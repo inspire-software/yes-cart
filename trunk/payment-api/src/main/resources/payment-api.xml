@@ -1,0 +1,107 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+			http://www.springframework.org/schema/context
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd
+			http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+
+    <aop:aspectj-autoproxy/>
+
+    <context:annotation-config/>
+
+    <bean id="payDataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="java:comp/env/jdbc/npapayjndi"/>
+        <property name="lookupOnStartup" value="true"/>
+        <property name="cache" value="true"/>
+        <property name="proxyInterface" value="javax.sql.DataSource"/>
+    </bean>
+
+
+    <bean id="paySessionFactory"
+          class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="dataSource" ref="payDataSource"/>
+        <property name="annotatedClasses">
+            <list>
+                <value>org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity</value>
+                <value>org.yes.cart.payment.persistence.entity.impl.PaymentGatewayParameterEntity</value>
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <map>
+                <entry key="hibernate.show_sql" value="false"/>
+                <entry key="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
+                <entry key="hibernate.hbm2ddl.auto" value="update"/>
+            </map>
+        </property>
+        <property name="entityInterceptor">
+            <bean class="org.yes.cart.payment.persistence.service.impl.AuditInterceptor"/>
+        </property>
+    </bean>
+
+
+    <bean id="payTransactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="paySessionFactory"/>
+    </bean>
+
+
+    <bean id="txPayProxyTemplate" abstract="true"
+          class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager" ref="payTransactionManager"/>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="create*">PROPAGATION_REQUIRED</prop>
+                <prop key="update*">PROPAGATION_REQUIRED</prop>
+                <prop key="delete*">PROPAGATION_REQUIRED</prop>
+                <prop key="remove*">PROPAGATION_REQUIRED</prop>
+                <prop key="save*">PROPAGATION_REQUIRED</prop>
+                <prop key="assign*">PROPAGATION_REQUIRED</prop>
+                <prop key="unassign*">PROPAGATION_REQUIRED</prop>
+                <prop key="reset*">PROPAGATION_REQUIRED</prop>
+                <prop key="*">PROPAGATION_SUPPORTS,readOnly</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="customerOrderPaymentDao" parent="txPayProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.payment.persistence.service.impl.PaymentModuleGenericDAOImpl">
+                <constructor-arg index="0" value="org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity"/>
+                <property name="sessionFactory" ref="paySessionFactory"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="paymentGatewayParameterDao" parent="txPayProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.payment.persistence.service.impl.PaymentModuleGenericDAOImpl">
+                <constructor-arg index="0" value="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayParameterEntity"/>
+                <property name="sessionFactory" ref="paySessionFactory"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="customerOrderPaymentService" parent="txPayProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.payment.service.impl.CustomerOrderPaymentServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.payment.persistence.service.PaymentModuleGenericDAO"  ref="customerOrderPaymentDao"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="paymentGatewayParameterService" parent="txPayProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.payment.service.impl.PaymentGatewayParameterServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.payment.persistence.service.PaymentModuleGenericDAO"  ref="paymentGatewayParameterDao"/>
+            </bean>
+        </property>
+    </bean>
+
+
+</beans>
