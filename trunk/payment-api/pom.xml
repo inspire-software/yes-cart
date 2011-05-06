@@ -12,7 +12,7 @@
     <groupId>org.yes</groupId>
     <artifactId>payment-api</artifactId>
     <version>1.x-SNAPSHOT</version>
-    <name>Payment API</name>
+    <name>Yes cart payment API</name>
     <url>http://maven.apache.org</url>
 
     <dependencies>

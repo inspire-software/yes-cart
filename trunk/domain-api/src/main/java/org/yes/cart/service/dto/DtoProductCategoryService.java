@@ -1,0 +1,27 @@
+package org.yes.cart.service.dto;
+
+import org.yes.cart.domain.dto.ProductCategoryDTO;
+
+/**
+ * User: Igor Azarny iazarny@yahoo.com
+ * Date: 07-May-2011
+ * Time: 11:13:01
+ */
+public interface DtoProductCategoryService extends GenericDTOService<ProductCategoryDTO>{
+
+    /**
+     * Delete product from given category
+     * @param categoryId given category id
+     * @param productId given product id
+     */
+    void removeByCategoryProductIds(long categoryId, long productId);
+
+
+    /**
+     * Get the next rank for product during product assignment.
+     * Default step is 50.
+     * @param categoryId category id
+     * @return rank.
+     */
+    int getNextRank(long categoryId);
+}
