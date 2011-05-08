@@ -15,18 +15,18 @@ public class UnableToWrapObjectException extends Exception {
      * Default constructor.
      *
      * @param domainClass domain class to wrap
-     * @param dtoClass dto wrapper
-     * @param cause the cause of failure
+     * @param dtoClass    dto wrapper
+     * @param cause       the cause of failure
      */
-    public UnableToWrapObjectException(final Class< ? > domainClass,
-                                       final Class< ? > dtoClass,
+    public UnableToWrapObjectException(final Class<?> domainClass,
+                                       final Class<?> dtoClass,
                                        final Throwable cause) {
         super(generateMessage(domainClass, dtoClass, cause));
 
     }
 
-    private static String generateMessage(final Class< ? > domainClass,
-                                          final Class< ? > dtoClass,
+    private static String generateMessage(final Class<?> domainClass,
+                                          final Class<?> dtoClass,
                                           final Throwable cause) {
         return new StringBuilder()
                 .append("Unable to wrap ")

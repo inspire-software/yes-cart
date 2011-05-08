@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 
 /**
  * Cart item object that hold information about a single shopping item.
- *
+ * <p/>
  * User: dogma
  * Date: Jan 15, 2011
  * Time: 10:25:01 PM
@@ -13,7 +13,6 @@ import java.math.BigDecimal;
 public interface CartItem extends Serializable {
 
     /**
-     *
      * @return product sku code.
      */
     String getProductSkuCode();
@@ -25,6 +24,7 @@ public interface CartItem extends Serializable {
 
     /**
      * Get the sku price price.
+     *
      * @return sku price.
      */
     BigDecimal getPrice();

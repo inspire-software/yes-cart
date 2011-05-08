@@ -5,11 +5,10 @@ import java.util.Collection;
 
 /**
  * Type of product.
- *
+ * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
  * Time: 11:12:54
-
  */
 
 public interface ProductType extends Auditable {
@@ -77,8 +76,6 @@ public interface ProductType extends Auditable {
     void setAttribute(Collection<ProductTypeAttr> attribute);
 
 
-
-
     Collection<ProdTypeAttributeViewGroup> getAttributeViewGroup();
 
     void setAttributeViewGroup(Collection<ProdTypeAttributeViewGroup> attributeViewGroup);
@@ -141,24 +138,28 @@ public interface ProductType extends Auditable {
 
     /**
      * Is product digital.
+     *
      * @return true if product digital.
      */
     boolean isDigital();
 
     /**
      * Set digital flag to product.
+     *
      * @param digital flag to set
      */
     void setDigital(boolean digital);
 
     /**
      * Is digital product donwloadable ?
+     *
      * @return true in case if digital product can be donwloaded.
      */
     boolean isDownloadable();
 
     /**
      * Set downloadable flag.
+     *
      * @param downloadable flag to set.
      */
     void setDownloadable(boolean downloadable);

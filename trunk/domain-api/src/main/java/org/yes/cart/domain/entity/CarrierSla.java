@@ -1,4 +1,3 @@
-
 package org.yes.cart.domain.entity;
 
 import java.math.BigDecimal;
@@ -27,19 +26,18 @@ import java.math.BigDecimal;
  * <p/>
  * <p/>
  * This this not represent the actual shipping rates for delivery but price for customer.
- *
- * Total devilery cost cab be limited as well as price and percent 
- *
+ * <p/>
+ * Total devilery cost cab be limited as well as price and percent
+ * <p/>
  * When price ant percent are obtained cost calculation
  * will be following:
- *
+ * <p/>
  * (F)ixed
- *     delivery cost = 1 * price + max(order_sub_total * percent, percent_not_less)
+ * delivery cost = 1 * price + max(order_sub_total * percent, percent_not_less)
  * (O) Per Order
- *     delivery cost = max( 1 * price                                 + max(order_sub_total * percent, percent_not_less), cost_not_less)
+ * delivery cost = max( 1 * price                                 + max(order_sub_total * percent, percent_not_less), cost_not_less)
  * (P) Per package
- *     delivery cost = max( max(packages qty * price, price_not_less) + max(     item_price * percent, percent_not_less), cost_not_less)
- *
+ * delivery cost = max( max(packages qty * price, price_not_less) + max(     item_price * percent, percent_not_less), cost_not_less)
  */
 public interface CarrierSla extends Auditable {
 
@@ -127,7 +125,6 @@ public interface CarrierSla extends Auditable {
     void setDescription(String description);
 
     /**
-     *
      * Get price. This is for internal usage only. Not a part of api.
      * Price of delivery must be obtained from service.
      *
@@ -159,36 +156,42 @@ public interface CarrierSla extends Auditable {
 
     /**
      * Get minimal cost for delivery.
+     *
      * @return minimal cost for delivery.
      */
     BigDecimal getPriceNotLess();
 
     /**
      * Set minimal cost for delivery.
+     *
      * @param priceNotLess minimal cost for delivery.
      */
     void setPriceNotLess(BigDecimal priceNotLess);
 
     /**
      * Get minimal amount  for precent.
+     *
      * @return minimal amount  for precent.
      */
     BigDecimal getPercentNotLess();
 
     /**
      * Set minimal amount  for precent.
+     *
      * @param percentNotLess minimal amount  for precent.
      */
     void setPercentNotLess(BigDecimal percentNotLess);
 
     /**
      * Get minimal delivery cost.
+     *
      * @return minimal delivery cost.
      */
     BigDecimal getCostNotLess();
 
     /**
      * Set minimal delivery cost.
+     *
      * @param costNotLess minimal delivery cost.
      */
     void setCostNotLess(BigDecimal costNotLess);
@@ -225,7 +228,8 @@ public interface CarrierSla extends Auditable {
 
 
     /**
-     * Get max deys delivery.     
+     * Get max deys delivery.
+     *
      * @return max deys delivery.
      */
     Integer getMaxDays();

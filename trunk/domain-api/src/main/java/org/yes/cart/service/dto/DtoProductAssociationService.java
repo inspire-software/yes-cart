@@ -15,6 +15,7 @@ public interface DtoProductAssociationService extends GenericDTOService<ProductA
 
     /**
      * Get all product associations.
+     *
      * @param productId product primary key
      * @return list of product assotiations
      */
@@ -23,7 +24,8 @@ public interface DtoProductAssociationService extends GenericDTOService<ProductA
 
     /**
      * Get all product associations by association type.
-     * @param productId product primary key
+     *
+     * @param productId       product primary key
      * @param accosiationCode accosiation code [up, cross, etc]
      * @return list of product assotiations
      */

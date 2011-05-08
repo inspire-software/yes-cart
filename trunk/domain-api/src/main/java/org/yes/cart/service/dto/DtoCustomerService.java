@@ -15,21 +15,25 @@ public interface DtoCustomerService extends GenericDTOService<CustomerDTO>, Gene
 
     /**
      * Find customer by given serach criteria. Serch will be performed using like operation.
-     * @param email optional email
-     * @param firstname optional first name
-     * @param lastname  optional last name
-     * @param middlename  optional middlename
+     *
+     * @param email      optional email
+     * @param firstname  optional first name
+     * @param lastname   optional last name
+     * @param middlename optional middlename
      * @return list of persons, that match search criteria or empty list if nobody found or null if no search criteria provided.
-     * @throws org.yes.cart.exception.UnableToCreateInstanceException  in case of dto mapping errors
-     * @throws org.yes.cart.exception.UnmappedInterfaceException in case of config errors
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case of dto mapping errors
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of config errors
      */
     List<CustomerDTO> findCustomer(String email, String firstname, String lastname, String middlename) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
     /**
      * Reset password to given user and send generated password via email.
+     *
      * @param customer customer to create
-     * @param shopId from what shop customer will have notification
+     * @param shopId   from what shop customer will have notification
      */
     void remoteResetPassword(CustomerDTO customer, final long shopId);
 

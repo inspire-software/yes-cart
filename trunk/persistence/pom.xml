@@ -1,0 +1,453 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <groupId>org.yes</groupId>
+        <artifactId>yes-cart</artifactId>
+        <version>1.0</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.yes</groupId>
+    <artifactId>persistence</artifactId>
+    <packaging>jar</packaging>
+    <version>1.x-SNAPSHOT</version>
+    <name>Yes cart persistence</name>
+    <url>http://maven.apache.org</url>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>domain-api</artifactId>
+            <version>1.x-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>1.2</version>
+        </dependency>
+
+
+        <!-- ################################## spring begin ####################################### -->
+
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${spring.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${spring.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>${spring.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${spring.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
+            <version>${spring.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${spring.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>${spring-security.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+
+        <!-- ################################## spring end ######################################### -->
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.7</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <version>1.2.2</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.6.6</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>3.3.2.GA</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>ejb3-persistence</artifactId>
+            <scope>compile</scope>
+            <version>1.0.2.GA</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-annotations</artifactId>
+            <scope>compile</scope>
+            <version>3.4.0.GA</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-search</artifactId>
+            <version>3.1.0.GA</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.5.8</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.5.8</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <scope>runtime</scope>
+            <version>1.6.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.8.0.GA</version>
+            <scope>runtime</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>1.8.0.7</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.dbunit</groupId>
+            <artifactId>dbunit</artifactId>
+            <version>2.4.7</version>
+            <scope>test</scope>
+        </dependency>
+
+
+    </dependencies>
+
+    <properties>
+        <spring.version>3.0.5.RELEASE</spring.version>
+        <spring-security.version>3.0.3.RELEASE</spring-security.version>
+    </properties>
+
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>dbunit-maven-plugin</artifactId>
+                    <version>1.0-beta-3</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <testResources>
+            <testResource>
+                <directory>src/test/config/spring</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </testResource>
+            <testResource>
+                <directory>src/main/config/spring</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </testResource>
+        </testResources>
+        <resources>
+            <resource>
+                <!-- this should pull in your hibernate template (.hbm.xml) files -->
+                <directory>src/main/config/hibernate</directory>
+                <includes>
+                    <include>npa.xml</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <!-- this should pull in your hibernate template (.hbm.xml) files -->
+                <directory>src/main/config/spring</directory>
+                <includes>
+                    <include>dao.xml</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+
+        </resources>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <dependencies>
+
+                    <dependency>
+                        <groupId>ant</groupId>
+                        <artifactId>ant-antlr</artifactId>
+                        <version>1.6.5</version>
+                    </dependency>
+
+                    <dependency>
+                        <groupId>ant</groupId>
+                        <artifactId>ant-optional</artifactId>
+                        <version>1.5.3-1</version>
+                        <scope>compile</scope>
+                    </dependency>
+
+
+                </dependencies>
+                <configuration>
+                    <tasks>
+
+                        <touch file="src/main/java/org/yes/cart/domain/entity/impl/AttributeEntity.java"/>
+                        <replace file="src/main/java/org/yes/cart/domain/entity/impl/AttributeEntity.java"
+                                 token="super(code);"
+                                 value="// super (code); hbm2java a little bit stupid"/>
+                        <taskdef name="replaceregexp"
+                                 classname="org.apache.tools.ant.taskdefs.optional.ReplaceRegExp"/>
+                        <replaceregexp
+                                file="src/main/java/org/yes/cart/domain/entity/impl/ProductEntity.java"
+                                match="\* UNCOMMENT(.*)"
+                                replace="\*/\1 /\*"
+                                byline="false" flags="mg"/>
+                        <replaceregexp
+                                file="src/main/java/org/yes/cart/domain/entity/impl/BrandEntity.java"
+                                match="\* UNCOMMENT(.*)"
+                                replace="\*/\1 /\*"
+                                byline="false" flags="mg"/>
+                        <replaceregexp
+                                file="src/main/java/org/yes/cart/domain/entity/impl/AttrValueEntityProduct.java"
+                                match="\* UNCOMMENT(.*)"
+                                replace="\*/\1 /\*"
+                                byline="false" flags="mg"/>
+                        <replaceregexp
+                                file="src/main/java/org/yes/cart/domain/entity/impl/AttrValueEntityProductSku.java"
+                                match="\* UNCOMMENT(.*)"
+                                replace="\*/\1 /\*"
+                                byline="false" flags="mg"/>
+
+                        <replaceregexp
+                                file="src/main/java/org/yes/cart/domain/entity/impl/ProductCategoryEntity.java"
+                                match="\* UNCOMMENT(.*)"
+                                replace="\*/\1 /\*"
+                                byline="false" flags="mg"/>
+                        <replaceregexp
+                                file="src/main/java/org/yes/cart/domain/entity/impl/ProductSkuEntity.java"
+                                match="\* UNCOMMENT(.*)"
+                                replace="\*/\1 /\*"
+                                byline="false" flags="mg"/>
+
+                        <replaceregexp
+                                file="src/main/java/org/yes/cart/domain/entity/impl/SkuPriceEntity.java"
+                                match="\* UNCOMMENT(.*)"
+                                replace="\*/\1 /\*"
+                                byline="false" flags="mg"/>
+
+
+                    </tasks>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>dbunit-maven-plugin</artifactId>
+                <version>1.0-beta-3</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>src/main/java/org/yes/cart/domain/entity</directory>
+                            <includes>
+                                <include>*.java</include>
+                            </includes>
+                            <followSymlinks>false</followSymlinks>
+                        </fileset>
+                        <fileset>
+                            <directory>${basedir}</directory>
+                            <includes>
+                                <include>luceneindex</include>
+                            </includes>
+                            <followSymlinks>false</followSymlinks>
+                        </fileset>
+                    </filesets>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>dbunit-maven-plugin</artifactId>
+                <version>1.0-beta-3</version>
+            </plugin>
+            <plugin>
+                <!-- hibernate ddl generation -->
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>hibernate3-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <components>
+                        <component>
+                            <name>hbm2java</name>
+                            <implementation>annotationconfiguration</implementation>
+                            <outputDirectory>src/main/java</outputDirectory>
+                        </component>
+                        <component>
+                            <name>hbm2ddl</name>
+                            <outputDirectory>.</outputDirectory>
+                        </component>
+                    </components>
+                    <componentProperties>
+                        <configurationfile>src/main/config/hibernate/hibernate.cfg.xml</configurationfile>
+                        <drop>false</drop>
+                        <create>true</create>
+                        <export>false</export>
+                        <jdk5>true</jdk5>
+                        <ejb3>true</ejb3>
+                        <format>true</format>
+                    </componentProperties>
+
+                </configuration>
+                <executions>
+
+
+                    <execution>
+                        <id>create-entity</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>hbm2java</goal>
+                        </goals>
+                    </execution>
+
+                    <execution>
+                        <id>export-oracle</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>hbm2ddl</goal>
+                        </goals>
+                        <configuration>
+                            <componentProperties>
+                                <propertyfile>src/main/resources/oracle/hibernate.properties</propertyfile>
+                                <outputfilename>sql/resources/oracle/create-tables.sql</outputfilename>
+                            </componentProperties>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>export-hsql</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>hbm2ddl</goal>
+                        </goals>
+                        <configuration>
+                            <componentProperties>
+                                <propertyfile>src/main/resources/hsql/hibernate.properties</propertyfile>
+                                <outputfilename>sql/resources/hsql/create-tables.sql</outputfilename>
+                            </componentProperties>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>export-mysql</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>hbm2ddl</goal>
+                        </goals>
+                        <configuration>
+                            <componentProperties>
+                                <propertyfile>src/main/resources/mysql/hibernate.properties</propertyfile>
+                                <outputfilename>sql/resources/mysql/create-tables.sql</outputfilename>
+                            </componentProperties>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>

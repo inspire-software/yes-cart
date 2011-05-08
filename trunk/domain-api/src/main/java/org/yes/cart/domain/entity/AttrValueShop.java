@@ -9,12 +9,14 @@ public interface AttrValueShop extends AttrValue {
 
     /**
      * Get the shop.
+     *
      * @return {@link Shop}
      */
     Shop getShop();
 
     /**
      * Set {@link Shop}
+     *
      * @param shop {@link Shop} to set.
      */
     void setShop(Shop shop);

@@ -3,11 +3,10 @@ package org.yes.cart.domain.entity;
 import java.util.Map;
 
 /**
- *
  * TODO kill this interface.
  */
 public interface NpaSystem extends Auditable {
-    
+
     String getCode();
 
     void setCode(String code);

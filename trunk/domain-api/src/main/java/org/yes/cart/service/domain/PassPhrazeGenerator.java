@@ -8,6 +8,7 @@ package org.yes.cart.service.domain;
 public interface PassPhrazeGenerator {
     /**
      * Generate a random pass phraze string with a random password.
+     *
      * @return generated pass phraze
      */
     String getNextPassPhrase();

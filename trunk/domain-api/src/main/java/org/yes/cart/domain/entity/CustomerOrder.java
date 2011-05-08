@@ -1,13 +1,12 @@
-
 package org.yes.cart.domain.entity;
 
-import java.util.Date;
 import java.util.Collection;
+import java.util.Date;
 
 
 /**
  * Customer order.
- *
+ * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
  * Time: 11:12:54
@@ -53,12 +52,14 @@ public interface CustomerOrder extends Auditable {
 
     /**
      * Get order pk value.
+     *
      * @return order pk value.
      */
     long getCustomerorderId();
 
     /**
      * Set order pk value.
+     *
      * @param customerorderId order pk value.
      */
     void setCustomerorderId(long customerorderId);
@@ -67,30 +68,33 @@ public interface CustomerOrder extends Auditable {
      * Get the order number. Order number not a pk value, it
      * can be slighty different and depends from active {@link org.yes.cart.service.order.OrderNumberGenerator}
      * implementation.
+     *
      * @return order number
      */
     String getOrdernum();
 
     /**
      * Set order number.
+     *
      * @param ordernum order number to set.
      */
     void setOrdernum(String ordernum);
 
     /**
      * Get payment gateway label.
+     *
      * @return payment gateway label.
      */
     String getPgLabel();
 
     /**
      * Set payment gateway label.
+     *
      * @param pgLabel payment gateway label.
      */
     void setPgLabel(String pgLabel);
 
     /**
-     *
      * Get formated billing address, that copied from customer profile.
      * This need to prevent situation when address can be edited by customer in his
      * profile during delivery, so need to copy billing address.
@@ -101,6 +105,7 @@ public interface CustomerOrder extends Auditable {
 
     /**
      * Set formated address.
+     *
      * @param billingAddress formated address.
      */
     public void setBillingAddress(String billingAddress);
@@ -108,85 +113,99 @@ public interface CustomerOrder extends Auditable {
 
     /**
      * Get formated shipping address.
+     *
      * @return shipping address.
      */
     String getShippingAddress();
 
     /**
      * Set shipping address.
+     *
      * @param shippingAddress shipping address.
      */
     void setShippingAddress(String shippingAddress);
 
     /**
      * Get the original cart guid.
+     *
      * @return cart guid
      */
     String getCartGuid();
 
     /**
      * Set cart guid.
-     * @param cartGuid  cart guid.
+     *
+     * @param cartGuid cart guid.
      */
     void setCartGuid(String cartGuid);
 
 
     /**
      * Get order currency code.
-     * @return  order currency code.
+     *
+     * @return order currency code.
      */
     String getCurrency();
 
     /**
      * Set  order currency code.
-     * @param currency  order currency code.
+     *
+     * @param currency order currency code.
      */
     void setCurrency(String currency);
 
     /**
      * Order message, can be a gift message or what ever
+     *
      * @return order message.
      */
     String getOrderMessage();
 
     /**
      * Set order message from shopping cart.
+     *
      * @param orderMessage order messge.
      */
     void setOrderMessage(String orderMessage);
 
     /**
      * Get order status.
+     *
      * @return order status.
      */
     String getOrderStatus();
 
     /**
      * Set order status.
+     *
      * @param orderStatus status of order
      */
     void setOrderStatus(String orderStatus);
 
     /**
      * Get Customer.
+     *
      * @return customer.
      */
     Customer getCustomer();
 
     /**
      * Set customer.
+     *
      * @param customer customer
      */
     void setCustomer(Customer customer);
 
     /**
      * Get shop.
+     *
      * @return shop.
      */
     Shop getShop();
 
     /**
      * Set Shop
+     *
      * @param shop shop
      */
     void setShop(Shop shop);
@@ -194,25 +213,29 @@ public interface CustomerOrder extends Auditable {
 
     /**
      * Is order will be delivered in several shipments.
+     *
      * @return true in case multiple deliveries, false in case of single delivery.
      */
     boolean isMultipleShipmentOption();
 
     /**
      * Set multiple delivery flag.
-     * @param multipleShipmentOption multiple delivery flag. 
+     *
+     * @param multipleShipmentOption multiple delivery flag.
      */
     void setMultipleShipmentOption(boolean multipleShipmentOption);
 
 
     /**
      * Get gollection of order datails, i.e. items
+     *
      * @return order details.
      */
     Collection<CustomerOrderDet> getOrderDetail();
 
     /**
      * Set order details.
+     *
      * @param orderDetail order details.
      */
     void setOrderDetail(Collection<CustomerOrderDet> orderDetail);
@@ -227,6 +250,7 @@ public interface CustomerOrder extends Auditable {
 
     /**
      * Set order deliveries.
+     *
      * @param delivery deliveries.
      */
     void setDelivery(Collection<CustomerOrderDelivery> delivery);
@@ -234,6 +258,7 @@ public interface CustomerOrder extends Auditable {
 
     /**
      * Get delivery by given number.
+     *
      * @param deliveryNumber given delivery number
      * @return Delivery if foud, otherwise null
      */
@@ -241,17 +266,17 @@ public interface CustomerOrder extends Auditable {
 
     /**
      * Get order creation timestamp.
+     *
      * @return order creation timestamp.
      */
     Date getOrderTimestamp();
 
     /**
      * Set order creation timestamp.
+     *
      * @param orderTimestamp order creation timestamp.
      */
     void setOrderTimestamp(Date orderTimestamp);
-
-
 
 
 }

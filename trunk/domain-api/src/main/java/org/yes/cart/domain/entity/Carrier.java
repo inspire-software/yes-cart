@@ -1,4 +1,3 @@
-
 package org.yes.cart.domain.entity;
 
 import java.util.Collection;
@@ -8,7 +7,6 @@ import java.util.Collection;
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
  * Time: 11:12:54
- *
  */
 public interface Carrier extends Auditable {
 
@@ -78,6 +76,7 @@ public interface Carrier extends Auditable {
 
     /**
      * Set world wide delivery flag.
+     *
      * @param worldwide world wide delivery flag
      */
     void setWorldwide(boolean worldwide);
@@ -91,6 +90,7 @@ public interface Carrier extends Auditable {
 
     /**
      * Set country delivery flag.
+     *
      * @param country country delivery flag.
      */
     void setCountry(boolean country);
@@ -105,6 +105,7 @@ public interface Carrier extends Auditable {
 
     /**
      * Set state devivery flag.
+     *
      * @param state state devivery flag
      */
     void setState(boolean state);
@@ -119,6 +120,7 @@ public interface Carrier extends Auditable {
 
     /**
      * Set local delivery flag.
+     *
      * @param local local delivery flag.
      */
     void setLocal(boolean local);

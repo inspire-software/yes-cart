@@ -1,7 +1,7 @@
 package org.yes.cart.domain.entity;
 
-import java.util.Date;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -66,7 +66,5 @@ public interface Auditable extends Serializable {
      */
     void setGuid(String guid);
 
-
-    
 
 }

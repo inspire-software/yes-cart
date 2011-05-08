@@ -1,8 +1,8 @@
 package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.CustomerWishListDTO;
-import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.exception.UnableToCreateInstanceException;
+import org.yes.cart.exception.UnmappedInterfaceException;
 
 import java.util.List;
 

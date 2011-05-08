@@ -12,17 +12,17 @@ public interface PriceTierTree {
 
     /**
      * Get price tiers node for given currency.
+     *
      * @param currency given currency
      * @return price tier nodes.
      */
     List<PriceTierNode> getPriceTierNodes(String currency);
 
     /**
-     *
      * Add price tier node.
      *
      * @param priceTierNodes node to add
-     * @param currency given currency 
+     * @param currency       given currency
      * @return added node
      */
     List<PriceTierNode> addPriceTierNode(String currency, List<PriceTierNode> priceTierNodes);

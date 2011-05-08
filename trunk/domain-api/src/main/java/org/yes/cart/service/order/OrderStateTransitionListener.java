@@ -9,8 +9,9 @@ public interface OrderStateTransitionListener {
 
     /**
      * Event handler.
+     *
      * @param orderEvent event to fire transition
-     * @return  true in case if transition was  successful
+     * @return true in case if transition was  successful
      */
     boolean onEvent(OrderEvent orderEvent);
 

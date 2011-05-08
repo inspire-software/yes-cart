@@ -5,8 +5,8 @@ import java.util.Set;
 
 /**
  * Shop discount rule.
- *
- *
+ * <p/>
+ * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
  * Time: 11:12:54

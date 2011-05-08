@@ -9,10 +9,11 @@ import java.util.List;
  * Date: 07-May-2011
  * Time: 11:13:01
  */
-public interface AddressService  extends GenericService<Address>{
+public interface AddressService extends GenericService<Address> {
 
     /**
      * Get customer addresses.
+     *
      * @param customerId customer id
      * @return list of addresses
      */
@@ -20,7 +21,8 @@ public interface AddressService  extends GenericService<Address>{
 
     /**
      * Get customer addresses filtered by requested type .
-     * @param customerId customer id
+     *
+     * @param customerId  customer id
      * @param addressType address type
      * @return list of addresses
      */
@@ -29,6 +31,7 @@ public interface AddressService  extends GenericService<Address>{
 
     /**
      * Set given address as default inside address type group.
+     *
      * @param instance instance to update
      * @return persisted instance of address.
      */

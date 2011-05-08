@@ -1,9 +1,8 @@
 package org.yes.cart.dao;
 
 /**
- *
  * Entity factory interface.
- *
+ * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
  * Time: 11:12:54
@@ -12,8 +11,9 @@ public interface EntityFactory {
 
     /**
      * Create new entity instance by his interface
+     *
      * @param interfaceClass interface class.
-     * @param <T> type
+     * @param <T>            type
      * @return new entity
      */
     <T> T getByIface(Class interfaceClass);
@@ -26,6 +26,7 @@ public interface EntityFactory {
 
     /**
      * Get the implementation class by given interface.
+     *
      * @param interfaceClass given interface
      * @return implementation class
      */
@@ -33,6 +34,7 @@ public interface EntityFactory {
 
     /**
      * Get the implementation class by given interface name.
+     *
      * @param entityBeanKey given interface name
      * @return implementation class
      */

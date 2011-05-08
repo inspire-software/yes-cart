@@ -1,8 +1,8 @@
 package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.AddressDTO;
-import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.exception.UnableToCreateInstanceException;
+import org.yes.cart.exception.UnmappedInterfaceException;
 
 import java.util.List;
 
@@ -15,6 +15,7 @@ public interface DtoAddressService extends GenericDTOService<AddressDTO> {
 
     /**
      * Get customers addresses
+     *
      * @param customerId customer id
      * @return list of addresses
      */

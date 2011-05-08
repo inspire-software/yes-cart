@@ -13,36 +13,42 @@ public interface AttributeViewGroup extends Auditable {
 
     /**
      * Pk value.
+     *
      * @return pk value.
      */
     long getAttributeViewGroupId();
 
     /**
      * Set pk value.
+     *
      * @param attributeViewGroupId pk value.
      */
     void setAttributeViewGroupId(long attributeViewGroupId);
 
     /**
      * Get name.
+     *
      * @return name of view group.
      */
     String getName();
 
     /**
      * Set name of view group.
+     *
      * @param name name.
      */
     void setName(String name);
 
     /**
      * View group description.
+     *
      * @return view group descrition.
      */
     String getDescription();
 
     /**
      * Set view groiup description.
+     *
      * @param description description.
      */
     void setDescription(String description);

@@ -14,7 +14,7 @@ public interface ProdTypeAttributeViewGroup extends Auditable {
     /**
      * Comma separated attribute list. For example WEIGHT,LENGHT,HEIGHT
      *
-     * @return  comm  separated attribute list.
+     * @return comm  separated attribute list.
      */
     String getAttrCodeList();
 

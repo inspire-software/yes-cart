@@ -1,26 +1,27 @@
 package org.yes.cart.service.domain;
 
 import org.hibernate.criterion.Criterion;
+import org.yes.cart.dao.GenericDAO;
 
 import java.util.List;
-
-import org.yes.cart.dao.GenericDAO;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
  * Time: 11:13:01
  */
-public interface GenericService <T> {
+public interface GenericService<T> {
 
     /**
      * Get all entities.
+     *
      * @return list of all entities
      */
     List<T> findAll();
 
     /**
      * Get object by given primary key.
+     *
      * @param pk pk value.
      * @return instance if found, otherwise null.
      */
@@ -28,6 +29,7 @@ public interface GenericService <T> {
 
     /**
      * Persist instance.
+     *
      * @param instance instance to persist
      * @return persisted instanse
      */
@@ -35,6 +37,7 @@ public interface GenericService <T> {
 
     /**
      * Update instance.
+     *
      * @param instance instance to update
      * @return persisted instanse
      */
@@ -42,6 +45,7 @@ public interface GenericService <T> {
 
     /**
      * delete instance.
+     *
      * @param instance instance to delete
      */
     void delete(T instance);
@@ -64,6 +68,7 @@ public interface GenericService <T> {
 
     /**
      * Get generic dao
+     *
      * @return generic dao
      */
     GenericDAO getGenericDao();

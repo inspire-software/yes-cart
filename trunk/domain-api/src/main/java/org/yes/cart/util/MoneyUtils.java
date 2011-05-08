@@ -16,7 +16,7 @@ public final class MoneyUtils {
     }
 
     /**
-     * @param value value to check
+     * @param value  value to check
      * @param ifNull value to return if value to check is null
      * @return value or ifNull if value is null. if ifNull is null retirns BigDecimal.ZERO.
      */
@@ -31,12 +31,12 @@ public final class MoneyUtils {
     }
 
     /**
-     * @param first value
+     * @param first  value
      * @param second value
      * @return true if first is greater than second (null safe)
      */
     public static boolean isFirstBiggerThanSecond(final BigDecimal first, final BigDecimal second) {
-        
+
         if (first == null && second == null) {
             return false;
         } else if (second == null) {
@@ -49,7 +49,7 @@ public final class MoneyUtils {
     }
 
     /**
-     * @param first value
+     * @param first  value
      * @param second value
      * @return true if first is greater than or equal to second (null safe)
      */
@@ -67,7 +67,7 @@ public final class MoneyUtils {
     }
 
     /**
-     * @param first value
+     * @param first  value
      * @param second value
      * @return true if first is equal to second (null safe)
      */
@@ -85,9 +85,9 @@ public final class MoneyUtils {
     }
 
     /**
-     * @param first value
+     * @param first  value
      * @param second value
-     * @param scale scale
+     * @param scale  scale
      * @return true if first is equal to second (null safe)
      */
     public static boolean isFirstEqualToSecond(final BigDecimal first, final BigDecimal second, final int scale) {

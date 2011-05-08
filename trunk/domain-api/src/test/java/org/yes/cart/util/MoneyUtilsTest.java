@@ -1,9 +1,10 @@
 package org.yes.cart.util;
 
-import static junit.framework.Assert.*;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+
+import static junit.framework.Assert.*;
 
 /**
  * MoneyUtils test.
@@ -19,6 +20,7 @@ public class MoneyUtilsTest {
     public void testNotNullIsNullSafe() {
         assertEquals("Must return zero if bot arguments are null", BigDecimal.ZERO, MoneyUtils.notNull(null, null));
     }
+
     @Test
     public void testNotNullWithNull() {
         assertEquals("Must return ifNull (10) for null value", BigDecimal.TEN, MoneyUtils.notNull(null, BigDecimal.TEN));

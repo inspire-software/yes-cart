@@ -3,9 +3,8 @@ package org.yes.cart.domain.dto;
 import java.math.BigDecimal;
 
 /**
- *
  * Carrier's SLA DTO inteface.
- *
+ * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
  * Time: 11:12:54
@@ -102,36 +101,42 @@ public interface CarrierSlaDTO {
 
     /**
      * Get minimal cost for delivery.
+     *
      * @return minimal cost for delivery.
      */
     BigDecimal getPriceNotLess();
 
     /**
      * Set minimal cost for delivery.
+     *
      * @param priceNotLess minimal cost for delivery.
      */
     void setPriceNotLess(BigDecimal priceNotLess);
 
     /**
      * Get minimal amount  for precent.
+     *
      * @return minimal amount  for precent.
      */
     BigDecimal getPercentNotLess();
 
     /**
      * Set minimal amount  for precent.
+     *
      * @param percentNotLess minimal amount  for precent.
      */
     void setPercentNotLess(BigDecimal percentNotLess);
 
     /**
      * Get minimal delivery cost.
+     *
      * @return minimal delivery cost.     *
      */
     BigDecimal getCostNotLess();
 
     /**
      * Set minimal delivery cost.
+     *
      * @param costNotLess minimal delivery cost.
      */
     void setCostNotLess(BigDecimal costNotLess);
@@ -169,6 +174,7 @@ public interface CarrierSlaDTO {
 
     /**
      * Get max deys delivery.
+     *
      * @return max deys delivery.
      */
     Integer getMaxDays();

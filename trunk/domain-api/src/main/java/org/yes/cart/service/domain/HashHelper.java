@@ -1,7 +1,7 @@
 package org.yes.cart.service.domain;
 
-import java.security.NoSuchAlgorithmException;
 import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -15,8 +15,10 @@ public interface HashHelper {
      *
      * @param password given password
      * @return md5 password string
-     * @throws java.security.NoSuchAlgorithmException     NoSuchAlgorithmException
-     * @throws java.io.UnsupportedEncodingException UnsupportedEncodingException
+     * @throws java.security.NoSuchAlgorithmException
+     *          NoSuchAlgorithmException
+     * @throws java.io.UnsupportedEncodingException
+     *          UnsupportedEncodingException
      */
     String getHash(String password) throws NoSuchAlgorithmException, UnsupportedEncodingException;
 

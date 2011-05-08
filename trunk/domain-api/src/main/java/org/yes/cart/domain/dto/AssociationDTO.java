@@ -3,15 +3,14 @@ package org.yes.cart.domain.dto;
 import java.io.Serializable;
 
 /**
- *
  * Product asssociation interface. At this moment supported
- * accessories, up sell, cross sell, buy with 
- *
+ * accessories, up sell, cross sell, buy with
+ * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface AssociationDTO  extends Serializable {
+public interface AssociationDTO extends Serializable {
 
     /**
      * @return pkimary key.

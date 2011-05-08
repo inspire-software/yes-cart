@@ -13,6 +13,7 @@ public interface StateService extends GenericService<State> {
 
     /**
      * Find by country code.
+     *
      * @param countryCode country code.
      * @return list of states , that belong to given country.
      */

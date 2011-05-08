@@ -44,13 +44,13 @@ public interface ShopWarehouseDTO extends Serializable {
     void setWarehouseId(long warehouseId);
 
     /**
-     *
      * @return Warehouse name.
      */
     String getWarehouseName();
 
     /**
      * Set warehouse name.
+     *
      * @param warehouseName warehouse name
      */
     void setWarehouseName(String warehouseName);

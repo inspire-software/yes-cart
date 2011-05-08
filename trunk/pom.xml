@@ -29,6 +29,7 @@
     <modules>
         <module>payment-api</module>
         <module>domain-api</module>
+        <module>persistence</module>
     </modules>
 
     <build>

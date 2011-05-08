@@ -1,8 +1,8 @@
 package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.CarrierSlaDTO;
-import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.exception.UnableToCreateInstanceException;
+import org.yes.cart.exception.UnmappedInterfaceException;
 
 import java.util.List;
 
@@ -11,10 +11,11 @@ import java.util.List;
  * Date: 07-May-2011
  * Time: 11:13:01
  */
-public interface DtoCarrierSlaService extends GenericDTOService<CarrierSlaDTO>{
+public interface DtoCarrierSlaService extends GenericDTOService<CarrierSlaDTO> {
 
     /**
      * Get shipping SLA by carrier Id.
+     *
      * @param carrierId given carrier id
      * @return list of SLA, that belongs to given carrier id
      */

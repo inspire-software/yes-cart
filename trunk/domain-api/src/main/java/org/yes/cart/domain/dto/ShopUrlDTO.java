@@ -3,14 +3,13 @@ package org.yes.cart.domain.dto;
 import java.io.Serializable;
 
 /**
- *
  * Shop URLs DTO.
- *
+ * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface ShopUrlDTO   extends Serializable {
+public interface ShopUrlDTO extends Serializable {
 
     /**
      * @return primary key value.

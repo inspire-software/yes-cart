@@ -16,42 +16,51 @@ public interface DtoCategoryService extends GenericDTOService<CategoryDTO>, Gene
 
     /**
      * Get all assigned to shop categories.
+     *
      * @param shopId shop id
      * @return list of assigned categories
-     * @throws org.yes.cart.exception.UnableToCreateInstanceException in case of reflection problem
-     * @throws org.yes.cart.exception.UnmappedInterfaceException in case of configuration problem
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case of reflection problem
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration problem
      */
     List<CategoryDTO> getAllByShopId(final long shopId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Get all categories with or withaout availability date range filtering.
+     *
      * @param withAvailalilityFiltering true if need to filter
      * @return list of categories
-     * @throws org.yes.cart.exception.UnableToCreateInstanceException in case of reflection problem
-     * @throws org.yes.cart.exception.UnmappedInterfaceException in case of configuration problem
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case of reflection problem
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration problem
      */
-    List<CategoryDTO> getAllWithAvailabilityFilter(boolean withAvailalilityFiltering) 
+    List<CategoryDTO> getAllWithAvailabilityFilter(boolean withAvailalilityFiltering)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Assign category to shop.
+     *
      * @param categoryId category id
-     * @param shopId shop id
+     * @param shopId     shop id
      * @return {@link org.yes.cart.domain.entity.ShopCategory}
      */
-    ShopCategoryDTO assignToShop(long categoryId, long shopId) 
+    ShopCategoryDTO assignToShop(long categoryId, long shopId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Unassign category from shop.
+     *
      * @param categoryId category id
-     * @param shopId shop id
+     * @param shopId     shop id
      */
     void unassignFromShop(long categoryId, long shopId);
 
     /**
      * Get all categories, that contains product with given id.
+     *
      * @param productId given product id.
      * @return list of categories, that contains product.
      */

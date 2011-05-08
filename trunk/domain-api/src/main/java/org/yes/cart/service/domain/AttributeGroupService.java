@@ -11,6 +11,7 @@ public interface AttributeGroupService extends GenericService<AttributeGroup> {
 
     /**
      * Get single attribute by given code.
+     *
      * @param code given code
      * @return {@link AttributeGroup} if found, otherwise null.
      */
@@ -19,6 +20,7 @@ public interface AttributeGroupService extends GenericService<AttributeGroup> {
 
     /**
      * Delete  {@link AttributeGroup} by given code.
+     *
      * @param code code of {@link AttributeGroup} to delete
      */
     void delete(String code);

@@ -1,20 +1,16 @@
-
 package org.yes.cart.domain.dto;
-
-import org.yes.cart.domain.dto.ProductSkuDTO;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Date;
+import java.util.List;
 
 //import org.springframework.security.core.context.SecurityContext;
 
 /**
- *
  * TODO most of the setters MUST be removed from this interface.
  * TODO Only commands can modify cart !!!
- *
+ * <p/>
  * Container class that represents Shopping Cart business object.
  * <p/>
  * User: dogma
@@ -35,50 +31,55 @@ public interface ShoppingCart extends /*SecurityContext,*/ Serializable {
 
     /**
      * Get selected payment gateway.
+     *
      * @return selected payment gateway
      */
     String getPaymentGatewayLabel();
+
     /**
      * Set selected payment gateway.
-     * @param paymentGatewayLabel   selected payment gateway.
+     *
+     * @param paymentGatewayLabel selected payment gateway.
      */
     void setPaymentGatewayLabel(String paymentGatewayLabel);
 
 
     /**
      * Is order need multiple delivery.
+     *
      * @return true if need multiple delivery.
      */
     boolean isMultipleDelivery();
 
     /**
      * Set multiple delivery for order.
+     *
      * @param multipleDelivery multiple delivery for order.
      */
     void setMultipleDelivery(boolean multipleDelivery);
 
 
-
     /**
      * Is billing address different from shipping adress.
+     *
      * @return true is billing and shipping address are different.
      */
     boolean isSeparateBillingAddress();
 
     /**
      * Set billilnd address different from shipping address flag.
+     *
      * @param separateBillingAddress flag.
      */
     void setSeparateBillingAddress(boolean separateBillingAddress);
 
 
-
     /**
      * Get shopping cart guid.
+     *
      * @return shopping cart guid.
      */
     String getGuid();
-
 
 
     /**
@@ -129,8 +130,9 @@ public interface ShoppingCart extends /*SecurityContext,*/ Serializable {
 
     /**
      * Set product sku price
+     *
      * @param productSkuCode product sku
-     * @param price price to set
+     * @param price          price to set
      * @return true if price has been set
      */
     boolean setProductSkuPrice(String productSkuCode, BigDecimal price);
@@ -140,10 +142,11 @@ public interface ShoppingCart extends /*SecurityContext,*/ Serializable {
      */
     int getCartItemsCount();
 
-    /**   TODO need total refactoring about money calculation
+    /**
+     * TODO need total refactoring about money calculation
      * Get cart sub total by given item list.
-     * @param items given items
      *
+     * @param items given items
      * @return total amount for all items in the shopping cart.
      */
     BigDecimal getCartSubTotal(List<? extends CartItem> items);
@@ -163,9 +166,9 @@ public interface ShoppingCart extends /*SecurityContext,*/ Serializable {
     void setCurrencyCode(String currencyCode);
 
 
-
     /**
      * Get the last modified date.
+     *
      * @return last modified date.
      */
     Date getModifiedDate();
@@ -173,6 +176,7 @@ public interface ShoppingCart extends /*SecurityContext,*/ Serializable {
 
     /**
      * Set last modified date.
+     *
      * @param modified last modified date.
      */
     void setModifiedDate(Date modified);
@@ -203,18 +207,19 @@ public interface ShoppingCart extends /*SecurityContext,*/ Serializable {
 
     /**
      * Get carrier shipping SLA.
+     *
      * @return carries sla id.
      */
     Integer getCarrierSlaId();
 
     /**
      * Set carrier shipping SLA.
+     *
      * @param carrierSlaId selected sla id.
      */
     void setCarrierSlaId(Integer carrierSlaId);
 
     /**
-     *
      * Get logon state.
      *
      * @return Logon state
@@ -223,24 +228,28 @@ public interface ShoppingCart extends /*SecurityContext,*/ Serializable {
 
     /**
      * Get current shop id
+     *
      * @return current shop id.
      */
     long getShopId();
 
     /**
      * Set current shop id.
+     *
      * @param shopId current shop id.
      */
     void setShopId(long shopId);
 
     /**
      * Get order message.
+     *
      * @return order message
      */
     String getOrderMessage();
 
     /**
      * Set order message.
+     *
      * @param orderMessage order message.
      */
     void setOrderMessage(String orderMessage);
@@ -248,19 +257,21 @@ public interface ShoppingCart extends /*SecurityContext,*/ Serializable {
 
     /**
      * Is sku code present in cart
+     *
      * @param skuCode product sku code
      * @return true if sku code present in cart
      */
     boolean contains(String skuCode);
 
     /**
-     * @param  skuCode sku code
+     * @param skuCode sku code
      * @return idex of cart item for this sku
      */
     int indexOf(final String skuCode);
 
 
     //TODO guess some things need to be removed from cart to separate object
+
     /**
      * Get lastest viewed skus.
      *
@@ -275,7 +286,5 @@ public interface ShoppingCart extends /*SecurityContext,*/ Serializable {
      */
     void setLatestViewedSkus(String latestViewedSkus);
 
-
-    
 
 }

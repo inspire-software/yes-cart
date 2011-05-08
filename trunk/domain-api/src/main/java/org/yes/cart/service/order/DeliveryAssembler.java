@@ -1,7 +1,7 @@
 package org.yes.cart.service.order;
 
-import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.dto.ShoppingCart;
+import org.yes.cart.domain.entity.CustomerOrder;
 
 /**
  * Order delivery assembler responsible for shipment creation.
@@ -28,15 +28,15 @@ import org.yes.cart.domain.dto.ShoppingCart;
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
  * Time: 11:13:01
-
  */
 public interface DeliveryAssembler {
 
 
     /**
      * Fill deliveries for {@link org.yes.cart.domain.entity.CustomerOrder} from given {@link org.yes.cart.domain.dto.ShoppingCart}.
-     * @param shoppingCart given shopping cart
-     * @param order without deliveries
+     *
+     * @param shoppingCart        given shopping cart
+     * @param order               without deliveries
      * @param onePhysicalDelivery true if need to create one physical delivery.
      * @return order with attached deliveries
      */
@@ -44,11 +44,11 @@ public interface DeliveryAssembler {
 
     /**
      * Is order can be with multiple deliveries.
-     * @param order               given order
+     *
+     * @param order given order
      * @return true in case if order can has multiple physical deliveries.
      */
-     boolean isOrderCanHasMultipleDeliveries(CustomerOrder order);
-
+    boolean isOrderCanHasMultipleDeliveries(CustomerOrder order);
 
 
 }

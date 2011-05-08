@@ -9,12 +9,14 @@ public interface SystemService {
 
     /**
      * Get etag expiration in minutes for images.
+     *
      * @return etag expiration in minutes if configured, otherwise default value 0 will be returned.
      */
     Integer getEtagExpirationForImages();
 
     /**
      * Get etag expiration in minutes for pages.
+     *
      * @return etag expiration in minutes if configured, otherwise default value 0 will be returned.
      */
     Integer getEtagExpirationForPages();
@@ -38,9 +40,9 @@ public interface SystemService {
     /**
      * Get the mail templates directory.
      * Mail template directory has following structure:
-     *
+     * <p/>
      * /mail/template/directory
-     *
+     * <p/>
      * /mail/template/directory/shopCode1/tamplatename - has two templates text and html
      * /mail/template/directory/shopCode1/tamplatename/resources has resources to inline into html template     *
      * /mail/template/directory/shopCode2/tamplatename - has two templates text and html

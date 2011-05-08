@@ -3,23 +3,24 @@ package org.yes.cart.domain.dto;
 import java.io.Serializable;
 
 /**
- *
  * Group of attributes.
- *
+ * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface AttributeGroupDTO  extends Serializable {
+public interface AttributeGroupDTO extends Serializable {
 
     /**
      * Get pk value.
+     *
      * @return pk value.
      */
     long getAttributegroupId();
 
     /**
      * Set pk value.
+     *
      * @param attributegroupId pk value
      */
     void setAttributegroupId(long attributegroupId);

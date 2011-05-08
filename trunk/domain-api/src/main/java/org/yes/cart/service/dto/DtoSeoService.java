@@ -1,7 +1,6 @@
 package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.SeoDTO;
-import org.yes.cart.service.dto.GenericDTOService;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com

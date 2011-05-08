@@ -86,7 +86,7 @@ public interface PriceService extends GenericService<SkuPrice> {
      * Get the sku prices filtered by quantity. Example:
      * ProductSKU1 has defined price ties 1 - 100 USD, 2 - 97 USD, 5 - 85 USD
      * ProductSKU2 has defined price ties 1 - 100 USD, 2 - 98 USD, 3 - 90 USD
-     *
+     * <p/>
      * For quantity 4 result will hold only two SkuPrice:
      * ProductSKU1 87 USD
      * ProductSKU2 90 USD
@@ -149,7 +149,8 @@ public interface PriceService extends GenericService<SkuPrice> {
      * Recalculate derived prices. Derived prices - proces not in default currency, for example default shop currency is
      * USD and sho psupport EUR also, but has not price lists for EUR currency and used currency exchange rate instead.
      * Use delete / insert paragigm instead of insert/update.
-     * @param shop shop
+     *
+     * @param shop            shop
      * @param derivedCurrency target currency
      * @return quantity of created records.
      */
