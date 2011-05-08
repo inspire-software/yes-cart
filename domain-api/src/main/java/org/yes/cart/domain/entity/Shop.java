@@ -7,23 +7,24 @@ import java.util.Set;
 
 /**
  * Shop.
- *
+ * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
  * Time: 11:12:54
-
  */
 
 public interface Shop extends Auditable {
 
     /**
      * Get shop code.
+     *
      * @return shop code.
      */
     String getCode();
 
     /**
      * Set shop code.
+     *
      * @param code shop code.
      */
     void setCode(String code);
@@ -31,36 +32,42 @@ public interface Shop extends Auditable {
 
     /**
      * Get pk value.
+     *
      * @return pk value.
      */
     long getShopId();
 
     /**
      * Set pk value.
+     *
      * @param shopId shop pk value.
      */
     void setShopId(long shopId);
 
     /**
      * Get shop name.
+     *
      * @return shop name.
      */
     String getName();
 
     /**
      * Set shop name.
+     *
      * @param name shop name.
      */
     void setName(String name);
 
     /**
      * Get shop description.
+     *
      * @return description.
      */
     String getDescription();
 
     /**
      * Set shop description.
+     *
      * @param description shop description
      */
     void setDescription(String description);
@@ -68,60 +75,70 @@ public interface Shop extends Auditable {
     /**
      * Get the path to shop theme. Default failover path will be used,
      * if some resource con not be found in shop theme.
+     *
      * @return path to shop theme.
      */
     String getFspointer();
 
     /**
      * Set shop theme path.
+     *
      * @param fspointer path to theme.
      */
     void setFspointer(String fspointer);
 
     /**
      * Get shop supported urls. Example shop.domain, www.shop.domain, www1.shop.domain, wap.shop.domain.
+     *
      * @return list of supported urls.
      */
     Set<ShopUrl> getShopUrl();
 
     /**
      * Set list of supported urls.
+     *
      * @param shopUrl supported urls.
      */
     void setShopUrl(Set<ShopUrl> shopUrl);
 
     /**
      * Get the currency exchange rates. All exchange rates from default to target currency.
+     *
      * @return list of exchange rates.
      */
     Collection<ShopExchangeRate> getExchangerates();
 
     /**
      * Set currency exchange rates.
-     * @param exchangerates  exchange rates.
+     *
+     * @param exchangerates exchange rates.
      */
     void setExchangerates(Collection<ShopExchangeRate> exchangerates);
 
     /**
      * Get the named advertizing places.
+     *
      * @return named advertizing places.
      */
     Collection<ShopAdvPlace> getAdvertisingPlaces();
 
     /**
      * Set named advertizing places.
+     *
      * @param advertisingPlaces named advertizing places.
      */
     void setAdvertisingPlaces(Collection<ShopAdvPlace> advertisingPlaces);
 
     /**
      * Get the discount rules.
+     *
      * @return discount rules.
      */
     Collection<ShopDiscount> getShopDiscountRules();
 
     /**
      * Set discount rules.
+     *
      * @param shopDiscountRules discount rules.
      */
     void setShopDiscountRules(Collection<ShopDiscount> shopDiscountRules);
@@ -150,7 +167,6 @@ public interface Shop extends Auditable {
     boolean isB2ProfileActive();
 
 
-
     /**
      * Get single attribute.
      *
@@ -177,18 +193,21 @@ public interface Shop extends Auditable {
 
     /**
      * Set shop seo information.
+     *
      * @param seo seo information.
      */
     void setSeo(Seo seo);
 
     /**
      * Get categories, that assigned to shop.
+     *
      * @return categories, that assigned to shop.
      */
     Collection<ShopCategory> getShopCategory();
 
     /**
      * Set categories, that assigned to shop.
+     *
      * @param shopCategory categories, that assigned to shop.
      */
     void setShopCategory(Collection<ShopCategory> shopCategory);

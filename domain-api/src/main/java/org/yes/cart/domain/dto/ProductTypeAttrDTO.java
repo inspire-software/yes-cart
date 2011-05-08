@@ -3,14 +3,13 @@ package org.yes.cart.domain.dto;
 import java.io.Serializable;
 
 /**
- *
  * Attribute type DTO.
- *
+ * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface ProductTypeAttrDTO  extends Serializable {
+public interface ProductTypeAttrDTO extends Serializable {
 
     /**
      * Get the primary key.
@@ -21,18 +20,21 @@ public interface ProductTypeAttrDTO  extends Serializable {
 
     /**
      * Set pk value.
+     *
      * @param productTypeAttrId product type pk value.
      */
     void setProductTypeAttrId(long productTypeAttrId);
 
     /**
      * Get the attribute.
+     *
      * @return {@link org.yes.cart.domain.entity.Attribute}
      */
     public AttributeDTO getAttributeDTO();
 
     /**
      * Set attribute.
+     *
      * @param attribute attribute.
      */
     public void setAttributeDTO(AttributeDTO attribute);
@@ -40,63 +42,73 @@ public interface ProductTypeAttrDTO  extends Serializable {
 
     /**
      * Get default product type if any.
+     *
      * @return default product type.
      */
     long getProducttypeId();
 
     /**
      * Set product type id
+     *
      * @param producttypeId Product Type id
      */
     void setProducttypeId(long producttypeId);
 
     /**
      * Candidate to deprecation.
-     * @deprecated do not use it
+     *
      * @return rank
+     * @deprecated do not use it
      */
     int getRank();
 
 
-     /**
-      * Candidate to deprecation.
-      * @deprecated do not use it
+    /**
+     * Candidate to deprecation.
+     *
      * @param rank to set.
+     * @deprecated do not use it
      */
     void setRank(int rank);
 
     /**
      * Is this attibute visible on storefront ?
+     *
      * @return true if attribute is vesible.
      */
     boolean isVisible();
 
     /**
      * Set attribute visible to storefront.
+     *
      * @param visible is attribute visible to storefront.
      */
     void setVisible(boolean visible);
 
     /**
      * Is this attribute will be taken to count product simularity.
+     *
      * @return true if this attribute will be taken to count product simularity.
      */
     boolean isSimulariry();
 
     /**
      * Set flag to count simularity on this product.
+     *
      * @param simulariry count simularity on this product.
      */
     void setSimulariry(boolean simulariry);
 
     /**
      * Use for attribute navigation.
+     *
      * @return true if attribute used for attribute navigation.
      */
     boolean isNavigation();
 
     /**
      * Set to true if attribute will be used for filtered navigation.
+     *
      * @param navigation true if attribute will be used for filtered navigation.
      */
     void setNavigation(boolean navigation);
@@ -111,6 +123,7 @@ public interface ProductTypeAttrDTO  extends Serializable {
 
     /**
      * Navigation type.
+     *
      * @param navigationType
      */
     void setNavigationType(String navigationType);
@@ -129,8 +142,5 @@ public interface ProductTypeAttrDTO  extends Serializable {
      */
     void setRangeNavigation(String rangeNavigation);
 
-
-    
-    
 
 }

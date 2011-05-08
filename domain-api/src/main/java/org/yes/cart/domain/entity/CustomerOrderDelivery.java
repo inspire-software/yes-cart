@@ -9,11 +9,10 @@ import java.util.Collection;
  * and skus have different availability (pre/back order, etc.), also
  * some products can not be shipped together, because of secutity.
  * Delivery address can be taken from order.
- *
+ * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
  * Time: 11:12:54
-
  */
 public interface CustomerOrderDelivery extends Auditable {
 
@@ -39,7 +38,7 @@ public interface CustomerOrderDelivery extends Auditable {
      */
     String DELIVERY_STATUS_INVENTORY_RESERVED = "inventory.reserved";
 
-   /**
+    /**
      * Inventory reserved
      */
     String DELIVERY_STATUS_INVENTORY_VOID_RESERVATION = "inventory.void.reserv";
@@ -76,8 +75,6 @@ public interface CustomerOrderDelivery extends Auditable {
     String DELIVERY_STATUS_SHIPPED = "shipped";
 
 
-
-    
     /**
      * Can be delivered.
      */

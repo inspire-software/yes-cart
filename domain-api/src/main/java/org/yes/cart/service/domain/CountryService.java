@@ -8,5 +8,5 @@ import org.yes.cart.domain.entity.Country;
  * Time: 11:13:01
  */
 public interface CountryService extends GenericService<Country> {
-    
+
 }

@@ -1,4 +1,3 @@
-
 package org.yes.cart.domain.entity;
 
 
@@ -8,7 +7,7 @@ package org.yes.cart.domain.entity;
  * up sell - the simular products with higher prices.
  * accesories - accessories to product, like charger for mobile phone.
  * who buy also buy - dynamic association, base on different customers buy history.
- *
+ * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
  * Time: 11:12:54

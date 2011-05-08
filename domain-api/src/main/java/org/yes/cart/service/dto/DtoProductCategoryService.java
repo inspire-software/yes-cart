@@ -7,12 +7,13 @@ import org.yes.cart.domain.dto.ProductCategoryDTO;
  * Date: 07-May-2011
  * Time: 11:13:01
  */
-public interface DtoProductCategoryService extends GenericDTOService<ProductCategoryDTO>{
+public interface DtoProductCategoryService extends GenericDTOService<ProductCategoryDTO> {
 
     /**
      * Delete product from given category
+     *
      * @param categoryId given category id
-     * @param productId given product id
+     * @param productId  given product id
      */
     void removeByCategoryProductIds(long categoryId, long productId);
 
@@ -20,6 +21,7 @@ public interface DtoProductCategoryService extends GenericDTOService<ProductCate
     /**
      * Get the next rank for product during product assignment.
      * Default step is 50.
+     *
      * @param categoryId category id
      * @return rank.
      */

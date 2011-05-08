@@ -15,16 +15,17 @@ import java.util.List;
 public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrderDTO> {
 
 
-/**
+    /**
      * Find customer's order by given criteria.
-     * @param customerId customer id. Rest of parameters will be ignored, if customerId more that 0.
-     * @param firstName optional to perform search using like by first name
-     * @param lastName optional to perform search using like by last name
-     * @param email optional to perform search using like by email
+     *
+     * @param customerId  customer id. Rest of parameters will be ignored, if customerId more that 0.
+     * @param firstName   optional to perform search using like by first name
+     * @param lastName    optional to perform search using like by last name
+     * @param email       optional to perform search using like by email
      * @param orderStatus optional order status
-     * @param fromDate optional order created from
-     * @param tillDate optional orer created till
-     * @param orderNum optional to perform search using like by order number
+     * @param fromDate    optional order created from
+     * @param tillDate    optional orer created till
+     * @param orderNum    optional to perform search using like by order number
      * @return list of customer's order dtos
      */
     List<CustomerOrderDTO> findCustomerOrdersByCriterias(
@@ -36,9 +37,7 @@ public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrder
             Date fromDate,
             Date tillDate,
             String orderNum
-            ) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    ) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
-
-    
 
 }

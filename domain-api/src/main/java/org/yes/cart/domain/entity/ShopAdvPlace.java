@@ -1,11 +1,10 @@
-
 package org.yes.cart.domain.entity;
 
 import java.util.Set;
 
 /**
  * Named advertising place in the shop .
- *
+ * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
  * Time: 11:12:54

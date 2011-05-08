@@ -1,7 +1,7 @@
 package org.yes.cart.service.domain;
 
-import org.yes.cart.domain.entity.ShopCategory;
 import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.ShopCategory;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -12,6 +12,7 @@ public interface ShopCategoryService extends GenericService<ShopCategory> {
 
     /**
      * Delete all relation between shops and given category
+     *
      * @param caterogy category pk
      */
     void deleteAll(Category caterogy);

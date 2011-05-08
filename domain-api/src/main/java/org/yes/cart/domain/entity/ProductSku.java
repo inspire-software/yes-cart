@@ -1,7 +1,5 @@
 package org.yes.cart.domain.entity;
 
-import org.yes.cart.domain.entity.Rankable;
-
 import java.util.Collection;
 
 /**

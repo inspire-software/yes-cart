@@ -37,22 +37,21 @@ import java.util.Map;
 public interface OrderStateManager {
 
 
-    public static final String EVT_PENDING                   = "evt.pending";                   // from none to pending state
-    public static final String EVT_PAYMENT_OFFLINE           = "evt.payment.offline";           // payment via offline payment gateway, transition to wait state
-    public static final String EVT_PAYMENT_CONFIRMED         = "evt.payment.confirmed";         // from wait confirmation to main order flow. inherited from evt.payment.ok
-    public static final String EVT_PAYMENT_OK                = "evt.payment.ok";                // online payment ok
-    public static final String EVT_PROCESS_ALLOCATION        = "evt.process.allocation";        // reserve qunatity on warehouse
-    public static final String EVT_CANCEL                    = "evt.order.cancel";              // simply cancel event for non confirmed orders and old orders in none state
-    public static final String EVT_CANCEL_WITH_REFUND        = "evt.order.cancel.refund";       // cancel event with refund and credit quantity.
-    public static final String EVT_PROCESS_TIME_WAIT         = "evt.process.date.wait";         // wait till date
-    public static final String EVT_PROCESS_INVENTORY_WAIT    = "evt.process.inventory.wait";    // wait till available quantity state
-    public static final String EVT_DELIVERY_ALLOWED_TIMEOUT  = "evt.delivery.allowed.timeout";  //transition will be performed when all items in delivery will have availability date more than now
+    public static final String EVT_PENDING = "evt.pending";                   // from none to pending state
+    public static final String EVT_PAYMENT_OFFLINE = "evt.payment.offline";           // payment via offline payment gateway, transition to wait state
+    public static final String EVT_PAYMENT_CONFIRMED = "evt.payment.confirmed";         // from wait confirmation to main order flow. inherited from evt.payment.ok
+    public static final String EVT_PAYMENT_OK = "evt.payment.ok";                // online payment ok
+    public static final String EVT_PROCESS_ALLOCATION = "evt.process.allocation";        // reserve qunatity on warehouse
+    public static final String EVT_CANCEL = "evt.order.cancel";              // simply cancel event for non confirmed orders and old orders in none state
+    public static final String EVT_CANCEL_WITH_REFUND = "evt.order.cancel.refund";       // cancel event with refund and credit quantity.
+    public static final String EVT_PROCESS_TIME_WAIT = "evt.process.date.wait";         // wait till date
+    public static final String EVT_PROCESS_INVENTORY_WAIT = "evt.process.inventory.wait";    // wait till available quantity state
+    public static final String EVT_DELIVERY_ALLOWED_TIMEOUT = "evt.delivery.allowed.timeout";  //transition will be performed when all items in delivery will have availability date more than now
     public static final String EVT_DELIVERY_ALLOWED_QUANTITY = "evt.delivery.allowed.quantity"; //transition will be performed when inventory check will be ok for non digital products.
-    public static final String EVT_RELEASE_TO_PACK           = "evt.release.to.pack";           // all quantity was reserved, so can release to order pack
-    public static final String EVT_PACK_COMPLETE             = "evt.packing.complete";          // order packed, so just wait for shipment
-    public static final String EVT_RELEASE_TO_SHIPMENT       = "evt.release.to.shipment";       // right now delivery on the way to the customer
-    public static final String EVT_SHIPMENT_COMPLETE         = "evt.shipment.complete";         // lets go to capture funds and update qty 
-
+    public static final String EVT_RELEASE_TO_PACK = "evt.release.to.pack";           // all quantity was reserved, so can release to order pack
+    public static final String EVT_PACK_COMPLETE = "evt.packing.complete";          // order packed, so just wait for shipment
+    public static final String EVT_RELEASE_TO_SHIPMENT = "evt.release.to.shipment";       // right now delivery on the way to the customer
+    public static final String EVT_SHIPMENT_COMPLETE = "evt.shipment.complete";         // lets go to capture funds and update qty
 
 
     /**
@@ -67,23 +66,24 @@ public interface OrderStateManager {
 
     /**
      * Get before transition listeners map.
+     *
      * @return after transition listeners map.
      */
     Map<String, List<? extends OrderStateTransitionListener>> getBeforeListenersMap();
 
     /**
      * Get handlers.
+     *
      * @return handlers map.
      */
     Map<String, OrderEventHandler> getHandlers();
 
     /**
      * Get after transition listeners map.
+     *
      * @return after transition listeners map.
      */
     Map<String, List<? extends OrderStateTransitionListener>> getAfterListenersMap();
-
-
 
 
 }

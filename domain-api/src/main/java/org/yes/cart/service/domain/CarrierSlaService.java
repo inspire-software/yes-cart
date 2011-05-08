@@ -13,10 +13,11 @@ import java.util.List;
  * Date: 07-May-2011
  * Time: 11:13:01
  */
-public interface CarrierSlaService extends GenericService<CarrierSla>{
+public interface CarrierSlaService extends GenericService<CarrierSla> {
 
-        /**
+    /**
      * Get shipping SLA by carrier Id.
+     *
      * @param carrierId given carrier id
      * @return list of SLA, that belongs to given carrier id
      */
@@ -24,8 +25,9 @@ public interface CarrierSlaService extends GenericService<CarrierSla>{
 
     /**
      * Get the price of delivery.
-     * @param carrierSla carries sla
-     * @param items items to deliver
+     *
+     * @param carrierSla     carries sla
+     * @param items          items to deliver
      * @param defaultAddress deliver to address.
      * @return price of delivery
      */

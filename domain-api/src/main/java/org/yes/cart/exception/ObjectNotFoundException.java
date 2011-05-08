@@ -23,16 +23,16 @@ public class ObjectNotFoundException extends Exception {
     /**
      * Recommended constructor.
      *
-     * @param clazz class of domain object
+     * @param clazz      class of domain object
      * @param parameters parameters used to retrieve object. These are key-value pairs
-     *        used as follows key1, value1, key2, value2 ... keyN, valueN.
+     *                   used as follows key1, value1, key2, value2 ... keyN, valueN.
      */
-    public ObjectNotFoundException(final Class< ? > clazz, final Object ... parameters) {
+    public ObjectNotFoundException(final Class<?> clazz, final Object... parameters) {
         this(generateMessage(clazz, parameters));
     }
 
 
-    private static String generateMessage(final Class< ? > clazz, final Object ... parameters) {
+    private static String generateMessage(final Class<?> clazz, final Object... parameters) {
         final StringBuilder msg = new StringBuilder("Object for class: " + clazz.getCanonicalName() + " cannot be found. Parameters : {");
         if (parameters != null) {
             for (int index = 0; index < parameters.length; index += 2) {

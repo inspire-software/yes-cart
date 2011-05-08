@@ -1,10 +1,10 @@
 package org.yes.cart.service.domain;
 
+import org.apache.lucene.search.Query;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.queryobject.FiteredNavigationRecord;
 import org.yes.cart.exception.ObjectNotFoundException;
-import org.apache.lucene.search.Query;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -13,9 +13,8 @@ import java.util.List;
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
  * Time: 11:13:01
-
  */
-public interface ProductService extends GenericService<Product>{
+public interface ProductService extends GenericService<Product> {
 
     /**
      * Get the all products in category
@@ -61,7 +60,7 @@ public interface ProductService extends GenericService<Product>{
      * Charger: 200/110
      * Battery type: Litium
      *
-     * @param attributable product  or sku
+     * @param attributable  product  or sku
      * @param productTypeId product type id
      * @return List of pair group names - list of attribute name and value.
      */
@@ -157,6 +156,7 @@ public interface ProductService extends GenericService<Product>{
     /**
      * Get all available products, that marked as featured . Need to be carefull to mark product as featured and keep
      * quantity of featured products limited.
+     *
      * @param categories current shop categories
      * @return shuffled list of featured products.
      */
@@ -172,12 +172,14 @@ public interface ProductService extends GenericService<Product>{
 
     /**
      * Reindex the products.
+     *
      * @return document quantity in index
      */
     int reindexProducts();
 
     /**
      * Reindex the products.
+     *
      * @param pk the product primary key
      * @return document quantity in index
      */
@@ -230,9 +232,9 @@ public interface ProductService extends GenericService<Product>{
     /**
      * Get the total quantity of product skus on warehouses that belong to given shop.
      * In multishop enviroment some product has 0 quantity at one shop and non 0 quantity at another,
-     *    this is can be used when shop owner want to getByKey more money from this situation.
+     * this is can be used when shop owner want to getByKey more money from this situation.
      *
-     * @param shop {@link Shop} given shop.
+     * @param shop    {@link Shop} given shop.
      * @param product product
      * @return quantity of product.
      */
@@ -246,9 +248,10 @@ public interface ProductService extends GenericService<Product>{
 
     /**
      * Find product by given optional filtering criteria.
-     * @param code product code.  use like %%
-     * @param name product name.  use like %%
-     * @param brandId brand id. use exact match
+     *
+     * @param code          product code.  use like %%
+     * @param name          product name.  use like %%
+     * @param brandId       brand id. use exact match
      * @param productTypeId product type id. use exact match
      * @return list of founded products
      */

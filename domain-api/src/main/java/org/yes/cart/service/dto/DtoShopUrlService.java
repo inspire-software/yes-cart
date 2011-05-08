@@ -1,9 +1,8 @@
 package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.ShopUrlDTO;
-import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.exception.UnableToCreateInstanceException;
-import org.yes.cart.service.dto.GenericDTOService;
+import org.yes.cart.exception.UnmappedInterfaceException;
 
 import java.util.List;
 
@@ -16,14 +15,16 @@ public interface DtoShopUrlService extends GenericDTOService<ShopUrlDTO> {
 
     /**
      * Get all urls, that belongs to given shop id
+     *
      * @param shopId pk value of shop
      * @return list of shop's urls
-     * @throws org.yes.cart.exception.UnableToCreateInstanceException in case of reflection problem
-     * @throws org.yes.cart.exception.UnmappedInterfaceException in case of configuration problem
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case of reflection problem
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration problem
      */
     List<ShopUrlDTO> getAllByShopId(long shopId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
-
 
 
 }

@@ -3,9 +3,8 @@ package org.yes.cart.domain.dto;
 import java.io.Serializable;
 
 /**
- *
  * Product type DTO.
- *
+ * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
  * Time: 11:12:54
@@ -57,25 +56,29 @@ public interface ProductTypeDTO extends Serializable {
 
     /**
      * Get the product type template variation.
+     *
      * @return template variation.
      */
     String getUitemplate();
 
     /**
      * Set template variation.
+     *
      * @param uitemplate template variation.
      */
     void setUitemplate(String uitemplate);
 
     /**
      * Get search template variation.
-     * @return  search template variation.
+     *
+     * @return search template variation.
      */
     String getUisearchtemplate();
 
     /**
      * Set  search template variation.
-     * @param uisearchtemplate  search template variation.
+     *
+     * @param uisearchtemplate search template variation.
      */
     void setUisearchtemplate(String uisearchtemplate);
 
@@ -124,24 +127,28 @@ public interface ProductTypeDTO extends Serializable {
 
     /**
      * Is product digital.
+     *
      * @return true if product digital.
      */
     boolean isDigital();
 
     /**
      * Set digital flag to product.
+     *
      * @param digital flag to set
      */
     void setDigital(boolean digital);
 
     /**
      * Is digital product donwloadable ?
+     *
      * @return true in case if digital product can be donwloaded.
      */
     boolean isDownloadable();
 
     /**
      * Set downloadable flag.
+     *
      * @param downloadable flag to set.
      */
     void setDownloadable(boolean downloadable);

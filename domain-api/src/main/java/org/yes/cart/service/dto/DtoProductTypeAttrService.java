@@ -1,8 +1,8 @@
 package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.ProductTypeAttrDTO;
-import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.exception.UnableToCreateInstanceException;
+import org.yes.cart.exception.UnmappedInterfaceException;
 
 import java.util.List;
 
@@ -15,10 +15,13 @@ public interface DtoProductTypeAttrService extends GenericDTOService<ProductType
 
     /**
      * Get the product type attributes.
+     *
      * @param productTypeId proruct type id
      * @return list of {@link ProductTypeAttrDTO}, that belong to product type.
-     * @throws org.yes.cart.exception.UnableToCreateInstanceException in case of reflection problem
-     * @throws org.yes.cart.exception.UnmappedInterfaceException in case of configuration problem
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case of reflection problem
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration problem
      */
     List<ProductTypeAttrDTO> getByProductTypeId(final long productTypeId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;

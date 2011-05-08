@@ -13,6 +13,7 @@ public interface ProductSkuService extends GenericService<ProductSku> {
 
     /**
      * Get all product SKUs.
+     *
      * @param productId product id
      * @return list of product skus.
      */
@@ -21,6 +22,7 @@ public interface ProductSkuService extends GenericService<ProductSku> {
 
     /**
      * Get product sku by code.
+     *
      * @param skuCode given sku code.
      * @return product sku if found, otherwise null
      */

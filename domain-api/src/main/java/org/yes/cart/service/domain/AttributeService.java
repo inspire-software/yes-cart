@@ -15,12 +15,14 @@ public interface AttributeService extends GenericService<Attribute> {
 
     /**
      * Get all attrubute codes.
+     *
      * @return set of attribute codes.
      */
     List<Object> getAllAttributeCodes();
 
     /**
      * Get attrubute names.
+     *
      * @param codes attribute codes
      * @return map of attribute code - name.
      */
@@ -29,6 +31,7 @@ public interface AttributeService extends GenericService<Attribute> {
 
     /**
      * Get list of attributes by given group code.
+     *
      * @param attributeGroupCode given group code
      * @return list of {@link Attribute}
      */
@@ -36,6 +39,7 @@ public interface AttributeService extends GenericService<Attribute> {
 
     /**
      * Get attribute by given code.
+     *
      * @param attributeCode given  code
      * @return instance {@link Attribute} if fount, otherwise null
      */
@@ -43,7 +47,8 @@ public interface AttributeService extends GenericService<Attribute> {
 
     /**
      * Get list of available attributes within given <code>attributeGroupCode</code>, that can be assigned to business entity.
-     * @param attributeGroupCode see AttributeGroup#code
+     *
+     * @param attributeGroupCode     see AttributeGroup#code
      * @param assignedAttributeCodes list of codes, that already assinged to entity
      * @return list of available attributes to fill with values.
      */
@@ -52,6 +57,7 @@ public interface AttributeService extends GenericService<Attribute> {
 
     /**
      * Find all attibutes in given group , that allow to have several attributes
+     *
      * @param attributeGroupCode group of attributes
      * @return list of attibutes with allowed multiple values or null if no such attributes found
      */

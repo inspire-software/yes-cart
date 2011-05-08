@@ -3,13 +3,11 @@ package org.yes.cart.domain.dto;
 import java.io.Serializable;
 
 /**
- *
  * Warehouse DTO.
- *
+ * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
  * Time: 11:12:54
- *
  */
 public interface WarehouseDTO extends Serializable {
 
@@ -71,50 +69,59 @@ public interface WarehouseDTO extends Serializable {
 
 
     // address part of warehouse begin
+
     /**
      * Get country.
+     *
      * @return coubtry.
      */
     String getCountryCode();
 
     /**
      * Set country.
+     *
      * @param countryCode country to set
      */
     void setCountryCode(String countryCode);
 
     /**
      * State or province code.
+     *
      * @return state or province code
      */
     String getStateCode();
 
     /**
      * Set state or province.
+     *
      * @param stateCode state.
      */
     void setStateCode(final String stateCode);
 
     /**
      * Get city.
+     *
      * @return city
      */
     String getCity();
 
     /**
      * Set city
+     *
      * @param city value to set
      */
     void setCity(String city);
 
     /**
      * Get postcode.
+     *
      * @return post code
      */
     String getPostcode();
 
     /**
      * Set post code
+     *
      * @param postcode value to set
      */
     void setPostcode(String postcode);

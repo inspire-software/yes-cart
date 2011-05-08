@@ -1,4 +1,3 @@
-
 package org.yes.cart.domain.entity;
 
 import java.math.BigDecimal;
@@ -6,7 +5,7 @@ import java.math.BigDecimal;
 
 /**
  * Currency exchange rate in particular store.
- *
+ * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
  * Time: 11:12:54

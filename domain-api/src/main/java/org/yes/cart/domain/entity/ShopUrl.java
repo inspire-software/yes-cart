@@ -1,4 +1,3 @@
-
 package org.yes.cart.domain.entity;
 
 

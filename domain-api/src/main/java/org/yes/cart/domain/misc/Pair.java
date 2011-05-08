@@ -1,16 +1,14 @@
-
 package org.yes.cart.domain.misc;
 
 import java.io.Serializable;
 import java.text.MessageFormat;
 
 /**
- *
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
  * Time: 11:12:54
  *
- * @param <FIRST> the type of the first object
+ * @param <FIRST>  the type of the first object
  * @param <SECOND> the type of the second object
  */
 public class Pair<FIRST, SECOND> implements Serializable {

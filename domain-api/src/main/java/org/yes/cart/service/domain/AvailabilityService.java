@@ -7,6 +7,6 @@ import org.yes.cart.domain.entity.Availability;
  * Date: 07-May-2011
  * Time: 11:13:01
  */
-public interface AvailabilityService  extends GenericService<Availability> {
+public interface AvailabilityService extends GenericService<Availability> {
 
 }

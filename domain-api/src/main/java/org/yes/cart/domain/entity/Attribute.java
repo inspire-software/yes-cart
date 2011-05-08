@@ -1,25 +1,25 @@
-
 package org.yes.cart.domain.entity;
 
 
 /**
  * Attribute.
- *
+ * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
  * Time: 11:12:54
- *
  */
 public interface Attribute extends Auditable, Rankable {
 
     /**
      * Get primary key.
+     *
      * @return pk cvalue
      */
     long getAttributeId();
 
     /**
      * Set pk value.
+     *
      * @param attributeId pk value.
      */
     void setAttributeId(long attributeId);
@@ -34,6 +34,7 @@ public interface Attribute extends Auditable, Rankable {
 
     /**
      * Set attribute code
+     *
      * @param code code value
      */
     void setCode(String code);
@@ -47,6 +48,7 @@ public interface Attribute extends Auditable, Rankable {
 
     /**
      * Set mandatory flag.
+     *
      * @param mandatory flag value
      */
     void setMandatory(boolean mandatory);
@@ -60,6 +62,7 @@ public interface Attribute extends Auditable, Rankable {
 
     /**
      * Set default value of attribute
+     *
      * @param val default value.
      */
     void setVal(String val);
@@ -73,78 +76,91 @@ public interface Attribute extends Auditable, Rankable {
 
     /**
      * Get atribute name
+     *
      * @param name name
      */
     void setName(String name);
 
     /**
      * Get description.
+     *
      * @return description.
      */
     String getDescription();
 
     /**
      * Set description
+     *
      * @param description description value.
      */
     void setDescription(String description);
 
     /**
      * Get the system type.
+     *
      * @return {@link Etype} type of attribute.
      */
     Etype getEtype();
 
     /**
      * Set type.
+     *
      * @param etype type.
      */
     void setEtype(Etype etype);
 
     /**
      * Get attribute group.
+     *
      * @return {@link AttributeGroup}
      */
     AttributeGroup getAttributeGroup();
 
     /**
      * Set {@link AttributeGroup}.
+     *
      * @param attributeGroup attribute group.
      */
     void setAttributeGroup(AttributeGroup attributeGroup);
 
     /**
-     * Is attribute duplicates allowed. Attribute can have several values. Example color - black and red. 
+     * Is attribute duplicates allowed. Attribute can have several values. Example color - black and red.
+     *
      * @return true if duplicates allowed
      */
     boolean isAllowduplicate();
 
     /**
      * Set duplicates allowed flag
+     *
      * @param allowduplicate duplicates allowed flag
      */
     void setAllowduplicate(boolean allowduplicate);
 
     /**
      * Allow failover search for category attributes.
+     *
      * @return true if failvover allowed.
      */
     boolean isAllowfailover();
 
     /**
      * Set search failower flag.
+     *
      * @param allowfailover true if faiover allowed.
      */
     void setAllowfailover(boolean allowfailover);
 
     /**
      * Get regular expression to validate user input on UI.
+     *
      * @return regular expression if any.
      */
     String getRegexp();
 
     /**
      * Set regular expression to validate user input on UI.
+     *
      * @param regexp regular expression.
      */
     void setRegexp(String regexp);
@@ -152,12 +168,14 @@ public interface Attribute extends Auditable, Rankable {
 
     /**
      * Get validation failed message. Message if type, mandatory or re validation failed.
+     *
      * @return validation failed message.
      */
     String getValidationFailedMessage();
 
     /**
      * Set validation failed message.
+     *
      * @param validationFailedMessage validation failed message.
      */
     void setValidationFailedMessage(String validationFailedMessage);
@@ -165,12 +183,14 @@ public interface Attribute extends Auditable, Rankable {
 
     /**
      * Get order in UI form.
+     *
      * @return order in UI form.
      */
     int getRank();
 
     /**
-     *  Set order in UI form.
+     * Set order in UI form.
+     *
      * @param rank order in UI form
      */
     void setRank(int rank);
@@ -178,18 +198,17 @@ public interface Attribute extends Auditable, Rankable {
     /**
      * Get the comma separated  [key-]value data or
      * service , that provide data in case if start from protocol,
+     *
      * @return comma separated coices.
      */
     String getChoiceData();
 
     /**
      * Set comma separated coices.
+     *
      * @param choiceData comma separated coices.
      */
     void setChoiceData(String choiceData);
-    
-
-        
 
 
 }

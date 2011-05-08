@@ -23,70 +23,95 @@ public class FiteredNavigationRecordImpl implements FiteredNavigationRecord, Ser
 
     private String type;
 
-    /** {@inheritDoc */
+    /**
+     * {@inheritDoc
+     */
     public String getCode() {
         return code;
     }
 
-    /** {@inheritDoc */
+    /**
+     * {@inheritDoc
+     */
     public void setCode(final String code) {
         this.code = code;
     }
 
-    /** {@inheritDoc */
+    /**
+     * {@inheritDoc
+     */
     public String getValue() {
         return value;
     }
 
-    /** {@inheritDoc */
+    /**
+     * {@inheritDoc
+     */
     public void setValue(final String value) {
         this.value = value;
     }
 
-    /** {@inheritDoc */
+    /**
+     * {@inheritDoc
+     */
     public int getCount() {
         return count;
     }
 
-    /** {@inheritDoc */
+    /**
+     * {@inheritDoc
+     */
     public void setCount(final int itemsCount) {
         this.count = itemsCount;
     }
 
-    /** {@inheritDoc */
+    /**
+     * {@inheritDoc
+     */
     public void setName(final String name) {
         this.name = name;
     }
 
-    /** {@inheritDoc */
+    /**
+     * {@inheritDoc
+     */
     public String getName() {
         return name;
     }
 
-    /** {@inheritDoc */
+    /**
+     * {@inheritDoc
+     */
     public int getRank() {
         return rank;
     }
 
-    /** {@inheritDoc */
+    /**
+     * {@inheritDoc
+     */
     public void setRank(final int rank) {
         this.rank = rank;
     }
 
-    /** {@inheritDoc */
+    /**
+     * {@inheritDoc
+     */
     public String getType() {
         return type;
     }
 
-    /** {@inheritDoc */
+    /**
+     * {@inheritDoc
+     */
     public void setType(final String type) {
         this.type = type;
     }
 
     /**
      * Construct filtered navigation record.
-     * @param name attribute nave
-     * @param code attribute code
+     *
+     * @param name  attribute nave
+     * @param code  attribute code
      * @param value value
      * @param count count of objects.
      */
@@ -99,11 +124,12 @@ public class FiteredNavigationRecordImpl implements FiteredNavigationRecord, Ser
 
     /**
      * Construct filtered navigation record.
-     * @param name attribute nave
-     * @param code attribute code
+     *
+     * @param name  attribute nave
+     * @param code  attribute code
      * @param value value
      * @param count count of objects.
-     * @param rank rank
+     * @param rank  rank
      */
     public FiteredNavigationRecordImpl(final String name, final String code, final String value, final int count, final int rank) {
         this.name = name;
@@ -115,12 +141,13 @@ public class FiteredNavigationRecordImpl implements FiteredNavigationRecord, Ser
 
     /**
      * Construct filtered navigation record.
-     * @param name attribute nave
-     * @param code attribute code
+     *
+     * @param name  attribute nave
+     * @param code  attribute code
      * @param value value
      * @param count count of objects.
-     * @param rank rank
-     * @param type type of navigation S - single value R - range value
+     * @param rank  rank
+     * @param type  type of navigation S - single value R - range value
      */
     public FiteredNavigationRecordImpl(final String name, final String code, final String value,
                                        final int count, final int rank, final String type) {
@@ -131,8 +158,6 @@ public class FiteredNavigationRecordImpl implements FiteredNavigationRecord, Ser
         this.rank = rank;
         this.type = type;
     }
-
-
 
 
 }

@@ -2,8 +2,8 @@ package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.ProductSkuDTO;
 import org.yes.cart.domain.dto.SkuPriceDTO;
-import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.exception.UnableToCreateInstanceException;
+import org.yes.cart.exception.UnmappedInterfaceException;
 
 import java.util.List;
 
@@ -16,6 +16,7 @@ public interface DtoProductSkuService extends GenericDTOService<ProductSkuDTO>, 
 
     /**
      * Get all product SKUs.
+     *
      * @param productId product id
      * @return list of product skus.
      */
@@ -24,6 +25,7 @@ public interface DtoProductSkuService extends GenericDTOService<ProductSkuDTO>, 
 
     /**
      * Create sku price.
+     *
      * @param skuPriceDTO to create in database
      * @return created price sku pk value
      */
@@ -31,6 +33,7 @@ public interface DtoProductSkuService extends GenericDTOService<ProductSkuDTO>, 
 
     /**
      * Update sku price.
+     *
      * @param skuPriceDTO to create in database
      * @return update price sku pk value
      */
@@ -39,6 +42,7 @@ public interface DtoProductSkuService extends GenericDTOService<ProductSkuDTO>, 
 
     /**
      * Delete sku prioce by given pk
+     *
      * @param skuPriceId pk value.
      */
     void removeSkuPrice(long skuPriceId);

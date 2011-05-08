@@ -13,6 +13,7 @@ public interface CustomerWishListService extends GenericService<CustomerWishList
 
     /**
      * Get customer credit cards.
+     *
      * @param customerId customer id
      * @return list of cards.
      */

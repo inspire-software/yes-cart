@@ -3,9 +3,8 @@ package org.yes.cart.domain.entity;
 import java.util.Collection;
 
 /**
- *
  * Mark objects as attributable.
- *
+ * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
  * Time: 11:12:54
@@ -14,7 +13,8 @@ public interface Attributable {
 
     /**
      * Get all attibute values.
-     * @return  all attr values.
+     *
+     * @return all attr values.
      */
     Collection<AttrValue> getAllAttibutes();
 

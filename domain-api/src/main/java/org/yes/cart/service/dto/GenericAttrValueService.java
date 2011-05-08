@@ -1,8 +1,8 @@
 package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.AttrValueDTO;
-import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.exception.UnableToCreateInstanceException;
+import org.yes.cart.exception.UnmappedInterfaceException;
 
 import java.util.List;
 
@@ -21,20 +21,23 @@ public interface GenericAttrValueService {
      * attr1 - value
      * attr2 - empty value
      * attr3 value.
-     *
+     * <p/>
      * This service mostly for UI.
      *
      * @param entityPk entity pk value
      * @return list of attribute values
-     * @throws org.yes.cart.exception.UnableToCreateInstanceException in case of configuration erros
-     * @throws org.yes.cart.exception.UnmappedInterfaceException in case of configuration erros
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case of configuration erros
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration erros
      */
-    List<? extends AttrValueDTO> getEntityAttributes(long entityPk) 
+    List<? extends AttrValueDTO> getEntityAttributes(long entityPk)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
     /**
      * Update attribute value.
+     *
      * @param attrValueDTO value to update
      * @return updated value
      */
@@ -42,6 +45,7 @@ public interface GenericAttrValueService {
 
     /**
      * Create attribute value
+     *
      * @param attrValueDTO value to persist
      * @return created value
      */
@@ -50,10 +54,10 @@ public interface GenericAttrValueService {
 
     /**
      * Delete attribute value by given pk value.
+     *
      * @param attributeValuePk given pk value.
      */
     void deleteAttributeValue(long attributeValuePk);
-
 
 
 }

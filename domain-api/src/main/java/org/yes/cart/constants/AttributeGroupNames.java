@@ -2,7 +2,7 @@ package org.yes.cart.constants;
 
 /**
  * Built in attribute group names.
- *
+ * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
  * Time: 11:12:54
