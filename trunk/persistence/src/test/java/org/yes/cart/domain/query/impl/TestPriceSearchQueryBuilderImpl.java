@@ -1,12 +1,12 @@
 package org.yes.cart.domain.query.impl;
 
-import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.dao.constants.DaoServiceBeanKeys;
-import org.yes.cart.dao.impl.AbstractTestDAO;
 import org.apache.lucene.search.BooleanQuery;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.dao.constants.DaoServiceBeanKeys;
+import org.yes.cart.dao.impl.AbstractTestDAO;
 import org.yes.cart.domain.entity.Product;
 
 import java.math.BigDecimal;

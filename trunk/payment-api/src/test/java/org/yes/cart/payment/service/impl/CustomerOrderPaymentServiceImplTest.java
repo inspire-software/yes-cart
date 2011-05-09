@@ -1,15 +1,15 @@
 package org.yes.cart.payment.service.impl;
 
-import org.junit.Before;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
-import org.yes.cart.payment.service.CustomerOrderPaymentService;
+import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity;
-import org.yes.cart.payment.dto.Payment;
+import org.yes.cart.payment.service.CustomerOrderPaymentService;
 
-import java.util.Date;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com

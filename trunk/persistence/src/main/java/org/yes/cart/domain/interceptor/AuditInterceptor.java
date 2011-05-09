@@ -1,18 +1,16 @@
 package org.yes.cart.domain.interceptor;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.type.Type;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
-import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.entity.Auditable;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.UUID;
 import java.util.Arrays;
+import java.util.Date;
 
 /**
 * User: Igor Azarny iazarny@yahoo.com

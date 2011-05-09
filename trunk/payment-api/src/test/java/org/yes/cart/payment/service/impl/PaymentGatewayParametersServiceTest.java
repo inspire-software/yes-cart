@@ -1,11 +1,11 @@
 package org.yes.cart.payment.service.impl;
 
-import org.junit.Before;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
-import org.yes.cart.payment.service.PaymentGatewayParameterService;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 import org.yes.cart.payment.persistence.entity.impl.PaymentGatewayParameterEntity;
+import org.yes.cart.payment.service.PaymentGatewayParameterService;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>yes-cart</artifactId>
+        <groupId>org.yes</groupId>
+        <version>1.0</version>
+    </parent>
+    <groupId>org.yes</groupId>
+    <artifactId>core-module-payment-base</artifactId>
+    <version>1.x-SNAPSHOT</version>
+    <name>Base payment modules provider</name>
+    <!--name>Include: null, delayed payment (?), carrier, bank, paypall express, gift sertiicate</name-->
+
+    <url>http://maven.apache.org</url>
+
+    <dependencies>
+
+
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>payment-api</artifactId>
+            <version>1.x-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>persistence</artifactId>
+                    <version>1.x-SNAPSHOT</version>
+                    <scope>compile</scope>
+        </dependency>
+                                                                
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.7</version>
+            <scope>test</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.5.8</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.5.8</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${spring.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>${spring-security.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${spring.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+
+    </dependencies>
+
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>dbunit-maven-plugin</artifactId>
+                    <version>1.0-beta-3</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.5</version>
+                    <configuration>
+                        <forkMode>pertest</forkMode>
+                        <argLine>-Xms512m -Xmx1024m</argLine>
+                        <testFailureIgnore>false</testFailureIgnore>
+                        <!--threadCount>12</threadCount-->
+                        <useUnlimitedThreads>true</useUnlimitedThreads>
+                        <parallel>classes</parallel>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </testResource>
+            <testResource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </testResource>
+        </testResources>
+    </build>
+
+
+    <properties>
+        <spring-security.version>3.0.3.RELEASE</spring-security.version>
+        <spring.version>3.0.5.RELEASE</spring.version>
+    </properties>
+
+</project>

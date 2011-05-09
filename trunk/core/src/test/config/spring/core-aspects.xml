@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+			http://www.springframework.org/schema/context
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd
+			http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+
+
+    <bean id="passPhraseGenerator" class="org.yes.cart.service.domain.impl.PassPhraseGeneratorImpl">
+        <constructor-arg index="0" value="8"/>
+    </bean>
+    <bean id="passwordHashHelper" class="org.yes.cart.service.domain.impl.MD5HashHelperImpl"/>
+
+    <!-- #################################  aspects configurations begin ######################################-->
+
+    <bean id="customerRegistrationAspect" class="org.yes.cart.service.domain.aspect.impl.CustomerRegistrationAspect">
+        <constructor-arg index="0" ref="passPhraseGenerator"/>
+        <constructor-arg index="1" ref="passwordHashHelper"/>
+    </bean>
+
+
+    <bean id="managerRegistrationAspect" class="org.yes.cart.service.domain.aspect.impl.ManagerRegistrationAspect">
+        <constructor-arg index="0" ref="passPhraseGenerator"/>
+        <constructor-arg index="1" ref="passwordHashHelper"/>
+    </bean>
+
+    <!-- #################################  aspects configurations end ######################################-->
+
+
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="localhost"/>
+        <property name="port" value="2525"/>
+        <property name="username" value="yourusername"/>
+        <property name="password" value="yourpassword"/>
+        <property name="javaMailProperties">
+            <props>
+                <!-- Use SMTP-AUTH to authenticate to SMTP server -->
+                <!--<prop key="mail.smtp.auth">true</prop>-->
+                <!-- Use TLS to encrypt communication with SMTP server -->
+                <prop key="mail.smtp.starttls.enable">true</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="customerRegistrationListener" class="org.yes.cart.domain.message.consumer.CustomerRegistrationMessageListener">
+        <constructor-arg index="0" type="org.springframework.mail.javamail.JavaMailSender" ref="mailSender"/>
+        <constructor-arg index="1" type="org.yes.cart.service.mail.MailComposer" ref="mailComposer"/>
+    </bean>
+    
+
+</beans>
+

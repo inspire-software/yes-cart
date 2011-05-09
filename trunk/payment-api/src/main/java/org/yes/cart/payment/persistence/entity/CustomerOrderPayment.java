@@ -1,11 +1,10 @@
 package org.yes.cart.payment.persistence.entity;
 
-import javax.persistence.Column;
 import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * Represent peymwnt per order. Each order has at least one payment. In case of several shipments order has several payments.
+ * Represent payment per order. Each order has at least one payment. In case of several shipments order has several payments.
  * This is limited by Visa and Mastercard policy. Fund capture can be performed for delivered order.
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com

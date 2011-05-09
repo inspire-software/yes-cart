@@ -1,8 +1,8 @@
 package org.yes.cart.dao.impl;
 
-import org.yes.cart.dao.EntityFactory;
 import org.junit.Before;
 import org.junit.Test;
+import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.impl.AddressEntity;
 
