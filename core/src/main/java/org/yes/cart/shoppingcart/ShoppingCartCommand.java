@@ -1,0 +1,30 @@
+package org.yes.cart.shoppingcart;
+
+
+import org.yes.cart.domain.dto.ShoppingCart;
+
+import java.io.Serializable;
+
+/**
+ * .
+ * <p/>
+ * User: dogma
+ * Date: Jan 22, 2011
+ * Time: 5:07:03 PM
+ */
+public interface ShoppingCartCommand extends Serializable {
+
+    /**
+     * Execute command on shopping cart to perform changes.
+     *
+     * @param shoppingCart the shopping cart
+     */
+    void execute(ShoppingCart shoppingCart);
+
+    /**
+     *
+     * @return command key
+     */
+    String getCmdKey();
+
+}

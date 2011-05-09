@@ -30,6 +30,8 @@
         <module>payment-api</module>
         <module>domain-api</module>
         <module>persistence</module>
+        <module>core-modules/core-module-payment-base</module>
+        <module>core</module>
     </modules>
 
     <build>

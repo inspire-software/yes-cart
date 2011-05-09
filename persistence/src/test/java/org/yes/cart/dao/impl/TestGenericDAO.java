@@ -1,12 +1,12 @@
 package org.yes.cart.dao.impl;
 
+import org.hibernate.criterion.Restrictions;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.constants.DaoServiceBeanKeys;
-import org.junit.Before;
-import org.junit.After;
-import org.junit.Test;
-import org.hibernate.criterion.Restrictions;
 import org.yes.cart.domain.entity.Brand;
 
 /**

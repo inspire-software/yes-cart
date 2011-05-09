@@ -1,0 +1,1029 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+			http://www.springframework.org/schema/context
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd
+			http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+
+
+
+
+    <bean id="priceNavigation" class="org.yes.cart.domain.query.impl.PriceNavigationImpl"/>
+
+    <bean id="hashHelper" class="org.yes.cart.service.domain.impl.MD5HashHelperImpl" scope="prototype"/>
+
+    <bean id="luceneQueryFactory" class="org.yes.cart.domain.query.impl.LuceneQueryFactoryImpl">
+        <constructor-arg index="0" type="org.yes.cart.domain.query.PriceNavigation" ref="priceNavigation"/>
+    </bean>
+
+    <bean id="systemService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.SystemServiceImpl">
+                <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="systemDao"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="shopService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.ShopServiceImpl">
+                <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="shopDao"/>
+                <constructor-arg type="org.yes.cart.service.domain.CategoryService" ref="categoryService"/>
+                <constructor-arg type="org.yes.cart.service.domain.AttributeService" ref="attributeService"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="shopUrlService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.ShopUrlServiceImpl">
+                <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="shopUrlDao"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="categoryService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.CategoryServiceImpl">
+                <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="categoryDao"/>
+                <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="shopCategoryDao"/>
+                <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="shopDao"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="productService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.ProductServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="productDao"/>
+                <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="productSkuDao"/>
+                <constructor-arg index="2" type="org.yes.cart.dao.GenericDAO" ref="productTypeDao"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="productSkuService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.ProductSkuServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="productSkuDao"/>
+                <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="productDao"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="addressService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.AddressServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="addressDao"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="customerWishListService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.CustomerWishListServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="customerWishListDao"/>
+            </bean>
+        </property>
+    </bean>
+
+
+
+    <bean id="attributeService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.AttributeServiceImpl">
+                <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="attributeDao"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <!--     #############################   Image section begin   #############################    -->
+    <bean id="categoryImageNameStrategy" class="org.yes.cart.service.image.impl.CategoryImageNameStrategyImpl">
+        <constructor-arg index="0" ref="systemService"/>
+    </bean>
+
+    <bean id="productImageNameStrategy" class="org.yes.cart.service.image.impl.ProductImageNameStrategyImpl">
+        <constructor-arg index="0" ref="systemService"/>
+        <constructor-arg index="1" ref="attrValueEntityProductSkuDao"/>
+        <constructor-arg index="2" ref="attrValueEntityProductDao"/>
+    </bean>
+
+    <bean id="brandImageNameStrategy" class="org.yes.cart.service.image.impl.BrandImageNameStrategyImpl">
+        <constructor-arg index="0" ref="systemService"/>
+    </bean>
+
+    <bean id="imageNameStrategyResolver" class="org.yes.cart.service.image.impl.ImageNameStrategyResolverImpl">
+        <constructor-arg index="0" ref="brandImageNameStrategy"/>
+        <constructor-arg index="1" ref="categoryImageNameStrategy"/>
+        <constructor-arg index="2" ref="productImageNameStrategy"/>
+    </bean>
+
+    <!--
+    Responsible:
+        image resizing;
+        storing images into repository during bulk import;
+        work with brand, product, sku and category images.
+    -->
+    <bean id="imageService" class="org.yes.cart.service.domain.impl.ImageServiceImpl">
+        <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="seoImageDao"/>
+        <constructor-arg type="org.yes.cart.service.image.ImageNameStrategyResolver" ref="imageNameStrategyResolver"/>
+        <!--
+        Allowed pictures sizes to resize. Original image will be returned if requested size not allowed.
+        -->
+        <constructor-arg type="java.lang.String" value="40x40,50x50,60x60,80x80,200x200,160x160,360x360,120x120"/>
+        <!--
+        Background RGB color for resized picture.
+        -->
+        <constructor-arg type="double" value="255"/>
+        <constructor-arg type="double" value="255"/>
+        <constructor-arg type="double" value="255"/>
+    </bean>
+    <!--     #############################   Image section end   #############################    -->
+
+    <bean id="productAssociationService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.ProductAssociationServiceImpl">
+                <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="productAssociationDao"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="associationService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.AssociationServiceImpl">
+                <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="associationDao"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="priceService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.PriceServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.service.domain.ExchangeRateService" ref="exchangeRateService"/>
+                <constructor-arg index="1" type="org.yes.cart.domain.query.PriceNavigation" ref="priceNavigation"/>
+                <constructor-arg index="2" type="org.yes.cart.dao.GenericDAO" ref="skuPriceDao"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="attributeGroupService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.AttributeGroupServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="attributeGroupDao"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="etypeService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.EtypeServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="etypeDao"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="exchangeRateService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.ExchangeRateServiceImpl"/>
+        </property>
+    </bean>
+
+
+    <bean id="seoService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.SeoServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="seoDao"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="shopCategoryService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.ShopCategoryServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="shopCategoryDao"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="availabilityService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.AvailabilityServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="availabilityDao"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="brandService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.BrandServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="brandDao"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="carrierService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.CarrierServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="carrierDao"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="carrierSlaService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.CarrierSlaServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="carrierSlaDao"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="warehouseService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.WarehouseServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="warehouseDao"/>
+                <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="shopDao"/>
+                <constructor-arg index="2" type="org.yes.cart.dao.GenericDAO" ref="shopWarehouseDao"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="productTypeService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.ProductTypeServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="productTypeDao"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="productTypeAttrService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.ProductTypeAttrServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="productTypeAttrDao"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="countryService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.CountryServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="countryDao"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="stateService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.StateServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="stateDao"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="productCategoryService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.ProductCategoryServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="productCategoryDao"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="customerOrderService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.CustomerOrderServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="customerOrderDao"/>
+                <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="customerDao"/>
+                <constructor-arg index="2" type="org.yes.cart.service.order.OrderAssembler" ref="orderAssembler"/>
+                <constructor-arg index="3" type="org.yes.cart.service.order.DeliveryAssembler" ref="deliveryAssembler"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="customerService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.CustomerServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="customerDao"/>
+                <constructor-arg index="1" type="org.yes.cart.service.domain.HashHelper" ref="hashHelper"/>
+                <constructor-arg index="2" type="org.yes.cart.dao.GenericDAO" ref="shopDao"/>
+                <constructor-arg index="3" type="org.yes.cart.service.domain.AttributeService" ref="attributeService"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="managerService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.ManagerServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="managerDao"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="skuWarehouseService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.SkuWarehouseServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="skuWarehouseDao"/>
+            </bean>
+        </property>
+    </bean>
+
+
+
+
+    <!-- ############################################ DTO Support ######################################################################### -->
+
+
+    <bean id="dtoAttributeGroupService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoAttributeGroupServiceImpl">
+                <constructor-arg index="0" ref="attributeGroupService"/>
+                <constructor-arg index="1" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="dtoAttributeService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoAttributeServiceImpl">
+                <constructor-arg index="0" ref="attributeService"/>
+                <constructor-arg index="1" ref="etypeService"/>
+                <constructor-arg index="2" ref="attributeGroupService"/>
+                <constructor-arg index="3" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="dtoCategoryService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoCategoryServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="1" ref="categoryService"/>
+                <constructor-arg index="2" ref="seoService"/>
+                <constructor-arg index="3" ref="shopCategoryService"/>
+                <constructor-arg index="4" ref="productTypeService"/>
+                <constructor-arg index="5" ref="dtoAttributeService"/>
+                <constructor-arg index="6" ref="attrValueEntityCategoryDao"/>
+                <constructor-arg index="7" ref="imageService"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="dtoEtypeService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoEtypeServiceImpl">
+                <constructor-arg index="0" ref="etypeService"/>
+                <constructor-arg index="1" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="dtoAvailabilityService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoAvailabilityServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="1" ref="availabilityService"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="dtoProductService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoProductServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="1" ref="productService"/>
+                <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+                <constructor-arg index="3" ref="seoService"/>
+                <constructor-arg index="4" ref="dtoAttributeService"/>
+                <constructor-arg index="5" ref="attrValueEntityProductDao"/>
+                <constructor-arg index="6" ref="imageService"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="dtoProductSkuService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoProductSkuServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="1" ref="productSkuService"/>
+                <constructor-arg index="2" ref="dtoAttributeService"/>
+                <constructor-arg index="3" ref="attrValueEntityProductSkuDao"/>
+                <constructor-arg index="4" ref="dtoValueConvertersRepository"/>
+                <constructor-arg index="5" ref="priceService"/>
+                <constructor-arg index="6" ref="seoService"/>
+                <constructor-arg index="7" ref="imageService"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="dtoSeoService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoSeoServiceImpl">
+                <constructor-arg index="0" ref="seoService"/>
+                <constructor-arg index="1" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="dtoShopService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoShopServiceImpl">
+                <constructor-arg index="0" ref="shopService"/>
+                <constructor-arg index="1" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="dtoShopUrlService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoShopUrlServiceImpl">
+                <constructor-arg index="0" ref="shopUrlService"/>
+                <constructor-arg index="1" ref="shopService"/>
+                <constructor-arg index="2" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="dtoBrandService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoBrandServiceImpl">
+                <constructor-arg index="0" ref="brandService"/>
+                <constructor-arg index="1" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="2" ref="dtoAttributeService"/>
+                <constructor-arg index="3" ref="attrValueEntityBrandDao"/>
+                <constructor-arg index="4" ref="imageService"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="dtoWarehouseService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoWarehouseServiceImpl">
+                <constructor-arg index="0" ref="warehouseService"/>
+                <constructor-arg index="1" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+                <constructor-arg index="3" ref="skuWarehouseService"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="dtoProductTypeService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoProductTypeServiceImpl">
+                <constructor-arg index="0" ref="productTypeService"/>
+                <constructor-arg index="1" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="dtoProductTypeAttrService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoProductTypeAttrServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="1" ref="productTypeAttrService"/>
+                <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="dtoAssociationService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoAssociationServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="1" ref="associationService"/>
+                <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="dtoProductAssociationService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoProductAssociationServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="1" ref="productAssociationService"/>
+                <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="dtoCustomerService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoCustomerServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="1" ref="customerService"/>
+                <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+                <constructor-arg index="3" ref="dtoAttributeService"/>
+                <constructor-arg index="4" ref="attrValueEntityCustomerDao"/>
+                <constructor-arg index="5" ref="shopDao"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="dtoAddressService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoAddressServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="1" ref="addressService"/>
+                <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="dtoCarrierService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoCarrierServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="1" ref="carrierService"/>
+                <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="dtoCarrierSlaService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoCarrierSlaServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="1" ref="carrierSlaService"/>
+                <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="dtoCustomerOrderService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoCustomerOrderServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="1" ref="customerOrderService"/>
+                <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="dtoCustomerWishListService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoCustomerWishListServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="1" ref="customerWishListService"/>
+                <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="dtoImageService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoImageServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="1" ref="imageService"/>
+                <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="dtoProductCategoryService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoProductCategoryServiceImpl">
+                <constructor-arg index="0" ref="productCategoryService"/>
+                <constructor-arg index="1" ref="productService"/>
+                <constructor-arg index="2" ref="categoryService"/>
+                <constructor-arg index="3" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="userManagmentService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.ManagementServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.service.domain.ManagerService" ref="managerService"/>
+                <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="managerRoleDao"/>
+                <constructor-arg index="2" type="org.yes.cart.dao.GenericDAO" ref="roleDao"/>
+                <constructor-arg index="3" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="dtoCountryService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoCountryServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="1" ref="countryService"/>
+                <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="dtoStateService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoStateServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="1" ref="stateService"/>
+                <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="dtoInterfaceToClassFactory" class="org.yes.cart.domain.dto.factory.impl.DtoFactoryImpl">
+        <constructor-arg>
+            <map>
+                <entry key="org.yes.cart.domain.dto.ProductSkuDTO" value="org.yes.cart.domain.dto.impl.ProductSkuDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.SkuPriceDTO" value="org.yes.cart.domain.dto.impl.SkuPriceDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ManagerDTO" value="org.yes.cart.domain.dto.impl.ManagerDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.RoleDTO" value="org.yes.cart.domain.dto.impl.RoleDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.AttributeGroupDTO" value="org.yes.cart.domain.dto.impl.AttributeGroupDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.AttributeDTO" value="org.yes.cart.domain.dto.impl.AttributeDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.EtypeDTO" value="org.yes.cart.domain.dto.impl.EtypeDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ShopDTO" value="org.yes.cart.domain.dto.impl.ShopDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ShopUrlDTO" value="org.yes.cart.domain.dto.impl.ShopUrlDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.CategoryDTO" value="org.yes.cart.domain.dto.impl.CategoryDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.SeoDTO" value="org.yes.cart.domain.dto.impl.SeoDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.AvailabilityDTO" value="org.yes.cart.domain.dto.impl.AvailabilityDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.BrandDTO" value="org.yes.cart.domain.dto.impl.BrandDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ProductTypeDTO" value="org.yes.cart.domain.dto.impl.ProductTypeDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ProductTypeAttrDTO" value="org.yes.cart.domain.dto.impl.ProductTypeAttrDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ProductCategoryDTO" value="org.yes.cart.domain.dto.impl.ProductCategoryDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ProductDTO" value="org.yes.cart.domain.dto.impl.ProductDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ProductSkuDTO" value="org.yes.cart.domain.dto.impl.ProductSkuDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.AttrValueCategoryDTO" value="org.yes.cart.domain.dto.impl.AttrValueCategoryDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.AttrValueCustomerDTO" value="org.yes.cart.domain.dto.impl.AttrValueCustomerDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.CustomerDTO" value="org.yes.cart.domain.dto.impl.CustomerDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.CustomerCardDTO" value="org.yes.cart.domain.dto.impl.CustomerCardDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.CustomerWishListDTO" value="org.yes.cart.domain.dto.impl.CustomerWishListDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.AttrValueProductDTO" value="org.yes.cart.domain.dto.impl.AttrValueProductDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.AttrValueProductSkuDTO"
+                       value="org.yes.cart.domain.dto.impl.AttrValueProductSkuDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.AttrValueBrandDTO" value="org.yes.cart.domain.dto.impl.AttrValueBrandDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.WarehouseDTO" value="org.yes.cart.domain.dto.impl.WarehouseDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ShopWarehouseDTO" value="org.yes.cart.domain.dto.impl.ShopWarehouseDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ShopCategoryDTO" value="org.yes.cart.domain.dto.impl.ShopCategoryDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.SkuWarehouseDTO" value="org.yes.cart.domain.dto.impl.SkuWarehouseDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.SeoImageDTO" value="org.yes.cart.domain.dto.impl.SeoImageDTOImpl"/>
+
+                <entry key="org.yes.cart.domain.dto.AssociationDTO" value="org.yes.cart.domain.dto.impl.AssociationDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ProductAssociationDTO"  value="org.yes.cart.domain.dto.impl.ProductAssociationDTOImpl"/>
+                
+                <entry key="org.yes.cart.domain.dto.AddressDTO"  value="org.yes.cart.domain.dto.impl.AddressDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.CarrierDTO"  value="org.yes.cart.domain.dto.impl.CarrierDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.CarrierSlaDTO"  value="org.yes.cart.domain.dto.impl.CarrierSlaDTOImpl"/>
+
+                <entry key="org.yes.cart.domain.dto.CountryDTO"  value="org.yes.cart.domain.dto.impl.CountryDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.StateDTO"  value="org.yes.cart.domain.dto.impl.StateDTOImpl"/>
+
+
+                <entry key="org.yes.cart.domain.dto.CustomerOrderDTO"  value="org.yes.cart.domain.dto.impl.CustomerOrderDTOImpl"/>
+
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <!-- ######################### Dto to entity convertors and repository    ############################### -->
+    <bean id="brandDTO2Brand" class="org.yes.cart.domain.dto.adapter.impl.GenericDtoToEntityConverter">
+        <constructor-arg index="0" ref="brandDao"/>
+    </bean>
+
+    <bean id="availabilityDto2Availability" class="org.yes.cart.domain.dto.adapter.impl.GenericDtoToEntityConverter">
+        <constructor-arg index="0" ref="availabilityDao"/>
+    </bean>
+
+    <bean id="productTypeDTO2ProductType" class="org.yes.cart.domain.dto.adapter.impl.GenericDtoToEntityConverter">
+        <constructor-arg index="0" ref="productTypeDao"/>
+    </bean>
+
+    <bean id="associationDTO2Association" class="org.yes.cart.domain.dto.adapter.impl.AssociationIdToEntityConverter">
+        <constructor-arg index="0" ref="associationDao"/>
+    </bean>
+
+    <bean id="productId2Product" class="org.yes.cart.domain.dto.adapter.impl.ProductIdToEntityConverter">
+        <constructor-arg index="0" ref="productDao"/>
+    </bean>
+
+    <bean id="skuId2Sku" class="org.yes.cart.domain.dto.adapter.impl.ProductSkuIdToEntityConverter">
+        <constructor-arg index="0" ref="productSkuDao"/>
+    </bean>
+
+    <bean id="shopId2Shop" class="org.yes.cart.domain.dto.adapter.impl.ShopIdToEntityConverter">
+        <constructor-arg index="0" ref="shopDao"/>
+    </bean>
+
+    <bean id="warehouseId2Warehouse" class="org.yes.cart.domain.dto.adapter.impl.WarehouseIdToEntityConverter">
+        <constructor-arg index="0" ref="warehouseDao"/>
+    </bean>
+
+    <bean id="carrierId2Carrier" class="org.yes.cart.domain.dto.adapter.impl.CarrierIdToEntityConverter">
+        <constructor-arg index="0" ref="carrierDao"/>
+    </bean>
+
+    <bean id="producttypeId2ProductType" class="org.yes.cart.domain.dto.adapter.impl.ProductTypeIdToEntityConverter">
+        <constructor-arg index="0" ref="productTypeDao"/>
+    </bean>
+
+    <bean id="attributeDTO2Attribute" class="org.yes.cart.domain.dto.adapter.impl.GenericDtoToEntityConverter">
+        <constructor-arg index="0" ref="attributeDao"/>
+    </bean>
+
+    <bean id="bigDecimalToFloat" class="org.yes.cart.domain.dto.adapter.impl.BigDecimalToFloatValueConverter"/>
+
+    <bean id="dtoValueConvertersRepository"
+          class="dp.lib.dto.geda.adapter.repository.impl.ValueConverterRepositoryImpl">
+        <constructor-arg>
+            <map>
+                <entry key="bigDecimalToFloat" value-ref="bigDecimalToFloat"/>
+                <entry key="brandDTO2Brand" value-ref="brandDTO2Brand"/>
+                <entry key="availabilityDto2Availability" value-ref="availabilityDto2Availability"/>
+                <entry key="productTypeDTO2ProductType" value-ref="productTypeDTO2ProductType"/>
+                <entry key="productId2Product" value-ref="productId2Product"/>
+                <entry key="skuId2Sku" value-ref="skuId2Sku"/>
+                <entry key="shopId2Shop" value-ref="shopId2Shop"/>
+                <entry key="warehouseId2Warehouse" value-ref="warehouseId2Warehouse"/>
+                <entry key="carrierId2Carrier" value-ref="carrierId2Carrier"/>
+                <entry key="associationDTO2Association" value-ref="associationDTO2Association"/>
+                <entry key="producttypeId2ProductType" value-ref="producttypeId2ProductType"/>
+
+                <entry key="attributeDTO2Attribute" value-ref="attributeDTO2Attribute"/>
+
+            </map>
+        </constructor-arg>
+    </bean>
+
+
+    <!-- ###################### Cache  ################################################ -->
+
+    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:ehcache.xml"/>
+        <!--<property name="configLocation" value="ehcache.xml"/>-->
+    </bean>
+
+    <bean id="categoryServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="cacheName" value="org.yes.cart.service.domain.impl.CategoryServiceImpl.cache"/>
+    </bean>
+
+    <bean id="shopServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="cacheName" value="org.yes.cart.service.domain.impl.ShopServiceImpl.cache"/>
+    </bean>
+
+    <bean id="attributeServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="cacheName" value="org.yes.cart.service.domain.impl.AttributeServiceImpl.cache"/>
+    </bean>
+
+    <bean id="productServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="cacheName" value="org.yes.cart.service.domain.impl.ProductServiceImpl.cache"/>
+    </bean>
+
+    <bean id="imageServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="cacheName" value="org.yes.cart.service.domain.impl.ImageServiceImpl.cache"/>
+    </bean>
+
+
+    <!-- ########################################### ExtendedConversionService ################################# -->
+    <bean id="extendedConversionService" class="org.yes.cart.utils.impl.ExtendedConversionService"/>
+
+
+    <bean id="mailComposer" class="org.yes.cart.service.mail.impl.MailComposerImpl">
+        <constructor-arg index="0" ref="systemService"/>
+    </bean>
+
+<!-- ############################# Shopping Cart Commands and Events ######################### -->
+
+
+
+    <bean id="shoppingCartCommandFactory" class="org.yes.cart.shoppingcart.impl.ShoppingCartCommandFactoryImpl">
+        <constructor-arg index="0">
+            <map>
+                <entry key="addToCartCmd" value="org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl"/>
+                <entry key="addQuantityToCartCmd" value="org.yes.cart.shoppingcart.impl.SetSkuQuantityToCartEventCommandImpl"/>
+                <entry key="removeAllSkuCmd" value="org.yes.cart.shoppingcart.impl.RemoveAllSkuFromCartCommandImpl"/>
+                <entry key="removeOneSkuCmd" value="org.yes.cart.shoppingcart.impl.RemoveSkuFromCartCommandImpl"/>
+
+                <entry key="changeCurrencyCmd" value="org.yes.cart.shoppingcart.impl.ChangeCurrencyEventCommandImpl"/>
+                <entry key="logoutCmd" value="org.yes.cart.shoppingcart.impl.LogoutCommandImpl"/>
+                <entry key="loginCmd" value="org.yes.cart.shoppingcart.impl.LoginCommandImpl"/>
+                <entry key="expireCartCmd" value="org.yes.cart.shoppingcart.impl.ExpireCartCommandImpl"/>
+                <entry key="setCarrierSlaCmd" value="org.yes.cart.shoppingcart.impl.SetCarrierSlaCartCommandImpl"/>
+                <entry key="setBillingAddressSeparateCmd" value="org.yes.cart.shoppingcart.impl.SetBillingSeparateFromShippingAddressCommandImpl"/>
+                <entry key="setMultipleDeliveryCmd" value="org.yes.cart.shoppingcart.impl.SetMultipleDeliveryCommandImpl"/>
+
+                <entry key="cleanCartCmd" value="org.yes.cart.shoppingcart.impl.CleanCartCommandImpl"/>
+
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <bean id="orderNumberGenerator" class="org.yes.cart.service.order.impl.DefaultOrderNumberGeneratorImpl">
+        <constructor-arg index="0" ref="customerOrderDao"/>
+    </bean>
+
+    <bean id="orderAssembler" class="org.yes.cart.service.order.impl.OrderAssemblerImpl">
+        <constructor-arg index="0" ref="orderNumberGenerator"/>
+        <constructor-arg index="1" ref="customerDao"/>
+        <constructor-arg index="2" ref="shopDao"/>
+        <constructor-arg index="3" ref="productSkuDao"/>
+        <constructor-arg index="4" value="{0} {1} {2} {3} {4} {5} {6} {7} {8}"/>
+        <!-- Address format
+        0 - address line 1
+        1 - address line 2
+        2 - post(zip) code
+        3 - city
+        4 - country code
+        5 - county/state/provicne/area code
+        6 - first name
+        7 - last name
+        8 - contact phone(s) as string 
+        -->
+    </bean>
+
+    <bean id="deliveryAssembler" class="org.yes.cart.service.order.impl.DeliveryAssemblerImpl">
+        <constructor-arg index="0" ref="warehouseService"/>
+        <constructor-arg index="1" ref="skuWarehouseService"/>        
+        <constructor-arg index="2" ref="carrierSlaService"/>
+    </bean>
+
+
+    <!-- ################################## service locator ################################# -->
+
+    <bean id="springInstantiationService" class="org.yes.cart.service.locator.impl.SpringInstantiationStrategyImpl"/>
+    <bean id="webInstantiationService" class="org.yes.cart.service.locator.impl.WebServiceInstantiationStrategyImpl"/>
+    <bean id="jnpInstantiationService" class="org.yes.cart.service.locator.impl.JnpInstantiationStrategyImpl"/>
+
+    <bean id="serviceLocator" class="org.yes.cart.service.locator.impl.ServiceLocatorImpl">
+        <constructor-arg index="0">
+            <map>
+                <entry key="http" value-ref="webInstantiationService"/>
+                <entry key="https" value-ref="webInstantiationService"/>
+                <entry key="jnp" value-ref="jnpInstantiationService"/>
+                <entry>
+                    <key><null/></key>
+                    <ref bean="springInstantiationService"/>
+                </entry>
+            </map>
+        </constructor-arg>
+
+    </bean>
+
+<!-- ################################# payment modules manager guess shall be  ########################################## -->
+
+    <bean id="paymentModulesManager" class="org.yes.cart.service.payment.impl.PaymentModulesManagerImpl">
+        <constructor-arg index="0" ref="serviceLocator"/>
+        <constructor-arg index="1" ref="systemService"/>
+    </bean>
+
+    <bean id="paymentProcessor" parent="txProxyTemplate" scope="prototype">
+        <property name="target">
+            <bean class="org.yes.cart.service.payment.impl.PaymentProcessorImpl" destroy-method="destroy">
+                <constructor-arg index="0" ref="customerOrderPaymentService"/>
+            </bean>
+        </property>
+    </bean>
+    
+
+    <bean id="paymentProcessorFactory" class="org.yes.cart.service.payment.impl.PaymentProcessorFactoryImpl">
+        <constructor-arg index="0" ref="paymentModulesManager"/>
+        <constructor-arg index="1" value="paymentProcessor"/>
+    </bean>
+
+    <bean id="paymentCallBackHandlerFacade" class="org.yes.cart.service.payment.impl.PaymentCallBackHandlerFacadeImpl">
+        <constructor-arg index="0" ref="paymentModulesManager"/>
+        <constructor-arg index="1" ref="customerOrderService"/>
+        <constructor-arg index="2" ref="orderStateManager"/>
+
+    </bean>
+
+<!-- ################################# order flow state manager  ########################################## -->
+
+<!--
+    Transition from none state to pending. Pending state is temporal and not persisted. Possible transition cancel or payment ok.
+    Perform online payment authorization
+-->
+    <bean id="pendingOrderEventHandler" class="org.yes.cart.service.order.impl.handler.PendingOrderEventHandlerImpl">
+        <constructor-arg index="0" ref="paymentProcessorFactory"/>
+        <constructor-arg index="1" ref="warehouseService"/>
+        <constructor-arg index="2" ref="skuWarehouseService"/>
+
+    </bean>
+
+    <!--Wait for order confirmation in case of courier payment gateway or fund capture in case of offline bank payment gateway-->
+    <bean id="paymentOfflineOrderEventHandler" class="org.yes.cart.service.order.impl.handler.PaymentOfflineOrderEventHandlerImpl"/>
+
+
+    <!--Pefrom separate processing of order deliveries-->
+    <bean id="paymentOkOrderEventHandler" class="org.yes.cart.service.order.impl.handler.PaymentOkOrderEventHandlerImpl"/>
+
+
+    <!-- Process quantity allocation on warehouses -->
+    <bean id="processAllocationOrderEventHandler"
+          class="org.yes.cart.service.order.impl.handler.ProcessAllocationOrderEventHandlerImpl">
+        <constructor-arg index="0" ref="warehouseService"/>
+        <constructor-arg index="1" ref="skuWarehouseService"/>
+
+    </bean>
+
+    <!--Order , that wait confirmation approved-->
+    <bean id="paymentConfirmedOrderEventHandler"  class="org.yes.cart.service.order.impl.handler.PaymentConfirmedOrderEventHandlerImpl" />
+
+    <!--Cancel order-->
+    <bean id="cancelOrderEventHandler"  class="org.yes.cart.service.order.impl.handler.CancelOrderEventHandlerImpl">
+        <constructor-arg index="0" ref="warehouseService"/>
+        <constructor-arg index="1" ref="skuWarehouseService"/>
+    </bean>
+
+    <!-- Simple transition to time wait state, because of mixed delivery of pre order -->
+    <bean id="processTimeWaitOrderEventHandler"  class="org.yes.cart.service.order.impl.handler.ProcessTimeWaitOrderEventHandlerImpl"/>
+
+    <!-- Simple transition to inventory wait state, because of back order -->
+    <bean id="processInventoryWaitOrderEventHandler"  class="org.yes.cart.service.order.impl.handler.ProcessInventoryWaitOrderEventHandlerImpl"/>
+
+    <!-- Transition from time wait to inventory wait state -->
+    <bean id="deliveryAllowedByTimeoutOrderEventHandler"  class="org.yes.cart.service.order.impl.handler.DeliveryAllowedByTimeoutOrderEventHandlerImpl"/>
+
+    <!-- Transition from inventory wait state to inventory allocation -->
+    <bean id="deliveryAllowedByInventoryOrderEventHandler"  class="org.yes.cart.service.order.impl.handler.DeliveryAllowedByInventoryOrderEventHandlerImpl">
+        <constructor-arg index="0" ref="warehouseService"/>
+        <constructor-arg index="1" ref="skuWarehouseService"/>
+    </bean>
+
+
+    <!-- Simple transition delivery released to paicking -->
+    <bean id="releaseToPackOrderEventHandler"  class="org.yes.cart.service.order.impl.handler.ReleaseToPackOrderEventHandlerImpl"/>
+
+    <!-- Pack completed . Wait for shipment-->
+    <bean id="packCompleteOrderEventHandler"  class="org.yes.cart.service.order.impl.handler.PackCompleteOrderEventHandlerImpl"/>
+
+    <!-- Shipment in progress -->
+    <bean id="releaseToShipmentOrderEventHandler"  class="org.yes.cart.service.order.impl.handler.ReleaseToShipmentOrderEventHandlerImpl"/>
+
+    <!-- Shipment completed -->
+    <bean id="shipmentCompleteOrderEventHandler"  class="org.yes.cart.service.order.impl.handler.ShipmentCompleteOrderEventHandlerImpl">
+        <constructor-arg index="0" ref="paymentProcessorFactory"/>
+    </bean>
+
+    <!-- Cancel with refund -->
+    <bean id="cancelOrderWithRefundOrderEventHandler"  class="org.yes.cart.service.order.impl.handler.CancelOrderWithRefundOrderEventHandlerImpl">
+        <constructor-arg index="0" ref="paymentProcessorFactory"/>
+        <constructor-arg index="1" ref="warehouseService"/>
+        <constructor-arg index="2" ref="skuWarehouseService"/>
+    </bean>
+
+
+
+    <bean id="orderStateManager" class="org.yes.cart.service.order.impl.OrderStateManagerImpl">
+        <constructor-arg index="0">
+            <map>
+                <entry key="evt.pending"                   value-ref="pendingOrderEventHandler"/>
+                <entry key="evt.payment.offline"           value-ref="paymentOfflineOrderEventHandler"/>
+                <entry key="evt.payment.confirmed"         value-ref="paymentConfirmedOrderEventHandler"/>
+                <entry key="evt.payment.ok"                value-ref="paymentOkOrderEventHandler"/>
+                <entry key="evt.process.allocation"        value-ref="processAllocationOrderEventHandler"/>
+                <entry key="evt.order.cancel"              value-ref="cancelOrderEventHandler"/>
+                <entry key="evt.process.date.wait"         value-ref="processTimeWaitOrderEventHandler"/>
+                <entry key="evt.process.inventory.wait"    value-ref="processInventoryWaitOrderEventHandler"/>
+                <entry key="evt.delivery.allowed.timeout"  value-ref="deliveryAllowedByTimeoutOrderEventHandler"/>
+                <entry key="evt.delivery.allowed.quantity" value-ref="deliveryAllowedByInventoryOrderEventHandler"/>
+                <entry key="evt.release.to.pack"           value-ref="releaseToPackOrderEventHandler"/>
+                <entry key="evt.packing.complete"          value-ref="packCompleteOrderEventHandler"/>
+                <entry key="evt.release.to.shipment"       value-ref="releaseToShipmentOrderEventHandler"/>
+                <entry key="evt.shipment.complete"         value-ref="releaseToShipmentOrderEventHandler"/>
+                <entry key="evt.order.cancel.refund"       value-ref="cancelOrderWithRefundOrderEventHandler"/>
+            </map>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <map/>
+        </constructor-arg>
+        <constructor-arg index="2">
+            <map/>
+        </constructor-arg>
+    </bean>
+
+
+
+
+
+</beans>

@@ -1,0 +1,100 @@
+<ehcache>
+    <defaultCache
+            maxElementsInMemory="10000"
+            overflowToDisk="false"
+            eternal="false"
+            timeToIdleSeconds="120" timeToLiveSeconds="600"
+            />
+
+    <cache name="org.yes.cart.service.domain.impl.CategoryServiceImpl.cache"
+           maxElementsInMemory="100"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+    <cache name="org.yes.cart.service.domain.impl.ShopServiceImpl.cache"
+           maxElementsInMemory="100"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+    <cache name="org.yes.cart.service.domain.impl.ProductServiceImpl.cache"
+           maxElementsInMemory="5000"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+    <cache name="org.yes.cart.service.domain.impl.AttributeServiceImpl.cache"
+           maxElementsInMemory="100"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+    <cache name="org.yes.cart.service.domain.impl.ImageServiceImpl.cache"
+           maxElementsInMemory="100"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+    <!-- ############################################# hibernate enitity cache #######################################-->
+
+    <cache name="org.yes.cart.domain.entity.Category" maxElementsInMemory="500" overflowToDisk="false" eternal="false"
+           timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.CategoryEntity.attribute" maxElementsInMemory="5000" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.CategoryEntity.productCategory" maxElementsInMemory="10000"
+           overflowToDisk="false" eternal="false" timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.ProductCategory" maxElementsInMemory="1000" overflowToDisk="false" eternal="false"
+           timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.AttributeGroup" maxElementsInMemory="1000" overflowToDisk="false" eternal="false"
+           timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.AttributeViewGroup" maxElementsInMemory="1000" overflowToDisk="false" eternal="false"
+           timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.Product" maxElementsInMemory="1000" overflowToDisk="false" eternal="false"
+           timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.ProductEntity.sku" maxElementsInMemory="1000" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.ProductEntity.productAssociations" maxElementsInMemory="1000"
+           overflowToDisk="false" eternal="false" timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.ProductEntity.ensebleOption" maxElementsInMemory="1000" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.ProductEntity.attribute" maxElementsInMemory="1000" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.Etype" maxElementsInMemory="100" overflowToDisk="false" eternal="false"
+           timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.EtypeEntity.attributes" maxElementsInMemory="1000" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.Attribute" maxElementsInMemory="5000" overflowToDisk="false" eternal="false"
+           timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.ProductType" maxElementsInMemory="100" overflowToDisk="false" eternal="false"
+           timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.ProductTypeEntity.attributeViewGroup" maxElementsInMemory="100"
+           overflowToDisk="false" eternal="false" timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.ProductTypeEntity.attribute" maxElementsInMemory="1000"
+           overflowToDisk="false" eternal="false" timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.Seo" maxElementsInMemory="1000" overflowToDisk="false" eternal="false"
+           timeToLiveSeconds="600"/>
+
+    <cache name="org.hibernate.cache.StandardQueryCache"
+           maxElementsInMemory="1000" eternal="false" timeToLiveSeconds="600"
+           overflowToDisk="false"/>
+
+
+</ehcache>

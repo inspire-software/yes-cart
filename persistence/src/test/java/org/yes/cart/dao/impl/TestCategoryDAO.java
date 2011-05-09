@@ -1,10 +1,10 @@
 package org.yes.cart.dao.impl;
 
-import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.dao.constants.DaoServiceBeanKeys;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.dao.constants.DaoServiceBeanKeys;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShopCategory;
