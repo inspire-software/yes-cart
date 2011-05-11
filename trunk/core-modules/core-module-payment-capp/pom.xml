@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>yes-cart</artifactId>
+        <groupId>org.yes</groupId>
+        <version>1.0</version>
+    </parent>
+    <groupId>org.yes</groupId>
+    <artifactId>core-module-payment-capp</artifactId>
+    <version>1.x-SNAPSHOT</version>
+    <name>Yes cart payment gateways: Cybersource, authorize, paypall, payflow</name>
+
+
+    <url>http://maven.apache.org</url>
+
+    <dependencies>
+
+
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>payment-api</artifactId>
+            <version>1.x-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>persistence</artifactId>
+                    <version>1.x-SNAPSHOT</version>
+                    <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.7</version>
+            <scope>test</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.5.8</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.5.8</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${spring.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>${spring-security.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${spring.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.cybersource</groupId>
+            <artifactId>cybersource-client</artifactId>
+            <version>1.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.cybersource</groupId>
+            <artifactId>cybersource-security</artifactId>
+            <version>1.5</version>
+        </dependency>
+        <dependency>
+            <groupId>net.authorize</groupId>
+            <artifactId>authorize-client</artifactId>
+            <version>1.4.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>4.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+            <version>3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>xalan</groupId>
+            <artifactId>xalan</artifactId>
+            <version>2.7.1</version>
+        </dependency>
+        <dependency>
+            <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
+            <version>2.9.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.6.6</version>
+        </dependency>
+        <dependency>
+            <groupId>javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.8.0.GA</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>${spring-security.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <version>1.2.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>1.8.0.7</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.dbunit</groupId>
+            <artifactId>dbunit</artifactId>
+            <version>2.4.7</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- payflow -->
+        <dependency>
+            <groupId>paypal.payflow</groupId>
+            <artifactId>payflow-client</artifactId>
+            <version>4.31</version>
+        </dependency>
+
+        <!-- paypal -->
+        <dependency>
+            <groupId>com.paypal</groupId>
+            <artifactId>paypal-client</artifactId>
+            <version>5.1.1</version>
+        </dependency>
+
+
+        <!-- ANET BEGIN -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>4.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- ANET END -->
+
+
+    </dependencies>
+
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>dbunit-maven-plugin</artifactId>
+                    <version>1.0-beta-3</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.5</version>
+                    <configuration>
+                        <forkMode>pertest</forkMode>
+                        <argLine>-Xms512m -Xmx1024m</argLine>
+                        <testFailureIgnore>false</testFailureIgnore>
+                        <threadCount>12</threadCount>
+                        <useUnlimitedThreads>true</useUnlimitedThreads>
+                        <parallel>classes</parallel>
+                        <systemProperties>
+                            <property>
+                                <name>testPgCyberSource</name>
+                                <value>${testPgCyberSource}</value>
+                            </property>
+
+                            <property>
+                                <name>testPgAuthorizeNetAim</name>
+                                <value>${testPgAuthorizeNetAim}</value>
+                            </property>
+                            <property>
+                                <name>testPgPayFlow</name>
+                                <value>${testPgPayFlow}</value>
+                            </property>
+                            <property>
+                                <name>testPgPayPal</name>
+                                <value>${testPgPayPal}</value>
+                            </property>
+
+
+                        </systemProperties>
+
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </testResource>
+            <testResource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </testResource>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </testResource>
+
+        </testResources>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>test-cybersource-pg</id>
+            <activation>
+                <property>
+                    <name>testPgCyberSource</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <properties>
+                <appserver.home>/path/to/dev/appserver</appserver.home>
+            </properties>
+        </profile>
+    </profiles>
+
+    <properties>
+        <spring-security.version>3.0.3.RELEASE</spring-security.version>
+        <spring.version>3.0.5.RELEASE</spring.version>
+
+        <testPgCyberSource>false</testPgCyberSource>
+        <testPgAuthorizeNetAim>false</testPgAuthorizeNetAim>
+        <testPgPayFlow>false</testPgPayFlow>
+        <testPgPayPal>false</testPgPayPal>
+    </properties>
+
+</project>

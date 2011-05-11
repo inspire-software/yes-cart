@@ -1,0 +1,265 @@
+package org.yes.cart.payment.impl;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.hibernate.SessionFactory;
+import org.hibernate.Session;
+import org.junit.Before;
+import org.junit.After;
+import org.dbunit.DBTestCase;
+import org.dbunit.PropertiesBasedJdbcDatabaseTester;
+import org.dbunit.operation.DatabaseOperation;
+import org.dbunit.database.QueryDataSet;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSet;
+import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.impl.*;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.math.BigDecimal;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Date;
+import java.util.UUID;
+
+
+/**
+ * User: Igor Azarny iazarny@yahoo.com
+ * Date: 09-May-2011
+ * Time: 14:12:54
+ */
+public abstract class CappPaymentModuleDBTestCase  extends DBTestCase {
+
+    /**
+     * A Spring application context that we'll create from a
+     * test application context and use to create
+     * our DAO object (and data source, session factory, etc.)
+     */
+    protected static ApplicationContext ctx = null;
+
+    protected SessionFactory sessionFactory;
+
+    protected Session session;
+
+    protected IDataSet getDataSet() throws Exception {
+        return new FlatXmlDataSet(
+                new File("../core-module-payment-api/src/test/resources/payinitialdata.xml"),
+                false,
+                true
+        );
+    }
+
+    protected void dumpDataBase(final String prefix, final String[] tables) {
+        try {
+            QueryDataSet queryDataSet = new QueryDataSet(getConnection());
+            for (String tableName : tables) {
+                queryDataSet.addTable(tableName);
+            }
+            FlatXmlDataSet.write(queryDataSet,
+                    new FileOutputStream("target/test-classes/" + this.getClass().getName() + "_" + prefix + "_dataset.xml"));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    protected DatabaseOperation getSetUpOperation() throws Exception {
+        return DatabaseOperation.REFRESH;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected DatabaseOperation getTearDownOperation() throws Exception {
+        return DatabaseOperation.NONE;
+    }
+
+    public CappPaymentModuleDBTestCase() {
+        System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_DRIVER_CLASS, "org.hsqldb.jdbcDriver");
+        System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_CONNECTION_URL, "jdbc:hsqldb:mem:testnpapaydb");
+        System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_USERNAME, "sa");
+        System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_PASSWORD, "");
+
+    }
+
+
+    @Before
+    public void setUp() throws Exception {
+        System.gc();
+
+
+        // Load the applicationContext.xml file
+        ctx = new ClassPathXmlApplicationContext("test-core-module-payment-capp.xml");
+
+        sessionFactory = (SessionFactory) ctx.getBean("paySessionFactory");
+
+        session = sessionFactory.openSession();
+
+        super.setUp();
+
+    }
+
+    @Before
+    public void setUp(String[] configurationXmls) throws Exception {
+        System.gc();
+
+
+        // Load the applicationContext.xml file
+        ctx = new ClassPathXmlApplicationContext(configurationXmls);
+
+        sessionFactory = (SessionFactory) ctx.getBean("paySessionFactory");
+
+        session = sessionFactory.openSession();
+
+        super.setUp();
+
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        sessionFactory.close();
+        session.close();
+        ctx = null;
+        session = null;
+        sessionFactory = null;
+        super.tearDown();
+    }
+
+
+
+
+    protected Customer createCustomer() {
+        Customer customer = new CustomerEntity();
+        customer.setEmail("john.dou@domain.com");
+        customer.setFirstname("John");
+        customer.setLastname("Dou");
+
+        Address address = new AddressEntity();
+        address.setFirstname("John");
+        address.setLastname("Dou");
+        address.setCity("Los Angeles");
+        address.setAddrline1("2684 Lacy Street Suite 208");
+        address.setCountryCode("US");
+        address.setStateCode("CA");
+        address.setPostcode("90031");
+        address.setAddressType(Address.ADDR_TYPE_BILLING);
+        address.setDefaultAddress(true);
+
+        customer.getAddress().add(address);
+
+        address = new AddressEntity();
+        address.setFirstname("Jane");
+        address.setLastname("Dou");
+        address.setCity("Los Angeles");
+        address.setAddrline1("713 Happy Street Suite 101");
+        address.setCountryCode("US");
+        address.setStateCode("CA");
+        address.setPostcode("90555");
+        address.setAddressType(Address.ADDR_TYPE_SHIPING);
+        address.setDefaultAddress(true);
+
+        customer.getAddress().add(address);
+        return customer;
+    }
+
+
+    protected CustomerOrderDeliveryDet createDeliveryItem(
+            final String productSkuName, final String skuCode, final BigDecimal price, final BigDecimal qty) {
+        CustomerOrderDeliveryDet deliveryDet = new CustomerOrderDeliveryDetEntity();
+        ProductSku sku = new ProductSkuEntity();
+        sku.setCode(skuCode);
+        sku.setName(productSkuName);
+        deliveryDet.setPrice(price);
+        deliveryDet.setQty( qty);
+        deliveryDet.setSku(sku);
+        return deliveryDet;
+    }
+
+
+    protected CarrierSla createCarrierSla() {
+        CarrierSla carrierSla = new CarrierSlaEntity();
+        carrierSla.setCarrierslaId(4321);
+        carrierSla.setName("Next dey delivery");
+        carrierSla.setPrice(new BigDecimal("13.99"));
+        carrierSla.setCurrency("USD");
+        return carrierSla;
+    }
+
+
+    protected CustomerOrderDelivery createDelivery0(final String orderNum) {
+        final CustomerOrderDelivery delivery = new CustomerOrderDeliveryEntity();
+        delivery.setCarrierSla(createCarrierSla());
+        delivery.setPrice(delivery.getCarrierSla().getPrice());
+        delivery.setDevileryNum(orderNum + "-0");
+        delivery.getDetail().add(
+                    createDeliveryItem("product sku 1. Three items in delivery 0", "skuCode1", new BigDecimal("12.12"), new BigDecimal("3"))
+        );
+        delivery.getDetail().add(
+                    createDeliveryItem("product sku 2. One item in delivery 0", "skuCode1", new BigDecimal("15.01"), new BigDecimal("1"))
+        );
+        return delivery;
+    }
+
+    protected CustomerOrderDelivery createDelivery1(final String orderNum) {
+        final CustomerOrderDelivery delivery = new CustomerOrderDeliveryEntity();
+        delivery.setCarrierSla(createCarrierSla());
+        delivery.setPrice(delivery.getCarrierSla().getPrice());
+        delivery.setDevileryNum(orderNum + "-1");
+        delivery.getDetail().add(
+                    createDeliveryItem("product sku 1. Two items in delivery 1", "skuCode2", new BigDecimal("25.00"), new BigDecimal("2"))
+        );
+        return delivery;
+    }
+
+    protected Map createCardParameters() {
+        Map params = new HashMap();
+        params.put("ccHolderName", "JOHN DOU");
+        params.put("ccNumber", getVisaCardNumber());
+        params.put("ccExpireMonth", "02");  // paypal test account
+        params.put("ccExpireYear", "2016"); // paypal test account
+        params.put("ccSecCode", "111");
+        params.put("ccType", "Visa");
+        params.put("ccHolderName", "JOHN DOU");
+        return params;
+    }
+
+
+    protected CustomerOrder createCustomerOrder(String orderNum) {
+        final CustomerOrder customerOrder = new CustomerOrderEntity();
+
+
+        customerOrder.setOrderTimestamp(new Date());
+        customerOrder.setCurrency("USD");
+        customerOrder.setOrdernum(orderNum);
+        customerOrder.setCartGuid(UUID.randomUUID().toString());
+        customerOrder.setCustomer(createCustomer());
+        customerOrder.setBillingAddress("2684 Lacy Street Suite 208, Los Angeles, 90031,  CA");
+        customerOrder.setShippingAddress("713 Happy Street Suite 101, Los Angeles, 90555,  CA");
+        customerOrder.getDelivery().add(createDelivery0(orderNum));
+        customerOrder.getDelivery().add(createDelivery1(orderNum));
+
+        customerOrder.setOrderStatus(CustomerOrder.ORDER_STATUS_IN_PROGRESS);
+
+        return customerOrder;
+    }
+
+
+
+    /**
+     * Get visa card number for testing. Usually gateways has differend card for testing
+     * @return card number
+     */
+    public abstract String getVisaCardNumber();
+
+
+
+
+    
+
+
+}

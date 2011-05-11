@@ -1,0 +1,209 @@
+package org.yes.cart.payment.impl;
+
+import org.yes.cart.payment.PaymentGatewayInternalForm;
+import org.yes.cart.payment.dto.Payment;
+import org.yes.cart.payment.dto.impl.PaymentImpl;
+import org.yes.cart.payment.PaymentGateway;
+import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
+import org.yes.cart.payment.service.PaymentGatewayParameterService;
+
+import java.util.*;
+import java.math.BigDecimal;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.commons.lang.StringUtils;
+
+/**
+ * User: Igor Azarny iazarny@yahoo.com
+ * Date: 09-May-2011
+ * Time: 14:12:54
+ 
+ */
+public abstract class AbstractCappPaymentGatewayImpl implements PaymentGateway {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractCappPaymentGatewayImpl.class);
+
+    private PaymentGatewayParameterService paymentGatewayParameterService;
+
+    private Collection<PaymentGatewayParameter> allParameters = null;
+
+
+    /**
+    * {@inheritDoc}
+    */
+    public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount, final String orderGuid) {
+        return getHtmlForm(cardHolderName, locale);
+    }
+
+
+    /**
+     * Dafault implementation.
+     * @param cardHolderName card holder name.
+     * @param locale locale
+     * @return html form.
+     */
+    protected String getHtmlForm(final String cardHolderName, final String locale) {
+        String htmlForm = getParameterValue("htmlForm");
+        if (htmlForm != null) {
+            return htmlForm.replace("@CARDHOLDERNAME@", cardHolderName);
+        }
+        return StringUtils.EMPTY;
+    }
+
+
+
+
+    /**
+     * {@inheritDoc}
+     */
+
+    public Collection<PaymentGatewayParameter> getPaymentGatewayParameters() {
+        if (allParameters == null) {
+            allParameters = paymentGatewayParameterService.findAll(getLabel());
+        }
+        return allParameters;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+
+    public void deleteParameter(final String parameterLabel) {
+        paymentGatewayParameterService.deleteByLabel(getLabel(), parameterLabel);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+
+    public void addParameter(final PaymentGatewayParameter paymentGatewayParameter) {
+        paymentGatewayParameterService.create(paymentGatewayParameter);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+
+    public void updateParameter(final PaymentGatewayParameter paymentGatewayParameter) {
+        paymentGatewayParameterService.update(paymentGatewayParameter);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Payment createPaymentPrototype(final Map parametersMap) {
+        final Payment payment = new PaymentImpl();
+
+        payment.setCardHolderName(getSingleValue(parametersMap.get("ccHolderName")));
+        payment.setCardNumber(getSingleValue(parametersMap.get("ccNumber")));
+        payment.setCardExpireMonth(getSingleValue(parametersMap.get("ccExpireMonth")));
+        payment.setCardExpireYear(getSingleValue(parametersMap.get("ccExpireYear")));
+        payment.setCardCvv2Code(getSingleValue(parametersMap.get("ccSecCode")));
+        payment.setCardType(getSingleValue(parametersMap.get("ccType")));
+
+        if (LOG.isDebugEnabled()) {
+            displayMap("Payment prototype from map", parametersMap);
+        }
+
+
+        return payment;
+    }
+
+    /**
+     * Work around promlem with wicket param values, when it can return
+     * parameter value as string or as array of strings with single value.
+     * This behavior depends from url encoding strategy
+     * @param param parameters
+     * @return value
+     */
+    public static String getSingleValue(final Object param) {
+        if (param instanceof String) {
+            return (String) param;
+        } else if (param instanceof String[]) {
+            if (((String[])param).length > 0) {
+                return ((String [])param)[0];
+            }
+        }
+        return null;
+
+    }
+    
+
+    /**
+     * Displays the content of the Map object.
+     *
+     * @param header Header text.
+     * @param map    Map object to display.
+     */
+    protected static void displayMap(final String header, final Map<String, String> map) {
+        StringBuilder dest = new StringBuilder();
+        dest.append(header);
+        if (map != null && !map.isEmpty()) {
+            List<String> keys = new ArrayList<String>(map.keySet());
+            Collections.sort(keys);
+
+            Iterator<String> iter = keys.iterator();
+
+            String key, val;
+            while (iter.hasNext()) {
+                key = iter.next();
+                val = getSingleValue(map.get(key));
+                dest.append(key);
+                dest.append('=');
+                dest.append(val);
+                dest.append('\n');
+            }
+        }
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(dest.toString());
+        }
+
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setPaymentGatewayParameterService(
+            final PaymentGatewayParameterService paymentGatewayParameterService) {
+        this.paymentGatewayParameterService = paymentGatewayParameterService;
+    }
+
+
+    /**
+     * Get the parameter value from given collection.
+     *
+     * @param valueLabel key to search
+     * @return value or null if not found
+     */
+    protected String getParameterValue(final String valueLabel) {
+        final Collection<PaymentGatewayParameter> values = getPaymentGatewayParameters();
+        for (PaymentGatewayParameter keyValue : values) {
+            if (keyValue.getLabel().equals(valueLabel)) {
+                return keyValue.getValue();
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * Get street address.
+     *
+     * @param addreLine1 line 1
+     * @param addreLine2 line 2
+     * @return street address
+     */
+    protected String getStreetAddress(final String addreLine1, final String addreLine2) {
+        return addreLine1
+                + (
+                StringUtils.isNotBlank(addreLine2) ?
+                        " " + addreLine2 :
+                        StringUtils.EMPTY)
+                ;
+
+    }
+
+
+}
