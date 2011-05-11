@@ -435,7 +435,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
         for (PaymentLine paymentLine : payment.getOrderItems()) {
             rez = rez.add(paymentLine.getQuantity().multiply(paymentLine.getUnitPrice()).setScale(Constants.DEFAULT_SCALE));
         }
-        payment.setOrderDeliveryAmount(rez);
+        payment.setPaymentAmount(rez);
     }
 
     private void fillPaymentShipment(final CustomerOrderDelivery delivery, final Payment payment) {

@@ -193,7 +193,7 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCappPaymentGatewayImp
 
         request.put("purchaseTotals_currency", payment.getOrderCurrency());
         request.put("purchaseTotals_grandTotalAmount",
-                payment.getOrderDeliveryAmount().setScale(2, RoundingMode.HALF_UP).toString());
+                payment.getPaymentAmount().setScale(2, RoundingMode.HALF_UP).toString());
 
         if (payment.getOrderItems() != null) {
             for (int index = 0; index < payment.getOrderItems().size(); index++) {
@@ -259,7 +259,7 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCappPaymentGatewayImp
         request.put("ccAuthReversalService_authRequestToken", payment.getTransactionRequestToken());
         request.put("purchaseTotals_currency", payment.getOrderCurrency());
         request.put("purchaseTotals_grandTotalAmount",
-                payment.getOrderDeliveryAmount().setScale(2, RoundingMode.HALF_UP).toString());
+                payment.getPaymentAmount().setScale(2, RoundingMode.HALF_UP).toString());
         request.put("merchantID", (String) getProperties().get(CS_MERCHANT_ID));
         request.put("requestID", payment.getTransactionAuthorizationCode());
         request.put("requestToken", payment.getTransactionRequestToken());
@@ -282,7 +282,7 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCappPaymentGatewayImp
         request.put("ccCaptureService_authRequestToken", payment.getTransactionRequestToken());
         request.put("purchaseTotals_currency", payment.getOrderCurrency());
         request.put("purchaseTotals_grandTotalAmount",
-                payment.getOrderDeliveryAmount().setScale(2, RoundingMode.HALF_UP).toString());
+                payment.getPaymentAmount().setScale(2, RoundingMode.HALF_UP).toString());
 
         request.put("merchantID", (String) getProperties().get(CS_MERCHANT_ID));
         request.put("requestID", payment.getTransactionAuthorizationCode());
@@ -341,7 +341,7 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCappPaymentGatewayImp
 
         request.put("purchaseTotals_currency", payment.getOrderCurrency());
         request.put("purchaseTotals_grandTotalAmount",
-                payment.getOrderDeliveryAmount().setScale(2, RoundingMode.HALF_UP).toString());
+                payment.getPaymentAmount().setScale(2, RoundingMode.HALF_UP).toString());
 
         request.put("merchantID", (String) getProperties().get(CS_MERCHANT_ID));
         request.put("requestID", payment.getTransactionAuthorizationCode());

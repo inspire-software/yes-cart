@@ -44,7 +44,7 @@ public abstract class CappPaymentModuleDBTestCase  extends DBTestCase {
 
     protected IDataSet getDataSet() throws Exception {
         return new FlatXmlDataSet(
-                new File("../core-module-payment-api/src/test/resources/payinitialdata.xml"),
+                new File("../../payment-api/src/test/resources/payinitialdata.xml"),
                 false,
                 true
         );

@@ -249,7 +249,7 @@ public class PayflowPaymentGatewayImpl extends AbstractCappPaymentGatewayImpl im
         invoice.setBillTo(billTo);
         invoice.setShipTo(shipTo);
         invoice.setAmt(new paypal.payflow.Currency(
-                paymentIn.getOrderDeliveryAmount().doubleValue(),
+                paymentIn.getPaymentAmount().doubleValue(),
                 paymentIn.getOrderCurrency()
         ));
         invoice.setPoNum(paymentIn.getOrderShipment());

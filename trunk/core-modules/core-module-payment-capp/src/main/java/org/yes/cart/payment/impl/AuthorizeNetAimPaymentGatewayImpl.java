@@ -55,7 +55,7 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
         final net.authorize.Merchant merchant = createMerchant();
         final net.authorize.aim.Transaction transaction = merchant.createAIMTransaction(
                 net.authorize.TransactionType.AUTH_ONLY,
-                payment.getOrderDeliveryAmount()
+                payment.getPaymentAmount()
         );
         transaction.setCustomer(createAnetCustomer(payment));
         transaction.setOrder(createAnetOrder(payment));
@@ -76,7 +76,7 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
         final net.authorize.Merchant merchant = createMerchant();
         final net.authorize.aim.Transaction transaction = merchant.createAIMTransaction(
                 net.authorize.TransactionType.VOID,
-                payment.getOrderDeliveryAmount()
+                payment.getPaymentAmount()
         );
         transaction.setTransactionId(payment.getTransactionReferenceId()); // prev auth
 
@@ -94,7 +94,7 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
         final net.authorize.Merchant merchant = createMerchant();
         final net.authorize.aim.Transaction transaction = merchant.createAIMTransaction(
                 net.authorize.TransactionType.VOID,
-                payment.getOrderDeliveryAmount()
+                payment.getPaymentAmount()
         );
         transaction.setTransactionId(payment.getTransactionReferenceId()); // prev auth
 
@@ -113,7 +113,7 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
         final net.authorize.Merchant merchant = createMerchant();
         final net.authorize.aim.Transaction transaction = merchant.createAIMTransaction(
                 net.authorize.TransactionType.AUTH_CAPTURE,
-                payment.getOrderDeliveryAmount()
+                payment.getPaymentAmount()
         );
         transaction.setCustomer(createAnetCustomer(payment));
         transaction.setOrder(createAnetOrder(payment));
@@ -133,7 +133,7 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
         final net.authorize.Merchant merchant = createMerchant();
         final net.authorize.aim.Transaction transaction = merchant.createAIMTransaction(
                 net.authorize.TransactionType.PRIOR_AUTH_CAPTURE,
-                payment.getOrderDeliveryAmount()
+                payment.getPaymentAmount()
         );
         transaction.setTransactionId(payment.getTransactionReferenceId()); // prev auth
 
@@ -153,7 +153,7 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
         final net.authorize.Merchant merchant = createMerchant();
         final net.authorize.aim.Transaction transaction = merchant.createAIMTransaction(
                 net.authorize.TransactionType.CREDIT,
-                payment.getOrderDeliveryAmount()
+                payment.getPaymentAmount()
         );
         transaction.setCreditCard(createAnetCreditCard(payment)); //need 4 last digits from credit card
         transaction.setTransactionId(payment.getTransactionReferenceId()); // prev auth

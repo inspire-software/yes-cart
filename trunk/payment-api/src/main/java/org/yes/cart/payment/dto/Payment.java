@@ -32,14 +32,14 @@ public interface Payment extends Serializable {
      *
      * @return devilevry amount.
      */
-    BigDecimal getOrderDeliveryAmount();
+    BigDecimal getPaymentAmount();
 
     /**
      * Set delivery amount.
      *
-     * @param orderDeliveryAmount delivery amount.
+     * @param paymentAmount delivery amount.
      */
-    void setOrderDeliveryAmount(BigDecimal orderDeliveryAmount);
+    void setPaymentAmount(BigDecimal paymentAmount);
 
 
     /**

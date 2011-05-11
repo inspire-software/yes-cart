@@ -159,7 +159,7 @@ public abstract class AbstractAuthorizeNetPaymentGatewayImpl extends AbstractCap
         final net.authorize.data.Order order = net.authorize.data.Order.createOrder();
         order.setInvoiceNumber(payment.getOrderShipment());
         order.setPurchaseOrderNumber(payment.getOrderShipment());
-        order.setTotalAmount(payment.getOrderDeliveryAmount());
+        order.setTotalAmount(payment.getPaymentAmount());
         final List<net.authorize.data.OrderItem> itemsInDelivery = new ArrayList<net.authorize.data.OrderItem>(payment.getOrderItems().size());
         /*int itemIdx = 1;   //TODO fix it low priority cant pass items information
         for (PaymentLine paymentLine : payment.getOrderItems()) {
