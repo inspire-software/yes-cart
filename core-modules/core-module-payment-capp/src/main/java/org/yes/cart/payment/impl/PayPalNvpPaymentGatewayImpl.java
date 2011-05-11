@@ -177,7 +177,7 @@ public class PayPalNvpPaymentGatewayImpl extends AbstractCappPaymentGatewayImpl 
         encoder.add("METHOD", "DoCapture");
         encoder.add("TRXTYPE", "D");
         encoder.add("AUTHORIZATIONID", payment.getTransactionAuthorizationCode());
-        encoder.add("AMT", payment.getOrderDeliveryAmount().setScale(2, RoundingMode.HALF_UP).toString());
+        encoder.add("AMT", payment.getPaymentAmount().setScale(2, RoundingMode.HALF_UP).toString());
         encoder.add("COMPLETETYPE", "NotComplete");
         encoder.add("CURRENCYCODE", payment.getOrderCurrency());
         return runTransaction(encoder, payment, CAPTURE);
@@ -192,7 +192,7 @@ public class PayPalNvpPaymentGatewayImpl extends AbstractCappPaymentGatewayImpl 
         final NVPEncoder encoder = new NVPEncoder();
         encoder.add("METHOD", "DoDirectPayment");
         encoder.add("PAYMENTACTION", paymentAction);
-        encoder.add("AMT", payment.getOrderDeliveryAmount().setScale(2, RoundingMode.HALF_UP).toString());
+        encoder.add("AMT", payment.getPaymentAmount().setScale(2, RoundingMode.HALF_UP).toString());
         encoder.add("CREDITCARDTYPE", payment.getCardType());
         encoder.add("ACCT", payment.getCardNumber());
         encoder.add("EXPDATE",

@@ -33,11 +33,11 @@
             <artifactId>core-module-payment-base</artifactId>
             <version>1.x-SNAPSHOT</version>
         </dependency>
-        <!--dependency>
+        <dependency>
             <groupId>org.yes</groupId>
             <artifactId>core-module-payment-capp</artifactId>
             <version>1.x-SNAPSHOT</version>
-        </dependency-->
+        </dependency>
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>persistence</artifactId>

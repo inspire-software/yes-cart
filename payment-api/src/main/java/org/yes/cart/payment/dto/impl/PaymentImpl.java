@@ -28,7 +28,7 @@ public class PaymentImpl implements Payment {
 
     // when order was created
     private Date orderDate;
-    private BigDecimal orderDeliveryAmount;
+    private BigDecimal paymentAmount;
     private String orderCurrency;
     private List<PaymentLine> orderItems;
     private String orderNumber;
@@ -62,22 +62,22 @@ public class PaymentImpl implements Payment {
      */
     public PaymentImpl() {
         orderItems = new ArrayList<PaymentLine>();
-        orderDeliveryAmount = BigDecimal.ZERO;
+        paymentAmount = BigDecimal.ZERO;
     }
 
 
     /**
      * {@inheritDoc}
      */
-    public BigDecimal getOrderDeliveryAmount() {
-        return this.orderDeliveryAmount;
+    public BigDecimal getPaymentAmount() {
+        return this.paymentAmount;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setOrderDeliveryAmount(BigDecimal orderDeliveryAmount) {
-        this.orderDeliveryAmount = orderDeliveryAmount;
+    public void setPaymentAmount(BigDecimal paymentAmount) {
+        this.paymentAmount = paymentAmount;
     }
 
     /**
@@ -442,7 +442,7 @@ public class PaymentImpl implements Payment {
                 ", cardExpireMonth='" + cardExpireMonth + '\'' +
                 ", cardStartDate=" + cardStartDate +
                 ", orderDate=" + orderDate +
-                ", orderAmount=" + orderDeliveryAmount +
+                ", paymentAmount=" + paymentAmount +
                 ", orderCurrency='" + orderCurrency + '\'' +
                 ", orderNumber='" + orderNumber + '\'' +
                 ", orderShipment='" + orderShipment + '\'' +
