@@ -17,7 +17,7 @@ import java.util.List;
  * Date: Jan 15, 2011
  * Time: 10:18:38 PM
  */
-public interface ShoppingCart extends /*SecurityContext,*/ Serializable {
+public interface ShoppingCart extends  Serializable {
 
     public final static int NOT_LOGGED = 0;
     public final static int SESSION_EXPIRED = 1;
@@ -269,22 +269,12 @@ public interface ShoppingCart extends /*SecurityContext,*/ Serializable {
      */
     int indexOf(final String skuCode);
 
-
-    //TODO guess some things need to be removed from cart to separate object
-
     /**
-     * Get lastest viewed skus.
-     *
-     * @return comma separated string of viewed skus.
+     * Get shopping context
+     * @return instance of {@link ShoppingContext}
      */
-    String getLatestViewedSkus();
+    ShoppingContext getShoppingContext();
 
-    /**
-     * Set latest viewed skus.
-     *
-     * @param latestViewedSkus latest viewed skus.
-     */
-    void setLatestViewedSkus(String latestViewedSkus);
 
 
 }

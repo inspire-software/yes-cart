@@ -2,6 +2,7 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContext;
 import org.yes.cart.domain.dto.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 
@@ -20,11 +21,10 @@ public class ExpireCartCommandImpl implements ShoppingCartCommand {
 
     /** {@inheritDoc} */
     public void execute(final ShoppingCart shoppingCart) {
-        //shoppingCart.setCustomerEmail(null);
-        shoppingCart.setLatestViewedSkus(null);
-        //TODO keep actual what need set to null. Visited categories , tag clound etc
-        //shoppingCart.setAuthentication(null);
-        SecurityContextHolder.setContext(SecurityContextHolder.createEmptyContext());
+        shoppingCart.getShoppingContext().clearContext();        
+        final SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        shoppingCart.getShoppingContext().setSecurityContext(securityContext);
+        SecurityContextHolder.setContext(securityContext);
         SecurityContextHolder.getContext().setAuthentication(null);
 
     }

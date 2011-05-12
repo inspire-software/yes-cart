@@ -138,7 +138,8 @@
     <TSYSTEMATTRVALUE ATTRVALUE_ID="1005" CODE="SYSTEM_IMPORT_ARCHIVE"       VAL="src/import/archive"                                       NPASYSTEM_ID="100" />
     <TSYSTEMATTRVALUE ATTRVALUE_ID="1006" CODE="SYSTEM_IMPORT"       VAL="src/import"                                       NPASYSTEM_ID="100" />
     <TSYSTEMATTRVALUE ATTRVALUE_ID="1009" CODE="SYSTEM_MAILTEMPLATES_FSPOINTER"       VAL="src/test/resources/mailtemplates/"                                       NPASYSTEM_ID="100" />
-    <TSYSTEMATTRVALUE ATTRVALUE_ID="1011" CODE="SYSTEM_PAYMENT_MODULES_URLS"           VAL="basePaymentModule,cappPaymentModule"       NPASYSTEM_ID="100" />
+    <!--<TSYSTEMATTRVALUE ATTRVALUE_ID="1011" CODE="SYSTEM_PAYMENT_MODULES_URLS"           VAL="basePaymentModule,cappPaymentModule"       NPASYSTEM_ID="100" />-->
+    <TSYSTEMATTRVALUE ATTRVALUE_ID="1011" CODE="SYSTEM_PAYMENT_MODULES_URLS"           VAL="basePaymentModule"       NPASYSTEM_ID="100" />
     <TSYSTEMATTRVALUE ATTRVALUE_ID="1012" CODE="SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS" VAL="testPaymentGateway,courierPaymentGateway,cyberSourcePaymentGateway,authorizeNetAimPaymentGateway,payflowPaymentGateway,payPalNvpPaymentGateway"       NPASYSTEM_ID="100" />
 
 
