@@ -10,6 +10,7 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.CartItem;
 import org.yes.cart.domain.dto.ProductSkuDTO;
 import org.yes.cart.domain.dto.ShoppingCart;
+import org.yes.cart.domain.dto.ShoppingContext;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
@@ -24,52 +25,32 @@ import java.util.List;
  * Date: Jan 15, 2011
  * Time: 10:39:12 PM
  */
-public class ShoppingCartImpl implements ShoppingCart, SecurityContext {
+public class ShoppingCartImpl implements ShoppingCart/*, SecurityContext */ {
 
-    private static final long serialVersionUID =  20110312L;
-
+    private static final long serialVersionUID =  20110509L;
     private static final Logger LOG = LoggerFactory.getLogger(ShoppingCartImpl.class);
-
     private List<CartItemImpl> items = new ArrayList<CartItemImpl>();
-
     private String currencyCode;
-
     private String customerName;
-
-    private String latestViewedSkus;
-
     private Date modifiedDate;
-
-    private Authentication authentication;
-
     private Integer carrierSlaId;
-
     private String guid = java.util.UUID.randomUUID().toString();
-
     private long shopId;
-
     private String orderMessage;
-
     private boolean separateBillingAddress;
-
     private boolean multipleDelivery;
-
     private String paymentGatewayLabel;
+    private ShoppingContext shoppingContext;
 
 
     /**
      * Clean current cart and prepare it to reuse.
      */
     public void clean() {
-
         guid = java.util.UUID.randomUUID().toString();
-
         items = new ArrayList<CartItemImpl>();
-
         orderMessage = null;
-
         modifiedDate = new Date();
-
     }
 
     /**
@@ -365,19 +346,6 @@ public class ShoppingCartImpl implements ShoppingCart, SecurityContext {
         this.customerName = customerName;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public String getLatestViewedSkus() {
-        return latestViewedSkus;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setLatestViewedSkus(final String latestViewedSkus) {
-        this.latestViewedSkus = latestViewedSkus;
-    }
 
     /**
      * {@inheritDoc}
@@ -395,6 +363,7 @@ public class ShoppingCartImpl implements ShoppingCart, SecurityContext {
 
     /** {@inheritDoc} */
     public String getCustomerEmail() {
+        final Authentication authentication = getShoppingContext().getSecurityContext().getAuthentication();
         if (authentication != null) {
             if (authentication.getPrincipal() instanceof User) {
                 return ((User) authentication.getPrincipal()).getUsername();
@@ -430,12 +399,15 @@ public class ShoppingCartImpl implements ShoppingCart, SecurityContext {
     }
 
     /** {@inheritDoc} */
-    public Authentication getAuthentication() {        
-        return authentication;
+    public ShoppingContext getShoppingContext() {
+        if (shoppingContext == null) {
+            shoppingContext = new ShoppingContextImpl();
+        }
+        return shoppingContext;
     }
 
     /** {@inheritDoc} */
-    public void setAuthentication(final Authentication authentication) {
-        this.authentication = authentication;
+    public void setShoppingContext(final ShoppingContext shoppingContext) {
+        this.shoppingContext = shoppingContext;
     }
 }

@@ -2,6 +2,7 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContext;
 import org.yes.cart.domain.dto.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 
@@ -25,8 +26,9 @@ public class LogoutCommandImpl  implements ShoppingCartCommand {
      */
     public void execute(final ShoppingCart shoppingCart) {
         shoppingCart.setCustomerName(null);
-        //TODO  shoppingCart.setAuthentication(null);
-        SecurityContextHolder.setContext(SecurityContextHolder.createEmptyContext());
+        final SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        shoppingCart.getShoppingContext().setSecurityContext(securityContext);
+        SecurityContextHolder.setContext(securityContext);
         SecurityContextHolder.getContext().setAuthentication(null);
     }
 

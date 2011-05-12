@@ -39,7 +39,7 @@ public class LoginCommandImpl  implements ShoppingCartCommand {
         SecurityContextHolder.setContext(SecurityContextHolder.createEmptyContext());
         SecurityContextHolder.getContext().setAuthentication(authentication); //current request cycle, for other particular filter is responsible
         
-        //TODO shoppingCart.setAuthentication(authentication);
+        shoppingCart.getShoppingContext().getSecurityContext().setAuthentication(authentication);
         shoppingCart.setCustomerName((String) parameters.get(NAME));
 
     }

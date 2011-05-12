@@ -17,6 +17,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.Date;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -67,6 +68,8 @@ public abstract class BaseCoreDBTestCase extends DBTestCase {
         return DatabaseOperation.REFRESH;
     }
 
+    
+
     /**
      * {@inheritDoc}
      */
@@ -85,11 +88,7 @@ public abstract class BaseCoreDBTestCase extends DBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        System.gc();
 
-
-
-        // Load the applicationContext.xml file
         ctx = new ClassPathXmlApplicationContext("testApplicationContext.xml");
 
         sessionFactory = (SessionFactory) ctx.getBean("sessionFactory");
@@ -102,11 +101,7 @@ public abstract class BaseCoreDBTestCase extends DBTestCase {
 
     @Before
     public void setUp(String [] configurationXmls) throws Exception {
-        System.gc();
 
-
-
-        // Load the applicationContext.xml file
         ctx = new ClassPathXmlApplicationContext(configurationXmls);
 
         sessionFactory = (SessionFactory) ctx.getBean("sessionFactory");
@@ -142,7 +137,6 @@ public abstract class BaseCoreDBTestCase extends DBTestCase {
             session = null;
             sessionFactory = null;
             super.tearDown();
-            System.gc();
 
         } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.

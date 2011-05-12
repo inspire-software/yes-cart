@@ -40,6 +40,8 @@
                 <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
                 <prop key="hibernate.hbm2ddl.auto">create</prop>
                 <prop key="hibernate.show_sql">false</prop>
+                <prop key="hibernate.generate_statistics">false</prop>
+                <prop key="hibernate.use_sql_comments">false</prop>
                 <prop key="hibernate.connection.autocommit">true</prop>
                 <prop key="hibernate.jdbc.batch_size">0</prop>
                 <!--prop key="hibernate.jdbc.batch_size">0</prop-->
@@ -61,6 +63,7 @@
 
     <import resource="classpath*:test-payment-api.xml"/>
     <import resource="classpath*:test-core-module-payment-base.xml"/>
+    <import resource="classpath*:test-core-module-payment-capp.xml"/>
 
     <import resource="core-services.xml"/>
 
