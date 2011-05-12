@@ -277,10 +277,10 @@
         <spring-security.version>3.0.3.RELEASE</spring-security.version>
         <spring.version>3.0.5.RELEASE</spring.version>
 
-        <testPgCyberSource>true</testPgCyberSource>
-        <testPgAuthorizeNetAim>true</testPgAuthorizeNetAim>
-        <testPgPayFlow>true</testPgPayFlow>
-        <testPgPayPal>true</testPgPayPal>
+        <testPgCyberSource>false</testPgCyberSource>
+        <testPgAuthorizeNetAim>false</testPgAuthorizeNetAim>
+        <testPgPayFlow>false</testPgPayFlow>
+        <testPgPayPal>false</testPgPayPal>
     </properties>
 
 </project>
