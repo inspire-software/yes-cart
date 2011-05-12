@@ -22,7 +22,7 @@ public class  ReleaseToPackOrderEventHandlerImplTest extends AbstractEventHandle
 
     @Before
     public void setUp() throws Exception {
-        super.setUp(new String [] {"testApplicationContext.xml" , "core-aspects.xml" });
+        super.setUp();
 
 
         handler = (ReleaseToPackOrderEventHandlerImpl) ctx.getBean("releaseToPackOrderEventHandler");

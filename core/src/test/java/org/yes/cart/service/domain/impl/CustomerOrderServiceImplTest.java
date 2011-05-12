@@ -28,7 +28,7 @@ public class CustomerOrderServiceImplTest  extends BaseCoreDBTestCase {
     @Before
     public void setUp() throws Exception {
 
-        super.setUp(new String [] {"testApplicationContext.xml" , "core-aspects.xml" });
+        super.setUp();
 
         customerOrderService = (CustomerOrderService) ctx.getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
 
@@ -47,12 +47,14 @@ public class CustomerOrderServiceImplTest  extends BaseCoreDBTestCase {
     @Test
     public void testCreateAndDelete() throws Exception {
 
+        final String customerPrefix = "testCreateAndDelete";
+
         
-        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx);
+        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx, customerPrefix);
         assertFalse(customer.getAddress().isEmpty());
 
 
-        final ShoppingCart shoppingCart =  getShoppingCart();
+        final ShoppingCart shoppingCart =  getShoppingCart(customerPrefix);
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
         long pk = order.getCustomerorderId();
         assertTrue(pk > 0);
@@ -67,12 +69,14 @@ public class CustomerOrderServiceImplTest  extends BaseCoreDBTestCase {
     @Test
     public void testFindByGuid() throws Exception {
 
+        final String customerPrefix = "testFindByGuid";
 
-        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx);
+
+        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx, customerPrefix);
         assertFalse(customer.getAddress().isEmpty());
 
 
-        final ShoppingCart shoppingCart =  getShoppingCart();
+        final ShoppingCart shoppingCart =  getShoppingCart(customerPrefix);
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
         long pk = order.getCustomerorderId();
         assertTrue(pk > 0);
@@ -96,18 +100,23 @@ public class CustomerOrderServiceImplTest  extends BaseCoreDBTestCase {
     @Test
     public void testGetCustomerOrders() throws Exception {
 
+        final String customerPrefix = "cosit2";
+
         final Date date = new Date();
 
-        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx);
+        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx , customerPrefix);
         assertFalse(customer.getAddress().isEmpty());
 
 
-        final ShoppingCart shoppingCart =  getShoppingCart();
+        final ShoppingCart shoppingCart =  getShoppingCart(customerPrefix);
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
         assertTrue(order.getCustomerorderId() > 0);
 
         assertEquals(1,customerOrderService.findCustomerOrders(date).size());
         assertTrue(customerOrderService.findCustomerOrders(new Date()).isEmpty());
+
+
+        dumpDataBase("zzzzzzzzzz" , new String []{"TCUSTOMERORDER", "TCUSTOMER"});
 
         assertEquals(1,customerOrderService.findCustomerOrders(customer, null).size());
 
@@ -119,12 +128,14 @@ public class CustomerOrderServiceImplTest  extends BaseCoreDBTestCase {
     @Test
     public void testPersistReassembledOrder1() throws Exception {
 
+        final String customerPrefix = "cosit3";
 
-        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx);
+
+        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx, customerPrefix);
         assertFalse(customer.getAddress().isEmpty());
 
 
-        final ShoppingCart shoppingCart =  getShoppingCart();
+        final ShoppingCart shoppingCart =  getShoppingCart(customerPrefix);
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
         assertEquals(4, order.getDelivery().size());
 
@@ -135,12 +146,13 @@ public class CustomerOrderServiceImplTest  extends BaseCoreDBTestCase {
     @Test
     public void testPersistReassembledOrder2() throws Exception {
 
+        final String customerPrefix = "cosit4";
 
-        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx);
+        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx, customerPrefix);
         assertFalse(customer.getAddress().isEmpty());
 
 
-        final ShoppingCart shoppingCart =  getShoppingCart();
+        final ShoppingCart shoppingCart =  getShoppingCart(customerPrefix);
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, true);
         assertEquals(2, order.getDelivery().size());
 
@@ -151,12 +163,14 @@ public class CustomerOrderServiceImplTest  extends BaseCoreDBTestCase {
     @Test
     public void testPersistReassembledOrder3() throws Exception {
 
+        final String customerPrefix = "testPersistReassembledOrder3";
 
-        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx);
+
+        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx, customerPrefix);
         assertFalse(customer.getAddress().isEmpty());
 
 
-        final ShoppingCart shoppingCart =  getShoppingCart2();
+        final ShoppingCart shoppingCart =  getShoppingCart2(customerPrefix);
         assertFalse(customerOrderService.isOrderCanHasMultipleDeliveries(shoppingCart));
 
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, true);
@@ -172,9 +186,9 @@ public class CustomerOrderServiceImplTest  extends BaseCoreDBTestCase {
      * Ordered qty more than qty on warehouses, so one "wait inventory " delivery will be planned.
      * @return cart
      */
-    public static ShoppingCart getShoppingCart() {
+    public static ShoppingCart getShoppingCart(final String prefix) {
 
-        ShoppingCart shoppingCart = getEmptyCart();
+        ShoppingCart shoppingCart = getEmptyCart(prefix);
 
         Map<String, String> param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST4");
@@ -233,9 +247,9 @@ public class CustomerOrderServiceImplTest  extends BaseCoreDBTestCase {
     /**
      * @return cart with one digital available product.
      */
-    private ShoppingCart getShoppingCart2() {
+    private ShoppingCart getShoppingCart2(final String prefix) {
 
-        ShoppingCart shoppingCart = getEmptyCart();
+        ShoppingCart shoppingCart = getEmptyCart(prefix);
 
         Map<String,String> param = new HashMap<String,String>();
 
@@ -260,12 +274,12 @@ public class CustomerOrderServiceImplTest  extends BaseCoreDBTestCase {
         return shoppingCart;
     }
 
-    private static ShoppingCart getEmptyCart() {
+    private static ShoppingCart getEmptyCart(final String prefix) {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
 
         Map<String,String> params = new HashMap<String,String>();
-        params.put(LoginCommandImpl.EMAIL,"jd@domain.com");
-        params.put(LoginCommandImpl.NAME,"John Doe");
+        params.put(LoginCommandImpl.EMAIL, prefix + "jd@domain.com");
+        params.put(LoginCommandImpl.NAME, prefix + "John Doe");
 
 
         shoppingCart.setShopId(10);

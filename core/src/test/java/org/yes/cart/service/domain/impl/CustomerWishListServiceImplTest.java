@@ -29,7 +29,7 @@ public class CustomerWishListServiceImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        super.setUp(new String [] {"testApplicationContext.xml" , "core-aspects.xml" });
+        super.setUp();
         service = (CustomerWishListService) ctx.getBean(ServiceSpringKeys.CUSTOMER_WISH_LIST_SERVICE);
         customerService = (CustomerService) ctx.getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
         productSkuService = (ProductSkuService) ctx.getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE);

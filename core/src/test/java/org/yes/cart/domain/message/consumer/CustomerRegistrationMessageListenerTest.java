@@ -21,7 +21,7 @@ public class CustomerRegistrationMessageListenerTest extends BaseCoreDBTestCase 
 
     @Before
     public void setUp()  throws Exception {
-        super.setUp(new String [] {"testApplicationContext.xml" , "core-aspects.xml" });
+        super.setUp();
     }
 
 

@@ -23,7 +23,7 @@ public class UserManagmentServiceImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        super.setUp(new String [] {"testApplicationContext.xml" , "core-aspects.xml" });
+        super.setUp();
         managementService = (ManagementService) ctx.getBean(ServiceSpringKeys.USER_MANAGMENT_SERVICE);
         managerService  = (ManagerService) ctx.getBean(ServiceSpringKeys.MANAGER_SERVICE);
     }

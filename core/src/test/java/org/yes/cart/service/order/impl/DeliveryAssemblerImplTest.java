@@ -33,7 +33,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp()  throws Exception {
-        super.setUp(new String [] {"testApplicationContext.xml" , "core-aspects.xml" });
+        super.setUp();
 
 
         orderAssembler = (OrderAssembler)  ctx.getBean(ServiceSpringKeys.ORDER_ASSEMBLER);

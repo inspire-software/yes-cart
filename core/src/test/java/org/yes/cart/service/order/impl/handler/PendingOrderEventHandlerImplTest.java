@@ -38,7 +38,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
 
     @Before
     public void setUp() throws Exception {
-        super.setUp(new String[]{"testApplicationContext.xml", "core-aspects.xml"});
+        super.setUp();
 
 
         handler = (PendingOrderEventHandlerImpl) ctx.getBean("pendingOrderEventHandler");

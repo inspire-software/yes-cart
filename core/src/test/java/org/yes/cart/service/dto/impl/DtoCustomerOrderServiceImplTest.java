@@ -31,11 +31,10 @@ public class DtoCustomerOrderServiceImplTest   extends BaseCoreDBTestCase {
 
     @Before
     public void setUp()  throws Exception {
-        super.setUp(new String [] {"testApplicationContext.xml" , "core-aspects.xml" });
+        super.setUp();
         dtoService = (DtoCustomerOrderService) ctx.getBean(ServiceSpringKeys.DTO_CUSTOMER_ORDER_SERVICE);
         dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
         customerOrderService = (CustomerOrderService) ctx.getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
-
     }
 
     @After
@@ -60,11 +59,14 @@ public class DtoCustomerOrderServiceImplTest   extends BaseCoreDBTestCase {
 
     @Test
     public void testUpdate()  throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx);
+
+        final String customerPrefix = "testUpdate";
+
+        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx, customerPrefix);
         assertFalse(customer.getAddress().isEmpty());
 
 
-        final ShoppingCart shoppingCart =  CustomerOrderServiceImplTest.getShoppingCart();
+        final ShoppingCart shoppingCart =  CustomerOrderServiceImplTest.getShoppingCart(customerPrefix);
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
         long pk = order.getCustomerorderId();
         assertTrue(pk > 0);

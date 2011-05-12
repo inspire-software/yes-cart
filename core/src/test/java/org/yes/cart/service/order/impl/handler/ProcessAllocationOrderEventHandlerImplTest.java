@@ -33,7 +33,7 @@ public class ProcessAllocationOrderEventHandlerImplTest  extends AbstractEventHa
 
     @Before
     public void setUp() throws Exception {
-        super.setUp(new String[]{"testApplicationContext.xml", "core-aspects.xml"});
+        super.setUp();
 
 
         handler = (ProcessAllocationOrderEventHandlerImpl) ctx.getBean("processAllocationOrderEventHandler");

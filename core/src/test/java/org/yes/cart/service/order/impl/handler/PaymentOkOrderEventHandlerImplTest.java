@@ -26,7 +26,7 @@ public class PaymentOkOrderEventHandlerImplTest extends AbstractEventHandlerImpl
 
     @Before
     public void setUp() throws Exception {
-        super.setUp(new String[]{"testApplicationContext.xml", "core-aspects.xml"});
+        super.setUp();
 
 
         handler = (PaymentOkOrderEventHandlerImpl) ctx.getBean("paymentOkOrderEventHandler");

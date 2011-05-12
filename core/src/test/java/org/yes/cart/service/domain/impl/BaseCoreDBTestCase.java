@@ -89,7 +89,17 @@ public abstract class BaseCoreDBTestCase extends DBTestCase {
     @Before
     public void setUp() throws Exception {
 
-        ctx = new ClassPathXmlApplicationContext("testApplicationContext.xml");
+        if (DomainTestSuite.ctx2 == null) {
+
+            DomainTestSuite.ctx2 = ctx = new ClassPathXmlApplicationContext(
+                    "testApplicationContext.xml" ,
+                    "core-aspects.xml");
+
+
+        } else {
+            ctx = DomainTestSuite.ctx2;
+
+        }
 
         sessionFactory = (SessionFactory) ctx.getBean("sessionFactory");
 
@@ -99,7 +109,7 @@ public abstract class BaseCoreDBTestCase extends DBTestCase {
 
     }
 
-    @Before
+    /*@Before
     public void setUp(String [] configurationXmls) throws Exception {
 
         ctx = new ClassPathXmlApplicationContext(configurationXmls);
@@ -110,7 +120,7 @@ public abstract class BaseCoreDBTestCase extends DBTestCase {
 
         super.setUp();
 
-    }
+    } */
 
     @After
     public void tearDown() {
