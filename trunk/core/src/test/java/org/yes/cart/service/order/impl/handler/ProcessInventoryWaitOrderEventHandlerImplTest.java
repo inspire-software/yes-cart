@@ -22,7 +22,7 @@ public class ProcessInventoryWaitOrderEventHandlerImplTest extends AbstractEvent
 
     @Before
     public void setUp() throws Exception {
-        super.setUp(new String [] {"testApplicationContext.xml" , "core-aspects.xml" });
+        super.setUp();
 
 
         handler = (ProcessInventoryWaitOrderEventHandlerImpl) ctx.getBean("processInventoryWaitOrderEventHandler");

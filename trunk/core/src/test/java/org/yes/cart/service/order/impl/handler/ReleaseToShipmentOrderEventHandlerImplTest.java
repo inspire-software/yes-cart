@@ -22,7 +22,7 @@ public class ReleaseToShipmentOrderEventHandlerImplTest extends AbstractEventHan
 
     @Before
     public void setUp() throws Exception {
-        super.setUp(new String[]{"testApplicationContext.xml", "core-aspects.xml"});
+        super.setUp();
 
 
         handler = (ReleaseToShipmentOrderEventHandlerImpl) ctx.getBean("releaseToShipmentOrderEventHandler");

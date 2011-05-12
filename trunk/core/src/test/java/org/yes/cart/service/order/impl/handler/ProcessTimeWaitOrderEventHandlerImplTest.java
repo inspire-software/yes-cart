@@ -22,7 +22,7 @@ public class ProcessTimeWaitOrderEventHandlerImplTest extends AbstractEventHandl
 
     @Before
     public void setUp() throws Exception {
-        super.setUp(new String [] {"testApplicationContext.xml" , "core-aspects.xml" });
+        super.setUp();
 
 
         handler = (ProcessTimeWaitOrderEventHandlerImpl) ctx.getBean("processTimeWaitOrderEventHandler");

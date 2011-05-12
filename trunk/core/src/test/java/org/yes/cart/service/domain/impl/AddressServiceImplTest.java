@@ -23,7 +23,7 @@ public class AddressServiceImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        super.setUp(new String [] {"testApplicationContext.xml" , "core-aspects.xml" });
+        super.setUp();
         addressService = (AddressService) ctx.getBean(ServiceSpringKeys.ADDRESS_SERVICE);
         customerService = (CustomerService) ctx.getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
         shopService = (ShopService)  ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);

@@ -22,7 +22,7 @@ public class CustomerServiceImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp()  throws Exception {
-        super.setUp(new String [] {"testApplicationContext.xml" , "core-aspects.xml" });
+        super.setUp();
         customerService = (CustomerService) ctx.getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
         shopService  = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
     }
@@ -36,7 +36,7 @@ public class CustomerServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testCreate() {
-        Customer customer = getCustomer();
+        Customer customer = getCustomer("testCreate");
         customer = customerService.create(customer, shopService.getById(10L));
         assertTrue (customer.getCustomerId() > 0);
         assertFalse(customer.getShops().isEmpty());
@@ -44,7 +44,7 @@ public class CustomerServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testUpdate() {
-        Customer customer = getCustomer();
+        Customer customer = getCustomer("testUpdate");
         customer = customerService.create(customer, shopService.getById(10L));
         assertTrue (customer.getCustomerId() > 0);
         customer.setFirstname("Gordon");
@@ -56,7 +56,7 @@ public class CustomerServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testDelete() {
-        Customer customer = getCustomer();
+        Customer customer = getCustomer("testDelete");
         customer = customerService.create(customer, shopService.getById(10L));
         assertTrue (customer.getCustomerId() > 0);
         long pk = customer.getCustomerId();
@@ -67,7 +67,7 @@ public class CustomerServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testResetPasswd() {
-        Customer customer = getCustomer();
+        Customer customer = getCustomer("testResetPasswd");
         customer = customerService.create(customer, shopService.getById(10L));
         assertTrue (customer.getCustomerId() > 0);
         String oldHash = customer.getPassword();
@@ -95,36 +95,40 @@ public class CustomerServiceImplTest extends BaseCoreDBTestCase {
 
         dumpDataBase("cust_addr" , new String [] {"TADDRESS"});
 
-        Customer customer = getCustomer();
+        Customer customer = getCustomer("");
+        customer.setEmail("user1@somedomain.com");
+        customer.setFirstname("SomeFirsname");
+        customer.setLastname("user1LastName");
         customerService.create(customer, shopService.getById(10L));
-        customer = getCustomer();
-        customer.setFirstname("Firsname");
+
+        customer = getCustomer("testFindCustomer2");
+        customer.setFirstname("SomeFirsname");
         customer.setLastname("Akintola");
-        customer.setEmail("akintola@shopdomain.com");
+        customer.setEmail("user2@somedomain.com");
         customerService.create(customer, shopService.getById(10L));
 
         List<Customer> list = customerService.findCustomer("", null, null, null);
         assertNotNull(list);
 
-        list = customerService.findCustomer("ola", null, null, null);
+        list = customerService.findCustomer("user2", null, null, null);
         assertEquals(1, list.size());
 
-        list = customerService.findCustomer("opdomain", null, null, null);
+        list = customerService.findCustomer("omedomain", null, null, null);
         assertEquals(2, list.size());
 
-        list = customerService.findCustomer(null, "Firsname", null, null);
+        list = customerService.findCustomer(null, "SomeFirsname", null, null);
         assertEquals(2, list.size());
 
-        list = customerService.findCustomer(null, null, "Lastname", null);
+        list = customerService.findCustomer(null, null, "user1LastName", null);
         assertEquals(1, list.size());
 
-        list = customerService.findCustomer(null, null, "name", null);
+        list = customerService.findCustomer(null, null, "kintola", null);
         assertEquals(1, list.size());
 
-        list = customerService.findCustomer(null, "name", null , null);
+        list = customerService.findCustomer(null, "SomeFirsname", null , null);
         assertEquals(2, list.size());
 
-        list = customerService.findCustomer(null, "Firsname", "Lastname", null);
+        list = customerService.findCustomer(null, "SomeFirsname", "Akintola", null);
         assertEquals(1, list.size());
 
 
@@ -132,11 +136,11 @@ public class CustomerServiceImplTest extends BaseCoreDBTestCase {
 
 
 
-    private Customer getCustomer() {
+    private Customer getCustomer(final String prefix) {
         Customer customer = customerService.getGenericDao().getEntityFactory().getByIface(Customer.class);
-        customer.setEmail("customer@shopdomain.com");
-        customer.setFirstname("Firsname");
-        customer.setLastname("Lastname");
+        customer.setEmail(prefix + "customer@shopdomain.com");
+        customer.setFirstname(prefix + "Firsname");
+        customer.setLastname(prefix + "Lastname");
         return customer;
     }
 

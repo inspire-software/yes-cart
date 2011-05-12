@@ -31,7 +31,7 @@ public class PaymentCallBackHandlerFacadeImplTest  extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        super.setUp(new String[]{"testApplicationContext.xml", "core-aspects.xml"});
+        super.setUp();
         paymentCallBackHandlerFacade  =  (PaymentCallBackHandlerFacade) ctx.getBean(ServiceSpringKeys.PAYMENT_CALLBACK_HANDLER);
         orderAssembler = (OrderAssembler)  ctx.getBean(ServiceSpringKeys.ORDER_ASSEMBLER);
         customerOrderService = (CustomerOrderService) ctx.getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);

@@ -29,7 +29,7 @@ import java.math.BigDecimal;
 
     @Before
     public void setUp() throws Exception {
-        super.setUp(new String[]{"testApplicationContext.xml", "core-aspects.xml"});
+        super.setUp();
 
 
         handler = (DeliveryAllowedByInventoryOrderEventHandlerImpl) ctx.getBean("deliveryAllowedByInventoryOrderEventHandler");

@@ -42,7 +42,7 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp()  throws Exception {
-        super.setUp(new String [] {"testApplicationContext.xml" , "core-aspects.xml" });
+        super.setUp();
 
 
         orderAssembler = (OrderAssembler)  ctx.getBean(ServiceSpringKeys.ORDER_ASSEMBLER);
@@ -196,10 +196,10 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
         return shoppingCart;
     }
 
+    public static Customer createCustomer(final ApplicationContext context, final String prefix) {
 
-    public static Customer createCustomer(final ApplicationContext context) {
 
-        CustomerService customerService;
+                CustomerService customerService;
         ShopService shopService;
         AttributeService attributeService;
         AddressService addressService;
@@ -213,9 +213,9 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
         GenericDAO<Customer, Long> customerDao = (GenericDAO<Customer, Long>)  ctx.getBean("customerDao");
 
         Customer customer = customerService.getGenericDao().getEntityFactory().getByIface(Customer.class);
-        customer.setEmail("jd@domain.com");
-        customer.setFirstname("John");
-        customer.setLastname("Doe");
+        customer.setEmail(prefix + "jd@domain.com");
+        customer.setFirstname(prefix + "John");
+        customer.setLastname(prefix + "Doe");
 
 
         final AttrValueCustomer attrValueCustomer = customerService.getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
@@ -253,10 +253,18 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
 //        customer = customerService.findCustomer("jd@domain.com");
 
         customer = customerDao.findSingleByCriteria(
-                Restrictions.eq("email", "jd@domain.com"));
+                Restrictions.eq("email", prefix + "jd@domain.com"));
 
 
         return customer;
+
+    }
+
+    public static Customer createCustomer(final ApplicationContext context) {
+
+        return createCustomer(context, "");
+
+
     }
 
 

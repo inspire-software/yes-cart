@@ -48,7 +48,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
 
     public void setUp() throws Exception {
 
-        super.setUp(new String[]{"testApplicationContext.xml", "core-aspects.xml"});
+        super.setUp();
         paymentProcessorFactory = (PaymentProcessorFactory) ctx.getBean(ServiceSpringKeys.PAYMENT_PROCESSOR_FACTORY);
         customerOrderService = (CustomerOrderService) ctx.getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
         customerOrderPaymentService = (CustomerOrderPaymentService) ctx.getBean(ServiceSpringKeys.ORDER_PAYMENT_SERICE);

@@ -32,7 +32,7 @@ public class CancelOrderWithRefundOrderEventHandlerImplTest    extends AbstractE
 
     @Before
     public void setUp() throws Exception {
-        super.setUp(new String[]{"testApplicationContext.xml", "core-aspects.xml"});
+        super.setUp();
 
 
         shipmentCompleteHandler = (ShipmentCompleteOrderEventHandlerImpl) ctx.getBean("shipmentCompleteOrderEventHandler");
