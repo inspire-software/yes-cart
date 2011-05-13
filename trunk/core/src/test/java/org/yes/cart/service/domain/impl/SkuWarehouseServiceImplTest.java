@@ -53,16 +53,17 @@ public class SkuWarehouseServiceImplTest extends BaseCoreDBTestCase {
         skuWarehouse.setQuantity(BigDecimal.TEN);
         skuWarehouse = skuWarehouseService.create(skuWarehouse);
         assertTrue(skuWarehouse.getSkuWarehouseId() > 0);
+        skuWarehouseService.delete(skuWarehouse);
     }
 
     @Test
     public void testGetQuantity() {
-        SkuWarehouse skuWarehouse = skuWarehouseService.getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);
+        SkuWarehouse skuWarehouse; /*= skuWarehouseService.getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);
         skuWarehouse.setSku(productSkuService.getById(11006L));
         skuWarehouse.setWarehouse(warehouseService.getById(1L));
         skuWarehouse.setQuantity(BigDecimal.TEN);
         skuWarehouse.setReserved(BigDecimal.TEN);
-        skuWarehouseService.create(skuWarehouse);
+        skuWarehouseService.create(skuWarehouse); */
 
 
         skuWarehouse = skuWarehouseService.getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);
@@ -87,9 +88,11 @@ public class SkuWarehouseServiceImplTest extends BaseCoreDBTestCase {
 
         ProductSku psku = productSkuService.getById(11006L);
 
+        dumpDataBase("asdasdasd" , new String [] {"TSKUWAREHOUSE"});
+
         Pair<BigDecimal,BigDecimal> rez = skuWarehouseService.getQuantity(warehouses, psku);
-        assertEquals(new BigDecimal("21.00"), rez.getFirst());
-        assertEquals(new BigDecimal("15.00"), rez.getSecond());
+        assertEquals(new BigDecimal("12.00"), rez.getFirst());
+        assertEquals(new BigDecimal("5.00"), rez.getSecond());
 
     }
 
@@ -105,7 +108,7 @@ public class SkuWarehouseServiceImplTest extends BaseCoreDBTestCase {
         warehouses.add(warehouseService.getById(1L));
 
 
-        ProductSku psku = productSkuService.getById(11006L);
+        ProductSku psku = productSkuService.getById(11007L);
 
         Pair<BigDecimal,BigDecimal> rez = skuWarehouseService.getQuantity(warehouses, psku);
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), rez.getFirst());

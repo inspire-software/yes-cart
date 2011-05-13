@@ -50,9 +50,9 @@ public class CustomerWishListServiceImplTest extends BaseCoreDBTestCase {
 
 
         Customer customer = customerService.getGenericDao().getEntityFactory().getByIface(Customer.class);
-        customer.setEmail("bender@domain.com");
-        customer.setFirstname("Bender");
-        customer.setLastname("Rodriguez");
+        customer.setEmail("bender001@domain.com");
+        customer.setFirstname("Bender001");
+        customer.setLastname("Rodriguez001");
         customer = customerService.create(customer, shopService.getById(10L));
         assertTrue (customer.getCustomerId() > 0);
 

@@ -96,8 +96,6 @@ public class TestProductServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testGetProductQuantity1() {
 
-        dumpDataBase("quantity1",
-                new String[]{"tproduct", "tsku", "TSKUWAREHOUSE"});
 
         final ProductService productService = (ProductService) ctx.getBean(ServiceSpringKeys.PRODUCT_SERVICE);
         final ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
@@ -117,9 +115,6 @@ public class TestProductServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testGetProductQuantity2() {
 
-        dumpDataBase("quantity2",
-                new String[]{"tproduct", "tsku", "TSKUWAREHOUSE"});
-
         final ProductService productService = (ProductService) ctx.getBean(ServiceSpringKeys.PRODUCT_SERVICE);
         final ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
         Shop shop = shopService.getById(10L);
@@ -127,15 +122,18 @@ public class TestProductServiceImpl extends BaseCoreDBTestCase {
         assertNotNull(shop);
 
         BigDecimal qty;
-        Product product = productService.getProductById(15006L);
+        Product product = productService.getProductById(15007L);
         //product has null qty
         assertNotNull(product);
-        assertEquals("PRODUCT7", product.getCode());
+        assertEquals("PRODUCT8", product.getCode());
+
+        dumpDataBase("qweqweqwe",
+                new String[]{"tproduct", "tsku", "TSKUWAREHOUSE"});
+
 
         /* Ttest that sobot has 0 skus on warehouse */
         qty = productService.getProductQuantity(product);
-        assertNull(qty);
-        assertEquals(null, qty);
+        assertNull("Product  " + product.getProductId() +" has " + qty + " quyantity, but expected null", qty);
 
     }
 
