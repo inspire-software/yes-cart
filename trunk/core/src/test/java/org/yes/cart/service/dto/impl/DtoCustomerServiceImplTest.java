@@ -52,7 +52,7 @@ public class DtoCustomerServiceImplTest  extends BaseCoreDBTestCase {
         CustomerDTO dto = getCustomerDto();
         dto = dtoService.create(dto);
         assertTrue(dto.getCustomerId() > 0);
-
+        dtoService.remove(dto.getCustomerId());
     }
 
 
@@ -66,6 +66,7 @@ public class DtoCustomerServiceImplTest  extends BaseCoreDBTestCase {
         dto = dtoService.update(dto);
         assertEquals("Jane", dto.getFirstname());
         assertEquals("Gav", dto.getLastname());
+        dtoService.remove(dto.getCustomerId());
     }
 
     public void testCreateEntityAttributeValue()  throws UnmappedInterfaceException, UnableToCreateInstanceException {
@@ -85,6 +86,7 @@ public class DtoCustomerServiceImplTest  extends BaseCoreDBTestCase {
         dto = dtoService.getById(dto.getCustomerId());
         assertFalse(dto.getAttribute().isEmpty());
         assertEquals("+380978159999", dto.getAttribute().iterator().next().getVal());
+
     }
 
 
