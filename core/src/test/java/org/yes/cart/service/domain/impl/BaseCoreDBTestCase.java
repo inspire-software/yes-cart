@@ -17,7 +17,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.Date;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -89,15 +88,15 @@ public abstract class BaseCoreDBTestCase extends DBTestCase {
     @Before
     public void setUp() throws Exception {
 
-        if (DomainTestSuite.ctx2 == null) {
+        if (DomainTestSuite.sharedContext == null) {
 
-            DomainTestSuite.ctx2 = ctx = new ClassPathXmlApplicationContext(
+            DomainTestSuite.sharedContext = ctx = new ClassPathXmlApplicationContext(
                     "testApplicationContext.xml" ,
                     "core-aspects.xml");
 
 
         } else {
-            ctx = DomainTestSuite.ctx2;
+            ctx = DomainTestSuite.sharedContext;
 
         }
 
@@ -109,18 +108,6 @@ public abstract class BaseCoreDBTestCase extends DBTestCase {
 
     }
 
-    /*@Before
-    public void setUp(String [] configurationXmls) throws Exception {
-
-        ctx = new ClassPathXmlApplicationContext(configurationXmls);
-
-        sessionFactory = (SessionFactory) ctx.getBean("sessionFactory");
-
-        session = sessionFactory.openSession();
-
-        super.setUp();
-
-    } */
 
     @After
     public void tearDown() {
@@ -136,10 +123,7 @@ public abstract class BaseCoreDBTestCase extends DBTestCase {
 
             } catch (NoSuchBeanDefinitionException noSuchBeanDefinitionException) {
                 //nothing
-
             }
-
-
 
             sessionFactory.close();
             session.close();

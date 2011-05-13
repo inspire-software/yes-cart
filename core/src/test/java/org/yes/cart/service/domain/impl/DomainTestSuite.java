@@ -33,6 +33,6 @@ import org.springframework.context.ApplicationContext;
 })
 public class DomainTestSuite {
 
-    static ApplicationContext ctx2 = null;
+    static ApplicationContext sharedContext = null;
 
 }

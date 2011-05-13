@@ -139,6 +139,8 @@ public class DtoCategoryServiceImplTest  extends BaseCoreDBTestCase {
             dtoService.assignToShop(dto.getCategoryId(), 50L);
             List<CategoryDTO> list = dtoService.getAllByShopId(50L);
             assertEquals(2, list.size());
+            dtoService.unassignFromShop(dto.getCategoryId(), 50L);
+            dtoService.remove(dto.getCategoryId());
         } catch (Exception e) {
             assertTrue(e.getMessage(), false);
         }

@@ -42,6 +42,7 @@ public class DtoAssociationServiceImplTest extends BaseCoreDBTestCase {
         try {
             dto = dtoAssociationService.create(dto);
             assertTrue(dto.getAssociationId() > 0);
+            dtoAssociationService.remove(dto.getAssociationId());
         } catch (Exception e) {
             assertTrue(e.getMessage(), false);
         }
@@ -65,6 +66,9 @@ public class DtoAssociationServiceImplTest extends BaseCoreDBTestCase {
             assertEquals("code2", dto.getCode());
             assertEquals("name2", dto.getName());
             assertEquals("description2", dto.getDescription());
+
+            dtoAssociationService.remove(dto.getAssociationId());
+            
 
         } catch (Exception e) {
             assertTrue(e.getMessage(), false);

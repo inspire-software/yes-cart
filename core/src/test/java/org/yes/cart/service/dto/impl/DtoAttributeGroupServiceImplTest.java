@@ -56,6 +56,7 @@ public class DtoAttributeGroupServiceImplTest extends BaseCoreDBTestCase {
         try {
             attributeGroupDTO = dtoAttributeGroupService.create(attributeGroupDTO);
             assertTrue(attributeGroupDTO.getAttributegroupId() > 0);
+            dtoAttributeGroupService.remove(attributeGroupDTO.getAttributegroupId());
         } catch (Exception e) {
             assertTrue(e.getMessage(), false);
         }
@@ -70,6 +71,7 @@ public class DtoAttributeGroupServiceImplTest extends BaseCoreDBTestCase {
             attributeGroupDTO.setName("other name");
             attributeGroupDTO = dtoAttributeGroupService.update(attributeGroupDTO);
             assertEquals("other name", attributeGroupDTO.getName());
+            dtoAttributeGroupService.remove(attributeGroupDTO.getAttributegroupId());
         } catch (Exception e) {
             assertTrue(e.getMessage(), false);
         }
