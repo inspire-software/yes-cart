@@ -5,7 +5,7 @@
         <artifactId>yes-cart</artifactId>
         <version>1.0</version>
     </parent>
-                            
+
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.yes</groupId>
     <artifactId>core</artifactId>
@@ -242,9 +242,30 @@
                         <forkMode>pertest</forkMode>
                         <argLine>-Xms512m -Xmx1024m</argLine>
                         <testFailureIgnore>false</testFailureIgnore>
-                        <!--threadCount>12</threadCount-->
-                        <useUnlimitedThreads>true</useUnlimitedThreads>
-                        <parallel>classes</parallel>
+                        <excludes>
+                            <!--exclude>**/AddressServiceImplTest.java</exclude>
+                            <exclude>**/AssociationServiceImplTest.java</exclude>
+                            <exclude>**/AttributeServiceImplTest.java</exclude>
+                            <exclude>**/CarrierSlaServiceImplTest.java</exclude>
+                            <exclude>**/CustomerOrderServiceImplTest.java</exclude>
+                            <exclude>**/CustomerServiceImplTest.java</exclude>
+                            <exclude>**/CustomerWishListServiceImplTest.java</exclude>
+                            <exclude>**/ProductSkuServiceImplTest.java</exclude>
+                            <exclude>**/SkuWarehouseServiceImplTest.java</exclude>
+                            <exclude>**/TestAttributeServiceImpl.java</exclude>
+                            <exclude>**/TestCategoryServiceImpl.java</exclude>
+                            <exclude>**/TestImageService.java</exclude>
+                            <exclude>**/TestPriceServiceImpl.java</exclude>
+                            <exclude>**/TestProductAssociationService.java</exclude>
+                            <exclude>**/TestProductCategoryServiceImpl.java</exclude>
+                            <exclude>**/TestProductServiceImpl.java</exclude>
+                            <exclude>**/TestShopServiceImpl.java</exclude>
+                            <exclude>**/WarehouseServiceImplTest.java</exclude-->
+                        </excludes>
+                        <includes>
+                             <include>**/DomainTestSuite.java</include>
+                         </includes>
+
                     </configuration>
                 </plugin>
             </plugins>
