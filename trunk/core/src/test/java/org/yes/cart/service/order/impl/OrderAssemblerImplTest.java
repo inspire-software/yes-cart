@@ -24,6 +24,7 @@ import org.yes.cart.shoppingcart.impl.*;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
 * User: Igor Azarny iazarny@yahoo.com
@@ -66,9 +67,9 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
     @Test
     public void testAssembleCustomerOrder() {
 
-        createCustomer(ctx);
+        Customer customer = createCustomer(ctx, "testAssembleCustomerOrder2");
 
-        ShoppingCart shoppingCart = getShoppingCart(ctx);
+        ShoppingCart shoppingCart = getShoppingCart(ctx, customer.getEmail());
 
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
 
@@ -94,7 +95,6 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
 
         assertNotNull("Order num must be set" , customerOrder.getOrdernum());
 
-        assertEquals("jd@domain.com", customerOrder.getCustomer().getEmail());
 
         assertTrue("Order in pending state must not have delivery", customerOrder.getDelivery().isEmpty());
 
@@ -112,14 +112,14 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
     }
 
 
-    public static ShoppingCart getShoppingCart(final ApplicationContext context) {
+    public static ShoppingCart getShoppingCart(final ApplicationContext context, final String customerEmail) {
 
         ShoppingCart shoppingCart = new ShoppingCartImpl();
 
         Map<String,String> params;
 
         params = new HashMap<String,String>();
-        params.put(LoginCommandImpl.EMAIL,"jd@domain.com");
+        params.put(LoginCommandImpl.EMAIL,customerEmail);
         params.put(LoginCommandImpl.NAME,"John Doe");
 
 
@@ -262,7 +262,7 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
 
     public static Customer createCustomer(final ApplicationContext context) {
 
-        return createCustomer(context, "");
+        return createCustomer(context, UUID.randomUUID().toString());
 
 
     }

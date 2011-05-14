@@ -1,9 +1,13 @@
 package org.yes.cart.service.domain.impl;
 
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Manager;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ManagerService;
+
+import java.util.List;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -30,4 +34,11 @@ public class ManagerServiceImpl extends BaseGenericServiceImpl<Manager> implemen
         //TODO assign to manage particular shop
         return super.create(manager);
     }
+
+    /** {@inheritDoc } */
+    public List<Manager> findByEmail(final String email) {
+        return findByCriteria(Restrictions.like("email", email, MatchMode.ANYWHERE));
+
+    }
+
 }

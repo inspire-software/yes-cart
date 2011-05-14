@@ -22,9 +22,9 @@ public abstract class AbstractEventHandlerImplTest  extends BaseCoreDBTestCase {
      * @param context spring context
      * @return cart
      */
-    protected ShoppingCart getStdCard(final ApplicationContext context) {
+    protected ShoppingCart getStdCard(final ApplicationContext context, final String customerEmail) {
 
-        ShoppingCart shoppingCart = getEmptyCart(context);
+        ShoppingCart shoppingCart = getEmptyCart(context, customerEmail);
 
         Map<String, String> param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST1");
@@ -47,11 +47,11 @@ public abstract class AbstractEventHandlerImplTest  extends BaseCoreDBTestCase {
 
     }
 
-    protected ShoppingCart getEmptyCart(final ApplicationContext context) {
+    protected ShoppingCart getEmptyCart(final ApplicationContext context, final String customerEmail) {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
 
         Map<String,String> params = new HashMap<String,String>();
-        params.put(LoginCommandImpl.EMAIL,"jd@domain.com");
+        params.put(LoginCommandImpl.EMAIL,customerEmail);
         params.put(LoginCommandImpl.NAME,"John Doe");
 
 

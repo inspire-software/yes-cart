@@ -45,13 +45,6 @@ public class DtoProductAssociationServiceImplTest  extends BaseCoreDBTestCase {
         super.tearDown();
     }
 
-    @Test
-    public void testCreate() throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        ProductAssociationDTO dto = getDto();
-        dto = dtoProductAssociationService.create(dto);
-        assertTrue(dto.getProductassociationId() > 0 );
-    }
-
 
     @Test
     public void testUpdate() {
@@ -63,18 +56,6 @@ public class DtoProductAssociationServiceImplTest  extends BaseCoreDBTestCase {
             dto.setRank(11324);
             dto = dtoProductAssociationService.update(dto);
             assertEquals(11324, dto.getRank());
-
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
-    }
-
-    @Test
-    public void testRemove() {
-        try {
-            ProductAssociationDTO dto = getDto();
-            dto = dtoProductAssociationService.create(dto);
-            assertTrue(dto.getProductassociationId() > 0 );
 
             long pk = dto.getProductassociationId();
             dtoProductAssociationService.remove(pk);
@@ -101,6 +82,8 @@ public class DtoProductAssociationServiceImplTest  extends BaseCoreDBTestCase {
 
             list = dtoProductAssociationService.getProductAssociations(11004L);
             assertEquals(5, list.size());
+
+            dtoProductAssociationService.remove(dto.getProductassociationId());
 
 
         } catch (Exception e) {

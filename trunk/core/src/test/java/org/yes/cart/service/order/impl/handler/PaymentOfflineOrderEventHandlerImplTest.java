@@ -42,7 +42,7 @@ public class PaymentOfflineOrderEventHandlerImplTest extends AbstractEventHandle
         final Customer customer = OrderAssemblerImplTest.createCustomer(ctx);
         assertFalse(customer.getAddress().isEmpty());
 
-        final CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx), false);
+        final CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
 
         handler.handle(
