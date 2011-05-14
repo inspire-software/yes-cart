@@ -51,7 +51,7 @@ import java.math.BigDecimal;
         final Customer customer = OrderAssemblerImplTest.createCustomer(ctx);
         assertFalse(customer.getAddress().isEmpty());
 
-        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx), false);
+        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
 
         CustomerOrderDelivery delivery = customerOrder.getDelivery().iterator().next();
@@ -74,7 +74,7 @@ import java.math.BigDecimal;
 
 
         //The equal order can not pefrorm transition , because 1 item on CC_TEST2 sku reserved
-        customerOrder = orderService.createFromCart(getStdCard(ctx), false);
+        customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
         delivery = customerOrder.getDelivery().iterator().next();
 

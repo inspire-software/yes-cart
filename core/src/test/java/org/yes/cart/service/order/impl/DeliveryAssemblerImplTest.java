@@ -56,10 +56,10 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
     @Test
     public void testGetDeliveryGroups() {
 
-        Customer customer = OrderAssemblerImplTest.createCustomer(ctx);
+        Customer customer = OrderAssemblerImplTest.createCustomer(ctx, "testGetDeliveryGroups");
         assertFalse(customer.getAddress().isEmpty());
 
-        ShoppingCart shoppingCart = getShoppingCart1(ctx);
+        ShoppingCart shoppingCart = getShoppingCart1(ctx, customer.getEmail());
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, false);
         Map<String, List<CustomerOrderDet>> dgroups =  deliveryAssembler.getDeliveryGroups(customerOrder, false);
@@ -68,7 +68,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         assertEquals(2, dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP).size());
 
         //two delivery will be planed , because of of the sku has not enough quantity
-        shoppingCart = getShoppingCart2(ctx);
+        shoppingCart = getShoppingCart2(ctx, customer.getEmail());
         customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, false);
         dgroups =  deliveryAssembler.getDeliveryGroups(customerOrder, false);
@@ -80,7 +80,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
 
 
         //Standard and back order with inventory. Only one delivery must be planned 
-        shoppingCart = getShoppingCart3(ctx);
+        shoppingCart = getShoppingCart3(ctx, customer.getEmail());
         customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, false);
         dgroups =  deliveryAssembler.getDeliveryGroups(customerOrder, false);
@@ -90,7 +90,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
 
         //Standard and back order with inventory. Ordered qty of back order product more that existing inventory.
         // so two delivery must be planned
-        shoppingCart = getShoppingCart4(ctx);
+        shoppingCart = getShoppingCart4(ctx, customer.getEmail());
         customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, false);
         dgroups =  deliveryAssembler.getDeliveryGroups(customerOrder, false);
@@ -102,7 +102,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
 
         //Standard and back order with inventory. Ordered qty of both products more that existing inventory.
         // so one delivery must be planned
-        shoppingCart = getShoppingCart5(ctx);
+        shoppingCart = getShoppingCart5(ctx, customer.getEmail());
         customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, false);
         dgroups =  deliveryAssembler.getDeliveryGroups(customerOrder, false);
@@ -112,7 +112,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
 
         //Standard, back order & pre order with inventory. Ordered qty covered by inventory.
         //Two  deliveries must be planned, because of pre order will wait 
-        shoppingCart = getShoppingCart6(ctx);
+        shoppingCart = getShoppingCart6(ctx, customer.getEmail());
         customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, false);
         dgroups =  deliveryAssembler.getDeliveryGroups(customerOrder, false);
@@ -124,7 +124,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
 
         //Standard, back order without inventory & pre order with inventory. Ordered qty not covered by inventory.
         // 4 deliveries must be planned, because of pre order will wait
-        shoppingCart = getShoppingCart7(ctx);
+        shoppingCart = getShoppingCart7(ctx, customer.getEmail());
         customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, false);
         dgroups =  deliveryAssembler.getDeliveryGroups(customerOrder, false);
@@ -145,11 +145,11 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
     @Test
     public void testAssembleCustomerOrder() {
 
-        Customer customer = OrderAssemblerImplTest.createCustomer(ctx);
+        Customer customer = OrderAssemblerImplTest.createCustomer(ctx, "testAssembleCustomerOrder");
         assertFalse(customer.getAddress().isEmpty());
         
 
-        ShoppingCart shoppingCart = getShoppingCart7(ctx);
+        ShoppingCart shoppingCart = getShoppingCart7(ctx, customer.getEmail());
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         assertNotNull("Customer can not be null", shoppingCart.getCustomerEmail());
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, false);
@@ -185,9 +185,9 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
      * @param context app context
      * @return cart
      */
-    private ShoppingCart getShoppingCart1(final ApplicationContext context) {
+    private ShoppingCart getShoppingCart1(final ApplicationContext context, final String customerEmail) {
 
-        ShoppingCart shoppingCart = getEmptyCart(context);
+        ShoppingCart shoppingCart = getEmptyCart(context, customerEmail);
 
         new AddSkuToCartEventCommandImpl(context, Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST1"))
                 .execute(shoppingCart);
@@ -203,9 +203,9 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
 
 
     //Bot sku with standard availability , but one of the has not qty on warehouse
-    private ShoppingCart getShoppingCart2(final ApplicationContext context) {
+    private ShoppingCart getShoppingCart2(final ApplicationContext context, final String customerEmail) {
 
-        ShoppingCart shoppingCart = getEmptyCart(context);
+        ShoppingCart shoppingCart = getEmptyCart(context, customerEmail);
 
         new AddSkuToCartEventCommandImpl(context, Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST4"))
                 .execute(shoppingCart);
@@ -222,9 +222,9 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
      * @param context app context
      * @return cart
      */
-    private ShoppingCart getShoppingCart3(final ApplicationContext context) {
+    private ShoppingCart getShoppingCart3(final ApplicationContext context, final String customerEmail) {
 
-        ShoppingCart shoppingCart = getEmptyCart(context);
+        ShoppingCart shoppingCart = getEmptyCart(context, customerEmail);
 
         new AddSkuToCartEventCommandImpl(context, Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST4"))
                 .execute(shoppingCart);
@@ -242,9 +242,9 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
      * @param context app context
      * @return cart
      */
-    private ShoppingCart getShoppingCart4(final ApplicationContext context) {
+    private ShoppingCart getShoppingCart4(final ApplicationContext context, final String customerEmail) {
 
-        ShoppingCart shoppingCart = getEmptyCart(context);
+        ShoppingCart shoppingCart = getEmptyCart(context, customerEmail);
 
         new AddSkuToCartEventCommandImpl(context, Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST4"))
                 .execute(shoppingCart);
@@ -266,9 +266,9 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
      * @param context app context
      * @return cart
      */
-    private ShoppingCart getShoppingCart5(final ApplicationContext context) {
+    private ShoppingCart getShoppingCart5(final ApplicationContext context, final String customerEmail) {
 
-        ShoppingCart shoppingCart = getEmptyCart(context);
+        ShoppingCart shoppingCart = getEmptyCart(context, customerEmail);
 
         Map<String,String> param = new HashMap<String,String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST4");
@@ -296,9 +296,9 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
      * @param context app context
      * @return cart
      */
-    private ShoppingCart getShoppingCart6(final ApplicationContext context) {
+    private ShoppingCart getShoppingCart6(final ApplicationContext context, final String customerEmail) {
 
-        ShoppingCart shoppingCart = getEmptyCart(context);
+        ShoppingCart shoppingCart = getEmptyCart(context, customerEmail);
 
         Map<String, String> param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST4");
@@ -334,9 +334,9 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
      * @param context app context
      * @return cart
      */
-    private ShoppingCart getShoppingCart7(final ApplicationContext context) {
+    private ShoppingCart getShoppingCart7(final ApplicationContext context, final String customerEmail) {
 
-        ShoppingCart shoppingCart = getEmptyCart(context);
+        ShoppingCart shoppingCart = getEmptyCart(context, customerEmail);
 
         Map<String, String> param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST4");
@@ -390,11 +390,11 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         return shoppingCart;
     }
 
-    private ShoppingCart getEmptyCart(final ApplicationContext context) {
+    private ShoppingCart getEmptyCart(final ApplicationContext context, final String customerEmail) {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
 
         Map<String,String> params = new HashMap<String,String>();
-        params.put(LoginCommandImpl.EMAIL,"jd@domain.com");
+        params.put(LoginCommandImpl.EMAIL, customerEmail);
         params.put(LoginCommandImpl.NAME,"John Doe");
 
 

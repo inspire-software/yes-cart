@@ -142,7 +142,7 @@ public class DtoProductServiceImplTest extends BaseCoreDBTestCase {
         try {
             List<ProductDTO> list = dtoService.getProductByConeNameBrandType(null, null, 104L, 0);
             assertFalse(list.isEmpty());
-            assertEquals(25, list.size());             //25 products with brand samsung
+            assertEquals(26, list.size());             //26 products with brand samsung
         } catch (Exception e) {
             assertTrue(e.getMessage(), false);
         }

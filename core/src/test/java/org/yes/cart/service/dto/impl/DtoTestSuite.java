@@ -1,10 +1,8 @@
 package org.yes.cart.service.dto.impl;
 
-import org.springframework.context.ApplicationContext;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-import org.springframework.context.ApplicationContext;
 
 /**
  * Igor Azarny iazarny@yahoo.com
@@ -32,7 +30,5 @@ import org.springframework.context.ApplicationContext;
         UserManagmentServiceImplTest.class
 })
 public class DtoTestSuite {
-
-    //static ApplicationContext sharedContext = null;
 
 }
