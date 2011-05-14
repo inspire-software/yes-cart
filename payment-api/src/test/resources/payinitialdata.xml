@@ -89,14 +89,14 @@
         P_NAME="Max size of log file"  P_DESCRIPTION="Value in MB"/>
 
 
-    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "109"
+    <!--TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "109"
         PG_LABEL="cyberSourcePaymentGateway" P_LABEL="proxyHost" P_VALUE="127.0.0.1"  P_NAME="Proxy host"  P_DESCRIPTION="Proxy host"/>
     <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "110"
         PG_LABEL="cyberSourcePaymentGateway" P_LABEL="proxyPort" P_VALUE="3128"  P_NAME="Proxy port"  P_DESCRIPTION="Proxy port"/>
     <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "111"
         PG_LABEL="cyberSourcePaymentGateway" P_LABEL="proxyUser" P_VALUE="userName"  P_NAME="Proxy user"  P_DESCRIPTION="Proxy user"/>
     <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "112"
-        PG_LABEL="cyberSourcePaymentGateway" P_LABEL="proxyPassword" P_VALUE="password"  P_NAME="Proxy pasword"  P_DESCRIPTION="Proxy password"/>
+        PG_LABEL="cyberSourcePaymentGateway" P_LABEL="proxyPassword" P_VALUE="password"  P_NAME="Proxy pasword"  P_DESCRIPTION="Proxy password"/-->
 
     <TPAYMENTGATEWAYPARAMETER
         PAYMENTGATEWAYPARAMETER_ID = "113"
@@ -285,7 +285,7 @@
         PG_LABEL="payflowPaymentGateway" P_LABEL="PROXY_PASSWORD" P_VALUE="proxyuser password"  P_NAME="Proxy password"  P_DESCRIPTION="Proxy password"/>
 
     <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "151"
-        PG_LABEL="payflowPaymentGateway" P_LABEL="PROXY_ENABLED" P_VALUE="true"  P_NAME="Proxy enabled"  P_DESCRIPTION="Is proxy enabled"/>
+        PG_LABEL="payflowPaymentGateway" P_LABEL="PROXY_ENABLED" P_VALUE="false"  P_NAME="Proxy enabled"  P_DESCRIPTION="Is proxy enabled"/>
 
     <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "152"
         PG_LABEL="payflowPaymentGateway" P_LABEL="USER_NAME" P_VALUE="aaz911"  P_NAME="Payment gateway user name"  P_DESCRIPTION="Merchant id ? . Payment gateway user name"/>
