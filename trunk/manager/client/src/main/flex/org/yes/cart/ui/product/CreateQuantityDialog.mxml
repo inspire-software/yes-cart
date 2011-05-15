@@ -1,0 +1,144 @@
+<?xml version="1.0" ?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:npa="org.yes.cart.util.*"
+                xmlns:datetime="com.georg.datetime.*" xmlns:georg="com.georg.*" layout="absolute"
+                width="350"
+                height="160"
+                title="@Resource(bundle='ProductManagmentPanel',key='adjustQuantity')"
+                showCloseButton="true" close="PopUpManager.removePopUp(this)">
+
+    <mx:Form>
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagmentPanel',key='sku')">
+            <mx:ComboBox id="skuComboBox"
+                         change="skuSelected(event)"
+                         width="260"
+                         labelFunction="skuLabelFunction"
+                         prompt="@Resource(bundle='ProductManagmentPanel',key='selectSku')"/>
+        </mx:FormItem>
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagmentPanel',key='quantity')">
+            <mx:TextInput id="quantityTextInput" width="160" change="quantityFormChanged(null);"
+                          enabled="{selectedSku != null}"/>
+        </mx:FormItem>
+    </mx:Form>
+
+    <mx:NumberValidator id="skuQuantityValidator"
+                        source="{quantityTextInput}"
+                        property="text"
+                        minValue="0" allowNegative="false" domain="int"/>
+
+    <mx:ControlBar horizontalAlign="right">
+        <mx:Button id="closeBtn" label="@Resource(bundle='ProductManagmentPanel',key='close')"
+                   click="PopUpManager.removePopUp(this)"
+                   width="94"/>
+        <mx:Button id="saveBtn"
+                   label="@Resource(bundle='ProductManagmentPanel',key='saveQuantity')"
+                   toolTip="@Resource(bundle='ProductManagmentPanel',key='saveQuantityHint')"
+                   width="94"
+                   enabled="false"
+                />
+    </mx:ControlBar>
+
+
+    <mx:Script>
+            <![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import org.yes.cart.impl.ProductSkuDTOImpl;
+
+        import org.yes.cart.impl.SkuWarehouseDTOImpl;
+
+        import mx.binding.utils.BindingUtils;
+        import mx.binding.utils.ChangeWatcher;
+        import mx.managers.PopUpManager;
+        import mx.validators.Validator;
+
+
+        [Bindable]
+        private var validatorArr:Array;
+
+        [Bindable]
+        public var selectedSku:ProductSkuDTOImpl;
+
+        [Bindable]
+        public var selectedSkuWarehouse:SkuWarehouseDTOImpl;
+
+        /**
+         * Create label for given product sku.
+         * @param value product sku dto
+         * @return label for given sku
+         */
+        private function skuLabelFunction(value:Object):String {
+            var code:String = value.code;
+            if (value.code != value.barCode) {
+                code += " / " + value.barCode;
+            }
+            return value.name + " (" + code + " )";
+        }
+
+
+        /**
+         * Sku selected
+         * @param event
+         * @return
+         */
+        private function skuSelected(event:Event):void {
+            selectedSku = event.currentTarget.selectedItem;
+            selectedSkuWarehouse.productSkuId = selectedSku.skuId;
+        }
+
+        /**
+         * Product sku changed watch function.
+         * @param event
+         * @return
+         */
+        private function quantityFormChanged(event:*):void {
+            var validatorErrorArray:Array = Validator.validateAll(validatorArr);
+            Debug.trace("DEBUG qty validation array " + validatorErrorArray.length + " sku selected item " + skuComboBox.selectedIndex);
+            saveBtn.enabled = (validatorErrorArray.length == 0) && skuComboBox.selectedIndex > -1;
+        }
+
+        /**
+         * Create new sku quantity.
+         */
+        public function createSkuQuantity():void {
+            this.selectedSkuWarehouse = new SkuWarehouseDTOImpl();
+            this.selectedSkuWarehouse.quantity = 0;
+            internalInit(this.selectedSkuWarehouse);
+        }
+
+
+        private function internalInit(skuWarehouse:SkuWarehouseDTOImpl):void {
+
+            this.selectedSkuWarehouse = skuWarehouse;
+
+            BindingUtils.bindProperty(quantityTextInput, "text", selectedSkuWarehouse, "quantity");
+            BindingUtils.bindProperty(selectedSkuWarehouse, "quantity", quantityTextInput, "text");
+
+
+            ChangeWatcher.watch(quantityTextInput, "text", quantityFormChanged);
+
+
+            validatorArr = new Array();
+            validatorArr.push(skuQuantityValidator);
+
+
+        }
+
+
+        /**
+         * Edit new sku quantity.
+         */
+        public function editSkuQuantity(skuWarehouse:SkuWarehouseDTOImpl):void {
+            for (var i:int = 0; i < skuComboBox.dataProvider.length; i++) {
+                var candidate:ProductSkuDTOImpl = ProductSkuDTOImpl(skuComboBox.dataProvider[i]);
+                if (candidate.skuId == skuWarehouse.productSkuId) {
+                    skuComboBox.selectedIndex = i;
+                    selectedSku = candidate;
+                    skuComboBox.enabled = false;
+                    break;
+                }
+            }
+            internalInit(skuWarehouse);
+        }
+        ]]>
+    </mx:Script>
+</mx:TitleWindow>

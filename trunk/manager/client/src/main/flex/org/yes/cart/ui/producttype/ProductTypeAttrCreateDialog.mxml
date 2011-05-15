@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="400" height="320"
+                title="@Resource(bundle='ProductTypeManagementPanel',key='productTypeAttr')"
+                showCloseButton="true"
+                close="PopUpManager.removePopUp(this)"
+           creationComplete="init();">
+
+
+	<mx:VBox x="0" y="0" width="100%" height="100%">
+		<mx:Form x="0" y="0">
+			<mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='name')">
+                <mx:ComboBox
+                        id="attributeComboBox"
+                        change="attributeChangeEvt(event)"
+                        width="200"
+                        labelField="name"
+                        prompt="@Resource(bundle='AttributeCreateEditDialog',key='selectAttribute')"
+                        />
+			</mx:FormItem>
+
+			<mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='rankEdit')">
+				<mx:TextInput id="rankTextInput" width="200"/>
+			</mx:FormItem>
+
+            <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='visible')">
+                <mx:CheckBox id="visibleCheckBox"
+                             toolTip="@Resource(bundle='ProductTypeManagementPanel',key='visibleHint')"/>
+            </mx:FormItem>
+
+            <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='simulariry')">
+                <mx:CheckBox id="simulariryCheckBox"
+                             toolTip="@Resource(bundle='ProductTypeManagementPanel',key='simulariryHint')"
+                        />
+            </mx:FormItem>
+
+			<mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='navigation')">
+				<mx:CheckBox id="navigationCheckBox"
+                             toolTip="@Resource(bundle='ProductTypeManagementPanel',key='navigationHint')"
+                        />
+			</mx:FormItem>
+
+            <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='navigationType')">
+                <mx:RadioButtonGroup id="navtype" itemClick="handleNavigationType(event);"/>
+                <mx:RadioButton id="navTypeSingle" groupName="navtype" value="S"
+                                label="@Resource(bundle='ProductTypeManagementPanel',key='singleValueNavigation')"
+                                toolTip="@Resource(bundle='ProductTypeManagementPanel',key='singleValueNavigationHint')"
+                        />
+                <mx:HBox>
+                    <mx:RadioButton id="navTypeRange" groupName="navtype" value="R"
+                                label="@Resource(bundle='ProductTypeManagementPanel',key='valueRangeNavigation')"
+                                toolTip="@Resource(bundle='ProductTypeManagementPanel',key='valueRangeNavigationHint')"
+                            />
+                    <mx:Button id="editRangeNavigationXmlBtn"
+                           enabled="{navigationTypeRangeEditEnabled}"
+                           label="@Resource(bundle='ProductTypeManagementPanel',key='rangeNavigationBtn')"
+                           toolTip="@Resource(bundle='ProductTypeManagementPanel',key='rangeNavigationEdit')"
+                            click="editRangeNavigationXml(event)"/>
+                </mx:HBox>
+
+            </mx:FormItem>
+
+
+		</mx:Form>
+
+		<mx:ControlBar width="100%" horizontalAlign="right">
+            <mx:Button id="cancelBtn" label="@Resource(bundle='ProductTypeManagementPanel',key='cancel')"
+                       click="PopUpManager.removePopUp(this)"
+                       width="94"/>
+            <mx:Button id="saveBtn" label="@Resource(bundle='ProductTypeManagementPanel',key='save')" width="94"/>
+		</mx:ControlBar>
+
+
+	</mx:VBox>
+
+    <mx:Boolean id="navigationTypeRangeEditEnabled">false</mx:Boolean>
+
+
+
+    <mx:Script>
+
+        <![CDATA[
+        import org.yes.cart.impl.AttributeDTOImpl;
+        import org.yes.cart.impl.ProductTypeAttrDTOImpl;
+
+        import mx.binding.utils.BindingUtils;
+        import mx.core.Application;
+        import mx.events.ItemClickEvent;
+        import mx.managers.PopUpManager;
+
+
+        [Bindable]
+        public var productTypeAttr:ProductTypeAttrDTOImpl;
+
+        private var rangeNavigationDialog:RangeNavigationDialog;
+
+        private function init():void {
+
+            BindingUtils.bindProperty(rankTextInput, "text", productTypeAttr, "rank");
+            BindingUtils.bindProperty(visibleCheckBox, "selected", productTypeAttr, "visible");
+            BindingUtils.bindProperty(simulariryCheckBox, "selected", productTypeAttr, "simulariry");
+            BindingUtils.bindProperty(navigationCheckBox, "selected", productTypeAttr, "navigation");
+
+            BindingUtils.bindProperty(productTypeAttr, "rank", rankTextInput, "text");
+            BindingUtils.bindProperty(productTypeAttr, "visible", visibleCheckBox, "selected");
+            BindingUtils.bindProperty(productTypeAttr, "simulariry", simulariryCheckBox, "selected");
+            BindingUtils.bindProperty(productTypeAttr, "navigation", navigationCheckBox, "selected");
+
+            if (!(isNaN(productTypeAttr.productTypeAttrId) || productTypeAttr.productTypeAttrId == 0)) {
+                //edit so set the comboboxes and radio buttons
+                navTypeSingle.selected = (productTypeAttr.navigationType == "S");
+                navigationTypeRangeEditEnabled = navTypeRange.selected = (productTypeAttr.navigationType == "R");
+
+                for (var i:int = 0; i < attributeComboBox.dataProvider.length; i++) {
+                    var candidate:Object = attributeComboBox.dataProvider[i];
+                    if (candidate.attributeId == productTypeAttr.attributeDTO.attributeId) {
+                        attributeComboBox.selectedItem = candidate;
+                        attributeComboBox.selectedIndex = i;
+                        break;
+                    }
+                }
+            }
+        }
+
+        private function handleNavigationType(event:mx.events.ItemClickEvent):void {
+            navigationTypeRangeEditEnabled = (event.currentTarget.selectedValue == "R");
+            productTypeAttr.navigationType = event.currentTarget.selectedValue;
+        }
+
+        private function attributeChangeEvt(event:Event):void {
+            productTypeAttr.attributeDTO = AttributeDTOImpl(event.currentTarget.selectedItem);
+        }
+
+        private function editRangeNavigationXml(event:flash.events.MouseEvent):void {
+            rangeNavigationDialog = RangeNavigationDialog(PopUpManager.createPopUp(
+                    DisplayObject(Application.application), RangeNavigationDialog, true));
+            rangeNavigationDialog.xmlString = productTypeAttr.rangeNavigation;
+            rangeNavigationDialog.saveBtn.addEventListener("click", saveRangeNavigation);
+            PopUpManager.centerPopUp(rangeNavigationDialog);
+        }
+
+        private function saveRangeNavigation(event:Event):void {
+            productTypeAttr.rangeNavigation = rangeNavigationDialog.getXmlString();
+            PopUpManager.removePopUp(rangeNavigationDialog);
+            rangeNavigationDialog = null;
+        }
+        ]]></mx:Script>
+</mx:TitleWindow>

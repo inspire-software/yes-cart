@@ -1,0 +1,126 @@
+<?xml version="1.0" ?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:npa="org.yes.cart.util.*"
+                xmlns:datetime="com.georg.datetime.*" xmlns:georg="com.georg.*" layout="absolute"
+                width="500"
+                height="250"
+                title="@Resource(bundle='ProductManagmentPanel',key='createAssociation')"
+                showCloseButton="true" close="PopUpManager.removePopUp(this)"
+                creationComplete="init();"
+        >
+    <mx:Form>
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagmentPanel',key='associationType')">
+            <mx:ComboBox id="associationComboBox" width="300"
+                         labelField="name"
+                         dataProvider="{remoteAssociationService.getAll.lastResult}"
+                         change="associationChanged(event)"
+                         prompt="@Resource(bundle='ProductManagmentPanel',key='associationPropmt')">
+            </mx:ComboBox>
+        </mx:FormItem>
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagmentPanel',key='selectProduct')">
+            <mx:HBox>
+                <mx:Label id="productLabel" width="262"/>
+                <mx:Button id="selectProductBtn" width="30"
+                           label="..."
+                           toolTip="@Resource(bundle='ProductManagmentPanel',key='selectProductHint')"
+                           click="selectProductClick(event);"
+                        />
+            </mx:HBox>
+        </mx:FormItem>
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagmentPanel',key='rank')">
+            <mx:TextInput id="rankTextInput" width="300"/>
+        </mx:FormItem>
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagmentPanel',key='reverseAssociation')">
+            <mx:CheckBox id="reverseCheckBox" selected="true"
+                         toolTip="@Resource(bundle='ProductManagmentPanel',key='reverseAssociationHint')"
+                    />
+        </mx:FormItem>
+    </mx:Form>
+
+    <mx:ControlBar horizontalAlign="right">
+        <mx:Button id="closeBtn" label="@Resource(bundle='ProductManagmentPanel',key='close')"
+                   click="PopUpManager.removePopUp(this)"
+                   width="94"/>
+        <mx:Button id="saveBtn"
+                   label="@Resource(bundle='ProductManagmentPanel',key='saveAssociation')"
+                   toolTip="@Resource(bundle='ProductManagmentPanel',key='saveAssociationHint')"
+                   width="94"
+                   enabled="{selecteAssociationDTOImpl != null &amp;&amp; selectedProductDTOImpl != null}"
+                />
+    </mx:ControlBar>
+
+    
+    <mx:NumberValidator id="rankValidator"
+        source="{rankTextInput}" property="text"
+        minValue="0" maxValue="99999" domain="int"
+        invalidCharError="@Resource(bundle='ProductManagmentPanel',key='rankInvalidCharError')"
+        integerError="@Resource(bundle='ProductManagmentPanel',key='rankInvalidCharError')"
+    />
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteAssociationService" destination="remoteAssociationService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+
+    <mx:Script>
+        <![CDATA[
+        import org.yes.cart.impl.AssociationDTOImpl;
+        import org.yes.cart.impl.ProductDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        import flash.events.MouseEvent;
+
+        import mx.core.Application;
+        import mx.managers.PopUpManager;
+
+        [Bindable]
+        public var selecteAssociationDTOImpl:AssociationDTOImpl;
+
+        [Bindable]
+        public var selectedProductDTOImpl:ProductDTOImpl;
+
+
+        private var productFinderPopUp:ProductFinderDialog;
+
+
+        public function init():void {
+            remoteAssociationService.getAll();
+        }
+
+
+        /**
+         * Type of accosiaction is changed, so need to reread.
+         * @param event
+         * @return nothing
+         */
+        private function associationChanged(event:Event):void {
+            selecteAssociationDTOImpl = event.currentTarget.selectedItem;
+        }
+
+
+        /**
+         * Select product click handler. Create dialog and select product.
+         * @param event
+         * @return
+         */
+        private function selectProductClick(event:MouseEvent):void {
+            productFinderPopUp = ProductFinderDialog(PopUpManager.createPopUp(DisplayObject(Application.application), ProductFinderDialog, true));
+            productFinderPopUp.selectProductButton.addEventListener("click", productSelected);
+            PopUpManager.centerPopUp(productFinderPopUp);
+
+        }
+
+        /**
+         * Handle selected product from finder dialog.
+         * @param event event
+         * @return nothing
+         */
+        private function productSelected(event:Event):void {
+            selectedProductDTOImpl = productFinderPopUp.productDTOImpl;
+            productLabel.text = selectedProductDTOImpl.code + " " + selectedProductDTOImpl.name;
+            productLabel.toolTip = selectedProductDTOImpl.description;
+            PopUpManager.removePopUp(productFinderPopUp);
+        }
+        ]]>
+    </mx:Script>
+</mx:TitleWindow>

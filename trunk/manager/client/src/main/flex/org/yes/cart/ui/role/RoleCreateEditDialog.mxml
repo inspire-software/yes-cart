@@ -1,0 +1,55 @@
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+				title="Create user"  showCloseButton="true" close="PopUpManager.removePopUp(this)" >
+
+
+    <mx:Form>
+        <mx:FormItem label="@Resource(bundle='RoleCreateEditDialog',key='role')">
+            <mx:TextInput width="160" id="role" enabled="{newRoleFlag}"/>
+        </mx:FormItem>
+        <mx:FormItem label="@Resource(bundle='RoleCreateEditDialog',key='description')">
+            <mx:TextArea width="160" id="description"/>
+        </mx:FormItem>
+    </mx:Form>
+    <mx:ControlBar horizontalAlign="right">
+        <mx:Button x="103" y="84" id="saveBtn" label="Save"
+                   width="94"/>
+        <mx:Button x="205" y="84" id="closeBtn" label="@Resource(bundle='RoleCreateEditDialog',key='close')"
+                   click="PopUpManager.removePopUp(this)" width="94"/>        
+    </mx:ControlBar>
+
+
+
+
+    <mx:Boolean id="newRoleFlag">false</mx:Boolean>
+
+
+	<mx:Script>
+		<![CDATA[
+
+        import mx.managers.PopUpManager;
+
+        private function init(): void {
+            if (newRoleFlag) {
+                this.title = resourceManager.getString('RoleCreateEditDialog', 'newRole');
+                saveBtn.label = resourceManager.getString('RoleCreateEditDialog', 'create');
+            } else {
+                this.title = resourceManager.getString('RoleCreateEditDialog', 'editRole');
+                saveBtn.label = resourceManager.getString('RoleCreateEditDialog', 'update');
+            }
+        }
+
+        public function editRole(role:String, description:String):void {
+            newRoleFlag = false;
+            this.role.text = role;
+            this.description.text = description;
+            init();
+        }
+
+        public function createNewRole():void {
+            newRoleFlag = true;
+            init();
+        }
+		]]>
+	</mx:Script>
+
+</mx:TitleWindow>

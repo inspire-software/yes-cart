@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+                showCloseButton="true"
+                close="PopUpManager.removePopUp(this)"
+                implements="org.yes.cart.ui.attributes.valuedialog.ValueDialog"
+                creationComplete="init();">
+
+
+    <mx:VBox>
+        <mx:Form x="0" y="0" width="100%">
+            <mx:FormItem label="@Resource(bundle='AttributesManagmentPanel',key='value')">
+                <mx:TextInput width="220" id="valueTextInput"/>
+            </mx:FormItem>
+        </mx:Form>
+        <mx:ControlBar width="100%" horizontalAlign="right">
+            <mx:Button id="btnCancel"
+                       width="94"
+                       label="@Resource(bundle='AttributesManagmentPanel',key='cancel')"
+                       click="PopUpManager.removePopUp(this)"
+                    />
+            <mx:Button id="btnSave"
+                       width="94"
+                       label="@Resource(bundle='AttributesManagmentPanel',key='save')"/>
+
+        </mx:ControlBar>
+
+    </mx:VBox>
+
+
+    <mx:Script><![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import mx.binding.utils.BindingUtils;
+        import mx.managers.PopUpManager;
+
+        private var _value:String;
+        private var _oldValue:String;
+        private var _windowTitle:String;
+        private var _code:String;
+        private var _attributeGroup:String;
+
+
+        private function init(): void {
+
+            BindingUtils.bindProperty(valueTextInput, "text", this, "value");
+
+            BindingUtils.bindProperty(this, "value", valueTextInput, "text");
+
+            this.title = windowTitle;
+
+            //TODO here add RE validator
+
+
+        }
+
+        public function getButtonSave(): Button {
+            return this.btnSave;
+        }
+
+
+        public function get oldValue():String {
+            return _oldValue;
+        }
+
+        public function get windowTitle():String {
+            return _windowTitle;
+        }
+
+        public function set windowTitle(value:String):void {
+            _windowTitle = value;
+        }
+
+        public function get value():String {
+            return _value;
+        }
+
+        public function set value(value:String):void {
+            _value = value;
+            _oldValue = new String(value);
+        }
+
+
+        public function get code():String {
+            return _code;
+        }
+
+        public function set code(value:String):void {
+            _code = value;
+        }
+
+        public function get attributeGroup():String {
+            return _attributeGroup;
+        }
+
+        public function set attributeGroup(value:String):void {
+            _attributeGroup = value;
+        }
+
+
+
+        ]]>
+    </mx:Script>
+</mx:TitleWindow>

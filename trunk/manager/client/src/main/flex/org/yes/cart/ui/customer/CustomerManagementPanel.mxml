@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+           width="100%"
+           height="100%"
+           creationComplete="init();">
+    <mx:Script>
+
+        <![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import org.yes.cart.constants.AttributeGroupNames;
+        import org.yes.cart.impl.AttrValueCustomerDTOImpl;
+        import org.yes.cart.impl.AttributeDTOImpl;
+        import org.yes.cart.impl.CustomerDTOImpl;
+        import org.yes.cart.util.UpdateTarget;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+        import org.yes.cart.ui.attributes.EntityAttributeValuesManagmentPanel;
+
+        import org.yes.cart.ui.order.CustomerOrderPanel;
+
+        import flash.events.Event;
+        import flash.events.MouseEvent;
+
+        import mx.collections.ArrayCollection;
+        import mx.controls.Alert;
+        import mx.events.IndexChangedEvent;
+        import mx.events.ListEvent;
+        import mx.rpc.AsyncResponder;
+        import mx.rpc.AsyncToken;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
+        private var TAB_ATTRIB_IDX:int = 0;
+        private var TAB_ORDERS_IDX:int = 1;
+        private var TAB_WISHLIST_IDX:int = 2;
+        private var TAB_ADDRESS_IDX:int = 3;
+        private var TAB_SHOP_IDX:int = 4;
+
+
+        [Bindable]
+        private var selectedCustomer:CustomerDTOImpl;
+
+        public function init():void {
+
+        }
+
+
+        /**
+         * Edit existing customer click handler.
+         * @param event event
+         * @return nothing
+         */
+        /*private function editCustomerClickHandler(event:MouseEvent):void {
+         Guess call center cant edit customer profile
+         } */
+
+
+        /**
+         * Handle the warehouse selection in data grid.
+         * @param event event
+         * @return nothing
+         */
+        private function handleCustomerSelectedClick(event:ListEvent):void {
+            selectedCustomer = CustomerDTOImpl(event.currentTarget.selectedItem);
+            initTabs(customerTabNavigator.selectedIndex);
+        }
+
+        private function initTabs(tabIdx:int):void {
+            Debug.trace("INFO customerTabNavigator.selectedIndex is :" + tabIdx);
+            switch (tabIdx) {
+
+
+                case TAB_ATTRIB_IDX: {
+                    attrValuesTabSelected(null);
+                    break;
+                }
+
+                case TAB_ORDERS_IDX: {
+                    ordersTabSelected(null);
+                    break;
+                }
+
+                case TAB_WISHLIST_IDX: {
+                    wishListTabSelected(null);
+                    break;
+                }
+
+                case TAB_ADDRESS_IDX: {
+                    addressTabSelected(null);
+                    break;
+                }
+
+
+            }
+
+        }
+
+
+        /**
+         * Attribute values tab selected.
+         * @param event event
+         * @return nothing.
+         */
+        private function attrValuesTabSelected(event:Event):void {
+            Debug.trace("INFO Customer attribute values tab selected for cusomer id" + selectedCustomer.customerId);
+            var asyncToken:AsyncToken = remoteCustomerService.getEntityAttributes(selectedCustomer.customerId);
+            asyncToken.addResponder(new AsyncResponder(getEntityAttributesResultHandler, default_faultHandler));
+        }
+
+        /**
+         * Customer's orders  tab selected.
+         * @param event event
+         * @return nothing.
+         */
+        private function ordersTabSelected(event:Event):void {
+            Debug.trace("INFO Customer orders tab selected for cusomer id" + selectedCustomer.customerId);
+            //var asyncToken:AsyncToken = remoteCustomerService.getEntityAttributes(selectedCustomer.customerId);
+            //asyncToken.addResponder(new AsyncResponder(getEntityAttributesResultHandler, default_faultHandler));
+            var orderPanel:CustomerOrderPanel = new CustomerOrderPanel();
+            orderPanel._searchCriteriaCustomerId = selectedCustomer.customerId;
+            orderPanel.performSearch();
+            customerOrders.removeAllChildren();
+            customerOrders.addChild(orderPanel);
+
+        }
+
+        /**
+         * Attribute values tab selected.
+         * @param event event
+         * @return nothing.
+         */
+        private function addressTabSelected(event:Event):void {
+            Debug.trace("INFO Customer address tab selected for customer id" + selectedCustomer.customerId);
+            var addressPanel:AddressPanel = new AddressPanel();
+            addressPanel.customerId = selectedCustomer.customerId;
+            customerAddresses.removeAllChildren();
+            customerAddresses.addChild(addressPanel);
+        }
+
+
+        /**
+         * Customer cards tab selected.
+         * @param event event
+         * @return nothing.
+         */
+        private function wishListTabSelected(event:Event):void {
+            Debug.trace("INFO Customer wish list tab selected for customer id" + selectedCustomer.customerId);
+            var panel:CustomerWishListPanel = new CustomerWishListPanel();
+            panel.customerId = selectedCustomer.customerId;
+            customerWishlist.removeAllChildren();
+            customerWishlist.addChild(panel);
+        }
+
+
+        private function default_faultHandler(event:FaultEvent):void {
+            Alert.show(event.toString(), resourceManager.getString('CustomerManagmentPanel', 'communicationError'));
+        }
+
+
+        /**
+         * Do not show the image attributes.
+         * @param item item to filter
+         * @return true if need to show item.
+         */
+        private function rejectImageAttributes(item:Object):Boolean {
+            return !acceptImageAttributes(item);
+        }
+
+        /**
+         * Accept only images
+         * @param item item to filter
+         * @return true if need to show item.
+         */
+        private function acceptImageAttributes(item:Object):Boolean {
+            return (item.attributeDTO.etypeName.indexOf("Image") > -1);
+        }
+
+
+        /**
+         * Service call back with category attribute values.
+         * @param event event
+         * @param token async token
+         * @return nothing
+         */
+        private function getEntityAttributesResultHandler(event:ResultEvent, token:AsyncToken):void {
+            getEntityAttributesResultHandlerInternal(event, customerSummary, rejectImageAttributes);
+        }
+
+
+        private function getEntityAttributesResultHandlerInternal(event:ResultEvent, canvas:Canvas, filterFunk:Function):void {
+            var attrValuePanel:EntityAttributeValuesManagmentPanel = new EntityAttributeValuesManagmentPanel();
+            attrValuePanel.attrValue = ArrayCollection(event.result);
+
+            attrValuePanel.attributeGroup = AttributeGroupNames.CUSTOMER;
+            attrValuePanel.attrValue.filterFunction = filterFunk;
+            attrValuePanel.attrValue.refresh();
+
+            attrValuePanel.attrValueChangedCallBack = attrValueChanged;
+            attrValuePanel.attrValueAddedCallBack = attrValueAdded;
+            attrValuePanel.attrValueDeleteCallBack = attrValueDelete;
+
+            canvas.removeAllChildren();
+            canvas.addChild(attrValuePanel);
+
+        }
+
+
+        /**
+         * Delete attribute value.
+         * @param attrValueId attribute value id.
+         */
+        private function attrValueDelete(attrValueId:Number):void {
+            Debug.trace("INFO delete customer attribute with id = " + attrValueId);
+            remoteCustomerService.deleteAttributeValue(attrValueId);
+        }
+
+
+        /**
+         * Added attribute, that allowe multiple value call back function.
+         * @param attr attribute
+         * @return instane of {@link AttrValueCategoryDTOImpl}
+         */
+        private function attrValueAdded(attr:AttributeDTOImpl):AttrValueCustomerDTOImpl {
+            var attrValue:AttrValueCustomerDTOImpl = new AttrValueCustomerDTOImpl();
+            attrValue.attributeDTO = attr;
+            attrValue.customerId = selectedCustomer.customerId;
+            Debug.trace("INFO added new attribute value  " + attrValue);
+            return attrValue;
+
+        }
+
+
+        /**
+         * Value changed callback function.
+         * @param attrValue  attribute value object.
+         * @param newValue new value
+         * @return nothing
+         */
+        private function attrValueChanged(attrValue:Object, newValue:String, rowIdx:int):void {
+
+            Debug.trace("INFO Customer attribute value changed call back");
+
+            attrValue.val = newValue;
+            var asyncToken:AsyncToken;
+            var updateTarget:UpdateTarget;
+            if (isNaN(attrValue.attrvalueId) || attrValue.attrvalueId == 0) {
+                // insert new attribute
+                Debug.trace("INFO create new attr value " + newValue + " for customer " + selectedCustomer);
+                asyncToken = remoteCustomerService.createEntityAttributeValue(attrValue);
+                updateTarget = new UpdateTarget(UpdateTarget.NEW, rowIdx);
+            } else {
+                //update
+                Debug.trace("INFO update attr value " + newValue + " for customer " + selectedCustomer);
+                asyncToken = remoteCustomerService.updateEntityAttributeValue(attrValue);
+                updateTarget = new UpdateTarget(UpdateTarget.UPDATE, rowIdx);
+            }
+            asyncToken.addResponder(new AsyncResponder(customerAttributeUpdatedResultHandler, default_faultHandler, updateTarget));
+        }
+
+
+        /**
+         * Service call back with product attribute value.
+         * @param event event
+         * @param token async token
+         * @return nothing
+         */
+        private function customerAttributeUpdatedResultHandler(event:ResultEvent, updateTarget:UpdateTarget):void {
+            Debug.trace("INFO Product attribute value updated result call back " + updateTarget.toString());
+            Debug.traceObj(updateTarget);
+            Debug.trace("INFO updateTarget.action " + updateTarget.action);
+            var obj:Object;
+            if (updateTarget.action == UpdateTarget.NEW) {
+                obj = remoteCustomerService.createEntityAttributeValue.lastResult;
+            } else {
+                obj = remoteCustomerService.updateEntityAttributeValue.lastResult;
+            }
+
+            EntityAttributeValuesManagmentPanel(
+                    customerSummary.getChildAt(0)).attrValue.setItemAt(obj, updateTarget.idx);
+
+            Debug.trace("INFO obj is " + obj);
+
+        }
+
+
+        /**
+         * Perform customer search.
+         * @param event event
+         * @return nothing
+         */
+        private function filter_clickHandler(event:MouseEvent):void {
+
+            selectedCustomer = null;
+
+            remoteCustomerService.findCustomer(
+                    emailFilterValue.text,
+                    firstNameFilterValue.text,
+                    lastNameFilterValue.text,
+                    null);
+        }
+
+        /**
+         * Tab clicked handler
+         * @param event event
+         * @return nothing
+         */
+        private function onTabClick(event:IndexChangedEvent):void {
+            initTabs(event.newIndex);
+        }
+        ]]>
+
+    </mx:Script>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteCustomerService"
+                     destination="remoteCustomerService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+    <mx:VDividedBox height="100%" width="100%">
+        <mx:VBox width="100%">
+            <mx:ControlBar>
+                <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='filters')"/>
+                <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='emailFilter')"/>
+                <mx:TextInput id="emailFilterValue" width="150"/>
+                <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='lastNameFilter')"/>
+                <mx:TextInput id="lastNameFilterValue" width="150"/>
+                <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='firstNameFilter')"/>
+                <mx:TextInput id="firstNameFilterValue" width="150"/>
+                <mx:Button label="@Resource(bundle='CustomerManagementPanel',key='applyFilter')"
+                           toolTip="@Resource(bundle='CustomerManagementPanel',key='applyFilterToolTip')"
+                           click="filter_clickHandler(event)"
+                        />
+            </mx:ControlBar>
+            <mx:DataGrid x="0" y="0" width="100%" height="99%"
+                         dataProvider="{remoteCustomerService.findCustomer.lastResult}"
+                         itemClick="handleCustomerSelectedClick(event)">
+                <mx:columns>
+                    <mx:DataGridColumn width="80" headerText="@Resource(bundle='CustomerManagementPanel',key='id')"
+                                       dataField="customerId"/>
+                    <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='email')"
+                                       dataField="email"/>
+                    <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='lastname')"
+                                       dataField="lastname"/>
+                    <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='firstname')"
+                                       dataField="firstname"/>
+                    <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='middlename')"
+                                       dataField="middlename"/>
+                </mx:columns>
+            </mx:DataGrid>
+
+        </mx:VBox>
+        <mx:TabNavigator id="customerTabNavigator" change="onTabClick(event);" width="100%" height="100%"
+                         visible="{selectedCustomer != null}">
+
+            <mx:Canvas id="customerSummary" label="@Resource(bundle='CustomerManagementPanel',key='customerSummary')"
+                       width="100%" height="100%"/>
+            <mx:Canvas id="customerOrders" label="@Resource(bundle='CustomerManagementPanel',key='customerOrders')"
+                       width="100%" height="100%"/>
+            <mx:Canvas id="customerWishlist" label="@Resource(bundle='CustomerManagementPanel',key='customerWishlist')"
+                       width="100%" height="100%"/>
+            <mx:Canvas id="customerAddresses" label="@Resource(bundle='CustomerManagementPanel',key='customerAddresses')"
+                       width="100%"  height="100%"/>
+            <mx:Canvas id="customerShops" label="@Resource(bundle='CustomerManagementPanel',key='customerShops')"
+                       width="100%" height="100%"/>
+
+
+        </mx:TabNavigator>
+    </mx:VDividedBox>
+
+</mx:Canvas>

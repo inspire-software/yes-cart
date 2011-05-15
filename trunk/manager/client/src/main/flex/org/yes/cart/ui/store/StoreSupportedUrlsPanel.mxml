@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" creationComplete="init();">
+    <mx:Script>
+
+<![CDATA[
+        import org.yes.cart.impl.ShopDTOImpl;
+        import org.yes.cart.impl.ShopUrlDTOImpl;
+        import org.yes.cart.util.DomainNameValidator;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        import mx.binding.utils.ChangeWatcher;
+        import mx.controls.Alert;
+        import mx.events.CloseEvent;
+        import mx.events.ListEvent;
+        import mx.events.PropertyChangeEvent;
+
+        import mx.rpc.AsyncResponder;
+        import mx.rpc.AsyncToken;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
+
+        private var shopDTOImpl:ShopDTOImpl;
+        private var selectedShopUrlDTOImpl:ShopUrlDTOImpl;
+        private var changeWatcher:ChangeWatcher;
+
+
+        private function init():void {
+            remoteShopUrlService.getAllByShopId(shopDTOImpl.shopId);
+        }
+
+
+        public function setShopDTOImpl(value:ShopDTOImpl):void {
+            shopDTOImpl = value;
+        }
+
+
+        private function addNewUrlClick(event:flash.events.MouseEvent):void {
+
+            var newShopUrl:ShopUrlDTOImpl = new ShopUrlDTOImpl();
+            newShopUrl.shopId = shopDTOImpl.shopId;
+            newShopUrl.url = resourceManager.getString('StoreSupportedUrlsPanel', 'pressHereToEditNewURL');
+            remoteShopUrlService.create(newShopUrl).addResponder(
+                    new AsyncResponder(urlCreatedHandler, null));
+        }
+
+        private function urlCreatedHandler(event:ResultEvent, token:AsyncToken):void {
+            remoteShopUrlService.getAllByShopId(shopDTOImpl.shopId);
+
+        }
+
+
+        private function setSelectedUrl(event:mx.events.ListEvent):void {
+            selectedShopUrlDTOImpl = event.currentTarget.selectedItem;
+            canDeleteUrl = true;
+            if (!controllBarVisible) {
+                changeWatcher = ChangeWatcher.watch(this.selectedShopUrlDTOImpl, "url", dtoUrlChanged);
+            }
+        }
+
+        public function dtoUrlChanged(event:PropertyChangeEvent):void {
+            if (changeWatcher != null) {
+                changeWatcher.unwatch();
+            }
+            controllBarVisible = true;
+            changeWatcher = null;
+
+        }
+
+        private function validateUrlsBeforeSave():Boolean {
+            for each (var urlDto:ShopUrlDTOImpl in remoteShopUrlService.getAllByShopId.lastResult) {
+                if (!DomainNameValidator.validate(urlDto.url)) {
+                    Alert.show(
+                            resourceManager.getString('StoreSupportedUrlsPanel', 'invalidUrl') + urlDto.url,
+                            resourceManager.getString('StoreSupportedUrlsPanel', 'errorUrl')
+                            );
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private function saveChanges(event:flash.events.MouseEvent):void {
+            if (validateUrlsBeforeSave()) {
+
+                for each (var urlDto:ShopUrlDTOImpl in remoteShopUrlService.getAllByShopId.lastResult) {
+                    var asyncToken:AsyncToken = remoteShopUrlService.update(urlDto);
+                    asyncToken.addResponder(
+                            new AsyncResponder(
+                                    urlUpdatedHandler,
+                                    urlUpdateFaultHandler)
+                            );
+                }
+                controllBarVisible = false;
+            }
+        }
+
+        private function urlUpdatedHandler(event:ResultEvent, token:AsyncToken):void {
+            //remoteShopUrlService.getAllByShopId(shopDTOImpl.shopId);
+
+        }
+
+        private function urlUpdateFaultHandler(event:FaultEvent):void {
+
+            Alert.show(
+                    resourceManager.getString('StoreSupportedUrlsPanel', 'cannotSaveURL') + event.toString(),
+                    resourceManager.getString('StoreSupportedUrlsPanel', 'communicationError')
+                    );
+            controllBarVisible = true;
+        }
+
+
+        /**
+         *
+         * Handle url button click.
+         *
+         * @param event miuse event
+         * @return nothing
+         */
+        private function deleteUrlClickHandler(event:flash.events.MouseEvent):void {
+            Alert.show(
+                    resourceManager.getString('StoreSupportedUrlsPanel', 'deleteUrlConfirm'),
+                    resourceManager.getString('StoreSupportedUrlsPanel', 'warning'),
+                    Alert.OK | Alert.CANCEL, this, deleteUrl, null, Alert.OK);
+        }
+
+        /**
+         * Call service to delete attribute group.
+         * Delete operation will be failed if group contains at least one attribute .
+         * @param event event
+         * @return nothing
+         */
+        private function deleteUrl(event:CloseEvent):void {
+            if (event.detail == Alert.OK) {
+                remoteShopUrlService.remove(selectedShopUrlDTOImpl.storeUrlId);
+                Alert.show(
+                        resourceManager.getString('StoreSupportedUrlsPanel', 'urlDeletedConfirm'),
+                        resourceManager.getString('StoreSupportedUrlsPanel', 'info'));
+            }
+            remoteShopUrlService.getAllByShopId(shopDTOImpl.shopId);
+            controllBarVisible = false;
+            canDeleteUrl = false;
+        }
+        ]]>
+</mx:Script>
+
+    <mx:RemoteObject showBusyCursor="true"  id="remoteShopUrlService"
+                     destination="remoteShopUrlService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+    <mx:Boolean id="controllBarVisible">false</mx:Boolean>
+    <mx:Boolean id="canDeleteUrl">false</mx:Boolean>
+
+	<mx:VBox x="0" y="0" width="100%" height="100%" id="supportedUrlsPanel">
+		<mx:ControlBar width="100%">
+			<mx:Label text="@Resource(bundle='StoreSupportedUrlsPanel',key='supportedUrl')"/>
+			<mx:Button
+                    id="addBtn"
+                    enabled="{!controllBarVisible}"
+                    label="@Resource(bundle='StoreSupportedUrlsPanel',key='addUrl')"
+                    click="addNewUrlClick(event)"/>
+			<mx:Button
+                    id="deleteBtn"
+                    enabled="{canDeleteUrl &amp;&amp;  !controllBarVisible}"
+                    label="@Resource(bundle='StoreSupportedUrlsPanel',key='deleteUrl')"
+                    click="deleteUrlClickHandler(event)"/>
+		</mx:ControlBar>
+		<mx:DataGrid editable="true" itemClick="setSelectedUrl(event)" width="100%" height="100%" dataProvider="{remoteShopUrlService.getAllByShopId.lastResult}">
+			<mx:columns>
+				<mx:DataGridColumn  headerText="@Resource(bundle='StoreSupportedUrlsPanel',key='url')" dataField="url"/>
+			</mx:columns>
+		</mx:DataGrid>
+		<mx:ControlBar width="100%" horizontalAlign="right" id="controllBar" visible="{controllBarVisible}">
+			<mx:Button label="@Resource(bundle='StoreSupportedUrlsPanel',key='saveUrl')" id="saveBtn" click="saveChanges(event)"/>
+		</mx:ControlBar>
+	</mx:VBox>
+</mx:Canvas>

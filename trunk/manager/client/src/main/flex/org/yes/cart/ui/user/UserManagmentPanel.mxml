@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+           width="100%"
+           height="100%"
+           creationComplete="init();">
+    <mx:Script>
+		<![CDATA[
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        import flash.events.MouseEvent;
+
+        import mx.controls.Alert;
+        import mx.events.CloseEvent;
+        import mx.events.ListEvent;
+
+        import mx.managers.PopUpManager;
+        import mx.rpc.AsyncResponder;
+        import mx.rpc.events.FaultEvent;
+
+
+        private var selectedUserId:String;
+        private var selectedUser:Object;
+        private var roleToGrant:String = null;
+        private var roleToRevoke:String = null;
+
+        private var newPopUp:UserCreateEditDialog;
+
+
+        /**
+         * Init user management panel.
+         * @return nothing
+         */
+        public function init():void {
+
+        }
+
+
+        private function remoteUserManagmentService_faultHandler(event:FaultEvent):void {
+            Alert.show(event.toString(), resourceManager.getString('UserManagmentPanel', 'communicationError'));
+            rolesDetailPanelVisible = false;
+            selectedUserId = null;
+            selectedUser = null;
+
+        }
+
+        /**
+         * Call the remote method to get filtered list of managers.
+         * @param event event
+         * @return nothing
+         */
+        private function filter_clickHandler(event:MouseEvent):void {
+
+            rolesDetailPanelVisible = false;
+            selectedUserId = null;
+            selectedUser = null;
+
+            setActionButtonsAvailability(false);
+
+            remoteUserManagmentService.getManagers(
+                    emailFilterValue.text,
+                    firstNameFilterValue.text,
+                    lastNameFilterValue.text);
+        }
+
+        /**
+         * Handle the user selection in data grid.
+         * @param event event
+         * @return nothing
+         */
+        private function handle_userSelectedClick(event:ListEvent):void {
+
+            selectedUserId = event.currentTarget.selectedItem.email;
+            selectedUser = event.currentTarget.selectedItem;
+            rolesDetailPanelVisible = true;
+            readRoles();
+        }
+
+        private function readRoles():void {
+            setActionButtonsAvailability(false);
+            remoteUserManagmentService.getAssignedManagerRoles(selectedUserId);
+            remoteUserManagmentService.getAvailableManagerRoles(selectedUserId);
+        }
+
+        private function setActionButtonsAvailability(enabled:Boolean):void {
+            revokeOneEnabled = enabled;
+            grantOneEnabled = enabled;
+
+        }
+
+
+        private function handle_availableRolesItemClick(event:ListEvent):void {
+            grantOneEnabled = true;
+            roleToGrant = event.currentTarget.selectedItem.code;
+        }
+
+        private function handle_assigedRolesItemClick(event:ListEvent):void {
+            revokeOneEnabled = true;
+            roleToRevoke = event.currentTarget.selectedItem.code;
+        }
+
+
+        private function handle_grantOneRoleClick(event:MouseEvent):void {
+            remoteUserManagmentService.grantRole(selectedUserId, roleToGrant);
+            readRoles();
+        }
+
+        private function handle_revokeOneRoleClick(event:MouseEvent):void {
+            remoteUserManagmentService.revokeRole(selectedUserId, roleToRevoke);
+            readRoles();
+        }
+
+
+        private function newUser_clickHandler(event:MouseEvent):void {
+            newPopUp = UserCreateEditDialog(PopUpManager.createPopUp(this, UserCreateEditDialog, true));
+            newPopUp.saveBtn.addEventListener("click", createNewUser);
+            newPopUp.createNewUser();
+            PopUpManager.centerPopUp(newPopUp);
+        }
+
+        private function editUser_clickHandler(event:MouseEvent):void {
+            newPopUp = UserCreateEditDialog(PopUpManager.createPopUp(this, UserCreateEditDialog, true));
+            newPopUp.saveBtn.addEventListener("click", updateUser);
+            newPopUp.editUser(selectedUser.email, selectedUser.firstName, selectedUser.lastName);
+            PopUpManager.centerPopUp(newPopUp);
+        }
+
+        /**
+         * Handle create new user action.
+         * @param event event to handle
+         * @return nothing
+         */
+        private function createNewUser(event:Event):void {
+            remoteUserManagmentService.addUser(
+                    newPopUp.email.text,
+                    newPopUp.firstName.text,
+                    newPopUp.lastName.text
+                    ).addResponder(new AsyncResponder(loadUsers, null));
+        }
+
+        /**
+         * Handle user edited action.
+         * @param event event to handle
+         * @return nothing
+         */
+        private function updateUser(event:Event):void {
+            remoteUserManagmentService.updateUser(
+                    newPopUp.email.text,
+                    newPopUp.firstName.text,
+                    newPopUp.lastName.text
+                    ).addResponder(new AsyncResponder(loadUsers, null));
+        }
+
+        /**
+         * Reload use list
+         * @param result resutl event
+         * @param obj token
+         * @return nothing
+         */
+        private function loadUsers(result:Object, obj:Object = null):void {
+            filter_clickHandler(null);
+            PopUpManager.removePopUp(newPopUp);
+        }
+
+        private function resetPasswordClickHandler(event:flash.events.MouseEvent):void {
+            Alert.show(
+                    resourceManager.getString('UserManagmentPanel', 'resetPasswordConfirm'),
+                    resourceManager.getString('UserManagmentPanel', 'warning'),
+                    Alert.OK | Alert.CANCEL, this, resetPassword, null, Alert.OK);
+        }
+
+        private function resetPassword(event:CloseEvent):void {
+            if (event.detail == Alert.OK) {
+
+                remoteUserManagmentService.resetPassword(selectedUserId);
+                Alert.show(
+                        resourceManager.getString('UserManagmentPanel', 'passwordResetedConfirm'),
+                        resourceManager.getString('UserManagmentPanel', 'info'));
+            }
+        }
+
+        private function deleteUserClickHandler(event:flash.events.MouseEvent):void {
+            Alert.show(
+                    resourceManager.getString('UserManagmentPanel', 'deleteUserConfirm'),
+                    resourceManager.getString('UserManagmentPanel', 'warning'),
+                    Alert.OK | Alert.CANCEL, this, deleteUser, null, Alert.OK);
+        }
+
+        /**
+         * Handle delete action.
+         * @param event event
+         * @return nothing
+         */
+        private function deleteUser(event:CloseEvent):void {
+            if (event.detail == Alert.OK) {
+
+                remoteUserManagmentService.deleteUser(selectedUserId
+                        ).addResponder(new AsyncResponder(loadUsers, null));
+
+                Alert.show(
+                        resourceManager.getString('UserManagmentPanel', 'userDeletedConfirm'),
+                        resourceManager.getString('UserManagmentPanel', 'info'));
+            }
+        }
+        ]]>
+    </mx:Script>
+
+    <mx:RemoteObject showBusyCursor="true"  id="remoteUserManagmentService"
+                     destination="remoteUserManagmentService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="remoteUserManagmentService_faultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+
+
+    <mx:Boolean id="rolesDetailPanelVisible">false</mx:Boolean>
+    <mx:Boolean id="revokeOneEnabled">false</mx:Boolean>
+    <mx:Boolean id="grantOneEnabled">false</mx:Boolean>
+
+
+    <mx:VDividedBox id="userManagmentPanel" x="0" y="0" height="100%" width="100%">
+        <mx:VBox height="50%" width="100%">
+
+
+            <mx:ControlBar>
+			<mx:HBox paddingTop="5" width="100%">
+                <mx:Label text="@Resource(bundle='UserManagmentPanel',key='filters')"/>
+				<mx:Label text="@Resource(bundle='UserManagmentPanel',key='emailFilter')"/>
+				<mx:TextInput id="emailFilterValue" width="50"/>
+				<mx:Label text="@Resource(bundle='UserManagmentPanel',key='firstNameFilter')"/>
+				<mx:TextInput id="firstNameFilterValue"  width="50"/>
+				<mx:Label text="@Resource(bundle='UserManagmentPanel',key='lastNameFilter')"/>
+				<mx:TextInput id="lastNameFilterValue"  width="50"/>
+
+				<mx:Button label="@Resource(bundle='UserManagmentPanel',key='applyFilter')"
+                           toolTip="@Resource(bundle='UserManagmentPanel',key='applyFilterToolTip')"
+                           click="filter_clickHandler(event)"
+                        />
+                <mx:Button label="@Resource(bundle='UserManagmentPanel',key='newUser')"
+                           toolTip="@Resource(bundle='UserManagmentPanel',key='newUserToolTip')"
+                           click="newUser_clickHandler(event)"/>
+
+                <mx:Button label="@Resource(bundle='UserManagmentPanel',key='resetPassword')"
+                           toolTip="@Resource(bundle='UserManagmentPanel',key='resetPasswordToolTip')"
+                           enabled="{rolesDetailPanelVisible}"
+                           click='resetPasswordClickHandler(event)'
+                        />
+                <mx:Button label="@Resource(bundle='UserManagmentPanel',key='editUser')"
+                           toolTip="@Resource(bundle='UserManagmentPanel',key='editUserToolTip')"
+                           enabled="{rolesDetailPanelVisible}"
+                           click="editUser_clickHandler(event)"
+                        />
+                <mx:Button label="@Resource(bundle='UserManagmentPanel',key='deleteUser')"
+                           toolTip="@Resource(bundle='UserManagmentPanel',key='deleteUserToolTip')"
+                           enabled="{rolesDetailPanelVisible}"
+                           click="deleteUserClickHandler(event)"
+                        />
+			</mx:HBox>
+            </mx:ControlBar>
+			<mx:DataGrid x="0" y="0"  width="100%" height="90%"
+                         dataProvider="{remoteUserManagmentService.getManagers.lastResult}"
+                         itemClick="handle_userSelectedClick(event)">
+				<mx:columns>
+					<mx:DataGridColumn headerText="@Resource(bundle='UserManagmentPanel',key='email')" dataField="email"/>
+					<mx:DataGridColumn headerText="@Resource(bundle='UserManagmentPanel',key='firstName')" dataField="firstName"/>
+					<mx:DataGridColumn headerText="@Resource(bundle='UserManagmentPanel',key='lastName')" dataField="lastName"/>
+				</mx:columns>
+			</mx:DataGrid>
+
+		</mx:VBox>
+
+        <mx:Grid width="100%" height="50%" id="rolesDetailPanel"  visible="{rolesDetailPanelVisible}" >
+            <mx:GridRow width="100%" height="5%">
+                <mx:GridItem width="45%" height="100%">
+                    <mx:Label text="@Resource(bundle='UserManagmentPanel',key='availableRoles')"/>
+                </mx:GridItem>
+                <mx:GridItem width="10%" height="100%">
+                </mx:GridItem>
+                <mx:GridItem width="45%" height="100%">
+                    <mx:Label text="@Resource(bundle='UserManagmentPanel',key='appliedRoles')"/>
+                </mx:GridItem>
+            </mx:GridRow>
+
+            <mx:GridRow width="100%" height="95%">
+                <mx:GridItem  width="44%" height="100%">
+                    <mx:List itemClick="handle_availableRolesItemClick(event)" id="availableRolesList" width="100%" height="100%"  labelField="code"  dataProvider="{remoteUserManagmentService.getAvailableManagerRoles.lastResult}">
+
+                    </mx:List>
+                </mx:GridItem>
+                <mx:GridItem width="12%" height="100%">
+                    <mx:VBox height="100%" width="100%" horizontalAlign="center" verticalAlign="middle">
+
+                        <mx:Button width="60" enabled="{grantOneEnabled}" click="handle_grantOneRoleClick(event)" label="@Resource(bundle='UserManagmentPanel',key='grantOneRole')"/>
+                        <mx:Button width="60" enabled="{revokeOneEnabled}" click="handle_revokeOneRoleClick(event)" label="@Resource(bundle='UserManagmentPanel',key='revokeOneRole')"/>
+
+                    </mx:VBox>
+                </mx:GridItem>
+                <mx:GridItem width="44%" height="100%">
+                    <mx:List itemClick="handle_assigedRolesItemClick(event)"  id="assignedRolesList" width="100%" height="100%" labelField="code" dataProvider="{remoteUserManagmentService.getAssignedManagerRoles.lastResult}">
+
+                    </mx:List>
+                </mx:GridItem>
+            </mx:GridRow>
+        </mx:Grid>
+    </mx:VDividedBox>
+
+</mx:Canvas>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init();">
+    <mx:Script>
+            <![CDATA[
+        import org.yes.cart.impl.ShopDTOImpl;
+
+        import mx.binding.utils.BindingUtils;
+        import mx.collections.ArrayList;
+        import mx.controls.Alert;
+        import mx.binding.utils.ChangeWatcher;
+        import mx.events.PropertyChangeEvent;
+
+        import mx.rpc.AsyncResponder;
+        import mx.rpc.AsyncToken;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+        import mx.rpc.remoting.mxml.RemoteObject;
+
+
+        private var _shopDTOImpl:ShopDTOImpl;
+
+        private var changeWatchers:ArrayList = new ArrayList();
+
+        private var remoteShopService:RemoteObject;
+
+        /**
+         * Bind values and start looking for changes.
+         * @return nothing
+         */
+        private function init():void {
+
+            BindingUtils.bindProperty(codeTextInput, "text", this._shopDTOImpl, "code");
+            BindingUtils.bindProperty(nameTextInput, "text", this._shopDTOImpl, "name");
+            BindingUtils.bindProperty(descriptionTextInput, "text", this._shopDTOImpl, "description");
+            BindingUtils.bindProperty(fspointerTextInput, "text", this._shopDTOImpl, "fspointer");
+
+            BindingUtils.bindProperty(this._shopDTOImpl, "code", codeTextInput, "text");
+            BindingUtils.bindProperty(this._shopDTOImpl, "name", nameTextInput, "text");
+            BindingUtils.bindProperty(this._shopDTOImpl, "description", descriptionTextInput, "text");
+            BindingUtils.bindProperty(this._shopDTOImpl, "fspointer", fspointerTextInput, "text");
+
+            newStoreFlag = (this._shopDTOImpl.shopId == 0);
+            codeTextInput.enabled = newStoreFlag;
+
+            initWatchers();
+
+        }
+
+        private function initWatchers():void {
+            changeWatchers.addItem(ChangeWatcher.watch(this._shopDTOImpl, "code", dtoChanged));
+            changeWatchers.addItem(ChangeWatcher.watch(this._shopDTOImpl, "name", dtoChanged));
+            changeWatchers.addItem(ChangeWatcher.watch(this._shopDTOImpl, "description", dtoChanged));
+            changeWatchers.addItem(ChangeWatcher.watch(this._shopDTOImpl, "fspointer", dtoChanged));
+        }
+
+        public function dtoChanged(event:PropertyChangeEvent):void {
+            for each (var cw:ChangeWatcher in changeWatchers) {
+                cw.unwatch();
+            }
+            changeWatchers.removeAll();
+            dtoChangedFlag = true;
+        }
+
+
+        public function set shopDTOImpl(value:ShopDTOImpl):void {
+            _shopDTOImpl = value;
+        }
+
+        public function setRemoteShopService(remoteShopService:RemoteObject):void {
+            this.remoteShopService = remoteShopService;
+        }
+
+        private function saveBtnClickHandler(event:flash.events.MouseEvent):void {
+
+            var asyncToken:AsyncToken;
+            if (newStoreFlag) {
+                asyncToken = remoteShopService.create(_shopDTOImpl);
+            } else {
+                asyncToken = remoteShopService.update(_shopDTOImpl);
+            }
+            asyncToken.addResponder(
+                    new AsyncResponder(
+                            shop_savedHandler,
+                            general_faultHandler)
+                    );
+        }
+
+        private function shop_savedHandler(event:ResultEvent, token:AsyncToken):void {
+            this._shopDTOImpl = ShopDTOImpl(event.result);
+            init();
+            dtoChangedFlag = false;
+            remoteShopService.getAll();
+
+        }
+
+        private function general_faultHandler(event:FaultEvent):void {
+
+            Alert.show(event.toString(), resourceManager.getString('StoreSummaryPanel', 'communicationError'));
+        }
+        ]]>
+    </mx:Script>
+    <mx:Boolean id="dtoChangedFlag">false</mx:Boolean>
+    <mx:Boolean id="newStoreFlag">false</mx:Boolean>
+
+    <mx:VBox x="10" y="10">
+        <mx:ControlBar width="100%">
+            <mx:Label text="@Resource(bundle='StoreSummaryPanel',key='summary')"/>
+        </mx:ControlBar>
+        <mx:Form>
+            <mx:FormItem label="@Resource(bundle='StoreSummaryPanel',key='code')">
+                    <mx:TextInput id="codeTextInput" width="245"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='StoreSummaryPanel',key='name')">
+                    <mx:TextInput id="nameTextInput" width="245"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='StoreSummaryPanel',key='description')">
+                    <mx:TextArea id="descriptionTextInput" height="100" width="245"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='StoreSummaryPanel',key='themeLocation')">
+                    <mx:TextInput id="fspointerTextInput" width="245"/>
+            </mx:FormItem>
+        </mx:Form>
+        <mx:ControlBar  width="100%" horizontalAlign="right">
+            <mx:Button id="saveBtn"
+                       click="saveBtnClickHandler(event)"
+                       label="@Resource(bundle='StoreSummaryPanel',key='save')"
+                       enabled="{dtoChangedFlag}"
+                       />
+        </mx:ControlBar>
+
+    </mx:VBox>
+
+</mx:Canvas>

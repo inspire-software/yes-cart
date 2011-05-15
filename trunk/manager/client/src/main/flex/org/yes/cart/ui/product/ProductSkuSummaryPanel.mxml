@@ -1,0 +1,157 @@
+<?xml version="1.0" ?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+           xmlns:controls="controls.*" width="100%" height="100%"
+           creationComplete="init();">
+
+    <mx:Form x="0" y="0">
+        <mx:FormItem label="@Resource(bundle='ProductSkuManagmentPanel',key='code')">
+            <mx:TextInput id="codeTextInput" width="300" enabled="{false}"/>
+        </mx:FormItem>
+        <mx:FormItem label="@Resource(bundle='ProductSkuManagmentPanel',key='name')">
+            <mx:TextInput id="nameTextInput" width="300" />
+        </mx:FormItem>
+        <mx:FormItem label="@Resource(bundle='ProductSkuManagmentPanel',key='barCode')">
+            <mx:TextInput id="barCodeTextInput" width="300"/>
+        </mx:FormItem>
+        <mx:FormItem label="@Resource(bundle='ProductSkuManagmentPanel',key='rank')">
+            <mx:TextInput id="rankTextInput" width="300"/>
+        </mx:FormItem>
+        <mx:FormItem label="@Resource(bundle='ProductSkuManagmentPanel',key='description')">
+            <mx:TextArea id="descriptionTextInput" width="300"/>
+        </mx:FormItem>
+        <mx:FormItem>
+            <mx:Button
+                enabled="{productSkuChangedFlag}"
+                label="@Resource(bundle='ProductSkuManagmentPanel',key='save')"
+                toolTip="@Resource(bundle='ProductSkuManagmentPanel',key='saveHint')"
+                click="saveProductsKU(event)"/>
+        </mx:FormItem>
+    </mx:Form>
+
+
+    <mx:NumberValidator id="rankValidator"
+        source="{rankTextInput}" property="text"
+        minValue="0" maxValue="99999" domain="int"
+        invalidCharError="@Resource(bundle='ProductSkuManagmentPanel',key='rankInvalidCharError')"
+        integerError="@Resource(bundle='ProductSkuManagmentPanel',key='rankInvalidCharError')"
+            />
+
+    <mx:StringValidator  id="skuNameValidator"
+        source="{nameTextInput}" property="text"
+        minLength="1"
+        required="true"
+        />
+
+    <mx:NumberValidator id="barCodeValidator"
+                        source="{barCodeTextInput}" property="text"
+                        required="false"
+                        domain="int"/>
+
+
+    <mx:Boolean id="productSkuChangedFlag">false</mx:Boolean>
+
+
+    <mx:Script>
+        <![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import org.yes.cart.impl.ProductSkuDTOImpl;
+
+        import flash.events.MouseEvent;
+
+        import mx.binding.utils.BindingUtils;
+        import mx.binding.utils.ChangeWatcher;
+        import mx.controls.Alert;
+        import mx.events.PropertyChangeEvent;
+        import mx.events.ValidationResultEvent;
+        import mx.validators.Validator;
+
+        [Bindable]
+        public var productSku:ProductSkuDTOImpl;
+
+        private var _skuChangedFunction:Function;
+
+        [Bindable]
+        private var validatorArr:Array;
+
+        /**
+         * Get product sku changed call back function
+         * @return call back function
+         */
+        public function get skuChangedFunction():Function {
+            return _skuChangedFunction;
+        }
+
+        /**
+         * Set product sku changed call back function
+         * @param value
+         * @return
+         */
+        public function set skuChangedFunction(value:Function):void {
+            _skuChangedFunction = value;
+        }
+
+
+        private function init():void {
+            validatorArr = new Array();
+            validatorArr.push(rankValidator);
+            validatorArr.push(skuNameValidator);
+            validatorArr.push(barCodeValidator);
+            rebind();
+        }
+
+
+        public function rebind():void {
+
+            if (productSku != null) {
+                Debug.trace("INFO ProductSkuSummaryPanel rebind begin");
+
+                BindingUtils.bindProperty(codeTextInput, "text", productSku, "code");
+                BindingUtils.bindProperty(nameTextInput, "text", productSku, "name");
+                BindingUtils.bindProperty(barCodeTextInput, "text", productSku, "barCode");
+                BindingUtils.bindProperty(rankTextInput, "text", productSku, "rank");
+                BindingUtils.bindProperty(descriptionTextInput, "text", productSku, "description");
+
+                BindingUtils.bindProperty(productSku, "code", codeTextInput, "text");
+                BindingUtils.bindProperty(productSku, "name", nameTextInput, "text");
+                BindingUtils.bindProperty(productSku, "barCode", barCodeTextInput, "text");
+                BindingUtils.bindProperty(productSku, "rank", rankTextInput, "text");
+                BindingUtils.bindProperty(productSku, "description", descriptionTextInput, "text");
+
+                ChangeWatcher.watch(productSku, "code", productSkuChanged);
+                ChangeWatcher.watch(productSku, "name", productSkuChanged);
+                ChangeWatcher.watch(productSku, "barCode", productSkuChanged);
+                ChangeWatcher.watch(productSku, "rank", productSkuChanged);
+                ChangeWatcher.watch(productSku, "description", productSkuChanged);
+
+                Debug.trace("INFO ProductSkuSummaryPanel rebind end");
+
+            }
+
+
+        }
+
+        /**
+         * Product sku changed watch function.
+         * @param event
+         * @return
+         */
+        private function productSkuChanged(event:PropertyChangeEvent):void {
+            var validatorErrorArray:Array = Validator.validateAll(validatorArr);
+            productSkuChangedFlag = (validatorErrorArray.length == 0);
+        }
+
+        /**
+         * Save the sku changes
+         * @param event event
+         * @return nothing
+         */
+        private function saveProductsKU(event:MouseEvent):void {
+            if (skuChangedFunction != null) {
+                skuChangedFunction(productSku);
+                productSkuChangedFlag = false;
+            }
+        }
+        ]]>
+</mx:Script>
+</mx:Canvas>

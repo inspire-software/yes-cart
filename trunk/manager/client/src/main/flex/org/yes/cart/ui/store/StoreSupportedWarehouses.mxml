@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" creationComplete="init();">
+    <mx:Script>
+<![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import org.yes.cart.impl.ShopDTOImpl;
+        import org.yes.cart.impl.WarehouseDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        import mx.rpc.AsyncResponder;
+        import mx.rpc.AsyncToken;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
+
+        private var _shopDTOImpl:ShopDTOImpl;
+        private var selectedAvailable:WarehouseDTOImpl;
+        private var selectedAssigned:WarehouseDTOImpl;
+
+
+        public function set shopDTOImpl(value:ShopDTOImpl):void {
+            _shopDTOImpl = value;
+        }
+
+        private function init():void {
+            reloadWarehouses(null);
+        }
+
+        private function reloadWarehouses(event:ResultEvent, token:Object = null):void {
+            remoteWarehouseService.findByShopId(_shopDTOImpl.shopId).addResponder(
+                    new AsyncResponder(warehousesByShopResultHandler, remoteWarehouseServiceFaultHandler));
+        }
+
+
+        private function assignWarehouse(event:flash.events.MouseEvent):void {
+
+            var syncToken:AsyncToken = remoteWarehouseService.assignWarehouse(selectedAvailable.warehouseId, _shopDTOImpl.shopId);
+            syncToken.addResponder(new AsyncResponder(reloadWarehouses, remoteWarehouseServiceFaultHandler));
+
+
+        }
+
+        private function unassignWarehouse(event:flash.events.MouseEvent):void {
+
+            var syncToken:AsyncToken = remoteWarehouseService.unassignWarehouse(selectedAssigned.warehouseId, _shopDTOImpl.shopId);
+            syncToken.addResponder(new AsyncResponder(reloadWarehouses, remoteWarehouseServiceFaultHandler));
+        }
+
+
+        /**
+         * Get warehouses by store.
+         * @param event event
+         * @param token token
+         * @return nothing
+         */
+        private function warehousesByShopResultHandler(event:ResultEvent, token:Object):void {
+            remoteWarehouseService.getAll().addResponder(
+                    new AsyncResponder(warehousesResultHandler, remoteWarehouseServiceFaultHandler));
+        }
+
+        /**
+         * Get all warehouses result handler
+         * @param event event
+         * @param token token
+         * @return nothing
+         */
+        private function warehousesResultHandler(event:ResultEvent, token:Object):void {
+            availableWarehouses.removeAll();
+            assignedWarehouses.removeAll();
+            for each (var warehouse:WarehouseDTOImpl in remoteWarehouseService.getAll.lastResult) {
+                if (!isAssigned(warehouse)) {
+                    availableWarehouses.addItem(warehouse);
+                }
+            }
+
+            for each (var shopWarehouse:Object in remoteWarehouseService.findByShopId.lastResult) {
+                assignedWarehouses.addItem(shopWarehouse);
+            }
+            addAvailableEnabled = false;
+            addAssignedEnabled = false;
+
+
+        }
+
+        /**
+         * Is given warehouse assigned to shop ?
+         * @param warehouse warehouse
+         * @return true if assigned
+         */
+        private function isAssigned(warehouse:WarehouseDTOImpl):Boolean {
+            for each (var shopWarehouse:Object in remoteWarehouseService.findByShopId.lastResult) {
+                if (shopWarehouse.warehouseId == warehouse.warehouseId) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private function remoteWarehouseServiceFaultHandler(event:FaultEvent, token:AsyncToken):void {
+
+            Debug.trace("StoreSupportedWarehouses fault handler" + event.toString());
+        }
+
+
+        private function availableWarehousesSelected(event:flash.events.MouseEvent):void {
+            selectedAvailable = WarehouseDTOImpl(event.currentTarget.selectedItem);
+            addAvailableEnabled = true;
+        }
+
+        private function assignedWarehouseSelected(event:flash.events.MouseEvent):void {
+            selectedAssigned = WarehouseDTOImpl(event.currentTarget.selectedItem);
+            addAssignedEnabled = true;
+        }
+        ]]>
+    </mx:Script>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteWarehouseService"
+                     destination="remoteWarehouseService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+    <mx:ArrayCollection id="availableWarehouses"></mx:ArrayCollection>
+    <mx:ArrayCollection id="assignedWarehouses"></mx:ArrayCollection>
+
+    <mx:Boolean id="addAvailableEnabled">false</mx:Boolean>
+    <mx:Boolean id="addAssignedEnabled">false</mx:Boolean>
+
+
+    <mx:Grid x="0" y="0" width="100%" height="100%" id="supportedCurrencyPanel">
+        <mx:GridRow width="100%" height="50">
+            <mx:GridItem width="150" height="50" textAlign="center" verticalAlign="middle">
+                <mx:Label text="@Resource(bundle='StoresManagmentPanel',key='availableWarehouses')"/>
+            </mx:GridItem>
+            <mx:GridItem width="100%" height="50">
+            </mx:GridItem>
+            <mx:GridItem width="150" height="50" textAlign="center" verticalAlign="middle">
+                <mx:Label text="@Resource(bundle='StoresManagmentPanel',key='supportedWarehouses')"/>
+            </mx:GridItem>
+        </mx:GridRow>
+        <mx:GridRow width="100%" height="100%">
+            <mx:GridItem width="150" height="100%">
+                <mx:List
+                        width="100%"
+                        height="100%"
+                        dataProvider="{availableWarehouses}"
+                        labelField="name"
+                        click="availableWarehousesSelected(event)"
+                        >
+                </mx:List>
+            </mx:GridItem>
+            <mx:GridItem width="100%" height="100%" verticalAlign="middle" textAlign="center">
+                <mx:VBox width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
+                    <mx:Button enabled="{addAvailableEnabled}"
+                               label="@Resource(bundle='StoresManagmentPanel',key='assign')"
+                               toolTip="@Resource(bundle='StoresManagmentPanel',key='assignHint')"
+                               click="assignWarehouse(event)"/>
+                    <mx:Button enabled="{addAssignedEnabled}"
+                               label="@Resource(bundle='StoresManagmentPanel',key='unassign')"
+                               toolTip="@Resource(bundle='StoresManagmentPanel',key='unassignHint')"
+                               click="unassignWarehouse(event)"/>
+                </mx:VBox>
+            </mx:GridItem>
+            <mx:GridItem width="150" height="100%">
+                <mx:List
+                        width="100%"
+                        height="100%"
+                        dataProvider="{assignedWarehouses}"
+                        labelField="name"
+                        click="assignedWarehouseSelected(event)"
+                        >
+
+                </mx:List>
+            </mx:GridItem>
+        </mx:GridRow>
+
+    </mx:Grid>
+</mx:Canvas>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+                creationComplete="init()"
+                creationCompleteEffect="Zoom"
+				title="Create country"  showCloseButton="true"
+                close="PopUpManager.removePopUp(this)" >
+
+    <mx:Boolean id="newCountryFlag">false</mx:Boolean>
+
+
+    <mx:Form>
+        <mx:FormItem  width="100%" label="@Resource(bundle='LocationManagementPanel',key='charCode')">
+            <mx:TextInput   width="160" id="charCode"/>
+        </mx:FormItem>
+        <mx:FormItem  width="100%" label="@Resource(bundle='LocationManagementPanel',key='digitCode')">
+            <mx:TextInput   width="160" id="digitCode"/>
+        </mx:FormItem>
+        <mx:FormItem  width="100%" label="@Resource(bundle='LocationManagementPanel',key='name')">
+            <mx:TextInput   width="160" id="lname"/>
+        </mx:FormItem>
+    </mx:Form>
+    <mx:ControlBar horizontalAlign="right">
+        <mx:Button  id="saveBtn" label="Save"
+                   width="94"/>
+        <mx:Button id="closeBtn" label="@Resource(bundle='LocationManagementPanel',key='close')"
+                   click="PopUpManager.removePopUp(this)" width="94"/>
+    </mx:ControlBar>
+
+
+    <mx:Script>
+       <![CDATA[
+        import org.yes.cart.impl.CountryDTOImpl;
+
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        import mx.binding.utils.BindingUtils;
+        import mx.managers.PopUpManager;
+
+
+        [Bindable]
+        private var _countryDTOImpl:CountryDTOImpl;
+
+
+        public function get countryDTOImpl():CountryDTOImpl {
+            return _countryDTOImpl;
+        }
+
+        public function set countryDTOImpl(value:CountryDTOImpl):void {
+            _countryDTOImpl = value;
+        }
+
+
+        private function init():void {
+            if (newCountryFlag) {
+                this.title = resourceManager.getString('LocationManagementPanel', 'newCountryDialogTitle');
+                saveBtn.label = resourceManager.getString('LocationManagementPanel', 'create');
+            } else {
+                this.title = resourceManager.getString('LocationManagementPanel', 'editCountryDialogTitle');
+                saveBtn.label = resourceManager.getString('LocationManagementPanel', 'update');
+            }
+
+            BindingUtils.bindProperty(this.digitCode, "text", _countryDTOImpl, "isoCode");
+            BindingUtils.bindProperty(this.charCode, "text", _countryDTOImpl, "countryCode");
+            BindingUtils.bindProperty(this.lname, "text", _countryDTOImpl, "name");
+
+            BindingUtils.bindProperty(_countryDTOImpl, "isoCode", this.digitCode, "text");
+            BindingUtils.bindProperty(_countryDTOImpl, "countryCode", this.charCode, "text");
+            BindingUtils.bindProperty(_countryDTOImpl, "name", this.lname, "text");
+
+
+        }
+        ]]>
+
+        </mx:Script>
+</mx:TitleWindow>

@@ -1,0 +1,335 @@
+<?xml version="1.0" ?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+                showCloseButton="true"
+                close="PopUpManager.removePopUp(this)"
+                implements="org.yes.cart.ui.attributes.valuedialog.ValueDialog"
+                creationComplete="init();">
+
+    <mx:VBox>
+        <mx:Canvas id="imageView"
+                   width="480"
+                   height="480"
+                   borderColor="#CCCCCC"
+                   borderStyle="solid"/>
+
+        <mx:Form x="0" y="0" width="100%">
+            <mx:FormItem label="@Resource(bundle='AttributesManagmentPanel',key='value')">
+                <mx:TextInput width="310" id="valueTextInput"/>
+            </mx:FormItem>
+            <mx:FormItem  label="@Resource(bundle='AttributesManagmentPanel',key='altText')">
+                <mx:TextInput width="310" id="altTextInput"/>
+            </mx:FormItem>
+            <mx:FormItem  label="@Resource(bundle='AttributesManagmentPanel',key='title')">
+                <mx:TextInput width="310"  id="titleTextInput"/>
+            </mx:FormItem>
+
+        </mx:Form>
+        <mx:ControlBar width="100%" horizontalAlign="right">
+            <mx:Button id="btnCancel"
+                       width="94"
+                       label="@Resource(bundle='AttributesManagmentPanel',key='cancel')"
+                       click="PopUpManager.removePopUp(this)"
+                    />
+            <mx:Button id="btnLoad" width="94"
+                       label="@Resource(bundle='AttributesManagmentPanel',key='loadImage')"
+                       toolTip="@Resource(bundle='AttributesManagmentPanel',key='loadImageHint')"
+                       click="loadImage()"/>
+            <mx:Button id="btnSave" width="94"
+                       label="@Resource(bundle='AttributesManagmentPanel',key='save')" click="saveImage()"/>
+
+        </mx:ControlBar>
+
+    </mx:VBox>
+    <mx:RemoteObject showBusyCursor="true"  id="remoteImageService"
+                     destination="remoteImageService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+
+    <mx:Script><![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import org.yes.cart.constants.AttributeGroupNames;
+        import org.yes.cart.constants.Constants;
+        import org.yes.cart.impl.SeoImageDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        import mx.binding.utils.BindingUtils;
+        import mx.graphics.codec.JPEGEncoder;
+        import mx.managers.PopUpManager;
+        import mx.rpc.AsyncResponder;
+        import mx.rpc.AsyncToken;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
+        private static const THUMB_WIDTH:uint = 480;
+        private static const THUMB_HEIGHT:uint = 480;
+
+
+        private var _value:String;
+        private var _oldValue:String;
+        private var _windowTitle:String;
+        private var _code:String;
+        private var _attributeGroup:String;
+
+        private var loadFileRef:FileReference;
+
+        private var bitmapData:BitmapData;
+
+        private var seoImage:SeoImageDTOImpl;
+        private var imageBodyHasChanges:Boolean = false;
+
+        private function init():void {
+            BindingUtils.bindProperty(valueTextInput, "text", this, "value");
+            BindingUtils.bindProperty(this, "value", valueTextInput, "text");
+            this.title = windowTitle;
+
+
+            if (value != null && value.length > 0) {
+                //get the existing image and image seo information
+                remoteImageService.getImageAsByteArray(value, code, resolveImageStorage(attributeGroup)).addResponder(
+                        new AsyncResponder(
+                                imageBodyResultHandler,
+                                imageBodyFaultHandler)
+                        );
+
+
+            } else {
+                //nothing to do this is a new image
+                seoImage = new SeoImageDTOImpl();
+
+            }
+
+        }
+
+
+        /**
+         * Seo image result handler. If Seo null the new seo object will be created.
+         * @param event event
+         * @param token token
+         * @return nothing
+         */
+        private function seoImageFaultHandler(event:FaultEvent, token:AsyncToken):void {
+            seoImage = new SeoImageDTOImpl();
+
+        }
+
+
+        /**
+         * Seo image result handler. If Seo null the new seo object will be created.
+         * @param event event
+         * @param token token
+         * @return nothing
+         */
+        private function seoImageResultHandler(event:ResultEvent, token:AsyncToken):void {
+            if (event.result == null) {
+                seoImage = new SeoImageDTOImpl();
+            } else {
+                seoImage = SeoImageDTOImpl(event.result);
+            }
+            titleTextInput.text = seoImage.title;
+            altTextInput.text = seoImage.alt;
+
+
+        }
+
+
+        private function saveImage():void {
+
+            if (imageBodyHasChanges) {
+                //Save image when it really changed.
+
+                var encoder:JPEGEncoder = new JPEGEncoder(); //TODO resolve the encoder by file extension
+                var rawBytes:ByteArray = encoder.encode(bitmapData);
+
+
+                remoteImageService.addImageToRepository(
+                        value,
+                        code,
+                        rawBytes,
+                        resolveImageStorage(attributeGroup)).addResponder(
+
+                        new AsyncResponder(
+                                imageUploadedResultHandler,
+                                ShopManagerGlobal.instance.defaultFaultHandler
+                                )
+                        );
+
+            } else {
+                imageUploadedResultHandler(null, null);
+
+            }
+
+
+        }
+
+
+        private function resolveImageStorage(attrGroupName:String):String {
+            if (AttributeGroupNames.CATEGORY == attrGroupName) {
+                return Constants.CATEGOTY_IMAGE_REPOSITORY_URL_PATTERN;
+            } else if (AttributeGroupNames.BRAND == attrGroupName) {
+                return Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN;
+            } else if (AttributeGroupNames.SKU == attrGroupName) {
+            } else if (AttributeGroupNames.PRODUCT == attrGroupName) {
+            }
+            return null;
+
+        }
+
+
+        private function imageUploadedResultHandler(event:ResultEvent, token:AsyncToken):void {
+            seoImage.imageName = value;
+            seoImage.alt = altTextInput.text;
+            seoImage.title = titleTextInput.text;
+            if (isNaN(seoImage.seoImageId) || seoImage.seoImageId == 0) {
+                // new image seo
+                remoteImageService.create(seoImage);
+            } else {
+                remoteImageService.update(seoImage);
+            }
+
+        }
+
+
+        /**
+         * Load file from local disk and show in {@link imageView}.
+         * @return nothing
+         */
+        private function loadImage():void {
+            loadFileRef = new FileReference();
+            loadFileRef.addEventListener(Event.SELECT, onFileSelect);
+            loadFileRef.browse();
+        }
+
+        /**
+         * Hanlde file selection event.
+         * @param e event
+         * @return nothing
+         */
+        private function onFileSelect(e:Event):void {
+
+            loadFileRef.addEventListener(Event.COMPLETE, onFileLoadComplete);
+            loadFileRef.load(); //Flex SDK 4 only. dont pay attension in IDE, that configured for SDK 3 version support
+        }
+
+
+        private function imageBodyFaultHandler(event:FaultEvent, token:AsyncToken):void {
+            Debug.trace("ERROR cant load image body from remote image service: " + event.message);
+
+        }
+
+
+        /**
+         * File loaded event handle
+         * @param e event
+         * @return nothing
+         */
+        private function onFileLoadComplete(e:Event):void {
+            var loader:Loader = new Loader();
+            loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onDataLoadComplete);
+            loader.loadBytes(loadFileRef.data);  //Flex SDK 4 only. dont pay attension in IDE, that configured for SDK 3 version support
+
+            var modifiedName:String = loadFileRef.name;
+            /*if (code != null && code.length > 0) { // TO DO remove it after image service and image filter refactoring
+             modifiedName = FileNameUtils.getFileNameWithoutExtension(modifiedName) + "_" + code + "_a." + FileNameUtils.getFileExtension(modifiedName);
+             } */
+
+            valueTextInput.text = modifiedName;
+            value = modifiedName;
+            loadFileRef = null;
+            imageBodyHasChanges = true;
+
+        }
+
+        /**
+         * Image body loaded from remote service.
+         * @param event
+         * @param token
+         * @return
+         */
+        private function imageBodyResultHandler(event:ResultEvent, token:AsyncToken):void {
+            var obj:Object = event.result;
+            var ba:ByteArray = ByteArray(event.result);
+            var loader:Loader = new Loader();
+            loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onDataLoadComplete);
+            loader.loadBytes(ba);
+            remoteImageService.getSeoImage(value).addResponder(
+                    new AsyncResponder(
+                            seoImageResultHandler,
+                            seoImageFaultHandler
+                            )
+                    );
+        }
+
+
+        /**
+         * Image loading complete, so we can show it.
+         * @param e event
+         * @return nothing
+         */
+        private function onDataLoadComplete(e:Event):void {
+            bitmapData = Bitmap(e.target.content).bitmapData;
+            var matrix:Matrix = new Matrix();
+            var maxImageSide:uint = Math.max(bitmapData.width, bitmapData.height);
+            var scale:Number = THUMB_WIDTH / maxImageSide;
+            var xOffset:Number = (THUMB_WIDTH - scale * bitmapData.width) / 2;
+            var yOffset:Number = (THUMB_HEIGHT - scale * bitmapData.height) / 2;
+
+            matrix.scale(scale, scale);
+            matrix.translate(xOffset, yOffset);
+
+            imageView.graphics.clear();
+            imageView.graphics.beginBitmapFill(bitmapData, matrix, false);
+            imageView.graphics.drawRect(xOffset, yOffset, THUMB_WIDTH - 2 * xOffset, THUMB_HEIGHT - 2 * yOffset);
+            imageView.graphics.endFill();
+
+        }
+
+
+        public function get value():String {
+            return _value;
+        }
+
+        public function set value(value:String):void {
+            _value = value;
+        }
+
+        public function get oldValue():String {
+            return _oldValue;
+        }
+
+        public function set oldValue(value:String):void {
+            _oldValue = value;
+        }
+
+        public function get windowTitle():String {
+            return _windowTitle;
+        }
+
+        public function set windowTitle(value:String):void {
+            _windowTitle = value;
+        }
+
+        public function getButtonSave():Button {
+            return this.btnSave;
+        }
+
+        public function get code():String {
+            return _code;
+        }
+
+        public function set code(value:String):void {
+            _code = value;
+        }
+
+        public function get attributeGroup():String {
+            return _attributeGroup;
+        }
+
+        public function set attributeGroup(value:String):void {
+            _attributeGroup = value;
+        }
+        ]]>
+</mx:Script>
+</mx:TitleWindow>

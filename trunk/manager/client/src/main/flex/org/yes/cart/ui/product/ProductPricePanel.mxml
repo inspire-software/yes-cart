@@ -1,0 +1,503 @@
+<?xml version="1.0" ?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" creationComplete="init();">
+
+    <mx:VBox width="100%" height="100%">
+        <mx:Form x="0" y="0">
+            <mx:FormItem label="@Resource(bundle='ProductManagmentPanel',key='product')">
+                <mx:Label id="productCodeName"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='ProductManagmentPanel',key='shop')">
+                <mx:HBox>
+                    <mx:ComboBox id="storesComboBox"
+                                 labelField="name"
+                                 data="shopId"
+                                 dataProvider="{remoteShopService.getAll.lastResult}"
+                                 change="shopChanged(event)"
+                                 prompt="@Resource(bundle='ProductManagmentPanel',key='selectStorePropmt')">
+                    </mx:ComboBox>
+                    <mx:Label text="@Resource(bundle='ProductManagmentPanel',key='defaultCurrency')"/>
+                    <mx:Label id="defaultCurrencyLabel"/>
+                </mx:HBox>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='ProductManagmentPanel',key='price')">
+                <mx:HBox>
+                    <mx:Button id="addPriceBtn"
+                               label="@Resource(bundle='ProductManagmentPanel',key='addPrice')"
+                               toolTip="@Resource(bundle='ProductManagmentPanel',key='addPriceHint')"
+                               enabled="false"
+                               click="addPrice(event);"
+                            />
+                    <mx:Button id="editPriceBtn"
+                               label="@Resource(bundle='ProductManagmentPanel',key='editPrice')"
+                               toolTip="@Resource(bundle='ProductManagmentPanel',key='editPriceHint')"
+                               enabled="false"
+                               click="editPrice(event);"
+                            />
+                    <mx:Button id="deletePriceBtn"
+                               label="@Resource(bundle='ProductManagmentPanel',key='deletePrice')"
+                               toolTip="@Resource(bundle='ProductManagmentPanel',key='deletePriceHint')"
+                               enabled="false"
+                               click="deletePrice(event);"
+                            />
+                </mx:HBox>
+            </mx:FormItem>
+
+        </mx:Form>
+        <mx:DataGrid
+                id="priceDataGrid"
+                x="0" y="0" width="100%" height="100%" editable="false"
+                dataProvider="{prices}"
+                itemClick="priceSelected(event)"
+                itemEditEnd="valueEditEnd(event);"
+                >
+            <mx:columns>
+                <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagmentPanel',key='id')"
+                                   dataField="skuPriceId" editable="false"/>
+                <mx:DataGridColumn width="120" headerText="@Resource(bundle='ProductManagmentPanel',key='skuCode')"
+                                   dataField="code" editable="false"/>
+                <mx:DataGridColumn headerText="@Resource(bundle='ProductManagmentPanel',key='skuName')"
+                                   dataField="skuName" editable="false"/>
+                <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagmentPanel',key='quantity')"
+                                   dataField="quantity" editable="true"/>
+                <mx:DataGridColumn headerText="@Resource(bundle='ProductManagmentPanel',key='listPrice')"
+                                   editorDataField="returnListPrice"
+                                   rendererIsEditor="false"
+                                   dataField="regularPrice"
+                                   editable="true">
+                    <mx:itemEditor>
+                        <mx:Component>
+                            <mx:HBox>
+                                <mx:Script>
+                                <![CDATA[
+                                    // Define a property for returning the new value to the cell.
+                                    [Bindable]
+                                    public var returnListPrice:String;
+                                ]]>
+                                </mx:Script>
+                                <mx:TextInput id="newListPrice" width="70" text="{data.regularPrice}"
+                                              updateComplete="returnListPrice=newListPrice.text;"
+                                              change="returnListPrice=newListPrice.text;"/>
+
+                                <mx:NumberValidator id="listPriceValidator" source="{newListPrice}" property="text"
+                                                    allowNegative="false"
+                                                    trigger="{newListPrice}" triggerEvent="change"
+                                                    decimalSeparator="."/>
+                            </mx:HBox>
+                        </mx:Component>
+                    </mx:itemEditor>
+                    <mx:itemRenderer>
+                        <mx:Component>
+                            <mx:Text selectable="false" width="100%"
+                                     text="{data.regularPrice==0?'':data.regularPrice}"
+                                    />
+                        </mx:Component>
+                    </mx:itemRenderer>
+                </mx:DataGridColumn>
+                <mx:DataGridColumn headerText="@Resource(bundle='ProductManagmentPanel',key='salePrice')"
+                                   editorDataField="returnSalePrice"
+                                   rendererIsEditor="false"
+                                   dataField="salePrice"
+                                   editable="true">
+                    <mx:itemEditor>
+                        <mx:Component>
+                            <mx:HBox>
+                                <mx:Script>
+                                <![CDATA[
+                                    // Define a property for returning the new value to the cell.
+                                    [Bindable]
+                                    public var returnSalePrice:String;
+                                ]]>
+                                </mx:Script>
+                                <mx:TextInput id="newSalePrice" width="70"
+                                              text="{data.salePrice}"
+                                              updateComplete="returnSalePrice=newSalePrice.text;"
+                                              change="returnSalePrice=newSalePrice.text;"
+                                        />
+                                <mx:NumberValidator
+                                        id="salePriceValidator"
+                                        source="{newSalePrice}"
+                                        property="text"
+                                        allowNegative="false"
+                                        trigger="{newSalePrice}"
+                                        triggerEvent="change"
+                                        decimalSeparator="."
+                                        />
+                            </mx:HBox>
+                        </mx:Component>
+                    </mx:itemEditor>
+                    <mx:itemRenderer>
+                        <mx:Component>
+                            <mx:Text selectable="false" width="100%"
+                                     text="{data.salePrice==0?'':data.salePrice}"
+                                    />
+                        </mx:Component>
+                    </mx:itemRenderer>
+                </mx:DataGridColumn>
+                <mx:DataGridColumn headerText="@Resource(bundle='ProductManagmentPanel',key='saleFrom')"
+                                   dataField="salefrom"
+                                   itemEditor="mx.controls.DateField"
+                                   rendererIsEditor="false"
+                                   editorDataField="selectedDate"
+                        />
+                <mx:DataGridColumn headerText="@Resource(bundle='ProductManagmentPanel',key='saleTill')"
+                                   dataField="saletill"
+                                   itemEditor="mx.controls.DateField"
+                                   rendererIsEditor="false"
+                                   editorDataField="selectedDate"
+                        />
+                <mx:DataGridColumn headerText="@Resource(bundle='ProductManagmentPanel',key='minimalPrice')"
+                                   editorDataField="returnMinimalPrice"
+                                   rendererIsEditor="false"
+                                   dataField="minimalPrice"
+                                   editable="true">
+                    <mx:itemEditor>
+                        <mx:Component>
+                            <mx:HBox>
+                                <mx:Script>
+                                <![CDATA[
+                                    // Define a property for returning the new value to the cell.
+                                    [Bindable]
+                                    public var returnMinimalPrice:String;
+                                ]]>
+                                </mx:Script>
+                                <mx:TextInput id="newMinimalPrice" width="70"
+                                              text="{data.minimalPrice}"
+                                              updateComplete="returnMinimalPrice=newMinimalPrice.text;"
+                                              change="returnMinimalPrice=newMinimalPrice.text;"
+                                        />
+                                <mx:NumberValidator
+                                        id="minimalPriceValidator"
+                                        source="{newMinimalPrice}"
+                                        property="text"
+                                        allowNegative="false"
+                                        trigger="{newMinimalPrice}"
+                                        triggerEvent="change"
+                                        decimalSeparator="."
+                                        />
+                            </mx:HBox>
+                        </mx:Component>
+                    </mx:itemEditor>
+                    <mx:itemRenderer>
+                        <mx:Component>
+                            <mx:Text selectable="false" width="100%"
+                                     text="{data.minimalPrice==0?'':data.minimalPrice}"
+                                    />
+                        </mx:Component>
+                    </mx:itemRenderer>
+                </mx:DataGridColumn>
+            </mx:columns>
+        </mx:DataGrid>
+    </mx:VBox>
+
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteProductService" destination="remoteProductService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteShopService"
+                     destination="remoteShopService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteProductSkuService"
+                     destination="remoteProductSkuService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+
+    <mx:ArrayCollection id="prices"/>
+
+
+    <mx:Script>
+		<![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import org.yes.cart.impl.ProductDTOImpl;
+        import org.yes.cart.impl.ProductSkuDTOImpl;
+        import org.yes.cart.impl.ShopDTOImpl;
+        import org.yes.cart.impl.SkuPriceDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        import flash.events.MouseEvent;
+
+        import mx.collections.Sort;
+        import mx.collections.SortField;
+        import mx.controls.Alert;
+        import mx.events.CloseEvent;
+        import mx.events.DataGridEvent;
+        import mx.events.DataGridEventReason;
+        import mx.events.ListEvent;
+        import mx.managers.PopUpManager;
+        import mx.rpc.AsyncResponder;
+        import mx.rpc.AsyncToken;
+        import mx.rpc.events.ResultEvent;
+
+        public var productId:Number;
+
+        [Bindable]
+        public var product:ProductDTOImpl;
+        [Bindable]
+        public var shopDTOImpl:ShopDTOImpl;
+
+        private var selectedSkuPrice:SkuPriceDTOImpl;
+
+        private var createPriceDialog:CreatePriceDialog;
+
+        public function init():void {
+
+            remoteShopService.getAll();
+            remoteProductService.getById(productId).addResponder(
+                    new AsyncResponder(
+                            function (event:ResultEvent, obj:Object):void {
+                                //Fresh product selected from service.
+                                product = ProductDTOImpl(event.result);
+                                productCodeName.text = product.code + ' ' + product.name;
+                            },
+                            ShopManagerGlobal.instance.defaultFaultHandler
+                            )
+                    );
+
+        }
+
+
+        /**
+         * Handle shop changed event.
+         * @param event event
+         * @return nothing
+         */
+        private function shopChanged(event:Event):void {
+
+            shopDTOImpl = event.currentTarget.selectedItem;
+            remoteShopService.getSupportedCurrencies(shopDTOImpl.shopId).addResponder(
+                    new AsyncResponder(
+                            function (event:ResultEvent, obj:Object = null):void {
+                                // Shop currencies are ready.
+                                var assignedCurrencyStr:String = String(event.result);
+                                deletePriceBtn.enabled = false;
+                                editPriceBtn.enabled = false;
+                                if (assignedCurrencyStr == null || assignedCurrencyStr == "null") {
+                                    defaultCurrencyLabel.text = resourceManager.getString("ProductManagmentPanel", "currencyNotConfigured");
+                                    addPriceBtn.enabled = false;
+                                } else {
+                                    defaultCurrencyLabel.text = assignedCurrencyStr.split(",")[0];
+                                    var token:AsyncToken = remoteProductSkuService.getAllProductSkus(product.productId);
+                                    token.addResponder(
+                                            new AsyncResponder(
+                                                    skusReady,
+                                                    ShopManagerGlobal.instance.defaultFaultHandler
+                                                    )
+                                            );
+                                    addPriceBtn.enabled = true;
+                                }
+                            },
+                            ShopManagerGlobal.instance.defaultFaultHandler
+                            )
+                    );
+        }
+
+        /**
+         * The product skus ready to use.
+         * @param event event
+         * @param token
+         * @return nothing
+         */
+        private function skusReady(event:ResultEvent, token:AsyncToken):void {
+            prices = new ArrayCollection();
+            for each (var sku:ProductSkuDTOImpl in remoteProductSkuService.getAllProductSkus.lastResult) {
+                Debug.trace("DEBUG ProductPricePanel sku is:" + sku);
+                for each (var priceCandidate:SkuPriceDTOImpl in sku.price) {
+                    Debug.trace("DEBUG ProductPricePanel priceCandidate is:" + priceCandidate);
+                    if (shopDTOImpl.shopId == priceCandidate.shopId
+                            && defaultCurrencyLabel.text == priceCandidate.currency) {
+                        prices.addItem(priceCandidate);
+                    }
+                }
+            }
+
+            var skuCode:SortField = new SortField();
+            skuCode.name = "code";
+
+            var qty:SortField = new SortField();
+            qty.name = "quantity";
+
+            var sort:Sort = new Sort();
+            sort.fields = [skuCode, qty];
+
+            prices.sort = sort;
+            prices.refresh();
+
+            Debug.trace("DEBUG ProductPricePanel skusReady end");
+            deletePriceBtn.enabled = false;
+            editPriceBtn.enabled = false;
+
+
+        }
+
+
+        private function priceSelected(event:ListEvent):void {
+            selectedSkuPrice = event.currentTarget.selectedItem;
+            deletePriceBtn.enabled = true;
+            editPriceBtn.enabled = true;
+        }
+
+        /**
+         * Price value edit end. Just mark that sku has unsaved changes.
+         * @param event grid event.
+         * @return nothing
+         */
+        private function valueEditEnd(event:DataGridEvent):void {
+            if (event.reason == DataGridEventReason.CANCELLED) {
+                return; // Do not update cell.
+            }
+
+            Debug.trace("TRACE PdiuctPricePanel valueEditEnd ");
+
+            var skuPriceDto:SkuPriceDTOImpl = DataGrid(event.target).dataProvider[event.rowIndex];
+            Debug.trace("TRACE PdiuctPricePanel valueEditEnd skuPriceDto = " + skuPriceDto);
+            remoteProductSkuService.updateSkuPrice(skuPriceDto);
+
+            Debug.trace("TRACE PdiuctPricePanel update call performaed ");
+
+            /*event.preventDefault(); // Disable copying data back to the control.
+
+             var textInput:TextInput = TextInput(DataGrid(event.target).itemEditorInstance);
+
+
+             Debug.trace("New value  " + textInput.text);
+             Debug.traceObj(attrValue);
+
+
+
+             DataGrid(event.target).destroyItemEditor(); // Close the cell editor.
+             DataGrid(event.target).dataProvider.itemUpdated(event.itemRenderer.data); // Notify the list control to update its display.
+             */
+        }
+
+        /**
+         * Create new price dialog.
+         * @param event event
+         * @return nothing
+         */
+        private function deletePrice(event:MouseEvent):void {
+            Alert.show(
+                    resourceManager.getString('ProductManagmentPanel', 'deletePriceConfirm'),
+                    resourceManager.getString('ProductManagmentPanel', 'warning'),
+                    Alert.OK | Alert.CANCEL, this, deletePriceServiceCall, null, Alert.OK);
+
+
+        }
+
+        private function deletePriceServiceCall(event:CloseEvent):void {
+            if (event.detail == Alert.OK) {
+
+                remoteProductSkuService.removeSkuPrice(selectedSkuPrice.skuPriceId).addResponder(
+                        new AsyncResponder(
+                                priceCreated,
+                                ShopManagerGlobal.instance.defaultFaultHandler
+                                )
+                        );
+            }
+        }
+
+
+        /**
+         * Edit selected price.
+         * @param event event
+         * @return nothing
+         */
+        private function editPrice(event:MouseEvent):void {
+            createPriceDialog = CreatePriceDialog(PopUpManager.createPopUp(this, CreatePriceDialog, true));
+            createPriceDialog.skuComboBox.dataProvider = remoteProductSkuService.getAllProductSkus.lastResult;
+            for (var i:int = 0; i < remoteProductSkuService.getAllProductSkus.lastResult.length; i++) {
+                var skuCandidate:ProductSkuDTOImpl = ProductSkuDTOImpl(remoteProductSkuService.getAllProductSkus.lastResult[i]);
+                if (skuCandidate.skuId == selectedSkuPrice.productSkuId) {
+                    createPriceDialog.skuComboBox.selectedIndex = i;
+                    createPriceDialog.selectedSku = skuCandidate;
+                    createPriceDialog.skuComboBox.enabled = false;
+                    break;
+                }
+            }
+
+            createPriceDialog.currency = defaultCurrencyLabel.text;
+            createPriceDialog.shopId = shopDTOImpl.shopId;
+            createPriceDialog.saveBtn.addEventListener("click", updatePriceServiceCall);
+            createPriceDialog.editPrice(selectedSkuPrice);
+            PopUpManager.centerPopUp(createPriceDialog);
+
+        }
+
+
+        /**
+         * Create new price dialog.
+         * @param event event
+         * @return nothing
+         */
+        private function addPrice(event:MouseEvent):void {
+            createPriceDialog = CreatePriceDialog(PopUpManager.createPopUp(this, CreatePriceDialog, true));
+            createPriceDialog.skuComboBox.dataProvider = remoteProductSkuService.getAllProductSkus.lastResult;
+            createPriceDialog.currency = defaultCurrencyLabel.text;
+            createPriceDialog.shopId = shopDTOImpl.shopId;
+            createPriceDialog.saveBtn.addEventListener("click", addPriceServiceCall);
+            createPriceDialog.createPrice();
+            PopUpManager.centerPopUp(createPriceDialog);
+        }
+
+
+        /**
+         * Call service to update the sku price
+         * @param event
+         * @return
+         */
+        private function updatePriceServiceCall(event:Event):void {
+
+            var price:SkuPriceDTOImpl = createPriceDialog.skuPrice;
+            Debug.trace("INFO sku price to update is " + price);
+            remoteProductSkuService.updateSkuPrice(price).addResponder(
+                    new AsyncResponder(
+                            priceCreated,
+                            ShopManagerGlobal.instance.defaultFaultHandler
+                            )
+                    );
+            PopUpManager.removePopUp(createPriceDialog);
+            createPriceDialog = null;
+
+        }
+
+        /**
+         * Perform price creation.
+         * @param event event
+         * @return nothing
+         */
+        private function addPriceServiceCall(event:Event):void {
+
+            var price:SkuPriceDTOImpl = createPriceDialog.skuPrice;
+            price.shopId = shopDTOImpl.shopId;
+            price.currency = defaultCurrencyLabel.text;
+            remoteProductSkuService.createSkuPrice(price).addResponder(
+                    new AsyncResponder(
+                            priceCreated,
+                            ShopManagerGlobal.instance.defaultFaultHandler
+                            )
+                    );
+            PopUpManager.removePopUp(createPriceDialog);
+            createPriceDialog = null;
+        }
+
+        /**
+         * Price create succsessfuly.
+         * @param event
+         * @param atoken
+         * @return
+         */
+        private function priceCreated(event:ResultEvent, atoken:AsyncToken):void {
+            remoteProductSkuService.getAllProductSkus(product.productId).addResponder(
+                    new AsyncResponder(
+                            skusReady,
+                            ShopManagerGlobal.instance.defaultFaultHandler));
+        }
+        ]]>
+   </mx:Script>
+</mx:Canvas>

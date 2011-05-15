@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:controls="controls.*" width="100%" height="100%"
+           creationComplete="init();">
+
+
+    <mx:Script>
+
+<![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import org.yes.cart.impl.CategoryDTOImpl;
+        import org.yes.cart.impl.ShopDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        import mx.controls.Alert;
+        import mx.events.FlexEvent;
+        import mx.events.ListEvent;
+
+        import mx.rpc.AsyncResponder;
+        import mx.rpc.AsyncToken;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
+
+        [Bindable]
+        private var selectedToAssignCategoryDTOImpl:CategoryDTOImpl;
+        [Bindable]
+        private var selectedToUnassignCategoryDTOImpl:CategoryDTOImpl;
+
+        public var shopDto:ShopDTOImpl;
+
+
+        /**
+         * Init categories panel.
+         * @return nothing
+         */
+        private function init():void {
+            loadAllCategories(null);
+        }
+
+        private function loadAllCategories(result:Object, obj:Object = null):void {
+            var asyncToken:AsyncToken = remoteCategoryService.getAll();
+            asyncToken.addResponder(new AsyncResponder(getAllResultHandler, ShopManagerGlobal.instance.defaultFaultHandler));
+
+        }
+
+
+        /**
+         * Get all categories result handler.
+         * @param event event
+         * @param token asyn token
+         * @return nothing
+         */
+        private function getAllResultHandler(event:ResultEvent, token:AsyncToken):void {
+            var asyncToken:AsyncToken = remoteCategoryService.getAllByShopId(shopDto.shopId);
+            asyncToken.addResponder(new AsyncResponder(getAllByShopIdResultHandler, ShopManagerGlobal.instance.defaultFaultHandler));
+        }
+
+        /**
+         * Get all assigned to shop categories result handler.
+         * @param event event
+         * @param token asyn token
+         * @return nothing
+         */
+        private function getAllByShopIdResultHandler(event:ResultEvent, token:AsyncToken):void {
+            selectedToAssignCategoryDTOImpl = null;
+            selectedToUnassignCategoryDTOImpl = null;
+
+        }
+
+
+        /**
+         * Creation of category tree completed. Expand first (root) item
+         * @return nothing
+         */
+        private function initCategoryTree(evt:FlexEvent):void {
+            try {
+                categoryTree.expandItem(categoryTree.firstVisibleItem, true, true);
+            } catch (errObject:Error) {
+
+            }
+        }
+
+        /**
+         * Category to assign selection handler
+         * @param event selection event
+         * @return nothing
+         */
+        private function categorySelectedEvent(event:ListEvent):void {
+            selectedToAssignCategoryDTOImpl = CategoryDTOImpl(event.currentTarget.selectedItem);
+            Debug.trace("Selected to assing category dto id is :" + selectedToAssignCategoryDTOImpl);
+        }
+
+        /**
+         * Category to unassign selection handler
+         * @param event selection event
+         * @return nothing
+         */
+        private function categoryToUnassignSelectedEvent(event:ListEvent):void {
+            selectedToUnassignCategoryDTOImpl = CategoryDTOImpl(event.currentTarget.selectedItem);
+            Debug.trace("Selected to unassing category dto id is :" + selectedToUnassignCategoryDTOImpl);
+
+        }
+
+        /**
+         * Assign selected category as one of top level categories into selected shop.
+         * @param event event
+         * @return nothing.
+         */
+        private function assignCategoryClickHandler(event:flash.events.MouseEvent):void {
+            remoteCategoryService.assignToShop(selectedToAssignCategoryDTOImpl.categoryId, shopDto.shopId).addResponder(
+                    new AsyncResponder(loadAllCategories, ShopManagerGlobal.instance.defaultFaultHandler));
+        }
+
+        /**
+         * Remove selected category from selected shop.
+         * @param event event
+         * @return nothing.
+         */
+        private function unassignCategoryClickHandler(event:flash.events.MouseEvent):void {
+            remoteCategoryService.unassignFromShop(selectedToUnassignCategoryDTOImpl.categoryId, shopDto.shopId).addResponder(
+                    new AsyncResponder(loadAllCategories, ShopManagerGlobal.instance.defaultFaultHandler));
+        }
+        ]]>
+
+   </mx:Script>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteCategoryService"
+                     destination="remoteCategoryService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+
+    <mx:VBox x="0" y="0" width="100%" height="100%">
+
+        <mx:Label text="@Resource(bundle='StoresManagmentPanel',key='assigedCategories')"/>
+        <mx:HBox x="0" y="0" width="100%" height="100%" id="mainPanel">
+            <mx:Tree height="100%" width="205" id="categoryTree"
+                     labelField="name"
+                     creationComplete="initCategoryTree(event);"
+                     dataChange="initCategoryTree(event);"
+                     dataProvider="{remoteCategoryService.getAll.lastResult}"
+                     change="categorySelectedEvent(event);"
+                    />
+            <mx:VBox width="80" height="100%" verticalAlign="middle" horizontalAlign="center">
+                <mx:Button label="@Resource(bundle='StoresManagmentPanel',key='assign')"
+                           toolTip="@Resource(bundle='StoresManagmentPanel',key='assignHint')"
+                           width="70" id="assignCategoryBtn"
+                           enabled="{selectedToAssignCategoryDTOImpl != null}"
+                           click="assignCategoryClickHandler(event);"
+                        />
+                <mx:Button
+                        label="@Resource(bundle='StoresManagmentPanel',key='unassign')"
+                        toolTip="@Resource(bundle='StoresManagmentPanel',key='unassignHint')"
+                        width="70" id="unassignCategoryBtn"
+                        enabled="{selectedToUnassignCategoryDTOImpl != null}"
+                        click="unassignCategoryClickHandler(event);"
+                        />
+            </mx:VBox>
+            <mx:List height="100%" width="190" id="assignedCategoriesList"
+                     labelField="name"
+                     dataProvider="{remoteCategoryService.getAllByShopId.lastResult}"
+                     change="categoryToUnassignSelectedEvent(event);"
+                    />
+        </mx:HBox>
+
+    </mx:VBox>
+
+</mx:Canvas>

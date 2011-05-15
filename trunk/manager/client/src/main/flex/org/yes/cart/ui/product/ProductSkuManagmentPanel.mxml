@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" creationComplete="init();">
+
+    <mx:Script>
+		<![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import org.yes.cart.constants.AttributeGroupNames;
+        import org.yes.cart.impl.AttrValueProductSkuDTOImpl;
+        import org.yes.cart.impl.AttributeDTOImpl;
+        import org.yes.cart.impl.ProductDTOImpl;
+        import org.yes.cart.impl.ProductSkuDTOImpl;
+        import org.yes.cart.impl.SeoDTOImpl;
+        import org.yes.cart.util.UpdateTarget;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+        import org.yes.cart.ui.attributes.EntityAttributeValuesManagmentPanel;
+        import org.yes.cart.ui.seo.SeoPanel;
+
+        import flash.events.MouseEvent;
+
+        import mx.collections.ArrayCollection;
+        import mx.controls.Alert;
+        import mx.events.CloseEvent;
+        import mx.events.IndexChangedEvent;
+        import mx.events.ListEvent;
+        import mx.managers.PopUpManager;
+        import mx.rpc.AsyncResponder;
+        import mx.rpc.AsyncToken;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
+        private var TAB_SUMMARY_IDX:int = 0;
+        private var TAB_IMAGE_IDX:int = 1;
+        private var TAB_ATTR_IDX:int = 2;
+        private var TAB_SEO_IDX:int = 3;
+        //private var TAB_PRICE_IDX:int = 4;
+        //private var TAB_WAREHOUSE_IDX:int = 5;
+
+
+        private var _product:ProductDTOImpl;
+        [Bindable]
+        private var selectedSku:ProductSkuDTOImpl;
+
+        private var productSkuCreateDialog:ProductSkuCreateDialog;
+
+        private var attrValuePanel:EntityAttributeValuesManagmentPanel;
+
+        public function get product():ProductDTOImpl {
+            return _product;
+        }
+
+        public function set product(value:ProductDTOImpl):void {
+            _product = value;
+        }
+
+
+        /**
+         * Init product sku manamegent panel.
+         * @return nothing
+         */
+        public function init():void {
+            remoteProductSkuService.getAllProductSkus(product.productId);
+        }
+
+
+        /**
+         * Sku selected event handler.
+         * @param event event
+         * @return nothing
+         */
+        private function skuSelected(event:ListEvent):void {
+            selectedSku = ProductSkuDTOImpl(skusComboBox.selectedItem);
+            initTab(skuTabNavigator.selectedIndex);
+        }
+
+        /**
+         * Sku tab selected event.
+         * @param event event
+         * @return nothing
+         */
+        private function onTabClick(event:IndexChangedEvent):void {
+            initTab(event.newIndex);
+        }
+
+        private function initTab(idx:int):void {
+            Debug.trace("INFO ProductSkuManagmentPanel selected tab idx is " + idx);
+            if (selectedSku == null) {
+                return;
+            }
+            Debug.trace("INFO ProductSkuManagmentPanel selected sku is " + selectedSku);
+            switch (idx) {
+
+                case TAB_SUMMARY_IDX: {
+                    skuSummaryTabSelect();
+                    break;
+                }
+
+                case TAB_IMAGE_IDX: {
+                    imageTabSelected(null);
+                    break;
+                }
+
+                case TAB_ATTR_IDX: {
+                    attrTabSelected(null);
+                    break;
+                }
+
+                case TAB_SEO_IDX: {
+                    seoTabSelected(null);
+                    break;
+                }
+
+                /*case TAB_PRICE_IDX: {
+                 break;
+                 }
+
+
+                 case TAB_WAREHOUSE_IDX: {
+                 break;
+                 } */
+
+            }
+
+        }
+
+        /**
+         * SKU attributes tab selected.
+         * @param event event
+         * @return nothing
+         */
+        private function attrTabSelected(event:MouseEvent):void {
+            remoteProductSkuService.getEntityAttributes(selectedSku.skuId).addResponder(
+                    new AsyncResponder(
+                            function (event:ResultEvent, obj:Object = null):void {
+                                getEntityAttributesResultHandlerInternal(event, skuAttributesTab, rejectImageAttributes);
+                            },
+                            ShopManagerGlobal.instance.defaultFaultHandler));
+        }
+
+
+        /**
+         * SKU images tab selected.
+         * @param event event
+         * @return nothing
+         */
+        private function imageTabSelected(event:MouseEvent):void {
+            remoteProductSkuService.getEntityAttributes(selectedSku.skuId).addResponder(
+                    new AsyncResponder(
+                            function (event:ResultEvent, obj:Object = null):void {
+                                //Service call back with category attribute values.
+                                getEntityAttributesResultHandlerInternal(event, skuImagesTab, acceptImageAttributes);
+                            },
+                            ShopManagerGlobal.instance.defaultFaultHandler
+                            )
+                    );
+        }
+
+
+        /**
+         * Service call back with category attribute values.
+         * @param event event
+         * @param canvas target tab
+         * @return nothing
+         */
+        private function getEntityAttributesResultHandlerInternal(event:ResultEvent, canvas:Canvas, filterFunk:Function):void {
+            Debug.trace("TRACE getEntityAttributesResultHandlerInternal");
+            attrValuePanel = new EntityAttributeValuesManagmentPanel();
+            attrValuePanel.attrValue = ArrayCollection(event.result);
+
+            attrValuePanel.entityCode = selectedSku.code;
+            attrValuePanel.attributeGroup = AttributeGroupNames.SKU;
+            attrValuePanel.attrValue.filterFunction = filterFunk;
+            attrValuePanel.attrValue.refresh();
+
+            attrValuePanel.attrValueChangedCallBack = attrValueChanged;
+            attrValuePanel.attrValueAddedCallBack = attrValueAdded;
+            attrValuePanel.attrValueDeleteCallBack = attrValueDelete;
+
+            canvas.removeAllChildren();
+            canvas.addChild(attrValuePanel);
+
+
+        }
+
+        /**
+         * Do not show the image attributes.
+         * @param item item to filter
+         * @return true if need to show item.
+         */
+        private function rejectImageAttributes(item:Object):Boolean {
+            return !acceptImageAttributes(item);
+        }
+
+        /**
+         * Accept only images
+         * @param item item to filter
+         * @return true if need to show item.
+         */
+        private function acceptImageAttributes(item:Object):Boolean {
+            return (item.attributeDTO.etypeName.indexOf("Image") > -1);
+        }
+
+
+        /**
+         * Delete attribute value.
+         * @param attrValueId attribute value id.
+         */
+        private function attrValueDelete(attrValueId:Number):void {
+
+            Debug.trace("INFO delete product attribute with id = " + attrValueId);
+            remoteProductSkuService.deleteAttributeValue(attrValueId);
+        }
+
+        /**
+         * Added attribute, that allowe multiple value call back function.
+         * @param attr attribute
+         * @return instane of {@link AttrValueCategoryDTOImpl}
+         */
+        private function attrValueAdded(attr:AttributeDTOImpl):AttrValueProductSkuDTOImpl {
+            var attrValue:AttrValueProductSkuDTOImpl = new AttrValueProductSkuDTOImpl();
+            attrValue.attributeDTO = attr;
+            attrValue.skuId = selectedSku.skuId;
+            Debug.trace("INFO added new attribute value  " + attrValue);
+            return attrValue;
+
+        }
+
+        /**
+         * Value changed callback function.
+         * @param attrValue  attribute value object.
+         * @param newValue new value
+         * @return nothing
+         */
+        private function attrValueChanged(attrValue:Object, newValue:String, rowIdx:int):void {
+
+            Debug.trace("INFO Product attribute value changed call back");
+            //var categoryAttrValue:AttrValueProductDTOImpl = AttrValueProductDTOImpl(attrValue);
+            attrValue.val = newValue;
+            var asyncToken:AsyncToken;
+            var updateTarget:UpdateTarget;
+            if (isNaN(attrValue.attrvalueId) || attrValue.attrvalueId == 0) {
+                // insert new attribute
+                Debug.trace("INFO create new attr value " + newValue + " for sku " + selectedSku);
+                asyncToken = remoteProductSkuService.createEntityAttributeValue(attrValue);
+                updateTarget = new UpdateTarget(UpdateTarget.NEW, rowIdx);
+            } else {
+                //update
+                Debug.trace("INFO update attr value " + newValue + " for sku " + selectedSku);
+                asyncToken = remoteProductSkuService.updateEntityAttributeValue(attrValue);
+                updateTarget = new UpdateTarget(UpdateTarget.UPDATE, rowIdx);
+            }
+            asyncToken.addResponder(
+                    new AsyncResponder(
+                            productAttributeUpdatedResultHandler,
+                            ShopManagerGlobal.instance.defaultFaultHandler, updateTarget
+                            )
+                    );
+        }
+
+
+        /**
+         * Service call back with sku attribute value.
+         * @param event event
+         * @param updateTarget async token
+         * @return nothing
+         */
+        private function productAttributeUpdatedResultHandler(event:ResultEvent, updateTarget:UpdateTarget):void {
+            var obj:Object;
+            if (updateTarget.action == UpdateTarget.NEW) {
+                obj = remoteProductSkuService.createEntityAttributeValue.lastResult;
+            } else {
+                obj = remoteProductSkuService.updateEntityAttributeValue.lastResult;
+            }
+            Debug.trace("INFO obj is " + obj);
+            attrValuePanel.attrValue.setItemAt(obj, updateTarget.idx);
+
+        }
+
+        /**
+         * Product SEO information tab.
+         * @param event event
+         * @return nothing
+         */
+        private function seoTabSelected(event:MouseEvent):void {
+            skuSeoTab.removeAllChildren();
+            var seoPanel:SeoPanel = new SeoPanel();
+            seoPanel.seoCreatedCallBack = seoCreatedCallBack;
+            seoPanel.seoRemovedCallBack = seoRemovedCallBack;
+            if (selectedSku.seoDTO != null && !isNaN(selectedSku.seoDTO.seoId)) {
+                seoPanel.seoId = selectedSku.seoDTO.seoId;
+            }
+            skuSeoTab.addChild(seoPanel);
+        }
+
+        /**
+         * Call back function to handle SEO created event
+         * @param seoDTOImpl created SeoDTOImpl
+         * @return nothing
+         */
+        public function seoCreatedCallBack(seoDTOImpl:SeoDTOImpl):void {
+            if (selectedSku.seoDTO == null || isNaN(selectedSku.seoDTO.seoId) || selectedSku.seoDTO.seoId == 0) {
+                selectedSku.seoDTO = seoDTOImpl;
+                skuChangedFunction(selectedSku);
+            }
+        }
+
+        /**
+         * Call back function to handle SEO removed event
+         * @param seoDTOImpl created SeoDTOImpl
+         * @return nothing
+         */
+        public function seoRemovedCallBack():void {
+            var removedSeo:SeoDTOImpl = selectedSku.seoDTO;
+            selectedSku.seoDTO = null;
+            remoteProductSkuService.update(selectedSku).addResponder(
+                    new AsyncResponder(
+                            function (event:ResultEvent, removedSeo:SeoDTOImpl):void {
+                                //Seo removed from product , so need to eliminate it from table
+                                remoteSeoService.remove(removedSeo.seoId);
+                            },
+                            ShopManagerGlobal.instance.defaultFaultHandler, removedSeo
+                            )
+                    );
+        }
+
+
+        /**
+         * Summary tab selected.
+         * @return nothing
+         */
+        private function skuSummaryTabSelect():void {
+            if (selectedSku != null) {
+                skuSummaryTab.removeAllChildren();
+                var productSkuSummary:ProductSkuSummaryPanel = new ProductSkuSummaryPanel();
+                productSkuSummary.productSku = selectedSku;
+                productSkuSummary.skuChangedFunction = skuChangedFunction;
+                skuSummaryTab.addChild(productSkuSummary);
+            }
+
+        }
+
+
+        /**
+         * Create sku event handler.
+         * @param event event.
+         * @return
+         */
+        protected function createSkuBtnHandler(event:MouseEvent):void {
+            productSkuCreateDialog = ProductSkuCreateDialog(PopUpManager.createPopUp(this, ProductSkuCreateDialog, true));
+            productSkuCreateDialog.saveBtn.addEventListener("click", createNewProductSku);
+            PopUpManager.centerPopUp(productSkuCreateDialog);
+        }
+
+        /**
+         * Handle prouct creation.
+         * @param event event.
+         */
+        private function createNewProductSku(event:Event):void {
+
+            var sku:ProductSkuDTOImpl = productSkuCreateDialog.productSku;
+            sku.productId = product.productId;
+            //TODO add validation
+
+            remoteProductSkuService.create(sku).addResponder(
+                    new AsyncResponder(
+                            function (event:ResultEvent, obj:Object = null):void {
+                                //The product sku was created.
+                                remoteProductSkuService.getAllProductSkus(product.productId);
+                            },
+                            ShopManagerGlobal.instance.defaultFaultHandler));
+
+
+            PopUpManager.removePopUp(productSkuCreateDialog);
+
+        }
+
+
+        /**
+         * Delete sku event handler.
+         * @param event event handler.
+         * @return nothing
+         */
+        protected function deleteSkuBtnHandler(event:MouseEvent):void {
+            Alert.show(
+                    resourceManager.getString('ProductSkuManagmentPanel', 'deleteSkuConfirm'),
+                    resourceManager.getString('ProductSkuManagmentPanel', 'warning'),
+                    Alert.OK | Alert.CANCEL, this, deleteSku, null, Alert.OK);
+
+        }
+
+
+        /**
+         * Perform delete warehouse operation.
+         * @param event close event
+         * @return nothing
+         */
+        private function deleteSku(event:CloseEvent):void {
+            if (event.detail == Alert.OK) {
+                remoteProductSkuService.remove(selectedSku.skuId).addResponder(
+                        new AsyncResponder(
+                                skuDeletedResultHandler,
+                                skuDeleteFaultHandler
+                                )
+                        );
+
+            }
+        }
+
+
+        /**
+         * The product sku was deleted.
+         * @param event event
+         * @param token
+         * @return nothing
+         */
+        private function skuDeleteFaultHandler(event:FaultEvent, token:AsyncToken):void {
+
+            Alert.show(
+                    resourceManager.getString('ProductSkuManagmentPanel', 'skuCanNotBeDeleted'),
+                    resourceManager.getString('ProductSkuManagmentPanel', 'error'));
+
+        }
+
+
+        /**
+         * The product sku was deleted.
+         * @param event event
+         * @param token
+         * @return nothing
+         */
+        private function skuDeletedResultHandler(event:ResultEvent, token:AsyncToken):void {
+            selectedSku = null;
+            remoteProductSkuService.getAllProductSkus(product.productId);
+
+
+            skuSummaryTab.removeAllChildren();
+            skuImagesTab.removeAllChildren();
+            skuAttributesTab.removeAllChildren();
+            skuSeoTab.removeAllChildren();
+
+            Alert.show(
+                    resourceManager.getString('ProductSkuManagmentPanel', 'skuDeleted'),
+                    resourceManager.getString('ProductSkuManagmentPanel', 'info'));
+
+        }
+
+
+        /**
+         * Update sku.
+         * @param sku sku to update
+         * @return noting
+         */
+        public function skuChangedFunction(sku:ProductSkuDTOImpl):void {
+            if (isNaN(sku.skuId) || sku.skuId == 0) {
+                remoteProductSkuService.create(sku);
+            } else {
+                remoteProductSkuService.update(sku);
+            }
+        }
+        ]]>
+	</mx:Script>
+
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteProductSkuService"
+                     destination="remoteProductSkuService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteSeoService"
+                     destination="remoteSeoService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+
+    <mx:VBox x="0" y="0" width="100%" height="100%" id="productSkuManagmenlPanel">
+        <mx:ControlBar width="100%">
+            <mx:Text text="@Resource(bundle='ProductSkuManagmentPanel',key='productSku')"/>
+            <mx:ComboBox id="skusComboBox"
+                         labelField="name"
+                         data="skuId"
+                         prompt="@Resource(bundle='ProductSkuManagmentPanel',key='selectSkuPropmt')"
+                         dataProvider="{remoteProductSkuService.getAllProductSkus.lastResult}"
+                         change="skuSelected(event);"
+                    >
+            </mx:ComboBox>
+            <mx:Button label="@Resource(bundle='ProductSkuManagmentPanel',key='createSku')"
+                       toolTip="@Resource(bundle='ProductSkuManagmentPanel',key='createSkuHint')"
+                       id="createSkuBtn"
+                       click="createSkuBtnHandler(event)"/>
+            <mx:Button label="@Resource(bundle='ProductSkuManagmentPanel',key='deleteSku')"
+                       toolTip="@Resource(bundle='ProductSkuManagmentPanel',key='deleteSkuHint')"
+                       id="deleteSkuBtn"
+                       click="deleteSkuBtnHandler(event)"/>
+        </mx:ControlBar>
+        <mx:TabNavigator width="100%" height="100%" id="skuTabNavigator"
+                         change="onTabClick(event);">
+            <mx:Canvas label="@Resource(bundle='ProductSkuManagmentPanel',key='summary')" width="100%" height="100%"
+                       id="skuSummaryTab"/>
+            <mx:Canvas label="@Resource(bundle='ProductSkuManagmentPanel',key='images')" width="100%" height="100%"
+                       id="skuImagesTab"/>
+            <mx:Canvas label="@Resource(bundle='ProductSkuManagmentPanel',key='attributes')" width="100%" height="100%"
+                       id="skuAttributesTab"/>
+            <mx:Canvas label="@Resource(bundle='ProductSkuManagmentPanel',key='seo')" width="100%" height="100%"
+                       id="skuSeoTab"/>
+            <!--
+                        <mx:Canvas label="@Resource(bundle='ProductSkuManagmentPanel',key='price')" width="100%" height="100%"
+                                   id="skuPriceTab"/>
+                        <mx:Canvas label="@Resource(bundle='ProductSkuManagmentPanel',key='quantity')" width="100%" height="100%"
+                                   id="skuQuantityTab"/>
+            -->
+        </mx:TabNavigator>
+    </mx:VBox>
+
+</mx:Canvas>

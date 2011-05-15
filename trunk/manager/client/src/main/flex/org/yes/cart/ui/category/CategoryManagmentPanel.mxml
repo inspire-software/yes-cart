@@ -1,0 +1,1019 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+           xmlns:controls="controls.*" width="100%" height="100%"
+           creationComplete="init();">
+    <mx:Script>
+
+<![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import org.yes.cart.constants.AttributeGroupNames;
+        import org.yes.cart.impl.AttrValueCategoryDTOImpl;
+        import org.yes.cart.impl.AttributeDTOImpl;
+        import org.yes.cart.impl.CategoryDTOImpl;
+        import org.yes.cart.impl.ProductCategoryDTOImpl;
+        import org.yes.cart.impl.ProductDTOImpl;
+        import org.yes.cart.impl.ProductTypeDTOImpl;
+        import org.yes.cart.impl.SeoDTOImpl;
+        import org.yes.cart.util.UpdateTarget;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+        import org.yes.cart.ui.attributes.EntityAttributeValuesManagmentPanel;
+        import org.yes.cart.ui.product.ProductFinderDialog;
+        import org.yes.cart.ui.seo.SeoPanel;
+
+        import flash.events.Event;
+        import flash.events.MouseEvent;
+
+        import mx.binding.utils.BindingUtils;
+        import mx.binding.utils.ChangeWatcher;
+        import mx.collections.ArrayCollection;
+        import mx.collections.ArrayList;
+        import mx.controls.Alert;
+        import mx.events.CloseEvent;
+        import mx.events.DataGridEvent;
+        import mx.events.DataGridEventReason;
+        import mx.events.FlexEvent;
+        import mx.events.IndexChangedEvent;
+        import mx.events.ListEvent;
+        import mx.events.PropertyChangeEvent;
+        import mx.managers.PopUpManager;
+        import mx.rpc.AsyncResponder;
+        import mx.rpc.AsyncToken;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+        import mx.utils.ObjectUtil;
+
+        private var TAB_SUMMARY_IDX:int = 0;
+        private var TAB_PRODUCTS_IDX:int = 1;
+        private var TAB_SEO_IDX:int = 2;
+        private var TAB_IMAGE_IDX:int = 3;
+        private var TAB_ATTRIB_IDX:int = 4;
+
+
+        [Bindable]
+        private var selectedCategoryDTOImpl:CategoryDTOImpl;
+
+        private var newCategoryPopUp:CategoryCreateDialog;
+        private var selectedProductTypeDTOImpl:ProductTypeDTOImpl;
+        private var productFinderPopUp:ProductFinderDialog;
+        private var productDTOImpl:ProductDTOImpl;
+        private var categoryPropertyChangeWatchers:ArrayList = new ArrayList();
+
+        private var attrValuePanel:EntityAttributeValuesManagmentPanel;
+
+        public function init():void {
+            remoteProductTypeService.getAll();
+            remoteCategoryService.getAll().addResponder(
+                    new AsyncResponder(
+                            getAllResultHandler,
+                            ShopManagerGlobal.instance.defaultFaultHandler));
+        }
+
+
+        /**
+         * Category selection handler
+         * @param event selection event
+         * @return nothing
+         */
+        private function categorySelectedEvent(event:ListEvent):void {
+            selectedCategoryDTOImpl = CategoryDTOImpl(event.currentTarget.selectedItem);
+            Debug.trace("Selected category dto id is :" + selectedCategoryDTOImpl.categoryId);
+            initTabs(categoryTabNavigator.selectedIndex);
+        }
+
+        private function summaryTabSelected():void {
+            if (isNaN(selectedCategoryDTOImpl.productTypeId) || selectedCategoryDTOImpl.productTypeId == 0) {
+                categoryProductTypeComboBox.selectedIndex = -1;
+                selectedProductTypeDTOImpl = null;
+            } else {
+                for each (var candidate:ProductTypeDTOImpl in categoryProductTypeComboBox.dataProvider) {
+                    if (candidate.producttypeId == selectedCategoryDTOImpl.productTypeId) {
+                        selectedProductTypeDTOImpl = candidate;
+                        categoryProductTypeComboBox.selectedItem = candidate;
+                        break;
+                    }
+                }
+            }
+            categoryInfoPanelVisible = true;
+            bingCategoryData();
+
+        }
+
+
+        /**
+         * Select tab handler.
+         * @param event event
+         * @return nothing
+         */
+        private function onTabClick(event:IndexChangedEvent):void {
+            initTabs(event.newIndex);
+        }
+
+
+        private function initTabs(tabIdx:int):void {
+            Debug.trace("categoryTabNavigator.selectedIndex is :" + tabIdx);
+            switch (tabIdx) {
+
+                case TAB_SUMMARY_IDX: {
+                    summaryTabSelected();
+                    break;
+                }
+
+                case TAB_PRODUCTS_IDX: {
+                    assignedProductsTabSelected(null);
+                    break;
+                }
+
+                case TAB_SEO_IDX: {
+                    seoTabSelected(null);
+                    break;
+                }
+
+                case TAB_IMAGE_IDX: {
+                    imagesTabSelected(null);
+                    break;
+                }
+
+                case TAB_ATTRIB_IDX: {
+                    attrValuesTabSelected(null);
+                    break;
+                }
+
+            }
+
+        }
+
+
+        /**
+         * Unbing selected category from UI controls.
+         * @return nothing
+         */
+        private function unbindAll():void {
+            for (var i:int = 0; i < categoryPropertyChangeWatchers.length; i++) {
+                var cw:ChangeWatcher = ChangeWatcher(categoryPropertyChangeWatchers.getItemAt(i));
+                cw.unwatch();
+            }
+            categoryPropertyChangeWatchers.removeAll();
+
+        }
+
+        /**
+         * Bind category to controls.
+         * @return nothing
+         */
+        private function bingCategoryData():void {
+
+            unbindAll();
+
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryNameTextInput, "text", this.selectedCategoryDTOImpl, "name"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryDescriptionTextInput, "text", this.selectedCategoryDTOImpl, "description"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryTemplateTextInput, "text", this.selectedCategoryDTOImpl, "uitemplate"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryRankTextInput, "text", this.selectedCategoryDTOImpl, "rank"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryAvailableFromDateField, "selectedDate", this.selectedCategoryDTOImpl, "availablefrom"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryAvailableTillDateField, "selectedDate", this.selectedCategoryDTOImpl, "availabletill"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryFNByAttributesCheckBox, "selected", this.selectedCategoryDTOImpl, "navigationByAttributes"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryFNByBrandsCheckBox, "selected", this.selectedCategoryDTOImpl, "navigationByBrand"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryFNByPriceCheckBox, "selected", this.selectedCategoryDTOImpl, "navigationByPrice"));
+
+            //categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryProductTypeComboBox, "selectedItem", this.selectedCategoryDTOImpl, "productTypeId"));
+
+
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "name", categoryNameTextInput, "text"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "description", categoryDescriptionTextInput, "text"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "uitemplate", categoryTemplateTextInput, "text"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "rank", categoryRankTextInput, "text"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "availablefrom", categoryAvailableFromDateField, "selectedDate"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "availabletill", categoryAvailableTillDateField, "selectedDate"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "navigationByAttributes", categoryFNByAttributesCheckBox, "selected"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "navigationByBrand", categoryFNByBrandsCheckBox, "selected"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "navigationByPrice", categoryFNByPriceCheckBox, "selected"));
+            //categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "productTypeId", categoryProductTypeComboBox, "selectedItem.producttypeId"));
+
+            // if (!saveBtnVisible) {
+            categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "name", categoryDtoChanged));
+            categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "description", categoryDtoChanged));
+            categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "uitemplate", categoryDtoChanged));
+            categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "rank", categoryDtoChanged));
+            categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "availablefrom", categoryDtoChanged));
+            categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "availabletill", categoryDtoChanged));
+            categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "navigationByAttributes", categoryDtoChanged));
+            categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "navigationByBrand", categoryDtoChanged));
+            categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "navigationByPrice", categoryDtoChanged));
+            categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "productTypeId", categoryDtoChanged));
+            // }
+
+        }
+
+        /**
+         * Enable save button in case if category date is changed
+         * @param event change event
+         * @return nothing
+         */
+        public function categoryDtoChanged(event:PropertyChangeEvent):void {
+            if (!selectedCategoryDTOImpl.changed) {
+                selectedCategoryDTOImpl.changed = true;
+                invalidateCategoryTree();
+            }
+        }
+
+        /**
+         * Repaint category tree control.
+         */
+        private function invalidateCategoryTree():void {
+            var scrollPosition:Number = categoryTree.verticalScrollPosition;
+            var openItems:Object = categoryTree.openItems;
+            categoryTree.expandChildrenOf(categoryTree.firstVisibleItem, false);
+            categoryTree.validateNow();
+            categoryTree.openItems = openItems;
+            categoryTree.validateNow();
+            categoryTree.verticalScrollPosition = scrollPosition;
+
+        }
+
+
+        /**
+         * Default product type in category is changed
+         * @param event product type selected event
+         * @return nothing
+         */
+        private function productTypeChanged(event:Event):void {
+            selectedProductTypeDTOImpl = event.currentTarget.selectedItem;
+            selectedCategoryDTOImpl.productTypeId = selectedProductTypeDTOImpl.producttypeId;
+        }
+
+
+        /**
+         * Save all categories, that marked as changed.
+         * @param event button click event
+         * @return nothing
+         */
+        private function saveChangesToCategoriesClickHandler(event:MouseEvent):void {
+            saveChangedCategories(selectedCategoryDTOImpl);
+        }
+
+        /**
+         * Creation of category tree completed. Expand first (root) item
+         * @return nothing
+         */
+        private function initCategoryTree(evt:FlexEvent):void {
+            try {
+                categoryTree.expandItem(categoryTree.firstVisibleItem, true, true);
+            } catch (errObject:Error) {
+
+            }
+        }
+
+
+        private function getAllResultHandler(event:ResultEvent, obj:Object = null):void {
+            initCategoryTree(null);
+        }
+
+
+        /**
+         * Insert or updated changed category
+         * @param dto category dto
+         * @return nothing
+         */
+        private function saveChangedCategories(dto:CategoryDTOImpl):void {
+            if (dto.changed) {
+                saveChangedCategory(dto);
+            }
+            if (dto.children != null && dto.children.length > 0) {
+                for each (var slaveDto:CategoryDTOImpl in dto.children) {
+                    saveChangedCategories(slaveDto);
+                }
+            }
+        }
+
+        /**
+         * Save single changed category
+         * @param dto category dto
+         * @return nothing
+         */
+        private function saveChangedCategory(dto:CategoryDTOImpl):void {
+            var asyncToken:AsyncToken;
+            if (isNaN(dto.categoryId) || dto.categoryId == 0) {
+                asyncToken = remoteCategoryService.create(dto);
+            } else {
+                asyncToken = remoteCategoryService.update(dto);
+            }
+            asyncToken.addResponder(
+                    new AsyncResponder(
+                            function (event:ResultEvent, dto:CategoryDTOImpl):void {
+                                dto.changed = false;
+                                invalidateCategoryTree();
+                            },
+                            function (event:FaultEvent, obj:Object = null):void {
+                                Alert.show(
+                                        resourceManager.getString('CategoryManagmentPanel', 'cannotSave', [CategoryDTOImpl(obj) , event]),
+                                        resourceManager.getString('CategoryManagmentPanel', 'error')
+                                        );
+                            },
+                            dto));
+
+        }
+
+
+        private function deleteSelectedCategoryClickHandler(event:MouseEvent):void {
+            Alert.show(
+                    resourceManager.getString('CategoryManagmentPanel', 'deleteCategoryConfirm'),
+                    resourceManager.getString('CategoryManagmentPanel', 'warning'),
+                    Alert.OK | Alert.CANCEL, this, deleteSelectedCategory, null, Alert.OK);
+        }
+
+
+        private function deleteSelectedCategory(event:CloseEvent):void {
+            if (event.detail == Alert.OK) {
+                var acyncToken:AsyncToken = remoteCategoryService.remove(selectedCategoryDTOImpl.categoryId);
+                acyncToken.addResponder(
+                        new AsyncResponder(
+                            //result handler
+                                function (event:ResultEvent, obj:Object = null):void {
+                                    selectedCategoryDTOImpl = null;
+                                    remoteCategoryService.getAll().addResponder(
+                                            new AsyncResponder(
+                                                    getAllResultHandler,
+                                                    ShopManagerGlobal.instance.defaultFaultHandler
+                                                    )
+                                            );
+                                    categoryInfoPanelVisible = false;
+                                    Alert.show(
+                                            resourceManager.getString('CategoryManagmentPanel', 'categoryDeleted'),
+                                            resourceManager.getString('CategoryManagmentPanel', 'info'));
+
+                                }
+                                ,
+                            //faulr handler
+                                function (event:FaultEvent, obj:Object):void {
+                                    Alert.show(
+                                            resourceManager.getString('CategoryManagmentPanel', 'categoryCanNotBeDeleted'),
+                                            resourceManager.getString('CategoryManagmentPanel', 'info'));
+
+                                }
+
+                                )
+                        );
+            }
+        }
+
+
+        private function createNewCategoryClickHandler(event:MouseEvent):void {
+            if (isNaN(selectedCategoryDTOImpl.categoryId) || selectedCategoryDTOImpl.categoryId == 0) {
+                Alert.show(
+                        resourceManager.getString('CategoryManagmentPanel', 'canNotAddtoUnsavedCategory'),
+                        resourceManager.getString('CategoryManagmentPanel', 'info'));
+
+            } else {
+                newCategoryPopUp = CategoryCreateDialog(PopUpManager.createPopUp(this, CategoryCreateDialog, true));
+                newCategoryPopUp.saveBtn.addEventListener("click", createNewCategory);
+                PopUpManager.centerPopUp(newCategoryPopUp);
+            }
+        }
+
+
+        /**
+         * Create new category in tree. Category not persisted till user press save.
+         * @param event event
+         * @return nothing
+         */
+        private function createNewCategory(event:Event):void {
+            var newCategory:CategoryDTOImpl = new CategoryDTOImpl();
+            newCategory.name = newCategoryPopUp.categoryName.text;
+            selectedCategoryDTOImpl.addChild(newCategory);
+            unbindAll();
+            categoryTree.expandItem(selectedCategoryDTOImpl, true, true);
+            selectedCategoryDTOImpl = newCategory;
+            newCategory.changed = true;
+            bingCategoryData();
+
+            categoryTree.selectedItem = newCategory;
+            PopUpManager.removePopUp(newCategoryPopUp);
+        }
+
+        /**
+         * Images tab selected.
+         * @param event event
+         * @return nothing.
+         */
+        private function imagesTabSelected(event:Event):void {
+            Debug.trace("INFO Category Images tab selected for category id" + selectedCategoryDTOImpl.categoryId);
+            remoteCategoryService.getEntityAttributes(selectedCategoryDTOImpl.categoryId).addResponder(
+                    new AsyncResponder(
+                        //Service call back with category image values.
+                            function (event:ResultEvent, objh:Object = null):void {
+                                getEntityAttributesResultHandlerInternal(event, imagesTabPanel, acceptImageAttributes);
+                            }
+                            ,
+                            ShopManagerGlobal.instance.defaultFaultHandler
+                            )
+                    );
+        }
+
+
+        /**
+         * Attribute values tab selected.
+         * @param event event
+         * @return nothing.
+         */
+        private function attrValuesTabSelected(event:Event):void {
+            Debug.trace("INFO Category attribute values tab selected for category id" + selectedCategoryDTOImpl.categoryId);
+            remoteCategoryService.getEntityAttributes(selectedCategoryDTOImpl.categoryId).addResponder(
+                    new AsyncResponder(
+                        //Service call back with category attribute values.
+                            function (event:ResultEvent, obj:Object = null):void {
+                                getEntityAttributesResultHandlerInternal(event, attrValuesTabPanel, rejectImageAttributes);
+                            }
+                            ,
+                            ShopManagerGlobal.instance.defaultFaultHandler
+                            )
+                    );
+        }
+
+
+        private function getEntityAttributesResultHandlerInternal(event:ResultEvent, canvas:Canvas, filterFunk:Function):void {
+            attrValuePanel = new EntityAttributeValuesManagmentPanel();
+            attrValuePanel.attrValue = ArrayCollection(event.result);
+
+            attrValuePanel.attributeGroup = AttributeGroupNames.CATEGORY;
+            attrValuePanel.attrValue.filterFunction = filterFunk;
+            attrValuePanel.attrValue.refresh();
+
+            attrValuePanel.attrValueChangedCallBack = attrValueChanged;
+            attrValuePanel.attrValueAddedCallBack = attrValueAdded;
+            attrValuePanel.attrValueDeleteCallBack = attrValueDelete;
+
+            canvas.removeAllChildren();
+            canvas.addChild(attrValuePanel);
+
+        }
+
+        /**
+         * Do not show the image attributes.
+         * @param item item to filter
+         * @return true if need to show item.
+         */
+        private function rejectImageAttributes(item:Object):Boolean {
+            return !acceptImageAttributes(item);
+        }
+
+        /**
+         * Accept only images
+         * @param item item to filter
+         * @return true if need to show item.
+         */
+        private function acceptImageAttributes(item:Object):Boolean {
+            return (item.attributeDTO.etypeName.indexOf("Image") > -1);
+        }
+
+        /**
+         * Delete attribute value.
+         * @param attrValueId attribute value id.
+         */
+        private function attrValueDelete(attrValueId:Number):void {
+            Debug.trace("INFO delete category attribute with id = " + attrValueId);
+            remoteCategoryService.deleteAttributeValue(attrValueId);
+
+        }
+
+
+        /**
+         * Added attribute, that allowe multiple value call back function.
+         * @param attr attribute
+         * @return instane of {@link AttrValueCategoryDTOImpl}
+         */
+        private function attrValueAdded(attr:AttributeDTOImpl):AttrValueCategoryDTOImpl {
+            var attrValue:AttrValueCategoryDTOImpl = new AttrValueCategoryDTOImpl();
+            attrValue.attributeDTO = attr;
+            attrValue.categoryId = selectedCategoryDTOImpl.categoryId;
+            return attrValue;
+        }
+
+
+        /**
+         * Value changed callback function.
+         * @param attrValue  attribute value object.
+         * @param newValue new value
+         * @return nothing
+         */
+        private function attrValueChanged(attrValue:Object, newValue:String, rowIdx:int):void {
+            Debug.inspect(attrValue);
+            var categoryAttrValue:AttrValueCategoryDTOImpl = AttrValueCategoryDTOImpl(attrValue);
+            categoryAttrValue.val = newValue;
+            var asyncToken:AsyncToken;
+            var updateTarget:UpdateTarget;
+            if (isNaN(categoryAttrValue.attrvalueId) || categoryAttrValue.attrvalueId == 0) {
+                // insert new attribute
+                Debug.trace("create new attr value");
+                asyncToken = remoteCategoryService.createEntityAttributeValue(categoryAttrValue);
+                updateTarget = new UpdateTarget(UpdateTarget.NEW, rowIdx);
+            } else {
+                //update
+                Debug.trace("update new attr value");
+                asyncToken = remoteCategoryService.updateEntityAttributeValue(categoryAttrValue);
+                updateTarget = new UpdateTarget(UpdateTarget.UPDATE, rowIdx);
+            }
+            asyncToken.addResponder(
+                    new AsyncResponder(
+                            categoryAttributeUpdatedResultHandler,
+                            ShopManagerGlobal.instance.defaultFaultHandler, updateTarget
+                            )
+                    );
+        }
+
+        /**
+         * Service call back with category attribute values.
+         * @param event event
+         * @param updateTarget update target
+         * @return nothing
+         */
+        private function categoryAttributeUpdatedResultHandler(event:ResultEvent, updateTarget:UpdateTarget):void {
+            Debug.trace("INFO Category attribute value updated result call back " + updateTarget.toString());
+            var obj:Object;
+            if (updateTarget.action == UpdateTarget.NEW) {
+                obj = remoteCategoryService.createEntityAttributeValue.lastResult;
+            } else {
+                obj = remoteCategoryService.updateEntityAttributeValue.lastResult;
+            }
+            Debug.trace("INFO obj is " + obj);
+            attrValuePanel.attrValue.setItemAt(obj, updateTarget.idx);
+        }
+
+
+        /**
+         * Tab withi Seo information selected.
+         * @param event event
+         * @return nothing
+         */
+        private function seoTabSelected(event:Event):void {
+            var seoPanel:SeoPanel = new SeoPanel();
+            seoPanel.seoCreatedCallBack = seoCreatedCallBack;
+            seoPanel.seoRemovedCallBack = seoRemovedCallBack;
+            if (selectedCategoryDTOImpl != null && !isNaN(selectedCategoryDTOImpl.seoId)) {
+                seoPanel.seoId = selectedCategoryDTOImpl.seoId;
+            }
+            seoTabPanel.removeAllChildren();
+            seoTabPanel.addChild(seoPanel);
+        }
+
+        /**
+         * Call back function to handle SEO removed event
+         * @return nothing
+         */
+        public function seoRemovedCallBack():void {
+            Debug.trace("INFO CategoryManagmentPanel seo id set to null for " + selectedCategoryDTOImpl);
+            var removedSeoId:Number = selectedCategoryDTOImpl.seoId;
+            selectedCategoryDTOImpl.seoId = Number.NaN;
+            remoteCategoryService.update(selectedCategoryDTOImpl).addResponder(
+                    new AsyncResponder(
+                        //Seo removed from category, so need to eliminate it from table
+                            function (event:ResultEvent, removedSeoId:Number):void {
+                                Debug.trace("INFO CategoryManagmentPanel category updated, seo " + removedSeoId + " will be removed");
+                                remoteSeoService.remove(removedSeoId);
+                            }
+                            ,
+                            ShopManagerGlobal.instance.defaultFaultHandler, removedSeoId
+                            )
+                    );
+        }
+
+
+        /**
+         * Call back function to handle SEO created event
+         * @param seoDTOImpl created SeoDTOImpl
+         * @return nothing
+         */
+        public function seoCreatedCallBack(seoDTOImpl:SeoDTOImpl):void {
+            if (isNaN(selectedCategoryDTOImpl.seoId) || selectedCategoryDTOImpl.seoId == 0) {
+                selectedCategoryDTOImpl.seoId = seoDTOImpl.seoId;
+                saveChangedCategory(selectedCategoryDTOImpl);
+            }
+        }
+
+        /**
+         * Tab wit assigned products opened.
+         * @param event event
+         * @return nothing
+         */
+        private function assignedProductsTabSelected(event:Event):void {
+            remoteProductService.getProductByCategory(selectedCategoryDTOImpl.categoryId);
+            productDTOImpl = null;
+            unlinkProductVisible = false;
+        }
+
+
+        private var priceNavigationDialog:PriceNavigationDialog;
+
+
+        /**
+         * Open price navigation xml to edit in dialog
+         * @param event
+         * @return nothing
+         */
+        private function openPriceNavigation(event:MouseEvent):void {
+            priceNavigationDialog = PriceNavigationDialog(PopUpManager.createPopUp(this, PriceNavigationDialog, true));
+            priceNavigationDialog.xmlString = selectedCategoryDTOImpl.navigationByPriceTiers;
+            priceNavigationDialog.saveBtn.addEventListener("click", updateCategoryPriceNavigation);
+            PopUpManager.centerPopUp(priceNavigationDialog);
+
+        }
+
+        /**
+         * Update price navigation xml.
+         * @param event
+         * @return nothign
+         */
+        private function updateCategoryPriceNavigation(event:Event):void {
+            selectedCategoryDTOImpl.navigationByPriceTiers = priceNavigationDialog.getXmlString();
+            selectedCategoryDTOImpl.changed = true;
+            invalidateCategoryTree();
+            PopUpManager.removePopUp(priceNavigationDialog);
+        }
+
+
+        /**
+         * Oped product finder dialog
+         * @param event
+         * @return
+         */
+        private function assignProductToCategoryClickHandler(event:MouseEvent):void {
+            productFinderPopUp = ProductFinderDialog(PopUpManager.createPopUp(this, ProductFinderDialog, true));
+            productFinderPopUp.selectProductButton.addEventListener("click", assignSelectedProduct);
+            PopUpManager.centerPopUp(productFinderPopUp);
+        }
+
+        /**
+         * Handle selected product from finder dialog and assign it to category.
+         * @param event event
+         * @return nothing
+         */
+        private function assignSelectedProduct(event:Event):void {
+            var productCategoryDTOImpl:ProductCategoryDTOImpl = new ProductCategoryDTOImpl();
+            productCategoryDTOImpl.productId = productFinderPopUp.productDTOImpl.productId;
+            productCategoryDTOImpl.categoryId = selectedCategoryDTOImpl.categoryId;
+            productCategoryDTOImpl.rank = 0;
+            PopUpManager.removePopUp(productFinderPopUp);
+            remoteProductCategoryService.create(productCategoryDTOImpl).addResponder(
+                    new AsyncResponder(
+                            productAssignedResultHandler,
+                            productAssignedFaultHandler
+                            )
+                    );
+        }
+
+        /**
+         * Product assigned call back.
+         * @param event
+         * @param token
+         * @return
+         */
+        function productAssignedResultHandler(event:ResultEvent, obj:Object = null):void {
+            assignedProductsTabSelected(null);
+        }
+
+        /**
+         * Product assigned call back.
+         * @param event
+         * @param token
+         * @return
+         */
+        private function productAssignedFaultHandler(event:FaultEvent, obj:Object = null):void {
+            Alert.show(
+                    event.toString(),
+                    resourceManager.getString('CategoryManagmentPanel', 'warning'));
+        }
+
+        /**
+         * Handle item selection to allow edit/remove.
+         * @param event event
+         * @return nothing
+         */
+        private function productSelectedClickHandler(event:ListEvent):void {
+            productDTOImpl = event.currentTarget.selectedItem;
+            unlinkProductVisible = true;
+        }
+
+        /**
+         *
+         * @param event
+         * @return
+         */
+        private function removeProductFromCategoryClickHandler(event:MouseEvent):void {
+            Alert.show(
+                    resourceManager.getString('CategoryManagmentPanel', 'deleteProductFromCategoryConfirm'),
+                    resourceManager.getString('CategoryManagmentPanel', 'warning'),
+                    Alert.OK | Alert.CANCEL, this, removeSelectedProductFromCategory, null, Alert.OK);
+        }
+
+        /**
+         * Unlink product from current category.
+         * @param event event
+         * @return nothing
+         */
+        private function removeSelectedProductFromCategory(event:CloseEvent):void {
+            if (event.detail == Alert.OK) {
+                var asyncToken:AsyncToken = remoteProductCategoryService.removeByCategoryProductIds(
+                        selectedCategoryDTOImpl.categoryId,
+                        productDTOImpl.productId);
+                asyncToken.addResponder(new AsyncResponder(productAssignedResultHandler, productAssignedFaultHandler));
+                productDTOImpl = null;
+                unlinkProductVisible = false;
+            }
+        }
+
+        /**
+         * Product rank in category label function
+         * @param item product dto
+         * @param column column
+         * @return string represenation of rank
+         */
+        private function rankLabelFunction(item:Object, column:DataGridColumn):String {
+            var productDTO:ProductDTOImpl = ProductDTOImpl(item);
+            return productDTO.getRank(selectedCategoryDTOImpl.categoryId).toString();
+        }
+
+        /**
+         * Rank sort function
+         * @param itemA product dto
+         * @param itemB product dto
+         * @return @see ObjectUtil # numericCompare
+         */
+        private function rankCompareFunction(itemA:Object, itemB:Object):int {
+
+            var productDTO_1:ProductDTOImpl = ProductDTOImpl(itemA);
+            var productDTO_2:ProductDTOImpl = ProductDTOImpl(itemB);
+
+            return ObjectUtil.numericCompare(
+                    productDTO_1.getRank(selectedCategoryDTOImpl.categoryId),
+                    productDTO_2.getRank(selectedCategoryDTOImpl.categoryId));
+        }
+
+        /**
+         * Assigned product to category edited.
+         * @param event grid event.
+         * @return nothing
+         */
+        private function rankEditEnd(event:DataGridEvent):void {
+            if (event.reason == DataGridEventReason.CANCELLED) {
+                return; // Do not update cell.
+            }
+
+            event.preventDefault(); // Disable copying data back to the control.
+
+            var textInput:TextInput = TextInput(DataGrid(event.target).itemEditorInstance);
+            Debug.trace("New rank value is " + textInput.text);
+
+            var product:ProductDTOImpl = DataGrid(event.target).dataProvider[event.rowIndex];
+            Debug.trace("Product is " + product);
+
+            var productCategory:ProductCategoryDTOImpl = product.getProductCategoryDTO(selectedCategoryDTOImpl.categoryId);
+            if (productCategory != null) {
+                productCategory.rank = Number(textInput.text);
+                Debug.trace("Value set to  " + productCategory);
+                remoteProductCategoryService.update(productCategory);
+            }
+
+            DataGrid(event.target).destroyItemEditor(); // Close the cell editor.
+            DataGrid(event.target).dataProvider.itemUpdated(event.itemRenderer.data); // Notify the list control to update its display.
+        }
+        ]]>
+
+    </mx:Script>
+    <mx:RemoteObject showBusyCursor="true" id="remoteCategoryService" destination="remoteCategoryService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteProductService" destination="remoteProductService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteProductTypeService" destination="remoteProductTypeService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteProductCategoryService" destination="remoteProductCategoryService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteSeoService" destination="remoteSeoService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+
+    <mx:Boolean id="categoryInfoPanelVisible">false</mx:Boolean>
+    <mx:Boolean id="unlinkProductVisible">false</mx:Boolean>
+
+
+    <mx:VDividedBox x="0" y="0" width="100%" height="100%" id="mainPanel">
+        <mx:VBox width="100%" height="100%">
+            <mx:ControlBar width="100%">
+                <mx:Label text="@Resource(bundle='CategoryManagmentPanel',key='categories')"/>
+
+                <mx:Button enabled="{categoryInfoPanelVisible}"
+                           label="@Resource(bundle='CategoryManagmentPanel',key='addCategory')"
+                           toolTip="@Resource(bundle='CategoryManagmentPanel',key='addCategoryHint')"
+                           click="createNewCategoryClickHandler(event)"
+                        />
+                <mx:Button enabled="{categoryInfoPanelVisible}"
+                           label="@Resource(bundle='CategoryManagmentPanel',key='deleteCategory')"
+                           toolTip="@Resource(bundle='CategoryManagmentPanel',key='deleteCategoryHint')"
+                           click="deleteSelectedCategoryClickHandler(event)"
+                        />
+            </mx:ControlBar>
+            <mx:HDividedBox x="0" y="0" width="100%" height="100%">
+                <mx:Tree id="categoryTree" height="100%" width="208"
+                         labelField="name"
+                         dataProvider="{remoteCategoryService.getAll.lastResult}"
+                         change="categorySelectedEvent(event);"
+                         itemRenderer="org.yes.cart.ui.category.CategoryTreeItemRenderer"
+                        >
+
+                </mx:Tree>
+                <!--TODO http://blog.flexexamples.com/2007/11/15/creating-a-custom-icon-function-on-a-flex-tree-control/-->
+
+
+                <mx:TabNavigator id="categoryTabNavigator" change="onTabClick(event);" width="100%"
+                                 height="100%"
+                                 visible="{categoryInfoPanelVisible}">
+
+
+                    <mx:Canvas label="@Resource(bundle='CategoryManagmentPanel',key='summary')" x="0"
+                               y="0" width="100%" height="100%" id="categoryInfoPanel">
+                        <mx:VBox width="100%" height="100%">
+                            <mx:Form>
+                                <mx:FormItem width="100%"
+                                             label="@Resource(bundle='CategoryManagmentPanel',key='name')">
+                                    <mx:TextInput id="categoryNameTextInput" width="227"/>
+                                </mx:FormItem>
+                                <mx:FormItem width="100%"
+                                             label="@Resource(bundle='CategoryManagmentPanel',key='description')">
+                                    <mx:TextInput id="categoryDescriptionTextInput" height="54"
+                                                  width="227"/>
+                                </mx:FormItem>
+                                <mx:FormItem width="100%"
+                                             label="@Resource(bundle='CategoryManagmentPanel',key='templateVariation')">
+                                    <mx:TextInput id="categoryTemplateTextInput" width="227"/>
+                                </mx:FormItem>
+                                <mx:FormItem width="100%"
+                                             label="@Resource(bundle='CategoryManagmentPanel',key='availableFrom')">
+                                    <mx:HBox>
+                                        <mx:DateField id="categoryAvailableFromDateField" width="125"/>
+                                        <mx:Button
+                                                visible="{categoryAvailableFromDateField.selectedDate != null}"
+                                                label="@Resource(bundle='CategoryManagmentPanel',key='clearDate')"
+                                                toolTip="@Resource(bundle='CategoryManagmentPanel',key='clearFromDate')"
+                                                click="categoryAvailableFromDateField.selectedDate = null;"/>
+                                    </mx:HBox>
+                                </mx:FormItem>
+                                <mx:FormItem width="100%"
+                                             label="@Resource(bundle='CategoryManagmentPanel',key='availableTill')">
+                                    <mx:HBox>
+                                        <mx:DateField id="categoryAvailableTillDateField" width="125"/>
+                                        <mx:Button
+                                                visible="{categoryAvailableTillDateField.selectedDate != null}"
+                                                label="@Resource(bundle='CategoryManagmentPanel',key='clearDate')"
+                                                toolTip="@Resource(bundle='CategoryManagmentPanel',key='clearTillDate')"
+                                                click="categoryAvailableTillDateField.selectedDate = null;"/>
+                                    </mx:HBox>
+                                </mx:FormItem>
+                                <mx:FormItem width="100%"
+                                             label="@Resource(bundle='CategoryManagmentPanel',key='rank')">
+                                    <mx:TextInput id="categoryRankTextInput" width="227"/>
+                                </mx:FormItem>
+                                <mx:FormItem width="100%"
+                                             label="@Resource(bundle='CategoryManagmentPanel',key='filteredNavigation')">
+                                    <mx:VBox width="100%" height="100%">
+                                        <mx:CheckBox id="categoryFNByAttributesCheckBox"
+                                                     label="@Resource(bundle='CategoryManagmentPanel',key='byAttr')"
+                                                     toolTip="@Resource(bundle='CategoryManagmentPanel',key='byAttrHint')"/>
+                                        <mx:CheckBox id="categoryFNByBrandsCheckBox"
+                                                     label="@Resource(bundle='CategoryManagmentPanel',key='byBrands')"
+                                                     toolTip="@Resource(bundle='CategoryManagmentPanel',key='byBrandsHint')"/>
+                                        <mx:CheckBox id="categoryFNByPriceCheckBox"
+                                                     label="@Resource(bundle='CategoryManagmentPanel',key='byPrice')"
+                                                     toolTip="@Resource(bundle='CategoryManagmentPanel',key='byPriceHint')"/>
+                                    </mx:VBox>
+
+                                </mx:FormItem>
+                                <mx:FormItem width="100%"
+                                             label="@Resource(bundle='CategoryManagmentPanel',key='priceTiers')"
+                                             enabled="{categoryFNByPriceCheckBox.selected}">
+                                    <mx:Button
+                                            label="@Resource(bundle='CategoryManagmentPanel',key='priceTiersEdit')"
+                                            toolTip="@Resource(bundle='CategoryManagmentPanel',key='priceTiersEditHint')"
+                                            click="openPriceNavigation(event);"
+
+                                            />
+                                </mx:FormItem>
+                                <mx:FormItem width="100%"
+                                             label="@Resource(bundle='CategoryManagmentPanel',key='productType')">
+                                    <mx:HBox>
+                                        <mx:ComboBox id="categoryProductTypeComboBox" width="227"
+                                                     dataProvider="{remoteProductTypeService.getAll.lastResult}"
+                                                     labelField="name"
+                                                     data="producttypeId"
+                                                     prompt="@Resource(bundle='CategoryManagmentPanel',key='selectTypePropmt')"
+                                                     change="productTypeChanged(event)"
+                                                />
+                                        <mx:Button
+                                                visible="{categoryProductTypeComboBox.selectedIndex != -1}"
+                                                label="@Resource(bundle='CategoryManagmentPanel',key='clearType')"
+                                                toolTip="@Resource(bundle='CategoryManagmentPanel',key='clearTypeHint')"
+                                                click="categoryProductTypeComboBox.selectedIndex = -1; selectedProductTypeDTOImpl = null; selectedCategoryDTOImpl.productTypeId = null;"
+                                                />
+                                    </mx:HBox>
+
+                                </mx:FormItem>
+                            </mx:Form>
+                            <mx:ControlBar horizontalAlign="right">
+                                <mx:Button id="saveBtn"
+                                           enabled="{selectedCategoryDTOImpl != null &amp;&amp; selectedCategoryDTOImpl.changed}"
+                                           click="saveChangesToCategoriesClickHandler(event)"
+                                           label="@Resource(bundle='CategoryManagmentPanel',key='save')"
+                                           toolTip="@Resource(bundle='CategoryManagmentPanel',key='saveHint')"/>
+                            </mx:ControlBar>
+                        </mx:VBox>
+                    </mx:Canvas>
+
+                    <mx:Canvas id="assignedProductsPanel"
+                               label="@Resource(bundle='CategoryManagmentPanel',key='products')"
+                               width="100%" height="100%">
+
+                        <mx:VBox width="100%" height="233">
+                            <mx:ControlBar width="100%">
+                                <mx:Button
+                                        label="@Resource(bundle='CategoryManagmentPanel',key='addProduct')"
+                                        toolTip="@Resource(bundle='CategoryManagmentPanel',key='addProductHint')"
+                                        click="assignProductToCategoryClickHandler(event)"
+                                        />
+                                <mx:Button
+                                        label="@Resource(bundle='CategoryManagmentPanel',key='removeProduct')"
+                                        toolTip="@Resource(bundle='CategoryManagmentPanel',key='removeProductHint')"
+                                        enabled="{unlinkProductVisible}"
+                                        click="removeProductFromCategoryClickHandler(event)"
+                                        />
+                            </mx:ControlBar>
+                            <mx:DataGrid id="assignedProductsGrid"
+                                         editable="true"
+                                         width="100%" height="100%"
+                                         dataProvider="{remoteProductService.getProductByCategory.lastResult}"
+                                         itemClick="productSelectedClickHandler(event)"
+                                         itemEditEnd="rankEditEnd(event);"
+                                    >
+                                <mx:columns>
+                                    <mx:DataGridColumn editable="false"
+                                                       width="50"
+                                                       headerText="@Resource(bundle='CategoryManagmentPanel',key='productId')"
+                                                       dataField="productId"/>
+                                    <mx:DataGridColumn editable="false"
+                                                       width="120"
+                                                       headerText="@Resource(bundle='CategoryManagmentPanel',key='code')"
+                                                       dataField="code"/>
+                                    <mx:DataGridColumn editable="true"
+                                                       width="65"
+                                                       headerText="@Resource(bundle='CategoryManagmentPanel',key='rank')"
+                                                       labelFunction="rankLabelFunction"
+                                                       sortCompareFunction="rankCompareFunction"/>
+                                    <mx:DataGridColumn
+                                            editable="false"
+                                            headerText="@Resource(bundle='CategoryManagmentPanel',key='name')"
+                                            dataField="name"/>
+                                    <!--
+                                                                                        <mx:DataGridColumn headerText="@Resource(bundle='CategoryManagmentPanel',key='availablefrom')" dataField="availablefrom"/>
+                                                                                        <mx:DataGridColumn headerText="@Resource(bundle='CategoryManagmentPanel',key='availabletill')" dataField="availabletill"/>
+                                    -->
+                                </mx:columns>
+                            </mx:DataGrid>
+
+                        </mx:VBox>
+
+                    </mx:Canvas>
+                    <mx:Canvas id="seoTabPanel"
+                               label="@Resource(bundle='CategoryManagmentPanel',key='seo')" width="100%"
+                               height="100%">
+                    </mx:Canvas>
+                    <mx:Canvas id="imagesTabPanel"
+                               label="@Resource(bundle='CategoryManagmentPanel',key='image')"
+                               width="100%"
+                               height="100%">
+                    </mx:Canvas>
+                    <mx:Canvas id="attrValuesTabPanel"
+                               label="@Resource(bundle='CategoryManagmentPanel',key='attr.values')"
+                               width="100%"
+                               height="100%">
+                    </mx:Canvas>
+                </mx:TabNavigator>
+
+            </mx:HDividedBox>
+        </mx:VBox>
+
+
+    </mx:VDividedBox>
+
+
+</mx:Canvas>

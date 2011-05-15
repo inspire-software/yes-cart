@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="350" height="250"
+                title="@Resource(bundle='BrandManagementPanel',key='brand')" showCloseButton="true"
+                close="PopUpManager.removePopUp(this)"
+           creationComplete="init();">
+
+        <mx:Form x="0" y="0">
+            <mx:FormItem label="@Resource(bundle='BrandManagementPanel',key='name')">
+                <mx:TextInput id="nameTextImput" width="200"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='BrandManagementPanel',key='description')">
+                <mx:TextArea id="descriptionTextInput" width="200"/>
+            </mx:FormItem>
+        </mx:Form>
+
+        <mx:ControlBar width="100%" horizontalAlign="right">
+            <mx:Button id="cancelBtn" label="@Resource(bundle='BrandManagementPanel',key='cancel')"
+                       click="PopUpManager.removePopUp(this)"
+                       width="94"/>
+            <mx:Button id="saveBtn" label="@Resource(bundle='BrandManagementPanel',key='save')" width="94"/>
+
+        </mx:ControlBar>
+
+        <mx:Script>
+
+            <![CDATA[
+            import org.yes.cart.impl.BrandDTOImpl;
+
+            import mx.binding.utils.BindingUtils;
+            import mx.managers.PopUpManager;
+
+            [Bindable]
+            public var brandDTOImpl:BrandDTOImpl;
+
+            private function init():void {
+
+                BindingUtils.bindProperty(nameTextImput, "text", brandDTOImpl, "name");
+                BindingUtils.bindProperty(descriptionTextInput, "text", brandDTOImpl, "description");
+
+                BindingUtils.bindProperty(brandDTOImpl, "name", nameTextImput, "text");
+                BindingUtils.bindProperty(brandDTOImpl, "description", descriptionTextInput, "text");
+
+
+            }
+            ]]>
+    </mx:Script>
+
+</mx:TitleWindow>
