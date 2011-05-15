@@ -19,7 +19,7 @@ Ant http://ant.apache.org/bindownload.cgi
 
 Tomcat at least 5.5.28 version http://tomcat.apache.org/
 
-SVN (with *svnwcrev*) or Tortuse
+SVN or Tortoise. svnwcrev with applied http://dl.dropbox.com/u/26657232/svnwcrev-2011-05-15.diff patch for linux users. The windows user use SubWCRev from Tortoise  
 
 Oracle XE or MySQL(see WAMP/LAMP in nice to have section) or MSSQL
 
