@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>yes-cart</artifactId>
+        <groupId>org.yes</groupId>
+        <version>1.0</version>
+    </parent>
+    <groupId>org.yes</groupId>
+    <artifactId>yes-manager-server</artifactId>
+    <version>1.x-SNAPSHOT</version>
+    <packaging>war</packaging>
+    <name>Yes cart manager server</name>
+    <description>Yes cart manaer server</description>
+    <dependencies>
+
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>core</artifactId>
+            <version>1.x-SNAPSHOT</version>
+        </dependency>
+
+        <!-- ##################################################### core modules ############################################### -->
+        <!--dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>core-module-bulkimport-csv</artifactId>
+            <version>1.x-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>core-module-bulkimport-null</artifactId>
+            <version>1.x-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>core-module-bulkimportimage</artifactId>
+            <version>1.x-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>core-module-bulkimportimage-null</artifactId>
+            <version>1.x-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency-->
+
+        <!-- ##################################################### core modules end ############################################### -->
+
+
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>domain-api</artifactId>
+            <version>1.x-SNAPSHOT</version>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.5.8</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.5.8</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.adobe.blazeds</groupId>
+            <artifactId>blazeds-remoting</artifactId>
+            <version>${blazeds.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.adobe.blazeds</groupId>
+            <artifactId>blazeds-common</artifactId>
+            <version>${blazeds.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.adobe.blazeds</groupId>
+            <artifactId>blazeds-core</artifactId>
+            <version>${blazeds.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.adobe.blazeds</groupId>
+            <artifactId>blazeds-opt</artifactId>
+            <version>${blazeds.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.adobe.blazeds</groupId>
+            <artifactId>blazeds-proxy</artifactId>
+            <version>${blazeds.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${spring.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.flex</groupId>
+            <artifactId>spring-flex</artifactId>
+            <version>1.0.3.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>backport-util-concurrent</groupId>
+            <artifactId>backport-util-concurrent</artifactId>
+            <version>${backport-util-concurrent.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql-connector.version}</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <configuration>
+                        <forkMode>pertest</forkMode>
+                        <argLine>-Xms512m -Xmx1024m</argLine>
+                        <testFailureIgnore>false</testFailureIgnore>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+    </build>
+
+    <properties>
+        <backport-util-concurrent.version>3.1</backport-util-concurrent.version>
+        <blazeds.version>3.2.0.3978</blazeds.version>
+        <junit.version>4.0</junit.version>
+        <servlet-api.version>2.5</servlet-api.version>
+        <spring.version>3.0.5.RELEASE</spring.version>
+        <spring-security.version>3.0.3.RELEASE</spring-security.version>
+        <mysql-connector.version>5.1.13</mysql-connector.version>
+    </properties>
+
+</project>

@@ -33,6 +33,7 @@
         <module>core-modules/core-module-payment-base</module>
         <module>core-modules/core-module-payment-capp</module>
         <module>core</module>
+        <module>manager/server</module>
     </modules>
 
     <build>
