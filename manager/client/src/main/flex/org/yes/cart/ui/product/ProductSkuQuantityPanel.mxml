@@ -1,0 +1,276 @@
+<?xml version="1.0" ?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" creationComplete="init();">
+
+    <mx:VBox width="100%" height="100%">
+        <mx:Form x="0" y="0">
+            <mx:FormItem label="@Resource(bundle='ProductManagmentPanel',key='product')">
+                <mx:Label id="productCodeName"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='ProductManagmentPanel',key='warehouse')">
+                <mx:HBox>
+                    <mx:ComboBox id="warehouseComboBox"
+                                 labelField="name"
+                                 dataProvider="{remoteWarehouseService.getAll.lastResult}"
+                                 change="warehouseChanged(event)"
+                                 prompt="@Resource(bundle='ProductManagmentPanel',key='selectWarehousePropmt')">
+                    </mx:ComboBox>
+                </mx:HBox>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='ProductManagmentPanel',key='quantity')">
+                <mx:HBox>
+                    <mx:Button id="addQuantityBtn"
+                               label="@Resource(bundle='ProductManagmentPanel',key='addQuantity')"
+                               toolTip="@Resource(bundle='ProductManagmentPanel',key='addQuantityHint')"
+                               enabled="{selectedWarehouse != null}"
+                               click="addQuantity(event);"
+                            />
+                    <mx:Button id="editQuantityBtn"
+                               label="@Resource(bundle='ProductManagmentPanel',key='editQuantity')"
+                               toolTip="@Resource(bundle='ProductManagmentPanel',key='editQuantityHint')"
+                               click="editQuantity(event);"
+                               enabled="{selectedSkuWarehouse != null}"
+
+                            />
+                    <mx:Button id="deleteQuantityBtn"
+                               label="@Resource(bundle='ProductManagmentPanel',key='deleteQuantity')"
+                               toolTip="@Resource(bundle='ProductManagmentPanel',key='deleteQuantityHint')"
+                               enabled="{selectedSkuWarehouse != null}"
+                               click="deleteQuantity(event);"
+                            />
+                </mx:HBox>
+            </mx:FormItem>
+
+        </mx:Form>
+        <mx:DataGrid
+                id="quantityDataGrid"
+                x="0" y="0" width="100%" height="100%" editable="false"
+                dataProvider="{remoteWarehouseService.findProductSkusOnWarehouse.lastResult}"
+                itemClick="quantitySelected(event)">
+            <mx:columns>
+                <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagmentPanel',key='id')"
+                                   dataField="skuWarehouseId" editable="false"/>
+                <mx:DataGridColumn width="120" headerText="@Resource(bundle='ProductManagmentPanel',key='skuCode')"
+                                   dataField="skuCode" editable="false"/>
+                <mx:DataGridColumn width="300" headerText="@Resource(bundle='ProductManagmentPanel',key='skuName')"
+                                   dataField="skuName" editable="false"/>
+                <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagmentPanel',key='quantity')"
+                                   dataField="quantity" editable="false"
+                                   labelFunction="quantityLabelFunction"
+
+                        />
+            </mx:columns>
+        </mx:DataGrid>
+    </mx:VBox>
+
+    <mx:NumberFormatter
+            id="quantityFormater"
+            useThousandsSeparator="false"
+            precision="0"
+            />
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteWarehouseService" destination="remoteWarehouseService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteProductService" destination="remoteProductService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteProductSkuService"
+                     destination="remoteProductSkuService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+
+    <mx:Script><![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import org.yes.cart.impl.ProductDTOImpl;
+        import org.yes.cart.impl.SkuWarehouseDTOImpl;
+        import org.yes.cart.impl.WarehouseDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        import flash.events.MouseEvent;
+
+        import mx.controls.Alert;
+        import mx.events.CloseEvent;
+        import mx.events.ListEvent;
+        import mx.managers.PopUpManager;
+        import mx.rpc.AsyncResponder;
+        import mx.rpc.AsyncToken;
+        import mx.rpc.events.ResultEvent;
+
+        public var productId:Number;
+        [Bindable]
+        public var product:ProductDTOImpl;
+
+        [Bindable]
+        private var selectedWarehouse:WarehouseDTOImpl;
+
+        [Bindable]
+        private var selectedSkuWarehouse:SkuWarehouseDTOImpl;
+
+
+        private function init():void {
+            remoteProductSkuService.getAllProductSkus(productId);
+            //TODO future get warehouses assigned to shop.
+            remoteWarehouseService.getAll().addResponder(
+                    new AsyncResponder(
+                            function (event:ResultEvent, obj:Object = null):void {
+                                //Warehouses obtained.
+                                remoteProductService.getById(productId).addResponder(new AsyncResponder(
+                                        function (event:ResultEvent, obj:Object = null):void {
+                                            //Fresh product selected from service.
+                                            product = ProductDTOImpl(event.result);
+                                            productCodeName.text = product.code + ' ' + product.name;
+
+                                        },
+                                        ShopManagerGlobal.instance.defaultFaultHandler));
+                            },
+                            ShopManagerGlobal.instance.defaultFaultHandler
+                            )
+                    );
+
+        }
+
+
+        /**
+         * Sku warehouse object selected in grid.
+         * @param event event
+         * @return nothing
+         */
+        private function quantitySelected(event:ListEvent):void {
+            selectedSkuWarehouse = event.currentTarget.selectedItem;
+        }
+
+        /**
+         * Perform the dele sku on warehouse operation.
+         * @param event
+         * @return nothing
+         */
+        private function deleteQuantity(event:MouseEvent):void {
+            Alert.show(
+                    resourceManager.getString('ProductManagmentPanel', 'deleteQuantityConfirm'),
+                    resourceManager.getString('ProductManagmentPanel', 'warning'),
+                    Alert.OK | Alert.CANCEL, this, deleteQuantityServiceCall, null, Alert.OK);
+        }
+
+        private function deleteQuantityServiceCall(event:CloseEvent):void {
+            if (event.detail == Alert.OK) {
+
+                remoteWarehouseService.removeSkuOnWarehouse(selectedSkuWarehouse.skuWarehouseId).addResponder(
+                        new AsyncResponder(
+                                skusOnWarehouseChanged,
+                                ShopManagerGlobal.instance.defaultFaultHandler));
+                selectedSkuWarehouse = null;
+            }
+        }
+
+        /**
+         * Warehouse changed.
+         * @param event
+         * @return
+         */
+        private function skusOnWarehouseChanged(event:ResultEvent, asyncToken:AsyncToken):void {
+            remoteWarehouseService.findProductSkusOnWarehouse(productId, selectedWarehouse.warehouseId);
+
+        }
+
+
+        private var createQuantityDialog:CreateQuantityDialog = null;
+
+        /**
+         * Edit SKU qty on warehouse
+         * @param event
+         * @return
+         */
+        private function editQuantity(event:MouseEvent):void {
+            createQuantityDialog = CreateQuantityDialog(PopUpManager.createPopUp(this, CreateQuantityDialog, true));
+            createQuantityDialog.skuComboBox.dataProvider = remoteProductSkuService.getAllProductSkus.lastResult;
+            createQuantityDialog.saveBtn.addEventListener("click", updateSkuWarehouseServiceCall);
+            createQuantityDialog.editSkuQuantity(selectedSkuWarehouse);
+            PopUpManager.centerPopUp(createQuantityDialog);
+
+
+        }
+
+        /**
+         * Add quantity of SKU to warehouse.
+         * @param event
+         * @return
+         */
+        private function addQuantity(event:MouseEvent):void {
+            createQuantityDialog = CreateQuantityDialog(PopUpManager.createPopUp(this, CreateQuantityDialog, true));
+            createQuantityDialog.skuComboBox.dataProvider = remoteProductSkuService.getAllProductSkus.lastResult;
+            createQuantityDialog.saveBtn.addEventListener("click", createSkuWarehouseServiceCall);
+            createQuantityDialog.createSkuQuantity();
+            PopUpManager.centerPopUp(createQuantityDialog);
+        }
+
+
+        /**
+         * Call service to update the sku price
+         * @param event
+         * @return
+         */
+        private function createSkuWarehouseServiceCall(event:Event):void {
+
+            var swh:SkuWarehouseDTOImpl = createQuantityDialog.selectedSkuWarehouse;
+            swh.warehouseId = selectedWarehouse.warehouseId;
+            Debug.trace("INFO swh to create is " + swh);
+
+            remoteWarehouseService.createSkuOnWarehouse(swh).addResponder(
+                    new AsyncResponder(
+                            skusOnWarehouseChanged,
+                            ShopManagerGlobal.instance.defaultFaultHandler
+                            )
+                    );
+            PopUpManager.removePopUp(createQuantityDialog);
+            createQuantityDialog = null;
+
+        }
+
+        /* Call service to update the sku price
+         * @param event
+         * @return
+         */
+        private function updateSkuWarehouseServiceCall(event:Event):void {
+
+            var swh:SkuWarehouseDTOImpl = createQuantityDialog.selectedSkuWarehouse;
+            remoteWarehouseService.updateSkuOnWarehouse(swh).addResponder(
+                    new AsyncResponder(
+                            skusOnWarehouseChanged,
+                            ShopManagerGlobal.instance.defaultFaultHandler));
+            PopUpManager.removePopUp(createQuantityDialog);
+            createQuantityDialog = null;
+
+        }
+
+
+        /**
+         * Quantity label function.
+         * @param item row
+         * @param column column
+         * @return string representatin of qty
+         */
+        public function quantityLabelFunction(item:Object, column:DataGridColumn):String {
+            return quantityFormater.format(item.quantity);
+        }
+
+
+        /**
+         * Warehouse changed.
+         * @param event
+         * @return
+         */
+        private function warehouseChanged(event:Event):void {
+
+            selectedWarehouse = event.currentTarget.selectedItem;
+            remoteWarehouseService.findProductSkusOnWarehouse(productId, selectedWarehouse.warehouseId);
+
+        }
+        ]]></mx:Script>
+</mx:Canvas>

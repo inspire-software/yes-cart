@@ -1,0 +1,206 @@
+<?xml version="1.0" ?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:npa="org.yes.cart.util.*"
+                xmlns:datetime="com.georg.datetime.*" xmlns:georg="com.georg.*" layout="absolute"
+                width="300"
+                height="330"
+                title="@Resource(bundle='ProductManagmentPanel',key='createPriceTier')"
+                showCloseButton="true" close="PopUpManager.removePopUp(this)"
+                creationComplete="init();"
+        >
+
+    <mx:Form>
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagmentPanel',key='sku')">
+            <mx:ComboBox id="skuComboBox"
+                         change="skuSelected(event)"
+                         width="160"
+                         labelField="name"
+                         prompt="@Resource(bundle='ProductManagmentPanel',key='selectSku')"
+                    />
+        </mx:FormItem>
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagmentPanel',key='quantity')">
+            <mx:TextInput id="quantityTextInput" width="160" change="priceFormChanged(null);"
+                          enabled="{selectedSku != null}"/>
+        </mx:FormItem>
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagmentPanel',key='listPrice')">
+            <mx:TextInput id="listPriceTextInput" width="160" change="priceFormChanged(null);"
+                          enabled="{selectedSku != null}"/>
+        </mx:FormItem>
+
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagmentPanel',key='salePrice')">
+            <mx:TextInput id="salePriceTextInput" width="160" change="priceFormChanged(null);"
+                          enabled="{selectedSku != null}"/>
+        </mx:FormItem>
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagmentPanel',key='saleFrom')">
+            <georg:DateTimeField id="saleFromDateField" width="160" enabled="{selectedSku != null}" change="priceFormChanged(event);"/>
+        </mx:FormItem>
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagmentPanel',key='saleTill')">
+            <georg:DateTimeField id="saleTillDateField" width="160" enabled="{selectedSku != null}" change="priceFormChanged(event);"/>
+        </mx:FormItem>
+
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagmentPanel',key='minimalPrice')">
+            <mx:TextInput id="minimalPriceTextInput" width="160" change="priceFormChanged(null);"
+                          enabled="{selectedSku != null}"/>
+        </mx:FormItem>
+
+
+
+    </mx:Form>
+    <npa:NotInValidator
+            id="quantityValidator"
+            errorMessage="@Resource(bundle='ProductManagmentPanel',key='quantityNotAllowed')"
+            source="{quantityTextInput}"
+            property="text"
+            />
+
+    <mx:NumberValidator id="quantityValidator2" source="{quantityTextInput}" property="text"
+                        minValue="1" allowNegative="false" domain="int"/>
+
+    <mx:NumberValidator id="listPriceValidator" source="{listPriceTextInput}" property="text"
+                        allowNegative="false" decimalSeparator="."/>
+
+    <mx:NumberValidator id="salePriceValidator" source="{salePriceTextInput}" property="text"
+                        allowNegative="false" decimalSeparator="." required="false"/>
+
+    <mx:NumberValidator id="minimalPriceValidator" source="{minimalPriceTextInput}" property="text"
+                        allowNegative="false" decimalSeparator="." required="false"/>
+
+    <mx:ControlBar horizontalAlign="right">
+        <mx:Button id="closeBtn" label="@Resource(bundle='ProductManagmentPanel',key='close')"
+                   click="PopUpManager.removePopUp(this)"
+                   width="94"/>
+        <mx:Button id="saveBtn"
+                   label="@Resource(bundle='ProductManagmentPanel',key='savePrice')"
+                   toolTip="@Resource(bundle='ProductManagmentPanel',key='savePriceHint')"
+                   width="94"
+                   enabled="false"
+                />
+    </mx:ControlBar>
+
+
+    <mx:Script>
+<![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import org.yes.cart.impl.ProductSkuDTOImpl;
+
+        import org.yes.cart.impl.SkuPriceDTOImpl;
+
+        import mx.binding.utils.BindingUtils;
+        import mx.binding.utils.ChangeWatcher;
+        import mx.events.PropertyChangeEvent;
+        import mx.managers.PopUpManager;
+        import mx.validators.Validator;
+
+        [Bindable]
+        private var validatorArr:Array;
+
+        [Bindable]
+        public var selectedSku:ProductSkuDTOImpl;
+
+        public var shopId:Number;
+        public var currency:String;
+
+        [Bindable]
+        private var _skuPrice:SkuPriceDTOImpl = new SkuPriceDTOImpl();
+
+        /**
+         * Get the filled product sku price
+         * @return instance {@see SkuPriceDTOImpl}
+         */
+        public function get skuPrice():SkuPriceDTOImpl {
+            return _skuPrice;
+        }
+
+        /**
+         * Set the product sku price edit.
+         * @param value
+         * @return nothing
+         */
+
+        public function set skuPrice(value:SkuPriceDTOImpl):void {
+            _skuPrice = value;
+        }
+
+        public function editPrice(value:SkuPriceDTOImpl):void {
+            skuPrice = value;
+            this.title = resourceManager.getString('ProductManagmentPanel', 'editPriceTier');
+
+            BindingUtils.bindProperty(quantityTextInput, "text", _skuPrice, "quantity");
+            BindingUtils.bindProperty(listPriceTextInput, "text", _skuPrice, "regularPrice");
+            BindingUtils.bindProperty(salePriceTextInput, "text", _skuPrice, "salePrice");
+            BindingUtils.bindProperty(saleFromDateField, "selectedDate", _skuPrice, "salefrom");
+            BindingUtils.bindProperty(saleTillDateField, "selectedDate", _skuPrice, "saletill");
+            BindingUtils.bindProperty(minimalPriceTextInput, "text", _skuPrice, "minimalPrice");
+
+            init();
+
+        }
+
+        public function createPrice():void {
+            init();
+            quantityTextInput.text = "";
+            listPriceTextInput.text = "";
+            salePriceTextInput.text = "";
+            minimalPriceTextInput.text = "";
+
+
+        }
+
+        //TODO create complex form validation as described here http://aralbalkan.com/1125
+        private function init():void {
+
+
+            BindingUtils.bindProperty(_skuPrice, "quantity", quantityTextInput, "text");
+            BindingUtils.bindProperty(_skuPrice, "regularPrice", listPriceTextInput, "text");
+            BindingUtils.bindProperty(_skuPrice, "salePrice", salePriceTextInput, "text");
+            BindingUtils.bindProperty(_skuPrice, "salefrom", saleFromDateField, "selectedDate");
+            BindingUtils.bindProperty(_skuPrice, "saletill", saleTillDateField, "selectedDate");
+            BindingUtils.bindProperty(_skuPrice, "minimalPrice", minimalPriceTextInput, "text");
+
+
+            ChangeWatcher.watch(skuComboBox, "selectedIndex", priceFormChanged);
+            ChangeWatcher.watch(quantityTextInput, "text", priceFormChanged);
+            ChangeWatcher.watch(listPriceTextInput, "text", priceFormChanged);
+            ChangeWatcher.watch(salePriceTextInput, "text", priceFormChanged);
+            ChangeWatcher.watch(minimalPriceTextInput, "text", priceFormChanged);
+
+
+            validatorArr = new Array();
+            validatorArr.push(listPriceValidator);
+            validatorArr.push(quantityValidator);
+            validatorArr.push(salePriceValidator);
+            validatorArr.push(minimalPriceValidator);
+
+
+        }
+
+        private function skuSelected(event:Event):void {
+
+            selectedSku = event.currentTarget.selectedItem;
+            _skuPrice.productSkuId = selectedSku.skuId;
+            var validationArray:Array = new Array();
+            for each (var priceCandidate:SkuPriceDTOImpl in selectedSku.price) {
+                if (priceCandidate.shopId == shopId
+                        && priceCandidate.currency == currency) {
+                    validationArray.push(priceCandidate.quantity.toString());
+                }
+            }
+            quantityValidator.inValues = validationArray;
+
+        }
+
+
+        /**
+         * Product sku changed watch function.
+         * @param event
+         * @return
+         */
+        private function priceFormChanged(event:*):void {
+            Debug.trace("DEBUG priceChanged validation");
+            var validatorErrorArray:Array = Validator.validateAll(validatorArr);
+            Debug.trace("DEBUG priceChanged validation array " + validatorErrorArray.length + " sku selected item " + skuComboBox.selectedIndex);
+            saveBtn.enabled = (validatorErrorArray.length == 0) && skuComboBox.selectedIndex > -1;
+        }
+        ]]>
+    </mx:Script>
+</mx:TitleWindow>

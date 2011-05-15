@@ -1,0 +1,80 @@
+<?xml version="1.0" ?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+           xmlns:controls="controls.*" width="100%" height="100%"
+           creationComplete="init();">
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteAddressService"
+                     destination="remoteAddressService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+    <mx:DataGrid x="0" y="0" width="100%" height="99%"
+                 dataProvider="{remoteAddressService.getAddressesByCustomerId.lastResult}">
+        <mx:columns>
+            <mx:DataGridColumn width="70" headerText="@Resource(bundle='CustomerManagementPanel',key='id')"
+                               dataField="addressId"/>
+            <mx:DataGridColumn width="60" headerText="@Resource(bundle='CustomerManagementPanel',key='countryCodestateCode')">
+                <mx:itemRenderer>
+                    <mx:Component>
+                        <mx:VBox>
+                            <mx:Label text="{data.countryCode}"/>
+                            <mx:Label text="{data.stateCode}"/>
+                        </mx:VBox>
+                    </mx:Component>
+                </mx:itemRenderer>
+            </mx:DataGridColumn>
+            <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='cityPostcode')">
+                <mx:itemRenderer>
+                    <mx:Component>
+                        <mx:VBox>
+                            <mx:Label text="{data.city}"/>
+                            <mx:Label text="{data.postcode}"/>
+                        </mx:VBox>
+                    </mx:Component>
+                </mx:itemRenderer>
+            </mx:DataGridColumn>
+
+            <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='addrlines')">
+                <mx:itemRenderer>
+                    <mx:Component>
+                        <mx:VBox>
+                            <mx:Label text="{data.addrline1}"/>
+                            <mx:Label text="{data.addrline2}"/>
+                        </mx:VBox>
+                    </mx:Component>
+                </mx:itemRenderer>
+            </mx:DataGridColumn>
+            <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='fullname')">
+                <mx:itemRenderer>
+                    <mx:Component>
+                        <mx:VBox>
+                            <mx:Label text="{data.lastname}"/>
+                            <mx:Label text="{data.firstname}"/>
+                            <mx:Label text="{data.firstname}"/>
+                        </mx:VBox>
+                    </mx:Component>
+                </mx:itemRenderer>
+
+            </mx:DataGridColumn>
+            <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='phone')"
+                               dataField="phoneList"/>
+            <mx:DataGridColumn width="40" headerText="@Resource(bundle='CustomerManagementPanel',key='addressType')"
+                               dataField="addressType"/>
+            <mx:DataGridColumn width="40" headerText="@Resource(bundle='CustomerManagementPanel',key='defaultAddress')"
+                               dataField="defaultAddress"/>
+
+        </mx:columns>
+    </mx:DataGrid>
+
+
+    <mx:Script><![CDATA[
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        public var customerId:Number;
+
+        public function init():void {
+            remoteAddressService.getAddressesByCustomerId(customerId);
+        }
+        ]]></mx:Script>
+</mx:Canvas>

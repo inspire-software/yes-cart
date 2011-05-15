@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+				title="Create attribute"
+                showCloseButton="true"
+                close="PopUpManager.removePopUp(this)" >
+
+    <mx:Boolean id="newAttributeFlag">false</mx:Boolean>
+
+    <mx:Form>
+        <mx:FormItem  width="100%" label="@Resource(bundle='AttributeCreateEditDialog',key='code')">
+            <mx:TextInput  width="160" id="code" enabled="{newAttributeFlag}"/>
+        </mx:FormItem>
+        <mx:FormItem  width="100%" label="@Resource(bundle='AttributeCreateEditDialog',key='name')">
+            <mx:TextInput width="160" id="attrName"/>
+        </mx:FormItem>
+        <mx:FormItem  width="100%" label="@Resource(bundle='AttributeCreateEditDialog',key='type')">
+            <mx:ComboBox change="etypeChangeEvt(event)"
+                         x="152" y="84" width="160" id="type"
+                         labelField="businesstype" data="etypeId"/>
+        </mx:FormItem>
+        <mx:FormItem  width="100%" label="@Resource(bundle='AttributeCreateEditDialog',key='mandatory')">
+            <mx:CheckBox  id="mandatory"/>
+        </mx:FormItem>
+        <mx:FormItem  width="100%" label="@Resource(bundle='AttributeCreateEditDialog',key='value')">
+            <mx:TextInput  width="160" id="val" enabled="{mandatory.selected}"/>
+        </mx:FormItem>
+        <mx:FormItem  width="100%" label="@Resource(bundle='AttributeCreateEditDialog',key='multipleValue')">
+            <mx:CheckBox  width="160"  id="multiple"/>
+        </mx:FormItem>
+        <mx:FormItem  width="100%" label="@Resource(bundle='AttributeCreateEditDialog',key='failover')">
+            <mx:CheckBox   id="failover"/>
+        </mx:FormItem>
+        <mx:FormItem  width="100%" label="@Resource(bundle='AttributeCreateEditDialog',key='regexp')">
+            <mx:TextInput width="160" id="regexp"/>
+        </mx:FormItem>
+        <mx:FormItem  width="100%" label="@Resource(bundle='AttributeCreateEditDialog',key='validationMessage')">
+            <mx:TextArea width="160" id="validationFailedMessage"/>
+        </mx:FormItem>
+        <mx:FormItem  width="100%" label="@Resource(bundle='AttributeCreateEditDialog',key='rank')">
+            <mx:TextInput width="160" id="rank"/>
+        </mx:FormItem>
+        <mx:FormItem  width="100%" label="@Resource(bundle='AttributeCreateEditDialog',key='choiceData')">
+            <mx:TextArea width="160" id="choiceData"/>
+        </mx:FormItem>
+        <mx:FormItem  width="100%" label="@Resource(bundle='AttributeCreateEditDialog',key='description')">
+            <mx:TextArea  width="160" id="description"/>
+        </mx:FormItem>
+
+    </mx:Form>
+    <mx:ControlBar horizontalAlign="right">
+        <mx:Button id="closeBtn" label="@Resource(bundle='AttributeCreateEditDialog',key='close')"
+                   click="PopUpManager.removePopUp(this)" width="94"/>
+        <mx:Button  id="saveBtn" label="Save"
+                   width="94"/>
+    </mx:ControlBar>
+
+	<mx:Script>
+		<![CDATA[
+        import org.yes.cart.impl.AttributeDTOImpl;
+
+        import mx.binding.utils.BindingUtils;
+        import mx.managers.PopUpManager;
+
+
+        private var attrbuteDTO:AttributeDTOImpl;
+
+
+        private function etypeChangeEvt(event:Event):void {
+            attrbuteDTO.etypeId = event.currentTarget.selectedItem.etypeId;
+        }
+
+
+        private function init():void {
+            if (newAttributeFlag) {
+                this.title = resourceManager.getString('AttributeCreateEditDialog', 'newAttribute');
+                saveBtn.label = resourceManager.getString('AttributeCreateEditDialog', 'create');
+            } else {
+                this.title = resourceManager.getString('AttributeCreateEditDialog', 'editAttribute');
+                saveBtn.label = resourceManager.getString('AttributeCreateEditDialog', 'update');
+            }
+            BindingUtils.bindProperty(attrbuteDTO, "code", code, "text");
+            BindingUtils.bindProperty(attrbuteDTO, "name", attrName, "text");
+            BindingUtils.bindProperty(attrbuteDTO, "description", description, "text");
+            BindingUtils.bindProperty(attrbuteDTO, "val", val, "text");
+            BindingUtils.bindProperty(attrbuteDTO, "mandatory", mandatory, "selected");
+            BindingUtils.bindProperty(attrbuteDTO, "allowduplicate", multiple, "selected");
+            BindingUtils.bindProperty(attrbuteDTO, "allowfailover", failover, "selected");
+            BindingUtils.bindProperty(attrbuteDTO, "regexp", regexp, "text");
+            BindingUtils.bindProperty(attrbuteDTO, "validationFailedMessage", validationFailedMessage, "text");
+            BindingUtils.bindProperty(attrbuteDTO, "choiceData", choiceData, "text");
+            BindingUtils.bindProperty(attrbuteDTO, "rank", rank, "text");
+            //BindingUtils.bindProperty(attrbuteDTO, "etypeId", type, "selectedItem.etypeId");
+        }
+
+        public function editAttr(attrbuteDTO:AttributeDTOImpl):void {
+            newAttributeFlag = false;
+            this.attrbuteDTO = attrbuteDTO;
+            this.code.text = attrbuteDTO.code;
+            this.attrName.text = attrbuteDTO.name;
+            this.description.text = attrbuteDTO.description;
+            this.val.text = attrbuteDTO.val;
+            this.mandatory.selected = attrbuteDTO.mandatory;
+            this.failover.selected = attrbuteDTO.allowfailover;
+            this.multiple.selected = attrbuteDTO.allowduplicate;
+            this.regexp.text = attrbuteDTO.regexp;
+            this.validationFailedMessage.text = attrbuteDTO.validationFailedMessage;
+            this.choiceData.text = attrbuteDTO.choiceData;
+            this.rank.text = attrbuteDTO.rank.toString();
+
+            for (var i:int = 0; i < type.dataProvider.length; i++) {
+                var candidate:Object = type.dataProvider[i];
+                if (candidate.etypeId == attrbuteDTO.etypeId) {
+                    type.selectedItem = candidate;
+                    break;
+                }
+            }
+            init();
+        }
+
+        public function createNewAttr(attrbuteDTO:AttributeDTOImpl):void {
+            newAttributeFlag = true;
+            this.attrbuteDTO = attrbuteDTO;
+            init();
+        }
+        ]]>
+	</mx:Script>
+
+</mx:TitleWindow>

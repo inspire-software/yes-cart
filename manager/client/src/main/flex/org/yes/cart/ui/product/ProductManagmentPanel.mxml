@@ -1,0 +1,617 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" creationComplete="init();">
+    <mx:VDividedBox width="100%" height="100%">
+        <mx:VBox width="100%" height="50%">
+            <mx:ControlBar x="0" y="0" width="100%">
+                <mx:Label text="@Resource(bundle='ProductManagmentPanel',key='code')"/>
+                <mx:TextInput id="codeTextInput" width="100"/>
+                <mx:Label text="@Resource(bundle='ProductManagmentPanel',key='name')"/>
+                <mx:TextInput id="nameTextInput" width="100"/>
+                <mx:Label text="@Resource(bundle='ProductManagmentPanel',key='brand')"/>
+                <mx:ComboBox id="brandComboBox" width="120"
+                             dataProvider="{remoteBrandService.getAll.lastResult}"
+                             labelField="name"
+                             data="brandId"
+                             prompt="@Resource(bundle='ProductManagmentPanel',key='selectBrandPropmt')"
+                        />
+                <mx:Label text="@Resource(bundle='ProductManagmentPanel',key='type')"/>
+                <mx:ComboBox id="typeComboBox" width="120"
+                             dataProvider="{remoteProductTypeService.getAll.lastResult}"
+                             labelField="name"
+                             data="producttypeId"
+                             prompt="@Resource(bundle='ProductManagmentPanel',key='selectTypePropmt')"
+                        />
+                <mx:Button label="@Resource(bundle='ProductManagmentPanel',key='findBtn')"
+                           toolTip="@Resource(bundle='ProductManagmentPanel',key='findBtnHint')"
+                           click="searchBtnClickHandler(event)"/>
+                <mx:Button label="@Resource(bundle='ProductManagmentPanel',key='createProduct')"
+                           toolTip="@Resource(bundle='ProductManagmentPanel',key='createProductHint')"
+                           click="createBtnClickHandler(event)"/>
+                <mx:Button label="@Resource(bundle='ProductManagmentPanel',key='deleteProduct')"
+                           toolTip="@Resource(bundle='ProductManagmentPanel',key='deleteProductHint')"
+                           click="searchBtnClickHandler(event)"
+                           enabled="{productDTOImpl!=null}"
+                        />
+            </mx:ControlBar>
+            <mx:DataGrid width="100%" height="100%"
+                         dataProvider="{remoteProductService.getProductByConeNameBrandType.lastResult}"
+                         itemClick="productSelectedClickHandler(event)"
+                    >
+                <mx:columns>
+                    <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagmentPanel',key='id')"
+                                       dataField="productId"/>
+                    <mx:DataGridColumn width="120" headerText="@Resource(bundle='ProductManagmentPanel',key='code')"
+                                       dataField="code"/>
+                    <mx:DataGridColumn headerText="@Resource(bundle='ProductManagmentPanel',key='name')"
+                                       dataField="name"/>
+                    <mx:DataGridColumn headerText="@Resource(bundle='ProductManagmentPanel',key='description')"
+                                       dataField="description"/>
+                </mx:columns>
+            </mx:DataGrid>
+        </mx:VBox>
+        <mx:TabNavigator id="productTabNavigator" change="onTabClick(event);" width="100%" height="100%"
+                         visible="{productDTOImpl != null}">
+            <mx:Canvas id="summaryTab" label="@Resource(bundle='ProductManagmentPanel',key='summaryTab')" width="100%"
+                       height="100%"/>
+            <mx:Canvas id="imageTab" label="@Resource(bundle='ProductManagmentPanel',key='imagesTab')" width="100%"
+                       height="100%"/>
+            <mx:Canvas id="attrTab" label="@Resource(bundle='ProductManagmentPanel',key='attributesTab')" width="100%"
+                       height="100%"/>
+            <mx:Canvas id="skuTab" label="@Resource(bundle='ProductManagmentPanel',key='skuTab')" width="100%"
+                       height="100%"/>
+            <mx:Canvas id="priceTab" label="@Resource(bundle='ProductManagmentPanel',key='priceTab')" width="100%"
+                       height="100%"/>
+            <mx:Canvas id="seoTab" label="@Resource(bundle='ProductManagmentPanel',key='seoTab')" width="100%"
+                       height="100%"/>
+            <mx:Canvas id="associationsTab" label="@Resource(bundle='ProductManagmentPanel',key='associationsTab')"
+                       width="100%" height="100%"/>
+            <mx:Canvas id="categoryTab" label="@Resource(bundle='ProductManagmentPanel',key='categoriesTab')"
+                       width="100%" height="100%"/>
+            <mx:Canvas id="quantityTab" label="@Resource(bundle='ProductManagmentPanel',key='quantity')" width="100%"
+                       height="100%"/>
+
+        </mx:TabNavigator>
+    </mx:VDividedBox>
+
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteSeoService" destination="remoteSeoService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteBrandService" destination="remoteBrandService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteProductTypeService" destination="remoteProductTypeService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteProductService" destination="remoteProductService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteAvailabilityService" destination="remoteAvailabilityService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+
+    <mx:Script><![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import org.yes.cart.constants.AttributeGroupNames;
+        import org.yes.cart.impl.AttrValueProductDTOImpl;
+        import org.yes.cart.impl.AttributeDTOImpl;
+        import org.yes.cart.impl.AvailabilityDTOImpl;
+        import org.yes.cart.impl.BrandDTOImpl;
+        import org.yes.cart.impl.ProductDTOImpl;
+        import org.yes.cart.impl.ProductTypeDTOImpl;
+        import org.yes.cart.impl.SeoDTOImpl;
+        import org.yes.cart.util.CloneUtil;
+        import org.yes.cart.util.UpdateTarget;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+        import org.yes.cart.ui.attributes.EntityAttributeValuesManagmentPanel;
+        import org.yes.cart.ui.seo.SeoPanel;
+
+        import flash.events.MouseEvent;
+
+        import mx.collections.ArrayCollection;
+        import mx.events.IndexChangedEvent;
+        import mx.events.ListEvent;
+        import mx.managers.PopUpManager;
+        import mx.rpc.AsyncResponder;
+        import mx.rpc.AsyncToken;
+        import mx.rpc.events.ResultEvent;
+
+        private var TAB_SUMMARY_IDX:int = 0;
+        private var TAB_IMAGE_IDX:int = 1;
+        private var TAB_ATTR_IDX:int = 2;
+        private var TAB_SKU_IDX:int = 3;
+        private var TAB_PRICE_IDX:int = 4;
+        private var TAB_SEO_IDX:int = 5;
+        private var TAB_ASSOCIATION_IDX:int = 6;
+        private var TAB_CATEGORY_IDX:int = 7;
+        private var TAB_WAREHOUSE_IDX:int = 8;
+
+
+        [Bindable]
+        public var productDTOImpl:ProductDTOImpl;
+
+        private var attrValuePanel:EntityAttributeValuesManagmentPanel;
+
+
+        /**
+         * Init Panel
+         *
+         * @return nothing
+         */
+        public function init():void {
+            remoteBrandService.getAll();
+            remoteProductTypeService.getAll();
+            remoteAvailabilityService.getAll();
+        }
+
+        /**
+         * Product selected.
+         * @param event event
+         * @return nothing
+         */
+        private function productSelectedClickHandler(event:ListEvent):void {
+
+            productDTOImpl = event.currentTarget.selectedItem;
+            initTab(productTabNavigator.selectedIndex);
+        }
+
+        private var productCreateDialog:ProductCreateDialog;
+
+        /**
+         * Create new product button click handler.
+         * @param event event
+         * @return nothing
+         */
+        private function createBtnClickHandler(event:MouseEvent):void {
+            productCreateDialog = ProductCreateDialog(PopUpManager.createPopUp(this, ProductCreateDialog, true));
+            productCreateDialog.brandComboBox.dataProvider = remoteBrandService.getAll.lastResult;
+            productCreateDialog.productTypeComboBox.dataProvider = remoteProductTypeService.getAll.lastResult;
+            productCreateDialog.availablilityComboBox.dataProvider = remoteAvailabilityService.getAll.lastResult;
+            productCreateDialog.saveBtn.addEventListener("click", createNewProduct);
+            PopUpManager.centerPopUp(productCreateDialog);
+        }
+
+        /**
+         * Handle prouct creation.
+         * @param event event.
+         */
+        private function createNewProduct(event:Event):void {
+
+            var product:ProductDTOImpl = new ProductDTOImpl();
+            product.code = productCreateDialog.codeTextInput.text;
+            product.name = productCreateDialog.nameTextImput.text;
+            product.availabilityDTO = AvailabilityDTOImpl(productCreateDialog.availablilityComboBox.selectedItem);
+            product.productTypeDTO = ProductTypeDTOImpl(productCreateDialog.productTypeComboBox.selectedItem);
+            product.brandDTO = BrandDTOImpl(productCreateDialog.brandComboBox.selectedItem);
+            remoteProductService.create(product);
+            PopUpManager.removePopUp(productCreateDialog);
+
+        }
+
+        /**
+         * Serach product by criteria.
+         * @param event event
+         * @return nothing
+         */
+        private function searchBtnClickHandler(event:MouseEvent):void {
+
+            var selectedBrandId:Number = 0;
+            var selectedTypeId:Number = 0;
+
+            var selectedBrand:BrandDTOImpl = BrandDTOImpl(brandComboBox.selectedItem);
+
+            var selectedType:ProductTypeDTOImpl = ProductTypeDTOImpl(typeComboBox.selectedItem);
+
+            if (selectedBrand != null) {
+                selectedBrandId = selectedBrand.brandId;
+            }
+
+            if (selectedType != null) {
+                selectedTypeId = selectedType.producttypeId;
+            }
+
+            productDTOImpl = null;
+
+            remoteProductService.getProductByConeNameBrandType(
+                    codeTextInput.text,
+                    nameTextInput.text,
+                    selectedBrandId,
+                    selectedTypeId);
+
+
+        }
+
+        /**
+         * Tab clicked handler
+         * @param event event
+         * @return nothing
+         */
+        private function onTabClick(event:IndexChangedEvent):void {
+            initTab(event.newIndex);
+        }
+
+
+        private function initTab(idx:int):void {
+            Debug.trace("INFO selected tab idx is " + idx);
+            switch (idx) {
+                case TAB_SUMMARY_IDX: {
+                    summaryTabSelected(null);
+                    break;
+                }
+                case TAB_IMAGE_IDX: {
+                    imageTabSelected(null);
+                    break;
+                }
+                case TAB_ATTR_IDX: {
+                    attrTabSelected(null);
+                    break;
+                }
+                case TAB_SKU_IDX: {
+                    skuTabSelected(null);
+                    break;
+                }
+
+                case TAB_PRICE_IDX: {
+                    priceTabSelected(null);
+                    break;
+                }
+                case TAB_SEO_IDX: {
+                    seoTabSelected(null);
+                    break;
+                }
+                case TAB_ASSOCIATION_IDX: {
+                    associationsTabSelected(null);
+                    break;
+                }
+                case TAB_CATEGORY_IDX: {
+                    categoriesTabSelected(null);
+                    break;
+                }
+                case TAB_WAREHOUSE_IDX: {
+                    quantityTabSelected(null);
+                    break;
+                }
+
+            }
+
+        }
+
+
+        /**
+         * Url supprted by shop tab selected
+         * @param event event
+         * @return nothing
+         */
+        private function summaryTabSelected(event:MouseEvent):void {
+            summaryTab.removeAllChildren();
+            var productSummaryPanel:ProductSummaryPanel = new ProductSummaryPanel();
+            productSummaryPanel.productDTOImpl = ProductDTOImpl(CloneUtil.clone(productDTOImpl));
+            productSummaryPanel.productTypes = remoteProductTypeService.getAll.lastResult;
+            productSummaryPanel.brands = remoteBrandService.getAll.lastResult;
+            productSummaryPanel.availability = remoteAvailabilityService.getAll.lastResult;
+            productSummaryPanel.changedFunction = productChangedCallBack;
+            summaryTab.addChild(productSummaryPanel);
+        }
+
+
+        /**
+         * Product attributes tab selected.
+         * @param event event
+         * @return nothing
+         */
+        private function imageTabSelected(event:MouseEvent):void {
+
+            Debug.trace("INFO image tab selected, selected product is " + productDTOImpl);
+            remoteProductService.getEntityAttributes(productDTOImpl.productId).addResponder(
+                    new AsyncResponder(
+                            function (event:ResultEvent, obj:Object = null):void {
+                                //Service call back with category attribute values.
+                                getEntityAttributesResultHandlerInternal(event, imageTab, acceptImageAttributes);
+                            },
+                            ShopManagerGlobal.instance.defaultFaultHandler));
+        }
+
+
+        /**
+         * Product attributes tab selected.
+         * @param event event
+         * @return nothing
+         */
+        private function attrTabSelected(event:MouseEvent):void {
+
+            Debug.trace("INFO attrTabSelected, selected product is " + productDTOImpl);
+            remoteProductService.getEntityAttributes(productDTOImpl.productId).addResponder(
+                    new AsyncResponder(
+                            function getEntityAttributesResultHandler(event:ResultEvent, obj:Object = null):void {
+                                //Service call back with category attribute values.
+                                getEntityAttributesResultHandlerInternal(event, attrTab, rejectImageAttributes);
+                            },
+                            ShopManagerGlobal.instance.defaultFaultHandler
+                            )
+                    );
+        }
+
+
+        /**
+         * Service call back with category attribute values.
+         * @param event event
+         * @param canvas target tab
+         * @return nothing
+         */
+        private function getEntityAttributesResultHandlerInternal(event:ResultEvent, canvas:Canvas, filterFunk:Function):void {
+            Debug.trace("TRACE getEntityAttributesResultHandlerInternal");
+            attrValuePanel = new EntityAttributeValuesManagmentPanel();
+            attrValuePanel.attrValue = ArrayCollection(event.result);
+
+            attrValuePanel.entityCode = productDTOImpl.code;
+            attrValuePanel.attributeGroup = AttributeGroupNames.PRODUCT;
+            attrValuePanel.attrValue.filterFunction = filterFunk;
+            attrValuePanel.attrValue.refresh();
+
+            attrValuePanel.attrValueChangedCallBack = attrValueChanged;
+            attrValuePanel.attrValueAddedCallBack = attrValueAdded;
+            attrValuePanel.attrValueDeleteCallBack = attrValueDelete;
+
+            canvas.removeAllChildren();
+            canvas.addChild(attrValuePanel);
+
+
+        }
+
+
+        /**
+         * Product attributes tab selected.
+         * @param event event
+         * @return nothing
+         */
+        private function skuTabSelected(event:MouseEvent):void {
+            Debug.trace("INFO skuTabSelected, selected product is " + productDTOImpl);
+            skuTab.removeAllChildren();
+            var productSkuManagmentPanel:ProductSkuManagmentPanel = new ProductSkuManagmentPanel();
+            productSkuManagmentPanel.product = productDTOImpl;
+            skuTab.addChild(productSkuManagmentPanel);
+        }
+
+
+        /**
+         * Do not show the image attributes.
+         * @param item item to filter
+         * @return true if need to show item.
+         */
+        private function rejectImageAttributes(item:Object):Boolean {
+            return !acceptImageAttributes(item);
+        }
+
+        /**
+         * Accept only images
+         * @param item item to filter
+         * @return true if need to show item.
+         */
+        private function acceptImageAttributes(item:Object):Boolean {
+            return (item.attributeDTO.etypeName.indexOf("Image") > -1);
+        }
+
+
+        /**
+         * Delete attribute value.
+         * @param attrValueId attribute value id.
+         */
+        private function attrValueDelete(attrValueId:Number):void {
+
+            Debug.trace("INFO delete product attribute with id = " + attrValueId);
+            remoteProductService.deleteAttributeValue(attrValueId);
+        }
+
+        /**
+         * Added attribute, that allowe multiple value call back function.
+         * @param attr attribute
+         * @return instane of {@link AttrValueCategoryDTOImpl}
+         */
+        private function attrValueAdded(attr:AttributeDTOImpl):AttrValueProductDTOImpl {
+            var attrValue:AttrValueProductDTOImpl = new AttrValueProductDTOImpl();
+            attrValue.attributeDTO = attr;
+            attrValue.productId = productDTOImpl.productId;
+            Debug.trace("INFO added new attribute value  " + attrValue);
+            return attrValue;
+
+        }
+
+        /**
+         * Value changed callback function.
+         * @param attrValue  attribute value object.
+         * @param newValue new value
+         * @return nothing
+         */
+        private function attrValueChanged(attrValue:Object, newValue:String, rowIdx:int):void {
+
+            Debug.trace("INFO Product attribute value changed call back");
+            //var categoryAttrValue:AttrValueProductDTOImpl = AttrValueProductDTOImpl(attrValue);
+            attrValue.val = newValue;
+            var asyncToken:AsyncToken;
+            var updateTarget:UpdateTarget;
+            if (isNaN(attrValue.attrvalueId) || attrValue.attrvalueId == 0) {
+                // insert new attribute
+                Debug.trace("INFO create new attr value " + newValue + " for product " + productDTOImpl);
+                asyncToken = remoteProductService.createEntityAttributeValue(attrValue);
+                updateTarget = new UpdateTarget(UpdateTarget.NEW, rowIdx);
+            } else {
+                //update
+                Debug.trace("INFO update attr value " + newValue + " for product " + productDTOImpl);
+                asyncToken = remoteProductService.updateEntityAttributeValue(attrValue);
+                updateTarget = new UpdateTarget(UpdateTarget.UPDATE, rowIdx);
+            }
+            asyncToken.addResponder(new AsyncResponder(
+                    productAttributeUpdatedResultHandler,
+                    ShopManagerGlobal.instance.defaultFaultHandler,
+                    updateTarget));
+        }
+
+        /**
+         * Service call back with product attribute value.
+         * @param event event
+         * @param updateTarget update target object
+         * @return nothing
+         */
+        private function productAttributeUpdatedResultHandler(event:ResultEvent, updateTarget:UpdateTarget):void {
+            Debug.trace("INFO Product attribute value updated result call back " + updateTarget.toString());
+            Debug.traceObj(updateTarget);
+            Debug.trace("INFO updateTarget.action " + updateTarget.action);
+            var obj:Object;
+            if (updateTarget.action == UpdateTarget.NEW) {
+                obj = remoteProductService.createEntityAttributeValue.lastResult;
+            } else {
+                obj = remoteProductService.updateEntityAttributeValue.lastResult;
+            }
+            Debug.trace("INFO obj is " + obj);
+            attrValuePanel.attrValue.setItemAt(obj, updateTarget.idx);
+
+        }
+
+        /**
+         * Manage product association.
+         * @param event
+         * @return nothing
+         */
+        private function associationsTabSelected(event:MouseEvent):void {
+            Debug.trace("INFO associationsTabSelected, selected product is " + productDTOImpl);
+            associationsTab.removeAllChildren();
+            var panel:ProductAssociationsPanel = new ProductAssociationsPanel();
+            panel.productId = productDTOImpl.productId;
+            associationsTab.addChild(panel);
+        }
+
+
+        /**
+         * Assign / unlink product to / from categories.
+         * @param event
+         * @return nothing.
+         */
+        private function categoriesTabSelected(event:MouseEvent):void {
+            Debug.trace("INFO categoriesTabSelected, selected product is " + productDTOImpl);
+            categoryTab.removeAllChildren();
+            var productCategoriesPanel:ProductCategoriesPanel = new ProductCategoriesPanel();
+            productCategoriesPanel.productId = productDTOImpl.productId;
+            categoryTab.addChild(productCategoriesPanel);
+
+        }
+
+        /**
+         * Manage product prices tab selected.
+         * @param event event
+         * @return nothing
+         */
+        private function priceTabSelected(event:MouseEvent):void {
+            Debug.trace("INFO priceTabSelected, selected product is " + productDTOImpl);
+            priceTab.removeAllChildren();
+            var productPricePanel:ProductPricePanel = new ProductPricePanel();
+            productPricePanel.productId = productDTOImpl.productId;
+            priceTab.addChild(productPricePanel);
+        }
+
+        /**
+         * Sku quantity on particular warehouse panel
+         * @param event  event
+         * @return nothing
+         */
+        private function quantityTabSelected(event:MouseEvent):void {
+            quantityTab.removeAllChildren();
+            var productSkuQuantityPanel:ProductSkuQuantityPanel = new ProductSkuQuantityPanel();
+            productSkuQuantityPanel.productId = productDTOImpl.productId;
+            quantityTab.addChild(productSkuQuantityPanel);
+
+        }
+
+
+        /**
+         * Product SEO information tab.
+         * @param event event
+         * @return nothing
+         */
+        private function seoTabSelected(event:MouseEvent):void {
+            Debug.trace("INFO seoTabSelected, selected product is " + productDTOImpl);
+            seoTab.removeAllChildren();
+            var seoPanel:SeoPanel = new SeoPanel();
+            seoPanel.seoCreatedCallBack = seoCreatedCallBack;
+            seoPanel.seoRemovedCallBack = seoRemovedCallBack;
+            if (productDTOImpl.seoDTO != null && !isNaN(productDTOImpl.seoDTO.seoId)) {
+                seoPanel.seoId = productDTOImpl.seoDTO.seoId;
+            }
+            seoTab.addChild(seoPanel);
+        }
+
+        /**
+         * Call back function to handle SEO removed event
+         * @param seoDTOImpl created SeoDTOImpl
+         * @return nothing
+         */
+        public function seoRemovedCallBack():void {
+
+            Debug.trace("INFO ProductManagmentPanel seo id set to null for " + productDTOImpl);
+            var removedSeo:SeoDTOImpl = productDTOImpl.seoDTO;
+            productDTOImpl.seoDTO = null;
+            var asyncToken:AsyncToken = remoteProductService.update(productDTOImpl);
+            asyncToken.addResponder(new AsyncResponder(seoRemoved, ShopManagerGlobal.instance.defaultFaultHandler, removedSeo));
+        }
+
+        /**
+         * Seo removed from product , so need to eliminate it from table
+         * @param event event
+         * @param removedSeo removed seo to clean
+         * @return nothing
+         */
+        private function seoRemoved(event:ResultEvent, removedSeo:SeoDTOImpl):void {
+            Debug.trace("INFO ProductManagmentPanel product updated, seo " + removedSeo + " will be removed");
+            remoteSeoService.remove(removedSeo.seoId);
+
+        }
+
+
+        /**
+         * Call back function to handle SEO created event
+         * @param seoDTOImpl created SeoDTOImpl
+         * @return nothing
+         */
+        public function seoCreatedCallBack(seoDTOImpl:SeoDTOImpl):void {
+            Debug.trace("INFO ProductManagmentPanel seo " + seoDTOImpl + " for " + productDTOImpl + " created call back ");
+            if (productDTOImpl.seoDTO == null || isNaN(productDTOImpl.seoDTO.seoId) || productDTOImpl.seoDTO.seoId == 0) {
+                Debug.trace("INFO gonna to update product");
+                productDTOImpl.seoDTO = seoDTOImpl;
+                productChangedCallBack(productDTOImpl);
+            }
+        }
+
+        /**
+         * Product changed call back function.
+         * @param product
+         */
+        private function productChangedCallBack(product:ProductDTOImpl):void {
+            if (isNaN(product.productId) || product.productId == 0) {
+                Debug.trace("INFO ProductManagmentPanel product will be created " + product);
+                remoteProductService.create(product);
+            } else {
+                Debug.trace("INFO ProductManagmentPanel product will be updated " + product);
+                remoteProductService.update(product);
+                var idx:int = 0;
+                for each (var prod:ProductDTOImpl in remoteProductService.getProductByConeNameBrandType.lastResult) {
+                    if (prod.productId == product.productId) {
+                        remoteProductService.getProductByConeNameBrandType.lastResult.setItemAt(product, idx);
+                    }
+                    idx++;
+                }
+            }
+        }
+        ]]></mx:Script>
+</mx:Canvas>

@@ -1,0 +1,233 @@
+<?xml version="1.0" ?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+           xmlns:controls="controls.*" xmlns:georg="com.georg.*" width="100%" height="100%"
+           creationComplete="init();">
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteCustomerOrderService"
+                     destination="remoteCustomerOrderService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+    <mx:VBox width="100%" height="100%">
+        <mx:ControlBar
+                visible="{_searchCriteriaCustomerId == 0}"
+                includeInLayout="{_searchCriteriaCustomerId == 0}"
+                >
+            <mx:VBox width="100%">
+                <mx:HBox width="100%">
+                    <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='firstNameFilter')"/>
+                    <mx:TextInput id="firstNameFilterValue" width="150"/>
+                    <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='lastNameFilter')"/>
+                    <mx:TextInput id="lastNameFilterValue" width="150"/>
+                    <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='emailNameFilter')"/>
+                    <mx:TextInput id="emailNameFilterValue" width="150"/>
+                </mx:HBox>
+                <mx:HBox width="100%">
+                    <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderStatusFilter')"/>
+                    <mx:ComboBox id="statusComboBox" width="120"
+                                 prompt="@Resource(bundle='CustomerOrderPanel',key='selectStatusPropmt')"
+                                 dataProvider="{statuses}"
+                                 data="code" labelField="name"
+                            />
+                    <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderFromDateFilter')"/>
+                    <georg:DateTimeField id="orderFromDateField" width="130"/>
+                    <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderTillDateFilter')"/>
+                    <georg:DateTimeField id="orderTillDateField" width="130"/>
+                    <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderNumberFilter')"/>
+                    <mx:TextInput id="orderNumberFilterValue" width="150"/>
+                </mx:HBox>
+            </mx:VBox>
+            <mx:Button height="100%" label="@Resource(bundle='CustomerOrderPanel',key='applyFilter')"
+                       toolTip="@Resource(bundle='CustomerOrderPanel',key='applyFilterToolTip')"
+                       click="filter_clickHandler(event)"
+                    />
+            <mx:Button height="100%" label="@Resource(bundle='CustomerOrderPanel',key='clearFilter')"
+                       toolTip="@Resource(bundle='CustomerOrderPanel',key='clearFilterToolTip')"
+                       click="cleanFilter_clickHandler(event)"
+                    />
+        </mx:ControlBar>
+        <mx:DataGrid x="0" y="0" width="100%" height="99%"
+                     dataTipFunction="orderToolTip"
+                     dataProvider="{remoteCustomerOrderService.findCustomerOrdersByCriterias.lastResult}"
+                >
+
+            <mx:columns>
+                <mx:DataGridColumn showDataTips="true" width="50" headerText="@Resource(bundle='CustomerOrderPanel',key='id')"
+                                   dataField="customerorderId"/>
+                <mx:DataGridColumn  width="70" headerText="@Resource(bundle='CustomerOrderPanel',key='orderNum')"
+                                   dataField="ordernum"/>
+                <mx:DataGridColumn width="120" headerText="@Resource(bundle='CustomerOrderPanel',key='shopper')"
+                                   sortable="false" >
+                    <mx:itemRenderer>
+                        <mx:Component>
+                            <mx:HBox>
+                                <mx:Label text="{data.lastname}"/>
+                                <mx:Label text="{data.firstname}"/>
+                                <mx:Label text="{data.email}"/>
+                            </mx:HBox>
+                        </mx:Component>
+                    </mx:itemRenderer>
+                </mx:DataGridColumn>
+
+                <mx:DataGridColumn width="50" headerText="@Resource(bundle='CustomerOrderPanel',key='amount')"
+                                   dataField="amount"/>
+                <mx:DataGridColumn width="50" headerText="@Resource(bundle='CustomerOrderPanel',key='currency')"
+                                   dataField="currency"/>
+                <mx:DataGridColumn  width="50"
+                                   headerText="@Resource(bundle='CustomerOrderPanel',key='status')"
+                                   labelFunction="statusLabelFunction"/>
+                <mx:DataGridColumn  width="50" headerText="@Resource(bundle='CustomerOrderPanel',key='date')"
+                                   dataField="orderTimestamp"/>
+
+
+            </mx:columns>
+
+
+        </mx:DataGrid>
+    </mx:VBox>
+    <mx:ArrayCollection id="statuses"/>
+
+
+    <mx:Script><![CDATA[
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        import mx.collections.ArrayCollection;
+        import mx.controls.Alert;
+
+        [Bindable]
+        public var _searchCriteriaCustomerId:Number = 0;
+        private var _searchCriteriaCustomerFirstName:String;
+        private var _searchCriteriaCustomerLastName:String;
+        private var _searchCriteriaCustomerEMailName:String;
+        private var _searchCriteriarOrderStatus:String;
+        private var _searchCriteriarOrderNum:String;
+        private var _searchCriteriarOrderDateFrom:Date;
+        private var _searchCriteriarOrderDateTill:Date;
+
+
+        public function init():void {
+
+            statuses.addItem(createStatusObject("all"));
+            statuses.addItem(createStatusObject("none"));
+            statuses.addItem(createStatusObject("pending"));
+            statuses.addItem(createStatusObject("waiting"));
+            statuses.addItem(createStatusObject("inprogress"));
+            statuses.addItem(createStatusObject("cancelled"));
+            statuses.addItem(createStatusObject("partially.shipped"));
+            statuses.addItem(createStatusObject("completed"));
+
+        }
+
+        private function createStatusObject(status:String):Object {
+            var obj:Object = new Object();
+            obj.code = status;
+            obj.name = resourceManager.getString('CustomerOrderPanel', status);
+            return obj;
+        }
+
+
+        private function statusLabelFunction(item:Object, column:DataGridColumn):String {
+
+            return resourceManager.getString('CustomerOrderPanel', item.orderStatus);
+
+        }
+
+        private function orderToolTip(item:Object):String {
+            var toolTip:String = "";
+            if (item != null) {
+
+
+                if (item.billingAddress == item.shippingAddress) {
+                    toolTip += resourceManager.getString('CustomerOrderPanel', "address") + " ";
+                    toolTip += " " + item.shippingAddress + "\n";
+                } else {
+                    //two  different addresses
+                    toolTip += resourceManager.getString('CustomerOrderPanel', "deliveryAddr") + " ";
+                    toolTip += " " + item.shippingAddress + "\n";
+                    toolTip += resourceManager.getString('CustomerOrderPanel', "billingAddr") + " ";
+                    toolTip += " " + item.billingAddress + "\n";
+                }
+                toolTip += resourceManager.getString('CustomerOrderPanel', "shop") + " ";
+                toolTip += " " + item.code + "\n";
+
+
+            }
+
+            return toolTip;
+        }
+
+
+        /**
+         * Perform customer search.
+         * @param event event
+         * @return nothing
+         */
+        private function filter_clickHandler(event:MouseEvent):void {
+
+            _searchCriteriaCustomerFirstName = firstNameFilterValue.text;
+            _searchCriteriaCustomerLastName = lastNameFilterValue.text;
+            _searchCriteriaCustomerEMailName = emailNameFilterValue.text;
+            _searchCriteriarOrderStatus = statusComboBox.selectedIndex == -1 ? null : statusComboBox.selectedItem.code;
+            _searchCriteriarOrderNum = orderNumberFilterValue.text;
+            _searchCriteriarOrderDateFrom = orderFromDateField.selectedDate;
+            _searchCriteriarOrderDateTill = orderTillDateField.selectedDate;
+
+            performSearch();
+
+
+        }
+
+
+        /**
+         * Perform search by given criteria
+         * @return nothign
+         */
+        public function performSearch():void {
+
+            remoteCustomerOrderService.findCustomerOrdersByCriterias(
+                    _searchCriteriaCustomerId,
+                    _searchCriteriaCustomerFirstName,
+                    _searchCriteriaCustomerLastName,
+                    _searchCriteriaCustomerEMailName,
+                    _searchCriteriarOrderStatus == "all" ? null : _searchCriteriarOrderStatus,
+                    _searchCriteriarOrderDateFrom,
+                    _searchCriteriarOrderDateTill,
+                    _searchCriteriarOrderNum
+                    );
+
+        }
+
+        /**
+         * Perform customer search.
+         * @param event event
+         * @return nothing
+         */
+        private function cleanFilter_clickHandler(event:MouseEvent):void {
+
+            _searchCriteriaCustomerFirstName = null;
+            _searchCriteriaCustomerLastName = null;
+            _searchCriteriaCustomerEMailName = null;
+            _searchCriteriarOrderStatus = null;
+            _searchCriteriarOrderNum = null;
+            _searchCriteriarOrderDateFrom = null;
+            _searchCriteriarOrderDateTill = null;
+
+
+            firstNameFilterValue.text = "";
+            lastNameFilterValue.text = "";
+            emailNameFilterValue.text = "";
+            statusComboBox.selectedIndex = -1;
+            orderNumberFilterValue.text = "";
+            orderFromDateField.selectedDate = null;
+            orderTillDateField.selectedDate = null;
+
+        }
+
+
+        public override function toString():String {
+            return super.toString() + "    \n\n{_searchCriteriaCustomerId=" + String(_searchCriteriaCustomerId) + ",_searchCriteriaCustomerFirstName=" + String(_searchCriteriaCustomerFirstName) + ",_searchCriteriaCustomerLastName=" + String(_searchCriteriaCustomerLastName) + ",_searchCriteriaCustomerEMailName=" + String(_searchCriteriaCustomerEMailName) + ",_searchCriteriarOrderStatus=" + String(_searchCriteriarOrderStatus) + ",_searchCriteriarOrderNum=" + String(_searchCriteriarOrderNum) + ",_searchCriteriarOrderDateFrom=" + String(_searchCriteriarOrderDateFrom) + ",_searchCriteriarOrderDateTill=" + String(_searchCriteriarOrderDateTill) + "}";
+        }
+        ]]></mx:Script>
+
+</mx:Canvas>

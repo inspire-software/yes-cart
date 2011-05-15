@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="shop-manager" default="depl" basedir=".">
+
+    <property environment="env"/>
+
+    <property name="FLEX_HOME" value="${env.FLEX_HOME}"/>
+
+
+    <taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar"/>
+
+
+    <target name="clean" description="Clean all">
+        <delete>
+            <fileset dir="src/main/flex" includes="**/*.properties"/>
+        </delete>
+
+        <delete dir="target"/>
+    </target>
+
+
+    <target name="build_ru"  description="Build russian swf">
+        <delete>
+            <fileset dir="src/main/flex" includes="**/*.properties"/>
+        </delete>
+
+
+        <!-- copy russian localization files -->
+        <copy todir="src/main/flex" flatten="true">
+            <fileset dir="src/main/resources/ru_RU"/>
+        </copy>
+
+        <exec executable="subWCRev" osfamily="windows">
+          <arg value="src/main/resources/ru_RU"/>
+          <arg value="src/main/resources/ru_RU/ShopManagerApplication.properties"/>
+          <arg value="src/main/flex/ShopManagerApplication.properties"/>
+        </exec>
+
+        <exec executable="svnwcrev" osfamily="unix">
+          <arg value="src/main/resources/ru_RU"/>
+          <arg value="src/main/resources/ru_RU/ShopManagerApplication.properties"/>
+          <arg value="src/main/flex/ShopManagerApplication.properties"/>
+        </exec>
+
+        <mxmlc file="src/main/flex/ShopManagerApplication.mxml" keep-generated-actionscript="false">
+            <load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
+            <source-path path-element="${FLEX_HOME}/frameworks"/>
+            <locale>ru_RU</locale>
+<!--            <include-sources dir="resources/com/npa/org.yes.cart.shopmanager" includes="ShopManagerGlobal.as"/>-->
+<!--            <compiler.source-path path-element="scr/main/resources/com/npa/org.yes.cart.shopmanager"/>-->
+        </mxmlc>
+        <copy file="src/main/flex/ShopManagerApplication.swf" tofile="target/ru_RU/ShopManagerApplication_ru_RU.swf"/>
+        <delete file="src/main/flex/ShopManagerApplication.swf"/>
+    </target>
+
+    <target name="build_en"  description="Build english swf">
+        <delete>
+            <fileset dir="src/main/flex" includes="**/*.properties"/>
+        </delete>
+
+
+        <!-- copy english localization files -->
+        <copy todir="src/main/flex" flatten="true">
+            <fileset dir="src/main/resources/en_EN"/>
+        </copy>
+        <exec executable="subWCRev"  osfamily="windows">
+          <arg value="src/main/resources/en_EN"/>
+          <arg value="src/main/resources/en_EN/ShopManagerApplication.properties"/>
+          <arg value="src/main/flex/ShopManagerApplication.properties"/>
+        </exec>
+        <exec executable="svnwcrev"  osfamily="unix">
+          <arg value="src/main/resources/en_EN"/>
+          <arg value="src/main/resources/en_EN/ShopManagerApplication.properties"/>
+          <arg value="src/main/flex/ShopManagerApplication.properties"/>
+        </exec>
+
+        <mxmlc file="${basedir}/src/main/flex/ShopManagerApplication.mxml" keep-generated-actionscript="false">
+            <load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
+            <source-path path-element="${FLEX_HOME}/frameworks"/>
+       </mxmlc>
+        <copy file="${basedir}/src/main/flex/ShopManagerApplication.swf" tofile="${basedir}/target/en_EN/ShopManagerApplication_en_EN.swf"/>
+        <delete file="${basedir}/src/main/flex/ShopManagerApplication.swf"/>
+    </target>
+
+
+   <target name="build" depends="build_en, build_ru" description="Build all swf">
+
+    </target>
+    <!-- serviceurl="http://localhost:8080/shop-manager-server/spring/amf" -->
+
+    <target name="wrapper_ru">
+        <html-wrapper
+
+                height="100%"
+                width="100%"
+                title="Welcome to Shop Manager (Russian)"
+                file="index.html"
+                bgcolor="red"
+                application="app"
+                swf="ShopManagerApplication_ru_RU"
+                version-major="10"
+                version-minor="0"
+                version-revision="0"
+                history="true"
+                output="../server/src/main/webapp/ru_RU"/>
+    </target>
+
+    <target name="wrapper_en">
+        <html-wrapper
+
+                height="100%"
+                width="100%"
+                title="Welcome to Shop Manager (English)"
+                file="index.html"
+                bgcolor="red"
+                application="app"
+                swf="ShopManagerApplication_en_EN"
+                version-major="10"
+                version-minor="0"
+                version-revision="0"
+                history="true"
+                output="../server/src/main/webapp/en_EN"/>
+    </target>
+
+
+    <target name="wrapper" depends="wrapper_ru, wrapper_en">
+    </target>
+
+    <target name="info">
+	<tstamp prefix="end">
+      		<format property="time" pattern="yyyy-MM-dd hh:mm aa" />
+  	</tstamp>
+
+        <echo message="-----------------------------------------------------"/>
+        <echo message="Set the flashVars manually !!!"/>
+        <echo message="Locale index.html under local assembly and add following lines:"/>
+        <echo message="1. AC_FL_RunContent( &quot;FlashVars&quot;, &quot;serviceurl=http://localhost:8080/shop-manager-server/spring/amf&quot;, "/>
+        <echo message="2. &lt;param name=&quot;serviceurl&quot; value=&quot;http://localhost:8080/shop-manager-server/spring/amf&quot;/&gt;, "/>
+        <echo message="3. &lt;embed src=&quot;ShopManagerApplication_lo_LO.swf&quot; serviceurl=&quot;http://localhost:8080/shop-manager-server/spring/amf&quot; "/>
+        <echo message="-----------------------------------------------------"/>
+	<echo message="${end.time}" />
+
+
+    </target>
+
+    <target name="checkenv" description="Check the environment variable">
+	<echo message="Flex home is: ${FLEX_HOME}"/>
+	<fail message="Please set FLEX_HOME system environment variable" unless="env.FLEX_HOME"/>
+    </target>
+
+
+    <target name="all" depends="clean, checkenv, build, wrapper, info" description="Build all">
+        <delete>
+            <fileset dir="src/main/flex" includes="**/*.properties"/>
+        </delete>
+	<delete file="flex-compiler-config.xml"/>
+
+    </target>
+
+    <target name="depl" depends="all">
+	<copy file="target/en_EN/ShopManagerApplication_en_EN.swf" tofile="../server/src/main/webapp/en_EN/ShopManagerApplication_en_EN.swf"/>
+	<copy file="target/ru_RU/ShopManagerApplication_ru_RU.swf" tofile="../server/src/main/webapp/ru_RU/ShopManagerApplication_ru_RU.swf"/>
+    </target>
+
+
+</project>

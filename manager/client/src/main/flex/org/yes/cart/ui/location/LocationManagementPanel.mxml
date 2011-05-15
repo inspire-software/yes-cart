@@ -1,0 +1,386 @@
+<?xml version="1.0" ?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+           width="100%"
+           height="100%"
+           creationComplete="init();">
+    <mx:Script>
+		<![CDATA[
+        import org.yes.cart.impl.CountryDTOImpl;
+        import org.yes.cart.impl.StateDTOImpl;
+        import org.yes.cart.util.CloneUtil;
+
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        import mx.controls.Alert;
+        import mx.events.CloseEvent;
+        import mx.events.ListEvent;
+        import mx.managers.PopUpManager;
+        import mx.rpc.AsyncResponder;
+        import mx.rpc.events.ResultEvent;
+
+        [Bindable]
+        private var countryDTO:CountryDTOImpl;
+        [Bindable]
+        private var stateDTO:StateDTOImpl;
+
+        private var countryCreateEditDialog:CountryCreateEditDialog;
+
+        private var stateCreateEditDialog:StateCreateEditDialog;
+
+        public function init():void {
+            remoteCountryService.getAll();
+        }
+
+        /**
+         * Country selected event handler.
+         * @param event
+         * @return nothing
+         */
+        private function handleCoutrySelectedClick(event:ListEvent):void {
+            countryDTO = CountryDTOImpl(event.currentTarget.selectedItem);
+            stateDTO = null;
+            remoteStateService.findByCountry(countryDTO.countryCode);
+        }
+
+
+        /**
+         * Delete country click handler.
+         * @param event event
+         * @return nothing
+         */
+        private function deleteCountryClickHandler(event:flash.events.MouseEvent):void {
+            Alert.show(
+                    resourceManager.getString('LocationManagementPanel', 'deleteCountryConfirm'),
+                    resourceManager.getString('LocationManagementPanel', 'warning'),
+                    Alert.OK | Alert.CANCEL, this, deleteCountry, null, Alert.OK);
+        }
+
+        /**
+         * Perform country delete operation.
+         * @param event close event
+         * @return nothing
+         */
+        private function deleteCountry(event:CloseEvent):void {
+            if (event.detail == Alert.OK) {
+                remoteCountryService.remove(countryDTO.countryId).addResponder(
+                        new AsyncResponder(
+                                function(event:*, obj:Object = null):void {
+                                    countryDTO = null;
+                                    stateDTO = null;
+                                    remoteCountryService.getAll();
+                                },
+                                ShopManagerGlobal.instance.defaultFaultHandler
+                                )
+                        );
+            }
+        }
+
+
+        /**
+         * Edit country click handler.
+         * @param event event
+         * @return nothing
+         */
+        private function editCountryClickHandler(event:flash.events.MouseEvent):void {
+            countryCreateEditDialog = CountryCreateEditDialog(
+                    PopUpManager.createPopUp(this, CountryCreateEditDialog, true));
+            countryCreateEditDialog.newCountryFlag = false;
+            countryCreateEditDialog.countryDTOImpl = CountryDTOImpl(CloneUtil.clone(countryDTO));
+            countryCreateEditDialog.saveBtn.addEventListener("click", updateCountry);
+            PopUpManager.centerPopUp(countryCreateEditDialog);
+        }
+
+
+        /**
+         * Perform update country action
+         * @param event event
+         * @return nothing
+         */
+        private function updateCountry(event:Event):void {
+            remoteCountryService.update(countryCreateEditDialog.countryDTOImpl).addResponder(
+                    new AsyncResponder(
+                            function(event:*, obj:Object = null):void {
+                                var tmpSelectedIndex:int = countryGrid.selectedIndex;
+                                remoteCountryService.getAll().addResponder(
+                                        new AsyncResponder(
+                                                function(event2:*, obj2:Object = null):void {
+                                                    countryGrid.selectedIndex = tmpSelectedIndex;
+                                                    countryDTO = countryGrid.dataProvider[tmpSelectedIndex];
+                                                }
+                                                ,
+                                                ShopManagerGlobal.instance.defaultFaultHandler
+                                                )
+                                        );
+
+                            },
+                            ShopManagerGlobal.instance.defaultFaultHandler)
+                    );
+            PopUpManager.removePopUp(countryCreateEditDialog);
+            countryCreateEditDialog = null;
+        }
+
+
+        /**
+         * New country click handler.
+         * @param event event
+         * @return nothing
+         */
+        private function newCountryClickHandler(event:flash.events.MouseEvent):void {
+            countryCreateEditDialog = CountryCreateEditDialog(
+                    PopUpManager.createPopUp(this, CountryCreateEditDialog, true));
+            countryCreateEditDialog.newCountryFlag = true;
+            countryCreateEditDialog.countryDTOImpl = new CountryDTOImpl();
+            countryCreateEditDialog.saveBtn.addEventListener("click", saveCountry);
+            PopUpManager.centerPopUp(countryCreateEditDialog);
+        }
+
+        /**
+         * Perform create new country action
+         * @param event event
+         * @return nothing
+         */
+        private function saveCountry(event:Event):void {
+            remoteCountryService.create(countryCreateEditDialog.countryDTOImpl).addResponder(
+                    new AsyncResponder(
+                            function(event:*, obj:Object = null):void {
+                                countryDTO = null;
+                                stateDTO = null;
+                                remoteCountryService.getAll();
+                            },
+                            ShopManagerGlobal.instance.defaultFaultHandler)
+                    );
+            PopUpManager.removePopUp(countryCreateEditDialog);
+            countryCreateEditDialog = null;
+        }
+
+
+        /**
+         * New state click handler.
+         * @param event event
+         * @return nothing
+         */
+        private function newStateClickHandler(event:flash.events.MouseEvent):void {
+            var parent:DisplayObject = this;
+            remoteStateService.getNew().addResponder(
+                    new AsyncResponder(
+                            function(event:ResultEvent, obj:Object = null):void {
+
+
+                                stateCreateEditDialog = StateCreateEditDialog(PopUpManager.createPopUp(parent, StateCreateEditDialog, true));
+                                stateCreateEditDialog.newStateFlag = true;
+
+                                stateCreateEditDialog.stateDTOImpl = StateDTOImpl(event.result);
+                                stateCreateEditDialog.stateDTOImpl.countryCode = countryDTO.countryCode;
+                                stateCreateEditDialog.saveBtn.addEventListener("click", saveState);
+                                PopUpManager.centerPopUp(stateCreateEditDialog);
+                            }
+                            ,
+                            ShopManagerGlobal.instance.defaultFaultHandler)
+                    );
+        }
+
+
+        /**
+         * New state click handler.
+         * @param event event
+         * @return nothing
+         */
+        private function editStateClickHandler(event:flash.events.MouseEvent):void {
+            stateCreateEditDialog = StateCreateEditDialog(
+                    PopUpManager.createPopUp(this, StateCreateEditDialog, true));
+            stateCreateEditDialog.newStateFlag = false;
+            stateCreateEditDialog.stateDTOImpl = StateDTOImpl(CloneUtil.clone(stateDTO));
+            stateCreateEditDialog.saveBtn.addEventListener("click", updateState);
+            PopUpManager.centerPopUp(stateCreateEditDialog);
+        }
+
+
+        /**
+         * Perform create new state or area or county or province action
+         * @param event event
+         * @return nothing
+         */
+        private function saveState(event:Event):void {
+            var stateDTOImpl:StateDTOImpl = stateCreateEditDialog.stateDTOImpl;
+            remoteStateService.create(stateDTOImpl).addResponder(
+                    new AsyncResponder(
+                            function(event:*, obj:Object = null):void {
+                                stateDTO = null;
+                                remoteStateService.findByCountry(countryDTO.countryCode);
+                            },
+                            ShopManagerGlobal.instance.defaultFaultHandler)
+                    );
+            PopUpManager.removePopUp(stateCreateEditDialog);
+            stateCreateEditDialog = null;
+        }
+
+
+        /**
+         * Perform create new state or area or county or province action
+         * @param event event
+         * @return nothing
+         */
+        private function updateState(event:Event):void {
+            remoteStateService.update(stateCreateEditDialog.stateDTOImpl).addResponder(
+                    new AsyncResponder(
+                            function(event:*, obj:Object = null):void {
+                                var tmpdSelectedIndex:int = stateGrid.selectedIndex;
+                                remoteStateService.findByCountry(countryDTO.countryCode).addResponder(
+                                        new AsyncResponder(
+                                                function(event:*, obj:Object = null):void {
+                                                    stateGrid.selectedIndex = tmpdSelectedIndex;
+                                                    stateDTO = stateGrid.dataProvider[tmpdSelectedIndex];
+                                                },
+                                                ShopManagerGlobal.instance.defaultFaultHandler
+                                                )
+                                        );
+
+                            },
+                            ShopManagerGlobal.instance.defaultFaultHandler
+                            )
+                    );
+            PopUpManager.removePopUp(stateCreateEditDialog);
+            stateCreateEditDialog = null;
+        }
+
+
+        /**
+         * Delete state click handler.
+         * @param event event
+         * @return nothing
+         */
+        private function deleteStateClickHandler(event:flash.events.MouseEvent):void {
+            Alert.show(
+                    resourceManager.getString('LocationManagementPanel', 'deleteStateConfirm'),
+                    resourceManager.getString('LocationManagementPanel', 'warning'),
+                    Alert.OK | Alert.CANCEL, this, deleteState, null, Alert.OK);
+        }
+
+        /**
+         * Perform state delete operation.
+         * @param event close event
+         * @return nothing
+         */
+        private function deleteState(event:CloseEvent):void {
+            if (event.detail == Alert.OK) {
+                remoteStateService.remove(stateDTO.stateId).addResponder(
+                        new AsyncResponder(
+                                function(event:*, obj:Object = null):void {
+                                    stateDTO = null;
+                                    remoteStateService.findByCountry(countryDTO.countryCode);
+                                },
+                                ShopManagerGlobal.instance.defaultFaultHandler
+                                )
+                        );
+            }
+        }
+
+
+        /**
+         * State selected event handler.
+         * @param event
+         * @return nothing
+         */
+        private function handleStateSelectedClick(event:ListEvent):void {
+            stateDTO = StateDTOImpl(event.currentTarget.selectedItem);
+        }
+        ]]>
+    </mx:Script>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteCountryService"
+                     destination="remoteCountryService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteStateService"
+                     destination="remoteStateService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+
+    <mx:VDividedBox height="100%" width="100%">
+        <mx:Panel width="100%" title="@Resource(bundle='LocationManagementPanel',key='countries')">
+            <mx:ControlBar>
+                <mx:Button label="@Resource(bundle='LocationManagementPanel',key='newCountry')"
+                           toolTip="@Resource(bundle='LocationManagementPanel',key='newCountryHint')"
+                           click="newCountryClickHandler(event)"
+                        />
+                <mx:Button label="@Resource(bundle='LocationManagementPanel',key='editCountry')"
+                           toolTip="@Resource(bundle='LocationManagementPanel',key='editCountryHint')"
+                           enabled="{countryDTO != null}"
+                           click="editCountryClickHandler(event)"
+                        />
+                <mx:Button label="@Resource(bundle='LocationManagementPanel',key='deleteCountry')"
+                           toolTip="@Resource(bundle='LocationManagementPanel',key='deleteCountryHint')"
+                           enabled="{countryDTO != null &amp;&amp; remoteStateService.findByCountry.lastResult.length == 0}"
+                           click="deleteCountryClickHandler(event)"
+                        />
+
+            </mx:ControlBar>
+            <mx:DataGrid id="countryGrid"
+                         dataProvider="{remoteCountryService.getAll.lastResult}"
+                         itemClick="handleCoutrySelectedClick(event)"
+                         width="100%" height="100%">
+                <mx:columns>
+                    <mx:DataGridColumn width="80"
+                                       headerText="@Resource(bundle='LocationManagementPanel',key='countryId')"
+                                       dataField="countryId"/>
+                    <mx:DataGridColumn width="100"
+                                       headerText="@Resource(bundle='LocationManagementPanel',key='countryCode')"
+                                       dataField="countryCode"/>
+                    <mx:DataGridColumn width="100"
+                                       headerText="@Resource(bundle='LocationManagementPanel',key='isoCode')"
+                                       dataField="isoCode"/>
+                    <mx:DataGridColumn
+                            headerText="@Resource(bundle='LocationManagementPanel',key='name')"
+                            dataField="name"/>
+                </mx:columns>
+                <!--countries dg-->
+            </mx:DataGrid>
+        </mx:Panel>
+
+        <mx:Panel width="100%" visible="{countryDTO != null}" layout="vertical" title="@Resource(bundle='LocationManagementPanel',key='states')">
+            <mx:ControlBar>
+                <mx:Button label="@Resource(bundle='LocationManagementPanel',key='newState')"
+                           toolTip="@Resource(bundle='LocationManagementPanel',key='newStateHint')"
+                           enabled="{countryDTO != null}"
+                           click="newStateClickHandler(event)"
+                        />
+                <mx:Button label="@Resource(bundle='LocationManagementPanel',key='editState')"
+                           toolTip="@Resource(bundle='LocationManagementPanel',key='editStateHint')"
+                           enabled="{stateDTO != null}"
+                           click="editStateClickHandler(event)"
+                        />
+                <mx:Button label="@Resource(bundle='LocationManagementPanel',key='deleteState')"
+                           toolTip="@Resource(bundle='LocationManagementPanel',key='deleteStateHint')"
+                           enabled="{stateDTO != null}"
+                           click="deleteStateClickHandler(event)"
+                        />
+
+            </mx:ControlBar>
+            <mx:DataGrid id="stateGrid"
+                         dataProvider="{remoteStateService.findByCountry.lastResult}"
+                         itemClick="handleStateSelectedClick(event)"
+                         width="100%" height="100%">
+                <mx:columns>
+                    <mx:DataGridColumn width="80"
+                                       headerText="@Resource(bundle='LocationManagementPanel',key='stateId')"
+                                       dataField="stateId"/>
+
+                    <mx:DataGridColumn width="80"
+                                       headerText="@Resource(bundle='LocationManagementPanel',key='stateCode')"
+                                       dataField="stateCode"/>
+
+                    <mx:DataGridColumn
+                            headerText="@Resource(bundle='LocationManagementPanel',key='stateName')"
+                            dataField="name"/>
+
+                </mx:columns>
+            </mx:DataGrid>
+        </mx:Panel>
+
+    </mx:VDividedBox>
+
+</mx:Canvas>

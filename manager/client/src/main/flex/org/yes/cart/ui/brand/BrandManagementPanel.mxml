@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+           width="100%"
+           height="100%"
+           creationComplete="init();">
+    <mx:Script>
+		<![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import org.yes.cart.constants.AttributeGroupNames;
+        import org.yes.cart.impl.AttrValueBrandDTOImpl;
+        import org.yes.cart.impl.BrandDTOImpl;
+        import org.yes.cart.util.UpdateTarget;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+        import org.yes.cart.ui.attributes.EntityAttributeValuesManagmentPanel;
+
+        import flash.events.MouseEvent;
+
+        import mx.collections.ArrayCollection;
+        import mx.controls.Alert;
+        import mx.events.CloseEvent;
+        import mx.events.IndexChangedEvent;
+        import mx.events.ListEvent;
+        import mx.managers.PopUpManager;
+        import mx.rpc.AsyncResponder;
+        import mx.rpc.AsyncToken;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
+        private var TAB_SUMMARY_IDX:int = 0;
+        private var TAB_IMAGE_IDX:int = 1;
+        private var TAB_ATTR_IDX:int = 2;
+
+
+        [Bindable]
+        private var selectedBrand:BrandDTOImpl;
+
+        private var newPopUp:BrandCreateDialog;
+
+        private var attrValuePanel:EntityAttributeValuesManagmentPanel;
+
+        public function init():void {
+            remoteBrandService.getAll();
+        }
+
+
+        /**
+         * Handle the warehouse selection in data grid.
+         * @param event event
+         * @return nothing
+         */
+        private function handleBrandSelectedClick(event:ListEvent):void {
+            selectedBrand = BrandDTOImpl(event.currentTarget.selectedItem);
+            initTab(brandTabNavigator.selectedIndex);
+        }
+
+
+        private function summaryTabSelected(param:*):void {
+            nameTextImput.text = selectedBrand.name;
+            descriptionTextInput.text = selectedBrand.description;
+
+        }
+
+        private function imageTabSelected(param:*):void {
+            remoteBrandService.getEntityAttributes(selectedBrand.brandId).addResponder(
+                    new AsyncResponder(
+                        //Service call back with category attribute values.
+                            function (event:ResultEvent, obj:Object = null):void {
+                                getEntityAttributesResultHandlerInternal(event, brandImagesPanel, acceptImageAttributes);
+                            }
+                            ,
+                            ShopManagerGlobal.instance.defaultFaultHandler
+                            )
+                    );
+
+        }
+
+        /**
+         * Service call back with category attribute values.
+         * @param event event
+         * @param canvas target tab
+         * @return nothing
+         */
+        private function getEntityAttributesResultHandlerInternal(event:ResultEvent, canvas:Canvas, filterFunk:Function):void {
+            Debug.trace("TRACE BrandManagementPanel getEntityAttributesResultHandlerInternal");
+            attrValuePanel = new EntityAttributeValuesManagmentPanel();
+            attrValuePanel.attrValue = ArrayCollection(event.result);
+
+
+            attrValuePanel.entityCode = null;
+            attrValuePanel.attributeGroup = AttributeGroupNames.BRAND;
+            attrValuePanel.attrValue.filterFunction = filterFunk;
+            attrValuePanel.attrValue.refresh();
+
+            attrValuePanel.attrValueChangedCallBack = attrValueChanged;
+            attrValuePanel.attrValueDeleteCallBack = attrValueDelete;
+
+
+            canvas.removeAllChildren();
+            canvas.addChild(attrValuePanel);
+
+
+        }
+
+        /**
+         * Delete attribute value.
+         * @param attrValueId attribute value id.
+         */
+        private function attrValueDelete(attrValueId:Number):void {
+            Debug.trace("INFO BrandManagementPanel delete brand attribute with id = " + attrValueId);
+            remoteBrandService.deleteAttributeValue(attrValueId);
+        }
+
+
+        /**
+         * Value changed callback function.
+         * @param attrValue  attribute value object.
+         * @param newValue new value
+         * @return nothing
+         */
+        private function attrValueChanged(attrValue:Object, newValue:String, rowIdx:int):void {
+            Debug.trace("INFO BrandManagementPanel#attrValueChanged brand attribute value changed call back: " + selectedBrand
+                    + "\n attrValue: " + attrValue + " \n new value: " + newValue);
+            Debug.traceObj(attrValue);
+            Debug.traceObj(AttrValueBrandDTOImpl(attrValue));
+            attrValue.val = newValue;
+            var asyncToken:AsyncToken;
+            var updateTarget:UpdateTarget;
+            if (isNaN(attrValue.attrvalueId) || attrValue.attrvalueId == 0) {
+                // insert new attribute
+                asyncToken = remoteBrandService.createEntityAttributeValue(AttrValueBrandDTOImpl(attrValue));
+                updateTarget = new UpdateTarget(UpdateTarget.NEW, rowIdx);
+            } else {
+                //update
+                asyncToken = remoteBrandService.updateEntityAttributeValue(AttrValueBrandDTOImpl(attrValue));
+                updateTarget = new UpdateTarget(UpdateTarget.UPDATE, rowIdx);
+            }
+            asyncToken.addResponder(new AsyncResponder(brandAttributeUpdatedResultHandler, ShopManagerGlobal.instance.defaultFaultHandler, updateTarget));
+            Debug.trace("INFO BrandManagementPanel#attrValueChanged exit");
+        }
+
+
+        /**
+         * Service call back with brand attribute value.
+         * @param event event
+         * @param token async token
+         * @return nothing
+         */
+        private function brandAttributeUpdatedResultHandler(event:ResultEvent, updateTarget:UpdateTarget):void {
+            Debug.trace("INFO BrandManagementPanel updateTarget " + updateTarget);
+            var obj:Object;
+            if (updateTarget.action == UpdateTarget.NEW) {
+                obj = remoteBrandService.createEntityAttributeValue.lastResult;
+            } else {
+                obj = remoteBrandService.updateEntityAttributeValue.lastResult;
+            }
+            Debug.trace("TRACE BrandManagementPanel obj is " + obj);
+            attrValuePanel.attrValue.setItemAt(obj, updateTarget.idx);
+
+        }
+
+
+        /**
+         * Do not show the image attributes.
+         * @param item item to filter
+         * @return true if need to show item.
+         */
+        private function rejectImageAttributes(item:Object):Boolean {
+            return !acceptImageAttributes(item);
+        }
+
+        /**
+         * Accept only images
+         * @param item item to filter
+         * @return true if need to show item.
+         */
+        private function acceptImageAttributes(item:Object):Boolean {
+            return (item.attributeDTO.etypeName.indexOf("Image") > -1);
+        }
+
+
+        private function initTab(idx:int):void {
+            Debug.trace("INFO BrandManagementPanel selected tab idx is " + idx);
+            switch (idx) {
+                case TAB_SUMMARY_IDX: {
+                    summaryTabSelected(null);
+                    break;
+                }
+                case TAB_IMAGE_IDX: {
+                    imageTabSelected(null);
+                    break;
+                }
+                /*case TAB_ATTR_IDX: {
+                 attrTabSelected(null);
+                 break;
+                 } */
+            }
+        }
+
+
+        /**
+         * Tab clicked handler
+         * @param event event
+         * @return nothing
+         */
+        private function onTabClick(event:IndexChangedEvent):void {
+            initTab(event.newIndex);
+        }
+
+
+        /**
+         * Create new warehouse click handler.
+         * @param event event
+         * @return nothing
+         */
+        private function newBrandClickHandler(event:MouseEvent):void {
+            newPopUp = BrandCreateDialog(PopUpManager.createPopUp(this, BrandCreateDialog, true));
+            newPopUp.saveBtn.addEventListener("click", createBrand);
+            newPopUp.brandDTOImpl = new BrandDTOImpl();
+            PopUpManager.centerPopUp(newPopUp);
+        }
+
+        /**
+         * Perform new warehouse creation.
+         * @param event event
+         * @return nothing
+         */
+        private function createBrand(event:Event):void {
+            remoteBrandService.create(newPopUp.brandDTOImpl).addResponder(
+                    new AsyncResponder(
+                        //Brand created service call back .
+                            function (event:ResultEvent, obj:Object = null):void {
+                                selectedBrand = null;
+                                remoteBrandService.getAll();
+                            }
+                            ,
+                        //Warehouse creation fauld handler
+                            function(event:FaultEvent, obj:Object = null):void {
+                                Alert.show(
+                                        resourceManager.getString('BrandManagementPanel', 'brandNotCreated') + "\n" + event.message,
+                                        resourceManager.getString('BrandManagementPanel', 'error'));
+                                selectedBrand = null;
+                                remoteBrandService.getAll();
+                            }
+
+                            )
+                    );
+            PopUpManager.removePopUp(newPopUp);
+        }
+
+
+        /**
+         * Edit existing warehouse click handler.
+         * @param event event
+         * @return nothing
+         */
+        private function editBrandClickHandler(event:MouseEvent):void {
+            newPopUp = BrandCreateDialog(PopUpManager.createPopUp(this, BrandCreateDialog, true));
+            newPopUp.saveBtn.addEventListener("click", updateExistingBrand);
+            newPopUp.brandDTOImpl = selectedBrand;
+            PopUpManager.centerPopUp(newPopUp);
+        }
+
+        /**
+         * Perform warehouse update.
+         * @param event event
+         * @return nothing.
+         */
+        private function updateExistingBrand(event:Event):void {
+            remoteBrandService.update(newPopUp.brandDTOImpl).addResponder(
+                    new AsyncResponder(
+                        //Warehouse updated service call back .
+                            function (event:ResultEvent, obj:Object = null):void {
+                                selectedBrand = null;
+                                remoteBrandService.getAll();
+                            }
+                            ,
+                        //Warehouse update fault handler
+                            function (event:FaultEvent, obj:Object = null):void {
+                                Alert.show(
+                                        resourceManager.getString('BrandManagementPanel', 'brandNotUpdated'),
+                                        resourceManager.getString('BrandManagementPanel', 'error'));
+                                selectedBrand = null;
+                                remoteBrandService.getAll();
+                            }
+
+                            )
+                    );
+            PopUpManager.removePopUp(newPopUp);
+        }
+
+
+        /**
+         * Delete warehouse click handler.
+         * @param event event
+         * @return nothing
+         */
+        private function deleteBrandClickHandler(event:MouseEvent):void {
+            Alert.show(
+                    resourceManager.getString('BrandManagementPanel', 'deleteBrandConfirm'),
+                    resourceManager.getString('BrandManagementPanel', 'warning'),
+                    Alert.OK | Alert.CANCEL, this, deleteBrand, null, Alert.OK);
+        }
+
+        /**
+         * Perform delete warehouse operation.
+         * @param event close event
+         * @return nothing
+         */
+        private function deleteBrand(event:CloseEvent):void {
+            if (event.detail == Alert.OK) {
+
+                remoteBrandService.remove(selectedBrand.brandId).addResponder(
+                        new AsyncResponder(
+                            //Delete warehouse service call back .
+                                function (event:ResultEvent, obj:Object = null):void {
+                                    Debug.trace("warehouse panel delete fault handler:" + event.toString());
+                                    Alert.show(
+                                            resourceManager.getString('BrandManagementPanel', 'brandDeletedConfirm'),
+                                            resourceManager.getString('BrandManagementPanel', 'info'));
+                                    selectedBrand = null;
+                                    remoteBrandService.getAll();
+                                }
+                                ,
+                            //fault handler
+                                function (event:FaultEvent, obj:Object = null):void {
+                                    Alert.show(
+                                            resourceManager.getString('BrandManagementPanel', 'brandNotDeleted'),
+                                            resourceManager.getString('BrandManagementPanel', 'error'));
+                                }
+
+                                )
+                        );
+            }
+        }
+        ]]>
+    </mx:Script>
+
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteBrandService"
+                     destination="remoteBrandService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+    <mx:VDividedBox height="100%" width="100%">
+        <mx:VBox width="100%">
+            <mx:ControlBar>
+                <mx:Button label="@Resource(bundle='BrandManagementPanel',key='newBrand')"
+                           toolTip="@Resource(bundle='BrandManagementPanel',key='newBrandHint')"
+                           click="newBrandClickHandler(event)"/>
+                <mx:Button label="@Resource(bundle='BrandManagementPanel',key='editBrand')"
+                           toolTip="@Resource(bundle='BrandManagementPanel',key='editBrandHint')"
+                           enabled="{selectedBrand != null}"
+                           click="editBrandClickHandler(event)"/>
+                <mx:Button label="@Resource(bundle='BrandManagementPanel',key='deleteBrand')"
+                           toolTip="@Resource(bundle='BrandManagementPanel',key='deleteBrandHint')"
+                           enabled="{selectedBrand != null}"
+                           click="deleteBrandClickHandler(event)"/>
+
+            </mx:ControlBar>
+
+            <mx:DataGrid x="0" y="0" width="100%" height="99%"
+                         dataProvider="{remoteBrandService.getAll.lastResult}"
+                         itemClick="handleBrandSelectedClick(event)">
+                <mx:columns>
+                    <mx:DataGridColumn width="80" headerText="@Resource(bundle='BrandManagementPanel',key='id')"
+                                       dataField="brandId"/>
+                    <mx:DataGridColumn width="300" headerText="@Resource(bundle='BrandManagementPanel',key='name')"
+                                       dataField="name"/>
+                    <mx:DataGridColumn headerText="@Resource(bundle='BrandManagementPanel',key='description')"
+                                       dataField="description"/>
+                </mx:columns>
+            </mx:DataGrid>
+
+        </mx:VBox>
+        <mx:TabNavigator id="brandTabNavigator" width="100%" height="100%" change="onTabClick(event);"
+                         visible="{selectedBrand != null}">
+            <mx:Canvas id="brandSummaryPanel" label="@Resource(bundle='BrandManagementPanel',key='summary')"
+                       width="100%" height="100%">
+                <mx:Form x="0" y="0">
+                    <mx:FormItem label="@Resource(bundle='BrandManagementPanel',key='name')">
+                        <mx:TextInput id="nameTextImput" width="200" editable="false"/>
+                    </mx:FormItem>
+                    <mx:FormItem label="@Resource(bundle='BrandManagementPanel',key='description')">
+                        <mx:TextArea id="descriptionTextInput" width="200" editable="false"/>
+                    </mx:FormItem>
+                </mx:Form>
+            </mx:Canvas>
+            <mx:Canvas id="brandImagesPanel" label="@Resource(bundle='BrandManagementPanel',key='images')" width="100%"
+                       height="100%"/>
+
+
+        </mx:TabNavigator>
+
+
+    </mx:VDividedBox>
+
+
+</mx:Canvas>

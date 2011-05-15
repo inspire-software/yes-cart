@@ -1,0 +1,75 @@
+<?xml version="1.0" ?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="375" height="500"
+                title="@Resource(bundle='CategoryManagmentPanel',key='find')"
+                showCloseButton="true"
+                close="PopUpManager.removePopUp(this)"
+                creationComplete="init();"
+        >
+
+    <mx:VBox width="100%" height="100%">
+        <mx:Tree id="categoryTree" x="0" y="0" height="100%" width="100%"
+                 labelField="name"
+                 creationComplete="initCategoryTree(event);"
+                 dataChange="initCategoryTree(event);"
+                 dataProvider="{remoteCategoryService.getAll.lastResult}"
+                 change="categorySelectedEvent(event);"
+                />
+
+        <mx:ControlBar x="0" y="0" width="100%" horizontalAlign="right">
+            <mx:Button label="@Resource(bundle='CategoryCreateDialog',key='close')"
+                       click="PopUpManager.removePopUp(this)"/>
+            <mx:Button id="selectProductButton" label="@Resource(bundle='ProductManagmentPanel',key='select')"
+                       enabled="{selectedCategoryDTOImpl != null}"/>
+        </mx:ControlBar>
+    </mx:VBox>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteCategoryService" destination="remoteCategoryService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+
+    <mx:Script>
+            <![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import org.yes.cart.impl.CategoryDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        import mx.events.FlexEvent;
+        import mx.events.ListEvent;
+        import mx.managers.PopUpManager;
+
+        [Bindable]
+        public var selectedCategoryDTOImpl:CategoryDTOImpl;
+
+        public function init():void {
+            remoteCategoryService.getAll();
+        }
+
+
+        /**
+         * Creation of category tree completed. Expand first (root) item
+         * @return nothing
+         */
+        private function initCategoryTree(evt:FlexEvent):void {
+            try {
+                categoryTree.expandItem(categoryTree.firstVisibleItem, true, true);
+            } catch (errObject:Error) {
+
+            }
+        }
+
+        /**
+         * Category selection handler
+         * @param event selection event
+         * @return nothing
+         */
+        private function categorySelectedEvent(event:ListEvent):void {
+            selectedCategoryDTOImpl = CategoryDTOImpl(event.currentTarget.selectedItem);
+            Debug.trace("Selected category dto id is :" + selectedCategoryDTOImpl.categoryId);
+        }
+        ]]>
+    </mx:Script>
+
+</mx:TitleWindow>

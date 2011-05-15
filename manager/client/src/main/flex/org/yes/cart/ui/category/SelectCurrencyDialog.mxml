@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="342" height="140"
+				title="@Resource(bundle='CategoryManagmentPanel',key='selectCurrency')"  showCloseButton="true" close="PopUpManager.removePopUp(this)" >
+
+	<mx:Label x="10" y="26" text="@Resource(bundle='CategoryManagmentPanel',key='currency')"/>
+
+    <mx:ComboBox change="currencyChangeEvt(event)"
+                 x="152" y="24" width="160"
+                 id="currenciesComboBox"
+                 prompt="@Resource(bundle='CategoryManagmentPanel',key='selectCurrencyPrompt')"
+            >
+
+	</mx:ComboBox>
+
+	<mx:Button x="217" y="56" id="closeBtn" label="@Resource(bundle='CategoryManagmentPanel',key='close')"
+			   click="PopUpManager.removePopUp(this)" width="94"/>
+
+	<mx:Button x="115" y="56" id="okBtn" label="@Resource(bundle='CategoryManagmentPanel',key='ok')"
+			   width="94"
+               enabled="{okEnabled}"
+            />
+
+
+	<mx:Script>
+		<![CDATA[
+
+
+        import mx.managers.PopUpManager;
+
+
+        private var _currency:String;
+
+
+        public function get currency():String {
+            return _currency;
+        }
+
+        public function set currency(value:String):void {
+            _currency = value;
+        }
+
+        private function currencyChangeEvt(event:Event):void {
+            _currency = event.currentTarget.selectedItem;
+            okEnabled = true;
+        }
+
+
+        private function init(): void {
+
+        }
+
+		]]>
+	</mx:Script>
+
+    <mx:Boolean id="okEnabled">false</mx:Boolean>
+
+</mx:TitleWindow>

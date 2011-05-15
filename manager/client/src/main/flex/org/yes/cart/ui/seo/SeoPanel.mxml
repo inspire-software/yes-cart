@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:controls="controls.*" width="100%" height="192"
+           creationComplete="init();">
+
+    <mx:Script><![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import org.yes.cart.impl.SeoDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        import mx.binding.utils.BindingUtils;
+        import mx.binding.utils.ChangeWatcher;
+        import mx.collections.ArrayList;
+        import mx.controls.Alert;
+        import mx.events.PropertyChangeEvent;
+
+        import mx.rpc.AsyncResponder;
+        import mx.rpc.AsyncToken;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
+        /**
+         * Callback function to handle seo create / edit event
+         */
+        public var seoCreatedCallBack:Function;
+        /**
+         * Callback function to handle seo removed event
+         */
+        public var seoRemovedCallBack:Function;
+
+        private var seoDTOImpl:SeoDTOImpl;
+
+
+        public function init():void {
+            if (isNaN(seoId) || seoId == 0) {
+                this.seoDTOImpl = new SeoDTOImpl();
+                bind();
+                clearVisible = false;
+
+            } else {
+                var asyncToken:AsyncToken = remoteSeoService.getById(seoId);
+                asyncToken.addResponder(new AsyncResponder(getByIdResultHandler,
+                        ShopManagerGlobal.instance.defaultFaultHandler));
+            }
+
+        }
+
+
+        private function getByIdResultHandler(event:ResultEvent, token:AsyncToken):void {
+            seoDTOImpl = SeoDTOImpl(event.result);
+            clearVisible = true;
+            bind();
+
+        }
+
+        private function seoDTOChanged(event:PropertyChangeEvent):void {
+            saveDiscardVisible = true;
+        }
+
+        /**
+         * Remove deom db seo by id and update entity in remote callback
+         * @param event event
+         * @return nothing
+         */
+        private function clearBtnClickHandler(event:flash.events.MouseEvent):void {
+
+            if (seoRemovedCallBack != null) {
+                Debug.trace("INFO SeoPanel seoDTOImpl to clear is " + seoDTOImpl);
+                seoRemovedCallBack();
+
+                unbind();
+                seoDTOImpl = new SeoDTOImpl();
+                bind();
+                clearVisible = false;
+
+
+            } else {
+                Debug.trace("ERROR SeoPanel seoRemovedCallBack is null, so remove will not be performed");
+            }
+        }
+
+
+        private function saveBtnClickHandler(event:flash.events.MouseEvent):void {
+
+            var asyncToken:AsyncToken;
+            if (isNaN(seoDTOImpl.seoId) || seoDTOImpl.seoId == 0) {
+                asyncToken = remoteSeoService.create(seoDTOImpl);
+            } else {
+                asyncToken = remoteSeoService.update(seoDTOImpl);
+            }
+            asyncToken.addResponder(
+                    new AsyncResponder(createUpdateResultHandler, ShopManagerGlobal.instance.defaultFaultHandler));
+        }
+
+
+        /**
+         * Async call back after seo was edited ar created.
+         * @param event event
+         * @param token token
+         * @return nothing
+         */
+        private function createUpdateResultHandler(event:ResultEvent, token:AsyncToken):void {
+            unbind();
+            seoDTOImpl = SeoDTOImpl(event.result);
+            bind();
+            if (seoCreatedCallBack != null) {
+                seoCreatedCallBack(seoDTOImpl);
+            }
+            saveDiscardVisible = false;
+
+
+        }
+
+        private function createUpdateFaultHandler(event:FaultEvent, token:AsyncToken):void {
+            Alert.show(event.toString(), resourceManager.getString('SeoPanel', 'communicationError'));
+        }
+
+        private var changeWatchers:ArrayList = new ArrayList();
+
+        private function unbind():void {
+            for (var i:int = 0; i < changeWatchers.length; i++) {
+                var cw:ChangeWatcher = ChangeWatcher(changeWatchers.getItemAt(i));
+                cw.unwatch();
+            }
+            changeWatchers.removeAll();
+        }
+
+        private function bind():void {
+
+            unbind();
+
+            BindingUtils.bindProperty(uriTextInput, "text", this.seoDTOImpl, "uri");
+            BindingUtils.bindProperty(tetleTextInput, "text", this.seoDTOImpl, "title");
+            BindingUtils.bindProperty(metakeywordsTextInput, "text", this.seoDTOImpl, "metakeywords");
+            BindingUtils.bindProperty(metadescriptionTextInput, "text", this.seoDTOImpl, "metadescription");
+
+            BindingUtils.bindProperty(this.seoDTOImpl, "uri", uriTextInput, "text");
+            BindingUtils.bindProperty(this.seoDTOImpl, "title", tetleTextInput, "text");
+            BindingUtils.bindProperty(this.seoDTOImpl, "metakeywords", metakeywordsTextInput, "text");
+            BindingUtils.bindProperty(this.seoDTOImpl, "metadescription", metadescriptionTextInput, "text");
+
+            ChangeWatcher.watch(this.seoDTOImpl, "uri", seoDTOChanged);
+            ChangeWatcher.watch(this.seoDTOImpl, "title", seoDTOChanged);
+            ChangeWatcher.watch(this.seoDTOImpl, "metakeywords", seoDTOChanged);
+            ChangeWatcher.watch(this.seoDTOImpl, "metadescription", seoDTOChanged);
+        }
+        ]]>
+    </mx:Script>
+
+    <mx:RemoteObject showBusyCursor="true"
+                     id="remoteSeoService"
+                     destination="remoteSeoService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+    <mx:Number id="seoId">0</mx:Number>
+    <mx:Boolean id="saveDiscardVisible">false</mx:Boolean>
+    <mx:Boolean id="clearVisible">false</mx:Boolean>
+
+
+    <mx:HBox id="mainPanel">
+        <mx:ControlBar x="0" y="0" width="100%" height="30">
+            <mx:Label id="infoLabel"/>
+        </mx:ControlBar>
+
+        <mx:Form x="0" y="30" id="seoForm">
+            <mx:FormItem label="@Resource(bundle='SeoPanel',key='url')">
+                <mx:TextInput id="uriTextInput" width="550"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='SeoPanel',key='title')">
+                <mx:TextInput id="tetleTextInput" width="550"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='SeoPanel',key='metakeywords')">
+                <mx:TextInput id="metakeywordsTextInput" width="550"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='SeoPanel',key='metadescription')">
+                <mx:TextInput id="metadescriptionTextInput" width="550"/>
+            </mx:FormItem>
+            <mx:HBox  horizontalAlign="right" width="100%">
+                <mx:Button enabled="{clearVisible}"
+                           label="@Resource(bundle='SeoPanel',key='clear')"
+                           toolTip="@Resource(bundle='SeoPanel',key='clearHint')"
+                           click="clearBtnClickHandler(event)"
+                        />
+
+                <mx:Button enabled="{saveDiscardVisible}"
+                           label="@Resource(bundle='SeoPanel',key='save')"
+                           click="saveBtnClickHandler(event)"/>
+            </mx:HBox>
+
+        </mx:Form>
+    </mx:HBox>
+
+
+</mx:Canvas>

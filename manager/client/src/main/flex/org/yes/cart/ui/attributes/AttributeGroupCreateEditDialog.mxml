@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="342" height="196"
+				title="Create user"  showCloseButton="true" close="PopUpManager.removePopUp(this)" >
+
+
+	<mx:Label x="30" y="26" text="@Resource(bundle='AttributeGroupCreateEditDialog',key='code')"/>
+	<mx:Label x="30" y="56" text="@Resource(bundle='AttributeGroupCreateEditDialog',key='name')"/>
+	<mx:Label x="30" y="86" text="@Resource(bundle='AttributeGroupCreateEditDialog',key='description')"/>
+	<mx:TextInput x="139" y="24" width="160" id="code" enabled="{newGroupFlag}"/>
+	<mx:TextInput x="139" y="54" width="160" id="attrname"/>
+	<mx:TextInput x="139" y="84" width="160" id="description"/>
+	<mx:Button x="205" y="114" id="closeBtn" label="@Resource(bundle='AttributeGroupCreateEditDialog',key='close')"
+               click="PopUpManager.removePopUp(this)" width="94"/>
+	<mx:Button x="103" y="114" id="saveBtn" label="Save"
+               width="94"/>
+
+    <mx:Boolean id="newGroupFlag">false</mx:Boolean>
+
+
+	<mx:Script>
+		<![CDATA[
+
+
+        import mx.managers.PopUpManager;
+
+
+        private function init(): void {
+            if (newGroupFlag) {
+                this.title = resourceManager.getString('AttributeGroupCreateEditDialog', 'newGroup');
+                saveBtn.label = resourceManager.getString('AttributeGroupCreateEditDialog', 'create');
+            } else {
+                this.title = resourceManager.getString('AttributeGroupCreateEditDialog', 'editGroup');
+                saveBtn.label = resourceManager.getString('AttributeGroupCreateEditDialog', 'update');
+            }
+        }
+
+        public function editAttrGroup(code:String, name:String, description:String):void {
+            newGroupFlag = false;
+            this.code.text = code;
+            this.attrname.text = name;
+            this.description.text = description;
+            init();
+        }
+
+        public function createNewAttrGroup():void {
+            newGroupFlag = true;
+            init();
+        }
+		]]>
+	</mx:Script>
+
+</mx:TitleWindow>

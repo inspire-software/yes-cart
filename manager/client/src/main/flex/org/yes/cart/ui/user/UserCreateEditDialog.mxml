@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+				title="Create user"  showCloseButton="true" close="PopUpManager.removePopUp(this)" >
+
+    <mx:Form>
+        <mx:FormItem label="@Resource(bundle='UserCreateEditDialog',key='email')">
+            <mx:TextInput width="160" id="email" enabled="{newUserFlag}"/>
+        </mx:FormItem>
+        <mx:FormItem label="@Resource(bundle='UserCreateEditDialog',key='firstName')">
+            <mx:TextInput width="160" id="firstName"/>
+        </mx:FormItem>
+        <mx:FormItem label="@Resource(bundle='UserCreateEditDialog',key='lastName')">
+            <mx:TextInput width="160" id="lastName"/>
+        </mx:FormItem>
+    </mx:Form>
+    <mx:ControlBar horizontalAlign="right">
+        <mx:Button id="saveBtn" label="Save"  width="94"/>
+        <mx:Button id="closeBtn" label="@Resource(bundle='UserCreateEditDialog',key='close')"
+                   click="PopUpManager.removePopUp(this)" width="94"/>
+    </mx:ControlBar>
+
+
+    <mx:Boolean id="newUserFlag">false</mx:Boolean>
+
+
+	<mx:Script>
+		<![CDATA[
+
+        
+        import mx.managers.PopUpManager;
+
+
+        private function init(): void {
+            if (newUserFlag) {
+                this.title = resourceManager.getString('UserCreateEditDialog', 'newUser');
+                saveBtn.label = resourceManager.getString('UserCreateEditDialog', 'create');
+            } else {
+                this.title = resourceManager.getString('UserCreateEditDialog', 'editUser');
+                saveBtn.label = resourceManager.getString('UserCreateEditDialog', 'update');
+            }
+        }
+
+        public function editUser(email:String, firstName:String, lastName:String):void {
+            newUserFlag = false;
+            this.email.text = email;
+            this.firstName.text = firstName;
+            this.lastName.text = lastName;
+            init();
+        }
+
+        public function createNewUser():void {
+            newUserFlag = true;
+            init();
+        }
+		]]>
+	</mx:Script>
+
+</mx:TitleWindow>

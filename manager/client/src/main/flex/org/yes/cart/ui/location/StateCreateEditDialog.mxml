@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+                creationComplete="init()"
+                creationCompleteEffect="Zoom"
+				title="Create state"  showCloseButton="true"
+                close="PopUpManager.removePopUp(this)" >
+
+    <mx:Boolean id="newStateFlag">false</mx:Boolean>
+
+
+    <mx:Form>
+        <mx:FormItem  width="100%" label="@Resource(bundle='LocationManagementPanel',key='stateCode')">
+            <mx:TextInput   width="160" id="stateCode"/>
+        </mx:FormItem>
+        <mx:FormItem  width="100%" label="@Resource(bundle='LocationManagementPanel',key='name')">
+            <mx:TextInput   width="160" id="lname"/>
+        </mx:FormItem>
+    </mx:Form>
+    <mx:ControlBar horizontalAlign="right">
+        <mx:Button  id="saveBtn" label="Save"
+                   width="94"/>
+        <mx:Button id="closeBtn" label="@Resource(bundle='LocationManagementPanel',key='close')"
+                   click="PopUpManager.removePopUp(this)" width="94"/>
+    </mx:ControlBar>
+
+
+    <mx:Script>
+       <![CDATA[
+        import org.yes.cart.impl.StateDTOImpl;
+
+        import mx.binding.utils.BindingUtils;
+        import mx.managers.PopUpManager;
+
+
+        [Bindable]
+        private var _stateDTOImpl:StateDTOImpl;
+
+
+        public function get stateDTOImpl():StateDTOImpl {
+            return _stateDTOImpl;
+        }
+
+        public function set stateDTOImpl(value:StateDTOImpl):void {
+            _stateDTOImpl = value;
+        }
+
+        private function init():void {
+            if (newStateFlag) {
+                this.title = resourceManager.getString('LocationManagementPanel', 'newStateDialogTitle');
+                saveBtn.label = resourceManager.getString('LocationManagementPanel', 'create');
+            } else {
+                this.title = resourceManager.getString('LocationManagementPanel', 'editStateDialogTitle');
+                saveBtn.label = resourceManager.getString('LocationManagementPanel', 'update');
+            }
+
+
+            BindingUtils.bindProperty(this.stateCode, "text", _stateDTOImpl, "stateCode");
+            BindingUtils.bindProperty(this.lname, "text", _stateDTOImpl, "name");
+
+            BindingUtils.bindProperty(_stateDTOImpl, "stateCode", this.stateCode, "text");
+            BindingUtils.bindProperty(_stateDTOImpl, "name", this.lname, "text");
+
+
+        }
+        ]]>
+
+        </mx:Script>
+</mx:TitleWindow>

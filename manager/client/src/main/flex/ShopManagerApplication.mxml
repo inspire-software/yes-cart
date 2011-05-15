@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:controls="controls.*"
+                usePreloader="true"
+                layout="absolute"
+                minWidth="800"
+                minHeight="600"
+                creationComplete="init();"
+                creationCompleteEffect="Zoom"
+                xmlns:component="com.*"
+
+
+        >
+
+    <mx:Script>
+		<![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import org.yes.cart.ui.attributes.AttributesManagmentPanel;
+        import org.yes.cart.ui.brand.BrandManagementPanel;
+        import org.yes.cart.ui.bulkimport.BulkImportPanel;
+        import org.yes.cart.ui.carrier.CarrierManagementPanel;
+        import org.yes.cart.ui.order.CustomerOrderPanel;
+        import org.yes.cart.ui.category.CategoryManagmentPanel;
+        import org.yes.cart.ui.customer.CustomerManagementPanel;
+        import org.yes.cart.ui.location.LocationManagementPanel;
+        import org.yes.cart.ui.product.ProductManagmentPanel;
+        import org.yes.cart.ui.producttype.ProductTypeManagementPanel;
+        import org.yes.cart.ui.reindex.ReindexPanel;
+
+        import org.yes.cart.ui.role.RoleManagmentPanel;
+        import org.yes.cart.ui.store.StoresManagmentPanel;
+        import org.yes.cart.ui.user.UserManagmentPanel;
+
+        import org.yes.cart.ui.warehouse.WarehouseManagmentPanel;
+
+
+        import mx.rpc.events.ResultEvent;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.AsyncToken;
+        import mx.rpc.AsyncResponder;
+        import mx.controls.Alert;
+        import mx.messaging.channels.AMFChannel;
+
+
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+
+        private var shopManagerGlobal:ShopManagerGlobal;
+
+
+        public function init():void {
+            currentState = "loginState";
+            var url:String;
+            if (Application.application.parameters.serviceurl == undefined || Application.application.parameters.serviceurl == '') {
+                url = "http://localhost:8080/shop-manager-server/spring/amf";
+                Alert.show(
+                        resourceManager.getString("ShopManagerApplication", "serviceUrlNotConfigured") + url,
+                        resourceManager.getString("ShopManagerApplication", "warning"));
+            } else {
+                url = Application.application.parameters.serviceurl;
+            }
+            ShopManagerGlobal.getInstance().url = url;
+
+            channelSet.removeChannel(myamf);
+            myamf = new AMFChannel("myamf", url);
+            channelSet.addChannel(myamf);
+        }
+
+
+        private function cheatLogin():void {
+            username.text = "iazarny@yahoo.com";
+            password.text = "1234567";
+            // password.text = "gbyudbysytktnf.n";
+            login();
+        }
+
+        private function login():void {
+
+            currentState = "inProgressState";
+            ShopManagerGlobal.getInstance().username = username.text;
+
+            ShopManagerGlobal.getInstance().password = password.text;
+
+            var token:AsyncToken = channelSet.login(
+                    username.text,
+                    password.text);
+            token.addResponder(new AsyncResponder(loginResult, loginFault));
+        }
+
+        private function loginResult(event:ResultEvent, token:AsyncToken):void {
+            ShopManagerGlobal.getInstance().amfChannel = myamf;
+            ShopManagerGlobal.getInstance().channelSet = channelSet;
+            currentState = "userAuthenticated";
+
+        }
+
+        private function loginFault(event:FaultEvent, token:AsyncToken):void {
+            invalidLogin = true;
+            currentState = "loginState";
+            var msg:String = "ERROR Can not perform logon to url ["
+                    + ShopManagerGlobal.getInstance().url
+                    + "] with name ["
+                    + ShopManagerGlobal.getInstance().username
+                    + "] and  password ["
+                    + ShopManagerGlobal.getInstance().password
+                    + "]. Fault event is: "
+                    + event.fault.message;
+            Debug.trace(msg);
+            Alert.show(msg, "Login failed");
+
+        }
+
+        /**
+         * product reindexing.
+         * @param event mouse event
+         */
+        protected function reindex_clickHandler(event:MouseEvent):void {
+            mainPanel.removeAllChildren();
+            mainPanel.addChild(new ReindexPanel());
+        }
+
+        /**
+         * product reindexing.
+         * @param event mouse event
+         */
+        protected function help_clickHandler(event:MouseEvent):void {
+            Alert.show(
+                    resourceManager.getString('ShopManagerApplication', 'revLabel') + resourceManager.getString('ShopManagerApplication', 'rev') + "\n" +
+                            resourceManager.getString('ShopManagerApplication', 'revDateLabel') + resourceManager.getString('ShopManagerApplication', 'revDate') + "\n" +
+                            resourceManager.getString('ShopManagerApplication', 'buildDateLabel') + resourceManager.getString('ShopManagerApplication', 'buildDate') + "\n",
+                    resourceManager.getString('ShopManagerApplication', 'info')
+                    );
+        }
+
+
+        /**
+         * product reindexing.
+         * @param event mouse event
+         */
+        protected function import_clickHandler(event:MouseEvent):void {
+            mainPanel.removeAllChildren();
+            mainPanel.addChild(new BulkImportPanel());
+        }
+
+        /**
+         * Manage locations.
+         * @param event mouse event
+         */
+        protected function location_clickHandler(event:MouseEvent):void {
+            mainPanel.removeAllChildren();
+            mainPanel.addChild(new LocationManagementPanel());
+        }
+
+        /**
+         * Manage carriers, carrier SLA & etc.
+         * @param event mouse event
+         */
+        protected function carrier_clickHandler(event:MouseEvent):void {
+            mainPanel.removeAllChildren();
+            mainPanel.addChild(new CarrierManagementPanel());
+        }
+
+        /**
+         * Open attibute managment panel
+         * @param event mouse event
+         */
+        protected function attributes_clickHandler(event:MouseEvent):void {
+            mainPanel.removeAllChildren();
+            mainPanel.addChild(new AttributesManagmentPanel());
+        }
+
+        /**
+         * Users managment.
+         * @param event mouse event
+
+         */
+        protected function userManagment_clickHandler(event:MouseEvent):void {
+            mainPanel.removeAllChildren();
+            mainPanel.addChild(new UserManagmentPanel());
+        }
+
+        /**
+         * Roles managment.
+         * @param event
+
+         */
+        protected function roleManagment_clickHandler(event:MouseEvent):void {
+            mainPanel.removeAllChildren();
+            mainPanel.addChild(new RoleManagmentPanel());
+        }
+
+        /**
+         * Roles managment.
+         * @param event
+         */
+        protected function storesManagment_clickHandler(event:MouseEvent):void {
+            mainPanel.removeAllChildren();
+            mainPanel.addChild(new StoresManagmentPanel());
+        }
+
+        /**
+         * Roles managment.
+         * @param event
+         */
+        protected function warehouseManagment_clickHandler(event:MouseEvent):void {
+            mainPanel.removeAllChildren();
+            mainPanel.addChild(new WarehouseManagmentPanel());
+        }
+
+        /**
+         * Manage categories
+         * @param event mouse event
+         * @return nothing
+         */
+        private function categoryManagment_clickHandlre(event:flash.events.MouseEvent):void {
+            mainPanel.removeAllChildren();
+            mainPanel.addChild(new CategoryManagmentPanel());
+        }
+
+        /**
+         * Manage brands
+         * @param event mouse event
+         * @return nothing
+         */
+        private function brandManagment_clickHandlre(event:flash.events.MouseEvent):void {
+            mainPanel.removeAllChildren();
+            mainPanel.addChild(new BrandManagementPanel());
+        }
+
+        /**
+         * Manage product types and attributes.
+         * @param event mouse event
+         * @return nothing
+         */
+        private function productTypesManagment_clickHandlre(event:flash.events.MouseEvent):void {
+            mainPanel.removeAllChildren();
+            mainPanel.addChild(new ProductTypeManagementPanel());
+        }
+
+        /**
+         * Manage products and skus
+         * @param event mouse event
+         * @return nothing
+         */
+        private function productManagment_clickHandlre(event:flash.events.MouseEvent):void {
+            mainPanel.removeAllChildren();
+            mainPanel.addChild(new ProductManagmentPanel());
+        }
+
+        /**
+         * Manage products and skus
+         * @param event mouse event
+         * @return nothing
+         */
+        private function customerManagment_clickHandlre(event:flash.events.MouseEvent):void {
+            mainPanel.removeAllChildren();
+            mainPanel.addChild(new CustomerManagementPanel());
+        }
+
+        /**
+         * Manage products and skus
+         * @param event mouse event
+         * @return nothing
+         */
+        private function orderManagment_clickHandlre(event:flash.events.MouseEvent):void {
+            mainPanel.removeAllChildren();
+            mainPanel.addChild(new CustomerOrderPanel());
+        }
+
+
+        private function userNameOrPasswordChanged(event:flash.events.Event):void {
+            loginButtonEnabled = (username.text != null && username.text.length > 5)
+                    && (password.text != null && password.text.length > 6);
+        }
+        ]]>
+	</mx:Script>
+
+    <mx:Boolean id="invalidLogin">false</mx:Boolean>
+    <mx:Boolean id="loginButtonEnabled">false</mx:Boolean>
+
+    <mx:AMFChannel xmlns:mx="http://www.adobe.com/2006/mxml"
+                   id="myamf"/>
+
+    <mx:ChannelSet id="channelSet" channels="{[myamf]}"/>
+
+
+    <mx:states>
+        <mx:State name="inProgressState">
+            <mx:RemoveChild target="{loginPanel}"/>
+            <mx:AddChild>
+                <mx:target>
+                    <mx:Box width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" id="inProgress">
+                        <controls:Spinner id="spinner" size="75" numTicks="20" tickWidth="5" speed="1000"
+                                      fadeSpeed="800" tickColor="#0066FF"/>
+                    </mx:Box>
+                </mx:target>
+            </mx:AddChild>
+        </mx:State>
+        <mx:State name="loginState">
+            <mx:RemoveChild target="{mainFrame}"/>
+            <mx:RemoveChild target="{inProgress}"/>
+            <mx:AddChild>
+                <mx:target>
+                    <!-- Login Form -->
+                    <mx:VBox horizontalAlign="center" verticalAlign="middle" height="100%" width="100%" id="loginPanel">
+                        <mx:HBox horizontalAlign="center" verticalAlign="middle" height="100%" width="100%">
+                            <mx:Panel title="@Resource(bundle='ShopManagerApplication',key='loginFormTitle')">
+                                <mx:Label text="@Resource(bundle='ShopManagerApplication',key='loginFormInvalidUser')"
+                                          includeInLayout="{invalidLogin}" visible="{invalidLogin}"/>
+                                <mx:Form defaultButton="{loginButton}">
+                                    <mx:FormItem width="100%"
+                                                 label="@Resource(bundle='ShopManagerApplication',key='loginFormUsername')">
+                                        <mx:TextInput id="username" change="userNameOrPasswordChanged(event)"/>
+                                    </mx:FormItem>
+                                    <mx:FormItem width="100%"
+                                                 label="@Resource(bundle='ShopManagerApplication',key='loginFormPassword')">
+                                        <mx:TextInput id="password" displayAsPassword="true"
+                                                      change="userNameOrPasswordChanged(event)"/>
+                                    </mx:FormItem>
+                                </mx:Form>
+                                <mx:ControlBar horizontalAlign="right">
+                                    <mx:Button id="loginButton"
+                                               label="@Resource(bundle='ShopManagerApplication',key='loginFormLogin')"
+                                               enabled="{loginButtonEnabled}"
+                                               click="login()"/>
+                                   <!-- <mx:Button id="cheatLoginButton"
+                                               label="Cheat"
+                                               enabled="true"
+                                               click="cheatLogin()"/>-->
+                                </mx:ControlBar>
+                            </mx:Panel>
+                        </mx:HBox>
+                    </mx:VBox>
+                </mx:target>
+            </mx:AddChild>
+        </mx:State>
+        <mx:State name="userAuthenticated">
+            <mx:RemoveChild target="{inProgress}"/>
+            <mx:AddChild>
+                <mx:target>
+                    <!-- The main frame -->
+                    <mx:VBox id="mainFrame" x="0" y="0" height="95%" width="100%">
+                        <mx:ApplicationControlBar width="100%">
+                            <mx:HBox width="100%">
+                                <mx:Label text="@Resource(bundle='ShopManagerApplication',key='Welcome')"/>
+                            </mx:HBox>
+                        </mx:ApplicationControlBar>
+                        <mx:HDividedBox width="100%" height="100%">
+                            <mx:Accordion width="200" height="100%">
+                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='customerService')"
+                                           width="100%" height="100%">
+                                    <mx:VBox x="0" y="0" height="100%" width="100%">
+                                        <mx:LinkButton width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='orders')"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='customersHint')"
+                                                       click="orderManagment_clickHandlre(event)"
+                                                />
+                                        <mx:LinkButton width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='customers')"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='customersHint')"
+                                                       click="customerManagment_clickHandlre(event)"
+                                                />
+                                    </mx:VBox>
+                                </mx:Canvas>
+                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='catalogManagment')"
+                                           toolTip="@Resource(bundle='ShopManagerApplication',key='catalogManagment')"
+                                           width="100%" height="100%">
+                                    <mx:VBox x="0" y="0" height="100%" width="100%">
+                                        <mx:LinkButton width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='products')"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='productsHint')"
+                                                       click="productManagment_clickHandlre(event)"
+                                                />
+                                        <mx:LinkButton width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='categories')"
+                                                       click="categoryManagment_clickHandlre(event)"
+                                                />
+                                        <mx:LinkButton width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='brands')"
+                                                       click="brandManagment_clickHandlre(event)"
+                                                />
+                                        <mx:LinkButton width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='productTypes')"
+                                                       click="productTypesManagment_clickHandlre(event)"
+                                                />
+                                    </mx:VBox>
+                                </mx:Canvas>
+                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='warehouse')"
+                                           width="100%" height="100%">
+                                </mx:Canvas>
+                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='marketing')"
+                                           width="100%" height="100%">
+                                </mx:Canvas>
+                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='reporting')"
+                                           width="100%" height="100%">
+                                </mx:Canvas>
+
+                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='system')" width="100%"
+                                           height="100%">
+                                    <mx:VBox x="0" y="0" height="100%" width="100%">
+                                        <mx:LinkButton width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='stores')"
+                                                       click="storesManagment_clickHandler(event)"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='storesHint')"
+                                                />
+                                        <mx:LinkButton width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='warehouses')"
+                                                       click="warehouseManagment_clickHandler(event)"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='warehousesHint')"
+                                                />
+                                        <mx:LinkButton width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='userManagment')"
+                                                       click="userManagment_clickHandler(event)"/>
+                                        <mx:LinkButton width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='roleManagment')"
+                                                       click="roleManagment_clickHandler(event)"/>
+
+                                        <mx:LinkButton width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='attributes')"
+                                                       click="attributes_clickHandler(event)"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='attributesHint')"
+                                                />
+                                        <mx:LinkButton width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='reindex')"
+                                                       click="reindex_clickHandler(event)"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='reindexHint')"
+                                                />
+                                        <mx:LinkButton width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='import')"
+                                                       click="import_clickHandler(event)"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='importHint')"
+                                                />
+                                        <mx:LinkButton width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='location')"
+                                                       click="location_clickHandler(event)"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='locationHint')"
+                                                />
+                                        <mx:LinkButton width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='carrier')"
+                                                       click="carrier_clickHandler(event)"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='carrierHint')"
+                                                />
+
+                                    </mx:VBox>
+                                </mx:Canvas>
+                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='technicalFloor')"
+                                           width="100%" height="100%">
+                                    <mx:VBox x="0" y="0" height="100%" width="100%">
+                                        <mx:LinkButton width="100%" label="SQL &amp; HSQL"/>
+                                        <mx:LinkButton width="100%" label="Lucene"/>
+                                    </mx:VBox>
+                                </mx:Canvas>
+                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='help')"
+                                           width="100%" height="100%">
+                                    <mx:VBox x="0" y="0" height="100%" width="100%">
+                                        <mx:LinkButton width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='about')"
+                                                       click="help_clickHandler(event)"
+                                                />
+                                    </mx:VBox>
+                                </mx:Canvas>
+
+                            </mx:Accordion>
+                            <mx:Canvas id="mainPanel" width="100%" height="100%">
+                            </mx:Canvas>
+                        </mx:HDividedBox>
+                    </mx:VBox>
+                </mx:target>
+            </mx:AddChild>
+        </mx:State>
+    </mx:states>
+
+</mx:Application>

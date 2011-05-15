@@ -1,0 +1,139 @@
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="780" height="500"
+                title="@Resource(bundle='ProductManagmentPanel',key='find')"
+                showCloseButton="true"
+                close="PopUpManager.removePopUp(this)"
+                creationComplete="init();"
+        >
+
+
+    <mx:Script>
+		<![CDATA[
+        // TODO see http://192.150.8.60/devnet/flex/articles/file_upload_02.html to show images
+
+        import org.yes.cart.impl.BrandDTOImpl;
+        import org.yes.cart.impl.ProductDTOImpl;
+        import org.yes.cart.impl.ProductTypeDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        import flash.events.MouseEvent;
+
+        import mx.events.ListEvent;
+        import mx.managers.PopUpManager;
+
+        [Bindable]
+        public var productDTOImpl:ProductDTOImpl;
+
+
+        public function init():void {
+            remoteBrandService.getAll();
+            remoteProductTypeService.getAll();
+        }
+
+
+        /**
+         * Handle item selection.
+         * @param event event
+         * @return nothing
+         */
+        private function productSelectedClickHandler(event:ListEvent):void {
+            productDTOImpl = event.currentTarget.selectedItem;
+        }
+
+
+        /**
+         * Performs search operation.
+         * @param event event
+         * @return nothing
+         */
+        private function searchBtnClickHandler(event:MouseEvent):void {
+
+            var selectedBrandId:Number = 0;
+            var selectedTypeId:Number = 0;
+
+            var selectedBrand:BrandDTOImpl = BrandDTOImpl(brandComboBox.selectedItem);
+
+            var selectedType:ProductTypeDTOImpl = ProductTypeDTOImpl(typeComboBox.selectedItem);
+
+            if (selectedBrand != null) {
+                selectedBrandId = selectedBrand.brandId;
+            }
+
+            if (selectedType != null) {
+                selectedTypeId = selectedType.producttypeId;
+            }
+
+            productDTOImpl = null;
+
+            remoteProductService.getProductByConeNameBrandType(
+                    codeTextInput.text,
+                    nameTextInput.text,
+                    selectedBrandId,
+                    selectedTypeId);
+
+        }
+        ]]>
+	</mx:Script>
+
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteBrandService" destination="remoteBrandService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteProductTypeService" destination="remoteProductTypeService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteProductService" destination="remoteProductService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+
+    <mx:VBox x="0" y="0" width="100%" height="100%">
+        <mx:ControlBar x="0" y="0" width="100%">
+            <mx:Label text="@Resource(bundle='ProductManagmentPanel',key='code')"/>
+            <mx:TextInput id="codeTextInput" width="100"/>
+            <mx:Label text="@Resource(bundle='ProductManagmentPanel',key='name')"/>
+            <mx:TextInput id="nameTextInput" width="100"/>
+            <mx:Label text="@Resource(bundle='ProductManagmentPanel',key='brand')"/>
+            <mx:ComboBox id="brandComboBox" width="120"
+                         dataProvider="{remoteBrandService.getAll.lastResult}"
+                         labelField="name"
+                         data="brandId"
+                         prompt="@Resource(bundle='ProductManagmentPanel',key='selectBrandPropmt')"
+                    />
+            <mx:Label text="@Resource(bundle='ProductManagmentPanel',key='type')"/>
+            <mx:ComboBox id="typeComboBox" width="120"
+                         dataProvider="{remoteProductTypeService.getAll.lastResult}"
+                         labelField="name"
+                         data="producttypeId"
+                         prompt="@Resource(bundle='ProductManagmentPanel',key='selectTypePropmt')"
+                    />
+            <mx:Button label="@Resource(bundle='ProductManagmentPanel',key='findBtn')"
+                       click="searchBtnClickHandler(event)"/>
+        </mx:ControlBar>
+        <mx:DataGrid width="100%" height="100%"
+                     dataProvider="{remoteProductService.getProductByConeNameBrandType.lastResult}"
+                     itemClick="productSelectedClickHandler(event)"
+                >
+            <mx:columns>
+                <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagmentPanel',key='id')"
+                                   dataField="productId"/>
+                <mx:DataGridColumn width="120" headerText="@Resource(bundle='ProductManagmentPanel',key='code')"
+                                   dataField="code"/>
+                <mx:DataGridColumn headerText="@Resource(bundle='ProductManagmentPanel',key='name')" dataField="name"/>
+            </mx:columns>
+        </mx:DataGrid>
+        <mx:ControlBar x="0" y="0" width="100%" horizontalAlign="right">
+            <mx:Button label="@Resource(bundle='CategoryCreateDialog',key='close')"
+                       click="PopUpManager.removePopUp(this)"/>
+            <mx:Button id="selectProductButton" label="@Resource(bundle='ProductManagmentPanel',key='select')"
+                       enabled="{productDTOImpl != null}"/>
+        </mx:ControlBar>
+    </mx:VBox>
+
+
+</mx:TitleWindow>
