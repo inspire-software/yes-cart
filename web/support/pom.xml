@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+
+
+    <parent>
+        <groupId>org.yes</groupId>
+        <artifactId>yes-cart</artifactId>
+        <version>1.0</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.yes</groupId>
+    <artifactId>websupport</artifactId>
+    <packaging>jar</packaging>
+    <version>1.x-SNAPSHOT</version>
+    <name>Yes cart web support tier</name>
+    <url>http://maven.apache.org</url>
+
+  <dependencies>
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>core</artifactId>
+            <version>1.x-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>domain-api</artifactId>
+            <version>1.x-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>persistence</artifactId>
+            <version>1.x-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.5.8</version>
+        </dependency>
+
+  </dependencies>
+
+    <build>
+
+         <pluginManagement>
+             <plugins>
+                 <plugin>
+                     <groupId>org.apache.maven.plugins</groupId>
+                     <artifactId>maven-surefire-plugin</artifactId>
+                     <configuration>
+                         <forkMode>pertest</forkMode>
+                         <argLine>-Xms512m -Xmx1024m</argLine>
+                         <testFailureIgnore>false</testFailureIgnore>
+                     </configuration>
+                 </plugin>
+             </plugins>
+         </pluginManagement>
+
+     </build>
+
+
+
+</project>
