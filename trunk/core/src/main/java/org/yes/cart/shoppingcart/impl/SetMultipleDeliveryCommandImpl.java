@@ -25,7 +25,7 @@ public class SetMultipleDeliveryCommandImpl  implements ShoppingCartCommand {
      * @param shoppingCart the shopping cart
      */
     public void execute(final ShoppingCart shoppingCart) {
-        shoppingCart.setMultipleDelivery(value);
+        shoppingCart.getOrderInfo().setMultipleDelivery(value);
     }
 
     /**
