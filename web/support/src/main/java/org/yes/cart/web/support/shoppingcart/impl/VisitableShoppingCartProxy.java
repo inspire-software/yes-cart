@@ -4,6 +4,7 @@ package org.yes.cart.web.support.shoppingcart.impl;
 import org.yes.cart.domain.dto.CartItem;
 import org.yes.cart.domain.dto.ProductSkuDTO;
 import org.yes.cart.domain.dto.ShoppingContext;
+import org.yes.cart.domain.dto.OrderInfo;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.shoppingcart.RequestRuntimeContainer;
@@ -109,35 +110,8 @@ public class VisitableShoppingCartProxy implements VisitableShoppingCart {
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
-    public boolean isMultipleDelivery() {
-        return getVisitableShoppingCart().isMultipleDelivery();
-    }
+    
 
-    /**
-     * {@inheritDoc}
-     */
-    public void setMultipleDelivery(final boolean multipleDelivery) {
-        getVisitableShoppingCart().setMultipleDelivery(multipleDelivery);
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getPaymentGatewayLabel() {
-        return getVisitableShoppingCart().getPaymentGatewayLabel();
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setPaymentGatewayLabel(String paymentGatewayLabel) {
-        getVisitableShoppingCart().setPaymentGatewayLabel(paymentGatewayLabel);
-    }
 
     /**
      * {@inheritDoc}
@@ -356,5 +330,9 @@ public class VisitableShoppingCartProxy implements VisitableShoppingCart {
 
     public ShoppingContext getShoppingContext() {
         return getVisitableShoppingCart().getShoppingContext();
+    }
+
+    public OrderInfo getOrderInfo() {
+        return getVisitableShoppingCart().getOrderInfo();
     }
 }

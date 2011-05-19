@@ -1,10 +1,7 @@
 package org.yes.cart.web.support.shoppingcart.impl;
 
 
-import org.yes.cart.domain.dto.CartItem;
-import org.yes.cart.domain.dto.ProductSkuDTO;
-import org.yes.cart.domain.dto.ShoppingCart;
-import org.yes.cart.domain.dto.ShoppingContext;
+import org.yes.cart.domain.dto.*;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.web.support.shoppingcart.VisitableShoppingCart;
 
@@ -14,8 +11,8 @@ import java.util.List;
 
 /**
  * Cookie aware shopping cart implementation that wraps core {@link ShoppingCart}
- * object in order to mark it with {@link PersistentCookie}
- * is used with {@link CookieTuplizer}.
+ * object in order to mark it with {@link org.yes.cart.web.support.util.cookie.annotations.PersistentCookie}
+ * is used with {@link org.yes.cart.web.support.util.cookie.CookieTuplizer}.
  * TODO must be dynamic proxy with small addons like isChanged
  * <p/>
  * User: dogma
@@ -63,35 +60,6 @@ public class CookieAwareShoppingCartImpl implements VisitableShoppingCart {
         return cart.isSeparateBillingAddress();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public boolean isMultipleDelivery() {
-        return cart.isMultipleDelivery();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setMultipleDelivery(final boolean multipleDelivery) {
-        setChanged(true);
-        cart.setMultipleDelivery(multipleDelivery);
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getPaymentGatewayLabel() {
-        return cart.getPaymentGatewayLabel();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setPaymentGatewayLabel(String paymentGatewayLabel) {
-        cart.setPaymentGatewayLabel(paymentGatewayLabel);
-    }
 
     /**
      * {@inheritDoc}
@@ -320,5 +288,9 @@ public class CookieAwareShoppingCartImpl implements VisitableShoppingCart {
 
     public ShoppingContext getShoppingContext() {
         return cart.getShoppingContext();
+    }
+
+    public OrderInfo getOrderInfo() {
+        return cart.getOrderInfo();
     }
 }

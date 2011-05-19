@@ -7,10 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.userdetails.User;
 import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.dto.CartItem;
-import org.yes.cart.domain.dto.ProductSkuDTO;
-import org.yes.cart.domain.dto.ShoppingCart;
-import org.yes.cart.domain.dto.ShoppingContext;
+import org.yes.cart.domain.dto.*;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
@@ -38,9 +35,10 @@ public class ShoppingCartImpl implements ShoppingCart/*, SecurityContext */ {
     private long shopId;
     private String orderMessage;
     private boolean separateBillingAddress;
-    private boolean multipleDelivery;
-    private String paymentGatewayLabel;
+
+
     private ShoppingContext shoppingContext;
+    private OrderInfo orderInfo;
 
 
     /**
@@ -53,37 +51,6 @@ public class ShoppingCartImpl implements ShoppingCart/*, SecurityContext */ {
         modifiedDate = new Date();
     }
 
-    /**
-     * Get selected payment gateway.
-     * @return selected payment gateway
-     */
-    public String getPaymentGatewayLabel() {
-        return paymentGatewayLabel;
-    }
-
-    /**
-     * Set selected payment gateway.
-     * @param paymentGatewayLabel   selected payment gateway.
-     */
-    public void setPaymentGatewayLabel(final String paymentGatewayLabel) {
-        this.paymentGatewayLabel = paymentGatewayLabel;
-    }
-
-    /**
-     * Is order need multiple delivery.
-     * @return true if need multiple delivery.
-     */
-    public boolean isMultipleDelivery() {
-        return multipleDelivery;
-    }
-
-    /**
-     * Set multiple delivery for order.
-     * @param multipleDelivery multiple delivery for order.
-     */
-    public void setMultipleDelivery(final boolean multipleDelivery) {
-        this.multipleDelivery = multipleDelivery;
-    }
 
     /**
      * Is billing address different from shipping adress.
@@ -410,4 +377,13 @@ public class ShoppingCartImpl implements ShoppingCart/*, SecurityContext */ {
     public void setShoppingContext(final ShoppingContext shoppingContext) {
         this.shoppingContext = shoppingContext;
     }
+
+    /** {@inheritDoc} */
+    public OrderInfo getOrderInfo() {
+        if (orderInfo == null) {
+            orderInfo = new OrderInfoImpl();
+        }
+        return orderInfo;
+    }
+
 }
