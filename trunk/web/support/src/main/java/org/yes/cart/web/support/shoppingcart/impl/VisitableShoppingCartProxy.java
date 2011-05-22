@@ -102,16 +102,6 @@ public class VisitableShoppingCartProxy implements VisitableShoppingCart {
         return getVisitableShoppingCart().isSeparateBillingAddress();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void setSeparateBillingAddress(final boolean separateBillingAddress) {
-        getVisitableShoppingCart().setSeparateBillingAddress(separateBillingAddress);
-    }
-
-
-    
-
 
     /**
      * {@inheritDoc}
@@ -252,14 +242,6 @@ public class VisitableShoppingCartProxy implements VisitableShoppingCart {
         return getVisitableShoppingCart().getOrderMessage();
     }
 
-    /**
-     * Set order message.
-     *
-     * @param orderMessage order message.
-     */
-    public void setOrderMessage(final String orderMessage) {
-        getVisitableShoppingCart().setOrderMessage(orderMessage);
-    }
 
     /**
      * Set product sku price
@@ -319,14 +301,6 @@ public class VisitableShoppingCartProxy implements VisitableShoppingCart {
         return getVisitableShoppingCart().getCarrierSlaId();
     }
 
-    /**
-     * Set carrier shipping SLA.
-     *
-     * @param carrierSlaId selected sla id.
-     */
-    public void setCarrierSlaId(final Integer carrierSlaId) {
-        getVisitableShoppingCart().setCarrierSlaId(carrierSlaId);
-    }
 
     public ShoppingContext getShoppingContext() {
         return getVisitableShoppingCart().getShoppingContext();

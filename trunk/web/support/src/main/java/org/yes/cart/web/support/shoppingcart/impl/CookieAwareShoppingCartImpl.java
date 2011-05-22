@@ -64,14 +64,6 @@ public class CookieAwareShoppingCartImpl implements VisitableShoppingCart {
     /**
      * {@inheritDoc}
      */
-    public void setSeparateBillingAddress(final boolean separateBillingAddress) {
-        setChanged(true);
-        cart.setSeparateBillingAddress(separateBillingAddress);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public String getGuid() {
         return cart.getGuid();
     }
@@ -181,14 +173,6 @@ public class CookieAwareShoppingCartImpl implements VisitableShoppingCart {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public void setOrderMessage(final String orderMessage) {
-        setChanged(true);
-        cart.setOrderMessage(orderMessage);
-    }
-
-    /**
      * Is sku code present in cart
      *
      * @param skuCode product sku code
@@ -266,14 +250,6 @@ public class CookieAwareShoppingCartImpl implements VisitableShoppingCart {
      */
     public Integer getCarrierSlaId() {
         return cart.getCarrierSlaId();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setCarrierSlaId(final Integer carrierSlaId) {
-        setChanged(true);
-        cart.setCarrierSlaId(carrierSlaId);
     }
 
     /**

@@ -25,7 +25,7 @@ public class SetBillingSeparateFromShippingAddressCommandImpl implements Shoppin
      * @param shoppingCart the shopping cart
      */
     public void execute(final ShoppingCart shoppingCart) {
-        shoppingCart.setSeparateBillingAddress(value);
+        shoppingCart.getOrderInfo().setSeparateBillingAddress(value);
     }
 
     /**

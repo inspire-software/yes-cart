@@ -22,7 +22,7 @@ public class CleanCartCommandImplTest {
         shoppingCart.addProductSkuToCart(new ProductSkuDTOImpl(), BigDecimal.ONE);
 
         shoppingCart.setModifiedDate(null);
-        shoppingCart.setOrderMessage("hi im cart");
+        shoppingCart.getOrderInfo().setOrderMessage("hi im cart");
         final String oldGuid = shoppingCart.getGuid();
 
         CleanCartCommandImpl command = new CleanCartCommandImpl(null, null);

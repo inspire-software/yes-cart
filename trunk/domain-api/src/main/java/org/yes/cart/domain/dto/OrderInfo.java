@@ -14,6 +14,50 @@ import java.io.Serializable;
 public interface OrderInfo  extends Serializable {
 
     /**
+     * Get order message.
+     *
+     * @return order message
+     */
+    String getOrderMessage();
+
+    /**
+     * Set order message.
+     *
+     * @param orderMessage order message.
+     */
+    void setOrderMessage(String orderMessage);
+
+    /**
+     * Set carrier shipping SLA.
+     *
+     * @param carrierSlaId selected sla id.
+     */
+    void setCarrierSlaId(Integer carrierSlaId);
+
+    /**
+     * Get carrier shipping SLA.
+     *
+     * @return carries sla id.
+     */
+    Integer getCarrierSlaId();
+
+
+
+    /**
+     * Is billing address different from shipping adress.
+     *
+     * @return true is billing and shipping address are different.
+     */
+    boolean isSeparateBillingAddress();
+
+    /**
+     * Set billilnd address different from shipping address flag.
+     *
+     * @param separateBillingAddress flag.
+     */
+    void setSeparateBillingAddress(boolean separateBillingAddress);
+
+    /**
      * Get selected payment gateway.
      *
      * @return selected payment gateway

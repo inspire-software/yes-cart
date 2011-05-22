@@ -11,6 +11,60 @@ public class OrderInfoImpl implements OrderInfo {
 
     private String paymentGatewayLabel;
     private boolean multipleDelivery;
+    private boolean separateBillingAddress;
+    private Integer carrierSlaId;
+    private String orderMessage;
+
+    /**
+     * Get order message.
+     * @return order message
+     */
+    public String getOrderMessage() {
+        return orderMessage;
+    }
+
+    /**
+     * Set order message.
+     * @param orderMessage order message.
+     */
+    public void setOrderMessage(final String orderMessage) {
+        this.orderMessage = orderMessage;
+    }
+
+
+    /**
+     * Get carrier shipping SLA.
+     * @return carries sla id.
+     */
+    public Integer getCarrierSlaId() {
+        return carrierSlaId;
+    }
+
+    /**
+     * Set carrier shipping SLA.
+     * @param carrierSlaId selected sla id.
+     */
+    public void setCarrierSlaId(final Integer carrierSlaId) {
+        this.carrierSlaId = carrierSlaId;
+    }
+
+
+
+    /**
+     * Is billing address different from shipping adress.
+     * @return true is billing and shipping address are different.
+     */
+    public boolean isSeparateBillingAddress() {
+        return separateBillingAddress;
+    }
+
+    /**
+     * Set billilnd address different from shipping address flag.
+     * @param separateBillingAddress flag.
+     */
+    public void setSeparateBillingAddress(final boolean separateBillingAddress) {
+        this.separateBillingAddress = separateBillingAddress;
+    }
 
     /**
      * Get selected payment gateway.

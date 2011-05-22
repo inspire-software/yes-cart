@@ -30,11 +30,11 @@ public class ShoppingCartImpl implements ShoppingCart/*, SecurityContext */ {
     private String currencyCode;
     private String customerName;
     private Date modifiedDate;
-    private Integer carrierSlaId;
+
     private String guid = java.util.UUID.randomUUID().toString();
     private long shopId;
-    private String orderMessage;
-    private boolean separateBillingAddress;
+
+
 
 
     private ShoppingContext shoppingContext;
@@ -47,7 +47,7 @@ public class ShoppingCartImpl implements ShoppingCart/*, SecurityContext */ {
     public void clean() {
         guid = java.util.UUID.randomUUID().toString();
         items = new ArrayList<CartItemImpl>();
-        orderMessage = null;
+        orderInfo = null;
         modifiedDate = new Date();
     }
 
@@ -57,32 +57,18 @@ public class ShoppingCartImpl implements ShoppingCart/*, SecurityContext */ {
      * @return true is billing and shipping address are different.
      */
     public boolean isSeparateBillingAddress() {
-        return separateBillingAddress;
+        return getOrderInfo().isSeparateBillingAddress();
     }
 
-    /**
-     * Set billilnd address different from shipping address flag.
-     * @param separateBillingAddress flag.
-     */
-    public void setSeparateBillingAddress(final boolean separateBillingAddress) {
-        this.separateBillingAddress = separateBillingAddress;
-    }
 
     /**
      * Get order message.
      * @return order message
      */
     public String getOrderMessage() {
-        return orderMessage;
+        return getOrderInfo().getOrderMessage();
     }
 
-    /**
-     * Set order message.
-     * @param orderMessage order message.
-     */
-    public void setOrderMessage(final String orderMessage) {
-        this.orderMessage = orderMessage;
-    }
 
     /**
      * Get current shop id
@@ -114,16 +100,9 @@ public class ShoppingCartImpl implements ShoppingCart/*, SecurityContext */ {
      * @return carries sla id.
      */
     public Integer getCarrierSlaId() {
-        return carrierSlaId;
+        return getOrderInfo().getCarrierSlaId();
     }
 
-    /**
-     * Set carrier shipping SLA.
-     * @param carrierSlaId selected sla id.
-     */
-    public void setCarrierSlaId(final Integer carrierSlaId) {
-        this.carrierSlaId = carrierSlaId;
-    }
 
     /**
      * {@inheritDoc}
