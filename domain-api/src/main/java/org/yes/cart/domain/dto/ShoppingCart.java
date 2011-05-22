@@ -174,12 +174,6 @@ public interface ShoppingCart extends  Serializable {
     boolean isSeparateBillingAddress();
 
     /**
-     * Set billilnd address different from shipping address flag.
-     *
-     * @param separateBillingAddress flag.
-     */
-    void setSeparateBillingAddress(boolean separateBillingAddress);
-    /**
      * Get carrier shipping SLA.
      *
      * @return carries sla id.
@@ -187,25 +181,11 @@ public interface ShoppingCart extends  Serializable {
     Integer getCarrierSlaId();
 
     /**
-     * Set carrier shipping SLA.
-     *
-     * @param carrierSlaId selected sla id.
-     */
-    void setCarrierSlaId(Integer carrierSlaId);
-
-    /**
      * Get order message.
      *
      * @return order message
      */
     String getOrderMessage();
-
-    /**
-     * Set order message.
-     *
-     * @param orderMessage order message.
-     */
-    void setOrderMessage(String orderMessage);
 ///////////////////////////////////////////////////////// remove to order info end //////////////////////////////////////////////////////
 
     /**

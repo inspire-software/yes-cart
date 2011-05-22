@@ -48,7 +48,7 @@ public class SetCarrierSlaCartCommandImpl implements ShoppingCartCommand {
         if(LOG.isDebugEnabled()) {
             LOG.debug("Set carrier sla to " + slaPkvalue);
         }
-        shoppingCart.setCarrierSlaId(slaPkvalue);
+        shoppingCart.getOrderInfo().setCarrierSlaId(slaPkvalue);
     }
 
     /**
