@@ -25,7 +25,7 @@ public class CookieAwareShoppingCartImpl implements VisitableShoppingCart {
 
     private final ShoppingCart cart;
 
-    private transient boolean isChanged = false;
+    //private transient boolean isChanged = false;
 
 
     /**
@@ -41,7 +41,6 @@ public class CookieAwareShoppingCartImpl implements VisitableShoppingCart {
      * Clean current cart and prepare it to reuse.
      */
     public void clean() {
-        setChanged(true);
         cart.clean();
     }
 
@@ -72,7 +71,6 @@ public class CookieAwareShoppingCartImpl implements VisitableShoppingCart {
      * {@inheritDoc}
      */
     public boolean addProductSkuToCart(final ProductSkuDTO sku, final BigDecimal quantity) {
-        setChanged(true);
         return cart.addProductSkuToCart(sku, quantity);
     }
 
@@ -80,7 +78,6 @@ public class CookieAwareShoppingCartImpl implements VisitableShoppingCart {
      * {@inheritDoc}
      */
     public boolean setProductSkuToCart(final ProductSkuDTO sku, final BigDecimal quantity) {
-        setChanged(true);
         return cart.setProductSkuToCart(sku, quantity);
     }
 
@@ -89,7 +86,6 @@ public class CookieAwareShoppingCartImpl implements VisitableShoppingCart {
      * {@inheritDoc}
      */
     public boolean removeCartItem(final ProductSkuDTO productSku) {
-        setChanged(true);
         return cart.removeCartItem(productSku);
     }
 
@@ -97,7 +93,6 @@ public class CookieAwareShoppingCartImpl implements VisitableShoppingCart {
      * {@inheritDoc}
      */
     public boolean removeCartItemQuantity(final ProductSkuDTO productSku, final BigDecimal quantity) {
-        setChanged(true);
         return cart.removeCartItemQuantity(productSku, quantity);
     }
 
@@ -132,7 +127,6 @@ public class CookieAwareShoppingCartImpl implements VisitableShoppingCart {
      */
     public void accept(final ShoppingCartCommand command) {
         command.execute(cart);
-        setChanged(true);
     }
 
     /**
@@ -142,13 +136,6 @@ public class CookieAwareShoppingCartImpl implements VisitableShoppingCart {
         return cart.getCurrencyCode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void setCurrencyCode(final String currencyCode) {
-        setChanged(true);
-        cart.setCurrencyCode(currencyCode);
-    }
 
     /**
      * {@inheritDoc}
@@ -161,7 +148,6 @@ public class CookieAwareShoppingCartImpl implements VisitableShoppingCart {
      * {@inheritDoc}
      */
     public void setShopId(final long shopId) {
-        setChanged(true);
         cart.setShopId(shopId);
     }
 
@@ -197,31 +183,6 @@ public class CookieAwareShoppingCartImpl implements VisitableShoppingCart {
         return cart.getCustomerName();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void setCustomerName(final String customerName) {
-        setChanged(true);
-        cart.setCustomerName(customerName);
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setChanged(boolean changed) {
-        isChanged = changed;
-        if (isChanged) {
-            setModifiedDate(new Date());
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean isChanged() {
-        return isChanged;
-    }
 
     /**
      * {@inheritDoc}

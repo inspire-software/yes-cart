@@ -56,6 +56,21 @@ public interface ShoppingContext extends Serializable {
      */
     void setLatestViewedCategories(String latestViewedCategories);
 
+    /**
+     * Get customer name.
+     *
+     * @return customer name or null if customer is anonymous
+     */
+    String getCustomerName();
+
+    /**
+     * Set customer name.
+     *
+     * @param customerName customer name.
+     */
+    void setCustomerName(String customerName);
+
+
 
     /**
      * Clear context.

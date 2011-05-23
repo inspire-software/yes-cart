@@ -53,7 +53,7 @@ public class VisitableShoppingCartProxy implements VisitableShoppingCart {
         this.tuplizer = tuplizer;
         requestRuntimeContainer = (RequestRuntimeContainer) httpRequest.getAttribute(WebParametersKeys.SESSION_OBJECT_NAME);
         if (this.defaultVisitableShoppingCart.getCurrencyCode() == null) {
-            this.defaultVisitableShoppingCart.setCurrencyCode(requestRuntimeContainer.getShop().getDefaultCurrency());
+            //this.defaultVisitableShoppingCart.setCurrencyCode(requestRuntimeContainer.getShop().getDefaultCurrency());
         }
         if (this.defaultVisitableShoppingCart.getShopId() == 0) {
             this.defaultVisitableShoppingCart.setShopId(requestRuntimeContainer.getShop().getShopId());
@@ -168,12 +168,7 @@ public class VisitableShoppingCartProxy implements VisitableShoppingCart {
         return getVisitableShoppingCart().getCurrencyCode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void setCurrencyCode(final String currencyCode) {
-        getVisitableShoppingCart().setCurrencyCode(currencyCode);
-    }
+
 
 
     /**
@@ -183,27 +178,8 @@ public class VisitableShoppingCartProxy implements VisitableShoppingCart {
         return getVisitableShoppingCart().getCustomerName();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void setCustomerName(final String customerName) {
-        getVisitableShoppingCart().setCustomerName(customerName);
-    }
 
 
-    /**
-     * @return true if cart changed.
-     */
-    public boolean isChanged() {
-        return getVisitableShoppingCart().isChanged();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setChanged(final boolean changed) {
-        getVisitableShoppingCart().setChanged(changed);
-    }
 
     /**
      * {@inheritDoc}
