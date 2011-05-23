@@ -121,7 +121,7 @@ public interface ShoppingCart extends  Serializable {
      *
      * @param currencyCode currency code.
      */
-    void setCurrencyCode(String currencyCode);
+    //void setCurrencyCode(String currencyCode);
 
 
     /**
@@ -130,6 +130,11 @@ public interface ShoppingCart extends  Serializable {
      * @return last modified date.
      */
     Date getModifiedDate();
+
+    /**
+     * @return true if cart changed.
+     */
+   // boolean isChanged();
 
 
     /**
@@ -145,13 +150,6 @@ public interface ShoppingCart extends  Serializable {
      * @return customer name or null if customer is anonymous
      */
     String getCustomerName();
-
-    /**
-     * Set customer name.
-     *
-     * @param customerName customer name.
-     */
-    void setCustomerName(String customerName);
 
 
     /**

@@ -20,9 +20,8 @@ import java.text.MessageFormat;
 import java.util.Map;
 
 /**
- *
  * Abstract sku cart command.
- *
+ * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
@@ -46,20 +45,21 @@ public abstract class AbstractSkuCartCommandImpl implements ShoppingCartCommand 
 
     /**
      * Construct abstracr sku command.
+     *
      * @param applicationContext spring context
-     * @param parameters parameters
+     * @param parameters         parameters
      */
     public AbstractSkuCartCommandImpl(final ApplicationContext applicationContext, final Map parameters) {
         super();
         String skuCode = (String) parameters.get(getCmdKey());
         try {
-            shopService = (ShopService)  applicationContext.getBean(ServiceSpringKeys.SHOP_SERVICE);
-            productService = (ProductService)  applicationContext.getBean(ServiceSpringKeys.PRODUCT_SERVICE);
+            shopService = (ShopService) applicationContext.getBean(ServiceSpringKeys.SHOP_SERVICE);
+            productService = (ProductService) applicationContext.getBean(ServiceSpringKeys.PRODUCT_SERVICE);
             priceService = (PriceService) applicationContext.getBean(ServiceSpringKeys.PRICE_SERVICE);
             dtoProductService = (DtoProductService) applicationContext.getBean(ServiceSpringKeys.DTO_PRODUCT_SERVICE);
             productSkuDTO = dtoProductService.getProductSkuByCode(skuCode);
         } catch (Exception e) {
-            LOG.error(MessageFormat.format("Can not retreive product sku dto with code {0}",skuCode), e);
+            LOG.error(MessageFormat.format("Can not retreive product sku dto with code {0}", skuCode), e);
         }
 
     }
@@ -67,32 +67,40 @@ public abstract class AbstractSkuCartCommandImpl implements ShoppingCartCommand 
     /**
      * Recalucalate price in shopping cart. At this moment price depends from shop, currenct and quantity.
      * Promotions also can impact the price. It will be implemented letter
+     *
      * @param shoppingCart shopping cart
      */
     protected void recalculatePrice(final ShoppingCart shoppingCart) {
 
-        final Shop shop = shopService.getById(shoppingCart.getShopId());
+        if (shoppingCart.getShopId() == 0) {
 
-        if (getProductSkuDTO() == null) {
-
-            for (int i = 0; i < shoppingCart.getCartItemList().size(); i++ ) {
-
-                final CartItem cartItem = shoppingCart.getCartItemList().get(i);
-
-                setProductSkuPrice(shoppingCart, shop, cartItem.getProductSkuCode(), cartItem.getQty());
-
-            }
+            LOG.error("Can not recalculate price because the shop id is 0");
 
         } else {
-            // particular sku command
-            final String skuCode = getProductSkuDTO().getCode();
 
-            int skuIdx = shoppingCart.indexOf(skuCode);
+            final Shop shop = shopService.getById(shoppingCart.getShopId());
 
-            if (skuIdx != -1) {
+            if (getProductSkuDTO() == null) {
 
-                setProductSkuPrice(shoppingCart, shop, skuCode, shoppingCart.getCartItemList().get(skuIdx).getQty());
-                
+                for (int i = 0; i < shoppingCart.getCartItemList().size(); i++) {
+
+                    final CartItem cartItem = shoppingCart.getCartItemList().get(i);
+
+                    setProductSkuPrice(shoppingCart, shop, cartItem.getProductSkuCode(), cartItem.getQty());
+
+                }
+
+            } else {
+                // particular sku command
+                final String skuCode = getProductSkuDTO().getCode();
+
+                int skuIdx = shoppingCart.indexOf(skuCode);
+
+                if (skuIdx != -1) {
+
+                    setProductSkuPrice(shoppingCart, shop, skuCode, shoppingCart.getCartItemList().get(skuIdx).getQty());
+
+                }
             }
         }
 
@@ -123,6 +131,7 @@ public abstract class AbstractSkuCartCommandImpl implements ShoppingCartCommand 
 
     /**
      * Get price service.
+     *
      * @return {@link PriceService}
      */
     public PriceService getPriceService() {
@@ -131,6 +140,7 @@ public abstract class AbstractSkuCartCommandImpl implements ShoppingCartCommand 
 
     /**
      * Get {@link DtoProductService}.
+     *
      * @return {@link DtoProductService}.
      */
     public DtoProductService getDtoProductService() {
@@ -139,6 +149,7 @@ public abstract class AbstractSkuCartCommandImpl implements ShoppingCartCommand 
 
     /**
      * Get sku dto.
+     *
      * @return optional {@link ProductSkuDTO} that related to current command.
      */
     public ProductSkuDTO getProductSkuDTO() {
@@ -147,6 +158,7 @@ public abstract class AbstractSkuCartCommandImpl implements ShoppingCartCommand 
 
     /**
      * Get product Service.
+     *
      * @return product service.
      */
     public ProductService getProductService() {

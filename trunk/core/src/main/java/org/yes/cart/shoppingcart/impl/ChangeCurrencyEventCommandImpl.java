@@ -33,7 +33,7 @@ public class ChangeCurrencyEventCommandImpl extends AbstractSkuCartCommandImpl {
     /** {@inheritDoc} */
     public void execute(final ShoppingCart shoppingCart) {
         if (currencyCode != null) {
-            shoppingCart.setCurrencyCode(currencyCode);
+            ((ShoppingCartImpl)shoppingCart).setCurrencyCode(currencyCode);
             recalculatePrice(shoppingCart);
         }
     }

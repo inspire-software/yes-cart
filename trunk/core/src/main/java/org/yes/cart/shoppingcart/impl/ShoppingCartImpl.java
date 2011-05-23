@@ -22,18 +22,19 @@ import java.util.List;
  * Date: Jan 15, 2011
  * Time: 10:39:12 PM
  */
-public class ShoppingCartImpl implements ShoppingCart/*, SecurityContext */ {
+public class ShoppingCartImpl implements ShoppingCart {
 
     private static final long serialVersionUID =  20110509L;
     private static final Logger LOG = LoggerFactory.getLogger(ShoppingCartImpl.class);
     private List<CartItemImpl> items = new ArrayList<CartItemImpl>();
     private String currencyCode;
-    private String customerName;
+
     private Date modifiedDate;
 
     private String guid = java.util.UUID.randomUUID().toString();
     private long shopId;
 
+    //private transient boolean isChanged = false;
 
 
 
@@ -274,7 +275,7 @@ public class ShoppingCartImpl implements ShoppingCart/*, SecurityContext */ {
     /**
      * {@inheritDoc}
      */
-    public void setCurrencyCode(final String currencyCode) {
+    void setCurrencyCode(final String currencyCode) {
         this.currencyCode = currencyCode;
     }
 
@@ -282,14 +283,7 @@ public class ShoppingCartImpl implements ShoppingCart/*, SecurityContext */ {
      * {@inheritDoc}
      */
     public String getCustomerName() {
-        return customerName;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setCustomerName(final String customerName) {
-        this.customerName = customerName;
+        return getShoppingContext().getCustomerName();
     }
 
 
@@ -306,6 +300,8 @@ public class ShoppingCartImpl implements ShoppingCart/*, SecurityContext */ {
     public void setModifiedDate(final Date modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
+
+
 
     /** {@inheritDoc} */
     public String getCustomerEmail() {

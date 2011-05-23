@@ -22,16 +22,6 @@ public interface VisitableShoppingCart extends ShoppingCart {
      */
     void accept(final ShoppingCartCommand command);
 
-    /**
-     * @return true if cart changed.
-     */
-    boolean isChanged();
 
-    /**
-     * Set changed flag
-     *
-     * @param changed flag.
-     */
-    void setChanged(boolean changed);
 
 }

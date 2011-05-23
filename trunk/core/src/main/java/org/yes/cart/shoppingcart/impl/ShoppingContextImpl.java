@@ -19,6 +19,7 @@ public class ShoppingContextImpl implements ShoppingContext {
     private SecurityContext securityContext;
     private String latestViewedSkus;
     private String latestViewedCategories;
+    private String customerName;
 
     /** {@inheritDoc} */
     public void clearContext() {
@@ -58,6 +59,20 @@ public class ShoppingContextImpl implements ShoppingContext {
     /** {@inheritDoc} */
     public void setLatestViewedCategories(final String latestViewedCategories) {
         this.latestViewedCategories = latestViewedCategories;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setCustomerName(final String customerName) {
+        this.customerName = customerName;
     }
     
 }

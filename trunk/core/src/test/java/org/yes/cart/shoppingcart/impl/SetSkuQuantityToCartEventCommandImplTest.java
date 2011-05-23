@@ -12,6 +12,7 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.impl.BaseCoreDBTestCase;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,7 +48,10 @@ public class SetSkuQuantityToCartEventCommandImplTest extends BaseCoreDBTestCase
     @Test
     public void testExecute() {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
-        shoppingCart.setCurrencyCode("EUR");
+        new ChangeCurrencyEventCommandImpl(
+                ctx,
+                Collections.singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "EUR")
+                ).execute(shoppingCart);
         shoppingCart.setShopId(10);
 
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getCartSubTotal(shoppingCart.getCartItemList()));

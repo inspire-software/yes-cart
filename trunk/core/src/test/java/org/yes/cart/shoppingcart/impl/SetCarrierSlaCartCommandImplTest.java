@@ -18,7 +18,14 @@ public class SetCarrierSlaCartCommandImplTest {
     public void testExecute() {
 
         ShoppingCart shoppingCart = new ShoppingCartImpl();
-        shoppingCart.setCurrencyCode("EUR");
+
+
+
+        new ChangeCurrencyEventCommandImpl(
+                null,
+                Collections.singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "EUR")
+                ).execute(shoppingCart);
+
         shoppingCart.setShopId(10);
 
         SetCarrierSlaCartCommandImpl slaChangeCmd = new SetCarrierSlaCartCommandImpl(

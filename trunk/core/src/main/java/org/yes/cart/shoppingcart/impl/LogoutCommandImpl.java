@@ -25,11 +25,12 @@ public class LogoutCommandImpl  implements ShoppingCartCommand {
      * @param shoppingCart the shopping cart
      */
     public void execute(final ShoppingCart shoppingCart) {
-        shoppingCart.setCustomerName(null);
         final SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
         shoppingCart.getShoppingContext().setSecurityContext(securityContext);
+        shoppingCart.getShoppingContext().setCustomerName(null);
         SecurityContextHolder.setContext(securityContext);
         SecurityContextHolder.getContext().setAuthentication(null);
+
     }
 
     /**
