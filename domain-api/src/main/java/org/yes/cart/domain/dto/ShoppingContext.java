@@ -5,10 +5,9 @@ import org.springframework.security.core.context.SecurityContext;
 import java.io.Serializable;
 
 /**
- *
  * Responsible to hold shopping context data like viewved products and categories, security context, geo data and
  * other stuff
- *
+ * <p/>
  * Igor Azarny iazarny@yahoo.com
  * Date: 12-May-2011
  * Time: 10:31:36
@@ -18,12 +17,14 @@ public interface ShoppingContext extends Serializable {
 
     /**
      * Get {@link SecurityContext}.
+     *
      * @return Security Context
      */
     SecurityContext getSecurityContext();
 
     /**
      * Set securityContext
+     *
      * @param securityContext context to use.
      */
     void setSecurityContext(SecurityContext securityContext);
@@ -52,6 +53,7 @@ public interface ShoppingContext extends Serializable {
 
     /**
      * Get lastest viewed categories.
+     *
      * @param latestViewedCategories comma separated list of category ids.
      */
     void setLatestViewedCategories(String latestViewedCategories);
@@ -70,13 +72,25 @@ public interface ShoppingContext extends Serializable {
      */
     void setCustomerName(String customerName);
 
+    /**
+     * Get current shop id
+     *
+     * @return current shop id.
+     */
+    long getShopId();
+
+    /**
+     * Set current shop id.
+     *
+     * @param shopId current shop id.
+     */
+    void setShopId(long shopId);
 
 
     /**
      * Clear context.
      */
     void clearContext();
-
 
 
 }

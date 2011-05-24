@@ -137,19 +137,7 @@ public class CookieAwareShoppingCartImpl implements VisitableShoppingCart {
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
-    public long getShopId() {
-        return cart.getShopId();
-    }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void setShopId(final long shopId) {
-        cart.setShopId(shopId);
-    }
 
     /**
      * {@inheritDoc}

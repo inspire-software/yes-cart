@@ -72,13 +72,13 @@ public abstract class AbstractSkuCartCommandImpl implements ShoppingCartCommand 
      */
     protected void recalculatePrice(final ShoppingCart shoppingCart) {
 
-        if (shoppingCart.getShopId() == 0) {
+        if (shoppingCart.getShoppingContext().getShopId() == 0) {
 
             LOG.error("Can not recalculate price because the shop id is 0");
 
         } else {
 
-            final Shop shop = shopService.getById(shoppingCart.getShopId());
+            final Shop shop = shopService.getById(shoppingCart.getShoppingContext().getShopId());
 
             if (getProductSkuDTO() == null) {
 

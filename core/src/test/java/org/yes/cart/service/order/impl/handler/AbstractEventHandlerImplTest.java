@@ -55,7 +55,8 @@ public abstract class AbstractEventHandlerImplTest  extends BaseCoreDBTestCase {
         params.put(LoginCommandImpl.NAME,"John Doe");
 
 
-        shoppingCart.setShopId(10);
+        new SetShopCartCommandImpl(ctx, Collections.singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
+                .execute(shoppingCart);
 
         new ChangeCurrencyEventCommandImpl( context, Collections.singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "USD"))
                 .execute(shoppingCart);
