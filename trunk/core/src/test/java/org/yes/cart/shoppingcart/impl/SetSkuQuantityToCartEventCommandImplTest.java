@@ -52,7 +52,8 @@ public class SetSkuQuantityToCartEventCommandImplTest extends BaseCoreDBTestCase
                 ctx,
                 Collections.singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "EUR")
                 ).execute(shoppingCart);
-        shoppingCart.setShopId(10);
+        new SetShopCartCommandImpl(ctx, Collections.singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
+                .execute(shoppingCart);
 
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getCartSubTotal(shoppingCart.getCartItemList()));
 

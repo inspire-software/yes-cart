@@ -20,6 +20,7 @@ public class ShoppingContextImpl implements ShoppingContext {
     private String latestViewedSkus;
     private String latestViewedCategories;
     private String customerName;
+    private long shopId;
 
     /** {@inheritDoc} */
     public void clearContext() {
@@ -74,5 +75,22 @@ public class ShoppingContextImpl implements ShoppingContext {
     public void setCustomerName(final String customerName) {
         this.customerName = customerName;
     }
+
+/**
+     * Get current shop id
+     * @return current shop id.
+     */
+    public long getShopId() {
+        return shopId;
+    }
+
+    /**
+     * Set current shop id.
+     * @param shopId current shop id.
+     */
+    public void setShopId(final long shopId) {
+        this.shopId = shopId;
+    }
+
     
 }

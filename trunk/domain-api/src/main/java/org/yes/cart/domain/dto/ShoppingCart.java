@@ -193,20 +193,6 @@ public interface ShoppingCart extends  Serializable {
      */
     int getLogonState();
 
-    /**
-     * Get current shop id
-     *
-     * @return current shop id.
-     */
-    long getShopId();
-
-    /**
-     * Set current shop id.
-     *
-     * @param shopId current shop id.
-     */
-    void setShopId(long shopId);
-
 
 
     /**

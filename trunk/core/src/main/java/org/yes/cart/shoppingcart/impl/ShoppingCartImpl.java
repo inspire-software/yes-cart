@@ -32,7 +32,7 @@ public class ShoppingCartImpl implements ShoppingCart {
     private Date modifiedDate;
 
     private String guid = java.util.UUID.randomUUID().toString();
-    private long shopId;
+
 
     //private transient boolean isChanged = false;
 
@@ -71,21 +71,6 @@ public class ShoppingCartImpl implements ShoppingCart {
     }
 
 
-    /**
-     * Get current shop id
-     * @return current shop id.
-     */
-    public long getShopId() {
-        return shopId;
-    }
-
-    /**
-     * Set current shop id.
-     * @param shopId current shop id.
-     */
-    public void setShopId(final long shopId) {
-        this.shopId = shopId;
-    }
 
     /**
      * Get shopping cart guid.

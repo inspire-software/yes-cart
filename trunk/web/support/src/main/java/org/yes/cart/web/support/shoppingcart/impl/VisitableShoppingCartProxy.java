@@ -55,8 +55,8 @@ public class VisitableShoppingCartProxy implements VisitableShoppingCart {
         if (this.defaultVisitableShoppingCart.getCurrencyCode() == null) {
             //this.defaultVisitableShoppingCart.setCurrencyCode(requestRuntimeContainer.getShop().getDefaultCurrency());
         }
-        if (this.defaultVisitableShoppingCart.getShopId() == 0) {
-            this.defaultVisitableShoppingCart.setShopId(requestRuntimeContainer.getShop().getShopId());
+        if (this.defaultVisitableShoppingCart.getShoppingContext().getShopId() == 0) {
+           //TODO  this.defaultVisitableShoppingCart.setShopId(requestRuntimeContainer.getShop().getShopId());
         }
 
     }
@@ -195,19 +195,6 @@ public class VisitableShoppingCartProxy implements VisitableShoppingCart {
         getVisitableShoppingCart().setModifiedDate(modified);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public long getShopId() {
-        return getVisitableShoppingCart().getShopId();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setShopId(final long shopId) {
-        getVisitableShoppingCart().setShopId(shopId);
-    }
 
     /**
      * Get order message.

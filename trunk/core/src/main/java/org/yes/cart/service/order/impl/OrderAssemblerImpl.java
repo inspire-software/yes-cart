@@ -85,7 +85,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
 
         if(!temp) {
             customerOrder.setOrdernum(orderNumberGenerator.getNextOrderNumber());
-            customerOrder.setShop(shopDao.findById(shoppingCart.getShopId()));
+            customerOrder.setShop(shopDao.findById(shoppingCart.getShoppingContext().getShopId()));
         }
 
         return customerOrder;
