@@ -1,6 +1,6 @@
 package org.yes.cart.service.order;
 
-import org.yes.cart.domain.dto.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.domain.entity.CustomerOrder;
 
 /**
@@ -33,7 +33,7 @@ public interface DeliveryAssembler {
 
 
     /**
-     * Fill deliveries for {@link org.yes.cart.domain.entity.CustomerOrder} from given {@link org.yes.cart.domain.dto.ShoppingCart}.
+     * Fill deliveries for {@link org.yes.cart.domain.entity.CustomerOrder} from given {@link org.yes.cart.shoppingcart.ShoppingCart}.
      *
      * @param shoppingCart        given shopping cart
      * @param order               without deliveries

@@ -1,10 +1,10 @@
 package org.yes.cart.service.order;
 
-import org.yes.cart.domain.dto.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.domain.entity.CustomerOrder;
 
 /**
- * Assemble {@link CustomerOrder} from {@link ShoppingCart}.
+ * Assemble {@link CustomerOrder} from {@link org.yes.cart.shoppingcart.ShoppingCart}.
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011

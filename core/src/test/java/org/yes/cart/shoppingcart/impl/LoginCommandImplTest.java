@@ -1,8 +1,7 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.junit.Test;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.yes.cart.domain.dto.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.util.HashMap;
 import java.util.Map;

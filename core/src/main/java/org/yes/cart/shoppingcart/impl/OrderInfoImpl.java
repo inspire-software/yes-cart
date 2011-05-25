@@ -1,6 +1,6 @@
 package org.yes.cart.shoppingcart.impl;
 
-import org.yes.cart.domain.dto.OrderInfo;
+import org.yes.cart.shoppingcart.OrderInfo;
 
 /**
  * Igor Azarny iazarny@yahoo.com

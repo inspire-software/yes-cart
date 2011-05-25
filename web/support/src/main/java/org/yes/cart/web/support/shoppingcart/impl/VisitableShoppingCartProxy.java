@@ -1,11 +1,11 @@
 package org.yes.cart.web.support.shoppingcart.impl;
 
 
-import org.yes.cart.domain.dto.CartItem;
+import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.domain.dto.ProductSkuDTO;
-import org.yes.cart.domain.dto.ShoppingContext;
-import org.yes.cart.domain.dto.OrderInfo;
-import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.*;
+import org.yes.cart.shoppingcart.OrderInfo;
+import org.yes.cart.shoppingcart.ShoppingContext;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.shoppingcart.RequestRuntimeContainer;
 import org.yes.cart.web.support.shoppingcart.VisitableShoppingCart;

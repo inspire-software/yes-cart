@@ -13,7 +13,7 @@ import java.util.Map;
 public interface ShoppingCartCommandFactory extends Serializable {
 
     /**
-     * Get the {@link ShoppingCartCommand} by givem map of parameters.
+     * Get the {@link ShoppingCartCommand} by given map of parameters.
      * @param pageParameters map of web request parameters.
      * @return {@link ShoppingCartCommand} on null if command can not be found in map parameters.
      */

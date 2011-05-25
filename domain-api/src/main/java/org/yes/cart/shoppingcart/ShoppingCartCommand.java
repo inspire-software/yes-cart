@@ -1,8 +1,6 @@
 package org.yes.cart.shoppingcart;
 
 
-import org.yes.cart.domain.dto.ShoppingCart;
-
 import java.io.Serializable;
 
 /**

@@ -1,7 +1,7 @@
 package org.yes.cart.service.order.impl;
 
 import org.yes.cart.dao.EntityFactory;
-import org.yes.cart.domain.dto.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CarrierSlaService;
