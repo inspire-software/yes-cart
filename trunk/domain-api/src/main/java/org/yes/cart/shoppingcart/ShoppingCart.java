@@ -1,4 +1,6 @@
-package org.yes.cart.domain.dto;
+package org.yes.cart.shoppingcart;
+
+import org.yes.cart.domain.dto.ProductSkuDTO;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -208,6 +210,14 @@ public interface ShoppingCart extends  Serializable {
      * @return idex of cart item for this sku
      */
     int indexOf(final String skuCode);
+
+    /**
+     * Accept shopping cart visitor that potentially will make modifications
+     * to the cart.
+     *
+     * @param command the modification visitor
+     */
+    void accept(final ShoppingCartCommand command);
 
     /**
      * Get shopping context

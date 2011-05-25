@@ -1,7 +1,6 @@
 package org.yes.cart.web.support.shoppingcart;
 
-import org.yes.cart.domain.dto.ShoppingCart;
-import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.support.util.cookie.annotations.PersistentCookie;
 
 /**
@@ -13,15 +12,6 @@ import org.yes.cart.web.support.util.cookie.annotations.PersistentCookie;
  */
 @PersistentCookie(value = "npa01", expirySeconds = 864000, path = "/")
 public interface VisitableShoppingCart extends ShoppingCart {
-
-    /**
-     * Accept shopping cart visitor that potentially will make modifications
-     * to the cart.
-     *
-     * @param command the modification visitor
-     */
-    void accept(final ShoppingCartCommand command);
-
 
 
 }

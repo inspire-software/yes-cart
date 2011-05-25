@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.dto.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.impl.BaseCoreDBTestCase;
 import org.yes.cart.service.order.OrderAssembler;

@@ -1,7 +1,7 @@
 package org.yes.cart.service.order.impl.handler;
 
 import org.springframework.context.ApplicationContext;
-import org.yes.cart.domain.dto.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.service.domain.impl.BaseCoreDBTestCase;
 import org.yes.cart.shoppingcart.impl.*;
 

@@ -2,7 +2,7 @@ package org.yes.cart.shoppingcart.impl;
 
 
 import org.springframework.context.ApplicationContext;
-import org.yes.cart.domain.dto.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.util.Map;
 

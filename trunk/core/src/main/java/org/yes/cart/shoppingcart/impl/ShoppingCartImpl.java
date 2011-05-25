@@ -4,10 +4,10 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.userdetails.User;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.*;
+import org.yes.cart.shoppingcart.*;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
@@ -334,9 +334,9 @@ public class ShoppingCartImpl implements ShoppingCart {
     }
 
     /** {@inheritDoc} */
-    public void setShoppingContext(final ShoppingContext shoppingContext) {
+   /* public void setShoppingContext(final ShoppingContext shoppingContext) {
         this.shoppingContext = shoppingContext;
-    }
+    }     */
 
     /** {@inheritDoc} */
     public OrderInfo getOrderInfo() {
@@ -344,6 +344,13 @@ public class ShoppingCartImpl implements ShoppingCart {
             orderInfo = new OrderInfoImpl();
         }
         return orderInfo;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void accept(final ShoppingCartCommand command) {
+        command.execute(this);
     }
 
 }

@@ -3,7 +3,7 @@ package org.yes.cart.service.payment.impl;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.dto.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;

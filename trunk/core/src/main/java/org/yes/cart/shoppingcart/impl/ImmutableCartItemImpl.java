@@ -1,7 +1,7 @@
 package org.yes.cart.shoppingcart.impl;
 
 
-import org.yes.cart.domain.dto.CartItem;
+import org.yes.cart.shoppingcart.CartItem;
 
 import java.math.BigDecimal;
 

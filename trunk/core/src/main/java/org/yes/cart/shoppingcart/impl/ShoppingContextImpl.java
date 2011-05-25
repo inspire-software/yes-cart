@@ -1,6 +1,6 @@
 package org.yes.cart.shoppingcart.impl;
 
-import org.yes.cart.domain.dto.ShoppingContext;
+import org.yes.cart.shoppingcart.ShoppingContext;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextImpl;
 
