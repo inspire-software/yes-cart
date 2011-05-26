@@ -1,7 +1,7 @@
 package org.yes.cart.service.order;
 
-import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.shoppingcart.ShoppingCart;
 
 /**
  * Order delivery assembler responsible for shipment creation.

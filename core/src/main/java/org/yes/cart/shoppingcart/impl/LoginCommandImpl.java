@@ -17,7 +17,7 @@ import java.util.Map;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class LoginCommandImpl  implements ShoppingCartCommand {
+public class LoginCommandImpl  extends AbstractCartCommandImpl  implements ShoppingCartCommand {
 
     private static final long serialVersionUID = 20101026L;
 
@@ -41,6 +41,7 @@ public class LoginCommandImpl  implements ShoppingCartCommand {
         
         shoppingCart.getShoppingContext().getSecurityContext().setAuthentication(authentication);
         shoppingCart.getShoppingContext().setCustomerName((String) parameters.get(NAME));
+        setModifiedDate(shoppingCart);
 
     }
 

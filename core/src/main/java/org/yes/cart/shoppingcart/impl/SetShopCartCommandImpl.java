@@ -12,7 +12,7 @@ import java.util.Map;
  * Date: 22-May-2011
  * Time: 14:12:54
  */
-public class SetShopCartCommandImpl implements ShoppingCartCommand {
+public class SetShopCartCommandImpl  extends AbstractCartCommandImpl implements ShoppingCartCommand {
 
     private static final long serialVersionUID = 2010522L;
 
@@ -27,6 +27,7 @@ public class SetShopCartCommandImpl implements ShoppingCartCommand {
      */
     public void execute(final ShoppingCart shoppingCart) {
         shoppingCart.getShoppingContext().setShopId(value);
+        setModifiedDate(shoppingCart);
     }
 
     /**

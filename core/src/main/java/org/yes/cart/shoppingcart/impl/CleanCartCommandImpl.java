@@ -14,13 +14,14 @@ import java.util.Map;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class CleanCartCommandImpl  implements ShoppingCartCommand {
+public class CleanCartCommandImpl extends AbstractCartCommandImpl implements ShoppingCartCommand {
 
     public static String CMD_KEY = "cleanCartCmd";
 
     /** {@inheritDoc} */
     public void execute(ShoppingCart shoppingCart) {
         shoppingCart.clean();
+        setModifiedDate(shoppingCart);
     }
 
 

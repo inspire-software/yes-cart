@@ -1,8 +1,8 @@
 package org.yes.cart.service.domain;
 
-import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.util.Date;
 import java.util.List;

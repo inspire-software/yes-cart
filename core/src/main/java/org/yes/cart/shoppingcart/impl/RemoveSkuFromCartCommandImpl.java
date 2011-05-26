@@ -52,6 +52,7 @@ public class RemoveSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl{
             }
 
             recalculatePrice(shoppingCart);
+            setModifiedDate(shoppingCart);
         }
     }
 

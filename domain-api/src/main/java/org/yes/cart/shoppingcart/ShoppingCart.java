@@ -7,19 +7,15 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-//import org.springframework.security.core.context.SecurityContext;
 
 /**
- * TODO most of the setters MUST be removed from this interface.
- * TODO Only commands can modify cart !!!
- * <p/>
  * Container class that represents Shopping Cart business object.
  * <p/>
  * User: dogma
  * Date: Jan 15, 2011
  * Time: 10:18:38 PM
  */
-public interface ShoppingCart extends  Serializable {
+public interface ShoppingCart extends Serializable {
 
     public final static int NOT_LOGGED = 0;
     public final static int SESSION_EXPIRED = 1;
@@ -30,8 +26,6 @@ public interface ShoppingCart extends  Serializable {
      * Clean current cart and prepare it to reuse.
      */
     void clean();
-
-
 
 
     /**
@@ -118,13 +112,6 @@ public interface ShoppingCart extends  Serializable {
      */
     String getCurrencyCode();
 
-    /**
-     * Set cart currency.
-     *
-     * @param currencyCode currency code.
-     */
-    //void setCurrencyCode(String currencyCode);
-
 
     /**
      * Get the last modified date.
@@ -133,18 +120,6 @@ public interface ShoppingCart extends  Serializable {
      */
     Date getModifiedDate();
 
-    /**
-     * @return true if cart changed.
-     */
-   // boolean isChanged();
-
-
-    /**
-     * Set last modified date.
-     *
-     * @param modified last modified date.
-     */
-    void setModifiedDate(Date modified);
 
     /**
      * Get customer name.
@@ -155,15 +130,11 @@ public interface ShoppingCart extends  Serializable {
 
 
     /**
-     * Get customer email. In fact custome is logged on if email not null
-     * and cart modification date not more that 30 minutes (configurable TODO config param name)
+     * Get customer email.
      *
      * @return customer name or null if customer is anonymous
      */
     String getCustomerEmail();
-
-///////////////////////////////////////////////////////// remove to order info end //////////////////////////////////////////////////////
-
 
 
     /**
@@ -186,7 +157,6 @@ public interface ShoppingCart extends  Serializable {
      * @return order message
      */
     String getOrderMessage();
-///////////////////////////////////////////////////////// remove to order info end //////////////////////////////////////////////////////
 
     /**
      * Get logon state.
@@ -194,7 +164,6 @@ public interface ShoppingCart extends  Serializable {
      * @return Logon state
      */
     int getLogonState();
-
 
 
     /**
@@ -221,16 +190,17 @@ public interface ShoppingCart extends  Serializable {
 
     /**
      * Get shopping context
+     *
      * @return instance of {@link ShoppingContext}
      */
     ShoppingContext getShoppingContext();
 
     /**
      * GEt order info.
+     *
      * @return order infornmation.
      */
     OrderInfo getOrderInfo();
-
 
 
 }

@@ -26,7 +26,7 @@ import java.util.Map;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public abstract class AbstractSkuCartCommandImpl implements ShoppingCartCommand {
+public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl implements ShoppingCartCommand {
 
     private static final long serialVersionUID = 20100313L;
 

@@ -14,7 +14,7 @@ import java.util.Map;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class SetCarrierSlaCartCommandImpl implements ShoppingCartCommand {
+public class SetCarrierSlaCartCommandImpl  extends AbstractCartCommandImpl implements ShoppingCartCommand {
 
     private static final long serialVersionUID = 20100313L;
 
@@ -49,6 +49,7 @@ public class SetCarrierSlaCartCommandImpl implements ShoppingCartCommand {
             LOG.debug("Set carrier sla to " + slaPkvalue);
         }
         shoppingCart.getOrderInfo().setCarrierSlaId(slaPkvalue);
+        setModifiedDate(shoppingCart);
     }
 
     /**

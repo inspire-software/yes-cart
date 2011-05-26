@@ -3,15 +3,14 @@ package org.yes.cart.shoppingcart;
 import java.io.Serializable;
 
 /**
- *
  * Hold specific order information.
  * Just remove from shopping cart to keep it simple as posible.
- *
+ * <p/>
  * Igor Azarny iazarny@yahoo.com
  * Date: 19-May-2011
  * Time: 17:27:32
  */
-public interface OrderInfo  extends Serializable {
+public interface OrderInfo extends Serializable {
 
     /**
      * Get order message.
@@ -40,7 +39,6 @@ public interface OrderInfo  extends Serializable {
      * @return carries sla id.
      */
     Integer getCarrierSlaId();
-
 
 
     /**
@@ -84,6 +82,6 @@ public interface OrderInfo  extends Serializable {
      * @param multipleDelivery multiple delivery for order.
      */
     void setMultipleDelivery(boolean multipleDelivery);
-    
+
 
 }

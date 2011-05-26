@@ -11,7 +11,7 @@ import java.util.Map;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class SetMultipleDeliveryCommandImpl  implements ShoppingCartCommand {
+public class SetMultipleDeliveryCommandImpl  extends AbstractCartCommandImpl  implements ShoppingCartCommand {
 
     private static final long serialVersionUID = 20110118L;
 
@@ -26,6 +26,7 @@ public class SetMultipleDeliveryCommandImpl  implements ShoppingCartCommand {
      */
     public void execute(final ShoppingCart shoppingCart) {
         shoppingCart.getOrderInfo().setMultipleDelivery(value);
+        setModifiedDate(shoppingCart);
     }
 
     /**
