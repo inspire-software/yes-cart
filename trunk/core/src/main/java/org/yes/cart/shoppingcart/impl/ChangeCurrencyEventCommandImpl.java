@@ -35,6 +35,7 @@ public class ChangeCurrencyEventCommandImpl extends AbstractSkuCartCommandImpl {
         if (currencyCode != null) {
             ((ShoppingCartImpl)shoppingCart).setCurrencyCode(currencyCode);
             recalculatePrice(shoppingCart);
+            setModifiedDate(shoppingCart);
         }
     }
 }

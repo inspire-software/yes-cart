@@ -11,7 +11,7 @@ import java.util.Map;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class SetBillingSeparateFromShippingAddressCommandImpl implements ShoppingCartCommand {
+public class SetBillingSeparateFromShippingAddressCommandImpl extends AbstractCartCommandImpl implements ShoppingCartCommand {
 
     private static final long serialVersionUID = 20101029L;
 
@@ -26,6 +26,7 @@ public class SetBillingSeparateFromShippingAddressCommandImpl implements Shoppin
      */
     public void execute(final ShoppingCart shoppingCart) {
         shoppingCart.getOrderInfo().setSeparateBillingAddress(value);
+        setModifiedDate(shoppingCart);
     }
 
     /**

@@ -48,6 +48,8 @@ public class RemoveAllSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl 
                 LOG.warn(MessageFormat.format("Can not remove all skus with code {0} from cart",
                         getProductSkuDTO().getCode()));
 
+            } else  {
+                setModifiedDate(shoppingCart);
             }
         }
     }

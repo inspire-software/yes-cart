@@ -43,6 +43,7 @@ public class AddSkuToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
         if (getProductSkuDTO() != null) {
             shoppingCart.addProductSkuToCart(getProductSkuDTO(), BigDecimal.ONE);
             recalculatePrice(shoppingCart);
+            setModifiedDate(shoppingCart);
             if (LOG.isDebugEnabled()) {
                 LOG.debug(
                         MessageFormat.format(

@@ -21,7 +21,6 @@ public class CleanCartCommandImplTest {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
         shoppingCart.addProductSkuToCart(new ProductSkuDTOImpl(), BigDecimal.ONE);
 
-        shoppingCart.setModifiedDate(null);
         shoppingCart.getOrderInfo().setOrderMessage("hi im cart");
         final String oldGuid = shoppingCart.getGuid();
 

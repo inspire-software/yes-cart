@@ -20,7 +20,13 @@ public interface ShoppingCartCommand extends Serializable {
     void execute(ShoppingCart shoppingCart);
 
     /**
+     * Execute command on shopping cart to perform changes.
      *
+     * @param shoppingCart the shopping cart
+     */
+    void setModifiedDate(ShoppingCart shoppingCart);
+
+    /**
      * @return command key
      */
     String getCmdKey();

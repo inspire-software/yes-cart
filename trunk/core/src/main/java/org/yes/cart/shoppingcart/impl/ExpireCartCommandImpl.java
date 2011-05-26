@@ -13,7 +13,7 @@ import java.util.Map;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class ExpireCartCommandImpl implements ShoppingCartCommand {
+public class ExpireCartCommandImpl  extends AbstractCartCommandImpl implements ShoppingCartCommand {
 
     private static final long serialVersionUID = 20101026L;
 
@@ -26,6 +26,7 @@ public class ExpireCartCommandImpl implements ShoppingCartCommand {
         shoppingCart.getShoppingContext().setSecurityContext(securityContext);
         SecurityContextHolder.setContext(securityContext);
         SecurityContextHolder.getContext().setAuthentication(null);
+        setModifiedDate(shoppingCart);
 
     }
 

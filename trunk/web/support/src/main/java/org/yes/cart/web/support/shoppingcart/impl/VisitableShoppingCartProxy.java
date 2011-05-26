@@ -188,12 +188,6 @@ public class VisitableShoppingCartProxy implements VisitableShoppingCart {
         return getVisitableShoppingCart().getModifiedDate();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void setModifiedDate(final Date modified) {
-        getVisitableShoppingCart().setModifiedDate(modified);
-    }
 
 
     /**

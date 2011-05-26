@@ -17,7 +17,7 @@ import java.util.Map;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class SetSkuQuantityToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
+public class SetSkuQuantityToCartEventCommandImpl  extends AbstractSkuCartCommandImpl {
 
     private static final long serialVersionUID = 20110312L;
 
@@ -59,6 +59,7 @@ public class SetSkuQuantityToCartEventCommandImpl extends AbstractSkuCartCommand
                         getProductSkuDTO().getCode(),
                         skuQty));
             }
+            setModifiedDate(shoppingCart);
         }
     }
 

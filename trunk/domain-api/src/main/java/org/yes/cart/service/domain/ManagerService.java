@@ -31,6 +31,7 @@ public interface ManagerService extends GenericService<Manager> {
 
     /**
      * Find manager by email using like operation
+     *
      * @param email filter
      * @return list of found managers
      */

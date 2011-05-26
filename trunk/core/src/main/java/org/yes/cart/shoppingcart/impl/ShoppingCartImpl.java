@@ -280,9 +280,11 @@ public class ShoppingCartImpl implements ShoppingCart {
     }
 
     /**
-     * {@inheritDoc}
+     * Set last modified date.
+     *
+     * @param modifiedDate last modified date.
      */
-    public void setModifiedDate(final Date modifiedDate) {
+    void setModifiedDate(final Date modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
 

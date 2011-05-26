@@ -23,7 +23,7 @@
             <version>3.3.2.GA</version>
             <scope>compile</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-core</artifactId>
