@@ -1108,67 +1108,6 @@
 
     </class>
 
-    <class name="org.yes.cart.domain.entity.Settings" table="TSETTINGS" discriminator-value="0">
-        <meta attribute="interface">true</meta>
-        <comment>System and common settings</comment>
-        <id name="settingsId" type="long">
-            <column name="SETTINGS_ID" not-null="true"/>
-            <generator class="native">
-                <param name="table">HIBERNATE_UNIQUE_KEYS</param>
-                <param name="column">value</param>
-            </generator>
-        </id>
-        <discriminator type="integer" formula="1"/>
-        <subclass name="org.yes.cart.domain.entity.impl.SettingsEntity" discriminator-value="1">
-            <meta attribute="extra-import">org.hibernate.annotations.Parameter</meta>
-            <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
-            <meta attribute="extra-import">javax.persistence.Id</meta>
-            <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
-            <meta attribute="interface">false</meta>
-            <meta attribute="class-code">
-                <![CDATA[
-     private long settingsId;
-
-     //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-
-    @Id @GeneratedValue /*(generator="generator")*/ 
-    @Column(name="SETTINGS_ID", nullable=false)
-    public long getSettingsId() {
-        return this.settingsId;
-    }
-
-    public void setSettingsId(long settingsId) {
-        this.settingsId = settingsId;
-    }
-                ]]>
-            </meta>
-            <many-to-one name="etype" class="org.yes.cart.domain.entity.Etype" foreign-key="FK_S_ETYPE">
-                <column name="ETYPE_ID" not-null="true"/>
-            </many-to-one>
-            <property name="code" column="CODE" type="string" length="64" not-null="true"/>
-            <property name="name" type="string" length="256">
-                <column name="NAME" length="256" not-null="true"/>
-            </property>
-            <property name="description" type="string" length="4000">
-                <column name="DESCRIPTION"/>
-            </property>
-            <property name="val" type="string" length="4000">
-                <column name="VAL"/>
-            </property>
-            <property name="timeout" type="long">
-                <column name="TIMEOUT">
-                    <comment>Expiration timeout in miliseconds</comment>
-                </column>
-            </property>
-            <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-            <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
-            <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
-            <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
-
-        </subclass>
-    </class>
-
     <!-- ########################################## #############################################################-->
 
     <class name="org.yes.cart.domain.entity.NpaSystem" table="TNPASYSTEM" discriminator-value="0">

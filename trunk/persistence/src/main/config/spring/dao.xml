@@ -88,7 +88,6 @@
                 <entry key="org.yes.cart.domain.entity.ProductTypeAttr" value="org.yes.cart.domain.entity.impl.ProductTypeAttrEntity"/>
                 <entry key="org.yes.cart.domain.entity.Seo" value="org.yes.cart.domain.entity.impl.SeoEntity"/>
                 <entry key="org.yes.cart.domain.entity.SeoImage" value="org.yes.cart.domain.entity.impl.SeoImageEntity"/>
-                <entry key="org.yes.cart.domain.entity.Settings" value="org.yes.cart.domain.entity.impl.SettingsEntity"/>
                 <entry key="org.yes.cart.domain.entity.Shop" value="org.yes.cart.domain.entity.impl.ShopEntity"/>
                 <entry key="org.yes.cart.domain.entity.ShopAdvPlace" value="org.yes.cart.domain.entity.impl.ShopAdvPlaceEntity"/>
                 <entry key="org.yes.cart.domain.entity.ShopAdvPlaceRule" value="org.yes.cart.domain.entity.impl.ShopAdvPlaceRuleEntity"/>
@@ -96,7 +95,6 @@
                 <entry key="org.yes.cart.domain.entity.ShopDiscount" value="org.yes.cart.domain.entity.impl.ShopDiscountEntity"/>
                 <entry key="org.yes.cart.domain.entity.ShopDiscountRule" value="org.yes.cart.domain.entity.impl.ShopDiscountRuleEntity"/>
                 <entry key="org.yes.cart.domain.entity.ShopExchangeRate" value="org.yes.cart.domain.entity.impl.ShopExchangeRateEntity"/>
-                <entry key="org.yes.cart.domain.entity.ShopSettings" value="org.yes.cart.domain.entity.impl.ShopSettingsEntity"/>
                 <entry key="org.yes.cart.domain.entity.ShopUrl" value="org.yes.cart.domain.entity.impl.ShopUrlEntity"/>
                 <entry key="org.yes.cart.domain.entity.SkuPrice" value="org.yes.cart.domain.entity.impl.SkuPriceEntity"/>
                 <entry key="org.yes.cart.domain.entity.Warehouse" value="org.yes.cart.domain.entity.impl.WarehouseEntity"/>
@@ -279,7 +277,7 @@
         </property>
     </bean>
 
-    <bean id="settingsDao" parent="txProxyTemplate">
+    <!--bean id="settingsDao" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
                 <constructor-arg><value>org.yes.cart.domain.entity.impl.SettingsEntity</value></constructor-arg>
@@ -287,7 +285,7 @@
                 <property name="sessionFactory" ref="sessionFactory"/>
             </bean>
         </property>
-    </bean>
+    </bean-->
 
     <!--bean id="shopSettingsDao" parent="txProxyTemplate">
         <property name="target">
