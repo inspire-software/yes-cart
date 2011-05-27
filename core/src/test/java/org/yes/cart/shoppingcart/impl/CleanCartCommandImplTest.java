@@ -32,12 +32,7 @@ public class CleanCartCommandImplTest {
         assertTrue(shoppingCart.getCartItemList().isEmpty());
         assertNotSame(oldGuid, shoppingCart.getGuid());
 
-
-
-
-
     }
-
 
 }
 

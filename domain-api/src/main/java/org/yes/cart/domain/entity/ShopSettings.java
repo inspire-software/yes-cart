@@ -15,11 +15,6 @@ public interface ShopSettings extends Auditable {
 
     public void setShopSettingsId(long shopSettingsId);
 
-    /**
-     */
-    public Settings getSetting();
-
-    public void setSetting(Settings setting);
 
     /**
      */

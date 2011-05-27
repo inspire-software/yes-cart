@@ -16,10 +16,6 @@ public interface DaoServiceBeanKeys {
         
     final static String BRAND_DAO = "brandDao";
         
-    final static String SETTINGS_DAO = "settingsDao";
-        
-    //final static String SHOP_SETTINGS = "shopSettingsDao";
-
     final static String SYSTEM_DAO = "systemDao";
 
     final static String SHOP_DAO = "shopDao";
