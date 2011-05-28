@@ -31,15 +31,6 @@ public class DtoCarrierServiceImpl
         super(dtoFactory, carrierGenericService, valueConverterRepository);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public CarrierDTO create(final CarrierDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        Carrier carrier = getEntityFactory().getByIface(Carrier.class);
-        assembler.assembleEntity(instance, carrier,  null, dtoFactory);
-        carrier = service.create(carrier);
-        return getById(carrier.getCarrierId());
-    }
 
     /**
      * {@inheritDoc}

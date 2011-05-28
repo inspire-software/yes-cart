@@ -37,14 +37,6 @@ public class DtoAddressServiceImpl
 
 
     /** {@inheritDoc} */
-    public AddressDTO create(final AddressDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        Address address = getEntityFactory().getByIface(Address.class);
-        assembler.assembleEntity(instance, address,  null, dtoFactory);
-        address = service.create(address);
-        return getById(address.getAddressId());
-    }
-
-    /** {@inheritDoc} */
     public AddressDTO update(final AddressDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         Address address = service.getById(instance.getAddressId());
         assembler.assembleEntity(instance, address, null, dtoFactory);

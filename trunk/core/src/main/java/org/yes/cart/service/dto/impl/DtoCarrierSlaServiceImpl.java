@@ -34,15 +34,7 @@ public class DtoCarrierSlaServiceImpl
         super(dtoFactory, carrierSlaGenericService, valueConverterRepository);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public CarrierSlaDTO create(final CarrierSlaDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        CarrierSla carrierSla = getEntityFactory().getByIface(CarrierSla.class);
-        assembler.assembleEntity(instance, carrierSla,  getValueConverterRepository() , dtoFactory);
-        carrierSla = service.create(carrierSla);
-        return getById(carrierSla.getCarrierslaId());
-    }
+
 
     /**
      * {@inheritDoc}

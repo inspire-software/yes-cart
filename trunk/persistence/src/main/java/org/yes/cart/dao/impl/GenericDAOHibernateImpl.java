@@ -123,11 +123,20 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
             query.setParameter(String.valueOf(idx), param);
             idx++;
         }
-        List rez = query.list();
-        if (!rez.isEmpty()) {   //TODO what if more that 1 result ?
-            return rez.get(0);
+        final List rez = query.list();
+        int size = rez.size();
+        switch (size) {
+            case 0: {
+                return null;
+            }
+            case 1: {
+                return rez.get(0);
+            }
+            default: {
+                LOG.error("#findSingleByQuery has more than one result for " + hsqlQuery);
+                return rez.get(0);
+            }
         }
-        return null;
     }
 
 

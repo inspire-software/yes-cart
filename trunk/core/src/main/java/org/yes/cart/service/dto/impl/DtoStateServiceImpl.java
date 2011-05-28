@@ -34,13 +34,6 @@ public class DtoStateServiceImpl extends AbstractDtoServiceImpl<StateDTO, StateD
         super(dtoFactory, stateGenericService, valueConverterRepository);
     }
 
-    /** {@inheritDoc} */
-    public StateDTO create(final StateDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        State state = getEntityFactory().getByIface(State.class);
-        assembler.assembleEntity(instance, state, null, dtoFactory);
-        state = service.create(state);
-        return getById(state.getStateId());
-    }
 
 
     /** {@inheritDoc} */

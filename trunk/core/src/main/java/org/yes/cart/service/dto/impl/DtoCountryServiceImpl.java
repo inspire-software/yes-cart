@@ -33,15 +33,7 @@ public class DtoCountryServiceImpl
         super(dtoFactory, countryGenericService, valueConverterRepository);
     }
 
-    /** {@inheritDoc} */
-    public CountryDTO create(final CountryDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        Country country = getEntityFactory().getByIface(Country.class);
-        assembler.assembleEntity(instance, country, null, dtoFactory);
-        country = service.create(country);
-        return getById(country.getCountryId());
-
-    }
 
     /** {@inheritDoc} */
     public CountryDTO update(final CountryDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
