@@ -33,6 +33,10 @@
         return this.managerId;
     }
 
+    public long getId() {
+        return this.managerId;
+    }
+
     public void setManagerId(long managerId) {
         this.managerId = managerId;
     }
@@ -85,6 +89,11 @@
         return this.roleId;
     }
 
+    public long getId() {
+        return this.roleId;
+    }
+
+
     public void setRoleId(long roleId) {
         this.roleId = roleId;
     }
@@ -129,6 +138,11 @@
     public long getManagerRoleId() {
         return this.managerRoleId;
     }
+
+    public long getId() {
+        return this.managerRoleId;
+    }
+
 
     public void setManagerRoleId(long managerRoleId) {
         this.managerRoleId = managerRoleId;
@@ -183,6 +197,12 @@
     public long getEtypeId() {
         return this.etypeId;
     }
+    public long getId() {
+        return this.etypeId;
+    }
+
+
+
     public void setEtypeId(long etypeId) {
         this.etypeId = etypeId;
     }
@@ -244,6 +264,11 @@
         return this.attributegroupId;
     }
 
+    public long getId() {
+        return this.attributegroupId;
+    }
+
+
     public void setAttributegroupId(long attributegroupId) {
         this.attributegroupId = attributegroupId;
     }
@@ -301,6 +326,11 @@
     public long getAttributeId() {
         return this.attributeId;
     }
+
+    public long getId() {
+        return this.attributeId;
+    }
+
 
     public void setAttributeId(long attributeId) {
         this.attributeId = attributeId;
@@ -423,6 +453,12 @@
      public long getAttrvalueId() {
         return this.attrvalueId;
      }
+
+    public long getId() {
+        return this.attrvalueId;
+    }
+
+
      public void setAttrvalueId(long attrvalueId) {
          this.attrvalueId = attrvalueId;
      }
@@ -469,6 +505,11 @@
      public long getAttrvalueId() {
         return this.attrvalueId;
      }
+
+    public long getId() {
+        return this.attrvalueId;
+    }
+
 
      public void setAttrvalueId(long attrvalueId) {
          this.attrvalueId = attrvalueId;
@@ -517,6 +558,11 @@
      public long getAttrvalueId() {
         return this.attrvalueId;
      }
+
+     public long getId() {
+        return this.attrvalueId;
+    }
+
 
      public void setAttrvalueId(long attrvalueId) {
          this.attrvalueId = attrvalueId;
@@ -569,6 +615,11 @@
         return this.attrvalueId;
      }
 
+    public long getId() {
+        return this.attrvalueId;
+    }
+
+
      public void setAttrvalueId(long attrvalueId) {
          this.attrvalueId = attrvalueId;
      }
@@ -618,6 +669,11 @@
      public long getAttrvalueId() {
         return this.attrvalueId;
      }
+
+    public long getId() {
+        return this.attrvalueId;
+    }
+
 
      public void setAttrvalueId(long attrvalueId) {
          this.attrvalueId = attrvalueId;
@@ -677,6 +733,11 @@
         return this.attrvalueId;
      }
 
+    public long getId() {
+        return this.attrvalueId;
+    }
+
+
      public void setAttrvalueId(long attrvalueId) {
          this.attrvalueId = attrvalueId;
      }
@@ -733,6 +794,11 @@
      public long getAttrvalueId() {
         return this.attrvalueId;
      }
+
+    public long getId() {
+        return this.attrvalueId;
+    }
+
 
      public void setAttrvalueId(long attrvalueId) {
          this.attrvalueId = attrvalueId;
@@ -794,6 +860,10 @@
     public long getCountryId() {
         return this.countryId;
     }
+    public long getId() {
+        return this.countryId;
+    }
+
 
     public void setCountryId(long countryId) {
         this.countryId = countryId;
@@ -845,9 +915,12 @@
     //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
 
     @Id
-
     @Column(name="COUNTRY_ID", nullable=false, length=2)
     public long getStateId() {
+        return this.stateId;
+    }
+
+    public long getId() {
         return this.stateId;
     }
 
@@ -905,6 +978,10 @@
         return this.addressId;
     }
 
+    public long getId() {
+        return this.addressId;
+    }
+
     public void setAddressId(long addressId) {
         this.addressId = addressId;
     }
@@ -937,56 +1014,6 @@
 
         </subclass>
     </class>
-
-<!--    <class name="org.yes.cart.domain.entity.Currency" table="TCURRENCY" discriminator-value="0">
-        <meta attribute="interface">true</meta>
-        <id name="currencyId" type="long">
-            <column name="CURRENCY_ID" not-null="true"/>
-            <generator class="native">
-                <param name="table">HIBERNATE_UNIQUE_KEYS</param>
-                <param name="column">value</param>
-            </generator>
-        </id>
-        <discriminator type="integer" formula="1"/>
-
-        <subclass name="org.yes.cart.domain.entity.impl.CurrencyEntity" discriminator-value="1">
-
-            <meta attribute="extra-import">org.hibernate.annotations.Parameter</meta>
-            <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
-            <meta attribute="extra-import">javax.persistence.Id</meta>
-            <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
-            <meta attribute="interface">false</meta>
-            <meta attribute="class-code">
-                <![CDATA[
-     private long currencyId;
-
-     //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-
-     @Id
-    @Column(name="CURRENCY", nullable=false, length=3)
-    public long getCurrencyId() {
-        return this.currencyId;
-    }
-
-    public void setCurrencyId(long currencyId) {
-        this.currencyId = currencyId;
-    }
-
-                ]]>
-            </meta>
-            <property name="currency" type="string" length="3">
-                <column name="CURRENCY" length="3" not-null="true"/>
-            </property>
-            <property name="name" type="string" length="64" not-null="true">
-                <column name="NAME" length="64" not-null="true"/>
-            </property>
-            <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-            <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
-            <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
-            <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
-        </subclass>
-    </class>-->
 
 
     <class name="org.yes.cart.domain.entity.Mailtemplategroup" table="TMAILTEMPLATEGROUP" discriminator-value="0">
@@ -1021,6 +1048,10 @@
      @Id @GeneratedValue /*(generator="generator")*/ 
     @Column(name="MAILTEMPLATEGROUP_ID", nullable=false)
     public long getMailtemplategroupId() {
+        return this.mailtemplategroupId;
+    }
+
+    public long getId() {
         return this.mailtemplategroupId;
     }
 
@@ -1076,6 +1107,11 @@
     public long getMailtemplateId() {
         return this.mailtemplateId;
     }
+
+     public long getId() {
+        return this.mailtemplateId;
+    }
+
 
     public void setMailtemplateId(long mailtemplateId) {
         this.mailtemplateId = mailtemplateId;
@@ -1134,6 +1170,10 @@
      @Id @GeneratedValue /*(generator="generator")*/ 
     @Column(name="NPASYSTEM_ID", nullable=false)
     public long getNpaSystemId() {
+        return this.npaSystemId;
+    }
+
+     public long getId() {
         return this.npaSystemId;
     }
 
@@ -1205,6 +1245,11 @@
  public long getProductTypeAttrId() {
      return productTypeAttrId;
  }
+
+ public long getId() {
+        return this.productTypeAttrId;
+   }
+
 
 public void setProductTypeAttrId(long productTypeAttrId) {
      this.productTypeAttrId = productTypeAttrId;
@@ -1311,6 +1356,9 @@ public void setRangeList(final RangeList rangeList) {
     public long getAttributeViewGroupId() {
         return this.attributeViewGroupId;
     }
+    public long getId() {
+        return this.attributeViewGroupId;
+    }
     public void setAttributeViewGroupId(long attributeViewGroupId) {
         this.attributeViewGroupId = attributeViewGroupId;
     }
@@ -1378,6 +1426,9 @@ public void setRangeList(final RangeList rangeList) {
     @Id @GeneratedValue /*(generator="generator")*/ 
     @Column(name="PRODUCTTYPE_ID", nullable=false)
     public long getProducttypeId() {
+        return this.producttypeId;
+    }
+    public long getId() {
         return this.producttypeId;
     }
     public void setProducttypeId(long producttypeId) {
@@ -1489,6 +1540,10 @@ public void setRangeList(final RangeList rangeList) {
         return this.prodTypeAttributeViewGroupId;
     }
 
+    public long getId() {
+        return this.prodTypeAttributeViewGroupId;
+    }
+
     public void setProdTypeAttributeViewGroupId(long prodTypeAttributeViewGroupId) {
         this.prodTypeAttributeViewGroupId = prodTypeAttributeViewGroupId;
     }
@@ -1557,6 +1612,10 @@ public void setRangeList(final RangeList rangeList) {
         return this.availabilityId;
     }
 
+    public long getId() {
+        return this.availabilityId;
+    }
+
     public void setAvailabilityId(long availabilityId) {
         this.availabilityId = availabilityId;
     }
@@ -1611,6 +1670,11 @@ public void setRangeList(final RangeList rangeList) {
     public long getCategoryId() {
         return this.categoryId;
     }
+
+    public long getId() {
+        return this.categoryId;
+    }
+
     public void setCategoryId(long categoryId) {
         this.categoryId = categoryId;
     }
@@ -1798,6 +1862,10 @@ public void setRangeList(final RangeList rangeList) {
         return this.brandId;
     }
 
+    public long getId() {
+        return this.brandId;
+    }
+
     public void setBrandId(long brandId) {
         this.brandId = brandId;
     }
@@ -1855,6 +1923,11 @@ public void setRangeList(final RangeList rangeList) {
     public long getProductId() {
         return this.productId;
     }
+
+    public long getId() {
+        return this.productId;
+    }
+
 
     public void setProductId(long productId) {
         this.productId = productId;
@@ -2043,6 +2116,11 @@ public void setRangeList(final RangeList rangeList) {
     public long getEnsembleOptId() {
         return this.ensembleOptId;
     }
+
+    public long getId() {
+        return this.ensembleOptId;
+    }
+
     public void setEnsembleOptId(long ensembleOptId) {
         this.ensembleOptId = ensembleOptId;
     }
@@ -2096,6 +2174,11 @@ public void setRangeList(final RangeList rangeList) {
     public long getSkuId() {
         return this.skuId;
     }
+
+    public long getId() {
+        return this.skuId;
+    }
+
     public void setSkuId(long skuId) {
         this.skuId = skuId;
     }
@@ -2217,6 +2300,11 @@ public void setRangeList(final RangeList rangeList) {
     public long getSkuPriceId() {
         return this.skuPriceId;
     }
+
+    public long getId() {
+        return this.skuPriceId;
+    }
+
     public void setSkuPriceId(long skuPriceId) {
         this.skuPriceId = skuPriceId;
     }
@@ -2297,6 +2385,11 @@ public void setRangeList(final RangeList rangeList) {
     public long getProductCategoryId() {
         return this.productCategoryId;
     }
+
+    public long getId() {
+        return this.productCategoryId;
+    }
+
     public void setProductCategoryId(long productCategoryId) {
         this.productCategoryId = productCategoryId;
     }
@@ -2352,6 +2445,11 @@ public void setRangeList(final RangeList rangeList) {
     public long getAssociationId() {
         return this.associationId;
     }
+
+    public long getId() {
+        return this.associationId;
+    }
+
     public void setAssociationId(long associationId) {
         this.associationId = associationId;
     }
@@ -2399,6 +2497,11 @@ public void setRangeList(final RangeList rangeList) {
     public long getProductassociationId() {
         return this.productassociationId;
     }
+
+    public long getId() {
+        return this.productassociationId;
+    }
+
 
     public void setProductassociationId(long productassociationId) {
         this.productassociationId = productassociationId;
@@ -2465,6 +2568,11 @@ public void setRangeList(final RangeList rangeList) {
         return this.warehouseId;
     }
 
+    public long getId() {
+        return this.warehouseId;
+    }
+
+
     public void setWarehouseId(long warehouseId) {
         this.warehouseId = warehouseId;
     }
@@ -2522,6 +2630,11 @@ public void setRangeList(final RangeList rangeList) {
     public long getShopId() {
         return this.shopId;
     }
+
+    public long getId() {
+        return this.shopId;
+    }
+
     public void setShopId(long shopId) {
         this.shopId = shopId;
     }
@@ -2693,6 +2806,11 @@ public void setRangeList(final RangeList rangeList) {
     public long getShopWarehouseId() {
         return shopWarehouseId;
     }
+
+    public long getId() {
+        return this.shopWarehouseId;
+    }
+
     public void setShopWarehouseId(long shopWarehouseId) {
         this.shopWarehouseId = shopWarehouseId;
     }
@@ -2745,6 +2863,11 @@ public void setRangeList(final RangeList rangeList) {
     public long getSkuWarehouseId() {
         return skuWarehouseId;
     }
+
+    public long getId() {
+        return this.skuWarehouseId;
+    }
+
     public void setSkuWarehouseId(long skuWarehouseId) {
         this.skuWarehouseId = skuWarehouseId;
     }
@@ -2811,6 +2934,11 @@ public void setRangeList(final RangeList rangeList) {
         return this.shopCategoryId;
     }
 
+
+    public long getId() {
+        return this.shopCategoryId;
+    }
+
     public void setShopCategoryId(long shopCategoryId) {
         this.shopCategoryId = shopCategoryId;
     }
@@ -2871,6 +2999,11 @@ public void setRangeList(final RangeList rangeList) {
         return this.shopDiscountId;
     }
 
+
+    public long getId() {
+        return this.shopDiscountId;
+    }
+
     public void setShopDiscountId(long shopDiscountId) {
         this.shopDiscountId = shopDiscountId;
     }
@@ -2925,6 +3058,11 @@ public void setRangeList(final RangeList rangeList) {
         return this.shopDiscountRuleId;
     }
 
+
+    public long getId() {
+        return this.shopDiscountRuleId;
+    }
+
     public void setShopDiscountRuleId(long shopDiscountRuleId) {
         this.shopDiscountRuleId = shopDiscountRuleId;
     }
@@ -2971,6 +3109,12 @@ public void setRangeList(final RangeList rangeList) {
      @Id @GeneratedValue /*(generator="generator")*/ 
     @Column(name="TSTOREURL_ID", nullable=false)
     public long getStoreUrlId() {
+        return this.storeUrlId;
+    }
+
+
+
+    public long getId() {
         return this.storeUrlId;
     }
 
@@ -3022,6 +3166,11 @@ public void setRangeList(final RangeList rangeList) {
         return this.shopexchangerateId;
     }
 
+
+    public long getId() {
+        return this.shopexchangerateId;
+    }
+
     public void setShopexchangerateId(long shopexchangerateId) {
         this.shopexchangerateId = shopexchangerateId;
     }
@@ -3068,6 +3217,11 @@ public void setRangeList(final RangeList rangeList) {
      @Id @GeneratedValue /*(generator="generator")*/ 
     @Column(name="SHOPADVPLACE_ID", nullable=false)
     public long getShopadvplaceId() {
+        return this.shopadvplaceId;
+    }
+
+
+    public long getId() {
         return this.shopadvplaceId;
     }
 
@@ -3122,6 +3276,11 @@ public void setRangeList(final RangeList rangeList) {
      @Id @GeneratedValue /*(generator="generator")*/ 
     @Column(name="STOREADVRULES_ID", nullable=false)
     public long getShopadvrulesId() {
+        return this.shopadvrulesId;
+    }
+
+
+    public long getId() {
         return this.shopadvrulesId;
     }
 
@@ -3181,6 +3340,11 @@ public void setRangeList(final RangeList rangeList) {
     @Id @GeneratedValue /*(generator="generator")*/
     @Column(name="CUSTOMER_ID", nullable=false)
     public long getCustomerId() {
+        return this.customerId;
+    }
+
+
+    public long getId() {
         return this.customerId;
     }
 
@@ -3327,6 +3491,11 @@ public void setRangeList(final RangeList rangeList) {
         return this.customerShopId;
     }
 
+
+    public long getId() {
+        return this.customerShopId;
+    }
+
     public void setCustomerShopId(long customerShopId) {
         this.customerShopId = customerShopId;
     }
@@ -3383,6 +3552,11 @@ public void setRangeList(final RangeList rangeList) {
         return this.customerwishlistId;
     }
 
+
+    public long getId() {
+        return this.customerwishlistId;
+    }
+
     public void setCustomerwishlistId(long customerwishlistId) {
         this.customerwishlistId = customerwishlistId;
     }
@@ -3416,94 +3590,7 @@ public void setRangeList(final RangeList rangeList) {
 
 
     <!-- ################################ Order & etc ####################################### -->
-<!--
-    <class name="org.yes.cart.domain.entity.OrderStatus" table="TORDERSTATUS" discriminator-value="0">
-        <meta attribute="interface">true</meta>
-        <id name="orderstatusId" column="ORDERSTATUS_ID" type="long">
-            <generator class="native">
-                <param name="table">HIBERNATE_UNIQUE_KEYS</param>
-                <param name="column">value</param>
-            </generator>
-        </id>
-        <discriminator type="integer" formula="1"/>
-        <subclass name="org.yes.cart.domain.entity.impl.OrderStatusEntity" discriminator-value="1">
-            <meta attribute="extra-import">org.hibernate.annotations.Parameter</meta>
-            <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
-            <meta attribute="extra-import">javax.persistence.Id</meta>
-            <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
-            <meta attribute="interface">false</meta>
-            <meta attribute="class-code">
-                <![CDATA[
-     private long orderstatusId;
 
-     //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-     @Id @GeneratedValue /*(generator="generator")*/ 
-
-    @Column(name="ORDERSTATUS_ID", nullable=false)
-    public long getOrderstatusId() {
-        return this.orderstatusId;
-    }
-
-    public void setOrderstatusId(long orderstatusId) {
-        this.orderstatusId = orderstatusId;
-    }
-
-                ]]>
-            </meta>
-            <property name="name" column="NAME" type="string" length="256" not-null="true"/>
-            <property name="description" column="DESCRIPTION" type="string" length="4000"/>
-            <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-            <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
-            <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
-            <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
-
-        </subclass>
-    </class>
-
-    <class name="org.yes.cart.domain.entity.DeliveryStatus" table="TDELIVERYSTATUS" discriminator-value="0">
-        <meta attribute="interface">true</meta>
-        <id name="deliverystatusId" column="DELIVERYSTATUS_ID" type="long">
-            <generator class="native">
-                <param name="table">HIBERNATE_UNIQUE_KEYS</param>
-                <param name="column">value</param>
-            </generator>
-        </id>
-        <discriminator type="integer" formula="1"/>
-        <subclass name="org.yes.cart.domain.entity.impl.DeliveryStatusEntity" discriminator-value="1">
-            <meta attribute="extra-import">org.hibernate.annotations.Parameter</meta>
-            <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
-            <meta attribute="extra-import">javax.persistence.Id</meta>
-            <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
-            <meta attribute="interface">false</meta>
-            <meta attribute="class-code">
-                <![CDATA[
-     private long deliverystatusId;
-
-     //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-     @Id @GeneratedValue /*(generator="generator")*/ 
-
-    @Column(name="DELIVERYSTATUS_ID", nullable=false)
-    public long getDeliverystatusId() {
-        return this.deliverystatusId;
-    }
-
-    public void setDeliverystatusId(long deliverystatusId) {
-        this.deliverystatusId = deliverystatusId;
-    }
-                ]]>
-            </meta>
-            <property name="name" column="NAME" type="string" length="256" not-null="true"/>
-            <property name="description" column="DESCRIPTION" type="string" length="4000"/>
-
-            <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-            <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
-            <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
-            <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
-
-        </subclass>
-    </class>-->
 
     <class name="org.yes.cart.domain.entity.CustomerOrder" table="TCUSTOMERORDER" discriminator-value="0">
         <meta attribute="interface">true</meta>
@@ -3530,6 +3617,11 @@ public void setRangeList(final RangeList rangeList) {
     @Id @GeneratedValue /*(generator="generator")*/
     @Column(name="CUSTOMERORDER_ID", nullable=false)
     public long getCustomerorderId() {
+        return this.customerorderId;
+    }
+
+
+    public long getId() {
         return this.customerorderId;
     }
 
@@ -3569,11 +3661,6 @@ public void setRangeList(final RangeList rangeList) {
                 </column>
             </property>
             <property name="orderStatus" column="ORDERSTATUS" type="string" length="64" not-null="true"/>
-<!--
-            <many-to-one name="orderStatus" class="org.yes.cart.domain.entity.OrderStatus" foreign-key="FK_ORDER_STATUS">
-                <column name="ORDERSTATUS_ID" not-null="true"/>
-            </many-to-one>
--->
             <many-to-one name="customer" class="org.yes.cart.domain.entity.Customer" foreign-key="FK_ORDER_CUSTOMER" lazy="false">
                 <column name="CUSTOMER_ID" not-null="true"/>
             </many-to-one>
@@ -3651,6 +3738,11 @@ public void setRangeList(final RangeList rangeList) {
         return this.customerOrderDetId;
     }
 
+    public long getId() {
+        return this.customerOrderDetId;
+    }
+
+
     public void setCustomerOrderDetId(long customerOrderDetId) {
         this.customerOrderDetId = customerOrderDetId;
     }
@@ -3718,6 +3810,11 @@ public void setRangeList(final RangeList rangeList) {
 
     @Column(name="CUSTOMERORDERDELIVERY_ID", nullable=false)
     public long getCustomerOrderDeliveryId() {
+        return this.customerOrderDeliveryId;
+    }
+
+
+    public long getId() {
         return this.customerOrderDeliveryId;
     }
 
@@ -3792,6 +3889,11 @@ public void setRangeList(final RangeList rangeList) {
         return this.customerorderdeliveryId;
     }
 
+
+    public long getId() {
+        return this.customerorderdeliveryId;
+    }
+
     public void setCustomerorderdeliveryId(long customerorderdeliveryId) {
         this.customerorderdeliveryId = customerorderdeliveryId;
     }
@@ -3854,6 +3956,11 @@ public void setRangeList(final RangeList rangeList) {
         return this.carrierId;
     }
 
+
+    public long getId() {
+        return this.carrierId;
+    }
+
     public void setCarrierId(long carrierId) {
         this.carrierId = carrierId;
     }
@@ -3909,6 +4016,11 @@ public void setRangeList(final RangeList rangeList) {
      @Id @GeneratedValue /*(generator="generator")*/ 
     @Column(name="CARRIERSLA_ID", nullable=false)
     public long getCarrierslaId() {
+        return this.carrierslaId;
+    }
+
+
+    public long getId() {
         return this.carrierslaId;
     }
 
@@ -3975,6 +4087,11 @@ public void setRangeList(final RangeList rangeList) {
         return this.seoImageId;
      }
 
+
+    public long getId() {
+        return this.seoImageId;
+    }
+
      public void setSeoImageId(long seoImageId) {
         this.seoImageId = seoImageId;
      }
@@ -4026,6 +4143,11 @@ public void setRangeList(final RangeList rangeList) {
 
     @Column(name="SEO_ID", nullable=false)
     public long getSeoId() {
+        return this.seoId;
+    }
+
+
+    public long getId() {
         return this.seoId;
     }
 

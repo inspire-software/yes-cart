@@ -46,7 +46,8 @@ public class DtoProductAssociationServiceImpl
      */
     public ProductAssociationDTO create(final ProductAssociationDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         ProductAssociation productAssociation = getEntityFactory().getByIface(ProductAssociation.class);
-        assembler.assembleEntity(instance, productAssociation,  getValueConverterRepository(), new EntityFactoryToBeanFactoryAdaptor(getEntityFactory()));
+        assembler.assembleEntity(instance, productAssociation,  getValueConverterRepository(),
+                new EntityFactoryToBeanFactoryAdaptor(getEntityFactory()));
         productAssociation = getService().create(productAssociation);
         return getById(productAssociation.getProductassociationId());
     }

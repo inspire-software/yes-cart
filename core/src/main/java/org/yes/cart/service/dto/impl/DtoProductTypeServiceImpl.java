@@ -31,15 +31,6 @@ public class DtoProductTypeServiceImpl
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
-    public ProductTypeDTO create(final ProductTypeDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        ProductType productType = getEntityFactory().getByIface(ProductType.class);
-        assembler.assembleEntity(instance, productType,  null, dtoFactory);
-        productType = service.create(productType);
-        return getById(productType.getProducttypeId());
-    }
 
     /**
      * {@inheritDoc}

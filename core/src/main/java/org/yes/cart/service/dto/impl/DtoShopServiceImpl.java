@@ -29,13 +29,6 @@ public class DtoShopServiceImpl
 
     }
 
-    /** {@inheritDoc} */
-    public ShopDTO create(ShopDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        Shop shop = getEntityFactory().getByIface(Shop.class);
-        assembler.assembleEntity(instance, shop,  null, dtoFactory);
-        shop = service.create(shop);
-        return getById(shop.getShopId());
-    }
 
     /** {@inheritDoc} */
     public ShopDTO update(ShopDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {

@@ -82,7 +82,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      */
     @Cacheable(value = "productServiceImplMethodCache")
     public Product getRandomProductByCategory(final Category category) {
-        //TODO add product availavility check and test
         if (!category.getProductCategory().isEmpty()) {
             int idx = rand.nextInt(category.getProductCategory().size());
             ProductCategory productCategory = (ProductCategory) category.getProductCategory().toArray()[idx];

@@ -85,15 +85,7 @@ public class DtoImageServiceImpl
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public SeoImageDTO create(final SeoImageDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        SeoImage seoImage = getEntityFactory().getByIface(SeoImage.class);
-        assembler.assembleEntity(instance, seoImage,  null, dtoFactory);
-        seoImage = service.create(seoImage);
-        return getById(seoImage.getSeoImageId());
-    }
+
 
     /**
      * {@inheritDoc}

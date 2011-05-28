@@ -34,14 +34,7 @@ public class DtoCustomerWishListServiceImpl
         super(dtoFactory, customerWishListGenericService, valueConverterRepository);
     }
 
-    /** {@inheritDoc} */
-    public CustomerWishListDTO create(final CustomerWishListDTO instance)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        CustomerWishList entity = getEntityFactory().getByIface(CustomerWishList.class);
-        assembler.assembleEntity(instance, entity,  null, dtoFactory);
-        entity = service.create(entity);
-        return getById(entity.getCustomerwishlistId());
-    }
+
 
     /** {@inheritDoc} */
     public CustomerWishListDTO update(final CustomerWishListDTO instance)

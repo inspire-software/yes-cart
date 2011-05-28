@@ -16,6 +16,14 @@ import java.util.Date;
  * 1. The same changes on several different staging servers will be added to production server.
  */
 public interface Auditable extends Serializable {
+
+    /**
+     * Get pk value.
+     *
+     * @return pk value.
+     */
+    long getId();
+
     /**
      * @return created timestamp.
      */
