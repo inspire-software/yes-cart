@@ -59,16 +59,6 @@ public class DtoWarehouseServiceImpl
                 ShopWarehouseDTOImpl.class, ShopWarehouse.class);
     }
 
-
-    /** {@inheritDoc}*/
-    public WarehouseDTO update(final WarehouseDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        Warehouse warehouse = service.getById(instance.getWarehouseId());
-        assembler.assembleEntity(instance, warehouse, null, dtoFactory);
-        warehouse = service.update(warehouse);
-        return getById(warehouse.getWarehouseId());
-
-    }
-
     /** {@inheritDoc}*/
     public Class<WarehouseDTO> getDtoIFace() {
         return WarehouseDTO.class;

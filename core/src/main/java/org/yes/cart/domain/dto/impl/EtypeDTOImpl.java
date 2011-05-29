@@ -28,6 +28,13 @@ public class EtypeDTOImpl implements EtypeDTO {
         return etypeId;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public long getId() {
+        return etypeId;
+    }
+
     /** {@inheritDoc} */
     public void setEtypeId(final long etypeId) {
         this.etypeId = etypeId;

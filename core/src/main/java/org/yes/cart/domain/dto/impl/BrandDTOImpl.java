@@ -46,6 +46,13 @@ public class BrandDTOImpl implements BrandDTO {
         return brandId;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public long getId() {
+        return brandId;
+    }
+
     /** {@inheritDoc}*/
     public void setBrandId(long brandId) {
         this.brandId = brandId;

@@ -57,6 +57,13 @@ public class ProductAssociationDTOImpl implements ProductAssociationDTO {
         return productassociationId;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public long getId() {
+        return productassociationId;
+    }
+
     /** {@inheritDoc} */
     public void setProductassociationId(final long productassociationId) {
         this.productassociationId = productassociationId;

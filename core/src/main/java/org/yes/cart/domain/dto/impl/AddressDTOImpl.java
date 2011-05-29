@@ -103,6 +103,11 @@ public class AddressDTOImpl implements AddressDTO {
         return addressId;
     }
 
+    /** {@inheritDoc} */
+    public long getId() {
+        return addressId;
+    }
+
 
     /** {@inheritDoc} */
     public void setAddressId(final long addressId) {

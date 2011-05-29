@@ -17,11 +17,35 @@ public class ManagerDTOImpl implements ManagerDTO {
     @DtoField(value = "email", readOnly = true)
     private String email;
 
+    @DtoField(value = "managerId", readOnly = true)
+    private long managerId;
+
     @DtoField(value = "firstname", readOnly = true)
     private String firstName;
 
     @DtoField(value = "lastname", readOnly = true)
     private String lastName;
+
+    /**
+     * {@inheritDoc}
+     */
+    public long getManagerId() {
+        return managerId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public long getId() {
+        return managerId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setManagerId(long managerId) {
+        this.managerId = managerId;
+    }
 
     /**
      * {@inheritDoc}

@@ -30,15 +30,6 @@ public class DtoEtypeServiceImpl
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
-    public EtypeDTO update(final EtypeDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        Etype etype = service.getById(instance.getEtypeId());
-        assembler.assembleEntity(instance, etype,  null, dtoFactory);
-        etype = service.update(etype);
-        return getById(etype.getEtypeId());
-    }
 
     /** {@inheritDoc} */
     public Class<EtypeDTO> getDtoIFace() {

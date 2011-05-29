@@ -63,6 +63,11 @@ public class SkuWarehouseDTOImpl implements SkuWarehouseDTO {
         return productSkuId;
     }
 
+     /** {@inheritDoc}*/
+    public long getId() {
+        return productSkuId;
+    }
+
     /** {@inheritDoc} */
     public void setProductSkuId(final long productSkuId) {
         this.productSkuId = productSkuId;

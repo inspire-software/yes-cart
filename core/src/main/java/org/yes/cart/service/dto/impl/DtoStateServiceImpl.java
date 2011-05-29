@@ -35,17 +35,6 @@ public class DtoStateServiceImpl extends AbstractDtoServiceImpl<StateDTO, StateD
     }
 
 
-
-    /** {@inheritDoc} */
-    public StateDTO update(final StateDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-
-        State state = service.getById(instance.getStateId());
-        assembler.assembleEntity(instance, state, null, dtoFactory);
-        state = service.update(state);
-        return getById(state.getStateId());
-
-    }
-
     /** {@inheritDoc} */
     public Class<StateDTO> getDtoIFace() {
         return StateDTO.class;

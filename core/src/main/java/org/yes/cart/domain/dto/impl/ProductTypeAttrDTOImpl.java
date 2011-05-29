@@ -18,6 +18,8 @@ public class ProductTypeAttrDTOImpl implements ProductTypeAttrDTO {
     private long productTypeAttrId;
 
 
+
+
     @DtoField(value = "attribute",
             dtoBeanKey = "org.yes.cart.domain.dto.AttributeDTO",
             entityBeanKeys = "org.yes.cart.domain.entity.Attribute")
@@ -53,6 +55,13 @@ public class ProductTypeAttrDTOImpl implements ProductTypeAttrDTO {
 
     /** {@inheritDoc} */
     public long getProductTypeAttrId() {
+        return productTypeAttrId;
+    }
+
+     /**
+     * {@inheritDoc}
+     */
+    public long getId() {
         return productTypeAttrId;
     }
 

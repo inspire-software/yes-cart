@@ -41,6 +41,11 @@ public class ShopWarehouseDTOImpl implements ShopWarehouseDTO {
         return shopWarehouseId;
     }
 
+    /** {@inheritDoc}*/
+    public long getId() {
+        return shopWarehouseId;
+    }
+
     /** {@inheritDoc} */
     public void setShopWarehouseId(final long shopWarehouseId) {
         this.shopWarehouseId = shopWarehouseId;

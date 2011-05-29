@@ -1,6 +1,8 @@
 package org.yes.cart.domain.dto;
 
 
+import org.yes.cart.domain.entity.Unique;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -14,7 +16,7 @@ import java.util.Set;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface CategoryDTO extends Serializable {
+public interface CategoryDTO extends Unique {
 
     /**
      * Get category pk value.

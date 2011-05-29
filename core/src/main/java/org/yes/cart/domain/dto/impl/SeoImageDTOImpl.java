@@ -32,6 +32,11 @@ public class SeoImageDTOImpl implements SeoImageDTO {
     }
 
     /** {@inheritDoc}*/
+    public long getId() {
+        return seoImageId;
+    }
+
+    /** {@inheritDoc}*/
     public void setSeoImageId(final long seoImageId) {
         this.seoImageId = seoImageId;
     }

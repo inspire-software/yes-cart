@@ -1,5 +1,7 @@
 package org.yes.cart.domain.dto;
 
+import org.yes.cart.domain.entity.Unique;
+
 import java.math.BigDecimal;
 
 /**
@@ -9,7 +11,7 @@ import java.math.BigDecimal;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface CarrierSlaDTO {
+public interface CarrierSlaDTO extends Unique {
 
 
     /**

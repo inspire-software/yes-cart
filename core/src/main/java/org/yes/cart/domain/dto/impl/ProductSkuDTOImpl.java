@@ -83,6 +83,13 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
         return skuId;
     }
 
+     /**
+     * {@inheritDoc}
+     */
+    public long getId() {
+        return skuId;
+    }
+
     /**
      * {@inheritDoc}
      */

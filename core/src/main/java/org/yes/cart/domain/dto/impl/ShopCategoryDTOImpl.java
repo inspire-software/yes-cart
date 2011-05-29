@@ -31,6 +31,11 @@ public class ShopCategoryDTOImpl  implements ShopCategoryDTO {
         return shopCategoryId;
     }
 
+    /** {@inheritDoc}*/
+    public long getId() {
+        return shopCategoryId;
+    }
+
     /** {@inheritDoc} */
     public void setShopCategoryId(final long shopCategoryId) {
         this.shopCategoryId = shopCategoryId;

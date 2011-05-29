@@ -33,6 +33,11 @@ public class StateDTOImpl implements StateDTO {
         return stateId;
     }
 
+    /** {@inheritDoc}*/
+    public long getId() {
+        return stateId;
+    }
+
     /**
      * {@inheritDoc}
      */

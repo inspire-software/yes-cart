@@ -67,6 +67,13 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    public long getId() {
+        return carrierslaId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void setCarrierslaId(final long carrierslaId) {
         this.carrierslaId = carrierslaId;
     }

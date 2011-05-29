@@ -32,16 +32,7 @@ public class DtoCarrierServiceImpl
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
-    public CarrierDTO update(final CarrierDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        Carrier carrier = service.getById(instance.getCarrierId());
-        assembler.assembleEntity(instance, carrier,  null, dtoFactory);
-        carrier = service.update(carrier);
-        return getById(carrier.getCarrierId());
 
-    }
 
     /**
      * Get the dto interface.

@@ -1,5 +1,7 @@
 package org.yes.cart.domain.dto;
 
+import org.yes.cart.domain.entity.Unique;
+
 /**
  * Carrier DTO interface.
  * <p/>
@@ -7,7 +9,7 @@ package org.yes.cart.domain.dto;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface CarrierDTO {
+public interface CarrierDTO extends Unique {
 
     /**
      * Get pk value.

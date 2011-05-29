@@ -6,6 +6,7 @@ import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.domain.dto.AttrValueDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.entity.Auditable;
+import org.yes.cart.domain.entity.Unique;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.GenericService;
@@ -21,7 +22,7 @@ import java.util.Map;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public abstract class AbstractDtoServiceImpl<DTOIFACE, DTOIMPL, IFACE extends Auditable> implements GenericDTOService<DTOIFACE> {
+public abstract class AbstractDtoServiceImpl<DTOIFACE extends Unique, DTOIMPL, IFACE extends Auditable> implements GenericDTOService<DTOIFACE> {
 
     protected final DtoFactory dtoFactory;
 
@@ -167,8 +168,19 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE, DTOIMPL, IFACE extends Au
 
 
     /** {@inheritDoc}*/
-    public abstract DTOIFACE update(DTOIFACE instance)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    public DTOIFACE update(final DTOIFACE instance)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        IFACE iface = service.getById(instance.getId());
+        assembler.assembleEntity(instance, iface, getValueConverterRepository(), dtoFactory);
+        iface = service.update(iface);
+        return getById(iface.getId());
+    }
+
+
+
+    /** {@inheritDoc}*/
+   /* public abstract DTOIFACE update(DTOIFACE instance)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException; */
 
     /**
      * Get the dto interface.

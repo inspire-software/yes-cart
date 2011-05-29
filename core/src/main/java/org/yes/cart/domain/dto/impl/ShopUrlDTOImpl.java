@@ -38,6 +38,11 @@ public class ShopUrlDTOImpl implements ShopUrlDTO {
         return storeUrlId;
     }
 
+    /** {@inheritDoc}*/
+    public long getId() {
+        return storeUrlId;
+    }
+
     /** {@inheritDoc}  */
     public void setStoreUrlId(final long storeUrlId) {
         this.storeUrlId = storeUrlId;
