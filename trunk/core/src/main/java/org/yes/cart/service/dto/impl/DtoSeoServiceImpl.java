@@ -30,18 +30,6 @@ public class DtoSeoServiceImpl
     }
 
 
-
-    /**
-     * {@inheritDoc}
-     */
-    public SeoDTO update(SeoDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        Seo seo = service.getById(instance.getSeoId());
-        assembler.assembleEntity(instance, seo,  null, dtoFactory);
-        seo = service.update(seo);
-        return getById(seo.getSeoId());
-
-    }
-
     /**
      * Get the dto interface.
      *

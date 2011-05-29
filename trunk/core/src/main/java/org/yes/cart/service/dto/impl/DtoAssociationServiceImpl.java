@@ -32,26 +32,6 @@ public class DtoAssociationServiceImpl
         super(dtoFactory, associationGenericService, valueConverterRepository);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public AssociationDTO create(final AssociationDTO instance)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        Association association = getEntityFactory().getByIface(Association.class);
-        assembler.assembleEntity(instance, association,  null, dtoFactory);
-        association = service.create(association);
-        return getById(association.getAssociationId());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public AssociationDTO update(final AssociationDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        Association association = service.getById(instance.getAssociationId());
-        assembler.assembleEntity(instance, association,  null, dtoFactory);
-        association = service.update(association);
-        return getById(association.getAssociationId());
-    }
 
     /**
      * Get the dto interface.

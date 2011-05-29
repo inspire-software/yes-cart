@@ -1,5 +1,7 @@
 package org.yes.cart.domain.dto;
 
+import org.yes.cart.domain.entity.Unique;
+
 import java.io.Serializable;
 
 /**
@@ -8,7 +10,7 @@ import java.io.Serializable;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface SeoDTO extends Serializable {
+public interface SeoDTO extends Unique {
 
     /**
      * Get seo pk value.

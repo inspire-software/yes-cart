@@ -1,5 +1,7 @@
 package org.yes.cart.domain.dto;
 
+import org.yes.cart.domain.entity.Unique;
+
 import java.io.Serializable;
 
 /**
@@ -9,7 +11,21 @@ import java.io.Serializable;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface ManagerDTO extends Serializable {
+public interface ManagerDTO extends Unique {
+
+    /**
+     * Primapy key.
+     *
+     * @return pk value.
+     */
+    long getManagerId();
+
+    /**
+     * Set pk.
+     *
+     * @param managerId pk value.
+     */
+    void setManagerId(long managerId);
 
     /**
      * Get the login mane, that equals to email.

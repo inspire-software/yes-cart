@@ -36,15 +36,6 @@ public class DtoCustomerWishListServiceImpl
 
 
 
-    /** {@inheritDoc} */
-    public CustomerWishListDTO update(final CustomerWishListDTO instance)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        CustomerWishList entity = service.getById(instance.getCustomerwishlistId());
-        assembler.assembleEntity(instance, entity,  null, dtoFactory);
-        entity = service.update(entity);
-        return getById(entity.getCustomerwishlistId());
-
-    }
 
     /** {@inheritDoc} */
     public Class<CustomerWishListDTO> getDtoIFace() {

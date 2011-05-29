@@ -14,11 +14,36 @@ public class RoleDTOImpl implements RoleDTO {
 
     private static final long serialVersionUID = 2010717L;
 
+    @DtoField(value = "roleId", readOnly = true)
+    private long roleId;
+
     @DtoField(value = "code", readOnly = true)
     private String code;
 
     @DtoField(value = "description", readOnly = true)
     private String description;
+
+    /**
+     * {@inheritDoc}
+     */
+    public long getRoleId() {
+        return roleId;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public long getId() {
+        return roleId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setRoleId(long roleId) {
+        this.roleId = roleId;
+    }
 
     /**
      * {@inheritDoc}

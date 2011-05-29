@@ -107,6 +107,13 @@ public class AttributeDTOImpl  implements AttributeDTO {
         return this.attributeId;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public long getId() {
+        return attributeId;
+    }
+
     /** {@inheritDoc} */
     public void setAttributeId(final long attributeId) {
         this.attributeId = attributeId;

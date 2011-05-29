@@ -37,14 +37,6 @@ public class DtoAddressServiceImpl
 
 
     /** {@inheritDoc} */
-    public AddressDTO update(final AddressDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        Address address = service.getById(instance.getAddressId());
-        assembler.assembleEntity(instance, address, null, dtoFactory);
-        address = service.update(address);
-        return getById(address.getAddressId());
-    }
-
-    /** {@inheritDoc} */
     public List<AddressDTO> getAddressesByCustomerId(final long customerId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {        
         return getDTOs(((AddressService)service).getAddressesByCustomerId(customerId));

@@ -30,6 +30,11 @@ public class AssociationDTOImpl implements AssociationDTO {
     }
 
     /** {@inheritDoc} */
+    public long getId() {
+        return associationId;
+    }
+
+    /** {@inheritDoc} */
     public void setAssociationId(final long associationId) {
         this.associationId = associationId;
     }

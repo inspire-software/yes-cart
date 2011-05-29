@@ -125,6 +125,11 @@ public class SkuPriceDTOImpl implements SkuPriceDTO {
         return skuPriceId;
     }
 
+     /** {@inheritDoc}*/
+    public long getId() {
+        return skuPriceId;
+    }
+
     /** {@inheritDoc}*/
     public void setSkuPriceId(final long skuPriceId) {
         this.skuPriceId = skuPriceId;

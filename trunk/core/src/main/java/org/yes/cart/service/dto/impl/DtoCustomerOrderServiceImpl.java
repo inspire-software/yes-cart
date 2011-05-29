@@ -45,16 +45,6 @@ public class DtoCustomerOrderServiceImpl
         throw new UnableToCreateInstanceException("Customer order cannot be created via back end", null);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public CustomerOrderDTO update(final CustomerOrderDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        CustomerOrder customerOrder = service.getById(instance.getCustomerorderId());
-        assembler.assembleEntity(instance, customerOrder, null, dtoFactory);
-        customerOrder = service.update(customerOrder);
-        return getById(customerOrder.getCustomerorderId());
-    }
-
 
     /**
      * {@inheritDoc}

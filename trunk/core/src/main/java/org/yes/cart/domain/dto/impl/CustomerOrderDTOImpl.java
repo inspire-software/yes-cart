@@ -99,6 +99,13 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public long getId() {
+        return customerorderId;
+    }
+
+    /**
      * {@inheritDoc
      */
     public void setCustomerorderId(final long customerorderId) {

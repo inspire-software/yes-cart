@@ -29,6 +29,12 @@ public class ShopDTOImpl implements ShopDTO  {
     @DtoField(value = "shopId", readOnly = true)
     private long shopId;
 
+    /** {@inheritDoc}*/
+    public long getId() {
+        return shopId;
+    }
+
+
     /** {@inheritDoc} */
     public String getCode() {
         return code;

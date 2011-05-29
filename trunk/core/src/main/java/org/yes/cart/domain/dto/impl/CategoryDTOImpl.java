@@ -107,6 +107,13 @@ public class CategoryDTOImpl implements CategoryDTO  {
         return categoryId;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public long getId() {
+        return categoryId;
+    }
+
     /** {@inheritDoc}*/
     public void setCategoryId(final long categoryId) {
         this.categoryId = categoryId;

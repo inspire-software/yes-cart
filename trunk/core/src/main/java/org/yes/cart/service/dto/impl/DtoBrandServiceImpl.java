@@ -70,17 +70,6 @@ public class DtoBrandServiceImpl
 
 
     /**
-     * {@inheritDoc}
-     */
-    public BrandDTO update(final BrandDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        Brand brand = service.getById(instance.getBrandId());
-        assembler.assembleEntity(instance, brand,  null, dtoFactory);
-        brand = service.update(brand);
-        return getById(brand.getBrandId());
-
-    }
-
-    /**
      * Get the dto interface.
      *
      * @return dto interface.

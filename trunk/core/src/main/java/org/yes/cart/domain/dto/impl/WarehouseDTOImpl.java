@@ -46,6 +46,11 @@ public class WarehouseDTOImpl implements WarehouseDTO {
     }
 
     /** {@inheritDoc}*/
+    public long getId() {
+        return warehouseId;
+    }
+
+    /** {@inheritDoc}*/
     public void setWarehouseId(final long warehouseId) {
         this.warehouseId = warehouseId;
     }

@@ -48,13 +48,6 @@ public class DtoShopUrlServiceImpl
         return getById(shopUrl.getStoreUrlId());
     }
 
-    /** {@inheritDoc}     */
-    public ShopUrlDTO update(final ShopUrlDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        ShopUrl shopUrl = service.getById(instance.getStoreUrlId());
-        assembler.assembleEntity(instance, shopUrl, null, dtoFactory);
-        shopUrl = service.update(shopUrl);
-        return getById(shopUrl.getStoreUrlId());
-    }
 
     /** {@inheritDoc} */
     public List<ShopUrlDTO> getAllByShopId(final long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException {

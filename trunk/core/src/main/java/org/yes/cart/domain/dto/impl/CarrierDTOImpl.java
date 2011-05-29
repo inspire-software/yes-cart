@@ -38,6 +38,13 @@ public class CarrierDTOImpl implements CarrierDTO {
         return carrierId;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public long getId() {
+        return carrierId;
+    }
+
     /** {@inheritDoc} */
     public void setCarrierId(final long carrierId) {
         this.carrierId = carrierId;

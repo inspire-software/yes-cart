@@ -30,6 +30,11 @@ public class SeoDTOImpl implements SeoDTO {
     private String metadescription;
 
     /** {@inheritDoc}*/
+    public long getId() {
+        return seoId;
+    }
+
+    /** {@inheritDoc}*/
     public long getSeoId() {
         return seoId;
     }

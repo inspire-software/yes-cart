@@ -15,14 +15,9 @@ import java.util.Date;
  * Here we have some limitionations for transfer change slices:
  * 1. The same changes on several different staging servers will be added to production server.
  */
-public interface Auditable extends Serializable {
+public interface Auditable extends Unique {
 
-    /**
-     * Get pk value.
-     *
-     * @return pk value.
-     */
-    long getId();
+
 
     /**
      * @return created timestamp.

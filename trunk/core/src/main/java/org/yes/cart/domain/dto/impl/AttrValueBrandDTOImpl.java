@@ -33,6 +33,13 @@ public class AttrValueBrandDTOImpl implements AttrValueBrandDTO {
         return attrvalueId;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public long getId() {
+        return attrvalueId;
+    }
+
     /** {@inheritDoc} */
     public void setAttrvalueId(final long attrvalueId) {
         this.attrvalueId = attrvalueId;

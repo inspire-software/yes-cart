@@ -51,6 +51,13 @@ public class CustomerDTOImpl implements CustomerDTO {
         return customerId;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public long getId() {
+        return customerId;
+    }
+
     /** {@inheritDoc} */
     public void setCustomerId(final long customerId) {
         this.customerId = customerId;

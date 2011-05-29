@@ -44,6 +44,14 @@ public class ProductCategoryDTOImpl implements ProductCategoryDTO {
         return productCategoryId;
     }
 
+/**
+     * {@inheritDoc}
+     */
+    public long getId() {
+        return productCategoryId;
+    }
+
+
     /** {@inheritDoc} */
     public void setProductCategoryId(final long productCategoryId) {
         this.productCategoryId = productCategoryId;

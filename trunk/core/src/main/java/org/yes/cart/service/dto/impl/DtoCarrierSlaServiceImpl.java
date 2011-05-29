@@ -36,17 +36,6 @@ public class DtoCarrierSlaServiceImpl
 
 
 
-    /**
-     * {@inheritDoc}
-     */
-    public CarrierSlaDTO update(final CarrierSlaDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        CarrierSla carrierSla = service.getById(instance.getCarrierslaId());
-        assembler.assembleEntity(instance, carrierSla,  getValueConverterRepository() , dtoFactory);
-        carrierSla = service.update(carrierSla);
-        return getById(carrierSla.getCarrierslaId());
-
-    }
-
 
     /**
      * {@inheritDoc}

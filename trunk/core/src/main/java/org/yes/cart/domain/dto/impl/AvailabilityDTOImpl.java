@@ -28,6 +28,13 @@ public class AvailabilityDTOImpl implements AvailabilityDTO {
         return availabilityId;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public long getId() {
+        return availabilityId;
+    }
+
     /** {@inheritDoc}*/
     public void setAvailabilityId(final long availabilityId) {
         this.availabilityId = availabilityId;

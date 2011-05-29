@@ -94,6 +94,13 @@ public class ProductDTOImpl implements ProductDTO {
         return productId;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public long getId() {
+        return productId;
+    }
+
     /** {@inheritDoc} */
     public void setProductId(final long productId) {
         this.productId = productId;

@@ -32,6 +32,13 @@ public class AttributeGroupDTOImpl implements AttributeGroupDTO {
         return attributegroupId;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public long getId() {
+        return attributegroupId;
+    }
+
     /** {@inheritDoc} */
     public void setAttributegroupId(final long attributegroupId) {
         this.attributegroupId = attributegroupId;

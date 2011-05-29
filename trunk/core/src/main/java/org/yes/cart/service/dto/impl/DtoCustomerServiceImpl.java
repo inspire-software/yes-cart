@@ -85,22 +85,13 @@ public class DtoCustomerServiceImpl
      * {@inheritDoc}
      */
     public CustomerDTO create(final CustomerDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        Customer customer = getEntityFactory().getByIface(Customer.class);
+        Customer customer = getEntityFactory().getByIface(getEntityIFace());
         assembler.assembleEntity(instance, customer, null, dtoFactory);
         customer = ((CustomerService)service).create(customer, null);
         return getById(customer.getCustomerId());
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public CustomerDTO update(final CustomerDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        Customer customer = service.getById(instance.getCustomerId());
-        assembler.assembleEntity(instance, customer, null, dtoFactory);
-        customer = service.update(customer);
-        return getById(customer.getCustomerId());
 
-    }
 
     /**
      * {@inheritDoc}

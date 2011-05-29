@@ -35,6 +35,13 @@ public class CustomerWishListDTOImpl implements CustomerWishListDTO {
         return customerwishlistId;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public long getId() {
+        return customerwishlistId;
+    }
+
     /** {@inheritDoc} */
     public void setCustomerwishlistId(final long customerwishlistId) {
         this.customerwishlistId = customerwishlistId;

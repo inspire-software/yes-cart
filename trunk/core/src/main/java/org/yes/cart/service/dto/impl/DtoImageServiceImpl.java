@@ -88,17 +88,6 @@ public class DtoImageServiceImpl
 
 
     /**
-     * {@inheritDoc}
-     */
-    public SeoImageDTO update(final SeoImageDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        SeoImage seoImage = service.getById(instance.getSeoImageId());
-        assembler.assembleEntity(instance, seoImage,  null, dtoFactory);
-        seoImage = service.update(seoImage);
-        return getById(seoImage.getSeoImageId());
-
-    }
-
-    /**
      * Get the dto interface.
      *
      * @return dto interface.

@@ -36,16 +36,6 @@ public class DtoCountryServiceImpl
 
 
     /** {@inheritDoc} */
-    public CountryDTO update(final CountryDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-
-        Country country = service.getById(instance.getCountryId());
-        assembler.assembleEntity(instance, country, null, dtoFactory);
-        country = service.update(country);
-        return getById(country.getCountryId());
-
-    }
-
-    /** {@inheritDoc} */
     public Class<CountryDTO> getDtoIFace() {
         return CountryDTO.class;
     }

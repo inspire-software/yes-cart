@@ -37,6 +37,13 @@ public class CountryDTOImpl implements CountryDTO {
     /**
      * {@inheritDoc}
      */
+    public long getId() {
+        return countryId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void setCountryId(final long countryId) {
         this.countryId = countryId;
     }

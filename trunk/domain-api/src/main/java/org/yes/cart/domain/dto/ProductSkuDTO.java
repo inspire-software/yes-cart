@@ -1,5 +1,7 @@
 package org.yes.cart.domain.dto;
 
+import org.yes.cart.domain.entity.Unique;
+
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -10,7 +12,7 @@ import java.util.Collection;
  * Date: Jan 22, 2011
  * Time: 10:37:01 PM
  */
-public interface ProductSkuDTO extends Serializable {
+public interface ProductSkuDTO extends Unique {
 
 
     /**
