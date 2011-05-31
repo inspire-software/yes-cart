@@ -3,7 +3,6 @@ package org.yes.cart.web.support.filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.service.payment.PaymentCallBackHandlerFacade;
-import org.yes.cart.web.support.shoppingcart.RequestRuntimeContainer;
 import org.yes.cart.web.support.util.HttpUtil;
 
 import javax.servlet.Filter;
@@ -34,13 +33,10 @@ public class BasePaymentGatewayCallBackFilter extends AbstractFilter implements 
     /**
      * Construct filter.
      *
-     * @param requestRuntimeContainer      current runtime container
      * @param paymentCallBackHandlerFacade handler.
      */
     public BasePaymentGatewayCallBackFilter(
-            final PaymentCallBackHandlerFacade paymentCallBackHandlerFacade,
-            final RequestRuntimeContainer requestRuntimeContainer) {
-        super(requestRuntimeContainer);
+            final PaymentCallBackHandlerFacade paymentCallBackHandlerFacade) {
         this.paymentCallBackHandlerFacade = paymentCallBackHandlerFacade;
     }
 
@@ -80,6 +76,6 @@ public class BasePaymentGatewayCallBackFilter extends AbstractFilter implements 
     }
 
     private boolean isCalledIpAllowed() {
-        return true; //TODO imple
+        return true; //TODO v2
     }
 }

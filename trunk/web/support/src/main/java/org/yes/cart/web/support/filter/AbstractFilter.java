@@ -1,7 +1,5 @@
 package org.yes.cart.web.support.filter;
 
-import org.yes.cart.web.support.constants.WebParametersKeys;
-import org.yes.cart.web.support.shoppingcart.RequestRuntimeContainer;
 
 import javax.servlet.*;
 import java.io.IOException;
@@ -15,13 +13,10 @@ public abstract class AbstractFilter {
 
     private FilterConfig filterConfig = null;
 
-    private final RequestRuntimeContainer runtimeContainer;
 
     /**
-     * @param container current request container.
      */
-    public AbstractFilter(final RequestRuntimeContainer container) {
-        this.runtimeContainer = container;
+    public AbstractFilter() {
     }
 
     /**
@@ -30,7 +25,6 @@ public abstract class AbstractFilter {
     public final void doFilter(final ServletRequest servletRequest,
                                final ServletResponse servletResponse,
                                final FilterChain filterChain) throws IOException, ServletException {
-        servletRequest.setAttribute(WebParametersKeys.SESSION_OBJECT_NAME, runtimeContainer);
         final ServletRequest passRequest = doBefore(servletRequest, servletResponse);
         if (passRequest == null) {
             return;
@@ -83,11 +77,6 @@ public abstract class AbstractFilter {
         return filterConfig;
     }
 
-    /**
-     * @return current request container.
-     */
-    protected RequestRuntimeContainer getRequestRuntimeContainer() {
-        return runtimeContainer;
-    }
+
 
 }

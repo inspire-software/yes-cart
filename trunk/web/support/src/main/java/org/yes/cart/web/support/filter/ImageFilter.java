@@ -7,7 +7,7 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.image.ImageNameStrategy;
-import org.yes.cart.web.support.shoppingcart.RequestRuntimeContainer;
+//import org.yes.cart.web.support.shoppingcart.RequestRuntimeContainer;
 
 import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.Filter;
@@ -61,10 +61,10 @@ public class ImageFilter extends AbstractFilter implements Filter {
 
     private Integer etagExpiration = null;
 
-    public ImageFilter(final RequestRuntimeContainer container,
+    public ImageFilter(
                        final ImageService imageService,
                        final SystemService systemService) {
-        super(container);
+        super();
         this.imageService = imageService;
         this.systemService = systemService;
         fileTypeMap = new MimetypesFileTypeMap();

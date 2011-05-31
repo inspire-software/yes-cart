@@ -4,9 +4,6 @@ package org.yes.cart.web.support.filter;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.shoppingcart.impl.ExpireCartCommandImpl;
-import org.yes.cart.web.support.shoppingcart.RequestRuntimeContainer;
-import org.yes.cart.web.support.shoppingcart.VisitableShoppingCart;
-import org.yes.cart.web.support.shoppingcart.impl.VisitableShoppingCartProxy;
 import org.yes.cart.web.support.util.cookie.CookieTuplizer;
 
 import javax.servlet.Filter;
@@ -32,14 +29,12 @@ public class ShoppingCartSessionFilter extends AbstractFilter implements Filter 
 
     /**
      * @param tuplizer                   tuplizer to manage cookie to object to cookie transformation
-     * @param container                  current runtime container
      * @param shoppingCartCommandFactory command factory to get expire command and perform expire action on long term
      *                                   shopping cart
      */
     public ShoppingCartSessionFilter(final CookieTuplizer tuplizer,
-                                     final RequestRuntimeContainer container,
                                      final ShoppingCartCommandFactory shoppingCartCommandFactory) {
-        super(container);
+        super();
         this.tuplizer = tuplizer;
         this.shoppingCartCommandFactory = shoppingCartCommandFactory;
     }
@@ -54,15 +49,15 @@ public class ShoppingCartSessionFilter extends AbstractFilter implements Filter 
 
         final HttpServletRequest httpRequest = (HttpServletRequest) request;
 
-        final VisitableShoppingCart defaultCart = getRequestRuntimeContainer().getShoppingCart();
+       //inal VisitableShoppingCart defaultCart = getRequestRuntimeContainer().getShoppingCart();
 
-        final VisitableShoppingCart fromCookiesCart = new VisitableShoppingCartProxy(
+      /*final VisitableShoppingCart fromCookiesCart = new VisitableShoppingCartProxy(
                 httpRequest,
                 defaultCart,
-                tuplizer);
+                tuplizer);     */
 
 
-        getRequestRuntimeContainer().setShoppingCart(fromCookiesCart);
+       //etRequestRuntimeContainer().setShoppingCart(fromCookiesCart);
 
         expireCustomerOnShoppingCart(httpRequest);
 
