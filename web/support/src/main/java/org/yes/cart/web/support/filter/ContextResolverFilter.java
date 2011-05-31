@@ -4,7 +4,6 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.web.support.request.HttpServletRequestWrapper;
-import org.yes.cart.web.support.shoppingcart.RequestRuntimeContainer;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -25,12 +24,7 @@ public class ContextResolverFilter extends AbstractFilter implements Filter {
     private static final Logger LOG = LoggerFactory.getLogger(ContextResolverFilter.class);
 
 
-    /**
-     * @param container current request container.
-     */
-    public ContextResolverFilter(final RequestRuntimeContainer container) {
-        super(container);
-    }
+
 
     private ServletRequest getWrappedServletRequest(final HttpServletRequest httpServletRequest,
                                                     final ServletContext servletContext,
@@ -70,7 +64,7 @@ public class ContextResolverFilter extends AbstractFilter implements Filter {
                     getFilterConfig().getServletContext(),
                     new String[]{
                             /*getRequestRuntimeContainer().getShop().getFspointer()*/"", //TODO not sure is it applicable ?
-                            getRequestRuntimeContainer().getDefaultContextPath()
+                            "getRequestRuntimeContainer().getDefaultContextPath()"     //TODO WTF
                     }
             );
 

@@ -7,7 +7,6 @@ import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.OrderInfo;
 import org.yes.cart.shoppingcart.ShoppingContext;
 import org.yes.cart.web.support.constants.WebParametersKeys;
-import org.yes.cart.web.support.shoppingcart.RequestRuntimeContainer;
 import org.yes.cart.web.support.shoppingcart.VisitableShoppingCart;
 import org.yes.cart.web.support.util.cookie.CookieTuplizer;
 import org.yes.cart.web.support.util.cookie.UnableToObjectizeCookieException;
@@ -36,7 +35,6 @@ public class VisitableShoppingCartProxy implements VisitableShoppingCart {
     private final VisitableShoppingCart defaultVisitableShoppingCart;
     private final HttpServletRequest httpRequest;
     private final CookieTuplizer tuplizer;
-    private final RequestRuntimeContainer requestRuntimeContainer;
     private final Cookie[] cookies;
 
 
@@ -51,7 +49,6 @@ public class VisitableShoppingCartProxy implements VisitableShoppingCart {
         this.cookies = httpRequest.getCookies();
         this.defaultVisitableShoppingCart = defaultVisitableShoppingCart;
         this.tuplizer = tuplizer;
-        requestRuntimeContainer = (RequestRuntimeContainer) httpRequest.getAttribute(WebParametersKeys.SESSION_OBJECT_NAME);
         if (this.defaultVisitableShoppingCart.getCurrencyCode() == null) {
             //this.defaultVisitableShoppingCart.setCurrencyCode(requestRuntimeContainer.getShop().getDefaultCurrency());
         }

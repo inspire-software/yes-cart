@@ -7,7 +7,6 @@ import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.web.support.service.ShopResolverService;
-import org.yes.cart.web.support.shoppingcart.RequestRuntimeContainer;
 
 import javax.servlet.Filter;
 import javax.servlet.ServletException;
@@ -45,14 +44,12 @@ public class ShopResolverFilter extends AbstractFilter implements Filter {
      * @param systemService       service
      * @param categoryService     service
      * @param shopService         service
-     * @param container           current runtime container
      */
     public ShopResolverFilter(final ShopResolverService shopResolverService,
                               final SystemService systemService,
                               final CategoryService categoryService,
-                              final ShopService shopService,
-                              final RequestRuntimeContainer container) {
-        super(container);
+                              final ShopService shopService) {
+        super();
         this.shopResolverService = shopResolverService;
         this.systemService = systemService;
         this.shopService = shopService;
@@ -79,9 +76,9 @@ public class ShopResolverFilter extends AbstractFilter implements Filter {
             return null;
 
         }
-        getRequestRuntimeContainer().setShop(shop);
-        getRequestRuntimeContainer().setDefaultContextPath(systemService.getDefaultResourceDirectory());
-        getRequestRuntimeContainer().setAllShopCategories(categoryService.transform(shopService.getShopCategories(shop)));
+        //getRequestRuntimeContainer().setShop(shop);
+        //getRequestRuntimeContainer().setDefaultContextPath(systemService.getDefaultResourceDirectory());
+        //getRequestRuntimeContainer().setAllShopCategories(categoryService.transform(shopService.getShopCategories(shop)));
         return servletRequest;
     }
 
