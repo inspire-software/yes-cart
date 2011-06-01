@@ -30,7 +30,7 @@ public class TestImageHttpRequestHandler {
                 will(returnValue(0));
             } });
 
-        ImageFilter imageFilter = new ImageFilter(null, null, systemService);
+        ImageFilter imageFilter = new ImageFilter(null, systemService);
 
         assertEquals("image/jpeg", imageFilter.getContentType("a.jpg"));
         assertEquals("image/jpeg", imageFilter.getContentType("a.JPEG"));
