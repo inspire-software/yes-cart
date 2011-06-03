@@ -1,8 +1,7 @@
 package org.yes.cart.domain.dto;
 
-import org.yes.cart.domain.entity.Unique;
+import org.yes.cart.domain.entity.Identifiable;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
@@ -12,7 +11,7 @@ import java.math.BigDecimal;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface SkuWarehouseDTO extends Unique {
+public interface SkuWarehouseDTO extends Identifiable {
 
     /**
      * Primary key.

@@ -1,8 +1,6 @@
 package org.yes.cart.domain.dto;
 
-import org.yes.cart.domain.entity.Unique;
-
-import java.io.Serializable;
+import org.yes.cart.domain.entity.Identifiable;
 
 /**
  * Attribute value DTO.
@@ -10,7 +8,7 @@ import java.io.Serializable;
  * Date: 07-May-2011
  * Time: 11:13:01
  */
-public interface AttrValueDTO extends Unique {
+public interface AttrValueDTO extends Identifiable {
 
     /**
      * Get primary key.

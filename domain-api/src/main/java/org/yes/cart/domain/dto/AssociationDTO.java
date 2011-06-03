@@ -1,8 +1,6 @@
 package org.yes.cart.domain.dto;
 
-import org.yes.cart.domain.entity.Unique;
-
-import java.io.Serializable;
+import org.yes.cart.domain.entity.Identifiable;
 
 /**
  * Product asssociation interface. At this moment supported
@@ -12,7 +10,7 @@ import java.io.Serializable;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface AssociationDTO extends Unique {
+public interface AssociationDTO extends Identifiable {
 
     /**
      * @return pkimary key.
@@ -25,7 +23,7 @@ public interface AssociationDTO extends Unique {
     public void setAssociationId(long associationId);
 
     /**
-     * Unique human readable association code.
+     * Identifiable human readable association code.
      *
      * @return unique human readable association code
      */

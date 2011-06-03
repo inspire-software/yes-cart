@@ -1,6 +1,5 @@
 package org.yes.cart.domain.entity;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -15,7 +14,7 @@ import java.util.Date;
  * Here we have some limitionations for transfer change slices:
  * 1. The same changes on several different staging servers will be added to production server.
  */
-public interface Auditable extends Unique {
+public interface Auditable extends Identifiable {
 
 
 

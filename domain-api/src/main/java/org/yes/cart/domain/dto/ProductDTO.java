@@ -1,9 +1,8 @@
 package org.yes.cart.domain.dto;
 
 
-import org.yes.cart.domain.entity.Unique;
+import org.yes.cart.domain.entity.Identifiable;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
@@ -15,7 +14,7 @@ import java.util.Set;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface ProductDTO extends Unique {
+public interface ProductDTO extends Identifiable {
 
     /**
      * Get product pk.
