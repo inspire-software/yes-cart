@@ -31,7 +31,7 @@ public interface Association extends Auditable {
     public void setAssociationId(long associationId);
 
     /**
-     * Unique human readable association code.
+     * Identifiable human readable association code.
      *
      * @return unique human readable association code
      */

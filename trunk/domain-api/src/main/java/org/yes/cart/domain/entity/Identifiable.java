@@ -7,7 +7,7 @@ import java.io.Serializable;
  * Date: 28-May-2011
  * Time: 11:12:54
  */
-public interface Unique extends Serializable {
+public interface Identifiable extends Serializable {
 
     /**
      * Get pk value.

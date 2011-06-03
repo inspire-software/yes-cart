@@ -6,7 +6,7 @@ import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.domain.dto.AttrValueDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.entity.Auditable;
-import org.yes.cart.domain.entity.Unique;
+import org.yes.cart.domain.entity.Identifiable;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.GenericService;
@@ -22,7 +22,7 @@ import java.util.Map;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public abstract class AbstractDtoServiceImpl<DTOIFACE extends Unique, DTOIMPL, IFACE extends Auditable> implements GenericDTOService<DTOIFACE> {
+public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOIMPL, IFACE extends Auditable> implements GenericDTOService<DTOIFACE> {
 
     protected final DtoFactory dtoFactory;
 

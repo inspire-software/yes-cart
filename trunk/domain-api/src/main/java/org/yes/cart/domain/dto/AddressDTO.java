@@ -1,9 +1,7 @@
 package org.yes.cart.domain.dto;
 
 
-import org.yes.cart.domain.entity.Unique;
-
-import java.io.Serializable;
+import org.yes.cart.domain.entity.Identifiable;
 
 /**
  * Shipment and billing address interface.
@@ -12,7 +10,7 @@ import java.io.Serializable;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface AddressDTO extends Unique {
+public interface AddressDTO extends Identifiable {
 
     /**
      * Get pk value
