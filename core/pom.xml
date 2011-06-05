@@ -258,6 +258,8 @@
                              <include>**/MailComposerImplTest.java</include>
                              <include>**/ExtendedConversionServiceTest.java</include>
                              <include>**/StringValueToPairListConverterTest.java</include>
+
+                             <include>**/ShopTopSellerServiceImplTest.java</include>
                          </includes>
 
                     </configuration>

@@ -59,6 +59,9 @@ public interface DaoServiceBeanKeys {
 
     final static String CUSTOMER_ORDER_DAO = "customerOrderDao";
 
+    final static String SHOP_TOP_SELLLER_DAO = "shopTopSellerDao";
+
+
 
 
 

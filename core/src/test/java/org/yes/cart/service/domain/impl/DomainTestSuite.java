@@ -20,7 +20,6 @@ import org.springframework.context.ApplicationContext;
         CustomerWishListServiceImplTest.class,
         MD5HashHelperImplTest.class,
         ProductSkuServiceImplTest.class,
-        ShopTopSellerServiceImplTest.class,
         SkuWarehouseServiceImplTest.class,
         TestAttributeServiceImpl.class,
         TestCategoryServiceImpl.class,
