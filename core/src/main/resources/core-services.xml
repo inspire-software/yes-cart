@@ -256,6 +256,15 @@
         </property>
     </bean>
 
+    <bean id="shopTopSellerService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.ShopTopSellerServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="shopTopSellerDao"/>
+                <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="shopDao"/>
+            </bean>
+        </property>
+    </bean>
+
 
     <bean id="warehouseService" parent="txProxyTemplate">
         <property name="target">
