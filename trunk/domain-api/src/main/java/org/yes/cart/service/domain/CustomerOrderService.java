@@ -14,14 +14,7 @@ import java.util.List;
  */
 public interface CustomerOrderService extends GenericService<CustomerOrder> {
 
-    /**
-     * TODO kill this method. Get customers orders since given date
-     * Guess top seller counter must be different
-     *
-     * @param since given date
-     * @return list of orders.
-     */
-    List<CustomerOrder> findCustomerOrders(Date since);
+
 
     /**
      * Get all orders , than belong to give customer.

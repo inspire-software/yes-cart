@@ -18,7 +18,7 @@ public interface CarrierService extends GenericService<Carrier> {
      * <p/>
      * At this moment only one supply point is supported.  Supply location
      * must be moved from shop to assigned warehouses to have multiple supply point.
-     * TODO such sofisticated logistic shall be in separate module
+     * TODO v2 such sofisticated logistic shall be in separate module
      *
      * @param countryCode given country code.
      * @param stateCode   state code - optional.

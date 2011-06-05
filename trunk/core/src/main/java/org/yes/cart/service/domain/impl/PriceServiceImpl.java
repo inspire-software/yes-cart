@@ -109,9 +109,7 @@ public class PriceServiceImpl
             return BigDecimal.ZERO;
         } else {
             SkuPrice skuPrice = skuPrices.get(0);
-            return MoneyUtils.notNull(skuPrice.getSalePrice(), skuPrice.getRegularPrice()); 
-            //TODO minimal from both
-            //TODO the sale price must be
+            return  MoneyUtils.max(skuPrice.getSalePrice(), skuPrice.getRegularPrice());
         }
     }
 
@@ -187,7 +185,6 @@ public class PriceServiceImpl
      * {@inheritDoc}
      */
     public List<SkuPrice> getSkuPricesFilteredByQuantity(final List<SkuPrice> prices, final BigDecimal quantity) {
-        //TODO test it !!!!
         List<SkuPrice> result = new ArrayList<SkuPrice>();
         final Set<String> uniqueSkuCodes = getUniqueSkuCodes(prices);
         for (String selectedSkuCode : uniqueSkuCodes) {

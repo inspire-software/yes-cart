@@ -49,12 +49,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
         this.customerDao = customerDao;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public List<CustomerOrder> findCustomerOrders(final Date since) {
-        return getGenericDao().findByCriteria(Restrictions.gt("orderTimestamp", since));
-    }
+
 
    /**
      * {@inheritDoc}

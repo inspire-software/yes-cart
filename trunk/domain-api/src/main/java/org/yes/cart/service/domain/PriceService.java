@@ -84,7 +84,7 @@ public interface PriceService extends GenericService<SkuPrice> {
 
     /**
      * Get the sku prices filtered by quantity. Example:
-     * ProductSKU1 has defined price ties 1 - 100 USD, 2 - 97 USD, 5 - 85 USD
+     * ProductSKU1 has defined price ties 1 - 100 USD, 2 - 87 USD, 5 - 85 USD
      * ProductSKU2 has defined price ties 1 - 100 USD, 2 - 98 USD, 3 - 90 USD
      * <p/>
      * For quantity 4 result will hold only two SkuPrice:
