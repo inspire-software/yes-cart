@@ -2855,7 +2855,7 @@ public void setRangeList(final RangeList rangeList) {
                 <column name="SHOP_ID" not-null="true"/>
             </many-to-one>
 
-            <many-to-one name="product" class="org.yes.cart.domain.entity.Product">
+            <many-to-one name="product" class="org.yes.cart.domain.entity.Product" lazy="false">
                 <column name="PRODUCT_ID" not-null="true"/>
             </many-to-one>
             <property name="counter" column="COUNTER" type="java.math.BigDecimal"  not-null="false"/>

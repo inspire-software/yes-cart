@@ -112,6 +112,24 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
     }
 
 
+    public static ShoppingCart getShoppingCart2(final ApplicationContext context, final String customerEmail) {
+
+        ShoppingCart shoppingCart = getShoppingCart(context, customerEmail);
+
+        Map<String, String> param = new HashMap<String, String>();
+        param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST10-SKU");
+        param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "17.00");
+
+        new SetSkuQuantityToCartEventCommandImpl(context,
+                param)
+                .execute(shoppingCart);
+
+
+
+        return shoppingCart;
+
+    }
+
     public static ShoppingCart getShoppingCart(final ApplicationContext context, final String customerEmail) {
 
         ShoppingCart shoppingCart = new ShoppingCartImpl();
