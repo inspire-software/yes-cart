@@ -99,6 +99,7 @@
                 <entry key="org.yes.cart.domain.entity.SkuPrice" value="org.yes.cart.domain.entity.impl.SkuPriceEntity"/>
                 <entry key="org.yes.cart.domain.entity.Warehouse" value="org.yes.cart.domain.entity.impl.WarehouseEntity"/>
                 <entry key="org.yes.cart.domain.entity.ShopWarehouse" value="org.yes.cart.domain.entity.impl.ShopWarehouseEntity"/>
+                <entry key="org.yes.cart.domain.entity.ShopTopSeller" value="org.yes.cart.domain.entity.impl.ShopTopSellerEntity"/>
                 <entry key="org.yes.cart.domain.entity.SkuWarehouse" value="org.yes.cart.domain.entity.impl.SkuWarehouseEntity"/>
 
                 <entry key="org.yes.cart.domain.entity.Manager" value="org.yes.cart.domain.entity.impl.ManagerEntity"/>
@@ -451,6 +452,16 @@
         <property name="target">
             <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
                 <constructor-arg><value>org.yes.cart.domain.entity.impl.SkuWarehouseEntity</value></constructor-arg>
+                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+                <property name="sessionFactory" ref="sessionFactory"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="shopTopSellerDao" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+                <constructor-arg><value>org.yes.cart.domain.entity.impl.ShopTopSellerEntity</value></constructor-arg>
                 <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
                 <property name="sessionFactory" ref="sessionFactory"/>
             </bean>

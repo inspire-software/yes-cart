@@ -114,6 +114,11 @@ public interface ServiceSpringKeys {
      */
     String SHOP_CATEGORY_SERVICE = "shopCategoryService";
 
+   /**
+     * {@link org.yes.cart.service.domain.ShopTopSellerService} bean key.
+     */
+    String SHOP_TOP_SELLER_SERVICE = "shopTopSellerService";
+
     /**
      * {@link org.yes.cart.service.domain.AvailabilityService} bean key.
      */

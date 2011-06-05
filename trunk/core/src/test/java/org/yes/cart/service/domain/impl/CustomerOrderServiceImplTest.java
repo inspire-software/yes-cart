@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
+import org.yes.cart.service.order.OrderAssembler;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
@@ -32,13 +33,15 @@ public class CustomerOrderServiceImplTest  extends BaseCoreDBTestCase {
 
         customerOrderService = (CustomerOrderService) ctx.getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
 
+
+
     }
 
     @After
     public void tearDown() {
 
         customerOrderService = null;
-        //customerOrderDao = null;
+
         super.tearDown();
     }
 
@@ -112,11 +115,6 @@ public class CustomerOrderServiceImplTest  extends BaseCoreDBTestCase {
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
         assertTrue(order.getCustomerorderId() > 0);
 
-        assertEquals(1,customerOrderService.findCustomerOrders(date).size());
-        assertTrue(customerOrderService.findCustomerOrders(new Date()).isEmpty());
-
-
-        dumpDataBase("zzzzzzzzzz" , new String []{"TCUSTOMERORDER", "TCUSTOMER"});
 
         assertEquals(1,customerOrderService.findCustomerOrders(customer, null).size());
 

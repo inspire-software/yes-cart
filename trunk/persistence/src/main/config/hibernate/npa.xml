@@ -4695,8 +4695,6 @@ public void setRangeList(final RangeList rangeList) {
 
 
 
-
-
     <query name="WISHLIST.BY.CUSTOMER">
         <![CDATA[
             select a from CustomerWishListEntity a
@@ -4710,6 +4708,24 @@ public void setRangeList(final RangeList rangeList) {
                 where a.carrier.carrierId = ?1
         ]]>
     </query>
+
+
+    <query name="TOP.SELLER.SHOP.CLEAN">
+        <![CDATA[
+            delete from ShopTopSellerEntity  st   where st.shop    = ?1
+        ]]>
+    </query>
+
+   <query name="TOP.SELLER.SHOP.CALCULATE">
+        <![CDATA[
+            select cod.sku.product.productId, sum(cod.qty) from CustomerOrderDetEntity  cod
+            where cod.customerOrder.shop = ?1
+            and cod.customerOrder.orderTimestamp >= ?2
+            group by cod.sku.product.productId
+        ]]>
+    </query>
+
+
 
 
 </hibernate-mapping>
