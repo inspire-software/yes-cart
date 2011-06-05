@@ -25,13 +25,14 @@ public class TopSellerCounterJobBeanImpl  extends QuartzJobBean{
 
     private CustomerOrderService customerOrderService;
 
+    private int calculationPeriodInDays = 10;
+
     /** {@inheritDoc}*/
     protected void executeInternal(final JobExecutionContext jobExecutionContext) throws JobExecutionException {
         LOG.info(MessageFormat.format("TopSellerCounterJobBeanImpl start at {0}", new Date()));
         final Calendar calendar = Calendar.getInstance();
-        calendar.get( Calendar.DATE ) ;
-        calendar.add( Calendar.MONTH, -1 ) ; //TODO top sellers must configured outside java
-        List<CustomerOrder> orders = customerOrderService.findCustomerOrders(calendar.getTime());
+        calendar.add( Calendar.DAY_OF_MONTH, -1 *  calculationPeriodInDays);
+        //List<CustomerOrder> orders = customerOrderService.findCustomerOrders(calendar.getTime());
         LOG.info(MessageFormat.format("TopSellerCounterJobBeanImpl   end at {0}", new Date()));
     }
 
@@ -45,5 +46,13 @@ public class TopSellerCounterJobBeanImpl  extends QuartzJobBean{
      */
     public void setCustomerOrderService(final CustomerOrderService customerOrderService) {
         this.customerOrderService = customerOrderService;
+    }
+
+    /**
+     * IoC  Authowire.
+     * @param calculationPeriodInDays  period for calclate top sellers.
+     */
+    public void setCalculationPeriodInDays(int calculationPeriodInDays) {
+        this.calculationPeriodInDays = calculationPeriodInDays;
     }
 }

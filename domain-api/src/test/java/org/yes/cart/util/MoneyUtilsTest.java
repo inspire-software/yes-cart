@@ -15,6 +15,26 @@ import static junit.framework.Assert.*;
  */
 public class MoneyUtilsTest {
 
+    @Test
+    public void testMaxWithNulls() {
+        assertEquals("Must return zero if bot arguments are null", BigDecimal.ZERO, MoneyUtils.max(null, null));
+    }
+
+    @Test
+    public void testMaxWithFirstNull() {
+        assertEquals("Must return zero if bot arguments are null", BigDecimal.ONE, MoneyUtils.max(null,  BigDecimal.ONE));
+    }
+
+    @Test
+    public void testMaxWithSecondNull() {
+        assertEquals("Must return zero if bot arguments are null", BigDecimal.TEN, MoneyUtils.max(BigDecimal.TEN, null));
+    }
+
+    @Test
+    public void testMax() {
+        assertEquals("Must return zero if bot arguments are null", BigDecimal.TEN, MoneyUtils.max(BigDecimal.TEN, BigDecimal.ONE));
+    }
+
     /* -- IsFirstBiggerThanSecond ----------------------------------- */
     @Test
     public void testNotNullIsNullSafe() {

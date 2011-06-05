@@ -20,6 +20,7 @@
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -33,7 +34,7 @@
         return this.managerId;
     }
 
-    public long getId() {
+    @Transient public long getId() {
         return this.managerId;
     }
 
@@ -76,6 +77,7 @@
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+             <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -89,7 +91,7 @@
         return this.roleId;
     }
 
-    public long getId() {
+    @Transient public long getId() {
         return this.roleId;
     }
 
@@ -126,6 +128,7 @@
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -139,7 +142,7 @@
         return this.managerRoleId;
     }
 
-    public long getId() {
+    @Transient public long getId() {
         return this.managerRoleId;
     }
 
@@ -186,6 +189,7 @@
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -197,7 +201,7 @@
     public long getEtypeId() {
         return this.etypeId;
     }
-    public long getId() {
+    @Transient public long getId() {
         return this.etypeId;
     }
 
@@ -251,6 +255,7 @@
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -264,7 +269,7 @@
         return this.attributegroupId;
     }
 
-    public long getId() {
+    @Transient public long getId() {
         return this.attributegroupId;
     }
 
@@ -314,6 +319,7 @@
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -327,7 +333,7 @@
         return this.attributeId;
     }
 
-    public long getId() {
+    @Transient public long getId() {
         return this.attributeId;
     }
 
@@ -443,6 +449,7 @@
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -454,7 +461,7 @@
         return this.attrvalueId;
      }
 
-    public long getId() {
+    @Transient public long getId() {
         return this.attrvalueId;
     }
 
@@ -493,6 +500,7 @@
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -506,7 +514,7 @@
         return this.attrvalueId;
      }
 
-    public long getId() {
+    @Transient public long getId() {
         return this.attrvalueId;
     }
 
@@ -546,6 +554,7 @@
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -559,7 +568,7 @@
         return this.attrvalueId;
      }
 
-     public long getId() {
+     @Transient public long getId() {
         return this.attrvalueId;
     }
 
@@ -603,6 +612,7 @@
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -615,7 +625,7 @@
         return this.attrvalueId;
      }
 
-    public long getId() {
+    @Transient public long getId() {
         return this.attrvalueId;
     }
 
@@ -657,6 +667,7 @@
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -670,7 +681,7 @@
         return this.attrvalueId;
      }
 
-    public long getId() {
+    @Transient public long getId() {
         return this.attrvalueId;
     }
 
@@ -720,6 +731,7 @@
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -733,7 +745,7 @@
         return this.attrvalueId;
      }
 
-    public long getId() {
+    @Transient public long getId() {
         return this.attrvalueId;
     }
 
@@ -782,6 +794,7 @@
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -795,7 +808,7 @@
         return this.attrvalueId;
      }
 
-    public long getId() {
+    @Transient public long getId() {
         return this.attrvalueId;
     }
 
@@ -848,6 +861,7 @@
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -860,7 +874,7 @@
     public long getCountryId() {
         return this.countryId;
     }
-    public long getId() {
+    @Transient public long getId() {
         return this.countryId;
     }
 
@@ -908,6 +922,7 @@
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -920,7 +935,7 @@
         return this.stateId;
     }
 
-    public long getId() {
+    @Transient public long getId() {
         return this.stateId;
     }
 
@@ -965,6 +980,7 @@
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -978,7 +994,7 @@
         return this.addressId;
     }
 
-    public long getId() {
+    @Transient public long getId() {
         return this.addressId;
     }
 
@@ -1038,6 +1054,7 @@
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -1051,7 +1068,7 @@
         return this.mailtemplategroupId;
     }
 
-    public long getId() {
+    @Transient public long getId() {
         return this.mailtemplategroupId;
     }
 
@@ -1094,6 +1111,7 @@
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -1108,7 +1126,7 @@
         return this.mailtemplateId;
     }
 
-     public long getId() {
+     @Transient public long getId() {
         return this.mailtemplateId;
     }
 
@@ -1160,6 +1178,7 @@
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -1173,7 +1192,7 @@
         return this.npaSystemId;
     }
 
-     public long getId() {
+     @Transient public long getId() {
         return this.npaSystemId;
     }
 
@@ -1228,6 +1247,7 @@
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
             <meta attribute="extra-import">javax.persistence.Transient</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="extra-import">com.thoughtworks.xstream.XStream</meta>
             <meta attribute="extra-import">com.thoughtworks.xstream.io.xml.DomDriver</meta>            
             <meta attribute="extra-import">org.yes.cart.domain.misc.navigation.range.RangeList</meta>
@@ -1246,7 +1266,7 @@
      return productTypeAttrId;
  }
 
- public long getId() {
+ @Transient public long getId() {
         return this.productTypeAttrId;
    }
 
@@ -1346,6 +1366,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -1356,7 +1377,7 @@ public void setRangeList(final RangeList rangeList) {
     public long getAttributeViewGroupId() {
         return this.attributeViewGroupId;
     }
-    public long getId() {
+    @Transient public long getId() {
         return this.attributeViewGroupId;
     }
     public void setAttributeViewGroupId(long attributeViewGroupId) {
@@ -1418,6 +1439,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -1428,7 +1450,7 @@ public void setRangeList(final RangeList rangeList) {
     public long getProducttypeId() {
         return this.producttypeId;
     }
-    public long getId() {
+    @Transient public long getId() {
         return this.producttypeId;
     }
     public void setProducttypeId(long producttypeId) {
@@ -1527,6 +1549,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -1540,7 +1563,7 @@ public void setRangeList(final RangeList rangeList) {
         return this.prodTypeAttributeViewGroupId;
     }
 
-    public long getId() {
+    @Transient public long getId() {
         return this.prodTypeAttributeViewGroupId;
     }
 
@@ -1598,6 +1621,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -1612,7 +1636,7 @@ public void setRangeList(final RangeList rangeList) {
         return this.availabilityId;
     }
 
-    public long getId() {
+    @Transient public long getId() {
         return this.availabilityId;
     }
 
@@ -1671,7 +1695,7 @@ public void setRangeList(final RangeList rangeList) {
         return this.categoryId;
     }
 
-    public long getId() {
+    @Transient public long getId() {
         return this.categoryId;
     }
 
@@ -1848,6 +1872,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -1862,7 +1887,7 @@ public void setRangeList(final RangeList rangeList) {
         return this.brandId;
     }
 
-    public long getId() {
+    @Transient public long getId() {
         return this.brandId;
     }
 
@@ -1911,6 +1936,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
             <meta attribute="extra-import">javax.persistence.Transient</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="extra-import">org.yes.cart.domain.entity.AttrValue</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
@@ -1924,7 +1950,7 @@ public void setRangeList(final RangeList rangeList) {
         return this.productId;
     }
 
-    public long getId() {
+    @Transient public long getId() {
         return this.productId;
     }
 
@@ -2106,6 +2132,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -2117,7 +2144,7 @@ public void setRangeList(final RangeList rangeList) {
         return this.ensembleOptId;
     }
 
-    public long getId() {
+    @Transient public long getId() {
         return this.ensembleOptId;
     }
 
@@ -2175,7 +2202,7 @@ public void setRangeList(final RangeList rangeList) {
         return this.skuId;
     }
 
-    public long getId() {
+    @Transient public long getId() {
         return this.skuId;
     }
 
@@ -2288,6 +2315,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="extra-import">javax.persistence.Column</meta>
             <meta attribute="extra-import">org.hibernate.search.annotations.*</meta>
             <meta attribute="interface">false</meta>
@@ -2301,7 +2329,7 @@ public void setRangeList(final RangeList rangeList) {
         return this.skuPriceId;
     }
 
-    public long getId() {
+    @Transient public long getId() {
         return this.skuPriceId;
     }
 
@@ -2375,6 +2403,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -2386,7 +2415,7 @@ public void setRangeList(final RangeList rangeList) {
         return this.productCategoryId;
     }
 
-    public long getId() {
+    @Transient public long getId() {
         return this.productCategoryId;
     }
 
@@ -2435,6 +2464,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -2446,7 +2476,7 @@ public void setRangeList(final RangeList rangeList) {
         return this.associationId;
     }
 
-    public long getId() {
+    @Transient public long getId() {
         return this.associationId;
     }
 
@@ -2485,6 +2515,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -2498,7 +2529,7 @@ public void setRangeList(final RangeList rangeList) {
         return this.productassociationId;
     }
 
-    public long getId() {
+    @Transient public long getId() {
         return this.productassociationId;
     }
 
@@ -2555,6 +2586,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -2568,7 +2600,7 @@ public void setRangeList(final RangeList rangeList) {
         return this.warehouseId;
     }
 
-    public long getId() {
+    @Transient public long getId() {
         return this.warehouseId;
     }
 
@@ -2631,7 +2663,7 @@ public void setRangeList(final RangeList rangeList) {
         return this.shopId;
     }
 
-    public long getId() {
+    @Transient public long getId() {
         return this.shopId;
     }
 
@@ -2776,9 +2808,70 @@ public void setRangeList(final RangeList rangeList) {
         </subclass>
     </class>
 
+    <class name="org.yes.cart.domain.entity.ShopTopSeller" table="TSHOPTOPSELLER" discriminator-value="0">
+         <meta attribute="interface">true</meta>
+        <comment>Hold top seller information</comment>
+        <id name="shopTopsellerId" column="SHOPTOPSELLER_ID" type="long">
+            <generator class="native">
+                <param name="table">HIBERNATE_UNIQUE_KEYS</param>
+                <param name="column">value</param>
+            </generator>
+        </id>
+        <discriminator type="integer" formula="1"/>
+        <subclass name="org.yes.cart.domain.entity.impl.ShopTopSellerEntity" discriminator-value="1">
+            <meta attribute="extra-import">org.hibernate.annotations.Parameter</meta>
+            <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
+            <meta attribute="extra-import">javax.persistence.Id</meta>
+            <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
+            <meta attribute="extra-import">javax.persistence.Column</meta>
+            <meta attribute="extra-import">org.hibernate.search.annotations.*</meta>
+            <meta attribute="interface">false</meta>
+            <meta attribute="class-code">
+                <![CDATA[
+
+    private long shopTopsellerId;
+    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
+    @Id @GeneratedValue /*(generator="generator")*/
+    @Column(name="SHOPTOPSELLER_ID", nullable=false)
+    public long getShopTopsellerId() {
+        return shopTopsellerId;
+    }
+
+    public void setShopTopsellerId(long shopTopsellerId) {
+        this.shopTopsellerId = shopTopsellerId;
+    }
+
+    @Transient public long getId() {
+        return this.shopTopsellerId;
+    }
+
+
+
+                ]]>
+            </meta>
+
+            <many-to-one name="shop" class="org.yes.cart.domain.entity.Shop">
+                <column name="SHOP_ID" not-null="true"/>
+            </many-to-one>
+
+            <many-to-one name="product" class="org.yes.cart.domain.entity.Product">
+                <column name="PRODUCT_ID" not-null="true"/>
+            </many-to-one>
+            <property name="counter" column="COUNTER" type="java.math.BigDecimal"  not-null="false"/>
+
+            <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
+            <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+            <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
+            <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+        </subclass>
+
+    </class>
+
 
    <class name="org.yes.cart.domain.entity.ShopWarehouse" table="TSHOPWAREHOUSE" discriminator-value="0">
-       <!--TODO add usage priority in next release-->
+       <!--TODO v2 add usage priority in next release-->
         <meta attribute="interface">true</meta>
         <comment>Relation between shop and warehouses</comment>
         <id name="shopWarehouseId" column="SHOPWAREHOUSE_ID" type="long">
@@ -2793,6 +2886,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="extra-import">javax.persistence.Column</meta>
             <meta attribute="extra-import">org.hibernate.search.annotations.*</meta>
             <meta attribute="interface">false</meta>
@@ -2807,7 +2901,7 @@ public void setRangeList(final RangeList rangeList) {
         return shopWarehouseId;
     }
 
-    public long getId() {
+    @Transient public long getId() {
         return this.shopWarehouseId;
     }
 
@@ -2850,6 +2944,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="extra-import">javax.persistence.Column</meta>
             <meta attribute="extra-import">org.hibernate.search.annotations.*</meta>
             <meta attribute="interface">false</meta>
@@ -2864,7 +2959,7 @@ public void setRangeList(final RangeList rangeList) {
         return skuWarehouseId;
     }
 
-    public long getId() {
+    @Transient public long getId() {
         return this.skuWarehouseId;
     }
 
@@ -2920,6 +3015,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -2935,7 +3031,7 @@ public void setRangeList(final RangeList rangeList) {
     }
 
 
-    public long getId() {
+    @Transient public long getId() {
         return this.shopCategoryId;
     }
 
@@ -2986,6 +3082,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -3000,7 +3097,7 @@ public void setRangeList(final RangeList rangeList) {
     }
 
 
-    public long getId() {
+    @Transient public long getId() {
         return this.shopDiscountId;
     }
 
@@ -3045,6 +3142,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -3059,7 +3157,7 @@ public void setRangeList(final RangeList rangeList) {
     }
 
 
-    public long getId() {
+    @Transient public long getId() {
         return this.shopDiscountRuleId;
     }
 
@@ -3099,6 +3197,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -3114,7 +3213,7 @@ public void setRangeList(final RangeList rangeList) {
 
 
 
-    public long getId() {
+    @Transient public long getId() {
         return this.storeUrlId;
     }
 
@@ -3152,6 +3251,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -3167,7 +3267,7 @@ public void setRangeList(final RangeList rangeList) {
     }
 
 
-    public long getId() {
+    @Transient public long getId() {
         return this.shopexchangerateId;
     }
 
@@ -3207,6 +3307,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -3221,7 +3322,7 @@ public void setRangeList(final RangeList rangeList) {
     }
 
 
-    public long getId() {
+    @Transient public long getId() {
         return this.shopadvplaceId;
     }
 
@@ -3266,6 +3367,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -3280,7 +3382,7 @@ public void setRangeList(final RangeList rangeList) {
     }
 
 
-    public long getId() {
+    @Transient public long getId() {
         return this.shopadvrulesId;
     }
 
@@ -3344,7 +3446,7 @@ public void setRangeList(final RangeList rangeList) {
     }
 
 
-    public long getId() {
+    @Transient public long getId() {
         return this.customerId;
     }
 
@@ -3477,6 +3579,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="extra-import">javax.persistence.Column</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
@@ -3492,7 +3595,7 @@ public void setRangeList(final RangeList rangeList) {
     }
 
 
-    public long getId() {
+    @Transient public long getId() {
         return this.customerShopId;
     }
 
@@ -3538,6 +3641,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="extra-import">javax.persistence.Column</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
@@ -3553,7 +3657,7 @@ public void setRangeList(final RangeList rangeList) {
     }
 
 
-    public long getId() {
+    @Transient public long getId() {
         return this.customerwishlistId;
     }
 
@@ -3606,6 +3710,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -3621,7 +3726,7 @@ public void setRangeList(final RangeList rangeList) {
     }
 
 
-    public long getId() {
+    @Transient public long getId() {
         return this.customerorderId;
     }
 
@@ -3724,6 +3829,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -3738,7 +3844,7 @@ public void setRangeList(final RangeList rangeList) {
         return this.customerOrderDetId;
     }
 
-    public long getId() {
+    @Transient public long getId() {
         return this.customerOrderDetId;
     }
 
@@ -3799,6 +3905,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -3814,7 +3921,7 @@ public void setRangeList(final RangeList rangeList) {
     }
 
 
-    public long getId() {
+    @Transient public long getId() {
         return this.customerOrderDeliveryId;
     }
 
@@ -3876,6 +3983,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -3890,7 +3998,7 @@ public void setRangeList(final RangeList rangeList) {
     }
 
 
-    public long getId() {
+    @Transient public long getId() {
         return this.customerorderdeliveryId;
     }
 
@@ -3943,6 +4051,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -3957,7 +4066,7 @@ public void setRangeList(final RangeList rangeList) {
     }
 
 
-    public long getId() {
+    @Transient public long getId() {
         return this.carrierId;
     }
 
@@ -4006,6 +4115,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -4020,7 +4130,7 @@ public void setRangeList(final RangeList rangeList) {
     }
 
 
-    public long getId() {
+    @Transient public long getId() {
         return this.carrierslaId;
     }
 
@@ -4076,6 +4186,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -4088,7 +4199,7 @@ public void setRangeList(final RangeList rangeList) {
      }
 
 
-    public long getId() {
+    @Transient public long getId() {
         return this.seoImageId;
     }
 
@@ -4133,6 +4244,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
             <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+            <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -4147,7 +4259,7 @@ public void setRangeList(final RangeList rangeList) {
     }
 
 
-    public long getId() {
+    @Transient public long getId() {
         return this.seoId;
     }
 
