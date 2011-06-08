@@ -46,7 +46,7 @@ public class DefaultOrderNumberGeneratorImpl implements OrderNumberGenerator {
      * @return Generated order number.
      */
     public synchronized String getNextOrderNumber() {
-        final String datePart = dateFormat.format(new Date()); //TODO get from time machine
+        final String datePart = dateFormat.format(new Date()); //TODO v2 get from time machine
 
         return datePart + '-' + getOrderSequence();
     }

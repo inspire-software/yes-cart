@@ -262,7 +262,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
      */
     @SuppressWarnings("unchecked")
     public T create(T entity) {
-        getHibernateTemplate().saveOrUpdate(entity);
+        getHibernateTemplate().save(entity);
         return entity;
     }
 
@@ -271,7 +271,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
      */
     @SuppressWarnings("unchecked")
     public T update(T entity) {
-        getHibernateTemplate().saveOrUpdate(entity);
+        getHibernateTemplate().update(entity);
         return entity;
     }
 

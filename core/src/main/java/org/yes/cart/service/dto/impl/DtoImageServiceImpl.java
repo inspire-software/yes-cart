@@ -66,7 +66,6 @@ public class DtoImageServiceImpl
      * @throws java.io.IOException in case of any I/O errors
      */
     public byte[] getImageAsByteArray(final String fileName, final String code, final String storagePrefix) throws IOException {
-        //TODO this metho must be more generic
         return imageService.getImageAsByteArray(fileName, code, storagePrefix);
     }
 

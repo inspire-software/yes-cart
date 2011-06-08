@@ -185,7 +185,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      */
     @Cacheable(value = "productServiceImplMethodCache")
     public List<Product> getFeaturedProducts(final List categories) {
-        List<Product> list = productDao.findQueryObjectsByNamedQueryWithList("PRODUCT.FEATURED", categories, new Date());  //TODO time machine
+        List<Product> list = productDao.findQueryObjectsByNamedQueryWithList("PRODUCT.FEATURED", categories, new Date());  //TODO v2 time machine
         Collections.shuffle(list);
         return list;
     }
