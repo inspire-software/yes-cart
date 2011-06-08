@@ -43,7 +43,7 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImpl implements OrderEvent
     }
 
     private Date getCurrentDate() { 
-        return new Date(); //TODO time machine
+        return new Date(); //TODO v2 time machine
     }
 
 

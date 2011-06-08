@@ -36,6 +36,7 @@
         <module>manager/server</module>
         <module>manager/client</module>
         <module>web/support</module>
+        <module>web/store</module>
     </modules>
 
     <build>
