@@ -1,0 +1,61 @@
+<Context path="/webshopwicket" docBase="/npa/jewelry" crossContext="true" >
+
+<!--
+    <Resource name="mail/Session"
+              auth="Container"
+              type="javax.mail.Session"
+              username="yourusername"
+              password="yourpassword"
+              mail.debug="true"
+              mail.user="yourusername"
+              mail.password="yourpassword"
+              mail.transport.protocol="smtp"
+              mail.smtp.host="your.smtphost.com"
+              mail.smtp.auth="true"
+              mail.smtp.port="25"
+              mail.smtp.starttls.enable="true"/>
+-->
+
+    <Resource name="jdbc/npapayjndi"
+                 auth="Container"
+                 scope="Shareable"
+                 type="javax.sql.DataSource"
+                 maxActive="100"
+                 maxIdle="30"
+                 maxWait="10000"
+                 removeAbandoned="true"
+                 username="root"
+                 password=""
+                 driverClassName="com.mysql.jdbc.Driver"
+                 url="jdbc:mysql://localhost/npapay?AutoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8"
+               />
+
+
+    <Resource name="jdbc/npajndi"
+              auth="Container"
+              scope="Shareable"
+              type="javax.sql.DataSource"
+              maxActive="100"
+              maxIdle="30"
+              maxWait="10000"
+              removeAbandoned="true"
+              username="root"
+              password=""
+              driverClassName="com.mysql.jdbc.Driver"
+              url="jdbc:mysql://localhost/npa?AutoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8"
+            />
+
+
+    <Realm className="org.apache.catalina.realm.DataSourceRealm" debug="4"
+        digest="MD5"
+        localDataSource="true"
+        dataSourceName="jdbc/npajndi"
+        userTable="TMANAGER"
+        userNameCol="email"
+        userCredCol="password"
+        userRoleTable="TMANAGERROLE"
+        roleNameCol="code"/>
+
+
+</Context>
+
