@@ -7,11 +7,11 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.mycompany.app</groupId>
+    <groupId>org.yes</groupId>
     <artifactId>my-webapp</artifactId>
     <packaging>war</packaging>
     <version>1.x-SNAPSHOT</version>
-    <name>Yes shop</name>
+    <name>Yes cart storefront</name>
     <url>http://maven.apache.org</url>
 
 
@@ -47,6 +47,29 @@
     </repositories>
 
     <dependencies>
+
+
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>payment-api</artifactId>
+            <version>1.x-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>domain-api</artifactId>
+            <version>1.x-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>core</artifactId>
+            <version>1.x-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>websupport</artifactId>
+            <version>1.x-SNAPSHOT</version>
+        </dependency>
+
 
         <dependency>
             <groupId>javax.servlet</groupId>

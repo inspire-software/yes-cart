@@ -1,19 +1,20 @@
 package org.yes.cart.web.support.filter;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.web.support.request.HttpServletRequestWrapper;
 import org.yes.cart.web.support.service.ShopResolverService;
 
-import javax.servlet.Filter;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.text.MessageFormat;
 import java.util.Date;
 
@@ -61,7 +62,7 @@ public class ShopResolverFilter extends AbstractFilter implements Filter {
      */
     public ServletRequest doBefore(final ServletRequest servletRequest,
                                    final ServletResponse servletResponse) throws IOException, ServletException {
-        if (LOG.isDebugEnabled()) {
+        /*if (LOG.isDebugEnabled()) {
             LOG.debug(MessageFormat.format("Request id {0} start at {1}",
                     servletRequest.toString(),
                     (new Date()).getTime()));
@@ -79,7 +80,43 @@ public class ShopResolverFilter extends AbstractFilter implements Filter {
         //getRequestRuntimeContainer().setShop(shop);
         //getRequestRuntimeContainer().setDefaultContextPath(systemService.getDefaultResourceDirectory());
         //getRequestRuntimeContainer().setAllShopCategories(categoryService.transform(shopService.getShopCategories(shop)));
+
+        final HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
+
+        final String servletPath = httpServletRequest.getServletPath();
+
+        if (StringUtils.isNotEmpty(servletPath)) {
+            return getWrappedServletRequest(
+                    httpServletRequest,
+                    getFilterConfig().getServletContext(),
+                    path
+            );
+
+        }  */
+
         return servletRequest;
+    }
+
+    private ServletRequest getWrappedServletRequest(final HttpServletRequest httpServletRequest,
+                                                    final ServletContext servletContext,
+                                                    final String[] rootPathChain) {
+
+        final String servletPath = httpServletRequest.getServletPath();
+        for (String rootPath : rootPathChain) {
+            final String resourceName = rootPath + servletPath;
+            try {
+                if (servletContext.getResource(resourceName) != null) {
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Retrieving resource: " + resourceName);
+                    }
+                    return new HttpServletRequestWrapper(httpServletRequest, resourceName);
+                }
+            } catch (MalformedURLException mue) {
+                LOG.error("Uable to locate resouce from URL", mue);
+            }
+        }
+        return httpServletRequest;
+
     }
 
     /**
