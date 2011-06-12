@@ -7,9 +7,12 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.shoppingcart.ShoppingContext;
+import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.request.HttpServletRequestWrapper;
 import org.yes.cart.web.support.service.ShopResolverService;
 
+import javax.faces.context.FacesContext;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -62,12 +65,14 @@ public class ShopResolverFilter extends AbstractFilter implements Filter {
      */
     public ServletRequest doBefore(final ServletRequest servletRequest,
                                    final ServletResponse servletResponse) throws IOException, ServletException {
-        /*if (LOG.isDebugEnabled()) {
+        if (LOG.isDebugEnabled()) {
             LOG.debug(MessageFormat.format("Request id {0} start at {1}",
                     servletRequest.toString(),
                     (new Date()).getTime()));
         }
-        Shop shop = shopResolverService.getShop(servletRequest);
+
+        final Shop shop = shopResolverService.getShop(servletRequest);
+
         if (shop == null) {
             String url = systemService.getDefaultShopURL();
             if (LOG.isInfoEnabled()) {
@@ -75,47 +80,36 @@ public class ShopResolverFilter extends AbstractFilter implements Filter {
             }
             ((HttpServletResponse) servletResponse).sendRedirect(url);
             return null;
-
         }
-        //getRequestRuntimeContainer().setShop(shop);
-        //getRequestRuntimeContainer().setDefaultContextPath(systemService.getDefaultResourceDirectory());
-        //getRequestRuntimeContainer().setAllShopCategories(categoryService.transform(shopService.getShopCategories(shop)));
+
+        final FacesContext facesContext = getFacesContext(servletRequest, servletResponse);
+        final ShoppingContext shoppingContext = (ShoppingContext)
+                getManagedBean(facesContext, WebParametersKeys.SESSION_SHOPPING_CONTEXT);
 
         final HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-
         final String servletPath = httpServletRequest.getServletPath();
 
         if (StringUtils.isNotEmpty(servletPath)) {
             return getWrappedServletRequest(
                     httpServletRequest,
-                    getFilterConfig().getServletContext(),
-                    path
+                    shop.getMarkupFolder()
             );
 
-        }  */
+        }
 
         return servletRequest;
     }
 
+
     private ServletRequest getWrappedServletRequest(final HttpServletRequest httpServletRequest,
-                                                    final ServletContext servletContext,
-                                                    final String[] rootPathChain) {
+                                                    final String rootPath) {
 
         final String servletPath = httpServletRequest.getServletPath();
-        for (String rootPath : rootPathChain) {
-            final String resourceName = rootPath + servletPath;
-            try {
-                if (servletContext.getResource(resourceName) != null) {
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("Retrieving resource: " + resourceName);
-                    }
-                    return new HttpServletRequestWrapper(httpServletRequest, resourceName);
-                }
-            } catch (MalformedURLException mue) {
-                LOG.error("Uable to locate resouce from URL", mue);
-            }
+        final String newServletPath = rootPath + servletPath;
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("New servlet path is :" + newServletPath);
         }
-        return httpServletRequest;
+        return new HttpServletRequestWrapper(httpServletRequest, newServletPath);
 
     }
 

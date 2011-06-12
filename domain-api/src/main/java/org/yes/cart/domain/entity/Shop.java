@@ -166,6 +166,12 @@ public interface Shop extends Auditable {
      */
     boolean isB2ProfileActive();
 
+    /**
+     * Get markup folder. @see fspointer for more details.
+     * @return folder with markup.
+     */
+    String getMarkupFolder();
+
 
     /**
      * Get single attribute.

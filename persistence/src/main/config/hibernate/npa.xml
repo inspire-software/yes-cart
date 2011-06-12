@@ -2739,7 +2739,17 @@ public void setRangeList(final RangeList rangeList) {
         return false;
     }
     
+    private String markupFolder = null;
 
+    @Transient
+    public String getMarkupFolder() {
+        if (markupFolder == null) {
+            synchronized (this) {
+                markupFolder = "/" + fspointer + "/markup";
+            }
+        }
+        return markupFolder;
+    }
 
                 ]]>
             </meta>
