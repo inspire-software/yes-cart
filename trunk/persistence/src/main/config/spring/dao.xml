@@ -24,10 +24,6 @@
                 <prop key="*">PROPAGATION_SUPPORTS,readOnly</prop>
             </props>
         </property>
-
-        <!--property name="preInterceptors">
-            <ref bean="servicePreInterceptors"/>
-        </property-->
     </bean>
 
     <bean id="internalEntityFactory" class="org.yes.cart.dao.impl.EntityFactoryImpl">
@@ -37,18 +33,12 @@
                 <entry key="org.yes.cart.payment.persistence.entity.CustomerOrderPayment" value="org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity"/>
 
                 <entry key="org.yes.cart.domain.entity.Address" value="org.yes.cart.domain.entity.impl.AddressEntity"/>
-                <!-- removed
-                <entry key="org.yes.cart.domain.entity.AddressType" value="org.yes.cart.domain.entity.impl.AddressTypeEntity"/>
-                -->
                 <entry key="org.yes.cart.domain.entity.Association" value="org.yes.cart.domain.entity.impl.AssociationEntity"/>
                 <entry key="org.yes.cart.domain.entity.Attribute" value="org.yes.cart.domain.entity.impl.AttributeEntity"/>
                 <entry key="org.yes.cart.domain.entity.AttributeGroup" value="org.yes.cart.domain.entity.impl.AttributeGroupEntity"/>
                 <entry key="org.yes.cart.domain.entity.AttributeViewGroup" value="org.yes.cart.domain.entity.impl.AttributeViewGroupEntity"/>
 
-                <!--
-                Cant be used ! Need particular interface and implementation
-                <entry key="org.yes.cart.domain.entity.AttrValue" value="org.yes.cart.domain.entity.impl.AttrValueEntity"/>
-                -->
+
                 <entry key="org.yes.cart.domain.entity.AttrValueProduct" value="org.yes.cart.domain.entity.impl.AttrValueEntityProduct"/>
                 <entry key="org.yes.cart.domain.entity.AttrValueShop" value="org.yes.cart.domain.entity.impl.AttrValueEntityShop"/>
                 <entry key="org.yes.cart.domain.entity.AttrValueProductSku" value="org.yes.cart.domain.entity.impl.AttrValueEntityProductSku"/>

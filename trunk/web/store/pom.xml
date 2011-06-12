@@ -8,7 +8,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.yes</groupId>
-    <artifactId>my-webapp</artifactId>
+    <artifactId>yes-shop</artifactId>
     <packaging>war</packaging>
     <version>1.x-SNAPSHOT</version>
     <name>Yes cart storefront</name>
@@ -159,10 +159,17 @@
         </dependency>
         <dependency>
             <groupId>com.sun.faces</groupId>
-            <artifactId>jsf-impl</artifactId>
+                <artifactId>jsf-impl</artifactId>
             <version>2.0.3</version>
             <scope>compile</scope>
         </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql-connector.version}</version>
+        </dependency>
+
     </dependencies>
 
     <properties>
@@ -171,6 +178,7 @@
         <spring.version>3.0.5.RELEASE</spring.version>
         <mysql-connector.version>5.1.13</mysql-connector.version>
         <spring-security.version>3.0.3.RELEASE</spring-security.version>
+        <mysql-connector.version>5.1.13</mysql-connector.version>
     </properties>
 
 </project>

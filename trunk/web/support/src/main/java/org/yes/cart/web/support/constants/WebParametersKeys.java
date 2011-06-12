@@ -7,6 +7,11 @@ package org.yes.cart.web.support.constants;
  */
 public interface WebParametersKeys {
 
+    /**
+     * Session part of shopping cart.
+     */
+    String SESSION_SHOPPING_CONTEXT = "webShoppingContext";
+
     String SESSION_OBJECT_NAME = "requestRuntimeContainer";
 
     String CATEGORY_ID = "category";
