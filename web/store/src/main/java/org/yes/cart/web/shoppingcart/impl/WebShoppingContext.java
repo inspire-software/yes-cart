@@ -16,4 +16,7 @@ import javax.faces.bean.ManagedBean;
 @ManagedBean(name = WebParametersKeys.SESSION_SHOPPING_CONTEXT)
 @SessionScoped
 public class WebShoppingContext extends ShoppingContextImpl {
+
+
+
 }

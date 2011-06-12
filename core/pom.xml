@@ -132,13 +132,14 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.5.8</version>
+            <version>1.6.1</version>
         </dependency>
-        <!--dependency>
+        <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.5.8</version>
-        </dependency-->
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.6.1</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>net.sf.ehcache</groupId>
             <artifactId>ehcache</artifactId>
@@ -243,24 +244,24 @@
                         <argLine>-Xms512m -Xmx1024m</argLine>
                         <testFailureIgnore>false</testFailureIgnore>
                         <includes>
-                             <include>**/DomainTestSuite.java</include>
-                             <include>**/DtoTestSuite.java</include>
-                             <include>**/ImageTestSuite.java</include>
-                             <include>**/HandlerTestSuite.java</include>
-                             <include>**/OrderTestSuite.java</include>
-                             <include>**/PaymentTestSuite.java</include>
-                             <include>**/ShoppingCartTestSuite.java</include>
+                            <include>**/DomainTestSuite.java</include>
+                            <include>**/DtoTestSuite.java</include>
+                            <include>**/ImageTestSuite.java</include>
+                            <include>**/HandlerTestSuite.java</include>
+                            <include>**/OrderTestSuite.java</include>
+                            <include>**/PaymentTestSuite.java</include>
+                            <include>**/ShoppingCartTestSuite.java</include>
 
-                             <include>**/TestDtoFactoryImpl.java</include>
-                             <include>**/CustomerRegistrationMessageListenerTest.java</include>
-                             <include>**/ServiceLocatorImplTest.java</include>
-                             <include>**/WebServiceInstantiationStrategyImplTest.java</include>
-                             <include>**/MailComposerImplTest.java</include>
-                             <include>**/ExtendedConversionServiceTest.java</include>
-                             <include>**/StringValueToPairListConverterTest.java</include>
+                            <include>**/TestDtoFactoryImpl.java</include>
+                            <include>**/CustomerRegistrationMessageListenerTest.java</include>
+                            <include>**/ServiceLocatorImplTest.java</include>
+                            <include>**/WebServiceInstantiationStrategyImplTest.java</include>
+                            <include>**/MailComposerImplTest.java</include>
+                            <include>**/ExtendedConversionServiceTest.java</include>
+                            <include>**/StringValueToPairListConverterTest.java</include>
 
-                             <include>**/ShopTopSellerServiceImplTest.java</include>
-                         </includes>
+                            <include>**/ShopTopSellerServiceImplTest.java</include>
+                        </includes>
 
                     </configuration>
                 </plugin>
