@@ -7,6 +7,7 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingContext;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.request.HttpServletRequestWrapper;
@@ -74,7 +75,7 @@ public class ShopResolverFilter extends AbstractFilter implements Filter {
         final Shop shop = shopResolverService.getShop(servletRequest);
 
         if (shop == null) {
-            String url = systemService.getDefaultShopURL();
+            final String url = systemService.getDefaultShopURL();
             if (LOG.isInfoEnabled()) {
                 LOG.info("Shop can not be resolved. Redirect to : " + url);
             }
@@ -82,36 +83,29 @@ public class ShopResolverFilter extends AbstractFilter implements Filter {
             return null;
         }
 
-        final FacesContext facesContext = getFacesContext(servletRequest, servletResponse);
-        final ShoppingContext shoppingContext = (ShoppingContext)
-                getManagedBean(facesContext, WebParametersKeys.SESSION_SHOPPING_CONTEXT);
+        final ShoppingCart shoppingCart = getShoppingCart(servletRequest, servletResponse);
 
+        shoppingCart.getShoppingContext().setShopId(shop.getShopId());
+
+        return getModifiedRequest(servletRequest, shop);
+
+    }
+
+
+
+    private ServletRequest getModifiedRequest(final ServletRequest servletRequest, final Shop shop) {
         final HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         final String servletPath = httpServletRequest.getServletPath();
-
         if (StringUtils.isNotEmpty(servletPath)) {
-            return getWrappedServletRequest(
-                    httpServletRequest,
-                    shop.getMarkupFolder()
-            );
-
+            final String newServletPath = shop.getMarkupFolder() + servletPath;
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("New servlet path is :" + newServletPath);
+            }
+            return new HttpServletRequestWrapper(httpServletRequest, newServletPath);
         }
-
         return servletRequest;
     }
 
-
-    private ServletRequest getWrappedServletRequest(final HttpServletRequest httpServletRequest,
-                                                    final String rootPath) {
-
-        final String servletPath = httpServletRequest.getServletPath();
-        final String newServletPath = rootPath + servletPath;
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("New servlet path is :" + newServletPath);
-        }
-        return new HttpServletRequestWrapper(httpServletRequest, newServletPath);
-
-    }
 
     /**
      * {@inheritDoc}

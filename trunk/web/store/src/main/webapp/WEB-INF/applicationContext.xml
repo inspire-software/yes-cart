@@ -48,6 +48,20 @@
         <constructor-arg index="3" ref="shopService"/>
     </bean>
 
+    <bean id="cookieTuplizer" class="org.yes.cart.web.support.util.cookie.impl.CookieTuplizerImpl">
+        <constructor-arg index="0" value="CHANGE_PASSWORD_ON_PRODUCTION"/>
+        <constructor-arg index="1" value="2048"/>
+        <constructor-arg index="2" value="DES"/>
+        <constructor-arg index="3" value="DES/ECB/PKCS5Padding"/>
+    </bean>
+
+
+    <bean id="shoppingCartSessionFilter" class="org.yes.cart.web.support.filter.ShoppingCartSessionFilter">
+        <constructor-arg index="0" ref="cookieTuplizer"/>
+    </bean>
+
+
+
 
     <!--
         <security:http auto-config='true'>

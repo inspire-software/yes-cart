@@ -83,6 +83,11 @@ public class DtoWarehouseServiceImpl
     }
 
     /** {@inheritDoc}*/
+    public void setShopWarehouseRank(final long shopWarehouseId, final int newRank) {
+       ((WarehouseService)service).setShopWarehouseRank(shopWarehouseId, newRank);
+    }
+
+    /** {@inheritDoc}*/
     public ShopWarehouseDTO assignWarehouse(
             final long warehouseId,
             final long shopId)

@@ -28,6 +28,14 @@ public interface DtoWarehouseService extends GenericDTOService<WarehouseDTO> {
      */
     List<WarehouseDTO> findByShopId(long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
+
+    /**
+     * Set usage rank to ShopWarehouseDTO.
+     * @param shopWarehouseId   pk of given ShopWarehouseDTO
+     * @param newRank  rank to set
+     */
+    void setShopWarehouseRank(long shopWarehouseId, int newRank);
+
     /**
      * Assign given warehouse to given shop.
      *

@@ -15,6 +15,8 @@ import java.util.List;
  */
 public class WarehouseServiceImpl extends BaseGenericServiceImpl<Warehouse> implements WarehouseService {
 
+    private final static int DEFAULT_USAGE_RANK = 100;
+
     private final GenericDAO<Shop, Long> shopDao;
     private final GenericDAO<ShopWarehouse, Long> shopWarehouseDao;
 
@@ -39,10 +41,18 @@ public class WarehouseServiceImpl extends BaseGenericServiceImpl<Warehouse> impl
     }
 
     /** {@inheritDoc} */
+    public void setShopWarehouseRank(final long shopWarehouseId, final int newRank) {
+        final ShopWarehouse shopWarehouse = shopWarehouseDao.findById(shopWarehouseId);
+        shopWarehouse.setRank(newRank);
+        shopWarehouseDao.update(shopWarehouse);
+    }
+
+    /** {@inheritDoc} */
     public ShopWarehouse assignWarehouse(final long warehouseId, final long shopId) {
         final ShopWarehouse shopWarehouse = shopWarehouseDao.getEntityFactory().getByIface(ShopWarehouse.class);
         shopWarehouse.setWarehouse(getById(warehouseId));
         shopWarehouse.setShop(shopDao.findById(shopId));
+        shopWarehouse.setRank(DEFAULT_USAGE_RANK);
         return shopWarehouseDao.create(shopWarehouse);
     }
 

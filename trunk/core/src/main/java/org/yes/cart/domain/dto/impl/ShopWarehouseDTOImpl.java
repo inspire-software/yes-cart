@@ -26,6 +26,9 @@ public class ShopWarehouseDTOImpl implements ShopWarehouseDTO {
     @DtoField(value = "warehouse.name", readOnly = true)
     private String warehouseName;
 
+    @DtoField(value = "rank")
+    private int rank;
+
     /** {@inheritDoc} */
     public String getWarehouseName() {
         return warehouseName;
@@ -69,5 +72,15 @@ public class ShopWarehouseDTOImpl implements ShopWarehouseDTO {
     /** {@inheritDoc} */
     public void setWarehouseId(final long warehouseId) {
         this.warehouseId = warehouseId;
+    }
+
+    /** {@inheritDoc} */
+    public int getRank() {
+        return this.rank;
+    }
+
+    /** {@inheritDoc} */
+    public void setRank(int rank) {
+        this.rank = rank;
     }
 }

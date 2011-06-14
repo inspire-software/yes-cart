@@ -12,6 +12,11 @@ public interface WebParametersKeys {
      */
     String SESSION_SHOPPING_CONTEXT = "webShoppingContext";
 
+    /**
+     * Session shopping cart.
+     */
+    String SESSION_SHOPPING_CART = "webShoppingCart";
+
     String SESSION_OBJECT_NAME = "requestRuntimeContainer";
 
     String CATEGORY_ID = "category";
