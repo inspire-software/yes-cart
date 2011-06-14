@@ -22,6 +22,13 @@ public interface WarehouseService extends GenericService<Warehouse> {
     List<Warehouse> findByShopId(long shopId);
 
     /**
+     * Set usage rank to ShopWarehouseDTO.
+     * @param shopWarehouseId   pk of given ShopWarehouseDTO
+     * @param newRank  rank to set
+     */
+    void setShopWarehouseRank(long shopWarehouseId, int newRank);
+
+    /**
      * Assign given warehouse to given shop.
      *
      * @param warehouseId warehouse id

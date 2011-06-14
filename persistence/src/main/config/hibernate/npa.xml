@@ -2881,7 +2881,6 @@ public void setRangeList(final RangeList rangeList) {
 
 
    <class name="org.yes.cart.domain.entity.ShopWarehouse" table="TSHOPWAREHOUSE" discriminator-value="0">
-       <!--TODO v2 add usage priority in next release-->
         <meta attribute="interface">true</meta>
         <comment>Relation between shop and warehouses</comment>
         <id name="shopWarehouseId" column="SHOPWAREHOUSE_ID" type="long">
@@ -2929,6 +2928,13 @@ public void setRangeList(final RangeList rangeList) {
             <many-to-one name="warehouse" class="org.yes.cart.domain.entity.Warehouse">
                 <column name="WAREHOUSE_ID" not-null="true"/>
             </many-to-one>
+            <property name="rank" type="int" not-null="false">
+                <column name="RANK">
+                    <comment>
+                       Warehouse priority usage
+                    </comment>
+                </column>
+            </property>
 
             <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -4629,6 +4635,7 @@ public void setRangeList(final RangeList rangeList) {
             select w from WarehouseEntity w, ShopWarehouseEntity sw
              where w.warehouseId = sw.warehouse.warehouseId
              and sw.shop.id = ?1
+             order by sw.rank
         ]]>
     </query>
 

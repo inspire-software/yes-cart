@@ -1,6 +1,9 @@
 package org.yes.cart.web.support.filter;
 
 
+import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.web.support.constants.WebParametersKeys;
+
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.component.UIViewRoot;
@@ -89,8 +92,9 @@ public abstract class AbstractFilter {
 
     /**
      * Get  FacesContext for usage in filters.
+     *
      * @param servletRequest  http request
-     * @param servletResponse  http responce
+     * @param servletResponse http responce
      * @return FacesContext
      */
     protected FacesContext getFacesContext(ServletRequest servletRequest, ServletResponse servletResponse) {
@@ -99,8 +103,9 @@ public abstract class AbstractFilter {
 
     /**
      * Get  FacesContext for usage in filters.
+     *
      * @param request  http request
-     * @param response  http responce
+     * @param response http responce
      * @return FacesContext
      */
     protected FacesContext getFacesContext(HttpServletRequest request, HttpServletResponse response) {
@@ -130,9 +135,10 @@ public abstract class AbstractFilter {
 
     /**
      * Get managed bean.
+     *
      * @param facesContext faces context
-     * @param beanName  bean name
-     * @return   managed bean
+     * @param beanName     bean name
+     * @return managed bean
      */
     protected Object getManagedBean(final FacesContext facesContext, final String beanName) {
         return getApplication(facesContext).getVariableResolver().resolveVariable(facesContext, beanName);
@@ -144,6 +150,13 @@ public abstract class AbstractFilter {
         protected static void setFacesContextAsCurrentInstance(FacesContext facesContext) {
             FacesContext.setCurrentInstance(facesContext);
         }
+    }
+
+
+    protected ShoppingCart getShoppingCart(ServletRequest servletRequest, ServletResponse servletResponse) {
+        final FacesContext facesContext = getFacesContext(servletRequest, servletResponse);
+        return (ShoppingCart)
+                getManagedBean(facesContext, WebParametersKeys.SESSION_SHOPPING_CART);
     }
 
 

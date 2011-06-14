@@ -55,5 +55,18 @@ public interface ShopWarehouseDTO extends Identifiable {
      */
     void setWarehouseName(String warehouseName);
 
+    /**
+     * Get the rank of warehouse usage in shop.
+     * @return    rank of warehouse usage
+     */
+    int getRank();
+
+
+    /**
+     * Set the rank of warehouse usage.
+     * @param rank of warehouse usage.
+     */
+    void setRank(int rank);
+
 
 }

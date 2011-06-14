@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.prime.com.tr/ui">
+<f:view contentType="text/html">
+
+    <h:head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+        <link rel="stylesheet" type="text/css" href="style/default.css" media="screen"/>
+        <title><ui:insert name="title">Yes shop</ui:insert></title>
+        <ui:insert name="head"></ui:insert>
+    </h:head>
+
+    <h:body>
+        <table id="mainTable">
+            <tr>
+                <td colspan="2">
+                    <ui:insert name="search"></ui:insert>
+                </td>
+                <td rowspan="2">
+                    <ui:insert name="cart"></ui:insert>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <ui:insert name="currency"></ui:insert>
+                    <ui:insert name="language"></ui:insert>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <ui:insert name="logo"></ui:insert>
+                    <ui:insert name="adv"></ui:insert>
+                </td>
+            </tr>
+             <tr>
+                <td colspan="3">
+                    <ui:insert name="menu"></ui:insert>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <ui:insert name="menu"></ui:insert>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <ui:insert name="categories"></ui:insert>
+                    <ui:insert name="filter"></ui:insert>
+                </td>
+                <td>
+                    <ui:insert name="main"></ui:insert>
+                </td>
+                <td>
+                    <ui:insert name="new"></ui:insert>
+                    <ui:insert name="promo"></ui:insert>
+                </td>
+            </tr>
+        </table>
+    </h:body>
+</f:view>
+</html>

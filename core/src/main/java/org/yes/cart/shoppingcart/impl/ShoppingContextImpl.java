@@ -100,7 +100,7 @@ public class ShoppingContextImpl implements ShoppingContext {
      * @param shopId current shop id.
      */
     public void setShopId(final long shopId) {
-        this.shopId = shopId;
+        this.shopId = shopId; //TODO reset shop dependand parameters in case if set different shop
     }
 
     

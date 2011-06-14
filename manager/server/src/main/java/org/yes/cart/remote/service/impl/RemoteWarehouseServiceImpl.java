@@ -42,6 +42,10 @@ public class RemoteWarehouseServiceImpl
         return dtoWarehouseService.findByShopId(shopId);
     }
 
+    public void setShopWarehouseRank(long shopWarehouseId, int newRank) {
+        dtoWarehouseService.setShopWarehouseRank(shopWarehouseId, newRank);
+    }
+
     /**
      * {@inheritDoc
      */

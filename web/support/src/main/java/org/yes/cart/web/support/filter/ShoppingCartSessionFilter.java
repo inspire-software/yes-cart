@@ -1,21 +1,29 @@
 package org.yes.cart.web.support.filter;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.shoppingcart.impl.ExpireCartCommandImpl;
+import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.util.cookie.CookieTuplizer;
+import org.yes.cart.web.support.util.cookie.UnableToObjectizeCookieException;
 
+import javax.faces.context.FacesContext;
 import javax.servlet.Filter;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.Collections;
 
 /**
- * Shooping cart filter will create a lazy shopping cart proxy.
+ * Shopping cart  filter responsible to restore shopping cart from cookies, if it possible.
  * <p/>
  * User: dogma
  * Date: 2011-May-17
@@ -23,20 +31,17 @@ import java.util.Collections;
  */
 public class ShoppingCartSessionFilter extends AbstractFilter implements Filter {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ShoppingCartSessionFilter.class);
+
     private final CookieTuplizer tuplizer;
-    private final ShoppingCartCommandFactory shoppingCartCommandFactory;
 
 
     /**
      * @param tuplizer                   tuplizer to manage cookie to object to cookie transformation
-     * @param shoppingCartCommandFactory command factory to get expire command and perform expire action on long term
-     *                                   shopping cart
      */
-    public ShoppingCartSessionFilter(final CookieTuplizer tuplizer,
-                                     final ShoppingCartCommandFactory shoppingCartCommandFactory) {
+    public ShoppingCartSessionFilter(final CookieTuplizer tuplizer) {
         super();
         this.tuplizer = tuplizer;
-        this.shoppingCartCommandFactory = shoppingCartCommandFactory;
     }
 
 
@@ -49,38 +54,27 @@ public class ShoppingCartSessionFilter extends AbstractFilter implements Filter 
 
         final HttpServletRequest httpRequest = (HttpServletRequest) request;
 
-       //inal VisitableShoppingCart defaultCart = getRequestRuntimeContainer().getShoppingCart();
+        final ShoppingCart shoppingCart =  getShoppingCart(request, response);
 
-      /*final VisitableShoppingCart fromCookiesCart = new VisitableShoppingCartProxy(
-                httpRequest,
-                defaultCart,
-                tuplizer);     */
-
-
-       //etRequestRuntimeContainer().setShoppingCart(fromCookiesCart);
-
-        expireCustomerOnShoppingCart(httpRequest);
-
+        if (httpRequest.getSession().isNew()) { // try to restore from cookies
+            synchronized (tuplizer) {
+                ShoppingCart restoredCart = null;
+                try {
+                    restoredCart  = tuplizer.toObject(
+                                httpRequest.getCookies(),
+                                shoppingCart);
+                    BeanUtils.copyProperties(restoredCart, shoppingCart);
+                } catch (UnableToObjectizeCookieException e) {
+                    if(LOG.isWarnEnabled()) {
+                        LOG.warn(MessageFormat.format("Cart {0} not restored from cookies", shoppingCart.getGuid()));
+                    }
+                }
+            }
+        }
         return request;
     }
 
 
-    /**
-     * Expire customen in case if new session where create
-     *
-     * @param httpRequest http request
-     */
-    private void expireCustomerOnShoppingCart(final HttpServletRequest httpRequest) {
-
-        if (httpRequest.getSession().isNew()) {
-            final ShoppingCartCommand expireCommand = shoppingCartCommandFactory.create(
-                    Collections.singletonMap(ExpireCartCommandImpl.CMD_KEY, ExpireCartCommandImpl.CMD_KEY)
-            );
-            //expireCommand.execute(getRequestRuntimeContainer().getShoppingCart());
-            //TODO
-        }
-
-    }
 
 
     /**
