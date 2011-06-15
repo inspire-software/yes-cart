@@ -41,7 +41,7 @@
     </bean>
 
 
-    <bean id="shopResolverFilter" class="org.yes.cart.web.support.filter.ShopResolverFilter">
+    <bean id="shopResolverFilter" class="org.yes.cart.web.filter.ShopResolverFilter">
         <constructor-arg index="0" ref="shopResolverService"/>
         <constructor-arg index="1" ref="systemService"/>
         <constructor-arg index="2" ref="categoryService"/>
@@ -56,7 +56,7 @@
     </bean>
 
 
-    <bean id="shoppingCartSessionFilter" class="org.yes.cart.web.support.filter.ShoppingCartSessionFilter">
+    <bean id="shoppingCartSessionFilter" class="org.yes.cart.web.filter.ShoppingCartSessionFilter">
         <constructor-arg index="0" ref="cookieTuplizer"/>
     </bean>
 
