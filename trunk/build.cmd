@@ -6,5 +6,5 @@ call ant depl
 
 cd ..\..
 
-rem call mvn -o -Dmaven.test.skip=true install
-mvn -o install
+mvn -o -Dmaven.test.skip=true install
+rem mvn -o install

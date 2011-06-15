@@ -15,6 +15,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+//import javax.el.ELContext;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -141,6 +142,9 @@ public abstract class AbstractFilter {
      * @return managed bean
      */
     protected Object getManagedBean(final FacesContext facesContext, final String beanName) {
+        /*ELContext elContext = FacesContext.getCurrentInstance().getELContext();
+NeededBean neededBean = (NeededBean) FacesContext.getCurrentInstance().getApplication()
+    .getELResolver().getValue(elContext, null, "neededBean"); */
         return getApplication(facesContext).getVariableResolver().resolveVariable(facesContext, beanName);
     }
 
