@@ -1,10 +1,11 @@
 package org.yes.cart.web.support.service.impl;
 
 
+import org.apache.commons.lang.StringUtils;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.web.support.service.CurrencySymbolService;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -33,6 +34,23 @@ public class CurrencySymbolServiceImpl implements CurrencySymbolService {
             return currencyCode;
         }
         return symbols;
+    }
+
+    /**
+     * {@inheritDoc
+     */
+    public List<Pair<String, String>> getCurrencyToDisplay(final String curensiesListString) {
+        if (StringUtils.isNotBlank(curensiesListString)) {
+            final String [] currCodes = curensiesListString.split(",");
+            final List<Pair<String, String>> rez = new ArrayList<Pair<String, String>>(currCodes.length);
+            for (String currCode : currCodes) {
+                rez.add(
+                  new Pair<String, String>(currCode, getCurrencySymbol(currCode))
+                );
+            }
+            return rez;
+        }
+        return null;
     }
 
     /**

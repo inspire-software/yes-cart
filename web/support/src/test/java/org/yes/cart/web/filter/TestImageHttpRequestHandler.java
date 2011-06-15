@@ -1,4 +1,4 @@
-package org.yes.cart.web.support.filter;
+package org.yes.cart.web.filter;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;

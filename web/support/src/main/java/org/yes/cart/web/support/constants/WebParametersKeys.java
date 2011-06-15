@@ -7,6 +7,13 @@ package org.yes.cart.web.support.constants;
  */
 public interface WebParametersKeys {
 
+    String APPLICATION_DYNAMYC_CACHE = "appDynamycCache";
+
+    /**
+     * Currency switch request bean
+     */
+    String REQUEST_CURRENCY = "currency";
+
     /**
      * Session part of shopping cart.
      */
