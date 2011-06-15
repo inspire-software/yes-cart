@@ -1,5 +1,9 @@
 package org.yes.cart.web.support.service;
 
+import org.yes.cart.domain.misc.Pair;
+
+import java.util.List;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 2011-May-17
@@ -14,5 +18,12 @@ public interface CurrencySymbolService {
      * @return currency symbol(s)
      */
     String getCurrencySymbol(String currencyCode);
+
+    /**
+     * Get currency to display.
+     * @param curensiesListString  given comma separated string of currency codes
+     * @return list of currency code - currency label
+     */
+    List<Pair<String, String>> getCurrencyToDisplay(String curensiesListString);
 
 }
