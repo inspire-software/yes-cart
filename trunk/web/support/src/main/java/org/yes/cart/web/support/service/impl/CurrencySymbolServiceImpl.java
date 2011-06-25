@@ -39,7 +39,7 @@ public class CurrencySymbolServiceImpl implements CurrencySymbolService {
     /**
      * {@inheritDoc
      */
-    public List<Pair<String, String>> getCurrencyToDisplay(final String curensiesListString) {
+    public List<Pair<String, String>> getCurrencyToDisplayAsList(final String curensiesListString) {
         if (StringUtils.isNotBlank(curensiesListString)) {
             final String [] currCodes = curensiesListString.split(",");
             final List<Pair<String, String>> rez = new ArrayList<Pair<String, String>>(currCodes.length);
@@ -51,6 +51,22 @@ public class CurrencySymbolServiceImpl implements CurrencySymbolService {
             return rez;
         }
         return null;
+    }
+
+    /**
+     * {@inheritDoc
+     */
+    public  Map<String, String> getCurrencyToDisplayAsMap(final String curensiesListString){
+        if (StringUtils.isNotBlank(curensiesListString)) {
+            final String [] currCodes = curensiesListString.split(",");
+            final Map<String, String> rez = new LinkedHashMap<String, String>(currCodes.length);
+            for (String currCode : currCodes) {
+                rez.put(getCurrencySymbol(currCode), currCode);
+            }
+            return rez;
+        }
+        return null;
+
     }
 
     /**

@@ -22,6 +22,13 @@ public interface ShopService extends AttributeManageGenericService<Shop> {
     Shop getShopByDomainName(String serverName);
 
     /**
+     * Find shop by id
+     * @param shopId  given id
+     * @return     shop if found, otherwise null
+     */
+    Shop findById(long shopId);
+
+    /**
      * Get the {@link Shop} by given order guid.
      *
      * @param orderGuid the guid of order

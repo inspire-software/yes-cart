@@ -6,6 +6,15 @@
 
     <application>
         <el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+        <view-handler>org.yes.cart.web.application.view.MultiStoreViewHandler</view-handler>
+        <locale-config>
+            <default-locale>en</default-locale>
+            <supported-locale>ru</supported-locale>
+        </locale-config>
+        <resource-bundle>
+            <base-name>org.yes.cart.web.Messages</base-name>
+            <var>msg</var>
+        </resource-bundle>
     </application>
 
     <lifecycle>

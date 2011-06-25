@@ -42,13 +42,6 @@ public class ShoppingCartPersister implements PhaseListener {
      * {@inheritDoc}
      */
     public void afterPhase(PhaseEvent phaseEvent) {
-        //nothing to do
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void beforePhase(PhaseEvent phaseEvent) {
         final FacesContext facesContext = FacesContext.getCurrentInstance();
         final HttpServletResponse httpServletResponse =
                 (HttpServletResponse) facesContext.getExternalContext().getResponse();
@@ -72,6 +65,14 @@ NeededBean neededBean
                 LOG.error(MessageFormat.format("Unable to create cookies from {0}", shoppingCart), e);
             }
         }
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void beforePhase(PhaseEvent phaseEvent) {
+        //nothing to do
     }
 
     /**
