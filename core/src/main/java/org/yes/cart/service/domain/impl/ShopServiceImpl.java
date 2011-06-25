@@ -54,7 +54,12 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     }
 
 
-
+    /**
+     * {@inheritDoc}
+     */
+    public Shop findById(final long shopId) {
+        return shopDao.findById(shopId);
+    }
 
     /**
      * {@inheritDoc}

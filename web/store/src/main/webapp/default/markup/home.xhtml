@@ -18,48 +18,52 @@
     </h:head>
 
     <h:body>
-        <table id="mainTable">
+        <table id="mainTable" border="1" align="center" width="1024">
             <tr>
                 <td colspan="2">
-                    <ui:insert name="search"></ui:insert>
+                    <ui:insert name="search">Search</ui:insert>
                 </td>
                 <td rowspan="2">
-                    <ui:insert name="cart"></ui:insert>
+                    <ui:insert name="cart">Cart</ui:insert>
                 </td>
             </tr>
             <tr>
                 <td colspan="2">
-                    <ui:insert name="currency"></ui:insert>
-                    <ui:insert name="language"></ui:insert>
+                    <ui:insert name="currency">
+                        <ui:include src="facelet/currency.xhtml"/>
+                    </ui:insert>
+                    <ui:insert name="language">Language</ui:insert>
                 </td>
             </tr>
             <tr>
                 <td colspan="3">
-                    <ui:insert name="logo"></ui:insert>
-                    <ui:insert name="adv"></ui:insert>
+                    <ui:insert name="logo">Logo</ui:insert>
+                    <ui:insert name="adv">Advertise</ui:insert>
                 </td>
             </tr>
              <tr>
                 <td colspan="3">
-                    <ui:insert name="menu"></ui:insert>
+                    <ui:insert name="menu">Menu 1</ui:insert>
                 </td>
             </tr>
             <tr>
                 <td colspan="3">
-                    <ui:insert name="menu"></ui:insert>
+                    <ui:insert name="menu">Menu 2</ui:insert>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <ui:insert name="categories"></ui:insert>
-                    <ui:insert name="filter"></ui:insert>
+                    <ui:insert name="categories">
+                        <ui:include src="facelet/toplevelcategories.xhtml"/>
+                    </ui:insert>
+                    <ui:insert name="filter">Filter </ui:insert>
                 </td>
                 <td>
-                    <ui:insert name="main"></ui:insert>
+                    <ui:insert name="main">Main area</ui:insert>
                 </td>
                 <td>
-                    <ui:insert name="new"></ui:insert>
-                    <ui:insert name="promo"></ui:insert>
+                    <ui:insert name="new">New arrivals</ui:insert>
+                    <ui:insert name="promo">Promo</ui:insert>
                 </td>
             </tr>
         </table>

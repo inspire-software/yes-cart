@@ -1,14 +1,14 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                template="../home.xhtml">
-
+                xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:form>
-        <h:outputLabel for="currencyComboBox" value="Currency">Currency</h:outputLabel>
-        <h:selectOneMenu id="currencyComboBox" value="#{currency.selectedCurrency}">
-            <f:selectItem itemValue="#{currency.selectItems.first}" itemLabel="#{currency.selectItems.second}"/>
+        <h:outputLabel for="currencyComboBox" value="#{msg.currency}"/>
+        <h:selectOneMenu id="currencyComboBox"
+                         value="#{currency.selectedCurrency}"
+                         valueChangeListener="#{currency.selectedCurrencyChange}"
+                         onchange="submit()">
+            <f:selectItems value="#{currency.selectItems}"/>
         </h:selectOneMenu>
     </h:form>
-
 </ui:composition>

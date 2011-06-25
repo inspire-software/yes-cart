@@ -3,6 +3,7 @@ package org.yes.cart.web.support.service;
 import org.yes.cart.domain.misc.Pair;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -24,6 +25,13 @@ public interface CurrencySymbolService {
      * @param curensiesListString  given comma separated string of currency codes
      * @return list of currency code - currency label
      */
-    List<Pair<String, String>> getCurrencyToDisplay(String curensiesListString);
+    List<Pair<String, String>> getCurrencyToDisplayAsList(String curensiesListString);
+
+    /**
+     * Get currency to display.
+     * @param curensiesListString  given comma separated string of currency codes
+     * @return map of currency code - currency label
+     */
+    Map<String, String> getCurrencyToDisplayAsMap(String curensiesListString);
 
 }

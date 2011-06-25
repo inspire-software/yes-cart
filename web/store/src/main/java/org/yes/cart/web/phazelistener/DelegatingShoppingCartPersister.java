@@ -11,6 +11,7 @@ import javax.faces.event.PhaseId;
  */
 public class DelegatingShoppingCartPersister extends DelegatingPhaseListenerMulticaster {
 
+    /** {@inheritDoc} */
     @Override
     public PhaseId getPhaseId() {
         return PhaseId.RENDER_RESPONSE;

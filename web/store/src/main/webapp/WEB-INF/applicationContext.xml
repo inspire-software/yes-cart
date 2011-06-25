@@ -36,16 +36,9 @@
 
     <import resource="modules.xml"/>
 
-    <bean id="shopResolverService" class="org.yes.cart.web.support.service.impl.ShopResolverServiceImpl">
-        <constructor-arg index="0" ref="shopService"/>
-    </bean>
-
 
     <bean id="shopResolverFilter" class="org.yes.cart.web.filter.ShopResolverFilter">
-        <constructor-arg index="0" ref="shopResolverService"/>
-        <constructor-arg index="1" ref="systemService"/>
-        <constructor-arg index="2" ref="categoryService"/>
-        <constructor-arg index="3" ref="shopService"/>
+        <constructor-arg index="0" ref="systemService"/>
     </bean>
 
     <bean id="cookieTuplizer" class="org.yes.cart.web.support.util.cookie.impl.CookieTuplizerImpl" scope="prototype">  <!-- one read , second write-->
@@ -64,7 +57,125 @@
         <constructor-arg index="0" ref="cookieTuplizer"/>
     </bean>
 
-
+    <bean id="currencySymbolService" class="org.yes.cart.web.support.service.impl.CurrencySymbolServiceImpl">
+        <constructor-arg index="0">
+            <map>
+                <entry key="ALL" value="&#x4c;&#x65;&#x6b;"/>
+                <entry key="AFN" value="&#x60b;"/>
+                <entry key="ANG" value="&#x192;"/>
+                <entry key="ARS" value="&#x24;"/>
+                <entry key="AUD" value="&#x24;"/>
+                <entry key="AWG" value="&#x192;"/>
+                <entry key="AZN" value="&#x43c;&#x430;&#x43d;"/>
+                <entry key="BAM" value="&#x4b;&#x4d;"/>
+                <entry key="BBD" value="&#x24;"/>
+                <entry key="BGN" value="&#x43b;&#x432;"/>
+                <entry key="BND" value="&#x24;"/>
+                <entry key="BOB" value="&#x24;&#x62;"/>
+                <entry key="BRL" value="&#x52;&#x24;"/>
+                <entry key="BSD" value="&#x24;"/>
+                <entry key="BWP" value="&#x50;"/>
+                <entry key="BYR" value="&#x70;&#x2e;"/>
+                <entry key="BZD" value="&#x42;&#x5a;&#x24;"/>
+                <entry key="CAD" value="&#x24;"/>
+                <entry key="CHF" value="&#x43;&#x48;&#x46;"/>
+                <entry key="CLP" value="&#x24;"/>
+                <entry key="CNY" value="&#xa5;"/>
+                <entry key="COP" value="&#x24;"/>
+                <entry key="CRC" value="&#x20a1;"/>
+                <entry key="CUP" value="&#x20b1;"/>
+                <entry key="CZK" value="&#x4b;&#x10d;"/>
+                <entry key="DKK" value="&#x6b;&#x72;"/>
+                <entry key="DOP" value="&#x52;&#x44;&#x24;"/>
+                <entry key="EEK" value="&#x6b;&#x72;"/>
+                <entry key="EGP" value="&#xa3;"/>
+                <entry key="EUR" value="&#x20ac;"/>
+                <entry key="FJD" value="&#x24;"/>
+                <entry key="FKP" value="&#xa3;"/>
+                <entry key="GBP" value="&#xa3;"/>
+                <entry key="GGP" value="&#xa3;"/>
+                <entry key="GHC" value="&#xa2;"/>
+                <entry key="GIP" value="&#xa3;"/>
+                <entry key="GTQ" value="&#x51;"/>
+                <entry key="GYD" value="&#x24;"/>
+                <entry key="HKD" value="&#x24;"/>
+                <entry key="HNL" value="&#x4c;"/>
+                <entry key="HRK" value="&#x6b;&#x6e;"/>
+                <entry key="HUF" value="&#x46;&#x74;"/>
+                <entry key="IDR" value="&#x52;&#x70;"/>
+                <entry key="ILS" value="&#x20aa;"/>
+                <entry key="IMP" value="&#xa3;"/>
+                <entry key="INR" value="&#x20a8;"/>
+                <entry key="IRR" value="&#xfdfc;"/>
+                <entry key="ISK" value="&#x6b;&#x72;"/>
+                <entry key="JEP" value="&#xa3;"/>
+                <entry key="JMD" value="&#x4a;&#x24;"/>
+                <entry key="JPY" value="&#xa5;"/>
+                <entry key="KGS" value="&#x43b;&#x432;"/>
+                <entry key="KHR" value="&#x17db;"/>
+                <entry key="KPW" value="&#x20a9;"/>
+                <entry key="KRW" value="&#x20a9;"/>
+                <entry key="KYD" value="&#x24;"/>
+                <entry key="KZT" value="&#x43b;&#x432;"/>
+                <entry key="LAK" value="&#x20ad;"/>
+                <entry key="LBP" value="&#xa3;"/>
+                <entry key="LKR" value="&#x20a8;"/>
+                <entry key="LRD" value="&#x24;"/>
+                <entry key="LTL" value="&#x4c;&#x74;"/>
+                <entry key="LVL" value="&#x4c;&#x73;"/>
+                <entry key="MKD" value="&#x434;&#x435;&#x43d;"/>
+                <entry key="MNT" value="&#x20ae;"/>
+                <entry key="MUR" value="&#x20a8;"/>
+                <entry key="MXN" value="&#x24;"/>
+                <entry key="MYR" value="&#x52;&#x4d;"/>
+                <entry key="MZN" value="&#x4d;&#x54;"/>
+                <entry key="NAD" value="&#x24;"/>
+                <entry key="NGN" value="&#x20a6;"/>
+                <entry key="NIO" value="&#x43;&#x24;"/>
+                <entry key="NOK" value="&#x6b;&#x72;"/>
+                <entry key="NPR" value="&#x20a8;"/>
+                <entry key="NZD" value="&#x24;"/>
+                <entry key="OMR" value="&#xfdfc;"/>
+                <entry key="PAB" value="&#x42;&#x2f;&#x2e;"/>
+                <entry key="PEN" value="&#x53;&#x2f;&#x2e;"/>
+                <entry key="PHP" value="&#x50;&#x68;&#x70;"/>
+                <entry key="PKR" value="&#x20a8;"/>
+                <entry key="PLN" value="&#x7a;&#x142;"/>
+                <entry key="PYG" value="&#x47;&#x73;"/>
+                <entry key="QAR" value="&#xfdfc;"/>
+                <entry key="RON" value="&#x6c;&#x65;&#x69;"/>
+                <entry key="RSD" value="&#x414;&#x438;&#x43d;&#x2e;"/>
+                <entry key="RUB" value="&#x440;&#x443;&#x431;"/>
+                <entry key="SAR" value="&#xfdfc;"/>
+                <entry key="SBD" value="&#x24;"/>
+                <entry key="SCR" value="&#x20a8;"/>
+                <entry key="SEK" value="&#x6b;&#x72;"/>
+                <entry key="SGD" value="&#x24;"/>
+                <entry key="SHP" value="&#xa3;"/>
+                <entry key="SOS" value="&#x53;"/>
+                <entry key="SRD" value="&#x24;"/>
+                <entry key="SVC" value="&#x24;"/>
+                <entry key="SYP" value="&#xa3;"/>
+                <entry key="THB" value="&#xe3f;"/>
+                <entry key="TRL" value="&#x20a4;"/>
+                <entry key="TRY" value="&#x54;&#x4c;"/>
+                <entry key="TTD" value="&#x54;&#x54;&#x24;"/>
+                <entry key="TVD" value="&#x24;"/>
+                <entry key="TWD" value="&#x4e;&#x54;&#x24;"/>
+                <entry key="UAH" value="&#1075;&#1088;&#1085;."/> <!-- not all browser supoprt &#x20b4; -->
+                <entry key="USD" value="&#x0443;.&#x0435;."/>
+<!--                <entry key="USD" value="&#x24;"/>-->
+                <entry key="UYU" value="&#x24;&#x55;"/>
+                <entry key="UZS" value="&#x43b;&#x432;"/>
+                <entry key="VEF" value="&#x42;&#x73;"/>
+                <entry key="VND" value="&#x20ab;"/>
+                <entry key="XCD" value="&#x24;"/>
+                <entry key="YER" value="&#xfdfc;"/>
+                <entry key="ZAR" value="&#x52;"/>
+                <entry key="ZWD" value="&#x5a;&#x24;"/>
+            </map>
+        </constructor-arg>
+    </bean>
 
 
     <!--

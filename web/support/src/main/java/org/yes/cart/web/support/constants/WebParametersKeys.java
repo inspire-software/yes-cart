@@ -7,6 +7,9 @@ package org.yes.cart.web.support.constants;
  */
 public interface WebParametersKeys {
 
+    /**
+     * Application director
+     */
     String APPLICATION_DYNAMYC_CACHE = "appDynamycCache";
 
     /**
@@ -15,16 +18,15 @@ public interface WebParametersKeys {
     String REQUEST_CURRENCY = "currency";
 
     /**
-     * Session part of shopping cart.
+     * Currency switch request bean
      */
-    String SESSION_SHOPPING_CONTEXT = "webShoppingContext";
+    String REQUEST_TOP_LEVEL_CATEGORIES = "topLevelCategories";
+
 
     /**
      * Session shopping cart.
      */
     String SESSION_SHOPPING_CART = "webShoppingCart";
-
-    String SESSION_OBJECT_NAME = "requestRuntimeContainer";
 
     String CATEGORY_ID = "category";
 

@@ -2,6 +2,7 @@ package org.yes.cart.web.filter;
 
 
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 
 import javax.faces.FactoryFinder;
@@ -162,6 +163,13 @@ NeededBean neededBean = (NeededBean) FacesContext.getCurrentInstance().getApplic
         return (ShoppingCart)
                 getManagedBean(facesContext, WebParametersKeys.SESSION_SHOPPING_CART);
     }
+
+    protected ApplicationDirector getApplicationDirector(ServletRequest servletRequest, ServletResponse servletResponse) {
+        final FacesContext facesContext = getFacesContext(servletRequest, servletResponse);
+        return (ApplicationDirector)
+                getManagedBean(facesContext, WebParametersKeys.APPLICATION_DYNAMYC_CACHE);
+    }
+
 
 
 }

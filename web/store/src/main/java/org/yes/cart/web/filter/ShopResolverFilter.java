@@ -4,17 +4,16 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.support.request.HttpServletRequestWrapper;
-import org.yes.cart.web.support.service.ShopResolverService;
 
+import javax.faces.context.FacesContext;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.text.MessageFormat;
 import java.util.Date;
 
@@ -32,29 +31,15 @@ public class ShopResolverFilter extends AbstractFilter implements Filter {
 
     private static final Logger LOG = LoggerFactory.getLogger(ShopResolverFilter.class);
 
-    private final ShopResolverService shopResolverService;
-
     private final SystemService systemService;
 
-    private final CategoryService categoryService;
-
-    private final ShopService shopService;
 
     /**
-     * @param shopResolverService service
-     * @param systemService       service
-     * @param categoryService     service
-     * @param shopService         service
+     * @param systemService service
      */
-    public ShopResolverFilter(final ShopResolverService shopResolverService,
-                              final SystemService systemService,
-                              final CategoryService categoryService,
-                              final ShopService shopService) {
+    public ShopResolverFilter(final SystemService systemService) {
         super();
-        this.shopResolverService = shopResolverService;
         this.systemService = systemService;
-        this.shopService = shopService;
-        this.categoryService = categoryService;
     }
 
     /**
@@ -68,7 +53,9 @@ public class ShopResolverFilter extends AbstractFilter implements Filter {
                     (new Date()).getTime()));
         }
 
-        final Shop shop = shopResolverService.getShop(servletRequest);
+        final String serverDomainName = servletRequest.getServerName().toLowerCase();
+
+        final Shop shop = getApplicationDirector(servletRequest, servletResponse).getShopByDomainName(serverDomainName);
 
         if (shop == null) {
             final String url = systemService.getDefaultShopURL();
@@ -88,17 +75,37 @@ public class ShopResolverFilter extends AbstractFilter implements Filter {
     }
 
 
-
+    /**
+     * Create http serlet wrapper to handle multi store requests.
+     *
+     * @param servletRequest current request
+     * @param shop           resolved shop
+     * @return servlet wrapper
+     */
     private ServletRequest getModifiedRequest(final ServletRequest servletRequest, final Shop shop) {
+
         final HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         final String servletPath = httpServletRequest.getServletPath();
+
         if (StringUtils.isNotEmpty(servletPath)) {
             final String newServletPath = shop.getMarkupFolder() + servletPath;
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("New servlet path is :" + newServletPath);
+            try {
+                if (FacesContext.getCurrentInstance().getExternalContext().getResource(newServletPath) != null) {  //TODO cache
+                    //this is something (html, css, images, etc), that can be
+                    //handled by external context
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("New servlet path is :" + newServletPath);
+                    }
+                    return new HttpServletRequestWrapper(httpServletRequest, newServletPath);
+
+                }
+            } catch (MalformedURLException e) {
+                if (LOG.isErrorEnabled()) {
+                    LOG.error("Wrong URL for path : " + newServletPath, e);
+                }
             }
-            return new HttpServletRequestWrapper(httpServletRequest, newServletPath);
         }
+
         return servletRequest;
     }
 
