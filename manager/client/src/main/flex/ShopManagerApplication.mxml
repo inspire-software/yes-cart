@@ -52,7 +52,7 @@
             currentState = "loginState";
             var url:String;
             if (Application.application.parameters.serviceurl == undefined || Application.application.parameters.serviceurl == '') {
-                url = "http://localhost:8080/shop-manager-server/spring/amf";
+                url = "http://localhost:8080/yes-manager/spring/amf";
                 Alert.show(
                         resourceManager.getString("ShopManagerApplication", "serviceUrlNotConfigured") + url,
                         resourceManager.getString("ShopManagerApplication", "warning"));
@@ -68,9 +68,8 @@
 
 
         private function cheatLogin():void {
-            username.text = "iazarny@yahoo.com";
+            username.text = "admin@yes-cart.com";
             password.text = "1234567";
-            // password.text = "gbyudbysytktnf.n";
             login();
         }
 
@@ -101,9 +100,7 @@
                     + ShopManagerGlobal.getInstance().url
                     + "] with name ["
                     + ShopManagerGlobal.getInstance().username
-                    + "] and  password ["
-                    + ShopManagerGlobal.getInstance().password
-                    + "]. Fault event is: "
+                    + "] and  password [* * * * * * ]. Fault event is: "
                     + event.fault.message;
             Debug.trace(msg);
             Alert.show(msg, "Login failed");
@@ -323,10 +320,10 @@
                                                label="@Resource(bundle='ShopManagerApplication',key='loginFormLogin')"
                                                enabled="{loginButtonEnabled}"
                                                click="login()"/>
-                                   <!-- <mx:Button id="cheatLoginButton"
+                                    <mx:Button id="cheatLoginButton"
                                                label="Cheat"
                                                enabled="true"
-                                               click="cheatLogin()"/>-->
+                                               click="cheatLogin()"/>
                                 </mx:ControlBar>
                             </mx:Panel>
                         </mx:HBox>

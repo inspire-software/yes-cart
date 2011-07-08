@@ -3,7 +3,7 @@ import mx.collections.ArrayCollection;
 import mx.core.IUID;
 
 [Bindable]
-[RemoteClass(alias="org.yes.cart.impl.BrandDTOImpl")]
+[RemoteClass(alias="org.yes.cart.domain.dto.impl.BrandDTOImpl")]
 
 public class BrandDTOImpl implements IUID {
 

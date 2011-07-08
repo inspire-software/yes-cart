@@ -1,7 +1,7 @@
 package org.yes.cart.impl {
 
 [Bindable]
-[RemoteClass(alias="org.yes.cart.impl.AttrValueProductDTOImpl")]
+[RemoteClass(alias="org.yes.cart.domain.dto.impl.AttrValueProductDTOImpl")]
 public class AttrValueProductDTOImpl {
     
     public var attrvalueId:Number;

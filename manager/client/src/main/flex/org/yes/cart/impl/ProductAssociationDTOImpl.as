@@ -1,7 +1,7 @@
 package org.yes.cart.impl {
 
 [Bindable]
-[RemoteClass(alias="org.yes.cart.impl.ProductAssociationDTOImpl")]
+[RemoteClass(alias="org.yes.cart.domain.dto.impl.ProductAssociationDTOImpl")]
 public class ProductAssociationDTOImpl {
 
     public var    productassociationId:Number;

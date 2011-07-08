@@ -21,7 +21,7 @@
                             class="flex.messaging.endpoints.AMFEndpoint" />
             -->
             <endpoint
-                    uri="http://localhost:8080/yes-manager-server/spring/amf"
+                    uri="http://localhost:8080/yes-manager/spring/amf"
                     class="flex.messaging.endpoints.AMFEndpoint"/>
 
         </channel-definition>

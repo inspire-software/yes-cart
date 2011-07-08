@@ -2,7 +2,7 @@ package org.yes.cart.impl {
 import mx.core.IUID;
 
 [Bindable]
-[RemoteClass(alias="org.yes.cart.impl.AvailabilityDTOImpl")]
+[RemoteClass(alias="org.yes.cart.domain.dto.impl.AvailabilityDTOImpl")]
 
 public class AvailabilityDTOImpl implements IUID {
 

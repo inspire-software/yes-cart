@@ -2,7 +2,7 @@ package org.yes.cart.impl {
 import mx.collections.ArrayCollection;
 
 [Bindable]
-[RemoteClass(alias="org.yes.cart.impl.CategoryDTOImpl")]
+[RemoteClass(alias="org.yes.cart.domain.dto.impl.CategoryDTOImpl")]
 public class CategoryDTOImpl {
     
     public var categoryId:Number ;

@@ -1,6 +1,6 @@
 package org.yes.cart.impl {
 [Bindable]
-[RemoteClass(alias="org.yes.cart.impl.SeoImageDTOImpl")]
+[RemoteClass(alias="org.yes.cart.domain.dto.impl.SeoImageDTOImpl")]
 public class SeoImageDTOImpl {
 
     public var  seoImageId:Number;
