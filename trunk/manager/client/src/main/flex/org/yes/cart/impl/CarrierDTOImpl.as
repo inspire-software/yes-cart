@@ -1,6 +1,6 @@
 package org.yes.cart.impl {
 [Bindable]
-[RemoteClass(alias="org.yes.cart.impl.CarrierDTOImpl")]
+[RemoteClass(alias="org.yes.cart.domain.dto.impl.CarrierDTOImpl")]
 public class CarrierDTOImpl {
 
     public var carrierId:Number;

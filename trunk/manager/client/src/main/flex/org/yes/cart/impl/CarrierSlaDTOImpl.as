@@ -1,6 +1,6 @@
 package org.yes.cart.impl {
 [Bindable]
-[RemoteClass(alias="org.yes.cart.impl.CarrierSlaDTOImpl")]
+[RemoteClass(alias="org.yes.cart.domain.dto.impl.CarrierSlaDTOImpl")]
 public class CarrierSlaDTOImpl {
 
 
