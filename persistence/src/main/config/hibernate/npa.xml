@@ -2740,6 +2740,7 @@ public void setRangeList(final RangeList rangeList) {
     }
     
     private String markupFolder = null;
+    private String imageVaultFolder = null;
 
     @Transient
     public String getMarkupFolder() {
@@ -2749,6 +2750,16 @@ public void setRangeList(final RangeList rangeList) {
             }
         }
         return markupFolder;
+    }
+
+    @Transient
+    public String getImageVaultFolder() {
+        if (imageVaultFolder == null) {
+            synchronized (this) {
+                imageVaultFolder = "/" + fspointer + "/imagevault";
+            }
+        }
+        return imageVaultFolder;
     }
 
                 ]]>

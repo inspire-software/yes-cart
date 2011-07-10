@@ -1,0 +1,30 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.prime.com.tr/ui">
+    <h:form>
+        <p:dataGrid
+                id="subCats"
+                var="cat"
+                value="#{subCategories.categories}"
+                columns="2"
+                rows="120"
+                paginator="false">
+            <p:column>
+                <p:panel header="#{cat.name}" style="text-align:center">
+                    <h:panelGrid columns="1" style="width:100%">
+                        <h:outputLink value="home.jsf">
+                            <p:graphicImage value="#{cat.categoryImage}?w=80&amp;h=80"/>
+                            <f:param name="category" value="#{cat.categoryId}"/>
+                        </h:outputLink>
+                        <h:outputLink value="home.jsf">
+                            <h:outputText value="#{cat.description}"/>
+                            <f:param name="category" value="#{cat.categoryId}"/>
+                        </h:outputLink>
+                    </h:panelGrid>
+                </p:panel>
+            </p:column>
+        </p:dataGrid>
+    </h:form>
+</ui:composition>

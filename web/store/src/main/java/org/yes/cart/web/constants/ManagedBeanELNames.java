@@ -30,11 +30,30 @@ public interface ManagedBeanELNames {
 
     String EL_CURRENCY_SYMBOL_SERVICE = "#{currencySymbolService}";
 
+    String EL_LANGUAGE_NAME_SERVICE = "#{languageService}";
+
+    String EL_CENTRAL_VIEW_RESOLVER = "#{centralViewResolver}";
+
+
+    String EL_VIEW_PARAMETERS = "#{"+WebParametersKeys.VIEW_PARAMETERS+"}";
+
+    /** Lucene query factory bean name el expression. */
+    String EL_LUCENE_QUERY_FACTORY = "#{"+ServiceSpringKeys.LUCENE_QUERY_FACTORY+"}";
+
+    /** Product service. */
+    String EL_PRODUCT_SERVICE = "#{"+ServiceSpringKeys.PRODUCT_SERVICE+"}";
+
+    /** Attribute service. */
+    String EL_ATTRIBUTE_SERVICE = "#{"+ServiceSpringKeys.ATTRIBUTE_SERVICE+"}";
+
     /** Shop service EL name.  */
     String EL_SHOP_SERVICE = "#{" + ServiceSpringKeys.SHOP_SERVICE + "}";
 
     /** Category service EL name. */
     String EL_CATEGORY_SERVICE = "#{" + ServiceSpringKeys.CATEGORY_SERVICE + "}";
+
+    /** Category service EL name. */
+    String EL_CATEGORY_IMAGE_SERVICE = "#{categoryImageService}";
 
 
 }

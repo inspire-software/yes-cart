@@ -14,8 +14,14 @@
         <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
         <link rel="stylesheet" type="text/css" href="style/default.css" media="screen"/>
         <title><ui:insert name="title">Yes shop</ui:insert></title>
-        <ui:insert name="head"></ui:insert>
+        <!--<ui:insert name="head"></ui:insert>-->
     </h:head>
+
+    <f:metadata>
+      <f:viewParam name="category" value="#{viewParams.categoryId}"/>
+      <f:viewParam name="viewLabel" value="#{viewParams.viewLabel}"/>
+    </f:metadata>
+
 
     <h:body>
         <table id="mainTable" border="1" align="center" width="1024">
@@ -32,7 +38,9 @@
                     <ui:insert name="currency">
                         <ui:include src="facelet/currency.xhtml"/>
                     </ui:insert>
-                    <ui:insert name="language">Language</ui:insert>
+                    <ui:insert name="language">
+                        <ui:include src="facelet/language.xhtml"/>
+                    </ui:insert>
                 </td>
             </tr>
             <tr>
@@ -41,14 +49,14 @@
                     <ui:insert name="adv">Advertise</ui:insert>
                 </td>
             </tr>
-             <tr>
+            <tr>
                 <td colspan="3">
-                    <ui:insert name="menu">Menu 1</ui:insert>
+                    <ui:insert name="menu">Home | Special offer | Sale | New products | FAQ | Contect us | Rss </ui:insert>
                 </td>
             </tr>
             <tr>
                 <td colspan="3">
-                    <ui:insert name="menu">Menu 2</ui:insert>
+                    <ui:insert name="menu">Category &gt;&gt; Subcat >> Q1 &gt;&gt; Q2 &gt;&gt; Attr 1 &gt;&gt; Product &gt;&gt; Sku </ui:insert>
                 </td>
             </tr>
             <tr>
@@ -59,7 +67,28 @@
                     <ui:insert name="filter">Filter </ui:insert>
                 </td>
                 <td>
-                    <ui:insert name="main">Main area</ui:insert>
+                    <ui:insert name="main">
+                        <c:choose>
+                            <c:when test="${'sku' eq viewParams.viewLabel}">
+                                TODO show sku
+                            </c:when>
+                            <c:when test="${'product' eq viewParams.viewLabel}">
+                                TODO show product
+                            </c:when>
+                            <c:when test="${'searchrez' eq viewParams.viewLabel}">
+                                 <ui:include src="facelet/productlist.xhtml"/>
+                            </c:when>
+                            <c:when test="${'products' eq viewParams.viewLabel}">
+                                <ui:include src="facelet/productlist.xhtml"/>
+                            </c:when>
+                            <c:when test="${'subcats' eq viewParams.viewLabel}">
+                                <ui:include src="facelet/subcategories.xhtml"/>
+                            </c:when>
+                            <c:otherwise>
+                                default empty panel
+                            </c:otherwise>
+                        </c:choose>
+                    </ui:insert>
                 </td>
                 <td>
                     <ui:insert name="new">New arrivals</ui:insert>

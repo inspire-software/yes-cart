@@ -90,16 +90,17 @@ public class ShopResolverFilter extends AbstractFilter implements Filter {
         if (StringUtils.isNotEmpty(servletPath)) {
             final String newServletPath = shop.getMarkupFolder() + servletPath;
             try {
-                if (FacesContext.getCurrentInstance().getExternalContext().getResource(newServletPath) != null) {  //TODO cache
+                //if (FacesContext.getCurrentInstance().getExternalContext().getResource(newServletPath) != null) {  //TODO cache
+                if (! servletPath.contains(".jsf")) {
                     //this is something (html, css, images, etc), that can be
-                    //handled by external context
+                    //handled by external context , hence must be shop specific
                     if (LOG.isDebugEnabled()) {
                         LOG.debug("New servlet path is :" + newServletPath);
                     }
                     return new HttpServletRequestWrapper(httpServletRequest, newServletPath);
 
                 }
-            } catch (MalformedURLException e) {
+            } catch (/*MalformedURL*/Exception e) {
                 if (LOG.isErrorEnabled()) {
                     LOG.error("Wrong URL for path : " + newServletPath, e);
                 }

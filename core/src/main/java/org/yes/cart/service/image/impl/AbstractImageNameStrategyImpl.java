@@ -12,20 +12,6 @@ import java.io.File;
  */
 public abstract class AbstractImageNameStrategyImpl implements ImageNameStrategy {
 
-    private String imageVaultPath;
-
-    private final SystemService systemService;
-
-
-    /**
-     * Construct image name strategy.
-     *
-     * @param systemService to resolve image repository path with tail file separator
-     */
-    public AbstractImageNameStrategyImpl(final SystemService systemService) {
-        this.systemService = systemService;
-    }
-
 
     /**
      * Get the image path prefix ended with {@see File#separator}
@@ -98,7 +84,6 @@ public abstract class AbstractImageNameStrategyImpl implements ImageNameStrategy
      */
     public String getFullFileNamePath(final String fileName, final String code, final String width, final String height) {
         final StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(getImageVaultPath());
         if (width != null) {
             stringBuilder.append(width);
             stringBuilder.append('x');
@@ -116,10 +101,4 @@ public abstract class AbstractImageNameStrategyImpl implements ImageNameStrategy
         return stringBuilder.toString();
     }
 
-    public String getImageVaultPath() {
-        if (imageVaultPath == null) {
-            imageVaultPath = systemService.getImageRepositoryDirectory() + getPathPrefix();
-        }
-        return imageVaultPath;
-    }
 }

@@ -27,7 +27,7 @@ public class BreadCrumbsBuilder {
     private final List<Long> shopCategoryIds;
     private final long categoryId;
     private final Map pageParameters;
-    private final List<Object> allowedAttributeNames;
+    private final List<String> allowedAttributeNames;
     private final CategoryService categoryService;
 
     /**
@@ -43,7 +43,7 @@ public class BreadCrumbsBuilder {
     public BreadCrumbsBuilder(
             final long categoryId,
             final Map pageParameters,
-            final List<Object> allowedAttributeNames,
+            final List<String> allowedAttributeNames,
             final List<Long> shopCategoryIds,
             final CrumbNamePrefixProvider namePrefixProvider,
             final CategoryService categoryService) {
@@ -69,7 +69,7 @@ public class BreadCrumbsBuilder {
         return crumbs;
     }
 
-    private List<Crumb> getFilteredNavigationCrumbs(final List<Object> allowedAttributeNames) {
+    private List<Crumb> getFilteredNavigationCrumbs(final List<String> allowedAttributeNames) {
         final List<Crumb> navigationCrumbs = new ArrayList<Crumb>();
         fillAttributes(navigationCrumbs, allowedAttributeNames);
         return navigationCrumbs;
@@ -121,7 +121,7 @@ public class BreadCrumbsBuilder {
 
     private void fillAttributes(
             final List<Crumb> navigationCrumbs,
-            final List<Object> allowedAttributeNames) {
+            final List<String> allowedAttributeNames) {
 
         //This is attributive only filtered navigation from request
         final LinkedHashMap<String, ?> attributesOnly = NavigationUtil.getRetainedRequestParameters(

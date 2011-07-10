@@ -18,7 +18,7 @@ public interface AttributeService extends GenericService<Attribute> {
      *
      * @return set of attribute codes.
      */
-    List<Object> getAllAttributeCodes();
+    List<String> getAllAttributeCodes();
 
     /**
      * Get attrubute names.
@@ -26,7 +26,7 @@ public interface AttributeService extends GenericService<Attribute> {
      * @param codes attribute codes
      * @return map of attribute code - name.
      */
-    Map<String, String> getAttributeNamesByCodes(List<Object> codes);
+    Map<String, String> getAttributeNamesByCodes(List<String> codes);
 
 
     /**

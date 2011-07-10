@@ -14,15 +14,6 @@ public class BrandImageNameStrategyImpl  extends AbstractImageNameStrategyImpl {
 
     private final static String PATH_PREFIX = Constants.BRAND_IMAGE_FILE_PREFIX + File.separator;
 
-    /**
-     * Construct image name strategy.
-     *
-     * @param systemService to resolve imageVaultPath
-     */
-    public BrandImageNameStrategyImpl(final SystemService systemService) {
-        super(systemService);
-    }
-
     /** {@inheritDoc} */
     protected String getPathPrefix() {
         return PATH_PREFIX;

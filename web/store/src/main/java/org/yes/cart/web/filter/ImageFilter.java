@@ -4,6 +4,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.Constants;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.image.ImageNameStrategy;
@@ -62,8 +63,8 @@ public class ImageFilter extends AbstractFilter implements Filter {
     private Integer etagExpiration = null;
 
     public ImageFilter(
-                       final ImageService imageService,
-                       final SystemService systemService) {
+            final ImageService imageService,
+            final SystemService systemService) {
         super();
         this.imageService = imageService;
         this.systemService = systemService;
@@ -135,26 +136,48 @@ public class ImageFilter extends AbstractFilter implements Filter {
 
             String code = imageNameStrategy.getCode(servetPath);  //optional product or sku code
             String fileName = imageNameStrategy.getFileName(servetPath);  //here file name with prefix
-            String original = imageNameStrategy.getFullFileNamePath(fileName, code); //path to not resized image
+
+            final String imageRealPathPrefix = getRealPathPrefix(httpServletRequest, httpServletResponse);
+
+            String original =
+                            imageRealPathPrefix +
+                            imageNameStrategy.getFullFileNamePath(fileName, code); //path to not resized image
+
+
             final File origFile = new File(original);
 
             if (!origFile.exists()) {
                 code = Constants.NO_IMAGE;
                 fileName = imageNameStrategy.getFileName(code);  //here file name with prefix
-                original = imageNameStrategy.getFullFileNamePath(fileName, code); //path to not resized image
+                original =
+                        imageRealPathPrefix +
+                                imageNameStrategy.getFullFileNamePath(fileName, code); //path to not resized image
             }
 
 
             String resizedImageFileName = null;
             if (width != null && height != null && imageService.isSizeAllowed(width, height)) {
-                resizedImageFileName = imageNameStrategy.getFullFileNamePath(fileName, code, width, height);
+                resizedImageFileName =
+                        imageRealPathPrefix +
+                                imageNameStrategy.getFullFileNamePath(fileName, code, width, height);
             }
 
-            File imageFile = getImageFile(original, resizedImageFileName, width, height);
+            final File imageFile = getImageFile(original, resizedImageFileName, width, height);
             final FileInputStream fileInputStream = new FileInputStream(imageFile);
             IOUtils.copy(fileInputStream, httpServletResponse.getOutputStream());
             fileInputStream.close();
         }
+    }
+
+    private String getRealPathPrefix(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+
+        final String serverDomainName = httpServletRequest.getServerName().toLowerCase();
+
+        final Shop shop = getApplicationDirector(httpServletRequest, httpServletResponse).getShopByDomainName(serverDomainName);
+
+        final String markupFolder = shop.getImageVaultFolder();
+
+        return getFilterConfig().getServletContext().getRealPath(markupFolder) + File.separator;
     }
 
     /**

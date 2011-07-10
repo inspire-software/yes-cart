@@ -25,21 +25,25 @@ import java.util.List;
 public class ShoppingCartImpl implements ShoppingCart {
 
     private static final long serialVersionUID =  20110509L;
+
     private static final Logger LOG = LoggerFactory.getLogger(ShoppingCartImpl.class);
+
     private List<CartItemImpl> items = new ArrayList<CartItemImpl>();
+
+    private String guid = java.util.UUID.randomUUID().toString();
+
+    private String currentLocale;
+
     private String currencyCode;
 
     private Date modifiedDate;
 
-    private String guid = java.util.UUID.randomUUID().toString();
-
-
-    //private transient boolean isChanged = false;
-
-
-
     private ShoppingContext shoppingContext;
+
     private OrderInfo orderInfo;
+
+
+
 
 
     /**
@@ -336,9 +340,17 @@ public class ShoppingCartImpl implements ShoppingCart {
     }
 
     /** {@inheritDoc} */
-   /* public void setShoppingContext(final ShoppingContext shoppingContext) {
-        this.shoppingContext = shoppingContext;
-    }     */
+    public String getCurrentLocale() {
+        return currentLocale;
+    }
+
+    /**
+     * Set shopping cart generic locale
+     * @param currentLocale current locale
+     */
+    void setCurrentLocale(String currentLocale) {
+        this.currentLocale = currentLocale;
+    }
 
     /** {@inheritDoc} */
     public OrderInfo getOrderInfo() {

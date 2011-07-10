@@ -24,13 +24,5 @@ public class CategoryImageNameStrategyImpl extends AbstractImageNameStrategyImpl
         return null;
     }
 
-    /**
-     * Construct image name strategy.
-     *
-     * @param systemService to resolve imageVaultPath
-     */    
-    public CategoryImageNameStrategyImpl(final SystemService systemService) {
-        super(systemService);
-    }
 
 }

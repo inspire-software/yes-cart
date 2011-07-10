@@ -81,8 +81,8 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
      * {@inheritDoc}
      */
     @Cacheable(value = "attributeServiceImplMethodCache")
-    public List<Object> getAllAttributeCodes() {
-        List<Object> allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.UNIQUE");
+    public List<String> getAllAttributeCodes() {
+        List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.UNIQUE");
         allowedAttributeNames.add(ProductSearchQueryBuilder.BRAND_FIELD);
         allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_PRICE);
         allowedAttributeNames.add(ProductSearchQueryBuilder.QUERY);
@@ -90,9 +90,10 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     }
 
     @Cacheable(value = "attributeServiceImplMethodCache")
-    public Map<String, String> getAttributeNamesByCodes(List<Object> codes) {
+    public Map<String, String> getAttributeNamesByCodes(List<String> codes) {
         Map<String, String> result = new HashMap<String, String>();
-        List<Object[]> codeNameList = attributeDao.findQueryObjectsByNamedQueryWithList("ATTRIBUTE.CODE.NAMES",
+        List<Object[]> codeNameList = attributeDao.findQueryObjectsByNamedQueryWithList(
+                "ATTRIBUTE.CODE.NAMES",
                 codes);
         if (codeNameList != null) {
             for (Object[] tuple : codeNameList) {

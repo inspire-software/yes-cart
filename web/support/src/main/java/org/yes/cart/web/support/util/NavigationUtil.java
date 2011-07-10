@@ -61,7 +61,7 @@ public class NavigationUtil {
      */
     public static LinkedHashMap getFilteredRequestParameters(
             final Map pageParameters,
-            final Collection<Object> nameFilter) {
+            final Collection<String> nameFilter) {
         final LinkedHashMap params = new LinkedHashMap(pageParameters);
         params.keySet().removeAll(nameFilter);
         params.keySet().removeAll(cmdKeys);
@@ -78,7 +78,7 @@ public class NavigationUtil {
      */
     public static LinkedHashMap getRetainedRequestParameters(
             final Map pageParameters,
-            final Collection<Object> nameFilter) {
+            final Collection<String> nameFilter) {
         final LinkedHashMap params = new LinkedHashMap(pageParameters);
         params.keySet().retainAll(nameFilter);
         params.keySet().removeAll(cmdKeys);

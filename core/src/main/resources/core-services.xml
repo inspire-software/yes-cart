@@ -22,6 +22,7 @@
 
     <bean id="luceneQueryFactory" class="org.yes.cart.domain.query.impl.LuceneQueryFactoryImpl">
         <constructor-arg index="0" type="org.yes.cart.domain.query.PriceNavigation" ref="priceNavigation"/>
+        <constructor-arg index="1" type="org.yes.cart.service.domain.AttributeService" ref="attributeService"/>
     </bean>
 
     <bean id="systemService" parent="txProxyTemplate">
@@ -111,19 +112,14 @@
 
 
     <!--     #############################   Image section begin   #############################    -->
-    <bean id="categoryImageNameStrategy" class="org.yes.cart.service.image.impl.CategoryImageNameStrategyImpl">
-        <constructor-arg index="0" ref="systemService"/>
-    </bean>
+    <bean id="categoryImageNameStrategy" class="org.yes.cart.service.image.impl.CategoryImageNameStrategyImpl"/>
 
     <bean id="productImageNameStrategy" class="org.yes.cart.service.image.impl.ProductImageNameStrategyImpl">
-        <constructor-arg index="0" ref="systemService"/>
-        <constructor-arg index="1" ref="attrValueEntityProductSkuDao"/>
-        <constructor-arg index="2" ref="attrValueEntityProductDao"/>
+        <constructor-arg index="0" ref="attrValueEntityProductSkuDao"/>
+        <constructor-arg index="1" ref="attrValueEntityProductDao"/>
     </bean>
 
-    <bean id="brandImageNameStrategy" class="org.yes.cart.service.image.impl.BrandImageNameStrategyImpl">
-        <constructor-arg index="0" ref="systemService"/>
-    </bean>
+    <bean id="brandImageNameStrategy" class="org.yes.cart.service.image.impl.BrandImageNameStrategyImpl"/>
 
     <bean id="imageNameStrategyResolver" class="org.yes.cart.service.image.impl.ImageNameStrategyResolverImpl">
         <constructor-arg index="0" ref="brandImageNameStrategy"/>

@@ -202,5 +202,12 @@ public interface ShoppingCart extends Serializable {
      */
     OrderInfo getOrderInfo();
 
+    /**
+     * Get current shopping cart locale. Preferred to work with generic locale -
+     * en instead of en_US, etc.
+     * @return   current locale
+     */
+    String getCurrentLocale();
+
 
 }

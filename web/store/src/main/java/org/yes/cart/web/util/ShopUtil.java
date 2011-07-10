@@ -4,6 +4,7 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.constants.WebParametersKeys;
+import org.yes.cart.web.support.util.HttpUtil;
 
 import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
@@ -17,6 +18,18 @@ import javax.faces.context.FacesContext;
  * Time: 9:42 PM
  */
 public class ShopUtil {
+
+    /**
+     * Get the single value of given parameter.
+     * @param parameterName  given parameter name.
+     * @return string value if it presetn in request map , otherwise null
+     */
+    public static String getRequetsParameterValue(final String parameterName) {
+        return HttpUtil.getSingleValue(
+            FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(parameterName)
+        );
+
+    }
 
     /**
      * Get the shop.

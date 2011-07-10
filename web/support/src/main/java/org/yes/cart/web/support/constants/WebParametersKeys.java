@@ -17,10 +17,35 @@ public interface WebParametersKeys {
      */
     String REQUEST_CURRENCY = "currency";
 
+   /**
+     * Language switch request bean.
+     */
+    String REQUEST_LANGUAGE = "language";
+
+    /**
+     * View resolver bean.
+     */
+    String REQUEST_VIEW_RESOLVER = "viewResolver";
+
     /**
      * Currency switch request bean
      */
     String REQUEST_TOP_LEVEL_CATEGORIES = "topLevelCategories";
+
+    /**
+     * Currency switch request bean
+     */
+    String REQUEST_SUB_CATEGORIES = "subCategories";
+
+    /**
+     * Product list.
+     */
+    String REQUEST_PRODUCT_LIST = "prodList";
+
+    /**
+     * View parameters holder bean.
+     */
+    String VIEW_PARAMETERS = "viewParams";
 
 
     /**
@@ -54,4 +79,15 @@ public interface WebParametersKeys {
      * Quantity of items per page.
      */
     String QUANTITY = "showItems";
+
+
+
+    /**
+     * Image height.
+     */
+    String HEIGHT = "h";
+    /**
+     * Image width.
+     */
+    String WIDTH = "w";
 }

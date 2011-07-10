@@ -8,6 +8,7 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.web.util.ReflUtil;
 import org.yes.cart.web.util.ShopUtil;
 
+import javax.faces.view.facelets.FaceletCache;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
@@ -31,7 +32,9 @@ public class MultiStoreFaceletFactory extends DefaultFaceletFactory {
     public MultiStoreFaceletFactory(final FaceletFactory root) throws IOException {
         super(
                 (Compiler) ReflUtil.getFieldValue(DefaultFaceletFactory.class, root, "compiler"),  ////((DefaultFaceletFactory) root).compiler;
-                ((DefaultFaceletFactory) root).getResourceResolver());
+                ((DefaultFaceletFactory) root).getResourceResolver(),
+                -1,
+                (FaceletCache) ReflUtil.getFieldValue(DefaultFaceletFactory.class, root, "cache") );
         msRelativeLocations = new ConcurrentHashMap<String, URL>();
         msBaseUrl = root.getResourceResolver().resolveUrl("/");
     }
