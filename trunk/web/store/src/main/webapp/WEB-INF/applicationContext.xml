@@ -36,12 +36,21 @@
 
     <import resource="modules.xml"/>
 
+    <!-- ################################### filter delegates begin ################################### -->
 
     <bean id="shopResolverFilter" class="org.yes.cart.web.filter.ShopResolverFilter">
         <constructor-arg index="0" ref="systemService"/>
     </bean>
 
-    <bean id="cookieTuplizer" class="org.yes.cart.web.support.util.cookie.impl.CookieTuplizerImpl" scope="prototype">  <!-- one read , second write-->
+     <bean id="imageFilter" class="org.yes.cart.web.filter.ImageFilter">
+        <constructor-arg index="0" ref="imageService"/>
+        <constructor-arg index="1" ref="systemService"/>
+    </bean>
+
+    <!-- ################################### filter delegates end ################################### -->
+
+    <bean id="cookieTuplizer" class="org.yes.cart.web.support.util.cookie.impl.CookieTuplizerImpl"
+          scope="prototype">  <!-- one read , second write-->
         <constructor-arg index="0" value="CHANGE_PASSWORD_ON_PRODUCTION"/>
         <constructor-arg index="1" value="2048"/>
         <constructor-arg index="2" value="DES"/>
@@ -56,6 +65,22 @@
     <bean id="shoppingCartPersister" class="org.yes.cart.web.phazelistener.ShoppingCartPersister">
         <constructor-arg index="0" ref="cookieTuplizer"/>
     </bean>
+
+    <bean id="languageService" class="org.yes.cart.web.support.service.impl.LanguageServiceImpl">
+        <constructor-arg index="0">
+            <map>
+                <entry key="en" value="English"/>
+                <entry key="ru" value="Русский"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <bean id="centralViewResolver" class="org.yes.cart.web.support.service.impl.CentralViewResolverImpl">
+        <constructor-arg index="0" ref="categoryService"/>
+        <constructor-arg index="1" ref="attributeService"/>
+        <constructor-arg index="2" ref="luceneQueryFactory"/>
+    </bean>
+
 
     <bean id="currencySymbolService" class="org.yes.cart.web.support.service.impl.CurrencySymbolServiceImpl">
         <constructor-arg index="0">
@@ -162,9 +187,10 @@
                 <entry key="TTD" value="&#x54;&#x54;&#x24;"/>
                 <entry key="TVD" value="&#x24;"/>
                 <entry key="TWD" value="&#x4e;&#x54;&#x24;"/>
-                <entry key="UAH" value="&#1075;&#1088;&#1085;."/> <!-- not all browser supoprt &#x20b4; -->
+                <entry key="UAH" value="&#1075;&#1088;&#1085;."/>
+                <!-- not all browser supoprt &#x20b4; -->
                 <entry key="USD" value="&#x0443;.&#x0435;."/>
-<!--                <entry key="USD" value="&#x24;"/>-->
+                <!--                <entry key="USD" value="&#x24;"/>-->
                 <entry key="UYU" value="&#x24;&#x55;"/>
                 <entry key="UZS" value="&#x43b;&#x432;"/>
                 <entry key="VEF" value="&#x42;&#x73;"/>
@@ -175,6 +201,28 @@
                 <entry key="ZWD" value="&#x5a;&#x24;"/>
             </map>
         </constructor-arg>
+    </bean>
+
+
+    <bean id="categoryImageAttributeStrategy" class="org.yes.cart.web.support.service.impl.CategoryImageRetrieveStrategyAttributeImpl">
+        <constructor-arg index="0" value="CATEGORY_IMAGE"/>
+    </bean>
+
+    <bean id="categoryImageRandomProduct" class="org.yes.cart.web.support.service.impl.CategoryImageRetrieveStrategyRandomProductImpl">
+        <constructor-arg index="0" ref="productService"/>
+        <constructor-arg index="1" value="IMAGE0"/>
+    </bean>
+
+    <bean id="categoryImageService" class="org.yes.cart.web.support.service.impl.CategoryImageServiceImpl">
+        <constructor-arg index="0">
+            <map>
+                <entry key="ATTRIBUTE" value-ref="categoryImageAttributeStrategy"/>
+                <entry key="RANDOM_PRODUCT" value-ref="categoryImageRandomProduct"/>
+            </map>
+        </constructor-arg>
+        <constructor-arg index="1" ref="categoryService"/>
+        <constructor-arg index="2" value="RANDOM_PRODUCT"/>
+
     </bean>
 
 

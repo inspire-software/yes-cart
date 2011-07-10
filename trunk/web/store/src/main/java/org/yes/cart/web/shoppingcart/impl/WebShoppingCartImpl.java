@@ -11,6 +11,7 @@ import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.util.cookie.annotations.PersistentCookie;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 
 

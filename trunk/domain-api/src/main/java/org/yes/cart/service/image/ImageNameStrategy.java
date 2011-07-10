@@ -67,11 +67,5 @@ public interface ImageNameStrategy {
      */
     String getCode(String url);
 
-    /**
-     * Get configured image vault path.
-     *
-     * @return configured image vault path.
-     */
-    String getImageVaultPath();
 
 }

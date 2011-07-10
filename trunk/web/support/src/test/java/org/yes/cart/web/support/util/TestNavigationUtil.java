@@ -53,7 +53,7 @@ public class TestNavigationUtil {
 
         }
 
-        public Map<String, String> getAttributeNamesByCodes(List<Object> codes) {
+        public Map<String, String> getAttributeNamesByCodes(List<String> codes) {
             return null;
         }
 
@@ -74,8 +74,8 @@ public class TestNavigationUtil {
         }
 
 
-        public List<Object> getAllAttributeCodes() {
-            Object[] obj = new Object[]{"ATTR1", "ATTR2", "ATTR3", "ATTR4", "ATTR5", "ATTR6", "MATERIAL", "COLOR", "WIGTH"};
+        public List<String> getAllAttributeCodes() {
+            String[] obj = new String[]{"ATTR1", "ATTR2", "ATTR3", "ATTR4", "ATTR5", "ATTR6", "MATERIAL", "COLOR", "WIGTH"};
             return Arrays.asList(obj);
         }
 

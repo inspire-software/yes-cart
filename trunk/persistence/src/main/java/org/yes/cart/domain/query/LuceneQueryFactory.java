@@ -46,7 +46,6 @@ public interface LuceneQueryFactory {
      * @param shopId                the current shop id
      * @param requestParameters     web request parameters
      * @param categories            given category ids
-     * @param allowedAttributeCodes for filter not allowed attribute names from request parameters
      * @param allShopcategories     optional parameter all shop caterories with child as list used in case if
      *                              user perform serach on entire shop
      * @return ordered by cookie name list of cookies
@@ -55,7 +54,6 @@ public interface LuceneQueryFactory {
             Long shopId,
             List<Long> categories,
             Map<String, ?> requestParameters,
-            List<Object> allowedAttributeCodes,
             List<Long> allShopcategories
     );
 }

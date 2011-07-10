@@ -2,7 +2,6 @@ package org.yes.cart.web.facelet;
 
 import org.apache.commons.collections.map.SingletonMap;
 import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.impl.ChangeCurrencyEventCommandImpl;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.constants.ManagedBeanELNames;
@@ -12,7 +11,6 @@ import org.yes.cart.web.support.service.CurrencySymbolService;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
-import javax.faces.bean.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
 import java.util.Map;
 
@@ -23,31 +21,24 @@ import java.util.Map;
  */
 @ManagedBean(name = WebParametersKeys.REQUEST_CURRENCY)
 @RequestScoped
-public class Currency {
+public class Currency extends BaseFacelet {
 
     @ManagedProperty(ManagedBeanELNames.EL_CURRENCY_SYMBOL_SERVICE)
     private CurrencySymbolService currencySymbolService;
-
-    @ManagedProperty(ManagedBeanELNames.EL_APPLICATION_DYNAMYC_CACHE)
-    private ApplicationDirector applicationDirector;
-
-    @ManagedProperty(ManagedBeanELNames.EL_SESSION_SHOPPING_CART)
-    private ShoppingCart shoppingCart;
-
 
     /**
      * Get selected currency.
      * @return selected currency.
      */
     public String getSelectedCurrency() {
-        if (shoppingCart.getCurrencyCode() == null) {
-            final Shop shop = applicationDirector.getShopById(shoppingCart.getShoppingContext().getShopId());
+        if (getShoppingCart().getCurrencyCode() == null) {
+            final Shop shop = getApplicationDirector().getShopById(getShoppingCart().getShoppingContext().getShopId());
             new ChangeCurrencyEventCommandImpl(
-                    applicationDirector.getApplicationContext(),
+                    ApplicationDirector.getApplicationContext(),
                     new SingletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, shop.getDefaultCurrency())
-            ).execute(shoppingCart);
+            ).execute(getShoppingCart());
         }
-        return shoppingCart.getCurrencyCode();
+        return getShoppingCart().getCurrencyCode();
     }
 
     /**
@@ -56,9 +47,9 @@ public class Currency {
      */
     public void setSelectedCurrency(final String selectedCurrency) {
         new ChangeCurrencyEventCommandImpl(
-                applicationDirector.getApplicationContext(),
+                ApplicationDirector.getApplicationContext(),
                 new SingletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, selectedCurrency)
-        ).execute(shoppingCart);
+        ).execute(getShoppingCart());
     }
 
     /**
@@ -74,7 +65,7 @@ public class Currency {
      * @return list of currency code - currency symbol
      */
     public Map<String, String> getSelectItems() {
-        final Shop shop = applicationDirector.getShopById(shoppingCart.getShoppingContext().getShopId());
+        final Shop shop = getApplicationDirector().getShopById(getShoppingCart().getShoppingContext().getShopId());
         return currencySymbolService.getCurrencyToDisplayAsMap(shop.getSupportedCurrensies());
     }
 
@@ -86,19 +77,5 @@ public class Currency {
         this.currencySymbolService = currencySymbolService;
     }
 
-    /**
-     * Set service to use.
-     * @param applicationDirector  service to use.
-     */
-    public void setApplicationDirector(final ApplicationDirector applicationDirector) {
-        this.applicationDirector = applicationDirector;
-    }
 
-    /**
-     * Set service to use.
-     * @param shoppingCart service to use.
-     */
-    public void setShoppingCart(final ShoppingCart shoppingCart) {
-        this.shoppingCart = shoppingCart;
-    }
 }

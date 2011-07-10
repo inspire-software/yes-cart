@@ -84,7 +84,7 @@ public class TestAttributeServiceImpl extends BaseCoreDBTestCase {
 
         final AttributeService atributeService = (AttributeService) ctx.getBean(ServiceSpringKeys.ATTRIBUTE_SERVICE);
 
-        List<Object> codes = atributeService.getAllAttributeCodes();
+        List<String> codes = atributeService.getAllAttributeCodes();
 
         assertNotNull(codes);
         assertFalse(codes.isEmpty());

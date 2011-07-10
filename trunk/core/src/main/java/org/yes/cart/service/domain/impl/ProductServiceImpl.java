@@ -72,7 +72,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "productServiceImplMethodCache")
     public List<Product> getProductByCategory(final long categoryId) {
         return productDao.findByNamedQuery("PRODUCTS.BY.CATEGORYID", categoryId, new Date());
     }

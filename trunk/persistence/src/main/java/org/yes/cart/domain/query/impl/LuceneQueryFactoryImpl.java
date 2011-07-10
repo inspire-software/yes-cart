@@ -12,6 +12,7 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.domain.query.PriceNavigation;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
+import org.yes.cart.service.domain.AttributeService;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
@@ -48,19 +49,23 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
 
     private MultiFieldQueryParser queryParser;
 
-    private PriceNavigation priceNavigation;
+    private final PriceNavigation priceNavigation;
+    private final AttributeService attributeService;
 
     protected MultiFieldQueryParser getQueryParser() {
         return queryParser;
     }
 
-    public LuceneQueryFactoryImpl(final PriceNavigation priceNavigation) {
+    /**
+     * Construct query builder factory.
+     * @param priceNavigation   price navigation service
+     * @param attributeService  attribute service to filter not allowed page parameters during filtered navigation
+     */
+    public LuceneQueryFactoryImpl(final PriceNavigation priceNavigation, final AttributeService attributeService) {
         this.priceNavigation = priceNavigation;
+        this.attributeService = attributeService;
     }
 
-    public void setPriceNavigation(PriceNavigation priceNavigation) {
-        this.priceNavigation = priceNavigation;
-    }
 
     private MultiFieldQueryParser getMultiFieldQueryParser() {
         if (queryParser == null) {
@@ -144,7 +149,6 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
      * @param shopId                the current shop id
      * @param requestParameters     web request parameters
      * @param categories            given category ids
-     * @param allowedAttributeCodes for filter not allowed attribute names from request parameters
      * @param allShopcategories     optional parameter all shop caterories with child as list used in case if
      *                              user perform serach on entire shop
      * @return ordered by cookie name list of cookies
@@ -153,8 +157,9 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
             final Long shopId,
             final List<Long> categories,
             final Map<String, ?> requestParameters,
-            final List<Object> allowedAttributeCodes,
             final List<Long> allShopcategories) {
+
+        final List<String> allowedAttributeCodes = attributeService.getAllAttributeCodes();
 
         final List<BooleanQuery> queryChain = new ArrayList<BooleanQuery>();
         for (Map.Entry<String, ?> entry : requestParameters.entrySet()) {
@@ -237,7 +242,7 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
     }
 
     private boolean isFilteredNavigationParameter(final String parameterName,
-                                                  final Collection<Object> uniqueAttributeCodes) {
+                                                  final Collection<String> uniqueAttributeCodes) {
         return uniqueAttributeCodes.contains(parameterName);
     }
 

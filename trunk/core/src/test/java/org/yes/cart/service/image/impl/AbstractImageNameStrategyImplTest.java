@@ -37,15 +37,15 @@ public class AbstractImageNameStrategyImplTest extends BaseCoreDBTestCase {
     @Test
     public void testGetFullFileNamePath() {
 
-        assertEquals("target/test/imgvault" + File.separator + "file-name_CODE_a.jpej",
+        assertEquals( "file-name_CODE_a.jpej",
                 imageNameStrategy.getFullFileNamePath("file-name_CODE_a.jpej", null));
 
 
 
-        assertEquals("target/test/imgvault" + File.separator + "C" + File.separator + "CODE" + File.separator + "file-name_CODE_a.jpej",
+        assertEquals( "C" + File.separator + "CODE" + File.separator + "file-name_CODE_a.jpej",
                 imageNameStrategy.getFullFileNamePath("file-name_CODE_a.jpej", "CODE"));
 
-        assertEquals("target/test/imgvault" + File.separator + "10x30" + File.separator + "C" + File.separator + "CODE" + File.separator + "file-name_CODE_a.jpej",
+        assertEquals( "10x30" + File.separator + "C" + File.separator + "CODE" + File.separator + "file-name_CODE_a.jpej",
                 imageNameStrategy.getFullFileNamePath("file-name_CODE_a.jpej", "CODE", "10", "30"));
 
     }

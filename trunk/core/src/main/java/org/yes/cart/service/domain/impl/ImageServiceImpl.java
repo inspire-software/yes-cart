@@ -203,7 +203,7 @@ public class ImageServiceImpl
      * {@inheritDoc}
      */
     public boolean isSizeAllowed(final String size) {
-        return allowedSizes.indexOf(size) > -1;
+        return allowedSizes.contains(size);
     }
 
     /**

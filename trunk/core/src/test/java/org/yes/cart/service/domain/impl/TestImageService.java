@@ -53,7 +53,7 @@ public class TestImageService {
 
         seoImageDao = mockery.mock(GenericDAO.class);
 
-        productImageNameStrategy = new ProductImageNameStrategyImpl(systemService,null,null);
+        productImageNameStrategy = new ProductImageNameStrategyImpl(null, null);
 
         mockery.checking(new Expectations() {{
 
@@ -113,7 +113,7 @@ public class TestImageService {
         byte [] image = Base64.decode(base64EncodedJpeg0);
         try {
             imageService.addImageToRepository(tmpFileName, "PRODUCT1", image, StringUtils.EMPTY);
-            File destination = new File("target/test/resources/imgrepo/P/PRODUCT1/some-seo-image-name_PRODUCT1.jpeg");
+            File destination = new File("P/PRODUCT1/some-seo-image-name_PRODUCT1.jpeg");
             assertTrue(destination.exists());
             
             image = Base64.decode(base64EncodedJpeg1);
@@ -133,7 +133,7 @@ public class TestImageService {
         byte [] image = Base64.decode(base64EncodedJpeg0);
         try {
             imageService.addImageToRepository(tmpFileName, "PRODUCT2", image, StringUtils.EMPTY);
-            File destination = new File("target/test/resources/imgrepo/P/PRODUCT2/some-seo-image-name_PRODUCT2.jpeg");
+            File destination = new File("P/PRODUCT2/some-seo-image-name_PRODUCT2.jpeg");
             assertTrue(destination.exists());
 
             image = Base64.decode(base64EncodedJpeg1);

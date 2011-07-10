@@ -32,15 +32,12 @@ public class ProductImageNameStrategyImpl  extends AbstractImageNameStrategyImpl
     /**
      * Construct image name strategy.
      *
-     * @param attrValueEntityProductSkuDao
-     * @param attrValueEntityProductDao
-     * @param systemService to resolve imageVaultPath
+     * @param attrValueEntityProductSkuDao  product sku attributes  dao
+     * @param attrValueEntityProductDao     product attributes dao
      */
     public ProductImageNameStrategyImpl(
-            final SystemService systemService,
             final GenericDAO<AttrValueEntityProductSku, Long> attrValueEntityProductSkuDao,
             final GenericDAO<AttrValueEntityProduct, Long> attrValueEntityProductDao) {
-        super(systemService);
         this.attrValueEntityProductSkuDao = attrValueEntityProductSkuDao;
         this.attrValueEntityProductDao = attrValueEntityProductDao;
     }

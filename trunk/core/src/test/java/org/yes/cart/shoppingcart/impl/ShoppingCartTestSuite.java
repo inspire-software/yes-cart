@@ -13,6 +13,7 @@ import org.junit.runners.Suite;
         AddSkuToCartEventCommandImplTest.class,
         CartItemImplTest.class,
         ChangeCurrencyEventCommandImplTest.class,
+        ChangeLocaleCartCommandImplTest.class,
         CleanCartCommandImplTest.class,
         ExpireCartCommandImplTest.class,
         LoginCommandImplTest.class,

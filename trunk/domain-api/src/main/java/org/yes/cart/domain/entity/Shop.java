@@ -172,6 +172,12 @@ public interface Shop extends Auditable {
      */
     String getMarkupFolder();
 
+    /**
+     * Get image vauld  folder. @see fspointer for more details.
+     * @return folder with markup.
+     */
+    String getImageVaultFolder();
+
 
     /**
      * Get single attribute.

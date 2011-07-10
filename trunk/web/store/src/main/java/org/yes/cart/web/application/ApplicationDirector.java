@@ -15,7 +15,6 @@ import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
@@ -107,9 +106,11 @@ public class ApplicationDirector {
      * Get spring application context.
      * @return {@link ApplicationContext}
      */
-    public ApplicationContext getApplicationContext() {
+    public static ApplicationContext getApplicationContext() {
         return WebApplicationContextUtils.getRequiredWebApplicationContext(
                 (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()
         );
     }
+
+
 }

@@ -31,9 +31,9 @@ public class HttpUtil {
 
 
     /**
-     * Work around promlem with wicket param values, when it can return
+     * Work with with param values, when it can return
      * parameter value as string or as array of strings with single value.
-     * This behavior depends from url encoding strategy
+     *
      *
      * @param param parameters
      * @return value
