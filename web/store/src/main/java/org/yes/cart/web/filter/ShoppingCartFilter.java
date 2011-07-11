@@ -5,6 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.web.application.ApplicationDirector;
+import org.yes.cart.web.shoppingcart.impl.WebShoppingCartImpl;
+import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.util.cookie.CookieTuplizer;
 import org.yes.cart.web.support.util.cookie.UnableToObjectizeCookieException;
 
@@ -23,18 +26,21 @@ import java.text.MessageFormat;
  * Date: 2011-May-17
  * Time: 6:13:57 PM
  */
-public class ShoppingCartSessionFilter extends AbstractFilter implements Filter {
+public class ShoppingCartFilter extends AbstractFilter implements Filter {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ShoppingCartSessionFilter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShoppingCartFilter.class);
 
     private final CookieTuplizer tuplizer;
 
 
     /**
-     * @param tuplizer                   tuplizer to manage cookie to object to cookie transformation
+     * @param tuplizer   tuplizer to manage cookie to object to cookie transformation
+     * @param applicationDirector app director.
      */
-    public ShoppingCartSessionFilter(final CookieTuplizer tuplizer) {
-        super();
+    public ShoppingCartFilter(
+            final ApplicationDirector applicationDirector,
+            final CookieTuplizer tuplizer) {
+        super(applicationDirector);
         this.tuplizer = tuplizer;
     }
 
@@ -48,22 +54,21 @@ public class ShoppingCartSessionFilter extends AbstractFilter implements Filter 
 
         final HttpServletRequest httpRequest = (HttpServletRequest) request;
 
-        final ShoppingCart shoppingCart =  getShoppingCart(request, response);
+        final ShoppingCart shoppingCart = new WebShoppingCartImpl();
 
-        if (httpRequest.getSession().isNew()) { // try to restore from cookies
-            synchronized (tuplizer) {
-                ShoppingCart restoredCart = null;
-                try {
-                    restoredCart  = tuplizer.toObject(
-                                httpRequest.getCookies(),
-                                shoppingCart);
-                    BeanUtils.copyProperties(restoredCart, shoppingCart);
-                } catch (UnableToObjectizeCookieException e) {
-                    if(LOG.isWarnEnabled()) {
-                        LOG.warn(MessageFormat.format("Cart {0} not restored from cookies", shoppingCart.getGuid()));
-                    }
+        synchronized (tuplizer) {
+            ShoppingCart restoredCart = null;
+            try {
+                restoredCart  = tuplizer.toObject(
+                            httpRequest.getCookies(),
+                            shoppingCart);
+                BeanUtils.copyProperties(restoredCart, shoppingCart);
+            } catch (UnableToObjectizeCookieException e) {
+                if(LOG.isWarnEnabled()) {
+                    LOG.warn(MessageFormat.format("Cart {0} not restored from cookies", shoppingCart.getGuid()));
                 }
             }
+            request.setAttribute(WebParametersKeys.REQUEST_SHOPPING_CART, shoppingCart); //TODO bing to thread local app dir
         }
         return request;
     }

@@ -36,17 +36,22 @@
 
     <import resource="modules.xml"/>
 
-    <!-- ################################### filter delegates begin ################################### -->
 
-    <bean id="shopResolverFilter" class="org.yes.cart.web.filter.ShopResolverFilter">
-        <constructor-arg index="0" ref="systemService"/>
+    <bean id="applicationDirector" class="org.yes.cart.web.application.ApplicationDirector">
+        <constructor-arg index="0" ref="shopService"/>
     </bean>
 
-     <bean id="imageFilter" class="org.yes.cart.web.filter.ImageFilter">
-        <constructor-arg index="0" ref="imageService"/>
+    <!-- ################################### filter delegates begin ################################### -->
+    <bean id="shopResolverFilter" class="org.yes.cart.web.filter.ShopResolverFilter">
+        <constructor-arg index="0" ref="applicationDirector"/>
         <constructor-arg index="1" ref="systemService"/>
     </bean>
 
+    <bean id="imageFilter" class="org.yes.cart.web.filter.ImageFilter">
+        <constructor-arg index="0" ref="applicationDirector"/>
+        <constructor-arg index="1" ref="imageService"/>
+        <constructor-arg index="2" ref="systemService"/>
+    </bean>
     <!-- ################################### filter delegates end ################################### -->
 
     <bean id="cookieTuplizer" class="org.yes.cart.web.support.util.cookie.impl.CookieTuplizerImpl"
@@ -58,8 +63,9 @@
     </bean>
 
 
-    <bean id="shoppingCartSessionFilter" class="org.yes.cart.web.filter.ShoppingCartSessionFilter">
-        <constructor-arg index="0" ref="cookieTuplizer"/>
+    <bean id="shoppingCartFilter" class="org.yes.cart.web.filter.ShoppingCartFilter">
+        <constructor-arg index="0" ref="applicationDirector"/>
+        <constructor-arg index="1" ref="cookieTuplizer"/>
     </bean>
 
     <bean id="shoppingCartPersister" class="org.yes.cart.web.phazelistener.ShoppingCartPersister">
@@ -204,11 +210,13 @@
     </bean>
 
 
-    <bean id="categoryImageAttributeStrategy" class="org.yes.cart.web.support.service.impl.CategoryImageRetrieveStrategyAttributeImpl">
+    <bean id="categoryImageAttributeStrategy"
+          class="org.yes.cart.web.support.service.impl.CategoryImageRetrieveStrategyAttributeImpl">
         <constructor-arg index="0" value="CATEGORY_IMAGE"/>
     </bean>
 
-    <bean id="categoryImageRandomProduct" class="org.yes.cart.web.support.service.impl.CategoryImageRetrieveStrategyRandomProductImpl">
+    <bean id="categoryImageRandomProduct"
+          class="org.yes.cart.web.support.service.impl.CategoryImageRetrieveStrategyRandomProductImpl">
         <constructor-arg index="0" ref="productService"/>
         <constructor-arg index="1" value="IMAGE0"/>
     </bean>

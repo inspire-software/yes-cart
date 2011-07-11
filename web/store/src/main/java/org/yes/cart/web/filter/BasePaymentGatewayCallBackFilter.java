@@ -3,6 +3,7 @@ package org.yes.cart.web.filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.service.payment.PaymentCallBackHandlerFacade;
+import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.util.HttpUtil;
 
 import javax.servlet.Filter;
@@ -34,9 +35,12 @@ public class BasePaymentGatewayCallBackFilter extends AbstractFilter implements 
      * Construct filter.
      *
      * @param paymentCallBackHandlerFacade handler.
+     * @param applicationDirector app director
      */
     public BasePaymentGatewayCallBackFilter(
+            final ApplicationDirector applicationDirector,
             final PaymentCallBackHandlerFacade paymentCallBackHandlerFacade) {
+        super(applicationDirector);
         this.paymentCallBackHandlerFacade = paymentCallBackHandlerFacade;
     }
 
