@@ -7,10 +7,6 @@ import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.util.cookie.CookieTuplizer;
 import org.yes.cart.web.support.util.cookie.UnableToCookielizeObjectException;
 
-import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseEvent;
-import javax.faces.event.PhaseId;
-import javax.faces.event.PhaseListener;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,7 +18,7 @@ import java.text.MessageFormat;
  * Date: 6/14/11
  * Time: 9:04 PM
  */
-public class ShoppingCartPersister implements PhaseListener {
+public class ShoppingCartPersister  {
 
     private static final Logger LOG = LoggerFactory.getLogger(ShoppingCartPersister.class);
 
@@ -41,18 +37,10 @@ public class ShoppingCartPersister implements PhaseListener {
     /**
      * {@inheritDoc}
      */
-    public void afterPhase(PhaseEvent phaseEvent) {
-        final FacesContext facesContext = FacesContext.getCurrentInstance();
-        final HttpServletResponse httpServletResponse =
-                (HttpServletResponse) facesContext.getExternalContext().getResponse();
-        final HttpServletRequest httpServletRequest =
-                (HttpServletRequest) facesContext.getExternalContext().getRequest();
+    /*public void afterPhase(PhaseEvent phaseEvent) {
+
         final ShoppingCart shoppingCart = (ShoppingCart) facesContext.getApplication()
                 .getVariableResolver().resolveVariable(facesContext, WebParametersKeys.SESSION_SHOPPING_CART);
-        /*ELContext elContext = FacesContext.getCurrentInstance().getELContext();
-NeededBean neededBean
-    = (NeededBean) FacesContext.getCurrentInstance().getApplication()
-        .getELResolver().getValue(elContext, null, "neededBean");*/
 
         final Cookie[] oldCookies = httpServletRequest.getCookies();
         try {
@@ -66,19 +54,6 @@ NeededBean neededBean
             }
         }
 
-    }
+    }  */
 
-    /**
-     * {@inheritDoc}
-     */
-    public void beforePhase(PhaseEvent phaseEvent) {
-        //nothing to do
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public PhaseId getPhaseId() {
-        return PhaseId.RENDER_RESPONSE;
-    }
 }

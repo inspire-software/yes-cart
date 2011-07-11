@@ -8,6 +8,7 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.image.ImageNameStrategy;
+import org.yes.cart.web.application.ApplicationDirector;
 //import org.yes.cart.web.support.shoppingcart.RequestRuntimeContainer;
 
 import javax.activation.MimetypesFileTypeMap;
@@ -63,9 +64,10 @@ public class ImageFilter extends AbstractFilter implements Filter {
     private Integer etagExpiration = null;
 
     public ImageFilter(
+            final ApplicationDirector applicationDirector,
             final ImageService imageService,
             final SystemService systemService) {
-        super();
+        super(applicationDirector);
         this.imageService = imageService;
         this.systemService = systemService;
         fileTypeMap = new MimetypesFileTypeMap();
@@ -173,7 +175,7 @@ public class ImageFilter extends AbstractFilter implements Filter {
 
         final String serverDomainName = httpServletRequest.getServerName().toLowerCase();
 
-        final Shop shop = getApplicationDirector(httpServletRequest, httpServletResponse).getShopByDomainName(serverDomainName);
+        final Shop shop = getApplicationDirector().getShopByDomainName(serverDomainName);
 
         final String markupFolder = shop.getImageVaultFolder();
 

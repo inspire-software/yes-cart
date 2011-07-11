@@ -51,7 +51,7 @@ public interface WebParametersKeys {
     /**
      * Session shopping cart.
      */
-    String SESSION_SHOPPING_CART = "webShoppingCart";
+    String REQUEST_SHOPPING_CART = "shoppingCart";
 
     String CATEGORY_ID = "category";
 

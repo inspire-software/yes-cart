@@ -2,50 +2,42 @@ package org.yes.cart.web.application;
 
 import com.google.common.collect.MapMaker;
 import org.springframework.context.ApplicationContext;
-import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.web.constants.ManagedBeanELNames;
-import org.yes.cart.web.support.constants.WebParametersKeys;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ApplicationScoped;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
 /**
- *
  * Storefornt director class responsible for data caching,
- *  common used operations, etc.
- *
+ * common used operations, etc.
+ * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 6/15/11
  * Time: 7:11 PM
  */
 
-@ManagedBean(name = WebParametersKeys.APPLICATION_DYNAMYC_CACHE)
-@ApplicationScoped
 public class ApplicationDirector {
 
-    @ManagedProperty(ManagedBeanELNames.EL_SHOP_SERVICE)
     private ShopService shopService;
+
+    private static ThreadLocal<Shop> shopThreadLocal =  new ThreadLocal<Shop>();
+
 
     private final ConcurrentMap<String, Shop> urlShopCache;
     private final ConcurrentMap<Long, Shop> idShopCache;
 
     /**
-     * Construct cache.
+     * Construct application director.
+     *
+     * @param shopService shop service to use.
      */
-    public ApplicationDirector() {
-
+    public ApplicationDirector(final ShopService shopService) {
+        this.shopService = shopService;
         urlShopCache = new MapMaker().concurrencyLevel(16).softValues().expiration(3, TimeUnit.MINUTES).makeMap();
         idShopCache = new MapMaker().concurrencyLevel(16).softValues().expiration(3, TimeUnit.MINUTES).makeMap();
-
     }
 
     private ConcurrentMap<String, Shop> getUrlShopCache() {
@@ -59,6 +51,7 @@ public class ApplicationDirector {
 
     /**
      * Get {@link Shop} from cache by his id.
+     *
      * @param shopId given shop id
      * @return {@link Shop}
      */
@@ -71,13 +64,12 @@ public class ApplicationDirector {
             }
         }
         return shop;
-
-
     }
 
 
     /**
      * Get {@link Shop} from cache by given domain address.
+     *
      * @param serverDomainName given given domain address.
      * @return {@link Shop}
      */
@@ -93,24 +85,20 @@ public class ApplicationDirector {
         return shop;
     }
 
-
     /**
-     * Set shop service.
-     * @param shopService  shop service to use.
+     * Get current shop from local thread.
+     * @return {@link Shop} instance
      */
-    public void setShopService(final ShopService shopService) {
-        this.shopService = shopService;
+    public static Shop getCurrentShop() {
+        return shopThreadLocal.get();
     }
 
     /**
-     * Get spring application context.
-     * @return {@link ApplicationContext}
+     * Set {@link Shop} instance to current thread.
+     * @param currentShop current shop.
      */
-    public static ApplicationContext getApplicationContext() {
-        return WebApplicationContextUtils.getRequiredWebApplicationContext(
-                (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext()
-        );
+    public static void setCurrentShop(final Shop currentShop) {
+        shopThreadLocal.set(currentShop);
     }
-
 
 }

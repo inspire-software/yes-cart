@@ -11,7 +11,7 @@
         <param-value>webapp.yes.cart</param-value>
     </context-param>
 
-    <context-param>
+    <!--context-param>
         <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
         <param-value>client</param-value>
     </context-param>
@@ -24,7 +24,7 @@
     <context-param>
         <param-name>com.sun.faces.faceletFactory</param-name>
         <param-value>org.yes.cart.web.application.view.MultiStoreFaceletFactory</param-value>
-    </context-param>
+    </context-param-->
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
@@ -73,7 +73,7 @@
     </filter>
 
     <filter>
-        <filter-name>shoppingCartSessionFilter</filter-name>
+        <filter-name>shoppingCartFilter</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
         <init-param>
             <param-name>targetFilterLifecycle</param-name>
@@ -98,6 +98,16 @@
             <param-value>true</param-value>
         </init-param>
     </filter>
+
+    <filter>
+        <filter-name>wicketFilter</filter-name>
+        <filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
+        <init-param>
+            <param-name>applicationClassName</param-name>
+            <param-value>org.yes.cart.web.application.StorefrontApplication</param-value>
+        </init-param>
+    </filter>
+
 
 
     <!--filter>
@@ -116,7 +126,7 @@
 
 
     <filter-mapping>
-        <filter-name>shoppingCartSessionFilter</filter-name>
+        <filter-name>shoppingCartFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
@@ -131,6 +141,12 @@
         <url-pattern>/imgvault/*</url-pattern>
     </filter-mapping>
 
+    <filter-mapping>
+        <filter-name>wicketFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
 
     <!--filter>
          <filter-name>springSecurityFilterChain</filter-name>
@@ -143,7 +159,7 @@
          <url-pattern>/*</url-pattern>
      </filter-mapping-->
 
-    <servlet>
+    <!--servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
@@ -162,6 +178,6 @@
     <servlet-mapping>
         <servlet-name>Resource Servlet</servlet-name>
         <url-pattern>/primefaces_resource/*</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping-->
 
 </web-app>

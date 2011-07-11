@@ -6,9 +6,10 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.web.application.ApplicationDirector;
+import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.request.HttpServletRequestWrapper;
 
-import javax.faces.context.FacesContext;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,8 +38,10 @@ public class ShopResolverFilter extends AbstractFilter implements Filter {
     /**
      * @param systemService service
      */
-    public ShopResolverFilter(final SystemService systemService) {
-        super();
+    public ShopResolverFilter(
+            final ApplicationDirector applicationDirector,
+            final SystemService systemService) {
+        super(applicationDirector);
         this.systemService = systemService;
     }
 
@@ -55,7 +58,7 @@ public class ShopResolverFilter extends AbstractFilter implements Filter {
 
         final String serverDomainName = servletRequest.getServerName().toLowerCase();
 
-        final Shop shop = getApplicationDirector(servletRequest, servletResponse).getShopByDomainName(serverDomainName);
+        final Shop shop = getApplicationDirector().getShopByDomainName(serverDomainName);
 
         if (shop == null) {
             final String url = systemService.getDefaultShopURL();
@@ -66,7 +69,9 @@ public class ShopResolverFilter extends AbstractFilter implements Filter {
             return null;
         }
 
-        final ShoppingCart shoppingCart = getShoppingCart(servletRequest, servletResponse);
+        ApplicationDirector.setCurrentShop(shop);
+
+        final ShoppingCart shoppingCart = (ShoppingCart) servletRequest.getAttribute(WebParametersKeys.REQUEST_SHOPPING_CART);
 
         shoppingCart.getShoppingContext().setShopId(shop.getShopId());
 
@@ -90,16 +95,10 @@ public class ShopResolverFilter extends AbstractFilter implements Filter {
         if (StringUtils.isNotEmpty(servletPath)) {
             final String newServletPath = shop.getMarkupFolder() + servletPath;
             try {
-                //if (FacesContext.getCurrentInstance().getExternalContext().getResource(newServletPath) != null) {  //TODO cache
-                if (! servletPath.contains(".jsf")) {
-                    //this is something (html, css, images, etc), that can be
-                    //handled by external context , hence must be shop specific
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("New servlet path is :" + newServletPath);
-                    }
-                    return new HttpServletRequestWrapper(httpServletRequest, newServletPath);
-
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("New servlet path is :" + newServletPath);
                 }
+                return new HttpServletRequestWrapper(httpServletRequest, newServletPath);
             } catch (/*MalformedURL*/Exception e) {
                 if (LOG.isErrorEnabled()) {
                     LOG.error("Wrong URL for path : " + newServletPath, e);
