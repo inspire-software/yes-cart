@@ -63,7 +63,7 @@ PATH=d:\jdk1.6.0_17\bin;D:\wamp\bin\mysql\mysql5.1.36\bin;D:\apache-maven-2.1.0\
 
 Go to util/lib3rdparty folder 
 
-Locate readme.txt in authozize.net cybersource payflow and paypal folders and follow instruction
+Locate readme.txt in authorize.net cybersource payflow and paypal folders and follow instruction
 
 Copy geda\dp folder into maven repository
 
