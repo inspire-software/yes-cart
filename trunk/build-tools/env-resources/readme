@@ -1,0 +1,2 @@
+Use this settings file for your local maven repository but don't forget to change provided credentials to your own!
+dont forget to set M2_HOME , for example M2_HOME=D:\apache-maven-2.1.0
