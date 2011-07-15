@@ -30,41 +30,41 @@ public interface AttributeGroupDTO extends Identifiable {
      *
      * @return attribute group code.
      */
-    public String getCode();
+    String getCode();
 
     /**
      * Set code value
      *
      * @param code code value.
      */
-    public void setCode(String code);
+    void setCode(String code);
 
     /**
      * Get attribute group name.
      *
      * @return
      */
-    public String getName();
+    String getName();
 
     /**
      * Set name.
      *
      * @param name name value.
      */
-    public void setName(String name);
+    void setName(String name);
 
     /**
      * Get attribute group description.
      *
      * @return
      */
-    public String getDescription();
+    String getDescription();
 
     /**
      * Set description.
      *
      * @param description description value.
      */
-    public void setDescription(String description);
+    void setDescription(String description);
 
 }

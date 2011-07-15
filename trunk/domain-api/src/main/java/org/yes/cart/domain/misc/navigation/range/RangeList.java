@@ -12,8 +12,8 @@ import java.util.List;
  */
 public interface RangeList<RangeNode> extends List<RangeNode>, Serializable {
 
-    public static final String RANGE_NODE_ALIAS = "range";
-    public static final String RANGE_LIST_ALIAS = "rangeList";
+    String RANGE_NODE_ALIAS = "range";
+    String RANGE_LIST_ALIAS = "rangeList";
 
 
 }

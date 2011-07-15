@@ -13,62 +13,62 @@ public interface Availability extends Auditable {
     /**
      * When available on warehouse.
      */
-    public static long STANDARD = 1;
+    long STANDARD = 1;
     /**
      * For preorder.
      */
-    public static long PREORDER = 2;
+    long PREORDER = 2;
 
     /**
      * Available for backorder.
      */
-    public static long BACKORDER = 4;
+    long BACKORDER = 4;
     /**
      * Always available
      */
-    public static long ALWAYS = 8;
+    long ALWAYS = 8;
 
     /**
      * Get the pk
      *
      * @return pk
      */
-    public long getAvailabilityId();
+    long getAvailabilityId();
 
     /**
      * Set pk
      *
      * @param availabilityId pk
      */
-    public void setAvailabilityId(long availabilityId);
+    void setAvailabilityId(long availabilityId);
 
     /**
      * Get name.
      *
      * @return name
      */
-    public String getName();
+    String getName();
 
     /**
      * Set name.
      *
      * @param name name
      */
-    public void setName(String name);
+    void setName(String name);
 
     /**
      * Get description.
      *
      * @return description
      */
-    public String getDescription();
+    String getDescription();
 
     /**
      * Set description
      *
      * @param description description of availability
      */
-    public void setDescription(String description);
+    void setDescription(String description);
 
 }
 

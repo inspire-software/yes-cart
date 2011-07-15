@@ -18,11 +18,11 @@ public interface Category extends Auditable, Attributable {
     /**
      * Price navigation in category.
      */
-    public String PRICE_TREE_ALIAS = "pricetree";
+    String PRICE_TREE_ALIAS = "pricetree";
     /**
      * Price navigation in category.
      */
-    public String PRICE_NODE_ALIAS = "pricenode";
+    String PRICE_NODE_ALIAS = "pricenode";
 
 
     /**

@@ -13,63 +13,63 @@ import java.util.Set;
 public interface Etype extends Auditable {
 
     // The OOTB business types
-    public static final String IMAGE_BUSINESS_TYPE = "Image";
+    String IMAGE_BUSINESS_TYPE = "Image";
 
     /**
      * Get primary key.
      *
      * @return pk
      */
-    public long getEtypeId();
+    long getEtypeId();
 
     /**
      * Set pk value
      *
      * @param etypeId pk value.
      */
-    public void setEtypeId(long etypeId);
+    void setEtypeId(long etypeId);
 
     /**
      * Get the full java class name.
      *
      * @return class name.
      */
-    public String getJavatype();
+    String getJavatype();
 
     /**
      * Set java type.
      *
      * @param javatype java type
      */
-    public void setJavatype(String javatype);
+    void setJavatype(String javatype);
 
     /**
      * High level business type
      *
      * @return business type
      */
-    public String getBusinesstype();
+    String getBusinesstype();
 
     /**
      * Set business type.
      *
      * @param businesstype business type.
      */
-    public void setBusinesstype(String businesstype);
+    void setBusinesstype(String businesstype);
 
     /**
      * Get attributes, that has this type
      *
      * @return attributes.
      */
-    public Set<Attribute> getAttributes();
+    Set<Attribute> getAttributes();
 
     /**
      * Set attributes.
      *
      * @param attributes attribute collection
      */
-    public void setAttributes(Set<Attribute> attributes);
+    void setAttributes(Set<Attribute> attributes);
 
 }
 

@@ -83,7 +83,7 @@ public interface SkuPriceDTO extends Identifiable {
      *
      * @return regular price.
      */
-    public BigDecimal getRegularPrice();
+    BigDecimal getRegularPrice();
 
     /**
      * Set regular price.

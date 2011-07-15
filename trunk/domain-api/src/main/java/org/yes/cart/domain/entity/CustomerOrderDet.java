@@ -21,66 +21,66 @@ public interface CustomerOrderDet extends Auditable, CartItem {
      *
      * @return detail pk value
      */
-    public long getCustomerOrderDetId();
+    long getCustomerOrderDetId();
 
     /**
      * Set detail pk value
      *
      * @param customerOrderDetId set pk value.
      */
-    public void setCustomerOrderDetId(long customerOrderDetId);
+    void setCustomerOrderDetId(long customerOrderDetId);
 
     /**
      * Get quantity of skus.
      *
      * @return set quantity of skus.
      */
-    public BigDecimal getQty();
+    BigDecimal getQty();
 
     /**
      * Set quantity of skus.
      *
      * @param qty quantity of skus.
      */
-    public void setQty(BigDecimal qty);
+    void setQty(BigDecimal qty);
 
     /**
      * Get the price.
      *
      * @return price per single sku.
      */
-    public BigDecimal getPrice();
+    BigDecimal getPrice();
 
     /**
      * Set single sku price.
      *
      * @param price single sku price.
      */
-    public void setPrice(BigDecimal price);
+    void setPrice(BigDecimal price);
 
     /**
      * Concrete product sku in cart.
      *
      * @return {@link ProductSku} product sku.
      */
-    public ProductSku getSku();
+    ProductSku getSku();
 
     /**
      * Set {@link ProductSku}.
      *
      * @param sku product sku
      */
-    public void setSku(ProductSku sku);
+    void setSku(ProductSku sku);
 
     /**
      * @return
      */
-    public CustomerOrder getCustomerOrder();
+    CustomerOrder getCustomerOrder();
 
     /**
      * @param customerOrder
      */
-    public void setCustomerOrder(CustomerOrder customerOrder);
+    void setCustomerOrder(CustomerOrder customerOrder);
 
 }
 

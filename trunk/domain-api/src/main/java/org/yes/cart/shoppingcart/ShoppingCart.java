@@ -17,9 +17,9 @@ import java.util.List;
  */
 public interface ShoppingCart extends Serializable {
 
-    public final static int NOT_LOGGED = 0;
-    public final static int SESSION_EXPIRED = 1;
-    public final static int LOGGED_IN = 2;
+    int NOT_LOGGED = 0;
+    int SESSION_EXPIRED = 1;
+    int LOGGED_IN = 2;
 
 
     /**

@@ -12,23 +12,23 @@ public interface ShopUrl extends Auditable {
     /**
      * @return primary key value.
      */
-    public long getStoreUrlId();
+    long getStoreUrlId();
 
-    public void setStoreUrlId(long storeUrlId);
+    void setStoreUrlId(long storeUrlId);
 
     /**
      * @return shop url.
      */
-    public String getUrl();
+    String getUrl();
 
-    public void setUrl(String url);
+    void setUrl(String url);
 
     /**
      * @return {@link Shop}
      */
-    public Shop getShop();
+    Shop getShop();
 
-    public void setShop(Shop shop);
+    void setShop(Shop shop);
 
 }
 

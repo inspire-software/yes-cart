@@ -18,111 +18,111 @@ public interface SkuWarehouseDTO extends Identifiable {
      *
      * @return ph value.
      */
-    public long getSkuWarehouseId();
+    long getSkuWarehouseId();
 
     /**
      * Set pk value.
      *
      * @param skuWarehouseId value to set
      */
-    public void setSkuWarehouseId(long skuWarehouseId);
+    void setSkuWarehouseId(long skuWarehouseId);
 
     /**
      * The sku pk.
      *
      * @return sku pk.
      */
-    public long getProductSkuId();
+    long getProductSkuId();
 
     /**
      * Set sku pk.
      *
      * @param productSkuId sku pk value.
      */
-    public void setProductSkuId(long productSkuId);
+    void setProductSkuId(long productSkuId);
 
     /**
      * Get sku code.
      *
      * @return sku code.
      */
-    public String getSkuCode();
+    String getSkuCode();
 
     /**
      * Set sku code.
      *
      * @param skuCode sku code.
      */
-    public void setSkuCode(String skuCode);
+    void setSkuCode(String skuCode);
 
     /**
      * Get sku name.
      *
      * @return sku name.
      */
-    public String getSkuName();
+    String getSkuName();
 
     /**
      * Set sku name
      *
      * @param skuName sku name.
      */
-    public void setSkuName(String skuName);
+    void setSkuName(String skuName);
 
     /**
      * Get the warehouse id.
      *
      * @return warehouse id
      */
-    public long getWarehouseId();
+    long getWarehouseId();
 
     /**
      * Set warehouse id.
      *
      * @param warehouseId warehouse id
      */
-    public void setWarehouseId(long warehouseId);
+    void setWarehouseId(long warehouseId);
 
     /**
      * Get warehouse code.
      *
      * @return warehouse code.
      */
-    public String getWarehouseCode();
+    String getWarehouseCode();
 
     /**
      * Set warehouse code.
      *
      * @param warehouseCode warehouse code.
      */
-    public void setWarehouseCode(String warehouseCode);
+    void setWarehouseCode(String warehouseCode);
 
     /**
      * Get warehouse name.
      *
      * @return warehouse name.
      */
-    public String getWarehouseName();
+    String getWarehouseName();
 
     /**
      * Set warehouse name.
      *
      * @param warehouseName warehouse name.
      */
-    public void setWarehouseName(String warehouseName);
+    void setWarehouseName(String warehouseName);
 
     /**
      * Sku quantity.
      *
      * @return sku quantity.
      */
-    public BigDecimal getQuantity();
+    BigDecimal getQuantity();
 
     /**
      * Set sku quantity
      *
      * @param quantity ku quantity.
      */
-    public void setQuantity(BigDecimal quantity);
+    void setQuantity(BigDecimal quantity);
 
 }

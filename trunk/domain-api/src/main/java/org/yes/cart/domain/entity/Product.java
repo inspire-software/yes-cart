@@ -261,14 +261,14 @@ public interface Product extends Auditable, Attributable {
      *
      * @return set featured flag.
      */
-    public Boolean getFeatured();
+    Boolean getFeatured();
 
     /**
      * Set product featured flag.
      *
      * @param featured featured flag.
      */
-    public void setFeatured(Boolean featured);
+    void setFeatured(Boolean featured);
 
 
     /**

@@ -17,14 +17,14 @@ public interface AttributeGroup extends Auditable {
      *
      * @return primary key.
      */
-    public long getAttributegroupId();
+    long getAttributegroupId();
 
     /**
      * Set primary key.
      *
      * @param attributegroupId pk value
      */
-    public void setAttributegroupId(long attributegroupId);
+    void setAttributegroupId(long attributegroupId);
 
 
     /**
@@ -32,56 +32,56 @@ public interface AttributeGroup extends Auditable {
      *
      * @return attribute group code.
      */
-    public String getCode();
+    String getCode();
 
     /**
      * Set code value
      *
      * @param code code value.
      */
-    public void setCode(String code);
+    void setCode(String code);
 
     /**
      * Get attribute group name.
      *
      * @return
      */
-    public String getName();
+    String getName();
 
     /**
      * Set name.
      *
      * @param name name value.
      */
-    public void setName(String name);
+    void setName(String name);
 
     /**
      * Get attribute group description.
      *
      * @return
      */
-    public String getDescription();
+    String getDescription();
 
     /**
      * Set description.
      *
      * @param description description value.
      */
-    public void setDescription(String description);
+    void setDescription(String description);
 
     /**
      * Get list of slave attributes
      *
      * @return
      */
-    public Set<Attribute> getAttributes();
+    Set<Attribute> getAttributes();
 
     /**
      * Set attributes.
      *
      * @param attributes attributes definition.
      */
-    public void setAttributes(Set<Attribute> attributes);
+    void setAttributes(Set<Attribute> attributes);
 
 
 }

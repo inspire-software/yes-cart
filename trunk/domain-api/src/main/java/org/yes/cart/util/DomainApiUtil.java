@@ -36,7 +36,7 @@ public class DomainApiUtil {
      * @param attributes collection of attribute
      * @return value if fount otherwise null
      */
-    public static String getAttirbuteValue(String attrName, Collection<? extends AttrValue> attributes) {
+    public static String getAttirbuteValue(final String attrName, final Collection<? extends AttrValue> attributes) {
         for (AttrValue attrValue : attributes) {
             if (attrName.equals(attrValue.getAttribute().getName())) {
                 return attrValue.getVal();

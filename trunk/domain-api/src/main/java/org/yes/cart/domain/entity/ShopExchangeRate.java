@@ -14,27 +14,27 @@ public interface ShopExchangeRate extends Auditable {
 
     /**
      */
-    public long getShopexchangerateId();
+    long getShopexchangerateId();
 
-    public void setShopexchangerateId(long shopexchangerateId);
-
-    /**
-     */
-    public String getFromCurrency();
-
-    public void setFromCurrency(String fromCurrency);
+    void setShopexchangerateId(long shopexchangerateId);
 
     /**
      */
-    public String getToCurrency();
+    String getFromCurrency();
 
-    public void setToCurrency(String toCurrency);
+    void setFromCurrency(String fromCurrency);
 
     /**
      */
-    public Shop getShop();
+    String getToCurrency();
 
-    public void setShop(Shop shop);
+    void setToCurrency(String toCurrency);
+
+    /**
+     */
+    Shop getShop();
+
+    void setShop(Shop shop);
 
     BigDecimal getRate();
 

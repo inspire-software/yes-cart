@@ -102,4 +102,7 @@ public interface Constants {
     List<String> DEFAULT_ITEMS_ON_PAGE = Arrays.asList("10,20,30".split(","));
 
 
+    long ROOT_CATEGORY_ID = 100L;
+
+
 }

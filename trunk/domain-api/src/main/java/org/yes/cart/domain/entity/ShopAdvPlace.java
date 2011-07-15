@@ -13,33 +13,33 @@ public interface ShopAdvPlace extends Auditable {
 
     /**
      */
-    public long getShopadvplaceId();
+    long getShopadvplaceId();
 
-    public void setShopadvplaceId(long shopadvplaceId);
-
-    /**
-     */
-    public String getName();
-
-    public void setName(String name);
+    void setShopadvplaceId(long shopadvplaceId);
 
     /**
      */
-    public String getDescription();
+    String getName();
 
-    public void setDescription(String description);
-
-    /**
-     */
-    public Shop getShop();
-
-    public void setShop(Shop shop);
+    void setName(String name);
 
     /**
      */
-    public Set<ShopAdvPlaceRule> getShopAdvPlaceRules();
+    String getDescription();
 
-    public void setShopAdvPlaceRules(Set<ShopAdvPlaceRule> shopAdvPlaceRules);
+    void setDescription(String description);
+
+    /**
+     */
+    Shop getShop();
+
+    void setShop(Shop shop);
+
+    /**
+     */
+    Set<ShopAdvPlaceRule> getShopAdvPlaceRules();
+
+    void setShopAdvPlaceRules(Set<ShopAdvPlaceRule> shopAdvPlaceRules);
 
 }
 

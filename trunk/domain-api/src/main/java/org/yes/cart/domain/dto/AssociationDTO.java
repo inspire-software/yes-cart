@@ -15,43 +15,43 @@ public interface AssociationDTO extends Identifiable {
     /**
      * @return pkimary key.
      */
-    public long getAssociationId();
+    long getAssociationId();
 
     /**
      * @param associationId primary key to set
      */
-    public void setAssociationId(long associationId);
+    void setAssociationId(long associationId);
 
     /**
      * Identifiable human readable association code.
      *
      * @return unique human readable association code
      */
-    public String getCode();
+    String getCode();
 
     /**
      * @param code unique human readable association code to use.
      */
-    public void setCode(String code);
+    void setCode(String code);
 
     /**
      * @return Association name.
      */
-    public String getName();
+    String getName();
 
     /**
      * @param name association name.
      */
-    public void setName(String name);
+    void setName(String name);
 
     /**
      * @return description
      */
-    public String getDescription();
+    String getDescription();
 
     /**
      * @param description description to use.
      */
-    public void setDescription(String description);
+    void setDescription(String description);
 
 }

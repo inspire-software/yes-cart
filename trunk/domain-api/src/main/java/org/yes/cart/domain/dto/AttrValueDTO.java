@@ -15,41 +15,41 @@ public interface AttrValueDTO extends Identifiable {
      *
      * @return pk value
      */
-    public long getAttrvalueId();
+    long getAttrvalueId();
 
     /**
      * Set pk value.
      *
      * @param attrvalueId pk value.
      */
-    public void setAttrvalueId(long attrvalueId);
+    void setAttrvalueId(long attrvalueId);
 
     /**
      * Get the string representation of attibute value.
      *
      * @return attribute value.
      */
-    public String getVal();
+    String getVal();
 
     /**
      * Set attribute value.
      *
      * @param val value
      */
-    public void setVal(String val);
+    void setVal(String val);
 
     /**
      * Get the attribute.
      *
      * @return {@link org.yes.cart.domain.entity.Attribute}
      */
-    public AttributeDTO getAttributeDTO();
+    AttributeDTO getAttributeDTO();
 
     /**
      * Set attribute.
      *
      * @param attribute attribute.
      */
-    public void setAttributeDTO(AttributeDTO attribute);
+    void setAttributeDTO(AttributeDTO attribute);
 
 }

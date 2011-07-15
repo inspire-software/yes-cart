@@ -15,45 +15,45 @@ public interface ShopDiscount extends Auditable {
 
     /**
      */
-    public long getShopDiscountId();
+    long getShopDiscountId();
 
-    public void setShopDiscountId(long shopDiscountId);
-
-    /**
-     */
-    public String getName();
-
-    public void setName(String name);
+    void setShopDiscountId(long shopDiscountId);
 
     /**
      */
-    public String getDescription();
+    String getName();
 
-    public void setDescription(String description);
-
-    /**
-     */
-    public Date getAvailablefrom();
-
-    public void setAvailablefrom(Date availablefrom);
+    void setName(String name);
 
     /**
      */
-    public Date getAvailabletill();
+    String getDescription();
 
-    public void setAvailabletill(Date availabletill);
-
-    /**
-     */
-    public Shop getShop();
-
-    public void setShop(Shop shop);
+    void setDescription(String description);
 
     /**
      */
-    public Set<ShopDiscountRule> getShopDiscountRules();
+    Date getAvailablefrom();
 
-    public void setShopDiscountRules(Set<ShopDiscountRule> shopDiscountRules);
+    void setAvailablefrom(Date availablefrom);
+
+    /**
+     */
+    Date getAvailabletill();
+
+    void setAvailabletill(Date availabletill);
+
+    /**
+     */
+    Shop getShop();
+
+    void setShop(Shop shop);
+
+    /**
+     */
+    Set<ShopDiscountRule> getShopDiscountRules();
+
+    void setShopDiscountRules(Set<ShopDiscountRule> shopDiscountRules);
 
 }
 

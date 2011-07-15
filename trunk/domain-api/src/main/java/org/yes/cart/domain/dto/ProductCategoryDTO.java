@@ -17,70 +17,70 @@ public interface ProductCategoryDTO extends Identifiable {
      *
      * @return pk
      */
-    public long getProductCategoryId();
+    long getProductCategoryId();
 
     /**
      * set pk.
      *
      * @param productCategoryId pk
      */
-    public void setProductCategoryId(long productCategoryId);
+    void setProductCategoryId(long productCategoryId);
 
     /**
      * Get product.
      *
      * @return product pk
      */
-    public long getProductId();
+    long getProductId();
 
     /**
      * Set product's pk
      *
      * @param productId product pk
      */
-    public void setProductId(long productId);
+    void setProductId(long productId);
 
     /**
      * Get category pk
      *
      * @return category pk
      */
-    public long getCategoryId();
+    long getCategoryId();
 
     /**
      * Set category pk.
      *
      * @param categoryId category pk
      */
-    public void setCategoryId(long categoryId);
+    void setCategoryId(long categoryId);
 
     /**
      * Get the order of product in category.
      *
      * @return order of product in category.
      */
-    public int getRank();
+    int getRank();
 
     /**
      * Set order of product in category.
      *
      * @param rank order of product in category.
      */
-    public void setRank(int rank);
+    void setRank(int rank);
 
     /**
      * Get category name.
      *
      * @return category name
      */
-    public String getCategoryName();
+    String getCategoryName();
 
     /**
      * Set category name.
      *
      * @param categoryName category name.
      */
-    public void setCategoryName(final String categoryName);
+    void setCategoryName(final String categoryName);
 
 
 }

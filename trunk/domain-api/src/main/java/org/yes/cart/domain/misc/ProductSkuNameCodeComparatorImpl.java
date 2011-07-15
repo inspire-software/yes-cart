@@ -13,7 +13,7 @@ public class ProductSkuNameCodeComparatorImpl implements Comparator<ProductSku> 
     /**
      * {@inheritDoc}
      */
-    public int compare(ProductSku sku1, ProductSku sku2) {
+    public int compare(final ProductSku sku1, final ProductSku sku2) {
         return (sku1.getName() + sku1.getCode()).compareTo(sku2.getName() + sku2.getCode());
     }
 }

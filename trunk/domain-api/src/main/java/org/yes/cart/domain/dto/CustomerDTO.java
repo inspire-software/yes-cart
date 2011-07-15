@@ -18,14 +18,14 @@ public interface CustomerDTO extends Identifiable {
      *
      * @return customer email.
      */
-    public String getEmail();
+    String getEmail();
 
     /**
      * Set customer email
      *
      * @param email email
      */
-    public void setEmail(String email);
+    void setEmail(String email);
 
     /**
      * Get first name.
@@ -75,14 +75,14 @@ public interface CustomerDTO extends Identifiable {
      *
      * @return pk value.
      */
-    public long getCustomerId();
+    long getCustomerId();
 
     /**
      * Set pk value.
      *
      * @param customerId pk value to set
      */
-    public void setCustomerId(long customerId);
+    void setCustomerId(long customerId);
 
     /**
      * Get attibutes.
