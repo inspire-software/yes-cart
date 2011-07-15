@@ -10,7 +10,7 @@ import java.util.Comparator;
  * Time: 11:13:01
  */
 public class SkuPriceSkuNameComparatorImpl implements Comparator<SkuPrice> {
-    public int compare(SkuPrice skuPrice1, SkuPrice skuPrice2) {
+    public int compare(final SkuPrice skuPrice1, final SkuPrice skuPrice2) {
         return skuPrice1.getSku().getName().compareTo(skuPrice2.getSku().getName());
     }
 }

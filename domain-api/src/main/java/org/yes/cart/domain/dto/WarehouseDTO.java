@@ -17,14 +17,14 @@ public interface WarehouseDTO extends Identifiable {
      *
      * @return primary key
      */
-    public long getWarehouseId();
+    long getWarehouseId();
 
     /**
      * Set primary key
      *
      * @param warehouseId primary key.
      */
-    public void setWarehouseId(long warehouseId);
+    void setWarehouseId(long warehouseId);
 
     /**
      * Get warehouse code.
@@ -46,26 +46,26 @@ public interface WarehouseDTO extends Identifiable {
      *
      * @return warehouse name.
      */
-    public String getName();
+    String getName();
 
     /**
      * Set Warehouse name.
      *
      * @param name name of warehouse
      */
-    public void setName(String name);
+    void setName(String name);
 
     /**
      * @return description.
      */
-    public String getDescription();
+    String getDescription();
 
     /**
      * Set description.
      *
      * @param description warehouse description.
      */
-    public void setDescription(String description);
+    void setDescription(String description);
 
 
     // address part of warehouse begin

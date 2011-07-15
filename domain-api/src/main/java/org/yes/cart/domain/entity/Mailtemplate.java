@@ -11,39 +11,39 @@ public interface Mailtemplate extends Auditable {
 
     /**
      */
-    public long getMailtemplateId();
+    long getMailtemplateId();
 
-    public void setMailtemplateId(long mailtemplateId);
-
-    /**
-     */
-    public String getCode();
-
-    public void setCode(String code);
+    void setMailtemplateId(long mailtemplateId);
 
     /**
      */
-    public String getFspointer();
+    String getCode();
 
-    public void setFspointer(String fspointer);
-
-    /**
-     */
-    public String getName();
-
-    public void setName(String name);
+    void setCode(String code);
 
     /**
      */
-    public String getDescription();
+    String getFspointer();
 
-    public void setDescription(String description);
+    void setFspointer(String fspointer);
 
     /**
      */
-    public Mailtemplategroup getMailTemplateGroup();
+    String getName();
 
-    public void setMailTemplateGroup(Mailtemplategroup mailTemplateGroup);
+    void setName(String name);
+
+    /**
+     */
+    String getDescription();
+
+    void setDescription(String description);
+
+    /**
+     */
+    Mailtemplategroup getMailTemplateGroup();
+
+    void setMailTemplateGroup(Mailtemplategroup mailTemplateGroup);
 
 }
 

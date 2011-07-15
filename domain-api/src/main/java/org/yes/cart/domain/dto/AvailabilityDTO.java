@@ -16,41 +16,41 @@ public interface AvailabilityDTO extends Identifiable {
      *
      * @return pk
      */
-    public long getAvailabilityId();
+    long getAvailabilityId();
 
     /**
      * Set pk
      *
      * @param availabilityId pk
      */
-    public void setAvailabilityId(long availabilityId);
+    void setAvailabilityId(long availabilityId);
 
     /**
      * Get name.
      *
      * @return name
      */
-    public String getName();
+    String getName();
 
     /**
      * Set name.
      *
      * @param name name
      */
-    public void setName(String name);
+    void setName(String name);
 
     /**
      * Get description.
      *
      * @return description
      */
-    public String getDescription();
+    String getDescription();
 
     /**
      * Set description
      *
      * @param description description.
      */
-    public void setDescription(String description);
+    void setDescription(String description);
 
 }

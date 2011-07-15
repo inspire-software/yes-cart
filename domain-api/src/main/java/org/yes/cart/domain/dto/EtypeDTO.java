@@ -16,42 +16,42 @@ public interface EtypeDTO extends Identifiable {
      *
      * @return pk
      */
-    public long getEtypeId();
+    long getEtypeId();
 
     /**
      * Set pk value
      *
      * @param etypeId pk value.
      */
-    public void setEtypeId(long etypeId);
+    void setEtypeId(long etypeId);
 
     /**
      * Get the full java class name.
      *
      * @return class name.
      */
-    public String getJavatype();
+    String getJavatype();
 
     /**
      * Set java type.
      *
      * @param javatype java type
      */
-    public void setJavatype(String javatype);
+    void setJavatype(String javatype);
 
     /**
      * High level business type
      *
      * @return business type
      */
-    public String getBusinesstype();
+    String getBusinesstype();
 
     /**
      * Set business type.
      *
      * @param businesstype business type.
      */
-    public void setBusinesstype(String businesstype);
+    void setBusinesstype(String businesstype);
 
 
 }

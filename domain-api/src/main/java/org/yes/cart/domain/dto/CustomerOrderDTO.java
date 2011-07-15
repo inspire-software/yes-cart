@@ -19,14 +19,14 @@ public interface CustomerOrderDTO extends Identifiable {
      *
      * @return amount
      */
-    public BigDecimal getAmount();
+    BigDecimal getAmount();
 
     /**
      * Set order amount
      *
      * @param amount order amount.
      */
-    public void setAmount(BigDecimal amount);
+    void setAmount(BigDecimal amount);
 
 
     /**
@@ -80,14 +80,14 @@ public interface CustomerOrderDTO extends Identifiable {
      *
      * @return formated delivery address.
      */
-    public String getBillingAddress();
+    String getBillingAddress();
 
     /**
      * Set formated address.
      *
      * @param billingAddress formated address.
      */
-    public void setBillingAddress(String billingAddress);
+    void setBillingAddress(String billingAddress);
 
 
     /**
@@ -197,14 +197,14 @@ public interface CustomerOrderDTO extends Identifiable {
      *
      * @return customer email.
      */
-    public String getEmail();
+    String getEmail();
 
     /**
      * Set customer email
      *
      * @param email email
      */
-    public void setEmail(String email);
+    void setEmail(String email);
 
     /**
      * Get first name.

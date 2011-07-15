@@ -13,6 +13,8 @@ import java.text.MessageFormat;
  */
 public class Pair<FIRST, SECOND> implements Serializable {
 
+    private static final long serialVersionUID = 20100711L;
+
     private final FIRST first;
     private final SECOND second;
 
@@ -33,14 +35,22 @@ public class Pair<FIRST, SECOND> implements Serializable {
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
 
-        Pair pair = (Pair) o;
+        final Pair pair = (Pair) obj;
 
-        if (!first.equals(pair.first)) return false;
-        if (!second.equals(pair.second)) return false;
+        if (!first.equals(pair.first)) {
+            return false;
+        }
+        if (!second.equals(pair.second)) {
+            return false;
+        }
 
         return true;
     }

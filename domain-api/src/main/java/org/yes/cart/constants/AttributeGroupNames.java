@@ -13,37 +13,37 @@ public interface AttributeGroupNames {
     /**
      * System.
      */
-    final static String SYSTEM = "SYSTEM";
+    String SYSTEM = "SYSTEM";
 
     /**
      * Shop.
      */
-    final static String SHOP = "SHOP";
+    String SHOP = "SHOP";
 
     /**
      * Category.
      */
-    final static String CATEGORY = "CATEGORY";
+    String CATEGORY = "CATEGORY";
 
     /**
      * Product.
      */
-    final static String PRODUCT = "PRODUCT";
+    String PRODUCT = "PRODUCT";
 
     /**
      * Product sku.
      */
-    final static String SKU = "SKU";
+    String SKU = "SKU";
 
     /**
      * Brand.
      */
-    final static String BRAND = "BRAND";
+    String BRAND = "BRAND";
 
     /**
      * Customer.
      */
-    final static String CUSTOMER = "CUSTOMER";
+    String CUSTOMER = "CUSTOMER";
 
 
 }

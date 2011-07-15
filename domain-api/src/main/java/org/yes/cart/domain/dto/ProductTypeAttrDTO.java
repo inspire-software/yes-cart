@@ -30,14 +30,14 @@ public interface ProductTypeAttrDTO extends Identifiable {
      *
      * @return {@link org.yes.cart.domain.entity.Attribute}
      */
-    public AttributeDTO getAttributeDTO();
+    AttributeDTO getAttributeDTO();
 
     /**
      * Set attribute.
      *
      * @param attribute attribute.
      */
-    public void setAttributeDTO(AttributeDTO attribute);
+    void setAttributeDTO(AttributeDTO attribute);
 
 
     /**

@@ -21,7 +21,7 @@ public class PriceTierNodeImpl implements PriceTierNode {
         return priceRange;
     }
 
-    public void setPriceRange(Pair<BigDecimal, BigDecimal> priceRange) {
+    public void setPriceRange(final Pair<BigDecimal, BigDecimal> priceRange) {
         this.priceRange = priceRange;
     }
 
@@ -29,15 +29,15 @@ public class PriceTierNodeImpl implements PriceTierNode {
         return priceSubRange;
     }
 
-    public void setPriceSubRange(List<PriceTierNode> priceSubRange) {
+    public void setPriceSubRange(final List<PriceTierNode> priceSubRange) {
         this.priceSubRange = priceSubRange;
     }
 
-    public PriceTierNodeImpl(Pair<BigDecimal, BigDecimal> priceRange) {
+    public PriceTierNodeImpl(final Pair<BigDecimal, BigDecimal> priceRange) {
         this.priceRange = priceRange;
     }
 
-    public PriceTierNodeImpl(BigDecimal bottomBorder, BigDecimal topBorder) {
+    public PriceTierNodeImpl(final BigDecimal bottomBorder, final BigDecimal topBorder) {
         this.priceRange = new Pair<BigDecimal, BigDecimal>(bottomBorder, topBorder);
     }
 }

@@ -13,27 +13,27 @@ public interface ProductEnsebleOption extends Auditable {
 
     /**
      */
-    public long getEnsembleOptId();
+    long getEnsembleOptId();
 
-    public void setEnsembleOptId(long ensembleOptId);
-
-    /**
-     */
-    public int getQty();
-
-    public void setQty(int qty);
+    void setEnsembleOptId(long ensembleOptId);
 
     /**
      */
-    public Product getProduct();
+    int getQty();
 
-    public void setProduct(Product product);
+    void setQty(int qty);
 
     /**
      */
-    public ProductSku getSku();
+    Product getProduct();
 
-    public void setSku(ProductSku sku);
+    void setProduct(Product product);
+
+    /**
+     */
+    ProductSku getSku();
+
+    void setSku(ProductSku sku);
 
 }
 

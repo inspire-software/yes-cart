@@ -76,7 +76,7 @@ public interface SkuPrice extends Auditable {
      *
      * @return regular price.
      */
-    public BigDecimal getRegularPrice();
+    BigDecimal getRegularPrice();
 
     /**
      * Set regular price.

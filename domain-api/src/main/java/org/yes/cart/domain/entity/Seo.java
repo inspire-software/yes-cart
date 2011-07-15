@@ -15,70 +15,70 @@ public interface Seo extends Auditable {
      *
      * @return seo pk value.
      */
-    public long getSeoId();
+    long getSeoId();
 
     /**
      * Set seo pk value.
      *
      * @param seoId pk value.
      */
-    public void setSeoId(long seoId);
+    void setSeoId(long seoId);
 
     /**
      * Get uri
      *
      * @return uri
      */
-    public String getUri();
+    String getUri();
 
     /**
      * Set uri.
      *
      * @param uri uri.
      */
-    public void setUri(String uri);
+    void setUri(String uri);
 
     /**
      * Get title.
      *
      * @return title.
      */
-    public String getTitle();
+    String getTitle();
 
     /**
      * Set title.
      *
      * @param title title
      */
-    public void setTitle(String title);
+    void setTitle(String title);
 
     /**
      * Get meta keywords.
      *
      * @return meta keywords
      */
-    public String getMetakeywords();
+    String getMetakeywords();
 
     /**
      * Set meta keywords
      *
      * @param metakeywords meta keywords
      */
-    public void setMetakeywords(String metakeywords);
+    void setMetakeywords(String metakeywords);
 
     /**
      * Get meta description.
      *
      * @return meta description
      */
-    public String getMetadescription();
+    String getMetadescription();
 
     /**
      * Set meta description.
      *
      * @param metadescription meta description.
      */
-    public void setMetadescription(String metadescription);
+    void setMetadescription(String metadescription);
 
 }
 

@@ -16,56 +16,56 @@ public interface ProductCategory extends Auditable {
      *
      * @return pk
      */
-    public long getProductCategoryId();
+    long getProductCategoryId();
 
     /**
      * set pk.
      *
      * @param productCategoryId pk
      */
-    public void setProductCategoryId(long productCategoryId);
+    void setProductCategoryId(long productCategoryId);
 
     /**
      * Get product.
      *
      * @return {@link Product}
      */
-    public Product getProduct();
+    Product getProduct();
 
     /**
      * Set {@link Product}
      *
      * @param product {@link Product}
      */
-    public void setProduct(Product product);
+    void setProduct(Product product);
 
     /**
      * Get {@link Category}
      *
      * @return {@link Category}
      */
-    public Category getCategory();
+    Category getCategory();
 
     /**
      * Set {@link Category}
      *
      * @param category {@link Category}
      */
-    public void setCategory(Category category);
+    void setCategory(Category category);
 
     /**
      * Get the order of product in category.
      *
      * @return order of product in category.
      */
-    public int getRank();
+    int getRank();
 
     /**
      * Set order of product in category.
      *
      * @param rank order of product in category.
      */
-    public void setRank(int rank);
+    void setRank(int rank);
 
 }
 

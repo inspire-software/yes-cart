@@ -46,7 +46,7 @@ public interface ManagementService {
      * @throws org.yes.cart.exception.UnableToCreateInstanceException
      *          in case if some problems with reflection
      */
-    public List<ManagerDTO> getManagers(final String emailFilter,
+    List<ManagerDTO> getManagers(final String emailFilter,
                                         final String firstNameFilter,
                                         final String lastNameFilter)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
@@ -61,7 +61,7 @@ public interface ManagementService {
      * @throws org.yes.cart.exception.UnableToCreateInstanceException
      *          in case if some problems with reflection
      */
-    public List<RoleDTO> getAssignedManagerRoles(String userId)
+    List<RoleDTO> getAssignedManagerRoles(String userId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
@@ -74,7 +74,7 @@ public interface ManagementService {
      * @throws org.yes.cart.exception.UnableToCreateInstanceException
      *          in case if some problems with reflection
      */
-    public List<RoleDTO> getAvailableManagerRoles(String userId)
+    List<RoleDTO> getAvailableManagerRoles(String userId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 

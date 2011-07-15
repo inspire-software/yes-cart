@@ -10,27 +10,27 @@ public interface ShopDiscountRule extends Auditable {
 
     /**
      */
-    public long getShopDiscountRuleId();
+    long getShopDiscountRuleId();
 
-    public void setShopDiscountRuleId(long shopDiscountRuleId);
-
-    /**
-     */
-    public String getRule();
-
-    public void setRule(String rule);
+    void setShopDiscountRuleId(long shopDiscountRuleId);
 
     /**
      */
-    public String getName();
+    String getRule();
 
-    public void setName(String name);
+    void setRule(String rule);
 
     /**
      */
-    public String getDescription();
+    String getName();
 
-    public void setDescription(String description);
+    void setName(String name);
+
+    /**
+     */
+    String getDescription();
+
+    void setDescription(String description);
 
 }
 

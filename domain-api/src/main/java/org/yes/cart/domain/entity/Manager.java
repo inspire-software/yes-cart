@@ -15,14 +15,14 @@ public interface Manager extends RegisteredPerson, Auditable {
      *
      * @return customer email.
      */
-    public String getEmail();
+    String getEmail();
 
     /**
      * Set customer email
      *
      * @param email email
      */
-    public void setEmail(String email);
+    void setEmail(String email);
 
     /**
      * Get first name.

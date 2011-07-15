@@ -16,39 +16,39 @@ public interface CustomerOrder extends Auditable {
     /**
      * Order in pending state.
      */
-    public static String ORDER_STATUS_NONE = "none";
+    String ORDER_STATUS_NONE = "none";
 
     /**
      * Order in pending state.
      */
-    public static String ORDER_STATUS_PENDING = "pending";
+    String ORDER_STATUS_PENDING = "pending";
 
     /**
      * Waiting for approvment, because of offline payment system is selected for payment.
      * It can be bank of currier payment.
      */
-    public static String ORDER_STATUS_WAITING = "waiting";
+    String ORDER_STATUS_WAITING = "waiting";
 
     /**
      * Order in progress. In this state need to look at order shipment state.
      * Quantity reserved on warehouse.
      */
-    public static String ORDER_STATUS_IN_PROGRESS = "inprogress";
+    String ORDER_STATUS_IN_PROGRESS = "inprogress";
 
     /**
      * Order canceled. Quantity returned from revervation.
      */
-    public static String ORDER_STATUS_CANCELLED = "cancelled";
+    String ORDER_STATUS_CANCELLED = "cancelled";
 
     /**
      * Order can have this state in case of shipment split. So at leas one shipment is incomplete.
      */
-    public static String ORDER_STATUS_PARTIALLY_SHIPPED = "partially.shipped";
+    String ORDER_STATUS_PARTIALLY_SHIPPED = "partially.shipped";
 
     /**
      * Order completed.
      */
-    public static String ORDER_STATUS_COMPLETED = "completed";
+    String ORDER_STATUS_COMPLETED = "completed";
 
     /**
      * Get order pk value.
@@ -101,14 +101,14 @@ public interface CustomerOrder extends Auditable {
      *
      * @return formated delivery address.
      */
-    public String getBillingAddress();
+    String getBillingAddress();
 
     /**
      * Set formated address.
      *
      * @param billingAddress formated address.
      */
-    public void setBillingAddress(String billingAddress);
+    void setBillingAddress(String billingAddress);
 
 
     /**

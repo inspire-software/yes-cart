@@ -18,14 +18,14 @@ public interface Customer extends RegisteredPerson, Auditable {
      *
      * @return customer email.
      */
-    public String getEmail();
+    String getEmail();
 
     /**
      * Set customer email
      *
      * @param email email
      */
-    public void setEmail(String email);
+    void setEmail(String email);
 
     /**
      * Get first name.
@@ -90,14 +90,14 @@ public interface Customer extends RegisteredPerson, Auditable {
      *
      * @return pk value.
      */
-    public long getCustomerId();
+    long getCustomerId();
 
     /**
      * Set pk value.
      *
      * @param customerId pk value to set
      */
-    public void setCustomerId(long customerId);
+    void setCustomerId(long customerId);
 
 
     /**
@@ -105,14 +105,14 @@ public interface Customer extends RegisteredPerson, Auditable {
      *
      * @return customer orders.
      */
-    public Collection<CustomerOrder> getOrders();
+    Collection<CustomerOrder> getOrders();
 
     /**
      * Set customer orders.
      *
      * @param orders orders to set
      */
-    public void setOrders(Collection<CustomerOrder> orders);
+    void setOrders(Collection<CustomerOrder> orders);
 
 
     /**
@@ -120,14 +120,14 @@ public interface Customer extends RegisteredPerson, Auditable {
      *
      * @return wish list.
      */
-    public Collection<CustomerWishList> getWishList();
+    Collection<CustomerWishList> getWishList();
 
     /**
      * Set wish list
      *
      * @param wishList wish list.
      */
-    public void setWishList(Collection<CustomerWishList> wishList);
+    void setWishList(Collection<CustomerWishList> wishList);
 
     /**
      * Get all customer attributes.

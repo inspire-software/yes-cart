@@ -11,41 +11,41 @@ package org.yes.cart.domain.entity;
  */
 public interface CustomerWishList extends Auditable {
 
-    public static final String SIMPLE_WISH_ITEM = "W";
+    String SIMPLE_WISH_ITEM = "W";
 
-    public static final String REMIND_WHEN_WILL_BE_AVAILABLE = "A";
+    String REMIND_WHEN_WILL_BE_AVAILABLE = "A";
 
-    public static final String REMIND_WHEN_PRICE_CHANGED = "P";
+    String REMIND_WHEN_PRICE_CHANGED = "P";
 
-    public static final String REMIND_WHEN_WILL_BE_IN_PROMO = "R";
+    String REMIND_WHEN_WILL_BE_IN_PROMO = "R";
 
     /**
      * Primary key value.
      *
      * @return key value.
      */
-    public long getCustomerwishlistId();
+    long getCustomerwishlistId();
 
     /**
      * Set key value
      *
      * @param customerwishlistId value to set.
      */
-    public void setCustomerwishlistId(long customerwishlistId);
+    void setCustomerwishlistId(long customerwishlistId);
 
     /**
      * Product sku
      *
      * @return {@link ProductSku}
      */
-    public ProductSku getSkus();
+    ProductSku getSkus();
 
     /**
      * Set {@link ProductSku}
      *
      * @param skus Product Sku
      */
-    public void setSkus(ProductSku skus);
+    void setSkus(ProductSku skus);
 
     /**
      * Get customer

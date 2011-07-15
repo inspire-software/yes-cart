@@ -11,6 +11,8 @@ import java.io.Serializable;
  */
 public class FiteredNavigationRecordImpl implements FiteredNavigationRecord, Serializable {
 
+    private static final long serialVersionUID = 20100711L;
+
     private String name;
 
     private String code;

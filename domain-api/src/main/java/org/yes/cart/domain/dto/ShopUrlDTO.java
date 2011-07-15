@@ -14,24 +14,24 @@ public interface ShopUrlDTO extends Identifiable {
     /**
      * @return primary key value.
      */
-    public long getStoreUrlId();
+    long getStoreUrlId();
 
-    public void setStoreUrlId(long storeUrlId);
+    void setStoreUrlId(long storeUrlId);
 
     /**
      * @return {@link org.yes.cart.domain.entity.Shop}
      */
-    public long getShopId();
+    long getShopId();
 
-    public void setShopId(long shopId);
+    void setShopId(long shopId);
 
 
     /**
      * @return shop url.
      */
-    public String getUrl();
+    String getUrl();
 
-    public void setUrl(String url);
+    void setUrl(String url);
 
 
 }

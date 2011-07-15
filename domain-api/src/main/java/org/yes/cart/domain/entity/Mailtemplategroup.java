@@ -12,21 +12,21 @@ public interface Mailtemplategroup extends Auditable {
 
     /**
      */
-    public long getMailtemplategroupId();
+    long getMailtemplategroupId();
 
-    public void setMailtemplategroupId(long mailtemplategroupId);
-
-    /**
-     */
-    public String getName();
-
-    public void setName(String name);
+    void setMailtemplategroupId(long mailtemplategroupId);
 
     /**
      */
-    public String getDescription();
+    String getName();
 
-    public void setDescription(String description);
+    void setName(String name);
+
+    /**
+     */
+    String getDescription();
+
+    void setDescription(String description);
 
 }
 

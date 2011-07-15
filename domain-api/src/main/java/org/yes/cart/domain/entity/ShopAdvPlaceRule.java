@@ -15,51 +15,51 @@ public interface ShopAdvPlaceRule extends Auditable {
 
     /**
      */
-    public long getShopadvrulesId();
+    long getShopadvrulesId();
 
-    public void setShopadvrulesId(long shopadvrulesId);
-
-    /**
-     */
-    public int getRank();
-
-    public void setRank(int rank);
+    void setShopadvrulesId(long shopadvrulesId);
 
     /**
      */
-    public String getName();
+    int getRank();
 
-    public void setName(String name);
-
-    /**
-     */
-    public String getDescription();
-
-    public void setDescription(String description);
+    void setRank(int rank);
 
     /**
      */
-    public Date getAvailablefrom();
+    String getName();
 
-    public void setAvailablefrom(Date availablefrom);
-
-    /**
-     */
-    public Date getAvailabletill();
-
-    public void setAvailabletill(Date availabletill);
+    void setName(String name);
 
     /**
      */
-    public String getRule();
+    String getDescription();
 
-    public void setRule(String rule);
+    void setDescription(String description);
 
     /**
      */
-    public ShopAdvPlace getShopAdvPlace();
+    Date getAvailablefrom();
 
-    public void setShopAdvPlace(ShopAdvPlace shopAdvPlace);
+    void setAvailablefrom(Date availablefrom);
+
+    /**
+     */
+    Date getAvailabletill();
+
+    void setAvailabletill(Date availabletill);
+
+    /**
+     */
+    String getRule();
+
+    void setRule(String rule);
+
+    /**
+     */
+    ShopAdvPlace getShopAdvPlace();
+
+    void setShopAdvPlace(ShopAdvPlace shopAdvPlace);
 
 }
 

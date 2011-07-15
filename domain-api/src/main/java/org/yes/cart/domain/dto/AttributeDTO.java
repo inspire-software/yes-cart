@@ -30,14 +30,14 @@ public interface AttributeDTO extends Identifiable {
      *
      * @return pk cvalue
      */
-    public long getAttributeId();
+    long getAttributeId();
 
     /**
      * Set pk value.
      *
      * @param attributeId pk value.
      */
-    public void setAttributeId(long attributeId);
+    void setAttributeId(long attributeId);
 
 
     /**
@@ -45,98 +45,98 @@ public interface AttributeDTO extends Identifiable {
      *
      * @return attribute code.
      */
-    public String getCode();
+    String getCode();
 
     /**
      * Set attribute code
      *
      * @param code code value
      */
-    public void setCode(String code);
+    void setCode(String code);
 
     /**
      * Mandatory flag.
      *
      * @return true if value must be set for this attribute.
      */
-    public boolean isMandatory();
+    boolean isMandatory();
 
     /**
      * Set mandatory flag.
      *
      * @param mandatory flag value
      */
-    public void setMandatory(boolean mandatory);
+    void setMandatory(boolean mandatory);
 
     /**
      * Default string representation of attribute value, in case if attribute is mandatory.
      *
      * @return default value.
      */
-    public String getVal();
+    String getVal();
 
     /**
      * Set default value of attribute
      *
      * @param val default value.
      */
-    public void setVal(String val);
+    void setVal(String val);
 
     /**
      * Attribute name.
      *
      * @return attribute name.
      */
-    public String getName();
+    String getName();
 
     /**
      * Get atribute name
      *
      * @param name name
      */
-    public void setName(String name);
+    void setName(String name);
 
     /**
      * Get description.
      *
      * @return description.
      */
-    public String getDescription();
+    String getDescription();
 
     /**
      * Set description
      *
      * @param description description value.
      */
-    public void setDescription(String description);
+    void setDescription(String description);
 
     /**
      * Get the system type.
      *
      * @return Etype primary key.
      */
-    public long getEtypeId();
+    long getEtypeId();
 
     /**
      * Set type.
      *
      * @param EtypeId id.
      */
-    public void setEtypeId(long EtypeId);
+    void setEtypeId(long EtypeId);
 
     /**
      * Get the system type name.
      *
      * @return Etype name.
      */
-    public String getEtypeName();
+    String getEtypeName();
 
     /**
      * Set type.
      *
      * @param etypeName etype name.
      */
-    public void setEtypeName(String etypeName);
+    void setEtypeName(String etypeName);
 
     /**
      * Is attribute duplicates allowed. Attribute can have several values. Example color - black and red.

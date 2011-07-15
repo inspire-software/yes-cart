@@ -4,7 +4,6 @@ import org.apache.lucene.search.Query;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.queryobject.FiteredNavigationRecord;
-import org.yes.cart.exception.ObjectNotFoundException;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -191,7 +190,6 @@ public interface ProductService extends GenericService<Product> {
      *
      * @param skuCode sku code
      * @return product sku for this sku code
-     * @throws ObjectNotFoundException if there is no sku for given skuCode.
      */
     ProductSku getProductSkuByCode(String skuCode);
 

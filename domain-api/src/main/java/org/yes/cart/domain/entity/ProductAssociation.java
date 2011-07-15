@@ -14,70 +14,70 @@ public interface ProductAssociation extends Auditable {
      *
      * @return pk value.
      */
-    public long getProductassociationId();
+    long getProductassociationId();
 
     /**
      * Set pk value.
      *
      * @param productassociationId pk value.
      */
-    public void setProductassociationId(long productassociationId);
+    void setProductassociationId(long productassociationId);
 
     /**
      * Rank.
      *
      * @return rank.
      */
-    public int getRank();
+    int getRank();
 
     /**
      * Set rank of asscosiation.
      *
      * @param rank rank of asscosiation.
      */
-    public void setRank(int rank);
+    void setRank(int rank);
 
     /**
      * Association type.
      *
      * @return association type.
      */
-    public Association getAssociation();
+    Association getAssociation();
 
     /**
      * Set association type.
      *
      * @param association association type.
      */
-    public void setAssociation(Association association);
+    void setAssociation(Association association);
 
     /**
      * Get the main(source) product.
      *
      * @return main product.
      */
-    public Product getProduct();
+    Product getProduct();
 
     /**
      * Set main product.
      *
      * @param product main product.
      */
-    public void setProduct(Product product);
+    void setProduct(Product product);
 
     /**
      * Get accosiated(destiation) product.
      *
      * @return accosiated product.
      */
-    public Product getProductAssociated();
+    Product getProductAssociated();
 
     /**
      * Set accosiated product.
      *
      * @param productAssociated accosiated product.
      */
-    public void setProductAssociated(Product productAssociated);
+    void setProductAssociated(Product productAssociated);
 
 }
 

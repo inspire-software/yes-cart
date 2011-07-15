@@ -14,4 +14,6 @@ import java.util.ArrayList;
  */
 public class RangeListImpl<E> extends ArrayList implements RangeList, Serializable {
 
+    private static final long serialVersionUID = 20100711L;
+
 }

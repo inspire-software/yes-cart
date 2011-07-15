@@ -13,12 +13,12 @@ public interface Address extends Auditable {
     /**
      * Billing address type
      */
-    public static String ADDR_TYPE_BILLING = "B";
+    String ADDR_TYPE_BILLING = "B";
 
     /**
      * Shipping address type.
      */
-    public static String ADDR_TYPE_SHIPING = "S";
+    String ADDR_TYPE_SHIPING = "S";
 
     /**
      * Get pk value

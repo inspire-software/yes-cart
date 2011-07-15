@@ -44,27 +44,27 @@ public interface CarrierSla extends Auditable {
     /**
      * External procedure delivery cost calcluation
      */
-    public static String EXTERNAL = "E";
+    String EXTERNAL = "E";
 
     /**
      * Free delivery cost calcluation
      */
-    public static String FREE = "R";
+    String FREE = "R";
 
     /**
      * Fixed price, percent
      */
-    public static String FIXED = "F";
+    String FIXED = "F";
 
     /**
      * Per order price, percent
      */
-    public static String PER_ORDER = "O";
+    String PER_ORDER = "O";
 
     /**
      * Per package price, percent
      */
-    public static String PER_PACKAGE = "P";
+    String PER_PACKAGE = "P";
 
     /**
      * Get pk value.

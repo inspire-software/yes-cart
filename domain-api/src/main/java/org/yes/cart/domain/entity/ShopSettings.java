@@ -11,22 +11,22 @@ public interface ShopSettings extends Auditable {
 
     /**
      */
-    public long getShopSettingsId();
+    long getShopSettingsId();
 
-    public void setShopSettingsId(long shopSettingsId);
+    void setShopSettingsId(long shopSettingsId);
 
-
-    /**
-     */
-    public Shop getShop();
-
-    public void setShop(Shop shop);
 
     /**
      */
-    public String getVal();
+    Shop getShop();
 
-    public void setVal(String val);
+    void setShop(Shop shop);
+
+    /**
+     */
+    String getVal();
+
+    void setVal(String val);
 
 }
 
