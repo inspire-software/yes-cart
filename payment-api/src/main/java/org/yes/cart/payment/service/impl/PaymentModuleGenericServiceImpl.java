@@ -76,7 +76,7 @@ public class PaymentModuleGenericServiceImpl<ENTITY> implements PaymentModuleGen
     /**
      * {@inheritDoc}
      */
-    public ENTITY findSingleByCriteria(Criterion... criterion) {
+    public ENTITY findSingleByCriteria(final Criterion... criterion) {
         return genericDao.findSingleByCriteria(criterion);
 
     }

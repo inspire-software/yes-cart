@@ -24,12 +24,7 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
     protected String additionalFeatures;
 
 
-    /**
-     * Default constructor.
-     */
-    public PaymentGatewayFeatureImpl() {
 
-    }
 
     /**
      * Construct PaymentGatewayFeature

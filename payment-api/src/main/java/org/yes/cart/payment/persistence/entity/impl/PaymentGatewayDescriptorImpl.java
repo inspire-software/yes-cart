@@ -10,6 +10,8 @@ import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
  */
 public class PaymentGatewayDescriptorImpl extends DescriptorImpl implements PaymentGatewayDescriptor {
 
+    private static final long serialVersionUID = 20100714L;
+
     private String url;
     private String login;
     private String password;

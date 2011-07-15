@@ -28,13 +28,9 @@ public class AuditInterceptor extends EmptyInterceptor {
 
             final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-            if (auth != null) {
+            if (auth != null && auth.getPrincipal() instanceof User) {
 
-                if (auth.getPrincipal() instanceof User) {
-
-                    return ((User) auth.getPrincipal()).getUsername();
-
-                }
+                return ((User) auth.getPrincipal()).getUsername();
 
             }
 
@@ -43,11 +39,6 @@ public class AuditInterceptor extends EmptyInterceptor {
         return "user unknown";
     }
 
-    private void dumpSecurityContext() {
-
-        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-    }
 
     /**
      * {@inheritDoc}
@@ -55,7 +46,6 @@ public class AuditInterceptor extends EmptyInterceptor {
     @Override
     public boolean onSave(final Object entity, final Serializable serializable,
                           final Object[] objects, final String[] propertyNames, final Type[] types) {
-        dumpSecurityContext();
         if (entity instanceof Auditable) {
             final Auditable auditable = ((Auditable) entity);
 
@@ -87,7 +77,6 @@ public class AuditInterceptor extends EmptyInterceptor {
     @Override
     public boolean onFlushDirty(final Object entity, final Serializable serializable, final Object[] currentState,
                                 final Object[] previousState, final String[] propertyNames, final Type[] types) {
-        dumpSecurityContext();
         if (entity instanceof Auditable) {
             final Auditable auditable = (Auditable) entity;
 
