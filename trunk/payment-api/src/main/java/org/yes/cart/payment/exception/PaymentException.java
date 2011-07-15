@@ -11,14 +11,14 @@ public class PaymentException extends RuntimeException {
     /**
      * {@inheritDoc}
      */
-    public PaymentException(String message) {
+    public PaymentException(final String message) {
         super(message);
     }
 
     /**
      * {@inheritDoc}
      */
-    public PaymentException(String message, Throwable cause) {
+    public PaymentException(final String message, final Throwable cause) {
         super(message, cause);
     }
 }

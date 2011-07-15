@@ -16,6 +16,8 @@ import java.util.Date;
 @Table(name = "TPAYMENTGATEWAYPARAMETER")
 public class PaymentGatewayParameterEntity extends DescriptorImpl implements PaymentGatewayParameter {
 
+    private static final long serialVersionUID = 20100714L;
+
     private long paymentGatewayParameterId;
     private String value;
     protected String pgLabel;
@@ -136,7 +138,7 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
         return this.createdTimestamp;
     }
 
-    public void setCreatedTimestamp(Date createdTimestamp) {
+    public void setCreatedTimestamp(final Date createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -146,7 +148,7 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
         return this.updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(Date updatedTimestamp) {
+    public void setUpdatedTimestamp(final Date updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -155,7 +157,7 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
         return this.createdBy;
     }
 
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -164,7 +166,7 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
         return this.updatedBy;
     }
 
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -173,7 +175,7 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
         return this.guid;
     }
 
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 

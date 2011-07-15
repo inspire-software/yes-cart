@@ -10,6 +10,8 @@ import org.yes.cart.payment.persistence.entity.Descriptor;
  */
 public class DescriptorImpl implements Descriptor {
 
+    private static final long serialVersionUID = 20100714L;
+
     protected String name;
     protected String description;
     protected String label;

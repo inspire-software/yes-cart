@@ -4,8 +4,6 @@ import org.hibernate.Criteria;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
 import org.hibernate.criterion.Criterion;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.yes.cart.payment.persistence.service.PaymentModuleGenericDAO;
 
@@ -24,8 +22,6 @@ import java.util.List;
 public class PaymentModuleGenericDAOImpl<T, PK extends Serializable> extends HibernateDaoSupport
         implements PaymentModuleGenericDAO<T, PK> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PaymentModuleGenericDAOImpl.class);
-
     final private Class<T> persistentClass;
 
     /**
@@ -42,7 +38,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable> extends Hib
     /**
      * {@inheritDoc}
      */
-    public T findById(PK id) {
+    public T findById(final PK id) {
         return findById(id, false);
     }
 
@@ -83,7 +79,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable> extends Hib
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
-    public T saveOrUpdate(T entity) {
+    public T saveOrUpdate(final T entity) {
         getHibernateTemplate().saveOrUpdate(entity);
         return entity;
     }
@@ -93,7 +89,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable> extends Hib
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
-    public T create(T entity) {
+    public T create(final T entity) {
         getHibernateTemplate().saveOrUpdate(entity);
         return entity;
     }
@@ -102,7 +98,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable> extends Hib
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
-    public T update(T entity) {
+    public T update(final T entity) {
         getHibernateTemplate().saveOrUpdate(entity);
         return entity;
     }
@@ -110,7 +106,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable> extends Hib
     /**
      * {@inheritDoc}
      */
-    public void delete(T entity) {
+    public void delete(final T entity) {
         getHibernateTemplate().delete(entity);
     }
 
@@ -147,7 +143,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable> extends Hib
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
-    public List<T> findByCriteria(Criterion... criterion) {
+    public List<T> findByCriteria(final Criterion... criterion) {
         Criteria crit = getSession().createCriteria(getPersistentClass());
         for (Criterion c : criterion) {
             crit.add(c);

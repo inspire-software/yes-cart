@@ -3,6 +3,7 @@ package org.yes.cart.payment.persistence.entity.impl;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -13,7 +14,9 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "TCUSTOMERORDERPAYMENT")
-public class CustomerOrderPaymentEntity implements CustomerOrderPayment, java.io.Serializable {
+public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Serializable {
+
+    private static final long serialVersionUID = 20100714L;
 
     private long customerOrderPaymentId;
     private String cardType;
@@ -41,11 +44,6 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, java.io
     private String updatedBy;
     private String guid;
 
-    /**
-     * Default constructor.
-     */
-    public CustomerOrderPaymentEntity() {
-    }
 
 
     /**
@@ -59,7 +57,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, java.io
     /**
      * {@inheritDoc}
      */
-    public void setCardType(String cardType) {
+    public void setCardType(final String cardType) {
         this.cardType = cardType;
     }
 
@@ -74,7 +72,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, java.io
     /**
      * {@inheritDoc}
      */
-    public void setCardHolderName(String cardHolderName) {
+    public void setCardHolderName(final String cardHolderName) {
         this.cardHolderName = cardHolderName;
     }
 
@@ -90,7 +88,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, java.io
     /**
      * {@inheritDoc}
      */
-    public void setCardExpireYear(String cardExpireYear) {
+    public void setCardExpireYear(final String cardExpireYear) {
         this.cardExpireYear = cardExpireYear;
     }
 
@@ -105,7 +103,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, java.io
     /**
      * {@inheritDoc}
      */
-    public void setCardExpireMonth(String cardExpireMonth) {
+    public void setCardExpireMonth(final String cardExpireMonth) {
         this.cardExpireMonth = cardExpireMonth;
     }
 
@@ -121,7 +119,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, java.io
     /**
      * {@inheritDoc}
      */
-    public void setCardStartDate(Date cardStartDate) {
+    public void setCardStartDate(final Date cardStartDate) {
         this.cardStartDate = cardStartDate;
     }
 
@@ -137,7 +135,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, java.io
     /**
      * {@inheritDoc}
      */
-    public void setOrderDate(Date orderDate) {
+    public void setOrderDate(final Date orderDate) {
         this.orderDate = orderDate;
     }
 
@@ -167,7 +165,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, java.io
     /**
      * {@inheritDoc}
      */
-    public void setOrderCurrency(String orderCurrency) {
+    public void setOrderCurrency(final String orderCurrency) {
         this.orderCurrency = orderCurrency;
     }
 
@@ -182,7 +180,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, java.io
     /**
      * {@inheritDoc}
      */
-    public void setOrderNumber(String orderNumber) {
+    public void setOrderNumber(final String orderNumber) {
         this.orderNumber = orderNumber;
     }
 
@@ -197,7 +195,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, java.io
     /**
      * {@inheritDoc}
      */
-    public void setOrderShipment(String orderShipment) {
+    public void setOrderShipment(final String orderShipment) {
         this.orderShipment = orderShipment;
     }
 
@@ -212,7 +210,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, java.io
     /**
      * {@inheritDoc}
      */
-    public void setTransactionReferenceId(String transactionReferenceId) {
+    public void setTransactionReferenceId(final String transactionReferenceId) {
         this.transactionReferenceId = transactionReferenceId;
     }
 
@@ -227,7 +225,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, java.io
     /**
      * {@inheritDoc}
      */
-    public void setTransactionRequestToken(String transactionRequestToken) {
+    public void setTransactionRequestToken(final String transactionRequestToken) {
         this.transactionRequestToken = transactionRequestToken;
     }
 
@@ -242,7 +240,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, java.io
     /**
      * {@inheritDoc}
      */
-    public void setTransactionAuthorizationCode(String transactionAuthorizationCode) {
+    public void setTransactionAuthorizationCode(final String transactionAuthorizationCode) {
         this.transactionAuthorizationCode = transactionAuthorizationCode;
     }
 
@@ -257,7 +255,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, java.io
     /**
      * {@inheritDoc}
      */
-    public void setTransactionGatewayLabel(String transactionGatewayLabel) {
+    public void setTransactionGatewayLabel(final String transactionGatewayLabel) {
         this.transactionGatewayLabel = transactionGatewayLabel;
     }
 
@@ -272,7 +270,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, java.io
     /**
      * {@inheritDoc}
      */
-    public void setTransactionOperation(String transactionOperation) {
+    public void setTransactionOperation(final String transactionOperation) {
         this.transactionOperation = transactionOperation;
     }
 
@@ -285,7 +283,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, java.io
     /**
      * {@inheritDoc}
      */
-    public void setTransactionOperationResultCode(String transactionOperationResultCode) {
+    public void setTransactionOperationResultCode(final String transactionOperationResultCode) {
         this.transactionOperationResultCode = transactionOperationResultCode;
     }
 
@@ -301,7 +299,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, java.io
     /**
      * {@inheritDoc}
      */
-    public void setTransactionOperationResultMessage(String transactionOperationResultMessage) {
+    public void setTransactionOperationResultMessage(final String transactionOperationResultMessage) {
         this.transactionOperationResultMessage = transactionOperationResultMessage;
     }
 
@@ -317,7 +315,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, java.io
     /**
      * {@inheritDoc}
      */
-    public void setPaymentProcessorResult(String paymentProcessorResult) {
+    public void setPaymentProcessorResult(final String paymentProcessorResult) {
         this.paymentProcessorResult = paymentProcessorResult;
     }
 
@@ -332,7 +330,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, java.io
     /**
      * {@inheritDoc}
      */
-    public void setPaymentProcessorBatchSettlement(boolean paymentProcessorBatchSettlement) {
+    public void setPaymentProcessorBatchSettlement(final boolean paymentProcessorBatchSettlement) {
         this.paymentProcessorBatchSettlement = paymentProcessorBatchSettlement;
     }
 
@@ -348,7 +346,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, java.io
     /**
      * {@inheritDoc}
      */
-    public void setCreatedTimestamp(Date createdTimestamp) {
+    public void setCreatedTimestamp(final Date createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -364,7 +362,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, java.io
     /**
      * {@inheritDoc}
      */
-    public void setUpdatedTimestamp(Date updatedTimestamp) {
+    public void setUpdatedTimestamp(final Date updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -379,7 +377,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, java.io
     /**
      * {@inheritDoc}
      */
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -394,7 +392,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, java.io
     /**
      * {@inheritDoc}
      */
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -409,7 +407,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, java.io
     /**
      * {@inheritDoc}
      */
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -427,7 +425,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, java.io
     /**
      * {@inheritDoc}
      */
-    public void setCustomerOrderPaymentId(long customerOrderPaymentId) {
+    public void setCustomerOrderPaymentId(final long customerOrderPaymentId) {
         this.customerOrderPaymentId = customerOrderPaymentId;
     }
 

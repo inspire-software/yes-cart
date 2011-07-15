@@ -1,11 +1,13 @@
 package org.yes.cart.payment.persistence.entity;
 
+import java.io.Serializable;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
  * Time: 10:22:53
  */
-public interface Descriptor {
+public interface Descriptor extends Serializable {
 
     /**
      * Get name.

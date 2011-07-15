@@ -76,7 +76,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
-    public void setPaymentAmount(BigDecimal paymentAmount) {
+    public void setPaymentAmount(final BigDecimal paymentAmount) {
         this.paymentAmount = paymentAmount;
     }
 
@@ -104,7 +104,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
-    public void setBillingEmail(String billingEmail) {
+    public void setBillingEmail(final String billingEmail) {
         this.billingEmail = billingEmail;
     }
 
@@ -344,7 +344,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
-    public void setTransactionOperation(String transactionOperation) {
+    public void setTransactionOperation(final String transactionOperation) {
         this.transactionOperation = transactionOperation;
     }
 
@@ -358,7 +358,7 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
-    public void setTransactionOperationResultCode(String transactionOperationResultCode) {
+    public void setTransactionOperationResultCode(final String transactionOperationResultCode) {
         this.transactionOperationResultCode = transactionOperationResultCode;
     }
 
@@ -366,7 +366,7 @@ public class PaymentImpl implements Payment {
         return transactionOperationResultMessage;
     }
 
-    public void setTransactionOperationResultMessage(String transactionOperationResultMessage) {
+    public void setTransactionOperationResultMessage(final String transactionOperationResultMessage) {
         this.transactionOperationResultMessage = transactionOperationResultMessage;
     }
 
@@ -374,7 +374,7 @@ public class PaymentImpl implements Payment {
         return transactionGatewayLabel;
     }
 
-    public void setTransactionGatewayLabel(String transactionGatewayLabel) {
+    public void setTransactionGatewayLabel(final String transactionGatewayLabel) {
         this.transactionGatewayLabel = transactionGatewayLabel;
     }
 

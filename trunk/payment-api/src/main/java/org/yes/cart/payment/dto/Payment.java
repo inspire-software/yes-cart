@@ -16,15 +16,15 @@ public interface Payment extends Serializable {
     /**
      * Failed status of whole order payment.
      */
-    public String PAYMENT_STATUS_FAILED = "Failed";
+    String PAYMENT_STATUS_FAILED = "Failed";
     /**
      * Payment in process.
      */
-    public String PAYMENT_STATUS_PROCESSING = "Processing";
+    String PAYMENT_STATUS_PROCESSING = "Processing";
     /**
      * Payment ok.
      */
-    public String PAYMENT_STATUS_OK = "Ok";
+    String PAYMENT_STATUS_OK = "Ok";
 
 
     /**
@@ -63,126 +63,126 @@ public interface Payment extends Serializable {
      *
      * @return cart type.
      */
-    public String getCardType();
+    String getCardType();
 
     /**
      * Set cart type.
      *
      * @param cardType cart type.
      */
-    public void setCardType(final String cardType);
+    void setCardType(final String cardType);
 
     /**
      * Get card holder name.
      *
      * @return card holder name.
      */
-    public String getCardHolderName();
+    String getCardHolderName();
 
     /**
      * Set card holder name.
      *
      * @param cardHolderName card holder name.
      */
-    public void setCardHolderName(final String cardHolderName);
+    void setCardHolderName(final String cardHolderName);
 
     /**
      * Get card number.
      *
      * @return card number.
      */
-    public String getCardNumber();
+    String getCardNumber();
 
     /**
      * Set card number.
      *
      * @param cardNumber card number.
      */
-    public void setCardNumber(final String cardNumber);
+    void setCardNumber(final String cardNumber);
 
     /**
      * Get year of expiration.
      *
      * @return year of expiration
      */
-    public String getCardExpireYear();
+    String getCardExpireYear();
 
     /**
      * Set  year of expiration
      *
      * @param cardExpireYear year of expiration
      */
-    public void setCardExpireYear(final String cardExpireYear);
+    void setCardExpireYear(final String cardExpireYear);
 
     /**
      * Get month of expiration.
      *
      * @return month of expiration.
      */
-    public String getCardExpireMonth();
+    String getCardExpireMonth();
 
     /**
      * Set month of expiration.
      *
      * @param cardExpireMonth month of expiration.
      */
-    public void setCardExpireMonth(final String cardExpireMonth);
+    void setCardExpireMonth(final String cardExpireMonth);
 
     /**
      * Get issue card number.
      *
      * @return issue card number.
      */
-    public String getCardIsuueNumber();
+    String getCardIsuueNumber();
 
     /**
      * Set  issue card number.
      *
      * @param cardIsuueNumber issue card number.
      */
-    public void setCardIsuueNumber(final String cardIsuueNumber);
+    void setCardIsuueNumber(final String cardIsuueNumber);
 
     /**
      * Get cvv2 card number.
      *
      * @return cvv2 card number.
      */
-    public String getCardCvv2Code();
+    String getCardCvv2Code();
 
     /**
      * Set cvv2 card number.
      *
      * @param cardCvv2Code cvv2 card number.
      */
-    public void setCardCvv2Code(final String cardCvv2Code);
+    void setCardCvv2Code(final String cardCvv2Code);
 
     /**
      * Get card start date.
      *
      * @return card start date.
      */
-    public Date getCardStartDate();
+    Date getCardStartDate();
 
     /**
      * Set  card start date.
      *
      * @param cardStartDate card start date.
      */
-    public void setCardStartDate(final Date cardStartDate);
+    void setCardStartDate(final Date cardStartDate);
 
     /**
      * Get order date.
      *
      * @return order date.
      */
-    public Date getOrderDate();
+    Date getOrderDate();
 
     /**
      * Set  order date.
      *
      * @param orderDate order date.
      */
-    public void setOrderDate(final Date orderDate);
+    void setOrderDate(final Date orderDate);
 
 
     /**
@@ -190,14 +190,14 @@ public interface Payment extends Serializable {
      *
      * @return currency.
      */
-    public String getOrderCurrency();
+    String getOrderCurrency();
 
     /**
      * Set currency.
      *
      * @param orderCurrency currency.
      */
-    public void setOrderCurrency(final String orderCurrency);
+    void setOrderCurrency(final String orderCurrency);
 
     /**
      * Get items in current shipment to pay. One of the line will hold delivery record to pay in case
@@ -205,42 +205,42 @@ public interface Payment extends Serializable {
      *
      * @return order  items.
      */
-    public List<PaymentLine> getOrderItems();
+    List<PaymentLine> getOrderItems();
 
     /**
      * Set  items.
      *
      * @param orderItems order  items.
      */
-    public void setOrderItems(final List<PaymentLine> orderItems);
+    void setOrderItems(final List<PaymentLine> orderItems);
 
     /**
      * Original order number.
      *
      * @return order number.
      */
-    public String getOrderNumber();
+    String getOrderNumber();
 
     /**
      * Set  order number.
      *
      * @param orderNumber order number.
      */
-    public void setOrderNumber(final String orderNumber);
+    void setOrderNumber(final String orderNumber);
 
     /**
      * Get order shipment num.
      *
      * @return order shipment.
      */
-    public String getOrderShipment();
+    String getOrderShipment();
 
     /**
      * Set order shipment number.
      *
      * @param orderShipment order shipment.
      */
-    public void setOrderShipment(final String orderShipment);
+    void setOrderShipment(final String orderShipment);
 
 
     /**

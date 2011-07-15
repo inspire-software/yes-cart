@@ -42,7 +42,7 @@ public class PaymentGatewayParameterServiceImpl
     /**
      * {@inheritDoc}
      */
-    public Collection<PaymentGatewayParameter> findAll(String label) {
+    public Collection<PaymentGatewayParameter> findAll(final String label) {
         return getGenericDao().findByCriteria(Restrictions.eq("pgLabel", label));
     }
 }

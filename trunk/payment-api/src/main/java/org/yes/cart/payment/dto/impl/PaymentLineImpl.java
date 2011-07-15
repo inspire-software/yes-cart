@@ -20,11 +20,6 @@ public class PaymentLineImpl implements PaymentLine {
     private BigDecimal taxAmount;
 
 
-    /**
-     * Default constructor.
-     */
-    public PaymentLineImpl() {
-    }
 
     /**
      * Construct payment line.
