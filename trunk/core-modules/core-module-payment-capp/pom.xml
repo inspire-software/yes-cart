@@ -6,11 +6,11 @@
     <parent>
         <artifactId>yes-cart</artifactId>
         <groupId>org.yes</groupId>
-        <version>1.0</version>
+        <version>${yes-cart.version}</version>
     </parent>
     <groupId>org.yes</groupId>
     <artifactId>core-module-payment-capp</artifactId>
-    <version>1.x-SNAPSHOT</version>
+    <version>${yes-cart.version}</version>
     <name>Yes cart payment gateways: Cybersource, authorize, paypall, payflow</name>
 
 
@@ -22,14 +22,14 @@
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>payment-api</artifactId>
-            <version>1.x-SNAPSHOT</version>
+            <version>${yes-cart.version}</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
                     <groupId>org.yes</groupId>
                     <artifactId>persistence</artifactId>
-                    <version>1.x-SNAPSHOT</version>
+                    <version>${yes-cart.version}</version>
                     <scope>compile</scope>
         </dependency>
 

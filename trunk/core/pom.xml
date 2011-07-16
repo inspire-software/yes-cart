@@ -3,14 +3,14 @@
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>yes-cart</artifactId>
-        <version>1.0</version>
+        <version>${yes-cart.version}</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.yes</groupId>
     <artifactId>core</artifactId>
     <packaging>jar</packaging>
-    <version>1.x-SNAPSHOT</version>
+    <version>${yes-cart.version}</version>
     <name>Yes cart core</name>
     <url>http://maven.apache.org</url>
 
@@ -21,27 +21,27 @@
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>payment-api</artifactId>
-            <version>1.x-SNAPSHOT</version>
+            <version>${yes-cart.version}</version>
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>core-module-payment-base</artifactId>
-            <version>1.x-SNAPSHOT</version>
+            <version>${yes-cart.version}</version>
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>core-module-payment-capp</artifactId>
-            <version>1.x-SNAPSHOT</version>
+            <version>${yes-cart.version}</version>
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>domain-api</artifactId>
-            <version>1.x-SNAPSHOT</version>
+            <version>${yes-cart.version}</version>
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>persistence</artifactId>
-            <version>1.x-SNAPSHOT</version>
+            <version>${yes-cart.version}</version>
             <scope>compile</scope>
         </dependency>
 
@@ -208,6 +208,25 @@
             <groupId>dp.lib</groupId>
             <artifactId>dp.lib-dto.GeDA</artifactId>
             <version>${dp.lib-dto.GeDA.version}</version>
+            <exclusions>
+                <exclusion>
+                   <groupId>javassist</groupId>
+                   <artifactId>javassist</artifactId>
+                </exclusion>
+                <exclusion>
+                   <groupId>org.apache.bcel</groupId>
+                   <artifactId>bcel</artifactId>
+                </exclusion>
+                <exclusion>
+                   <groupId>org.slf4j</groupId>
+                   <artifactId>slf4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                   <groupId>org.slf4j</groupId>
+                   <artifactId>slf4j-jcl</artifactId>
+                </exclusion>
+            </exclusions>
+            
         </dependency>
 
         <!--dependency>
@@ -374,7 +393,7 @@
     <properties>
         <spring-security.version>3.0.3.RELEASE</spring-security.version>
         <spring.version>3.0.5.RELEASE</spring.version>
-        <dp.lib-dto.GeDA.version>1.0.3</dp.lib-dto.GeDA.version>
+        <dp.lib-dto.GeDA.version>1.1.2</dp.lib-dto.GeDA.version>
     </properties>
 
 

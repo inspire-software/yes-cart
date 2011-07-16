@@ -6,11 +6,11 @@
     <parent>
         <artifactId>yes-cart</artifactId>
         <groupId>org.yes</groupId>
-        <version>1.0</version>
+        <version>${yes-cart.version}</version>
     </parent>
     <groupId>org.yes</groupId>
     <artifactId>yes-manager-server</artifactId>
-    <version>1.x-SNAPSHOT</version>
+    <version>${yes-cart.version}</version>
     <packaging>war</packaging>
     <name>Yes cart manager server</name>
     <description>Yes cart manaer server</description>
@@ -19,35 +19,35 @@
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>core</artifactId>
-            <version>1.x-SNAPSHOT</version>
+            <version>${yes-cart.version}</version>
         </dependency>
 
         <!-- ##################################################### core modules ############################################### -->
         <!--dependency>
             <groupId>org.yes</groupId>
             <artifactId>core-module-bulkimport-csv</artifactId>
-            <version>1.x-SNAPSHOT</version>
+            <version>${yes-cart.version}</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>core-module-bulkimport-null</artifactId>
-            <version>1.x-SNAPSHOT</version>
+            <version>${yes-cart.version}</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>core-module-bulkimportimage</artifactId>
-            <version>1.x-SNAPSHOT</version>
+            <version>${yes-cart.version}</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>core-module-bulkimportimage-null</artifactId>
-            <version>1.x-SNAPSHOT</version>
+            <version>${yes-cart.version}</version>
             <scope>compile</scope>
         </dependency-->
 
@@ -57,7 +57,7 @@
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>domain-api</artifactId>
-            <version>1.x-SNAPSHOT</version>
+            <version>${yes-cart.version}</version>
         </dependency>
 
 

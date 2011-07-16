@@ -99,6 +99,7 @@ public class DtoWarehouseServiceImplTest extends BaseCoreDBTestCase {
             List<WarehouseDTO> dtos = dtoService.findByShopId(20L);
             assertEquals(1, dtos.size());
 
+            dtoService.unassignWarehouse(dto.getWarehouseId(), 20L);
 
         } catch (Exception e) {
             assertTrue(e.getMessage(), false);

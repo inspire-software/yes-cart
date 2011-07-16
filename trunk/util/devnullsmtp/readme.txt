@@ -1,2 +1,2 @@
 Use for test purposes on localhost. 
-Please, dont run test , that use dumbster wher dev nul server is listenin on 25 port
+Please, dont run tests, that use dumbster where dev null server is listenin on 25 port
