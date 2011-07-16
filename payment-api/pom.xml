@@ -6,13 +6,13 @@
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>yes-cart</artifactId>
-        <version>1.0</version>
+        <version>${yes-cart.version}</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.yes</groupId>
     <artifactId>payment-api</artifactId>
-    <version>1.x-SNAPSHOT</version>
+    <version>${yes-cart.version}</version>
     <name>Yes cart payment API</name>
     <url>http://maven.apache.org</url>
 

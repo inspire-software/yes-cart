@@ -7,14 +7,14 @@
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>yes-cart</artifactId>
-        <version>1.0</version>
+        <version>${yes-cart.version}</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.yes</groupId>
     <artifactId>websupport</artifactId>
     <packaging>jar</packaging>
-    <version>1.x-SNAPSHOT</version>
+    <version>${yes-cart.version}</version>
     <name>Yes cart web support tier</name>
     <url>http://maven.apache.org</url>
 
@@ -22,17 +22,17 @@
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>core</artifactId>
-            <version>1.x-SNAPSHOT</version>
+            <version>${yes-cart.version}</version>
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>domain-api</artifactId>
-            <version>1.x-SNAPSHOT</version>
+            <version>${yes-cart.version}</version>
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>persistence</artifactId>
-            <version>1.x-SNAPSHOT</version>
+            <version>${yes-cart.version}</version>
             <scope>compile</scope>
         </dependency>
 
