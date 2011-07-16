@@ -35,11 +35,11 @@
           <arg value="src/main/flex/ShopManagerApplication.properties"/>
         </exec>
 
-        <!-- exec executable="svnwcrev" osfamily="unix">
+        <exec executable="svnwcrev" osfamily="unix">
           <arg value="src/main/resources/ru_RU"/>
           <arg value="src/main/resources/ru_RU/ShopManagerApplication.properties"/>
           <arg value="src/main/flex/ShopManagerApplication.properties"/>
-        </exec -->
+        </exec>
 
         <mxmlc file="src/main/flex/ShopManagerApplication.mxml" keep-generated-actionscript="false">
             <load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
@@ -67,11 +67,11 @@
           <arg value="src/main/resources/en_EN/ShopManagerApplication.properties"/>
           <arg value="src/main/flex/ShopManagerApplication.properties"/>
         </exec>
-        <!-- exec executable="svnwcrev"  osfamily="unix">
+        <exec executable="svnwcrev"  osfamily="unix">
           <arg value="src/main/resources/en_EN"/>
           <arg value="src/main/resources/en_EN/ShopManagerApplication.properties"/>
           <arg value="src/main/flex/ShopManagerApplication.properties"/>
-        </exec -->
+        </exec>
 
         <mxmlc file="${basedir}/src/main/flex/ShopManagerApplication.mxml" keep-generated-actionscript="false">
             <load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
