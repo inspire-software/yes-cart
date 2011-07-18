@@ -1,79 +1,80 @@
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>yes-cart</artifactId>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>manager</artifactId>
+        <groupId>org.yes</groupId>
+        <version>${yes-cart.version}</version>
+    </parent>
     <groupId>org.yes</groupId>
+    <artifactId>yes-manager-client</artifactId>
     <version>${yes-cart.version}</version>
-  </parent>
-  <groupId>org.yes</groupId>
-  <artifactId>yes-manager-client</artifactId>
-  <version>${yes-cart.version}</version>
-  <!--packaging>swf</packaging-->
-  <name>Yes cart manager client</name>
-  <description>Flex application to manage yes cart</description>  
-  <!-- Version 1.0 corresponds to Flash Player 9.x, 2.0 to Flash Player 10.x ATM ant used to build application-->
+    <!--packaging>swf</packaging-->
+    <name>Yes cart manager client</name>
+    <description>Flex application to manage yes cart</description>
+    <!-- Version 1.0 corresponds to Flash Player 9.x, 2.0 to Flash Player 10.x ATM ant used to build application-->
 
-  <!--dependencies> 
-        <dependency> 
-        <groupId>com.adobe.flash.core</groupId> 
-        <artifactId>playerglobal</artifactId> 
-        <version>2.0</version> 
-        <scope>provided</scope> 
-        <type>swc</type> 
-    </dependency> 
-    <dependency> 
-        <groupId>com.adobe.flex.sdkcore</groupId> 
-        <artifactId>framework</artifactId> 
-        <version>3.2.0.3958</version> 
-        <type>swc</type> 
-    </dependency> 
-    <dependency> 
-        <groupId>com.adobe.flex.sdkcore</groupId> 
-        <artifactId>flex</artifactId> 
-        <version>3.2.0.3958</version> 
-        <type>swc</type> 
-    </dependency>  
-    <dependency> 
-        <groupId>com.adobe.flex.sdkcore</groupId> 
-        <artifactId>rpc</artifactId> 
-        <version>3.2.0.3958</version> 
-        <type>swc</type> 
-    </dependency> 
-    <dependency> 
-        <groupId>com.adobe.flex.sdkcore</groupId> 
-        <artifactId>utilities</artifactId> 
-        <version>3.2.0.3958</version> 
-        <type>swc</type> 
-    </dependency>
-    <dependency>
-        <groupId>com.adobe.flex.locales.en_US</groupId> 
-        <artifactId>framework_rb</artifactId> 
-        <version>3.2.0.3958</version> 
-        <type>swc</type> 
-    </dependency> 
-    <dependency>
-        <groupId>com.adobe.flex.locales.en_US</groupId> 
-        <artifactId>rpc_rb</artifactId> 
-        <version>3.2.0.3958</version> 
-        <type>swc</type> 
-    </dependency>
-   </dependencies-->
+    <!--dependencies>
+         <dependency>
+         <groupId>com.adobe.flash.core</groupId>
+         <artifactId>playerglobal</artifactId>
+         <version>2.0</version>
+         <scope>provided</scope>
+         <type>swc</type>
+     </dependency>
+     <dependency>
+         <groupId>com.adobe.flex.sdkcore</groupId>
+         <artifactId>framework</artifactId>
+         <version>3.2.0.3958</version>
+         <type>swc</type>
+     </dependency>
+     <dependency>
+         <groupId>com.adobe.flex.sdkcore</groupId>
+         <artifactId>flex</artifactId>
+         <version>3.2.0.3958</version>
+         <type>swc</type>
+     </dependency>
+     <dependency>
+         <groupId>com.adobe.flex.sdkcore</groupId>
+         <artifactId>rpc</artifactId>
+         <version>3.2.0.3958</version>
+         <type>swc</type>
+     </dependency>
+     <dependency>
+         <groupId>com.adobe.flex.sdkcore</groupId>
+         <artifactId>utilities</artifactId>
+         <version>3.2.0.3958</version>
+         <type>swc</type>
+     </dependency>
+     <dependency>
+         <groupId>com.adobe.flex.locales.en_US</groupId>
+         <artifactId>framework_rb</artifactId>
+         <version>3.2.0.3958</version>
+         <type>swc</type>
+     </dependency>
+     <dependency>
+         <groupId>com.adobe.flex.locales.en_US</groupId>
+         <artifactId>rpc_rb</artifactId>
+         <version>3.2.0.3958</version>
+         <type>swc</type>
+     </dependency>
+    </dependencies-->
 
     <pluginRepositories>
         <pluginRepository>
             <id>servebox</id>
             <name>ServeBox Plugin Repository</name>
             <url>http://maven.servebox.org/repository</url>
-        </pluginRepository>     
+        </pluginRepository>
     </pluginRepositories>
     <repositories>
         <repository>
             <id>servebox</id>
             <name>ServeBox Plugin Repository</name>
             <url>http://maven.servebox.org/repository</url>
-        </repository>   
+        </repository>
     </repositories>
 
     <build>
