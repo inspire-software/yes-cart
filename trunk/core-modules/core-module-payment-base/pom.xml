@@ -4,16 +4,15 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>yes-cart</artifactId>
+        <artifactId>core-modules</artifactId>
         <groupId>org.yes</groupId>
         <version>${yes-cart.version}</version>
     </parent>
     <groupId>org.yes</groupId>
     <artifactId>core-module-payment-base</artifactId>
     <version>${yes-cart.version}</version>
-    <name>Base payment modules provider</name>
+    <name>Yes cart base payment modules provider</name>
     <!--name>Include: null, delayed payment (?), carrier, bank, paypall express, gift sertiicate</name-->
-
     <url>http://maven.apache.org</url>
 
     <dependencies>
@@ -27,12 +26,12 @@
         </dependency>
 
         <dependency>
-                    <groupId>org.yes</groupId>
-                    <artifactId>persistence</artifactId>
-                    <version>${yes-cart.version}</version>
-                    <scope>compile</scope>
+            <groupId>org.yes</groupId>
+            <artifactId>persistence</artifactId>
+            <version>${yes-cart.version}</version>
+            <scope>compile</scope>
         </dependency>
-                                                                
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -128,11 +127,5 @@
             </testResource>
         </testResources>
     </build>
-
-
-    <properties>
-        <spring-security.version>3.0.3.RELEASE</spring-security.version>
-        <spring.version>3.0.5.RELEASE</spring.version>
-    </properties>
 
 </project>
