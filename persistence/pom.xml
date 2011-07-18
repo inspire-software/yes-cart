@@ -201,12 +201,6 @@
 
     </dependencies>
 
-    <properties>
-        <spring.version>3.0.5.RELEASE</spring.version>
-        <spring-security.version>3.0.3.RELEASE</spring-security.version>
-    </properties>
-
-
     <build>
         <pluginManagement>
             <plugins>
