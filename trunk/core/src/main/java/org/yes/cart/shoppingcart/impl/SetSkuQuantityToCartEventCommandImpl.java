@@ -23,7 +23,7 @@ public class SetSkuQuantityToCartEventCommandImpl  extends AbstractSkuCartComman
 
     private static final Logger LOG = LoggerFactory.getLogger(SetSkuQuantityToCartEventCommandImpl.class);
 
-    public static String CMD_KEY = "addQuantityToCartCmd";
+    public static String CMD_KEY = "setQuantityToCartCmd";
 
     public static String CMD_PARAM_QTY = "qty";
 

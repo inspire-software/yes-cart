@@ -262,6 +262,16 @@
     <TCATEGORY CATEGORY_ID="211"   PARENT_ID="100"        RANK="81" NAME="Featured products" DESCRIPTION="featured products category"  UITEMPLATE="christmas"/>
     <TCATEGORY CATEGORY_ID="212"   PARENT_ID="100"        RANK="82" NAME="Availability test category" DESCRIPTION="Availability test category"  UITEMPLATE="christmas"/>
 
+    <TCATEGORY CATEGORY_ID="300"   PARENT_ID="100"        RANK="0" NAME="Get parent chain test" DESCRIPTION=""  UITEMPLATE=""/>
+    <TCATEGORY CATEGORY_ID="301"   PARENT_ID="300"        RANK="0" NAME="Get parent chain test" DESCRIPTION=""  UITEMPLATE=""/>
+    <TCATEGORY CATEGORY_ID="302"   PARENT_ID="301"        RANK="0" NAME="Get parent chain test" DESCRIPTION=""  UITEMPLATE=""/>
+    <TCATEGORY CATEGORY_ID="303"   PARENT_ID="302"        RANK="0" NAME="Get parent chain test" DESCRIPTION=""  UITEMPLATE=""/>
+    <TCATEGORY CATEGORY_ID="304"   PARENT_ID="303"        RANK="0" NAME="Get parent chain test" DESCRIPTION=""  UITEMPLATE=""/>
+    <TCATEGORY CATEGORY_ID="310"   PARENT_ID="300"        RANK="0" NAME="Get parent chain test" DESCRIPTION=""  UITEMPLATE=""/>
+    <TCATEGORY CATEGORY_ID="311"   PARENT_ID="310"        RANK="0" NAME="Get parent chain test" DESCRIPTION=""  UITEMPLATE=""/>
+    <TCATEGORY CATEGORY_ID="312"   PARENT_ID="311"        RANK="0" NAME="Get parent chain test" DESCRIPTION=""  UITEMPLATE=""/>
+
+
 
 
     <!-- category to shop passignment -->

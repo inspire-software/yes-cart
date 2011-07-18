@@ -180,4 +180,14 @@
         <url-pattern>/primefaces_resource/*</url-pattern>
     </servlet-mapping-->
 
+<!-- Datasource Configuration -->
+	<resource-ref>
+		<description>Database connection</description>
+		<res-ref-name>jdbc/yesjndi</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>
+		<res-auth>Container</res-auth>
+	</resource-ref>
+
+
+
 </web-app>

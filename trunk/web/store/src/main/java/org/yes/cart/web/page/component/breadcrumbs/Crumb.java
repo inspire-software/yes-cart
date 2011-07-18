@@ -1,7 +1,8 @@
-package org.yes.cart.web.support.breadcrumbs;
+package org.yes.cart.web.page.component.breadcrumbs;
+
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import java.io.Serializable;
-import java.util.LinkedHashMap;
 
 /**
  * Represents a Breadcrumb navigation object.
@@ -14,34 +15,34 @@ public class Crumb implements Serializable {
 
     private final String name;
 
-    private final LinkedHashMap<java.lang.String, ?> crumbLinkParameters;
+    private final PageParameters crumbLinkParameters;
 
-    private LinkedHashMap<java.lang.String, ?> removeCrumbLinkParameters;
+    private PageParameters removeCrumbLinkParameters;
 
     public String getName() {
         return name;
     }
 
-    public LinkedHashMap<java.lang.String, ?> getCrumbLinkParameters() {
+    public PageParameters getCrumbLinkParameters() {
         return crumbLinkParameters;
     }
 
-    public LinkedHashMap<java.lang.String, ?> getRemoveCrumbLinkParameters() {
+    public PageParameters getRemoveCrumbLinkParameters() {
         return removeCrumbLinkParameters;
     }
 
-    public void setRemoveCrumbLinkParameters(LinkedHashMap<String, ?> removeCrumbLinkParameters) {
+    public void setRemoveCrumbLinkParameters(PageParameters removeCrumbLinkParameters) {
         this.removeCrumbLinkParameters = removeCrumbLinkParameters;
     }
 
-    public Crumb(final String name, final LinkedHashMap<String, ?> crumbLinkParameters) {
+    public Crumb(final String name, final PageParameters crumbLinkParameters) {
         this.name = name;
         this.crumbLinkParameters = crumbLinkParameters;
     }
 
     public Crumb(final String name,
-                 final LinkedHashMap<java.lang.String, ?> crumbLinkParameters,
-                 final LinkedHashMap<java.lang.String, ?> removeCrumbLinkParameters) {
+                 final PageParameters crumbLinkParameters,
+                 final PageParameters removeCrumbLinkParameters) {
         this.name = name;
         this.crumbLinkParameters = crumbLinkParameters;
         this.removeCrumbLinkParameters = removeCrumbLinkParameters;

@@ -1,11 +1,14 @@
-package org.yes.cart.web.support.breadcrumbs;
+package org.yes.cart.web.page.component.breadcrumbs;
 
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.web.support.breadcrumbs.CrumbNamePrefixProvider;
 import org.yes.cart.web.support.constants.WebParametersKeys;
-import org.yes.cart.web.support.util.NavigationUtil;
+import org.yes.cart.web.util.WicketUtil;
 
 import java.util.*;
 
@@ -26,7 +29,7 @@ public class BreadCrumbsBuilder {
     private final CrumbNamePrefixProvider namePrefixProvider;
     private final List<Long> shopCategoryIds;
     private final long categoryId;
-    private final Map pageParameters;
+    private final PageParameters pageParameters;
     private final List<String> allowedAttributeNames;
     private final CategoryService categoryService;
 
@@ -42,7 +45,7 @@ public class BreadCrumbsBuilder {
      */
     public BreadCrumbsBuilder(
             final long categoryId,
-            final Map pageParameters,
+            final PageParameters pageParameters,
             final List<String> allowedAttributeNames,
             final List<Long> shopCategoryIds,
             final CrumbNamePrefixProvider namePrefixProvider,
@@ -94,9 +97,10 @@ public class BreadCrumbsBuilder {
     private void fillCategories(final List<Crumb> categoriesCrumbs, final long categoryId) {
         final Category category = categoryService.getById(categoryId);
         if (categoryId != category.getParentId()) {
-            categoriesCrumbs.add(new Crumb(category.getName(),
-                    getCategoryLinkParameters(categoryId),
-                    getRemoveCategoryLinkParameters(category))
+            categoriesCrumbs.add(
+                    new Crumb(category.getName(),
+                   /* getCategoryLinkParameters(categoryId)*/ null,
+                    /*getRemoveCategoryLinkParameters(category)*/ null)
             );
 
             if (LOG.isDebugEnabled()) {
@@ -124,27 +128,31 @@ public class BreadCrumbsBuilder {
             final List<String> allowedAttributeNames) {
 
         //This is attributive only filtered navigation from request
-        final LinkedHashMap<String, ?> attributesOnly = NavigationUtil.getRetainedRequestParameters(
+        final PageParameters attributesOnly = WicketUtil.getRetainedRequestParameters(
                 pageParameters,
                 allowedAttributeNames);
 
         //Base hold category path from begining and accomulate all attributive navigation
-        final LinkedHashMap<String, ?> base = NavigationUtil.getFilteredRequestParameters(
+        final PageParameters base = WicketUtil.getFilteredRequestParameters(
                 pageParameters,
                 allowedAttributeNames);
 
         //If we are on display product page, we have to remove for filtering
         base.remove(WebParametersKeys.PRODUCT_ID);
 
-        for (Map.Entry<String, ?> entry : attributesOnly.entrySet()) {
-            String key = entry.getKey();
-            if (entry.getValue() instanceof Object[]) {
+        for (PageParameters.NamedPair namedPair : attributesOnly.getAllNamed()) {
+            final List<StringValue> vals =  attributesOnly.getValues(namedPair.getKey());
+            for (StringValue val : vals) {
+                navigationCrumbs.add(createFilteredNavigationCrumb(base, namedPair.getKey(), val.toString()));
+
+            }
+            /*if (entry.getValue() instanceof Object[]) {
                 for (Object obj : (Object[]) entry.getValue()) {
                     navigationCrumbs.add(createFilteredNavigationCrumb(base, key, obj));
                 }
             } else {
                 navigationCrumbs.add(createFilteredNavigationCrumb(base, key, entry.getValue()));
-            }
+            }*/
         }
     }
 
@@ -166,22 +174,22 @@ public class BreadCrumbsBuilder {
      * @return {@link Crumb}
      */
     private Crumb createFilteredNavigationCrumb(
-            final LinkedHashMap base,
+            final PageParameters base,
             final String key,
             final Object value) {
         final String stringValue = String.valueOf(value);
 
-        final LinkedHashMap<String, ?> withoutCurrent = getAllPathWithoutMe(key, value);
+        final PageParameters withoutCurrent = getAllPathWithoutMe(key, value);
 
         final String linkName = namePrefixProvider.getLinkNamePrefix(key)
                 + "::"
                 + namePrefixProvider.getLinkName(key, stringValue);
-        base.put(key, value);
-        return new Crumb(linkName, new LinkedHashMap(base), withoutCurrent);
+        base.add(key, value);
+        return new Crumb(linkName, new PageParameters(base), withoutCurrent);
     }
 
-    private LinkedHashMap<String, ?> getAllPathWithoutMe(final String key, final Object value) {
-        final LinkedHashMap<String, ?> withoutCurrent =
+    private PageParameters getAllPathWithoutMe(final String key, final Object value) {
+        /*final LinkedHashMap<String, ?> withoutCurrent =
                 NavigationUtil.getFilteredRequestParameters(pageParameters);
 
         //withoutCurrent.remove(key); this can not be used, because of multiple parameters for one key
@@ -199,7 +207,9 @@ public class BreadCrumbsBuilder {
                 break;
             }
         }
-        return withoutCurrent;
+        return withoutCurrent; */
+
+        return null; //todo migrate to 1.5
     }
 
 }

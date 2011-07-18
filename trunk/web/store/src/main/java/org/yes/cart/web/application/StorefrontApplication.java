@@ -2,15 +2,18 @@ package org.yes.cart.web.application;
 
 import org.apache.wicket.IRequestCycleProvider;
 import org.apache.wicket.Page;
+import org.apache.wicket.Session;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.cycle.RequestCycleContext;
+import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.file.IResourceFinder;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.yes.cart.web.page.HomePage;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -59,6 +62,8 @@ public class StorefrontApplication extends WebApplication implements IResourceFi
         getMarkupSettings().setStripWicketTags(true); // true remove wicket:tags in development mode
         getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
 
+        getComponentInstantiationListeners().add(new SpringComponentInjector(this));
+
 
     }
 
@@ -76,6 +81,7 @@ public class StorefrontApplication extends WebApplication implements IResourceFi
         resolver.set(getMultiWebApplicationPath());
         return new RequestCycle(context);
     }
+
 
     /**
      * Get exising or create new {@link MultiWebApplicationPath} for new request

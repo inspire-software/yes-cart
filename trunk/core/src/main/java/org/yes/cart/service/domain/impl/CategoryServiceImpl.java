@@ -27,9 +27,10 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
 
     /**
      * Construct service to manage categories
-     * @param categoryDao category dao to use
+     *
+     * @param categoryDao     category dao to use
      * @param shopCategoryDao shop category dao to use
-     * @param shopDao shop dao
+     * @param shopDao         shop dao
      */
     public CategoryServiceImpl(
             final GenericDAO<Category, Long> categoryDao,
@@ -56,7 +57,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      * {@inheritDoc}
      */
     public List<Category> getAllByShopId(final long shopId) {
-        return categoryDao.findByNamedQuery("ALL.TOPCATEGORIES.BY.SHOPID", shopId);        
+        return categoryDao.findByNamedQuery("ALL.TOPCATEGORIES.BY.SHOPID", shopId);
     }
 
 
@@ -87,7 +88,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      * {@inheritDoc}
      */
     public Category getRootCategory() {
-        return categoryDao.findSingleByNamedQuery("ROOTCATEORY");        
+        return categoryDao.findSingleByNamedQuery("ROOTCATEORY");
     }
 
     /**
@@ -108,40 +109,31 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         return variation;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Cacheable(value = "categoryServiceImplMethodCache")
-    public List<String> getItemsPerPage(final long categoryId) {
-        return getItemsPerPage(
-                categoryDao.findById(categoryId)
-        );
-    }
-
 
     /**
      * {@inheritDoc}
      */
     @Cacheable(value = "categoryServiceImplMethodCache")
     public List<String> getItemsPerPage(final Category category) {
-        String attributeName = AttributeNamesKeys.CATEGORY_ITEMS_PER_PAGE;
-        final String val = getCategoryAttributeRecursive(category, attributeName);
+        final String val = getCategoryAttributeRecursive(category, AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
         if (val == null) {
-            return  Constants.DEFAULT_ITEMS_ON_PAGE;
+            return Constants.DEFAULT_ITEMS_ON_PAGE;
         } else {
-            return  Arrays.asList(val.split(","));
+            return Arrays.asList(val.split(","));
         }
     }
 
     /**
      * Get the value of given attribute. If value not present in given category
      * failover to parent category will be used.
-     * @param category given category
+     *
+     * @param category      given category
      * @param attributeName attribute name
-     * @param defaultValue default value will be returned if value not found in hierarcht
+     * @param defaultValue  default value will be returned if value not found in hierarcht
      * @return value of given attibute name or defaultValue if value not found in category hierarchy
      */
-    public String getCategoryAttributeRecursive(final Category category,  final String attributeName, final String defaultValue) {
+    @Cacheable(value = "categoryServiceImplMethodCache")
+    public String getCategoryAttributeRecursive(final Category category, final String attributeName, final String defaultValue) {
         final String value = getCategoryAttributeRecursive(category, attributeName);
         if (value == null) {
             return defaultValue;
@@ -151,12 +143,12 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
 
     /**
      * Get the value of given attribute. If value not present in given category failover to parent category will be used.
-     * @param category given category
+     *
+     * @param category      given category
      * @param attributeName attribute name
      * @return value of given attibute name or null if value not found in category hierarchy
      */
-    @Cacheable(value = "categoryServiceImplMethodCache")
-    public String getCategoryAttributeRecursive(final Category category, final String attributeName) {
+    private String getCategoryAttributeRecursive(final Category category, final String attributeName) {
         if (category.getAttributeByCode(attributeName) == null
                 ||
                 StringUtils.isBlank(category.getAttributeByCode(attributeName).getVal())) {
@@ -245,7 +237,40 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         return result;
     }
 
-    /** {@inheritDoc} Just to cache*/
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isCategoryHasSubcategory(final long topCategoryId, final long subCategoryId) {
+        final Category start = getById(subCategoryId);
+        if (start != null) {
+            if (subCategoryId == topCategoryId) {
+                return true;
+            } else {
+                final List<Category> list = new ArrayList<Category>();
+                list.add(start);
+                addParent(list, topCategoryId);
+                return list.get(list.size() - 1).getCategoryId() == topCategoryId;
+            }
+        }
+        return false;
+    }
+
+    private void addParent(final List<Category> categoryChain, final long categoryIdStopAt) {
+        final Category cat = categoryChain.get(categoryChain.size() - 1);
+        if (cat.getParentId() != cat.getCategoryId()) {
+            final Category parent = getById(cat.getParentId());
+            if (parent != null) {
+                categoryChain.add(parent);
+                if (parent.getCategoryId() != categoryIdStopAt) {
+                    addParent(categoryChain, categoryIdStopAt);
+                }
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc} Just to cache
+     */
     @Cacheable(value = "categoryServiceImplMethodCache")
     public Category getById(final long pk) {
         return getGenericDao().findById(pk);
@@ -279,9 +304,9 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      */
     public List<Category> getByProductId(long productId) {
         return categoryDao.findByNamedQuery(
-                    "CATEGORIES.BY.PRODUCTID",
-                    productId
-            );
+                "CATEGORIES.BY.PRODUCTID",
+                productId
+        );
     }
 
 }

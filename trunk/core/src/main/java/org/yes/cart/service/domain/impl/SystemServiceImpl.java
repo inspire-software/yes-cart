@@ -34,7 +34,7 @@ public class SystemServiceImpl implements SystemService {
      * {@inheritDoc}
      */
     public String getDefaultShopURL() {
-        return DomainApiUtil.getAttirbuteValue(AttributeNamesKeys.SYSTEM_DEFAULT_SHOP,
+        return DomainApiUtil.getAttirbuteValue(AttributeNamesKeys.System.SYSTEM_DEFAULT_SHOP,
                 getSystem().getAttribute());
     }
 
@@ -51,7 +51,7 @@ public class SystemServiceImpl implements SystemService {
      * {@inheritDoc}
      */
     public String getDefaultResourceDirectory() {
-        return DomainApiUtil.getAttirbuteValue(AttributeNamesKeys.SYSTEM_DEFAULT_FSPOINTER,
+        return DomainApiUtil.getAttirbuteValue(AttributeNamesKeys.System.SYSTEM_DEFAULT_FSPOINTER,
                 getSystem().getAttribute());
     }
 
@@ -60,7 +60,7 @@ public class SystemServiceImpl implements SystemService {
      */
     public String getImageRepositoryDirectory() {
         return addTailFileSeparator(
-                DomainApiUtil.getAttirbuteValue(AttributeNamesKeys.SYSTEM_IMAGE_VAULT,
+                DomainApiUtil.getAttirbuteValue(AttributeNamesKeys.System.SYSTEM_IMAGE_VAULT,
                         getSystem().getAttribute()));
     }
 
@@ -68,7 +68,7 @@ public class SystemServiceImpl implements SystemService {
      * {@inheritDoc}
      */
     public String getImportDescritorsDirectory() {
-        return addTailFileSeparator(DomainApiUtil.getAttirbuteValue(AttributeNamesKeys.SYSTEM_IMPORT_DESCRIPTORS,
+        return addTailFileSeparator(DomainApiUtil.getAttirbuteValue(AttributeNamesKeys.System.SYSTEM_IMPORT_DESCRIPTORS,
                 getSystem().getAttribute()));
     }
 
@@ -76,7 +76,7 @@ public class SystemServiceImpl implements SystemService {
      * {@inheritDoc}
      */
     public String getImportArchiveDirectory() {
-        return addTailFileSeparator(DomainApiUtil.getAttirbuteValue(AttributeNamesKeys.SYSTEM_IMPORT_ARCHIVE,
+        return addTailFileSeparator(DomainApiUtil.getAttirbuteValue(AttributeNamesKeys.System.SYSTEM_IMPORT_ARCHIVE,
                 getSystem().getAttribute()));
     }
 
@@ -84,7 +84,7 @@ public class SystemServiceImpl implements SystemService {
      * {@inheritDoc}
      */
     public String getImportDirectory() {
-        return addTailFileSeparator(DomainApiUtil.getAttirbuteValue(AttributeNamesKeys.SYSTEM_IMPORT,
+        return addTailFileSeparator(DomainApiUtil.getAttirbuteValue(AttributeNamesKeys.System.SYSTEM_IMPORT,
                 getSystem().getAttribute()));
     }
 
@@ -95,7 +95,7 @@ public class SystemServiceImpl implements SystemService {
      */
     public Integer getEtagExpirationForImages() {
         final String expirationTimeout = DomainApiUtil.getAttirbuteValue(
-                AttributeNamesKeys.SYSTEM_ETAG_CACHE_IMAGES_TIME,
+                AttributeNamesKeys.System.SYSTEM_ETAG_CACHE_IMAGES_TIME,
                 getSystem().getAttribute());
         if (expirationTimeout != null) {
             return Integer.valueOf(expirationTimeout);
@@ -108,7 +108,7 @@ public class SystemServiceImpl implements SystemService {
      */
     public Integer getEtagExpirationForPages() {
         final String expirationTimeout = DomainApiUtil.getAttirbuteValue(
-                AttributeNamesKeys.SYSTEM_ETAG_CACHE_PAGES_TIME,
+                AttributeNamesKeys.System.SYSTEM_ETAG_CACHE_PAGES_TIME,
                 getSystem().getAttribute());
         if (expirationTimeout != null) {
             return Integer.valueOf(expirationTimeout);
