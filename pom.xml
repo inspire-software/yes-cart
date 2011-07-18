@@ -3,7 +3,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <properties>
+        <yes-cart.jdk.target>1.5</yes-cart.jdk.target>
         <yes-cart.version>1.0.0-SNAPSHOT</yes-cart.version>
+        <spring-security.version>3.0.3.RELEASE</spring-security.version>
         <spring.version>3.0.5.RELEASE</spring.version>
     </properties>
 
@@ -20,12 +22,24 @@
             <id>maven2-repository.dev.java.net</id>
             <name>Java.net Repository for Maven</name>
             <url>http://download.java.net/maven/2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
         <repository>
             <id>prime-repo</id>
             <name>Prime Technology Maven Repository</name>
             <url>http://repository.prime.com.tr</url>
             <layout>default</layout>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
     </repositories>
     <pluginRepositories>
@@ -33,16 +47,14 @@
 
 
     <modules>
+        <module>build-tools</module>
         <module>payment-api</module>
         <module>domain-api</module>
         <module>persistence</module>
-        <module>core-modules/core-module-payment-base</module>
-        <module>core-modules/core-module-payment-capp</module>
+        <module>core-modules</module>
         <module>core</module>
-        <module>manager/server</module>
-        <module>manager/client</module>
-        <module>web/support</module>
-        <module>web/store</module>
+        <module>manager</module>
+        <module>web</module>
     </modules>
 
     <build>
@@ -50,8 +62,8 @@
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <source>${yes-cart.jdk.target}</source>
+                    <target>${yes-cart.jdk.target}</target>
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
@@ -59,22 +71,22 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <dependencies>
-                    <!-- dependency>
+                    <dependency>
                         <groupId>org.yes</groupId>
                         <artifactId>build-tools</artifactId>
                         <version>${yes-cart.version}</version>
-                    </dependency -->
+                    </dependency>
                 </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
                 <dependencies>
-                    <!-- dependency>
+                    <dependency>
                         <groupId>org.yes</groupId>
                         <artifactId>build-tools</artifactId>
                         <version>${yes-cart.version}</version>
-                    </dependency -->
+                    </dependency>
                 </dependencies>
             </plugin>
         </plugins>
