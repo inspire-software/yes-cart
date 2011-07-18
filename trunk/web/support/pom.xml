@@ -6,7 +6,7 @@
 
     <parent>
         <groupId>org.yes</groupId>
-        <artifactId>yes-cart</artifactId>
+        <artifactId>web</artifactId>
         <version>${yes-cart.version}</version>
     </parent>
 
