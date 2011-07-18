@@ -73,8 +73,10 @@ Copy geda\dp folder into maven repository
 mvn install
 
 == Database ==
-At this moment MySQL used as main database for development. 
+At this moment MySQL used as main database for development.
+{{{ 
 CREATE DATABASE `yes` CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `yes`;
 SOURCE create-tables.sql
 SOURCE initdata.sql
+}}}
