@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
         <groupId>org.yes</groupId>
-        <artifactId>yes-cart</artifactId>
+        <artifactId>web</artifactId>
         <version>${yes-cart.version}</version>
     </parent>
 
@@ -21,33 +21,15 @@
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>${yes-cart.jdk.target}</source>
+                    <target>${yes-cart.jdk.target}</target>
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
         </plugins>
     </build>
 
-
-    <repositories>
-        <!--repository>
-            <id>maven2-repository.dev.java.net</id>
-            <name>Java.net Repository for Maven</name>
-            <url>http://download.java.net/maven/2</url>
-        </repository>
-
-        <repository>
-            <id>prime-repo</id>
-            <name>Prime Technology Maven Repository</name>
-            <url>http://repository.prime.com.tr</url>
-            <layout>default</layout>
-        </repository-->
-
-    </repositories>
-
     <dependencies>
-
 
         <dependency>
             <groupId>org.yes</groupId>
@@ -93,29 +75,29 @@
             <scope>provided</scope>
         </dependency>
 
-    <dependency>
-      <groupId>org.apache.wicket</groupId>
-      <artifactId>wicket-core</artifactId>
-      <version>${wicket.version}</version>
-    </dependency>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-core</artifactId>
+            <version>${wicket.version}</version>
+        </dependency>
 
-    <dependency>
-      <groupId>org.apache.wicket</groupId>
-      <artifactId>wicket-spring</artifactId>
-      <version>${wicket.version}</version>
-    </dependency>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-spring</artifactId>
+            <version>${wicket.version}</version>
+        </dependency>
 
-      <dependency>
-          <groupId>org.apache.wicket</groupId>
-          <artifactId>wicket-extensions</artifactId>
-          <version>${wicket.version}</version>
-      </dependency>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-extensions</artifactId>
+            <version>${wicket.version}</version>
+        </dependency>
 
-    <dependency>
-      <groupId>org.codehaus.groovy</groupId>
-      <artifactId>groovy-all</artifactId>
-      <version>1.7.4</version>
-    </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>1.7.4</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
@@ -176,9 +158,6 @@
     <properties>
         <wicket.version>1.5-RC5.1</wicket.version>
         <jetty.version>6.1.4</jetty.version>
-        <spring.version>3.0.5.RELEASE</spring.version>
-        <mysql-connector.version>5.1.13</mysql-connector.version>
-        <spring-security.version>3.0.3.RELEASE</spring-security.version>
         <mysql-connector.version>5.1.13</mysql-connector.version>
     </properties>
 
