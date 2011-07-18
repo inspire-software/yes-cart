@@ -1,7 +1,31 @@
 package org.yes.cart.web.page;
 
+import org.apache.commons.lang.math.NumberUtils;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.yes.cart.constants.ServiceSpringKeys;
+import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.query.LuceneQueryFactory;
+import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.web.application.ApplicationDirector;
+import org.yes.cart.web.page.component.*;
+import org.yes.cart.web.support.constants.CentralViewLabel;
+import org.yes.cart.web.support.constants.WebParametersKeys;
+import org.yes.cart.web.support.constants.WebServiceSpringKey;
+import org.yes.cart.web.support.service.CentralViewResolver;
+import org.yes.cart.web.support.util.HttpUtil;
+import org.yes.cart.web.util.WicketUtil;
+
+import java.lang.reflect.Constructor;
+import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -10,12 +34,135 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
  */
 public class HomePage extends AbstractWebPage {
 
+
+    final Map<String, Object> mapParams;
+
+
+    @SpringBean(name = WebServiceSpringKey.CENTRAL_VIEW_RESOLVER)
+    private CentralViewResolver centralViewResolver;
+
+    @SpringBean(name = ServiceSpringKeys.LUCENE_QUERY_FACTORY)
+    private LuceneQueryFactory luceneQueryFactory;
+
+    @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
+    private CategoryService categoryService;
+
+    @SpringBean(name = ServiceSpringKeys.SHOP_SERVICE)
+    private ShopService shopService;
+
     /**
      * Construct home page.
-     * @param params  page parameters
+     *
+     * @param params page parameters
      */
     public HomePage(final PageParameters params) {
+
         super(params);
-        add(new Label("version", getApplication().getFrameworkSettings().getVersion()));
+
+        mapParams = WicketUtil.pageParametesAsMap(params);
+
     }
+
+    /** {@inheritDoc} */
+    @Override
+    protected void onBeforeRender() {
+
+        final String centralViewLabel = centralViewResolver.resolveMainPanelRendererLabel(mapParams);
+
+        final Shop shop =  ApplicationDirector.getCurrentShop();
+
+        final long categoryId = NumberUtils.toLong(HttpUtil.getSingleValue(mapParams.get(WebParametersKeys.CATEGORY_ID)));
+
+        final List<BooleanQuery> queriesChain = luceneQueryFactory.getFilteredNavigationQueryChain(
+                shop.getShopId(),
+                getCategories(categoryId),
+                mapParams,
+                categoryService.transform(shopService.getShopCategories(shop))
+        );
+
+        final BooleanQuery query = centralViewResolver.getBooleanQuery(
+                queriesChain,
+                null,
+                categoryId,
+                centralViewLabel,
+                null
+        );
+
+
+
+        add(new Label("version",centralViewLabel));
+        add(new Currency("currency"));
+        add(new Language("language"));
+        add(new TopCategories("topCategories"));
+
+        add(getCentralPanel(centralViewLabel, "centralView", categoryId, query));
+
+
+
+        super.onBeforeRender();
+
+
+    }
+
+
+    /**
+     * Get category sub tree as list, that starts from given category id.
+     *
+     * @param categoryId root of tree.
+     * @return list of categories, that belong to sub tree.
+     */
+    private List<Long> getCategories(final Long categoryId) {
+        if (categoryId > 0) {
+            return categoryService.transform(
+                    categoryService.getChildCategoriesRecursive(categoryId));
+        } else {
+            return Arrays.asList(0L);
+        }
+    }
+
+    /**
+     * Registered main panel renderers
+     */
+    private static final Map<String, Class<? extends AbstractCentralView>> rendererPanelMap =
+            new HashMap<String, Class<? extends AbstractCentralView>>() {{
+                put(CentralViewLabel.SUBCATEGORIES_LIST, SubCategoriesCentralView.class);
+                put(CentralViewLabel.PRODUCTS_LIST, ProductCentralView.class);
+                put(CentralViewLabel.PRODUCT, null);
+                put(CentralViewLabel.SKU, null);
+                put(CentralViewLabel.SEARCH_LIST, ProductCentralView.class);
+                put(CentralViewLabel.DEFAULT, EmptyCentralView.class);
+            }};
+
+    /**
+     * Get the main panel renderer by given renderer label.
+     *
+     * @param rendererLabel renderer label
+     * @param id            component id
+     * @param categoryId    category id
+     * @param booleanQuery  optional lucene query
+     * @return concrete instance of {@link AbstractCentralView} if renderer found, otherwise
+     *         instance of EmptyCentralView
+     */
+    private AbstractCentralView getCentralPanel(
+            final String rendererLabel,
+            final String id,
+            final Long categoryId,
+            final BooleanQuery booleanQuery) {
+
+        Class<? extends AbstractCentralView>  clz = rendererPanelMap.get(rendererLabel);
+        try {
+            Constructor<? extends AbstractCentralView> constructor = clz.getConstructor(String.class,
+                    long.class,
+                    BooleanQuery.class);
+            return constructor.newInstance(id, categoryId, booleanQuery);
+        } catch (Exception e) {
+            /*if (LOG.isErrorEnabled()) {
+                LOG.error(MessageFormat.format("Can not create instance of panel for label {0}", rendererLabel), e);
+            }*/
+            return new EmptyCentralView(id, categoryId, booleanQuery);
+
+        }
+
+    }
+
 }

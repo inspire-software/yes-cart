@@ -1,0 +1,34 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<body>
+<wicket:panel>
+    <table width="100%">
+        <tr>
+            <td align="left">
+                <wicket:container  wicket:id="sorter">
+                    [sorter]
+                </wicket:container>
+            </td>
+            <td align="center">
+                <span wicket:id="paginator">[dataview navigator]</span>
+            </td>
+            <td align="right">
+                <span class="text2">&nbsp;Изделий на странице&nbsp;</span>
+                <span wicket:id="itemsPerPageList">
+                    <a wicket:id="itemsPerPage"><span wicket:id="items"/></a>
+                </span>
+            </td>
+        </tr>
+    </table>
+    <table cellspacing="0"  width="99%" align="right">
+        <tr wicket:id="rows">
+            <td wicket:id="cols" valign="top">
+                <wicket:container  wicket:id="product">
+					 [product in list]
+                </wicket:container>
+            </td>
+        </tr>
+    </table>
+</wicket:panel>
+
+</body>
+</html>

@@ -31,7 +31,7 @@
                />
 
 
-    <Resource name="jdbc/npajndi"
+    <Resource name="jdbc/yesjndi"
               auth="Container"
               scope="Shareable"
               type="javax.sql.DataSource"
@@ -42,14 +42,14 @@
               username="root"
               password=""
               driverClassName="com.mysql.jdbc.Driver"
-              url="jdbc:mysql://localhost/npa?AutoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8"
+              url="jdbc:mysql://localhost/yes?AutoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8"
             />
 
 
     <Realm className="org.apache.catalina.realm.DataSourceRealm" debug="4"
         digest="MD5"
         localDataSource="true"
-        dataSourceName="jdbc/npajndi"
+        dataSourceName="jdbc/yesjndi"
         userTable="TMANAGER"
         userNameCol="email"
         userCredCol="password"

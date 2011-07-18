@@ -5,6 +5,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.shoppingcart.ShoppingCart;
 
 import javax.servlet.ServletContext;
 import java.util.concurrent.ConcurrentMap;
@@ -24,6 +25,7 @@ public class ApplicationDirector {
     private ShopService shopService;
 
     private static ThreadLocal<Shop> shopThreadLocal =  new ThreadLocal<Shop>();
+    private static ThreadLocal<ShoppingCart> shoppingCartThreadLocal =  new ThreadLocal<ShoppingCart>();
 
 
     private final ConcurrentMap<String, Shop> urlShopCache;
@@ -101,4 +103,19 @@ public class ApplicationDirector {
         shopThreadLocal.set(currentShop);
     }
 
+    /**
+     * Get shopping cart from local thread storage.
+     * @return {@link ShoppingCart}
+     */
+    public static ShoppingCart getShoppingCart() {
+        return shoppingCartThreadLocal.get();
+    }
+
+    /**
+     * Set shopping cart to storage.
+     * @param shoppingCart  current cart.
+     */
+    public static void setShoppingCart(final ShoppingCart shoppingCart) {
+        shoppingCartThreadLocal.set(shoppingCart);
+    }
 }

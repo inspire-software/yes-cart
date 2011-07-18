@@ -68,7 +68,9 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
                     LOG.warn(MessageFormat.format("Cart {0} not restored from cookies", shoppingCart.getGuid()));
                 }
             }
-            request.setAttribute(WebParametersKeys.REQUEST_SHOPPING_CART, shoppingCart); //TODO bing to thread local app dir
+            ApplicationDirector.setShoppingCart(shoppingCart);
+            shoppingCart.getCurrentLocale();
+
         }
         return request;
     }

@@ -78,7 +78,7 @@ public interface WebParametersKeys {
     /**
      * Quantity of items per page.
      */
-    String QUANTITY = "showItems";
+    String QUANTITY = "items";
 
 
 

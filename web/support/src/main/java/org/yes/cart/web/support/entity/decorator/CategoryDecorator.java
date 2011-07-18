@@ -15,4 +15,26 @@ public interface CategoryDecorator  extends Category {
      */
     String getCategoryImage();
 
+    /**
+     * Get category image with give width and height.
+     * @param width image width to get correct url
+     * @param height image height to get correct url
+     *
+     * @return category image url, depending from strategy.
+     */
+    String getCategoryImage(String width, String height);
+
+    /**
+     * Get category image width.
+     * @return  image width.
+     */
+    String getCategoryImageWidth();
+
+    /**
+     * Get category image height.
+     * @return     image height.
+     */
+    String getCategoryImageHeight();
+
+
 }

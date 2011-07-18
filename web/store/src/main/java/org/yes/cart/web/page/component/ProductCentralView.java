@@ -1,0 +1,175 @@
+package org.yes.cart.web.page.component;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.data.GridView;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.constants.Constants;
+import org.yes.cart.constants.ServiceSpringKeys;
+import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.query.ProductSearchQueryBuilder;
+import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.web.page.HomePage;
+import org.yes.cart.web.page.component.data.SortableProductDataProvider;
+import org.yes.cart.web.page.component.navigation.ProductPerPageListView;
+import org.yes.cart.web.page.component.navigation.ProductSorter;
+import org.yes.cart.web.page.component.navigation.URLPagingNavigator;
+import org.yes.cart.web.support.constants.WebParametersKeys;
+import org.yes.cart.web.support.entity.decorator.ProductDecorator;
+import org.yes.cart.web.util.WicketUtil;
+
+import java.util.List;
+
+/**
+ * User: Igor Azarny iazarny@yahoo.com
+ * Date: 7/13/11
+ * Time: 10:29 PM
+ */
+public class ProductCentralView extends AbstractCentralView {
+
+    // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
+    /**
+     * Named place for  per page links
+     */
+    private static final String ITEMS_PER_PAGE_LIST = "itemsPerPageList";
+    /**
+     * Name of product view.
+     */
+    private static final String PAGINATOR = "paginator";
+   /**
+     * Name of product view.
+     */
+    private static final String SORTER = "sorter";
+    /**
+     * Name of product view.
+     */
+    private static final String PRODUCT = "product";
+    /**
+     * Name of products list view.
+     */
+    private static final String PRODUCT_LIST = "rows";
+    // ------------------------------------- MARKUP IDs END ---------------------------------- //
+
+
+
+
+    @SpringBean(name = ServiceSpringKeys.PRODUCT_SERVICE)
+    protected ProductService productService;
+
+    /**
+     * Construct panel.
+     *
+     * @param id           panel id
+     * @param categoryId   current category id.
+     * @param booleanQuery boolean query.
+     */
+    public ProductCentralView(String id, long categoryId, BooleanQuery booleanQuery) {
+        super(id, categoryId, booleanQuery);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void onBeforeRender() {
+
+        final List<String> itemsPerPageValues =
+                getCategoryService().getItemsPerPage(getCategory());
+
+        final int selectedItemPerPage = WicketUtil.getSelectedItemsPerPage(
+                getPage().getPageParameters(), itemsPerPageValues);
+
+        final SortableProductDataProvider dataProvider = new
+                SortableProductDataProvider(productService, getBooleanQuery());
+
+        applySortFieldAndOrder(dataProvider);
+
+        final GridView<ProductDecorator> productDataView = new GridView<ProductDecorator>(PRODUCT_LIST, dataProvider) {
+
+            protected void populateItem(Item<ProductDecorator> productItem) {
+                productItem.add(
+                        new Label(PRODUCT, productItem.getModelObject().getName())
+                );
+                // Auto component will look at parent data
+                //Product product = (Product) productItem.getDefaultModel().getObject();
+                //productItem.add(new ProductInListPanel(PRODUCT, product));
+            }
+
+
+            protected void populateEmptyItem(Item<ProductDecorator> productItem) {
+                productItem.add(
+                        new Label(PRODUCT, StringUtils.EMPTY).setVisible(false)
+                );
+
+            }
+
+        };
+
+        final int columns = NumberUtils.toInt(
+                getCategoryService().getCategoryAttributeRecursive(
+                        getCategory(),
+                        AttributeNamesKeys.Category.CATEGORY_PRODUCTS_COLUMNS,
+                        "2")
+        );
+
+        productDataView.setColumns(columns);
+        productDataView.setRows(selectedItemPerPage / columns);
+
+
+        final String curentPage = getPage().getPageParameters().get(WebParametersKeys.PAGE).toString();
+        if (curentPage != null) {
+            int currentPageIdx = NumberUtils.toInt(curentPage);
+            if (currentPageIdx < productDataView.getPageCount()) {
+                productDataView.setCurrentPage(currentPageIdx);
+            } else {
+                productDataView.setCurrentPage(0);
+            }
+        }
+
+        add(new ProductSorter(SORTER));
+        add(new URLPagingNavigator(PAGINATOR, productDataView, getPage().getPageParameters()));
+        add(new ProductPerPageListView(ITEMS_PER_PAGE_LIST, itemsPerPageValues, getPage().getPageParameters()));
+        add(productDataView);
+
+        super.onBeforeRender();
+    }
+
+
+
+
+    private void applySortFieldAndOrder(SortableProductDataProvider dataProvider) {
+        final Pair<String, Boolean> sortResult = getSortField();
+
+        if (sortResult != null) {
+            dataProvider.setSortFieldName(sortResult.getFirst());
+            dataProvider.setReverse(sortResult.getSecond());
+        }
+    }
+
+    /**
+     * Get the sort field and sort direction.
+     *
+     * @return {@link Pair} of sort filed and sort direction (true - asc order)
+     */
+    private Pair<String, Boolean> getSortField() {
+        String sort = getPage().getPageParameters().get(WebParametersKeys.SORT).toString();
+        if (sort != null) {
+            return new Pair<String, Boolean>(sort, false);
+        }
+        sort = getPage().getPageParameters().get(WebParametersKeys.SORT_REVERSE).toString();
+        if (sort != null) {
+            return new Pair<String, Boolean>(sort, true);
+        }
+        return null;
+    }
+
+
+}

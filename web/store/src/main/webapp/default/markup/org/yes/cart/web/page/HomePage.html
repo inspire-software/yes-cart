@@ -4,57 +4,67 @@
       xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.5-strict.dtd">
 
 
-    <head>
-        <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-        <link rel="stylesheet" type="text/css" href="../../../../style/default.css" media="screen"/>
-        <title>Yes shop</title>
-    </head>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="../../../../style/default.css" media="screen"/>
+    <title>Yes shop</title>
+</head>
 
 
+<body>
 
-    <body>
-        <wicket:container wicket:id="version">1.5-SNAPSHOT</wicket:container>
-        <table id="mainTable" border="1" align="center" width="1024">
-            <tr>
-                <td colspan="2">
-                    Search
-                </td>
-                <td rowspan="2">
-                    Cart
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    Currency and Language
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3">
-                    Logo and adv
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3">
-                    Home | Special offer | Sale | New products | FAQ | Contect us | Rss
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3">
-                    Category &gt;&gt; Subcat >> Q1 &gt;&gt; Q2 &gt;&gt; Attr 1 &gt;&gt; Product &gt;&gt; Sku
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Top livel cats
-                    Filter
-                </td>
-                <td>
-                    central panel
-                </td>
-                <td>
-                    New arrivals and promo
-                </td>
-            </tr>
-        </table>
-    </body>
+<table id="mainTable" border="1" align="center" width="1024">
+    <tr>
+        <td colspan="2">
+            Search
+        </td>
+        <td rowspan="2">
+            Cart
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <wicket:container wicket:id="currency">
+                [switch currency]
+            </wicket:container>
+            <wicket:container wicket:id="language">
+                [switch language]
+            </wicket:container>
+            and Language
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3">
+            Logo and adv
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3">
+            Home | Special offer | Sale | New products | FAQ | Contect us | Rss
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3">
+            Category &gt;&gt; Subcat >> Q1 &gt;&gt; Q2 &gt;&gt; Attr 1 &gt;&gt; Product &gt;&gt; Sku
+        </td>
+    </tr>
+    <tr>
+        <td valign="top">
+             <wicket:container wicket:id="topCategories">
+                [switch language]
+            </wicket:container>
+            Filter
+        </td>
+        <td>
+            <wicket:container wicket:id="version">1.5-SNAPSHOT</wicket:container>
+            <wicket:container wicket:id="centralView">
+                [switch language]
+            </wicket:container>
+        </td>
+        <td>
+            New arrivals and promo
+        </td>
+    </tr>
+</table>
+</body>
 </html>

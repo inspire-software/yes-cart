@@ -24,4 +24,20 @@ public interface CategoryImageService {
     String getCategoryImage(Category category,
                             String httpServletContextPath);
 
+    /**
+     *
+     * Get the context image with image servlet url
+     * and specified parameters.
+     *
+     * @param category  given category
+     * @param httpServletContextPath http servlet request path
+     * @param width image width
+     * @param height image height.
+     * @return context image url.
+     */
+    String getCategoryImage(Category category,
+                            String httpServletContextPath,
+                            String width,
+                            String height);
+
 }

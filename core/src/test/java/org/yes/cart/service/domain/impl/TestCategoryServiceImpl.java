@@ -129,14 +129,14 @@ public class TestCategoryServiceImpl extends BaseCoreDBTestCase {
     public void  testGetCategoryAttributeRecursive() {
         CategoryService categoryService = (CategoryService) ctx.getBean(ServiceSpringKeys.CATEGORY_SERVICE);
         GenericDAO<Category, Long> categoryDAO = (GenericDAO<Category, Long>) ctx.getBean(DaoServiceBeanKeys.CATEGORY_DAO);
-        String val = categoryService.getCategoryAttributeRecursive(categoryDAO.findById(105L), "SOME_NOT_EXISTING_ATTR");
+        String val = categoryService.getCategoryAttributeRecursive(categoryDAO.findById(105L), "SOME_NOT_EXISTING_ATTR", null);
         assertNull(val);
 
 
-        val = categoryService.getCategoryAttributeRecursive(categoryDAO.findById(105L), AttributeNamesKeys.CATEGORY_ITEMS_PER_PAGE);
+        val = categoryService.getCategoryAttributeRecursive(categoryDAO.findById(105L), AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
         assertEquals("10,20,50", val);
 
-        val = categoryService.getCategoryAttributeRecursive(categoryDAO.findById(139L), AttributeNamesKeys.CATEGORY_ITEMS_PER_PAGE);
+        val = categoryService.getCategoryAttributeRecursive(categoryDAO.findById(139L), AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
         assertEquals("6,12,24", val);
 
 
@@ -156,7 +156,7 @@ public class TestCategoryServiceImpl extends BaseCoreDBTestCase {
         // Category with seted CATEGORY_ITEMS_PER_PAGE
         Category category = categoryDAO.findById(105L);
         assertNotNull(category);
-        assertNotNull(category.getAttributeByCode(AttributeNamesKeys.CATEGORY_ITEMS_PER_PAGE));
+        assertNotNull(category.getAttributeByCode(AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE));
         List<String> itemsPerPage = categoryService.getItemsPerPage(category);
         assertNotNull(itemsPerPage);
         assertEquals(3, itemsPerPage.size());
@@ -168,7 +168,7 @@ public class TestCategoryServiceImpl extends BaseCoreDBTestCase {
         // Failover part
         category = categoryDAO.findById(139L);
         assertNotNull(category);
-        assertNull(category.getAttributesByCode(AttributeNamesKeys
+        assertNull(category.getAttributesByCode(AttributeNamesKeys.Category
                 .CATEGORY_ITEMS_PER_PAGE));
         itemsPerPage = categoryService.getItemsPerPage(category);
         assertNotNull(itemsPerPage);
@@ -217,6 +217,21 @@ public class TestCategoryServiceImpl extends BaseCoreDBTestCase {
         for (Category category : categories) {
             assertTrue(categoryIds.contains(category.getCategoryId()));
         }
+
+    }
+
+    @Test
+    public void testIsCategoryHasSubcategory() {
+
+        CategoryService categoryService = (CategoryService) ctx.getBean(ServiceSpringKeys.CATEGORY_SERVICE);
+
+        assertTrue(categoryService.isCategoryHasSubcategory(300, 304));
+        assertTrue(categoryService.isCategoryHasSubcategory(301, 304));
+        assertFalse(categoryService.isCategoryHasSubcategory(301, 312));
+        assertFalse(categoryService.isCategoryHasSubcategory(50, 312));      // not existing root
+        assertFalse(categoryService.isCategoryHasSubcategory(50, 98));      // not existing root   and given sub category
+        assertFalse(categoryService.isCategoryHasSubcategory(300, 98));      // existing root   and not existing given sub category
+        assertFalse(categoryService.isCategoryHasSubcategory(304, 300)); //reverse
 
     }
 

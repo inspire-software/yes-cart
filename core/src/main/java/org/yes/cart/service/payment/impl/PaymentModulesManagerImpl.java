@@ -57,7 +57,7 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
     private List<String> getModulesUrl() {
         if (modulesUrl == null) {
             modulesUrl = new ArrayList<String>();
-            String urls = systemService.getAttributeValue(AttributeNamesKeys.SYSTEM_PAYMENT_MODULES_URLS);
+            String urls = systemService.getAttributeValue(AttributeNamesKeys.System.SYSTEM_PAYMENT_MODULES_URLS);
             if (StringUtils.isNotBlank(urls)) {
                 modulesUrl.addAll(
                         Arrays.asList(
@@ -121,7 +121,7 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
             );
         }
         if (!allModules) {
-            final String allowed = systemService.getAttributeValue(AttributeNamesKeys.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS);
+            final String allowed = systemService.getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS);
             if (StringUtils.isNotBlank(allowed)) {
                 //final String [] labels =  allowed.split(",");
                 final List<PaymentGatewayDescriptor> allowedDescr = new ArrayList<PaymentGatewayDescriptor>();

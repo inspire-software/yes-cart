@@ -126,14 +126,6 @@ public interface CategoryService extends GenericService<Category> {
      */
     List<String> getItemsPerPage(Category category);
 
-    /**
-     * Get the value of given attribute. If value not present in given category failover to parent category will be used.
-     *
-     * @param category      given category
-     * @param attributeName attribute name
-     * @return value of given attibute name or null if value not found in category hierarchy
-     */
-    String getCategoryAttributeRecursive(Category category, String attributeName);
 
     /**
      * Get the value of given attribute. If value not present in given category
@@ -146,15 +138,6 @@ public interface CategoryService extends GenericService<Category> {
      */
     String getCategoryAttributeRecursive(Category category, String attributeName, String defaultValue);
 
-    /**
-     * Get the items per page for particular category.
-     * See CATEGORY_ITEMS_PER_PAGE settings
-     * Failover to parent category if value does not exist
-     *
-     * @param categoryId given category id
-     * @return list of items per page settings
-     */
-    List<String> getItemsPerPage(long categoryId);
 
 
     /**
@@ -180,6 +163,15 @@ public interface CategoryService extends GenericService<Category> {
      * @return list of categories, that contains product.
      */
     List<Category> getByProductId(long productId);
+
+
+    /**
+     * Is given sub category belong to tree, that start from <code>topCategory</code>.
+     * @param topCategoryId given root for category tree.
+     * @param subCategoryId candidate to check.
+     * @return true in case if category belong to tree, that start from <code>topCategory</code>
+     */
+    boolean isCategoryHasSubcategory(long topCategoryId, long subCategoryId);
 
 
 }

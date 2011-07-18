@@ -50,7 +50,7 @@ public class BasePaymentGatewayCallBackFilter extends AbstractFilter implements 
     public ServletRequest doBefore(final ServletRequest servletRequest,
                                    final ServletResponse servletResponse) throws IOException, ServletException {
 
-        if (isCalledIpAllowed()) {
+        if (isCallerIpAllowed()) {
 
             HttpUtil.requestDump((HttpServletRequest) servletRequest);
 
@@ -79,7 +79,7 @@ public class BasePaymentGatewayCallBackFilter extends AbstractFilter implements 
         //nothing
     }
 
-    private boolean isCalledIpAllowed() {
+    private boolean isCallerIpAllowed() {
         return true; //TODO v2
     }
 }

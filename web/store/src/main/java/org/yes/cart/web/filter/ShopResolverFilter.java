@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.impl.SetShopCartCommandImpl;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.request.HttpServletRequestWrapper;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.text.MessageFormat;
+import java.util.Collections;
 import java.util.Date;
 
 
@@ -71,9 +73,8 @@ public class ShopResolverFilter extends AbstractFilter implements Filter {
 
         ApplicationDirector.setCurrentShop(shop);
 
-        final ShoppingCart shoppingCart = (ShoppingCart) servletRequest.getAttribute(WebParametersKeys.REQUEST_SHOPPING_CART);
-
-        shoppingCart.getShoppingContext().setShopId(shop.getShopId());
+        new SetShopCartCommandImpl(null, Collections.singletonMap(SetShopCartCommandImpl.CMD_KEY, shop.getShopId()))
+                .execute(ApplicationDirector.getShoppingCart());
 
         return getModifiedRequest(servletRequest, shop);
 

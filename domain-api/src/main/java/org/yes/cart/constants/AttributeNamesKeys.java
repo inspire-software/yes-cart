@@ -9,56 +9,78 @@ package org.yes.cart.constants;
  */
 public interface AttributeNamesKeys {
 
-    /**
-     * Comma separated list of paymenе modules urls.
-     */
-    String SYSTEM_PAYMENT_MODULES_URLS = "SYSTEM_PAYMENT_MODULES_URLS";
 
-    /**
-     * Comma separated list of active payment gateways.
-     */
-    String SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS = "SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS";
+    public interface System {
 
-    /**
-     * Etag expiration timeout for images.
-     */
-    String SYSTEM_ETAG_CACHE_IMAGES_TIME = "SYSTEM_ETAG_CACHE_IMAGES_TIME";
+        /**
+         * Comma separated list of paymenе modules urls.
+         */
+        String SYSTEM_PAYMENT_MODULES_URLS = "SYSTEM_PAYMENT_MODULES_URLS";
+        /**
+         * Comma separated list of active payment gateways.
+         */
+        String SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS = "SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS";
+        /**
+         * Etag expiration timeout for images.
+         */
+        String SYSTEM_ETAG_CACHE_IMAGES_TIME = "SYSTEM_ETAG_CACHE_IMAGES_TIME";
+        /**
+         * Etag expiration timeout for pages.
+         */
+        String SYSTEM_ETAG_CACHE_PAGES_TIME = "SYSTEM_ETAG_CACHE_PAGES_TIME";
+        /**
+         * Default shop to redirect.
+         */
+        String SYSTEM_DEFAULT_SHOP = "SYSTEM_DEFAULT_SHOP";
+        /**
+         * Default (failover) directory for resources.
+         */
+        String SYSTEM_DEFAULT_FSPOINTER = "SYSTEM_DEFAULT_FSPOINTER";
+        /**
+         * Image repository.
+         */
+        String SYSTEM_IMAGE_VAULT = "SYSTEM_IMAGE_VAULT";
+        /**
+         * The absolute path to import descriptors.
+         */
+        String SYSTEM_IMPORT_DESCRIPTORS = "SYSTEM_IMPORT_DESCRIPTORS";
+        /**
+         * The absolute path to archive folder where import files will be moved after import.
+         */
+        String SYSTEM_IMPORT_ARCHIVE = "SYSTEM_IMPORT_ARCHIVE";
+        /**
+         * The absolute path to import folder.
+         */
+        String SYSTEM_IMPORT = "SYSTEM_IMPORT";
+    }
 
-    /**
-     * Etag expiration timeout for pages.
-     */
-    String SYSTEM_ETAG_CACHE_PAGES_TIME = "SYSTEM_ETAG_CACHE_PAGES_TIME";
+
+    public interface Category {
+
+        String CATEGORY_ITEMS_PER_PAGE = "CATEGORY_ITEMS_PER_PAGE";
+
+        String CATEGORY_SUBCATEGORIES_COLUMNS = "CATEGORY_SUBCATEGORIES_COLUMNS";
+
+        /**
+         * Label of category image retreive strategy. Allowed values:
+         * ATTRIBUTE
+         * RANDOM_PRODUCT
+         */
+        String CATEGORY_IMAGE_RETREIVE_STRATEGY = "CATEGORY_IMAGE_RETREIVE_STRATEGY";
+
+        /** Category images width and height.  */
+        String CATEGORY_IMAGE_WIDTH = "CATEGORY_IMAGE_WIDTH";
+        String CATEGORY_IMAGE_HEIGHT = "CATEGORY_IMAGE_HEIGHT";
+
+        /** Product columns in grid */
+        String CATEGORY_PRODUCTS_COLUMNS = "CATEGORY_PRODUCTS_COLUMNS";
 
 
-    /**
-     * Default shop to redirect.
-     */
-    String SYSTEM_DEFAULT_SHOP = "SYSTEM_DEFAULT_SHOP";
+    }
 
-    /**
-     * Default (failover) directory for resources.
-     */
-    String SYSTEM_DEFAULT_FSPOINTER = "SYSTEM_DEFAULT_FSPOINTER";
+    public interface Product {
 
-    /**
-     * Image repository.
-     */
-    String SYSTEM_IMAGE_VAULT = "SYSTEM_IMAGE_VAULT";
-
-    /**
-     * The absolute path to import descriptors.
-     */
-    String SYSTEM_IMPORT_DESCRIPTORS = "SYSTEM_IMPORT_DESCRIPTORS";
-
-    /**
-     * The absolute path to archive folder where import files will be moved after import.
-     */
-    String SYSTEM_IMPORT_ARCHIVE = "SYSTEM_IMPORT_ARCHIVE";
-
-    /**
-     * The absolute path to import folder.
-     */
-    String SYSTEM_IMPORT = "SYSTEM_IMPORT";
+    }
 
 
     /**
@@ -73,17 +95,6 @@ public interface AttributeNamesKeys {
 
 
     String BRAND_IMAGE = "BRAND_IMAGE";
-
-    String CATEGORY_ITEMS_PER_PAGE = "CATEGORY_ITEMS_PER_PAGE";
-
-    String CATEGORY_SUBCATEGORIES_COLUMNS = "CATEGORY_SUBCATEGORIES_COLUMNS";
-
-    /**
-     * Label of category image retreive strategy. Allowed values:
-     * ATTRIBUTE
-     * RANDOM_PRODUCT
-     */
-    String CATEGORY_IMAGE_RETREIVE_STRATEGY = "CATEGORY_IMAGE_RETREIVE_STRATEGY";
 
 
     /**

@@ -2,6 +2,7 @@ package org.yes.cart.web.support.util;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.MessageFormat;
+import java.util.Collection;
 import java.util.Enumeration;
 
 /**
@@ -41,6 +42,10 @@ public class HttpUtil {
     public static String getSingleValue(final Object param) {
         if (param instanceof String) {
             return (String) param;
+        } else if (param instanceof Collection) {
+            if (!((Collection) param).isEmpty()) {
+                return ((Collection) param).iterator().next().toString();
+            }
         } else if (param instanceof String[]) {
             if (((String[]) param).length > 0) {
                 return ((String[]) param)[0];

@@ -51,39 +51,8 @@ public class NavigationUtil {
     }
 
 
-    /**
-     * Get the filtered request parameters, that not contains given set of request parameter names
-     *
-     * @param pageParameters original request parameters
-     * @param nameFilter     set of parameter name to remove
-     * @return new filtered {@link LinkedHashMap}
-     * @see NavigationUtil#getRetainedRequestParameters(Map, java.util.Collection) oposite opetation
-     */
-    public static LinkedHashMap getFilteredRequestParameters(
-            final Map pageParameters,
-            final Collection<String> nameFilter) {
-        final LinkedHashMap params = new LinkedHashMap(pageParameters);
-        params.keySet().removeAll(nameFilter);
-        params.keySet().removeAll(cmdKeys);
-        return params;
-    }
 
-    /**
-     * Get the retained request parameters, that not contains given set of request parameter names
-     *
-     * @param pageParameters original request parameters
-     * @param nameFilter     set of parameter name to retaine
-     * @return new filtered {@link LinkedHashMap}
-     * @see NavigationUtil#getFilteredRequestParameters(Map, java.util.Collection) oposite opetation
-     */
-    public static LinkedHashMap getRetainedRequestParameters(
-            final Map pageParameters,
-            final Collection<String> nameFilter) {
-        final LinkedHashMap params = new LinkedHashMap(pageParameters);
-        params.keySet().retainAll(nameFilter);
-        params.keySet().removeAll(cmdKeys);
-        return params;
-    }
+
 
     /**
      * Is cmd present in given string.
@@ -101,24 +70,6 @@ public class NavigationUtil {
     }
 
 
-    /**
-     * Get selected items on page.
-     *
-     * @param pageParameters     page parameters from http request
-     * @param itemsPerPageValues allowed values
-     * @return selected items per page value if it in allowed list otherwise {@see NavigationUtil.DEFAULT_ITEMS} vaule
-     */
-    public static int getSelectedItemsPerPage(final Map pageParameters, final List<String> itemsPerPageValues) {
-        int result = DEFAULT_ITEMS;
-        if (itemsPerPageValues != null && !itemsPerPageValues.isEmpty()) {
-            String selectedItemPerPage = (String) pageParameters.get(WebParametersKeys.QUANTITY);
-            if (!itemsPerPageValues.contains(selectedItemPerPage)) {
-                selectedItemPerPage = itemsPerPageValues.get(0);
-            }
-            result = NumberUtils.toInt(selectedItemPerPage);
-        }
-        return result;
-    }
 
 
 }

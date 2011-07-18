@@ -1,8 +1,3 @@
-/*
- * Copyright (c) 2010. The intellectual rights for this code remain to the NPA developer team.
- * Code distribution, sale or modification is prohibited unless authorized by all members of NPA
- * development team.
- */
 
 package org.yes.cart.domain.entity.bridge;
 
