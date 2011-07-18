@@ -1,5 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <properties>
+        <dp.lib-dto.GeDA.version>1.1.2</dp.lib-dto.GeDA.version>
+    </properties>
+    
+
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>yes-cart</artifactId>
@@ -353,48 +359,6 @@
             </plugin>
         </plugins>
     </build>
-    <!--
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-                <version>2.4</version>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>2.4</version>
-                <configuration>
-                    <targetJdk>1.5</targetJdk>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <configuration>
-                    <xmlOutput>true</xmlOutput>
-                    <effort>Max</effort>
-                    <threshold>Low</threshold>
-                </configuration>
-                <version>2.3.1</version>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.6.1</version>
-            </plugin>
-        </plugins>
-    </reporting>
-    -->
-    <properties>
-        <spring-security.version>3.0.3.RELEASE</spring-security.version>
-        <spring.version>3.0.5.RELEASE</spring.version>
-        <dp.lib-dto.GeDA.version>1.1.2</dp.lib-dto.GeDA.version>
-    </properties>
 
 
 </project>
