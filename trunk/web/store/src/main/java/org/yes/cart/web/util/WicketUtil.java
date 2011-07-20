@@ -73,16 +73,14 @@ public class WicketUtil {
      * @return new filtered {@link LinkedHashMap}
      */
     public static PageParameters getFilteredRequestParameters(final PageParameters parameters) {
-
-        if (parameters == null) {
-            return new PageParameters();
-        } else {
-            final PageParameters rez = new PageParameters(parameters);
+        final PageParameters rez = new PageParameters(parameters);
+        if (parameters != null) {
             for (String paramName : cmdKeys) {
                 rez.remove(paramName);
             }
-            return rez;
+
         }
+        return rez;
     }
 
     /**
