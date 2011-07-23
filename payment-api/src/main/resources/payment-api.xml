@@ -17,7 +17,7 @@
     <context:annotation-config/>
 
     <bean id="payDataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-        <property name="jndiName" value="java:comp/env/jdbc/npapayjndi"/>
+        <property name="jndiName" value="java:comp/env/jdbc/yespayjndi"/>
         <property name="lookupOnStartup" value="true"/>
         <property name="cache" value="true"/>
         <property name="proxyInterface" value="javax.sql.DataSource"/>
@@ -36,7 +36,7 @@
         <property name="hibernateProperties">
             <map>
                 <entry key="hibernate.show_sql" value="false"/>
-                <entry key="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
+                <entry key="hibernate.dialect" value="${db.config.yespay.driver}"/>
                 <entry key="hibernate.hbm2ddl.auto" value="update"/>
             </map>
         </property>

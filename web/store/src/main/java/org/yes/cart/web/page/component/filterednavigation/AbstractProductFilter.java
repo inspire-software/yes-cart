@@ -20,10 +20,7 @@ import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.util.HttpUtil;
 import org.yes.cart.web.util.WicketUtil;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  *
@@ -259,11 +256,9 @@ public abstract class AbstractProductFilter extends BaseComponent {
      * @return true if product or his sku is shown;
      */
     protected boolean isShowProduct() {
-
-        return getPage().getPageParameters().getPosition(WebParametersKeys.PRODUCT_ID) > -1
-                    ||
-                getPage().getPageParameters().getPosition(WebParametersKeys.SKU_ID) > -1;
-
+        final Set<String> paramNames = getPage().getPageParameters().getNamedKeys();
+        return paramNames.contains(WebParametersKeys.PRODUCT_ID)
+                || paramNames.contains(WebParametersKeys.SKU_ID);
     }
 
     /**
