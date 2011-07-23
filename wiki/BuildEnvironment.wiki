@@ -9,7 +9,8 @@ At this moment build procedure support Linux and Windows only.
 
 Java 1.6
 
-Installed Java JAI 1.1.3  http://java.sun.com/javase/technologies/desktop/media/jai/
+Installed Java JAI 1.1.3 http://java.sun.com/javase/technologies/desktop/media/jai/
+ Download here here http://download.java.net/media/jai/builds/release/1_1_3/
 
 Flex SDK 4 http://opensource.adobe.com/wiki/display/flexsdk/Downloads 
 
