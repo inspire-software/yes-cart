@@ -7,6 +7,23 @@
         <yes-cart.version>1.0.0-SNAPSHOT</yes-cart.version>
         <spring-security.version>3.0.3.RELEASE</spring-security.version>
         <spring.version>3.0.5.RELEASE</spring.version>
+
+        <lucene.config.index.dir>/yes-cart/lucene-index</lucene.config.index.dir>
+
+        <db.config.yes.hibernate.dialect>org.hibernate.dialect.MySQL5Dialect</db.config.yes.hibernate.dialect>
+        <db.config.yes.login>root</db.config.yes.login>
+        <db.config.yes.password></db.config.yes.password>
+        <db.config.yes.driver>com.mysql.jdbc.Driver</db.config.yes.driver>
+        <db.config.yes.url>jdbc:mysql://localhost/yes?AutoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8</db.config.yes.url>
+
+        <db.config.yespay.hibernate.dialect>org.hibernate.dialect.MySQL5Dialect</db.config.yespay.hibernate.dialect>
+        <db.config.yespay.login>root</db.config.yespay.login>
+        <db.config.yespay.password></db.config.yespay.password>
+        <db.config.yespay.driver>com.mysql.jdbc.Driver</db.config.yespay.driver>
+        <db.config.yespay.url>jdbc:mysql://localhost/yespay?AutoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8</db.config.yespay.url>
+
+        <!-- jdbc:derby://localhost:1527/derbyDB;create=true -->
+
     </properties>
 
     <modelVersion>4.0.0</modelVersion>
@@ -19,9 +36,19 @@
 
     <repositories>
         <repository>
-            <id>maven2-repository.dev.java.net</id>
-            <name>Java.net Repository for Maven</name>
-            <url>http://download.java.net/maven/2</url>
+            <id>JBoss</id>
+            <name>Maven JBoss Nexus</name>
+            <layout>default</layout>
+            <url>http://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>maven2-jboss-repo</id>
+            <name>JBOSS Repository for Maven</name>
+            <url>http://repository.jboss.org/maven2</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -29,11 +56,11 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
+
         <repository>
-            <id>prime-repo</id>
-            <name>Prime Technology Maven Repository</name>
-            <url>http://repository.prime.com.tr</url>
-            <layout>default</layout>
+            <id>maven2-repository.dev.java.net</id>
+            <name>Java.net Repository for Maven</name>
+            <url>http://download.java.net/maven/2</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -58,6 +85,14 @@
     </modules>
 
     <build>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -89,6 +124,7 @@
                     </dependency>
                 </dependencies>
             </plugin>
+
         </plugins>
     </build>
 

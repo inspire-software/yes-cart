@@ -10,8 +10,8 @@
         <property name="cache.provider_configuration_file_resource_path">ehcache.xml</property>
 
 
-        <property name="hibernate.search.default.indexBase">/npa/lucene-index</property>
-        <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
+        <property name="hibernate.search.default.indexBase">${lucene.config.index.dir}</property>
+        <property name="hibernate.dialect">${db.config.yes.hibernate.dialect}</property>
         <property name="hibernate.hbm2ddl.auto">update</property>
         <property name="show_sql">false</property>
         <!-- validate | update | create | create-drop -->

@@ -4,7 +4,7 @@
     <properties>
         <dp.lib-dto.GeDA.version>1.1.2</dp.lib-dto.GeDA.version>
     </properties>
-    
+
 
     <parent>
         <groupId>org.yes</groupId>
@@ -95,12 +95,23 @@
             <version>3.1.0.GA</version>
         </dependency>
         <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-jms_1.1_spec</artifactId>
+            <version>1.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- some crap with repository -->
+        <!-- dependency>
             <groupId>org.jboss.javaee</groupId>
             <artifactId>jboss-jms-api</artifactId>
             <version>1.1.0.GA</version>
             <scope>compile</scope>
-        </dependency>
+        </dependency -->
+
         <!-- hornetq end -->
+
+
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
@@ -216,43 +227,29 @@
             <version>${dp.lib-dto.GeDA.version}</version>
             <exclusions>
                 <exclusion>
-                   <groupId>javassist</groupId>
-                   <artifactId>javassist</artifactId>
+                    <groupId>javassist</groupId>
+                    <artifactId>javassist</artifactId>
                 </exclusion>
                 <exclusion>
-                   <groupId>org.apache.bcel</groupId>
-                   <artifactId>bcel</artifactId>
+                    <groupId>org.apache.bcel</groupId>
+                    <artifactId>bcel</artifactId>
                 </exclusion>
                 <exclusion>
-                   <groupId>org.slf4j</groupId>
-                   <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
                 </exclusion>
                 <exclusion>
-                   <groupId>org.slf4j</groupId>
-                   <artifactId>slf4j-jcl</artifactId>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-jcl</artifactId>
                 </exclusion>
             </exclusions>
-            
         </dependency>
-
-        <!--dependency>
-            <groupId>commons-scxml</groupId>
-            <artifactId>commons-scxml</artifactId>
-            <version>0.9</version>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-jexl</groupId>
-            <artifactId>commons-jexl</artifactId>
-            <version>1.1</version>
-        </dependency-->
 
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>r07</version>
         </dependency>
-
     </dependencies>
 
 

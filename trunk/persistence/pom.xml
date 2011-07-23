@@ -405,7 +405,7 @@
                         </goals>
                     </execution>
 
-                    <execution>
+                    <!--execution>
                         <id>export-oracle</id>
                         <phase>generate-resources</phase>
                         <goals>
@@ -430,7 +430,22 @@
                                 <outputfilename>sql/resources/hsql/create-tables.sql</outputfilename>
                             </componentProperties>
                         </configuration>
+                    </execution-->
+
+                    <execution>
+                        <id>export-derby</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>hbm2ddl</goal>
+                        </goals>
+                        <configuration>
+                            <componentProperties>
+                                <propertyfile>src/main/resources/derby/hibernate.properties</propertyfile>
+                                <outputfilename>sql/resources/derby/create-tables.sql</outputfilename>
+                            </componentProperties>
+                        </configuration>
                     </execution>
+
                     <execution>
                         <id>export-mysql</id>
                         <phase>generate-resources</phase>
