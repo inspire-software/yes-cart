@@ -53,7 +53,7 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
     /**
      * {@inheritDoc}
      */
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
 
@@ -114,19 +114,18 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
             }
 
 
-            if (MoneyUtils.isFirstBiggerThanSecond(toReserve, BigDecimal.ZERO)) {
+            if ((MoneyUtils.isFirstBiggerThanSecond(toReserve, BigDecimal.ZERO))
+                    &&
+                    (Availability.STANDARD == productSku.getProduct().getAvailability().getAvailabilityId())) {
 
                 /**
                  * Availability.BACKORDER -  can get from somewere
                  * Availability.PREORDER - can order from manafacturer
                  * Availability.ALWAYS - always
                  */
-                if (Availability.STANDARD == productSku.getProduct().getAvailability().getAvailabilityId() ) {
                     throw new Exception("PendingOrderEventHandlerImpl. Can not allocate total qty = " + det.getQty()   //TODO need patricular type of exception
                             + " for sku = " + productSku.getCode()
                             + " in delivery " + orderDelivery.getDevileryNum());
-
-                }
             }
         }
         orderDelivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);

@@ -29,7 +29,7 @@ public class ServiceLocatorImpl implements ServiceLocator {
      *
      * @param protocolStrategyMap strategy  map to instanciate service.
      */
-    public ServiceLocatorImpl(Map<String, InstantiationStrategy> protocolStrategyMap) {
+    public ServiceLocatorImpl(final Map<String, InstantiationStrategy> protocolStrategyMap) {
         this.protocolStrategyMap = protocolStrategyMap;
     }
 

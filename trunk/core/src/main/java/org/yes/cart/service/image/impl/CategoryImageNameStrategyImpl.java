@@ -1,7 +1,6 @@
 package org.yes.cart.service.image.impl;
 
 import org.yes.cart.constants.Constants;
-import org.yes.cart.service.domain.SystemService;
 
 import java.io.File;
 
@@ -14,12 +13,16 @@ public class CategoryImageNameStrategyImpl extends AbstractImageNameStrategyImpl
 
     private final static String PATH_PREFIX = Constants.CATEGOTY_IMAGE_FILE_PREFIX + File.separator;
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     protected String getPathPrefix() {
         return PATH_PREFIX;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public String getCode(final String fileName) {
         return null;
     }

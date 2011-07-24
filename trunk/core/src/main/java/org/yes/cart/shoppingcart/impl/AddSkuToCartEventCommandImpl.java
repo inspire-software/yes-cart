@@ -22,7 +22,7 @@ public class AddSkuToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
 
     private static final Logger LOG = LoggerFactory.getLogger(AddSkuToCartEventCommandImpl.class);
 
-    public static String CMD_KEY = "addToCartCmd";
+    public static final String CMD_KEY = "addToCartCmd";
 
 
     /**
@@ -32,6 +32,11 @@ public class AddSkuToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
         return CMD_KEY;
     }
 
+    /**
+     * Construct command.
+     * @param applicationContext    application context.
+     * @param parameters            command parameters.
+     */
     public AddSkuToCartEventCommandImpl(final ApplicationContext applicationContext, final Map parameters) {
         super(applicationContext, parameters);
     }

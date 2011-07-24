@@ -1,6 +1,5 @@
 package org.yes.cart.service.image.impl;
 
-import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.image.ImageNameStrategy;
 
 import java.io.File;
@@ -15,7 +14,6 @@ public abstract class AbstractImageNameStrategyImpl implements ImageNameStrategy
 
     /**
      * Get the image path prefix ended with {@see File#separator}
-     *
      */
     protected abstract String getPathPrefix();
 

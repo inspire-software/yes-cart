@@ -110,9 +110,9 @@ public class MailComposerImpl implements MailComposer {
      * @param shopCode     optional shop code
      * @param templateName template name
      * @param from         from address
-     * @param to           mail desctinatiol address
-     * @param cc           optional cc
-     * @param bcc          optional bcc
+     * @param toEmail           mail desctinatiol address
+     * @param ccEmail           optional cc
+     * @param bccEmail          optional bcc
      * @param model        model
      * @throws MessagingException in case if mail message can not be converted
      * @throws java.io.IOException    in case of inline resources can not be found
@@ -123,25 +123,25 @@ public class MailComposerImpl implements MailComposer {
             final String shopCode,
             final String templateName,
             final String from,
-            final String to,
-            final String cc,
-            final String bcc,
+            final String toEmail,
+            final String ccEmail,
+            final String bccEmail,
             final Map<String, Object> model)
                 throws MessagingException, IOException, ClassNotFoundException {
 
 
         final MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-        helper.setTo(to);
+        helper.setTo(toEmail);
 
         helper.setSentDate(new Date());
 
-        if (cc != null) {
-            helper.setCc(cc);
+        if (ccEmail != null) {
+            helper.setCc(ccEmail);
         }
 
-        if (bcc != null) {
-            helper.setBcc(bcc);
+        if (bccEmail != null) {
+            helper.setBcc(bccEmail);
         }
 
         final String pathToTemplateFolder =  getPathToTemplate(shopCode, templateName);
@@ -155,10 +155,10 @@ public class MailComposerImpl implements MailComposer {
         }
         helper.setSubject(prop.getProperty("subject"));
 
-        if (from != null) {
-            helper.setFrom(from);
+        if (from == null) {
+            helper.setFrom(prop.getProperty("from"));
         } else {
-            helper.setFrom(prop.getProperty("from"));            
+            helper.setFrom(from);
         }
 
 

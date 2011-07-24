@@ -15,25 +15,30 @@ public class ChangeCurrencyEventCommandImpl extends AbstractSkuCartCommandImpl {
 
     private static final long serialVersionUID = 20101702L;
 
-    public static String CMD_KEY = "changeCurrencyCmd";
+    public static final String CMD_KEY = "changeCurrencyCmd";
 
-    /** {@inheritDoc} */
+    private final String currencyCode;
+
+    /**
+     * {@inheritDoc}
+     */
     public String getCmdKey() {
         return CMD_KEY;
     }
 
-    private String currencyCode = null;
 
     public ChangeCurrencyEventCommandImpl(final ApplicationContext applicationContext, final Map parameters) {
         super(applicationContext, parameters);
-        currencyCode = (String) parameters.get(getCmdKey());
+        currencyCode = (String) parameters.get(CMD_KEY);
     }
 
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void execute(final ShoppingCart shoppingCart) {
         if (currencyCode != null) {
-            ((ShoppingCartImpl)shoppingCart).setCurrencyCode(currencyCode);
+            ((ShoppingCartImpl) shoppingCart).setCurrencyCode(currencyCode);
             recalculatePrice(shoppingCart);
             setModifiedDate(shoppingCart);
         }

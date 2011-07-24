@@ -253,7 +253,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
         if (
                 paymentsToCapture.size() > 1
                         ||
-                        (paymentsToCapture.size() == 0 && !getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorize())) {
+                        (paymentsToCapture.isEmpty() && !getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorize())) {
             LOG.warn( //must be only one record
                     MessageFormat.format(
                             "Payment gateway {0} with features {1}. Found {2} records to capture, but expected 1 only. Order num {3} Shipment num {4}",

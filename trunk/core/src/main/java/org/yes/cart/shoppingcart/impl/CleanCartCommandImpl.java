@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public class CleanCartCommandImpl extends AbstractCartCommandImpl implements ShoppingCartCommand {
 
-    public static String CMD_KEY = "cleanCartCmd";
+    public static final String CMD_KEY = "cleanCartCmd";
 
     /** {@inheritDoc} */
     public void execute(ShoppingCart shoppingCart) {

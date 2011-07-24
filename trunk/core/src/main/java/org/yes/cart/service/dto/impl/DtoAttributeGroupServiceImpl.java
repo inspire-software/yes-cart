@@ -93,12 +93,14 @@ public class DtoAttributeGroupServiceImpl
     }
 
     /** {@inheritDoc}*/
-    public AttributeGroupDTO create(AttributeGroupDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public AttributeGroupDTO create(final AttributeGroupDTO instance)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return create(instance.getCode(), instance.getName(), instance.getDescription());
     }
 
     /** {@inheritDoc}*/
-    public AttributeGroupDTO update(AttributeGroupDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public AttributeGroupDTO update(final AttributeGroupDTO instance)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return update(instance.getCode(), instance.getName(), instance.getDescription());
     }
 

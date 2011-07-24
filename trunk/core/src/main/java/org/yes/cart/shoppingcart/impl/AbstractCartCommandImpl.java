@@ -16,7 +16,7 @@ public abstract class AbstractCartCommandImpl implements ShoppingCartCommand {
     /**
      * {@inheritDoc}
      */
-    public void setModifiedDate(ShoppingCart shoppingCart) {
+    public void setModifiedDate(final ShoppingCart shoppingCart) {
         ((ShoppingCartImpl) shoppingCart).setModifiedDate(new Date());
     }
 }

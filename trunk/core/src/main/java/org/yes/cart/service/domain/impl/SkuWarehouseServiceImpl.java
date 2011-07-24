@@ -45,7 +45,7 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
      * @param productSku sku
      * @return  pair of available and reserved quantity
      */
-    public Pair<BigDecimal, BigDecimal> getQuantity(final List<Warehouse> warehouses, ProductSku productSku) {
+    public Pair<BigDecimal, BigDecimal> getQuantity(final List<Warehouse> warehouses, final ProductSku productSku) {
 
         final List<Object> warehouseIdList = new ArrayList<Object>(warehouses.size());
         for (Warehouse wh : warehouses ) {
@@ -137,7 +137,7 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
 
 
     /** {@inheritDoc} */
-    public BigDecimal credit(Warehouse warehouse, ProductSku productSku, BigDecimal addQty) {
+    public BigDecimal credit(final Warehouse warehouse, final ProductSku productSku, final BigDecimal addQty) {
         final SkuWarehouse skuWarehouse = findByWarehouseSku(warehouse, productSku);
 
         if (skuWarehouse == null) {

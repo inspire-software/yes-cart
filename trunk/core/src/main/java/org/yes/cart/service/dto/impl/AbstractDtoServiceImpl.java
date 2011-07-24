@@ -46,12 +46,12 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
     }
 
     /** {@inheritDoc} */
-    public DTOIFACE getById(long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public DTOIFACE getById(final long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return getById(id, valueConverterRepository);
     }
 
     /** {@inheritDoc} */
-    public DTOIFACE getById(long id, final Map converters)
+    public DTOIFACE getById(final long id, final Map converters)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final IFACE entity = service.getById(id);
         if (entity != null) {
@@ -68,7 +68,7 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
     }
 
     /** {@inheritDoc} */
-    public void remove(long id) {
+    public void remove(final long id) {
         service.delete(service.getById(id));
     }
 
@@ -80,7 +80,7 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
      * @throws UnableToCreateInstanceException ion case of dto creating errors
      * @return list of dto
      */
-    public List<DTOIFACE> getDTOs(Collection<IFACE> entities) 
+    public List<DTOIFACE> getDTOs(final Collection<IFACE> entities)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         List<DTOIFACE> result = new ArrayList<DTOIFACE>();
         if (entities != null) {
@@ -96,7 +96,7 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
      * @throws UnmappedInterfaceException in case of config errors
      * @throws UnableToCreateInstanceException ion case of dto creating errors
      */
-    public void fillDTOs(Collection<IFACE> entities, Collection<DTOIFACE> dtos)
+    public void fillDTOs(final Collection<IFACE> entities, final Collection<DTOIFACE> dtos)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         for (IFACE entity : entities) {
             DTOIFACE dto = (DTOIFACE) dtoFactory.getByIface(getDtoIFace());

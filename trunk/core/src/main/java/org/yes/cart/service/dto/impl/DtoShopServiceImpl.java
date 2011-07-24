@@ -5,8 +5,6 @@ import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.ShopDTOImpl;
 import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.exception.UnableToCreateInstanceException;
-import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.dto.DtoShopService;
 

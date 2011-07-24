@@ -172,7 +172,7 @@ public class DtoCategoryServiceImpl
     /**
      * {@inheritDoc}
      */
-    public void remove(long id) {
+    public void remove(final long id) {
         ((ShopCategoryService) shopCategoryGenericService).deleteAll(service.getById(id));
         super.remove(id);
     }
@@ -190,7 +190,7 @@ public class DtoCategoryServiceImpl
     /**
      * {@inheritDoc}
      */
-    public List<CategoryDTO> getByProductId(long productId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public List<CategoryDTO> getByProductId(final long productId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<Category> categories = ((CategoryService) service).getByProductId(productId);
         final List<CategoryDTO> dtos = new ArrayList<CategoryDTO>(categories.size());
         fillDTOs(categories, dtos);
@@ -290,7 +290,7 @@ public class DtoCategoryServiceImpl
      *
      * @param attributeValuePk given pk value.
      */
-    public void deleteAttributeValue(long attributeValuePk) {
+    public void deleteAttributeValue(final long attributeValuePk) {
         final AttrValueEntityCategory valueEntityCategory = attrValueEntityCategoryDao.findById(attributeValuePk);
         if (Etype.IMAGE_BUSINESS_TYPE.equals(valueEntityCategory.getAttribute().getEtype().getBusinesstype())) {
             imageService.deleteImage(valueEntityCategory.getVal());

@@ -5,8 +5,6 @@ import org.yes.cart.domain.dto.AssociationDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.AssociationDTOImpl;
 import org.yes.cart.domain.entity.Association;
-import org.yes.cart.exception.UnableToCreateInstanceException;
-import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.dto.DtoAssociationService;
 
@@ -16,18 +14,18 @@ import org.yes.cart.service.dto.DtoAssociationService;
  * Time: 14:12:54
  */
 public class DtoAssociationServiceImpl
-    extends AbstractDtoServiceImpl<AssociationDTO, AssociationDTOImpl, Association>
-    implements DtoAssociationService {
+        extends AbstractDtoServiceImpl<AssociationDTO, AssociationDTOImpl, Association>
+        implements DtoAssociationService {
 
     /**
      * Construct association remote service.
      *
-     * @param dtoFactory               {@link org.yes.cart.domain.dto.factory.DtoFactory}
-     * @param associationGenericService                  {@link org.yes.cart.service.domain.GenericService}
-     * @param valueConverterRepository {@link dp.lib.dto.geda.adapter.repository.ValueConverterRepository}
+     * @param dtoFactory                {@link org.yes.cart.domain.dto.factory.DtoFactory}
+     * @param associationGenericService {@link org.yes.cart.service.domain.GenericService}
+     * @param valueConverterRepository  {@link dp.lib.dto.geda.adapter.repository.ValueConverterRepository}
      */
     public DtoAssociationServiceImpl(final DtoFactory dtoFactory,
-                                     final GenericService<Association> associationGenericService, 
+                                     final GenericService<Association> associationGenericService,
                                      final ValueConverterRepository valueConverterRepository) {
         super(dtoFactory, associationGenericService, valueConverterRepository);
     }

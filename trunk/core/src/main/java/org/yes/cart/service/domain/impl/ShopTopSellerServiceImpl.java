@@ -37,7 +37,7 @@ public class ShopTopSellerServiceImpl extends BaseGenericServiceImpl<ShopTopSell
     /** {@inheritDoc} */
     //Use stored procedures in case if it will reduce performance on big data set
     //Bad ORM fashion
-    public void updateTopSellers(int calculationPeriodInDays) {
+    public void updateTopSellers(final int calculationPeriodInDays) {
         final Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_MONTH, -1 * calculationPeriodInDays);
         List<Shop> shops = shopDao.findAll();

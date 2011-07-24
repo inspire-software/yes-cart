@@ -131,7 +131,7 @@ public class DtoProductServiceImpl
      * {@inheritDoc}
      * Default product sku will be also created.
      */
-    public ProductDTO create(ProductDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public ProductDTO create(final ProductDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         Product product = getEntityFactory().getByIface(Product.class);
         assembler.assembleEntity(instance, product, valueConverterRepository,
                 new EntityFactoryToBeanFactoryAdaptor(productService.getGenericDao().getEntityFactory()));
@@ -143,7 +143,7 @@ public class DtoProductServiceImpl
     /**
      * {@inheritDoc}
      */
-    public ProductDTO update(ProductDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public ProductDTO update(final ProductDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         Product product = service.getById(instance.getProductId());
         assembler.assembleEntity(
                 instance,
@@ -219,9 +219,9 @@ public class DtoProductServiceImpl
      *          in case of configuration problem
      */
     public List<ProductDTO> getProductByCategoryWithPaging(
-            long categoryId,
-            int firtsResult,
-            int maxResults) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+            final long categoryId,
+            final int firtsResult,
+            final int maxResults) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<Product> products = ((ProductService) service).getProductByCategory(categoryId, firtsResult, maxResults);
         final List<ProductDTO> dtos = new ArrayList<ProductDTO>(products.size());
         fillDTOs(products, dtos);

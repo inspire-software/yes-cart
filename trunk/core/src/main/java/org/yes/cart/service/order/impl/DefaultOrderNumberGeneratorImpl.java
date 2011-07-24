@@ -22,22 +22,23 @@ public class DefaultOrderNumberGeneratorImpl implements OrderNumberGenerator {
     private final GenericDAO<CustomerOrder, Long> customerOrderDao ;
 
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-    private static long orderSequence = -1;
+    private static long orderSequence;
 
     /**
      * Construct order number generator service.
      * @param customerOrderDao order dao to use in check what consequence number need to use.
      */
-    public DefaultOrderNumberGeneratorImpl(GenericDAO<CustomerOrder, Long> customerOrderDao) {
+    public DefaultOrderNumberGeneratorImpl(final GenericDAO<CustomerOrder, Long> customerOrderDao) {
         this.customerOrderDao = customerOrderDao;
+        orderSequence = -1;
     }
 
+    /**
+     * Default constructor.
+     */
     DefaultOrderNumberGeneratorImpl() {
-
         customerOrderDao = null;
         orderSequence = 0;
-
-
     }
 
     /**
@@ -47,7 +48,6 @@ public class DefaultOrderNumberGeneratorImpl implements OrderNumberGenerator {
      */
     public synchronized String getNextOrderNumber() {
         final String datePart = dateFormat.format(new Date()); //TODO v2 get from time machine
-
         return datePart + '-' + getOrderSequence();
     }
 
