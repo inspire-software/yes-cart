@@ -98,7 +98,7 @@ public class AttributeDTOImpl  implements AttributeDTO {
     }
 
     /** {@inheritDoc} */
-    public void setAttributegroupId(long attributegroupId) {
+    public void setAttributegroupId(final long attributegroupId) {
         this.attributegroupId = attributegroupId;
     }
 

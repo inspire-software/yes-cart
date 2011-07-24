@@ -77,7 +77,7 @@ public class BaseGenericServiceImpl<ENTITY> implements GenericService<ENTITY> {
     /**
      * {@inheritDoc}
      */
-    public ENTITY findSingleByCriteria(Criterion... criterion) {
+    public ENTITY findSingleByCriteria(final Criterion... criterion) {
         return genericDao.findSingleByCriteria(criterion);
 
     }

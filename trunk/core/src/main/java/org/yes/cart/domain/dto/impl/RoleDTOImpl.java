@@ -41,7 +41,7 @@ public class RoleDTOImpl implements RoleDTO {
     /**
      * {@inheritDoc}
      */
-    public void setRoleId(long roleId) {
+    public void setRoleId(final long roleId) {
         this.roleId = roleId;
     }
 
@@ -55,7 +55,7 @@ public class RoleDTOImpl implements RoleDTO {
     /**
      * {@inheritDoc}
      */
-    public void setCode(String code) {
+    public void setCode(final String code) {
         this.code = code;
     }
 
@@ -69,7 +69,7 @@ public class RoleDTOImpl implements RoleDTO {
     /**
      * {@inheritDoc}
      */
-    public void setDescription(String descrition) {
+    public void setDescription(final String descrition) {
         this.description = descrition;
     }
 
@@ -77,14 +77,22 @@ public class RoleDTOImpl implements RoleDTO {
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals(final Object otherObj) {
+        if (this == otherObj) {
+            return true;
+        }
+        if (otherObj == null || getClass() != otherObj.getClass()) {
+            return false;
+        }
 
-        RoleDTOImpl roleDTO = (RoleDTOImpl) o;
+        final RoleDTOImpl roleDTO = (RoleDTOImpl) otherObj;
 
-        if (!code.equals(roleDTO.code)) return false;
-        if (!description.equals(roleDTO.description)) return false;
+        if (!code.equals(roleDTO.code)) {
+            return false;
+        }
+        if (!description.equals(roleDTO.description)) {
+            return false;
+        }
 
         return true;
     }

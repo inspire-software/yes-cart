@@ -3,9 +3,8 @@ package org.yes.cart.service.domain.impl;
 import org.yes.cart.service.domain.PassPhrazeGenerator;
 
 /**
- *
- * (C)opypasted from some internet resource, sorry, dont remember.   
- *
+ * (C)opypasted from some internet resource, sorry, dont remember.
+ * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
@@ -38,6 +37,7 @@ public class PassPhraseGeneratorImpl implements PassPhrazeGenerator {
 
     /**
      * Create password generator
+     *
      * @param passwordLenght the length of generated password.
      */
     public PassPhraseGeneratorImpl(final int passwordLenght) {
@@ -46,6 +46,7 @@ public class PassPhraseGeneratorImpl implements PassPhrazeGenerator {
 
     /**
      * Set the length of generated password.
+     *
      * @param passwordLenght the length of generated password.
      */
     public void setPasswordLenght(final int passwordLenght) {
@@ -58,11 +59,11 @@ public class PassPhraseGeneratorImpl implements PassPhrazeGenerator {
      * @return generated pass phraze
      */
     public String getNextPassPhrase() {
-        StringBuffer sb = new StringBuffer();
+        final StringBuilder buffer = new StringBuilder();
         for (int i = 0; i < passwordLenght; i++) {
-            sb.append(goodChar[rand.nextInt(goodChar.length)]);
+            buffer.append(goodChar[rand.nextInt(goodChar.length)]);
         }
-        return sb.toString();
+        return buffer.toString();
     }
 
 }

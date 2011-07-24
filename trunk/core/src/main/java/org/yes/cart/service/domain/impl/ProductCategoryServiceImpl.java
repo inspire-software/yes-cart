@@ -11,7 +11,7 @@ import org.yes.cart.service.domain.ProductCategoryService;
  */
 public class ProductCategoryServiceImpl extends BaseGenericServiceImpl<ProductCategory> implements ProductCategoryService {
 
-    private final static int rankStep = 50;
+    private final static int RANK_STEP = 50;
 
     /**
      * Construct product category service.
@@ -33,9 +33,9 @@ public class ProductCategoryServiceImpl extends BaseGenericServiceImpl<ProductCa
     public int getNextRank(final long categoryId) {
         Integer maxRank = (Integer)getGenericDao().getScalarResultByNamedQuery("GET.MAX.RANK", categoryId);
         if (maxRank != null) {
-            return maxRank + rankStep;
+            return maxRank + RANK_STEP;
         } else {
-            return rankStep;
+            return RANK_STEP;
         }
 
 

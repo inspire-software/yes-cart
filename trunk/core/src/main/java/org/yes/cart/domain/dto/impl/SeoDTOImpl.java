@@ -40,7 +40,7 @@ public class SeoDTOImpl implements SeoDTO {
     }
 
     /** {@inheritDoc}*/
-    public void setSeoId(long seoId) {
+    public void setSeoId(final long seoId) {
         this.seoId = seoId;
     }
 
@@ -50,7 +50,7 @@ public class SeoDTOImpl implements SeoDTO {
     }
 
     /** {@inheritDoc}*/
-    public void setUri(String uri) {
+    public void setUri(final String uri) {
         this.uri = uri;
     }
 
@@ -60,7 +60,7 @@ public class SeoDTOImpl implements SeoDTO {
     }
 
     /** {@inheritDoc}*/
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
@@ -70,7 +70,7 @@ public class SeoDTOImpl implements SeoDTO {
     }
 
     /** {@inheritDoc}*/
-    public void setMetakeywords(String metakeywords) {
+    public void setMetakeywords(final String metakeywords) {
         this.metakeywords = metakeywords;
     }
 
@@ -80,7 +80,7 @@ public class SeoDTOImpl implements SeoDTO {
     }
 
     /** {@inheritDoc}*/
-    public void setMetadescription(String metadescription) {
+    public void setMetadescription(final String metadescription) {
         this.metadescription = metadescription;
     }
 }

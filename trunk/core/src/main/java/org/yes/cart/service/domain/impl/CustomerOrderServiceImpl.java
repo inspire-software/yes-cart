@@ -94,16 +94,15 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
      * {@inheritDoc}
      */
     public List<CustomerOrder> findCustomerOrders(final Customer customer, final Date since) {
-        if (since != null) {
-            return getGenericDao().findByCriteria(
-                    Restrictions.eq("customer", customer),
-                    Restrictions.gt("orderTimestamp", since)
-            );
-        } else {
+        if (since == null) {
             return getGenericDao().findByCriteria(
                     Restrictions.eq("customer", customer)
             );
         }
+        return getGenericDao().findByCriteria(
+                Restrictions.eq("customer", customer),
+                Restrictions.gt("orderTimestamp", since)
+        );
     }
 
     /**

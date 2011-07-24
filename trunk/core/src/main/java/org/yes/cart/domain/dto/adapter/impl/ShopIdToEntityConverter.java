@@ -17,7 +17,7 @@ public class ShopIdToEntityConverter  extends GenericIdToEntityConverter<Shop>{
 
     /** {@inheritDoc}*/
     @Override
-    public Object convertToDto(Object object, BeanFactory beanFactory) {
+    public Object convertToDto(final Object object, final BeanFactory beanFactory) {
         return ((Shop) object).getShopId();
     }
 

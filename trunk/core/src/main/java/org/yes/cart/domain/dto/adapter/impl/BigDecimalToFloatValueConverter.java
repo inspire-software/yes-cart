@@ -16,14 +16,14 @@ public class BigDecimalToFloatValueConverter implements ValueConverter {
     /**
      * {@inheritDoc}
      */
-    public Object convertToDto(Object object, dp.lib.dto.geda.adapter.BeanFactory beanFactory) {
+    public Object convertToDto(final Object object, final dp.lib.dto.geda.adapter.BeanFactory beanFactory) {
         return new BigDecimal((Float) object);
     }
 
     /**
      * {@inheritDoc}
      */
-    public Object convertToEntity(Object object, Object oldEntity, dp.lib.dto.geda.adapter.BeanFactory beanFactory) {
+    public Object convertToEntity(final Object object,final Object oldEntity, final dp.lib.dto.geda.adapter.BeanFactory beanFactory) {
         if (object instanceof BigDecimal) {
             return ((BigDecimal) object).floatValue();
         }

@@ -87,7 +87,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc
      */
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(final BigDecimal amount) {
         this.amount = amount;
     }
 

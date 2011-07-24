@@ -95,7 +95,7 @@ public class SkuPriceDTOImpl implements SkuPriceDTO {
 
     /**
      * @deprecated
-     * @return
+     * @return  quantity
      */
     public BigDecimal getQuantityTier() {
         return quantity;
@@ -103,7 +103,7 @@ public class SkuPriceDTOImpl implements SkuPriceDTO {
 
     /**
      * @deprecated
-     * @param quantityTier
+     * @param quantityTier  quantity
      */
     public void setQuantityTier(final BigDecimal quantityTier) {
         this.quantity = quantityTier;
@@ -206,17 +206,31 @@ public class SkuPriceDTOImpl implements SkuPriceDTO {
     }
 
     @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals(final Object otherObj) {
+        if (this == otherObj) {
+            return true;
+        }
+        if (otherObj == null || getClass() != otherObj.getClass()) {
+            return false;
+        }
 
-        SkuPriceDTOImpl that = (SkuPriceDTOImpl) o;
+        final SkuPriceDTOImpl that = (SkuPriceDTOImpl) otherObj;
 
-        if (productSkuId != that.productSkuId) return false;
-        if (skuPriceId != that.skuPriceId) return false;
-        if (currency != null ? !currency.equals(that.currency) : that.currency != null) return false;
-        if (regularPrice != null ? !regularPrice.equals(that.regularPrice) : that.regularPrice != null) return false;
-        if (quantity != null ? !quantity.equals(that.quantity) : that.quantity != null) return false;
+        if (productSkuId != that.productSkuId) {
+            return false;
+        }
+        if (skuPriceId != that.skuPriceId) {
+            return false;
+        }
+        if (currency != null ? !currency.equals(that.currency) : that.currency != null) {
+            return false;
+        }
+        if (regularPrice != null ? !regularPrice.equals(that.regularPrice) : that.regularPrice != null) {
+            return false;
+        }
+        if (quantity != null ? !quantity.equals(that.quantity) : that.quantity != null) {
+            return false;
+        }
 
         return true;
     }

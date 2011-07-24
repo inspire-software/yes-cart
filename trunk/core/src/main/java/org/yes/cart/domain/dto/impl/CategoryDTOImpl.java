@@ -98,7 +98,7 @@ public class CategoryDTOImpl implements CategoryDTO  {
     }
 
     /** {@inheritDoc}*/
-    public void setChildren(List<CategoryDTO> children) {
+    public void setChildren(final List<CategoryDTO> children) {
         this.children = children;
     }
 
@@ -125,7 +125,7 @@ public class CategoryDTOImpl implements CategoryDTO  {
     }
 
     /** {@inheritDoc}*/
-    public void setParentId(long parentId) {
+    public void setParentId(final long parentId) {
         this.parentId = parentId;
     }
 

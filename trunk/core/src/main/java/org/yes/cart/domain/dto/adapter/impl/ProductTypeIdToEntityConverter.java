@@ -20,7 +20,7 @@ public class ProductTypeIdToEntityConverter  extends GenericIdToEntityConverter<
 
     /** {@inheritDoc}*/
     @Override
-    public Object convertToDto(Object object, BeanFactory beanFactory) {
+    public Object convertToDto(final Object object, final BeanFactory beanFactory) {
         return ((ProductType) object).getProducttypeId();
     }
     

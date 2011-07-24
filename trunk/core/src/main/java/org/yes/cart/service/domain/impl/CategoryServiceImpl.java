@@ -74,7 +74,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    public void unassignFromShop(long categoryId, long shopId) {
+    public void unassignFromShop(final long categoryId, final long shopId) {
         ShopCategory shopCategory = shopCategoryDao.findSingleByNamedQuery(
                 "SHOP.CATEGORY",
                 categoryId,
@@ -204,7 +204,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    public List<Category> getChildCategoriesWithAvailability(long categoryId, boolean withAvailability) {
+    public List<Category> getChildCategoriesWithAvailability(final long categoryId, final boolean withAvailability) {
         if (withAvailability) {
             return categoryDao.findByNamedQuery(
                     "CATEGORIES.BY.PARENTID",
@@ -302,7 +302,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    public List<Category> getByProductId(long productId) {
+    public List<Category> getByProductId(final long productId) {
         return categoryDao.findByNamedQuery(
                 "CATEGORIES.BY.PRODUCTID",
                 productId

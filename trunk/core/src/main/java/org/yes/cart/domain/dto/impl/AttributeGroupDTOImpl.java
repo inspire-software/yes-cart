@@ -76,15 +76,25 @@ public class AttributeGroupDTOImpl implements AttributeGroupDTO {
 
     /** {@inheritDoc} */
     @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals(final Object otherObj) {
+        if (this == otherObj) {
+            return true;
+        }
+        if (otherObj == null || getClass() != otherObj.getClass()) {
+            return false;
+        }
 
-        AttributeGroupDTOImpl that = (AttributeGroupDTOImpl) o;
+        final AttributeGroupDTOImpl that = (AttributeGroupDTOImpl) otherObj;
 
-        if (!code.equals(that.code)) return false;
-        if (!description.equals(that.description)) return false;
-        if (!name.equals(that.name)) return false;
+        if (!code.equals(that.code)) {
+            return false;
+        }
+        if (!description.equals(that.description)) {
+            return false;
+        }
+        if (!name.equals(that.name)) {
+            return false;
+        }
 
         return true;
     }

@@ -54,7 +54,7 @@ public class BrandDTOImpl implements BrandDTO {
     }
 
     /** {@inheritDoc}*/
-    public void setBrandId(long brandId) {
+    public void setBrandId(final long brandId) {
         this.brandId = brandId;
     }
 
@@ -64,7 +64,7 @@ public class BrandDTOImpl implements BrandDTO {
     }
 
     /** {@inheritDoc}*/
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -74,7 +74,7 @@ public class BrandDTOImpl implements BrandDTO {
     }
 
     /** {@inheritDoc}*/
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
