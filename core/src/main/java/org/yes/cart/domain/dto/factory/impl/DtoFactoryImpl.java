@@ -21,7 +21,7 @@ public class DtoFactoryImpl implements DtoFactory {
         this.classMap = classMap;
     }
 
-    public Object get(String entityBeanKey) {
+    public Object get(final String entityBeanKey) {
         return getByKey(entityBeanKey);
     }
 
@@ -38,7 +38,9 @@ public class DtoFactoryImpl implements DtoFactory {
             try {
                 return Class.forName(className);
             } catch (Exception e) {
-                throw new InstantiationError("Cant getByKey class for interface " + ifaceName + " class " + className);
+                throw new InstantiationError("Cant getByKey class for interface " + ifaceName
+                        + " class " + className
+                        + ". Original error is: " + e.getMessage());
             }
         }
         throw new InstantiationError("Cant getByKey class for interface " + ifaceName);

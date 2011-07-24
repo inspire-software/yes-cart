@@ -73,8 +73,8 @@ public class MethodCacheAdvice implements ApplicationContextAware {
      * @throws Throwable in case of error
      */
     @After("@annotation(CacheFlush)")
-    public void doCacheFlush(JoinPoint jp) throws Throwable {
-        final Cache cache = getCache(getAnnotation(jp, CacheFlush.class).value());
+    public void doCacheFlush(final JoinPoint joinPoint) throws Throwable {
+        final Cache cache = getCache(getAnnotation(joinPoint, CacheFlush.class).value());
         cache.flush();
     }
 
@@ -123,21 +123,21 @@ public class MethodCacheAdvice implements ApplicationContextAware {
      * @return key for cache.
      */
     private String getCacheKey(final String signature, final Object[] arguments) {
-        StringBuilder sb = new StringBuilder(signature);
+        final StringBuilder stringBuilder = new StringBuilder(signature);
         if (arguments != null) {
             for (Object argument : arguments) {
                 if (argument instanceof Iterable) {
                     for (Object argInList : (Iterable) argument) {
-                        sb.append(":").append(argInList);
+                        stringBuilder.append(":").append(argInList);
                     }
                 } else {
-                    sb.append(".").append(argument);
+                    stringBuilder.append(".").append(argument);
                 }
 
             }
         }
 
-        return sb.toString();
+        return stringBuilder.toString();
     }
 
     /**

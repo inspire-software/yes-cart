@@ -54,7 +54,7 @@ public class ImportJobBeanImpl extends QuartzJobBean {
      * IoC. Set product service to use.
      * @param productService product service to use
      */
-    public void setProductService(ProductService productService) {
+    public void setProductService(final ProductService productService) {
         this.productService = productService;
     }
 
@@ -62,7 +62,7 @@ public class ImportJobBeanImpl extends QuartzJobBean {
      * IoC. Set system service.
      * @param systemService system service.
      */
-    public void setSystemService(SystemService systemService) {
+    public void setSystemService(final SystemService systemService) {
         this.systemService = systemService;
     }
 
@@ -71,7 +71,7 @@ public class ImportJobBeanImpl extends QuartzJobBean {
      *
      * @param importDirector service to use.
      */
-    public void setImportDirector(ImportDirectorService importDirector) {
+    public void setImportDirector(final ImportDirectorService importDirector) {
         this.importDirector = importDirector;
     }
 }

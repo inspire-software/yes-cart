@@ -18,12 +18,12 @@ public class GenericIdToEntityConverter<T> implements ValueConverter {
     }
 
     /** {@inheritDoc} */
-    public Object convertToDto(Object object, BeanFactory beanFactory) {
+    public Object convertToDto(final Object object, final BeanFactory beanFactory) {
         throw new RuntimeException(this.getClass().getCanonicalName() + " not support conversion from id to entity " + object.getClass());
     }
 
     /** {@inheritDoc} */
-    public Object convertToEntity(Object object, Object oldEntity, BeanFactory beanFactory) {
+    public Object convertToEntity(final Object object, final Object oldEntity, final BeanFactory beanFactory) {
         if (object != null) {
             return genericDAO.findById((Long) object);
         }

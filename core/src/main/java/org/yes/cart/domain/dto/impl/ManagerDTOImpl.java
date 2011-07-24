@@ -43,7 +43,7 @@ public class ManagerDTOImpl implements ManagerDTO {
     /**
      * {@inheritDoc}
      */
-    public void setManagerId(long managerId) {
+    public void setManagerId(final long managerId) {
         this.managerId = managerId;
     }
 
@@ -57,7 +57,7 @@ public class ManagerDTOImpl implements ManagerDTO {
     /**
      * {@inheritDoc}
      */
-    public void setEmail(String email) {
+    public void setEmail(final String email) {
         this.email = email;
     }
 
@@ -71,7 +71,7 @@ public class ManagerDTOImpl implements ManagerDTO {
     /**
      * {@inheritDoc}
      */
-    public void setFirstName(String firstName) {
+    public void setFirstName(final String firstName) {
         this.firstName = firstName;
     }
 
@@ -85,7 +85,7 @@ public class ManagerDTOImpl implements ManagerDTO {
     /**
      * {@inheritDoc}
      */
-    public void setLastName(String lastName) {
+    public void setLastName(final String lastName) {
         this.lastName = lastName;
     }
 
@@ -93,15 +93,25 @@ public class ManagerDTOImpl implements ManagerDTO {
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals(Object otherObj) {
+        if (this == otherObj) {
+            return true;
+        }
+        if (otherObj == null || getClass() != otherObj.getClass()) {
+            return false;
+        }
 
-        ManagerDTOImpl that = (ManagerDTOImpl) o;
+        final ManagerDTOImpl that = (ManagerDTOImpl) otherObj;
 
-        if (!email.equals(that.email)) return false;
-        if (!firstName.equals(that.firstName)) return false;
-        if (!lastName.equals(that.lastName)) return false;
+        if (!email.equals(that.email)) {
+            return false;
+        }
+        if (!firstName.equals(that.firstName)) {
+            return false;
+        }
+        if (!lastName.equals(that.lastName)) {
+            return false;
+        }
 
         return true;
     }

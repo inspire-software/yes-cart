@@ -32,7 +32,7 @@ public class CarrierSlaServiceImpl extends BaseGenericServiceImpl<CarrierSla> im
 
     /** {@inheritDoc} */
     public BigDecimal getDeliveryPrice(final CarrierSla carrierSla,
-                                       Collection<CustomerOrderDeliveryDet> items,
+                                       final Collection<CustomerOrderDeliveryDet> items,
                                        final Address defaultAddress) {
         // TODO v2 at this moment fixed or zero delivery prices are supported, so just return the price from sla
         return carrierSla.getPrice();

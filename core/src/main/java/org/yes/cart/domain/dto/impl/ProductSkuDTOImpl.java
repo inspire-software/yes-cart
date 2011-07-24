@@ -210,18 +210,34 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     }
 
     @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals(final Object otherObject) {
+        if (this == otherObject) {
+            return true;
+        }
+        if (otherObject == null || getClass() != otherObject.getClass()) {
+            return false;
+        }
 
-        ProductSkuDTOImpl that = (ProductSkuDTOImpl) o;
+        final ProductSkuDTOImpl that = (ProductSkuDTOImpl) otherObject;
 
-        if (rank != that.rank) return false;
-        if (skuId != that.skuId) return false;
-        if (barCode != null ? !barCode.equals(that.barCode) : that.barCode != null) return false;
-        if (!code.equals(that.code)) return false;
-        if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (rank != that.rank) {
+            return false;
+        }
+        if (skuId != that.skuId) {
+            return false;
+        }
+        if (barCode != null ? !barCode.equals(that.barCode) : that.barCode != null) {
+            return false;
+        }
+        if (!code.equals(that.code)) {
+            return false;
+        }
+        if (description != null ? !description.equals(that.description) : that.description != null) {
+            return false;
+        }
+        if (name != null ? !name.equals(that.name) : that.name != null) {
+            return false;
+        }
 
         return true;
     }

@@ -13,12 +13,12 @@ public class EntityFactoryToBeanFactoryAdaptor implements dp.lib.dto.geda.adapte
 
     private final EntityFactory entityFactory;
 
-    public EntityFactoryToBeanFactoryAdaptor(EntityFactory entityFactory) {
+    public EntityFactoryToBeanFactoryAdaptor(final EntityFactory entityFactory) {
         this.entityFactory = entityFactory;
     }
 
     /** {@inheritDoc} */
-    public Object get(String entityBeanKey) {
+    public Object get(final String entityBeanKey) {
         return entityFactory.getByKey(entityBeanKey);
     }
 

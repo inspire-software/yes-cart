@@ -18,7 +18,7 @@ public class ProductSkuIdToEntityConverter extends GenericIdToEntityConverter<Pr
 
     /** {@inheritDoc}*/
     @Override
-    public Object convertToDto(Object object, BeanFactory beanFactory) {
+    public Object convertToDto(final Object object, final BeanFactory beanFactory) {
         return ((ProductSku) object).getSkuId();
     }
 

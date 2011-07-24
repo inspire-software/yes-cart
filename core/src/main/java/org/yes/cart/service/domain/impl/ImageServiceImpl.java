@@ -144,7 +144,7 @@ public class ImageServiceImpl
      * @return codec name
      */
     private String getCodecFromFilename(final String filename) {
-        final String fileExt = filename.substring(filename.lastIndexOf(".") + 1);
+        final String fileExt = filename.substring(filename.lastIndexOf('.') + 1);
         final String ext = fileExt.toLowerCase();
         if ("jpg".equals(ext)) {
             return "jpeg";
@@ -155,7 +155,7 @@ public class ImageServiceImpl
     }
 
 
-    private RenderedOp addPadding(final BufferedImage bufferedImage, int xPad, int yPad) {
+    private RenderedOp addPadding(final BufferedImage bufferedImage, final int xPad, final int yPad) {
         ParameterBlock borderParams = new ParameterBlock();
         borderParams.addSource(bufferedImage);
         borderParams.add(xPad); //left pad
@@ -187,9 +187,9 @@ public class ImageServiceImpl
     private boolean createFolder(final String fullPath) {
         int idx = fullPath.lastIndexOf(File.separator);
         if (idx == -1) {
-            idx = fullPath.lastIndexOf("/");
+            idx = fullPath.lastIndexOf('/');
             if (idx == -1) {
-                idx = fullPath.lastIndexOf("\\");
+                idx = fullPath.lastIndexOf('\\');
             }
         }
 

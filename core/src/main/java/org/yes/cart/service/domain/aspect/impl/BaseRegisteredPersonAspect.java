@@ -47,7 +47,7 @@ public class BaseRegisteredPersonAspect extends BaseNotificationAspect {
     }
 
     /**
-     *
+     * Perform notification about person registration.
      * @param pjp
      * @param newPerson in case if new person was created.
      * @return inherited return
@@ -95,7 +95,7 @@ public class BaseRegisteredPersonAspect extends BaseNotificationAspect {
         return pjp.proceed();
     }
 
-    private Set<String> transformShopUrls(Set<ShopUrl> urls) {
+    private Set<String> transformShopUrls(final Set<ShopUrl> urls) {
         final Set<String> rez = new HashSet<String>();
         if (urls != null) {
             for (ShopUrl url : urls) {

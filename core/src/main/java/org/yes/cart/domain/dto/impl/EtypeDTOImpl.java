@@ -61,15 +61,25 @@ public class EtypeDTOImpl implements EtypeDTO {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals(Object otherObj) {
+        if (this == otherObj) {
+            return true;
+        }
+        if (otherObj == null || getClass() != otherObj.getClass()) {
+            return false;
+        }
 
-        EtypeDTOImpl etypeDTO = (EtypeDTOImpl) o;
+        final EtypeDTOImpl etypeDTO = (EtypeDTOImpl) otherObj;
 
-        if (etypeId != etypeDTO.etypeId) return false;
-        if (!businesstype.equals(etypeDTO.businesstype)) return false;
-        if (!javatype.equals(etypeDTO.javatype)) return false;
+        if (etypeId != etypeDTO.etypeId) {
+            return false;
+        }
+        if (!businesstype.equals(etypeDTO.businesstype)) {
+            return false;
+        }
+        if (!javatype.equals(etypeDTO.javatype)) {
+            return false;
+        }
 
         return true;
     }

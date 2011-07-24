@@ -22,7 +22,7 @@ public class GenericDtoToEntityConverter<T> implements EntityRetriever {
         this.genericDAO = genericDAO;
     }
 
-    public Object retrieveByPrimaryKey(Class entityInterface, Class entityClass, Object primaryKey) {
+    public Object retrieveByPrimaryKey(final Class entityInterface, final Class entityClass, final Object primaryKey) {
         if (primaryKey != null) {
             try {
                 return genericDAO.findById((Long) primaryKey);

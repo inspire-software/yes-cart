@@ -116,7 +116,7 @@ public class PriceServiceImpl
     /**
      * {@inheritDoc}
      */
-    public List<SkuPrice> getSkuPrices(ProductSku productSku, final Shop shop, final String currencyCode) {
+    public List<SkuPrice> getSkuPrices(final ProductSku productSku, final Shop shop, final String currencyCode) {
         final Collection<ProductSku> productSkus = new ArrayList<ProductSku>(1);
         productSkus.add(productSku);
         return getSkuPrices(productSkus, shop, currencyCode);
