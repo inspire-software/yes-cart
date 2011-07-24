@@ -28,7 +28,9 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
      * @param warehouseService    to locate warehouse, that belong to shop where order was created
      * @param skuWarehouseService to credit quantity on warehouse
      */
-    public CancelOrderEventHandlerImpl(WarehouseService warehouseService, SkuWarehouseService skuWarehouseService) {
+    public CancelOrderEventHandlerImpl(
+            final WarehouseService warehouseService,
+            final SkuWarehouseService skuWarehouseService) {
         this.warehouseService = warehouseService;
         this.skuWarehouseService = skuWarehouseService;
     }

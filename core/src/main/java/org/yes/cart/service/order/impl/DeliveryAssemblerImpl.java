@@ -156,16 +156,17 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
 
     /**
      * Is order can be with multiple deliveries.
-     * @param order               given order
+     *
+     * @param order given order
      * @return true in case if order can has multiple physical deliveries.
      */
-     public boolean isOrderCanHasMultipleDeliveries(final CustomerOrder order) {
+    public boolean isOrderCanHasMultipleDeliveries(final CustomerOrder order) {
 
-         final Map<String, List<CustomerOrderDet>> deliveryGroups = getDeliveryGroups(order, false);
+        final Map<String, List<CustomerOrderDet>> deliveryGroups = getDeliveryGroups(order, false);
 
-         return (getPhysicalDeliveriesQty(deliveryGroups) > 1);
+        return (getPhysicalDeliveriesQty(deliveryGroups) > 1);
 
-     }
+    }
 
 
     /**
@@ -212,10 +213,10 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
                 return deliveryGroups;
 
             } else if (deliveryQty > 1) {
-                final List<String> removeGroups =  new ArrayList<String>();
+                final List<String> removeGroups = new ArrayList<String>();
                 final List<CustomerOrderDet> collector = new ArrayList<CustomerOrderDet>(5);
                 deliveryGroups.put(
-                    CustomerOrderDelivery.MIX_DELIVERY_GROUP,
+                        CustomerOrderDelivery.MIX_DELIVERY_GROUP,
                         collector
                 );
 
@@ -223,8 +224,8 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
                 for (Map.Entry<String, List<CustomerOrderDet>> entry : deliveryGroups.entrySet()) {
                     if (
                             !(CustomerOrderDelivery.ELECTONIC_DELIVERY_GROUP.equals(entry.getKey())
-                            ||
-                            CustomerOrderDelivery.MIX_DELIVERY_GROUP.equals(entry.getKey()))
+                                    ||
+                                    CustomerOrderDelivery.MIX_DELIVERY_GROUP.equals(entry.getKey()))
                             ) {
                         removeGroups.add(entry.getKey());
                         collector.addAll(entry.getValue());
@@ -271,10 +272,11 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
         if (availability.getAvailabilityId() == Availability.ALWAYS) {
 
             final Date availableFrom = customerOrderDet.getSku().getProduct().getAvailablefrom();
-            if (availableFrom != null) {
-                if (now.getTime() < availableFrom.getTime()) {
-                    return CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP;
-                }
+            if ((availableFrom != null)
+                    &&
+                    (now.getTime() < availableFrom.getTime())) {
+
+                return CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP;
             }
 
             if (customerOrderDet.getSku().getProduct().getProducttype().isDigital()) {
@@ -287,10 +289,8 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
             //inventory available
             if (availability.getAvailabilityId() == Availability.PREORDER) {
                 final Date availableFrom = customerOrderDet.getSku().getProduct().getAvailablefrom();
-                if (availableFrom != null) {
-                    if (now.getTime() < availableFrom.getTime()) {
-                        return CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP;
-                    }
+                if ((availableFrom != null) && (now.getTime() < availableFrom.getTime())) {
+                    return CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP;
                 }
             }
             if (MoneyUtils.isFirstBiggerThanSecond(customerOrderDet.getQty(), rest)) {
@@ -301,10 +301,8 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
             //inventory NOT available
             if (availability.getAvailabilityId() == Availability.PREORDER) {
                 final Date availableFrom = customerOrderDet.getSku().getProduct().getAvailablefrom();
-                if (availableFrom != null) {
-                    if (now.getTime() < availableFrom.getTime()) {
-                        return CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP;
-                    }
+                if ((availableFrom != null) && (now.getTime() < availableFrom.getTime())) {
+                    return CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP;
                 }
             }
             return CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP;

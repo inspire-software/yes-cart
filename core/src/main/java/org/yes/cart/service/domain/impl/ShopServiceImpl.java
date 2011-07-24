@@ -110,15 +110,15 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
         final Shop shop = shopDao.findById(shopId);
         if (shop != null) {
             AttrValueShop attrValueShop = shop.getAttributeByCode(attributeKey);
-            if (attrValueShop != null) {
-                attrValueShop.setVal(attributeValue);
-            } else {
+            if (attrValueShop == null) {
                 final Attribute attribute = attributeService.findByAttributeCode(attributeKey);
                 attrValueShop = getGenericDao().getEntityFactory().getByIface(AttrValueShop.class);
                 attrValueShop.setVal(attributeValue);
                 attrValueShop.setAttribute(attribute);
                 attrValueShop.setShop(shop);
                 shop.getAttribute().add(attrValueShop);
+            } else {
+                attrValueShop.setVal(attributeValue);
             }
             shopDao.update(shop);
         }

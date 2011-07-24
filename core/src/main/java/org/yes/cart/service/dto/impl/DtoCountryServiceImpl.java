@@ -5,14 +5,12 @@ import org.yes.cart.domain.dto.CountryDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.CountryDTOImpl;
 import org.yes.cart.domain.entity.Country;
-import org.yes.cart.exception.UnableToCreateInstanceException;
-import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.dto.DtoCountryService;
 
 /**
  * Country dto service.
- *
+ * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
@@ -23,9 +21,10 @@ public class DtoCountryServiceImpl
 
     /**
      * Construct country dto service.
-     * @param dtoFactory    {@link org.yes.cart.domain.dto.factory.DtoFactory}
-     * @param countryGenericService generic counry service
-     * @param valueConverterRepository   value converter
+     *
+     * @param dtoFactory               {@link org.yes.cart.domain.dto.factory.DtoFactory}
+     * @param countryGenericService    generic counry service
+     * @param valueConverterRepository value converter
      */
     public DtoCountryServiceImpl(final DtoFactory dtoFactory,
                                  final GenericService<Country> countryGenericService,
@@ -34,18 +33,23 @@ public class DtoCountryServiceImpl
     }
 
 
-
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Class<CountryDTO> getDtoIFace() {
         return CountryDTO.class;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Class<CountryDTOImpl> getDtoImpl() {
         return CountryDTOImpl.class;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Class<Country> getEntityIFace() {
         return Country.class;
     }

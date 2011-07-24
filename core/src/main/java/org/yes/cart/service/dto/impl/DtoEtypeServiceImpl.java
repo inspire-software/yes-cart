@@ -4,8 +4,6 @@ import org.yes.cart.domain.dto.EtypeDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.EtypeDTOImpl;
 import org.yes.cart.domain.entity.Etype;
-import org.yes.cart.exception.UnableToCreateInstanceException;
-import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.EtypeService;
 import org.yes.cart.service.dto.DtoEtypeService;
 

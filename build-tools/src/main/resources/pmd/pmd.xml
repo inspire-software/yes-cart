@@ -3893,6 +3893,7 @@ public class Foo {
 //VariableDeclaratorId[string-length(@Image) < 3]
  [not(ancestor::ForInit)]
  [not((ancestor::FormalParameter) and (ancestor::TryStatement))]
+ [not(@Image = 'id' or @Image = 'pk')]
                   ]]>
                 </value>
             </property>

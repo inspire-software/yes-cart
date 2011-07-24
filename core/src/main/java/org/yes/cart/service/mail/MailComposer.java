@@ -29,9 +29,9 @@ public interface MailComposer {
      * @param shopCode     optional shop code
      * @param templateName template name
      * @param from         from address
-     * @param to           mail desctinatiol address
-     * @param cc           optional cc
-     * @param bcc          optional bcc
+     * @param toEmail           mail desctinatiol address
+     * @param ccEmail           optional cc
+     * @param bccEmail          optional bcc
      * @param model        model
      * @throws javax.mail.MessagingException in case if mail message can not be converted
      * @throws java.io.IOException    in case of inline resources can not be found
@@ -42,9 +42,9 @@ public interface MailComposer {
             String shopCode,
             String templateName,
             String from,
-            String to,
-            String cc,
-            String bcc,
+            String toEmail,
+            String ccEmail,
+            String bccEmail,
             Map<String, Object> model)
                 throws MessagingException, IOException, ClassNotFoundException;
 }

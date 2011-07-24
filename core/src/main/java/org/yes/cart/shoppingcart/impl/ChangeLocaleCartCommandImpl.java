@@ -14,15 +14,20 @@ public class ChangeLocaleCartCommandImpl  extends AbstractSkuCartCommandImpl {
 
     private static final long serialVersionUID = 20110625L;
 
-    public static String CMD_KEY = "changeLocaleCmd";
+    public final static String CMD_KEY = "changeLocaleCmd";
+
+    private final String locale;
 
     /** {@inheritDoc} */
     public String getCmdKey() {
         return CMD_KEY;
     }
 
-    private String locale = null;
-
+    /**
+     * Construct command to change shopping cart locale.
+     * @param applicationContext  application context.
+     * @param parameters  command parameters.
+     */
     public ChangeLocaleCartCommandImpl(final ApplicationContext applicationContext, final Map parameters) {
         super(applicationContext, parameters);
         locale = (String) parameters.get(getCmdKey());

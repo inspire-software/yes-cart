@@ -5,8 +5,6 @@ import org.yes.cart.domain.dto.CarrierDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.CarrierDTOImpl;
 import org.yes.cart.domain.entity.Carrier;
-import org.yes.cart.exception.UnableToCreateInstanceException;
-import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.dto.DtoCarrierService;
 
@@ -16,13 +14,14 @@ import org.yes.cart.service.dto.DtoCarrierService;
  * Time: 14:12:54
  */
 public class DtoCarrierServiceImpl
-    extends AbstractDtoServiceImpl<CarrierDTO, CarrierDTOImpl, Carrier>
-    implements DtoCarrierService {
+        extends AbstractDtoServiceImpl<CarrierDTO, CarrierDTOImpl, Carrier>
+        implements DtoCarrierService {
 
     /**
      * Construct service.
-     * @param dtoFactory dto factory
-     * @param carrierGenericService generic service to use
+     *
+     * @param dtoFactory               dto factory
+     * @param carrierGenericService    generic service to use
      * @param valueConverterRepository convertor factory.
      */
     public DtoCarrierServiceImpl(final DtoFactory dtoFactory,
@@ -30,8 +29,6 @@ public class DtoCarrierServiceImpl
                                  final ValueConverterRepository valueConverterRepository) {
         super(dtoFactory, carrierGenericService, valueConverterRepository);
     }
-
-
 
 
     /**

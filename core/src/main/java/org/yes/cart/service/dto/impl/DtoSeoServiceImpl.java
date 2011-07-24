@@ -4,8 +4,6 @@ import org.yes.cart.domain.dto.SeoDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.SeoDTOImpl;
 import org.yes.cart.domain.entity.Seo;
-import org.yes.cart.exception.UnableToCreateInstanceException;
-import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.dto.DtoSeoService;
 

@@ -11,15 +11,15 @@
         <lucene.config.index.dir>/yes-cart/lucene-index</lucene.config.index.dir>
 
         <db.config.yes.hibernate.dialect>org.hibernate.dialect.DerbyDialect</db.config.yes.hibernate.dialect>
-        <db.config.yes.login>sa</db.config.yes.login>
-        <db.config.yes.password></db.config.yes.password>
-        <db.config.yes.driver>com.mysql.jdbc.Driver</db.config.yes.driver>
+        <db.config.yes.login>app</db.config.yes.login>
+        <db.config.yes.password>app</db.config.yes.password>
+        <db.config.yes.driver>org.apache.derby.jdbc.ClientDriver</db.config.yes.driver>
         <db.config.yes.url>jdbc:derby://localhost:1527/yes;create=true</db.config.yes.url>
 
         <db.config.yespay.hibernate.dialect>org.hibernate.dialect.DerbyDialect</db.config.yespay.hibernate.dialect>
-        <db.config.yespay.login>sa</db.config.yespay.login>
-        <db.config.yespay.password></db.config.yespay.password>
-        <db.config.yespay.driver>com.mysql.jdbc.Driver</db.config.yespay.driver>
+        <db.config.yespay.login>app</db.config.yespay.login>
+        <db.config.yespay.password>app</db.config.yespay.password>
+        <db.config.yespay.driver>org.apache.derby.jdbc.ClientDriver</db.config.yespay.driver>
         <db.config.yespay.url>jdbc:derby://localhost:1527/yespay;create=true</db.config.yespay.url>
 
 <!--

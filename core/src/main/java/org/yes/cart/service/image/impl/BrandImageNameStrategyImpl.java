@@ -10,16 +10,20 @@ import java.io.File;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class BrandImageNameStrategyImpl  extends AbstractImageNameStrategyImpl {
+public class BrandImageNameStrategyImpl extends AbstractImageNameStrategyImpl {
 
     private final static String PATH_PREFIX = Constants.BRAND_IMAGE_FILE_PREFIX + File.separator;
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     protected String getPathPrefix() {
         return PATH_PREFIX;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public String getCode(final String url) {
         return null;
     }

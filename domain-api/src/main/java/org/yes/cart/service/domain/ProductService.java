@@ -68,10 +68,10 @@ public interface ProductService extends GenericService<Product> {
     /**
      * Get product by his primary key value
      *
-     * @param id product id
+     * @param productId product id
      * @return product if found, otherwise null
      */
-    Product getProductById(Long id);
+    Product getProductById(Long productId);
 
     /**
      * Get the all products in category.

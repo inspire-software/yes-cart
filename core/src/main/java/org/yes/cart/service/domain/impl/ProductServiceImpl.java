@@ -162,8 +162,8 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * {@inheritDoc}
      */
     @Cacheable(value = "productServiceImplMethodCache")
-    public Product getProductById(final Long id) {
-        return productDao.findById(id);
+    public Product getProductById(final Long productId) {
+        return productDao.findById(productId);
     }
 
     /**
@@ -286,7 +286,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * @param productTypeId product type id
      * @return list of {@link FiteredNavigationRecord}
      */
-    private List<FiteredNavigationRecord> getRangeValueNavigationRecords(long productTypeId) {
+    private List<FiteredNavigationRecord> getRangeValueNavigationRecords(final long productTypeId) {
 
         final ProductType productType = productTypeDao.findById(productTypeId);
 
@@ -334,7 +334,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * @param list of raw object arrays after, result of named query
      * @return constructed list of navigation records.
      */
-    private List<FiteredNavigationRecord> constructBrandFilteredNavigationRecords(List<Object[]> list) {
+    private List<FiteredNavigationRecord> constructBrandFilteredNavigationRecords(final List<Object[]> list) {
         List<FiteredNavigationRecord> result = new ArrayList<FiteredNavigationRecord>(list.size());
         for (Object[] objArray : list) {
             result.add(
@@ -356,7 +356,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * @param list of raw object arrays after, result of named query
      * @return constructed list of navigation records.
      */
-    private List<FiteredNavigationRecord> constructFilteredNavigationRecords(List<Object[]> list) {
+    private List<FiteredNavigationRecord> constructFilteredNavigationRecords(final List<Object[]> list) {
         List<FiteredNavigationRecord> result = new ArrayList<FiteredNavigationRecord>(list.size());
         for (Object[] objArray : list) {
             result.add(

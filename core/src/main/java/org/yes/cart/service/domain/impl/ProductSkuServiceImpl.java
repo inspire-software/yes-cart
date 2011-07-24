@@ -26,7 +26,7 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
     /**
      * {@inheritDoc}
      */
-    public Collection<ProductSku> getAllProductSkus(long productId) {
+    public Collection<ProductSku> getAllProductSkus(final long productId) {
         final Product product = productDao.findById(productId);
         return product.getSku();
     }

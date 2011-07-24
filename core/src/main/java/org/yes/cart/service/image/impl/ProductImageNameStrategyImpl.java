@@ -6,7 +6,6 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.impl.AttrValueEntityProduct;
 import org.yes.cart.domain.entity.impl.AttrValueEntityProductSku;
-import org.yes.cart.service.domain.SystemService;
 
 
 /**
@@ -14,26 +13,22 @@ import org.yes.cart.service.domain.SystemService;
  * Product or SKU Code resolving will use two ways:
  * 1. Fast if url has the underscored code, example (.*)_CODE_(.*).imageextension
  * 2. In case if first way failed code will be resolved via attr values.
- *
+ * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
- *
-
- *
  */
-public class ProductImageNameStrategyImpl  extends AbstractImageNameStrategyImpl {
+public class ProductImageNameStrategyImpl extends AbstractImageNameStrategyImpl {
 
     private final GenericDAO<AttrValueEntityProduct, Long> attrValueEntityProductDao;
     private final GenericDAO<AttrValueEntityProductSku, Long> attrValueEntityProductSkuDao;
 
 
-
     /**
      * Construct image name strategy.
      *
-     * @param attrValueEntityProductSkuDao  product sku attributes  dao
-     * @param attrValueEntityProductDao     product attributes dao
+     * @param attrValueEntityProductSkuDao product sku attributes  dao
+     * @param attrValueEntityProductDao    product attributes dao
      */
     public ProductImageNameStrategyImpl(
             final GenericDAO<AttrValueEntityProductSku, Long> attrValueEntityProductSkuDao,
@@ -42,20 +37,24 @@ public class ProductImageNameStrategyImpl  extends AbstractImageNameStrategyImpl
         this.attrValueEntityProductDao = attrValueEntityProductDao;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     protected String getPathPrefix() {
         return StringUtils.EMPTY;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     @Cacheable(value = "productServiceImplMethodCache")
     public String getCode(final String url) {
 
         if (url != null) {
 
-            if ( url.indexOf('_') > -1) {
-                final String [] nameParts = url.split("_");
-                return nameParts[nameParts.length -2];
+            if (url.indexOf('_') > -1) {
+                final String[] nameParts = url.split("_");
+                return nameParts[nameParts.length - 2];
             }
 
             final String val = getFileNameWithoutPrefix(url);

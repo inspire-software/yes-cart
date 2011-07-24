@@ -18,18 +18,18 @@ import java.util.Properties;
 public class JnpInstantiationStrategyImpl implements InstantiationStrategy {
 
     private static final Logger LOG = LoggerFactory.getLogger(JnpInstantiationStrategyImpl.class);
-    private static final String AT = "@"; // delimiter between server and jndi name
+    private static final String AT_DELIMITER = "@"; // delimiter between server and jndi name
 
     /**
      * {@inheritDoc}
      */
     @SuppressWarnings({"unchecked"})
-    public <T> T getInstance(final String serviceUrl, 
+    public <T> T getInstance(final String serviceUrl,
                              final Class<T> iface,
                              final String loginName,
                              final String password) {
         //TODO pass login & pwd into context during lookup operation
-        if(LOG.isDebugEnabled()) {
+        if (LOG.isDebugEnabled()) {
             LOG.debug("Get " + serviceUrl + " as " + iface.getName());
         }
 
@@ -47,7 +47,7 @@ public class JnpInstantiationStrategyImpl implements InstantiationStrategy {
 
     protected <T> T internalLookup(final String url) throws NamingException {
 
-        final String providerUrl = getProviderUrl(url);        
+        final String providerUrl = getProviderUrl(url);
 
         final Properties prop = new Properties();  //TODO configure from spring
         prop.put(Context.INITIAL_CONTEXT_FACTORY, "org.jnp.interfaces.NamingContextFactory"); // jboss specific
@@ -60,7 +60,7 @@ public class JnpInstantiationStrategyImpl implements InstantiationStrategy {
     }
 
 
-/**
+    /**
      * Full reference: jnp://172.30.77.75:1099@common.service.locator.tests/TestSLejbA/local or .../TestSLejbA/remote
      * Short reference: common.service.locator.tests/TestSLejbA/local or .../TestSLejbA/remote
      * If reference is short default JNDI provider is used
@@ -69,7 +69,7 @@ public class JnpInstantiationStrategyImpl implements InstantiationStrategy {
      * @return jnp url of remote server
      */
     private String getProviderUrl(final String url) {
-        if (url.indexOf(AT) > -1) {
+        if (url.indexOf(AT_DELIMITER) > -1) {
             return url.split("@")[0];
         }
         return getDefaultProviderUrl();
@@ -86,7 +86,7 @@ public class JnpInstantiationStrategyImpl implements InstantiationStrategy {
      * @return jndi name
      */
     private String getJndiName(final String url) {
-        if (url.indexOf(AT) > -1) {
+        if (url.indexOf(AT_DELIMITER) > -1) {
             return url.split("@")[1];
         }
         return url;

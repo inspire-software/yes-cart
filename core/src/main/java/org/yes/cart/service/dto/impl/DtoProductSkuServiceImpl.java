@@ -49,7 +49,7 @@ public class DtoProductSkuServiceImpl
     /**
      * {@inheritDoc}
      */
-    public List<ProductSkuDTO> getAllProductSkus(long productId)
+    public List<ProductSkuDTO> getAllProductSkus(final long productId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final Collection<ProductSku> skus = ((ProductSkuService) getService()).getAllProductSkus(productId);
         final List<ProductSkuDTO> result = new ArrayList<ProductSkuDTO>(skus.size());
@@ -115,7 +115,7 @@ public class DtoProductSkuServiceImpl
     /**
      * {@inheritDoc}
      */
-    public long updateSkuPrice(SkuPriceDTO skuPriceDTO) {
+    public long updateSkuPrice(final SkuPriceDTO skuPriceDTO) {
         final SkuPrice skuPrice = priceService.getById(skuPriceDTO.getSkuPriceId());
         skuPriceAssembler.assembleEntity(skuPriceDTO, skuPrice,
                 getValueConverterRepository(),
@@ -129,7 +129,7 @@ public class DtoProductSkuServiceImpl
     /**
      * {@inheritDoc}
      */
-    public void removeSkuPrice(long skuPriceId) {
+    public void removeSkuPrice(final long skuPriceId) {
         priceService.delete(
                 priceService.getById(skuPriceId)
         );

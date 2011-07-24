@@ -17,10 +17,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
  * Perform separate processing of order deliveries.
- *
- *
+ * <p/>
+ * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
@@ -32,20 +31,21 @@ public class PaymentOkOrderEventHandlerImpl extends AbstractOrderEventHandlerImp
     private OrderStateManager orderStateManager = null;
     private ApplicationContext applicationContext;
 
-    private final Map<String,String> groupTriggerMap = new HashMap <String,String>() {{
+    private static final Map<String, String> GROUP_TRIGGER_MAP = new HashMap<String, String>() {{
 
-        put(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, OrderStateManager.EVT_PROCESS_ALLOCATION);
-        put(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, OrderStateManager.EVT_PROCESS_TIME_WAIT);
-        put(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, OrderStateManager.EVT_PROCESS_INVENTORY_WAIT);        
-        put(CustomerOrderDelivery.ELECTONIC_DELIVERY_GROUP, OrderStateManager.EVT_SHIPMENT_COMPLETE);
-        put(CustomerOrderDelivery.MIX_DELIVERY_GROUP, OrderStateManager.EVT_PROCESS_TIME_WAIT);
+            put(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, OrderStateManager.EVT_PROCESS_ALLOCATION);
+            put(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, OrderStateManager.EVT_PROCESS_TIME_WAIT);
+            put(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, OrderStateManager.EVT_PROCESS_INVENTORY_WAIT);
+            put(CustomerOrderDelivery.ELECTONIC_DELIVERY_GROUP, OrderStateManager.EVT_SHIPMENT_COMPLETE);
+            put(CustomerOrderDelivery.MIX_DELIVERY_GROUP, OrderStateManager.EVT_PROCESS_TIME_WAIT);
 
-    }};
+        }};
+
 
     /**
      * {@inheritDoc}
      */
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
 
@@ -63,12 +63,12 @@ public class PaymentOkOrderEventHandlerImpl extends AbstractOrderEventHandlerImp
         handleInternal(orderEvent);
         CustomerOrder order = orderEvent.getCustomerOrder();
         for (CustomerOrderDelivery delivery : order.getDelivery()) {
-            final String eventId = groupTriggerMap.get(delivery.getDeliveryGroup());
+            final String eventId = GROUP_TRIGGER_MAP.get(delivery.getDeliveryGroup());
             if (LOG.isInfoEnabled()) {
-                LOG.info(MessageFormat.format( "Delivery {0} for order {1} event {2}",
-                        delivery.getDevileryNum(), order.getOrdernum(),  eventId  ));
+                LOG.info(MessageFormat.format("Delivery {0} for order {1} event {2}",
+                        delivery.getDevileryNum(), order.getOrdernum(), eventId));
             }
-            final OrderEvent deliveryEvent = new OrderEventImpl( eventId,  order, delivery   );
+            final OrderEvent deliveryEvent = new OrderEventImpl(eventId, order, delivery);
             getOrderStateManager().fireTransition(deliveryEvent);
         }
         return true;

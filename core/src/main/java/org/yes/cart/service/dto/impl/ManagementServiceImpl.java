@@ -141,7 +141,8 @@ public class ManagementServiceImpl implements ManagementService {
         return result;
     }
 
-    private void fillRolesDTOs(List<RoleDTO> result, List<Role> roles) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    private void fillRolesDTOs(final List<RoleDTO> result, final List<Role> roles)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
         for (Role role : roles) {
             final RoleDTO roleDTO = dtoFactory.getByIface(RoleDTO.class);
             roleAssembler.assembleDto(roleDTO, role, null, dtoFactory);
@@ -153,7 +154,8 @@ public class ManagementServiceImpl implements ManagementService {
     /**
      * {@inheritDoc}
      */
-    public void addUser(final String userId, final String firstName, final String lastName) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+    public void addUser(final String userId, final String firstName, final String lastName)
+            throws NoSuchAlgorithmException, UnsupportedEncodingException {
 
         final Manager manager = managerService.getGenericDao().getEntityFactory().getByIface(Manager.class);
 

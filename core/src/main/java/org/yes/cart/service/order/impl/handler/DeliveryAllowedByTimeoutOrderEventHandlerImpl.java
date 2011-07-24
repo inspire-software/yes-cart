@@ -12,7 +12,7 @@ import java.util.Date;
 /**
  * Perform transition from time  wait to inventory wait state.
  * <p/>
- ** User: Igor Azarny iazarny@yahoo.com
+ * * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
@@ -30,10 +30,8 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImpl implements OrderEvent
         for (CustomerOrderDeliveryDet det : deliveryDetails) {
             final ProductSku productSku = det.getSku();
             final Date availableFrom = productSku.getProduct().getAvailablefrom();
-            if (availableFrom != null) {
-                if (availableFrom.getTime() > now.getTime()) {
-                    return false; // no transition, because need to wait
-                }
+            if ((availableFrom != null) && (availableFrom.getTime() > now.getTime())) {
+                return false; // no transition, because need to wait
             }
         }
 
@@ -42,7 +40,7 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImpl implements OrderEvent
         return true;
     }
 
-    private Date getCurrentDate() { 
+    private Date getCurrentDate() {
         return new Date(); //TODO v2 time machine
     }
 

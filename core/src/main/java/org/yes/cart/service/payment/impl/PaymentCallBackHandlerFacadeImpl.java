@@ -29,9 +29,10 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
 
     /**
      * Constract service.
+     *
      * @param paymentModulesManager Payment modules manager to get the order number from request parameters.
-     * @param customerOrderService to get order
-     * @param orderStateManager to perform transitions
+     * @param customerOrderService  to get order
+     * @param orderStateManager     to perform transitions
      */
     public PaymentCallBackHandlerFacadeImpl(final PaymentModulesManager paymentModulesManager,
                                             final CustomerOrderService customerOrderService,
@@ -41,7 +42,9 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
         this.orderStateManager = orderStateManager;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void handlePaymentCallback(final Map parameters, final String paymentGatewayLabel) {
         final String orderGuid = getOrderGuid(parameters, paymentGatewayLabel);
 
@@ -49,9 +52,15 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
 
             final CustomerOrder order = customerOrderService.findByGuid(orderGuid);
 
-            if (order != null) {
+            if (order == null) {
 
-                if (CustomerOrder.ORDER_STATUS_NONE.endsWith(order.getOrderStatus()) ) {
+                if (LOG.isWarnEnabled()) {
+                    LOG.warn("Can not get order with guid " + orderGuid);
+                }
+
+            } else {
+
+                if (CustomerOrder.ORDER_STATUS_NONE.endsWith(order.getOrderStatus())) {
 
                     OrderEvent orderEvent = new OrderEventImpl(
                             OrderStateManager.EVT_PENDING,
@@ -73,12 +82,6 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
                                 + " state, but " + order.getOrderStatus());
                     }
 
-                }
-
-            } else {
-
-                if (LOG.isWarnEnabled()) {
-                    LOG.warn("Can not get order with guid " + orderGuid);
                 }
 
             }
