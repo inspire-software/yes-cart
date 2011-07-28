@@ -76,7 +76,7 @@
         <constructor-arg index="0">
             <map>
                 <entry key="en" value="English"/>
-                <entry key="ru" value="Русский"/>
+                <entry key="ru" value="&#x0420;&#x0443;&#x0441;&#x0441;&#x043a;&#x0438;&#x0439;"/>
             </map>
         </constructor-arg>
     </bean>
