@@ -13,14 +13,14 @@
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>web</artifactId>
-        <version>${yes-cart.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.yes</groupId>
     <artifactId>yes-shop</artifactId>
     <packaging>war</packaging>
-    <version>${yes-cart.version}</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>Yes cart storefront</name>
     <url>http://maven.apache.org</url>
 
@@ -61,22 +61,22 @@
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>payment-api</artifactId>
-            <version>${yes-cart.version}</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>domain-api</artifactId>
-            <version>${yes-cart.version}</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>core</artifactId>
-            <version>${yes-cart.version}</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>websupport</artifactId>
-            <version>${yes-cart.version}</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
