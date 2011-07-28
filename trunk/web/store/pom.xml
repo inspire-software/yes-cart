@@ -20,7 +20,6 @@
     <groupId>org.yes</groupId>
     <artifactId>yes-shop</artifactId>
     <packaging>war</packaging>
-    <version>1.0.0-SNAPSHOT</version>
     <name>Yes cart storefront</name>
     <url>http://maven.apache.org</url>
 
