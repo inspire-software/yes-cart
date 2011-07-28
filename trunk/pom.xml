@@ -44,7 +44,7 @@
     <groupId>org.yes</groupId>
     <artifactId>yes-cart</artifactId>
     <packaging>pom</packaging>
-    <version>${yes-cart.version}</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>Yes Cart</name>
     <url>http://maven.apache.org</url>
 
@@ -123,7 +123,7 @@
                     <dependency>
                         <groupId>org.yes</groupId>
                         <artifactId>build-tools</artifactId>
-                        <version>${yes-cart.version}</version>
+                        <version>1.0.0-SNAPSHOT</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -134,7 +134,7 @@
                     <dependency>
                         <groupId>org.yes</groupId>
                         <artifactId>build-tools</artifactId>
-                        <version>${yes-cart.version}</version>
+                        <version>1.0.0-SNAPSHOT</version>
                     </dependency>
                 </dependencies>
             </plugin>

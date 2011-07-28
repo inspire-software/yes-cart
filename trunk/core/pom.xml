@@ -9,14 +9,14 @@
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>yes-cart</artifactId>
-        <version>${yes-cart.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.yes</groupId>
     <artifactId>core</artifactId>
     <packaging>jar</packaging>
-    <version>${yes-cart.version}</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>Yes cart core</name>
     <url>http://maven.apache.org</url>
 
@@ -27,27 +27,32 @@
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>payment-api</artifactId>
-            <version>${yes-cart.version}</version>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>core-modules</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>core-module-payment-base</artifactId>
-            <version>${yes-cart.version}</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>core-module-payment-capp</artifactId>
-            <version>${yes-cart.version}</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>domain-api</artifactId>
-            <version>${yes-cart.version}</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>persistence</artifactId>
-            <version>${yes-cart.version}</version>
+            <version>1.0.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 

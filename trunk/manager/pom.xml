@@ -5,14 +5,14 @@
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>yes-cart</artifactId>
-        <version>${yes-cart.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.yes</groupId>
     <artifactId>manager</artifactId>
     <packaging>pom</packaging>
-    <version>${yes-cart.version}</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>Yes cart manager modules</name>
     <url>http://maven.apache.org</url>
 
