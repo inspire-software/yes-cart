@@ -30,8 +30,8 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
             <security:jdbc-user-service
                     data-source-ref="dataSourceSec"
                     group-authorities-by-username-query=""
-                    users-by-username-query="SELECT m.email as username, m.password, 1 as 'enabled' FROM TMANAGER m where m.email = ?"
-                    authorities-by-username-query="SELECT mr.email as username, mr.code as 'authority' FROM TMANAGERROLE mr  WHERE mr.email = ?"/>
+                    users-by-username-query="SELECT m.email as username, m.password, 1 as enabled FROM TMANAGER m where m.email = ?"
+                    authorities-by-username-query="SELECT mr.email as username, mr.code as authority FROM TMANAGERROLE mr  WHERE mr.email = ?"/>
         </security:authentication-provider>
     </security:authentication-manager>
 

@@ -182,12 +182,18 @@
             <artifactId>derby</artifactId>
             <version>10.8.1.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derbyclient</artifactId>
+            <version>10.8.1.2</version>
+        </dependency>
+
 
 
     </dependencies>
 
     <build>
-        <finalName>yes-manager-server</finalName>
+        <finalName>yes-manager</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
