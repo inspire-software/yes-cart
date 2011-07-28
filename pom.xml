@@ -54,6 +54,9 @@
             <name>Maven JBoss Nexus</name>
             <layout>default</layout>
             <url>http://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
