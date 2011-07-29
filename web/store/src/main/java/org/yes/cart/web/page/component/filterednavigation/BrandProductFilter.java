@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ *
+ * Simple product filtering by brand component.
+ *
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 7/18/11
  * Time: 10:00 PM
@@ -51,8 +54,11 @@ public class BrandProductFilter extends AbstractProductFilter {
      */
     List<FiteredNavigationRecord> getFilteredNagigationRecords(
             final List<FiteredNavigationRecord> allNavigationRecords) {
+
         final List<FiteredNavigationRecord> navigationList = new ArrayList<FiteredNavigationRecord>();
+
         if (!isAttributeAlreadyFiltered(ProductSearchQueryBuilder.BRAND_FIELD)) {
+
             final BrandSearchQueryBuilder queryBuilder = new BrandSearchQueryBuilder();
 
             for (FiteredNavigationRecord record : allNavigationRecords) {
