@@ -25,6 +25,8 @@ import java.util.*;
  */
 public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implements ProductService {
 
+    private final static String PROD_SERV_METHOD_CACHE =  "productServiceImplMethodCache";
+
     private final GenericDAO<Product, Long> productDao;
     private final GenericDAO<ProductSku, Long> productSkuDao;
     private final GenericDAO<ProductType, Long> productTypeDao;
@@ -58,12 +60,12 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         return getGenericDao().create(instance);
     }
 
-    @Cacheable(value = "productServiceImplMethodCache")
+    @Cacheable(value = PROD_SERV_METHOD_CACHE)
     public Product getById(final Long productId) {
         return productDao.findById(productId);
     }
 
-    @Cacheable(value = "productServiceImplMethodCache")
+    @Cacheable(value = PROD_SERV_METHOD_CACHE)
     public ProductSku getSkuById(final Long skuId) {
         return productSkuDao.findById(skuId);
     }
@@ -79,7 +81,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "productServiceImplMethodCache")
+    @Cacheable(value = PROD_SERV_METHOD_CACHE)
     public Product getRandomProductByCategory(final Category category) {
         if (!category.getProductCategory().isEmpty()) {
             int idx = rand.nextInt(category.getProductCategory().size());
@@ -136,7 +138,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "productServiceImplMethodCache")
+    @Cacheable(value = PROD_SERV_METHOD_CACHE)
     public ProductSku getProductSkuByCode(final String skuCode) {
         final List<ProductSku> skus = productSkuDao.findByNamedQuery("PRODUCT.SKU.BY.CODE", skuCode);
         if (CollectionUtils.isEmpty(skus)) {
@@ -152,7 +154,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * @param skuCode sku code
      * @return product sku for this sku code
      */
-    @Cacheable(value = "productServiceImplMethodCache")
+    @Cacheable(value = PROD_SERV_METHOD_CACHE)
     public Product getProductBySkuCode(final String skuCode) {
         return (Product) productDao.getScalarResultByNamedQuery("PRODUCT.BY.SKU.CODE", skuCode);
     }
@@ -161,7 +163,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "productServiceImplMethodCache")
+    @Cacheable(value = PROD_SERV_METHOD_CACHE)
     public Product getProductById(final Long productId) {
         return productDao.findById(productId);
     }
@@ -169,7 +171,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "productServiceImplMethodCache")
+    @Cacheable(value = PROD_SERV_METHOD_CACHE)
     public List<Product> getProductByQuery(
             final Query query,
             final int firtsResult,
@@ -182,7 +184,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "productServiceImplMethodCache")
+    @Cacheable(value = PROD_SERV_METHOD_CACHE)
     public List<Product> getFeaturedProducts(final List categories) {
         List<Product> list = productDao.findQueryObjectsByNamedQueryWithList("PRODUCT.FEATURED", categories, new Date());  //TODO v2 time machine
         Collections.shuffle(list);
@@ -192,7 +194,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "productServiceImplMethodCache")
+    @Cacheable(value = PROD_SERV_METHOD_CACHE)
     public List<Product> getProductByQuery(
             final Query query,
             final int firtsResult,
@@ -208,7 +210,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "productServiceImplMethodCache")
+    @Cacheable(value = PROD_SERV_METHOD_CACHE)
     public int getProductQty(final Query query) {
         return productDao.getResultCount(query);
     }
@@ -232,7 +234,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "productServiceImplMethodCache")
+    @Cacheable(value = PROD_SERV_METHOD_CACHE)
     public List<Object> getDistinctAttributeValues(final long productTypeId, final String code) {
         return productDao.findQueryObjectByNamedQuery(
                 "PRODUCTS.ATTRIBUTE.VALUES.BY.CODE.PRODUCTTYPEID",
@@ -258,7 +260,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * @param productTypeId product type id
      * @return list of distinct attib values
      */
-    @Cacheable(value = "productServiceImplMethodCache")
+    @Cacheable(value = PROD_SERV_METHOD_CACHE)
     public List<FiteredNavigationRecord> getDistinctAttributeValues(final long productTypeId) {
         final List<FiteredNavigationRecord> records = new ArrayList<FiteredNavigationRecord>();
         records.addAll(getSingleValueNavigationRecords(productTypeId));
@@ -377,7 +379,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "productServiceImplMethodCache")
+    @Cacheable(value = PROD_SERV_METHOD_CACHE)
     public Long getProductIdBySeoUri(final String seoUri) {
         List<Product> list = productDao.findByNamedQuery("PRODUCT.BY.SEO.URI", seoUri);
         if (list != null && !list.isEmpty()) {
@@ -389,7 +391,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "productServiceImplMethodCache")
+    @Cacheable(value = PROD_SERV_METHOD_CACHE)
     public Long getProductSkuIdBySeoUri(final String seoUri) {
         List<ProductSku> list = productSkuDao.findByNamedQuery("SKU.BY.SEO.URI", seoUri);
         if (list != null && !list.isEmpty()) {
@@ -402,7 +404,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "productServiceImplMethodCache")
+    @Cacheable(value = PROD_SERV_METHOD_CACHE)
     public int getProductQty(final long categoryId) {
         return Integer.valueOf(
                 String.valueOf(productDao.getScalarResultByNamedQuery("PRODUCTS.QTY.BY.CATEGORYID", categoryId, new Date())));

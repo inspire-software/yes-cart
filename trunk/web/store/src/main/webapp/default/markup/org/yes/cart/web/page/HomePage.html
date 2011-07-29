@@ -1,15 +1,11 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xml:lang="en" lang="en"
-      xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.5-strict.dtd">
-
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="../../../../style/default.css" media="screen"/>
     <title>Yes shop</title>
 </head>
-
 
 <body>
 
@@ -49,11 +45,20 @@
         </td>
     </tr>
     <tr>
-        <td valign="top">
+        <td valign="top" width="180">
              <wicket:container wicket:id="topCategories">
                 [switch language]
             </wicket:container>
+
             <wicket:container wicket:id="brandFilter">
+                [brand filter]
+            </wicket:container>
+
+            <wicket:container wicket:id="attributeFilter">
+                [brand filter]
+            </wicket:container>
+
+            <wicket:container wicket:id="priceFilter">
                 [brand filter]
             </wicket:container>
         </td>
@@ -63,7 +68,7 @@
                 [switch language]
             </wicket:container>
         </td>
-        <td>
+        <td width="180">
             New arrivals and promo
         </td>
     </tr>

@@ -13,7 +13,9 @@ import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.*;
+import org.yes.cart.web.page.component.filterednavigation.AttributeProductFilter;
 import org.yes.cart.web.page.component.filterednavigation.BrandProductFilter;
+import org.yes.cart.web.page.component.filterednavigation.PriceProductFilter;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.constants.WebServiceSpringKey;
@@ -96,6 +98,8 @@ public class HomePage extends AbstractWebPage {
         add(new Language("language"));
         add(new TopCategories("topCategories"));
         add(new BrandProductFilter("brandFilter", query, categoryId));
+        add(new AttributeProductFilter("attributeFilter", query, categoryId));
+        add(new PriceProductFilter("priceFilter", query, categoryId));
 
         add(getCentralPanel(centralViewLabel, "centralView", categoryId, query));
 
