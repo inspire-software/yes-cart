@@ -16,10 +16,7 @@ import org.yes.cart.service.domain.AttributeService;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -236,6 +233,8 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
     private Object[] getValues(final Object value) {
         if (value instanceof Object[]) {
             return (Object[]) value;
+        } else if (value instanceof Collection) {
+            return ((Collection) value).toArray();
         } else {
             return new Object[]{String.valueOf(value)};
         }

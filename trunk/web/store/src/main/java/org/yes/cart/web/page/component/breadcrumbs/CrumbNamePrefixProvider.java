@@ -1,4 +1,4 @@
-package org.yes.cart.web.support.breadcrumbs;
+package org.yes.cart.web.page.component.breadcrumbs;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com

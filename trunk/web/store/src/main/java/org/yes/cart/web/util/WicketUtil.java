@@ -5,6 +5,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
+import org.apache.wicket.util.string.*;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 
 import javax.servlet.http.HttpServletRequest;
@@ -70,7 +71,7 @@ public class WicketUtil {
      * that not contains given set of request parameter names
      *
      * @param parameters original request parameters
-     * @return new filtered {@link LinkedHashMap}
+     * @return new filtered {@link PageParameters}
      */
     public static PageParameters getFilteredRequestParameters(final PageParameters parameters) {
         final PageParameters rez = new PageParameters(parameters);
@@ -79,6 +80,31 @@ public class WicketUtil {
                 rez.remove(paramName);
             }
 
+        }
+        return rez;
+    }
+
+    /**
+     * Get the filtered, from commands, request parameters,
+     * that not contains given key and his value.
+     *
+     *
+     * @param parameters original request parameters
+     * @param key key part to remove
+     * @param value value part to remove
+     * @return new filtered {@link PageParameters}
+     */
+    public static PageParameters getFilteredRequestParameters(
+            final PageParameters parameters,
+            final String key,
+            final String value) {
+        final PageParameters rez = getFilteredRequestParameters (parameters);
+        final List<StringValue> vals = rez.getValues(key);
+        if (vals.size() > 1) {
+            //todo remove particular key - value     wait for WICKET-3938 resolution
+            throw new RuntimeException("todo remove particular key - value");
+        } else {
+            rez.remove(key);
         }
         return rez;
     }
