@@ -19,9 +19,10 @@ public interface Association extends Auditable {
     String ACCESSORIES = "accessories";
     String UP_SELL = "up";
     String BUY_WITH_THIS = "buywiththis";
+    String EXPENDABLE = "expendable";
 
     /**
-     * @return pkimary key.
+     * @return primary key.
      */
     long getAssociationId();
 

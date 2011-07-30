@@ -6,8 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.web.support.breadcrumbs.CrumbNamePrefixProvider;
 import org.yes.cart.web.support.constants.WebParametersKeys;
+import org.yes.cart.web.support.util.HttpUtil;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.util.*;
@@ -64,9 +64,10 @@ public class BreadCrumbsBuilder {
      * We have 2 kinds of breadcrumbs:
      * 1. category path, for example electronics -> phones -> ip phones
      * 2. attributive filters, for example ip phones [price range, brands, weight, ect]
+     * @return list of crumbs
      */
     public List<Crumb> getBreadCrumbs() {
-        List<Crumb> crumbs = new ArrayList<Crumb>();
+        final List<Crumb> crumbs = new ArrayList<Crumb>();
         crumbs.addAll(getCategoriesCrumbs(categoryId));
         crumbs.addAll(getFilteredNavigationCrumbs(allowedAttributeNames));
         return crumbs;
@@ -98,9 +99,9 @@ public class BreadCrumbsBuilder {
         final Category category = categoryService.getById(categoryId);
         if (categoryId != category.getParentId()) {
             categoriesCrumbs.add(
-                    new Crumb(category.getName(),
-                   /* getCategoryLinkParameters(categoryId)*/ null,
-                    /*getRemoveCategoryLinkParameters(category)*/ null)
+                   new Crumb(category.getName(),
+                   getCategoryLinkParameters(categoryId),
+                   getRemoveCategoryLinkParameters(category))
             );
 
             if (LOG.isDebugEnabled()) {
@@ -110,17 +111,25 @@ public class BreadCrumbsBuilder {
         }
     }
 
-    public LinkedHashMap getCategoryLinkParameters(final long categoryId) {
-        final LinkedHashMap parameters = new LinkedHashMap();
-        parameters.put(WebParametersKeys.CATEGORY_ID, categoryId);
-        return parameters;
+    /**
+     * Get {@link PageParameters}, that point to given category.
+     * @param categoryId given category id
+     * @return  page parameters for link
+     */
+    public PageParameters getCategoryLinkParameters(final long categoryId) {
+        return new PageParameters().add(WebParametersKeys.CATEGORY_ID, categoryId);
     }
 
-    private LinkedHashMap getRemoveCategoryLinkParameters(final Category category) {
+    /**
+     * Get {@link PageParameters}, that point to parent, if any, of given category.
+     * @param category given category
+     * @return page parameter for point to parent.
+     */
+    private PageParameters getRemoveCategoryLinkParameters(final Category category) {
         if (shopCategoryIds.contains(category.getParentId())) {
             return getCategoryLinkParameters(category.getParentId());
         }
-        return new LinkedHashMap();
+        return new PageParameters();
     }
 
     private void fillAttributes(
@@ -132,34 +141,27 @@ public class BreadCrumbsBuilder {
                 pageParameters,
                 allowedAttributeNames);
 
-        //Base hold category path from begining and accomulate all attributive navigation
+        //Base hold category path from begining and accumulate all attributive navigation
         final PageParameters base = WicketUtil.getFilteredRequestParameters(
                 pageParameters,
                 allowedAttributeNames);
 
-        //If we are on display product page, we have to remove for filtering
+        //If we are on display product page, we have to remove for filtering  as well as sku
         base.remove(WebParametersKeys.PRODUCT_ID);
+        base.remove(WebParametersKeys.SKU_ID);
 
         for (PageParameters.NamedPair namedPair : attributesOnly.getAllNamed()) {
             final List<StringValue> vals =  attributesOnly.getValues(namedPair.getKey());
             for (StringValue val : vals) {
                 navigationCrumbs.add(createFilteredNavigationCrumb(base, namedPair.getKey(), val.toString()));
-
             }
-            /*if (entry.getValue() instanceof Object[]) {
-                for (Object obj : (Object[]) entry.getValue()) {
-                    navigationCrumbs.add(createFilteredNavigationCrumb(base, key, obj));
-                }
-            } else {
-                navigationCrumbs.add(createFilteredNavigationCrumb(base, key, entry.getValue()));
-            }*/
         }
     }
 
     /**
      * Create filtered navigation crubm with two links:
      * <p/>
-     * First - curreent postion, that include the whole path before current.
+     * First - current position, that include the whole path before current.
      * example category/17/subcategory/156/proce/100-200/currentkey/currentvalue
      * <p/>
      * Second - the whole current path without current
@@ -176,40 +178,19 @@ public class BreadCrumbsBuilder {
     private Crumb createFilteredNavigationCrumb(
             final PageParameters base,
             final String key,
-            final Object value) {
-        final String stringValue = String.valueOf(value);
+            final String value) {
 
-        final PageParameters withoutCurrent = getAllPathWithoutMe(key, value);
+        final PageParameters withoutCurrent = WicketUtil.getFilteredRequestParameters(
+                pageParameters,
+                key,
+                value
+        );
 
         final String linkName = namePrefixProvider.getLinkNamePrefix(key)
                 + "::"
-                + namePrefixProvider.getLinkName(key, stringValue);
+                + namePrefixProvider.getLinkName(key, value);
         base.add(key, value);
         return new Crumb(linkName, new PageParameters(base), withoutCurrent);
-    }
-
-    private PageParameters getAllPathWithoutMe(final String key, final Object value) {
-        /*final LinkedHashMap<String, ?> withoutCurrent =
-                NavigationUtil.getFilteredRequestParameters(pageParameters);
-
-        //withoutCurrent.remove(key); this can not be used, because of multiple parameters for one key
-        //example search/search_term1/search/search_term2
-        for (Map.Entry entry : withoutCurrent.entrySet()) {
-            if (entry.getKey().equals(key)) {
-                if (entry.getValue() instanceof Object[]) {
-                    List newValues = new ArrayList(Arrays.asList((Object[]) entry.getValue()));
-                    newValues.remove(value);
-                    String[] valuesToSet = new String[newValues.size()];
-                    entry.setValue(newValues.toArray(valuesToSet));
-                    break;
-                }
-                withoutCurrent.entrySet().remove(entry);
-                break;
-            }
-        }
-        return withoutCurrent; */
-
-        return null; //todo migrate to 1.5
     }
 
 }

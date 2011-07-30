@@ -41,7 +41,9 @@
     </tr>
     <tr>
         <td colspan="3">
-            Category &gt;&gt; Subcat >> Q1 &gt;&gt; Q2 &gt;&gt; Attr 1 &gt;&gt; Product &gt;&gt; Sku
+            <wicket:container wicket:id="breadCrumbs">
+                [bread crumbs]
+            </wicket:container>
         </td>
     </tr>
     <tr>
@@ -62,7 +64,7 @@
                 [brand filter]
             </wicket:container>
         </td>
-        <td>
+        <td valign="top">
             <wicket:container wicket:id="version">1.5-SNAPSHOT</wicket:container>
             <wicket:container wicket:id="centralView">
                 [switch language]

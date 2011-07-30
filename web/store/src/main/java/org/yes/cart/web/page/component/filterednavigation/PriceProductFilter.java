@@ -62,11 +62,12 @@ public class PriceProductFilter extends AbstractProductFilter {
 
         if (categoryId > 0) {
 
-            filteredNavigationByPrice = getCategory().getNavigationByPrice() == null ? false : getCategory().getNavigationByPrice();
+            priceTierTree = getCategory().getNavigationByPriceTree();
+
+            filteredNavigationByPrice = (getCategory().getNavigationByPrice() == null || priceTierTree == null)
+                    ? false : getCategory().getNavigationByPrice();
 
             if (filteredNavigationByPrice) {
-
-                priceTierTree = getCategory().getNavigationByPriceTree();
 
                 currency = ApplicationDirector.getShoppingCart().getCurrencyCode();
 

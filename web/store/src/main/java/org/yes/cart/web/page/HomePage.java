@@ -13,6 +13,7 @@ import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.*;
+import org.yes.cart.web.page.component.breadcrumbs.BreadCrumbsView;
 import org.yes.cart.web.page.component.filterednavigation.AttributeProductFilter;
 import org.yes.cart.web.page.component.filterednavigation.BrandProductFilter;
 import org.yes.cart.web.page.component.filterednavigation.PriceProductFilter;
@@ -72,13 +73,15 @@ public class HomePage extends AbstractWebPage {
 
         final String centralViewLabel = centralViewResolver.resolveMainPanelRendererLabel(mapParams);
 
+        final long categoryId = NumberUtils.toLong(HttpUtil.getSingleValue(mapParams.get(WebParametersKeys.CATEGORY_ID)));
+
         final Shop shop =  ApplicationDirector.getCurrentShop();
 
-        final long categoryId = NumberUtils.toLong(HttpUtil.getSingleValue(mapParams.get(WebParametersKeys.CATEGORY_ID)));
+        final List<Long> shopCategories = getCategories(categoryId);
 
         final List<BooleanQuery> queriesChain = luceneQueryFactory.getFilteredNavigationQueryChain(
                 shop.getShopId(),
-                getCategories(categoryId),
+                shopCategories,
                 mapParams,
                 categoryService.transform(shopService.getShopCategories(shop))
         );
@@ -100,6 +103,7 @@ public class HomePage extends AbstractWebPage {
         add(new BrandProductFilter("brandFilter", query, categoryId));
         add(new AttributeProductFilter("attributeFilter", query, categoryId));
         add(new PriceProductFilter("priceFilter", query, categoryId));
+        add(new BreadCrumbsView("breadCrumbs", categoryId, shopCategories));
 
         add(getCentralPanel(centralViewLabel, "centralView", categoryId, query));
 
