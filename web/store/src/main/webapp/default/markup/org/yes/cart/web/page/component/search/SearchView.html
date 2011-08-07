@@ -4,12 +4,14 @@
     <div>
 
         <script type="text/javascript">
-            var sURL = window.location.pathname;
             function search() {
                 var aInput = document.getElementById("searchPhraze");
                 if (!isBlank(aInput.value)) {
-                    var query = '/query/' + aInput.value;
-                    window.location.href = sURL + query;
+                    if ((window.location.href.lastIndexOf("/") == window.location.href.length - 1)) {
+                        window.location.href = window.location.href + 'query/' + aInput.value;
+                    } else {
+                        window.location.href = window.location.href + '/query/' + aInput.value;
+                    }
                 }
             }
             function isBlank(str) {
