@@ -1,13 +1,10 @@
 package org.yes.cart.web.application;
 
 import com.google.common.collect.MapMaker;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
-import javax.servlet.ServletContext;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 

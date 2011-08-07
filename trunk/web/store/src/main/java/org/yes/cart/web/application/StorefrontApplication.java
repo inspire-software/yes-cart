@@ -8,10 +8,16 @@ import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.cycle.RequestCycleContext;
+import org.apache.wicket.request.mapper.MountedMapper;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.file.IResourceFinder;
 import org.apache.wicket.util.resource.IResourceStream;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.page.HomePage;
+import org.yes.cart.web.util.SeoBookmarkablePageParametersEncoder;
 
 import java.util.Locale;
 import java.util.Map;
@@ -64,7 +70,30 @@ public class StorefrontApplication extends WebApplication implements IResourceFi
 
         getComponentInstantiationListeners().add(new SpringComponentInjector(this));
 
+        mountPages();
 
+
+
+    }
+
+    /**
+     * Mount pages to particular pathes.
+     */
+    private void mountPages() {
+        final ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
+        final CategoryService categoryService = ctx.getBean("categoryService", CategoryService.class);
+        final ProductService productService = ctx.getBean("productService", ProductService.class);
+
+        mount(
+                new MountedMapper(
+                        "/",
+                        HomePage.class,
+                        new SeoBookmarkablePageParametersEncoder(
+                                categoryService,
+                                productService
+                        )
+                )
+        );
     }
 
     /**
