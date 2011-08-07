@@ -81,17 +81,14 @@ public class StorefrontApplication extends WebApplication implements IResourceFi
      */
     private void mountPages() {
         final ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
-        final CategoryService categoryService = ctx.getBean("categoryService", CategoryService.class);
-        final ProductService productService = ctx.getBean("productService", ProductService.class);
-
+        final SeoBookmarkablePageParametersEncoder encoder = ctx.getBean(
+                "seoBookmarkablePageParametersEncoder",
+                SeoBookmarkablePageParametersEncoder.class);
         mount(
                 new MountedMapper(
                         "/",
                         HomePage.class,
-                        new SeoBookmarkablePageParametersEncoder(
-                                categoryService,
-                                productService
-                        )
+                        encoder
                 )
         );
     }

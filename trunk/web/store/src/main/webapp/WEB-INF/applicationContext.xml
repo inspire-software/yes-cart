@@ -229,7 +229,7 @@
             </map>
         </constructor-arg>
         <constructor-arg index="1" ref="categoryService"/>
-        <constructor-arg index="2" value="RANDOM_PRODUCT"/>
+        <constructor-arg index="2" value="RANDOM_PRODUCT"/> <!-- one of the allowed stategy label -->
 
     </bean>
 
@@ -252,6 +252,13 @@
                 <value>setQuantityToCartCmd</value>
             </list>
         </property>
+    </bean>
+
+    <bean id="seoBookmarkablePageParametersEncoder" class="org.yes.cart.web.util.SeoBookmarkablePageParametersEncoder">
+        <constructor-arg index="0" ref="categoryService"/>
+        <constructor-arg index="1" ref="productService"/>
+        <constructor-arg index="2" value="true" /> <!-- is seo url rewriting enabled -->
+
     </bean>
 
 
