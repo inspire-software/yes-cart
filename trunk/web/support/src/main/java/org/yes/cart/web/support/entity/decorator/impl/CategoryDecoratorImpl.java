@@ -25,6 +25,7 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
      * @param categoryImageService  category image service to get the image.
      * @param categoryEntity  entity to decorate.
      * @param httpServletContextPath servlet context path
+     * @param categoryService category service to get the images width and height
      */
     public CategoryDecoratorImpl(final CategoryImageService categoryImageService,
                                  final CategoryService categoryService,

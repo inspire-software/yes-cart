@@ -5,9 +5,12 @@ import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvid
 import org.apache.wicket.model.IModel;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
+import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.support.entity.decorator.ProductDecorator;
 import org.yes.cart.web.support.entity.decorator.impl.ProductDecoratorImpl;
+import org.yes.cart.web.support.service.ProductImageService;
+import org.yes.cart.web.util.WicketUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,6 +27,8 @@ import java.util.List;
 public class SortableProductDataProvider extends SortableDataProvider<ProductDecorator> {
 
     private final ProductService productService;
+    private final ProductImageService productImageService;
+    private final CategoryService categoryService;
     private final Query query;
     private String sortFieldName = ProductSearchQueryBuilder.PRODUCT_CATEGORY_RANK_FIELD;
     private boolean reverse = false;
@@ -35,8 +40,13 @@ public class SortableProductDataProvider extends SortableDataProvider<ProductDec
      * @param productService product service to get the products.
      * @param query          lucene query.
      */
-    public SortableProductDataProvider(ProductService productService, Query query) {
+    public SortableProductDataProvider(final ProductService productService,
+                                       final ProductImageService productImageService,
+                                       final CategoryService categoryService,
+                                       final Query query) {
         this.productService = productService;
+        this.productImageService = productImageService;
+        this.categoryService = categoryService;
         this.query = query;
     }
 
@@ -59,7 +69,14 @@ public class SortableProductDataProvider extends SortableDataProvider<ProductDec
     private List<ProductDecorator> decorate(final List<Product> productsToDecorate) {
         final List<ProductDecorator> rez = new ArrayList<ProductDecorator>(productsToDecorate.size());
         for (Product product : productsToDecorate) {
-            rez.add(new ProductDecoratorImpl(product));
+            rez.add(
+                    new ProductDecoratorImpl(
+                            productImageService,
+                            categoryService,
+                            product,
+                            WicketUtil.getHttpServletRequest().getContextPath()
+                    )
+            );
         }
         return rez;
     }

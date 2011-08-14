@@ -22,9 +22,14 @@ public interface WebServiceSpringKey {
      */
     public String CENTRAL_VIEW_RESOLVER = "centralViewResolver";
 
-    /**
-     * Category image service .
-     */
-    public String CATEGORY_IMAGE_SERVICE = "categoryImageService";
+     /**
+      * Category image service .
+      */
+     public String CATEGORY_IMAGE_SERVICE = "categoryImageService";
+
+     /**
+      * Product image service .
+      */
+     public String PRODUCT_IMAGE_SERVICE = "productImageService";
 
 }
