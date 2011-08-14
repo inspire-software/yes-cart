@@ -4,25 +4,23 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.GridView;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.query.ProductSearchQueryBuilder;
+import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.component.data.SortableProductDataProvider;
 import org.yes.cart.web.page.component.navigation.ProductPerPageListView;
 import org.yes.cart.web.page.component.navigation.ProductSorter;
 import org.yes.cart.web.page.component.navigation.URLPagingNavigator;
+import org.yes.cart.web.page.component.product.ProductInListView;
 import org.yes.cart.web.support.constants.WebParametersKeys;
+import org.yes.cart.web.support.constants.WebServiceSpringKey;
 import org.yes.cart.web.support.entity.decorator.ProductDecorator;
+import org.yes.cart.web.support.service.ProductImageService;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.util.List;
@@ -43,7 +41,7 @@ public class ProductCentralView extends AbstractCentralView {
      * Name of product view.
      */
     private static final String PAGINATOR = "paginator";
-   /**
+    /**
      * Name of product view.
      */
     private static final String SORTER = "sorter";
@@ -58,10 +56,14 @@ public class ProductCentralView extends AbstractCentralView {
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
 
-
-
     @SpringBean(name = ServiceSpringKeys.PRODUCT_SERVICE)
     protected ProductService productService;
+
+    @SpringBean(name = WebServiceSpringKey.PRODUCT_IMAGE_SERVICE)
+    protected ProductImageService productImageService;
+
+    @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
+    protected CategoryService categoryService;
 
     /**
      * Construct panel.
@@ -70,7 +72,7 @@ public class ProductCentralView extends AbstractCentralView {
      * @param categoryId   current category id.
      * @param booleanQuery boolean query.
      */
-    public ProductCentralView(String id, long categoryId, BooleanQuery booleanQuery) {
+    public ProductCentralView(final String id, long categoryId, final BooleanQuery booleanQuery) {
         super(id, categoryId, booleanQuery);
     }
 
@@ -88,7 +90,7 @@ public class ProductCentralView extends AbstractCentralView {
                 getPage().getPageParameters(), itemsPerPageValues);
 
         final SortableProductDataProvider dataProvider = new
-                SortableProductDataProvider(productService, getBooleanQuery());
+                SortableProductDataProvider(productService, productImageService, categoryService, getBooleanQuery());
 
         applySortFieldAndOrder(dataProvider);
 
@@ -96,13 +98,9 @@ public class ProductCentralView extends AbstractCentralView {
 
             protected void populateItem(Item<ProductDecorator> productItem) {
                 productItem.add(
-                        new Label(PRODUCT, productItem.getModelObject().getName())
+                        new ProductInListView(PRODUCT, productItem.getModelObject(), getCategory())
                 );
-                // Auto component will look at parent data
-                //Product product = (Product) productItem.getDefaultModel().getObject();
-                //productItem.add(new ProductInListPanel(PRODUCT, product));
             }
-
 
             protected void populateEmptyItem(Item<ProductDecorator> productItem) {
                 productItem.add(
@@ -141,8 +139,6 @@ public class ProductCentralView extends AbstractCentralView {
 
         super.onBeforeRender();
     }
-
-
 
 
     private void applySortFieldAndOrder(SortableProductDataProvider dataProvider) {

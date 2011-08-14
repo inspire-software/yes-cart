@@ -1,0 +1,43 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<body>
+<wicket:panel>
+    <table border="1" width="200">
+        <tr>
+            <td>
+                <a wicket:id="productLinkSku">
+                    <span wicket:id="skunum">[sku num]</span>
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a wicket:id="productLinkName">
+                    <span wicket:id="name">[name]</span>
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div>
+                    <a wicket:id="addToCartLink">
+                        <wicket:message key="add.to.cart">[add one to cart]</wicket:message>
+                    </a>
+                </div>
+                <div>
+                    <wicket:container wicket:id="priceView">
+                        [price]
+                    </wicket:container>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a wicket:id="productLinkImage">
+                    <img border="0" wicket:id="productDefaultImage"/>
+                </a>
+            </td>
+        </tr>
+    </table>
+</wicket:panel>
+</body>
+</html>

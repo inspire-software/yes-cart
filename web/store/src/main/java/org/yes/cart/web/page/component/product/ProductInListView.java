@@ -1,0 +1,124 @@
+package org.yes.cart.web.page.component.product;
+
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.image.ContextImage;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.constants.ServiceSpringKeys;
+import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.Product;
+import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl;
+import org.yes.cart.web.page.HomePage;
+import org.yes.cart.web.page.component.BaseComponent;
+import org.yes.cart.web.support.constants.WebParametersKeys;
+import org.yes.cart.web.support.constants.WebServiceSpringKey;
+import org.yes.cart.web.support.entity.decorator.ProductDecorator;
+import org.yes.cart.web.support.entity.decorator.impl.ProductDecoratorImpl;
+import org.yes.cart.web.support.service.ProductImageService;
+import org.yes.cart.web.util.WicketUtil;
+
+/**
+ * User: Igor Azarny iazarny@yahoo.com
+ * Date: 8/8/11
+ * Time: 11:43 AM
+ */
+public class ProductInListView extends BaseComponent {
+
+    // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
+    private final static String PRODUCT_LINK_SKU = "productLinkSku";
+    private final static String SKU_LABEL = "skunum";
+    private final static String PRODUCT_LINK_NAME = "productLinkName";
+    private final static String NAME_LABEL = "name";
+    private final static String ADD_TO_CART_LINK = "addToCartLink";
+    private final static String PRICE_VIEW = "priceView";
+    private final static String PRODUCT_LINK_IMAGE = "productLinkImage";
+    private final static String PRODUCT_IMAGE = "productDefaultImage";
+    // ------------------------------------- MARKUP IDs END ------------------------------------ //
+
+    private final ProductDecorator product;
+
+    private final Category category;
+
+
+    @SpringBean(name = WebServiceSpringKey.PRODUCT_IMAGE_SERVICE)
+    private ProductImageService productImageService;
+
+    @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
+    private CategoryService categoryService;
+
+
+    /**
+     * Construct product view, that show product in grid.
+     *
+     * @param id       view od
+     * @param product  product model
+     * @param category product in category, optional parameter
+     */
+    public ProductInListView(final String id, final Product product, final Category category) {
+        super(id);
+        if (category == null) {
+            this.category = categoryService.getRootCategory();
+        } else {
+            this.category = category;
+        }
+        this.product = new ProductDecoratorImpl(
+                productImageService,
+                categoryService,
+                product,
+                WicketUtil.getHttpServletRequest().getContextPath());
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void onBeforeRender() {
+
+        final PageParameters linkToProductParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters());
+        linkToProductParameters.set(WebParametersKeys.PRODUCT_ID, product.getId());
+
+        final String width = product.getProductImageWidth(category);
+        final String height = product.getProductImageHeight(category);
+
+        add(
+                new BookmarkablePageLink<HomePage>(PRODUCT_LINK_SKU, HomePage.class, linkToProductParameters).add(
+                        new Label(SKU_LABEL, product.getCode())
+                )
+        );
+
+        add(
+                new BookmarkablePageLink<HomePage>(PRODUCT_LINK_NAME, HomePage.class, linkToProductParameters).add(
+                        new Label(NAME_LABEL, product.getName())
+                )
+        );
+
+        add(
+                new BookmarkablePageLink<HomePage>(PRODUCT_LINK_IMAGE, HomePage.class, linkToProductParameters).add(
+                        new ContextImage(PRODUCT_IMAGE, product.getProductImage(width, height))
+                                .add(new AttributeModifier("width", width))
+                                .add(new AttributeModifier("height", height))
+                )
+        );
+
+        final PageParameters addToCartParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters());
+        addToCartParameters.set(AddSkuToCartEventCommandImpl.CMD_KEY, product.getDefaultSku().getCode());
+
+
+        add(
+                new BookmarkablePageLink<HomePage>(ADD_TO_CART_LINK, HomePage.class, addToCartParameters)
+        );
+
+        add(
+                new Label(PRICE_VIEW, "TODO add price")
+        );
+
+
+        super.onBeforeRender();
+    }
+}

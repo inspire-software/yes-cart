@@ -209,7 +209,7 @@
         </constructor-arg>
     </bean>
 
-
+    <!-- ################################## Category , Product and Sku image services begin ######################## -->
     <bean id="categoryImageAttributeStrategy"
           class="org.yes.cart.web.support.service.impl.CategoryImageRetrieveStrategyAttributeImpl">
         <constructor-arg index="0" value="CATEGORY_IMAGE"/>
@@ -230,8 +230,10 @@
         </constructor-arg>
         <constructor-arg index="1" ref="categoryService"/>
         <constructor-arg index="2" value="RANDOM_PRODUCT"/> <!-- one of the allowed stategy label -->
-
     </bean>
+
+    <bean id="productImageService" class="org.yes.cart.web.support.service.impl.ProductImageServiceImpl"/>
+    <!-- ############################ Category , Product and Sku image services end ############################### -->
 
     <bean id="wicketUtil" class="org.yes.cart.web.util.WicketUtil">
         <property name="cmdKeys">
