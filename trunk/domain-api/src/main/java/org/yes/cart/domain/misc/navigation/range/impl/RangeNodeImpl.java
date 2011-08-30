@@ -29,6 +29,15 @@ public class RangeNodeImpl implements RangeNode {
     }
 
     /**
+     * Construct value range. Default constructor
+     *
+     * @param range value range.
+     */
+    public RangeNodeImpl() {
+	super();
+    }
+
+    /**
      * Construct value range.
      *
      * @param range value range.

@@ -3,8 +3,8 @@
 
 
     <properties>
-        <wicket.version>1.5-RC5.1</wicket.version>
-        <!--wicket.version>1.5-SNAPSHOT</wicket.version-->
+        <!--wicket.version>1.5-RC5.1</wicket.version-->
+        <wicket.version>1.5-SNAPSHOT</wicket.version>
 
         <jetty.version>6.1.4</jetty.version>
         <mysql-connector.version>5.1.13</mysql-connector.version>
@@ -22,6 +22,21 @@
     <packaging>war</packaging>
     <name>Yes cart storefront</name>
     <url>http://maven.apache.org</url>
+
+<repositories> <!-- wicket -->
+    <repository>
+        <releases>
+            <enabled>false</enabled>
+        </releases>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
+        <id>apache.snapshots</id>
+        <name>Apache Snapshot Repository</name>
+        <url>http://repository.apache.org/content/groups/snapshots</url>
+        <layout>default</layout>
+    </repository>
+</repositories>
 
 
     <build>
