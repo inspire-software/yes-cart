@@ -17,6 +17,13 @@ public class PriceTierNodeImpl implements PriceTierNode {
 
     private List<PriceTierNode> priceSubRange;
 
+    /**
+     * Defualt PriceTierNodeImpl constructor. 
+     */
+    public PriceTierNodeImpl() {
+        super();
+    }
+
     public Pair<BigDecimal, BigDecimal> getPriceRange() {
         return priceRange;
     }

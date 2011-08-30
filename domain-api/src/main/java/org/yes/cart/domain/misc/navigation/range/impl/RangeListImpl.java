@@ -16,4 +16,11 @@ public class RangeListImpl<E> extends ArrayList implements RangeList, Serializab
 
     private static final long serialVersionUID = 20100711L;
 
+    /**
+     * Default constructror.
+     */
+    public RangeListImpl() {
+        super();
+    }
+
 }
