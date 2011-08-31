@@ -78,7 +78,7 @@ public class SkuWarehouseServiceImplTest extends BaseCoreDBTestCase {
         skuWarehouse = skuWarehouseService.getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);
         skuWarehouse.setSku(productSkuService.getById(11006L));
         skuWarehouse.setWarehouse(warehouseService.getById(3L));
-        skuWarehouse.setQuantity(BigDecimal.ONE);
+        skuWarehouse.setQuantity(new BigDecimal("4.00"));
         skuWarehouse.setReserved(new BigDecimal("0.00"));
         skuWarehouseService.create(skuWarehouse);
 
@@ -93,7 +93,7 @@ public class SkuWarehouseServiceImplTest extends BaseCoreDBTestCase {
         dumpDataBase("after_testGetQuantity" , new String [] {"TSKUWAREHOUSE"});
 
         Pair<BigDecimal,BigDecimal> rez = skuWarehouseService.getQuantity(warehouses, psku);
-        assertEquals(new BigDecimal("11.00"), rez.getFirst());
+        assertEquals(new BigDecimal("14.00"), rez.getFirst());
         assertEquals(new BigDecimal("5.00"), rez.getSecond());
 
     }
@@ -130,6 +130,11 @@ public class SkuWarehouseServiceImplTest extends BaseCoreDBTestCase {
         skuWarehouse.setQuantity(BigDecimal.ONE);
         skuWarehouse = skuWarehouseService.update(skuWarehouse);
         assertEquals(BigDecimal.ONE, skuWarehouse.getQuantity());
+
+        long pk = skuWarehouse.getSkuWarehouseId();
+        skuWarehouseService.delete(skuWarehouse);
+        skuWarehouse = skuWarehouseService.getById(pk);
+        assertNull(skuWarehouse);
 
     }
 
