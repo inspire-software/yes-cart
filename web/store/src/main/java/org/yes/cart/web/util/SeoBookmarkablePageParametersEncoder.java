@@ -104,7 +104,7 @@ public class SeoBookmarkablePageParametersEncoder implements IPageParametersEnco
             if (name == null) {
                 name = segment;
             } else {
-                parameters.set(name, decodeId(name, segment));
+                parameters.add(name, decodeId(name, segment));
                 name = null;
             }
         }

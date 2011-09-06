@@ -115,12 +115,18 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      */
     @Cacheable(value = "categoryServiceImplMethodCache")
     public List<String> getItemsPerPage(final Category category) {
-        final String val = getCategoryAttributeRecursive(category, AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
-        if (val == null) {
-            return Constants.DEFAULT_ITEMS_ON_PAGE;
+        final List<String> rez;
+        if (category == null) {
+            rez = Constants.DEFAULT_ITEMS_ON_PAGE;
         } else {
-            return Arrays.asList(val.split(","));
+            final String val = getCategoryAttributeRecursive(category, AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
+            if (val == null) {
+                rez = Constants.DEFAULT_ITEMS_ON_PAGE;
+            } else {
+                rez = Arrays.asList(val.split(","));
+            }
         }
+        return rez;
     }
 
     /**
@@ -149,18 +155,25 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      * @return value of given attibute name or null if value not found in category hierarchy
      */
     private String getCategoryAttributeRecursive(final Category category, final String attributeName) {
-        if (category.getAttributeByCode(attributeName) == null
-                ||
-                StringUtils.isBlank(category.getAttributeByCode(attributeName).getVal())) {
-            if (category.getCategoryId() == category.getParentId()) {
-                return null; //root of hierarchy
-            }
-            final Category parentCategory =
-                    categoryDao.findById(category.getParentId());
-            return getCategoryAttributeRecursive(parentCategory, attributeName);
+        final String rez;
+        if (category == null || attributeName == null) {
+            rez = null;
         } else {
-            return category.getAttributeByCode(attributeName).getVal();
+            if (category.getAttributeByCode(attributeName) == null
+                    ||
+                    StringUtils.isBlank(category.getAttributeByCode(attributeName).getVal())) {
+                if (category.getCategoryId() == category.getParentId()) {
+                    rez = null; //root of hierarchy
+                } else {
+                    final Category parentCategory =
+                            categoryDao.findById(category.getParentId());
+                    rez = getCategoryAttributeRecursive(parentCategory, attributeName);
+                }
+            } else {
+                rez = category.getAttributeByCode(attributeName).getVal();
+            }
         }
+        return rez;
     }
 
     /**

@@ -151,10 +151,7 @@ public class BreadCrumbsBuilder {
         base.remove(WebParametersKeys.SKU_ID);
 
         for (PageParameters.NamedPair namedPair : attributesOnly.getAllNamed()) {
-            final List<StringValue> vals =  attributesOnly.getValues(namedPair.getKey());
-            for (StringValue val : vals) {
-                navigationCrumbs.add(createFilteredNavigationCrumb(base, namedPair.getKey(), val.toString()));
-            }
+            navigationCrumbs.add(createFilteredNavigationCrumb(base, namedPair.getKey(), namedPair.getValue()));
         }
     }
 

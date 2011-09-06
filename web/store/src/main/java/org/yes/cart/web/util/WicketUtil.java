@@ -101,8 +101,7 @@ public class WicketUtil {
         final PageParameters rez = getFilteredRequestParameters (parameters);
         final List<StringValue> vals = rez.getValues(key);
         if (vals.size() > 1) {
-            //todo remove particular key - value     wait for WICKET-3938 resolution
-            throw new RuntimeException("todo remove particular key - value");
+            rez.remove(key, value);
         } else {
             rez.remove(key);
         }
