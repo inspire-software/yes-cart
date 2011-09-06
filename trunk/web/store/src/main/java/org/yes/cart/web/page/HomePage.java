@@ -92,7 +92,7 @@ public class HomePage extends AbstractWebPage {
                 null,
                 categoryId,
                 centralViewLabel,
-                null
+                getItemId()
         );
 
 
@@ -110,12 +110,21 @@ public class HomePage extends AbstractWebPage {
         add(getCentralPanel(centralViewLabel, "centralView", categoryId, query));
 
 
-
-
-
         super.onBeforeRender();
 
 
+    }
+
+    /**
+     * Get product id or product sku id.
+     * @return product id or product sku id.
+     */
+    private String getItemId() {
+        String itemId = HttpUtil.getSingleValue(mapParams.get(WebParametersKeys.PRODUCT_ID));
+        if (itemId == null) {
+            itemId = HttpUtil.getSingleValue(mapParams.get(WebParametersKeys.SKU_ID));
+        }
+        return itemId;
     }
 
 
