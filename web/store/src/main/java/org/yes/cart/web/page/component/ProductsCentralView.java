@@ -30,7 +30,7 @@ import java.util.List;
  * Date: 7/13/11
  * Time: 10:29 PM
  */
-public class ProductCentralView extends AbstractCentralView {
+public class ProductsCentralView extends AbstractCentralView {
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     /**
@@ -72,7 +72,7 @@ public class ProductCentralView extends AbstractCentralView {
      * @param categoryId   current category id.
      * @param booleanQuery boolean query.
      */
-    public ProductCentralView(final String id, long categoryId, final BooleanQuery booleanQuery) {
+    public ProductsCentralView(final String id, long categoryId, final BooleanQuery booleanQuery) {
         super(id, categoryId, booleanQuery);
     }
 
