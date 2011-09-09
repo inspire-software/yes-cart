@@ -2,7 +2,6 @@ package org.yes.cart.web.page;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.lucene.search.BooleanQuery;
-import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -26,7 +25,6 @@ import org.yes.cart.web.support.util.HttpUtil;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.lang.reflect.Constructor;
-import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -149,10 +147,10 @@ public class HomePage extends AbstractWebPage {
     private static final Map<String, Class<? extends AbstractCentralView>> rendererPanelMap =
             new HashMap<String, Class<? extends AbstractCentralView>>() {{
                 put(CentralViewLabel.SUBCATEGORIES_LIST, SubCategoriesCentralView.class);
-                put(CentralViewLabel.PRODUCTS_LIST, ProductCentralView.class);
+                put(CentralViewLabel.PRODUCTS_LIST, ProductsCentralView.class);
                 put(CentralViewLabel.PRODUCT, null);
                 put(CentralViewLabel.SKU, null);
-                put(CentralViewLabel.SEARCH_LIST, ProductCentralView.class);
+                put(CentralViewLabel.SEARCH_LIST, ProductsCentralView.class);
                 put(CentralViewLabel.DEFAULT, EmptyCentralView.class);
             }};
 
