@@ -87,6 +87,7 @@ public class AttributeProductFilter extends AbstractProductFilter {
 
     }
 
+
     private BooleanQuery getQueryCandidate(final AttributiveSearchQueryBuilderImpl queryBuilder, final FiteredNavigationRecord record) {
 
         final Map map;

@@ -74,6 +74,8 @@ public class BaseFilterView extends BaseComponent {
         super.onBeforeRender();
     }
 
+    
+
     /**
      * {@inheritDoc}
      */

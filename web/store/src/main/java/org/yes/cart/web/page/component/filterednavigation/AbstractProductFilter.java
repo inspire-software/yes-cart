@@ -192,7 +192,7 @@ public abstract class AbstractProductFilter extends BaseComponent {
             currentPair.getSecond().add(
                     new Pair<Pair<String, Integer>, PageParameters>(
                             new Pair<String, Integer>(
-                                    adaptValueForLinkLabel(navigationRecord.getValue()),
+                                    adaptValueForLinkLabel(navigationRecord.getValue(), navigationRecord.getDisplayValue()),
                                     navigationRecord.getCount()),
                             getNavigationParameter(navigationRecord.getCode(), navigationRecord.getValue())
                     )
@@ -204,11 +204,15 @@ public abstract class AbstractProductFilter extends BaseComponent {
     /**
      * Adapt parameter value to be represented as filtered navigation label.
      *
-     * @param valueToAdapt
-     * @return
+     * @param valueToAdapt value to adapt
+     * @param displayValue display value
+     * @return  adapted value
      */
-    protected String adaptValueForLinkLabel(final String valueToAdapt) {
-        return valueToAdapt;
+    protected String adaptValueForLinkLabel(final String valueToAdapt, final String displayValue) {
+        if (displayValue == null) {
+            return valueToAdapt;
+        }
+        return displayValue;
     }
 
     /**

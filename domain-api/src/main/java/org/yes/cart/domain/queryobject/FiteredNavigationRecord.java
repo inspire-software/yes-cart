@@ -42,6 +42,20 @@ public interface FiteredNavigationRecord extends Rankable {
     void setValue(String value);
 
     /**
+     * Get attribute display value
+     *
+     * @return attribute display value.
+     */
+    String getDisplayValue();
+
+    /**
+     * Set display value.
+     *
+     * @param displayValue display value to use.
+     */
+    void setDisplayValue(String displayValue);
+
+    /**
      * Get the count of object, that mach the navigation record. Not set by productService, but by lucene.
      *
      * @return count of object.
