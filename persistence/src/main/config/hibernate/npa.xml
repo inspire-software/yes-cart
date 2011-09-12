@@ -1941,6 +1941,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
+    private ProductSku defaultProductSku = null;
     private long productId;
     //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
     @DocumentId
@@ -1961,10 +1962,20 @@ public void setRangeList(final RangeList rangeList) {
 
     @Transient
     public ProductSku getDefaultSku() {
-        if (this.getSku() != null && !this.getSku().isEmpty()) {
-            return this.getSku().iterator().next();
+        if (defaultProductSku == null) {
+            if (this.getSku() != null && !this.getSku().isEmpty()) {
+                if (isMultiSkuProduct()) { //multisku
+                    for (ProductSku productSku : this.getSku()) {
+                        if (productSku.getCode().endsWith(this.getCode())) {
+                            defaultProductSku = productSku;
+                        }
+                    }
+                } else { //single sku
+                    defaultProductSku = this.getSku().iterator().next();
+                }
+            }
         }
-        return null;        
+        return defaultProductSku;
     }
 
    @Transient
@@ -1999,12 +2010,7 @@ public void setRangeList(final RangeList rangeList) {
 
     @Transient
     public ProductSku getSku(final String skuCode) {
-        for(ProductSku prodSku : sku) {
-            if ( prodSku.getCode().equals(skuCode)) {
-                return prodSku;
-            }
-        }
-        return null;
+        return getDefaultSku();
     }
 
     @Transient

@@ -114,8 +114,8 @@ public class AttributeProductFilter extends AbstractProductFilter {
      * {@inheritDoc}
      */
     public boolean isVisible() {
-        return  /*super.isPanelVisible()
-                && */filteredNavigationByAttribute
+        return  super.isVisible()
+                && filteredNavigationByAttribute
                 && getNavigationRecords() != null
                 && !getNavigationRecords().isEmpty();
     }

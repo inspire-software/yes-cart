@@ -148,8 +148,8 @@ public class PriceProductFilter extends AbstractProductFilter {
      * {@inheritDoc}
      */
     public boolean isVisible() {
-        return  /*super.isPanelVisible()
-                && */filteredNavigationByPrice
+        return  super.isVisible()
+                && filteredNavigationByPrice
                 && getNavigationRecords() != null
                 && !getNavigationRecords().isEmpty();
     }

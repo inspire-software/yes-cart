@@ -251,6 +251,8 @@ public interface Product extends Auditable, Attributable {
 
     /**
      * Get the default sku. For single sku product it will be only one sku.
+     * In case of multi sku product default sku has the same sku code as product, otherwise
+     * the first will be returned.,
      *
      * @return default sku or null if not found
      */

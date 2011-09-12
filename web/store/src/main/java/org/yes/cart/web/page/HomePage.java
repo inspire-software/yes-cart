@@ -148,8 +148,8 @@ public class HomePage extends AbstractWebPage {
             new HashMap<String, Class<? extends AbstractCentralView>>() {{
                 put(CentralViewLabel.SUBCATEGORIES_LIST, SubCategoriesCentralView.class);
                 put(CentralViewLabel.PRODUCTS_LIST, ProductsCentralView.class);
-                put(CentralViewLabel.PRODUCT, null);
-                put(CentralViewLabel.SKU, null);
+                put(CentralViewLabel.PRODUCT, SkuCentralView.class);
+                put(CentralViewLabel.SKU, SkuCentralView.class);
                 put(CentralViewLabel.SEARCH_LIST, ProductsCentralView.class);
                 put(CentralViewLabel.DEFAULT, EmptyCentralView.class);
             }};
