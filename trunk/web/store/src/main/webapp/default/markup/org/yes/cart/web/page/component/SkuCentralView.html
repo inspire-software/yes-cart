@@ -1,9 +1,43 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
 <wicket:panel>
-    <table width="100%">
+    <table width="100%" border="1">
+        <tr>
+            <td colspan="2">
+                <span wicket:id="skuCode">[sku num]</span>
+                <span wicket:id="name">[product or sku name]</span>
+            </td>
+        </tr>        
         <tr>
             <td>
+                <wicket:container wicket:id="imageView">
+                    [product image view]
+                </wicket:container>
+            </td>
+            <td>
+                <div>
+                    <a wicket:id="addToCartLink">
+                        <wicket:message key="add.to.cart">[add one to cart]</wicket:message>
+                    </a>
+                    <wicket:container wicket:id="priceView">
+                        [price]
+                    </wicket:container>
+                </div>
+                <div>
+                    <wicket:container wicket:id="priceTiersView">
+                        [price tiers view]
+                    </wicket:container>
+                </div>
+                <div>
+                    <wicket:container wicket:id="skuList">
+                        [product variation / sku list]
+                    </wicket:container>
+                </div>
+                <div>
+                    <wicket:container wicket:id="description">
+                        [product or sku description]
+                    </wicket:container>
+                </div>
             </td>
         </tr>
     </table>

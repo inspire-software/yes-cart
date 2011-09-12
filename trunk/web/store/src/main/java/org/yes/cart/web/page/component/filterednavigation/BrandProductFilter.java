@@ -84,8 +84,8 @@ public class BrandProductFilter extends AbstractProductFilter {
      * {@inheritDoc}
      */
     public boolean isVisible() {
-        return  /*super.isPanelVisible()
-                && */filteredNavigationByBrand
+        return  super.isVisible()
+                && filteredNavigationByBrand
                 && getNavigationRecords() != null
                 && !getNavigationRecords().isEmpty();
     }

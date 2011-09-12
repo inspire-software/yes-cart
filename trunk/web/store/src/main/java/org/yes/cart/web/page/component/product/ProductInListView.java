@@ -4,10 +4,8 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
@@ -31,7 +29,7 @@ public class ProductInListView extends BaseComponent {
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private final static String PRODUCT_LINK_SKU = "productLinkSku";
-    private final static String SKU_LABEL = "skunum";
+    private final static String SKU_CODE_LABEL = "skuCode";
     private final static String PRODUCT_LINK_NAME = "productLinkName";
     private final static String NAME_LABEL = "name";
     private final static String ADD_TO_CART_LINK = "addToCartLink";
@@ -88,7 +86,7 @@ public class ProductInListView extends BaseComponent {
 
         add(
                 new BookmarkablePageLink<HomePage>(PRODUCT_LINK_SKU, HomePage.class, linkToProductParameters).add(
-                        new Label(SKU_LABEL, product.getCode())
+                        new Label(SKU_CODE_LABEL, product.getCode())
                 )
         );
 
@@ -108,7 +106,6 @@ public class ProductInListView extends BaseComponent {
 
         final PageParameters addToCartParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters());
         addToCartParameters.set(AddSkuToCartEventCommandImpl.CMD_KEY, product.getDefaultSku().getCode());
-
 
         add(
                 new BookmarkablePageLink<HomePage>(ADD_TO_CART_LINK, HomePage.class, addToCartParameters)
