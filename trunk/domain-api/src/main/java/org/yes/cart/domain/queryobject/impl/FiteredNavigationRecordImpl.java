@@ -19,6 +19,8 @@ public class FiteredNavigationRecordImpl implements FiteredNavigationRecord, Ser
 
     private String value;
 
+    private String displayValue;
+
     private int count;
 
     private int rank;
@@ -110,6 +112,20 @@ public class FiteredNavigationRecordImpl implements FiteredNavigationRecord, Ser
     }
 
     /**
+     * {@inheritDoc
+     */
+    public String getDisplayValue() {
+        return displayValue;
+    }
+
+    /**
+     * {@inheritDoc
+     */
+    public void setDisplayValue(final String displayValue) {
+        this.displayValue = displayValue;
+    }
+
+    /**
      * Construct filtered navigation record.
      *
      * @param name  attribute nave
@@ -147,18 +163,21 @@ public class FiteredNavigationRecordImpl implements FiteredNavigationRecord, Ser
      * @param name  attribute nave
      * @param code  attribute code
      * @param value value
+     * @param displayValue display value
      * @param count count of objects.
      * @param rank  rank
      * @param type  type of navigation S - single value R - range value
      */
-    public FiteredNavigationRecordImpl(final String name, final String code, final String value,
+    public FiteredNavigationRecordImpl(final String name, final String code, final String value, final String displayValue,
                                        final int count, final int rank, final String type) {
         this.name = name;
         this.code = code;
         this.value = value;
+        this.displayValue = displayValue;
         this.count = count;
         this.rank = rank;
         this.type = type;
+
     }
 
 

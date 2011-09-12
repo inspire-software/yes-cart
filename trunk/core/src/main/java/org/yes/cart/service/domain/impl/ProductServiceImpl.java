@@ -304,6 +304,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                                         entry.getAttribute().getName(),
                                         entry.getAttribute().getCode(),
                                         node.getRange().getFirst() + '-' + node.getRange().getSecond(),
+                                        node.getRange().getFirst() + '-' + node.getRange().getSecond(),
                                         0,
                                         entry.getRank(),
                                         "R"
@@ -315,6 +316,32 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         }
         return records;
     }
+
+    /**
+     * Construct filtered navigation records.
+     *
+     * @param list of raw object arrays after, result of named query
+     * @return constructed list of navigation records.
+     */
+    private List<FiteredNavigationRecord> constructFilteredNavigationRecords(final List<Object[]> list) {
+        List<FiteredNavigationRecord> result = new ArrayList<FiteredNavigationRecord>(list.size());
+        for (Object[] objArray : list) {
+            result.add(
+                    new FiteredNavigationRecordImpl(
+                            (String) objArray[0],
+                            (String) objArray[1],
+                            (String) objArray[2],
+                            (String) objArray[3],
+                            (Integer) objArray[4],
+                            (Integer) objArray[5],
+                            "S"
+                    )
+            );
+
+        }
+        return result;
+    }
+
 
     /**
      * Collect the single attribute value navigation see ProductTypeAttr#navigationType
@@ -352,29 +379,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         return result;
     }
 
-    /**
-     * Construct filtered navigation records.
-     *
-     * @param list of raw object arrays after, result of named query
-     * @return constructed list of navigation records.
-     */
-    private List<FiteredNavigationRecord> constructFilteredNavigationRecords(final List<Object[]> list) {
-        List<FiteredNavigationRecord> result = new ArrayList<FiteredNavigationRecord>(list.size());
-        for (Object[] objArray : list) {
-            result.add(
-                    new FiteredNavigationRecordImpl(
-                            (String) objArray[0],
-                            (String) objArray[1],
-                            (String) objArray[2],
-                            (Integer) objArray[3],
-                            (Integer) objArray[4],
-                            "S"
-                    )
-            );
-
-        }
-        return result;
-    }
 
     /**
      * {@inheritDoc}

@@ -131,7 +131,7 @@ public class PriceProductFilter extends AbstractProductFilter {
      * @param valueToAdapt - expected value in following format CUR-LOW-HIGH
      * @return currency symbol  low high
      */
-    protected String adaptValueForLinkLabel(final String valueToAdapt) {
+    protected String adaptValueForLinkLabel(final String valueToAdapt, final String displayValue) {
         Pair<String, Pair<BigDecimal, BigDecimal>> pair = priceNavigation.decomposePriceRequestParams(valueToAdapt);
         return priceNavigation.composePriceRequestParams(
                 currencySymbolService.getCurrencySymbol(pair.getFirst()),

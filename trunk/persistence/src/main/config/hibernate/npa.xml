@@ -472,6 +472,7 @@
                 ]]>
             </meta>
             <property name="val" column="VAL" type="string" length="4000"/>
+            <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
             <many-to-one name="customer" class="org.yes.cart.domain.entity.Customer"  not-null="true" column="CUSTOMER_ID"/>
             <many-to-one name="attribute" class="org.yes.cart.domain.entity.Attribute" lazy="false" foreign-key="FK_C_ATTRIBUTE"
                          property-ref="code" insert="true" update="true">
@@ -525,6 +526,7 @@
                 ]]>
             </meta>
             <property name="val" column="VAL" type="string" length="4000"/>
+            <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
             <many-to-one name="shop" class="org.yes.cart.domain.entity.Shop"  not-null="true" column="SHOP_ID"/>
             <many-to-one name="attribute" class="org.yes.cart.domain.entity.Attribute" lazy="false"
                          foreign-key="FK_SHOP_ATTRIBUTE" property-ref="code" insert="true" update="true">
@@ -580,6 +582,7 @@
             </meta>
 
             <property name="val" column="VAL" type="string" length="4000"/>
+            <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
             <many-to-one name="attribute" class="org.yes.cart.domain.entity.Attribute" lazy="false"
                          foreign-key="FK_PYS_ATTRIBUTE" property-ref="code" insert="false" update="false">
                 <column name="CODE" not-null="true"/>
@@ -637,6 +640,7 @@
             </meta>
             <many-to-one name="brand" class="org.yes.cart.domain.entity.Brand"  not-null="true" column="BRAND_ID"/>
             <property name="val" column="VAL" type="string" length="4000"/>
+            <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
             <many-to-one name="attribute" class="org.yes.cart.domain.entity.Attribute" lazy="false"
                          property-ref="code" insert="true" update="true">
                 <column name="CODE" not-null="true"/>
@@ -695,6 +699,7 @@
             <property name="val" column="VAL" type="string" length="4000">
                 <meta attribute="field-description">UNCOMMENT @Fields( { @Field(index = Index.UN_TOKENIZED), @Field(name = "attrvalsearch", index = Index.TOKENIZED) } )    @ContainedIn</meta>
             </property>
+            <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
 
             <many-to-one name="product" class="org.yes.cart.domain.entity.Product"  not-null="true" column="PRODUCT_ID"/>
 
@@ -759,6 +764,7 @@
             <property name="val" column="VAL" type="string" length="4000">
                 <meta attribute="field-description">UNCOMMENT @Fields( { @Field(index = Index.UN_TOKENIZED), @Field(name = "attrvalsearch", index = Index.TOKENIZED) } )    @ContainedIn</meta>
             </property>
+            <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
 
             <many-to-one name="productSku" class="org.yes.cart.domain.entity.ProductSku"  not-null="true" column="SKU_ID"/>
 
@@ -820,6 +826,7 @@
             </meta>
 
             <property name="val" column="VAL" type="string" length="4000"/>
+            <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
 
             <many-to-one name="category" class="org.yes.cart.domain.entity.Category"  not-null="true" column="CATEGORY_ID"/>
 
@@ -4462,14 +4469,14 @@ public void setRangeList(final RangeList rangeList) {
 
     <query name="PRODUCTS.ATTR.CODE.VALUES.BY.PRODUCTTYPEID">
         <![CDATA[
-       select a.attribute.name, a.attribute.code, a.val, 0, pta.rank
+       select a.attribute.name, a.attribute.code, a.val, a.displayVal, 0, pta.rank
        from  ProductTypeEntity pt, ProductTypeAttrEntity pta, ProductEntity p inner join p.attribute a
             where p.producttype.producttypeId = pt.producttypeId
             and pt.producttypeId = pta.producttype.producttypeId
             and pta.producttype.producttypeId = ?1
             and pta.attribute.code = a.attribute.code
             and pta.navigationType = 'S'
-            group by a.attribute.name, a.attribute.code, a.val, pta.rank 
+            group by a.attribute.name, a.attribute.code, a.val, a.displayVal, pta.rank 
             order by pta.rank, a.attribute.name, a.val
        ]]>
     </query>

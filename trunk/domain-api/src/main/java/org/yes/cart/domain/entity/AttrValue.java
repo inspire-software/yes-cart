@@ -39,6 +39,23 @@ public interface AttrValue extends Auditable {
     void setVal(String val);
 
     /**
+     * Get display value to show on the web. The some
+     * correct attributes value does not look good on the web,
+     * so need to use dislplay value to eliminate this situation.
+     * Need to use val in case if displayVal is empty.
+     * Affect UI only.
+     *
+     * @return display value.
+     */
+    String getDisplayVal();
+
+    /**
+     * Set display value.
+     * @param displayVal display value.
+     */
+    void setDisplayVal(String displayVal);
+
+    /**
      * Get the attribute.
      *
      * @return {@link Attribute}
