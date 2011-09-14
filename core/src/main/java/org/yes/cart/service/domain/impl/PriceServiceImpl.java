@@ -57,17 +57,17 @@ public class PriceServiceImpl
 
     }
 
+
     /**
      * {@inheritDoc}
      */
-    public Pair<BigDecimal, BigDecimal> getMinimalRegularPrice(
+    public SkuPrice getMinimalRegularPrice(
             final Collection<ProductSku> productSkus,
             final Shop shop,
             final String currencyCode,
             final BigDecimal quantity) {
 
         BigDecimal minimalRegularPrice = null;
-        BigDecimal salePrice = null;
 
         List<SkuPrice> skuPrices = getSkuPrices(productSkus, shop, currencyCode);
         if (quantity != null) {
@@ -75,16 +75,17 @@ public class PriceServiceImpl
                     skuPrices,
                     quantity);
         }
-
+        SkuPrice rez = null;
         for (SkuPrice skuPrice : skuPrices) {
             if (minimalRegularPrice == null
                     || MoneyUtils.isFirstBiggerThanOrEqualToSecond(minimalRegularPrice, skuPrice.getRegularPrice())) {
                 minimalRegularPrice = skuPrice.getRegularPrice();
-                salePrice = skuPrice.getSalePrice();
+                rez = skuPrice;
             }
         }
-        return new Pair<BigDecimal, BigDecimal>(minimalRegularPrice, salePrice);
+        return rez;
     }
+
 
     /**
      * {@inheritDoc}

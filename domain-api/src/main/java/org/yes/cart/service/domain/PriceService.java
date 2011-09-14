@@ -20,6 +20,7 @@ import java.util.List;
  */
 public interface PriceService extends GenericService<SkuPrice> {
 
+
     /**
      * Get minimal price for given product skus (all), shop, currency and quantity.
      * Exchange rate will be used for recalculate price if price does not present
@@ -29,13 +30,13 @@ public interface PriceService extends GenericService<SkuPrice> {
      * @param shop         shop
      * @param currencyCode desirable currency
      * @param quantity     quantity
-     * @return pair of regular and sale price.
+     * @return SkuPrice
      */
-    Pair<BigDecimal, BigDecimal> getMinimalRegularPrice(
-            Collection<ProductSku> productSkus,
-            Shop shop,
-            String currencyCode,
-            BigDecimal quantity);
+    SkuPrice getMinimalRegularPrice(
+            final Collection<ProductSku> productSkus,
+            final Shop shop,
+            final String currencyCode,
+            final BigDecimal quantity);
 
     /**
      * Get minimal price for given product skus (will be filtered by selected sku), shop, currency and quantity.

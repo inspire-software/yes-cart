@@ -35,7 +35,7 @@ public interface Constants {
 
     /**
      * Money in minor money units. For example
-     * 12 dollars ans 34 cent will be 1234 cents.
+     * 12 dollars and 34 cent will be 1234 cents.
      */
     String MONEY_FORMAT_TOINDEX = "00000000";
     String MONEY_FORMAT = "######.00";

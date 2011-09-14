@@ -7,9 +7,13 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.impl.SetShopCartCommandImpl;
+import org.yes.cart.shoppingcart.impl.ChangeCurrencyEventCommandImpl;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.request.HttpServletRequestWrapper;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ApplicationContext;
+import org.springframework.beans.BeansException;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -30,11 +34,13 @@ import java.util.Date;
  * If shop can not be resolved by server/domain name
  * filter redirect to default url.
  */
-public class ShopResolverFilter extends AbstractFilter implements Filter {
+public class ShopResolverFilter extends AbstractFilter implements Filter, ApplicationContextAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(ShopResolverFilter.class);
 
     private final SystemService systemService;
+
+    private ApplicationContext applicationContext;
 
 
     /**
@@ -71,14 +77,36 @@ public class ShopResolverFilter extends AbstractFilter implements Filter {
             return null;
         }
 
-        ApplicationDirector.setCurrentShop(shop);
+        setDefaultValues(shop);
 
-        new SetShopCartCommandImpl(null, Collections.singletonMap(SetShopCartCommandImpl.CMD_KEY, shop.getShopId()))
-                .execute(ApplicationDirector.getShoppingCart());
+        ApplicationDirector.setCurrentShop(shop);
 
         return getModifiedRequest(servletRequest, shop);
 
     }
+
+    /**
+     * Set default values. Mostly for new cart.
+     * @param shop shop
+     */
+    private void setDefaultValues(final Shop shop) {
+
+        final ShoppingCart shoppingCart = ApplicationDirector.getShoppingCart();
+
+        new SetShopCartCommandImpl(applicationContext, Collections.singletonMap(SetShopCartCommandImpl.CMD_KEY, shop.getShopId()))
+                .execute(shoppingCart);
+
+        if (shoppingCart.getCurrencyCode() == null) { // new cart only may satisfy this condition
+            new ChangeCurrencyEventCommandImpl(applicationContext, Collections.singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, shop.getDefaultCurrency()))
+                    .execute(shoppingCart);
+        }
+
+        if (shoppingCart.getCurrentLocale() == null) {
+            //TODO 
+        }
+
+    }
+
 
 
     /**
@@ -124,4 +152,8 @@ public class ShopResolverFilter extends AbstractFilter implements Filter {
 
     }
 
+    /** {@inheritDoc} */
+    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
 }
