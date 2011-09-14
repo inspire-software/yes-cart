@@ -30,7 +30,7 @@ Oracle XE or MySQL(see WAMP/LAMP in nice to have section) or MSSQL
 
 Jetbrains Idea IDE or Eclipse IDE
 
-WAMP or LAMP
+WAMP or LAMP or use Derby 
 
 Http server shall be configured with ajp 1.3 support.
 
@@ -74,10 +74,19 @@ Copy geda\dp folder into maven repository
 mvn install
 
 == Database ==
-At this moment MySQL used as main database for development.
+MySQL usage for development.
 {{{ 
 CREATE DATABASE `yes` CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `yes`;
 SOURCE create-tables.sql
 SOURCE initdata.sql
 }}}
+
+Derby usage for development. 
+Start derby network server
+Run ij and type following 
+{{{
+connect 'jdbc:derby://localhost:1527/yespay;create=true';
+connect 'jdbc:derby://localhost:1527/yes;create=true';
+}}}
+Run  create-tables.sql and initdata.sql scripts
