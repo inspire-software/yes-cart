@@ -56,7 +56,7 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
 
         final ShoppingCart shoppingCart = new WebShoppingCartImpl();
 
-        synchronized (tuplizer) {
+        synchronized (tuplizer) {    //TODO here can be a bottle neck, so may be need to use a pool
             ShoppingCart restoredCart = null;
             try {
                 restoredCart  = tuplizer.toObject(
@@ -68,13 +68,15 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
                     LOG.warn(MessageFormat.format("Cart {0} not restored from cookies", shoppingCart.getGuid()));
                 }
             }
+
+            
+
             ApplicationDirector.setShoppingCart(shoppingCart);
-            shoppingCart.getCurrentLocale();
+
 
         }
         return request;
     }
-
 
 
 

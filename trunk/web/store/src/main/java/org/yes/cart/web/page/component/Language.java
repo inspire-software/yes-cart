@@ -1,8 +1,8 @@
 package org.yes.cart.web.page.component;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ThreadContext;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -10,17 +10,12 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.shoppingcart.impl.ChangeCurrencyEventCommandImpl;
 import org.yes.cart.shoppingcart.impl.ChangeLocaleCartCommandImpl;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.support.constants.WebServiceSpringKey;
 import org.yes.cart.web.support.service.LanguageService;
 import org.yes.cart.web.util.WicketUtil;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -97,7 +92,7 @@ public class Language extends BaseComponent {
 
                     if (languageCode.equals(ApplicationDirector.getShoppingCart().getCurrentLocale())) {
 
-                        pageLink.add(new SimpleAttributeModifier(HTML_CLASS, "language-active"));
+                        pageLink.add(new AttributeModifier(HTML_CLASS, "language-active"));
 
                     }
 

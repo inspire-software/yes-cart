@@ -1,6 +1,7 @@
 package org.yes.cart.web.page.component.product;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -9,16 +10,25 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.entity.SkuPrice;
+import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl;
 import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.component.BaseComponent;
+import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.constants.WebServiceSpringKey;
 import org.yes.cart.web.support.entity.decorator.ProductDecorator;
 import org.yes.cart.web.support.entity.decorator.impl.ProductDecoratorImpl;
 import org.yes.cart.web.support.service.ProductImageService;
 import org.yes.cart.web.util.WicketUtil;
+import org.yes.cart.web.application.ApplicationDirector;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.math.BigDecimal;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -48,6 +58,10 @@ public class ProductInListView extends BaseComponent {
 
     @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
     private CategoryService categoryService;
+
+    @SpringBean(name = ServiceSpringKeys.PRICE_SERVICE)
+    protected PriceService priceService;
+
 
 
     /**
@@ -104,18 +118,34 @@ public class ProductInListView extends BaseComponent {
                 )
         );
 
-        final PageParameters addToCartParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters());
-        addToCartParameters.set(AddSkuToCartEventCommandImpl.CMD_KEY, product.getDefaultSku().getCode());
+        final PageParameters addToCartParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters())
+                .set(AddSkuToCartEventCommandImpl.CMD_KEY, product.getDefaultSku().getCode());
 
         add(
                 new BookmarkablePageLink<HomePage>(ADD_TO_CART_LINK, HomePage.class, addToCartParameters)
         );
 
         add(
-                new Label(PRICE_VIEW, "TODO add price")
+                new PriceView(PRICE_VIEW, new Model<SkuPrice>(getSkuPrice()), true)
         );
 
 
         super.onBeforeRender();
     }
+
+
+    /**
+     * Get product or his sku price.
+     * In case of multisku product the minimal regular price from multiple sku was used for single item.
+     * @return {@link org.yes.cart.domain.entity.SkuPrice}
+     */
+    private SkuPrice getSkuPrice() {
+        return priceService.getMinimalRegularPrice(
+                product.getSku(),
+                ApplicationDirector.getCurrentShop(),
+                ApplicationDirector.getShoppingCart().getCurrencyCode(),
+                BigDecimal.ONE
+                );
+    }
+
 }

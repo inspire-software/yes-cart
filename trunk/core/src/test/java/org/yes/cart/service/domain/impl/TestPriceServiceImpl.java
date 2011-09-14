@@ -92,26 +92,26 @@ public class TestPriceServiceImpl extends BaseCoreDBTestCase {
         assertNotNull(product);
         assertEquals(4, product.getSku().size());
 
-        Pair<BigDecimal, BigDecimal> pricePair = priceService.getMinimalRegularPrice(product.getSku(), shop, "EUR", BigDecimal.ONE);
-        assertNotNull(pricePair);
-        assertNull(pricePair.getSecond());
-        assertTrue((new BigDecimal("150.00")).equals(pricePair.getFirst()));
+        SkuPrice skuPrice = priceService.getMinimalRegularPrice(product.getSku(), shop, "EUR", BigDecimal.ONE);
+        assertNotNull(skuPrice);
+        assertNull(skuPrice.getSalePrice());
+        assertTrue((new BigDecimal("150.00")).equals(skuPrice.getRegularPrice()));
 
-        pricePair = priceService.getMinimalRegularPrice(product.getSku(), shop, "EUR", new BigDecimal("2"));
-        assertNotNull(pricePair);
-        assertNull(pricePair.getSecond());
-        assertTrue((new BigDecimal("145.00")).equals(pricePair.getFirst()));
+        skuPrice = priceService.getMinimalRegularPrice(product.getSku(), shop, "EUR", new BigDecimal("2"));
+        assertNotNull(skuPrice);
+        assertNull(skuPrice.getSalePrice());
+        assertTrue((new BigDecimal("145.00")).equals(skuPrice.getRegularPrice()));
 
         //Test than we are can not getByKey the minimal price through price tiers for multisku product for not cofigured currency
-        pricePair = priceService.getMinimalRegularPrice(product.getSku(), shop, "BYR", BigDecimal.ONE);
-        assertNotNull(pricePair);
-        assertNull(pricePair.getFirst());
-        assertNull(pricePair.getSecond());
+        skuPrice = priceService.getMinimalRegularPrice(product.getSku(), shop, "BYR", BigDecimal.ONE);
+        assertNotNull(skuPrice);
+        assertNull(skuPrice.getRegularPrice());
+        assertNull(skuPrice.getSalePrice());
 
         //Test than we are can getByKey the minimal price through price tiers for multisku product.
-        pricePair = priceService.getMinimalRegularPrice(product.getSku(), shop, "UAH", BigDecimal.ONE);
-        assertNotNull(pricePair);
-        assertTrue(MoneyUtils.isFirstEqualToSecond(new BigDecimal("1707.00"), pricePair.getFirst()));
+        skuPrice = priceService.getMinimalRegularPrice(product.getSku(), shop, "UAH", BigDecimal.ONE);
+        assertNotNull(skuPrice);
+        assertTrue(MoneyUtils.isFirstEqualToSecond(new BigDecimal("1707.00"), skuPrice.getRegularPrice()));
 
     }
 
@@ -172,9 +172,9 @@ public class TestPriceServiceImpl extends BaseCoreDBTestCase {
         assertNotNull(product);
         assertEquals(4, product.getSku().size());
 
-        Pair<BigDecimal, BigDecimal> pricePair = priceService.getMinimalRegularPrice(product.getSku(), shop, "UAH", BigDecimal.ONE);
-        assertNotNull(pricePair);
-        assertTrue(MoneyUtils.isFirstEqualToSecond(new BigDecimal("1707.00"), pricePair.getFirst()));
+        SkuPrice skuPrice = priceService.getMinimalRegularPrice(product.getSku(), shop, "UAH", BigDecimal.ONE);
+        assertNotNull(skuPrice);
+        assertTrue(MoneyUtils.isFirstEqualToSecond(new BigDecimal("1707.00"), skuPrice.getRegularPrice()));
     }
 
 }

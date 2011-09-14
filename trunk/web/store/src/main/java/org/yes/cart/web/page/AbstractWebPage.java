@@ -21,4 +21,14 @@ public class AbstractWebPage extends WebPage {
 
 
 
+    /*    protected void processCommands(final Map params) {
+        ShoppingCartCommand cartCommand = getShoppingCartCommandFactory().create(params);
+        if (cartCommand != null) {
+            getRequestRuntimeContainer().getShoppingCart().accept(cartCommand);
+        }
+    }
+*/
+
+
+
 }
