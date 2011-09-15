@@ -2,6 +2,8 @@ package org.yes.cart.service.domain;
 
 
 import org.yes.cart.domain.entity.Attribute;
+import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.misc.Pair;
 
 import java.util.List;
 import java.util.Map;
@@ -62,4 +64,30 @@ public interface AttributeService extends GenericService<Attribute> {
      * @return list of attibutes with allowed multiple values or null if no such attributes found
      */
     List<Attribute> findAttributesWithMultipleValues(String attributeGroupCode);
+
+
+    /**
+     * Perform merge atttribute values operation.
+     * @param to merge to collection
+     * @param from merge from collection
+     * @return result of merge
+     */
+    List<Pair<String, List<AttrValue>>> merge(List<Pair<String, List<AttrValue>>> to, List<Pair<String, List<AttrValue>>> from);
+
+    /**
+     * Remove attr value from given list by given name
+     * @param values list to remove from
+     * @param attrName name to remove
+     * @return removed {@link AttrValue} if found, otherwise null
+     */
+    AttrValue removeAttrValue(List<AttrValue> values, String attrName);
+
+    /**
+     * Remove section from given lisy by name.
+     * @param fromList list to remove section
+     * @param sectionName section name to remove.
+     * @return removed section if found, otherwise null
+     */
+    List<AttrValue> removeAttrValues(List<Pair<String, List<AttrValue>>> fromList, String sectionName);
+
 }

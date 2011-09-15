@@ -18,6 +18,7 @@ import org.yes.cart.web.util.WicketUtil;
 import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.page.component.price.PriceTierView;
+import org.yes.cart.web.page.component.product.SkuListView;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
@@ -56,7 +57,8 @@ public class SkuCentralView extends AbstractCentralView {
     private final static String PRODUCT_IMAGE_VIEW = "imageView";
     /** Product sku list */
     private final static String SKU_LIST_VIEW = "skuList";
-
+    /** View to show sku attributes */
+    private final static String SKU_ATTR_VIEW = "skuAttrView";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
     @SpringBean(name = ServiceSpringKeys.PRODUCT_SERVICE)
@@ -117,26 +119,40 @@ public class SkuCentralView extends AbstractCentralView {
 
         configureContext();
 
-        add(new Label(PRODUCT_IMAGE_VIEW, "TODO image view"));
         add(
                 new PriceView(PRICE_VIEW, new Model<SkuPrice>(getSkuPrice()), true)
         );
         add(
                 new PriceTierView(PRICE_TIERS_VIEW, getSkuPrices())
         );
-        add(new Label(SKU_LIST_VIEW, "skuList"));
-
-        add(new Label(SKU_CODE_LABEL, sku.getCode()));
-        add(new Label(PRODUCT_NAME_LABEL, isProduct?product.getName():sku.getName()));
-        add(new Label(PRODUCT_DESCRIPTION_LABEL, isProduct?product.getDescription():sku.getDescription()));
-
-        final PageParameters addToCartParameters = WicketUtil.getFilteredRequestParameters(
-                getPage().getPageParameters());
-        addToCartParameters.set(AddSkuToCartEventCommandImpl.CMD_KEY, sku.getCode());
+        add(
+                new SkuListView(SKU_LIST_VIEW, product.getSku(), sku, isProduct)
+        );
+        add(
+                new Label(SKU_CODE_LABEL, sku.getCode())
+        );
+        add(
+                new Label(PRODUCT_NAME_LABEL, isProduct?product.getName():sku.getName())
+        );
+        add(
+                new Label(PRODUCT_DESCRIPTION_LABEL, isProduct?product.getDescription():sku.getDescription())
+        );
+        
+        final PageParameters addToCartParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters())
+            .set(AddSkuToCartEventCommandImpl.CMD_KEY, sku.getCode());
 
         add(
                 new BookmarkablePageLink<HomePage>(ADD_TO_CART_LINK, HomePage.class, addToCartParameters)
         );
+
+        add(
+                new Label(SKU_ATTR_VIEW, "TODO attributes")
+        );
+
+        add(
+                new Label(PRODUCT_IMAGE_VIEW, "TODO image view")
+        );
+
 
 
         super.onBeforeRender();

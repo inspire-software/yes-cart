@@ -7,6 +7,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Attribute;
+import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.AttributeService;
 
 import java.util.Arrays;
@@ -23,6 +25,20 @@ import java.util.Map;
 public class TestNavigationUtil {
 
     private final AttributeService attributeService = new AttributeService() {
+
+
+        public AttrValue removeAttrValue(List<AttrValue> values, final String attrName) {
+            return null;
+        }
+
+        public List<AttrValue> removeAttrValues(final List<Pair<String, List<AttrValue>>> fromList, final String sectionName) {
+            return null;
+        }
+
+        public List<Pair<String, List<AttrValue>>> merge(final List<Pair<String, List<AttrValue>>> to, final List<Pair<String, List<AttrValue>>> from) {
+            return null;
+        }
+
         public GenericDAO getGenericDao() {
             return null;
         }

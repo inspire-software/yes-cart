@@ -20,10 +20,12 @@ import java.util.Collections;
  * Date: 17-Sep-2011
  * Time: 13:51:49
  */
-public class PriceTierView  extends BaseComponent {
+public class PriceTierView extends BaseComponent {
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
-    /** Single item price panel*/
+    /**
+     * Single item price panel
+     */
     private final static String PRICE_VIEW = "priceView";
     private final static String PRICE_TIERS_LIST = "skusPriceTiers";
     private final static String QUANTITY_LABEL = "quantity";
@@ -34,14 +36,15 @@ public class PriceTierView  extends BaseComponent {
 
     /**
      * Construct price tiers view.
-     * @param id component id
+     *
+     * @param id        component id
      * @param rawPrices list of prices
      */
     public PriceTierView(final String id, final Collection<SkuPrice> rawPrices) {
         super(id);
         final String currency = ApplicationDirector.getShoppingCart().getCurrencyCode();
         skuPrices = new ArrayList<SkuPrice>();
-        for(SkuPrice skuPrice : rawPrices) {
+        for (SkuPrice skuPrice : rawPrices) {
             if (skuPrice.getCurrency().equals(currency)) {
                 skuPrices.add(skuPrice);
             }
@@ -49,23 +52,27 @@ public class PriceTierView  extends BaseComponent {
         Collections.sort(skuPrices, new SkuPriceQuantityComparatorImpl());
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void onBeforeRender() {
-        new ListView<SkuPrice>(PRICE_TIERS_LIST, skuPrices) {
-            protected void populateItem(ListItem<SkuPrice> listItem) {
-                listItem.add(
-                        new Label(QUANTITY_LABEL, String.valueOf(listItem.getModelObject().getQuantity().intValue()))
-                );
-                listItem.add(
-                        new PriceView(PRICE_VIEW, listItem.getModel(), true)
-                );
+        add(
+            new ListView<SkuPrice>(PRICE_TIERS_LIST, skuPrices) {
+                protected void populateItem(ListItem<SkuPrice> listItem) {
+                    listItem.add(
+                            new Label(QUANTITY_LABEL, String.valueOf(listItem.getModelObject().getQuantity().intValue()))
+                    );
+                    listItem.add(
+                            new PriceView(PRICE_VIEW, listItem.getModel(), true)
+                    );
+                }
             }
-        };
+        );
         super.onBeforeRender();
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean isVisible() {
-        return super.isVisible() && !skuPrices.isEmpty();
+        return super.isVisible() && skuPrices.size() > 1;
     }
 }
