@@ -3,7 +3,9 @@ package org.yes.cart.service.domain.impl;
 import org.yes.cart.cache.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Attribute;
+import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.AttributeService;
 
 import java.util.HashMap;
@@ -73,8 +75,6 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
                     (List) assignedAttributeCodes,
                     attributeGroupCode);
         }
-
-
     }
 
     /**
@@ -104,6 +104,64 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
             }
         }
         return result;
+    }
+
+    /** {@inheritDoc} */
+    public List<Pair<String, List<AttrValue>>> merge(
+            final List<Pair<String, List<AttrValue>>> to,
+            final List<Pair<String, List<AttrValue>>> from) {
+
+        for (Pair<String, List<AttrValue>> pair : to) { //overwrite sections
+            final String sectionName = pair.getFirst();
+            final List<AttrValue> valuesToMegreFrom = removeAttrValues(from, sectionName);
+            if (valuesToMegreFrom != null) {
+                for (AttrValue attrValue : pair.getSecond()) { //overwrite valuesToMegreFrom in current section
+                    final AttrValue value = removeAttrValue(valuesToMegreFrom, attrValue.getAttribute().getName());
+                    if (value != null) {
+                        attrValue.setVal(value.getVal());
+                    }
+                }
+                pair.getSecond().addAll(valuesToMegreFrom); //merge the rest, because they are not present in "to" list
+            }
+        }
+        //merge sections
+        to.addAll(from);
+
+        return to;
+
+    }
+
+
+    /**
+     * Remove attr value from given list by given name
+     * @param values list to remove from
+     * @param attrName name to remove
+     * @return removed {@link AttrValue} if found, otherwise null
+     */
+    public AttrValue removeAttrValue(List<AttrValue> values, final String attrName) {
+        for (AttrValue attrValue : values) {
+            if (attrValue.getAttribute().getName().equals(attrName)) {
+                values.remove(attrValue);
+                return attrValue;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Remove section from given lisy by name.
+     * @param fromList list to remove section
+     * @param sectionName section name to remove.
+     * @return removed section if found, otherwise null
+     */
+    public List<AttrValue> removeAttrValues(final List<Pair<String, List<AttrValue>>> fromList, final String sectionName) {
+        for (Pair<String, List<AttrValue>> pair : fromList) {
+            if (sectionName.equals(pair.getFirst())) {
+                fromList.remove(pair);
+                return pair.getSecond();
+            }
+        }
+        return null;
     }
 
 }
