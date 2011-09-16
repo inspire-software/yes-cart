@@ -19,6 +19,7 @@ import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.page.component.price.PriceTierView;
 import org.yes.cart.web.page.component.product.SkuListView;
+import org.yes.cart.web.page.component.product.SkuAttributesView;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
@@ -93,15 +94,15 @@ public class SkuCentralView extends AbstractCentralView {
     }
 
     private void configureContext() {
-        String productIdStr = getPage().getPageParameters().get(WebParametersKeys.PRODUCT_ID).toString();
-        String skuIdStr = getPage().getPageParameters().get(WebParametersKeys.SKU_ID).toString();
-        if (skuIdStr != null) {
+        String productId = getPage().getPageParameters().get(WebParametersKeys.PRODUCT_ID).toString();
+        String skuId = getPage().getPageParameters().get(WebParametersKeys.SKU_ID).toString();
+        if (skuId != null) {
             isProduct = false;
-            sku = productSkuService.getById(Long.valueOf(skuIdStr));
+            sku = productSkuService.getById(Long.valueOf(skuId));
             product = sku.getProduct();
-        } else if (productIdStr != null) {
+        } else if (productId != null) {
             isProduct = true;
-            product = productService.getProductById(Long.valueOf(productIdStr));
+            product = productService.getProductById(Long.valueOf(productId));
             sku = product.getDefaultSku();
         } else {
             throw new RuntimeException("Product or Sku id expected");
@@ -146,7 +147,7 @@ public class SkuCentralView extends AbstractCentralView {
         );
 
         add(
-                new Label(SKU_ATTR_VIEW, "TODO attributes")
+                new SkuAttributesView(SKU_ATTR_VIEW, sku, isProduct)
         );
 
         add(
