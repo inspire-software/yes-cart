@@ -6,6 +6,7 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.queryobject.FiteredNavigationRecord;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -87,6 +88,16 @@ public interface ProductService extends GenericService<Product> {
             int maxResults);
 
     /**
+     * Get new arrivals in category.
+     * @param categoryId  given category id
+     * @param maxResults  max result
+     * @return  list of new arrived products
+     */
+    List<Product> getNewArrivalsProductInCategory(
+            long categoryId,
+            int maxResults);
+
+    /**
      * Get the list of unique attribute values by given product type
      * and attribute code.
      *
@@ -95,6 +106,13 @@ public interface ProductService extends GenericService<Product> {
      * @return list of distinct attib values
      */
     List<Object> getDistinctAttributeValues(long productTypeId, String code);
+
+    /**
+     * Get list of products by id list.
+     * @param idList given list of id.
+     * @return list of product, that satisfy given list of ids.
+     */
+    List<Product> getProductByIdList(List idList);
 
     /**
      * Get the ranked by ProductTypeAttr.rank list of unique product attribute values by given product type
@@ -159,7 +177,7 @@ public interface ProductService extends GenericService<Product> {
      * @param categories current shop categories
      * @return shuffled list of featured products.
      */
-    List<Product> getFeaturedProducts(List categories);
+    List<Product> getFeaturedProducts(Collection categories);
 
     /**
      * Get the quantity of products in particular category.

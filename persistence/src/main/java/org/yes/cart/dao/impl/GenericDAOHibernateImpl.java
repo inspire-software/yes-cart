@@ -14,6 +14,7 @@ import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -203,7 +204,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
      */    
     @SuppressWarnings("unchecked")
     public List<T> findQueryObjectsByNamedQueryWithList(
-            final String namedQueryName, final List<Object> listParameter,
+            final String namedQueryName, final Collection<Object> listParameter,
             final Object... parameters) {
         Query query = getSession().getNamedQuery(namedQueryName);
         query.setParameterList("list", listParameter);

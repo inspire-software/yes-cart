@@ -3,6 +3,7 @@ package org.yes.cart.dao;
 import org.hibernate.criterion.Criterion;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -128,7 +129,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      * @param parameters     optional parameters for named query
      * @return list of found objects
      */
-    List<T> findQueryObjectsByNamedQueryWithList(String namedQueryName, List<Object> listParameter, Object... parameters);
+    List<T> findQueryObjectsByNamedQueryWithList(String namedQueryName, Collection<Object> listParameter, Object... parameters);
 
 
     /**

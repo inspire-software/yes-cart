@@ -25,7 +25,7 @@ import java.util.*;
  */
 public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implements ProductService {
 
-    private final static String PROD_SERV_METHOD_CACHE =  "productServiceImplMethodCache";
+    private final static String PROD_SERV_METHOD_CACHE = "productServiceImplMethodCache";
 
     private final GenericDAO<Product, Long> productDao;
     private final GenericDAO<ProductSku, Long> productSkuDao;
@@ -45,6 +45,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
 
     /**
      * Persist product. Default sku will be created.
+     *
      * @param instance instance to persist
      * @return persisted instanse
      */
@@ -92,11 +93,10 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     }
 
 
-
     /**
      * Get the grouped product attributes, with values.
      *
-     * @param attributable product  or sku
+     * @param attributable  product  or sku
      * @param productTypeId product type id
      * @return List of pair group names - list of attribute name and value.
      */
@@ -185,8 +185,9 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * {@inheritDoc}
      */
     @Cacheable(value = PROD_SERV_METHOD_CACHE)
-    public List<Product> getFeaturedProducts(final List categories) {
-        List<Product> list = productDao.findQueryObjectsByNamedQueryWithList("PRODUCT.FEATURED", categories, new Date());  //TODO v2 time machine
+    public List<Product> getFeaturedProducts(final Collection categories) {
+        List<Product> list = productDao.findQueryObjectsByNamedQueryWithList(
+                "PRODUCT.FEATURED", categories, new Date());  //TODO v2 time machine
         Collections.shuffle(list);
         return list;
     }
@@ -227,7 +228,21 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                 firtsResult,
                 maxResults,
                 categoryId,
-                new Date()
+                new Date()   //TODO time machine
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<Product> getNewArrivalsProductInCategory(
+            final long categoryId,
+            final int maxResults) {
+        return productDao.findByNamedQuery("NEW.PRODUCTS.IN.CATEGORYID",
+                0,
+                maxResults,
+                categoryId,
+                new Date()    //TODO time machine
         );
     }
 
@@ -240,6 +255,14 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                 "PRODUCTS.ATTRIBUTE.VALUES.BY.CODE.PRODUCTTYPEID",
                 productTypeId,
                 code);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = PROD_SERV_METHOD_CACHE)
+    public List<Product> getProductByIdList(final List idList) {
+        return productDao.findQueryObjectsByNamedQueryWithList("PRODUCTS.LIST.BY.IDS", idList, null);
     }
 
     /**
@@ -465,16 +488,16 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             final Long productTypeId) {
 
         final List<Criterion> criterionList = new ArrayList<Criterion>();
-        if(code != null) {
+        if (code != null) {
             criterionList.add(Restrictions.like("code", code, MatchMode.ANYWHERE));
         }
-        if(name != null) {
+        if (name != null) {
             criterionList.add(Restrictions.like("name", name, MatchMode.ANYWHERE));
         }
-        if(brandId != null) {
+        if (brandId != null) {
             criterionList.add(Restrictions.eq("brand.brandId", brandId));
         }
-        if(productTypeId != null) {
+        if (productTypeId != null) {
             criterionList.add(Restrictions.eq("producttype.producttypeId", productTypeId));
         }
 
