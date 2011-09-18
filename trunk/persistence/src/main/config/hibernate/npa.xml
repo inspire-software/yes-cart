@@ -4418,6 +4418,17 @@ public void setRangeList(final RangeList rangeList) {
        ]]>
     </query>
 
+    <query name="NEW.PRODUCTS.IN.CATEGORYID">
+        <![CDATA[
+       select p from ProductEntity p, ProductCategoryEntity pc
+            where p.productId = pc.product.productId
+            and pc.category.categoryId = ?1
+            and (p.availablefrom < ?2 OR p.availablefrom IS NULL)
+            and (p.availabletill > ?2 OR p.availabletill IS NULL)
+            order by p.createdTimestamp desc
+       ]]>
+    </query>
+
     <query name="PRODUCTS.QTY.BY.CATEGORYID">
         <![CDATA[
        select count(p) from ProductEntity p, ProductCategoryEntity pc
@@ -4488,6 +4499,14 @@ public void setRangeList(final RangeList rangeList) {
        where p.productId = pc.product.productId 
         and pc.category.categoryId in (:list)
         order by b.name
+       ]]>
+    </query>
+
+    <query name="PRODUCTS.LIST.BY.IDS">
+        <![CDATA[
+       select p
+       from  ProductEntity p
+       where p.productId  in (:list)
        ]]>
     </query>
 

@@ -31,7 +31,7 @@ public class TestProductServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testCreate() {
         ProductService productService = (ProductService) ctx.getBean(ServiceSpringKeys.PRODUCT_SERVICE);
-        ProductTypeService productTypeService = (ProductTypeService)  ctx.getBean(ServiceSpringKeys.PRODUCT_TYPE_SERVICE);
+        ProductTypeService productTypeService = (ProductTypeService) ctx.getBean(ServiceSpringKeys.PRODUCT_TYPE_SERVICE);
         BrandService brandService = (BrandService) ctx.getBean(ServiceSpringKeys.BRAND_SERVICE);
         AvailabilityService availabilityService = (AvailabilityService) ctx.getBean(ServiceSpringKeys.AVAILABILITY_SERVICE);
         EntityFactory entityFactory = productService.getGenericDao().getEntityFactory();
@@ -52,9 +52,7 @@ public class TestProductServiceImpl extends BaseCoreDBTestCase {
         assertFalse(product.getSku().isEmpty());
 
         //code the same
-        assertEquals(product.getCode(), product.getSku().iterator().next().getCode() );
-
-
+        assertEquals(product.getCode(), product.getSku().iterator().next().getCode());
 
 
     }
@@ -133,7 +131,7 @@ public class TestProductServiceImpl extends BaseCoreDBTestCase {
 
         /* Ttest that sobot has 0 skus on warehouse */
         qty = productService.getProductQuantity(product);
-        assertNull("Product  " + product.getProductId() +" has " + qty + " quyantity, but expected null", qty);
+        assertNull("Product  " + product.getProductId() + " has " + qty + " quyantity, but expected null", qty);
 
     }
 
@@ -271,6 +269,33 @@ public class TestProductServiceImpl extends BaseCoreDBTestCase {
     }
 
     @Test
+    public void testGetProductByIdList() {
+        final ProductService productService = (ProductService) ctx.getBean(ServiceSpringKeys.PRODUCT_SERVICE);
+        List<Long> ids = new ArrayList<Long>() {{
+            add(12004L);
+            add(15004L);
+        }};
+        List<Product> prods = productService.getProductByIdList(ids);
+        assertEquals(2, prods.size());
+
+        ids = new ArrayList<Long>() {{
+            add(12004L);
+            add(15004L);
+            add(777L);
+        }};
+        prods = productService.getProductByIdList(ids);
+        assertEquals(2, prods.size());
+
+        new ArrayList<String>() {{
+            add("12004");
+            add("15004");
+        }};
+        prods = productService.getProductByIdList(ids);
+        assertEquals(2, prods.size());
+
+    }
+
+    @Test
     public void testGetRandomProductByCategory() {
         final ProductService productService = (ProductService) ctx.getBean(ServiceSpringKeys.PRODUCT_SERVICE);
         final CategoryService categoryService = (CategoryService) ctx.getBean(ServiceSpringKeys.CATEGORY_SERVICE);
@@ -280,7 +305,7 @@ public class TestProductServiceImpl extends BaseCoreDBTestCase {
             list.add(productService.getRandomProductByCategory(category).getProductId());
         }
         //assume, that we select at least two different products in ten times
-        assertTrue("Set is " + list + " his size is " + list.size() + " but expected more that 1",  list.size() > 1);
+        assertTrue("Set is " + list + " his size is " + list.size() + " but expected more that 1", list.size() > 1);
     }
 
 

@@ -87,6 +87,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
+    @Cacheable(value = "categoryServiceImplMethodCache")
     public Category getRootCategory() {
         return categoryDao.findSingleByNamedQuery("ROOTCATEORY");
     }
