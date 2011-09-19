@@ -1,19 +1,19 @@
 package org.yes.cart.web.page.component.product;
 
-import org.yes.cart.domain.entity.ProductSku;
-import org.yes.cart.domain.entity.AttrValue;
-import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.web.page.component.BaseComponent;
-import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.service.domain.AttributeService;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.yes.cart.constants.ServiceSpringKeys;
+import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.service.domain.AttributeService;
+import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.web.page.component.BaseComponent;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 

@@ -175,9 +175,10 @@ public interface ProductService extends GenericService<Product> {
      * quantity of featured products limited.
      *
      * @param categories current shop categories
+     * @param limit limit of products to return.
      * @return shuffled list of featured products.
      */
-    List<Product> getFeaturedProducts(Collection categories);
+    List<Product> getFeaturedProducts(Collection categories, int limit);
 
     /**
      * Get the quantity of products in particular category.

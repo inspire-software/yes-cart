@@ -185,11 +185,35 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * {@inheritDoc}
      */
     @Cacheable(value = PROD_SERV_METHOD_CACHE)
-    public List<Product> getFeaturedProducts(final Collection categories) {
+    public List<Product> getFeaturedProducts(final Collection categories, int limit) {
         List<Product> list = productDao.findQueryObjectsByNamedQueryWithList(
-                "PRODUCT.FEATURED", categories, new Date());  //TODO v2 time machine
+                "PRODUCT.FEATURED",
+                categories,
+                new Date());  //TODO v2 time machine
         Collections.shuffle(list);
-        return list;
+        int toIndex = limit; //to index exclusive
+        if (list.size() < limit) {
+            toIndex = list.size();
+        }
+        if (toIndex < 0) {
+            toIndex = 0;
+        }
+        return list.subList(0, toIndex);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = PROD_SERV_METHOD_CACHE)
+    public List<Product> getNewArrivalsProductInCategory(
+            final long categoryId,
+            final int maxResults) {
+        return productDao.findByNamedQuery("NEW.PRODUCTS.IN.CATEGORYID",
+                0,
+                maxResults,
+                categoryId,
+                new Date()    //TODO time machine
+        );
     }
 
     /**
@@ -232,19 +256,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public List<Product> getNewArrivalsProductInCategory(
-            final long categoryId,
-            final int maxResults) {
-        return productDao.findByNamedQuery("NEW.PRODUCTS.IN.CATEGORYID",
-                0,
-                maxResults,
-                categoryId,
-                new Date()    //TODO time machine
-        );
-    }
+
 
     /**
      * {@inheritDoc}

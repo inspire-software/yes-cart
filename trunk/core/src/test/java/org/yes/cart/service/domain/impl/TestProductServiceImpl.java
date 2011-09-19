@@ -328,7 +328,17 @@ public class TestProductServiceImpl extends BaseCoreDBTestCase {
         assertFalse(shopCategoryIds.isEmpty());
         assertTrue(shopCategoryIds.contains(211L));
 
-        List<Product> rez = productService.getFeaturedProducts(shopCategoryIds);
+        List<Product> rezLimit = productService.getFeaturedProducts(shopCategoryIds, 2);
+        assertNotNull(rezLimit);
+        assertFalse(rezLimit.isEmpty());
+        assertEquals(2, rezLimit.size());
+
+        rezLimit = productService.getFeaturedProducts(shopCategoryIds, 0);
+        assertNotNull(rezLimit);
+        assertTrue(rezLimit.isEmpty());
+        
+
+        List<Product> rez = productService.getFeaturedProducts(shopCategoryIds, 100);
         assertNotNull(rez);
         assertFalse(rez.isEmpty());
         assertEquals(4, rez.size());
@@ -345,6 +355,8 @@ public class TestProductServiceImpl extends BaseCoreDBTestCase {
         }
 
         assertTrue(expectedProductCodes.isEmpty());
+
+
 
 
     }

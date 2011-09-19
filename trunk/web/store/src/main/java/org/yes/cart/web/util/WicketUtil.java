@@ -41,9 +41,24 @@ public class WicketUtil {
         return (HttpServletRequest) ((WebRequest) RequestCycle.get().getRequest()).getContainerRequest();
     }
 
-    public static PageParameters getPageParametes() {
+    public static PageParameters getPageParameters() {
         return pageParametersEncoder.decodePageParameters(RequestCycle.get().getRequest());
     }
+
+
+    /**
+     * Get current category id.
+     *
+     * @return category id if present in request, otherwise 0
+     */
+    public static long getCategoryId() {
+        final String categoryId = getPageParameters().get(WebParametersKeys.CATEGORY_ID).toString();
+        if (categoryId != null) {
+            return Long.valueOf(categoryId);
+        }
+        return 0;
+    }
+
 
     /**
      * Transform wicket 1.5 page parameter to more traditional map.  Expensive operation.

@@ -11,6 +11,7 @@ import org.springframework.context.ApplicationContext;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+        ShopCategoryServiceImplTest.class,
         AddressServiceImplTest.class,
         AssociationServiceImplTest.class,
         AttributeServiceImplTest.class,
