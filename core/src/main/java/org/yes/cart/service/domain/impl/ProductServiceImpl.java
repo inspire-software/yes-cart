@@ -198,7 +198,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         if (toIndex < 0) {
             toIndex = 0;
         }
-        return list.subList(0, toIndex);
+        return new ArrayList<Product>(list.subList(0, toIndex));
     }
 
     /**

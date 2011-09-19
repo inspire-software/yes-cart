@@ -9,6 +9,7 @@ import org.yes.cart.web.util.WicketUtil;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
@@ -41,15 +42,15 @@ public class FeaturedProducts  extends AbstractProductList {
     public List<Product> getProductListToShow() {
         if (products == null) {
             final long categoryId = WicketUtil.getCategoryId();
-            final Collection<ShopCategory> categories;
+            final Collection<Long> categories;
             if (categoryId == 0) {
-                categories = ApplicationDirector.getCurrentShop().getShopCategory();
+                categories = adapt(ApplicationDirector.getCurrentShop().getShopCategory());
             } else {
-                categories = Collections.singletonList(
+                categories = adapt(Collections.singletonList(
                         shopCategoryService.findByShopCategory(
                                 ApplicationDirector.getCurrentShop(),
                                 categoryService.getById(categoryId))
-                );
+                ));
             }
             products = productService.getFeaturedProducts(
                     categories,
@@ -57,6 +58,14 @@ public class FeaturedProducts  extends AbstractProductList {
 
         }
         return products;
+    }
+
+    private List<Long> adapt(Collection<ShopCategory> categories) {
+        final List<Long> rez = new ArrayList<Long>(categories.size());
+        for (ShopCategory cat : categories) {
+            rez.add(cat.getCategory().getCategoryId());
+        }
+        return rez;
     }
 
     /**
