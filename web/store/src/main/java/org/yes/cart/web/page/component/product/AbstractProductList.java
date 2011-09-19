@@ -11,7 +11,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.ProductAssociation;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ProductAssociationService;
 import org.yes.cart.service.domain.ProductService;

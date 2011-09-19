@@ -1,12 +1,12 @@
 package org.yes.cart.web.page.component.product;
 
-import org.yes.cart.web.page.component.BaseComponent;
-import org.yes.cart.domain.entity.ProductSku;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.web.page.component.BaseComponent;
 
-import java.util.Collection;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**

@@ -1,19 +1,8 @@
 package org.yes.cart.web.page.component.product;
 
-import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.web.page.component.BaseComponent;
-import org.yes.cart.web.support.constants.WebParametersKeys;
-import org.yes.cart.service.domain.ProductAssociationService;
-import org.yes.cart.service.domain.ProductSkuService;
-import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.ProductAssociation;
 import org.yes.cart.domain.entity.Product;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.yes.cart.web.support.constants.WebServiceSpringKey;
-import org.yes.cart.web.support.service.ProductImageService;
-import org.yes.cart.web.util.WicketUtil;
+import org.yes.cart.domain.entity.ProductAssociation;
+import org.yes.cart.web.support.constants.WebParametersKeys;
 
 import java.util.ArrayList;
 import java.util.List;
