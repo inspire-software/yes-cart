@@ -831,6 +831,7 @@
                 <entry key="removeOneSkuCmd" value="org.yes.cart.shoppingcart.impl.RemoveSkuFromCartCommandImpl"/>
 
                 <entry key="changeCurrencyCmd" value="org.yes.cart.shoppingcart.impl.ChangeCurrencyEventCommandImpl"/>
+                <entry key="changeLocaleCmd" value="org.yes.cart.shoppingcart.impl.ChangeLocaleCartCommandImpl"/>
                 <entry key="logoutCmd" value="org.yes.cart.shoppingcart.impl.LogoutCommandImpl"/>
                 <entry key="loginCmd" value="org.yes.cart.shoppingcart.impl.LoginCommandImpl"/>
                 <entry key="expireCartCmd" value="org.yes.cart.shoppingcart.impl.ExpireCartCommandImpl"/>
@@ -841,7 +842,6 @@
                 <entry key="cleanCartCmd" value="org.yes.cart.shoppingcart.impl.CleanCartCommandImpl"/>
 
                 <entry key="setShopIdCmd" value="org.yes.cart.shoppingcart.impl.SetShopCartCommandImpl"/>
-
             </map>
         </constructor-arg>
     </bean>

@@ -18,6 +18,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.Date;
 
 /**
  * Shopping cart  filter responsible to restore shopping cart from cookies, if it possible.
@@ -54,26 +55,19 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
 
         final HttpServletRequest httpRequest = (HttpServletRequest) request;
 
-        final ShoppingCart shoppingCart = new WebShoppingCartImpl();
-
         synchronized (tuplizer) {    //TODO here can be a bottle neck, so may be need to use a pool
-            ShoppingCart restoredCart = null;
+            ShoppingCart cart = new WebShoppingCartImpl();
             try {
-                restoredCart  = tuplizer.toObject(
+                cart = tuplizer.toObject(
                             httpRequest.getCookies(),
-                            shoppingCart);
-                BeanUtils.copyProperties(restoredCart, shoppingCart);
+                            cart);
             } catch (UnableToObjectizeCookieException e) {
                 if(LOG.isWarnEnabled()) {
-                    LOG.warn(MessageFormat.format("Cart {0} not restored from cookies", shoppingCart.getGuid()));
+                    LOG.warn("Cart not restored from cookies");
                 }
             }
-
-            
-
-            ApplicationDirector.setShoppingCart(shoppingCart);
-
-
+            cart.setProcessingStartDate(new Date());
+            ApplicationDirector.setShoppingCart(cart);
         }
         return request;
     }

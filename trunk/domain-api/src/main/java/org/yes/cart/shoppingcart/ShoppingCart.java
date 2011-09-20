@@ -185,8 +185,9 @@ public interface ShoppingCart extends Serializable {
      * to the cart.
      *
      * @param command the modification visitor
+     * @return true in case if command was accepted
      */
-    void accept(final ShoppingCartCommand command);
+    boolean accept(final ShoppingCartCommand command);
 
     /**
      * Get shopping context
@@ -208,6 +209,19 @@ public interface ShoppingCart extends Serializable {
      * @return   current locale
      */
     String getCurrentLocale();
+
+
+    /**
+     * Get date when this cart was processed through cycle.
+     * @return date.
+     */
+    Date getProcessingStartDate();
+
+    /**
+     * Set processing start date.
+     * @param processingStartDate start date.
+     */
+    void setProcessingStartDate(Date processingStartDate);    
 
 
 }

@@ -55,7 +55,7 @@
     <!-- ################################### filter delegates end ################################### -->
 
     <bean id="cookieTuplizer" class="org.yes.cart.web.support.util.cookie.impl.CookieTuplizerImpl"
-          scope="prototype">  <!-- one read , second write-->
+          scope="prototype">  <!-- at lease one read , second write-->
         <constructor-arg index="0" value="CHANGE_PASSWORD_ON_PRODUCTION"/>
         <constructor-arg index="1" value="2048"/>
         <constructor-arg index="2" value="DES"/>
@@ -68,7 +68,7 @@
         <constructor-arg index="1" ref="cookieTuplizer"/>
     </bean>
 
-    <bean id="shoppingCartPersister" class="org.yes.cart.web.phazelistener.ShoppingCartPersister">
+    <bean id="shoppingCartPersister" class="org.yes.cart.web.support.util.cookie.impl.ShoppingCartPersisterImpl">
         <constructor-arg index="0" ref="cookieTuplizer"/>
     </bean>
 

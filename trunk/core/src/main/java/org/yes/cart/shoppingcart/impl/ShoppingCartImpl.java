@@ -38,6 +38,8 @@ public class ShoppingCartImpl implements ShoppingCart {
 
     private Date modifiedDate;
 
+    private Date processingStartDate;
+
     private ShoppingContext shoppingContext;
 
     private OrderInfo orderInfo;
@@ -363,8 +365,27 @@ public class ShoppingCartImpl implements ShoppingCart {
     /**
      * {@inheritDoc}
      */
-    public void accept(final ShoppingCartCommand command) {
-        command.execute(this);
+    public boolean accept(final ShoppingCartCommand command) {
+        if(command != null) {
+            command.execute(this);
+            return true;
+        }
+        return false;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Date getProcessingStartDate() {
+        return processingStartDate;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setProcessingStartDate(final Date processingStartDate) {
+        this.processingStartDate = processingStartDate;
+    }
+
 
 }

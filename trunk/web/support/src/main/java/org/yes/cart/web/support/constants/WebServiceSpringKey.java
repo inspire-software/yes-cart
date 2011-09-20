@@ -32,4 +32,9 @@ public interface WebServiceSpringKey {
       */
      public String PRODUCT_IMAGE_SERVICE = "productImageService";
 
+     /**
+      * Cart persister.
+      */
+     public String CART_PERSISTER = "shoppingCartPersister";
+
 }
