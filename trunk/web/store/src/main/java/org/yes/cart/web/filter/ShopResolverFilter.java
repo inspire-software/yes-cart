@@ -1,19 +1,23 @@
 package org.yes.cart.web.filter;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.impl.ChangeLocaleCartCommandImpl;
 import org.yes.cart.shoppingcart.impl.SetShopCartCommandImpl;
 import org.yes.cart.shoppingcart.impl.ChangeCurrencyEventCommandImpl;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.constants.WebParametersKeys;
+import org.yes.cart.web.support.constants.WebServiceSpringKey;
 import org.yes.cart.web.support.request.HttpServletRequestWrapper;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationContext;
 import org.springframework.beans.BeansException;
+import org.yes.cart.web.support.service.LanguageService;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +27,7 @@ import java.net.MalformedURLException;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Locale;
 
 
 /**
@@ -42,15 +47,19 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Applic
 
     private ApplicationContext applicationContext;
 
+    private final LanguageService languageService;
+
 
     /**
      * @param systemService service
      */
     public ShopResolverFilter(
             final ApplicationDirector applicationDirector,
-            final SystemService systemService) {
+            final SystemService systemService,
+            final LanguageService languageService) {
         super(applicationDirector);
         this.systemService = systemService;
+        this.languageService = languageService;
     }
 
     /**
@@ -101,7 +110,15 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Applic
             new ChangeCurrencyEventCommandImpl(applicationContext, Collections.singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, shop.getDefaultCurrency()))
                     .execute(shoppingCart);
 
-            //TODO locale
+        }
+
+        if (Session.get().getLocale() == null) {
+            Session.get().setLocale(new Locale(languageService.getSupportedLanguages().get(0)));
+        }
+
+        if(StringUtils.isBlank(shoppingCart.getCurrentLocale())) {
+            new ChangeLocaleCartCommandImpl(applicationContext, Collections.singletonMap(ChangeLocaleCartCommandImpl.CMD_KEY, Session.get().getLocale().getLanguage()))
+                    .execute(shoppingCart);
         }
 
     }
@@ -155,4 +172,5 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Applic
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
+
 }
