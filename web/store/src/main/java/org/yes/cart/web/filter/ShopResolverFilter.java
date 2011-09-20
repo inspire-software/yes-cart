@@ -93,16 +93,15 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Applic
 
         final ShoppingCart shoppingCart = ApplicationDirector.getShoppingCart();
 
-        new SetShopCartCommandImpl(applicationContext, Collections.singletonMap(SetShopCartCommandImpl.CMD_KEY, shop.getShopId()))
-                .execute(shoppingCart);
-
         if (shoppingCart.getCurrencyCode() == null) { // new cart only may satisfy this condition
+
+            new SetShopCartCommandImpl(applicationContext, Collections.singletonMap(SetShopCartCommandImpl.CMD_KEY, shop.getShopId()))
+                    .execute(shoppingCart);
+
             new ChangeCurrencyEventCommandImpl(applicationContext, Collections.singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, shop.getDefaultCurrency()))
                     .execute(shoppingCart);
-        }
 
-        if (shoppingCart.getCurrentLocale() == null) {
-            //TODO 
+            //TODO locale
         }
 
     }

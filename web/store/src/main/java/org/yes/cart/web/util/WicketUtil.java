@@ -74,18 +74,14 @@ public class WicketUtil {
      * @param pageParameters given parameters to transform.
      * @return parameters transformed to map
      */
-    public static Map<String, Object> pageParametesAsMap(final PageParameters pageParameters) {
-
-        final Map<String, Object> map = new LinkedHashMap<String, Object>(pageParameters.getNamedKeys().size());
-        for (String key : pageParameters.getNamedKeys()) {
-            map.put(
-                    key,
-                    pageParameters.getValues(key)
-            );
+    public static Map<String, String> pageParametesAsMap(final PageParameters pageParameters) {
+        final Map<String, String> map = new LinkedHashMap<String, String>();
+        if (pageParameters != null) {
+            for (String key : pageParameters.getNamedKeys()) {
+                map.put(key, pageParameters.get(key).toString());
+            }
         }
-
         return map;
-
     }
 
 

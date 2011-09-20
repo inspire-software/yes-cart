@@ -16,8 +16,8 @@ import org.yes.cart.web.page.component.breadcrumbs.BreadCrumbsView;
 import org.yes.cart.web.page.component.filterednavigation.AttributeProductFilter;
 import org.yes.cart.web.page.component.filterednavigation.BrandProductFilter;
 import org.yes.cart.web.page.component.filterednavigation.PriceProductFilter;
-import org.yes.cart.web.page.component.product.NewArrivalProducts;
 import org.yes.cart.web.page.component.product.FeaturedProducts;
+import org.yes.cart.web.page.component.product.NewArrivalProducts;
 import org.yes.cart.web.page.component.search.SearchView;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
@@ -40,7 +40,7 @@ import java.util.Map;
 public class HomePage extends AbstractWebPage {
 
 
-    final Map<String, Object> mapParams;
+    final Map<String, String> mapParams;
 
 
     @SpringBean(name = WebServiceSpringKey.CENTRAL_VIEW_RESOLVER)
@@ -54,6 +54,8 @@ public class HomePage extends AbstractWebPage {
 
     @SpringBean(name = ServiceSpringKeys.SHOP_SERVICE)
     private ShopService shopService;
+
+
 
     /**
      * Construct home page.
@@ -71,6 +73,8 @@ public class HomePage extends AbstractWebPage {
     /** {@inheritDoc} */
     @Override
     protected void onBeforeRender() {
+
+        processCommands();
 
         final String centralViewLabel = centralViewResolver.resolveMainPanelRendererLabel(mapParams);
 
@@ -189,5 +193,6 @@ public class HomePage extends AbstractWebPage {
         }
 
     }
+
 
 }
