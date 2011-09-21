@@ -71,20 +71,7 @@ public class BaseRegisteredPersonAspect extends BaseNotificationAspect {
                 registrationMessage.setPassword(generatedPassword);
                 registrationMessage.setNewPerson(newPerson);
 
-                if (args.length >= 2 && args[1] instanceof Shop) {
-                    final Shop shop = (Shop)  args[1];
-                    registrationMessage.setShopId(shop.getShopId());
-
-                    final AttrValue attrValue = shop.getAttributeByCode(AttributeNamesKeys.SHOP_MAIL_FROM);
-                    if (attrValue != null && StringUtils.isNotBlank(attrValue.getVal())) {
-                        //if value not set it will be collected from mail properties
-                        registrationMessage.setShopMailFrom(attrValue.getVal());                           
-                    }
-
-                    registrationMessage.setShopCode(shop.getCode());
-                    registrationMessage.setShopName(shop.getName());
-                    registrationMessage.setShopUrl(transformShopUrls(shop.getShopUrl()));
-                }
+                addShopInformation(args, registrationMessage);
 
                 sendNotification(registrationMessage);
                 LOG.info("Person message was send to queue " + registrationMessage.toString());
@@ -93,6 +80,28 @@ public class BaseRegisteredPersonAspect extends BaseNotificationAspect {
             }
         }
         return pjp.proceed();
+    }
+
+    /**
+     * Add shop information if it present.
+     * @param args function arguments
+     * @param registrationMessage message to add info
+     */
+    private void addShopInformation(final Object[] args, final RegistrationMessage registrationMessage) {
+        if (args.length >= 2 && args[1] instanceof Shop) {
+            final Shop shop = (Shop)  args[1];
+            registrationMessage.setShopId(shop.getShopId());
+
+            final AttrValue attrValue = shop.getAttributeByCode(AttributeNamesKeys.SHOP_MAIL_FROM);
+            if (attrValue != null && StringUtils.isNotBlank(attrValue.getVal())) {
+                //if value not set it will be collected from mail properties
+                registrationMessage.setShopMailFrom(attrValue.getVal());
+            }
+
+            registrationMessage.setShopCode(shop.getCode());
+            registrationMessage.setShopName(shop.getName());
+            registrationMessage.setShopUrl(transformShopUrls(shop.getShopUrl()));
+        }
     }
 
     private Set<String> transformShopUrls(final Set<ShopUrl> urls) {

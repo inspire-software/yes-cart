@@ -1,7 +1,6 @@
 package org.yes.cart.service.image.impl;
 
 import org.yes.cart.constants.Constants;
-import org.yes.cart.service.domain.SystemService;
 
 import java.io.File;
 

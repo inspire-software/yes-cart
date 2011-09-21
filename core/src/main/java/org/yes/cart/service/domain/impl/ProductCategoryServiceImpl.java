@@ -32,10 +32,10 @@ public class ProductCategoryServiceImpl extends BaseGenericServiceImpl<ProductCa
     /** {@inheritDoc} */
     public int getNextRank(final long categoryId) {
         Integer maxRank = (Integer)getGenericDao().getScalarResultByNamedQuery("GET.MAX.RANK", categoryId);
-        if (maxRank != null) {
-            return maxRank + RANK_STEP;
-        } else {
+        if (maxRank == null) {
             return RANK_STEP;
+        } else {            
+            return maxRank + RANK_STEP;
         }
 
 

@@ -15,7 +15,7 @@ public class SetBillingSeparateFromShippingAddressCommandImpl extends AbstractCa
 
     private static final long serialVersionUID = 20101029L;
 
-    public static String CMD_KEY = "setBillingAddressSeparateCmd";
+    public static final String CMD_KEY = "setBillingAddressSeparateCmd";
 
     private final boolean value;
 

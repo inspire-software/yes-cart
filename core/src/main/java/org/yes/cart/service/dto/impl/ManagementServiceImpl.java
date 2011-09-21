@@ -33,6 +33,9 @@ import java.util.List;
  */
 public class ManagementServiceImpl implements ManagementService {
 
+    private static final String EMAIL = "email";
+    private static final String CODE = "code";
+
 
     private final ManagerService managerService;
 
@@ -86,7 +89,7 @@ public class ManagementServiceImpl implements ManagementService {
 
         final List<Criterion> criteriaList = new ArrayList<Criterion>();
         if (StringUtils.isNotBlank(emailFilter)) {
-            criteriaList.add(Restrictions.like("email", emailFilter, MatchMode.ANYWHERE));
+            criteriaList.add(Restrictions.like(EMAIL, emailFilter, MatchMode.ANYWHERE));
         }
         if (StringUtils.isNotBlank(firstNameFilter)) {
             criteriaList.add(Restrictions.like("firstname", firstNameFilter, MatchMode.ANYWHERE));
@@ -116,7 +119,7 @@ public class ManagementServiceImpl implements ManagementService {
      */
     public List<RoleDTO> getAssignedManagerRoles(final String userId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<RoleDTO> result = new ArrayList<RoleDTO>();
-        final Manager manager = managerService.findSingleByCriteria(Restrictions.eq("email", userId));
+        final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
         if (manager != null) {
             List<Role> roles = roleDao.findByNamedQuery(
                     "ASSIGNED.ROLES.BY.USER.EMAIL",
@@ -131,7 +134,7 @@ public class ManagementServiceImpl implements ManagementService {
      */
     public List<RoleDTO> getAvailableManagerRoles(final String userId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<RoleDTO> result = new ArrayList<RoleDTO>();
-        final Manager manager = managerService.findSingleByCriteria(Restrictions.eq("email", userId));
+        final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
         if (manager != null) {
             List<Role> roles = roleDao.findByNamedQuery(
                     "AVAILABLE.ROLES.BY.USER.EMAIL",
@@ -171,7 +174,7 @@ public class ManagementServiceImpl implements ManagementService {
      * {@inheritDoc}
      */
     public void updateUser(final String userId, final String firstName, final String lastName) {
-        final Manager manager = managerService.findSingleByCriteria(Restrictions.eq("email", userId));
+        final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
         if (manager != null) {
             manager.setFirstname(firstName);
             manager.setLastname(lastName);
@@ -185,7 +188,7 @@ public class ManagementServiceImpl implements ManagementService {
      */
     public void resetPassword(final String userId) {
 
-        final Manager manager = managerService.findSingleByCriteria(Restrictions.eq("email", userId));
+        final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
         if (manager != null) {
             managerService.resetPassword(manager);
         }
@@ -195,9 +198,9 @@ public class ManagementServiceImpl implements ManagementService {
      * {@inheritDoc}
      */
     public void deleteUser(final String userId) {
-        final Manager manager = managerService.findSingleByCriteria(Restrictions.eq("email", userId));
+        final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
         if (manager != null) {
-            final List<ManagerRole> assignedRoles = managerRoleDao.findByCriteria(Restrictions.eq("email", userId));
+            final List<ManagerRole> assignedRoles = managerRoleDao.findByCriteria(Restrictions.eq(EMAIL, userId));
             for (ManagerRole managerRole : assignedRoles) {
                 managerRoleDao.delete(managerRole);
             }
@@ -227,7 +230,7 @@ public class ManagementServiceImpl implements ManagementService {
      * {@inheritDoc}
      */
     public void updateRole(final String role, final String decription) {
-        final Role roleEntity = roleDao.findSingleByCriteria(Restrictions.eq("code", role));
+        final Role roleEntity = roleDao.findSingleByCriteria(Restrictions.eq(CODE, role));
         if (roleEntity != null) {
             roleEntity.setDescription(decription);
             roleDao.update(roleEntity);
@@ -238,9 +241,9 @@ public class ManagementServiceImpl implements ManagementService {
      * {@inheritDoc}
      */
     public void deleteRole(final String role) {
-        final Role roleEntity = roleDao.findSingleByCriteria(Restrictions.eq("code", role));
+        final Role roleEntity = roleDao.findSingleByCriteria(Restrictions.eq(CODE, role));
         if (roleEntity != null) {
-            final List<ManagerRole> assignedRoles = managerRoleDao.findByCriteria(Restrictions.eq("code", role));
+            final List<ManagerRole> assignedRoles = managerRoleDao.findByCriteria(Restrictions.eq(CODE, role));
             for (ManagerRole managerRole : assignedRoles) {
                 managerRoleDao.delete(managerRole);
             }
@@ -252,8 +255,8 @@ public class ManagementServiceImpl implements ManagementService {
      * {@inheritDoc}
      */
     public void grantRole(final String userId, final String role) {
-        final Role roleEntity = roleDao.findSingleByCriteria(Restrictions.eq("code", role));
-        final Manager manager = managerService.findSingleByCriteria(Restrictions.eq("email", userId));
+        final Role roleEntity = roleDao.findSingleByCriteria(Restrictions.eq(CODE, role));
+        final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
         if (roleEntity != null && manager != null) {
             final ManagerRole managerRole = managerRoleDao.getEntityFactory().getByIface(ManagerRole.class);
             managerRole.setCode(role);
@@ -267,8 +270,8 @@ public class ManagementServiceImpl implements ManagementService {
      */
     public void revokeRole(final String userId, final String role) {
         final ManagerRole managerRole = managerRoleDao.findSingleByCriteria(
-                Restrictions.eq("code", role),
-                Restrictions.eq("email", userId)
+                Restrictions.eq(CODE, role),
+                Restrictions.eq(EMAIL, userId)
         );
         if (managerRole != null) {
             managerRoleDao.delete(managerRole);

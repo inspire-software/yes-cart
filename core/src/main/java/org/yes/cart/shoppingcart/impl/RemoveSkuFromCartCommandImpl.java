@@ -23,7 +23,7 @@ public class RemoveSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl{
 
     private static final Logger LOG = LoggerFactory.getLogger(RemoveSkuFromCartCommandImpl.class);
 
-    public static String CMD_KEY = "removeOneSkuCmd";
+    public static final String CMD_KEY = "removeOneSkuCmd";
 
 
     /** {@inheritDoc} */

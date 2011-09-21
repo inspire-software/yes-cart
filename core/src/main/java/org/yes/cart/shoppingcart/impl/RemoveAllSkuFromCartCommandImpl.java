@@ -20,7 +20,7 @@ public class RemoveAllSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl 
 
     private static final long serialVersionUID = 20100313L;
 
-    public static String CMD_KEY = "removeAllSkuCmd";
+    public static final String CMD_KEY = "removeAllSkuCmd";
 
     private static final Logger LOG = LoggerFactory.getLogger(RemoveAllSkuFromCartCommandImpl.class);
 

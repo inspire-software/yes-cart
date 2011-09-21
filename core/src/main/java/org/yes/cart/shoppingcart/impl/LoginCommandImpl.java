@@ -21,9 +21,9 @@ public class LoginCommandImpl  extends AbstractCartCommandImpl  implements Shopp
 
     private static final long serialVersionUID = 20101026L;
 
-    public static String CMD_KEY = "loginCmd";
-    public static String EMAIL = "email";
-    public static String NAME = "name";
+    public static final String CMD_KEY = "loginCmd";
+    public static final String EMAIL = "email";
+    public static final String NAME = "name";
 
     private final Map parameters;
 
