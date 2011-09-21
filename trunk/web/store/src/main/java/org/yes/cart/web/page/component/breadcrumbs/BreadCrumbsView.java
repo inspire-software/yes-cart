@@ -12,11 +12,10 @@ import org.yes.cart.domain.query.PriceNavigation;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.WebParametersKeys;
-import org.yes.cart.web.support.constants.WebServiceSpringKey;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CurrencySymbolService;
 
 import java.math.BigDecimal;
@@ -41,7 +40,7 @@ public class BreadCrumbsView extends BaseComponent implements CrumbNamePrefixPro
     @SpringBean(name = ServiceSpringKeys.ATTRIBUTE_SERVICE)
     private AttributeService attributeService;
 
-    @SpringBean(name = WebServiceSpringKey.CURRENCY_SYMBOL_SERVICE)
+    @SpringBean(name = StorefrontServiceSpringKeys.CURRENCY_SYMBOL_SERVICE)
     private CurrencySymbolService currencySymbolService;
 
     @SpringBean(name = ServiceSpringKeys.PRICE_NAVIGATION)

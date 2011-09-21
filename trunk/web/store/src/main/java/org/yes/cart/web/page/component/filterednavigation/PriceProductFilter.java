@@ -3,7 +3,6 @@ package org.yes.cart.web.page.component.filterednavigation;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.ProductType;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
@@ -13,8 +12,7 @@ import org.yes.cart.domain.query.impl.PriceSearchQueryBuilderImpl;
 import org.yes.cart.domain.queryobject.FiteredNavigationRecord;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.web.application.ApplicationDirector;
-import org.yes.cart.web.support.constants.WebParametersKeys;
-import org.yes.cart.web.support.constants.WebServiceSpringKey;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CurrencySymbolService;
 
 import java.math.BigDecimal;
@@ -46,7 +44,7 @@ public class PriceProductFilter extends AbstractProductFilter {
     @SpringBean(name = ServiceSpringKeys.PRICE_SERVICE)
     private PriceService priceService;
 
-    @SpringBean(name = WebServiceSpringKey.CURRENCY_SYMBOL_SERVICE)
+    @SpringBean(name = StorefrontServiceSpringKeys.CURRENCY_SYMBOL_SERVICE)
     private CurrencySymbolService currencySymbolService;
 
 

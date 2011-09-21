@@ -1030,6 +1030,9 @@
         </constructor-arg>
     </bean>
 
+    <!-- ############################################ misc ####################################### -->
+
+    <bean id="pluralFormService" class="org.yes.cart.service.misc.impl.PluralFormServiceImpl"/> 
 
 
 

@@ -11,7 +11,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.web.page.component.data.SortableCategoryDataProvider;
-import org.yes.cart.web.support.constants.WebServiceSpringKey;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.CategoryDecorator;
 import org.yes.cart.web.support.entity.decorator.impl.CategoryDecoratorImpl;
 import org.yes.cart.web.support.service.CategoryImageService;
@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class SubCategoriesCentralView extends AbstractCentralView {
 
-    @SpringBean(name = WebServiceSpringKey.CATEGORY_IMAGE_SERVICE)
+    @SpringBean(name = StorefrontServiceSpringKeys.CATEGORY_IMAGE_SERVICE)
     protected CategoryImageService categoryImageService;
 
     /**

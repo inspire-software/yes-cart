@@ -1,6 +1,5 @@
 package org.yes.cart.web.page.component;
 
-import org.apache.wicket.Page;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -11,13 +10,11 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.yes.cart.shoppingcart.impl.ChangeCurrencyEventCommandImpl;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.HomePage;
-import org.yes.cart.web.support.constants.WebServiceSpringKey;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CurrencySymbolService;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.web.support.util.NavigationUtil;
 import org.yes.cart.web.util.WicketUtil;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -34,7 +31,7 @@ public class Currency extends BaseComponent {
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
 
-    @SpringBean(name = WebServiceSpringKey.CURRENCY_SYMBOL_SERVICE)
+    @SpringBean(name = StorefrontServiceSpringKeys.CURRENCY_SYMBOL_SERVICE)
     private CurrencySymbolService currencySymbolService;
 
 

@@ -5,7 +5,7 @@ package org.yes.cart.web.support.constants;
  * Date: 7/10/11
  * Time: 9:23 PM
  */
-public interface WebServiceSpringKey {
+public interface StorefrontServiceSpringKeys {
 
     /**
      * Currency service.

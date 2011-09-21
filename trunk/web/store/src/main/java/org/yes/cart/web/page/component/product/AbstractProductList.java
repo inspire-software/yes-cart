@@ -18,7 +18,7 @@ import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.WebParametersKeys;
-import org.yes.cart.web.support.constants.WebServiceSpringKey;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.ProductDecorator;
 import org.yes.cart.web.support.entity.decorator.impl.ProductDecoratorImpl;
 import org.yes.cart.web.support.service.ProductImageService;
@@ -52,7 +52,7 @@ public abstract class AbstractProductList extends BaseComponent {
     @SpringBean(name = ServiceSpringKeys.PRODUCT_SERVICE)
     protected ProductService productService;
 
-    @SpringBean(name = WebServiceSpringKey.PRODUCT_IMAGE_SERVICE)
+    @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_IMAGE_SERVICE)
     protected ProductImageService productImageService;
 
     @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)

@@ -11,7 +11,7 @@ import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.PriceService;
-import org.yes.cart.web.support.constants.WebServiceSpringKey;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.ProductImageService;
 import org.yes.cart.web.util.WicketUtil;
@@ -68,7 +68,7 @@ public class SkuCentralView extends AbstractCentralView {
     @SpringBean(name = ServiceSpringKeys.PRODUCT_SKU_SERVICE)
     protected ProductSkuService productSkuService;
 
-    @SpringBean(name = WebServiceSpringKey.PRODUCT_IMAGE_SERVICE)
+    @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_IMAGE_SERVICE)
     protected ProductImageService productImageService;
 
     @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)

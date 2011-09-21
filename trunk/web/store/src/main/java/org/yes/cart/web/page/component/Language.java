@@ -13,7 +13,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.shoppingcart.impl.ChangeLocaleCartCommandImpl;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.HomePage;
-import org.yes.cart.web.support.constants.WebServiceSpringKey;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.LanguageService;
 import org.yes.cart.web.util.WicketUtil;
 
@@ -30,7 +30,7 @@ public class Language extends BaseComponent {
     private final static String LANGUAGE_NAME = "languageName";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
-    @SpringBean(name = WebServiceSpringKey.LANGUAGE_SERVICE)
+    @SpringBean(name = StorefrontServiceSpringKeys.LANGUAGE_SERVICE)
     private LanguageService languageService;
 
     /**

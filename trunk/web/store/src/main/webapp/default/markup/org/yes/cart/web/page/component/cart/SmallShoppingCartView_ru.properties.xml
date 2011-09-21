@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="item.form0">{0} продукт</entry>
+	<entry key="item.form1">{0} продукта</entry>
+	<entry key="item.form2">{0} продуктов</entry>
+</properties>
