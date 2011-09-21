@@ -17,7 +17,7 @@ public class LogoutCommandImpl  extends AbstractCartCommandImpl implements Shopp
 
     private static final long serialVersionUID = 20101025L;
 
-    public static String CMD_KEY = "logoutCmd";
+    public static final String CMD_KEY = "logoutCmd";
 
     /**
      * Execute command on shopping cart to perform changes.

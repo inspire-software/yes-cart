@@ -20,7 +20,7 @@ public class SetCarrierSlaCartCommandImpl  extends AbstractCartCommandImpl imple
 
     private static final Logger LOG = LoggerFactory.getLogger(SetCarrierSlaCartCommandImpl.class);
 
-    public static String CMD_KEY = "setCarrierSlaCmd";
+    public static final String CMD_KEY = "setCarrierSlaCmd";
 
     private Integer slaPkvalue = null;
 

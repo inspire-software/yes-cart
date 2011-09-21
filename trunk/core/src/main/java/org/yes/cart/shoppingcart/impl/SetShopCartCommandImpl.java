@@ -16,7 +16,7 @@ public class SetShopCartCommandImpl  extends AbstractCartCommandImpl implements 
 
     private static final long serialVersionUID = 2010522L;
 
-    public static String CMD_KEY = "setShopIdCmd";
+    public static final String CMD_KEY = "setShopIdCmd";
 
     private final long value;
 

@@ -15,7 +15,7 @@ public class SetMultipleDeliveryCommandImpl  extends AbstractCartCommandImpl  im
 
     private static final long serialVersionUID = 20110118L;
 
-    public static String CMD_KEY = "setMultipleDeliveryCmd";
+    public static final String CMD_KEY = "setMultipleDeliveryCmd";
 
     private final boolean value;
 

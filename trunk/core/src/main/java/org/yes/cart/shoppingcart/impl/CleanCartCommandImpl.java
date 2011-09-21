@@ -19,7 +19,7 @@ public class CleanCartCommandImpl extends AbstractCartCommandImpl implements Sho
     public static final String CMD_KEY = "cleanCartCmd";
 
     /** {@inheritDoc} */
-    public void execute(ShoppingCart shoppingCart) {
+    public void execute(final ShoppingCart shoppingCart) {
         shoppingCart.clean();
         setModifiedDate(shoppingCart);
     }

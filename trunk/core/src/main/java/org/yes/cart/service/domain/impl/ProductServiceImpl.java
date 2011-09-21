@@ -185,7 +185,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * {@inheritDoc}
      */
     @Cacheable(value = PROD_SERV_METHOD_CACHE)
-    public List<Product> getFeaturedProducts(final Collection categories, int limit) {
+    public List<Product> getFeaturedProducts(final Collection categories, final int limit) {
         List<Product> list = productDao.findQueryObjectsByNamedQueryWithList(
                 "PRODUCT.FEATURED",
                 categories,

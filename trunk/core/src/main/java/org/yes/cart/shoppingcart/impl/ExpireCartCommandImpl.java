@@ -17,7 +17,7 @@ public class ExpireCartCommandImpl  extends AbstractCartCommandImpl implements S
 
     private static final long serialVersionUID = 20101026L;
 
-    public static String CMD_KEY = "expireCartCmd";
+    public static final String CMD_KEY = "expireCartCmd";
 
     /** {@inheritDoc} */
     public void execute(final ShoppingCart shoppingCart) {

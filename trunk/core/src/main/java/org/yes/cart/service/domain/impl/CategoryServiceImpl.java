@@ -19,6 +19,8 @@ import java.util.*;
  */
 public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implements CategoryService {
 
+    private static final String CACHE_NAME = "categoryServiceImplMethodCache";
+
     private final GenericDAO<Category, Long> categoryDao;
 
     private final GenericDAO<ShopCategory, Long> shopCategoryDao;
@@ -48,7 +50,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      * @param shop given shop
      * @return ordered by rank list of assigned top level categories
      */
-    @Cacheable(value = "categoryServiceImplMethodCache")
+    @Cacheable(value = CACHE_NAME)
     public List<Category> getTopLevelCategories(final Shop shop) {
         return categoryDao.findByNamedQuery("TOPCATEGORIES.BY.SHOPID", shop.getShopId(), new Date());
     }
@@ -87,7 +89,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "categoryServiceImplMethodCache")
+    @Cacheable(value = CACHE_NAME)
     public Category getRootCategory() {
         return categoryDao.findSingleByNamedQuery("ROOTCATEORY");
     }
@@ -95,7 +97,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "categoryServiceImplMethodCache")
+    @Cacheable(value = CACHE_NAME)
     public String getCategoryTemplateVariation(final Category category) {
         String variation = null;
         if (StringUtils.isBlank(category.getUitemplate())) {
@@ -114,7 +116,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "categoryServiceImplMethodCache")
+    @Cacheable(value = CACHE_NAME)
     public List<String> getItemsPerPage(final Category category) {
         final List<String> rez;
         if (category == null) {
@@ -139,7 +141,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      * @param defaultValue  default value will be returned if value not found in hierarcht
      * @return value of given attibute name or defaultValue if value not found in category hierarchy
      */
-    @Cacheable(value = "categoryServiceImplMethodCache")
+    @Cacheable(value = CACHE_NAME)
     public String getCategoryAttributeRecursive(final Category category, final String attributeName, final String defaultValue) {
         final String value = getCategoryAttributeRecursive(category, attributeName);
         if (value == null) {
@@ -180,7 +182,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "categoryServiceImplMethodCache")
+    @Cacheable(value = CACHE_NAME)
     public String getCategoryTemplateVariation(final long categoryId) {
         return getCategoryTemplateVariation(
                 categoryDao.findById(categoryId)
@@ -190,7 +192,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "categoryServiceImplMethodCache")
+    @Cacheable(value = CACHE_NAME)
     public int getProductQuantity(final long categoryId, final boolean includeChild) {
         int qty = 0;
         Category category = categoryDao.findById(categoryId);
@@ -210,7 +212,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "categoryServiceImplMethodCache")
+    @Cacheable(value = CACHE_NAME)
     public List<Category> getChildCategories(final long categoryId) {
         return getChildCategoriesWithAvailability(categoryId, true);
     }
@@ -237,7 +239,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "categoryServiceImplMethodCache")
+    @Cacheable(value = CACHE_NAME)
     public Set<Category> getChildCategoriesRecursive(final long categoryId) {
         Set<Category> result = new HashSet<Category>();
         List<Category> categories = getChildCategories(categoryId);
@@ -285,7 +287,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc} Just to cache
      */
-    @Cacheable(value = "categoryServiceImplMethodCache")
+    @Cacheable(value = CACHE_NAME)
     public Category getById(final long pk) {
         return getGenericDao().findById(pk);
     }
@@ -304,7 +306,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "categoryServiceImplMethodCache")
+    @Cacheable(value = CACHE_NAME)
     public Long getCategoryIdBySeoUri(final String seoUri) {
         List<Category> list = categoryDao.findByNamedQuery("CATEGORY.BY.SEO.URI", seoUri);
         if (list != null && !list.isEmpty()) {

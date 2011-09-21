@@ -135,10 +135,10 @@ public class ShoppingCartImpl implements ShoppingCart {
         newItem.setQuantity(quantity);
 
         final int skuIndex = indexOf(sku);
-        if (skuIndex != -1) {
-            getItems().set(skuIndex, newItem);
-        } else {
+        if (skuIndex == -1) { //not found
             getItems().add(newItem);
+        } else {
+            getItems().set(skuIndex, newItem);
         }
         return true;
     }
@@ -148,7 +148,7 @@ public class ShoppingCartImpl implements ShoppingCart {
      *
      * @param productSku
      */
-    public boolean removeCartItem(ProductSkuDTO productSku) {
+    public boolean removeCartItem(final ProductSkuDTO productSku) {
         final int skuIndex = indexOf(productSku);
         if (skuIndex != -1) {
             getItems().remove(skuIndex);
@@ -350,7 +350,7 @@ public class ShoppingCartImpl implements ShoppingCart {
      * Set shopping cart generic locale
      * @param currentLocale current locale
      */
-    void setCurrentLocale(String currentLocale) {
+    void setCurrentLocale(final String currentLocale) {
         this.currentLocale = currentLocale;
     }
 

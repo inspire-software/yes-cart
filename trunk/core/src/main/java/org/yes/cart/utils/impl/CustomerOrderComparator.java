@@ -13,8 +13,9 @@ import java.util.Comparator;
 public class CustomerOrderComparator implements Comparator<CustomerOrder> {
 
     /** {@inheritDoc} */
-    public int compare(final CustomerOrder o1, final CustomerOrder o2) {
-        return (o1.getCustomerorderId() < o2.getCustomerorderId() ? -1 : (o1.getCustomerorderId() == o2.getCustomerorderId() ? 0 : 1));
+    public int compare(final CustomerOrder order1, final CustomerOrder order2) {
+        return (order1.getCustomerorderId() < order2.getCustomerorderId() ?
+                -1 : (order1.getCustomerorderId() == order2.getCustomerorderId() ? 0 : 1));
     }
 
 }

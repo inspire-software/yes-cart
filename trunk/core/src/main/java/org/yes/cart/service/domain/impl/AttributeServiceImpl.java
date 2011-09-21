@@ -108,12 +108,12 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
 
     /** {@inheritDoc} */
     public List<Pair<String, List<AttrValue>>> merge(
-            final List<Pair<String, List<AttrValue>>> to,
-            final List<Pair<String, List<AttrValue>>> from) {
+            final List<Pair<String, List<AttrValue>>> desctination,
+            final List<Pair<String, List<AttrValue>>> source) {
 
-        for (Pair<String, List<AttrValue>> pair : to) { //overwrite sections
+        for (Pair<String, List<AttrValue>> pair : desctination) { //overwrite sections
             final String sectionName = pair.getFirst();
-            final List<AttrValue> valuesToMegreFrom = removeAttrValues(from, sectionName);
+            final List<AttrValue> valuesToMegreFrom = removeAttrValues(source, sectionName);
             if (valuesToMegreFrom != null) {
                 for (AttrValue attrValue : pair.getSecond()) { //overwrite valuesToMegreFrom in current section
                     final AttrValue value = removeAttrValue(valuesToMegreFrom, attrValue.getAttribute().getName());
@@ -125,9 +125,9 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
             }
         }
         //merge sections
-        to.addAll(from);
+        desctination.addAll(source);
 
-        return to;
+        return desctination;
 
     }
 
@@ -138,7 +138,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
      * @param attrName name to remove
      * @return removed {@link AttrValue} if found, otherwise null
      */
-    public AttrValue removeAttrValue(List<AttrValue> values, final String attrName) {
+    public AttrValue removeAttrValue(final List<AttrValue> values, final String attrName) {
         for (AttrValue attrValue : values) {
             if (attrValue.getAttribute().getName().equals(attrName)) {
                 values.remove(attrValue);

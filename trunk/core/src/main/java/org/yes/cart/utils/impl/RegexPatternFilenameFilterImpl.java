@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
  */
 public class RegexPatternFilenameFilterImpl implements FilenameFilter {
 
-    private Pattern pattern;
+    private final Pattern pattern;
 
     /**
      * Constructor.
@@ -34,7 +34,7 @@ public class RegexPatternFilenameFilterImpl implements FilenameFilter {
     /**
      * {@inheritDoc
      */
-    public boolean accept(File dir, String name) {
+    public boolean accept(final File dir, final String name) {
         return (name != null) && this.pattern.matcher(name).matches();
     }
 
