@@ -50,7 +50,7 @@ public class ChangeLocaleCartCommandImplTest   extends BaseCoreDBTestCase {
 
         ShoppingCart shoppingCart = new ShoppingCartImpl();
         new ChangeLocaleCartCommandImpl(
-                ctx,
+                null,
                 Collections.singletonMap(ChangeLocaleCartCommandImpl.CMD_KEY, "en")
                 ).execute(shoppingCart);
 
@@ -58,7 +58,7 @@ public class ChangeLocaleCartCommandImplTest   extends BaseCoreDBTestCase {
 
 
         new ChangeLocaleCartCommandImpl(
-                ctx,
+                null,
                 Collections.singletonMap(ChangeLocaleCartCommandImpl.CMD_KEY, "uk")
                 ).execute(shoppingCart);
 

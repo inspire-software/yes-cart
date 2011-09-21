@@ -383,6 +383,12 @@ public interface ServiceSpringKeys {
     String ORDER_STATE_MANAGER = "orderStateManager";
 
 
+    /**
+     * Plural form service bean id.
+     */
+    String PLURAL_FORM_SERVICE = "pluralFormService";
+
+
 
 
 }

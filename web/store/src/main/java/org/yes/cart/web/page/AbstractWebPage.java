@@ -3,18 +3,22 @@ package org.yes.cart.web.page;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.Session;
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.impl.ChangeLocaleCartCommandImpl;
 import org.yes.cart.web.application.ApplicationDirector;
-import org.yes.cart.web.support.constants.WebServiceSpringKey;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.util.cookie.ShoppingCartPersister;
-import org.yes.cart.web.support.util.cookie.impl.ShoppingCartPersisterImpl;
+import org.yes.cart.web.support.service.LanguageService;
 import org.yes.cart.web.util.WicketUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Locale;
+import java.util.Collections;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -26,8 +30,14 @@ public class AbstractWebPage extends WebPage {
     @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)
     private ShoppingCartCommandFactory shoppingCartCommandFactory;
 
-    @SpringBean(name = WebServiceSpringKey.CART_PERSISTER)
+    @SpringBean(name = StorefrontServiceSpringKeys.CART_PERSISTER)
     private ShoppingCartPersister shoppingCartPersister;
+
+    @SpringBean(name = StorefrontServiceSpringKeys.LANGUAGE_SERVICE)
+    private LanguageService languageService;
+
+
+
 
     /**
      * Construct page.
@@ -36,8 +46,27 @@ public class AbstractWebPage extends WebPage {
      */
     public AbstractWebPage(final PageParameters params) {
         super(params);
+
+        final ShoppingCart shoppingCart = ApplicationDirector.getShoppingCart();
+
+        if (getSession().getLocale() == null) {
+            getSession().setLocale(new Locale(languageService.getSupportedLanguages().get(0)));
+        }
+
+        if(StringUtils.isBlank(shoppingCart.getCurrentLocale())) {
+            new ChangeLocaleCartCommandImpl(
+                    null,
+                    Collections.singletonMap(ChangeLocaleCartCommandImpl.CMD_KEY, getSession().getLocale().getLanguage()))
+                    .execute(shoppingCart);
+        }
+
+        getSession().setLocale(new Locale(shoppingCart.getCurrentLocale()));
+
         setStatelessHint(true);
+
     }
+
+
 
     /**
      * {@inheritDoc}

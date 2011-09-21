@@ -10,7 +10,7 @@ import java.util.Map;
  * Date: 6/25/11
  * Time: 11:37 AM
  */
-public class ChangeLocaleCartCommandImpl  extends AbstractSkuCartCommandImpl {
+public class ChangeLocaleCartCommandImpl  extends AbstractCartCommandImpl {
 
     private static final long serialVersionUID = 20110625L;
 
@@ -29,7 +29,7 @@ public class ChangeLocaleCartCommandImpl  extends AbstractSkuCartCommandImpl {
      * @param parameters  command parameters.
      */
     public ChangeLocaleCartCommandImpl(final ApplicationContext applicationContext, final Map parameters) {
-        super(applicationContext, parameters);
+        //super(applicationContext, parameters);
         locale = (String) parameters.get(getCmdKey());
     }
 
@@ -38,7 +38,6 @@ public class ChangeLocaleCartCommandImpl  extends AbstractSkuCartCommandImpl {
     public void execute(final ShoppingCart shoppingCart) {
         if (locale != null) {
             ((ShoppingCartImpl)shoppingCart).setCurrentLocale(locale);
-            recalculatePrice(shoppingCart);
             setModifiedDate(shoppingCart);
         }
     }

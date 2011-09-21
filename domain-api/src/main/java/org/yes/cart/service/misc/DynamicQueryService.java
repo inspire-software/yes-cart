@@ -9,6 +9,7 @@ import org.yes.cart.domain.queryobject.QueryType;
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 7/31/11
  * Time: 6:13 AM
+ * TODO implementation
  */
 public interface DynamicQueryService {
 

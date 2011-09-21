@@ -11,8 +11,6 @@ import org.yes.cart.shoppingcart.impl.ChangeLocaleCartCommandImpl;
 import org.yes.cart.shoppingcart.impl.SetShopCartCommandImpl;
 import org.yes.cart.shoppingcart.impl.ChangeCurrencyEventCommandImpl;
 import org.yes.cart.web.application.ApplicationDirector;
-import org.yes.cart.web.support.constants.WebParametersKeys;
-import org.yes.cart.web.support.constants.WebServiceSpringKey;
 import org.yes.cart.web.support.request.HttpServletRequestWrapper;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationContext;
@@ -23,7 +21,6 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.Date;
@@ -112,14 +109,6 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Applic
 
         }
 
-        if (Session.get().getLocale() == null) {
-            Session.get().setLocale(new Locale(languageService.getSupportedLanguages().get(0)));
-        }
-
-        if(StringUtils.isBlank(shoppingCart.getCurrentLocale())) {
-            new ChangeLocaleCartCommandImpl(applicationContext, Collections.singletonMap(ChangeLocaleCartCommandImpl.CMD_KEY, Session.get().getLocale().getLanguage()))
-                    .execute(shoppingCart);
-        }
 
     }
 

@@ -2,7 +2,7 @@ package org.yes.cart.web.page.component.price;
 
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.service.CurrencySymbolService;
-import org.yes.cart.web.support.constants.WebServiceSpringKey;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.constants.Constants;
@@ -43,7 +43,7 @@ public class PriceView extends BaseComponent {
     private static final String decimalSeparator; // to perform sptil operation
     private static final String[] emptyFormatedPrice;
 
-    @SpringBean(name = WebServiceSpringKey.CURRENCY_SYMBOL_SERVICE)
+    @SpringBean(name = StorefrontServiceSpringKeys.CURRENCY_SYMBOL_SERVICE)
     private CurrencySymbolService currencySymbolService;
 
 

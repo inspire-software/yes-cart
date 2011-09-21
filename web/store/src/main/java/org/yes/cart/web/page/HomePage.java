@@ -12,6 +12,7 @@ import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.*;
+import org.yes.cart.web.page.component.cart.SmallShoppingCartView;
 import org.yes.cart.web.page.component.breadcrumbs.BreadCrumbsView;
 import org.yes.cart.web.page.component.filterednavigation.AttributeProductFilter;
 import org.yes.cart.web.page.component.filterednavigation.BrandProductFilter;
@@ -21,7 +22,7 @@ import org.yes.cart.web.page.component.product.NewArrivalProducts;
 import org.yes.cart.web.page.component.search.SearchView;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
-import org.yes.cart.web.support.constants.WebServiceSpringKey;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CentralViewResolver;
 import org.yes.cart.web.support.util.HttpUtil;
 import org.yes.cart.web.util.WicketUtil;
@@ -43,7 +44,7 @@ public class HomePage extends AbstractWebPage {
     final Map<String, String> mapParams;
 
 
-    @SpringBean(name = WebServiceSpringKey.CENTRAL_VIEW_RESOLVER)
+    @SpringBean(name = StorefrontServiceSpringKeys.CENTRAL_VIEW_RESOLVER)
     private CentralViewResolver centralViewResolver;
 
     @SpringBean(name = ServiceSpringKeys.LUCENE_QUERY_FACTORY)
@@ -112,6 +113,7 @@ public class HomePage extends AbstractWebPage {
         add(new SearchView("search"));
         add(new NewArrivalProducts("newArrival"));
         add(new FeaturedProducts("featured"));
+        add(new SmallShoppingCartView("smallCart"));
 
         add(getCentralPanel(centralViewLabel, "centralView", categoryId, query));
 
