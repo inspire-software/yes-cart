@@ -45,4 +45,10 @@ public class RemoteShopServiceImpl
         ((DtoShopService) getGenericDTOService()).setSupportedCurrencies(shopId, currensies);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public ShopDTO getShopDtoByDomainName(final String serverDomainName) {
+        return ((DtoShopService) getGenericDTOService()).getShopDtoByDomainName(serverDomainName);
+    }
 }

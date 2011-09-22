@@ -23,20 +23,20 @@
     <name>Yes cart storefront</name>
     <url>http://maven.apache.org</url>
 
-<repositories> <!-- wicket -->
-    <repository>
-        <releases>
-            <enabled>false</enabled>
-        </releases>
-        <snapshots>
-            <enabled>true</enabled>
-        </snapshots>
-        <id>apache.snapshots</id>
-        <name>Apache Snapshot Repository</name>
-        <url>http://repository.apache.org/content/groups/snapshots</url>
-        <layout>default</layout>
-    </repository>
-</repositories>
+    <repositories> <!-- wicket -->
+        <repository>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>apache.snapshots</id>
+            <name>Apache Snapshot Repository</name>
+            <url>http://repository.apache.org/content/groups/snapshots</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
 
 
     <build>
@@ -52,9 +52,11 @@
                             <filtering>true</filtering>
                             <directory>src/main/webapp</directory>
                             <includes>
-                                <include>**/*.xml</include>
-                                <!-- include any other file types you want to filter -->
+                                <include>**/context.xml</include>
                             </includes>
+                            <excludes>
+                                <exclude>**/*.properties.xml</exclude>
+                            </excludes>
                         </resource>
                     </webResources>
                 </configuration>
@@ -67,6 +69,8 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
+
+
         </plugins>
     </build>
 

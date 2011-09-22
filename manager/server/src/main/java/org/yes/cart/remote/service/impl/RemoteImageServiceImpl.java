@@ -1,11 +1,16 @@
 package org.yes.cart.remote.service.impl;
 
+import flex.messaging.FlexContext;
 import org.yes.cart.domain.dto.SeoImageDTO;
+import org.yes.cart.domain.dto.ShopDTO;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.remote.service.RemoteImageService;
 import org.yes.cart.service.dto.DtoImageService;
+import org.yes.cart.service.dto.DtoShopService;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -17,15 +22,18 @@ public class RemoteImageServiceImpl extends AbstractRemoteService<SeoImageDTO> i
 
 
     private final DtoImageService dtoImageService;
+    private final DtoShopService dtoShopService;
 
     /**
      * Construct dtoRemote service.
      *
      * @param dtoImageService
      */
-    public RemoteImageServiceImpl(final DtoImageService dtoImageService) {
+    public RemoteImageServiceImpl(final DtoImageService dtoImageService,
+                                  final DtoShopService dtoShopService) {
         super(dtoImageService);
         this.dtoImageService = dtoImageService;
+        this.dtoShopService = dtoShopService;
     }
 
 
@@ -36,6 +44,7 @@ public class RemoteImageServiceImpl extends AbstractRemoteService<SeoImageDTO> i
      * @param fullFileName full path to image file.
      * @param code         product or sku code.
      * @param imgBody      image as byte array.
+     * @param pathToRepository not used
      * @return true if file was added successfully
      * @throws java.io.IOException in case of any I/O errors
      */
@@ -43,9 +52,23 @@ public class RemoteImageServiceImpl extends AbstractRemoteService<SeoImageDTO> i
             final String fullFileName,
             final String code,
             final byte[] imgBody,
-            final String storagePrefix) throws IOException {
-        return dtoImageService.addImageToRepository(fullFileName, code, imgBody, storagePrefix);
+            final String storagePrefix,
+            final String pathToRepository) throws IOException {
+
+        return dtoImageService.addImageToRepository(fullFileName, code, imgBody, storagePrefix, getRealPathPrefix());
     }
+
+    private String getRealPathPrefix() {
+
+        final ShopDTO shopDTO = dtoShopService.getShopDtoByDomainName(
+                FlexContext.getHttpRequest().getServerName().toLowerCase()
+        );
+
+        return FlexContext.getServletContext().getRealPath("/../yes-shop" + shopDTO.getImageVaultFolder()) + File.separator;
+
+    }
+
+
 
     /**
      * Read product or sku image into byte array.

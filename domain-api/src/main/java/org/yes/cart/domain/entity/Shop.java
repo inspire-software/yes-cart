@@ -178,6 +178,12 @@ public interface Shop extends Auditable {
      */
     String getImageVaultFolder();
 
+    /**
+     * Set image value folder for shop.
+     * @param imageVaultFolder  image repository folder
+     */
+    void setImageVaultFolder(String imageVaultFolder);
+
 
     /**
      * Get single attribute.

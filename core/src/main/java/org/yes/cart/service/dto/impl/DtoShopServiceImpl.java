@@ -51,6 +51,14 @@ public class DtoShopServiceImpl
     }
 
     /** {@inheritDoc} */
+    public ShopDTO getShopDtoByDomainName(final String serverDomainName) {
+        final Shop shop =((ShopService)service).getShopByDomainName(serverDomainName);
+        final ShopDTO dto = (ShopDTO) dtoFactory.getByIface(getDtoIFace());
+        getAssembler().assembleDto(dto, shop, getValueConverterRepository(), getDtoFactory());
+        return dto;
+    }
+
+    /** {@inheritDoc} */
     public Class<ShopDTO> getDtoIFace() {
         return ShopDTO.class;
     }

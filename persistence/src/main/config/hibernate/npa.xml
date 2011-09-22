@@ -2753,7 +2753,6 @@ public void setRangeList(final RangeList rangeList) {
     }
     
     private String markupFolder = null;
-    private String imageVaultFolder = null;
 
     @Transient
     public String getMarkupFolder() {
@@ -2765,15 +2764,6 @@ public void setRangeList(final RangeList rangeList) {
         return markupFolder;
     }
 
-    @Transient
-    public String getImageVaultFolder() {
-        if (imageVaultFolder == null) {
-            synchronized (this) {
-                imageVaultFolder = "/" + fspointer + "/imagevault";
-            }
-        }
-        return imageVaultFolder;
-    }
 
                 ]]>
             </meta>
@@ -2788,6 +2778,13 @@ public void setRangeList(final RangeList rangeList) {
                 <column name="FSPOINTER" length="4000" not-null="true">
                     <comment>
                         Point to jsps
+                    </comment>
+                </column>
+            </property>
+            <property name="imageVaultFolder" length="4000" type="string">
+                <column name="IMGVAULT" length="4000" not-null="true">
+                    <comment>
+                        Point to image repository
                     </comment>
                 </column>
             </property>

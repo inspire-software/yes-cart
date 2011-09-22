@@ -16,11 +16,11 @@
             <mx:FormItem label="@Resource(bundle='AttributesManagmentPanel',key='value')">
                 <mx:TextInput width="310" id="valueTextInput"/>
             </mx:FormItem>
-            <mx:FormItem  label="@Resource(bundle='AttributesManagmentPanel',key='altText')">
+            <mx:FormItem label="@Resource(bundle='AttributesManagmentPanel',key='altText')">
                 <mx:TextInput width="310" id="altTextInput"/>
             </mx:FormItem>
-            <mx:FormItem  label="@Resource(bundle='AttributesManagmentPanel',key='title')">
-                <mx:TextInput width="310"  id="titleTextInput"/>
+            <mx:FormItem label="@Resource(bundle='AttributesManagmentPanel',key='title')">
+                <mx:TextInput width="310" id="titleTextInput"/>
             </mx:FormItem>
 
         </mx:Form>
@@ -40,7 +40,7 @@
         </mx:ControlBar>
 
     </mx:VBox>
-    <mx:RemoteObject showBusyCursor="true"  id="remoteImageService"
+    <mx:RemoteObject showBusyCursor="true" id="remoteImageService"
                      destination="remoteImageService"
                      result="ShopManagerGlobal.instance.defaultResultHandler(event)"
                      fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
@@ -92,7 +92,7 @@
                         new AsyncResponder(
                                 imageBodyResultHandler,
                                 imageBodyFaultHandler)
-                        );
+                );
 
 
             } else {
@@ -148,13 +148,13 @@
                         value,
                         code,
                         rawBytes,
-                        resolveImageStorage(attributeGroup)).addResponder(
-
+                        resolveImageStorage(attributeGroup),
+                        "").addResponder(
                         new AsyncResponder(
                                 imageUploadedResultHandler,
                                 ShopManagerGlobal.instance.defaultFaultHandler
-                                )
-                        );
+                        )
+                );
 
             } else {
                 imageUploadedResultHandler(null, null);
@@ -258,8 +258,8 @@
                     new AsyncResponder(
                             seoImageResultHandler,
                             seoImageFaultHandler
-                            )
-                    );
+                    )
+            );
         }
 
 

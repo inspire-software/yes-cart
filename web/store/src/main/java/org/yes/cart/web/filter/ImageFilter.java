@@ -139,7 +139,7 @@ public class ImageFilter extends AbstractFilter implements Filter {
             String code = imageNameStrategy.getCode(servetPath);  //optional product or sku code
             String fileName = imageNameStrategy.getFileName(servetPath);  //here file name with prefix
 
-            final String imageRealPathPrefix = getRealPathPrefix(httpServletRequest, httpServletResponse);
+            final String imageRealPathPrefix = getRealPathPrefix(httpServletRequest.getServerName().toLowerCase());
 
             String original =
                             imageRealPathPrefix +
@@ -171,15 +171,12 @@ public class ImageFilter extends AbstractFilter implements Filter {
         }
     }
 
-    private String getRealPathPrefix(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-
-        final String serverDomainName = httpServletRequest.getServerName().toLowerCase();
+    private String getRealPathPrefix(final String serverDomainName) {
 
         final Shop shop = getApplicationDirector().getShopByDomainName(serverDomainName);
 
-        final String markupFolder = shop.getImageVaultFolder();
+        return getFilterConfig().getServletContext().getRealPath(shop.getImageVaultFolder()) + File.separator;
 
-        return getFilterConfig().getServletContext().getRealPath(markupFolder) + File.separator;
     }
 
     /**

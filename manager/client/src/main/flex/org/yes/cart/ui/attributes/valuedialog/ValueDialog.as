@@ -24,7 +24,5 @@ public interface ValueDialog {
     function set attributeGroup(value:String):void;
 
 
-
-
 }
 }

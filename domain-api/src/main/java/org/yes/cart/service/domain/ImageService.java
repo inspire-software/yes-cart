@@ -72,6 +72,21 @@ public interface ImageService extends GenericService<SeoImage> {
     boolean addImageToRepository(String fullFileName, String code, byte[] imgBody, String storagePrefix) throws IOException;
 
     /**
+     * Add the given file to image repository.
+     * Used from UI to
+     *
+     * @param fullFileName  full path to image file.
+     * @param code          product or sku code.
+     * @param imgBody       image as byte array.
+     * @param storagePrefix optional storage prefix {@see Constants.CATEGOTY_IMAGE_REPOSITORY_URL_PATTERN}
+     *                      or {@see Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN}. If parameter not provider the product image storage will be used.
+     * @param pathToRepository path to repository
+     * @return true if file was added successfully
+     * @throws IOException in case of any I/O errors
+     */
+    boolean addImageToRepository(String fullFileName, String code, byte[] imgBody, String storagePrefix, String pathToRepository) throws IOException;
+
+    /**
      * Read product or sku image into byte array.
      *
      * @param fileName      file name from attribute

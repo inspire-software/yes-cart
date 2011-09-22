@@ -3,4 +3,5 @@
 <properties>
 	<entry key="item.form0">{0} item in cart</entry>
 	<entry key="item.form1">{0} items in cart</entry>
+	<entry key="no.item">Cart is empty</entry>
 </properties>
