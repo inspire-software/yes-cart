@@ -49,6 +49,7 @@ public class TestShopDAO extends AbstractTestDAO {
         shop.setName("test shop");
         shop.setDescription("test shop description");
         shop.setFspointer("/npa/data");
+        shop.setImageVaultFolder("/npa/data/imgvault");
 
         ShopUrl url;
         url = new ShopUrlEntity();

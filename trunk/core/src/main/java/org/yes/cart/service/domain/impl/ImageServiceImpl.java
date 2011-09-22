@@ -241,8 +241,15 @@ public class ImageServiceImpl
     /** {@inheritDoc} */
     public boolean addImageToRepository(final String fullFileName, final String code,
                                         final byte[] imgBody, final String storagePrefix) throws IOException {
+        return addImageToRepository(fullFileName, code, imgBody, storagePrefix, StringUtils.EMPTY);
+    }
+
+    /** {@inheritDoc} */
+    public boolean addImageToRepository(final String fullFileName, final String code,
+                                        final byte[] imgBody, final String storagePrefix,
+                                        final String pathToRepository) throws IOException {
         File file = new File(fullFileName);
-        String pathInRepository = getImageNameStrategy(storagePrefix).getFullFileNamePath(file.getName(), code);
+        String pathInRepository = pathToRepository + getImageNameStrategy(storagePrefix).getFullFileNamePath(file.getName(), code);
         File destinationFile = new File(pathInRepository);
         FileUtils.writeByteArrayToFile(destinationFile, imgBody);
         return destinationFile.exists();

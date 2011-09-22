@@ -47,14 +47,16 @@ public class DtoImageServiceImpl
      * @param imgBody      image as byte array.
      * @param storagePrefix optional storage prefix {@see Constants.CATEGOTY_IMAGE_REPOSITORY_URL_PATTERN}
      * or {@see Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN}. If parameter not provider the product image storage will be used.
+     * @param pathToRepository path to repository
      * @return true if file was added successfully
      * @throws java.io.IOException in case of any I/O errors
      */
     public boolean addImageToRepository(final String fullFileName,
                                         final String code,
                                         final byte[] imgBody,
-                                        final String storagePrefix) throws IOException {
-        return imageService.addImageToRepository(fullFileName, code, imgBody, storagePrefix);
+                                        final String storagePrefix,
+                                        final String pathToRepository) throws IOException {
+        return imageService.addImageToRepository(fullFileName, code, imgBody, storagePrefix, pathToRepository);
     }
 
     /**

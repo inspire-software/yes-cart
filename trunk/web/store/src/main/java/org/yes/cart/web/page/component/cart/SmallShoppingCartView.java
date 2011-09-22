@@ -71,12 +71,14 @@ public class SmallShoppingCartView extends BaseComponent {
                         SUB_TOTAL_VIEW,
                         new Model<SkuPrice>(skuPrice),
                         true
-                )
+                ).setVisible(isCartEmpty())
         );
 
         add(
                 new Label(
                         QTY_LABEL,
+                        isCartEmpty()?
+                        new StringResourceModel("no.item", this, null, itemsInCart):
                         new StringResourceModel(resourceKey, this, null, itemsInCart)
                 )
         );
@@ -85,11 +87,11 @@ public class SmallShoppingCartView extends BaseComponent {
     }
 
     /**
-     * {@inheritDoc}
+     *
+     * @return true in case of empty cart
      */
-    @Override
-    public boolean isVisible() {
-        return ApplicationDirector.getShoppingCart().getCartItemsCount() > 0;
+    public boolean isCartEmpty() {
+        return ApplicationDirector.getShoppingCart().getCartItemsCount() == 0;
     }
 
 }

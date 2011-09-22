@@ -35,4 +35,12 @@ public interface DtoShopService extends GenericDTOService<ShopDTO> {
     void setSupportedCurrencies(long shopId, String currensies);
 
 
+    /**
+     * Get shop by server domain name.
+     * @param serverDomainName given domain nanme.
+     * @return shop dto if found otherwise null.
+     */
+    ShopDTO getShopDtoByDomainName(String serverDomainName);
+
+
 }

@@ -12,6 +12,8 @@ public class ShopDTOImpl {
 
     public var fspointer:String;
 
+    public var imageVaultFolder:String;
+
     public var shopId:Number;
     
     
