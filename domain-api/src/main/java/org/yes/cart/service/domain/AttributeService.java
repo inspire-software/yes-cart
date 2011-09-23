@@ -68,11 +68,12 @@ public interface AttributeService extends GenericService<Attribute> {
 
     /**
      * Perform merge atttribute values operation.
-     * @param to merge to collection
-     * @param from merge from collection
+     * @param destination merge to collection
+     * @param source merge from collection
      * @return result of merge
      */
-    List<Pair<String, List<AttrValue>>> merge(List<Pair<String, List<AttrValue>>> to, List<Pair<String, List<AttrValue>>> from);
+    List<Pair<String, List<AttrValue>>> merge(List<Pair<String, List<AttrValue>>> destination, 
+                                              List<Pair<String, List<AttrValue>>> source);
 
     /**
      * Remove attr value from given list by given name

@@ -22,6 +22,8 @@ import java.util.List;
 public class PaymentModuleGenericDAOImpl<T, PK extends Serializable> extends HibernateDaoSupport
         implements PaymentModuleGenericDAO<T, PK> {
 
+    private final static String UNCHECKED = "unchecked";
+
     final private Class<T> persistentClass;
 
     /**
@@ -29,7 +31,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable> extends Hib
      *
      * @param type - entity type
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     public PaymentModuleGenericDAOImpl(
             final Class<T> type) {
         this.persistentClass = type;
@@ -45,7 +47,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable> extends Hib
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     public T findById(final PK id, final boolean lock) {
         T entity;
         if (lock) {
@@ -69,7 +71,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable> extends Hib
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     public List<T> findAll() {
         return findByCriteria();
     }
@@ -78,7 +80,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable> extends Hib
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     public T saveOrUpdate(final T entity) {
         getHibernateTemplate().saveOrUpdate(entity);
         return entity;
@@ -88,7 +90,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable> extends Hib
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     public T create(final T entity) {
         getHibernateTemplate().saveOrUpdate(entity);
         return entity;
@@ -97,7 +99,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable> extends Hib
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     public T update(final T entity) {
         getHibernateTemplate().saveOrUpdate(entity);
         return entity;
@@ -114,7 +116,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable> extends Hib
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     public List<T> findByNamedQuery(final String namedQueryName, final Object... parameters) {
         Query query = getSession().getNamedQuery(namedQueryName);
         if (parameters != null) {
@@ -130,7 +132,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable> extends Hib
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     public <T> T findSingleByNamedQuery(final String namedQueryName, final Object... parameters) {
         List<T> rez = (List<T>) this.findByNamedQuery(namedQueryName, parameters);
         if (!rez.isEmpty()) {
@@ -142,7 +144,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable> extends Hib
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     public List<T> findByCriteria(final Criterion... criterion) {
         Criteria crit = getSession().createCriteria(getPersistentClass());
         for (Criterion c : criterion) {

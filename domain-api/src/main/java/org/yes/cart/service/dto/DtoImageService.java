@@ -36,6 +36,36 @@ public interface DtoImageService extends GenericDTOService<SeoImageDTO> {
                                  String pathToRepository) throws IOException;
 
     /**
+     * Add the given file to image repository.
+     * Used from UI to
+     *
+     * @param fullFileName  full path to image file.
+     * @param code          product or sku code.
+     * @param imgBody       image as byte array.
+     * @param storagePrefix optional storage prefix {@see Constants.CATEGOTY_IMAGE_REPOSITORY_URL_PATTERN}
+     *                      or {@see Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN}. If parameter not provider the product
+     *                      image storage will be used.
+     * @return true if file was added successfully
+     * @throws java.io.IOException in case of any I/O errors
+     */
+    boolean addImageToRepository(String fullFileName,
+                                 String code,
+                                 byte[] imgBody,
+                                 String storagePrefix) throws IOException;
+
+    /**
+     * Read product or sku image into byte array.
+     *
+     * @param fileName file name from attribute
+     * @param code     product or sku code
+     * @param pathToRepository path to repository.
+     * @return byte array
+     * @throws IOException in case of any I/O errors
+     */
+    byte[] getImageAsByteArray(String fileName, String code, String storagePrefix,
+                                 String pathToRepository) throws IOException;
+
+    /**
      * Read product or sku image into byte array.
      *
      * @param fileName file name from attribute

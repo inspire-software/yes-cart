@@ -12,9 +12,9 @@ import java.util.List;
  */
 public class QueryResultImpl implements QueryResult {
 
-    private List<String> columnNames;
+    private final List<String> columnNames;
 
-    private List data;
+    private final List data;
 
     /**
      * Construct query result.

@@ -7,10 +7,11 @@ package org.yes.cart.constants;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
+@SuppressWarnings("PMD.AvoidConstantsInterface")
 public interface AttributeNamesKeys {
 
 
-    public interface System {
+    interface System {
 
         /**
          * Comma separated list of paymenе modules urls.
@@ -55,7 +56,7 @@ public interface AttributeNamesKeys {
     }
 
 
-    public interface Category {
+    interface Category {
 
         String CATEGORY_ITEMS_PER_PAGE = "CATEGORY_ITEMS_PER_PAGE";
 
@@ -82,7 +83,7 @@ public interface AttributeNamesKeys {
 
     }
 
-    public interface Product {
+    interface Product {
 
     }
 

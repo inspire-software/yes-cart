@@ -44,4 +44,8 @@ public class DomainApiUtil {
         }
         return null;
     }
+    
+    private DomainApiUtil() {
+        
+    }
 }

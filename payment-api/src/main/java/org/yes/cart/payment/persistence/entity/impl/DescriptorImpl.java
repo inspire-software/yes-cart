@@ -88,5 +88,9 @@ public class DescriptorImpl implements Descriptor {
      * Default constructor.
      */
     public DescriptorImpl() {
+        this.name = null;
+        this.description = null;
+        this.label = null;
+
     }
 }

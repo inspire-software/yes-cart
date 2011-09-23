@@ -10,6 +10,7 @@ import java.util.List;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
+@SuppressWarnings("PMD.AvoidConstantsInterface")
 public interface Constants {
 
     String DEFAULT_DATE_TIME_FORMAT = "yyyy-MMM-dd hh:mm:ss";

@@ -1,6 +1,7 @@
 package org.yes.cart.service.dto.impl;
 
 import dp.lib.dto.geda.adapter.repository.ValueConverterRepository;
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.dto.SeoImageDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.SeoImageDTOImpl;
@@ -39,6 +40,16 @@ public class DtoImageServiceImpl
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public boolean addImageToRepository(final String fullFileName,
+                                        final String code,
+                                        final byte[] imgBody,
+                                        final String storagePrefix) throws IOException {
+        return imageService.addImageToRepository(fullFileName, code, imgBody, storagePrefix, StringUtils.EMPTY);
+    }
+
+    /**
      * Add the given file to image repository.
      * Used from UI to
      *
@@ -68,7 +79,20 @@ public class DtoImageServiceImpl
      * @throws java.io.IOException in case of any I/O errors
      */
     public byte[] getImageAsByteArray(final String fileName, final String code, final String storagePrefix) throws IOException {
-        return imageService.getImageAsByteArray(fileName, code, storagePrefix);
+        return getImageAsByteArray(fileName, code, storagePrefix, StringUtils.EMPTY);
+    }
+
+    /**
+     * Read product or sku image into byte array.
+     *
+     * @param fileName file name from attribute
+     * @param code     product or sku code
+     * @param pathToRepository path to repository
+     * @return byte array
+     * @throws java.io.IOException in case of any I/O errors
+     */
+    public byte[] getImageAsByteArray(final String fileName, final String code, final String storagePrefix, final String pathToRepository) throws IOException {
+        return imageService.getImageAsByteArray(fileName, code, storagePrefix, pathToRepository);
     }
 
     /**

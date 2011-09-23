@@ -14,6 +14,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "TCUSTOMERORDERPAYMENT")
+@SuppressWarnings("PMD.TooManyFields")
 public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Serializable {
 
     private static final long serialVersionUID = 20100714L;
