@@ -93,10 +93,11 @@ public interface ImageService extends GenericService<SeoImage> {
      * @param code          product or sku code
      * @param storagePrefix optional storage prefix {@see Constants.CATEGOTY_IMAGE_REPOSITORY_URL_PATTERN}
      *                      or {@see Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN}. If parameter not provider the product image storage will be used.
+     * @param pathToRepository
      * @return byte array
      * @throws IOException in case of any I/O errors
      */
-    byte[] getImageAsByteArray(String fileName, String code, String storagePrefix) throws IOException;
+    byte[] getImageAsByteArray(String fileName, String code, String storagePrefix, String pathToRepository) throws IOException;
 
     /**
      * Get the image seo data by given image name.

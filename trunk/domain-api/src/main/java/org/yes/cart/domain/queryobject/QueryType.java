@@ -8,6 +8,7 @@ package org.yes.cart.domain.queryobject;
  * Date: 7/31/11
  * Time: 6:08 AM
  */
+@SuppressWarnings("PMD.AvoidConstantsInterface")
 public interface QueryType {
 
     /**

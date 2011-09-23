@@ -19,9 +19,9 @@ public interface NpaSystem extends Auditable {
 
     void setDescription(String description);
 
-    public Map<String, AttrValue> getAttribute();
+    Map<String, AttrValue> getAttribute();
 
-    public void setAttribute(Map<String, AttrValue> attribute);
+    void setAttribute(Map<String, AttrValue> attribute);
 
     long getNpaSystemId();
 

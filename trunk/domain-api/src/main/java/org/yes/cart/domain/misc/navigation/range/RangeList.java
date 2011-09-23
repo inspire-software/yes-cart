@@ -10,6 +10,7 @@ import java.util.List;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
+@SuppressWarnings("PMD.AvoidConstantsInterface")
 public interface RangeList<RangeNode> extends List<RangeNode>, Serializable {
 
     String RANGE_NODE_ALIAS = "range";

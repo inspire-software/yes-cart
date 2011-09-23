@@ -40,6 +40,7 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
      * @param additionalFeatures
      * @param onlineGateway               is this online payment gateway
      */
+    @SuppressWarnings("PMD.ExcessiveParameterList")
     public PaymentGatewayFeatureImpl(
             final boolean supportAuthorize,
             final boolean supportAuthorizePerShipment,

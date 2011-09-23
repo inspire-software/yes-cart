@@ -27,7 +27,8 @@ public class RemoteImageServiceImpl extends AbstractRemoteService<SeoImageDTO> i
     /**
      * Construct dtoRemote service.
      *
-     * @param dtoImageService
+     * @param dtoImageService image service
+     * @param dtoShopService shop service to 
      */
     public RemoteImageServiceImpl(final DtoImageService dtoImageService,
                                   final DtoShopService dtoShopService) {
@@ -38,15 +39,19 @@ public class RemoteImageServiceImpl extends AbstractRemoteService<SeoImageDTO> i
 
 
     /**
-     * Add the given file to image repository.
-     * Used from UI to
-     *
-     * @param fullFileName full path to image file.
-     * @param code         product or sku code.
-     * @param imgBody      image as byte array.
-     * @param pathToRepository not used
-     * @return true if file was added successfully
-     * @throws java.io.IOException in case of any I/O errors
+     * {@inheritDoc}
+     */
+    public boolean addImageToRepository(
+            final String fullFileName,
+            final String code,
+            final byte[] imgBody,
+            final String storagePrefix) throws IOException {
+
+        return addImageToRepository(fullFileName, code, imgBody, storagePrefix, getRealPathPrefix());
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public boolean addImageToRepository(
             final String fullFileName,
@@ -55,9 +60,15 @@ public class RemoteImageServiceImpl extends AbstractRemoteService<SeoImageDTO> i
             final String storagePrefix,
             final String pathToRepository) throws IOException {
 
-        return dtoImageService.addImageToRepository(fullFileName, code, imgBody, storagePrefix, getRealPathPrefix());
+        return dtoImageService.addImageToRepository(fullFileName, code, imgBody, storagePrefix, pathToRepository);
     }
 
+    /**
+     * TODO
+     * TODO yes-shop !!! This is dirty hack !!!!! Eliminate this !!!!
+     * TODO it work under tomcat, but not sure aabout other AS
+     * @return   path to external web context
+     */
     private String getRealPathPrefix() {
 
         final ShopDTO shopDTO = dtoShopService.getShopDtoByDomainName(
@@ -68,18 +79,23 @@ public class RemoteImageServiceImpl extends AbstractRemoteService<SeoImageDTO> i
 
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
+    public byte[] getImageAsByteArray(final String fileName,
+                                      final String code,
+                                      final String storagePrefix) throws IOException {
+        return getImageAsByteArray(fileName, code, storagePrefix, getRealPathPrefix());
+    }
 
     /**
-     * Read product or sku image into byte array.
-     *
-     * @param fileName file name from attribute
-     * @param code     product or sku code
-     * @return byte array
-     * @throws java.io.IOException in case of any I/O errors
+     * {@inheritDoc}
      */
-    public byte[] getImageAsByteArray(final String fileName, final String code, final String storagePrefix) throws IOException {
-        return dtoImageService.getImageAsByteArray(fileName, code, storagePrefix);
+    public byte[] getImageAsByteArray(final String fileName,
+                                      final String code,
+                                      final String storagePrefix,
+                                      final String pathToRepository) throws IOException {
+        return dtoImageService.getImageAsByteArray(fileName, code, storagePrefix, pathToRepository);
     }
 
     /**

@@ -15,6 +15,7 @@ import java.util.List;
  * Date: 07-May-2011
  * Time: 13:24:24
  */
+@SuppressWarnings("PMD.TooManyFields")
 public class PaymentImpl implements Payment {
 
     private String cardType; //Mastercard, visa, etc.

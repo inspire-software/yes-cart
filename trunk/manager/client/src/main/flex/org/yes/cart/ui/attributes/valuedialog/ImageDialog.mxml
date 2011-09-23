@@ -130,8 +130,6 @@
             }
             titleTextInput.text = seoImage.title;
             altTextInput.text = seoImage.alt;
-
-
         }
 
 
@@ -139,32 +137,25 @@
 
             if (imageBodyHasChanges) {
                 //Save image when it really changed.
-
                 var encoder:JPEGEncoder = new JPEGEncoder(); //TODO resolve the encoder by file extension
                 var rawBytes:ByteArray = encoder.encode(bitmapData);
-
-
-                remoteImageService.addImageToRepository(
-                        value,
-                        code,
-                        rawBytes,
-                        resolveImageStorage(attributeGroup),
-                        "").addResponder(
-                        new AsyncResponder(
-                                imageUploadedResultHandler,
-                                ShopManagerGlobal.instance.defaultFaultHandler
-                        )
-                );
-
+                remoteImageService.addImageToRepository(value, code, rawBytes, resolveImageStorage(attributeGroup))
+                        .addResponder(
+                            new AsyncResponder(
+                                    imageUploadedResultHandler,
+                                    ShopManagerGlobal.instance.defaultFaultHandler
+                            )
+                        );
             } else {
                 imageUploadedResultHandler(null, null);
-
             }
-
-
         }
 
-
+        /**
+         * Get image storage label. For sku and products the null will be returned.
+         * @param attrGroupName
+         * @return image starage label.
+         */
         private function resolveImageStorage(attrGroupName:String):String {
             if (AttributeGroupNames.CATEGORY == attrGroupName) {
                 return Constants.CATEGOTY_IMAGE_REPOSITORY_URL_PATTERN;

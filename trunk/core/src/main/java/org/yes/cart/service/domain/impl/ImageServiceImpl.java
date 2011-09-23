@@ -256,9 +256,12 @@ public class ImageServiceImpl
     }
 
     /** {@inheritDoc} */
-    public byte[] getImageAsByteArray(final String fileName, final String code, final String storagePrefix) throws IOException {
+    public byte[] getImageAsByteArray(final String fileName,
+                                      final String code,
+                                      final String storagePrefix,
+                                      final String pathToRepository) throws IOException {
         final File file = new File(fileName);
-        String pathInRepository = getImageNameStrategy(storagePrefix).getFullFileNamePath(file.getName(), code);
+        String pathInRepository = pathToRepository + getImageNameStrategy(storagePrefix).getFullFileNamePath(file.getName(), code);
         File destinationFile = new File(pathInRepository);
         return FileUtils.readFileToByteArray(destinationFile);
     }

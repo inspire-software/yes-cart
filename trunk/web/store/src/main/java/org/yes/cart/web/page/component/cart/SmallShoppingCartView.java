@@ -71,7 +71,7 @@ public class SmallShoppingCartView extends BaseComponent {
                         SUB_TOTAL_VIEW,
                         new Model<SkuPrice>(skuPrice),
                         true
-                ).setVisible(isCartEmpty())
+                ).setVisible(!isCartEmpty())
         );
 
         add(
