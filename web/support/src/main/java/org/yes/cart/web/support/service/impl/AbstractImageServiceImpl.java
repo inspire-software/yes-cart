@@ -1,6 +1,10 @@
 package org.yes.cart.web.support.service.impl;
 
+import org.yes.cart.constants.Constants;
+import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.entity.Attributable;
 import org.yes.cart.web.support.constants.WebParametersKeys;
+import org.yes.cart.web.support.service.AttributableImageService;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -9,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
  * Date: 7/4/11
  * Time: 6:44 PM
  */
-public abstract class AbstractImageServiceImpl {
+public abstract class AbstractImageServiceImpl implements AttributableImageService {
 
     /**
      * Get default image uri.
@@ -21,7 +25,7 @@ public abstract class AbstractImageServiceImpl {
      * @param object             product/sku/category
      * @return image uri.
      */
-    public String getImageURI(final String imageName,
+    protected String getImageURI(final String imageName,
                               final String width,
                               final String height,
                               final String servletContextPath,
@@ -50,7 +54,7 @@ public abstract class AbstractImageServiceImpl {
      * @param object             product/sku/category
      * @return image uri.
      */
-    public String getImageURI(final String imageName,
+    protected String getImageURI(final String imageName,
                               final String servletContextPath,
                               final Object object) {
         final StringBuilder stringBuilder = new StringBuilder();
@@ -64,45 +68,37 @@ public abstract class AbstractImageServiceImpl {
 
 
     /**
-     * Get default image uri.
-     *
-     * @param imageName          name of image
-     * @param width              image width
-     * @param height             image height
-     * @param httpServletRequest http servlet request
-     * @param object             product/sku/category
-     * @return image uri.
+     * Get attribute value.
+     * @param attributable given attributable.
+     * @param attrName  attribute name
+     * @return attibute value if found, otherwise noimage will be returned.
      */
-    public String getImageURI(final String imageName,
-                              final String width,
-                              final String height,
-                              final HttpServletRequest httpServletRequest,
-                              final Object object) {
-        return getImageURI(imageName, width, height, httpServletRequest.getContextPath(), object);
+    public String getImageAttributeValue(final Attributable attributable, final String attrName) {
+        final AttrValue attrValue = attributable.getAttributeByCode(attrName);
+        if (attrValue == null) {
+            return Constants.NO_IMAGE;
+        }
+        return attrValue.getVal();
+
     }
 
-    /**
-     * Get default image uri.
-     *
-     * @param imageName          name of image
-     * @param httpServletRequest http servlet request
-     * @return image uri.
-     */
-    public String getImageURI(final String imageName,
-                              final HttpServletRequest httpServletRequest,
-                              final Object object) {
-        final StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(httpServletRequest.getContextPath());
-        stringBuilder.append(getImageRepositoryUrlPattern(object));
-        stringBuilder.append(imageName);
-        return stringBuilder.toString();
+
+    /** {@inheritDoc} */
+    public String getImage(final Attributable attributable, final String httpServletContextPath,
+                           final String width, final String height, final String attrName) {
+        return getImageURI(getImageAttributeValue(attributable, attrName), width, height, httpServletContextPath, attributable);
     }
+
 
     /**
      *
      * @return image repository url pattern.
+     * @param object to determinate url pattern
      */
     public abstract String getImageRepositoryUrlPattern(Object object);
+
+
+
 
 
 }

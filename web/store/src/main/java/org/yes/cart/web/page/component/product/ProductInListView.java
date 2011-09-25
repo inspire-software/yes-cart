@@ -22,7 +22,7 @@ import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.ProductDecorator;
 import org.yes.cart.web.support.entity.decorator.impl.ProductDecoratorImpl;
-import org.yes.cart.web.support.service.ProductImageService;
+import org.yes.cart.web.support.service.AttributableImageService;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.math.BigDecimal;
@@ -51,7 +51,7 @@ public class ProductInListView extends BaseComponent {
 
 
     @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_IMAGE_SERVICE)
-    private ProductImageService productImageService;
+    private AttributableImageService attributableImageService;
 
     @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
     private CategoryService categoryService;
@@ -76,7 +76,7 @@ public class ProductInListView extends BaseComponent {
             this.category = category;
         }
         this.product = new ProductDecoratorImpl(
-                productImageService,
+                attributableImageService,
                 categoryService,
                 product,
                 WicketUtil.getHttpServletRequest().getContextPath());
@@ -92,8 +92,8 @@ public class ProductInListView extends BaseComponent {
         final PageParameters linkToProductParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters());
         linkToProductParameters.set(WebParametersKeys.PRODUCT_ID, product.getId());
 
-        final String width = product.getProductImageWidth(category);
-        final String height = product.getProductImageHeight(category);
+        final String width = product.getImageWidth(category);
+        final String height = product.getImageHeight(category);
 
         add(
                 new BookmarkablePageLink<HomePage>(PRODUCT_LINK_SKU, HomePage.class, linkToProductParameters).add(
@@ -109,7 +109,7 @@ public class ProductInListView extends BaseComponent {
 
         add(
                 new BookmarkablePageLink<HomePage>(PRODUCT_LINK_IMAGE, HomePage.class, linkToProductParameters).add(
-                        new ContextImage(PRODUCT_IMAGE, product.getProductImage(width, height))
+                        new ContextImage(PRODUCT_IMAGE, product.getDefaultImage(width, height))
                                 .add(new AttributeModifier("width", width))
                                 .add(new AttributeModifier("height", height))
                 )

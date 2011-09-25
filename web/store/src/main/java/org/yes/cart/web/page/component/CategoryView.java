@@ -41,13 +41,13 @@ public class CategoryView extends  BaseComponent {
 
         final PageParameters pageParameters = new PageParameters().add(WebParametersKeys.CATEGORY_ID, category.getCategoryId());
 
-        final String width = category.getCategoryImageWidth();
+        final String width = category.getImageWidth(category);
 
-        final String height = category.getCategoryImageHeight();
+        final String height = category.getImageHeight(category);
 
         add(
             new BookmarkablePageLink<HomePage>(CATEGORY_IMAGE_LINK, HomePage.class, pageParameters).add(
-                    new ContextImage(CATEGORY_IMAGE, category.getCategoryImage(width, height))
+                    new ContextImage(CATEGORY_IMAGE, category.getDefaultImage(width, height))
                             .add(new AttributeModifier("width", width))
                             .add(new AttributeModifier("height", height))
             )

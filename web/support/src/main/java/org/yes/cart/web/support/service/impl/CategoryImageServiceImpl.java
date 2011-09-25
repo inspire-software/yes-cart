@@ -1,10 +1,13 @@
 package org.yes.cart.web.support.service.impl;
 
 import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.constants.Constants;
+import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.entity.Attributable;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.web.support.service.AttributableImageService;
 import org.yes.cart.web.support.service.CategoryImageRetrieveStrategy;
-import org.yes.cart.web.support.service.CategoryImageService;
 
 import java.util.Map;
 
@@ -13,7 +16,7 @@ import java.util.Map;
  * Date: 7/4/11
  * Time: 6:42 PM
  */
-public class CategoryImageServiceImpl  extends AbstractImageServiceImpl implements CategoryImageService {
+public class CategoryImageServiceImpl extends AbstractImageServiceImpl implements AttributableImageService {
 
     private final Map<String, CategoryImageRetrieveStrategy> strategies;
     private final CategoryService categoryService;
@@ -22,7 +25,7 @@ public class CategoryImageServiceImpl  extends AbstractImageServiceImpl implemen
     /**
      * Construct category image service.
      *
-     * @param strategies      map of strategy lable - strategy.
+     * @param strategies      map of strategy label - strategy.
      * @param categoryService category service to use.
      * @param defaultStrategy default strategy if strategy can not be found for given category
      */
@@ -39,58 +42,38 @@ public class CategoryImageServiceImpl  extends AbstractImageServiceImpl implemen
      * {@inheritDoc}
      */
     @Override
-    public String getImageRepositoryUrlPattern(final Object object) {
-        String label = (String) object;
-
-        final CategoryImageRetrieveStrategy strategy = strategies.get(label);
-
+    public String getImageRepositoryUrlPattern(final Object object) {     //TODO
+        //final AttrValue attrValue = ((Category) object).getAttributeByCode("CATEGORY_IMAGE_RETREIVE_STRATEGY"); //TODO consta
+        /*String val = "RANDOM_PRODUCT";//TODO const
+        if (attrValue != null) {
+            val = attrValue.getVal();
+        }  */
+        final CategoryImageRetrieveStrategy strategy = strategies.get(object);
+        if (strategy == null) {
+            return "RANDOM_PRODUCT";
+        }
         return strategy.getImageRepositoryUrlPattern();
-
     }
 
-    /** {@inheritDoc} */
-    public String getCategoryImage(final Category category,
-                            final String httpServletContextPath) {
 
-        final String strategyLabel = getImageRetreiveStrategy(category);
 
-        final CategoryImageRetrieveStrategy strategy = strategies.get(strategyLabel);
-
-        final String imageName = strategy.getImageName(category);
-
-        return getImageURI(imageName, httpServletContextPath, strategyLabel);
-    }
-
-    /** {@inheritDoc} */
-    public String getCategoryImage(final Category category,
-                            final String httpServletContextPath,
-                            final String width,
-                            final String height) {
-
-        final String strategyLabel = getImageRetreiveStrategy(category);
-
-        final CategoryImageRetrieveStrategy strategy = strategies.get(strategyLabel);
-
-        final String imageName = strategy.getImageName(category);
-
-        return getImageURI(imageName, width, height,  httpServletContextPath, strategyLabel);
-
-    }
 
     /**
-     * Get the image retreive strategy label for given category.
-     *
-     * @param category given category
-     * @return strategy label if found, otherwise default strategy label will be returned.
+     * {@inheritDoc}
      */
-    String getImageRetreiveStrategy(Category category) {
+    public String getImage(final Attributable category,
+                           final String httpServletContextPath,
+                           final String width,
+                           final String height,
+                           final String attrName) {
 
-        return categoryService.getCategoryAttributeRecursive(
-                category,
-                AttributeNamesKeys.Category.CATEGORY_IMAGE_RETREIVE_STRATEGY,
-                defaultStrategy);
+        //final String strategyLabel = getImageRetreiveStrategy(category);
+        final String strategyLabel = getImageAttributeValue(category, AttributeNamesKeys.Category.CATEGORY_IMAGE_RETREIVE_STRATEGY);
+        final CategoryImageRetrieveStrategy strategy = strategies.get(strategyLabel);
+        final String imageName = strategy.getImageName(category);
+        return getImageURI(imageName, width, height, httpServletContextPath, strategyLabel);
+
     }
-
 
 
 }

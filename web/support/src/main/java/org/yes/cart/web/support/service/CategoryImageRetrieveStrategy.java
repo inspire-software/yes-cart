@@ -1,5 +1,6 @@
 package org.yes.cart.web.support.service;
 
+import org.yes.cart.domain.entity.Attributable;
 import org.yes.cart.domain.entity.Category;
 
 
@@ -16,7 +17,7 @@ public interface CategoryImageRetrieveStrategy {
      * @param category category
      * @return image name to show as category image
      */
-    String getImageName(Category category);
+    String getImageName(Attributable category);
 
     /**
      * Get image repository url pattern.
@@ -24,5 +25,12 @@ public interface CategoryImageRetrieveStrategy {
      * @return image repository url pattern
      */
     String getImageRepositoryUrlPattern();
+
+
+    /**
+     * Get default image attribute name.
+     * @return  default image attribute name.
+     */
+    String getAttributeCode();
 
 }

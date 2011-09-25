@@ -2,6 +2,7 @@ package org.yes.cart.web.support.service.impl;
 
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.entity.Attributable;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.web.support.service.CategoryImageRetrieveStrategy;
 
@@ -26,7 +27,7 @@ public class CategoryImageRetrieveStrategyAttributeImpl implements CategoryImage
     /**
      * {@inheritDoc}
      */
-    public String getImageName(final Category category) {
+    public String getImageName(final Attributable category) {
         final AttrValue attrValue = category.getAttributeByCode(attributeCode);
         if (attrValue == null) {
             return Constants.NO_IMAGE;
@@ -43,4 +44,8 @@ public class CategoryImageRetrieveStrategyAttributeImpl implements CategoryImage
         return Constants.CATEGOTY_IMAGE_REPOSITORY_URL_PATTERN;
     }
 
+    /** {@inheritDoc} */
+    public String getAttributeCode() {
+        return attributeCode;
+    }
 }

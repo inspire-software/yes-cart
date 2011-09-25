@@ -59,22 +59,26 @@ public interface Constants {
     /**
      * Default image attribute name.
      */
-    String PRODUCT_DEFAULT_IMAGE_ATTR_NAME = "IMAGE0";
-
-    /**
-     * Default image attribute name.
-     */
-    String PRODUCT_SKU_DEFAULT_IMAGE_ATTR_NAME = "SKUIMAGE0";
-
-    /**
-     * Default image attribute name.
-     */
     String PRODUCT_IMAGE_ATTR_NAME_PREFIX = "IMAGE";
+
+
+    /**
+     * Default image attribute name.
+     */
+    String PRODUCT_DEFAULT_IMAGE_ATTR_NAME = PRODUCT_IMAGE_ATTR_NAME_PREFIX + "0";
 
     /**
      * Default image attribute name.
      */
     String PRODUCT_SKU_IMAGE_ATTR_NAME_PREFIX = "SKUIMAGE";
+
+
+    /**
+     * Default image attribute name.
+     */
+    String PRODUCT_SKU_DEFAULT_IMAGE_ATTR_NAME = PRODUCT_SKU_IMAGE_ATTR_NAME_PREFIX  + "0";
+
+
 
 
     /**
