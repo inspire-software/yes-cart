@@ -7,13 +7,13 @@ import org.yes.cart.domain.entity.Category;
  * Date: 7/4/11
  * Time: 8:16 PM
  */
-public interface CategoryDecorator  extends Category {
+public interface CategoryDecorator  extends Category, Depictable {
 
     /**
      * Get category image.
      * @return category image url, depending from strategy.
      */
-    String getCategoryImage();
+    //String getCategoryImage();
 
     /**
      * Get category image with give width and height.
@@ -22,19 +22,19 @@ public interface CategoryDecorator  extends Category {
      *
      * @return category image url, depending from strategy.
      */
-    String getCategoryImage(String width, String height);
+    //String getCategoryImage(String width, String height);
 
     /**
      * Get category image width.
      * @return  image width.
      */
-    String getCategoryImageWidth();
+    //String getCategoryImageWidth();
 
     /**
      * Get category image height.
      * @return     image height.
-     */
-    String getCategoryImageHeight();
+     * */
+    //String getCategoryImageHeight();
 
 
 }

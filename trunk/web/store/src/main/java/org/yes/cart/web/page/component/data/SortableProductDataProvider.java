@@ -9,7 +9,7 @@ import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.support.entity.decorator.ProductDecorator;
 import org.yes.cart.web.support.entity.decorator.impl.ProductDecoratorImpl;
-import org.yes.cart.web.support.service.ProductImageService;
+import org.yes.cart.web.support.service.AttributableImageService;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ import java.util.List;
 public class SortableProductDataProvider extends SortableDataProvider<ProductDecorator> {
 
     private final ProductService productService;
-    private final ProductImageService productImageService;
+    private final AttributableImageService attributableImageService;
     private final CategoryService categoryService;
     private final Query query;
     private String sortFieldName = ProductSearchQueryBuilder.PRODUCT_CATEGORY_RANK_FIELD;
@@ -41,11 +41,11 @@ public class SortableProductDataProvider extends SortableDataProvider<ProductDec
      * @param query          lucene query.
      */
     public SortableProductDataProvider(final ProductService productService,
-                                       final ProductImageService productImageService,
+                                       final AttributableImageService attributableImageService,
                                        final CategoryService categoryService,
                                        final Query query) {
         this.productService = productService;
-        this.productImageService = productImageService;
+        this.attributableImageService = attributableImageService;
         this.categoryService = categoryService;
         this.query = query;
     }
@@ -71,7 +71,7 @@ public class SortableProductDataProvider extends SortableDataProvider<ProductDec
         for (Product product : productsToDecorate) {
             rez.add(
                     new ProductDecoratorImpl(
-                            productImageService,
+                            attributableImageService,
                             categoryService,
                             product,
                             WicketUtil.getHttpServletRequest().getContextPath()

@@ -21,7 +21,7 @@ import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.ProductDecorator;
 import org.yes.cart.web.support.entity.decorator.impl.ProductDecoratorImpl;
-import org.yes.cart.web.support.service.ProductImageService;
+import org.yes.cart.web.support.service.AttributableImageService;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.util.List;
@@ -53,7 +53,7 @@ public abstract class AbstractProductList extends BaseComponent {
     protected ProductService productService;
 
     @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_IMAGE_SERVICE)
-    protected ProductImageService productImageService;
+    protected AttributableImageService attributableImageService;
 
     @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
     protected CategoryService categoryService;
@@ -100,19 +100,19 @@ public abstract class AbstractProductList extends BaseComponent {
 
                         final Product prod =  listItem.getModelObject();
                         final ProductDecorator productDecorator = new ProductDecoratorImpl(
-                                productImageService,
+                                attributableImageService,
                                 categoryService,
                                 prod,
                                 WicketUtil.getHttpServletRequest().getContextPath());
                         final Category category = categoryService.getRootCategory();
-                        final String width = productDecorator.getProductImageWidth(category);   //TODo size
-                        final String height = productDecorator.getProductImageHeight(category);
+                        final String width = productDecorator.getImageWidth(category);   //TODo size
+                        final String height = productDecorator.getImageHeight(category);
                         final PageParameters pageParameters = getProductPageParameters(prod);
 
 
                         listItem.add(
                                 new BookmarkablePageLink<HomePage>(PRODUCT_LINK_IMAGE, HomePage.class, pageParameters).add(
-                                        new ContextImage(PRODUCT_IMAGE, productDecorator.getProductImage(width, height))
+                                        new ContextImage(PRODUCT_IMAGE, productDecorator.getDefaultImage(width, height))
                                                 .add(new AttributeModifier("width", width))
                                                 .add(new AttributeModifier("height", height))
                                                 .add(new AttributeModifier("title", prod.getDescription()))

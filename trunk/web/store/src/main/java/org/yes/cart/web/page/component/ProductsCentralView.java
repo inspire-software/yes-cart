@@ -20,7 +20,7 @@ import org.yes.cart.web.page.component.product.ProductInListView;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.ProductDecorator;
-import org.yes.cart.web.support.service.ProductImageService;
+import org.yes.cart.web.support.service.AttributableImageService;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.util.List;
@@ -60,7 +60,7 @@ public class ProductsCentralView extends AbstractCentralView {
     protected ProductService productService;
 
     @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_IMAGE_SERVICE)
-    protected ProductImageService productImageService;
+    protected AttributableImageService attributableImageService;
 
     @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
     protected CategoryService categoryService;
@@ -90,7 +90,7 @@ public class ProductsCentralView extends AbstractCentralView {
                 getPage().getPageParameters(), itemsPerPageValues);
 
         final SortableProductDataProvider dataProvider = new
-                SortableProductDataProvider(productService, productImageService, categoryService, getBooleanQuery());
+                SortableProductDataProvider(productService, attributableImageService, categoryService, getBooleanQuery());
 
         applySortFieldAndOrder(dataProvider);
 

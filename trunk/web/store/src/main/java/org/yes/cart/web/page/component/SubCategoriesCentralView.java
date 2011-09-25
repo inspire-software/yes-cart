@@ -14,7 +14,7 @@ import org.yes.cart.web.page.component.data.SortableCategoryDataProvider;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.CategoryDecorator;
 import org.yes.cart.web.support.entity.decorator.impl.CategoryDecoratorImpl;
-import org.yes.cart.web.support.service.CategoryImageService;
+import org.yes.cart.web.support.service.AttributableImageService;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ import java.util.List;
 public class SubCategoriesCentralView extends AbstractCentralView {
 
     @SpringBean(name = StorefrontServiceSpringKeys.CATEGORY_IMAGE_SERVICE)
-    protected CategoryImageService categoryImageService;
+    protected AttributableImageService attributableImageService;
 
     /**
      * Default quantity of columns to show subcategorues in list
@@ -63,7 +63,7 @@ public class SubCategoriesCentralView extends AbstractCentralView {
         for (Category cat : categories) {
             rez.add(
                     new CategoryDecoratorImpl(
-                            categoryImageService,
+                            attributableImageService,
                             getCategoryService(),
                             cat,
                             WicketUtil.getHttpServletRequest().getContextPath()

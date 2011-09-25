@@ -2,6 +2,7 @@ package org.yes.cart.web.support.service.impl;
 
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.entity.Attributable;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.service.domain.ProductService;
@@ -30,6 +31,7 @@ public class CategoryImageRetrieveStrategyRandomProductImpl implements CategoryI
      * Construct category image retreive strategy
      *
      * @param productService product service to get random product in category.
+     * @param attributeCode attribu code.
      */
     public CategoryImageRetrieveStrategyRandomProductImpl(
             final ProductService productService,
@@ -41,8 +43,8 @@ public class CategoryImageRetrieveStrategyRandomProductImpl implements CategoryI
     /**
      * {@inheritDoc}
      */
-    public String getImageName(final Category category) {
-        Product product = productService.getRandomProductByCategory(category);
+    public String getImageName(final Attributable category) {
+        Product product = productService.getRandomProductByCategory((Category)category);
         if (product != null) {
             AttrValue attrValue = product.getAttributeByCode(attributeCode);
             if (attrValue != null) {
@@ -52,4 +54,8 @@ public class CategoryImageRetrieveStrategyRandomProductImpl implements CategoryI
         return Constants.NO_IMAGE;
     }
 
+    /** {@inheritDoc} */
+    public String getAttributeCode() {
+        return attributeCode;
+    }
 }

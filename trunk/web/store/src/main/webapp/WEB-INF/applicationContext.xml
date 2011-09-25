@@ -233,7 +233,7 @@
         <constructor-arg index="2" value="RANDOM_PRODUCT"/> <!-- one of the allowed stategy label -->
     </bean>
 
-    <bean id="productImageService" class="org.yes.cart.web.support.service.impl.ProductImageServiceImpl"/>
+    <bean id="attributableImageService" class="org.yes.cart.web.support.service.impl.AttributableImageServiceImpl"/>
     <!-- ############################ Category , Product and Sku image services end ############################### -->
 
     <bean id="wicketUtil" class="org.yes.cart.web.util.WicketUtil">
