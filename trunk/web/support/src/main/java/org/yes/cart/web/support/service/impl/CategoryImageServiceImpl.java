@@ -42,20 +42,27 @@ public class CategoryImageServiceImpl extends AbstractImageServiceImpl implement
      * {@inheritDoc}
      */
     @Override
-    public String getImageRepositoryUrlPattern(final Object object) {     //TODO
-        //final AttrValue attrValue = ((Category) object).getAttributeByCode("CATEGORY_IMAGE_RETREIVE_STRATEGY"); //TODO consta
-        /*String val = "RANDOM_PRODUCT";//TODO const
-        if (attrValue != null) {
-            val = attrValue.getVal();
-        }  */
-        final CategoryImageRetrieveStrategy strategy = strategies.get(object);
-        if (strategy == null) {
-            return "RANDOM_PRODUCT";
-        }
+    public String getImageRepositoryUrlPattern(final Object strategyLabel) {
+        final CategoryImageRetrieveStrategy strategy = strategies.get(strategyLabel);
         return strategy.getImageRepositoryUrlPattern();
     }
 
 
+    /**
+     * Get attribute value.  For category case it return strategy label,
+     * so all other reslveng will be performed via
+     * particular strategy.
+     * @param attributable given attributable.
+     * @param attrName  attribute name
+     * @return attibute value if found, otherwise default strategy label.
+     */
+    public String getImageAttributeValue(final Attributable attributable, final String attrName) {
+        final AttrValue attrValue = attributable.getAttributeByCode(attrName);
+        if (attrValue == null) {
+            return AttributeNamesKeys.Category.CATEGORY_IMAGE_DEFAULT_RETREIVE_STRATEGY;
+        }
+        return attrValue.getVal();
+    }
 
 
     /**
