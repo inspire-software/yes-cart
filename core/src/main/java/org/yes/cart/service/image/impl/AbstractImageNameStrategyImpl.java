@@ -95,6 +95,7 @@ public abstract class AbstractImageNameStrategyImpl implements ImageNameStrategy
             stringBuilder.append(File.separator);
         }
 
+        stringBuilder.append(getPathPrefix());
         stringBuilder.append(fileName);
         return stringBuilder.toString();
     }

@@ -15,6 +15,7 @@ import org.yes.cart.domain.entity.SeoImage;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.image.ImageNameStrategyResolver;
 import org.yes.cart.service.image.impl.ProductImageNameStrategyImpl;
+import org.yes.cart.constants.Constants;
 
 import java.io.File;
 import java.io.IOException;
@@ -122,8 +123,8 @@ public class TestImageService {
         } catch (IOException e) {
             assertTrue(e.getMessage(),false);
         }
-
     }
+
 
     @Test
     public void testDeleteImage() {

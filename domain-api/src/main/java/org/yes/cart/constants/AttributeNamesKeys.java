@@ -69,6 +69,11 @@ public interface AttributeNamesKeys {
          */
         String CATEGORY_IMAGE_RETREIVE_STRATEGY = "CATEGORY_IMAGE_RETREIVE_STRATEGY";
 
+        /**
+         * Default strategy
+         */
+        String CATEGORY_IMAGE_DEFAULT_RETREIVE_STRATEGY = "RANDOM_PRODUCT";
+
         /** Category images width and height.  */
         String CATEGORY_IMAGE_WIDTH = "CATEGORY_IMAGE_WIDTH";
         String CATEGORY_IMAGE_HEIGHT = "CATEGORY_IMAGE_HEIGHT";
