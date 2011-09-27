@@ -68,7 +68,7 @@ public class SkuCentralView extends AbstractCentralView {
     @SpringBean(name = ServiceSpringKeys.PRODUCT_SKU_SERVICE)
     protected ProductSkuService productSkuService;
 
-    @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_IMAGE_SERVICE)
+    @SpringBean(name = StorefrontServiceSpringKeys.ATTRIBUTABLE_IMAGE_SERVICE)
     protected AttributableImageService attributableImageService;
 
     @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)

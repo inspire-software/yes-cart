@@ -49,12 +49,12 @@ public abstract class AbstractImageServiceImpl implements AttributableImageServi
     /**
      * Get default image uri.
      *
-     * @param imageName          name of image
-     * @param servletContextPath http servlet request
-     * @param object             product/sku/category
-     * @return image uri.
+     * @p aram imageName          name of image
+     * @p aram servletContextPath http servlet request
+     * @pa ram object             product/sku/category
+     * @re turn image uri.
      */
-    protected String getImageURI(final String imageName,
+    /*protected String getImageURI(final String imageName,
                               final String servletContextPath,
                               final Object object) {
         final StringBuilder stringBuilder = new StringBuilder();
@@ -62,7 +62,7 @@ public abstract class AbstractImageServiceImpl implements AttributableImageServi
         stringBuilder.append(getImageRepositoryUrlPattern(object));
         stringBuilder.append(imageName);
         return stringBuilder.toString();
-    }
+    } */
 
 
 
