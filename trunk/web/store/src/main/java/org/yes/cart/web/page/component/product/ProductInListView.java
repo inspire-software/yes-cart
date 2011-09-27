@@ -50,7 +50,7 @@ public class ProductInListView extends BaseComponent {
     private final Category category;
 
 
-    @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_IMAGE_SERVICE)
+    @SpringBean(name = StorefrontServiceSpringKeys.ATTRIBUTABLE_IMAGE_SERVICE)
     private AttributableImageService attributableImageService;
 
     @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)

@@ -30,7 +30,7 @@ public interface StorefrontServiceSpringKeys {
      /**
       * Product image service .
       */
-     public String PRODUCT_IMAGE_SERVICE = "attributableImageService";
+     public String ATTRIBUTABLE_IMAGE_SERVICE = "attributableImageService";
 
      /**
       * Cart persister.

@@ -138,8 +138,8 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      *
      * @param category      given category
      * @param attributeName attribute name
-     * @param defaultValue  default value will be returned if value not found in hierarcht
-     * @return value of given attibute name or defaultValue if value not found in category hierarchy
+     * @param defaultValue  default value will be returned if value not found in hierarchy
+     * @return value of given attribute name or defaultValue if value not found in category hierarchy
      */
     @Cacheable(value = CACHE_NAME)
     public String getCategoryAttributeRecursive(final Category category, final String attributeName, final String defaultValue) {

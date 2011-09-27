@@ -59,7 +59,7 @@ public class ProductsCentralView extends AbstractCentralView {
     @SpringBean(name = ServiceSpringKeys.PRODUCT_SERVICE)
     protected ProductService productService;
 
-    @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_IMAGE_SERVICE)
+    @SpringBean(name = StorefrontServiceSpringKeys.ATTRIBUTABLE_IMAGE_SERVICE)
     protected AttributableImageService attributableImageService;
 
     @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
