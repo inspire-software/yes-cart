@@ -4,6 +4,8 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 
+import java.util.List;
+
 /**
  * Depictable interface for sku, product , brands, etc.
  * User: Igor Azarny iazarny@yahoo.com
@@ -11,6 +13,31 @@ import org.yes.cart.domain.entity.Product;
  * Time: 9:39 PM
  */
 public interface Depictable {
+
+
+    String PRODUCT_DEFAULT_IMAGE_WIDTH = "360";
+    String PRODUCT_DEFAULT_IMAGE_HEIGHT = "360";
+
+    String PRODUCT_THUMBNAIL_IMAGE_WIDTH = "80";
+    String PRODUCT_THUMBNAIL_IMAGE_HEIGHT = "80";
+
+    /**
+     * Get images attributes names.
+     * @param filled in case of true only filled with data will be returned, otherwise all
+     * @return images attributes names.
+     */
+    List<String> getImageAttributeNames(boolean filled);
+
+    /**
+     * Get product image with give width and height.
+     * @param width image width to get correct url
+     * @param height image height to get correct url
+     * @param imageAttributeName particular attribute name.
+     *
+     * @return product image url, depending from strategy.
+     */
+    String getImage(String width, String height, String imageAttributeName);
+
 
     /**
      * Get product image with give width and height.
@@ -26,14 +53,28 @@ public interface Depictable {
      * @param category optional given category
      * @return  image width.
      */
-    String getImageWidth(Category category);
+    String getDefaultImageWidth(Category category);
 
     /**
      * Get product image height in partucular category.
      * @param category given category
      * @return     image height.
      */
-    String getImageHeight(Category category);
+    String getDefaultImageHeight(Category category);
+
+    /**
+     * Get product image width in particular category.
+     * @param category optional given category
+     * @return  image width.
+     */
+    String getThumbnailImageWidth(Category category);
+
+    /**
+     * Get product image height in partucular category.
+     * @param category given category
+     * @return     image height.
+     */
+    String getThumbnailImageHeight(Category category);
 
 
      /** Get default image attribute name.

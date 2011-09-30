@@ -63,6 +63,12 @@ public interface AttributeNamesKeys {
         String CATEGORY_SUBCATEGORIES_COLUMNS = "CATEGORY_SUBCATEGORIES_COLUMNS";
 
         /**
+         * Category omage attribute name
+         */
+        String CATEGORY_IMAGE = "CATEGORY_IMAGE";
+
+
+        /**
          * Label of category image retreive strategy. Allowed values:
          * ATTRIBUTE
          * RANDOM_PRODUCT

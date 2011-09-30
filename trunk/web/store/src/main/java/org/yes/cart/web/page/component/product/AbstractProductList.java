@@ -105,8 +105,8 @@ public abstract class AbstractProductList extends BaseComponent {
                                 prod,
                                 WicketUtil.getHttpServletRequest().getContextPath());
                         final Category category = categoryService.getRootCategory();
-                        final String width = productDecorator.getImageWidth(category);   //TODo size
-                        final String height = productDecorator.getImageHeight(category);
+                        final String width = productDecorator.getDefaultImageWidth(category);   //TODo size
+                        final String height = productDecorator.getDefaultImageHeight(category);
                         final PageParameters pageParameters = getProductPageParameters(prod);
 
 
