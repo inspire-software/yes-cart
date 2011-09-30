@@ -92,8 +92,8 @@ public class ProductInListView extends BaseComponent {
         final PageParameters linkToProductParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters());
         linkToProductParameters.set(WebParametersKeys.PRODUCT_ID, product.getId());
 
-        final String width = product.getImageWidth(category);
-        final String height = product.getImageHeight(category);
+        final String width = product.getDefaultImageWidth(category);
+        final String height = product.getDefaultImageHeight(category);
 
         add(
                 new BookmarkablePageLink<HomePage>(PRODUCT_LINK_SKU, HomePage.class, linkToProductParameters).add(

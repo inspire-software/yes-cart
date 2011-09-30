@@ -10,12 +10,26 @@ import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.web.support.entity.decorator.ProductDecorator;
 import org.yes.cart.web.support.service.AttributableImageService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 7/13/11
  * Time: 9:39 PM
  */
 public class ProductDecoratorImpl extends ProductEntity implements ProductDecorator {
+
+    private final static List<String> attrNames = new ArrayList<String>() {{
+        add(Constants.PRODUCT_DEFAULT_IMAGE_ATTR_NAME + "0");
+        add(Constants.PRODUCT_DEFAULT_IMAGE_ATTR_NAME + "1");
+        add(Constants.PRODUCT_DEFAULT_IMAGE_ATTR_NAME + "2");
+        add(Constants.PRODUCT_DEFAULT_IMAGE_ATTR_NAME + "3");
+        add(Constants.PRODUCT_DEFAULT_IMAGE_ATTR_NAME + "4");
+        add(Constants.PRODUCT_DEFAULT_IMAGE_ATTR_NAME + "5");
+    }};
+
+
 
     private final AttributableImageService attributableImageService;
     private final CategoryService categoryService;
@@ -45,12 +59,48 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
     }
 
 
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<String> getImageAttributeNames(final boolean filled) {
+        if (filled) {
+            final List<String> rez = new ArrayList<String>();
+            for(String attrName : attrNames) {
+                if(this.getAttributeByCode(attrName) != null) {
+                    rez.add(attrName);
+                }
+            }
+            return rez;
+        }
+        return attrNames;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getImage(final String width, final String height, final String imageAttributeName) {
+        return attributableImageService.getImage(
+                this,
+                httpServletContextPath,
+                width,
+                height,
+                imageAttributeName);
+    }
+
+
     /**
      * {@inheritDoc}
      */
     public String getDefaultImage(final String width, final String height) {
         if (productImageUrl == null) {
-            productImageUrl = attributableImageService.getImage(this, httpServletContextPath, width, height, getDefaultImageAttributeName());
+            productImageUrl = attributableImageService.getImage(
+                    this,
+                    httpServletContextPath,
+                    width,
+                    height,
+                    getDefaultImageAttributeName()
+            );
         }
         return productImageUrl;
     }
@@ -58,19 +108,37 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
     /**
      * {@inheritDoc}
      */
-    public String getImageWidth(final Category category) {
+    public String getDefaultImageWidth(final Category category) {
         return categoryService.getCategoryAttributeRecursive(category,
                 AttributeNamesKeys.Category.PRODUCT_IMAGE_WIDTH,
-                "120");
+                PRODUCT_DEFAULT_IMAGE_WIDTH);
     }
 
     /**
      * {@inheritDoc}
      */
-    public String getImageHeight(final Category category) {
+    public String getDefaultImageHeight(final Category category) {
         return categoryService.getCategoryAttributeRecursive(category,
                 AttributeNamesKeys.Category.PRODUCT_IMAGE_HEIGHT,
-                "120");
+                PRODUCT_DEFAULT_IMAGE_HEIGHT);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getThumbnailImageWidth(final Category category) {
+        return categoryService.getCategoryAttributeRecursive(category,
+                AttributeNamesKeys.Category.PRODUCT_IMAGE_WIDTH,
+                PRODUCT_THUMBNAIL_IMAGE_WIDTH);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getThumbnailImageHeight(final Category category) {
+        return categoryService.getCategoryAttributeRecursive(category,
+                AttributeNamesKeys.Category.PRODUCT_IMAGE_HEIGHT,
+                PRODUCT_THUMBNAIL_IMAGE_HEIGHT);
     }
 
     /**

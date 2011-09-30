@@ -9,12 +9,17 @@ import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.web.support.entity.decorator.CategoryDecorator;
 import org.yes.cart.web.support.service.AttributableImageService;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 7/4/11
  * Time: 8:19 PM
  */
 public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDecorator {
+
+    private static final List<String> attrNames = Collections.singletonList(AttributeNamesKeys.Category.CATEGORY_IMAGE);
 
     private final AttributableImageService categoryImageService;
     private final CategoryService categoryService;
@@ -39,6 +44,26 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
         BeanUtils.copyProperties(categoryEntity, this);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public List<String> getImageAttributeNames(final boolean filled) {
+        return attrNames;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getImage(final String width, final String height, final String imageAttributeName) {
+        return categoryImageService.getImage(
+                this,
+                httpServletContextPath,
+                width,
+                height,
+                imageAttributeName);
+    }
+
+
 
     public String getDefaultImage(String width, String height) {
         if (categoryImageUrl == null) {
@@ -47,13 +72,25 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
         return categoryImageUrl;
     }
 
-    public String getImageWidth(final Category category) {
+    public String getDefaultImageWidth(final Category category) {
         return categoryService.getCategoryAttributeRecursive(category,
                 AttributeNamesKeys.Category.CATEGORY_IMAGE_WIDTH,
                 "80");
     }
 
-    public String getImageHeight(final Category category) {
+    public String getDefaultImageHeight(final Category category) {
+        return categoryService.getCategoryAttributeRecursive(this,
+                AttributeNamesKeys.Category.CATEGORY_IMAGE_HEIGHT,
+                "80");
+    }
+
+    public String getThumbnailImageWidth(final Category category) {
+        return categoryService.getCategoryAttributeRecursive(category,
+                AttributeNamesKeys.Category.CATEGORY_IMAGE_WIDTH,
+                "80");
+    }
+
+    public String getThumbnailImageHeight(final Category category) {
         return categoryService.getCategoryAttributeRecursive(this,
                 AttributeNamesKeys.Category.CATEGORY_IMAGE_HEIGHT,
                 "80");
@@ -63,7 +100,7 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
      * {@inheritDoc}
      */
     public String getDefaultImageAttributeName() {
-        return Constants.PRODUCT_DEFAULT_IMAGE_ATTR_NAME;
+        return AttributeNamesKeys.Category.CATEGORY_IMAGE;
     }
 
 }

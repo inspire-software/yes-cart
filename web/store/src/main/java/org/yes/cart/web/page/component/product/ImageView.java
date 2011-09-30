@@ -3,17 +3,11 @@ package org.yes.cart.web.page.component.product;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.springframework.web.util.WebUtils;
-import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
-import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.Depictable;
-import org.yes.cart.web.support.service.AttributableImageService;
 import org.yes.cart.web.util.WicketUtil;
 
 /**
@@ -72,8 +66,8 @@ public class ImageView extends BaseComponent {
     @Override
     protected void onBeforeRender() {
 
-        final String width = deciptable.getImageWidth(category);
-        final String height = deciptable.getImageHeight(category);
+        final String width = deciptable.getDefaultImageWidth(category);
+        final String height = deciptable.getDefaultImageHeight(category);
 
 
         final String contextRelativePath = deciptable.getDefaultImage(
@@ -82,8 +76,10 @@ public class ImageView extends BaseComponent {
 
         add(
                 new ContextImage(DEFAULT_IMAGE,contextRelativePath)
-                    .add(new AttributeModifier("width", width))
-                    .add(new AttributeModifier("height", height))
+                    .add(
+                            new AttributeModifier("width", width),
+                            new AttributeModifier("height", height)
+                    )
 
         );
 
