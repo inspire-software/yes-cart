@@ -24,9 +24,9 @@ import java.util.Map;
  * cache name determination and initialization. Added  cache for
  * annotated method, because reflection operations to get
  * annotations on method are very expensive.
- *
+ * <p/>
  * Well know issue - not work with overloaded methods.
- *
+ * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
@@ -118,6 +118,7 @@ public class MethodCacheAdvice implements ApplicationContextAware {
 
     /**
      * Get the cache key.
+     *
      * @param signature method signature.
      * @param arguments value of arguments
      * @return key for cache.
@@ -151,11 +152,14 @@ public class MethodCacheAdvice implements ApplicationContextAware {
 
     /**
      * Get the all caches.
+     *
      * @return mas name - cache
      */
-    private synchronized Map<String, Cache> getCacheMap() {
-        if (cacheMap == null) {
-            cacheMap = applicationContext.getBeansOfType(Cache.class);
+    private Map<String, Cache> getCacheMap() {
+        synchronized (this) {
+            if (cacheMap == null) {
+                cacheMap = applicationContext.getBeansOfType(Cache.class);
+            }
         }
         return cacheMap;
     }

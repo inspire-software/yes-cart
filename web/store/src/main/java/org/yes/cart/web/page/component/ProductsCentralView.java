@@ -11,6 +11,7 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.page.component.data.SortableProductDataProvider;
 import org.yes.cart.web.page.component.navigation.ProductPerPageListView;
@@ -65,6 +66,9 @@ public class ProductsCentralView extends AbstractCentralView {
     @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
     protected CategoryService categoryService;
 
+    @SpringBean(name = ServiceSpringKeys.IMAGE_SERVICE)
+    protected ImageService imageService;
+
     /**
      * Construct panel.
      *
@@ -90,7 +94,11 @@ public class ProductsCentralView extends AbstractCentralView {
                 getPage().getPageParameters(), itemsPerPageValues);
 
         final SortableProductDataProvider dataProvider = new
-                SortableProductDataProvider(productService, attributableImageService, categoryService, getBooleanQuery());
+                SortableProductDataProvider(imageService,
+                productService,
+                attributableImageService,
+                categoryService,
+                getBooleanQuery());
 
         applySortFieldAndOrder(dataProvider);
 

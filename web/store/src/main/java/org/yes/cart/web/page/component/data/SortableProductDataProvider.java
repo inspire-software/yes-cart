@@ -6,6 +6,7 @@ import org.apache.wicket.model.IModel;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.support.entity.decorator.ProductDecorator;
 import org.yes.cart.web.support.entity.decorator.impl.ProductDecoratorImpl;
@@ -29,6 +30,7 @@ public class SortableProductDataProvider extends SortableDataProvider<ProductDec
     private final ProductService productService;
     private final AttributableImageService attributableImageService;
     private final CategoryService categoryService;
+    private final ImageService imageService;
     private final Query query;
     private String sortFieldName = ProductSearchQueryBuilder.PRODUCT_CATEGORY_RANK_FIELD;
     private boolean reverse = false;
@@ -39,8 +41,10 @@ public class SortableProductDataProvider extends SortableDataProvider<ProductDec
      *
      * @param productService product service to get the products.
      * @param query          lucene query.
+     * @param imageService image service
      */
-    public SortableProductDataProvider(final ProductService productService,
+    public SortableProductDataProvider(final ImageService imageService,
+                                       final ProductService productService,
                                        final AttributableImageService attributableImageService,
                                        final CategoryService categoryService,
                                        final Query query) {
@@ -48,6 +52,7 @@ public class SortableProductDataProvider extends SortableDataProvider<ProductDec
         this.attributableImageService = attributableImageService;
         this.categoryService = categoryService;
         this.query = query;
+        this.imageService = imageService;
     }
 
     public Iterator<? extends ProductDecorator> iterator(int first, int count) {
@@ -71,6 +76,7 @@ public class SortableProductDataProvider extends SortableDataProvider<ProductDec
         for (Product product : productsToDecorate) {
             rez.add(
                     new ProductDecoratorImpl(
+                            imageService,
                             attributableImageService,
                             categoryService,
                             product,

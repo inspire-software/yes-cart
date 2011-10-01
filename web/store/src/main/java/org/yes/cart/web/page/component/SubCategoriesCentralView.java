@@ -9,7 +9,9 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.GridView;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Category;
+import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.web.page.component.data.SortableCategoryDataProvider;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.CategoryDecorator;
@@ -29,6 +31,9 @@ public class SubCategoriesCentralView extends AbstractCentralView {
 
     @SpringBean(name = StorefrontServiceSpringKeys.CATEGORY_IMAGE_SERVICE)
     protected AttributableImageService attributableImageService;
+
+    @SpringBean(name = ServiceSpringKeys.IMAGE_SERVICE)
+    protected ImageService imageService;
 
     /**
      * Default quantity of columns to show subcategorues in list
@@ -63,6 +68,7 @@ public class SubCategoriesCentralView extends AbstractCentralView {
         for (Category cat : categories) {
             rez.add(
                     new CategoryDecoratorImpl(
+                            imageService,
                             attributableImageService,
                             getCategoryService(),
                             cat,
