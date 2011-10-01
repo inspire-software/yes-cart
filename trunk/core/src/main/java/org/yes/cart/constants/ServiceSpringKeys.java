@@ -5,6 +5,7 @@ package org.yes.cart.constants;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
+@SuppressWarnings("PMD.AvoidConstantsInterface")
 public interface ServiceSpringKeys {
 
     /* ######### DOMAIN ####################################### */

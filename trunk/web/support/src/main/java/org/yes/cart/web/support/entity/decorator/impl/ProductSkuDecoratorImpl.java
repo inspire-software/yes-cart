@@ -6,8 +6,11 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.entity.SeoImage;
 import org.yes.cart.domain.entity.impl.ProductSkuEntity;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.web.support.entity.decorator.ProductSkuDecorator;
 import org.yes.cart.web.support.service.AttributableImageService;
 
@@ -33,12 +36,11 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
     }};
 
 
-
-
     private final AttributableImageService attributableImageService;
     private final CategoryService categoryService;
     private final String httpServletContextPath;
     private String productImageUrl;
+    private final ImageService imageService;
 
     /**
      * Construct product sku decorator.
@@ -47,8 +49,10 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
      * @param categoryService          to get image width and height
      * @param httpServletContextPath   servlet context path
      * @param productSkuEntity         sku to decorate
+     * @param imageService             image service to get the image seo info
      */
-    public ProductSkuDecoratorImpl(final AttributableImageService attributableImageService,
+    public ProductSkuDecoratorImpl(final ImageService imageService,
+                                   final AttributableImageService attributableImageService,
                                    final CategoryService categoryService,
                                    final ProductSku productSkuEntity,
                                    final String httpServletContextPath) {
@@ -58,22 +62,28 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
         this.attributableImageService = attributableImageService;
         this.categoryService = categoryService;
         this.productImageUrl = null;
+        this.imageService = imageService;
     }
 
     /**
      * {@inheritDoc}
      */
-    public List<String> getImageAttributeNames(final boolean filled) {
-        if (filled) {
-            final List<String> rez = new ArrayList<String>();
-            for(String attrName : attrNames) {
-                if(this.getAttributeByCode(attrName) != null) {
-                    rez.add(attrName);
-                }
-            }
-            return rez;
-        }
+    public List<String> getImageAttributeNames() {
         return attrNames;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<Pair<String, String>> getImageAttributeFileNames() {
+        final List<Pair<String, String>> rez = new ArrayList<Pair<String, String>>();
+        for (String attrName : attrNames) {
+            if (this.getAttributeByCode(attrName) != null) {
+                rez.add(new Pair<String, String>(attrName, this.getAttributeByCode(attrName).getVal()));
+            }
+        }
+        return rez;
     }
 
 
@@ -147,5 +157,12 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
         return Constants.PRODUCT_SKU_DEFAULT_IMAGE_ATTR_NAME;
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    public SeoImage getSeoImage(final String fileName) {
+        return imageService.getSeoImage(fileName);
+    }
 
 }

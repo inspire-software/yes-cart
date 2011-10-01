@@ -7,12 +7,13 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.model.Model;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.service.domain.ProductSkuService;
-import org.yes.cart.service.domain.PriceService;
+import org.yes.cart.service.domain.*;
+import org.yes.cart.web.page.component.product.ImageView;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
+import org.yes.cart.web.support.entity.decorator.Depictable;
+import org.yes.cart.web.support.entity.decorator.impl.ProductDecoratorImpl;
+import org.yes.cart.web.support.entity.decorator.impl.ProductSkuDecoratorImpl;
 import org.yes.cart.web.support.service.AttributableImageService;
 import org.yes.cart.web.util.WicketUtil;
 import org.yes.cart.web.page.HomePage;
@@ -70,6 +71,9 @@ public class SkuCentralView extends AbstractCentralView {
 
     @SpringBean(name = StorefrontServiceSpringKeys.ATTRIBUTABLE_IMAGE_SERVICE)
     protected AttributableImageService attributableImageService;
+
+    @SpringBean(name = ServiceSpringKeys.IMAGE_SERVICE)
+    protected ImageService imageService;
 
     @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
     protected CategoryService categoryService;
@@ -151,13 +155,29 @@ public class SkuCentralView extends AbstractCentralView {
         );
 
         add(
-                new Label(PRODUCT_IMAGE_VIEW, "TODO image view")
+                new ImageView(PRODUCT_IMAGE_VIEW, getDepictable())
         );
-
 
 
         super.onBeforeRender();
 
+    }
+
+    private Depictable getDepictable()  {
+        if (isProduct) {
+            return new ProductDecoratorImpl(
+                    imageService,
+                    attributableImageService,
+                    categoryService,
+                    product,
+                    WicketUtil.getHttpServletRequest().getContextPath() );
+        }
+        return new ProductSkuDecoratorImpl(
+                    imageService,
+                    attributableImageService,
+                    categoryService,
+                    sku,
+                    WicketUtil.getHttpServletRequest().getContextPath() );
     }
 
     /**

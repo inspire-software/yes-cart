@@ -4,11 +4,15 @@ import org.springframework.beans.BeanUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.SeoImage;
 import org.yes.cart.domain.entity.impl.CategoryEntity;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.web.support.entity.decorator.CategoryDecorator;
 import org.yes.cart.web.support.service.AttributableImageService;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,6 +29,7 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
     private final CategoryService categoryService;
     private final String httpServletContextPath;
     private String categoryImageUrl;
+    private final ImageService imageService;
 
     /**
      * Construct entity decorator.
@@ -33,24 +38,41 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
      * @param categoryEntity         entity to decorate.
      * @param httpServletContextPath servlet context path
      * @param categoryService        category service to get the images width and height
+     * @param imageService image service to get the image seo info
      */
-    public CategoryDecoratorImpl(final AttributableImageService categoryImageService,
-                                 final CategoryService categoryService,
-                                 final Category categoryEntity,
-                                 final String httpServletContextPath) {
+    public CategoryDecoratorImpl(
+            final ImageService imageService,
+            final AttributableImageService categoryImageService,
+            final CategoryService categoryService,
+            final Category categoryEntity,
+            final String httpServletContextPath) {
         this.categoryService = categoryService;
         this.categoryImageService = categoryImageService;
         this.httpServletContextPath = httpServletContextPath;
+        this.imageService = imageService;
         BeanUtils.copyProperties(categoryEntity, this);
     }
 
     /**
      * {@inheritDoc}
      */
-    public List<String> getImageAttributeNames(final boolean filled) {
+    public List<String> getImageAttributeNames() {
         return attrNames;
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<Pair<String, String>> getImageAttributeFileNames() {
+        final List<Pair<String, String>> rez = new ArrayList<Pair<String, String>>();
+        for (String attrName : attrNames) {
+            if (this.getAttributeByCode(attrName) != null) {
+                rez.add(new Pair<String, String>(attrName, this.getAttributeByCode(attrName).getVal()));
+            }
+        }
+        return rez;
+    }
     /**
      * {@inheritDoc}
      */
@@ -62,7 +84,6 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
                 height,
                 imageAttributeName);
     }
-
 
 
     public String getDefaultImage(String width, String height) {
@@ -101,6 +122,14 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
      */
     public String getDefaultImageAttributeName() {
         return AttributeNamesKeys.Category.CATEGORY_IMAGE;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public SeoImage getSeoImage(final String fileName) {
+        return imageService.getSeoImage(fileName);
     }
 
 }

@@ -12,6 +12,7 @@ import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl;
 import org.yes.cart.web.application.ApplicationDirector;
@@ -59,6 +60,8 @@ public class ProductInListView extends BaseComponent {
     @SpringBean(name = ServiceSpringKeys.PRICE_SERVICE)
     protected PriceService priceService;
 
+    @SpringBean(name = ServiceSpringKeys.IMAGE_SERVICE)
+    protected ImageService imageService;
 
 
     /**
@@ -76,6 +79,7 @@ public class ProductInListView extends BaseComponent {
             this.category = category;
         }
         this.product = new ProductDecoratorImpl(
+                imageService,
                 attributableImageService,
                 categoryService,
                 product,
@@ -134,6 +138,7 @@ public class ProductInListView extends BaseComponent {
     /**
      * Get product or his sku price.
      * In case of multisku product the minimal regular price from multiple sku was used for single item.
+     *
      * @return {@link org.yes.cart.domain.entity.SkuPrice}
      */
     private SkuPrice getSkuPrice() {
@@ -142,7 +147,7 @@ public class ProductInListView extends BaseComponent {
                 ApplicationDirector.getCurrentShop(),
                 ApplicationDirector.getShoppingCart().getCurrencyCode(),
                 BigDecimal.ONE
-                );
+        );
     }
 
 }

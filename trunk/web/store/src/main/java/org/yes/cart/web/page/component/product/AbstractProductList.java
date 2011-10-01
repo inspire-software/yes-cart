@@ -11,10 +11,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
-import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.service.domain.ProductAssociationService;
-import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.service.domain.ProductSkuService;
+import org.yes.cart.service.domain.*;
 import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.WebParametersKeys;
@@ -58,9 +55,13 @@ public abstract class AbstractProductList extends BaseComponent {
     @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
     protected CategoryService categoryService;
 
+    @SpringBean(name = ServiceSpringKeys.IMAGE_SERVICE)
+    protected ImageService imageService;
+
 
     /**
      * Construct product list to show.
+     *
      * @param id component id.
      */
     public AbstractProductList(final String id) {
@@ -98,8 +99,9 @@ public abstract class AbstractProductList extends BaseComponent {
                 new ListView<Product>(PRODUCT_LIST, getProductListToShow()) {
                     protected void populateItem(ListItem<Product> listItem) {
 
-                        final Product prod =  listItem.getModelObject();
+                        final Product prod = listItem.getModelObject();
                         final ProductDecorator productDecorator = new ProductDecoratorImpl(
+                                imageService,
                                 attributableImageService,
                                 categoryService,
                                 prod,
@@ -134,8 +136,6 @@ public abstract class AbstractProductList extends BaseComponent {
     }
 
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -143,7 +143,6 @@ public abstract class AbstractProductList extends BaseComponent {
     public boolean isVisible() {
         return super.isVisible() && !getProductListToShow().isEmpty();
     }
-
 
 
 }

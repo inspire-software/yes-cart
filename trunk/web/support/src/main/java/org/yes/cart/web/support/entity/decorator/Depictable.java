@@ -3,6 +3,8 @@ package org.yes.cart.web.support.entity.decorator;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.entity.SeoImage;
+import org.yes.cart.domain.misc.Pair;
 
 import java.util.List;
 
@@ -23,10 +25,17 @@ public interface Depictable {
 
     /**
      * Get images attributes names.
-     * @param filled in case of true only filled with data will be returned, otherwise all
      * @return images attributes names.
      */
-    List<String> getImageAttributeNames(boolean filled);
+    List<String> getImageAttributeNames();
+
+    /**
+     * Get pair of images attributes names - image file name.
+     * @return images attributes names.
+     */
+    List<Pair<String, String>> getImageAttributeFileNames();
+
+
 
     /**
      * Get product image with give width and height.
@@ -81,5 +90,13 @@ public interface Depictable {
       * @return default image attibute name
       * */
     String getDefaultImageAttributeName();
+
+
+    /**
+     * Get image seo information.
+     * @param fileName image filename.
+     * @return {@link SeoImage}  in cae if it present for given filename, otherwise null
+     */
+    SeoImage getSeoImage(String fileName);
 
 }

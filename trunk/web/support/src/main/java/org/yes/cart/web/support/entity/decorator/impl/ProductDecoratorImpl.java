@@ -5,8 +5,11 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.entity.SeoImage;
 import org.yes.cart.domain.entity.impl.ProductEntity;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.web.support.entity.decorator.ProductDecorator;
 import org.yes.cart.web.support.service.AttributableImageService;
 
@@ -30,11 +33,11 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
     }};
 
 
-
     private final AttributableImageService attributableImageService;
     private final CategoryService categoryService;
     private final String httpServletContextPath;
     private String productImageUrl;
+    private final ImageService imageService;
 
     /**
      * Construct entity decorator.
@@ -43,8 +46,10 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
      * @param categoryService          to get image width and height
      * @param httpServletContextPath   servlet context path
      * @param productEntity            original product to decorate.
+     * @param imageService image serice to get the image seo info
      */
     public ProductDecoratorImpl(
+            final ImageService imageService,
             final AttributableImageService attributableImageService,
             final CategoryService categoryService,
             final Product productEntity,
@@ -55,25 +60,30 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
         this.attributableImageService = attributableImageService;
         this.categoryService = categoryService;
         this.productImageUrl = null;
+        this.imageService = imageService;
 
     }
-
 
 
     /**
      * {@inheritDoc}
      */
-    public List<String> getImageAttributeNames(final boolean filled) {
-        if (filled) {
-            final List<String> rez = new ArrayList<String>();
-            for(String attrName : attrNames) {
-                if(this.getAttributeByCode(attrName) != null) {
-                    rez.add(attrName);
-                }
-            }
-            return rez;
-        }
+    public List<String> getImageAttributeNames() {
         return attrNames;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<Pair<String, String>> getImageAttributeFileNames() {
+        final List<Pair<String, String>> rez = new ArrayList<Pair<String, String>>();
+        for (String attrName : attrNames) {
+            if (this.getAttributeByCode(attrName) != null) {
+                rez.add(new Pair<String, String>(attrName, this.getAttributeByCode(attrName).getVal()));
+            }
+        }
+        return rez;
     }
 
     /**
@@ -146,6 +156,13 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
      */
     public String getDefaultImageAttributeName() {
         return Constants.PRODUCT_DEFAULT_IMAGE_ATTR_NAME;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public SeoImage getSeoImage(final String fileName) {
+        return imageService.getSeoImage(fileName);
     }
 
 }
