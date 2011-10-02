@@ -4,6 +4,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.image.ContextImage;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Category;
@@ -30,14 +32,6 @@ public class ImageView extends BaseComponent {
     protected final static String ALT_IMAGE_LIST = "altImageList";
     protected final static String ALT_IMAGE = "altImage";
     // ------------------------------------- MARKUP IDs END   ---------------------------------- //
-
-    protected final static String DEFAULT_IMAGE_ALT = "defaultImageAlt";
-    protected final static String DEFAULT_IMAGE_TITLE = "defaultImageTitle";
-    protected final static String DEFAULT_IMAGE_LONGDESC = "defaultImageLongDesc";
-
-    protected final static String ALT_IMAGE_ALT = "altImageAlt";
-    protected final static String ALT_IMAGE_TITLE = "altImageTitle";
-    protected final static String ALT_IMAGE_LONGDESC = "altImageLongDesc";
 
 
     @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
@@ -79,19 +73,40 @@ public class ImageView extends BaseComponent {
         final List<Pair<String, String>> filledImageAttributes = depictable.getImageAttributeFileNames();
 
 
-        final String contextRelativePath = depictable.getDefaultImage(
-                width, height);
+        final String defaultImageRelativePath = depictable.getDefaultImage(width, height);
 
 
         add(
                 createSeoImage(
-                        new ContextImage(DEFAULT_IMAGE, contextRelativePath)
+                        new ContextImage(DEFAULT_IMAGE, defaultImageRelativePath)
                                 .add(
                                         new AttributeModifier("width", width),
                                         new AttributeModifier("height", height)
                                 ),
                         getSeoImage(filledImageAttributes, depictable.getDefaultImageAttributeName()))
 
+        );
+
+        add(
+                new ListView<Pair<String, String>>(ALT_IMAGE_LIST, filledImageAttributes) {
+
+                    @Override
+                    protected void populateItem(ListItem<Pair<String, String>> pairListItem) {
+                        final Pair<String, String> pair = pairListItem.getModelObject();
+                        final String altImageRelativePath = depictable.getImage(tumbWidth, tumbHeight, pair.getFirst());
+                        pairListItem.add(
+                                createSeoImage(
+                                        new ContextImage(ALT_IMAGE, altImageRelativePath)
+                                                .add(
+                                                        new AttributeModifier("width", tumbWidth),
+                                                        new AttributeModifier("height", tumbHeight)
+                                                ),
+                                        getSeoImage(filledImageAttributes, pair.getFirst()))
+                        );
+
+                    }
+
+                }
         );
 
 

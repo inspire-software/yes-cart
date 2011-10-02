@@ -24,12 +24,12 @@ import java.util.List;
 public class ProductDecoratorImpl extends ProductEntity implements ProductDecorator {
 
     private final static List<String> attrNames = new ArrayList<String>() {{
-        add(Constants.PRODUCT_DEFAULT_IMAGE_ATTR_NAME + "0");
-        add(Constants.PRODUCT_DEFAULT_IMAGE_ATTR_NAME + "1");
-        add(Constants.PRODUCT_DEFAULT_IMAGE_ATTR_NAME + "2");
-        add(Constants.PRODUCT_DEFAULT_IMAGE_ATTR_NAME + "3");
-        add(Constants.PRODUCT_DEFAULT_IMAGE_ATTR_NAME + "4");
-        add(Constants.PRODUCT_DEFAULT_IMAGE_ATTR_NAME + "5");
+        add(Constants.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "0");
+        add(Constants.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "1");
+        add(Constants.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "2");
+        add(Constants.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "3");
+        add(Constants.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "4");
+        add(Constants.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "5");
     }};
 
 
