@@ -128,7 +128,7 @@ public class ImageView extends BaseComponent {
     private SeoImage getSeoImage(final List<Pair<String, String>> allImages, final String attrName) {
         final String fileName = getFileName(allImages, attrName);
         if (StringUtils.isNotBlank(fileName)) {
-            depictable.getSeoImage(fileName);
+            return depictable.getSeoImage(fileName);
         }
         return null;
     }
