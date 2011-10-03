@@ -32,7 +32,7 @@ public class NewArrivalProducts extends AbstractProductList {
     public List<Product> getProductListToShow() {
         if (products == null) {
             products = productService.getNewArrivalsProductInCategory(
-                    WicketUtil.getCategoryId(),
+                    WicketUtil.getCategoryId(getPage().getPageParameters()),
                     getProductsLimit());
         }
         return products;

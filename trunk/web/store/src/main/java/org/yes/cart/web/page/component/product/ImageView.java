@@ -39,7 +39,7 @@ public class ImageView extends BaseComponent {
 
 
     private final Depictable depictable;
-    private final Category category;
+
 
 
     /**
@@ -51,12 +51,6 @@ public class ImageView extends BaseComponent {
     public ImageView(final String id, final Depictable depictable) {
         super(id);
         this.depictable = depictable;
-        long categoryId = WicketUtil.getCategoryId();
-        if (categoryId > 0) {
-            category = categoryService.getById(categoryId);
-        } else {
-            category = categoryService.getRootCategory();
-        }
     }
 
 
@@ -65,6 +59,14 @@ public class ImageView extends BaseComponent {
      */
     @Override
     protected void onBeforeRender() {
+        final Category category;
+        long categoryId = WicketUtil.getCategoryId(getPage().getPageParameters());
+        if (categoryId > 0) {
+            category = categoryService.getById(categoryId);
+        } else {
+            category = categoryService.getRootCategory();
+        }
+
 
         final String width = depictable.getDefaultImageWidth(category);
         final String height = depictable.getDefaultImageHeight(category);
@@ -80,8 +82,8 @@ public class ImageView extends BaseComponent {
                 createSeoImage(
                         new ContextImage(DEFAULT_IMAGE, defaultImageRelativePath)
                                 .add(
-                                        new AttributeModifier("width", width),
-                                        new AttributeModifier("height", height)
+                                        new AttributeModifier(HTML_WIDTH, width),
+                                        new AttributeModifier(HTML_HEIGHT, height)
                                 ),
                         getSeoImage(filledImageAttributes, depictable.getDefaultImageAttributeName()))
 
@@ -98,8 +100,8 @@ public class ImageView extends BaseComponent {
                                 createSeoImage(
                                         new ContextImage(ALT_IMAGE, altImageRelativePath)
                                                 .add(
-                                                        new AttributeModifier("width", tumbWidth),
-                                                        new AttributeModifier("height", tumbHeight)
+                                                        new AttributeModifier(HTML_WIDTH, tumbWidth),
+                                                        new AttributeModifier(HTML_HEIGHT, tumbHeight)
                                                 ),
                                         getSeoImage(filledImageAttributes, pair.getFirst()))
                         );
@@ -116,8 +118,8 @@ public class ImageView extends BaseComponent {
     private Component createSeoImage(final Component component, final SeoImage seoImage) {
         if (seoImage != null) {
             component.add(
-                    new AttributeModifier("alt", seoImage.getAlt()),
-                    new AttributeModifier("title", seoImage.getTitle())
+                    new AttributeModifier(HTML_ALT, seoImage.getAlt()),
+                    new AttributeModifier(HTML_TITLE, seoImage.getTitle())
             ); //todo long descr
 
         }
@@ -134,7 +136,7 @@ public class ImageView extends BaseComponent {
     }
 
 
-    //TODO not optimal remake
+    //TODO not optimal - remake
     private String getFileName(final List<Pair<String, String>> allImages, final String attrName) {
         for (Pair<String, String> attrFileName : allImages) {
             if (attrFileName.getFirst().equals(attrName)) {

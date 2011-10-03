@@ -107,18 +107,18 @@ public abstract class AbstractProductList extends BaseComponent {
                                 prod,
                                 WicketUtil.getHttpServletRequest().getContextPath());
                         final Category category = categoryService.getRootCategory();
-                        final String width = productDecorator.getDefaultImageWidth(category);   //TODo size
-                        final String height = productDecorator.getDefaultImageHeight(category);
+                        final String width = productDecorator.getThumbnailImageWidth(category);   //TODo size
+                        final String height = productDecorator.getThumbnailImageHeight(category);
                         final PageParameters pageParameters = getProductPageParameters(prod);
 
 
                         listItem.add(
                                 new BookmarkablePageLink<HomePage>(PRODUCT_LINK_IMAGE, HomePage.class, pageParameters).add(
                                         new ContextImage(PRODUCT_IMAGE, productDecorator.getDefaultImage(width, height))
-                                                .add(new AttributeModifier("width", width))
-                                                .add(new AttributeModifier("height", height))
-                                                .add(new AttributeModifier("title", prod.getDescription()))
-                                                .add(new AttributeModifier("alt", prod.getDescription()))
+                                                .add(new AttributeModifier(HTML_WIDTH, width))
+                                                .add(new AttributeModifier(HTML_HEIGHT, height))
+                                                .add(new AttributeModifier(HTML_TITLE, prod.getDescription()))
+                                                .add(new AttributeModifier(HTML_ALT, prod.getName()))
                                 )
                         );
                         listItem.add(

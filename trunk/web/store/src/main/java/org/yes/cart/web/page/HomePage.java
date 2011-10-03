@@ -111,9 +111,10 @@ public class HomePage extends AbstractWebPage {
         add(new PriceProductFilter("priceFilter", query, categoryId));
         add(new BreadCrumbsView("breadCrumbs", categoryId, shopCategories));
         add(new SearchView("search"));
+        add(new SmallShoppingCartView("smallCart"));
+
         add(new NewArrivalProducts("newArrival"));
         add(new FeaturedProducts("featured"));
-        add(new SmallShoppingCartView("smallCart"));
 
         add(getCentralPanel(centralViewLabel, "centralView", categoryId, query));
 

@@ -1,5 +1,7 @@
 package org.yes.cart.web.page.component.product;
 
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ShopCategory;
 import org.yes.cart.service.domain.ShopCategoryService;
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 public class FeaturedProducts  extends AbstractProductList {
 
 
+    @SpringBean(name = ServiceSpringKeys.SHOP_CATEGORY_SERVICE)
     private ShopCategoryService shopCategoryService;
 
 
@@ -41,7 +44,7 @@ public class FeaturedProducts  extends AbstractProductList {
     @Override
     public List<Product> getProductListToShow() {
         if (products == null) {
-            final long categoryId = WicketUtil.getCategoryId();
+            final long categoryId = WicketUtil.getCategoryId(getPage().getPageParameters());
             final Collection<Long> categories;
             if (categoryId == 0) {
                 categories = adapt(ApplicationDirector.getCurrentShop().getShopCategory());

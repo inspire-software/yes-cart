@@ -59,8 +59,8 @@ public class WicketUtil {
      *
      * @return category id if present in request, otherwise 0
      */
-    public static long getCategoryId() {
-        final String categoryId = getPageParameters().get(WebParametersKeys.CATEGORY_ID).toString();
+    public static long getCategoryId(final PageParameters pageParameters) {
+        final String categoryId = pageParameters.get(WebParametersKeys.CATEGORY_ID).toString();
         if (categoryId != null) {
             return Long.valueOf(categoryId);
         }

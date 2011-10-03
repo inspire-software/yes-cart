@@ -114,8 +114,8 @@ public class ProductInListView extends BaseComponent {
         add(
                 new BookmarkablePageLink<HomePage>(PRODUCT_LINK_IMAGE, HomePage.class, linkToProductParameters).add(
                         new ContextImage(PRODUCT_IMAGE, product.getDefaultImage(width, height))
-                                .add(new AttributeModifier("width", width))
-                                .add(new AttributeModifier("height", height))
+                                .add(new AttributeModifier(HTML_WIDTH, width))
+                                .add(new AttributeModifier(HTML_HEIGHT, height))
                 )
         );
 

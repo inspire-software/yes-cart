@@ -41,7 +41,7 @@ public class URLPagingNavigation extends PagingNavigation {
 
         final PageParameters pageParameters =
                 WicketUtil.getFilteredRequestParameters(
-                        WicketUtil.getPageParameters(),
+                        getPage().getPageParameters(),
                         Collections.EMPTY_LIST);
 
         pageParameters.set(WebParametersKeys.PAGE, pageIndex);
