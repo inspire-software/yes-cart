@@ -48,8 +48,8 @@ public class CategoryView extends  BaseComponent {
         add(
             new BookmarkablePageLink<HomePage>(CATEGORY_IMAGE_LINK, HomePage.class, pageParameters).add(
                     new ContextImage(CATEGORY_IMAGE, category.getDefaultImage(width, height))
-                            .add(new AttributeModifier("width", width))
-                            .add(new AttributeModifier("height", height))
+                            .add(new AttributeModifier(HTML_WIDTH, width))
+                            .add(new AttributeModifier(HTML_HEIGHT, height))
             )
         );
 

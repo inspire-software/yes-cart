@@ -10,6 +10,8 @@ public class BaseComponent extends Panel {
     protected static final String HTML_CLASS = "class";
     protected static final String HTML_TITLE = "title";
     protected static final String HTML_ALT = "alt";
+    protected static final String HTML_WIDTH = "width";
+    protected static final String HTML_HEIGHT = "height";
 
 
     private boolean panelVisible = true;
