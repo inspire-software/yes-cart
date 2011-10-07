@@ -23,10 +23,10 @@ public class ProductAssociationsView extends AbstractProductList {
      * Construct product association view.
      *
      * @param id              component id
-     * @param associationType type of association
+     * @param associationType type of association. See
      */
     public ProductAssociationsView(final String id, final String associationType) {
-        super(id);
+        super(id, true);
         final List<ProductAssociation> associatedProducts = productAssociationService.getProductAssociations(
                 getProductId(),
                 associationType
