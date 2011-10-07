@@ -24,7 +24,7 @@ public class NewArrivalProducts extends AbstractProductList {
      * @param id component id.
      */
     public NewArrivalProducts(final String id) {
-        super(id);
+        super(id, true);
     }
 
     /** {@inheritDoc} */

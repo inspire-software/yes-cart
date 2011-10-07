@@ -37,7 +37,7 @@ public class FeaturedProducts  extends AbstractProductList {
      * @param id component id.
      */
     public FeaturedProducts(final String id) {
-        super(id);
+        super(id, false);
     }
 
     /** {@inheritDoc} */

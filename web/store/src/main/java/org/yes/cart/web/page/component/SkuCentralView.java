@@ -7,8 +7,10 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.model.Model;
 import org.yes.cart.constants.ServiceSpringKeys;
+import org.yes.cart.domain.entity.Association;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.web.page.component.product.ImageView;
+import org.yes.cart.web.page.component.product.ProductAssociationsView;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.entity.decorator.Depictable;
@@ -61,6 +63,8 @@ public class SkuCentralView extends AbstractCentralView {
     private final static String SKU_LIST_VIEW = "skuList";
     /** View to show sku attributes */
     private final static String SKU_ATTR_VIEW = "skuAttrView";
+    /** Product accessories or cross sell */
+    private final static String ACCESSORIES_VIEW = "accessoriesView";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
     @SpringBean(name = ServiceSpringKeys.PRODUCT_SERVICE)
@@ -156,6 +160,10 @@ public class SkuCentralView extends AbstractCentralView {
 
         add(
                 new ImageView(PRODUCT_IMAGE_VIEW, getDepictable())
+        );
+
+        add(
+                new ProductAssociationsView(ACCESSORIES_VIEW, Association.ACCESSORIES).setVisible(true /*TODO is product not accessory */)
         );
 
 

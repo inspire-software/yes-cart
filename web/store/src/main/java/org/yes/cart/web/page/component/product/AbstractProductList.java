@@ -58,14 +58,18 @@ public abstract class AbstractProductList extends BaseComponent {
     @SpringBean(name = ServiceSpringKeys.IMAGE_SERVICE)
     protected ImageService imageService;
 
+    private final boolean nameLinkVisible;
+
 
     /**
      * Construct product list to show.
      *
      * @param id component id.
+     * @param nameLinkVisible true in case if need to show link with product name
      */
-    public AbstractProductList(final String id) {
+    public AbstractProductList(final String id, final boolean nameLinkVisible) {
         super(id);
+        this.nameLinkVisible = nameLinkVisible;
     }
 
 
@@ -123,9 +127,8 @@ public abstract class AbstractProductList extends BaseComponent {
                         );
                         listItem.add(
                                 new BookmarkablePageLink<HomePage>(PRODUCT_NAME_LINK, HomePage.class, pageParameters)
-                                        .add(
-                                                new Label(NAME, prod.getName()).setEscapeModelStrings(false)
-                                        )
+                                        .add( new Label(NAME, prod.getName()).setEscapeModelStrings(false) )
+                                        .setVisible(nameLinkVisible)
                         );
                     }
 
