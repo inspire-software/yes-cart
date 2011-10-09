@@ -4,5 +4,6 @@
 	<entry key="item.form0">{0} продукт</entry>
 	<entry key="item.form1">{0} продукта</entry>
 	<entry key="item.form2">{0} продуктов</entry>
-	<entry key="no.item">Пустая корзина</entry>	
+	<entry key="no.item">Пустая корзина</entry>
+    <entry key="cart.detail">Корзина</entry>
 </properties>

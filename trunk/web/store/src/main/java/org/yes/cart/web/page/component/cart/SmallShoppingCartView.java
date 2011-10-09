@@ -1,6 +1,7 @@
 package org.yes.cart.web.page.component.cart;
 
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -10,6 +11,7 @@ import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.misc.PluralFormService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.application.ApplicationDirector;
+import org.yes.cart.web.page.ShoppingCartPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
 
@@ -26,6 +28,7 @@ public class SmallShoppingCartView extends BaseComponent {
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private static final String QTY_LABEL = "qtyLabel";
     private static final String SUB_TOTAL_VIEW = "subTotal";
+    private static final String CART_LINK = "cartLink";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
     private static final String [] pluralForms = new String [] {
@@ -81,6 +84,13 @@ public class SmallShoppingCartView extends BaseComponent {
                         new StringResourceModel("no.item", this, null, itemsInCart):
                         new StringResourceModel(resourceKey, this, null, itemsInCart)
                 )
+        );
+
+        add(
+                new BookmarkablePageLink<ShoppingCartPage>(
+                        CART_LINK,
+                        ShoppingCartPage.class
+                ).setVisible(!isCartEmpty())
         );
 
         super.onBeforeRender();

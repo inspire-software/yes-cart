@@ -7,11 +7,11 @@ import org.apache.wicket.model.IModel;
 
 public class BaseComponent extends Panel {
 
-    protected static final String HTML_CLASS = "class";
-    protected static final String HTML_TITLE = "title";
-    protected static final String HTML_ALT = "alt";
-    protected static final String HTML_WIDTH = "width";
-    protected static final String HTML_HEIGHT = "height";
+    public static final String HTML_CLASS = "class";
+    public static final String HTML_TITLE = "title";
+    public static final String HTML_ALT = "alt";
+    public static final String HTML_WIDTH = "width";
+    public static final String HTML_HEIGHT = "height";
 
 
     private boolean panelVisible = true;
