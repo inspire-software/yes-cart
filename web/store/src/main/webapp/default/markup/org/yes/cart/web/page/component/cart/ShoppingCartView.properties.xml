@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+
+    <entry key="product">Product</entry>
+    <entry key="price">Price</entry>
+    <entry key="qty">Quantity</entry>
+
+    <entry key="amountMsg">Amount</entry>
+
+
+    <entry key="addOneLink">Add</entry>
+    <entry key="removeOneLink">Remove</entry>
+    <entry key="removeAllLink">Remove all</entry>
+
+
+    <entry key="checkout">Checkout</entry>
+    <entry key="skuNumber">SKU code</entry>
+    <entry key="productsInCart">Items in cart</entry>
+
+
+
+</properties>

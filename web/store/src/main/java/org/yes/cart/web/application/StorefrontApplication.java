@@ -17,6 +17,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.page.HomePage;
+import org.yes.cart.web.page.ShoppingCartPage;
 import org.yes.cart.web.util.SeoBookmarkablePageParametersEncoder;
 
 import java.util.Locale;
@@ -88,6 +89,14 @@ public class StorefrontApplication extends WebApplication implements IResourceFi
                 new MountedMapper(
                         "/",
                         HomePage.class,
+                        encoder
+                )
+        );
+
+        mount(
+                new MountedMapper(
+                        "/cart",
+                        ShoppingCartPage.class,
                         encoder
                 )
         );
