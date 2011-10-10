@@ -1,5 +1,6 @@
 package org.yes.cart.web.page.component.price;
 
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.service.CurrencySymbolService;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
@@ -38,9 +39,10 @@ public class PriceView extends BaseComponent {
 
 
 
-    private final SkuPrice skuPrice;
+    private final Pair<BigDecimal, BigDecimal> pricePair;
+    private final String currencySymbol;
     private final boolean showCurrencySymbol;
-    private static final String decimalSeparator; // to perform sptil operation
+    private static final String decimalSeparator; // to perform split operation
     private static final String[] emptyFormatedPrice;
 
     @SpringBean(name = StorefrontServiceSpringKeys.CURRENCY_SYMBOL_SERVICE)
@@ -67,8 +69,31 @@ public class PriceView extends BaseComponent {
      */
     public PriceView(final String id, final IModel<SkuPrice> model, final boolean showCurrencySymbol) {
         super(id, model);
-        this.skuPrice = model.getObject();
+        final SkuPrice skuPrice = model.getObject();
+        this.pricePair = new Pair<BigDecimal, BigDecimal>(
+                skuPrice == null ? null : skuPrice.getRegularPrice(),
+                skuPrice == null ? null : skuPrice.getSalePrice()
+        );
+        this.currencySymbol = skuPrice == null ? null : skuPrice.getCurrency();
         this.showCurrencySymbol = showCurrencySymbol;
+
+    }
+
+    /**
+     * Create price view.
+     * @param id component id.
+     * @param pricePair regular / sale price pair.
+     * @param showCurrencySymbol currency symbol.
+     * @param currencySymbol currency symbol
+     */
+    public PriceView(final String id,
+                     final Pair<BigDecimal, BigDecimal> pricePair,
+                     final String currencySymbol,
+                     final boolean showCurrencySymbol) {
+        super(id);
+        this.pricePair = pricePair;
+        this.showCurrencySymbol = showCurrencySymbol;
+        this.currencySymbol = currencySymbol;
     }
 
     /**
@@ -91,10 +116,10 @@ public class PriceView extends BaseComponent {
 
     @Override
     protected void onBeforeRender() {
-        BigDecimal priceToFormat = skuPrice.getRegularPrice();
+        BigDecimal priceToFormat = pricePair.getFirst();
         String cssModificator = "regular";
-        if (skuPrice.getSalePrice() != null) {
-            priceToFormat = skuPrice.getSalePrice();
+        if (pricePair.getSecond() != null) {
+            priceToFormat = pricePair.getSecond();
             cssModificator = "sale";
         }
         final String[] formated = getFormatedPrice(priceToFormat);
@@ -114,7 +139,7 @@ public class PriceView extends BaseComponent {
                         .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_DECIMAL))
         );
         add(
-                new Label(CURRENCY_LABEL, currencySymbolService.getCurrencySymbol(skuPrice.getCurrency()))
+                new Label(CURRENCY_LABEL, currencySymbolService.getCurrencySymbol(currencySymbol))
                         .setVisible(showCurrencySymbol)
                         .setEscapeModelStrings(false)
                         .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_CURRENCY))
@@ -128,11 +153,11 @@ public class PriceView extends BaseComponent {
     public boolean isVisible() {
         return super.isVisible()
                 &&
-                skuPrice != null
+                pricePair.getFirst() != null
                 &&
                 !MoneyUtils.isFirstEqualToSecond(
                         BigDecimal.ZERO,
-                        MoneyUtils.notNull(skuPrice.getRegularPrice()),
+                        MoneyUtils.notNull(pricePair.getFirst()),
                         2);
     }
 }

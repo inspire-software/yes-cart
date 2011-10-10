@@ -16,6 +16,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.entity.SkuPrice;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.ProductService;
@@ -29,6 +31,7 @@ import org.yes.cart.web.page.CheckoutPage;
 import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.ShoppingCartPage;
 import org.yes.cart.web.page.component.BaseComponent;
+import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.entity.decorator.ProductSkuDecorator;
@@ -65,7 +68,11 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
     private static final String PRODUCT_NAME_LABEL = "name";
     private static final String DEFAULT_IMAGE = "defaultImage";
     private static final String QUANTITY_TEXT = "quantity";
-    private static final String LINE_TOTAL_PANEL = "lineTotalPanel";
+
+
+    private static final String LINE_TOTAL_VIEW = "lineAmountView";
+    private final static String PRICE_VIEW = "skuPriceView";
+
     private static final String QUANTITY_ADJUST_BUTTON = "quantityButton";
 
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
@@ -87,9 +94,6 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
     private final Category rootCategory;
 
 
-    //private  final List<? extends CartItem> cartItems;
-
-
     /**
      * Construct list of product in shopping cart.
      *
@@ -108,7 +112,9 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
     @Override
     protected void populateItem(final ListItem<CartItem> cartItemListItem) {
 
-        final String skuCode = cartItemListItem.getModelObject().getProductSkuCode();
+        final CartItem cartItem = cartItemListItem.getModelObject();
+
+        final String skuCode = cartItem.getProductSkuCode();
 
         final ProductSku sku = productSkuService.getProductSkuBySkuCode(skuCode);
 
@@ -131,20 +137,22 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
                 new Label(SKU_NUM_LABEL, skuCode)
         ).add(
                 getProductLink(sku)
+        ).add(
+                new PriceView(PRICE_VIEW, new Pair<BigDecimal, BigDecimal>(cartItem.getPrice(), null), null, false)
+        ).add(
+                new PriceView(LINE_TOTAL_VIEW, new Pair<BigDecimal, BigDecimal>(
+                        cartItem.getPrice().multiply(cartItem.getQty()), null), null, false)
         );
 
 
         final TextField<Integer> quantity = new TextField<Integer>(QUANTITY_TEXT,
-                        new Model<Integer>(cartItemListItem.getModelObject().getQty().intValue()));
+                new Model<Integer>(cartItem.getQty().intValue()));
 
         cartItemListItem.add(
                 quantity
-        );
-
-        cartItemListItem.add(
+        ).add(
                 createAddSeveralSkuButton(skuCode, quantity)
         );
-
 
 
         final String height = productSkuDecorator.getThumbnailImageHeight(rootCategory);
@@ -193,7 +201,7 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
                     stringBuilder.append(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY);
                     stringBuilder.append('/');
                     stringBuilder.append(qty);
-                   /* getRequestCycle().setRequestTarget(
+                    /* getRequestCycle().setRequestTarget(
                             new RedirectRequestTarget(stringBuilder.toString())
                     );*/
                 } else {

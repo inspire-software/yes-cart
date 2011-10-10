@@ -39,7 +39,9 @@
                     <span wicket:id="skunum">[sku number]</span>
                 </td>
                 <td width="50" align="right" valign="top">
-                    <div>[TODO price panel]</div>
+                    <wicket:container wicket:id="skuPriceView">
+                        [sku price]
+                    </wicket:container>
                 </td>
                 <td width="170" nowrap align="right" valign="top">
                     <input wicket:id="quantity" type="text"/>
@@ -55,17 +57,16 @@
                     </a>
                 </td>
                 <td align="right" valign="top">
-                    <div >[todo price total panel]</div>
+                    <wicket:container wicket:id="lineAmountView">
+                        [line amount price]
+                    </wicket:container>
                 </td>
             </tr>
             <tr>
                 <td colspan="5" align="right">
-                    <span >[todo sub total]</span>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="5">
-                    <span>[todo grand total]</span>
+                    <wicket:container wicket:id="subTotalView">
+                        [sub total]
+                    </wicket:container>
                 </td>
             </tr>
         </table>
