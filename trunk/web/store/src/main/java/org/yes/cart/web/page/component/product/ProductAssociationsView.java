@@ -18,6 +18,7 @@ import java.util.List;
 public class ProductAssociationsView extends AbstractProductList {
 
     private List<Product> associatedProductList = null;
+    private final String associationType;
 
     /**
      * Construct product association view.
@@ -27,15 +28,7 @@ public class ProductAssociationsView extends AbstractProductList {
      */
     public ProductAssociationsView(final String id, final String associationType) {
         super(id, true);
-        final List<ProductAssociation> associatedProducts = productAssociationService.getProductAssociations(
-                getProductId(),
-                associationType
-        );
-        final List<Long> productIds = new ArrayList<Long>(associatedProducts.size());
-        for (ProductAssociation pass : associatedProducts) {
-            productIds.add(pass.getProductAssociated().getId());
-        }
-        associatedProductList = productService.getProductByIdList(productIds);
+        this.associationType = associationType;
     }
 
     /**
@@ -59,6 +52,18 @@ public class ProductAssociationsView extends AbstractProductList {
      * {@inheritDoc
      */
     public List<Product> getProductListToShow() {
+        if (associatedProductList == null) {
+            final List<ProductAssociation> associatedProducts = productAssociationService.getProductAssociations(
+                    getProductId(),
+                    associationType
+            );
+            final List<Long> productIds = new ArrayList<Long>(associatedProducts.size());
+            for (ProductAssociation pass : associatedProducts) {
+                productIds.add(pass.getProductAssociated().getId());
+            }
+            associatedProductList = productService.getProductByIdList(productIds);
+
+        }
         return associatedProductList;
     }
 
