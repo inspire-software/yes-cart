@@ -274,6 +274,9 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      */
     @Cacheable(value = PROD_SERV_METHOD_CACHE)
     public List<Product> getProductByIdList(final List idList) {
+        if (idList == null || idList.isEmpty()){
+            return Collections.EMPTY_LIST;
+        }
         return productDao.findQueryObjectsByNamedQueryWithList("PRODUCTS.LIST.BY.IDS", idList, null);
     }
 

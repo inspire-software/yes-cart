@@ -8,9 +8,9 @@ import org.yes.cart.web.page.component.cart.ShoppingCartView;
  * Date: 10/8/11
  * Time: 9:27 PM
  */
-public class ShoppingCartPage  extends AbstractWebPage {
+public class ShoppingCartPage extends AbstractWebPage {
 
-     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
+    // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private final static String CART_VIEW = "shoppingCartView";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
@@ -26,6 +26,8 @@ public class ShoppingCartPage  extends AbstractWebPage {
 
     @Override
     protected void onBeforeRender() {
+
+        processCommands();
 
         add(
                 new ShoppingCartView(CART_VIEW)
