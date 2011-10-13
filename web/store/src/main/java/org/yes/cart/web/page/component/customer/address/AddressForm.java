@@ -8,15 +8,17 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.StringValidator;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.Address;
-import org.yes.cart.domain.entity.Country;
-import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.domain.entity.State;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.AddressService;
 import org.yes.cart.service.domain.CountryService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.StateService;
+import org.yes.cart.web.page.component.util.CountryModel;
+import org.yes.cart.web.page.component.util.CountryRenderer;
+import org.yes.cart.web.page.component.util.StateModel;
+import org.yes.cart.web.page.component.util.StateRenderer;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 
 import java.util.List;
@@ -53,9 +55,6 @@ public class AddressForm  extends Form<Address> {
     @SpringBean(name = ServiceSpringKeys.ADDRESS_SERVICE)
     private AddressService addressService;
 
-    //@SpringBean(name = WebParametersKeys.SESSION_OBJECT_NAME)
-    //private RequestRuntimeContainer requestRuntimeContainer;
-
     @SpringBean(name = ServiceSpringKeys.COUNTRY_SERVICE)
     private CountryService countryService;
 
@@ -91,7 +90,7 @@ public class AddressForm  extends Form<Address> {
         this.succsessPageParameters = succsessPageParameters;
 
 
-        /*final Address address = addressIModel.getObject();
+        final Address address = addressIModel.getObject();
 
         final Customer customer = customerService.findCustomer(
                null //TODO getRequestRuntimeContainer().getShoppingCart().getCustomerEmail()
@@ -158,10 +157,49 @@ public class AddressForm  extends Form<Address> {
                     }
 
                 }.setDefaultFormProcessing(false).setVisible(cancelPage != null)
-        );     */
+        );
+
+    }
+
+    /**
+     * Fill some data in case of new {@link Address}
+     * @param addressType addres type
+     * @param address address to preprocess
+     * @param customer customer.
+     */
+    private void preprocessAddress(final Address address, final String addressType, final Customer customer) {
+        if (address.getAddressId() == 0) {
+
+            address.setAddressType(addressType);
+            address.setCustomer(customer);
+            fillAddressWithGeoIpData(address, customer);
+
+        }
+    }
+
+    /**
+     * Fill new Address with Geo Ip data.
+     * At this moment only profile data are supplied. No geo ip.
+     * INTEGRATION POINT with tag cloud, that will have geo ip data
+     * @param address address to fill
+     * @param customer customer.
+     */
+    private void fillAddressWithGeoIpData(final Address address, final Customer customer) {
+        final AttrValueCustomer attrValue = customer.getAttributeByCode(AttributeNamesKeys.CUSTOMER_PHONE);
+        address.setFirstname(customer.getFirstname());
+        address.setLastname(customer.getLastname());
+        address.setPhoneList(attrValue==null?StringUtils.EMPTY:attrValue.getVal());
+    }
 
 
-
+    /**
+     * Get states inside selected country.
+     *
+     * @param countryCode country ot retrive the states.
+     * @return state list inside selected country.
+     */
+    private List<State> getStateList(final String countryCode) {
+        return stateService.findByCountry(countryCode);
     }
 
 
