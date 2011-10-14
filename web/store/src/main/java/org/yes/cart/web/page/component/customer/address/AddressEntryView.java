@@ -1,6 +1,7 @@
 package org.yes.cart.web.page.component.customer.address;
 
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -9,6 +10,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.service.domain.AddressService;
+import org.yes.cart.web.page.component.BaseComponent;
 
 import java.util.List;
 
@@ -17,7 +19,7 @@ import java.util.List;
  * Date: 15/10/11
  * Time: 14:00
  */
-public class AddressEntryView {
+public class AddressEntryView  extends BaseComponent {
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     protected final static String ADDRESSES_FORM = "selectAddressForm";
@@ -41,7 +43,7 @@ public class AddressEntryView {
      * @param s           component id.
      * @param addresses   address model
      */
-    public AddressEntryPanel(final String s, final List<Address> addresses) {
+    public AddressEntryView(final String s, final List<Address> addresses) {
         super(s);
 
         addressForm = new Form(ADDRESSES_FORM);
@@ -71,8 +73,15 @@ public class AddressEntryView {
         final ListView<Address> addressList = new ListView<Address>(ADDRESSES_LIST, addresses) {
 
             protected void populateItem(final ListItem<Address> addressListItem) {
+
                 final Address address = addressListItem.getModelObject();
-                populateAddress(addressListItem, address);
+
+                addressListItem.add(
+                                new Radio(ADDRESS_RADIO, new Model<Address>(address))
+                ).add(
+                                new AddressShowView(ADDRESS_PANEL, address)
+                );
+
 
             }
 
@@ -80,6 +89,33 @@ public class AddressEntryView {
 
         group.add(addressList);
 
+    }
+
+     protected Form getAddressForm() {
+        return addressForm;
+    }
+
+
+    /**
+     * Getr first default address.
+     * @param addresses address list
+     * @return first address, that marked as default or null if not found
+     */
+    protected Address getDefaultAddress(final List<Address> addresses) {
+        for (Address addr : addresses) {
+            if (addr.isDefaultAddress()) {
+                return addr;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get address service.
+     * @return address service.
+     */
+    protected AddressService getAddressService() {
+        return addressService;
     }
 
 
