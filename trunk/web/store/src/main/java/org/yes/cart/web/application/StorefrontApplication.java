@@ -1,9 +1,13 @@
 package org.yes.cart.web.application;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.IRequestCycleProvider;
 import org.apache.wicket.Page;
 import org.apache.wicket.Session;
 import org.apache.wicket.authorization.IUnauthorizedComponentInstantiationListener;
+import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
@@ -19,8 +23,10 @@ import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.page.CustomerSelfCarePage;
 import org.yes.cart.web.page.HomePage;
+import org.yes.cart.web.page.LoginPage;
 import org.yes.cart.web.page.ShoppingCartPage;
 import org.yes.cart.web.util.SeoBookmarkablePageParametersEncoder;
+
 
 import java.util.Locale;
 import java.util.Map;
@@ -32,11 +38,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * Time: 9:02 AM
  */
 public class StorefrontApplication
-        extends WebApplication
+        extends AuthenticatedWebApplication
         implements
         IResourceFinder,
-        IRequestCycleProvider,
-        IUnauthorizedComponentInstantiationListener
+        IRequestCycleProvider
 {
 
     /**
@@ -85,6 +90,16 @@ public class StorefrontApplication
 
     }
 
+    /**  {@inheritDoc} */
+    protected Class<? extends AbstractAuthenticatedWebSession> getWebSessionClass() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+   /**  {@inheritDoc} */
+    protected Class<? extends WebPage> getSignInPageClass() {
+        return LoginPage.class;
+    }
+
     /**
      * Mount pages to particular pathes.
      */
@@ -113,6 +128,14 @@ public class StorefrontApplication
                 new MountedMapper(
                         "/selfcare",
                         CustomerSelfCarePage.class,
+                        encoder
+                )
+        );
+
+        mount(
+                new MountedMapper(
+                        "/login",
+                        LoginPage.class,
                         encoder
                 )
         );
