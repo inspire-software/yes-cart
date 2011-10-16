@@ -4,7 +4,7 @@
 
     <properties>
         <!--wicket.version>1.5-RC5.1</wicket.version-->
-        <wicket.version>1.5-SNAPSHOT</wicket.version>
+        <wicket.version>1.5.1</wicket.version>
 
         <jetty.version>6.1.4</jetty.version>
         <mysql-connector.version>5.1.13</mysql-connector.version>
@@ -120,9 +120,16 @@
             <scope>provided</scope>
         </dependency>
 
+
         <dependency>
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-core</artifactId>
+            <version>${wicket.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-auth-roles</artifactId>
             <version>${wicket.version}</version>
         </dependency>
 

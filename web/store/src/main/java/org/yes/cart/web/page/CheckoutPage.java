@@ -1,5 +1,6 @@
 package org.yes.cart.web.page;
 
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import java.util.Map;
@@ -17,6 +18,7 @@ import java.util.Map;
  * Date: 10/8/11
  * Time: 8:06 PM
  */
+@AuthorizeInstantiation("USER")
 public class CheckoutPage extends AbstractWebPage {
 
     private static final long serialVersionUID = 20101107L;
