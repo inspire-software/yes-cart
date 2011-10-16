@@ -1,0 +1,51 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<body>
+    <wicket:panel>
+        <table align="center" width="800" border="1">
+            <tr><td>&nbsp;</td></tr>
+            <tr><td>
+                <form wicket:id="registerForm">
+                    <table>
+                        <tr>
+                            <td colspan="2">
+                                <span><wicket:message key="newUser">[new user]</wicket:message></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <wicket:message key="email">[user email]</wicket:message>
+                            </td>
+                            <td><input type="text" wicket:id="email"/></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <wicket:message key="firstname">[first name]</wicket:message>
+                            </td>
+                            <td><input type="text" wicket:id="firstname"/></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <wicket:message key="lastname">[last name]</wicket:message>
+                            </td>
+                            <td><input type="text"  wicket:id="lastname"/></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <wicket:message key="phone">[phone]</wicket:message>
+                            </td>
+                            <td><input type="text" wicket:id="phone"/></td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>
+                                <a wicket:id="registerLink"><span><wicket:message key="register">[register]</wicket:message></span></a>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </td></tr>
+            <tr><td >&nbsp;</td></tr>
+        </table>
+    </wicket:panel>
+</body>
+</html>

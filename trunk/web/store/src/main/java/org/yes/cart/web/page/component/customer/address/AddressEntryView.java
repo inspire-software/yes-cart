@@ -1,5 +1,7 @@
 package org.yes.cart.web.page.component.customer.address;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioGroup;
@@ -19,7 +21,7 @@ import java.util.List;
  * Date: 15/10/11
  * Time: 14:00
  */
-public class AddressEntryView  extends BaseComponent {
+public class AddressEntryView extends BaseComponent {
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     protected final static String ADDRESSES_FORM = "selectAddressForm";
@@ -28,6 +30,13 @@ public class AddressEntryView  extends BaseComponent {
     protected final static String ADDRESS_RADIO_GROUP = "addressRadioGroup";
     protected final static String ADDRESS_RADIO = "addressRadio";
     protected final static String ADDRESS_PANEL = "addressShopPanel";
+
+
+    private final static String LINE1 = "addrLine1";
+    private final static String LINE2 = "addrLine2";
+    private final static String LINE3 = "addrLine3";
+    private final static String LINE4 = "addrLine4";
+    private final static String LINE5 = "addrLine5";
 
     // ------------------------------------- MARKUP IDs AND ---------------------------------- //
 
@@ -40,8 +49,8 @@ public class AddressEntryView  extends BaseComponent {
     /**
      * Construct Address entry.
      *
-     * @param s           component id.
-     * @param addresses   address model
+     * @param s         component id.
+     * @param addresses address model
      */
     public AddressEntryView(final String s, final List<Address> addresses) {
         super(s);
@@ -76,11 +85,7 @@ public class AddressEntryView  extends BaseComponent {
 
                 final Address address = addressListItem.getModelObject();
 
-                addressListItem.add(
-                                new Radio(ADDRESS_RADIO, new Model<Address>(address))
-                ).add(
-                                new AddressShowView(ADDRESS_PANEL, address)
-                );
+                populateAddress(addressListItem, address);
 
 
             }
@@ -91,13 +96,29 @@ public class AddressEntryView  extends BaseComponent {
 
     }
 
-     protected Form getAddressForm() {
+     /**
+     * Populate address into list item
+     * @param addressListItem list item
+     * @param address address to populate
+     */
+    protected void populateAddress(ListItem<Address> addressListItem, Address address) {
+        addressListItem
+                .add(new Radio<Address>(ADDRESS_RADIO, new Model<Address>(address)))
+                .add(new Label(LINE1, address.getFirstname() + ", " + address.getLastname()))
+                .add(new Label(LINE2, address.getAddrline1()))
+                .add(new Label(LINE3, StringUtils.isBlank(address.getAddrline2()) ? StringUtils.EMPTY : address.getAddrline1()))
+                .add(new Label(LINE4, address.getCity() + ", " + address.getStateCode()))
+                .add(new Label(LINE5, address.getPostcode() + ", " + address.getCountryCode()));
+    }
+
+    protected Form getAddressForm() {
         return addressForm;
     }
 
 
     /**
      * Getr first default address.
+     *
      * @param addresses address list
      * @return first address, that marked as default or null if not found
      */
@@ -112,13 +133,12 @@ public class AddressEntryView  extends BaseComponent {
 
     /**
      * Get address service.
+     *
      * @return address service.
      */
     protected AddressService getAddressService() {
         return addressService;
     }
-
-
 
 
 }
