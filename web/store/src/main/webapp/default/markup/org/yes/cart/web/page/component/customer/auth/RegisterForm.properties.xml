@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="newUser">New customer</entry>
+	<entry key="email">E-mail</entry>
+	<entry key="firstname">First name</entry>
+	<entry key="lastname">Second name</entry>
+	<entry key="register">Register</entry>
+    <entry key="phone">Phone</entry>
+</properties>

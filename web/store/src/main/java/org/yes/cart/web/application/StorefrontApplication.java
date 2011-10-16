@@ -3,6 +3,7 @@ package org.yes.cart.web.application;
 import org.apache.wicket.IRequestCycleProvider;
 import org.apache.wicket.Page;
 import org.apache.wicket.Session;
+import org.apache.wicket.authorization.IUnauthorizedComponentInstantiationListener;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
@@ -16,6 +17,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.web.page.CustomerSelfCarePage;
 import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.ShoppingCartPage;
 import org.yes.cart.web.util.SeoBookmarkablePageParametersEncoder;
@@ -29,7 +31,13 @@ import java.util.concurrent.ConcurrentHashMap;
  * Date: 7/10/11
  * Time: 9:02 AM
  */
-public class StorefrontApplication extends WebApplication implements IResourceFinder, IRequestCycleProvider {
+public class StorefrontApplication
+        extends WebApplication
+        implements
+        IResourceFinder,
+        IRequestCycleProvider,
+        IUnauthorizedComponentInstantiationListener
+{
 
     /**
      * Home page mount path.
@@ -97,6 +105,14 @@ public class StorefrontApplication extends WebApplication implements IResourceFi
                 new MountedMapper(
                         "/cart",
                         ShoppingCartPage.class,
+                        encoder
+                )
+        );
+
+        mount(
+                new MountedMapper(
+                        "/selfcare",
+                        CustomerSelfCarePage.class,
                         encoder
                 )
         );

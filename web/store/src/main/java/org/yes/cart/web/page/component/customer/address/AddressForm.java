@@ -15,6 +15,7 @@ import org.yes.cart.service.domain.AddressService;
 import org.yes.cart.service.domain.CountryService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.StateService;
+import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.util.CountryModel;
 import org.yes.cart.web.page.component.util.CountryRenderer;
 import org.yes.cart.web.page.component.util.StateModel;
@@ -93,7 +94,7 @@ public class AddressForm  extends Form<Address> {
         final Address address = addressIModel.getObject();
 
         final Customer customer = customerService.findCustomer(
-               null //TODO getRequestRuntimeContainer().getShoppingCart().getCustomerEmail()
+               ApplicationDirector.getShoppingCart().getCustomerEmail()
         );
 
 
