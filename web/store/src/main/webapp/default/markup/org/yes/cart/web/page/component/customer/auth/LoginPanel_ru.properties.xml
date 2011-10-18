@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <entry key="wrongPassword">Неправильный пароль</entry>
+    <entry key="customerNotExists">Email не зарегистрирован. Пройдите процедуру регистрации.</entry>
+    <entry key="existingUser">Existing shopper</entry>
+    <entry key="email">Email</entry>
+    <entry key="password">Password</entry>
+    <entry key="restorePassword">Restore password</entry>
+    <entry key="login">Login</entry>
+</properties>

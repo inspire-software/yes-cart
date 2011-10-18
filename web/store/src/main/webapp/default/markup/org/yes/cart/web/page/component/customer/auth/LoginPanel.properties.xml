@@ -3,4 +3,9 @@
 <properties>
 	<entry key="wrongPassword">Wrong password</entry>
 	<entry key="customerNotExists">Unknown user. Register please</entry>
+	<entry key="existingUser">Existing shopper</entry>
+	<entry key="email">Email</entry>
+	<entry key="password">Password</entry>
+	<entry key="restorePassword">Restore password</entry>
+	<entry key="login">Login</entry>
 </properties>

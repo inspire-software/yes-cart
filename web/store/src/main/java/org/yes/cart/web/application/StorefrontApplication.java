@@ -1,16 +1,9 @@
 package org.yes.cart.web.application;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.IRequestCycleProvider;
-import org.apache.wicket.Page;
-import org.apache.wicket.Session;
-import org.apache.wicket.authorization.IUnauthorizedComponentInstantiationListener;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.request.Request;
-import org.apache.wicket.request.Response;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.cycle.RequestCycleContext;
 import org.apache.wicket.request.mapper.MountedMapper;
@@ -19,16 +12,12 @@ import org.apache.wicket.util.file.IResourceFinder;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.page.CustomerSelfCarePage;
 import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.LoginPage;
 import org.yes.cart.web.page.ShoppingCartPage;
 import org.yes.cart.web.util.SeoBookmarkablePageParametersEncoder;
 
-
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -92,7 +81,7 @@ public class StorefrontApplication
 
     /**  {@inheritDoc} */
     protected Class<? extends AbstractAuthenticatedWebSession> getWebSessionClass() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return StorefrontWebSession.class;
     }
 
    /**  {@inheritDoc} */
@@ -127,16 +116,14 @@ public class StorefrontApplication
         mount(
                 new MountedMapper(
                         "/selfcare",
-                        CustomerSelfCarePage.class,
-                        encoder
+                        CustomerSelfCarePage.class
                 )
         );
 
-        mount(
+       mount(
                 new MountedMapper(
                         "/login",
-                        LoginPage.class,
-                        encoder
+                        LoginPage.class
                 )
         );
     }
@@ -169,7 +156,6 @@ public class StorefrontApplication
 
             MultiWebApplicationPath.add(ApplicationDirector.getCurrentShop().getFspointer()+"/markup");  // shop specific markup folder
             MultiWebApplicationPath.add("default/markup"); // default place to search resource
-
 
             resourceResolvers.put(ApplicationDirector.getCurrentShop().getCode(), MultiWebApplicationPath);
         }
