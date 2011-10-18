@@ -11,31 +11,33 @@ import org.apache.wicket.request.Request;
  */
 public class StorefrontWebSession  extends AuthenticatedWebSession {
 
+    private  String username;
+
      /**
      * Construct.
      *
      * @param request
      *            The current request object
      */
-    public StorefrontWebSession(Request request)
-    {
+    public StorefrontWebSession(Request request) {
         super(request);
     }
 
    /** {@inheritDoc} */
-    public boolean authenticate(final String username, final String password)
-    {
+    public boolean authenticate(final String username, final String password) {
         // todo Check username and password
-        return username.equals("wicket") && password.equals("wicket");
+        if (username.equals("wicket") && password.equals("wicket")) {
+            this.username = username;
+            return true;
+        }
+        return false;
     }
 
     /** {@inheritDoc} */
-    public Roles getRoles()
-    {
-        if (isSignedIn())
-        {
+    public Roles getRoles() {
+        if (isSignedIn()) {
             // If the user is signed in, they have these roles
-            return new Roles(Roles.ADMIN);
+            return new Roles(Roles.USER);
         }
         return null;
     }
