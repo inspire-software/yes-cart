@@ -3,7 +3,7 @@
 <wicket:panel>
 
     <table align="center" width="800" cellpadding="0" cellspacing="0">
-        <tr><td>&nbsp;</td></tr>
+        <tr><td><span wicket:id="feedback"/></td></tr>
         <tr><td>
             <form wicket:id="loginForm">
                 <table>
@@ -26,18 +26,8 @@
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <input type="submit" wicket:id="restorePasswordBtn"
-                                   wicket:message="value:restorePassword"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td>
-                            <a wicket:id="loginLink" >
-                                <span>
-                                    <wicket:message key="login">[register]</wicket:message>
-                                </span>
-                            </a>
+                            <input type="submit" wicket:id="loginBtn"  wicket:message="value:signIn"/>
+                            <input type="submit" wicket:id="restorePasswordBtn"  wicket:message="value:restorePassword"/>
                         </td>
                     </tr>
                 </table>
