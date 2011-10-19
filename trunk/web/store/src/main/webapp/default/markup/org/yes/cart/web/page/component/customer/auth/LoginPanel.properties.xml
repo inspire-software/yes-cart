@@ -8,4 +8,5 @@
 	<entry key="password">Password</entry>
 	<entry key="restorePassword">Restore password</entry>
 	<entry key="login">Login</entry>
+    <entry key="signIn">Sign In</entry>
 </properties>
