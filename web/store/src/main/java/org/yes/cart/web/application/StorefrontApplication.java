@@ -1,9 +1,12 @@
 package org.yes.cart.web.application;
 
 import org.apache.wicket.IRequestCycleProvider;
+import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.Response;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.cycle.RequestCycleContext;
 import org.apache.wicket.request.mapper.MountedMapper;
@@ -43,6 +46,20 @@ public class StorefrontApplication
 
     private ThreadLocal<MultiWebApplicationPath> resolver = new ThreadLocal<MultiWebApplicationPath>();
 
+    private SpringComponentInjector springComponentInjector;
+
+
+    /**
+     * Lazy getter of spring injector.
+     * @return
+     */
+    public SpringComponentInjector getSpringComponentInjector() {
+        if (springComponentInjector == null) {
+            this.springComponentInjector = new SpringComponentInjector(this);
+        }
+        return springComponentInjector;
+    }
+
     /**
      * @see org.apache.wicket.Application#getHomePage()
      */
@@ -71,12 +88,17 @@ public class StorefrontApplication
         getMarkupSettings().setStripWicketTags(true); // true remove wicket:tags in development mode
         getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
 
-        getComponentInstantiationListeners().add(new SpringComponentInjector(this));
+        getComponentInstantiationListeners().add(getSpringComponentInjector());
 
         mountPages();
 
 
 
+    }
+
+    @Override
+    public Session newSession(Request request, Response response) {
+        return super.newSession(request, response);    //To change body of overridden methods use File | Settings | File Templates.
     }
 
     /**  {@inheritDoc} */
