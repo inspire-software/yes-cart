@@ -21,6 +21,7 @@ public class StorefrontWebSession  extends AuthenticatedWebSession {
      */
     public StorefrontWebSession(Request request) {
         super(request);
+        ((StorefrontApplication)getApplication()).getSpringComponentInjector().inject(this);   // allow to use @SpringBean
     }
 
    /** {@inheritDoc} */
