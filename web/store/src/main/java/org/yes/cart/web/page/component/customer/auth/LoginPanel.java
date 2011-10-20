@@ -1,15 +1,23 @@
 package org.yes.cart.web.page.component.customer.auth;
 
 import org.apache.wicket.Page;
+import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
+import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.web.application.ApplicationDirector;
+import org.yes.cart.web.page.CustomerSelfCarePage;
+import org.yes.cart.web.page.HomePage;
+import org.yes.cart.web.page.RegistrationPage;
 import org.yes.cart.web.page.component.BaseComponent;
 
 /**
@@ -24,7 +32,7 @@ public class LoginPanel extends BaseComponent {
     private static final String PASSWORD_INPUT = "password";
     private static final String RESTORE_PASSWORD_BUTTON = "restorePasswordBtn";
     private static final String LOGIN_BUTTON = "loginBtn";
-    private static final String LOGIN_LINK = "loginLink";
+    private static final String REGISTRATION_LINK = "registrationLink";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
 
@@ -77,28 +85,38 @@ public class LoginPanel extends BaseComponent {
                          final PageParameters successfulPageParameters) {
 
             super(id);
-            final Button sendNewPasswordBtn;
-            //final String email = ApplicationDirector.getShoppingCart().getCustomerEmail();
 
             setModel(new CompoundPropertyModel<LoginForm>(LoginForm.this));
 
-            sendNewPasswordBtn = new Button(RESTORE_PASSWORD_BUTTON) {
+            final Button sendNewPasswordBtn = new Button(RESTORE_PASSWORD_BUTTON) {
+
                 @Override
                 public void onSubmit() {
+
                     System.out.println("on restore password");
-                    /*final Customer customer = getCustomerService().findCustomer(emailField.getInput());
-                  if (customer != null) {
-                      getCustomerService().resetPassword(customer, ApplicationDirector.getCurrentShop());
-                  }
-                  setVisible(false);  */
+
+                    final Customer customer = getCustomerService().findCustomer(getEmail());
+                    if (customer != null) {
+                        getCustomerService().resetPassword(customer, ApplicationDirector.getCurrentShop());
+                    }
+                    setResponsePage(HomePage.class);
                 }
 
 
             };
+
             sendNewPasswordBtn.setDefaultFormProcessing(false)
                     .setVisible(false);
 
-            add(sendNewPasswordBtn);
+            add(
+                    sendNewPasswordBtn
+            );
+
+            final Link<RegistrationPage> registrationLink = new BookmarkablePageLink<RegistrationPage>(REGISTRATION_LINK, RegistrationPage.class);
+            registrationLink.setVisible(false);
+            add(
+                    registrationLink
+            );
 
             add(
                     new TextField<String>(EMAIL_INPUT)
@@ -116,61 +134,34 @@ public class LoginPanel extends BaseComponent {
 
                         @Override
                         public void onSubmit() {
-                            System.out.println("on submit  " + getEmail() + getPassword());
+
+                            System.out.println("on submit  login" + getEmail() + getPassword());
+
+                            if (signIn(getEmail(), getPassword())) {
+                                final IAuthenticationStrategy strategy = getApplication().getSecuritySettings()
+                                        .getAuthenticationStrategy();
+                                strategy.save(getEmail(), getPassword());
+                                //TODO login cmd
+                                if (!continueToOriginalDestination()) {
+                                    setResponsePage(CustomerSelfCarePage.class);
+                                }
+                            } else {
+                                //TODO logout cmd
+                                if (isCustomerExists(getEmail())) {
+                                    sendNewPasswordBtn.setVisible(true);
+                                    registrationLink.setVisible(false);
+                                    error("Try to restore password ");
+                                } else {
+                                    sendNewPasswordBtn.setVisible(false);
+                                    registrationLink.setVisible(true);
+                                    error("Register ");
+                                }
+                            }
                         }
 
                     }
             );
-            //setDefaultButton(loginBtn);
 
-
-            /* final SubmitLink loginLink = new SubmitLink(LOGIN_LINK) {
-         @Override
-         public void onSubmit() {
-
-             IAuthenticationStrategy strategy = getApplication().getSecuritySettings()
-                     .getAuthenticationStrategy();
-
-             if (signIn(emailField.getInput(), passwordField.getInput())) {
-                 strategy.save(emailField.getInput(), passwordField.getInput());
-                 getPage().setResponsePage(successfulPage, successfulPageParameters);
-             } else {
-                 sendNewPasswordBtn.setVisible(true);
-                 error(
-                         getLocalizer().getString("wrongPassword", this)
-                 ); //todo register
-
-             }
-
-
-             sendNewPasswordBtn.setVisible(false);
-             if (isCustomerExists(emailField.getInput())) {
-                 if (isPasswordValid(emailField.getInput(), passwordField.getInput())) {
-
-
-                     final ShoppingCart visitableShoppingCart = ApplicationDirector.getShoppingCart();
-
-                     executeLoginCommand(visitableShoppingCart, emailField.getInput());
-
-                     getPage().setResponsePage(successfulPage, successfulPageParameters);
-
-                 } else {
-                     sendNewPasswordBtn.setVisible(true);
-                     error(
-                             getLocalizer().getString("wrongPassword", this)
-                     );
-                 }
-             } else {
-                 error(
-                         getLocalizer().getString("customerNotExists", this)
-                 );
-             }*
-         }
-
-     };
-
-
-     add(loginLink);       */
         }
 
 
