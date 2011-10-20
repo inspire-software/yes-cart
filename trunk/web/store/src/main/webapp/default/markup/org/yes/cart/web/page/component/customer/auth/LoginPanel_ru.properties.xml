@@ -9,4 +9,5 @@
     <entry key="restorePassword">Restore password</entry>
     <entry key="login">Login</entry>
     <entry key="signIn">Sign In</entry>
+    <entry key="registration">Регистрация</entry>
 </properties>

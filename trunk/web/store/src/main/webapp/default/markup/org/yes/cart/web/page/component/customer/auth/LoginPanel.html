@@ -25,9 +25,10 @@
                         <td><input type="password"  wicket:id="password"/></td>
                     </tr>
                     <tr>
-                        <td colspan="2">
-                            <input type="submit" wicket:id="loginBtn"  wicket:message="value:signIn"/>
+                        <td colspan="2" align="right">
+                            <a wicket:id="registrationLink"><wicket:message key="registration">[registration]</wicket:message></a>
                             <input type="submit" wicket:id="restorePasswordBtn"  wicket:message="value:restorePassword"/>
+                            <input type="submit" wicket:id="loginBtn"  wicket:message="value:signIn"/>
                         </td>
                     </tr>
                 </table>
