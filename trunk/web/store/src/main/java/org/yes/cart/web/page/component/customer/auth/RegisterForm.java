@@ -22,7 +22,7 @@ import org.yes.cart.web.page.AbstractWebPage;
  */
 public class RegisterForm extends BaseAuthForm {
 
-    private final long serialVersionUid =   20111016L;
+    private final long serialVersionUid = 20111016L;
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private static final String EMAIL_INPUT = "email";
@@ -46,32 +46,29 @@ public class RegisterForm extends BaseAuthForm {
 
         super(id);
 
-        final TextField<String> emailField;
-        final TextField<String> firstNameField;
-        final TextField<String> lastNameField;
-        final TextField<String> phoneField;
 
+        add(
+                new TextField<String>(EMAIL_INPUT, new Model<String>(StringUtils.EMPTY))
+                    .setRequired(true)
+                    .add(StringValidator.lengthBetween(MIN_LEN, MAX_LEN))
+                    .add(EmailAddressValidator.getInstance())
+        );
 
-        emailField = new TextField<String>(EMAIL_INPUT, new Model<String>(StringUtils.EMPTY));
-        emailField
-                .setRequired(true)
-                .add(StringValidator.lengthBetween(MIN_LEN, MAX_LEN))
-                .add(EmailAddressValidator.getInstance());
+        add(
+                new TextField<String>(FIRSTNAME_INPUT, new Model<String>(StringUtils.EMPTY))
+                        .setRequired(true)
+        );
 
-        firstNameField = new TextField<String>(FIRSTNAME_INPUT, new Model<String>(StringUtils.EMPTY));
-        firstNameField.setRequired(true);
+        add(
+                new TextField<String>(LASTNAME_INPUT, new Model<String>(StringUtils.EMPTY))
+                        .setRequired(true)
+        );
 
-        lastNameField = new TextField<String>(LASTNAME_INPUT, new Model<String>(StringUtils.EMPTY));
-        lastNameField.setRequired(true);
-
-        phoneField = new TextField<String>(PHONE_INPUT, new Model<String>(StringUtils.EMPTY));
-        phoneField.setRequired(true)
-                .add(StringValidator.lengthBetween(6, 13)); //NBC
-
-        add(emailField);
-        add(firstNameField);
-        add(lastNameField);
-        add(phoneField);
+        add(
+                new TextField<String>(PHONE_INPUT, new Model<String>(StringUtils.EMPTY))
+                        .setRequired(true)
+                        .add(StringValidator.lengthBetween(4, 13))
+        );
 
         add(
                 new SubmitLink(REGISTER_LINK) {
@@ -83,14 +80,14 @@ public class RegisterForm extends BaseAuthForm {
                     private Customer createNewCustomer() {
 
                         Customer customer = getCustomerService().getGenericDao().getEntityFactory().getByIface(Customer.class);
-                        customer.setEmail(emailField.getInput());
+                        /*customer.setEmail(emailField.getInput());
                         customer.setFirstname(firstNameField.getInput());
-                        customer.setLastname(lastNameField.getInput());
+                        customer.setLastname(lastNameField.getInput());   */
 
 
                         final AttrValueCustomer attrValueCustomer = getCustomerService().getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
                         attrValueCustomer.setCustomer(customer);
-                        attrValueCustomer.setVal(phoneField.getInput());
+                        //attrValueCustomer.setVal(phoneField.getInput());
                         attrValueCustomer.setAttribute(getAttributeService().findByAttributeCode(
                                 AttributeNamesKeys.CUSTOMER_PHONE));
 
@@ -105,7 +102,7 @@ public class RegisterForm extends BaseAuthForm {
                     @Override
                     public void onSubmit() {
 
-                        if (!getCustomerService().isCustomerExists(emailField.getInput())) {
+                        if (true /*!getCustomerService().isCustomerExists(emailField.getInput())*/) {
 
                             final ShoppingCart shoppingCart = ApplicationDirector.getShoppingCart();
 

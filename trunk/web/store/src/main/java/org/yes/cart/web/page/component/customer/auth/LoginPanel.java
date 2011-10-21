@@ -112,10 +112,8 @@ public class LoginPanel extends BaseComponent {
                     sendNewPasswordBtn
             );
 
-            final Link<RegistrationPage> registrationLink = new BookmarkablePageLink<RegistrationPage>(REGISTRATION_LINK, RegistrationPage.class);
-            registrationLink.setVisible(false);
             add(
-                    registrationLink
+                    new BookmarkablePageLink<RegistrationPage>(REGISTRATION_LINK, RegistrationPage.class)
             );
 
             add(
@@ -141,19 +139,15 @@ public class LoginPanel extends BaseComponent {
                                 final IAuthenticationStrategy strategy = getApplication().getSecuritySettings()
                                         .getAuthenticationStrategy();
                                 strategy.save(getEmail(), getPassword());
-                                //TODO login cmd
                                 if (!continueToOriginalDestination()) {
                                     setResponsePage(CustomerSelfCarePage.class);
                                 }
                             } else {
-                                //TODO logout cmd
                                 if (isCustomerExists(getEmail())) {
                                     sendNewPasswordBtn.setVisible(true);
-                                    registrationLink.setVisible(false);
                                     error("Try to restore password ");
                                 } else {
                                     sendNewPasswordBtn.setVisible(false);
-                                    registrationLink.setVisible(true);
                                     error("Register ");
                                 }
                             }

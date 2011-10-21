@@ -15,10 +15,7 @@ import org.apache.wicket.util.file.IResourceFinder;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-import org.yes.cart.web.page.CustomerSelfCarePage;
-import org.yes.cart.web.page.HomePage;
-import org.yes.cart.web.page.LoginPage;
-import org.yes.cart.web.page.ShoppingCartPage;
+import org.yes.cart.web.page.*;
 import org.yes.cart.web.util.SeoBookmarkablePageParametersEncoder;
 
 import java.util.Map;
@@ -146,6 +143,13 @@ public class StorefrontApplication
                 new MountedMapper(
                         "/login",
                         LoginPage.class
+                )
+        );
+
+       mount(
+                new MountedMapper(
+                        "/registration",
+                        RegistrationPage.class
                 )
         );
     }
