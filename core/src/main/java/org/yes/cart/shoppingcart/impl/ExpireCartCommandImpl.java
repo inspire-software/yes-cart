@@ -1,8 +1,8 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 
@@ -22,10 +22,6 @@ public class ExpireCartCommandImpl  extends AbstractCartCommandImpl implements S
     /** {@inheritDoc} */
     public void execute(final ShoppingCart shoppingCart) {
         shoppingCart.getShoppingContext().clearContext();        
-        final SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-        shoppingCart.getShoppingContext().setSecurityContext(securityContext);
-        SecurityContextHolder.setContext(securityContext);
-        SecurityContextHolder.getContext().setAuthentication(null);
         setModifiedDate(shoppingCart);
 
     }

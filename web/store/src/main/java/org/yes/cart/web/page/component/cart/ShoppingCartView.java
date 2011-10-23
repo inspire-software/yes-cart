@@ -19,7 +19,6 @@ public class ShoppingCartView extends BaseComponent {
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private static final String SUB_TOTAL_VIEW = "subTotalView";
-    private static final String FEEDBACK_PANEL = "feedback";
     private static final String ITEMS_LIST = "itemsList";
     private static final String CART_FORM = "cartForm";
 
@@ -54,7 +53,7 @@ public class ShoppingCartView extends BaseComponent {
                 new Form(CART_FORM).add(
                         new ShoppingCartItemsList(ITEMS_LIST, ApplicationDirector.getShoppingCart().getCartItemList())
                 ).add(
-                        new FeedbackPanel(FEEDBACK_PANEL)
+                        new FeedbackPanel(FEEDBACK)
                 ).add(
                         new PriceView(
                                 SUB_TOTAL_VIEW,

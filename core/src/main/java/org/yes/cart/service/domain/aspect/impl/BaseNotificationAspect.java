@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 /**
  *
- * Base class for notification aspects.
+ * Base class for notification aspects.  All aspect across solution derived from this one.
  *
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+
+    <!-- order statuses from CustomerOrder interface -->
+    <entry key="none">-</entry>
+	<entry key="pending">Подкготовка</entry>
+	<entry key="waiting">Необходимо подтверждение</entry>
+	<entry key="inprogress">Выполняется</entry>
+	<entry key="cancelled">Отменен</entry>
+	<entry key="partially.shipped">Частично выполнен</entry>
+	<entry key="completed">Выполнен</entry>
+
+
+	<entry key="orderNumHead">Номер</entry>
+	<entry key="orderDateHead">Дата</entry>
+	<entry key="orderStatusHead">Статус</entry>
+	<entry key="orderItemsHead">Товар</entry>
+	<entry key="orderAmountHead">Сумма</entry>
+
+
+</properties>

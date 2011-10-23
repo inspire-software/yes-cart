@@ -53,6 +53,7 @@ public class CustomerWishListServiceImplTest extends BaseCoreDBTestCase {
         customer.setEmail("bender001@domain.com");
         customer.setFirstname("Bender001");
         customer.setLastname("Rodriguez001");
+        customer.setPassword("rawpassword");
         customer = customerService.create(customer, shopService.getById(10L));
         assertTrue (customer.getCustomerId() > 0);
 

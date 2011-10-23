@@ -1,5 +1,6 @@
 package org.yes.cart.web.page.component.customer.auth;
 
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
@@ -50,6 +51,7 @@ public class BaseAuthForm extends Form {
 
     /**
      * Check is customer already registered.
+     *
      * @param customerEmail email to check
      * @return true in case if email unique.
      */
@@ -59,8 +61,9 @@ public class BaseAuthForm extends Form {
 
     /**
      * Check is provided password for customer valid.
+     *
      * @param customerEmail email to check
-     * @param password password
+     * @param password      password
      * @return true in case if email unique.
      */
     protected boolean isPasswordValid(final String customerEmail, final String password) {
@@ -70,6 +73,7 @@ public class BaseAuthForm extends Form {
 
     /**
      * Get {@link CustomerService} service.
+     *
      * @return {@link CustomerService} service
      */
     protected CustomerService getCustomerService() {
@@ -78,38 +82,24 @@ public class BaseAuthForm extends Form {
 
     /**
      * Get attribute service.
+     *
      * @return {@link AttributeService}
      */
     protected AttributeService getAttributeService() {
         return attributeService;
     }
 
-    /**
-     * Execute login command.
-     * @param shoppingCart shopping cart
-     * @param email customer email.
-     */
-    protected void executeLoginCommand(final ShoppingCart shoppingCart, final String email) {
-        final Customer customer = getCustomerService().findCustomer(email);
-        if (customer == null) {
-            LOG.error(MessageFormat.format("Can not get customer for given {0} email", email));
-        } else {
-            executeLoginCommand(shoppingCart, customer);
-        }
-    }
+
 
     /**
-     * Execute login command.
-     * @param shoppingCart shopping cart
-     * @param customer customer.
+     * Sign in user if possible.
+     *
+     * @param username The username
+     * @param password The password
+     * @return True if signin was successful
      */
-    protected void executeLoginCommand(final ShoppingCart shoppingCart, final Customer customer) {
-        final Map<String, String> map = new HashMap<String, String>();
-        map.put(LoginCommandImpl.EMAIL, customer.getEmail());
-        map.put(LoginCommandImpl.NAME, customer.getFirstname() + " " + customer.getLastname());
-        map.put(LoginCommandImpl.CMD_KEY, LoginCommandImpl.CMD_KEY);
-        final ShoppingCartCommand loginCommand = shoppingCartCommandFactory.create(map);
-        loginCommand.execute(shoppingCart);
+    protected boolean signIn(final String username, final String password) {
+        return AuthenticatedWebSession.get().signIn(username, password);
     }
 
 }

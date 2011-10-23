@@ -144,12 +144,12 @@
 
 
 
-    <TSHOP        SHOP_ID="10" CODE="SHOIP1"        NAME="Gadget universe"                         DESCRIPTION="Gadget universe shop"    FSPOINTER="/npa/gadget" IMGVAULT="/npa/gadget/imagevault" />
-    <TSHOP        SHOP_ID="20" CODE="SHOIP2"        NAME="Mobile universe"                         DESCRIPTION="Mobile universe shop"    FSPOINTER="/npa/mobile" IMGVAULT="/npa/gadget/imagevault" />
-    <TSHOP        SHOP_ID="30" CODE="SHOIP3"        NAME="Game universe"                           DESCRIPTION="Game universe shop"        FSPOINTER="/npa/game" IMGVAULT="/npa/gadget/imagevault" />
-    <TSHOP        SHOP_ID="40" CODE="SHOIP4"        NAME="Shop without assigned categories"        DESCRIPTION="Shop without assigned categories used in test"        FSPOINTER="/dev/none"  IMGVAULT="/npa/gadget/imagevault"/>
-    <TSHOP        SHOP_ID="50" CODE="SHOIP5"        NAME="Shop with limited assigned categories"        DESCRIPTION="Shop with limited assigned categories used in test"        FSPOINTER="/dev/none"  IMGVAULT="/npa/gadget/imagevault"/>
-    <TSHOP        SHOP_ID="60" CODE="JEWEL_SHOP"    NAME="To pass bulk import test"        DESCRIPTION="Shop with limited assigned categories used in test"        FSPOINTER="/dev/none"  IMGVAULT="/npa/gadget/imagevault"/>
+    <TSHOP        SHOP_ID="10" CODE="SHOIP1"        NAME="Gadget universe"                         DESCRIPTION="Gadget universe shop"    FSPOINTER="gadget" IMGVAULT="gadget/imagevault" />
+    <TSHOP        SHOP_ID="20" CODE="SHOIP2"        NAME="Mobile universe"                         DESCRIPTION="Mobile universe shop"    FSPOINTER="mobile" IMGVAULT="mobile/imagevault" />
+    <TSHOP        SHOP_ID="30" CODE="SHOIP3"        NAME="Game universe"                           DESCRIPTION="Game universe shop"        FSPOINTER="game" IMGVAULT="game/imagevault" />
+    <TSHOP        SHOP_ID="40" CODE="SHOIP4"        NAME="Shop without assigned categories"        DESCRIPTION="Shop without assigned categories used in test"        FSPOINTER="/dev/none"  IMGVAULT="none/imagevault"/>
+    <TSHOP        SHOP_ID="50" CODE="SHOIP5"        NAME="Shop with limited assigned categories"        DESCRIPTION="Shop with limited assigned categories used in test"        FSPOINTER="/dev/none"  IMGVAULT="none/imagevault"/>
+    <TSHOP        SHOP_ID="60" CODE="JEWEL_SHOP"    NAME="To pass bulk import test"        DESCRIPTION="Shop with limited assigned categories used in test"        FSPOINTER="/dev/none"  IMGVAULT="none/imagevault"/>
 
 
     <TSHOPATTRVALUE ATTRVALUE_ID="10" VAL="EUR,UAH,RUB" CODE="CURRENCY" SHOP_ID="10"/>

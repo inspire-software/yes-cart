@@ -3,6 +3,7 @@ package org.yes.cart.domain.message.consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.message.RegistrationMessage;
 import org.yes.cart.service.mail.MailComposer;
 
@@ -56,7 +57,13 @@ public class CustomerRegistrationMessageListener implements MessageListener {
         final ObjectMessage objectMessage = (ObjectMessage) message;
         try {
             final RegistrationMessage registrationMessage = (RegistrationMessage) objectMessage.getObject();
-            processMessage(registrationMessage);
+            System.out.println(">>>>>>>>>>>>>>>>> " +registrationMessage);
+
+            if (registrationMessage.getPathToTemplateFolder() != null) {
+                processMessage(registrationMessage);
+            }
+
+
         } catch (Exception e) {
             LOG.error("Cant process " + message, e);
             throw new RuntimeException(e); //rollback message
@@ -78,11 +85,13 @@ public class CustomerRegistrationMessageListener implements MessageListener {
         model.put("shopName", registrationMessage.getShopName());
 
         final MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-
+         //
+           //     registrationMessage.isNewPerson()?MailComposer.MAIL_TEMPLATE_CUSTOMER_REGISTERED:MailComposer.MAIL_TEMPLATE_CUSTOMER_CHANGE_PASSWORD,
         mailComposer.composeMessage(
                 mimeMessage,
                 registrationMessage.getShopCode(),
-                registrationMessage.isNewPerson()?MailComposer.MAIL_TEMPLATE_CUSTOMER_REGISTERED:MailComposer.MAIL_TEMPLATE_CUSTOMER_CHANGE_PASSWORD,
+                registrationMessage.getPathToTemplateFolder(),
+                registrationMessage.getTemplateName(),
                 registrationMessage.getShopMailFrom(),
                 registrationMessage.getEmail(),
                 null,

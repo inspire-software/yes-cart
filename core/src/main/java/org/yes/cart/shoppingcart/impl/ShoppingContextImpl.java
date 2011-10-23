@@ -1,8 +1,6 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.shoppingcart.ShoppingContext;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextImpl;
 
 /**
  *
@@ -16,31 +14,29 @@ public class ShoppingContextImpl implements ShoppingContext {
 
     private static final long serialVersionUID =  20110509L;
 
-    private SecurityContext securityContext;
     private String latestViewedSkus;
     private String latestViewedCategories;
     private String customerName;
     private long shopId;
     private String resolvedIp;
+    private String customerEmail;
+
+    /** {@inheritDoc} */
+    public String getCustomerEmail() {
+        return customerEmail;
+    }
+
+    /** {@inheritDoc} */
+    public void setCustomerEmail(final String customerEmail) {
+        this.customerEmail = customerEmail;
+    }
 
     /** {@inheritDoc} */
     public void clearContext() {
         latestViewedSkus = null;
         latestViewedCategories = null;
-        securityContext = null;
-    }
-
-    /** {@inheritDoc} */
-    public SecurityContext getSecurityContext() {
-        if (securityContext == null) {
-            securityContext = new SecurityContextImpl();
-        }
-        return securityContext;
-    }
-
-    /** {@inheritDoc} */
-    public void setSecurityContext(final SecurityContext securityContext) {
-        this.securityContext = securityContext;
+        customerEmail = null;
+        customerName = null;
     }
 
     /** {@inheritDoc} */

@@ -15,6 +15,7 @@ import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.web.application.ApplicationDirector;
+import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.CustomerSelfCarePage;
 import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.RegistrationPage;
@@ -27,12 +28,15 @@ import org.yes.cart.web.page.component.BaseComponent;
  */
 public class LoginPanel extends BaseComponent {
 
+    private final long serialVersionUid = 20111016L;
+
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private static final String EMAIL_INPUT = "email";
     private static final String PASSWORD_INPUT = "password";
     private static final String RESTORE_PASSWORD_BUTTON = "restorePasswordBtn";
     private static final String LOGIN_BUTTON = "loginBtn";
     private static final String REGISTRATION_LINK = "registrationLink";
+    private static final String LOGIN_FORM = "loginForm";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
 
@@ -44,10 +48,10 @@ public class LoginPanel extends BaseComponent {
     public LoginPanel(final String id) {
         super(id);
         add(
-                new FeedbackPanel("feedback"))
+                new FeedbackPanel(FEEDBACK))
         ;
         add(
-                new LoginForm("loginForm", null, null)
+                new LoginForm(LOGIN_FORM)
         );
     }
 
@@ -77,12 +81,8 @@ public class LoginPanel extends BaseComponent {
          * Construct login form.
          *
          * @param id                       form id
-         * @param successfulPage           go to given page in case of successful login
-         * @param successfulPageParameters go to given page with given parameters in case of successful login
          */
-        public LoginForm(final String id,
-                         final Class<? extends Page> successfulPage,
-                         final PageParameters successfulPageParameters) {
+        public LoginForm(final String id) {
 
             super(id);
 
@@ -99,6 +99,7 @@ public class LoginPanel extends BaseComponent {
                     if (customer != null) {
                         getCustomerService().resetPassword(customer, ApplicationDirector.getCurrentShop());
                     }
+                    ((AbstractWebPage) getPage()).processCommands();
                     setResponsePage(HomePage.class);
                 }
 
@@ -159,16 +160,7 @@ public class LoginPanel extends BaseComponent {
         }
 
 
-        /**
-         * Sign in user if possible.
-         *
-         * @param username The username
-         * @param password The password
-         * @return True if signin was successful
-         */
-        private boolean signIn(final String username, final String password) {
-            return AuthenticatedWebSession.get().signIn(username, password);
-        }
+
 
 
     }

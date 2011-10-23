@@ -89,8 +89,6 @@ public class StorefrontApplication
 
         mountPages();
 
-
-
     }
 
     @Override

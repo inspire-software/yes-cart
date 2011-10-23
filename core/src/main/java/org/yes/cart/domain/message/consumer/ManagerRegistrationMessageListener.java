@@ -18,7 +18,7 @@ import java.util.Map;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class ManagerRegistrationMessageListener  implements MessageListener {
+public class ManagerRegistrationMessageListener implements MessageListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(ManagerRegistrationMessageListener.class);
 
@@ -28,8 +28,9 @@ public class ManagerRegistrationMessageListener  implements MessageListener {
 
     /**
      * Contruct jms listener.
+     *
      * @param javaMailSender mail sender to use.
-     * @param mailComposer mail composer
+     * @param mailComposer   mail composer
      */
     public ManagerRegistrationMessageListener(
             final JavaMailSender javaMailSender,
@@ -56,6 +57,7 @@ public class ManagerRegistrationMessageListener  implements MessageListener {
 
     /**
      * Process message from queue to mail.
+     *
      * @param registrationMessage massage to process
      * @throws Exception in case of compose mail error
      */
@@ -68,11 +70,14 @@ public class ManagerRegistrationMessageListener  implements MessageListener {
 
 
         final MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        /*
+                registrationMessage.isNewPerson()? MailComposer.MAIL_TEMPLATE_MANAGER_REGISTERED:MailComposer.MAIL_TEMPLATE_MANAGER_CHANGE_PASSWORD,*/
 
         mailComposer.composeMessage(
                 mimeMessage,
                 null,
-                registrationMessage.isNewPerson()? MailComposer.MAIL_TEMPLATE_MANAGER_REGISTERED:MailComposer.MAIL_TEMPLATE_MANAGER_CHANGE_PASSWORD,
+                registrationMessage.getPathToTemplateFolder(),
+                registrationMessage.getTemplateName(),
                 registrationMessage.getShopMailFrom(),
                 registrationMessage.getEmail(),
                 null,

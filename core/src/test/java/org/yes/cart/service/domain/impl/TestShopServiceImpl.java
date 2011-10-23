@@ -16,6 +16,17 @@ import java.util.*;
  */
 public class TestShopServiceImpl extends BaseCoreDBTestCase {
 
+    @Test
+    public void testGetShopByCode() {
+
+        final ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
+
+        assertNull(shopService.getShopByCode("NOTEXISTING-SHOP"));
+
+        assertNotNull(shopService.getShopByCode("SHOIP3"));
+
+    }
+
 
     /**
      *

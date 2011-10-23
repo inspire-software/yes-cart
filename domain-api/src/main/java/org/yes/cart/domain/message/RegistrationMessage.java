@@ -39,17 +39,32 @@ public interface RegistrationMessage extends Serializable {
      */
     void setShopMailFrom(String shopMailFrom);
 
-    /**
-     * @return true in case if new person were created
-     */
-    boolean isNewPerson();
 
     /**
-     * Set new person flag.
-     *
-     * @param newPerson new person flag.
+     * Get template name.
+     * @return  template name.
      */
-    void setNewPerson(boolean newPerson);
+    String getTemplateName();
+
+    /**
+     * Set  template name.
+     * @param templateName  template name.
+     */
+    void setTemplateName(String templateName);
+
+
+    /**
+     * Get path to template folder.
+     * Example /some/path/shop/mailtemplates/ must hold folders with concrete templates
+     * @return path to template folder.
+     */
+    String getPathToTemplateFolder();
+
+    /**
+     * Set path to template folder.
+     * @param pathToTemplateFolder  path to template folder.
+     */
+    public void setPathToTemplateFolder(String pathToTemplateFolder);
 
 
     /**

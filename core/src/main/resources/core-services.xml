@@ -816,6 +816,7 @@
 
     <bean id="mailComposer" class="org.yes.cart.service.mail.impl.MailComposerImpl">
         <constructor-arg index="0" ref="systemService"/>
+        <constructor-arg index="1" ref="shopService"/>
     </bean>
 
 <!-- ############################# Shopping Cart Commands and Events ######################### -->
@@ -1032,7 +1033,13 @@
 
     <!-- ############################################ misc ####################################### -->
 
-    <bean id="pluralFormService" class="org.yes.cart.service.misc.impl.PluralFormServiceImpl"/> 
+    <bean id="pluralFormService" class="org.yes.cart.service.misc.impl.PluralFormServiceImpl"/>
+
+    <bean id="passPhraseGenerator" class="org.yes.cart.service.domain.impl.PassPhraseGeneratorImpl">
+        <constructor-arg index="0" value="8"/>
+    </bean>
+
+    <bean id="passwordHashHelper" class="org.yes.cart.service.domain.impl.MD5HashHelperImpl"/>
 
 
 

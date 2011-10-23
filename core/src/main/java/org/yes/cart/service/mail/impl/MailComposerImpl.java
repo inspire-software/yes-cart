@@ -1,11 +1,14 @@
 package org.yes.cart.service.mail.impl;
 
+import com.google.common.collect.MapMaker;
 import groovy.lang.Writable;
 import groovy.text.GStringTemplateEngine;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.mail.MailComposer;
 
@@ -16,17 +19,17 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
-
  * Class responsible to compose mail from given:
  * templates (txt and html);
  * set of variables;
  * current shop context;
  * current spring context.
- *
+ * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
@@ -46,7 +49,9 @@ public class MailComposerImpl implements MailComposer {
 
     private final SystemService systemService;
 
-    private String  resourceExpression = RE_EXPRESSION;
+    private final ShopService shopService;
+
+    private String resourceExpression = RE_EXPRESSION;
 
     private Pattern resourcePattern;
 
@@ -55,29 +60,35 @@ public class MailComposerImpl implements MailComposer {
     private final GStringTemplateEngine templateEngine;
 
 
-
     /**
      * Construct mail composer
+     *
      * @param systemService to getByKey the path to mail templates.
+     * @param shopService shop service.
      */
-    public MailComposerImpl(final SystemService systemService) {
+    public MailComposerImpl(final SystemService systemService, final ShopService shopService) {
         this.templateEngine = new GStringTemplateEngine();
         this.systemService = systemService;
+        this.shopService = shopService;
     }
 
+     private Map<String, String> shopCodeMailTemplateDirMap =
+             new MapMaker().concurrencyLevel(16).softValues().expiration(3, TimeUnit.MINUTES).makeMap();
+
     /**
-     * Get mail resource directory.
+     * Get mail resource directory for given shop .
+     * @param shopCode given shop code.
+     *
      * @return mail resource directory.
      */
-    public String getMailResourceDirectory() {
-        if (mailResourceDirectory == null) {
-            mailResourceDirectory = systemService.getMailResourceDirectory();
-        }
-        return mailResourceDirectory;
+    private String getMailResourceDirectory(final String shopCode) {
+        return shopService.getShopByCode(shopCode).getMailFolder();
     }
+
 
     /**
      * Set mail resource directory.
+     *
      * @param mailResourceDirectory mail resource directory.
      */
     public void setMailResourceDirectory(final String mailResourceDirectory) {
@@ -91,8 +102,7 @@ public class MailComposerImpl implements MailComposer {
      * @param model model
      * @return megred view.
      * @throws java.io.IOException    in case of inline resources can not be found
-     * @throws ClassNotFoundException  in case if something wrong with template engine
-     *
+     * @throws ClassNotFoundException in case if something wrong with template engine
      */
     String merge(final String view, final Map<String, Object> model)
             throws IOException, ClassNotFoundException {
@@ -110,24 +120,25 @@ public class MailComposerImpl implements MailComposer {
      * @param shopCode     optional shop code
      * @param templateName template name
      * @param from         from address
-     * @param toEmail           mail desctinatiol address
-     * @param ccEmail           optional cc
-     * @param bccEmail          optional bcc
+     * @param toEmail      mail desctinatiol address
+     * @param ccEmail      optional cc
+     * @param bccEmail     optional bcc
      * @param model        model
-     * @throws MessagingException in case if mail message can not be converted
+     * @throws MessagingException     in case if mail message can not be converted
      * @throws java.io.IOException    in case of inline resources can not be found
-     * @throws ClassNotFoundException  in case if something wrong with template engine
+     * @throws ClassNotFoundException in case if something wrong with template engine
      */
     public void composeMessage(
             final MimeMessage message,
             final String shopCode,
+            final String pathToTemplateFolder,
             final String templateName,
             final String from,
             final String toEmail,
             final String ccEmail,
             final String bccEmail,
             final Map<String, Object> model)
-                throws MessagingException, IOException, ClassNotFoundException {
+            throws MessagingException, IOException, ClassNotFoundException {
 
 
         final MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -144,13 +155,15 @@ public class MailComposerImpl implements MailComposer {
             helper.setBcc(bccEmail);
         }
 
-        final String pathToTemplateFolder =  getPathToTemplate(shopCode, templateName);
-        final String textTemplate = getTemplate(pathToTemplateFolder, templateName  + ".txt");
-        final String htmlTemplate = getTemplate(pathToTemplateFolder, templateName  + ".html");
-        final String pathToResources = pathToTemplateFolder + "resources" + File.separator;
-        final String propString = getTemplate(pathToTemplateFolder, templateName  + ".properties");
+        final String fullPath = pathToTemplateFolder + templateName + File.separator;
+
+
+        final String textTemplate = getTemplate(fullPath, templateName + ".txt");
+        final String htmlTemplate = getTemplate(fullPath, templateName + ".html");
+        final String pathToResources = fullPath + "resources" + File.separator;
+        final String propString = getTemplate(fullPath, templateName + ".properties");
         final Properties prop = new Properties();
-        if(propString != null) {
+        if (propString != null) {
             prop.load(new ByteArrayInputStream(propString.getBytes()));
         }
         helper.setSubject(prop.getProperty("subject"));
@@ -162,7 +175,6 @@ public class MailComposerImpl implements MailComposer {
         }
 
 
-
         composeMessage(helper,
                 textTemplate,
                 htmlTemplate,
@@ -172,18 +184,17 @@ public class MailComposerImpl implements MailComposer {
     }
 
 
-
     /**
      * Fill mail messagge. At least one of the templates must be given.
      *
-     * @param textTemplate optional text template
-     * @param htmlTemplate optional html template
-     * @param model        model
+     * @param textTemplate    optional text template
+     * @param htmlTemplate    optional html template
+     * @param model           model
      * @param pathToResources optional path to inline resources. Used if htmlTemplate is set and has "cid" resoures.
-     * @param helper       mail message helper
-     * @throws MessagingException in case if message can not be composed
+     * @param helper          mail message helper
+     * @throws MessagingException     in case if message can not be composed
      * @throws java.io.IOException    in case of inline resources can not be found
-     * @throws ClassNotFoundException  in case if something wrong with template engine
+     * @throws ClassNotFoundException in case if something wrong with template engine
      */
     void composeMessage(
             final MimeMessageHelper helper,
@@ -191,27 +202,26 @@ public class MailComposerImpl implements MailComposer {
             final String htmlTemplate,
             final String pathToResources,
             final Map<String, Object> model
-    ) throws MessagingException, ClassNotFoundException,  IOException {
+    ) throws MessagingException, ClassNotFoundException, IOException {
 
         final String htmlMergeResult;
 
         if (textTemplate == null || htmlTemplate == null) {
             if (textTemplate != null) {
-                helper.setText( merge(textTemplate, model),  false );
+                helper.setText(merge(textTemplate, model), false);
             }
 
             if (htmlTemplate != null) {
                 htmlMergeResult = merge(htmlTemplate, model);
-                helper.setText( htmlMergeResult,  true );
+                helper.setText(htmlMergeResult, true);
             }
 
         } else {
             htmlMergeResult = merge(htmlTemplate, model);
-            helper.setText( merge(textTemplate, model), htmlMergeResult);
+            helper.setText(merge(textTemplate, model), htmlMergeResult);
         }
 
         inlineResources(helper, htmlTemplate, pathToResources);
-
 
 
     }
@@ -221,8 +231,8 @@ public class MailComposerImpl implements MailComposer {
      * Add inline resource to mail message.
      * Resource id will be interpreted as file name in following fashion: filename_ext.
      *
-     * @param helper MimeMessageHelper, that has mail message
-     * @param htmlTemplate html message template
+     * @param helper          MimeMessageHelper, that has mail message
+     * @param htmlTemplate    html message template
      * @param pathToResources physical path to resources
      * @throws javax.mail.MessagingException in case if resource can not inlined
      */
@@ -249,18 +259,18 @@ public class MailComposerImpl implements MailComposer {
 
     /**
      * Transform resource id in filename_extenstion format to filename.extension
+     *
      * @param resourceName resource id
      * @return filename
      */
     String transformResourceIdToFileName(final String resourceName) {
-        return resourceName.replace('_','.');
+        return resourceName.replace('_', '.');
     }
-
-
 
 
     /**
      * Collect resource ids
+     *
      * @param htmlTemplate given html template
      * @return list of resourcve ids in template order.
      */
@@ -276,6 +286,7 @@ public class MailComposerImpl implements MailComposer {
 
     /**
      * Get regular expression to collect resources to inline.
+     *
      * @return regular expression
      */
     public String getResourceExpression() {
@@ -285,6 +296,7 @@ public class MailComposerImpl implements MailComposer {
     /**
      * Set regular expression  to collect resources to inline.
      * Also set patternt to null.
+     *
      * @param resourceExpression regular expression
      */
     public void setResourceExpression(final String resourceExpression) {
@@ -295,7 +307,7 @@ public class MailComposerImpl implements MailComposer {
 
     private Pattern getResourcePattern() {
         if (resourcePattern == null) {
-            resourcePattern = Pattern.compile(getResourceExpression(),Pattern.CASE_INSENSITIVE);
+            resourcePattern = Pattern.compile(getResourceExpression(), Pattern.CASE_INSENSITIVE);
         }
         return resourcePattern;
     }
@@ -303,8 +315,9 @@ public class MailComposerImpl implements MailComposer {
 
     /**
      * Get template as string.
+     *
      * @param pathToTemplate path to template folder
-     * @param fileName file name
+     * @param fileName       file name
      * @return template if exists
      * @throws IOException in case of io errors.
      */
@@ -319,26 +332,24 @@ public class MailComposerImpl implements MailComposer {
 
     /**
      * Get path to template folder terminated with File.separator.
-     * @param shopCode optional shop code
+     *
+     * @param shopCode     optional shop code
      * @param templateName template name
      * @return path to template folder
      */
     String getPathToTemplate(final String shopCode, final String templateName) {
 
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(getMailResourceDirectory());
-        if (StringUtils.isBlank(shopCode)) {
-            stringBuilder.append(DEFAULT_TEMPLATE_FOLDER);
-        } else {
-            stringBuilder.append(shopCode);
-        }
-        stringBuilder.append(File.separator);
+
+        stringBuilder.append(getMailResourceDirectory(shopCode));
+
+        //stringBuilder.append(File.separator);
         stringBuilder.append(templateName);
         stringBuilder.append(File.separator);
 
         return stringBuilder.toString();
 
     }
-    
+
 
 }

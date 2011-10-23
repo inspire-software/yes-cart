@@ -1,0 +1,8 @@
+Hello $firstName $lastName !
+
+<% if (shopUrl != null && !shopUrl.isEmpty()) { %>
+You are registered at "<%out.print(shopUrl.iterator().next())%>" $shopName shop.
+<% } else { %>
+You are registered att $shopName
+<% }%>
+With password is $password

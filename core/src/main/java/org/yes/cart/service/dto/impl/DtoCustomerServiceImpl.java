@@ -87,6 +87,7 @@ public class DtoCustomerServiceImpl
     public CustomerDTO create(final CustomerDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         Customer customer = getEntityFactory().getByIface(getEntityIFace());
         assembler.assembleEntity(instance, customer, null, dtoFactory);
+        customer.setPassword("TODO"); //TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         customer = ((CustomerService)service).create(customer, null);
         return getById(customer.getCustomerId());
     }

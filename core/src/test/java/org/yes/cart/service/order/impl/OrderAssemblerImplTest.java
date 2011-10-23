@@ -27,14 +27,11 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
-* User: Igor Azarny iazarny@yahoo.com
+ * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
 public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
-
-
-
 
 
     private OrderAssembler orderAssembler;
@@ -42,15 +39,13 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
 
 
     @Before
-    public void setUp()  throws Exception {
+    public void setUp() throws Exception {
         super.setUp();
 
 
-        orderAssembler = (OrderAssembler)  ctx.getBean(ServiceSpringKeys.ORDER_ASSEMBLER);
+        orderAssembler = (OrderAssembler) ctx.getBean(ServiceSpringKeys.ORDER_ASSEMBLER);
 
         customerOrderDao = (GenericDAO<CustomerOrder, Long>) ctx.getBean("customerOrderDao");
-
-
 
 
     }
@@ -62,7 +57,6 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
         super.tearDown();
     }
 
-    
 
     @Test
     public void testAssembleCustomerOrder() {
@@ -93,7 +87,7 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
                 CustomerOrder.ORDER_STATUS_NONE,
                 customerOrder.getOrderStatus());
 
-        assertNotNull("Order num must be set" , customerOrder.getOrdernum());
+        assertNotNull("Order num must be set", customerOrder.getOrdernum());
 
 
         assertTrue("Order in pending state must not have delivery", customerOrder.getDelivery().isEmpty());
@@ -102,11 +96,9 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
                 shoppingCart.getGuid(),
                 customerOrder.getGuid());
 
-        assertEquals(8,customerOrder.getOrderDetail().size());
+        assertEquals(8, customerOrder.getOrderDetail().size());
 
         assertFalse(customerOrder.isMultipleShipmentOption());
-
-
 
 
     }
@@ -125,7 +117,6 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
                 .execute(shoppingCart);
 
 
-
         return shoppingCart;
 
     }
@@ -134,17 +125,17 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
 
         ShoppingCart shoppingCart = new ShoppingCartImpl();
 
-        Map<String,String> params;
+        Map<String, String> params;
 
-        params = new HashMap<String,String>();
-        params.put(LoginCommandImpl.EMAIL,customerEmail);
-        params.put(LoginCommandImpl.NAME,"John Doe");
+        params = new HashMap<String, String>();
+        params.put(LoginCommandImpl.EMAIL, customerEmail);
+        params.put(LoginCommandImpl.NAME, "John Doe");
 
 
         new SetShopCartCommandImpl(ctx, Collections.singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
                 .execute(shoppingCart);
 
-        new ChangeCurrencyEventCommandImpl( context, Collections.singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "USD"))
+        new ChangeCurrencyEventCommandImpl(context, Collections.singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "USD"))
                 .execute(shoppingCart);
 
         new LoginCommandImpl(null, params)
@@ -168,7 +159,7 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
                 .execute(shoppingCart);
 
 
-        param = new HashMap<String,String>();
+        param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST5");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "200.00");
 
@@ -176,7 +167,7 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
                 param)
                 .execute(shoppingCart);
 
-        param = new HashMap<String,String>();
+        param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST6");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "3.00");
 
@@ -184,7 +175,7 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
                 param)
                 .execute(shoppingCart);
 
-        param = new HashMap<String,String>();
+        param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST7");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
 
@@ -192,7 +183,7 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
                 param)
                 .execute(shoppingCart);
 
-        param = new HashMap<String,String>();
+        param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST8");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
 
@@ -200,7 +191,7 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
                 param)
                 .execute(shoppingCart);
 
-        param = new HashMap<String,String>();
+        param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST9");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
 
@@ -218,23 +209,24 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
     public static Customer createCustomer(final ApplicationContext context, final String prefix) {
 
 
-                CustomerService customerService;
+        CustomerService customerService;
         ShopService shopService;
         AttributeService attributeService;
         AddressService addressService;
 
 
-        shopService  = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
+        shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
         customerService = (CustomerService) context.getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
         attributeService = (AttributeService) ctx.getBean(ServiceSpringKeys.ATTRIBUTE_SERVICE);
         addressService = (AddressService) ctx.getBean(ServiceSpringKeys.ADDRESS_SERVICE);
 
-        GenericDAO<Customer, Long> customerDao = (GenericDAO<Customer, Long>)  ctx.getBean("customerDao");
+        GenericDAO<Customer, Long> customerDao = (GenericDAO<Customer, Long>) ctx.getBean("customerDao");
 
         Customer customer = customerService.getGenericDao().getEntityFactory().getByIface(Customer.class);
         customer.setEmail(prefix + "jd@domain.com");
         customer.setFirstname(prefix + "John");
         customer.setLastname(prefix + "Doe");
+        customer.setPassword("rawpassword");
 
 
         final AttrValueCustomer attrValueCustomer = customerService.getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);

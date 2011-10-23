@@ -1,0 +1,42 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<body>
+<wicket:panel>
+    <table class="table-in-form" width="100%">
+                    <tr>
+                        <td>
+                            <span class="table-title-in-form"><wicket:message key="orderNumHead">[order number]</wicket:message></span>
+                        </td>
+                        <td>
+                            <span class="table-title-in-form"><wicket:message key="orderDateHead">[order date]</wicket:message></span>
+                        </td>
+                        <td>
+                            <span class="table-title-in-form"><wicket:message key="orderStatusHead">[status]</wicket:message></span>
+                        </td>
+                        <td>
+                            <span class="table-title-in-form"><wicket:message key="orderItemsHead">[items in order]</wicket:message></span>
+                        </td>
+                        <td>
+                            <span class="table-title-in-form"><wicket:message key="orderAmountHead">[order amount]</wicket:message></span>
+                        </td>
+                    </tr>
+                    <tr wicket:id="orders">
+                        <td valign="top">
+                            <span wicket:id="orderNum">[order number]</span>
+                        </td>
+                        <td valign="top">
+                            <span wicket:id="orderDate">[order date]</span>
+                        </td>
+                        <td valign="top">
+                            <span wicket:id="orderStatus">[status]</span>
+                        </td>
+                        <td valign="top">
+                            <span wicket:id="orderItems">[items in order]</span>
+                        </td>
+                        <td valign="top">
+                            <span wicket:id="orderAmount">[order amount]</span>
+                        </td>
+                    </tr>
+                </table>
+</wicket:panel>
+</body>
+</html>

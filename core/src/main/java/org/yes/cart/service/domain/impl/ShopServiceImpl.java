@@ -49,6 +49,14 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
+    @Cacheable(value = "shopServiceImplMethodCache")
+    public Shop getShopByCode(final String shopCode) {
+        return shopDao.findSingleByNamedQuery("SHOP.BY.CODE", shopCode);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public Shop getShopByOrderNum(final String orderNum) {
         return shopDao.findSingleByNamedQuery("SHOP.BY.ORDER.NUM", orderNum);
     }

@@ -1,8 +1,6 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.context.SecurityContext;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 
@@ -13,7 +11,7 @@ import java.util.Map;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class LogoutCommandImpl  extends AbstractCartCommandImpl implements ShoppingCartCommand {
+public class LogoutCommandImpl extends AbstractCartCommandImpl implements ShoppingCartCommand {
 
     private static final long serialVersionUID = 20101025L;
 
@@ -25,13 +23,8 @@ public class LogoutCommandImpl  extends AbstractCartCommandImpl implements Shopp
      * @param shoppingCart the shopping cart
      */
     public void execute(final ShoppingCart shoppingCart) {
-        final SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-        shoppingCart.getShoppingContext().setSecurityContext(securityContext);
-        shoppingCart.getShoppingContext().setCustomerName(null);
-        SecurityContextHolder.setContext(securityContext);
-        SecurityContextHolder.getContext().setAuthentication(null);
+        shoppingCart.getShoppingContext().clearContext();
         setModifiedDate(shoppingCart);
-
     }
 
     /**
@@ -42,9 +35,8 @@ public class LogoutCommandImpl  extends AbstractCartCommandImpl implements Shopp
     }
 
     /**
-     *
      * @param applicationContext application context
-     * @param parameters page parameters
+     * @param parameters         page parameters
      */
     public LogoutCommandImpl(final ApplicationContext applicationContext, final Map parameters) {
         super();

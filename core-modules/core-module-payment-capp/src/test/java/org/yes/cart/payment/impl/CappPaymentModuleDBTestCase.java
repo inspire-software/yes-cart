@@ -138,6 +138,7 @@ public abstract class CappPaymentModuleDBTestCase  extends DBTestCase {
         customer.setEmail("john.dou@domain.com");
         customer.setFirstname("John");
         customer.setLastname("Dou");
+        customer.setPassword("rawpassword");
 
         Address address = new AddressEntity();
         address.setFirstname("John");

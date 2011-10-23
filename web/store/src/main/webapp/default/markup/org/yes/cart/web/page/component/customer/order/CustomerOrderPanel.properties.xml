@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+
+    <!-- order statuses from CustomerOrder interface -->
+    <entry key="none">-</entry>
+	<entry key="pending">Pending</entry>
+	<entry key="waiting">Wait for confirmation</entry>
+	<entry key="inprogress">In progress</entry>
+	<entry key="cancelled">Cancelled</entry>
+	<entry key="partially.shipped">Shipped partially</entry>
+	<entry key="completed">Completed</entry>
+
+
+	<entry key="orderNumHead">Num</entry>
+	<entry key="orderDateHead">Date</entry>
+	<entry key="orderStatusHead">Status</entry>
+	<entry key="orderItemsHead">Product</entry>
+	<entry key="orderAmountHead">Sum</entry>
+
+
+</properties>

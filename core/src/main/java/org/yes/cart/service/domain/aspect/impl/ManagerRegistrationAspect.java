@@ -50,10 +50,10 @@ public class ManagerRegistrationAspect  extends BaseRegisteredPersonAspect {
      * @return Object
      * @throws Throwable in case of target method errors
      */
-    @Around("execution(* org.yes.cart.service.domain.impl.ManagerServiceImpl.create(..))")
-    public Object doCreateCustomer(final ProceedingJoinPoint pjp) throws Throwable {
+    /*@Around("execution(* org.yes.cart.service.domain.impl.ManagerServiceImpl.create(..))")
+    public Object doCreateManager(final ProceedingJoinPoint pjp) throws Throwable {
         return notifyInternal(pjp, true);
-    }
+    }     */
 
     /**
      * Handle reset password operation.
@@ -62,8 +62,8 @@ public class ManagerRegistrationAspect  extends BaseRegisteredPersonAspect {
      * @return Object
      * @throws Throwable in case of target method errors
      */
-    @Around("execution(* org.yes.cart.service.domain.impl.ManagerServiceImpl.resetPassword(..))")
+   /* @Around("execution(* org.yes.cart.service.domain.impl.ManagerServiceImpl.resetPassword(..))")
     public Object doResetPassword(final ProceedingJoinPoint pjp) throws Throwable {
         return notifyInternal(pjp, false);
-    }
+    }  */
 }

@@ -8,6 +8,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.mail.MailComposer;
 
@@ -34,6 +36,8 @@ public class MailComposerImplTest {
     private final Mockery mockery = new JUnit4Mockery();
 
     private SystemService systemService;
+    private ShopService shopService;
+    private Shop shop;
 
 
 
@@ -42,6 +46,8 @@ public class MailComposerImplTest {
     public void setUp() {
 
         systemService = mockery.mock(SystemService.class);
+        shopService = mockery.mock(ShopService.class);
+        shop = mockery.mock(Shop.class);
 
 
 
@@ -55,7 +61,7 @@ public class MailComposerImplTest {
         final String template = "$name lives...somewhere in time.";
         final Map<String, Object> model = new HashMap<String, Object>();
         model.put("name", "Bender");
-        final MailComposerImpl mailComposer = new MailComposerImpl(null);
+        final MailComposerImpl mailComposer = new MailComposerImpl(null, null);
         final String result = mailComposer.merge(template, model);
         assertEquals("Bender lives...somewhere in time.", result);
     }
@@ -69,7 +75,7 @@ public class MailComposerImplTest {
         list.add("blackjack");
         list.add("poetess");
         model.put("with", list);
-        final MailComposerImpl mailComposer = new MailComposerImpl(null);
+        final MailComposerImpl mailComposer = new MailComposerImpl(null, null);
         final String result = mailComposer.merge(template, model);
         assertEquals("Bender lives in theme park with blackjack poetess ", result);
     }
@@ -78,7 +84,7 @@ public class MailComposerImplTest {
 
     @Test
     public void testGetResourcesId() {
-        final MailComposerImpl mailComposer = new MailComposerImpl(null);
+        final MailComposerImpl mailComposer = new MailComposerImpl(null, null);
                                                             //'cid:identifier1234' "cid:id" 'cid:ident' "cid:identifier5678"
         final List<String> rez = mailComposer.getResourcesId("'cid:identifier1234' \"cid:id\" 'cid:ident' \"cid:identifier5678\"");
         assertEquals(4, rez.size());
@@ -93,26 +99,30 @@ public class MailComposerImplTest {
 
         mockery.checking(new Expectations() {{
 
-            allowing(systemService).getMailResourceDirectory();
-            will(returnValue("/a/b/c/"));
+           // allowing(systemService).getMailResourceDirectory();
+           // will(returnValue("/a/b/c/"));
+
+
+            allowing(shopService).getShopByCode("SHOIP1");
+            will(returnValue(shop));
+
+
+            allowing(shop).getMailFolder();
+            will(returnValue("/a/b/c/default/"));
 
 
         }});
         
 
-        final MailComposerImpl mailComposer = new MailComposerImpl(systemService);
+        final MailComposerImpl mailComposer = new MailComposerImpl(systemService, shopService);
+
 
         assertEquals(
-                "/a/b/c/default" + File.separator + "priceReduced" + File.separator,
-                mailComposer.getPathToTemplate(null, "priceReduced"));
+                ("/a/b/c/default" + File.separator + "priceReduced" + File.separator).replace("\\","/"),
+                (mailComposer.getPathToTemplate("SHOIP1", "priceReduced")).replace("\\","/")
+        );
 
-        assertEquals(
-                "/a/b/c/default" + File.separator + "priceReduced" + File.separator,
-                mailComposer.getPathToTemplate("", "priceReduced"));
 
-        assertEquals(
-                "/a/b/c/shopcode" + File.separator + "priceReduced" + File.separator,
-                mailComposer.getPathToTemplate("shopcode", "priceReduced"));
 
 
     }
@@ -135,7 +145,7 @@ public class MailComposerImplTest {
         list.add("blackjack");
         list.add("poetess");
         model.put("with", list);
-        final MailComposerImpl mailComposer = new MailComposerImpl(null);
+        final MailComposerImpl mailComposer = new MailComposerImpl(null, null);
 
         mailComposer.composeMessage(helper, textTemplate, htmlTemplate, null, model);
 
@@ -173,7 +183,7 @@ public class MailComposerImplTest {
         list.add("blackjack");
         list.add("poetess");
         model.put("with", list);
-        final MailComposerImpl mailComposer = new MailComposerImpl(null);
+        final MailComposerImpl mailComposer = new MailComposerImpl(null, null);
 
         mailComposer.composeMessage(helper, textTemplate, htmlTemplate, null, model);
 
@@ -211,7 +221,7 @@ public class MailComposerImplTest {
         list.add("blackjack");
         list.add("poetess");
         model.put("with", list);
-        final MailComposerImpl mailComposer = new MailComposerImpl(null);
+        final MailComposerImpl mailComposer = new MailComposerImpl(null, null);
 
         mailComposer.composeMessage(helper, textTemplate, htmlTemplate, null, model);
 
@@ -262,11 +272,12 @@ public class MailComposerImplTest {
         list.add("blackjack");
         list.add("poetess");
         model.put("with", list);
-        final MailComposer mailComposer = new MailComposerImpl(systemService);
+        final MailComposer mailComposer = new MailComposerImpl(systemService, null);
 
         mailComposer.composeMessage(
                 message,
                 null,
+                "src/test/resources/mailtemplates/default/",
                 "imtest",
                 "test@localhost.lo",
                 "to@somedomain.com",

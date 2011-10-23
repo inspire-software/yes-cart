@@ -7,4 +7,6 @@
 	<entry key="lastname">Фамилия</entry>
 	<entry key="register">Регистрация</entry>
     <entry key="phone">Телефон</entry>
+    <entry key="customerExists">Такой покупатель уже зарегистрированн. Новый пароль выслан на почту.</entry>
+    <entry key="canNotRegister">Невозможно зарегистрировать. Админы уже чешут репу</entry>
 </properties>
