@@ -45,9 +45,8 @@ public class ExpireCartCommandImplTest {
 
         //assertNull(shoppingCart.getAuthentication());
         assertNull(shoppingCart.getCustomerEmail());        
-        assertNull(SecurityContextHolder.getContext().getAuthentication());
 
-        assertNotNull(shoppingCart.getCustomerName());
+        assertNull(shoppingCart.getCustomerName());
 
         //assertEquals(ShoppingCart.SESSION_EXPIRED, shoppingCart.getLogonState());
 

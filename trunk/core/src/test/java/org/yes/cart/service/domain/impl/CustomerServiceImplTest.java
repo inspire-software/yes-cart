@@ -49,6 +49,7 @@ public class CustomerServiceImplTest extends BaseCoreDBTestCase {
         assertTrue (customer.getCustomerId() > 0);
         customer.setFirstname("Gordon");
         customer.setLastname("Freeman");
+        customer.setPassword("rawpassword");
         customer = customerService.update(customer);
         assertEquals("Gordon", customer.getFirstname());
         assertEquals("Freeman", customer.getLastname());
@@ -65,30 +66,6 @@ public class CustomerServiceImplTest extends BaseCoreDBTestCase {
         assertNull(customer);
     }
 
-    @Test
-    public void testResetPasswd() {
-        Customer customer = getCustomer("testResetPasswd");
-        customer = customerService.create(customer, shopService.getById(10L));
-        assertTrue (customer.getCustomerId() > 0);
-        String oldHash = customer.getPassword();
-        assertNotNull("pwd can not be null" , oldHash);
-        assertTrue("pwd can not be empty" , oldHash.length() > 0);
-        
-        long pk = customer.getCustomerId();
-
-        customerService.resetPassword(customer, shopService.getById(10L));
-        Customer customerWithUpdatedPwd = customerService.getById(pk);
-        String newHash = customer.getPassword();
-        assertNotNull("pwd can not be null" , newHash);
-        assertTrue("pwd can not be empty" , newHash.length() > 0);
-
-        assertEquals(customer.getCustomerId(), customerWithUpdatedPwd.getCustomerId());
-        assertEquals(customer.getFirstname(), customerWithUpdatedPwd.getFirstname());
-        assertEquals(customer.getLastname(), customerWithUpdatedPwd.getLastname());
-        
-        assertTrue(!newHash.equals(oldHash));
-        
-    }
 
     @Test
     public void testFindCustomer() {
@@ -99,11 +76,13 @@ public class CustomerServiceImplTest extends BaseCoreDBTestCase {
         customer.setEmail("user1@somedomain.com");
         customer.setFirstname("SomeFirsname");
         customer.setLastname("user1LastName");
+        customer.setPassword("rawpassword");
         customerService.create(customer, shopService.getById(10L));
 
         customer = getCustomer("testFindCustomer2");
         customer.setFirstname("SomeFirsname");
         customer.setLastname("Akintola");
+        customer.setPassword("rawpassword");
         customer.setEmail("user2@somedomain.com");
         customerService.create(customer, shopService.getById(10L));
 
@@ -141,6 +120,7 @@ public class CustomerServiceImplTest extends BaseCoreDBTestCase {
         customer.setEmail(prefix + "customer@shopdomain.com");
         customer.setFirstname(prefix + "Firsname");
         customer.setLastname(prefix + "Lastname");
+        customer.setPassword("rawpassword");
         return customer;
     }
 

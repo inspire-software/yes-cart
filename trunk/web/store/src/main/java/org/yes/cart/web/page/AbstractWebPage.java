@@ -27,6 +27,8 @@ import java.util.Collections;
  */
 public class AbstractWebPage extends WebPage {
 
+    public static final String FEEDBACK = "feedback";
+
     @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)
     private ShoppingCartCommandFactory shoppingCartCommandFactory;
 
@@ -71,7 +73,7 @@ public class AbstractWebPage extends WebPage {
     /**
      * {@inheritDoc}
      */
-    protected void processCommands() {
+    public void processCommands() {
 
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
 

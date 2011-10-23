@@ -613,6 +613,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
         customer.setEmail(UUID.randomUUID().toString() + "jd@domain.com");
         customer.setFirstname("John");
         customer.setLastname("Dou");
+        customer.setPassword("rawpassword");
         customer = customerService.create(customer, shopService.getById(10L));
         assertTrue(customer.getCustomerId() > 0);
 

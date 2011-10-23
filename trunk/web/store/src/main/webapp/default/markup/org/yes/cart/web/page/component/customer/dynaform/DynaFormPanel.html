@@ -1,0 +1,53 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<body>
+<wicket:panel>
+
+    <table align="center" width="800" border="1">
+        <form wicket:id="form">
+                <table >
+                    <tr>
+                        <td colspan="2">
+                            <span><wicket:message key="customerAdditional">[additional info]</wicket:message></span>
+                        </td>
+                    </tr>
+                    <tr wicket:id="fields">
+                        <td>
+                            <span wicket:id="name">[name]</span>
+                        </td>
+                        <td wicket:id="editor">[editor]</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <a style="padding-left: 280px;" wicket:id="saveLink" >
+                                <span>
+                                    <wicket:message key="save">[save]</wicket:message>
+                                </span>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+    </table>
+
+
+
+    <wicket:fragment wicket:id="booleanEditor">
+        <input type="checkbox" wicket:id="edit"/>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="stringEditor">
+        <input type="text"  wicket:id="edit"/>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="singleChoiceEditor">
+        <select wicket:id="edit" ></select>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="multipleChoicesEditor">
+        <span wicket:id="edit"></span>
+    </wicket:fragment>
+
+
+</wicket:panel>
+</body>
+</html>

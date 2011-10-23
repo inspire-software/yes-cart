@@ -4,4 +4,6 @@
 	<entry key="create">Создать</entry>
 	<entry key="delete">Удалить</entry>
 	<entry key="edit">Редактировать</entry>
+    <entry key="addressTypeS">Доставка</entry>
+	<entry key="addressTypeB">Оплата</entry>
 </properties>

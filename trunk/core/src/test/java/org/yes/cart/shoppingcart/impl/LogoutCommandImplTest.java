@@ -21,7 +21,6 @@ public class LogoutCommandImplTest {
     public void testExecute() {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
 
-        assertNull(shoppingCart.getShoppingContext().getSecurityContext().getAuthentication());
 
         Map<String, String> params = new HashMap<String, String>();
         params.put(LoginCommandImpl.EMAIL, "test@test.com");
@@ -34,18 +33,17 @@ public class LogoutCommandImplTest {
 
         loginCommand.execute(shoppingCart);
 
-        assertNotNull(shoppingCart.getShoppingContext().getSecurityContext().getAuthentication());
+        assertNotNull(shoppingCart.getShoppingContext().getCustomerEmail());
 
         assertEquals("Test that auth in spring security context",
-                SecurityContextHolder.getContext().getAuthentication(),
-                shoppingCart.getShoppingContext().getSecurityContext().getAuthentication());
+                 "test@test.com",
+                shoppingCart.getShoppingContext().getCustomerEmail());
 
         LogoutCommandImpl command = new LogoutCommandImpl(null, null);
         command.execute(shoppingCart);
 
 
         assertNull(shoppingCart.getCustomerEmail());
-        assertNull(SecurityContextHolder.getContext().getAuthentication());
 
         assertNull(shoppingCart.getCustomerName());
 

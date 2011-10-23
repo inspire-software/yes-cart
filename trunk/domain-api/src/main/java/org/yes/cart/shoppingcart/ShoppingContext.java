@@ -14,20 +14,19 @@ import java.io.Serializable;
  */
 public interface ShoppingContext extends Serializable {
 
+    /**
+     * Get customer email.
+     * @return customer email.
+     */
+    String getCustomerEmail();
 
     /**
-     * Get {@link SecurityContext}.
-     *
-     * @return Security Context
+     * Set customer email.
+     * @param customerEmail customer email.
      */
-    SecurityContext getSecurityContext();
+    void setCustomerEmail(String customerEmail);
 
-    /**
-     * Set securityContext
-     *
-     * @param securityContext context to use.
-     */
-    void setSecurityContext(SecurityContext securityContext);
+
 
     /** Get shopper ip address */
     String getResolvedIp();

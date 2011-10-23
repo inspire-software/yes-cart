@@ -4,4 +4,6 @@
 	<entry key="create">Create</entry>
 	<entry key="delete">Delete</entry>
 	<entry key="edit">Edit</entry>
+	<entry key="addressTypeS">Shipping</entry>
+	<entry key="addressTypeB">Billing</entry>
 </properties>

@@ -26,7 +26,29 @@ public class RegistrationMessageImpl implements RegistrationMessage {
     private String firstname;
     private String lastname;
     private String password;
-    private boolean newPerson;
+    private String pathToTemplateFolder;
+    private String templateName;
+
+
+    /** {@inheritDoc} */
+    public String getTemplateName() {
+        return templateName;
+    }
+
+    /** {@inheritDoc} */
+    public void setTemplateName(final String templateName) {
+        this.templateName = templateName;
+    }
+
+    /** {@inheritDoc} */
+    public String getPathToTemplateFolder() {
+        return pathToTemplateFolder;
+    }
+
+    /** {@inheritDoc} */
+    public void setPathToTemplateFolder(final String pathToTemplateFolder) {
+        this.pathToTemplateFolder = pathToTemplateFolder;
+    }
 
     /** {@inheritDoc} */
     public String getShopMailFrom() {
@@ -36,16 +58,6 @@ public class RegistrationMessageImpl implements RegistrationMessage {
     /** {@inheritDoc} */
     public void setShopMailFrom(final String shopMailFrom) {
         this.shopMailFrom = shopMailFrom;
-    }
-
-    /** {@inheritDoc} */
-    public boolean isNewPerson() {
-        return newPerson;
-    }
-
-    /** {@inheritDoc} */
-    public void setNewPerson(final boolean newPerson) {
-        this.newPerson = newPerson;
     }
 
     /** {@inheritDoc} */
@@ -131,15 +143,12 @@ public class RegistrationMessageImpl implements RegistrationMessage {
     @Override
     public String toString() {
         return "RegistrationMessageImpl{" +
-                "shopId=" + shopId +
-                ", shopCode='" + shopCode + '\'' +
-                ", shopName='" + shopName + '\'' +
-                ", shopMailFrom='" + shopMailFrom + '\'' +
-                ", shopUrl=" + shopUrl +
+                "shopCode='" + shopCode + '\'' +
                 ", email='" + email + '\'' +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
-                ", newPerson=" + newPerson +
+                ", pathToTemplateFolder='" + pathToTemplateFolder + '\'' +
+                ", templateName='" + templateName + '\'' +
                 '}';
     }
 }

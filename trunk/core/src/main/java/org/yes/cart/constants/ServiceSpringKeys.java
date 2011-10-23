@@ -390,6 +390,17 @@ public interface ServiceSpringKeys {
     String PLURAL_FORM_SERVICE = "pluralFormService";
 
 
+    /**
+     * Password generator.
+     */
+    String PASSPHRAZE_GENERATOR = "passPhraseGenerator";
+
+   /**
+     * Hash creator.
+     */
+    String HASH_HELPER = "passwordHashHelper";
+
+
 
 
 }

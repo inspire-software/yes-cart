@@ -3,14 +3,11 @@ package org.yes.cart.shoppingcart.impl;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.dto.*;
+import org.yes.cart.domain.dto.ProductSkuDTO;
 import org.yes.cart.shoppingcart.*;
 
 import java.math.BigDecimal;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -298,21 +295,7 @@ public class ShoppingCartImpl implements ShoppingCart {
 
     /** {@inheritDoc} */
     public String getCustomerEmail() {
-        final Authentication authentication = getShoppingContext().getSecurityContext().getAuthentication();
-        if (authentication != null) {
-            if (authentication.getPrincipal() instanceof User) {
-                return ((User) authentication.getPrincipal()).getUsername();
-            }
-            if (LOG.isWarnEnabled()) {
-                LOG.warn(
-                        MessageFormat.format(
-                                "The {0} in authentication#principal not instance of User ",
-                                authentication.getPrincipal()
-                        )
-                );
-            }
-        }
-        return null;
+        return  getShoppingContext().getCustomerEmail();
     }
 
 

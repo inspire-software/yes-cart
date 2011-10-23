@@ -165,6 +165,7 @@ public class ManagementServiceImpl implements ManagementService {
         manager.setEmail(userId);
         manager.setFirstname(firstName);
         manager.setLastname(lastName);
+        manager.setPassword("TODO"); //TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         managerService.create(manager, null); //No particular shop at this moment, but  future
 

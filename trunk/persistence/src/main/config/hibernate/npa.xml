@@ -2764,6 +2764,19 @@ public void setRangeList(final RangeList rangeList) {
         return markupFolder;
     }
 
+    private String mailFolder = null;
+
+    @Transient
+    public String getMailFolder() {
+        if (mailFolder == null) {
+            synchronized (this) {
+                mailFolder = "/" + fspointer + "/mail";
+            }
+        }
+        return mailFolder;
+    }
+
+
 
                 ]]>
             </meta>
@@ -4338,6 +4351,12 @@ public void setRangeList(final RangeList rangeList) {
     <query name="SHOP.BY.URL">
         <![CDATA[
        select o.shop from ShopUrlEntity o where o.url = ?1
+       ]]>
+    </query>
+
+   <query name="SHOP.BY.CODE">
+        <![CDATA[
+       select o from ShopEntity o where o.code = ?1
        ]]>
     </query>
 

@@ -34,6 +34,7 @@ public class BaseRegisteredPersonAspect extends BaseNotificationAspect {
 
     /**
      * Construct base for aspect.
+     *
      * @param phrazeGenerator {@link PassPhrazeGenerator}
      * @param hashHelper      {@link HashHelper}
      * @param jmsTemplate     {@link JmsTemplate} to send message over JMS, if it null message will not send.
@@ -46,72 +47,12 @@ public class BaseRegisteredPersonAspect extends BaseNotificationAspect {
         this.phrazeGenerator = phrazeGenerator;
     }
 
-    /**
-     * Perform notification about person registration.
-     * @param pjp
-     * @param newPerson in case if new person was created.
-     * @return inherited return
-     * @throws Throwable
-     */
-    protected Object notifyInternal(final ProceedingJoinPoint pjp, final boolean newPerson) throws Throwable {
-        final Object[] args = pjp.getArgs();
-        if (args != null && args.length >= 1) {
-            if ( args[0] instanceof RegisteredPerson) {
 
-                final RegisteredPerson registeredPerson = (RegisteredPerson) args[0];
-                final String generatedPassword = phrazeGenerator.getNextPassPhrase();
-                final String passwordHash = hashHelper.getHash(generatedPassword);
 
-                registeredPerson.setPassword(passwordHash);
 
-                final RegistrationMessage registrationMessage = new RegistrationMessageImpl();
-                registrationMessage.setEmail(registeredPerson.getEmail());
-                registrationMessage.setFirstname(registeredPerson.getFirstname());
-                registrationMessage.setLastname(registeredPerson.getLastname());
-                registrationMessage.setPassword(generatedPassword);
-                registrationMessage.setNewPerson(newPerson);
-
-                addShopInformation(args, registrationMessage);
-
-                sendNotification(registrationMessage);
-                LOG.info("Person message was send to queue " + registrationMessage.toString());
-
-                return pjp.proceed();
-            }
-        }
-        return pjp.proceed();
-    }
-
-    /**
-     * Add shop information if it present.
-     * @param args function arguments
-     * @param registrationMessage message to add info
-     */
-    private void addShopInformation(final Object[] args, final RegistrationMessage registrationMessage) {
-        if (args.length >= 2 && args[1] instanceof Shop) {
-            final Shop shop = (Shop)  args[1];
-            registrationMessage.setShopId(shop.getShopId());
-
-            final AttrValue attrValue = shop.getAttributeByCode(AttributeNamesKeys.SHOP_MAIL_FROM);
-            if (attrValue != null && StringUtils.isNotBlank(attrValue.getVal())) {
-                //if value not set it will be collected from mail properties
-                registrationMessage.setShopMailFrom(attrValue.getVal());
-            }
-
-            registrationMessage.setShopCode(shop.getCode());
-            registrationMessage.setShopName(shop.getName());
-            registrationMessage.setShopUrl(transformShopUrls(shop.getShopUrl()));
-        }
-    }
-
-    private Set<String> transformShopUrls(final Set<ShopUrl> urls) {
-        final Set<String> rez = new HashSet<String>();
-        if (urls != null) {
-            for (ShopUrl url : urls) {
-                rez.add(url.getUrl());
-            }
-        }
-        return rez;
-    }
+    /*protected String getTemplateFolder(final Shop shop, final String templateName) {
+        StorefrontApplication
+        return null;
+    }   */
 
 }

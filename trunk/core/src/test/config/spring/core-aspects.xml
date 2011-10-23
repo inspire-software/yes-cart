@@ -19,21 +19,6 @@
     </bean>
     <bean id="passwordHashHelper" class="org.yes.cart.service.domain.impl.MD5HashHelperImpl"/>
 
-    <!-- #################################  aspects configurations begin ######################################-->
-
-    <bean id="customerRegistrationAspect" class="org.yes.cart.service.domain.aspect.impl.CustomerRegistrationAspect">
-        <constructor-arg index="0" ref="passPhraseGenerator"/>
-        <constructor-arg index="1" ref="passwordHashHelper"/>
-    </bean>
-
-
-    <bean id="managerRegistrationAspect" class="org.yes.cart.service.domain.aspect.impl.ManagerRegistrationAspect">
-        <constructor-arg index="0" ref="passPhraseGenerator"/>
-        <constructor-arg index="1" ref="passwordHashHelper"/>
-    </bean>
-
-    <!-- #################################  aspects configurations end ######################################-->
-
 
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="localhost"/>

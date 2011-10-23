@@ -16,8 +16,7 @@ import java.util.Map;
 public interface MailComposer {
 
 
-    String MAIL_TEMPLATE_CUSTOMER_CHANGE_PASSWORD = "customerChangePassword";
-    String MAIL_TEMPLATE_CUSTOMER_REGISTERED = "customerRegistered";
+
 
     String MAIL_TEMPLATE_MANAGER_CHANGE_PASSWORD = "managerChangePassword";
     String MAIL_TEMPLATE_MANAGER_REGISTERED = "managerRegistered";
@@ -27,6 +26,7 @@ public interface MailComposer {
      *
      * @param message      mime message to fill
      * @param shopCode     optional shop code
+     * @param pathToTemplateFolder path to template folder
      * @param templateName template name
      * @param from         from address
      * @param toEmail           mail desctinatiol address
@@ -40,6 +40,7 @@ public interface MailComposer {
     void composeMessage(
             MimeMessage message,
             String shopCode,
+            String pathToTemplateFolder,
             String templateName,
             String from,
             String toEmail,

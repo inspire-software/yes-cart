@@ -44,6 +44,8 @@ public class AddressServiceImplTest extends BaseCoreDBTestCase {
         customer.setEmail("bender@domain.com");
         customer.setFirstname("Bender");
         customer.setLastname("Rodriguez");
+        customer.setPassword("rawpassword");
+
         customer = customerService.create(customer, shopService.getById(10L));
         assertTrue (customer.getCustomerId() > 0);
 

@@ -1,9 +1,13 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
-    <wicket:panel>
-        <table align="center" width="800" border="1">
-            <tr><td>&nbsp;</td></tr>
-            <tr><td>
+<wicket:panel>
+
+    <table align="center" width="800" cellpadding="0" cellspacing="0">
+        <tr>
+            <td><span wicket:id="feedback"/></td>
+        </tr>
+        <tr>
+            <td>
                 <form wicket:id="registerForm">
                     <table>
                         <tr>
@@ -27,7 +31,7 @@
                             <td>
                                 <wicket:message key="lastname">[last name]</wicket:message>
                             </td>
-                            <td><input type="text"  wicket:id="lastname"/></td>
+                            <td><input type="text" wicket:id="lastname"/></td>
                         </tr>
                         <tr>
                             <td>
@@ -38,14 +42,17 @@
                         <tr>
                             <td>&nbsp;</td>
                             <td>
-                                <a wicket:id="registerLink"><span><wicket:message key="register">[register]</wicket:message></span></a>
+                                <input type="submit" wicket:id="registerBtn" wicket:message="value:register"/>
                             </td>
                         </tr>
                     </table>
                 </form>
-            </td></tr>
-            <tr><td >&nbsp;</td></tr>
-        </table>
-    </wicket:panel>
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+</wicket:panel>
 </body>
 </html>

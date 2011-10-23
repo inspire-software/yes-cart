@@ -74,7 +74,7 @@ public class RemoteImageServiceImpl extends AbstractRemoteService<SeoImageDTO> i
         final ShopDTO shopDTO = dtoShopService.getShopDtoByDomainName(
                 FlexContext.getHttpRequest().getServerName().toLowerCase()
         );
-
+        //TODO storefront context
         return FlexContext.getServletContext().getRealPath("/../yes-shop" + shopDTO.getImageVaultFolder()) + File.separator;
 
     }

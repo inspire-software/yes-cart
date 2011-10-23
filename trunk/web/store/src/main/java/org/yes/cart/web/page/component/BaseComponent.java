@@ -7,6 +7,8 @@ import org.apache.wicket.model.IModel;
 
 public class BaseComponent extends Panel {
 
+    public static final String FEEDBACK = "feedback";
+
     public static final String HTML_CLASS = "class";
     public static final String HTML_TITLE = "title";
     public static final String HTML_ALT = "alt";
