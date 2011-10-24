@@ -1,4 +1,4 @@
-package org.yes.cart.web.page.component.customer;
+package org.yes.cart.web.page.component.customer.address;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.SubmitLink;
