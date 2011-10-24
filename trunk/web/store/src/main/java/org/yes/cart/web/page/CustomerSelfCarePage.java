@@ -10,7 +10,7 @@ import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.web.application.ApplicationDirector;
-import org.yes.cart.web.page.component.customer.ManageAddressesView;
+import org.yes.cart.web.page.component.customer.address.ManageAddressesView;
 import org.yes.cart.web.page.component.customer.dynaform.DynaFormPanel;
 import org.yes.cart.web.page.component.customer.order.CustomerOrderPanel;
 import org.yes.cart.web.page.component.customer.password.PasswordPanel;
