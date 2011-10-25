@@ -9,7 +9,7 @@
                 </td>
             </tr>
             <tr>
-                <td>
+                <td colspan="2">
                     <a wicket:id="createLink">
                         <span>
                             <wicket:message key="create">[create]</wicket:message>
@@ -17,32 +17,25 @@
                     </a>
                 </td>
             </tr>
-            <tr>
+            <tr wicket:id="addressList">
                 <td>
-                    <div wicket:id="addressRadioGroup">
-                        <table border="1">
-                            <tr wicket:id="addressList">
-                                <td valign="top">
-                                    <input type="radio" wicket:id="addressRadio">
-                                </td>
-                                <td>
-                                    <div wicket:id="addressShopPanel">[single <br>address show/edit]</div>
-                                </td>
-                                <td valign="top">
-                                    <a wicket:id="deleteLink">
-                                        <span>
-                                            <wicket:message key="delete">[delete]</wicket:message>
-                                        </span>
-                                    </a>
-                                    <a wicket:id="editLink">
-                                        <span>
-                                            <wicket:message key="edit">[edit]</wicket:message>
-                                        </span>
-                                    </a>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
+                    <div wicket:id="addrLine1">[line 1]</div>
+                    <div wicket:id="addrLine2">[line 2]</div>
+                    <div wicket:id="addrLine3">[line 3]</div>
+                    <div wicket:id="addrLine4">[line 4]</div>
+                    <div wicket:id="addrLine5">[line 5]</div>
+                </td>
+                <td valign="top">
+                    <a wicket:id="deleteLink">
+                        <span>
+                            <wicket:message key="delete">[delete]</wicket:message>
+                        </span>
+                    </a>
+                    <a wicket:id="editLink">
+                        <span>
+                            <wicket:message key="edit">[edit]</wicket:message>
+                        </span>
+                    </a>
                 </td>
             </tr>
         </table>
