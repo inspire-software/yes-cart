@@ -48,9 +48,9 @@ public class AddressListView extends BaseComponent {
         super(s);
         final Address address = addressService.getGenericDao().getEntityFactory().getByIface(Address.class);
 
-        add(
+        /*add(
                 new AddressEntryView(ADDRESS_SELECTOR_ENTRY, addresses)
-        );
+        );   */
 
 
 
@@ -67,7 +67,7 @@ public class AddressListView extends BaseComponent {
                 new CompoundPropertyModel(address),
                 addressType,
                 null, //todo CheckoutPage.class,
-                succsesspageParameters,
+                null,             //succsesspageParameters
                 null,
                 null );
 
