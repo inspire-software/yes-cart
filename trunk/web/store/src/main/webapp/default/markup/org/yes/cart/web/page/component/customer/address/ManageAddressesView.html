@@ -41,7 +41,85 @@
         </table>
     </form>
 
+
     <form wicket:id="editAddressForm">
+
+        <table cellpadding="0" cellspacing="0" class="table-in-form">
+            <tr>
+                <td colspan="2">
+                    <span class="table-title-in-form"><wicket:message key="adderessTitle">[Edit address]
+                    </wicket:message></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <wicket:message key="firstName">[First name]</wicket:message>
+                </td>
+                <td><input type="text" class="input-text" wicket:id="firstName"/></td>
+            </tr>
+            <tr>
+                <td>
+                    <wicket:message key="lastName">[Last name]</wicket:message>
+                </td>
+                <td><input type="text" class="input-text" wicket:id="lastName"/></td>
+            </tr>
+            <tr>
+                <td>
+                    <wicket:message key="line1">[line 1]</wicket:message>
+                </td>
+                <td><input type="text" class="input-text" wicket:id="line1"/></td>
+            </tr>
+            <tr>
+                <td>
+                    <wicket:message key="line2">[line 2]</wicket:message>
+                </td>
+                <td><input type="text" class="input-text" wicket:id="line2"/></td>
+            </tr>
+            <tr>
+                <td>
+                    <wicket:message key="country">[Country]</wicket:message>
+                </td>
+                <td><select class="input-select" wicket:id="country"/></td>
+            </tr>
+            <tr>
+                <td>
+                    <wicket:message key="state">[State]</wicket:message>
+                </td>
+                <td><select class="input-select" wicket:id="state"/></td>
+            </tr>
+            <tr>
+                <td>
+                    <wicket:message key="city">[City]</wicket:message>
+                </td>
+                <td><input type="text" class="input-text" wicket:id="city"/></td>
+            </tr>
+            <tr>
+                <td>
+                    <wicket:message key="postcode">[postcode]</wicket:message>
+                </td>
+                <td><input type="text" class="input-text" wicket:id="postcode"/></td>
+            </tr>
+            <tr>
+                <td>
+                    <wicket:message key="phoneList">[phoneList]</wicket:message>
+                </td>
+                <td><input type="text" class="input-text" wicket:id="phoneList"/></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <a style="padding-left: 150px;" wicket:id="cancel" class="saveg">
+                                    <span>
+                                        <wicket:message key="cancel">[cancel]</wicket:message>
+                                    </span>
+                    </a>
+                    <a wicket:id="addAddress" class="saveg">
+                                    <span>
+                                        <wicket:message key="create">[create]</wicket:message>
+                                    </span>
+                    </a>
+                </td>
+            </tr>
+        </table>
 
     </form>
 
