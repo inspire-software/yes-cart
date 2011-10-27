@@ -7,6 +7,7 @@ import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -28,7 +29,8 @@ public class ManageAddressesView extends BaseComponent {
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
 
-    protected final static String ADDRESSES_FORM = "selectAddressForm";
+    protected final static String SELECT_ADDRESSES_FORM = "selectAddressForm";
+    protected final static String EDIT_ADDRESSES_FORM = "editAddressForm";
     protected final static String ADDRESSES_LIST = "addressList";
 
     private final static String CREATE_LINK = "createLink";
@@ -59,8 +61,11 @@ public class ManageAddressesView extends BaseComponent {
 
         super(s);
 
+        final boolean editFormVisible = false;
+        final Address address = addressService.getGenericDao().getEntityFactory().getByIface(Address.class); //todo move into method
+
         add(
-                new Form(ADDRESSES_FORM)
+                new Form(SELECT_ADDRESSES_FORM)
                         .add(
                                 new Label(ADDRESS_LABEL, getLocalizer().getString("addressType" + addressType, this))
                         )
@@ -84,6 +89,20 @@ public class ManageAddressesView extends BaseComponent {
                                     }
                                 }
                         )
+                .setVisible(!editFormVisible)
+        );
+
+        add(
+                new AddressForm(
+                        EDIT_ADDRESSES_FORM,
+                        new Model<Address>(address),
+                        addressType,
+                        CustomerSelfCarePage.class,
+                        null, //successPageParameters
+                        CustomerSelfCarePage.class,
+                        null //successPageParameters
+                        )
+                    .setVisible(editFormVisible)
         );
 
 
