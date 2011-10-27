@@ -1,9 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-	<entry key="create">Create</entry>
-	<entry key="delete">Delete</entry>
-	<entry key="edit">Edit</entry>
-	<entry key="addressTypeS">Shipping</entry>
-	<entry key="addressTypeB">Billing</entry>
+    <entry key="create">Create</entry>
+    <entry key="delete">Delete</entry>
+    <entry key="edit">Edit</entry>
+    <entry key="addressTypeS">Shipping</entry>
+    <entry key="addressTypeB">Billing</entry>
+
+    <entry key="adderessTitle">Addess</entry>
+    <entry key="firstName">First name</entry>
+    <entry key="lastName">Last name</entry>
+    <entry key="line1">Address line 1</entry>
+    <entry key="line2">Address line 2</entry>
+    <entry key="city">City</entry>
+    <entry key="country">Country</entry>
+    <entry key="state">State</entry>
+    <entry key="postcode">Post code</entry>
+    <entry key="phoneList">Phones</entry>
+    <entry key="create">Save</entry>
+    <entry key="cancel">Cancel</entry>
+
 </properties>
