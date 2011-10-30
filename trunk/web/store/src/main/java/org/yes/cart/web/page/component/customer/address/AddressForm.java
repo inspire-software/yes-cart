@@ -25,11 +25,12 @@ import org.yes.cart.web.support.constants.WebParametersKeys;
 import java.util.List;
 
 /**
+ * Form to create / edit customer address.
  * Igor Azarny iazarny@yahoo.com
  * Date: 12/10/11
  * Time: 18:01
  */
-public class AddressForm  extends Form<Address> {
+public class AddressForm extends Form<Address> {
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private final static String FIRSTNAME = "firstName";
@@ -69,13 +70,13 @@ public class AddressForm  extends Form<Address> {
     /**
      * Create address form.
      *
-     * @param s             form id
-     * @param addressIModel address model.
-     * @param addressType   address type
-     * @param succsessPage succsess page class
+     * @param s                      form id
+     * @param addressIModel          address model.
+     * @param addressType            address type
+     * @param succsessPage           succsess page class
      * @param succsessPageParameters succsess page parameters
-     * @param cancelPage optional cancel page class
-     * @param cancelPageParameters optional  cancel page parameters
+     * @param cancelPage             optional cancel page class
+     * @param cancelPageParameters   optional  cancel page parameters
      */
     public AddressForm(final String s,
                        final IModel<Address> addressIModel,
@@ -94,36 +95,47 @@ public class AddressForm  extends Form<Address> {
         final Address address = addressIModel.getObject();
 
         final Customer customer = customerService.findCustomer(
-               ApplicationDirector.getShoppingCart().getCustomerEmail()
+                ApplicationDirector.getShoppingCart().getCustomerEmail()
         );
 
 
         preprocessAddress(address, addressType, customer);
 
 
-
-        add(new TextField<String>(FIRSTNAME, new PropertyModel<String>(address, "firstname")).setRequired(true).add(new StringValidator.MaximumLengthValidator(MEDIUM_LENGTH)));
-        add(new TextField<String>(LASTNAME, new PropertyModel<String>(address, "lastname")).setRequired(true).add(new StringValidator.MaximumLengthValidator(MEDIUM_LENGTH)));
-        add(new TextField<String>(LINE1, new PropertyModel<String>(address, "addrline1")).setRequired(true).add(new StringValidator.MaximumLengthValidator(LARGE_LENGTH)));
-        add(new TextField<String>(LINE2, new PropertyModel<String>(address, "addrline2")).add(new StringValidator.MaximumLengthValidator(LARGE_LENGTH)));
-        add(new TextField<String>(CITY, new PropertyModel<String>(address, "city")).setRequired(true).add(new StringValidator.MaximumLengthValidator(MEDIUM_LENGTH)));
-        add(new TextField<String>(POSTCODE, new PropertyModel<String>(address, "postcode")).setRequired(true).add(new StringValidator.MaximumLengthValidator(SMALL_LENGTH)));
-        add(new TextField<String>(PHONELIST, new PropertyModel<String>(address, "phoneList")).setRequired(true).add(new StringValidator.MaximumLengthValidator(LARGE_LENGTH)));
-
-
         final List<State> stateList = getStateList(address.getCountryCode());
+        final List<Country> countryList = countryService.findAll();
+
         final AbstractChoice<State, State> stateDropDownChoice = new DropDownChoice<State>(
                 STATE,
-                new StateModel(new PropertyModel(address, "countryCode"), stateList),
+                new StateModel(new PropertyModel(address, "stateCode"), stateList),
                 stateList).setChoiceRenderer(new StateRenderer());
         stateDropDownChoice.setRequired(!stateList.isEmpty());
+
+
         add(
+                new TextField<String>(FIRSTNAME, new PropertyModel<String>(address, "firstname"))
+                        .setRequired(true).add(new StringValidator.MaximumLengthValidator(MEDIUM_LENGTH))
+        ).add(
+                new TextField<String>(LASTNAME, new PropertyModel<String>(address, "lastname"))
+                        .setRequired(true).add(new StringValidator.MaximumLengthValidator(MEDIUM_LENGTH))
+        ).add(
+                new TextField<String>(LINE1, new PropertyModel<String>(address, "addrline1"))
+                        .setRequired(true).add(new StringValidator.MaximumLengthValidator(LARGE_LENGTH))
+        ).add(
+                new TextField<String>(LINE2, new PropertyModel<String>(address, "addrline2"))
+                        .add(new StringValidator.MaximumLengthValidator(LARGE_LENGTH))
+        ).add(
+                new TextField<String>(CITY, new PropertyModel<String>(address, "city"))
+                        .setRequired(true).add(new StringValidator.MaximumLengthValidator(MEDIUM_LENGTH))
+        ).add(
+                new TextField<String>(POSTCODE, new PropertyModel<String>(address, "postcode"))
+                        .setRequired(true).add(new StringValidator.MaximumLengthValidator(SMALL_LENGTH))
+        ).add(
+                new TextField<String>(PHONELIST, new PropertyModel<String>(address, "phoneList"))
+                        .setRequired(true).add(new StringValidator.MaximumLengthValidator(LARGE_LENGTH))
+        ).add(
                 stateDropDownChoice
-        );
-
-
-        final List<Country> countryList = countryService.findAll();
-        add(
+        ).add(
                 new DropDownChoice<Country>(
                         COUNTRY,
                         new CountryModel(new PropertyModel(address, "countryCode"), countryList),
@@ -143,13 +155,22 @@ public class AddressForm  extends Form<Address> {
                     }
 
                 }.setChoiceRenderer(new CountryRenderer()).setRequired(true)
-        );
+        ).add(
+                new SubmitLink(ADD_ADDRESS) {
 
-        add(
-                new SubmitLink(ADD_ADDRESS)
-        );
+                    @Override
+                    public void onSubmit() {
+                        final Address addr = getModelObject();
+                        if (addr.getAddressId() == 0) {
+                            addressService.create(addr);
+                        } else {
+                            addressService.update(addr);
+                        }
+                        setResponsePage(succsessPage, succsessPageParameters);
+                    }
 
-        add(
+                }
+        ).add(
                 new SubmitLink(CANCELL_LINK) {
 
                     @Override
@@ -164,9 +185,10 @@ public class AddressForm  extends Form<Address> {
 
     /**
      * Fill some data in case of new {@link Address}
+     *
      * @param addressType addres type
-     * @param address address to preprocess
-     * @param customer customer.
+     * @param address     address to preprocess
+     * @param customer    customer.
      */
     private void preprocessAddress(final Address address, final String addressType, final Customer customer) {
         if (address.getAddressId() == 0) {
@@ -182,14 +204,15 @@ public class AddressForm  extends Form<Address> {
      * Fill new Address with Geo Ip data.
      * At this moment only profile data are supplied. No geo ip.
      * INTEGRATION POINT with tag cloud, that will have geo ip data
-     * @param address address to fill
+     *
+     * @param address  address to fill
      * @param customer customer.
      */
     private void fillAddressWithGeoIpData(final Address address, final Customer customer) {
         final AttrValueCustomer attrValue = customer.getAttributeByCode(AttributeNamesKeys.CUSTOMER_PHONE);
         address.setFirstname(customer.getFirstname());
         address.setLastname(customer.getLastname());
-        address.setPhoneList(attrValue==null?StringUtils.EMPTY:attrValue.getVal());
+        address.setPhoneList(attrValue == null ? StringUtils.EMPTY : attrValue.getVal());
     }
 
 
