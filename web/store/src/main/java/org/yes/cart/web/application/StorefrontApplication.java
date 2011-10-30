@@ -16,6 +16,7 @@ import org.apache.wicket.util.resource.IResourceStream;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.yes.cart.web.page.*;
+import org.yes.cart.web.page.component.customer.address.CreateEditAddressPage;
 import org.yes.cart.web.util.SeoBookmarkablePageParametersEncoder;
 
 import java.util.Map;
@@ -148,6 +149,20 @@ public class StorefrontApplication
                 new MountedMapper(
                         "/registration",
                         RegistrationPage.class
+                )
+        );
+
+       mount(
+                new MountedMapper(
+                        "/address",
+                        CreateEditAddressPage.class
+                )
+        );
+
+       mount(
+                new MountedMapper(
+                        "/checkout",
+                        CheckoutPage.class
                 )
         );
     }

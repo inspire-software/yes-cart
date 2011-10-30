@@ -15,10 +15,7 @@ import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.web.application.ApplicationDirector;
-import org.yes.cart.web.page.AbstractWebPage;
-import org.yes.cart.web.page.CustomerSelfCarePage;
-import org.yes.cart.web.page.HomePage;
-import org.yes.cart.web.page.RegistrationPage;
+import org.yes.cart.web.page.*;
 import org.yes.cart.web.page.component.BaseComponent;
 
 /**
@@ -39,19 +36,37 @@ public class LoginPanel extends BaseComponent {
     private static final String LOGIN_FORM = "loginForm";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
+    private final boolean isCheckout;
+
 
     /**
      * Construct login panel.
      *
      * @param id panel id
+     * @param isCheckout is we are on checkout
      */
-    public LoginPanel(final String id) {
+    public LoginPanel(final String id, final boolean isCheckout) {
         super(id);
+        this.isCheckout = isCheckout;
+
+        final Class<? extends Page> successfulPage;
+        final PageParameters parameters = new PageParameters();
+
+        if (isCheckout) {
+            successfulPage = CheckoutPage.class;
+            parameters.set(
+                    CheckoutPage.THREE_STEPS_PROCESS,
+                    "true"
+            ).set(
+                    CheckoutPage.STEP,
+                    CheckoutPage.STEP_ADDR
+            );
+        } else {
+            successfulPage = HomePage.class;
+        }
+
         add(
-                new FeedbackPanel(FEEDBACK))
-        ;
-        add(
-                new LoginForm(LOGIN_FORM)
+                new LoginForm(LOGIN_FORM, successfulPage, parameters)
         );
     }
 
@@ -81,8 +96,12 @@ public class LoginPanel extends BaseComponent {
          * Construct login form.
          *
          * @param id                       form id
+         * @param successfulPage page to go in case of successful
+         * @param parameters parameters
          */
-        public LoginForm(final String id) {
+        public LoginForm(final String id,
+                         final Class<? extends Page> successfulPage,
+                         final PageParameters parameters) {
 
             super(id);
 
@@ -92,15 +111,18 @@ public class LoginPanel extends BaseComponent {
 
                 @Override
                 public void onSubmit() {
-
-                    System.out.println("on restore password");
-
                     final Customer customer = getCustomerService().findCustomer(getEmail());
                     if (customer != null) {
                         getCustomerService().resetPassword(customer, ApplicationDirector.getCurrentShop());
                     }
                     ((AbstractWebPage) getPage()).processCommands();
-                    setResponsePage(HomePage.class);
+
+                    if(isCheckout) {
+                        info("New password was sent. Check email please."); //todo localization
+                    } else {
+                        setResponsePage(HomePage.class);
+                    }
+
                 }
 
 
@@ -115,6 +137,7 @@ public class LoginPanel extends BaseComponent {
 
             add(
                     new BookmarkablePageLink<RegistrationPage>(REGISTRATION_LINK, RegistrationPage.class)
+                        .setVisible(!isCheckout)
             );
 
             add(
@@ -134,14 +157,12 @@ public class LoginPanel extends BaseComponent {
                         @Override
                         public void onSubmit() {
 
-                            System.out.println("on submit  login" + getEmail() + getPassword());
-
                             if (signIn(getEmail(), getPassword())) {
                                 final IAuthenticationStrategy strategy = getApplication().getSecuritySettings()
                                         .getAuthenticationStrategy();
                                 strategy.save(getEmail(), getPassword());
                                 if (!continueToOriginalDestination()) {
-                                    setResponsePage(CustomerSelfCarePage.class);
+                                    setResponsePage(successfulPage, parameters);
                                 }
                             } else {
                                 if (isCustomerExists(getEmail())) {

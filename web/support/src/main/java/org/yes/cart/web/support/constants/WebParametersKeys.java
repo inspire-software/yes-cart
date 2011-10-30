@@ -75,6 +75,9 @@ public interface WebParametersKeys {
 
     String ADDRESS_TYPE = "addrType";
 
+    /** Label, that shows return address after address editing */
+    String ADDRESS_FORM_RETURN_LABEL= "returnTo";
+
     /**
      * Quantity of items per page.
      */

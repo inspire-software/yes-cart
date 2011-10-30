@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="../../../../style/default.css" media="screen"/>
+    <title>Registration</title>
+</head>
+
+<body>
+
+
+<table id="mainTable" border="1" align="center" width="1024">
+    <tr>
+        <td>
+            <div wicket:id="feedback">[feedpack panel]</div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <form wicket:id="addressForm">
+
+                <table cellpadding="0" cellspacing="0" class="table-in-form">
+                    <tr>
+                        <td colspan="2">
+                    <span class="table-title-in-form"><wicket:message key="adderessTitle">[Edit address]
+                    </wicket:message></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <wicket:message key="firstName">[First name]</wicket:message>
+                        </td>
+                        <td><input type="text" class="input-text" wicket:id="firstName"/></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <wicket:message key="lastName">[Last name]</wicket:message>
+                        </td>
+                        <td><input type="text" class="input-text" wicket:id="lastName"/></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <wicket:message key="line1">[line 1]</wicket:message>
+                        </td>
+                        <td><input type="text" class="input-text" wicket:id="line1"/></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <wicket:message key="line2">[line 2]</wicket:message>
+                        </td>
+                        <td><input type="text" class="input-text" wicket:id="line2"/></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <wicket:message key="country">[Country]</wicket:message>
+                        </td>
+                        <td><select class="input-select" wicket:id="country"/></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <wicket:message key="state">[State]</wicket:message>
+                        </td>
+                        <td><select class="input-select" wicket:id="state"/></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <wicket:message key="city">[City]</wicket:message>
+                        </td>
+                        <td><input type="text" class="input-text" wicket:id="city"/></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <wicket:message key="postcode">[postcode]</wicket:message>
+                        </td>
+                        <td><input type="text" class="input-text" wicket:id="postcode"/></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <wicket:message key="phoneList">[phoneList]</wicket:message>
+                        </td>
+                        <td><input type="text" class="input-text" wicket:id="phoneList"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <a style="padding-left: 150px;" wicket:id="cancel" class="saveg">
+                                    <span>
+                                        <wicket:message key="cancel">[cancel]</wicket:message>
+                                    </span>
+                            </a>
+                            <a wicket:id="addAddress" class="saveg">
+                                    <span>
+                                        <wicket:message key="create">[create]</wicket:message>
+                                    </span>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+
+            </form>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

@@ -20,6 +20,8 @@ import org.yes.cart.service.domain.PassPhrazeGenerator;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
+import org.yes.cart.web.page.CheckoutPage;
+import org.yes.cart.web.page.CustomerSelfCarePage;
 import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.component.BaseComponent;
 
@@ -49,17 +51,31 @@ public class RegisterPanel extends BaseComponent {
     /**
      * Create register panel.
      *
-     * @param id component id.
+     * @param id         component id.
+     * @param isCheckout true if we are on checkout
      */
-    public RegisterPanel(final String id) {
+    public RegisterPanel(final String id, final boolean isCheckout) {
+
         super(id);
 
-        add(
-                new FeedbackPanel(FEEDBACK)
-        );
+        final Class<? extends Page> successfulPage;
+        final PageParameters parameters = new PageParameters();
+
+        if (isCheckout) {
+            successfulPage = CheckoutPage.class;
+            parameters.set(
+                    CheckoutPage.THREE_STEPS_PROCESS,
+                    "true"
+            ).set(
+                    CheckoutPage.STEP,
+                    CheckoutPage.STEP_ADDR
+            );
+        } else {
+            successfulPage = CustomerSelfCarePage.class;
+        }
 
         add(
-                new RegisterForm(REGISTER_FORM, HomePage.class)
+                new RegisterForm(REGISTER_FORM, successfulPage, parameters)
         );
 
     }
@@ -153,9 +169,11 @@ public class RegisterPanel extends BaseComponent {
          *
          * @param id             form id.
          * @param successfulPage page to go in case of successful
+         * @param parameters parameters
          */
         public RegisterForm(final String id,
-                            final Class<? extends Page> successfulPage) {
+                            final Class<? extends Page> successfulPage,
+                            final PageParameters parameters) {
 
             super(id);
 
@@ -223,7 +241,7 @@ public class RegisterPanel extends BaseComponent {
                                 if (signIn(getEmail(), password)) {
 
                                     ((AbstractWebPage) getPage()).processCommands();
-                                    setResponsePage(successfulPage);
+                                    setResponsePage(successfulPage, parameters);
 
                                 } else {
 

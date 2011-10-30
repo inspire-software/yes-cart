@@ -3,6 +3,8 @@ package org.yes.cart.web.page.component.customer.address;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.Radio;
+import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -31,6 +33,9 @@ public class ManageAddressesView extends BaseComponent {
 
     protected final static String SELECT_ADDRESSES_FORM = "selectAddressForm";
     protected final static String EDIT_ADDRESSES_FORM = "editAddressForm";
+    protected final static String ADDRESS_RADIO_GROUP = "addressRadioGroup";
+    protected final static String ADDRESS_RADIO = "addressRadio";
+
     protected final static String ADDRESSES_LIST = "addressList";
 
     private final static String CREATE_LINK = "createLink";
@@ -61,59 +66,62 @@ public class ManageAddressesView extends BaseComponent {
 
         super(s);
 
-        final boolean editFormVisible = false;
-        final Address address = addressService.getGenericDao().getEntityFactory().getByIface(Address.class); //todo move into method
-
         add(
-                new Form(SELECT_ADDRESSES_FORM)
-                        .add(
-                                new Label(ADDRESS_LABEL, getLocalizer().getString("addressType" + addressType, this))
-                        )
-                        .add(
-                                new SubmitLink(CREATE_LINK) {
-                                    @Override
-                                    public void onSubmit() {
-                                        final PageParameters pageParameters = new PageParameters();
-                                        //todo pageParameters.add(CustomerSelfCarePage.PANEL, CustomerSelfCarePage.EDIT_ADDRESS_PANEL);
-                                        pageParameters.add(WebParametersKeys.ADDRESS_ID, "0");
-                                        pageParameters.add(WebParametersKeys.ADDRESS_TYPE, addressType);
-                                        setResponsePage(CustomerSelfCarePage.class, pageParameters);
+                new Form(SELECT_ADDRESSES_FORM).add(
+                        new RadioGroup<Address>(
+                                ADDRESS_RADIO_GROUP,
+                                new Model<Address>(getDefaultAddress(customerModel.getObject().getAddresses(addressType)))) {
 
-                                    }
-                                }.setDefaultFormProcessing(false)
-                        )
-                        .add(
-                                new ListView<Address>(ADDRESSES_LIST, customerModel.getObject().getAddresses(addressType)) {
-                                    protected void populateItem(final ListItem<Address> addressListItem) {
-                                        populateAddress(addressListItem, addressListItem.getModelObject());
-                                    }
-                                }
-                        )
-                .setVisible(!editFormVisible)
+                            @Override
+                            protected void onSelectionChanged(final Object o) {
+                                super.onSelectionChanged(o);
+                                addressService.updateSetDefault((Address) o);
+                            }
+
+                            @Override
+                            protected boolean wantOnSelectionChangedNotifications() {
+                                return true;
+                            }
+
+                        }
+                                .add(
+                                        new Label(ADDRESS_LABEL, getLocalizer().getString("addressType" + addressType, this))
+                                )
+                                .add(
+                                        new SubmitLink(CREATE_LINK) {
+                                            @Override
+                                            public void onSubmit() {
+                                                final PageParameters pageParameters = new PageParameters();
+                                                pageParameters.add(WebParametersKeys.ADDRESS_FORM_RETURN_LABEL, CreateEditAddressPage.RETURN_TO_SELFCARE); //todo checkout
+                                                pageParameters.add(WebParametersKeys.ADDRESS_ID, "0");
+                                                pageParameters.add(WebParametersKeys.ADDRESS_TYPE, addressType);
+                                                setResponsePage(CreateEditAddressPage.class, pageParameters);
+
+                                            }
+                                        }.setDefaultFormProcessing(false)
+                                )
+                                .add(
+                                        new ListView<Address>(ADDRESSES_LIST, customerModel.getObject().getAddresses(addressType)) {
+                                            protected void populateItem(final ListItem<Address> addressListItem) {
+                                                populateAddress(addressListItem, addressListItem.getModelObject());
+                                            }
+                                        }
+                                )
+                )
         );
-
-        add(
-                new AddressForm(
-                        EDIT_ADDRESSES_FORM,
-                        new Model<Address>(address),
-                        addressType,
-                        CustomerSelfCarePage.class,
-                        null, //successPageParameters
-                        CustomerSelfCarePage.class,
-                        null //successPageParameters
-                        )
-                    .setVisible(editFormVisible)
-        );
-
 
     }
 
     /**
-     * {@inheritDoc}
+     * * Populate address entry
+     *
+     * @param addressListItem list item
+     * @param address         address entry
      */
     protected void populateAddress(final ListItem<Address> addressListItem, final Address address) {
 
         addressListItem
+                .add(new Radio<Address>(ADDRESS_RADIO, new Model<Address>(address)))
                 .add(new Label(LINE1, address.getFirstname() + ", " + address.getLastname()))
                 .add(new Label(LINE2, address.getAddrline1()))
                 .add(new Label(LINE3, StringUtils.isBlank(address.getAddrline2()) ? StringUtils.EMPTY : address.getAddrline1()))
@@ -125,10 +133,10 @@ public class ManageAddressesView extends BaseComponent {
                             public void onSubmit() {
 
                                 final PageParameters pageParameters = new PageParameters();
-                                //todo pageParameters.add(CustomerSelfCarePage.PANEL, CustomerSelfCarePage.EDIT_ADDRESS_PANEL);
+                                pageParameters.add(WebParametersKeys.ADDRESS_FORM_RETURN_LABEL, CreateEditAddressPage.RETURN_TO_SELFCARE); //todo checkout
                                 pageParameters.add(WebParametersKeys.ADDRESS_ID, String.valueOf(address.getAddressId()));
                                 pageParameters.add(WebParametersKeys.ADDRESS_TYPE, address.getAddressType());
-                                setResponsePage(CustomerSelfCarePage.class, pageParameters);
+                                setResponsePage(CreateEditAddressPage.class, pageParameters);
 
                             }
                         }.setDefaultFormProcessing(false)
@@ -150,12 +158,27 @@ public class ManageAddressesView extends BaseComponent {
                                     }
                                 }
 
-                                final PageParameters pageParameters = new PageParameters();
-                                //todo pageParameters.add(CustomerSelfCarePage.PANEL, CustomerSelfCarePage.SELFCARE_PANEL);
-                                setResponsePage(CustomerSelfCarePage.class, pageParameters);
+                                setResponsePage(CustomerSelfCarePage.class);
 
                             }
                         }.setDefaultFormProcessing(false)
                 );
     }
+
+
+    /**
+     * Getr first default address.
+     *
+     * @param addresses address list
+     * @return first address, that marked as default or null if not found
+     */
+    protected Address getDefaultAddress(final List<Address> addresses) {
+        for (Address addr : addresses) {
+            if (addr.isDefaultAddress()) {
+                return addr;
+            }
+        }
+        return null;
+    }
+
 }

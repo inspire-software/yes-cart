@@ -1,30 +1,30 @@
 package org.yes.cart.web.filter;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.wicket.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.impl.ChangeLocaleCartCommandImpl;
-import org.yes.cart.shoppingcart.impl.SetShopCartCommandImpl;
 import org.yes.cart.shoppingcart.impl.ChangeCurrencyEventCommandImpl;
+import org.yes.cart.shoppingcart.impl.SetShopCartCommandImpl;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.request.HttpServletRequestWrapper;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.ApplicationContext;
-import org.springframework.beans.BeansException;
 import org.yes.cart.web.support.service.LanguageService;
 
-import javax.servlet.*;
+import javax.servlet.Filter;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Locale;
 
 
 /**
