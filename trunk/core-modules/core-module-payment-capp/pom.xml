@@ -142,13 +142,8 @@
             <plugins>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
+                    <inherited>true</inherited>
                     <configuration>
-                        <forkMode>pertest</forkMode>
-                        <argLine>-Xms512m -Xmx1024m</argLine>
-                        <testFailureIgnore>false</testFailureIgnore>
-                        <threadCount>12</threadCount>
-                        <useUnlimitedThreads>true</useUnlimitedThreads>
-                        <parallel>classes</parallel>
                         <systemProperties>
                             <property>
                                 <name>testPgCyberSource</name>
