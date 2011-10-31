@@ -47,22 +47,6 @@
     </dependencies>
 
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <configuration>
-                        <forkMode>pertest</forkMode>
-                        <argLine>-Xms512m -Xmx1024m</argLine>
-                        <testFailureIgnore>false</testFailureIgnore>
-                        <!--threadCount>12</threadCount-->
-                        <useUnlimitedThreads>true</useUnlimitedThreads>
-                        <parallel>classes</parallel>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-
         <testResources>
             <testResource>
                 <directory>src/test/resources</directory>
