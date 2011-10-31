@@ -43,6 +43,8 @@
                             </excludes>
                         </resource>
                     </webResources>
+                    <!-- web.xml is added to the project by other means, and shouldn't be packaged by default -->
+                    <packagingExcludes>WEB-INF/web.xml</packagingExcludes>
                 </configuration>
             </plugin>
             <plugin>
