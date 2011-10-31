@@ -30,9 +30,4 @@
             <version>${spring-security.version}</version>
         </dependency>
     </dependencies>
-
-    <properties>
-        <spring-security.version>3.0.3.RELEASE</spring-security.version>
-    </properties>
-
 </project>
