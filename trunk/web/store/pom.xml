@@ -23,22 +23,6 @@
     <name>Yes cart storefront</name>
     <url>http://maven.apache.org</url>
 
-    <repositories> <!-- wicket -->
-        <repository>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <id>apache.snapshots</id>
-            <name>Apache Snapshot Repository</name>
-            <url>http://repository.apache.org/content/groups/snapshots</url>
-            <layout>default</layout>
-        </repository>
-    </repositories>
-
-
     <build>
         <finalName>yes-shop</finalName>
         <plugins>

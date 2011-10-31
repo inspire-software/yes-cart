@@ -62,7 +62,7 @@
      </dependency>
     </dependencies-->
 
-    <pluginRepositories>
+    <!--pluginRepositories>
         <pluginRepository>
             <id>servebox</id>
             <name>ServeBox Plugin Repository</name>
@@ -75,7 +75,7 @@
             <name>ServeBox Plugin Repository</name>
             <url>http://maven.servebox.org/repository</url>
         </repository>
-    </repositories>
+    </repositories-->
 
     <build>
 
