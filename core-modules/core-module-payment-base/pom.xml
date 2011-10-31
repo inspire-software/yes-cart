@@ -21,14 +21,14 @@
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>payment-api</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>persistence</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
             <scope>compile</scope>
         </dependency>
 

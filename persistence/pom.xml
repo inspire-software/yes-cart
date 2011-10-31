@@ -17,7 +17,7 @@
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>domain-api</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
             <scope>compile</scope>
         </dependency>
 
@@ -359,11 +359,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>dbunit-maven-plugin</artifactId>
-                <version>1.0-beta-3</version>
             </plugin>
             <plugin>
                 <!-- hibernate ddl generation -->
