@@ -13,7 +13,6 @@
     <artifactId>manager</artifactId>
     <packaging>pom</packaging>
     <name>Yes cart manager modules</name>
-    <url>http://maven.apache.org</url>
 
     <modules>
         <module>client</module>

@@ -13,7 +13,6 @@
     <artifactId>web</artifactId>
     <packaging>pom</packaging>
     <name>Yes cart web modules</name>
-    <url>http://maven.apache.org</url>
 
     <modules>
         <module>support</module>

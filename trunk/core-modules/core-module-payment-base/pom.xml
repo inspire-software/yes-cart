@@ -12,52 +12,20 @@
     <groupId>org.yes</groupId>
     <artifactId>core-module-payment-base</artifactId>
     <name>Yes cart base payment modules provider</name>
-    <!--name>Include: null, delayed payment (?), carrier, bank, paypall express, gift sertiicate</name-->
-    <url>http://maven.apache.org</url>
 
     <dependencies>
-
-
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>payment-api</artifactId>
             <version>${project.parent.version}</version>
             <scope>compile</scope>
         </dependency>
-
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>persistence</artifactId>
             <version>${project.parent.version}</version>
             <scope>compile</scope>
         </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.7</version>
-            <scope>test</scope>
-        </dependency>
-
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.6.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.6.1</version>
-        </dependency>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <scope>runtime</scope>
-            <version>1.2.12</version>
-        </dependency>
-
-
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
@@ -82,10 +50,7 @@
             <version>${spring.version}</version>
             <scope>compile</scope>
         </dependency>
-
-
     </dependencies>
-
 
     <build>
         <pluginManagement>
@@ -119,5 +84,4 @@
             </testResource>
         </testResources>
     </build>
-
 </project>
