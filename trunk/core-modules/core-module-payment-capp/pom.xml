@@ -187,15 +187,7 @@
         <pluginManagement>
             <plugins>
                 <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>dbunit-maven-plugin</artifactId>
-                    <version>1.0-beta-3</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.5</version>
                     <configuration>
                         <forkMode>pertest</forkMode>
                         <argLine>-Xms512m -Xmx1024m</argLine>
@@ -208,7 +200,6 @@
                                 <name>testPgCyberSource</name>
                                 <value>${testPgCyberSource}</value>
                             </property>
-
                             <property>
                                 <name>testPgAuthorizeNetAim</name>
                                 <value>${testPgAuthorizeNetAim}</value>
@@ -221,10 +212,7 @@
                                 <name>testPgPayPal</name>
                                 <value>${testPgPayPal}</value>
                             </property>
-
-
                         </systemProperties>
-
                     </configuration>
                 </plugin>
             </plugins>
