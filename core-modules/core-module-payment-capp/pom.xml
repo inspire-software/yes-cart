@@ -19,8 +19,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.yes</groupId>
     <artifactId>core-module-payment-capp</artifactId>
-    <name>Yes cart payment gateways: cybersource, authorize, paypall, payflow</name>
-    <url>http://maven.apache.org</url>
+    <name>Yes cart payment gateways</name>
 
     <dependencies>
         <dependency>
@@ -29,40 +28,12 @@
             <version>${project.parent.version}</version>
             <scope>compile</scope>
         </dependency>
-
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>persistence</artifactId>
             <version>${project.parent.version}</version>
             <scope>compile</scope>
         </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.7</version>
-            <scope>test</scope>
-        </dependency>
-
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.6.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.6.1</version>
-        </dependency>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <scope>runtime</scope>
-            <version>1.2.12</version>
-        </dependency>
-
-
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
@@ -107,7 +78,6 @@
             <artifactId>httpcore</artifactId>
             <version>4.1</version>
         </dependency>
-
         <dependency>
             <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient</artifactId>
@@ -123,7 +93,6 @@
             <artifactId>xercesImpl</artifactId>
             <version>2.9.1</version>
         </dependency>
-
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
@@ -135,7 +104,6 @@
             <version>3.8.0.GA</version>
             <scope>runtime</scope>
         </dependency>
-
         <dependency>
             <groupId>commons-dbcp</groupId>
             <artifactId>commons-dbcp</artifactId>
@@ -154,22 +122,18 @@
             <version>2.4.7</version>
             <scope>test</scope>
         </dependency>
-
         <!-- payflow -->
         <dependency>
             <groupId>paypal.payflow</groupId>
             <artifactId>payflow-client</artifactId>
             <version>4.31</version>
         </dependency>
-
         <!-- paypal -->
         <dependency>
             <groupId>com.paypal</groupId>
             <artifactId>paypal-client</artifactId>
             <version>5.1.1</version>
         </dependency>
-
-
         <!-- ANET BEGIN -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -178,10 +142,7 @@
             <scope>compile</scope>
         </dependency>
         <!-- ANET END -->
-
-
     </dependencies>
-
 
     <build>
         <pluginManagement>

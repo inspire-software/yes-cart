@@ -48,7 +48,7 @@
     <packaging>pom</packaging>
     <version>1.0.0-SNAPSHOT</version>
     <name>Yes Cart</name>
-    <url>http://maven.apache.org</url>
+    <url>http://code.google.com/p/yes-cart/</url>
 
     <modules>
         <module>build-tools</module>
@@ -204,31 +204,9 @@
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>${spring.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
             <artifactId>spring-jms</artifactId>
             <version>${spring.version}</version>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.6.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.6.1</version>
-        </dependency>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <scope>runtime</scope>
-            <version>1.2.12</version>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>

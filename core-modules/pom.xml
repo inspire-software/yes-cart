@@ -13,7 +13,6 @@
     <artifactId>core-modules</artifactId>
     <packaging>pom</packaging>
     <name>Yes cart core payment modules</name>
-    <url>http://maven.apache.org</url>
 
     <modules>
         <module>core-module-payment-base</module>

@@ -15,7 +15,6 @@
     <artifactId>websupport</artifactId>
     <packaging>jar</packaging>
     <name>Yes cart web support tier</name>
-    <url>http://maven.apache.org</url>
 
     <dependencies>
         <dependency>
@@ -34,39 +33,13 @@
             <version>${project.parent.version}</version>
             <scope>compile</scope>
         </dependency>
-
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
             <version>2.5</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.6.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.6.1</version>
-        </dependency>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <scope>runtime</scope>
-            <version>1.2.12</version>
-        </dependency>
-
-<!--        <dependency>
-            <groupId>com.sun.faces</groupId>
-            <artifactId>jsf-api</artifactId>
-            <version>2.0.3</version>
-            <scope>compile</scope>
-        </dependency> -->
-
     </dependencies>
-
     <build>
         <pluginManagement>
             <plugins>
