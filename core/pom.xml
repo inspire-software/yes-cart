@@ -42,7 +42,6 @@
             <groupId>org.yes</groupId>
             <artifactId>persistence</artifactId>
             <version>${project.parent.version}</version>
-            <scope>compile</scope>
         </dependency>
         <!-- hornetq begin -->
         <dependency>
@@ -61,25 +60,21 @@
             <groupId>org.hornetq</groupId>
             <artifactId>hornetq-core</artifactId>
             <version>2.0.0.GA</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.hornetq</groupId>
             <artifactId>hornetq-jms</artifactId>
             <version>2.0.0.GA</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.hornetq</groupId>
             <artifactId>hornetq-logging</artifactId>
             <version>2.0.0.GA</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.hornetq</groupId>
             <artifactId>hornetq-transports</artifactId>
             <version>2.0.0.GA</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.netty</groupId>
@@ -90,14 +85,12 @@
             <groupId>org.apache.geronimo.specs</groupId>
             <artifactId>geronimo-jms_1.1_spec</artifactId>
             <version>1.0.1</version>
-            <scope>compile</scope>
         </dependency>
         <!-- some crap with repository -->
         <!-- dependency>
             <groupId>org.jboss.javaee</groupId>
             <artifactId>jboss-jms-api</artifactId>
             <version>1.1.0.GA</version>
-            <scope>compile</scope>
         </dependency -->
         <!-- hornetq end -->
         <dependency>
@@ -135,7 +128,6 @@
         <dependency>
             <groupId>net.sf.ehcache</groupId>
             <artifactId>ehcache</artifactId>
-            <scope>compile</scope>
             <version>1.6.0</version>
         </dependency>
         <dependency>
@@ -176,19 +168,16 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
             <version>${spring.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
             <version>${spring-security.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>dp.lib</groupId>
