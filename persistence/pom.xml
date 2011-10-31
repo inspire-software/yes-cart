@@ -201,15 +201,6 @@
     </dependencies>
 
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>dbunit-maven-plugin</artifactId>
-                    <version>1.0-beta-3</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
         <testResources>
             <testResource>
                 <directory>src/test/config/spring</directory>
@@ -246,28 +237,22 @@
         <plugins>
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <dependencies>
-
                     <dependency>
                         <groupId>ant</groupId>
                         <artifactId>ant-antlr</artifactId>
                         <version>1.6.5</version>
                     </dependency>
-
                     <dependency>
                         <groupId>ant</groupId>
                         <artifactId>ant-optional</artifactId>
                         <version>1.5.3-1</version>
                         <scope>compile</scope>
                     </dependency>
-
-
                 </dependencies>
                 <configuration>
-                    <tasks>
-
+                    <target>
                         <touch file="src/main/java/org/yes/cart/domain/entity/impl/AttributeEntity.java"/>
                         <replace file="src/main/java/org/yes/cart/domain/entity/impl/AttributeEntity.java"
                                  token="super(code);"
@@ -294,7 +279,6 @@
                                 match="\* UNCOMMENT(.*)"
                                 replace="\*/\1 /\*"
                                 byline="false" flags="mg"/>
-
                         <replaceregexp
                                 file="src/main/java/org/yes/cart/domain/entity/impl/ProductCategoryEntity.java"
                                 match="\* UNCOMMENT(.*)"
@@ -305,15 +289,12 @@
                                 match="\* UNCOMMENT(.*)"
                                 replace="\*/\1 /\*"
                                 byline="false" flags="mg"/>
-
                         <replaceregexp
                                 file="src/main/java/org/yes/cart/domain/entity/impl/SkuPriceEntity.java"
                                 match="\* UNCOMMENT(.*)"
                                 replace="\*/\1 /\*"
                                 byline="false" flags="mg"/>
-
-
-                    </tasks>
+                    </target>
                 </configuration>
                 <executions>
                     <execution>
@@ -324,11 +305,9 @@
                     </execution>
                 </executions>
             </plugin>
-
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>dbunit-maven-plugin</artifactId>
-                <version>1.0-beta-3</version>
             </plugin>
             <plugin>
                 <artifactId>maven-clean-plugin</artifactId>
@@ -364,7 +343,6 @@
                 <!-- hibernate ddl generation -->
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>hibernate3-maven-plugin</artifactId>
-                <version>2.2</version>
                 <configuration>
                     <components>
                         <component>
@@ -386,11 +364,8 @@
                         <ejb3>true</ejb3>
                         <format>true</format>
                     </componentProperties>
-
                 </configuration>
                 <executions>
-
-
                     <execution>
                         <id>create-entity</id>
                         <phase>generate-sources</phase>
@@ -457,6 +432,4 @@
             </plugin>
         </plugins>
     </build>
-
-
 </project>
