@@ -18,12 +18,9 @@ Maven 3 http://maven.apache.org/download.html
 
 Ant http://ant.apache.org/bindownload.cgi
 
-Tomcat at least 5.5.28 version http://tomcat.apache.org/
+Tomcat at least 5.5.28 version http://tomcat.apache.org/ but we are going with 7
 
 SVN or Tortoise. svnwcrev with applied http://dl.dropbox.com/u/26657232/svnwcrev-2011-05-15.diff patch for linux users. The windows user use SubWCRev from Tortoise  
-
-Oracle XE or MySQL(see WAMP/LAMP in nice to have section) or MSSQL
-
 
 
 == Nice to have ==
@@ -42,6 +39,8 @@ Visual paradigm community edition
 
 Local email SMTP/POP3 server
 
+Oracle XE or MySQL(see WAMP/LAMP in nice to have section) or MSSQL
+
 
 
 == OS enviroment variables shall be like following ==
@@ -56,17 +55,9 @@ JAVA_OPTS=-Xms256m -Xmx1024m -XX:MaxPermSize=256m
 
 JBOSS_HOME=D:\dev\jboss-4.2.3.GA
 
-M3_HOME=D:\apache-maven-3.0.3
+M3_HOME=D:\apache-maven-3.0.3   (optional)
 
 PATH=d:\jdk1.6.0_17\bin;D:\wamp\bin\mysql\mysql5.1.36\bin;D:\apache-maven-2.1.0\bin;D:\apache-ant-1.7.0\bin;D:\flex_sdk_4\bin
-
-== Install 3rd patry libs ==
-
-Go to util/lib3rdparty folder 
-
-Locate readme.txt in authorize.net cybersource payflow and paypal folders and follow instruction
-
-Copy geda\dp folder into maven repository
 
 
 == Build ==
