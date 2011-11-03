@@ -190,6 +190,8 @@
             <groupId>dp.lib</groupId>
             <artifactId>dp.lib-dto.GeDA</artifactId>
             <version>${dp.lib-dto.GeDA.version}</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/../util/lib3rdparty/geda/dp.lib-dto.GeDA-1.1.2.jar</systemPath>
             <exclusions>
                 <exclusion>
                     <groupId>javassist</groupId>
