@@ -143,6 +143,15 @@
             <version>4.1</version>
         </dependency>
         <!-- ANET END -->
+
+        <!--dependency>
+            <groupId>ojdbc</groupId>
+            <artifactId>ojdbc</artifactId>
+            <version>14</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/web/WEB-INF/lib/ojdbc6.jar</systemPath>
+        </dependency-->
+
     </dependencies>
     <build>
         <testResources>

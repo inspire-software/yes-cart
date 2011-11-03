@@ -36,6 +36,10 @@ public class MultipleLogTest {
         assertTrue(log20content.indexOf("shop10") == -1);
 
 
+        System.out.println(log10content);
+        System.out.println(log20content);
+
+
     }
 
     private static String readFileAsString(String filePath)
