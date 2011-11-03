@@ -129,20 +129,48 @@
             <groupId>paypal.payflow</groupId>
             <artifactId>payflow-client</artifactId>
             <version>4.31</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/../../util/lib3rdparty/payflow/payflow.jar</systemPath>
         </dependency>
         <!-- paypal -->
         <dependency>
             <groupId>com.paypal</groupId>
             <artifactId>paypal-client</artifactId>
             <version>5.1.1</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/../../util/lib3rdparty/paypal/paypal_base.jar</systemPath>
         </dependency>
         <!-- ANET BEGIN -->
+        <dependency>
+            <groupId>net.authorize</groupId>
+            <artifactId>authorize-client</artifactId>
+            <version>1.4.2</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/../../util/lib3rdparty/authozize.net/anet-java-sdk-1.4.2.jar</systemPath>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.1</version>
         </dependency>
         <!-- ANET END -->
+	<!-- cybersource -->
+        <dependency>
+            <groupId>com.cybersource</groupId>
+            <artifactId>cybersource-client</artifactId>
+            <version>1.5</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/../../util/lib3rdparty/cybersource/cybsclients15.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.cybersource</groupId>
+            <artifactId>cybersource-security</artifactId>
+            <version>1.5</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/../../util/lib3rdparty/cybersource/cybssecurity.jar</systemPath>
+        </dependency>
+
 
         <!--dependency>
             <groupId>ojdbc</groupId>
