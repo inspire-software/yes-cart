@@ -15,7 +15,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.*;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -40,11 +39,7 @@ public abstract class CappPaymentModuleDBTestCase extends DBTestCase {
     protected Session session;
 
     protected IDataSet getDataSet() throws Exception {
-        return new FlatXmlDataSet(
-                new File("../../payment-api/src/test/resources/payinitialdata.xml"),
-                false,
-                true
-        );
+        return new FlatXmlDataSet(getClass().getClassLoader().getResourceAsStream("payinitialdata.xml"), false);
     }
 
     protected void dumpDataBase(final String prefix, final String[] tables) {

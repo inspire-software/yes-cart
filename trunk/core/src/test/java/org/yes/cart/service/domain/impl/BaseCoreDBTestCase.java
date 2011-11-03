@@ -35,6 +35,8 @@ public abstract class BaseCoreDBTestCase extends DBTestCase {
     protected Session session;
 
     protected IDataSet getDataSet() throws Exception {
+// TODO fix test failures when loading resources from classpath
+//        return new FlatXmlDataSet(getClass().getClassLoader().getResourceAsStream("initialdata.xml"), false);
         return new FlatXmlDataSet(
                 new File("../persistence/src/test/resources/initialdata.xml"),
                 false,

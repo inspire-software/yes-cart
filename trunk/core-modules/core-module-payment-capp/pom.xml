@@ -24,6 +24,13 @@
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
+            <artifactId>payment-api</artifactId>
+            <version>${project.parent.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.yes</groupId>
             <artifactId>persistence</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
