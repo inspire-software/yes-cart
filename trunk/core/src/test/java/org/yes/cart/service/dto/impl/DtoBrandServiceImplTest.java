@@ -1,6 +1,5 @@
 package org.yes.cart.service.dto.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -16,7 +15,7 @@ import java.util.List;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class DtoBrandServiceImplTest   extends BaseCoreDBTestCase {
+public class DtoBrandServiceImplTest extends BaseCoreDBTestCase {
 
     private DtoBrandService dtoService = null;
     private DtoFactory dtoFactory = null;
@@ -27,13 +26,6 @@ public class DtoBrandServiceImplTest   extends BaseCoreDBTestCase {
         dtoService = (DtoBrandService) ctx.getBean(ServiceSpringKeys.DTO_BRAND_SERVICE);
         dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
 
-    }
-
-    @After
-    public void tearDown() {
-        dtoService = null;
-        dtoFactory = null;
-        super.tearDown();
     }
 
     @Test

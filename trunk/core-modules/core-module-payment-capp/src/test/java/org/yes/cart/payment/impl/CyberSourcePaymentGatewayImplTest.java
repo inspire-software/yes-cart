@@ -1,19 +1,17 @@
 package org.yes.cart.payment.impl;
 
-import org.junit.Before;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
-
-import static junit.framework.Assert.assertTrue;
-
-import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
-import org.yes.cart.payment.service.CustomerOrderPaymentService;
-import org.yes.cart.payment.dto.Payment;
-import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.payment.PaymentGateway;
+import org.yes.cart.payment.dto.Payment;
+import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
+import org.yes.cart.payment.service.CustomerOrderPaymentService;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.UUID;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -43,11 +41,7 @@ public class CyberSourcePaymentGatewayImplTest extends CappPaymentModuleDBTestCa
     @After
     public void tearDown() throws Exception {
         if (isTestAllowed()) {
-            paymentProcessor = null;
-            cyberSourcePaymentGateway = null;
-            customerOrderPaymentService = null;
             super.tearDown();
-
         }
     }
 
@@ -254,7 +248,7 @@ public class CyberSourcePaymentGatewayImplTest extends CappPaymentModuleDBTestCa
                         orderNum,
                         null,
                         Payment.PAYMENT_STATUS_OK,
-                        useRefund? PaymentGateway.REFUND: PaymentGateway.VOID_CAPTURE).size());
+                        useRefund ? PaymentGateway.REFUND : PaymentGateway.VOID_CAPTURE).size());
 
         assertEquals(
                 6,
@@ -266,7 +260,9 @@ public class CyberSourcePaymentGatewayImplTest extends CappPaymentModuleDBTestCa
     }
 
 
-   /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public String getVisaCardNumber() {
         return "4111111111111111";
     }

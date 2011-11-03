@@ -1,6 +1,5 @@
 package org.yes.cart.service.order.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.service.order.*;
@@ -86,11 +85,6 @@ public class OrderStateManagerImplTest {
             put("payment.ok", orderStateBeforeTransitionListeners);
         }};
 
-
-    }
-
-    @After
-    public void tearDown() throws Exception {
 
     }
 

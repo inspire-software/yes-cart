@@ -30,10 +30,8 @@ public abstract class BaseCoreDBTestCase extends DBTestCase {
      * test application context and use to create
      * our DAO object (and data source, session factory, etc.)
      */
-    protected static ApplicationContext ctx = null;
-
+    protected ApplicationContext ctx;
     protected SessionFactory sessionFactory;
-
     protected Session session;
 
     protected IDataSet getDataSet() throws Exception {
@@ -58,16 +56,12 @@ public abstract class BaseCoreDBTestCase extends DBTestCase {
         }
     }
 
-
-
     /**
      * {@inheritDoc}
      */
     protected DatabaseOperation getSetUpOperation() throws Exception {
         return DatabaseOperation.REFRESH;
     }
-
-    
 
     /**
      * {@inheritDoc}
@@ -81,59 +75,33 @@ public abstract class BaseCoreDBTestCase extends DBTestCase {
         System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_CONNECTION_URL, "jdbc:hsqldb:mem:testnpadb");
         System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_USERNAME, "sa");
         System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_PASSWORD, "");
-
     }
-
 
     @Before
     public void setUp() throws Exception {
-
         if (DomainTestSuite.sharedContext == null) {
-
-            DomainTestSuite.sharedContext = ctx = new ClassPathXmlApplicationContext(
-                    "testApplicationContext.xml" ,
+            DomainTestSuite.sharedContext = new ClassPathXmlApplicationContext(
+                    "testApplicationContext.xml",
                     "core-aspects.xml");
-
-
-        } else {
-            ctx = DomainTestSuite.sharedContext;
-
         }
-
+        ctx = DomainTestSuite.sharedContext;
         sessionFactory = (SessionFactory) ctx.getBean("sessionFactory");
-
         session = sessionFactory.openSession();
-
         super.setUp();
-
     }
 
-
     @After
-    public void tearDown() {
-
+    public void tearDown() throws Exception {
+        super.tearDown();
         try {
-
-            try {
-                JMSServerManagerImpl jmsServerManager = (JMSServerManagerImpl) ctx.getBean("jmsServerManagerImpl");
-                if (jmsServerManager != null) {
-                    jmsServerManager.stop();
-                    jmsServerManager = null;
-                }
-
-            } catch (NoSuchBeanDefinitionException noSuchBeanDefinitionException) {
-                //nothing
+            JMSServerManagerImpl jmsServerManager = (JMSServerManagerImpl) ctx.getBean("jmsServerManagerImpl");
+            if (jmsServerManager != null) {
+                jmsServerManager.stop();
             }
-
-            sessionFactory.close();
-            session.close();
-            ctx = null;
-            session = null;
-            sessionFactory = null;
-            super.tearDown();
-
-        } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (NoSuchBeanDefinitionException noSuchBeanDefinitionException) {
+            //nothing
         }
+        sessionFactory.close();
+        session.close();
     }
 }

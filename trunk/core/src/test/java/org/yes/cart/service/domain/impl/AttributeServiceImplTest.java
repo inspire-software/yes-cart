@@ -1,6 +1,5 @@
 package org.yes.cart.service.domain.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.AttributeGroupNames;
@@ -13,24 +12,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- ** User: Igor Azarny iazarny@yahoo.com
+ * * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class AttributeServiceImplTest  extends BaseCoreDBTestCase {
+public class AttributeServiceImplTest extends BaseCoreDBTestCase {
 
     private AttributeService attributeService = null;
-    
+
     @Before
     public void setUp() throws Exception {
         super.setUp();
         attributeService = (AttributeService) ctx.getBean(ServiceSpringKeys.ATTRIBUTE_SERVICE);
-    }
-
-    @After
-    public void tearDown() {
-        attributeService = null;
-        super.tearDown();
     }
 
     @Test

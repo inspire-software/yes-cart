@@ -1,13 +1,10 @@
 package org.yes.cart.service.dto.impl;
 
-import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.ManagerDTO;
 import org.yes.cart.domain.dto.RoleDTO;
-import org.yes.cart.domain.entity.Role;
 import org.yes.cart.service.domain.ManagerService;
 import org.yes.cart.service.domain.impl.BaseCoreDBTestCase;
 import org.yes.cart.service.dto.ManagementService;
@@ -28,14 +25,7 @@ public class UserManagmentServiceImplTest extends BaseCoreDBTestCase {
     public void setUp() throws Exception {
         super.setUp();
         managementService = (ManagementService) ctx.getBean(ServiceSpringKeys.USER_MANAGMENT_SERVICE);
-        managerService  = (ManagerService) ctx.getBean(ServiceSpringKeys.MANAGER_SERVICE);
-    }
-
-    @After
-    public void tearDown() {
-        managementService = null;
-        managerService = null;
-        super.tearDown();
+        managerService = (ManagerService) ctx.getBean(ServiceSpringKeys.MANAGER_SERVICE);
     }
 
     @Test
@@ -45,16 +35,16 @@ public class UserManagmentServiceImplTest extends BaseCoreDBTestCase {
         managementService.addUser("optimus.prime@transformers.com", "Optimus", "Prime");
         managementService.addUser("megatron.beast@transformers.com", "Megatron", "Beast");
 
-        assertEquals(3, managementService.getManagers(null,null,null).size());
+        assertEquals(3, managementService.getManagers(null, null, null).size());
 
     }
 
     @Test
     public void testDeleteUser() throws Exception {
         managementService.addUser("bender2@futurama.com", "Bender2", "Rodriguez2");
-        assertEquals(4, managementService.getManagers(null,null,null).size());
+        assertEquals(4, managementService.getManagers(null, null, null).size());
         managementService.deleteUser("bender2@futurama.com");
-        assertEquals(3, managementService.getManagers(null,null,null).size());
+        assertEquals(3, managementService.getManagers(null, null, null).size());
     }
 
     @Test
@@ -92,20 +82,20 @@ public class UserManagmentServiceImplTest extends BaseCoreDBTestCase {
         managementService.addUser("optimus.prime5@transformers.com", "Optimus", "Prime5");
         managementService.addUser("megatron.beast5@transformers.com", "Megatron", "Beast");
 
-        assertEquals(3, managementService.getManagers("5",null,null).size());
+        assertEquals(3, managementService.getManagers("5", null, null).size());
         List<ManagerDTO> rez;
 
-        rez = managementService.getManagers("asd",null,"");
-        assertEquals(0,rez.size());
+        rez = managementService.getManagers("asd", null, "");
+        assertEquals(0, rez.size());
 
-        rez = managementService.getManagers(null,"Bender5",null);
-        assertEquals(1,rez.size());
+        rez = managementService.getManagers(null, "Bender5", null);
+        assertEquals(1, rez.size());
 
-        rez = managementService.getManagers(null,null,"Prime5");
-        assertEquals(1,rez.size());
+        rez = managementService.getManagers(null, null, "Prime5");
+        assertEquals(1, rez.size());
 
-        rez = managementService.getManagers(null,"us","me5");
-        assertEquals(1,rez.size());
+        rez = managementService.getManagers(null, "us", "me5");
+        assertEquals(1, rez.size());
 
     }
 
@@ -171,9 +161,6 @@ public class UserManagmentServiceImplTest extends BaseCoreDBTestCase {
 
 
     }
-
-
-
 
 
 }

@@ -1,7 +1,5 @@
-
 package org.yes.cart.service.locator.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -27,14 +25,6 @@ public class ServiceLocatorImplTest extends BaseCoreDBTestCase {
 
         serviceLocator = (ServiceLocator) ctx.getBean(ServiceSpringKeys.SERVICE_LOCATOR);
 
-
-    }
-
-    @After
-    public void tearDown() {
-
-        serviceLocator = null;
-        super.tearDown();
 
     }
 

@@ -2,7 +2,6 @@ package org.yes.cart.dao.impl;
 
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.dao.GenericDAO;
@@ -23,30 +22,19 @@ import java.util.*;
 public class TestProductDAO extends AbstractTestDAO {
 
     private GenericDAO<Product, Long> productDao;
-
     private GenericDAO<Availability, Long> availabilityDao;
-
     private GenericDAO<Brand, Long> brandDao;
-
     private GenericDAO<ProductType, Long> productTypeDao;
-
     private GenericDAO<ProductCategory, Long> productCategoryDao;
-
     private GenericDAO<Category, Long> categoryDao;
-
     private GenericDAO<Attribute, Long> attributeDao;
-
     private GenericDAO<SkuWarehouse, Long> skuWareHouseDao;
-
     private GenericDAO<Warehouse, Long> warehouseDao;
-
-
     private Set<Long> cleanupPks = new HashSet<Long>();
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
-
         productDao = (GenericDAO<Product, Long>) ctx.getBean(DaoServiceBeanKeys.PRODUCT_DAO);
         availabilityDao = (GenericDAO<Availability, Long>) ctx.getBean(DaoServiceBeanKeys.AVAILABILITY_DAO);
         brandDao = (GenericDAO<Brand, Long>) ctx.getBean(DaoServiceBeanKeys.BRAND_DAO);
@@ -56,37 +44,17 @@ public class TestProductDAO extends AbstractTestDAO {
         attributeDao = (GenericDAO<Attribute, Long>) ctx.getBean(DaoServiceBeanKeys.ATTRIBUTE_DAO);
         skuWareHouseDao = (GenericDAO<SkuWarehouse, Long>) ctx.getBean(DaoServiceBeanKeys.SKU_WAREHOUSE_DAO);
         warehouseDao = (GenericDAO<Warehouse, Long>) ctx.getBean(DaoServiceBeanKeys.WAREHOUSE_DAO);
-
-    }
-
-    @After
-    public void tearDown() {
-        productDao = null;
-        availabilityDao = null;
-        brandDao = null;
-        productTypeDao = null;
-        productCategoryDao = null;
-        categoryDao = null;
-        attributeDao = null;
-        skuWareHouseDao = null;
-        warehouseDao = null;
-        super.tearDown();
     }
 
     public void cleanUp() {
         for (Long pk : cleanupPks) {
             productDao.delete(productDao.findById(pk));
         }
-
         for (Long pk : cleanupPks) {
             assertNull(productDao.findById(pk));
         }
-
     }
 
-    /**
-     *
-     */
     @Test
     public void testCreateProduct() {
 
@@ -151,7 +119,6 @@ public class TestProductDAO extends AbstractTestDAO {
         productDao.fullTextSearchReindex();
 
     }
-
 
     @Test
     public void testSimpleSearchTest() {

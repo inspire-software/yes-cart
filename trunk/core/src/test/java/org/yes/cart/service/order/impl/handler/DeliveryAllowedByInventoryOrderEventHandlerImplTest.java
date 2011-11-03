@@ -1,6 +1,5 @@
 package org.yes.cart.service.order.impl.handler;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.Constants;
@@ -20,7 +19,7 @@ import java.math.BigDecimal;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-    public class DeliveryAllowedByInventoryOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
+public class DeliveryAllowedByInventoryOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
 
     private CustomerOrderService orderService = null;
@@ -30,19 +29,9 @@ import java.math.BigDecimal;
     @Before
     public void setUp() throws Exception {
         super.setUp();
-
-
         handler = (DeliveryAllowedByInventoryOrderEventHandlerImpl) ctx.getBean("deliveryAllowedByInventoryOrderEventHandler");
         orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
         skuWarehouseService = (SkuWarehouseService) ctx.getBean("skuWarehouseService");
-    }
-
-    @After
-    public void tearDown() {
-        orderService = null;
-        handler = null;
-        skuWarehouseService = null;
-        super.tearDown();
     }
 
     @Test
@@ -63,13 +52,13 @@ import java.math.BigDecimal;
 //        skuWarehouse.setReserved(BigDecimal.ONE);
 //        skuWarehouseService.update(skuWarehouse);
 
-        assertTrue(handler.handle( new OrderEventImpl( "",  customerOrder,   delivery  ) ));
+        assertTrue(handler.handle(new OrderEventImpl("", customerOrder, delivery)));
         skuWarehouse = skuWarehouseService.getById(31);
-        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE),skuWarehouse.getQuantity().setScale(Constants.DEFAULT_SCALE));
-        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE),skuWarehouse.getReserved().setScale(Constants.DEFAULT_SCALE));
+        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), skuWarehouse.getQuantity().setScale(Constants.DEFAULT_SCALE));
+        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), skuWarehouse.getReserved().setScale(Constants.DEFAULT_SCALE));
         skuWarehouse = skuWarehouseService.getById(30);
-        assertEquals(new BigDecimal("7.00"),skuWarehouse.getQuantity().setScale(Constants.DEFAULT_SCALE));
-        assertEquals(new BigDecimal("0.00"),skuWarehouse.getReserved().setScale(Constants.DEFAULT_SCALE));
+        assertEquals(new BigDecimal("7.00"), skuWarehouse.getQuantity().setScale(Constants.DEFAULT_SCALE));
+        assertEquals(new BigDecimal("0.00"), skuWarehouse.getReserved().setScale(Constants.DEFAULT_SCALE));
         assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED, delivery.getDeliveryStatus());
 
 
@@ -78,7 +67,7 @@ import java.math.BigDecimal;
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
         delivery = customerOrder.getDelivery().iterator().next();
 
-        assertFalse(handler.handle( new OrderEventImpl( "",  customerOrder,   delivery  ) ));
+        assertFalse(handler.handle(new OrderEventImpl("", customerOrder, delivery)));
         assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_ON_FULLFILMENT, delivery.getDeliveryStatus());
 
         // update qty
@@ -87,14 +76,9 @@ import java.math.BigDecimal;
         skuWarehouseService.update(skuWarehouse);
 
         //delivery, than not pass before, now can perform transition
-        assertTrue(handler.handle( new OrderEventImpl( "",  customerOrder,   delivery  ) ));
+        assertTrue(handler.handle(new OrderEventImpl("", customerOrder, delivery)));
 
         assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED, delivery.getDeliveryStatus());
-
-
-
-
-
 
 
     }

@@ -27,10 +27,19 @@ import java.sql.Statement;
  */
 public abstract class AbstractTestDAO extends DBTestCase {
 
-     /**
-      * Please, set working directory for test(s) to npa\trunk\db if you are run under IDE.  
-      * {@inheritDoc}
-      * */
+    /**
+     * A Spring application context that we'll create from a
+     * test application context and use to create
+     * our DAO object (and data source, session factory, etc.)
+     */
+    protected ApplicationContext ctx;
+    protected SessionFactory sessionFactory;
+    protected Session session;
+
+    /**
+     * Please, set working directory for test(s) to npa\trunk\db if you are run under IDE.
+     * {@inheritDoc}
+     */
     protected IDataSet getDataSet() throws Exception {
         return new FlatXmlDataSet(
                 new File("src/test/resources/initialdata.xml"),
@@ -38,66 +47,40 @@ public abstract class AbstractTestDAO extends DBTestCase {
                 true);
     }
 
-    
-
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     protected DatabaseOperation getSetUpOperation() throws Exception {
         return DatabaseOperation.REFRESH;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     protected DatabaseOperation getTearDownOperation() throws Exception {
         return DatabaseOperation.NONE;
     }
 
     public AbstractTestDAO() {
-
         System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_DRIVER_CLASS, "org.hsqldb.jdbcDriver");
         System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_CONNECTION_URL, "jdbc:hsqldb:mem:testnpadb");
         System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_USERNAME, "sa");
         System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_PASSWORD, "");
-
-
     }
-
-
-    /**
-     * A Spring application context that we'll create from a
-     * test application context and use to create
-     * our DAO object (and data source, session factory, etc.)
-     */
-    protected static ApplicationContext ctx = null;
-
-    protected SessionFactory sessionFactory;
-    
-    protected Session session;
 
     @Before
     public void setUp() throws Exception {
-        
-        ctx = new ClassPathXmlApplicationContext( "testApplicationContext.xml" );
-
+        ctx = new ClassPathXmlApplicationContext("testApplicationContext.xml");
         sessionFactory = (SessionFactory) ctx.getBean("sessionFactory");
-
         session = sessionFactory.openSession();
-
         super.setUp();
-
     }
 
     @After
-    public void tearDown() {
-        try {
-            super.tearDown();
-            sessionFactory.close();
-            session.close();
-            ctx = null;
-            session = null;
-            sessionFactory = null;
-            System.gc();
-        } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+    public void tearDown() throws Exception {
+        super.tearDown();
+        sessionFactory.close();
+        session.close();
     }
 
     /**
@@ -113,7 +96,7 @@ public abstract class AbstractTestDAO extends DBTestCase {
         } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } finally {
-            if (st!=null) {
+            if (st != null) {
                 st.close();
             }
         }
@@ -129,35 +112,34 @@ public abstract class AbstractTestDAO extends DBTestCase {
         } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } finally {
-            if (st!=null) {
+            if (st != null) {
                 st.close();
             }
         }
         return "";
     }
 
-    protected void dumpDataBase(final String prefix, final String [] tables) throws Exception {
+    protected void dumpDataBase(final String prefix, final String[] tables) throws Exception {
         QueryDataSet queryDataSet = new QueryDataSet(getConnection());
         for (String tableName : tables) {
             queryDataSet.addTable(tableName);
         }
         FlatXmlDataSet.write(queryDataSet,
-                new FileOutputStream("target/test-classes/"+this.getClass().getName()+"_" + prefix +"_dataset.xml"));
+                new FileOutputStream("target/test-classes/" + this.getClass().getName() + "_" + prefix + "_dataset.xml"));
     }
 
     protected static String dump(ResultSet rs) throws SQLException {
         ResultSetMetaData meta = rs.getMetaData();
 
         int colmax = meta.getColumnCount();
-        Object o = null;
+        Object o;
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < colmax; i++) {
-            sb.append(meta.getColumnName(i+1));
-            sb.append(" ");            
+            sb.append(meta.getColumnName(i + 1));
+            sb.append(" ");
         }
         sb.append("\n");
-
 
         for (; rs.next(); ) {
             for (int i = 0; i < colmax; i++) {
@@ -167,16 +149,13 @@ public abstract class AbstractTestDAO extends DBTestCase {
                 else
                     sb.append("null");
 
-                if(i < colmax-1)
+                if (i < colmax - 1)
                     sb.append(" ");
             }
 
-            if(!rs.isLast())
+            if (!rs.isLast())
                 sb.append("\n");
         }
         return sb.toString();
     }
-
-
-
 }

@@ -1,6 +1,5 @@
 package org.yes.cart.service.dto.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -19,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
-* User: Igor Azarny iazarny@yahoo.com
+ * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
@@ -45,18 +44,6 @@ public class DtoProductServiceImplTest extends BaseCoreDBTestCase {
 
     }
 
-    @After
-    public void tearDown() {
-        dtoService = null;
-        dtoFactory = null;
-        dtoBrandService = null;
-        dtoProductTypeService = null;
-        dtoAvailabilityService = null;
-        dtoAttrService = null;
-        super.tearDown();
-    }
-
-
     @Test
     public void testGetProductSkuByCode() {
         try {
@@ -74,9 +61,9 @@ public class DtoProductServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testCreate() throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-            ProductDTO dto = getDto();
-            dto = dtoService.create(dto);
-            assertTrue(dto.getProductId() > 0);
+        ProductDTO dto = getDto();
+        dto = dtoService.create(dto);
+        assertTrue(dto.getProductId() > 0);
 
     }
 

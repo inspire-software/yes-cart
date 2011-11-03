@@ -1,10 +1,8 @@
 package org.yes.cart.service.payment.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.payment.impl.TestExtFormPaymentGatewayImpl;
@@ -14,38 +12,31 @@ import org.yes.cart.service.order.OrderAssembler;
 import org.yes.cart.service.order.impl.DeliveryAssemblerImpl;
 import org.yes.cart.service.order.impl.OrderAssemblerImplTest;
 import org.yes.cart.service.payment.PaymentCallBackHandlerFacade;
+import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.util.HashMap;
 
 /**
-* User: Igor Azarny iazarny@yahoo.com
+ * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class PaymentCallBackHandlerFacadeImplTest  extends BaseCoreDBTestCase {
+public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
 
     private PaymentCallBackHandlerFacade paymentCallBackHandlerFacade;
-    private OrderAssembler  orderAssembler;
+    private OrderAssembler orderAssembler;
     private CustomerOrderService customerOrderService;
     private DeliveryAssemblerImpl deliveryAssembler;
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        paymentCallBackHandlerFacade  =  (PaymentCallBackHandlerFacade) ctx.getBean(ServiceSpringKeys.PAYMENT_CALLBACK_HANDLER);
-        orderAssembler = (OrderAssembler)  ctx.getBean(ServiceSpringKeys.ORDER_ASSEMBLER);
+        paymentCallBackHandlerFacade = (PaymentCallBackHandlerFacade) ctx.getBean(ServiceSpringKeys.PAYMENT_CALLBACK_HANDLER);
+        orderAssembler = (OrderAssembler) ctx.getBean(ServiceSpringKeys.ORDER_ASSEMBLER);
         customerOrderService = (CustomerOrderService) ctx.getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
-        deliveryAssembler = (DeliveryAssemblerImpl)  ctx.getBean(ServiceSpringKeys.DELIVERY_ASSEMBLER);
+        deliveryAssembler = (DeliveryAssemblerImpl) ctx.getBean(ServiceSpringKeys.DELIVERY_ASSEMBLER);
 
 
-    }
-
-    @After
-    public void tearDown() {
-        paymentCallBackHandlerFacade = null;
-        orderAssembler = null;
-        customerOrderService = null;
-        deliveryAssembler = null;
     }
 
     @Test
@@ -65,7 +56,6 @@ public class PaymentCallBackHandlerFacadeImplTest  extends BaseCoreDBTestCase {
                 customerOrder.getOrderStatus());
 
         final String ordGuid = customerOrder.getCartGuid();
-        
 
 
         paymentCallBackHandlerFacade.handlePaymentCallback(
@@ -84,11 +74,6 @@ public class PaymentCallBackHandlerFacadeImplTest  extends BaseCoreDBTestCase {
                 "Order must be in ORDER_STATUS_NONE state",
                 CustomerOrder.ORDER_STATUS_IN_PROGRESS,
                 customerOrder.getOrderStatus());
-
-
-
-
-
 
 
     }

@@ -1,6 +1,5 @@
 package org.yes.cart.service.dto.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -20,7 +19,7 @@ import java.util.List;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class DtoProductAssociationServiceImplTest  extends BaseCoreDBTestCase {
+public class DtoProductAssociationServiceImplTest extends BaseCoreDBTestCase {
 
     private DtoFactory dtoFactory = null;
     private DtoProductAssociationService dtoProductAssociationService = null;
@@ -36,22 +35,12 @@ public class DtoProductAssociationServiceImplTest  extends BaseCoreDBTestCase {
         dtoProductService = (DtoProductService) ctx.getBean(ServiceSpringKeys.DTO_PRODUCT_SERVICE);
     }
 
-    @After
-    public void tearDown() {
-        dtoFactory = null;
-        dtoProductAssociationService = null;
-        dtoProductService = null;
-        dtoAssociationService = null;
-        super.tearDown();
-    }
-
-
     @Test
     public void testUpdate() {
         try {
             ProductAssociationDTO dto = getDto();
             dto = dtoProductAssociationService.create(dto);
-            assertTrue(dto.getProductassociationId() > 0 );
+            assertTrue(dto.getProductassociationId() > 0);
             assertEquals(0, dto.getRank());
             dto.setRank(11324);
             dto = dtoProductAssociationService.update(dto);
@@ -74,7 +63,7 @@ public class DtoProductAssociationServiceImplTest  extends BaseCoreDBTestCase {
         try {
             ProductAssociationDTO dto = getDto();
             dto = dtoProductAssociationService.create(dto);
-            assertTrue(dto.getProductassociationId() > 0 );
+            assertTrue(dto.getProductassociationId() > 0);
 
 
             List<ProductAssociationDTO> list = dtoProductAssociationService.getProductAssociations(11002L);
@@ -96,7 +85,7 @@ public class DtoProductAssociationServiceImplTest  extends BaseCoreDBTestCase {
         try {
             ProductAssociationDTO dto = getDto();
             dto = dtoProductAssociationService.create(dto);
-            assertTrue(dto.getProductassociationId() > 0 );
+            assertTrue(dto.getProductassociationId() > 0);
 
             long pk = dto.getProductassociationId();
 

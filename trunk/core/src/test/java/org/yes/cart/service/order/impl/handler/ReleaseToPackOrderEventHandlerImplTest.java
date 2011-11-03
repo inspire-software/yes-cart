@@ -1,6 +1,5 @@
 package org.yes.cart.service.order.impl.handler;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.domain.entity.Customer;
@@ -11,11 +10,11 @@ import org.yes.cart.service.order.impl.OrderAssemblerImplTest;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 
 /**
-* User: Igor Azarny iazarny@yahoo.com
+ * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class  ReleaseToPackOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
+public class ReleaseToPackOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
     private CustomerOrderService orderService = null;
     private ReleaseToPackOrderEventHandlerImpl handler = null;
@@ -26,14 +25,7 @@ public class  ReleaseToPackOrderEventHandlerImplTest extends AbstractEventHandle
 
 
         handler = (ReleaseToPackOrderEventHandlerImpl) ctx.getBean("releaseToPackOrderEventHandler");
-        orderService =  (CustomerOrderService)  ctx.getBean("customerOrderService");
-    }
-
-    @After
-    public void tearDown() {
-        orderService = null;
-        handler = null;
-        super.tearDown();
+        orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
     }
 
     @Test

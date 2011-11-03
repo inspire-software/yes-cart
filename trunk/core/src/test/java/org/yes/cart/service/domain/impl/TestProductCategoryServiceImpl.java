@@ -1,6 +1,5 @@
 package org.yes.cart.service.domain.impl;
 
-import org.junit.After;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.service.domain.ProductCategoryService;
@@ -10,12 +9,7 @@ import org.yes.cart.service.domain.ProductCategoryService;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class TestProductCategoryServiceImpl  extends BaseCoreDBTestCase {
-
-    @After
-    public void tearDown() {
-        super.tearDown();
-    }
+public class TestProductCategoryServiceImpl extends BaseCoreDBTestCase {
 
     @Test
     public void testGetProductById() {

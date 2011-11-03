@@ -1,6 +1,5 @@
 package org.yes.cart.service.dto.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -28,14 +27,6 @@ public class DtoAttributeServiceImplTest extends BaseCoreDBTestCase {
         dtoAttributeService = (DtoAttributeService) ctx.getBean(ServiceSpringKeys.DTO_ATTRIBUTE_SERVICE);
         dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
     }
-
-    @After
-    public void tearDown() {
-        dtoAttributeService = null;
-        dtoFactory = null;
-        super.tearDown();
-    }
-
 
     @Test
     public void testCreate() {
@@ -90,10 +81,10 @@ public class DtoAttributeServiceImplTest extends BaseCoreDBTestCase {
             List<AttributeDTO> dtos = dtoAttributeService.findAvailableAttributes(
                     "CATEGORY",
                     Collections.singletonList("CATEGORY_ITEMS_PER_PAGE")
-                    );
+            );
             assertNotNull(dtos);
             assertEquals(2, dtos.size());
-            for (AttributeDTO dto : dtos ) {
+            for (AttributeDTO dto : dtos) {
                 assertFalse("CATEGORY_ITEMS_PER_PAGE".equals(dto.getCode()));
             }
 
@@ -117,7 +108,7 @@ public class DtoAttributeServiceImplTest extends BaseCoreDBTestCase {
             dtos = dtoAttributeService.findAttributesWithMultipleValues(
                     "SYSTEM");
             assertNull(dtos);
-            
+
         } catch (Exception e) {
             assertTrue(e.getMessage(), false);
         }

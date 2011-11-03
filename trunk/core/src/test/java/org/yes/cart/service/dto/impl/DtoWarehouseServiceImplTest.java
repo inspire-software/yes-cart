@@ -1,6 +1,5 @@
 package org.yes.cart.service.dto.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -14,7 +13,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
-* User: Igor Azarny iazarny@yahoo.com
+ * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
@@ -29,13 +28,6 @@ public class DtoWarehouseServiceImplTest extends BaseCoreDBTestCase {
         super.setUp();
         dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
         dtoService = (DtoWarehouseService) ctx.getBean(ServiceSpringKeys.DTO_WAREHOUSE_SERVICE);
-    }
-
-    @After
-    public void tearDown() {
-        dtoService = null;
-        dtoFactory = null;
-        super.tearDown();
     }
 
     @Test
@@ -112,7 +104,7 @@ public class DtoWarehouseServiceImplTest extends BaseCoreDBTestCase {
         try {
             dto = dtoService.create(dto);
             assertTrue(dto.getWarehouseId() > 0);
-            dtoService.assignWarehouse(dto.getWarehouseId(), 30L );
+            dtoService.assignWarehouse(dto.getWarehouseId(), 30L);
 
             List<WarehouseDTO> dtos = dtoService.findByShopId(30L);
             assertEquals(1, dtos.size());
@@ -145,9 +137,9 @@ public class DtoWarehouseServiceImplTest extends BaseCoreDBTestCase {
 
     private WarehouseDTO getDto(int idx) {
         WarehouseDTO dto = dtoFactory.getByIface(WarehouseDTO.class);
-        dto.setCode("W"+idx);
-        dto.setName("warehouese"+idx);
-        dto.setDescription("description"+idx);
+        dto.setCode("W" + idx);
+        dto.setName("warehouese" + idx);
+        dto.setDescription("description" + idx);
         return dto;
     }
 
@@ -184,9 +176,6 @@ public class DtoWarehouseServiceImplTest extends BaseCoreDBTestCase {
         dtoService.removeSkuOnWarehouse(13L);
         assertNull(dtoService.getSkuWarehouseService().getById(13L));
     }
-
-
-
 
 
 }

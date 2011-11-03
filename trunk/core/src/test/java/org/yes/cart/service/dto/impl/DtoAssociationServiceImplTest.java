@@ -1,6 +1,5 @@
 package org.yes.cart.service.dto.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -12,7 +11,7 @@ import org.yes.cart.service.dto.DtoAssociationService;
 import java.util.List;
 
 /**
- ** User: Igor Azarny iazarny@yahoo.com
+ * * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
@@ -26,13 +25,6 @@ public class DtoAssociationServiceImplTest extends BaseCoreDBTestCase {
         super.setUp();
         dtoAssociationService = (DtoAssociationService) ctx.getBean(ServiceSpringKeys.DTO_ASSOCIATION_SERVICE);
         dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
-    }
-
-    @After
-    public void tearDown() {
-        dtoAssociationService = null;
-        dtoFactory = null;
-        super.tearDown();
     }
 
     @Test
@@ -68,7 +60,7 @@ public class DtoAssociationServiceImplTest extends BaseCoreDBTestCase {
             assertEquals("description2", dto.getDescription());
 
             dtoAssociationService.remove(dto.getAssociationId());
-            
+
 
         } catch (Exception e) {
             assertTrue(e.getMessage(), false);
@@ -79,7 +71,7 @@ public class DtoAssociationServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testGetAll() {
         try {
-            List<AssociationDTO> list =  dtoAssociationService.getAll();
+            List<AssociationDTO> list = dtoAssociationService.getAll();
             assertEquals(4, list.size());
         } catch (Exception e) {
             assertTrue(e.getMessage(), false);

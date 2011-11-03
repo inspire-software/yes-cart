@@ -1,14 +1,12 @@
 package org.yes.cart.service.order.impl;
 
 import org.hibernate.criterion.Restrictions;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.AttrValueCustomer;
 import org.yes.cart.domain.entity.Customer;
@@ -19,6 +17,7 @@ import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.impl.BaseCoreDBTestCase;
 import org.yes.cart.service.order.OrderAssembler;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.impl.*;
 
 import java.util.Collections;
@@ -49,14 +48,6 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
 
 
     }
-
-    @After
-    public void tearDown() {
-        orderAssembler = null;
-        customerOrderDao = null;
-        super.tearDown();
-    }
-
 
     @Test
     public void testAssembleCustomerOrder() {
@@ -132,7 +123,7 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
         params.put(LoginCommandImpl.NAME, "John Doe");
 
 
-        new SetShopCartCommandImpl(ctx, Collections.singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
+        new SetShopCartCommandImpl(context, Collections.singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
                 .execute(shoppingCart);
 
         new ChangeCurrencyEventCommandImpl(context, Collections.singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "USD"))
@@ -215,12 +206,12 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
         AddressService addressService;
 
 
-        shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
+        shopService = (ShopService) context.getBean(ServiceSpringKeys.SHOP_SERVICE);
         customerService = (CustomerService) context.getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
-        attributeService = (AttributeService) ctx.getBean(ServiceSpringKeys.ATTRIBUTE_SERVICE);
-        addressService = (AddressService) ctx.getBean(ServiceSpringKeys.ADDRESS_SERVICE);
+        attributeService = (AttributeService) context.getBean(ServiceSpringKeys.ATTRIBUTE_SERVICE);
+        addressService = (AddressService) context.getBean(ServiceSpringKeys.ADDRESS_SERVICE);
 
-        GenericDAO<Customer, Long> customerDao = (GenericDAO<Customer, Long>) ctx.getBean("customerDao");
+        GenericDAO<Customer, Long> customerDao = (GenericDAO<Customer, Long>) context.getBean("customerDao");
 
         Customer customer = customerService.getGenericDao().getEntityFactory().getByIface(Customer.class);
         customer.setEmail(prefix + "jd@domain.com");

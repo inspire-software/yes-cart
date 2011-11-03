@@ -1,6 +1,5 @@
 package org.yes.cart.service.dto.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -16,24 +15,17 @@ import java.util.List;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class DtoEtypeServiceImplTest  extends BaseCoreDBTestCase {
+public class DtoEtypeServiceImplTest extends BaseCoreDBTestCase {
 
     private DtoEtypeService dtoEtypeService = null;
     private DtoFactory dtoFactory = null;
-    
+
     @Before
-    public void setUp()  throws Exception {
+    public void setUp() throws Exception {
         super.setUp();
         dtoEtypeService = (DtoEtypeService) ctx.getBean(ServiceSpringKeys.DTO_ETYPE_SERVICE);
         dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
 
-    }
-
-    @After
-    public void tearDown() {
-        dtoEtypeService = null;
-        dtoFactory = null;
-        super.tearDown();
     }
 
     @Test

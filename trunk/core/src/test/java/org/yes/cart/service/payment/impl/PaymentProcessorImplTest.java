@@ -3,7 +3,6 @@ package org.yes.cart.service.payment.impl;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
@@ -20,13 +19,14 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.impl.BaseCoreDBTestCase;
 import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.service.payment.PaymentProcessorFactory;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.impl.*;
 
 import java.math.BigDecimal;
 import java.util.*;
 
 /**
-* User: Igor Azarny iazarny@yahoo.com
+ * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
@@ -53,16 +53,6 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
         customerService = (CustomerService) ctx.getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
         shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
 
-    }
-
-    public void tearDown() {
-        paymentProcessorFactory = null;
-        customerOrderService = null;
-        customerOrderPaymentService = null;
-        addressService = null;
-        customerService = null;
-        shopService = null;
-        super.tearDown();
     }
 
     /**
@@ -508,7 +498,6 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
                 customerOrder.getOrdernum(), null, null, null).size());
 
 
-
     }
 
 
@@ -600,8 +589,6 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
 
 
         //TODO test with cancel state wait till customerOrder.setOrderStatus();
-
-
 
 
     }

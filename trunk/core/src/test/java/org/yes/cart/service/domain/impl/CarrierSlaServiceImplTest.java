@@ -2,7 +2,6 @@ package org.yes.cart.service.domain.impl;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -14,7 +13,7 @@ import java.util.List;
 
 /**
  */
-public class CarrierSlaServiceImplTest  extends BaseCoreDBTestCase {
+public class CarrierSlaServiceImplTest extends BaseCoreDBTestCase {
 
     private CarrierService carrierService;
 
@@ -33,17 +32,11 @@ public class CarrierSlaServiceImplTest  extends BaseCoreDBTestCase {
 
     }
 
-    @After
-    public void tearDown() {
-        carrierService = null;
-        super.tearDown();
-    }
-
     @Test
     public void testFindCarriersFilterByCurrency() {
         List<Carrier> carriers = carrierService.findCarriers(null, null, null, "RUB");
-        assertEquals(1,carriers.size());
-        assertEquals(1,carriers.get(0).getCarrierSla().size());
+        assertEquals(1, carriers.size());
+        assertEquals(1, carriers.get(0).getCarrierSla().size());
 
         carriers = carrierService.findCarriers(null, null, null, "MWZ"); // no one of carriers use web money
 

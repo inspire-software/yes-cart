@@ -1,6 +1,5 @@
 package org.yes.cart.service.dto.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -26,13 +25,6 @@ public class DtoSeoServiceImplTest extends BaseCoreDBTestCase {
 
     }
 
-    @After
-    public void tearDown() {
-        dtoService = null;
-        super.tearDown();
-    }
-
-
     @Test
     public void testCreate() {
         try {
@@ -55,7 +47,7 @@ public class DtoSeoServiceImplTest extends BaseCoreDBTestCase {
             seoDTO.setUri("Bender-Bending-Rodríguez-Robot");
             dtoService.update(seoDTO);
             seoDTO = dtoService.getById(pk);
-            assertEquals("Bender-Bending-Rodríguez-Robot",seoDTO.getUri());
+            assertEquals("Bender-Bending-Rodríguez-Robot", seoDTO.getUri());
         } catch (Exception e) {
             assertTrue(e.getMessage(), false);
         }

@@ -1,15 +1,14 @@
 package org.yes.cart.shoppingcart.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.impl.BaseCoreDBTestCase;
+import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -21,8 +20,8 @@ import java.util.Map;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class RemoveSkuFromCartCommandImplTest  extends BaseCoreDBTestCase {
- ShopService shopService = null;
+public class RemoveSkuFromCartCommandImplTest extends BaseCoreDBTestCase {
+    ShopService shopService = null;
     PriceService priceService = null;
     ProductService productService = null;
 
@@ -36,15 +35,6 @@ public class RemoveSkuFromCartCommandImplTest  extends BaseCoreDBTestCase {
 
     }
 
-    @After
-    public void tearDown() {
-        shopService = null;
-        priceService = null;
-        productService = null;
-        super.tearDown();
-    }
-
-
     @Test
     public void testExecute() {
 
@@ -52,7 +42,7 @@ public class RemoveSkuFromCartCommandImplTest  extends BaseCoreDBTestCase {
         new ChangeCurrencyEventCommandImpl(
                 ctx,
                 Collections.singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "EUR")
-                ).execute(shoppingCart);
+        ).execute(shoppingCart);
         new SetShopCartCommandImpl(ctx, Collections.singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
                 .execute(shoppingCart);
 
@@ -77,5 +67,5 @@ public class RemoveSkuFromCartCommandImplTest  extends BaseCoreDBTestCase {
         assertEquals(2, shoppingCart.getCartItemsCount());
 
 
-
-    }}
+    }
+}

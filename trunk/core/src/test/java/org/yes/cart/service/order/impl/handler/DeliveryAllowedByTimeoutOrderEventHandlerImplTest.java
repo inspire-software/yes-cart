@@ -1,6 +1,5 @@
 package org.yes.cart.service.order.impl.handler;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.domain.entity.Customer;
@@ -28,14 +27,7 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImplTest extends AbstractE
 
 
         handler = (DeliveryAllowedByTimeoutOrderEventHandlerImpl) ctx.getBean("deliveryAllowedByTimeoutOrderEventHandler");
-        orderService =  (CustomerOrderService)  ctx.getBean("customerOrderService");
-    }
-
-    @After
-    public void tearDown() {
-        orderService = null;
-        handler = null;
-        super.tearDown();
+        orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
     }
 
     @Test
@@ -52,10 +44,9 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImplTest extends AbstractE
         Calendar calendar = Calendar.getInstance();
 
 
-
         //set allowed time in the future
-        calendar.set(2020,9,11);
-        for (CustomerOrderDeliveryDet det : delivery.getDetail() )  {
+        calendar.set(2020, 9, 11);
+        for (CustomerOrderDeliveryDet det : delivery.getDetail()) {
             det.getSku().getProduct().setAvailablefrom(calendar.getTime());
         }
 
@@ -70,8 +61,8 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImplTest extends AbstractE
         ));
 
         //set allowed time in the past
-        calendar.set(2011,1,22);
-        for (CustomerOrderDeliveryDet det : delivery.getDetail() )  {
+        calendar.set(2011, 1, 22);
+        for (CustomerOrderDeliveryDet det : delivery.getDetail()) {
             det.getSku().getProduct().setAvailablefrom(calendar.getTime());
         }
 

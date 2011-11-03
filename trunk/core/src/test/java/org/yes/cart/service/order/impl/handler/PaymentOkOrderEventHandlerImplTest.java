@@ -1,6 +1,5 @@
 package org.yes.cart.service.order.impl.handler;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.domain.entity.Customer;
@@ -14,7 +13,7 @@ import org.yes.cart.service.order.impl.OrderEventImpl;
 import java.util.Collections;
 
 /**
-* User: Igor Azarny iazarny@yahoo.com
+ * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
@@ -34,14 +33,6 @@ public class PaymentOkOrderEventHandlerImplTest extends AbstractEventHandlerImpl
         customerOrderPaymentService = (CustomerOrderPaymentService) ctx.getBean("customerOrderPaymentService");
     }
 
-    @After
-    public void tearDown() {
-        orderService = null;
-        handler = null;
-        customerOrderPaymentService = null;
-        super.tearDown();
-    }
-
     /**
      * Test with ok payment
      */
@@ -57,12 +48,11 @@ public class PaymentOkOrderEventHandlerImplTest extends AbstractEventHandlerImpl
         customerOrder.setPgLabel("testPaymentGatewayLabel");
         orderService.update(customerOrder);
 
-        assertTrue(handler.handle( new OrderEventImpl("",  customerOrder,  null,  Collections.EMPTY_MAP  ) ));
+        assertTrue(handler.handle(new OrderEventImpl("", customerOrder, null, Collections.EMPTY_MAP)));
 
         assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
         assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED,
                 customerOrder.getDelivery().iterator().next().getDeliveryStatus());
-
 
 
     }
