@@ -1,47 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
-    <properties>
-        <yes-cart.jdk.target>1.5</yes-cart.jdk.target>
-        <yes-cart.version>1.0.0-SNAPSHOT</yes-cart.version>
-        <spring-security.version>3.0.3.RELEASE</spring-security.version>
-        <spring.version>3.0.5.RELEASE</spring.version>
-
-        <lucene.config.index.dir>/yes-cart/lucene-index</lucene.config.index.dir>
-
-        <db.config.yes.hibernate.dialect>org.hibernate.dialect.DerbyDialect</db.config.yes.hibernate.dialect>
-        <db.config.yes.login>app</db.config.yes.login>
-        <db.config.yes.password>app</db.config.yes.password>
-        <db.config.yes.driver>org.apache.derby.jdbc.ClientDriver</db.config.yes.driver>
-        <db.config.yes.url>jdbc:derby://localhost:1527/yes;create=true</db.config.yes.url>
-
-        <db.config.yespay.hibernate.dialect>org.hibernate.dialect.DerbyDialect</db.config.yespay.hibernate.dialect>
-        <db.config.yespay.login>app</db.config.yespay.login>
-        <db.config.yespay.password>app</db.config.yespay.password>
-        <db.config.yespay.driver>org.apache.derby.jdbc.ClientDriver</db.config.yespay.driver>
-        <db.config.yespay.url>jdbc:derby://localhost:1527/yespay;create=true</db.config.yespay.url>
-
-        <!--
-
-                <db.config.yes.hibernate.dialect>org.hibernate.dialect.MySQL5Dialect</db.config.yes.hibernate.dialect>
-                <db.config.yes.login>root</db.config.yes.login>
-                <db.config.yes.password></db.config.yes.password>
-                <db.config.yes.driver>com.mysql.jdbc.Driver</db.config.yes.driver>
-                <db.config.yes.url>jdbc:mysql://localhost/yes?AutoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8</db.config.yes.url>
-
-                <db.config.yespay.hibernate.dialect>org.hibernate.dialect.MySQL5Dialect</db.config.yespay.hibernate.dialect>
-                <db.config.yespay.login>root</db.config.yespay.login>
-                <db.config.yespay.password></db.config.yespay.password>
-                <db.config.yespay.driver>com.mysql.jdbc.Driver</db.config.yespay.driver>
-                <db.config.yespay.url>jdbc:mysql://localhost/yespay?AutoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8</db.config.yespay.url>
-
-        -->
-
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-    </properties>
-
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.yes</groupId>
     <artifactId>yes-cart</artifactId>
@@ -49,7 +8,6 @@
     <version>1.0.0-SNAPSHOT</version>
     <name>Yes Cart</name>
     <url>http://code.google.com/p/yes-cart/</url>
-
     <modules>
         <module>build-tools</module>
         <module>payment-api</module>
@@ -60,16 +18,100 @@
         <module>manager</module>
         <module>web</module>
     </modules>
-
+    <properties>
+        <spring-security.version>3.0.3.RELEASE</spring-security.version>
+        <spring.version>3.0.5.RELEASE</spring.version>
+        <lucene.config.index.dir>/yes-cart/lucene-index</lucene.config.index.dir>
+        <db.config.yes.hibernate.dialect>org.hibernate.dialect.DerbyDialect</db.config.yes.hibernate.dialect>
+        <db.config.yes.login>app</db.config.yes.login>
+        <db.config.yes.password>app</db.config.yes.password>
+        <db.config.yes.driver>org.apache.derby.jdbc.ClientDriver</db.config.yes.driver>
+        <db.config.yes.url>jdbc:derby://localhost:1527/yes;create=true</db.config.yes.url>
+        <db.config.yespay.hibernate.dialect>org.hibernate.dialect.DerbyDialect</db.config.yespay.hibernate.dialect>
+        <db.config.yespay.login>app</db.config.yespay.login>
+        <db.config.yespay.password>app</db.config.yespay.password>
+        <db.config.yespay.driver>org.apache.derby.jdbc.ClientDriver</db.config.yespay.driver>
+        <db.config.yespay.url>jdbc:derby://localhost:1527/yespay;create=true</db.config.yespay.url>
+        <maven.compiler.source>1.5</maven.compiler.source>
+        <maven.compiler.target>1.5</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jms</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <scope>runtime</scope>
+            <version>1.2.12</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit-dep</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.jmock</groupId>
+            <artifactId>jmock-junit4</artifactId>
+            <version>2.5.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-core</artifactId>
+            <version>1.3.RC2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+            <version>1.3.RC2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-integration</artifactId>
+            <version>1.3.RC2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
     <build>
-
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
             </resource>
         </resources>
-
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -98,10 +140,6 @@
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>2.3.2</version>
-                    <configuration>
-                        <source>${yes-cart.jdk.target}</source>
-                        <target>${yes-cart.jdk.target}</target>
-                    </configuration>
                 </plugin>
                 <plugin>
                     <artifactId>maven-dependency-plugin</artifactId>
@@ -167,7 +205,6 @@
             </plugins>
         </pluginManagement>
     </build>
-
     <reporting>
         <plugins>
             <plugin>
@@ -176,7 +213,7 @@
                 <configuration>
                     <sourceEncoding>utf-8</sourceEncoding>
                     <minimumTokens>100</minimumTokens>
-                    <targetJdk>1.5</targetJdk>
+                    <targetJdk>${maven.compiler.target}</targetJdk>
                     <rulesets>
                         <ruleset>pmd/pmd.xml</ruleset>
                     </rulesets>
@@ -192,51 +229,21 @@
             </plugin>
         </plugins>
     </reporting>
-
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.7</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jmock</groupId>
-            <artifactId>jmock-junit4</artifactId>
-            <version>2.5.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jms</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.6.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.6.1</version>
-        </dependency>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <scope>runtime</scope>
-            <version>1.2.12</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.4</version>
-        </dependency>
-    </dependencies>
-
+    <profiles>
+        <profile>
+            <id>mysql</id>
+            <properties>
+                <db.config.yes.hibernate.dialect>org.hibernate.dialect.MySQL5Dialect</db.config.yes.hibernate.dialect>
+                <db.config.yes.login>root</db.config.yes.login>
+                <db.config.yes.password></db.config.yes.password>
+                <db.config.yes.driver>com.mysql.jdbc.Driver</db.config.yes.driver>
+                <db.config.yes.url>jdbc:mysql://localhost/yes?AutoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8</db.config.yes.url>
+                <db.config.yespay.hibernate.dialect>org.hibernate.dialect.MySQL5Dialect</db.config.yespay.hibernate.dialect>
+                <db.config.yespay.login>root</db.config.yespay.login>
+                <db.config.yespay.password></db.config.yespay.password>
+                <db.config.yespay.driver>com.mysql.jdbc.Driver</db.config.yespay.driver>
+                <db.config.yespay.url>jdbc:mysql://localhost/yespay?AutoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8</db.config.yespay.url>
+            </properties>
+        </profile>
+    </profiles>
 </project>
