@@ -1,6 +1,5 @@
 package org.yes.cart.service.dto.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -19,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
-* User: Igor Azarny iazarny@yahoo.com
+ * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
@@ -37,16 +36,7 @@ public class DtoProductSkuServiceImplTest extends BaseCoreDBTestCase {
         dtoService = (DtoProductSkuService) ctx.getBean(ServiceSpringKeys.DTO_PRODUCT_SKU_SERVICE);
         dtoProductService = (DtoProductService) ctx.getBean(ServiceSpringKeys.DTO_PRODUCT_SERVICE);
         dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
-        dtoAttrService  = (DtoAttributeService) ctx.getBean(ServiceSpringKeys.DTO_ATTRIBUTE_SERVICE);
-    }
-
-    @After
-    public void tearDown() {
-        dtoService = null;
-        dtoProductService = null;
-        dtoFactory = null;
-        dtoAttrService = null;
-        super.tearDown();
+        dtoAttrService = (DtoAttributeService) ctx.getBean(ServiceSpringKeys.DTO_ATTRIBUTE_SERVICE);
     }
 
     @Test
@@ -73,7 +63,7 @@ public class DtoProductSkuServiceImplTest extends BaseCoreDBTestCase {
             long pk = dto.getSkuId();
             dto.setName("new name");
             dto.setDescription("new description");
-            dto.setBarCode("233456");            
+            dto.setBarCode("233456");
             dto = dtoService.update(dto);
             assertEquals("new name", dto.getName());
             assertEquals("new description", dto.getDescription());
@@ -119,6 +109,7 @@ public class DtoProductSkuServiceImplTest extends BaseCoreDBTestCase {
         }
 
     }
+
     /**
      * Add price.
      */
@@ -231,7 +222,7 @@ public class DtoProductSkuServiceImplTest extends BaseCoreDBTestCase {
             dtoService.createEntityAttributeValue(attrValueDTO);
             dto = dtoService.getById(dto.getSkuId());
             assertFalse(dto.getAttribute().isEmpty());
-            assertEquals("image.jpg", dto.getAttribute().iterator().next().getVal());            
+            assertEquals("image.jpg", dto.getAttribute().iterator().next().getVal());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -254,7 +245,7 @@ public class DtoProductSkuServiceImplTest extends BaseCoreDBTestCase {
             List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(dto.getSkuId());
             assertFalse(list.isEmpty());
             assertEquals(7, list.size()); // 7 images
-            assertEquals("image.jpg", list.iterator().next().getVal());            
+            assertEquals("image.jpg", list.iterator().next().getVal());
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,6 +1,5 @@
 package org.yes.cart.service.dto.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -24,13 +23,6 @@ public class DtoAttributeGroupServiceImplTest extends BaseCoreDBTestCase {
         super.setUp();
         dtoAttributeGroupService = (DtoAttributeGroupService) ctx.getBean(ServiceSpringKeys.DTO_ATTRIBUTE_GROUP_SERVICE);
         dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
-    }
-
-    @After
-    public void tearDown() {
-        dtoAttributeGroupService = null;
-        dtoFactory = null;
-        super.tearDown();
     }
 
     @Test
@@ -88,7 +80,7 @@ public class DtoAttributeGroupServiceImplTest extends BaseCoreDBTestCase {
             long id = attributeGroupDTO.getAttributegroupId();
             dtoAttributeGroupService.remove(id);
             attributeGroupDTO = dtoAttributeGroupService.getById(id);
-            assertNull(attributeGroupDTO);            
+            assertNull(attributeGroupDTO);
         } catch (Exception e) {
             assertTrue(e.getMessage(), false);
         }
@@ -100,7 +92,6 @@ public class DtoAttributeGroupServiceImplTest extends BaseCoreDBTestCase {
         attributeGroupDTO.setName("Test name");
         return attributeGroupDTO;
     }
-
 
 
 }

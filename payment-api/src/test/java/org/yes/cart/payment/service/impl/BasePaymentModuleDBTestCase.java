@@ -28,10 +28,8 @@ public abstract class BasePaymentModuleDBTestCase extends DBTestCase {
      * test application context and use to create
      * our DAO object (and data source, session factory, etc.)
      */
-    protected static ApplicationContext ctx = null;
-
+    protected ApplicationContext ctx;
     protected SessionFactory sessionFactory;
-
     protected Session session;
 
     protected IDataSet getDataSet() throws Exception {
@@ -56,7 +54,6 @@ public abstract class BasePaymentModuleDBTestCase extends DBTestCase {
         }
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -76,43 +73,29 @@ public abstract class BasePaymentModuleDBTestCase extends DBTestCase {
         System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_CONNECTION_URL, "jdbc:hsqldb:mem:testnpapaydb");
         System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_USERNAME, "sa");
         System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_PASSWORD, "");
-
     }
 
 
     @Before
     public void setUp() throws Exception {
-
         ctx = new ClassPathXmlApplicationContext("test-payment-api.xml");
-
         sessionFactory = (SessionFactory) ctx.getBean("paySessionFactory");
-
         session = sessionFactory.openSession();
-
         super.setUp();
-
     }
 
     @Before
     public void setUp(String[] configurationXmls) throws Exception {
-
         ctx = new ClassPathXmlApplicationContext(configurationXmls);
-
         sessionFactory = (SessionFactory) ctx.getBean("paySessionFactory");
-
         session = sessionFactory.openSession();
-
         super.setUp();
-
     }
 
     @After
     public void tearDown() throws Exception {
+        super.tearDown();
         sessionFactory.close();
         session.close();
-        ctx = null;
-        session = null;
-        sessionFactory = null;
-        super.tearDown();
     }
 }

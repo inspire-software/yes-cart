@@ -1,6 +1,5 @@
 package org.yes.cart.service.domain.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -21,24 +20,17 @@ public class CustomerServiceImplTest extends BaseCoreDBTestCase {
     private ShopService shopService;
 
     @Before
-    public void setUp()  throws Exception {
+    public void setUp() throws Exception {
         super.setUp();
         customerService = (CustomerService) ctx.getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
-        shopService  = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
-    }
-
-    @After
-    public void tearDown() {
-        customerService = null;
-        shopService  = null;
-        super.tearDown();
+        shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
     }
 
     @Test
     public void testCreate() {
         Customer customer = getCustomer("testCreate");
         customer = customerService.create(customer, shopService.getById(10L));
-        assertTrue (customer.getCustomerId() > 0);
+        assertTrue(customer.getCustomerId() > 0);
         assertFalse(customer.getShops().isEmpty());
     }
 
@@ -46,7 +38,7 @@ public class CustomerServiceImplTest extends BaseCoreDBTestCase {
     public void testUpdate() {
         Customer customer = getCustomer("testUpdate");
         customer = customerService.create(customer, shopService.getById(10L));
-        assertTrue (customer.getCustomerId() > 0);
+        assertTrue(customer.getCustomerId() > 0);
         customer.setFirstname("Gordon");
         customer.setLastname("Freeman");
         customer.setPassword("rawpassword");
@@ -59,7 +51,7 @@ public class CustomerServiceImplTest extends BaseCoreDBTestCase {
     public void testDelete() {
         Customer customer = getCustomer("testDelete");
         customer = customerService.create(customer, shopService.getById(10L));
-        assertTrue (customer.getCustomerId() > 0);
+        assertTrue(customer.getCustomerId() > 0);
         long pk = customer.getCustomerId();
         customerService.delete(customer);
         customer = customerService.getById(pk);
@@ -70,7 +62,7 @@ public class CustomerServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testFindCustomer() {
 
-        dumpDataBase("cust_addr" , new String [] {"TADDRESS"});
+        dumpDataBase("cust_addr", new String[]{"TADDRESS"});
 
         Customer customer = getCustomer("");
         customer.setEmail("user1@somedomain.com");
@@ -104,7 +96,7 @@ public class CustomerServiceImplTest extends BaseCoreDBTestCase {
         list = customerService.findCustomer(null, null, "kintola", null);
         assertEquals(1, list.size());
 
-        list = customerService.findCustomer(null, "SomeFirsname", null , null);
+        list = customerService.findCustomer(null, "SomeFirsname", null, null);
         assertEquals(2, list.size());
 
         list = customerService.findCustomer(null, "SomeFirsname", "Akintola", null);
@@ -112,7 +104,6 @@ public class CustomerServiceImplTest extends BaseCoreDBTestCase {
 
 
     }
-
 
 
     private Customer getCustomer(final String prefix) {

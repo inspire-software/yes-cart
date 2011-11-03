@@ -1,6 +1,5 @@
 package org.yes.cart.service.order.impl.handler;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.domain.entity.*;
@@ -17,11 +16,11 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 
 /**
-* User: Igor Azarny iazarny@yahoo.com
+ * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class ProcessAllocationOrderEventHandlerImplTest  extends AbstractEventHandlerImplTest {
+public class ProcessAllocationOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
     private CustomerOrderService orderService = null;
     private ProcessAllocationOrderEventHandlerImpl handler = null;
@@ -41,22 +40,9 @@ public class ProcessAllocationOrderEventHandlerImplTest  extends AbstractEventHa
         customerOrderPaymentService = (CustomerOrderPaymentService) ctx.getBean("customerOrderPaymentService");
 
 
-        productSkuService = (ProductSkuService)  ctx.getBean("productSkuService");
+        productSkuService = (ProductSkuService) ctx.getBean("productSkuService");
         skuWarehouseService = (SkuWarehouseService) ctx.getBean("skuWarehouseService");
-        warehouseService = (WarehouseService)  ctx.getBean("warehouseService");
-    }
-
-    @After
-    public void tearDown() {
-        orderService = null;
-        handler = null;
-        customerOrderPaymentService = null;
-
-        warehouseService = null;
-        productSkuService = null;
-        skuWarehouseService = null;
-
-        super.tearDown();
+        warehouseService = (WarehouseService) ctx.getBean("warehouseService");
     }
 
     /**
@@ -76,14 +62,16 @@ public class ProcessAllocationOrderEventHandlerImplTest  extends AbstractEventHa
 
         CustomerOrderDelivery customerOrderDelivery = customerOrder.getDelivery().iterator().next();
 
-        assertTrue(handler.handle( new OrderEventImpl("",  customerOrder,  customerOrderDelivery  ) ));
+        assertTrue(handler.handle(new OrderEventImpl("", customerOrder, customerOrderDelivery)));
 
         final Warehouse warehouse = warehouseService.getById(1);
 
         // check reserved quantity
         ProductSku sku = productSkuService.getProductSkuBySkuCode("CC_TEST1");
         Pair<BigDecimal, BigDecimal> qty = skuWarehouseService.getQuantity(
-                new ArrayList<Warehouse>() {{ add(warehouse); }},
+                new ArrayList<Warehouse>() {{
+                    add(warehouse);
+                }},
                 sku
         );
         assertEquals(new BigDecimal("7.00"), qty.getFirst());
@@ -92,12 +80,13 @@ public class ProcessAllocationOrderEventHandlerImplTest  extends AbstractEventHa
 
         sku = productSkuService.getProductSkuBySkuCode("CC_TEST2");
         qty = skuWarehouseService.getQuantity(
-                new ArrayList<Warehouse>() {{ add(warehouse); }},
+                new ArrayList<Warehouse>() {{
+                    add(warehouse);
+                }},
                 sku
         );
         assertEquals(new BigDecimal("0.00"), qty.getFirst());
         assertEquals(new BigDecimal("0.00"), qty.getSecond());
-
 
 
         assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED,

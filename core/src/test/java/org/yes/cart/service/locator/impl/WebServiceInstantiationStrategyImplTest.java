@@ -1,7 +1,5 @@
 package org.yes.cart.service.locator.impl;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -12,15 +10,6 @@ import static org.junit.Assert.assertEquals;
  * Time: 14:12:54
  */
 public class WebServiceInstantiationStrategyImplTest {
-    @Before
-    public void setUp() throws Exception {
-
-    }
-
-    @After
-    public void tearDown() throws Exception {
-
-    }
 
     @Test
     public void testGetServiceName() throws Exception {

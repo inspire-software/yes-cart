@@ -1,6 +1,5 @@
 package org.yes.cart.service.domain.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -10,7 +9,6 @@ import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
-import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
 import org.yes.cart.domain.queryobject.FiteredNavigationRecord;
 import org.yes.cart.service.domain.PriceService;
@@ -39,15 +37,6 @@ public class TestPriceServiceImpl extends BaseCoreDBTestCase {
         priceService = (PriceService) ctx.getBean(ServiceSpringKeys.PRICE_SERVICE);
         shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
     }
-
-    @After
-    public void tearDown() {
-        shopService = null;
-        priceService = null;
-        productService = null;
-        super.tearDown();
-    }
-
 
     /**
      * Test .
@@ -123,12 +112,12 @@ public class TestPriceServiceImpl extends BaseCoreDBTestCase {
 
         List<SkuPrice> skus = priceService.getSkuPriceFilteredByShop(product.getSku(), shop);
 
-        skus =  priceService.getSkuPriceFilteredByCurrency(
-                 priceService.getSkuPricesFilteredByQuantity (skus, new BigDecimal(2))
-                    ,"EUR");
+        skus = priceService.getSkuPriceFilteredByCurrency(
+                priceService.getSkuPricesFilteredByQuantity(skus, new BigDecimal(2))
+                , "EUR");
 
         boolean found = false;
-        for(SkuPrice skuPrice : skus) {
+        for (SkuPrice skuPrice : skus) {
             if ("SOBOT-LIGHT".equals(skuPrice.getSku().getCode())) {
                 assertEquals(new BigDecimal("145.00"), skuPrice.getRegularPrice());
                 found = true;
@@ -136,7 +125,6 @@ public class TestPriceServiceImpl extends BaseCoreDBTestCase {
         }
 
         assertTrue(found);
-
 
 
     }
@@ -165,7 +153,7 @@ public class TestPriceServiceImpl extends BaseCoreDBTestCase {
     public void testGetMinimalRegularPriceForsupportedCurrencyTest() {
 
         Product product = productService.getProductById(10000L);
-        
+
         Shop shop = shopService.getShopByDomainName("www.gadget.npa.com");
 
 

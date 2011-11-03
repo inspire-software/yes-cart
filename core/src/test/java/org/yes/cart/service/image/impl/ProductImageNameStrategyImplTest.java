@@ -1,6 +1,5 @@
 package org.yes.cart.service.image.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.Constants;
@@ -12,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
-* User: Igor Azarny iazarny@yahoo.com
+ * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
@@ -20,7 +19,7 @@ public class ProductImageNameStrategyImplTest extends BaseCoreDBTestCase {
 
     private ImageNameStrategy imageNameStrategy;
 
-    private String [] fileNames = {
+    private String[] fileNames = {
             "some_seo_image_file-name_PRODUCT-or-SKU-CODE_a.jpeg",
             "some_seo_image_file-name_PRODUCT1_b.jpeg",
             "some_seo_image_file-name_PROD+UCT1_c.jpeg",
@@ -31,17 +30,10 @@ public class ProductImageNameStrategyImplTest extends BaseCoreDBTestCase {
     };
 
 
-
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        imageNameStrategy = (ImageNameStrategy)ctx.getBean(ServiceSpringKeys.PRODUCT_IMAGE_NAME_STRATEGY);
-    }
-
-    @After
-    public void tearDown() {
-        imageNameStrategy = null;
-        super.tearDown();
+        imageNameStrategy = (ImageNameStrategy) ctx.getBean(ServiceSpringKeys.PRODUCT_IMAGE_NAME_STRATEGY);
     }
 
     @Test
@@ -99,7 +91,6 @@ public class ProductImageNameStrategyImplTest extends BaseCoreDBTestCase {
                 imageNameStrategy.getCode("sobot-picture.jpeg"));
 
 
-
     }
 
 
@@ -112,7 +103,5 @@ public class ProductImageNameStrategyImplTest extends BaseCoreDBTestCase {
 
     }
 
-
-    
 
 }

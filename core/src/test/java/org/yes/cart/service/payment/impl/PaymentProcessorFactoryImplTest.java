@@ -6,7 +6,7 @@ import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.service.payment.PaymentProcessorFactory;
 
 /**
-* User: Igor Azarny iazarny@yahoo.com
+ * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
@@ -19,11 +19,6 @@ public class PaymentProcessorFactoryImplTest extends BaseCoreDBTestCase {
 
         super.setUp();
         paymentProcessorFactory = (PaymentProcessorFactory) ctx.getBean(ServiceSpringKeys.PAYMENT_PROCESSOR_FACTORY);
-    }
-
-    public void tearDown() {
-        paymentProcessorFactory = null;
-        super.tearDown();
     }
 
     /**

@@ -1,6 +1,5 @@
 package org.yes.cart.service.domain.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -41,14 +40,6 @@ public class ShopTopSellerServiceImplTest extends BaseCoreDBTestCase {
 
     }
 
-    @After
-    public void tearDown() {
-        shopTopSellerService = null;
-        orderAssembler = null;
-        customerOrderDao = null;
-        super.tearDown();
-    }
-
     @Test
     public void testUpdateTopSellers() throws Exception {
 
@@ -79,14 +70,14 @@ public class ShopTopSellerServiceImplTest extends BaseCoreDBTestCase {
         System.out.println(allTopSellers.size());
         for (ShopTopSeller ts : allTopSellers) {
             Long key = ts.getProduct().getId();
-            assertEquals(expectation.remove(key) , ts.getCounter() );
+            assertEquals(expectation.remove(key), ts.getCounter());
             expectation.remove(key);
         }
 
 
         dumpDataBase("topsell", new String[]{"TCUSTOMERORDER", "TCUSTOMERORDERDET", "TSHOPTOPSELLER"});
 
-        assertTrue("Expectation must be empty but has " +expectation.size(), expectation.isEmpty());
+        assertTrue("Expectation must be empty but has " + expectation.size(), expectation.isEmpty());
 
 
     }

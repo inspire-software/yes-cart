@@ -1,6 +1,5 @@
 package org.yes.cart.service.order.impl.handler;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -24,9 +23,10 @@ import java.util.Collections;
 import java.util.List;
 
 /**
-* User: Igor Azarny iazarny@yahoo.com
+ * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
- * Time: 14:12:54 */
+ * Time: 14:12:54
+ */
 public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
     private CustomerOrderService orderService = null;
@@ -49,18 +49,6 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         skuWarehouseService = (SkuWarehouseService) ctx.getBean(ServiceSpringKeys.SKU_WAREHOUSE_SERVICE);
         warehouseService = (WarehouseService) ctx.getBean(ServiceSpringKeys.WAREHOUSE_SERVICE);
     }
-
-    @After
-    public void tearDown() {
-        orderService = null;
-        handler = null;
-        customerOrderPaymentService = null;
-        warehouseService = null;
-        productSkuService = null;
-        skuWarehouseService = null;
-        super.tearDown();
-    }
-
 
     /**
      * Test with ok payment and offline payment gw

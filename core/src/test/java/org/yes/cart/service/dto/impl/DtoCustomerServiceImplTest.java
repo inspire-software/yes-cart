@@ -1,6 +1,5 @@
 package org.yes.cart.service.dto.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -22,7 +21,7 @@ import java.util.List;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class DtoCustomerServiceImplTest  extends BaseCoreDBTestCase {
+public class DtoCustomerServiceImplTest extends BaseCoreDBTestCase {
 
     private DtoFactory dtoFactory = null;
     private DtoCustomerService dtoService = null;
@@ -33,19 +32,8 @@ public class DtoCustomerServiceImplTest  extends BaseCoreDBTestCase {
         super.setUp();
         dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
         dtoService = (DtoCustomerService) ctx.getBean(ServiceSpringKeys.DTO_CUSTOMER_SERVICE);
-        dtoAttrService  = (DtoAttributeService) ctx.getBean(ServiceSpringKeys.DTO_ATTRIBUTE_SERVICE);
-
-
+        dtoAttrService = (DtoAttributeService) ctx.getBean(ServiceSpringKeys.DTO_ATTRIBUTE_SERVICE);
     }
-
-    @After
-    public void tearDown() {
-        dtoFactory = null;
-        dtoService = null;
-        dtoAttrService = null;
-        super.tearDown();
-    }
-
 
     @Test
     public void testCreate() throws UnmappedInterfaceException, UnableToCreateInstanceException {
@@ -69,7 +57,7 @@ public class DtoCustomerServiceImplTest  extends BaseCoreDBTestCase {
         dtoService.remove(dto.getCustomerId());
     }
 
-    public void testCreateEntityAttributeValue()  throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public void testCreateEntityAttributeValue() throws UnmappedInterfaceException, UnableToCreateInstanceException {
         CustomerDTO dto = getCustomerDto("testCreateEntityAttributeValue");
         dto = dtoService.create(dto);
         assertTrue(dto.getCustomerId() > 0);
@@ -90,8 +78,8 @@ public class DtoCustomerServiceImplTest  extends BaseCoreDBTestCase {
     }
 
 
-    public void testGetEntityAttributes()   throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        dumpDataBase("ffffffff" , new String [] {"TCUSTOMER"});
+    public void testGetEntityAttributes() throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        dumpDataBase("ffffffff", new String[]{"TCUSTOMER"});
         CustomerDTO dto = getCustomerDto("testGetEntityAttributes");
         dto = dtoService.create(dto);
         assertTrue(dto.getCustomerId() > 0);
@@ -110,10 +98,9 @@ public class DtoCustomerServiceImplTest  extends BaseCoreDBTestCase {
         assertEquals("+380978159999", list.get(0).getVal());
 
 
-
     }
 
-    public void testUpdateEntityAttributeValue()  throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public void testUpdateEntityAttributeValue() throws UnmappedInterfaceException, UnableToCreateInstanceException {
         CustomerDTO dto = getCustomerDto("testUpdateEntityAttributeValue");
         dto = dtoService.create(dto);
         assertTrue(dto.getCustomerId() > 0);
@@ -135,7 +122,6 @@ public class DtoCustomerServiceImplTest  extends BaseCoreDBTestCase {
         aDto.setVal("+44555123456");
         aDto = (AttrValueCustomerDTO) dtoService.updateEntityAttributeValue(aDto);
         assertEquals("+44555123456", aDto.getVal());
-
 
 
     }
@@ -160,7 +146,6 @@ public class DtoCustomerServiceImplTest  extends BaseCoreDBTestCase {
         assertEquals("+380978159999", dto.getAttribute().iterator().next().getVal());
 
 
-
         dtoService.deleteAttributeValue(dto.getAttribute().iterator().next().getAttrvalueId());
         dto = dtoService.getById(dto.getCustomerId());
         assertTrue(dto.getAttribute().isEmpty());
@@ -175,7 +160,6 @@ public class DtoCustomerServiceImplTest  extends BaseCoreDBTestCase {
         dto.setLastname(prefix + "Doe");
         return dto;
     }
-    
 
 
 }

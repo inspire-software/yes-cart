@@ -1,6 +1,5 @@
 package org.yes.cart.service.domain.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -20,12 +19,12 @@ import java.util.List;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class WarehouseServiceImplTest  extends BaseCoreDBTestCase {
+public class WarehouseServiceImplTest extends BaseCoreDBTestCase {
 
     private WarehouseService warehouseService;
     private ShopService shopService;
     private EntityFactory entityFactory;
-    private GenericDAO<ShopWarehouse, Long> shopWarehouseDao  ;
+    private GenericDAO<ShopWarehouse, Long> shopWarehouseDao;
 
     private Shop shop;
     private Warehouse warehouse;
@@ -38,16 +37,6 @@ public class WarehouseServiceImplTest  extends BaseCoreDBTestCase {
         entityFactory = warehouseService.getGenericDao().getEntityFactory();
         shopWarehouseDao = (GenericDAO) ctx.getBean(DaoServiceBeanKeys.SHOP_WAREHOUSE_DAO);
     }
-
-    @After
-    public void tearDown() {
-        warehouseService = null;
-        shopService = null;
-        entityFactory = null;
-        shopWarehouseDao = null;
-        super.tearDown();
-    }
-
 
     /**
      * Assign warehouse to shop test.
@@ -132,7 +121,6 @@ public class WarehouseServiceImplTest  extends BaseCoreDBTestCase {
         warehouse = warehouseService.create(warehouse);
         assertNotNull(warehouse);
     }
-
 
 
 }

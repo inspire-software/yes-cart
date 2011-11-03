@@ -1,6 +1,5 @@
 package org.yes.cart.service.dto.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -12,11 +11,11 @@ import org.yes.cart.service.domain.impl.BaseCoreDBTestCase;
 import org.yes.cart.service.dto.DtoImageService;
 
 /**
-* User: Igor Azarny iazarny@yahoo.com
+ * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class DtoImageServiceImplTest  extends BaseCoreDBTestCase {
+public class DtoImageServiceImplTest extends BaseCoreDBTestCase {
 
     private DtoImageService dtoService = null;
     private DtoFactory dtoFactory = null;
@@ -25,16 +24,9 @@ public class DtoImageServiceImplTest  extends BaseCoreDBTestCase {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        dtoService =  (DtoImageService) ctx.getBean(ServiceSpringKeys.DTO_IMAGE_SERVICE);
-        dtoFactory =  (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
+        dtoService = (DtoImageService) ctx.getBean(ServiceSpringKeys.DTO_IMAGE_SERVICE);
+        dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
 
-    }
-
-    @After
-    public void tearDown() {
-        dtoService = null;
-        dtoFactory = null;
-        super.tearDown();
     }
 
     @Test

@@ -1,6 +1,5 @@
 package org.yes.cart.service.domain.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -19,15 +18,9 @@ public class AssociationServiceImplTest extends BaseCoreDBTestCase {
     private AssociationService associationService = null;
 
     @Before
-    public void setUp()  throws Exception {
+    public void setUp() throws Exception {
         super.setUp();
         associationService = (AssociationService) ctx.getBean(ServiceSpringKeys.ASSOCIATION_SERVICE);
-    }
-
-    @After
-    public void tearDown() {
-        associationService = null;
-        super.tearDown();
     }
 
     @Test
@@ -39,12 +32,12 @@ public class AssociationServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testCreate() {
-        Association association  = associationService.getGenericDao().getEntityFactory().getByIface(Association.class);
+        Association association = associationService.getGenericDao().getEntityFactory().getByIface(Association.class);
         association.setCode("someCode");
         association.setName("someName");
         association.setDescription("someDescription");
 
-        association  = associationService.create(association);
+        association = associationService.create(association);
         assertTrue(association.getAssociationId() > 0);
 
         List<Association> list = associationService.findAll();
@@ -55,19 +48,19 @@ public class AssociationServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testUpdate() {
 
-        Association association  = associationService.getGenericDao().getEntityFactory().getByIface(Association.class);
+        Association association = associationService.getGenericDao().getEntityFactory().getByIface(Association.class);
         association.setCode("someCode");
         association.setName("someName");
         association.setDescription("someDescription");
 
-        association  = associationService.create(association);
+        association = associationService.create(association);
         assertTrue(association.getAssociationId() > 0);
 
         association.setCode("someCode2");
         association.setName("someName2");
         association.setDescription("someDescription2");
 
-        association  = associationService.update(association);
+        association = associationService.update(association);
         assertEquals("someCode2", association.getCode());
         assertEquals("someName2", association.getName());
         assertEquals("someDescription2", association.getDescription());
@@ -78,18 +71,18 @@ public class AssociationServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testDelete() {
 
-        Association association  = associationService.getGenericDao().getEntityFactory().getByIface(Association.class);
+        Association association = associationService.getGenericDao().getEntityFactory().getByIface(Association.class);
         association.setCode("someCode");
         association.setName("someName");
         association.setDescription("someDescription");
 
-        association  = associationService.create(association);
+        association = associationService.create(association);
         assertTrue(association.getAssociationId() > 0);
 
         long pk = association.getAssociationId();
         associationService.delete(association);
 
-        association  = associationService.getById(pk);
+        association = associationService.getById(pk);
         assertNull(association);
 
     }

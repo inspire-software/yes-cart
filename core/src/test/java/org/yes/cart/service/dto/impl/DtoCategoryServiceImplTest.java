@@ -1,6 +1,5 @@
 package org.yes.cart.service.dto.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -15,11 +14,11 @@ import org.yes.cart.service.dto.DtoCategoryService;
 import java.util.List;
 
 /**
-* User: Igor Azarny iazarny@yahoo.com
+ * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class DtoCategoryServiceImplTest  extends BaseCoreDBTestCase {
+public class DtoCategoryServiceImplTest extends BaseCoreDBTestCase {
 
     private DtoFactory dtoFactory = null;
     private DtoCategoryService dtoService = null;
@@ -30,17 +29,7 @@ public class DtoCategoryServiceImplTest  extends BaseCoreDBTestCase {
         super.setUp();
         dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
         dtoService = (DtoCategoryService) ctx.getBean(ServiceSpringKeys.DTO_CATEGORY_SERVICE);
-        dtoAttrService  = (DtoAttributeService) ctx.getBean(ServiceSpringKeys.DTO_ATTRIBUTE_SERVICE);
-
-
-    }
-
-    @After
-    public void tearDown() {
-        dtoFactory = null;
-        dtoService = null;
-        dtoAttrService = null;
-        super.tearDown();
+        dtoAttrService = (DtoAttributeService) ctx.getBean(ServiceSpringKeys.DTO_ATTRIBUTE_SERVICE);
     }
 
     @Test
@@ -195,7 +184,7 @@ public class DtoCategoryServiceImplTest  extends BaseCoreDBTestCase {
             for (AttrValueDTO dto : list) {
                 if (dto.getAttributeDTO().getCode().equals("CATEGORY_ITEMS_PER_PAGE")) {
                     assertEquals("5,15,35", dto.getVal());
-                }                
+                }
             }
         } catch (Exception e) {
             assertTrue(e.getMessage(), false);
@@ -208,8 +197,8 @@ public class DtoCategoryServiceImplTest  extends BaseCoreDBTestCase {
             final int qty = 3;
             List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(100L);
             assertEquals(qty, list.size());
-            for (int i = 0; i< qty; i++) {
-                AttrValueDTO dto  = list.get(i);
+            for (int i = 0; i < qty; i++) {
+                AttrValueDTO dto = list.get(i);
                 if (dto.getVal() != null) {
                     dtoService.deleteAttributeValue(dto.getAttrvalueId());
                 }
@@ -231,13 +220,13 @@ public class DtoCategoryServiceImplTest  extends BaseCoreDBTestCase {
             final int qty = 3;
             List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(100L);
             assertEquals(3, list.size());
-            for (int i = 0; i< qty; i++) {
-                AttrValueDTO dto  = list.get(i);
+            for (int i = 0; i < qty; i++) {
+                AttrValueDTO dto = list.get(i);
                 if (dto.getVal() != null) {
                     dtoService.deleteAttributeValue(dto.getAttrvalueId());
                 }
             }
-            
+
             list = dtoService.getEntityAttributes(100L);
             assertEquals(qty, list.size());
             for (AttrValueDTO dto : list) {
@@ -266,7 +255,7 @@ public class DtoCategoryServiceImplTest  extends BaseCoreDBTestCase {
                 }
             }
 
-            
+
         } catch (Exception e) {
             assertTrue(e.getMessage(), false);
         }

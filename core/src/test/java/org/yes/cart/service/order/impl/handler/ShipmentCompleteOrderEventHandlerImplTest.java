@@ -1,6 +1,5 @@
 package org.yes.cart.service.order.impl.handler;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.Constants;
@@ -23,11 +22,11 @@ import java.util.Collections;
 import java.util.List;
 
 /**
-* User: Igor Azarny iazarny@yahoo.com
+ * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class ShipmentCompleteOrderEventHandlerImplTest   extends AbstractEventHandlerImplTest {
+public class ShipmentCompleteOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
     private CustomerOrderService orderService = null;
     private ShipmentCompleteOrderEventHandlerImpl handler = null;
@@ -47,24 +46,11 @@ public class ShipmentCompleteOrderEventHandlerImplTest   extends AbstractEventHa
         handler = (ShipmentCompleteOrderEventHandlerImpl) ctx.getBean("shipmentCompleteOrderEventHandler");
         orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
         skuWarehouseService = (SkuWarehouseService) ctx.getBean("skuWarehouseService");
-        customerOrderPaymentService =  (CustomerOrderPaymentService)  ctx.getBean("customerOrderPaymentService");
+        customerOrderPaymentService = (CustomerOrderPaymentService) ctx.getBean("customerOrderPaymentService");
         pendingHandler = (PendingOrderEventHandlerImpl) ctx.getBean("pendingOrderEventHandler");
-        productSkuService = (ProductSkuService)  ctx.getBean("productSkuService");
-        warehouseService = (WarehouseService)  ctx.getBean("warehouseService");
+        productSkuService = (ProductSkuService) ctx.getBean("productSkuService");
+        warehouseService = (WarehouseService) ctx.getBean("warehouseService");
 
-    }
-
-    @After
-    public void tearDown() {
-        orderService = null;
-        handler = null;
-        skuWarehouseService = null;
-        customerOrderPaymentService = null;
-        pendingHandler = null;
-        warehouseService = null;
-        productSkuService = null;
-
-        super.tearDown();
     }
 
     @Test
@@ -80,8 +66,7 @@ public class ShipmentCompleteOrderEventHandlerImplTest   extends AbstractEventHa
         orderService.update(customerOrder);
 
 
-
-        SkuWarehouse skuWarehouse ;
+        SkuWarehouse skuWarehouse;
 
         //need to auth before capture
         assertTrue(pendingHandler.handle(
@@ -97,17 +82,15 @@ public class ShipmentCompleteOrderEventHandlerImplTest   extends AbstractEventHa
         final Warehouse warehouse = warehouseService.getById(1);
 
 
-       /* //adjust reserved quanity
-        SkuWarehouse sw = skuWarehouseService.findByWarehouseSku(warehouse,  productSkuService.getProductSkuBySkuCode("CC_TEST1"));
-        sw.setReserved(new BigDecimal("2.00"));
-        skuWarehouseService.update(sw);
+        /* //adjust reserved quanity
+       SkuWarehouse sw = skuWarehouseService.findByWarehouseSku(warehouse,  productSkuService.getProductSkuBySkuCode("CC_TEST1"));
+       sw.setReserved(new BigDecimal("2.00"));
+       skuWarehouseService.update(sw);
 
-        sw = skuWarehouseService.findByWarehouseSku(warehouse,  productSkuService.getProductSkuBySkuCode("CC_TEST2"));
-        sw.setReserved(new BigDecimal("1.00"));
-        skuWarehouseService.update(sw);
-         */
-
-
+       sw = skuWarehouseService.findByWarehouseSku(warehouse,  productSkuService.getProductSkuBySkuCode("CC_TEST2"));
+       sw.setReserved(new BigDecimal("1.00"));
+       skuWarehouseService.update(sw);
+        */
 
 
         CustomerOrderDelivery delivery = customerOrder.getDelivery().iterator().next();
@@ -115,7 +98,7 @@ public class ShipmentCompleteOrderEventHandlerImplTest   extends AbstractEventHa
         // funds not captured and quantity not changed
         TestPaymentGatewayImpl.getGatewayConfig().put(TestPaymentGatewayImpl.CAPTURE_FAIL, new PaymentGatewayParameterEntity());
 
-        assertFalse(handler.handle( new OrderEventImpl( "",  customerOrder,   delivery  ) ));
+        assertFalse(handler.handle(new OrderEventImpl("", customerOrder, delivery)));
 
         skuWarehouse = skuWarehouseService.getById(31);
         assertEquals(new BigDecimal("0.00"), skuWarehouse.getReserved().setScale(Constants.DEFAULT_SCALE));
@@ -126,7 +109,7 @@ public class ShipmentCompleteOrderEventHandlerImplTest   extends AbstractEventHa
         assertEquals(new BigDecimal("7.00"), skuWarehouse.getQuantity().setScale(Constants.DEFAULT_SCALE));
 
 
-        List<CustomerOrderPayment> rezList =  customerOrderPaymentService.findBy(
+        List<CustomerOrderPayment> rezList = customerOrderPaymentService.findBy(
                 customerOrder.getOrdernum(),
                 delivery.getDevileryNum(),
                 Payment.PAYMENT_STATUS_FAILED,
@@ -134,11 +117,10 @@ public class ShipmentCompleteOrderEventHandlerImplTest   extends AbstractEventHa
         assertEquals(1, rezList.size());
 
 
-
         // same operation with ok fund capture
 
         TestPaymentGatewayImpl.getGatewayConfig().put(TestPaymentGatewayImpl.CAPTURE_FAIL, null);
-        assertTrue(handler.handle( new OrderEventImpl( "",  customerOrder,   delivery  ) ));
+        assertTrue(handler.handle(new OrderEventImpl("", customerOrder, delivery)));
         skuWarehouse = skuWarehouseService.getById(30);
         assertEquals(new BigDecimal("0.00"), skuWarehouse.getReserved().setScale(Constants.DEFAULT_SCALE));
         assertEquals(new BigDecimal("7.00"), skuWarehouse.getQuantity().setScale(Constants.DEFAULT_SCALE));
@@ -147,7 +129,7 @@ public class ShipmentCompleteOrderEventHandlerImplTest   extends AbstractEventHa
         assertEquals(new BigDecimal("0.00"), skuWarehouse.getReserved().setScale(Constants.DEFAULT_SCALE));
         assertEquals(new BigDecimal("0.00"), skuWarehouse.getQuantity().setScale(Constants.DEFAULT_SCALE));
 
-        rezList =  customerOrderPaymentService.findBy(
+        rezList = customerOrderPaymentService.findBy(
                 customerOrder.getOrdernum(),
                 delivery.getDevileryNum(),
                 Payment.PAYMENT_STATUS_OK,
@@ -156,10 +138,6 @@ public class ShipmentCompleteOrderEventHandlerImplTest   extends AbstractEventHa
 
         assertEquals(CustomerOrder.ORDER_STATUS_COMPLETED, customerOrder.getOrderStatus());
         assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_SHIPPED, delivery.getDeliveryStatus());
-
-
-
-
 
 
     }

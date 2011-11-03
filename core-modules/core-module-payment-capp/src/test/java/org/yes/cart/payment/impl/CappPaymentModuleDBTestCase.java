@@ -1,45 +1,42 @@
 package org.yes.cart.payment.impl;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.hibernate.SessionFactory;
-import org.hibernate.Session;
-import org.junit.Before;
-import org.junit.After;
 import org.dbunit.DBTestCase;
 import org.dbunit.PropertiesBasedJdbcDatabaseTester;
-import org.dbunit.operation.DatabaseOperation;
 import org.dbunit.database.QueryDataSet;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
+import org.dbunit.operation.DatabaseOperation;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.junit.After;
+import org.junit.Before;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
-
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public abstract class CappPaymentModuleDBTestCase  extends DBTestCase {
+public abstract class CappPaymentModuleDBTestCase extends DBTestCase {
 
     /**
      * A Spring application context that we'll create from a
      * test application context and use to create
      * our DAO object (and data source, session factory, etc.)
      */
-    protected static ApplicationContext ctx = null;
-
+    protected ApplicationContext ctx;
     protected SessionFactory sessionFactory;
-
     protected Session session;
 
     protected IDataSet getDataSet() throws Exception {
@@ -64,7 +61,6 @@ public abstract class CappPaymentModuleDBTestCase  extends DBTestCase {
         }
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -84,54 +80,32 @@ public abstract class CappPaymentModuleDBTestCase  extends DBTestCase {
         System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_CONNECTION_URL, "jdbc:hsqldb:mem:testnpapaydb");
         System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_USERNAME, "sa");
         System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_PASSWORD, "");
-
     }
-
 
     @Before
     public void setUp() throws Exception {
-        System.gc();
-
-
         // Load the applicationContext.xml file
         ctx = new ClassPathXmlApplicationContext("test-core-module-payment-capp.xml");
-
         sessionFactory = (SessionFactory) ctx.getBean("paySessionFactory");
-
         session = sessionFactory.openSession();
-
         super.setUp();
-
     }
 
     @Before
     public void setUp(String[] configurationXmls) throws Exception {
-        System.gc();
-
-
         // Load the applicationContext.xml file
         ctx = new ClassPathXmlApplicationContext(configurationXmls);
-
         sessionFactory = (SessionFactory) ctx.getBean("paySessionFactory");
-
         session = sessionFactory.openSession();
-
         super.setUp();
-
     }
 
     @After
     public void tearDown() throws Exception {
+        super.tearDown();
         sessionFactory.close();
         session.close();
-        ctx = null;
-        session = null;
-        sessionFactory = null;
-        super.tearDown();
     }
-
-
-
 
     protected Customer createCustomer() {
         Customer customer = new CustomerEntity();
@@ -168,7 +142,6 @@ public abstract class CappPaymentModuleDBTestCase  extends DBTestCase {
         return customer;
     }
 
-
     protected CustomerOrderDeliveryDet createDeliveryItem(
             final String productSkuName, final String skuCode, final BigDecimal price, final BigDecimal qty) {
         CustomerOrderDeliveryDet deliveryDet = new CustomerOrderDeliveryDetEntity();
@@ -176,11 +149,10 @@ public abstract class CappPaymentModuleDBTestCase  extends DBTestCase {
         sku.setCode(skuCode);
         sku.setName(productSkuName);
         deliveryDet.setPrice(price);
-        deliveryDet.setQty( qty);
+        deliveryDet.setQty(qty);
         deliveryDet.setSku(sku);
         return deliveryDet;
     }
-
 
     protected CarrierSla createCarrierSla() {
         CarrierSla carrierSla = new CarrierSlaEntity();
@@ -191,17 +163,16 @@ public abstract class CappPaymentModuleDBTestCase  extends DBTestCase {
         return carrierSla;
     }
 
-
     protected CustomerOrderDelivery createDelivery0(final String orderNum) {
         final CustomerOrderDelivery delivery = new CustomerOrderDeliveryEntity();
         delivery.setCarrierSla(createCarrierSla());
         delivery.setPrice(delivery.getCarrierSla().getPrice());
         delivery.setDevileryNum(orderNum + "-0");
         delivery.getDetail().add(
-                    createDeliveryItem("product sku 1. Three items in delivery 0", "skuCode1", new BigDecimal("12.12"), new BigDecimal("3"))
+                createDeliveryItem("product sku 1. Three items in delivery 0", "skuCode1", new BigDecimal("12.12"), new BigDecimal("3"))
         );
         delivery.getDetail().add(
-                    createDeliveryItem("product sku 2. One item in delivery 0", "skuCode1", new BigDecimal("15.01"), new BigDecimal("1"))
+                createDeliveryItem("product sku 2. One item in delivery 0", "skuCode1", new BigDecimal("15.01"), new BigDecimal("1"))
         );
         return delivery;
     }
@@ -212,7 +183,7 @@ public abstract class CappPaymentModuleDBTestCase  extends DBTestCase {
         delivery.setPrice(delivery.getCarrierSla().getPrice());
         delivery.setDevileryNum(orderNum + "-1");
         delivery.getDetail().add(
-                    createDeliveryItem("product sku 1. Two items in delivery 1", "skuCode2", new BigDecimal("25.00"), new BigDecimal("2"))
+                createDeliveryItem("product sku 1. Two items in delivery 1", "skuCode2", new BigDecimal("25.00"), new BigDecimal("2"))
         );
         return delivery;
     }
@@ -228,7 +199,6 @@ public abstract class CappPaymentModuleDBTestCase  extends DBTestCase {
         params.put("ccHolderName", "JOHN DOU");
         return params;
     }
-
 
     protected CustomerOrder createCustomerOrder(String orderNum) {
         final CustomerOrder customerOrder = new CustomerOrderEntity();
@@ -249,18 +219,10 @@ public abstract class CappPaymentModuleDBTestCase  extends DBTestCase {
         return customerOrder;
     }
 
-
-
     /**
      * Get visa card number for testing. Usually gateways has differend card for testing
+     *
      * @return card number
      */
     public abstract String getVisaCardNumber();
-
-
-
-
-    
-
-
 }

@@ -1,6 +1,5 @@
 package org.yes.cart.service.domain.impl;
 
-import org.junit.After;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.EntityFactory;
@@ -22,11 +21,6 @@ import java.util.Set;
  * Time: 14:12:54
  */
 public class TestProductServiceImpl extends BaseCoreDBTestCase {
-
-    @After
-    public void tearDown() {
-        super.tearDown();
-    }
 
     @Test
     public void testCreate() {
@@ -336,7 +330,7 @@ public class TestProductServiceImpl extends BaseCoreDBTestCase {
         rezLimit = productService.getFeaturedProducts(shopCategoryIds, 0);
         assertNotNull(rezLimit);
         assertTrue(rezLimit.isEmpty());
-        
+
 
         List<Product> rez = productService.getFeaturedProducts(shopCategoryIds, 100);
         assertNotNull(rez);
@@ -355,8 +349,6 @@ public class TestProductServiceImpl extends BaseCoreDBTestCase {
         }
 
         assertTrue(expectedProductCodes.isEmpty());
-
-
 
 
     }

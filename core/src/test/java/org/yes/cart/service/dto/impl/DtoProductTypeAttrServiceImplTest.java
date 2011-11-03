@@ -1,6 +1,5 @@
 package org.yes.cart.service.dto.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -19,31 +18,22 @@ import org.yes.cart.service.dto.DtoProductTypeService;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class DtoProductTypeAttrServiceImplTest  extends BaseCoreDBTestCase {
+public class DtoProductTypeAttrServiceImplTest extends BaseCoreDBTestCase {
 
-    
+
     private DtoProductTypeAttrService dtoService = null;
     private DtoProductTypeService dtoProductTypeService = null;
     private DtoAttributeService dtoAttributeService = null;
     private DtoFactory dtoFactory = null;
 
     @Before
-    public void setUp()  throws Exception {
+    public void setUp() throws Exception {
         super.setUp();
         dtoService = (DtoProductTypeAttrService) ctx.getBean(ServiceSpringKeys.DTO_PRODUCT_TYPE_ATTR_SERVICE);
         dtoProductTypeService = (DtoProductTypeService) ctx.getBean(ServiceSpringKeys.DTO_PRODUCT_TYPE_SERVICE);
         dtoAttributeService = (DtoAttributeService) ctx.getBean(ServiceSpringKeys.DTO_ATTRIBUTE_SERVICE);
         dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
 
-    }
-
-    @After
-    public void tearDown() {
-        dtoService = null;
-        dtoFactory = null;
-        dtoProductTypeService = null;
-        dtoAttributeService = null;
-        super.tearDown();
     }
 
     @Test
@@ -57,7 +47,7 @@ public class DtoProductTypeAttrServiceImplTest  extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testUpdate()  throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public void testUpdate() throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final String rangeNav = "<rangeList serialization=\"custom\"><unserializable-parents/><list><default><size>10</size></default><int>10</int><range><range><first class=\"string\">0.10</first><second class=\"string\">1.00</second></range></range><range><range><first class=\"string\">1.00</first><second class=\"string\">2.00</second></range></range><range><range><first class=\"string\">2.00</first><second class=\"string\">3.00</second></range></range><range><range><first class=\"string\">3.00</first><second class=\"string\">4.00</second></range></range><range><range><first class=\"string\">4.00</first><second class=\"string\">5.00</second></range></range><range><range><first class=\"string\">5.00</first><second class=\"string\">6.00</second></range></range><range><range><first class=\"string\">6.00</first><second class=\"string\">7.00</second></range></range><range><range><first class=\"string\">7.00</first><second class=\"string\">8.00</second></range></range><range><range><first class=\"string\">8.00</first><second class=\"string\">10.00</second></range></range><range><range><first class=\"string\">10.00</first><second class=\"string\">20.00</second></range></range></list></rangeList>";
 

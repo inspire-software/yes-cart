@@ -1,7 +1,5 @@
 package org.yes.cart.service.order.impl.handler;
 
-import org.junit.After;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.domain.entity.Customer;
@@ -15,7 +13,7 @@ import org.yes.cart.service.order.impl.OrderEventImpl;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class CancelOrderEventHandlerImplTest extends  AbstractEventHandlerImplTest {
+public class CancelOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
     private CustomerOrderService orderService = null;
     private CancelOrderEventHandlerImpl handler = null;
@@ -26,14 +24,7 @@ public class CancelOrderEventHandlerImplTest extends  AbstractEventHandlerImplTe
 
 
         handler = (CancelOrderEventHandlerImpl) ctx.getBean("cancelOrderEventHandler");
-        orderService =  (CustomerOrderService)  ctx.getBean("customerOrderService");
-    }
-
-    @After
-    public void tearDown() {
-        orderService = null;
-        handler = null;
-        super.tearDown();
+        orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
     }
 
     @Test

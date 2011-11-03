@@ -1,15 +1,14 @@
 package org.yes.cart.shoppingcart.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.impl.BaseCoreDBTestCase;
+import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -21,7 +20,7 @@ import java.util.Map;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class RemoveAllSkuFromCartCommandImplTest  extends BaseCoreDBTestCase {
+public class RemoveAllSkuFromCartCommandImplTest extends BaseCoreDBTestCase {
 
     ShopService shopService = null;
     PriceService priceService = null;
@@ -37,15 +36,6 @@ public class RemoveAllSkuFromCartCommandImplTest  extends BaseCoreDBTestCase {
 
     }
 
-    @After
-    public void tearDown() {
-        shopService = null;
-        priceService = null;
-        productService = null;
-        super.tearDown();
-    }
-
-
     @Test
     public void testExecute() {
 
@@ -53,9 +43,9 @@ public class RemoveAllSkuFromCartCommandImplTest  extends BaseCoreDBTestCase {
         new ChangeCurrencyEventCommandImpl(
                 ctx,
                 Collections.singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "EUR")
-                ).execute(shoppingCart);
+        ).execute(shoppingCart);
 
-       new SetShopCartCommandImpl(ctx, Collections.singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
+        new SetShopCartCommandImpl(ctx, Collections.singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
                 .execute(shoppingCart);
 
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getCartSubTotal(shoppingCart.getCartItemList()));
@@ -77,7 +67,6 @@ public class RemoveAllSkuFromCartCommandImplTest  extends BaseCoreDBTestCase {
 
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getCartSubTotal(shoppingCart.getCartItemList()));
         assertTrue(shoppingCart.getCartItemList().isEmpty());
-
 
 
     }

@@ -1,7 +1,5 @@
 package org.yes.cart.payment.service.impl;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 import org.yes.cart.payment.persistence.entity.impl.PaymentGatewayParameterEntity;
@@ -14,17 +12,6 @@ import org.yes.cart.payment.service.PaymentGatewayParameterService;
  */
 public class PaymentGatewayParametersServiceTest extends BasePaymentModuleDBTestCase {
 
-
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        super.tearDown();
-    }
-
     @Test
     public void testCrud() {
         PaymentGatewayParameterService service = (PaymentGatewayParameterService) ctx.getBean("paymentGatewayParameterService");
@@ -34,7 +21,7 @@ public class PaymentGatewayParametersServiceTest extends BasePaymentModuleDBTest
         parameter.setLabel("label");
         parameter.setName("name");
         parameter.setValue("red");
-        parameter  = service.create(parameter);
+        parameter = service.create(parameter);
 
         assertTrue(parameter.getPaymentGatewayParameterId() > 0);
 
@@ -44,13 +31,13 @@ public class PaymentGatewayParametersServiceTest extends BasePaymentModuleDBTest
 
         service.update(parameter);
 
-        parameter  = service.getById(pkValue);
+        parameter = service.getById(pkValue);
 
         assertEquals("black", parameter.getValue());
 
         service.delete(parameter);
 
-        parameter  =  service.getById(pkValue);
+        parameter = service.getById(pkValue);
 
         assertNull(parameter);
 
@@ -67,17 +54,17 @@ public class PaymentGatewayParametersServiceTest extends BasePaymentModuleDBTest
         parameter.setLabel("label");
         parameter.setName("name");
         parameter.setValue("red");
-        parameter  = service.create(parameter);
+        parameter = service.create(parameter);
 
         assertTrue(parameter.getPaymentGatewayParameterId() > 0);
         long pkValue = parameter.getPaymentGatewayParameterId();
 
-        service.deleteByLabel("pgLabel" , "label");
+        service.deleteByLabel("pgLabel", "label");
 
-        parameter  =  service.getById(pkValue);
+        parameter = service.getById(pkValue);
 
         assertNull(parameter);
-        
+
     }
 
 }

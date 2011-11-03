@@ -1,6 +1,5 @@
 package org.yes.cart.service.domain.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -33,16 +32,7 @@ public class CustomerWishListServiceImplTest extends BaseCoreDBTestCase {
         service = (CustomerWishListService) ctx.getBean(ServiceSpringKeys.CUSTOMER_WISH_LIST_SERVICE);
         customerService = (CustomerService) ctx.getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
         productSkuService = (ProductSkuService) ctx.getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE);
-        shopService = (ShopService)  ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
-    }
-
-    @After
-    public void tearDown() {
-        service = null;
-        customerService = null;
-        productSkuService = null;
-        shopService = null;
-        super.tearDown();
+        shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
     }
 
     @Test
@@ -55,7 +45,7 @@ public class CustomerWishListServiceImplTest extends BaseCoreDBTestCase {
         customer.setLastname("Rodriguez001");
         customer.setPassword("rawpassword");
         customer = customerService.create(customer, shopService.getById(10L));
-        assertTrue (customer.getCustomerId() > 0);
+        assertTrue(customer.getCustomerId() > 0);
 
 
         Collection<ProductSku> skus = productSkuService.getAllProductSkus(10000L); //SOBOT
@@ -72,8 +62,6 @@ public class CustomerWishListServiceImplTest extends BaseCoreDBTestCase {
 
         List<CustomerWishList> list = service.getByCustomerId(customer.getCustomerId());
         assertEquals(1, list.size());
-
-
 
 
     }

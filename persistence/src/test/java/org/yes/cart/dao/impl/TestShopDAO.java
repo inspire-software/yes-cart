@@ -1,6 +1,5 @@
 package org.yes.cart.dao.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.dao.GenericDAO;
@@ -21,7 +20,7 @@ import java.util.Set;
  */
 public class TestShopDAO extends AbstractTestDAO {
 
-    private GenericDAO<Shop,Long> shopDao;
+    private GenericDAO<Shop, Long> shopDao;
     private Set<Long> cleanupPks = new HashSet<Long>();
     private static final String URL1 = "www.shop1.npa.com";
     private static final String URL2 = "shop1.npa.com";
@@ -30,15 +29,7 @@ public class TestShopDAO extends AbstractTestDAO {
     public void setUp() throws Exception {
         super.setUp();
 
-        shopDao = (GenericDAO<Shop,Long>) ctx.getBean(DaoServiceBeanKeys.SHOP_DAO);
-
-    }
-
-    @After
-    public void tearDown() {
-        super.tearDown();
-
-        shopDao = null;
+        shopDao = (GenericDAO<Shop, Long>) ctx.getBean(DaoServiceBeanKeys.SHOP_DAO);
 
     }
 
@@ -56,7 +47,7 @@ public class TestShopDAO extends AbstractTestDAO {
         url.setUrl(URL1);
         url.setShop(shop);
         shop.getShopUrl().add(url);
-        url = new ShopUrlEntity ();
+        url = new ShopUrlEntity();
         url.setUrl(URL2);
         url.setShop(shop);
         shop.getShopUrl().add(url);
@@ -64,7 +55,7 @@ public class TestShopDAO extends AbstractTestDAO {
         shop = shopDao.create(shop);
 
         assertNotNull(shop);
-        
+
         assertEquals(2, shop.getShopUrl().size());
 
 
@@ -86,7 +77,7 @@ public class TestShopDAO extends AbstractTestDAO {
             shop.setName(newName);
             shopDao.update(shop);
             shop = shopDao.findById(pk);
-            assertEquals(newName,shop.getName());
+            assertEquals(newName, shop.getName());
         }
     }
 
@@ -95,15 +86,15 @@ public class TestShopDAO extends AbstractTestDAO {
      */
     public void resolveShopByURL() {
 
-        List <Shop> shopList0= shopDao.findAll();
+        List<Shop> shopList0 = shopDao.findAll();
 
-        List <Shop> shopList = shopDao.findByNamedQuery(
-                "SHOP.BY.URL", "gadget.npa.com"  );
+        List<Shop> shopList = shopDao.findByNamedQuery(
+                "SHOP.BY.URL", "gadget.npa.com");
 
         assertEquals(1, shopList.size());
 
         shopList = shopDao.findByNamedQuery(
-                "SHOP.BY.URL",  URL2 );
+                "SHOP.BY.URL", URL2);
 
         assertEquals(1, shopList.size());
 

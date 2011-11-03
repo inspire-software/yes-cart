@@ -1,6 +1,5 @@
 package org.yes.cart.dao.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.dao.GenericDAO;
@@ -19,22 +18,15 @@ import java.util.List;
  * Date: 07-May-2011
  * Time: 16:13:01
  */
-public class TestCategoryDAO  extends AbstractTestDAO {
-    private GenericDAO<Category,Long> categoryDao;
-    private GenericDAO<Shop,Long> shopDao;
+public class TestCategoryDAO extends AbstractTestDAO {
+    private GenericDAO<Category, Long> categoryDao;
+    private GenericDAO<Shop, Long> shopDao;
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        shopDao = (GenericDAO<Shop,Long>) ctx.getBean(DaoServiceBeanKeys.SHOP_DAO);
-        categoryDao = (GenericDAO<Category,Long>) ctx.getBean(DaoServiceBeanKeys.CATEGORY_DAO);
-    }
-
-    @After
-    public void tearDown() {
-        super.tearDown();
-        shopDao = null;
-        categoryDao = null;        
+        shopDao = (GenericDAO<Shop, Long>) ctx.getBean(DaoServiceBeanKeys.SHOP_DAO);
+        categoryDao = (GenericDAO<Category, Long>) ctx.getBean(DaoServiceBeanKeys.CATEGORY_DAO);
     }
 
     public void cleanUp() {
@@ -52,21 +44,21 @@ public class TestCategoryDAO  extends AbstractTestDAO {
      * and thea are ranked.
      */
     public void resovleCategoriesbyShop() {
-        Shop shop = shopDao.findSingleByNamedQuery("SHOP.BY.URL", "gadget.npa.com"  );
-        assertNotNull("Shop must be resolved by URL" , shop);
+        Shop shop = shopDao.findSingleByNamedQuery("SHOP.BY.URL", "gadget.npa.com");
+        assertNotNull("Shop must be resolved by URL", shop);
         List<Category> assignedCategories =
-                categoryDao.findByNamedQuery("TOPCATEGORIES.BY.SHOPID" , shop.getShopId(), new Date());
-        assertNotNull("Test shop must have assigned categories" , assignedCategories);
-        assertFalse("Assigned categories not empty" , assignedCategories.isEmpty());
-        int currentRank  = Integer.MIN_VALUE;
+                categoryDao.findByNamedQuery("TOPCATEGORIES.BY.SHOPID", shop.getShopId(), new Date());
+        assertNotNull("Test shop must have assigned categories", assignedCategories);
+        assertFalse("Assigned categories not empty", assignedCategories.isEmpty());
+        int currentRank = Integer.MIN_VALUE;
         Iterator<ShopCategory> shopCategoryIterator = shop.getShopCategory().iterator();
         Iterator<Category> categoryIterator = assignedCategories.iterator();
         // because categories can be out of available scope
-       // assertTrue(assignedCategories.size() == shop.getShopCategory().size());
+        // assertTrue(assignedCategories.size() == shop.getShopCategory().size());
 
         List<Long> allAssignedCategories = new ArrayList<Long>();
         for (ShopCategory allShopCat : shop.getShopCategory()) {
-            allAssignedCategories.add(allShopCat.getCategory().getCategoryId() );
+            allAssignedCategories.add(allShopCat.getCategory().getCategoryId());
         }
 
         List<Long> allAssignedAvailableCategories = new ArrayList<Long>();
@@ -79,7 +71,7 @@ public class TestCategoryDAO  extends AbstractTestDAO {
 
         while (shopCategoryIterator.hasNext()) {
             ShopCategory sc = shopCategoryIterator.next();
-            assertTrue("Assigned category is ranked " , currentRank <= sc.getRank() );            
+            assertTrue("Assigned category is ranked ", currentRank <= sc.getRank());
             currentRank = sc.getRank();
         }
 
@@ -89,15 +81,15 @@ public class TestCategoryDAO  extends AbstractTestDAO {
      * Test, that available from and available to work correctrly
      */
     public void availableCriteriaTest() {
-        Shop shop = shopDao.findSingleByNamedQuery("SHOP.BY.URL", "gadget.npa.com"  );
-        assertNotNull("Shop must be resolved by URL" , shop);
+        Shop shop = shopDao.findSingleByNamedQuery("SHOP.BY.URL", "gadget.npa.com");
+        assertNotNull("Shop must be resolved by URL", shop);
         List<Category> assignedCategories =
-                categoryDao.findByNamedQuery("TOPCATEGORIES.BY.SHOPID" , shop.getShopId() , new Date());
+                categoryDao.findByNamedQuery("TOPCATEGORIES.BY.SHOPID", shop.getShopId(), new Date());
         Date date = new Date();
 
         for (Category category : assignedCategories) {
-            assertTrue( (category.getAvailablefrom() == null) || (category.getAvailablefrom().getTime() > date.getTime()) );
-            assertTrue( (category.getAvailabletill() == null) || (category.getAvailabletill().getTime() < date.getTime()) );
+            assertTrue((category.getAvailablefrom() == null) || (category.getAvailablefrom().getTime() > date.getTime()));
+            assertTrue((category.getAvailabletill() == null) || (category.getAvailabletill().getTime() < date.getTime()));
         }
 
     }

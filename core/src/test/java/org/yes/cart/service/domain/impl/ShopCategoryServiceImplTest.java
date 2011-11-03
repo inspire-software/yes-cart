@@ -1,12 +1,11 @@
 package org.yes.cart.service.domain.impl;
 
 import org.junit.Before;
-import org.junit.After;
 import org.junit.Test;
-import org.yes.cart.service.domain.ShopCategoryService;
-import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.constants.ServiceSpringKeys;
+import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.domain.ShopCategoryService;
+import org.yes.cart.service.domain.ShopService;
 
 /**
  * Igor Azarny iazarny@yahoo.com
@@ -29,14 +28,6 @@ public class ShopCategoryServiceImplTest extends BaseCoreDBTestCase {
         categoryService = (CategoryService)
                 ctx.getBean(ServiceSpringKeys.CATEGORY_SERVICE);
 
-    }
-
-    @After
-    public void tearDown() {
-        shopCategoryService = null;
-        categoryService = null;
-        shopService = null;
-        super.tearDown();
     }
 
     @Test

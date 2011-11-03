@@ -1,6 +1,5 @@
 package org.yes.cart.service.order.impl.handler;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.domain.entity.Customer;
@@ -26,14 +25,7 @@ public class PaymentOfflineOrderEventHandlerImplTest extends AbstractEventHandle
 
 
         handler = (PaymentOfflineOrderEventHandlerImpl) ctx.getBean("paymentOfflineOrderEventHandler");
-        orderService =  (CustomerOrderService)  ctx.getBean("customerOrderService");
-    }
-
-    @After
-    public void tearDown() {
-        orderService = null;
-        handler = null;
-        super.tearDown();
+        orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
     }
 
     @Test
@@ -52,6 +44,6 @@ public class PaymentOfflineOrderEventHandlerImplTest extends AbstractEventHandle
                 )
         );
         assertEquals(CustomerOrder.ORDER_STATUS_WAITING, customerOrder.getOrderStatus());
-        
+
     }
 }

@@ -1,17 +1,17 @@
 package org.yes.cart.payment.impl;
 
-import org.junit.Before;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
-import org.yes.cart.payment.service.CustomerOrderPaymentService;
-import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
-import org.yes.cart.payment.dto.Payment;
-import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.payment.PaymentGateway;
+import org.yes.cart.payment.dto.Payment;
+import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
+import org.yes.cart.payment.service.CustomerOrderPaymentService;
 
-import java.util.UUID;
 import java.util.Iterator;
+import java.util.UUID;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -43,13 +43,8 @@ public class PayPalNvpPaymentGatewayImplTest extends CappPaymentModuleDBTestCase
     @After
     public void tearDown() throws Exception {
         if (isTestAllowed()) {
-            paymentProcessor = null;
-            payPalNvpPaymentGateway = null;
-            customerOrderPaymentService = null;
             super.tearDown();
-
         }
-
     }
 
     @Test

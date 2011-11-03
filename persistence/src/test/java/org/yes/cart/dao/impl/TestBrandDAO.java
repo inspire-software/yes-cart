@@ -3,7 +3,6 @@ package org.yes.cart.dao.impl;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.dao.GenericDAO;
@@ -17,7 +16,7 @@ import java.util.Set;
 
 
 /**
-* User: Igor Azarny iazarny@yahoo.com
+ * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
  * Time: 16:13:01
  */
@@ -41,9 +40,6 @@ public class TestBrandDAO extends AbstractTestDAO {
     private Set<Long> cleanupPks = new HashSet<Long>();
 
 
-
-
-
     @Before
     public void setUp() throws Exception {
         super.setUp();
@@ -53,28 +49,18 @@ public class TestBrandDAO extends AbstractTestDAO {
         attributeGroupDAO = (GenericDAO<AttributeGroup, Long>) ctx.getBean(DaoServiceBeanKeys.ATTRIBUTE_GROUP_DAO);
 
         etypeEntity = etypeDAO.findById(1000L);
-        attributeGroupEntity = attributeGroupDAO.findByCriteria (Restrictions.eq("code","BRAND")).get(0);
-        attributeEntity = attributeDAO.findByCriteria(Restrictions.eq("code","BRAND_IMAGE")).get(0);
+        attributeGroupEntity = attributeGroupDAO.findByCriteria(Restrictions.eq("code", "BRAND")).get(0);
+        attributeEntity = attributeDAO.findByCriteria(Restrictions.eq("code", "BRAND_IMAGE")).get(0);
 
 
     }
-
-    @After
-    public void tearDown() {
-        brandDAO = null;
-        etypeDAO = null;
-        attributeDAO = null;
-        attributeGroupDAO = null;
-        super.tearDown();
-    }
-
 
     /**
      * Test that we are able to add brand.
      */
     @Test
     public void testAddEmptyBrand() {
-        
+
         // create simle brand without attributes
         Brand entity = new BrandEntity();
 
@@ -131,7 +117,7 @@ public class TestBrandDAO extends AbstractTestDAO {
         }
 
         for (Long pk : cleanupPks) {
-            assertNull(brandDAO.findById(pk));            
+            assertNull(brandDAO.findById(pk));
         }
 
     }

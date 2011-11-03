@@ -1,7 +1,6 @@
 package org.yes.cart.dao.impl;
 
 import org.hibernate.criterion.Restrictions;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.dao.EntityFactory;
@@ -28,13 +27,6 @@ public class TestGenericDAO extends AbstractTestDAO {
         entityFactory = brandDao.getEntityFactory();
     }
 
-    @After
-    public void tearDown() {
-        entityFactory = null;
-        brandDao = null;
-        super.tearDown();
-    }
-
     public void cleanUp() {
         // nothing to do
 
@@ -52,15 +44,15 @@ public class TestGenericDAO extends AbstractTestDAO {
 
         sql = "update tbrand set description = 'NewRobotics' where name = :1";
         assertEquals(1, brandDao.executeNativeQuery(sql, "FutureRobots"));
-        brand = brandDao.findSingleByCriteria(Restrictions.eq("name", "FutureRobots") );
+        brand = brandDao.findSingleByCriteria(Restrictions.eq("name", "FutureRobots"));
         assertEquals("NewRobotics", brand.getDescription());
 
 
         sql = "update tbrand set description = 'OldRobotics' where brand_id = :1 and name = :2";
         assertEquals(1, brandDao.executeNativeQuery(sql, 101, "FutureRobots"));
         brand = brandDao.findSingleByCriteria(Restrictions.eq("brandId", 101L),
-                Restrictions.eq("name", "FutureRobots") );
-        assertEquals("OldRobotics", brand.getDescription());        
+                Restrictions.eq("name", "FutureRobots"));
+        assertEquals("OldRobotics", brand.getDescription());
 
     }
 
@@ -86,7 +78,7 @@ public class TestGenericDAO extends AbstractTestDAO {
 
         sql = "delete from tbrand where name = :1 and description= :2 ";
         assertEquals(1, brandDao.executeNativeQuery(sql, "name2", "description2"));
-        brand = brandDao.findSingleByCriteria(Restrictions.eq("name", "name2") );
+        brand = brandDao.findSingleByCriteria(Restrictions.eq("name", "name2"));
         assertNull(brand);
 
     }

@@ -1,6 +1,5 @@
 package org.yes.cart.service.domain.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -26,20 +25,12 @@ public class AddressServiceImplTest extends BaseCoreDBTestCase {
         super.setUp();
         addressService = (AddressService) ctx.getBean(ServiceSpringKeys.ADDRESS_SERVICE);
         customerService = (CustomerService) ctx.getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
-        shopService = (ShopService)  ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
-    }
-
-    @After
-    public void tearDown() {
-        addressService = null;
-        customerService = null;
-        shopService = null;
-        super.tearDown();
+        shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
     }
 
     @Test
     public void testGetAddressesByCustomerId() {
-        
+
         Customer customer = customerService.getGenericDao().getEntityFactory().getByIface(Customer.class);
         customer.setEmail("bender@domain.com");
         customer.setFirstname("Bender");
@@ -47,11 +38,11 @@ public class AddressServiceImplTest extends BaseCoreDBTestCase {
         customer.setPassword("rawpassword");
 
         customer = customerService.create(customer, shopService.getById(10L));
-        assertTrue (customer.getCustomerId() > 0);
+        assertTrue(customer.getCustomerId() > 0);
 
         Address address = addressService.getGenericDao().getEntityFactory().getByIface(Address.class);
         address.setFirstname("Bender");
-        address.setLastname("Rodriguez");        
+        address.setLastname("Rodriguez");
         address.setCity("LA");
         address.setAddrline1("line1");
         address.setCountryCode("US");
