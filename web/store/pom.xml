@@ -1,54 +1,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
-
-    <properties>
-        <!--wicket.version>1.5-RC5.1</wicket.version-->
-        <wicket.version>1.5.1</wicket.version>
-
-        <jetty.version>6.1.4</jetty.version>
-        <mysql-connector.version>5.1.13</mysql-connector.version>
-    </properties>
-
+    <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>web</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>org.yes</groupId>
     <artifactId>yes-shop</artifactId>
     <packaging>war</packaging>
     <name>Yes cart storefront</name>
-
-    <build>
-        <finalName>yes-shop</finalName>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <artifactId>maven-war-plugin</artifactId>
-                    <configuration>
-                        <webResources>
-                            <resource>
-                                <filtering>true</filtering>
-                                <directory>src/main/webapp</directory>
-                                <includes>
-                                    <include>**/context.xml</include>
-                                </includes>
-                                <excludes>
-                                    <exclude>**/*.properties.xml</exclude>
-                                </excludes>
-                            </resource>
-                        </webResources>
-                        <!-- web.xml is added to the project by other means, and shouldn't be packaged by default -->
-                        <packagingExcludes>WEB-INF/web.xml</packagingExcludes>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
-
+    <properties>
+        <!--wicket.version>1.5-RC5.1</wicket.version-->
+        <wicket.version>1.5.1</wicket.version>
+        <jetty.version>6.1.4</jetty.version>
+        <mysql-connector.version>5.1.13</mysql-connector.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.yes</groupId>
@@ -152,4 +118,30 @@
             <version>10.8.1.2</version>
         </dependency>
     </dependencies>
+    <build>
+        <finalName>yes-shop</finalName>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <configuration>
+                        <webResources>
+                            <resource>
+                                <filtering>true</filtering>
+                                <directory>src/main/webapp</directory>
+                                <includes>
+                                    <include>**/context.xml</include>
+                                </includes>
+                                <excludes>
+                                    <exclude>**/*.properties.xml</exclude>
+                                </excludes>
+                            </resource>
+                        </webResources>
+                        <!-- web.xml is added to the project by other means, and shouldn't be packaged by default -->
+                        <packagingExcludes>WEB-INF/web.xml</packagingExcludes>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>

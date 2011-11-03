@@ -4,16 +4,21 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>manager</artifactId>
         <groupId>org.yes</groupId>
+        <artifactId>manager</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-
-    <groupId>org.yes</groupId>
     <artifactId>yes-manager-server</artifactId>
     <packaging>war</packaging>
     <name>Yes cart manager server</name>
     <description>Yes cart manager server</description>
+    <properties>
+        <backport-util-concurrent.version>3.1</backport-util-concurrent.version>
+        <blazeds.version>3.2.0.3978</blazeds.version>
+        <junit.version>4.0</junit.version>
+        <servlet-api.version>2.5</servlet-api.version>
+        <mysql-connector.version>5.1.13</mysql-connector.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.yes</groupId>
@@ -122,7 +127,6 @@
             <version>10.8.1.2</version>
         </dependency>
     </dependencies>
-
     <build>
         <finalName>yes-manager</finalName>
         <pluginManagement>
@@ -146,13 +150,4 @@
             </plugins>
         </pluginManagement>
     </build>
-
-    <properties>
-        <backport-util-concurrent.version>3.1</backport-util-concurrent.version>
-        <blazeds.version>3.2.0.3978</blazeds.version>
-        <junit.version>4.0</junit.version>
-        <servlet-api.version>2.5</servlet-api.version>
-        <mysql-connector.version>5.1.13</mysql-connector.version>
-    </properties>
-
 </project>
