@@ -13,7 +13,6 @@ import org.junit.Before;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.io.File;
 import java.io.FileOutputStream;
 
 /**
@@ -33,11 +32,7 @@ public abstract class BasePaymentModuleDBTestCase extends DBTestCase {
     protected Session session;
 
     protected IDataSet getDataSet() throws Exception {
-        return new FlatXmlDataSet(
-                new File("target/test-classes/payinitialdata.xml"),
-                false,
-                true
-        );
+        return new FlatXmlDataSet(getClass().getClassLoader().getResourceAsStream("payinitialdata.xml"), false);
     }
 
     protected void dumpDataBase(final String prefix, final String[] tables) {

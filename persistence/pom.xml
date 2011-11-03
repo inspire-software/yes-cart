@@ -153,6 +153,12 @@
                     <include>**/*.xml</include>
                 </includes>
             </testResource>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <includes>
+                    <include>*.xml</include>
+                </includes>
+            </testResource>
         </testResources>
         <resources>
             <resource>
@@ -360,6 +366,16 @@
                                 <outputfilename>sql/resources/mysql/create-tables.sql</outputfilename>
                             </componentProperties>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
