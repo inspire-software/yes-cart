@@ -7,7 +7,6 @@ import org.yes.cart.domain.dto.CustomerOrderDTO;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.exception.UnableToCreateInstanceException;
-import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.impl.BaseCoreDBTestCase;
 import org.yes.cart.service.domain.impl.CustomerOrderServiceImplTest;
@@ -33,18 +32,13 @@ public class DtoCustomerOrderServiceImplTest extends BaseCoreDBTestCase {
         customerOrderService = (CustomerOrderService) ctx.getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
     }
 
-    @Test
-    public void testCreate() throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        try {
-            dtoService.create(null);
-            assertTrue(false);
-        } catch (UnableToCreateInstanceException e) {
-            assertTrue(true);
-        }
+    @Test(expected = UnableToCreateInstanceException.class)
+    public void testCreate() throws Exception {
+        dtoService.create(null);
     }
 
     @Test
-    public void testUpdate() throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public void testUpdate() throws Exception {
         final String customerPrefix = "testUpdate";
         final Customer customer = OrderAssemblerImplTest.createCustomer(ctx, customerPrefix);
         assertFalse(customer.getAddress().isEmpty());

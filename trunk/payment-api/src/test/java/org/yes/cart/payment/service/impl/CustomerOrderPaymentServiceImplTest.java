@@ -32,7 +32,6 @@ public class CustomerOrderPaymentServiceImplTest extends BasePaymentModuleDBTest
         assertEquals(1, service.findBy("123-45", null, null, null).size());
         assertEquals(1, service.findBy(null, "123-45-0", null, null).size());
         assertEquals(1, service.findBy("123-45", "123-45-0", Payment.PAYMENT_STATUS_OK, "AUTH").size());
-
     }
 
     @Test
@@ -43,14 +42,8 @@ public class CustomerOrderPaymentServiceImplTest extends BasePaymentModuleDBTest
         assertEquals(new BigDecimal("223.45"), service.getOrderAmount("223-45"));
     }
 
-    /**
-     * Get {@link CustomerOrderPayment} for test.
-     *
-     * @return instance of {@link CustomerOrderPayment}
-     */
     private CustomerOrderPayment getCustomerOrderPayment(final BigDecimal amount, final String orderNum, final String shipmentNum) {
         CustomerOrderPayment payment = new CustomerOrderPaymentEntity();
-
         payment.setCardExpireMonth("02");
         payment.setCardExpireYear("2020");
         payment.setCardHolderName("Bender Rodrigues");

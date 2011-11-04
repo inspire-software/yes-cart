@@ -54,7 +54,6 @@ public class CentralViewResolverImplTest {
                 null
         );
 
-
         assertEquals(
                 CentralViewLabel.SKU,
                 centralViewResolver.resolveMainPanelRendererLabel(
@@ -90,8 +89,6 @@ public class CentralViewResolverImplTest {
                 centralViewResolver.resolveMainPanelRendererLabel(
                         getRequestParams2(WebParametersKeys.CATEGORY_ID, "11"))
         );
-
-
     }
 
     private Map<String, String> getRequestParams(final String param, final String val) {
@@ -107,5 +104,4 @@ public class CentralViewResolverImplTest {
             put(param, val);
         }};
     }
-
 }

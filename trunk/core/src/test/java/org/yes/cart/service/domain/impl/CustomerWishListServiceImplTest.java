@@ -45,18 +45,14 @@ public class CustomerWishListServiceImplTest extends BaseCoreDBTestCase {
         customer.setPassword("rawpassword");
         customer = customerService.create(customer, shopService.getById(10L));
         assertTrue(customer.getCustomerId() > 0);
-
         Collection<ProductSku> skus = productSkuService.getAllProductSkus(10000L); //SOBOT
         assertNotNull(skus);
         assertEquals(4, skus.size());
-
         CustomerWishList customerWishList = service.getGenericDao().getEntityFactory().getByIface(CustomerWishList.class);
         customerWishList.setCustomer(customer);
         customerWishList.setSkus(skus.iterator().next());
         customerWishList.setWlType(CustomerWishList.REMIND_WHEN_PRICE_CHANGED);
-
         service.create(customerWishList);
-
         List<CustomerWishList> list = service.getByCustomerId(customer.getCustomerId());
         assertEquals(1, list.size());
     }

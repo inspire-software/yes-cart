@@ -24,32 +24,20 @@ public class PaymentGatewayParametersServiceTest extends BasePaymentModuleDBTest
         parameter.setName("name");
         parameter.setValue("red");
         parameter = service.create(parameter);
-
         assertTrue(parameter.getPaymentGatewayParameterId() > 0);
-
         long pkValue = parameter.getPaymentGatewayParameterId();
-
         parameter.setValue("black");
-
         service.update(parameter);
-
         parameter = service.getById(pkValue);
-
         assertEquals("black", parameter.getValue());
-
         service.delete(parameter);
-
         parameter = service.getById(pkValue);
-
         assertNull(parameter);
-
     }
 
     @Test
     public void testDeleteByLabel() {
-
         PaymentGatewayParameterService service = (PaymentGatewayParameterService) ctx.getBean("paymentGatewayParameterService");
-
         PaymentGatewayParameter parameter = new PaymentGatewayParameterEntity();
         parameter.setDescription("desc");
         parameter.setPgLabel("pgLabel");
@@ -57,16 +45,10 @@ public class PaymentGatewayParametersServiceTest extends BasePaymentModuleDBTest
         parameter.setName("name");
         parameter.setValue("red");
         parameter = service.create(parameter);
-
         assertTrue(parameter.getPaymentGatewayParameterId() > 0);
         long pkValue = parameter.getPaymentGatewayParameterId();
-
         service.deleteByLabel("pgLabel", "label");
-
         parameter = service.getById(pkValue);
-
         assertNull(parameter);
-
     }
-
 }

@@ -8,8 +8,6 @@ import org.yes.cart.domain.dto.AttrValueDTO;
 import org.yes.cart.domain.dto.AttributeDTO;
 import org.yes.cart.domain.dto.CustomerDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
-import org.yes.cart.exception.UnableToCreateInstanceException;
-import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.impl.BaseCoreDBTestCase;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoCustomerService;
@@ -25,9 +23,9 @@ import static org.junit.Assert.*;
  */
 public class DtoCustomerServiceImplTest extends BaseCoreDBTestCase {
 
-    private DtoFactory dtoFactory = null;
-    private DtoCustomerService dtoService = null;
-    private DtoAttributeService dtoAttrService = null;
+    private DtoFactory dtoFactory;
+    private DtoCustomerService dtoService;
+    private DtoAttributeService dtoAttrService;
 
     @Before
     public void setUp() throws Exception {
@@ -37,16 +35,15 @@ public class DtoCustomerServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testCreate() throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public void testCreate() throws Exception {
         CustomerDTO dto = getCustomerDto("testCreate");
         dto = dtoService.create(dto);
         assertTrue(dto.getCustomerId() > 0);
         dtoService.remove(dto.getCustomerId());
     }
 
-
     @Test
-    public void testUpdate() throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public void testUpdate() throws Exception {
         CustomerDTO dto = getCustomerDto("testUpdate");
         dto = dtoService.create(dto);
         assertTrue(dto.getCustomerId() > 0);
@@ -59,100 +56,75 @@ public class DtoCustomerServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testCreateEntityAttributeValue() throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public void testCreateEntityAttributeValue() throws Exception {
         CustomerDTO dto = getCustomerDto("testCreateEntityAttributeValue");
         dto = dtoService.create(dto);
         assertTrue(dto.getCustomerId() > 0);
-
         AttributeDTO attrDto = dtoAttrService.getById(1030); //CUSTOMER_PHONE
-
         AttrValueCustomerDTO attrValueDTO = dtoFactory.getByIface(AttrValueCustomerDTO.class);
         attrValueDTO.setCustomerId(dto.getCustomerId());
         attrValueDTO.setVal("+380978159999");
         attrValueDTO.setAttributeDTO(attrDto);
-
         dtoService.createEntityAttributeValue(attrValueDTO);
-
         dto = dtoService.getById(dto.getCustomerId());
         assertFalse(dto.getAttribute().isEmpty());
         assertEquals("+380978159999", dto.getAttribute().iterator().next().getVal());
-
     }
 
     @Test
-    public void testGetEntityAttributes() throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public void testGetEntityAttributes() throws Exception {
         //dumpDataBase("ffffffff", new String[]{"TCUSTOMER"});
         CustomerDTO dto = getCustomerDto("testGetEntityAttributes");
         dto = dtoService.create(dto);
         assertTrue(dto.getCustomerId() > 0);
-
         AttributeDTO attrDto = dtoAttrService.getById(1030); //CUSTOMER_PHONE
-
         AttrValueCustomerDTO attrValueDTO = dtoFactory.getByIface(AttrValueCustomerDTO.class);
         attrValueDTO.setCustomerId(dto.getCustomerId());
         attrValueDTO.setVal("+380978159999");
         attrValueDTO.setAttributeDTO(attrDto);
-
         dtoService.createEntityAttributeValue(attrValueDTO);
-
         List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(dto.getCustomerId());
         assertFalse(list.isEmpty());
         assertEquals("+380978159999", list.get(0).getVal());
-
-
     }
 
     @Test
-    public void testUpdateEntityAttributeValue() throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public void testUpdateEntityAttributeValue() throws Exception {
         CustomerDTO dto = getCustomerDto("testUpdateEntityAttributeValue");
         dto = dtoService.create(dto);
         assertTrue(dto.getCustomerId() > 0);
-
         AttributeDTO attrDto = dtoAttrService.getById(1030); //CUSTOMER_PHONE
-
         AttrValueCustomerDTO attrValueDTO = dtoFactory.getByIface(AttrValueCustomerDTO.class);
         attrValueDTO.setCustomerId(dto.getCustomerId());
         attrValueDTO.setVal("+380978159999");
         attrValueDTO.setAttributeDTO(attrDto);
-
         dtoService.createEntityAttributeValue(attrValueDTO);
-
         List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(dto.getCustomerId());
         assertFalse(list.isEmpty());
         assertEquals("+380978159999", list.get(0).getVal());
-
         AttrValueCustomerDTO aDto = (AttrValueCustomerDTO) list.get(0);
         aDto.setVal("+44555123456");
         aDto = (AttrValueCustomerDTO) dtoService.updateEntityAttributeValue(aDto);
         assertEquals("+44555123456", aDto.getVal());
-
-
     }
 
     @Test
-    public void testDeleteAttributeValue() throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public void testDeleteAttributeValue() throws Exception {
         CustomerDTO dto = getCustomerDto("testDeleteAttributeValue");
         dto = dtoService.create(dto);
         assertTrue(dto.getCustomerId() > 0);
-
         AttributeDTO attrDto = dtoAttrService.getById(1030); //CUSTOMER_PHONE
-
         AttrValueCustomerDTO attrValueDTO = dtoFactory.getByIface(AttrValueCustomerDTO.class);
         attrValueDTO.setCustomerId(dto.getCustomerId());
         attrValueDTO.setVal("+380978159999");
         attrValueDTO.setAttributeDTO(attrDto);
-
         dtoService.createEntityAttributeValue(attrValueDTO);
-
         dto = dtoService.getById(dto.getCustomerId());
         assertFalse(dto.getAttribute().isEmpty());
         assertEquals("+380978159999", dto.getAttribute().iterator().next().getVal());
-
-
         dtoService.deleteAttributeValue(dto.getAttribute().iterator().next().getAttrvalueId());
         dto = dtoService.getById(dto.getCustomerId());
         assertTrue(dto.getAttribute().isEmpty());
-
     }
 
     private CustomerDTO getCustomerDto(final String prefix) {

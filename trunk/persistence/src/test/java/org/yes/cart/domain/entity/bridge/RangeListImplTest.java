@@ -12,7 +12,6 @@ import static org.junit.Assert.assertNotNull;
 /**
  * This test just prove, that we can serialize / deserialize {@link RangeListImpl}.
  * <p/>
- * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 08-May-2011
  * Time: 11:12:54

@@ -53,7 +53,7 @@ public class DtoProductServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testCreate() throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public void testCreate() throws Exception {
         ProductDTO dto = getDto();
         dto = dtoService.create(dto);
         assertTrue(dto.getProductId() > 0);

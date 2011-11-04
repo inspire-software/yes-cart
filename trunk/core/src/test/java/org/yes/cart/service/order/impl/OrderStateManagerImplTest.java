@@ -19,28 +19,17 @@ import static org.junit.Assert.assertTrue;
  */
 public class OrderStateManagerImplTest {
 
-    Map<String, OrderEventHandler> handlersOk;
-    Map<String, OrderEventHandler> handlersFailed;
-    Map<String, List<? extends OrderStateTransitionListener>> afterListenersMapOk;
-    Map<String, List<? extends OrderStateTransitionListener>> beforeListenersMapOk;
-
-    boolean afterTransitionListenerWasFired;
-    boolean beforeTransitionListenerWasFired;
-
-    boolean afterTransitionDynamicListenerWasFired;
-    boolean beforeTransitionDynamicListenerWasFired;
-
+    private Map<String, OrderEventHandler> handlersOk;
+    private Map<String, OrderEventHandler> handlersFailed;
+    private Map<String, List<? extends OrderStateTransitionListener>> afterListenersMapOk;
+    private Map<String, List<? extends OrderStateTransitionListener>> beforeListenersMapOk;
+    private boolean afterTransitionListenerWasFired;
+    private boolean beforeTransitionListenerWasFired;
+    private boolean afterTransitionDynamicListenerWasFired;
+    private boolean beforeTransitionDynamicListenerWasFired;
 
     @Before
     public void setUp() throws Exception {
-
-        afterTransitionListenerWasFired = false;
-        beforeTransitionListenerWasFired = false;
-
-        afterTransitionDynamicListenerWasFired = false;
-        beforeTransitionDynamicListenerWasFired = false;
-
-
         handlersOk = new HashMap<String, OrderEventHandler>() {{
             put("payment.ok", new OrderEventHandler() {
                 public boolean handle(OrderEvent orderEvent) {
@@ -48,7 +37,6 @@ public class OrderStateManagerImplTest {
                 }
             });
         }};
-
         handlersFailed = new HashMap<String, OrderEventHandler>() {{
             put("payment.ok", new OrderEventHandler() {
                 public boolean handle(OrderEvent orderEvent) {
@@ -56,7 +44,6 @@ public class OrderStateManagerImplTest {
                 }
             });
         }};
-
         final List<OrderStateAfterTransitionListener> orderStateAfterTransitionListeners = new ArrayList<OrderStateAfterTransitionListener>() {{
             add(new OrderStateAfterTransitionListener() {
                 public boolean onEvent(OrderEvent orderEvent) {
@@ -65,12 +52,9 @@ public class OrderStateManagerImplTest {
                 }
             });
         }};
-
-
         afterListenersMapOk = new HashMap<String, List<? extends OrderStateTransitionListener>>() {{
             put("payment.ok", orderStateAfterTransitionListeners);
         }};
-
         final List<OrderStateBeforeTransitionListener> orderStateBeforeTransitionListeners = new ArrayList<OrderStateBeforeTransitionListener>() {{
             add(new OrderStateBeforeTransitionListener() {
                 public boolean onEvent(OrderEvent orderEvent) {
@@ -79,13 +63,9 @@ public class OrderStateManagerImplTest {
                 }
             });
         }};
-
-
         beforeListenersMapOk = new HashMap<String, List<? extends OrderStateTransitionListener>>() {{
             put("payment.ok", orderStateBeforeTransitionListeners);
         }};
-
-
     }
 
     /**
@@ -101,7 +81,6 @@ public class OrderStateManagerImplTest {
         ));
         assertFalse(afterTransitionListenerWasFired);
         assertFalse(beforeTransitionListenerWasFired);
-
     }
 
     /**
@@ -131,7 +110,6 @@ public class OrderStateManagerImplTest {
         assertFalse(orderStateManager.fireTransition(
                 new OrderEventImpl("payment.ok", null)
         ));
-
         assertTrue(beforeTransitionListenerWasFired);
         assertFalse(afterTransitionListenerWasFired);
     }
@@ -153,10 +131,8 @@ public class OrderStateManagerImplTest {
                 return true;
             }
         });
-
         List<OrderStateTransitionListener> beforeTransitionEventHandlers =
                 (List<OrderStateTransitionListener>) orderStateManager.getBeforeListenersMap().get("payment.ok");
-
         beforeTransitionEventHandlers.add(
                 new OrderStateBeforeTransitionListener() {
                     public boolean onEvent(OrderEvent orderEvent) {
@@ -165,15 +141,10 @@ public class OrderStateManagerImplTest {
                     }
                 }
         );
-
         assertTrue(orderStateManager.fireTransition(
                 new OrderEventImpl("payment.ok", null)
         ));
-
         assertTrue(afterTransitionDynamicListenerWasFired);
         assertTrue(beforeTransitionDynamicListenerWasFired);
-
     }
-
-
 }

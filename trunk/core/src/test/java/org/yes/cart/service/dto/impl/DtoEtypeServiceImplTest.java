@@ -19,8 +19,8 @@ import static org.junit.Assert.*;
  */
 public class DtoEtypeServiceImplTest extends BaseCoreDBTestCase {
 
-    private DtoEtypeService dtoEtypeService = null;
-    private DtoFactory dtoFactory = null;
+    private DtoEtypeService dtoEtypeService;
+    private DtoFactory dtoFactory;
 
     @Before
     public void setUp() throws Exception {

@@ -5,8 +5,6 @@ import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.ProductAssociationDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
-import org.yes.cart.exception.UnableToCreateInstanceException;
-import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.impl.BaseCoreDBTestCase;
 import org.yes.cart.service.dto.DtoAssociationService;
 import org.yes.cart.service.dto.DtoProductAssociationService;
@@ -55,13 +53,10 @@ public class DtoProductAssociationServiceImplTest extends BaseCoreDBTestCase {
         ProductAssociationDTO dto = getDto();
         dto = dtoProductAssociationService.create(dto);
         assertTrue(dto.getProductassociationId() > 0);
-
         List<ProductAssociationDTO> list = dtoProductAssociationService.getProductAssociations(11002L);
         assertEquals(1, list.size());
-
         list = dtoProductAssociationService.getProductAssociations(11004L);
         assertEquals(5, list.size());
-
         dtoProductAssociationService.remove(dto.getProductassociationId());
     }
 
@@ -70,23 +65,18 @@ public class DtoProductAssociationServiceImplTest extends BaseCoreDBTestCase {
         ProductAssociationDTO dto = getDto();
         dto = dtoProductAssociationService.create(dto);
         assertTrue(dto.getProductassociationId() > 0);
-
         long pk = dto.getProductassociationId();
-
         List<ProductAssociationDTO> list = dtoProductAssociationService.getProductAssociationsByProductAssociationType(11002L, "accessories");
         assertEquals(0, list.size());
-
         list = dtoProductAssociationService.getProductAssociationsByProductAssociationType(11002L, "up");
         assertEquals(0, list.size());
-
         list = dtoProductAssociationService.getProductAssociationsByProductAssociationType(11002L, "cross");
         assertEquals(1, list.size());
-
         list = dtoProductAssociationService.getProductAssociationsByProductAssociationType(11002L, "buywiththis");
         assertEquals(0, list.size());
     }
 
-    private ProductAssociationDTO getDto() throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    private ProductAssociationDTO getDto() throws Exception {
         ProductAssociationDTO dto = dtoFactory.getByIface(ProductAssociationDTO.class);
         dto.setAssociationId(dtoAssociationService.getById(3L).getAssociationId());
         dto.setProductId(11002L);

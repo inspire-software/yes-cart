@@ -19,10 +19,8 @@ public class MultipleLogTest {
 
     @Test
     public void testMultipleLogFiles() throws IOException {
-
         Logger log20 = LoggerFactory.getLogger("SHOP20");
         log20.info("shop20");
-
 
         Logger log10 = LoggerFactory.getLogger("SHOP10");
         log10.info("shop10");
@@ -34,12 +32,6 @@ public class MultipleLogTest {
         String log20content = readFileAsString("target/shop20.log");
         assertTrue(log20content.indexOf("shop20") > -1);
         assertTrue(log20content.indexOf("shop10") == -1);
-
-
-        System.out.println(log10content);
-        System.out.println(log20content);
-
-
     }
 
     private static String readFileAsString(String filePath)
@@ -57,5 +49,4 @@ public class MultipleLogTest {
         reader.close();
         return fileData.toString();
     }
-
 }

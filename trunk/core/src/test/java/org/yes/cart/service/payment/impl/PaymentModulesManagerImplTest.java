@@ -50,7 +50,6 @@ public class PaymentModulesManagerImplTest extends BaseCoreDBTestCase {
     public void testGetPaymentGateways() {
         Collection<PaymentGatewayDescriptor> paymentGateways = paymentModulesManager.getPaymentGatewaysDescriptors("basePaymentModule");
         assertEquals(3, paymentGateways.size());
-
         paymentGateways = paymentModulesManager.getPaymentGatewaysDescriptors(true);
         assertEquals(3, paymentGateways.size());
     }
@@ -63,6 +62,5 @@ public class PaymentModulesManagerImplTest extends BaseCoreDBTestCase {
         PaymentGateway paymentGateway = paymentModulesManager.getPaymentGateway("testPaymentGatewayLabel");
         assertNotNull(paymentGateway);
         assertEquals("testPaymentGateway", paymentGateway.getLabel());
-
     }
 }

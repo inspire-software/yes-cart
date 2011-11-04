@@ -36,13 +36,10 @@ public class AssociationServiceImplTest extends BaseCoreDBTestCase {
         association.setCode("someCode");
         association.setName("someName");
         association.setDescription("someDescription");
-
         association = associationService.create(association);
         assertTrue(association.getAssociationId() > 0);
-
         List<Association> list = associationService.findAll();
         assertEquals(5, list.size());
-
     }
 
     @Test
@@ -51,14 +48,11 @@ public class AssociationServiceImplTest extends BaseCoreDBTestCase {
         association.setCode("someCode");
         association.setName("someName");
         association.setDescription("someDescription");
-
         association = associationService.create(association);
         assertTrue(association.getAssociationId() > 0);
-
         association.setCode("someCode2");
         association.setName("someName2");
         association.setDescription("someDescription2");
-
         association = associationService.update(association);
         assertEquals("someCode2", association.getCode());
         assertEquals("someName2", association.getName());
@@ -71,13 +65,10 @@ public class AssociationServiceImplTest extends BaseCoreDBTestCase {
         association.setCode("someCode");
         association.setName("someName");
         association.setDescription("someDescription");
-
         association = associationService.create(association);
         assertTrue(association.getAssociationId() > 0);
-
         long pk = association.getAssociationId();
         associationService.delete(association);
-
         association = associationService.getById(pk);
         assertNull(association);
     }

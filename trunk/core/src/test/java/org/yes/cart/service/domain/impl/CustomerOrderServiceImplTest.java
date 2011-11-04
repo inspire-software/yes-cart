@@ -13,7 +13,6 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.impl.*;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,34 +37,26 @@ public class CustomerOrderServiceImplTest extends BaseCoreDBTestCase {
         final String customerPrefix = "testCreateAndDelete";
         final Customer customer = OrderAssemblerImplTest.createCustomer(ctx, customerPrefix);
         assertFalse(customer.getAddress().isEmpty());
-
         final ShoppingCart shoppingCart = getShoppingCart(ctx, customerPrefix);
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
         long pk = order.getCustomerorderId();
         assertTrue(pk > 0);
-
         customerOrderService.delete(order);
-
         assertNull(customerOrderService.getById(pk));
     }
 
     @Test
     public void testFindByGuid() throws Exception {
         final String customerPrefix = "testFindByGuid";
-
         final Customer customer = OrderAssemblerImplTest.createCustomer(ctx, customerPrefix);
         assertFalse(customer.getAddress().isEmpty());
-
         final ShoppingCart shoppingCart = getShoppingCart(ctx, customerPrefix);
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
         long pk = order.getCustomerorderId();
         assertTrue(pk > 0);
-
         CustomerOrder order2 = customerOrderService.findByGuid(shoppingCart.getGuid());
         assertNotNull(order2);
-
         customerOrderService.delete(order);
-
         assertNull(customerOrderService.getById(pk));
         assertNull(customerOrderService.findByGuid(shoppingCart.getGuid()));
     }
@@ -73,10 +64,8 @@ public class CustomerOrderServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testGetCustomerOrders() throws Exception {
         final String customerPrefix = "cosit2";
-        final Date date = new Date();
         final Customer customer = OrderAssemblerImplTest.createCustomer(ctx, customerPrefix);
         assertFalse(customer.getAddress().isEmpty());
-
         final ShoppingCart shoppingCart = getShoppingCart(ctx, customerPrefix);
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
         assertTrue(order.getCustomerorderId() > 0);
@@ -86,14 +75,9 @@ public class CustomerOrderServiceImplTest extends BaseCoreDBTestCase {
     @Ignore("expected:<4> but was:<3>")
     @Test
     public void testPersistReassembledOrder1() throws Exception {
-
         final String customerPrefix = "cosit3";
-
-
         final Customer customer = OrderAssemblerImplTest.createCustomer(ctx, customerPrefix);
         assertFalse(customer.getAddress().isEmpty());
-
-
         final ShoppingCart shoppingCart = getShoppingCart(ctx, customerPrefix);
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
         assertEquals(4, order.getDelivery().size());
@@ -101,33 +85,21 @@ public class CustomerOrderServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testPersistReassembledOrder2() throws Exception {
-
         final String customerPrefix = "cosit4";
-
         final Customer customer = OrderAssemblerImplTest.createCustomer(ctx, customerPrefix);
         assertFalse(customer.getAddress().isEmpty());
-
-
         final ShoppingCart shoppingCart = getShoppingCart(ctx, customerPrefix);
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, true);
         assertEquals(2, order.getDelivery().size());
-
-
     }
 
     @Test
     public void testPersistReassembledOrder3() throws Exception {
-
         final String customerPrefix = "testPersistReassembledOrder3";
-
-
         final Customer customer = OrderAssemblerImplTest.createCustomer(ctx, customerPrefix);
         assertFalse(customer.getAddress().isEmpty());
-
-
         final ShoppingCart shoppingCart = getShoppingCart2(customerPrefix);
         assertFalse(customerOrderService.isOrderCanHasMultipleDeliveries(shoppingCart));
-
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, true);
         assertEquals(2, order.getDelivery().size());
     }
@@ -139,60 +111,39 @@ public class CustomerOrderServiceImplTest extends BaseCoreDBTestCase {
      * @return cart
      */
     public static ShoppingCart getShoppingCart(final ApplicationContext ctx, final String prefix) {
-
         ShoppingCart shoppingCart = getEmptyCart(ctx, prefix);
-
         Map<String, String> param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST4");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
-
-        new SetSkuQuantityToCartEventCommandImpl(ctx,
-                param)
+        new SetSkuQuantityToCartEventCommandImpl(ctx, param)
                 .execute(shoppingCart);
-
-
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST5");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "200.00");
-
-        new SetSkuQuantityToCartEventCommandImpl(ctx,
-                param)
+        new SetSkuQuantityToCartEventCommandImpl(ctx, param)
                 .execute(shoppingCart);
-
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST6");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "3.00");
-
-        new SetSkuQuantityToCartEventCommandImpl(ctx,
-                param)
+        new SetSkuQuantityToCartEventCommandImpl(ctx, param)
                 .execute(shoppingCart);
-
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST7");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
-
-        new SetSkuQuantityToCartEventCommandImpl(ctx,
-                param)
+        new SetSkuQuantityToCartEventCommandImpl(ctx, param)
                 .execute(shoppingCart);
-
         // this digital product not available till date
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST8");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
-
-        new SetSkuQuantityToCartEventCommandImpl(ctx,
-                param)
+        new SetSkuQuantityToCartEventCommandImpl(ctx, param)
                 .execute(shoppingCart);
-
-        // this digital product available 
+        // this digital product available
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST9");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
-
-        new SetSkuQuantityToCartEventCommandImpl(ctx,
-                param)
+        new SetSkuQuantityToCartEventCommandImpl(ctx, param)
                 .execute(shoppingCart);
-
         return shoppingCart;
     }
 
@@ -200,52 +151,34 @@ public class CustomerOrderServiceImplTest extends BaseCoreDBTestCase {
      * @return cart with one digital available product.
      */
     private ShoppingCart getShoppingCart2(final String prefix) {
-
         ShoppingCart shoppingCart = getEmptyCart(ctx, prefix);
-
-        Map<String, String> param = new HashMap<String, String>();
-
         // this digital product available
-        param = new HashMap<String, String>();
+        Map<String, String> param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST9");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
-
-        new SetSkuQuantityToCartEventCommandImpl(ctx,
-                param)
+        new SetSkuQuantityToCartEventCommandImpl(ctx, param)
                 .execute(shoppingCart);
-
-
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST5");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "200.00");
-
-        new SetSkuQuantityToCartEventCommandImpl(ctx,
-                param)
+        new SetSkuQuantityToCartEventCommandImpl(ctx, param)
                 .execute(shoppingCart);
-
         return shoppingCart;
     }
 
     private static ShoppingCart getEmptyCart(final ApplicationContext ctx, final String prefix) {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
-
         Map<String, String> params = new HashMap<String, String>();
         params.put(LoginCommandImpl.EMAIL, prefix + "jd@domain.com");
         params.put(LoginCommandImpl.NAME, prefix + "John Doe");
-
-
         new SetShopCartCommandImpl(ctx, Collections.singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
                 .execute(shoppingCart);
-
         new ChangeCurrencyEventCommandImpl(ctx, Collections.singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "USD"))
                 .execute(shoppingCart);
-
         new LoginCommandImpl(null, params)
                 .execute(shoppingCart);
-
         new SetCarrierSlaCartCommandImpl(null, Collections.singletonMap(SetCarrierSlaCartCommandImpl.CMD_KEY, "1"))
                 .execute(shoppingCart);
-
         return shoppingCart;
     }
 }

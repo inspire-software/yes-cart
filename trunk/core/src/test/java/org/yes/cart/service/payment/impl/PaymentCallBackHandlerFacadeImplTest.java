@@ -36,46 +36,29 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
         orderAssembler = (OrderAssembler) ctx.getBean(ServiceSpringKeys.ORDER_ASSEMBLER);
         customerOrderService = (CustomerOrderService) ctx.getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
         deliveryAssembler = (DeliveryAssemblerImpl) ctx.getBean(ServiceSpringKeys.DELIVERY_ASSEMBLER);
-
-
     }
 
     @Test
     public void testHandlePaymentCallback() {
         Customer customer = OrderAssemblerImplTest.createCustomer(ctx, "testHandlePaymentCallback");
         ShoppingCart shoppingCart = OrderAssemblerImplTest.getShoppingCart(ctx, customer.getEmail());
-
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
-
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, true);
-
         customerOrder.setPgLabel("testExtFormPaymentGatewayLabel");
         customerOrder = customerOrderService.create(customerOrder);
-        assertEquals(
-                "Order must be in ORDER_STATUS_NONE state",
+        assertEquals("Order must be in ORDER_STATUS_NONE state",
                 CustomerOrder.ORDER_STATUS_NONE,
                 customerOrder.getOrderStatus());
-
         final String ordGuid = customerOrder.getCartGuid();
-
-
         paymentCallBackHandlerFacade.handlePaymentCallback(
                 new HashMap() {{
                     put(TestExtFormPaymentGatewayImpl.ORDER_GUID_PARAM_KEY, ordGuid);
                     put(TestExtFormPaymentGatewayImpl.RESPONCE_CODE_PARAM_KEY, "1"); // 1 - means ok 
-                }}
-                ,
-                "testExtFormPaymentGatewayLabel"
-        );
-
-
+                }},
+                "testExtFormPaymentGatewayLabel");
         customerOrder = customerOrderService.findByGuid(customerOrder.getCartGuid());
-
-        assertEquals(
-                "Order must be in ORDER_STATUS_NONE state",
+        assertEquals("Order must be in ORDER_STATUS_NONE state",
                 CustomerOrder.ORDER_STATUS_IN_PROGRESS,
                 customerOrder.getOrderStatus());
-
-
     }
 }

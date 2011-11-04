@@ -6,7 +6,6 @@ import org.apache.lucene.search.Query;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -19,13 +18,9 @@ public class TestAsIsAnalyzerImpl {
     private static final String[] FIELDS = {"productCategory.category", "attribute.attribute", "attribute.val"};
 
     @Test
-    public void testThatQueryIsNotTransformaedByAnalyzerWithMultipleFiledsQueryParser() {
+    public void testThatQueryIsNotTransformaedByAnalyzerWithMultipleFiledsQueryParser() throws ParseException {
         MultiFieldQueryParser queryParser = new MultiFieldQueryParser(FIELDS, new AsIsAnalyzerImpl());
-        try {
-            Query query = queryParser.parse(LUCENE_QUERY);
-            assertEquals(LUCENE_QUERY, query.toString());
-        } catch (ParseException e) {
-            assertTrue(false);
-        }
+        Query query = queryParser.parse(LUCENE_QUERY);
+        assertEquals(LUCENE_QUERY, query.toString());
     }
 }

@@ -19,17 +19,14 @@ public class DefaultOrderNumberGeneratorImplTest {
     @Test
     public void testGetNextOrderNumber() {
         DefaultOrderNumberGeneratorImpl defaultOrderNumberGenerator = new DefaultOrderNumberGeneratorImpl();
-        for (int i = 1; i <= 100000; i = i + 1) {
+        for (int i = 1; i <= 10000; i = i + 1) {
             final String orderNum = defaultOrderNumberGenerator.getNextOrderNumber();
             final String expected = "-" + i;
-            assertEquals(
-                    expected,
+            assertEquals(expected,
                     orderNum.substring(orderNum.indexOf("-")));
         }
-
-
         //Multithread.
-        int THREADGROUPSIZE = 1000;
+        int THREADGROUPSIZE = 100;
         defaultOrderNumberGenerator = new DefaultOrderNumberGeneratorImpl();
         Set<String> rez = Collections.synchronizedSet(new HashSet<String>());
         Thread[] th = new Thread[THREADGROUPSIZE];
@@ -44,18 +41,15 @@ public class DefaultOrderNumberGeneratorImplTest {
                 System.out.print("Join interrupted\n");
             }
         }
-
         assertEquals(THREADGROUPSIZE, rez.size());
     }
 
     class MyOrderCreatorThread extends Thread {
 
-        private final DefaultOrderNumberGeneratorImpl defaultOrderNumberGenerator;
-
-        private final Set<String> generated;
+        private DefaultOrderNumberGeneratorImpl defaultOrderNumberGenerator;
+        private Set<String> generated;
 
         MyOrderCreatorThread(final DefaultOrderNumberGeneratorImpl defaultOrderNumberGenerator, final Set<String> generated) {
-            super();
             this.defaultOrderNumberGenerator = defaultOrderNumberGenerator;
             this.generated = generated;
         }

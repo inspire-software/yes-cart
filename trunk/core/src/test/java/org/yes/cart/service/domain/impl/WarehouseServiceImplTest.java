@@ -27,7 +27,6 @@ public class WarehouseServiceImplTest extends BaseCoreDBTestCase {
     private ShopService shopService;
     private EntityFactory entityFactory;
     private GenericDAO<ShopWarehouse, Long> shopWarehouseDao;
-
     private Shop shop;
     private Warehouse warehouse;
 
@@ -44,37 +43,26 @@ public class WarehouseServiceImplTest extends BaseCoreDBTestCase {
      */
     @Test
     public void testAssignWarehouse() {
-
         createShopAndWareHouse("TESTSHOP", "TESTWAREHOUSE");
-
         List<Warehouse> shopWarehouses = warehouseService.findByShopId(shop.getShopId());
         assertNotNull(shopWarehouses);
         assertTrue(shopWarehouses.isEmpty());
-
-
         ShopWarehouse shopWarehouse = warehouseService.assignWarehouse(warehouse.getWarehouseId(), shop.getShopId());
         assertNotNull(shopWarehouse);
         assertEquals(warehouse.getWarehouseId(), shopWarehouse.getWarehouse().getWarehouseId());
         assertEquals(shop.getShopId(), shopWarehouse.getShop().getShopId());
-
         shopWarehouses = warehouseService.findByShopId(shop.getShopId());
         assertNotNull(shopWarehouses);
         assertFalse(shopWarehouses.isEmpty());
-
         assertEquals(warehouse.getWarehouseId(), shopWarehouses.get(0).getWarehouseId());
-
     }
 
     @Test
     public void testSetShopWarehouseRank() {
-
         createShopAndWareHouse("TESTSHOP123", "TESTWAREHOUSE123");
-
         List<Warehouse> shopWarehouses = warehouseService.findByShopId(shop.getShopId());
         assertNotNull(shopWarehouses);
         assertTrue(shopWarehouses.isEmpty());
-
-
         ShopWarehouse shopWarehouse = warehouseService.assignWarehouse(warehouse.getWarehouseId(), shop.getShopId());
 
         assertEquals("Test default rank", 100, shopWarehouse.getRank());

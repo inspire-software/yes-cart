@@ -1,6 +1,7 @@
 package org.yes.cart.service.dto.impl;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.AvailabilityDTO;
@@ -28,33 +29,26 @@ public class DtoAvailabilityServiceImplTest extends BaseCoreDBTestCase {
         dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
     }
 
+    @Ignore("AvailabilityDTO can not be created")
     @Test
-    public void testCreate() {
+    public void testCreate() throws Exception {
         AvailabilityDTO dto = getDto();
-        try {
-            dto = dtoService.create(dto);
-            assertTrue(dto.getAvailabilityId() > 0);
-        } catch (Exception e) {
-            assertFalse(e.getMessage(), false);
-        }
+        dto = dtoService.create(dto);
+        assertTrue(dto.getAvailabilityId() > 0);
     }
 
 
+    @Ignore("AvailabilityDTO can not be created")
     @Test
-    public void testUpdate() {
+    public void testUpdate() throws Exception {
         AvailabilityDTO dto = getDto();
-        try {
-            dto = dtoService.create(dto);
-            assertTrue(dto.getAvailabilityId() > 0);
-            long id = dto.getAvailabilityId();
-            dto.setName("name2");
-            dtoService.update(dto);
-            dto = dtoService.getById(id);
-            assertEquals("name2", dto.getName());
-        } catch (Exception e) {
-            assertFalse(e.getMessage(), false);
-        }
-
+        dto = dtoService.create(dto);
+        assertTrue(dto.getAvailabilityId() > 0);
+        long id = dto.getAvailabilityId();
+        dto.setName("name2");
+        dtoService.update(dto);
+        dto = dtoService.getById(id);
+        assertEquals("name2", dto.getName());
     }
 
     @Test
@@ -63,13 +57,10 @@ public class DtoAvailabilityServiceImplTest extends BaseCoreDBTestCase {
         assertFalse(list.isEmpty());
     }
 
+    @Ignore("AvailabilityDTO can not be created")
     @Test
     public void testRemove() {
-        try {
-            dtoService.remove(1L);
-        } catch (Error e) {
-            assertFalse(e.getMessage(), false);
-        }
+        dtoService.remove(1L);
     }
 
     private AvailabilityDTO getDto() {

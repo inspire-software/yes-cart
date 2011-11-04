@@ -30,25 +30,19 @@ public class ShopCategoryServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testFindByShopCategory() {
-        assertNotNull(
-                shopCategoryService.findByShopCategory(
-                        shopService.getById(10L),
-                        categoryService.getById(133L))
-        );
-        assertNull(
-                shopCategoryService.findByShopCategory(
-                        shopService.getById(777L),
-                        categoryService.getById(133L))
-        );
+        assertNotNull(shopCategoryService.findByShopCategory(
+                shopService.getById(10L),
+                categoryService.getById(133L)));
+        assertNull(shopCategoryService.findByShopCategory(
+                shopService.getById(777L),
+                categoryService.getById(133L)));
     }
 
     @Test
     public void testDeleteAll() {
         shopCategoryService.deleteAll(categoryService.getById(133L));
-        assertNull(
-                shopCategoryService.findByShopCategory(
-                        shopService.getById(10L),
-                        categoryService.getById(133L))
-        );
+        assertNull(shopCategoryService.findByShopCategory(
+                shopService.getById(10L),
+                categoryService.getById(133L)));
     }
 }
