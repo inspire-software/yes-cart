@@ -13,6 +13,9 @@ import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoProductTypeAttrService;
 import org.yes.cart.service.dto.DtoProductTypeService;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -20,20 +23,17 @@ import org.yes.cart.service.dto.DtoProductTypeService;
  */
 public class DtoProductTypeAttrServiceImplTest extends BaseCoreDBTestCase {
 
-
-    private DtoProductTypeAttrService dtoService = null;
-    private DtoProductTypeService dtoProductTypeService = null;
-    private DtoAttributeService dtoAttributeService = null;
-    private DtoFactory dtoFactory = null;
+    private DtoProductTypeAttrService dtoService;
+    private DtoProductTypeService dtoProductTypeService;
+    private DtoAttributeService dtoAttributeService;
+    private DtoFactory dtoFactory;
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         dtoService = (DtoProductTypeAttrService) ctx.getBean(ServiceSpringKeys.DTO_PRODUCT_TYPE_ATTR_SERVICE);
         dtoProductTypeService = (DtoProductTypeService) ctx.getBean(ServiceSpringKeys.DTO_PRODUCT_TYPE_SERVICE);
         dtoAttributeService = (DtoAttributeService) ctx.getBean(ServiceSpringKeys.DTO_ATTRIBUTE_SERVICE);
         dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
-
     }
 
     @Test

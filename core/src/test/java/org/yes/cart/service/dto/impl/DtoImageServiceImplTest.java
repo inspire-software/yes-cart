@@ -4,11 +4,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.SeoImageDTO;
-import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.impl.BaseCoreDBTestCase;
 import org.yes.cart.service.dto.DtoImageService;
+
+import static org.junit.Assert.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -17,16 +18,11 @@ import org.yes.cart.service.dto.DtoImageService;
  */
 public class DtoImageServiceImplTest extends BaseCoreDBTestCase {
 
-    private DtoImageService dtoService = null;
-    private DtoFactory dtoFactory = null;
-
+    private DtoImageService dtoService;
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         dtoService = (DtoImageService) ctx.getBean(ServiceSpringKeys.DTO_IMAGE_SERVICE);
-        dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
-
     }
 
     @Test

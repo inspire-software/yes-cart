@@ -3,17 +3,19 @@ package org.yes.cart.service.domain.impl;
 import org.junit.Test;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.impl.AttrValueEntityBrand;
 import org.yes.cart.domain.entity.impl.AttributeEntity;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.AttributeService;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.ArrayList;
+
+import static org.junit.Assert.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -21,10 +23,6 @@ import java.util.ArrayList;
  * Time: 14:12:54
  */
 public class TestAttributeServiceImpl extends BaseCoreDBTestCase {
-
-    public TestAttributeServiceImpl() {
-        super();
-    }
 
     /**
      * Prove of availability to getByKey list of attributes, that can have mupliple values within given
@@ -150,7 +148,7 @@ public class TestAttributeServiceImpl extends BaseCoreDBTestCase {
         List<AttrValue> removedList = atributeService.removeAttrValues(rez, "section-0");
         assertEquals("Size must be without changes", 3, removedList.size());
         for (AttrValue attrVal : removedList) {
-            assertTrue("Value must be overwritten" ,attrVal.getVal().indexOf("_newval_") > -1);
+            assertTrue("Value must be overwritten", attrVal.getVal().indexOf("_newval_") > -1);
         }
 
         removedList = atributeService.removeAttrValues(rez, "section-1");
@@ -166,9 +164,9 @@ public class TestAttributeServiceImpl extends BaseCoreDBTestCase {
             String val = attrVal.getVal();
             assertTrue(
                     val.equals("section_5_newval_0") ||
-                    val.equals("section_5_value_1") ||
-                    val.equals("section_5_value_2") ||
-                    val.equals("section_5_value_3")
+                            val.equals("section_5_value_1") ||
+                            val.equals("section_5_value_2") ||
+                            val.equals("section_5_value_3")
             );
 
         }
@@ -210,6 +208,4 @@ public class TestAttributeServiceImpl extends BaseCoreDBTestCase {
         return new Pair<String, List<AttrValue>>("section-" + idx, attrValues);
 
     }
-
-
 }

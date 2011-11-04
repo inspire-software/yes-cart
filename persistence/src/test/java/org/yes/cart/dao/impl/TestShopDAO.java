@@ -13,6 +13,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static org.junit.Assert.*;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 08-May-2011
@@ -27,10 +29,7 @@ public class TestShopDAO extends AbstractTestDAO {
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
-
         shopDao = (GenericDAO<Shop, Long>) ctx.getBean(DaoServiceBeanKeys.SHOP_DAO);
-
     }
 
     @Test
@@ -104,12 +103,8 @@ public class TestShopDAO extends AbstractTestDAO {
         for (Long pk : cleanupPks) {
             shopDao.delete(shopDao.findById(pk));
         }
-
         for (Long pk : cleanupPks) {
             assertNull(shopDao.findById(pk));
         }
-
     }
-
-
 }

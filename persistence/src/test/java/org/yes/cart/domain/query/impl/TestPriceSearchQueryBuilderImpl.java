@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 08-May-2011
@@ -23,17 +25,7 @@ public class TestPriceSearchQueryBuilderImpl extends AbstractTestDAO {
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
-
         productDao = (GenericDAO<Product, Long>) ctx.getBean(DaoServiceBeanKeys.PRODUCT_DAO);
-    }
-
-    public void cleanUp() {
-
-    }
-
-    public void testDummy() {
-
     }
 
     @Test

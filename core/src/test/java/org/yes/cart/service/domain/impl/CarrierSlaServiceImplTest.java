@@ -10,17 +10,18 @@ import org.yes.cart.service.domain.CarrierService;
 
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+
 public class CarrierSlaServiceImplTest extends BaseCoreDBTestCase {
 
     private CarrierService carrierService;
 
-    protected IDataSet getDataSet() throws Exception {
+    protected IDataSet createDataSet() throws Exception {
         return new FlatXmlDataSet(getClass().getClassLoader().getResourceAsStream("initialdata_carrier.xml"), false);
     }
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         carrierService = (CarrierService) ctx.getBean(ServiceSpringKeys.CARRIER_SERVICE);
     }
 

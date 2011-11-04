@@ -1,8 +1,8 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.junit.Test;
-import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.domain.dto.impl.ProductSkuDTOImpl;
+import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.math.BigDecimal;
 
@@ -17,7 +17,6 @@ public class CleanCartCommandImplTest {
 
     @Test
     public void testExecute() {
-
         ShoppingCart shoppingCart = new ShoppingCartImpl();
         shoppingCart.addProductSkuToCart(new ProductSkuDTOImpl(), BigDecimal.ONE);
 
@@ -31,8 +30,6 @@ public class CleanCartCommandImplTest {
         assertNotNull(shoppingCart.getModifiedDate());
         assertTrue(shoppingCart.getCartItemList().isEmpty());
         assertNotSame(oldGuid, shoppingCart.getGuid());
-
     }
-
 }
 

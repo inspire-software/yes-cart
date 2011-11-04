@@ -10,6 +10,8 @@ import org.yes.cart.service.dto.DtoBrandService;
 
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -17,15 +19,13 @@ import java.util.List;
  */
 public class DtoBrandServiceImplTest extends BaseCoreDBTestCase {
 
-    private DtoBrandService dtoService = null;
-    private DtoFactory dtoFactory = null;
+    private DtoBrandService dtoService;
+    private DtoFactory dtoFactory;
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         dtoService = (DtoBrandService) ctx.getBean(ServiceSpringKeys.DTO_BRAND_SERVICE);
         dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
-
     }
 
     @Test

@@ -16,6 +16,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -23,14 +25,12 @@ import java.util.List;
  */
 public class SkuWarehouseServiceImplTest extends BaseCoreDBTestCase {
 
-
-    WarehouseService warehouseService = null;
-    SkuWarehouseService skuWarehouseService = null;
-    ProductSkuService productSkuService = null;
+    WarehouseService warehouseService;
+    SkuWarehouseService skuWarehouseService;
+    ProductSkuService productSkuService;
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         warehouseService = (WarehouseService) ctx.getBean(ServiceSpringKeys.WAREHOUSE_SERVICE);
         skuWarehouseService = (SkuWarehouseService) ctx.getBean(ServiceSpringKeys.SKU_WAREHOUSE_SERVICE);
         productSkuService = (ProductSkuService) ctx.getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE);
@@ -56,7 +56,7 @@ public class SkuWarehouseServiceImplTest extends BaseCoreDBTestCase {
         skuWarehouse.setReserved(BigDecimal.TEN);
         skuWarehouseService.create(skuWarehouse); */
 
-        dumpDataBase("before_testGetQuantity", new String[]{"TSKUWAREHOUSE"});
+        //dumpDataBase("before_testGetQuantity", new String[]{"TSKUWAREHOUSE"});
 
 
         skuWarehouse = skuWarehouseService.getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);
@@ -81,7 +81,7 @@ public class SkuWarehouseServiceImplTest extends BaseCoreDBTestCase {
 
         ProductSku psku = productSkuService.getById(11006L);
 
-        dumpDataBase("after_testGetQuantity", new String[]{"TSKUWAREHOUSE"});
+        //dumpDataBase("after_testGetQuantity", new String[]{"TSKUWAREHOUSE"});
 
         Pair<BigDecimal, BigDecimal> rez = skuWarehouseService.getQuantity(warehouses, psku);
         assertEquals(new BigDecimal("14.00"), rez.getFirst());

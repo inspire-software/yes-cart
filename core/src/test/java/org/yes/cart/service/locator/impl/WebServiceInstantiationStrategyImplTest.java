@@ -13,7 +13,6 @@ public class WebServiceInstantiationStrategyImplTest {
 
     @Test
     public void testGetServiceName() throws Exception {
-
         WebServiceInstantiationStrategyImpl instantiationStrategy = new WebServiceInstantiationStrategyImpl();
         assertEquals("OrteLookup.asmx",
                 instantiationStrategy.getServiceName("http://mathertel.de/AJAXEngine/S02_AJAXCoreSamples/OrteLookup.asmx"));

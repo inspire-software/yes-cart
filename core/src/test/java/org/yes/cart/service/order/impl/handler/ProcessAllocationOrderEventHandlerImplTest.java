@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.SkuWarehouseService;
@@ -15,6 +14,8 @@ import org.yes.cart.service.order.impl.OrderEventImpl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+import static org.junit.Assert.*;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -22,24 +23,16 @@ import java.util.ArrayList;
  */
 public class ProcessAllocationOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
-    private CustomerOrderService orderService = null;
-    private ProcessAllocationOrderEventHandlerImpl handler = null;
-    private CustomerOrderPaymentService customerOrderPaymentService = null;
+    private CustomerOrderService orderService;
+    private ProcessAllocationOrderEventHandlerImpl handler;
     private WarehouseService warehouseService;
     private ProductSkuService productSkuService;
     private SkuWarehouseService skuWarehouseService;
 
-
     @Before
     public void setUp() throws Exception {
-        super.setUp();
-
-
         handler = (ProcessAllocationOrderEventHandlerImpl) ctx.getBean("processAllocationOrderEventHandler");
         orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
-        customerOrderPaymentService = (CustomerOrderPaymentService) ctx.getBean("customerOrderPaymentService");
-
-
         productSkuService = (ProductSkuService) ctx.getBean("productSkuService");
         skuWarehouseService = (SkuWarehouseService) ctx.getBean("skuWarehouseService");
         warehouseService = (WarehouseService) ctx.getBean("warehouseService");

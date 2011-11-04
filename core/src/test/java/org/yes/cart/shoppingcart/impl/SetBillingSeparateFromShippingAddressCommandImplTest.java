@@ -39,9 +39,5 @@ public class SetBillingSeparateFromShippingAddressCommandImplTest {
                 new SetBillingSeparateFromShippingAddressCommandImpl(null, params);
         command.execute(shoppingCart);
         assertFalse(shoppingCart.isSeparateBillingAddress());
-
-
     }
-
-
 }

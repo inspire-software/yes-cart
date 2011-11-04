@@ -1,15 +1,11 @@
 package org.yes.cart.shoppingcart.impl;
 
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
 
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
 
 /**
  * CartItemImpl test.
@@ -18,31 +14,9 @@ import static junit.framework.Assert.*;
  * Date: Jan 16, 2011
  * Time: 12:28:31 AM
  */
-@RunWith(org.jmock.integration.junit4.JMock.class)
 public class CartItemImplTest {
 
-    private CartItemImpl item;
-    private final Mockery mockery = new JUnit4Mockery();
-
-    @Before
-    public void setUp() {
-        item = new CartItemImpl();
-    }
-
-    /* -- ProductSku ----------------------------------- */
-
-    /*@Test(expected = IllegalArgumentException.class)
-    public void testSetProductSkuWithNull() {
-        item.setProductSku(null);
-    }  */
-
-    /*@Test
-    public void testSetProductSku() {
-        final ProductSkuDTO sku = mockery.mock(ProductSkuDTO.class);
-        item.setProductSkuCode(sku.getCode());
-    } */
-
-    /* -- Quantity ----------------------------------- */
+    private CartItemImpl item = new CartItemImpl();
 
     @Test
     public void testGetQuantityPreventsModificationsToQuantity() {
@@ -74,8 +48,6 @@ public class CartItemImplTest {
         assertEquals("Must be valid quantity (default is one)", BigDecimal.ONE, item.getQty());
     }
 
-    /* -- Adding quantity ----------------------------------- */
-
     @Test
     public void testAddQuantityNullSafe() {
         final BigDecimal original = item.getQty();
@@ -103,8 +75,6 @@ public class CartItemImplTest {
 
     }
 
-    /* -- Remove quantity ----------------------------------- */
-
     @Test
     public void testRemoveQuantityNullSafe() throws CartItemRequiresDeletion {
         final BigDecimal original = item.getQty();
@@ -129,7 +99,6 @@ public class CartItemImplTest {
 
     }
 
-    //@Test(expected = CartItemRequiresDeletion.class)
     @Test
     public void testRemoveQuantity() throws CartItemRequiresDeletion {
         final BigDecimal original = item.addQuantity(new BigDecimal(100));

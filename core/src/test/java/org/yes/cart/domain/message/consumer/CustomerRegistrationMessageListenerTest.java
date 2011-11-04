@@ -2,15 +2,15 @@ package org.yes.cart.domain.message.consumer;
 
 import com.dumbster.smtp.SimpleSmtpServer;
 import com.dumbster.smtp.SmtpMessage;
-import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.domain.message.RegistrationMessage;
-import org.yes.cart.domain.message.consumer.CustomerRegistrationMessageListener;
 import org.yes.cart.domain.message.impl.RegistrationMessageImpl;
 import org.yes.cart.service.domain.impl.BaseCoreDBTestCase;
 
 import java.util.HashSet;
 import java.util.Iterator;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -18,13 +18,6 @@ import java.util.Iterator;
  * Time: 14:12:54
  */
 public class CustomerRegistrationMessageListenerTest extends BaseCoreDBTestCase {
-
-    @Before
-    public void setUp()  throws Exception {
-        super.setUp();
-    }
-
-
 
     @Test
     public void testOnMessage0() throws Exception {
@@ -57,7 +50,6 @@ public class CustomerRegistrationMessageListenerTest extends BaseCoreDBTestCase 
         Iterator emailIter = server.getReceivedEmail();
         SmtpMessage email = (SmtpMessage) emailIter.next();
 
-        
 
         assertTrue(email.getBody().contains("neWpaSswOrd"));
         assertTrue(email.getBody().contains("Bender"));

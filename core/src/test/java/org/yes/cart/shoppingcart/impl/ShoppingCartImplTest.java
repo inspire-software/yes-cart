@@ -1,17 +1,13 @@
 package org.yes.cart.shoppingcart.impl;
 
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.yes.cart.domain.dto.ProductSkuDTO;
 import org.yes.cart.domain.dto.impl.ProductSkuDTOImpl;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
 
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
 
 /**
  * ShoppingCartImpl test.
@@ -20,22 +16,12 @@ import static junit.framework.Assert.*;
  * Date: Jan 16, 2011
  * Time: 1:19:22 AM
  */
-@RunWith(org.jmock.integration.junit4.JMock.class)
 public class ShoppingCartImplTest {
 
-    private ShoppingCartImpl cart;
-
-    private final Mockery mockery = new JUnit4Mockery();
-
-    @Before
-    public void setUp() {
-        cart = new ShoppingCartImpl();
-    }
-
+    private ShoppingCartImpl cart = new ShoppingCartImpl();
 
     @Test
     public void testIndexOfSkuInexistent() {
-        //final ProductSkuDTO sku = mockery.mock(ProductSkuDTO.class, "sku");
         final ProductSkuDTO sku = getProductSkuDTO("sku");
         assertEquals("Size should be 0", 0, cart.getCartItemsCount());
         assertEquals("Index must be -1 for inexistent sku", -1, cart.indexOf(sku));
@@ -44,7 +30,6 @@ public class ShoppingCartImplTest {
 
     @Test
     public void testAddProductSkuDTOToCartInexistent() {
-        //final ProductSkuDTO sku = mockery.mock(ProductSkuDTO.class, "sku01");
         final ProductSkuDTO sku = getProductSkuDTO("sku");
         final boolean newItem = cart.addProductSkuToCart(sku, BigDecimal.TEN);
         assertTrue("Must create new item", newItem);
@@ -56,7 +41,6 @@ public class ShoppingCartImplTest {
 
     @Test
     public void testAddProductSkuDTOToCartExistent() {
-        //final ProductSkuDTO sku = mockery.mock(ProductSkuDTO.class, "sku01");
         final ProductSkuDTO sku = getProductSkuDTO("sku");
         final boolean newItem1 = cart.addProductSkuToCart(sku, BigDecimal.TEN);
         final boolean newItem2 = cart.addProductSkuToCart(sku, BigDecimal.TEN);
@@ -70,8 +54,6 @@ public class ShoppingCartImplTest {
 
     @Test
     public void testAddProductSkuToCartExistentAndInexistent() {
-        //final ProductSkuDTO sku = mockery.mock(ProductSkuDTO.class, "sku01");
-        //final ProductSkuDTO sku2 = mockery.mock(ProductSkuDTO.class, "sku02");
         final ProductSkuDTO sku = getProductSkuDTO("sku01");
         final ProductSkuDTO sku2 = getProductSkuDTO("sku02");
 
@@ -91,11 +73,6 @@ public class ShoppingCartImplTest {
 
     @Test
     public void testRemoveCartItemInexistent() {
-/*
-        final ProductSkuDTO sku = mockery.mock(ProductSkuDTO.class, "sku01");
-        final ProductSkuDTO sku2 = mockery.mock(ProductSkuDTO.class, "sku02");
-        final ProductSkuDTO sku3 = mockery.mock(ProductSkuDTO.class, "sku03");
-*/
         final ProductSkuDTO sku = getProductSkuDTO("sku01");
         final ProductSkuDTO sku2 = getProductSkuDTO("sku02");
         final ProductSkuDTO sku3 = getProductSkuDTO("sku03");
@@ -109,10 +86,6 @@ public class ShoppingCartImplTest {
 
     @Test
     public void testRemoveCartItemExistent() {
-/*
-        final ProductSkuDTO sku = mockery.mock(ProductSkuDTO.class, "sku01");
-        final ProductSkuDTO sku2 = mockery.mock(ProductSkuDTO.class, "sku02");
-*/
         final ProductSkuDTO sku = getProductSkuDTO("sku01");
         final ProductSkuDTO sku2 = getProductSkuDTO("sku02");
         cart.addProductSkuToCart(sku, BigDecimal.TEN);
@@ -126,11 +99,6 @@ public class ShoppingCartImplTest {
 
     @Test
     public void testRemoveCartItemQuantityInexistent() {
-/*
-        final ProductSkuDTO sku = mockery.mock(ProductSkuDTO.class, "sku01");
-        final ProductSkuDTO sku2 = mockery.mock(ProductSkuDTO.class, "sku02");
-        final ProductSkuDTO sku3 = mockery.mock(ProductSkuDTO.class, "sku03");
-*/
         final ProductSkuDTO sku = getProductSkuDTO("sku01");
         final ProductSkuDTO sku2 = getProductSkuDTO("sku02");
         final ProductSkuDTO sku3 = getProductSkuDTO("sku03");
@@ -143,13 +111,8 @@ public class ShoppingCartImplTest {
         assertEquals("Size should be 30", 30, cart.getCartItemsCount());
     }
 
-
     @Test
     public void testRemoveCartItemQuantityExistent() {
-/*
-        final ProductSkuDTO sku = mockery.mock(ProductSkuDTO.class, "sku01");
-        final ProductSkuDTO sku2 = mockery.mock(ProductSkuDTO.class, "sku02");
-*/
         final ProductSkuDTO sku = getProductSkuDTO("sku01");
         final ProductSkuDTO sku2 = getProductSkuDTO("sku02");
 
@@ -165,10 +128,6 @@ public class ShoppingCartImplTest {
 
     @Test
     public void testRemoveCartItemQuantityExistentFull() {
-/*
-        final ProductSkuDTO sku = mockery.mock(ProductSkuDTO.class, "sku01");
-        final ProductSkuDTO sku2 = mockery.mock(ProductSkuDTO.class, "sku02");
-*/
         final ProductSkuDTO sku = getProductSkuDTO("sku01");
         final ProductSkuDTO sku2 = getProductSkuDTO("sku02");
 
@@ -183,10 +142,6 @@ public class ShoppingCartImplTest {
 
     @Test
     public void testRemoveCartItemQuantityExistentMoreThanInCart() {
-/*
-        final ProductSkuDTO sku = mockery.mock(ProductSkuDTO.class, "sku01");
-        final ProductSkuDTO sku2 = mockery.mock(ProductSkuDTO.class, "sku02");
-*/
         final ProductSkuDTO sku = getProductSkuDTO("sku01");
         final ProductSkuDTO sku2 = getProductSkuDTO("sku02");
 
@@ -202,7 +157,6 @@ public class ShoppingCartImplTest {
     private ProductSkuDTO getProductSkuDTO(final String skuCode) {
         final ProductSkuDTO productSkuDTO = new ProductSkuDTOImpl();
         productSkuDTO.setCode(skuCode);
-        return productSkuDTO;        
+        return productSkuDTO;
     }
-
 }

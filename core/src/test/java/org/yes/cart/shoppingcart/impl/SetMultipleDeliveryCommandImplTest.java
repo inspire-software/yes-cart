@@ -10,7 +10,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
-* User: Igor Azarny iazarny@yahoo.com
+ * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
@@ -38,8 +38,5 @@ public class SetMultipleDeliveryCommandImplTest {
                 new SetMultipleDeliveryCommandImpl(null, params);
         command.execute(shoppingCart);
         assertFalse(shoppingCart.getOrderInfo().isMultipleDelivery());
-
-
     }
-
 }

@@ -15,6 +15,8 @@ import org.yes.cart.service.dto.DtoCustomerOrderService;
 import org.yes.cart.service.order.impl.OrderAssemblerImplTest;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
+import static org.junit.Assert.*;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -27,7 +29,6 @@ public class DtoCustomerOrderServiceImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         dtoService = (DtoCustomerOrderService) ctx.getBean(ServiceSpringKeys.DTO_CUSTOMER_ORDER_SERVICE);
         customerOrderService = (CustomerOrderService) ctx.getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
     }

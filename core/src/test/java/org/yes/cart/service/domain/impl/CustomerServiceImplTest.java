@@ -9,6 +9,8 @@ import org.yes.cart.service.domain.ShopService;
 
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -21,7 +23,6 @@ public class CustomerServiceImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         customerService = (CustomerService) ctx.getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
         shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
     }
@@ -62,7 +63,7 @@ public class CustomerServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testFindCustomer() {
 
-        dumpDataBase("cust_addr", new String[]{"TADDRESS"});
+        //dumpDataBase("cust_addr", new String[]{"TADDRESS"});
 
         Customer customer = getCustomer("");
         customer.setEmail("user1@somedomain.com");

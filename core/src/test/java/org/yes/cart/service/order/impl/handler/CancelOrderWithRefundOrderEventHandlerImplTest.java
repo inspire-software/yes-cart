@@ -7,7 +7,6 @@ import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.SkuWarehouse;
-import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.order.impl.OrderAssemblerImplTest;
@@ -16,28 +15,23 @@ import org.yes.cart.service.order.impl.OrderEventImpl;
 import java.math.BigDecimal;
 import java.util.Collections;
 
+import static org.junit.Assert.*;
+
 /* User: Igor Azarny iazarny@yahoo.com
- * Date: 09-May-2011
- * Time: 14:12:54
- */
+* Date: 09-May-2011
+* Time: 14:12:54
+*/
 public class CancelOrderWithRefundOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
-    private CustomerOrderService orderService = null;
-    private ShipmentCompleteOrderEventHandlerImpl shipmentCompleteHandler = null;
-    private PendingOrderEventHandlerImpl pendingHandler = null;
-    private SkuWarehouseService skuWarehouseService = null;
-    private CustomerOrderPaymentService customerOrderPaymentService = null;
-    private CancelOrderWithRefundOrderEventHandlerImpl handler = null;
+    private CustomerOrderService orderService;
+    private PendingOrderEventHandlerImpl pendingHandler;
+    private SkuWarehouseService skuWarehouseService;
+    private CancelOrderWithRefundOrderEventHandlerImpl handler;
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
-
-
-        shipmentCompleteHandler = (ShipmentCompleteOrderEventHandlerImpl) ctx.getBean("shipmentCompleteOrderEventHandler");
         orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
         skuWarehouseService = (SkuWarehouseService) ctx.getBean("skuWarehouseService");
-        customerOrderPaymentService = (CustomerOrderPaymentService) ctx.getBean("customerOrderPaymentService");
         pendingHandler = (PendingOrderEventHandlerImpl) ctx.getBean("pendingOrderEventHandler");
         handler = (CancelOrderWithRefundOrderEventHandlerImpl) ctx.getBean("cancelOrderWithRefundOrderEventHandler");
     }

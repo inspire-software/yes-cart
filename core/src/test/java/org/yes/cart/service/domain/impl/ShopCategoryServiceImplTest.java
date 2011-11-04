@@ -7,6 +7,9 @@ import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopCategoryService;
 import org.yes.cart.service.domain.ShopService;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 /**
  * Igor Azarny iazarny@yahoo.com
  * Date: 18-Sep-2011
@@ -20,7 +23,6 @@ public class ShopCategoryServiceImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         shopCategoryService = (ShopCategoryService)
                 ctx.getBean(ServiceSpringKeys.SHOP_CATEGORY_SERVICE);
         shopService = (ShopService)

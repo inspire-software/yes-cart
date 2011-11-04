@@ -4,6 +4,8 @@ import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.service.domain.ProductCategoryService;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011

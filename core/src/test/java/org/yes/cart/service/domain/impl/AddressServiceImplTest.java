@@ -9,6 +9,9 @@ import org.yes.cart.service.domain.AddressService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -16,13 +19,12 @@ import org.yes.cart.service.domain.ShopService;
  */
 public class AddressServiceImplTest extends BaseCoreDBTestCase {
 
-    private AddressService addressService = null;
-    private CustomerService customerService = null;
-    private ShopService shopService = null;
+    private AddressService addressService;
+    private CustomerService customerService;
+    private ShopService shopService;
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         addressService = (AddressService) ctx.getBean(ServiceSpringKeys.ADDRESS_SERVICE);
         customerService = (CustomerService) ctx.getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
         shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);

@@ -9,6 +9,9 @@ import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011

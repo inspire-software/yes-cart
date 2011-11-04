@@ -14,6 +14,8 @@ import org.yes.cart.service.order.impl.OrderEventImpl;
 
 import java.math.BigDecimal;
 
+import static org.junit.Assert.*;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -28,7 +30,6 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImplTest extends Abstrac
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         handler = (DeliveryAllowedByInventoryOrderEventHandlerImpl) ctx.getBean("deliveryAllowedByInventoryOrderEventHandler");
         orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
         skuWarehouseService = (SkuWarehouseService) ctx.getBean("skuWarehouseService");
@@ -79,8 +80,5 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImplTest extends Abstrac
         assertTrue(handler.handle(new OrderEventImpl("", customerOrder, delivery)));
 
         assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED, delivery.getDeliveryStatus());
-
-
     }
-
 }

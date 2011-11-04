@@ -1,5 +1,6 @@
 package org.yes.cart.service.payment.impl;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -25,6 +26,9 @@ import org.yes.cart.shoppingcart.impl.*;
 import java.math.BigDecimal;
 import java.util.*;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -32,27 +36,23 @@ import java.util.*;
  */
 public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
 
-    private final static String PGLABEL = "testPaymentGatewayLabel";
-
+    private static final String PGLABEL = "testPaymentGatewayLabel";
 
     private PaymentProcessorFactory paymentProcessorFactory;
     private CustomerOrderService customerOrderService;
     private CustomerOrderPaymentService customerOrderPaymentService;
-    private AddressService addressService = null;
-    private CustomerService customerService = null;
-    private ShopService shopService = null;
+    private AddressService addressService;
+    private CustomerService customerService;
+    private ShopService shopService;
 
-
+    @Before
     public void setUp() throws Exception {
-
-        super.setUp();
         paymentProcessorFactory = (PaymentProcessorFactory) ctx.getBean(ServiceSpringKeys.PAYMENT_PROCESSOR_FACTORY);
         customerOrderService = (CustomerOrderService) ctx.getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
         customerOrderPaymentService = (CustomerOrderPaymentService) ctx.getBean(ServiceSpringKeys.ORDER_PAYMENT_SERICE);
         addressService = (AddressService) ctx.getBean(ServiceSpringKeys.ADDRESS_SERVICE);
         customerService = (CustomerService) ctx.getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
         shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
-
     }
 
     /**

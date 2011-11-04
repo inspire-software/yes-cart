@@ -14,6 +14,8 @@ import org.yes.cart.service.domain.ShopService;
 import java.util.Collection;
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -21,14 +23,13 @@ import java.util.List;
  */
 public class CustomerWishListServiceImplTest extends BaseCoreDBTestCase {
 
-    private CustomerWishListService service = null;
-    private CustomerService customerService = null;
-    private ProductSkuService productSkuService = null;
-    private ShopService shopService = null;
+    private CustomerWishListService service;
+    private CustomerService customerService;
+    private ProductSkuService productSkuService;
+    private ShopService shopService;
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         service = (CustomerWishListService) ctx.getBean(ServiceSpringKeys.CUSTOMER_WISH_LIST_SERVICE);
         customerService = (CustomerService) ctx.getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
         productSkuService = (ProductSkuService) ctx.getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE);
@@ -37,8 +38,6 @@ public class CustomerWishListServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetByCustomerId() {
-
-
         Customer customer = customerService.getGenericDao().getEntityFactory().getByIface(Customer.class);
         customer.setEmail("bender001@domain.com");
         customer.setFirstname("Bender001");
@@ -62,9 +61,5 @@ public class CustomerWishListServiceImplTest extends BaseCoreDBTestCase {
 
         List<CustomerWishList> list = service.getByCustomerId(customer.getCustomerId());
         assertEquals(1, list.size());
-
-
     }
-
-
 }

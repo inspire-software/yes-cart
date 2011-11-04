@@ -1,18 +1,15 @@
 package org.yes.cart.web.support.util;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
 import org.hibernate.criterion.Criterion;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.AttributeService;
 
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 

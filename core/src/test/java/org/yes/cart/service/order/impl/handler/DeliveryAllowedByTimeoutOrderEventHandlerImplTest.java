@@ -12,10 +12,12 @@ import org.yes.cart.service.order.impl.OrderEventImpl;
 
 import java.util.Calendar;
 
+import static org.junit.Assert.*;
+
 /* User: Igor Azarny iazarny@yahoo.com
- * Date: 09-May-2011
- * Time: 14:12:54
- */
+* Date: 09-May-2011
+* Time: 14:12:54
+*/
 public class DeliveryAllowedByTimeoutOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
     private CustomerOrderService orderService = null;
@@ -23,9 +25,6 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImplTest extends AbstractE
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
-
-
         handler = (DeliveryAllowedByTimeoutOrderEventHandlerImpl) ctx.getBean("deliveryAllowedByTimeoutOrderEventHandler");
         orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
     }
@@ -80,5 +79,4 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImplTest extends AbstractE
                 delivery.getDeliveryStatus());
 
     }
-
 }

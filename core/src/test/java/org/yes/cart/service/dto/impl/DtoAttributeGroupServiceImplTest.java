@@ -8,6 +8,8 @@ import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.service.domain.impl.BaseCoreDBTestCase;
 import org.yes.cart.service.dto.DtoAttributeGroupService;
 
+import static org.junit.Assert.*;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -15,12 +17,11 @@ import org.yes.cart.service.dto.DtoAttributeGroupService;
  */
 public class DtoAttributeGroupServiceImplTest extends BaseCoreDBTestCase {
 
-    private DtoAttributeGroupService dtoAttributeGroupService = null;
-    private DtoFactory dtoFactory = null;
+    private DtoAttributeGroupService dtoAttributeGroupService;
+    private DtoFactory dtoFactory;
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         dtoAttributeGroupService = (DtoAttributeGroupService) ctx.getBean(ServiceSpringKeys.DTO_ATTRIBUTE_GROUP_SERVICE);
         dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
     }
@@ -92,6 +93,4 @@ public class DtoAttributeGroupServiceImplTest extends BaseCoreDBTestCase {
         attributeGroupDTO.setName("Test name");
         return attributeGroupDTO;
     }
-
-
 }

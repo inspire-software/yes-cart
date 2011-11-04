@@ -13,6 +13,9 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 import java.math.BigDecimal;
 import java.util.Collections;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -20,14 +23,12 @@ import java.util.Collections;
  */
 public class ChangeCurrencyEventCommandImplTest extends BaseCoreDBTestCase {
 
-    ShopService shopService = null;
-    PriceService priceService = null;
-    ProductService productService = null;
-
+    ShopService shopService;
+    PriceService priceService;
+    ProductService productService;
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         productService = (ProductService) ctx.getBean(ServiceSpringKeys.PRODUCT_SERVICE);
         priceService = (PriceService) ctx.getBean(ServiceSpringKeys.PRICE_SERVICE);
         shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
@@ -64,7 +65,5 @@ public class ChangeCurrencyEventCommandImplTest extends BaseCoreDBTestCase {
         assertEquals("USD", shoppingCart.getCurrencyCode());
 
         assertTrue("Expected 570.03", (new BigDecimal("570.03")).equals(shoppingCart.getCartSubTotal(shoppingCart.getCartItemList())));
-
     }
-
 }

@@ -17,6 +17,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -24,15 +26,13 @@ import java.util.List;
  */
 public class DtoProductSkuServiceImplTest extends BaseCoreDBTestCase {
 
-
-    private DtoProductSkuService dtoService = null;
-    private DtoProductService dtoProductService = null;
-    private DtoFactory dtoFactory = null;
-    private DtoAttributeService dtoAttrService = null;
+    private DtoProductSkuService dtoService;
+    private DtoProductService dtoProductService;
+    private DtoFactory dtoFactory;
+    private DtoAttributeService dtoAttrService;
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         dtoService = (DtoProductSkuService) ctx.getBean(ServiceSpringKeys.DTO_PRODUCT_SKU_SERVICE);
         dtoProductService = (DtoProductService) ctx.getBean(ServiceSpringKeys.DTO_PRODUCT_SERVICE);
         dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
@@ -205,9 +205,7 @@ public class DtoProductSkuServiceImplTest extends BaseCoreDBTestCase {
             e.printStackTrace();
             assertTrue(e.getMessage(), false);
         }
-
     }
-
 
     @Test
     public void testCreateEntityAttributeValue() {
@@ -229,7 +227,6 @@ public class DtoProductSkuServiceImplTest extends BaseCoreDBTestCase {
             assertTrue(e.getMessage(), false);
         }
     }
-
 
     @Test
     public void testGetEntityAttributes() {
@@ -282,7 +279,6 @@ public class DtoProductSkuServiceImplTest extends BaseCoreDBTestCase {
 
     }
 
-
     @Test
     public void testDeleteAttributeValue() {
         try {
@@ -316,8 +312,6 @@ public class DtoProductSkuServiceImplTest extends BaseCoreDBTestCase {
             e.printStackTrace();
             assertTrue(e.getMessage(), false);
         }
-
-
     }
 
     private ProductSkuDTO getDto() throws UnableToCreateInstanceException, UnmappedInterfaceException {
@@ -331,5 +325,4 @@ public class DtoProductSkuServiceImplTest extends BaseCoreDBTestCase {
         dto.setRank(5);
         return dto;
     }
-
 }

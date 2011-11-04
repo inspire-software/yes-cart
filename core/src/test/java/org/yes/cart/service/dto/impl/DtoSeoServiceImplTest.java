@@ -9,6 +9,8 @@ import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.impl.BaseCoreDBTestCase;
 import org.yes.cart.service.dto.DtoSeoService;
 
+import static org.junit.Assert.*;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -16,13 +18,11 @@ import org.yes.cart.service.dto.DtoSeoService;
  */
 public class DtoSeoServiceImplTest extends BaseCoreDBTestCase {
 
-    private DtoSeoService dtoService = null;
+    private DtoSeoService dtoService;
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         dtoService = (DtoSeoService) ctx.getBean(ServiceSpringKeys.DTO_SEO_SERVICE);
-
     }
 
     @Test
@@ -67,8 +67,6 @@ public class DtoSeoServiceImplTest extends BaseCoreDBTestCase {
         } catch (Exception e) {
             assertTrue(e.getMessage(), false);
         }
-
-
     }
 
     private SeoDTO getDto() throws UnableToCreateInstanceException, UnmappedInterfaceException {
@@ -79,5 +77,4 @@ public class DtoSeoServiceImplTest extends BaseCoreDBTestCase {
         seoDTO.setMetakeywords("Robot, Beer, Futurama");
         return seoDTO;
     }
-
 }
