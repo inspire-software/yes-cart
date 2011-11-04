@@ -56,7 +56,7 @@ public class CustomerRegistrationMessageListenerTest extends BaseCoreDBTestCase 
         registrationMessage.setShopUrl(new HashSet<String>());
         registrationMessage.getShopUrl().add("www.somegadget.com");
         registrationMessage.getShopUrl().add("somegadget.com");
-        registrationMessage.setPathToTemplateFolder("mailtemplates/SHOIP1/");
+        registrationMessage.setPathToTemplateFolder("src/test/resources/mailtemplates/SHOIP1/");
         registrationMessage.setTemplateName("customerChangePassword");
         return registrationMessage;
     }
