@@ -45,199 +45,142 @@ public class DtoProductServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testGetProductSkuByCode() {
-        try {
-            ProductSkuDTO dto = dtoService.getProductSkuByCode("NOTEXISTINGSKUCODE");
-            assertNull(dto);
-            dto = dtoService.getProductSkuByCode("BENDER-ua");
-            assertNotNull(dto);
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
-
-
+    public void testGetProductSkuByCode() throws Exception {
+        ProductSkuDTO dto = dtoService.getProductSkuByCode("NOTEXISTINGSKUCODE");
+        assertNull(dto);
+        dto = dtoService.getProductSkuByCode("BENDER-ua");
+        assertNotNull(dto);
     }
 
     @Test
     public void testCreate() throws UnmappedInterfaceException, UnableToCreateInstanceException {
-
         ProductDTO dto = getDto();
         dto = dtoService.create(dto);
         assertTrue(dto.getProductId() > 0);
-
     }
 
     @Test
-    public void testUpdate() {
-        try {
-
-            ProductDTO dto = getDto();
-            dto = dtoService.create(dto);
-            assertTrue(dto.getProductId() > 0);
-
-
-            long pk = dto.getProductId();
-            final Date availavleFrom = new Date();
-            dto.setAvailablefrom(availavleFrom);
-            dto.setAvailabletill(availavleFrom);
-            dto.setName("new-name");
-            dto.setDescription("new desciption");
-            dto.setBrandDTO(dtoBrandService.getById(102L));
-            dto.setProductTypeDTO(dtoProductTypeService.getById(2L));
-            dto.setAvailabilityDTO(dtoAvailabilityService.getById(Availability.ALWAYS));
-            dtoService.update(dto);
-            dto = dtoService.getById(pk);
-            assertEquals(availavleFrom, dto.getAvailablefrom());
-            assertEquals(availavleFrom, dto.getAvailabletill());
-            assertEquals("new-name", dto.getName());
-            assertEquals("new desciption", dto.getDescription());
-            assertEquals(102L, dto.getBrandDTO().getBrandId());
-            assertEquals(2L, dto.getProductTypeDTO().getProducttypeId());
-            assertEquals(Availability.ALWAYS, dto.getAvailabilityDTO().getAvailabilityId());
-
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
-
+    public void testUpdate() throws Exception {
+        ProductDTO dto = getDto();
+        dto = dtoService.create(dto);
+        assertTrue(dto.getProductId() > 0);
+        long pk = dto.getProductId();
+        final Date availavleFrom = new Date();
+        dto.setAvailablefrom(availavleFrom);
+        dto.setAvailabletill(availavleFrom);
+        dto.setName("new-name");
+        dto.setDescription("new desciption");
+        dto.setBrandDTO(dtoBrandService.getById(102L));
+        dto.setProductTypeDTO(dtoProductTypeService.getById(2L));
+        dto.setAvailabilityDTO(dtoAvailabilityService.getById(Availability.ALWAYS));
+        dtoService.update(dto);
+        dto = dtoService.getById(pk);
+        assertEquals(availavleFrom, dto.getAvailablefrom());
+        assertEquals(availavleFrom, dto.getAvailabletill());
+        assertEquals("new-name", dto.getName());
+        assertEquals("new desciption", dto.getDescription());
+        assertEquals(102L, dto.getBrandDTO().getBrandId());
+        assertEquals(2L, dto.getProductTypeDTO().getProducttypeId());
+        assertEquals(Availability.ALWAYS, dto.getAvailabilityDTO().getAvailabilityId());
     }
 
     @Ignore("expected:<8> but was:<9>")
     @Test
-    public void testGetProductByCategory() {
-        try {
-            List<ProductDTO> list = dtoService.getProductByCategory(211L);
-            assertEquals(8, list.size()); //FEATURED-PRODUCT3 AVAILABLEFROM="2000-04-08 11:15:17.451" AVAILABLETILL="2001-04-08 11:15:17.451"
-            for (ProductDTO dto : list) {
-                assertFalse(dto.getCode().equals("FEATURED-PRODUCT3"));
-            }
-
-
-            list = dtoService.getProductByCategory(208L);
-            assertTrue(list.isEmpty());
-
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
+    public void testGetProductByCategory() throws Exception {
+        List<ProductDTO> list = dtoService.getProductByCategory(211L);
+        assertEquals(8, list.size()); //FEATURED-PRODUCT3 AVAILABLEFROM="2000-04-08 11:15:17.451" AVAILABLETILL="2001-04-08 11:15:17.451"
+        for (ProductDTO dto : list) {
+            assertFalse(dto.getCode().equals("FEATURED-PRODUCT3"));
         }
+        list = dtoService.getProductByCategory(208L);
+        assertTrue(list.isEmpty());
     }
 
+    @Ignore("pending")
     @Test
     public void testGetProductByCategoryWithPaging() {
         assertTrue(true);
     }
 
     @Test
-    public void testGetProductByConeNameBrandType() {
-        try {
-            List<ProductDTO> list = dtoService.getProductByConeNameBrandType(null, null, 104L, 0);
-            assertFalse(list.isEmpty());
-            assertEquals(26, list.size());             //26 products with brand samsung
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
+    public void testGetProductByConeNameBrandType() throws Exception {
+        List<ProductDTO> list = dtoService.getProductByConeNameBrandType(null, null, 104L, 0);
+        assertFalse(list.isEmpty());
+        assertEquals(26, list.size());             //26 products with brand samsung
+    }
+
+    @Test
+    public void testCreateEntityAttributeValue() throws Exception {
+        ProductDTO dto = getDto();
+        dto = dtoService.create(dto);
+        assertTrue(dto.getProductId() > 0);
+        AttrValueProductDTO attrValueProductDTO = dtoFactory.getByIface(AttrValueProductDTO.class);
+        attrValueProductDTO.setAttributeDTO(dtoAttrService.getById(2010L)); //POWERSUPPLY
+        attrValueProductDTO.setProductId(dto.getProductId());
+        attrValueProductDTO.setVal("Дрова"); //Firewood
+        attrValueProductDTO = (AttrValueProductDTO) dtoService.createEntityAttributeValue(attrValueProductDTO);
+        assertTrue(attrValueProductDTO.getAttrvalueId() > 0);
+    }
+
+    @Test
+    public void testUpdateEntityAttributeValue() throws Exception {
+        ProductDTO dto = getDto();
+        dto = dtoService.create(dto);
+        assertTrue(dto.getProductId() > 0);
+        AttrValueProductDTO attrValueProductDTO = dtoFactory.getByIface(AttrValueProductDTO.class);
+        attrValueProductDTO.setAttributeDTO(dtoAttrService.getById(2010L)); //POWERSUPPLY
+        attrValueProductDTO.setProductId(dto.getProductId());
+        attrValueProductDTO.setVal("Дрова"); //Firewood
+        attrValueProductDTO = (AttrValueProductDTO) dtoService.createEntityAttributeValue(attrValueProductDTO);
+        assertTrue(attrValueProductDTO.getAttrvalueId() > 0);
+        attrValueProductDTO.setVal("Peat");
+        attrValueProductDTO = (AttrValueProductDTO) dtoService.updateEntityAttributeValue(attrValueProductDTO);
+        assertEquals("Peat", attrValueProductDTO.getVal());
+    }
+
+    @Test
+    public void testGetEntityAttributes() throws Exception {
+        ProductDTO dto = getDto();
+        dto = dtoService.create(dto);
+        assertTrue(dto.getProductId() > 0);
+        List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(dto.getProductId());
+        for (AttrValueDTO attrValueDTO : list) {
+            assertNull(attrValueDTO.getVal()); // all must be empty when rpoduct is created
         }
     }
 
     @Test
-    public void testCreateEntityAttributeValue() {
-        try {
-            ProductDTO dto = getDto();
-            dto = dtoService.create(dto);
-            assertTrue(dto.getProductId() > 0);
-            AttrValueProductDTO attrValueProductDTO = dtoFactory.getByIface(AttrValueProductDTO.class);
-            attrValueProductDTO.setAttributeDTO(dtoAttrService.getById(2010L)); //POWERSUPPLY
-            attrValueProductDTO.setProductId(dto.getProductId());
-            attrValueProductDTO.setVal("Дрова"); //Firewood
-            attrValueProductDTO = (AttrValueProductDTO) dtoService.createEntityAttributeValue(attrValueProductDTO);
-            assertTrue(attrValueProductDTO.getAttrvalueId() > 0);
-
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
-    }
-
-    @Test
-    public void testUpdateEntityAttributeValue() {
-        try {
-            ProductDTO dto = getDto();
-            dto = dtoService.create(dto);
-            assertTrue(dto.getProductId() > 0);
-            AttrValueProductDTO attrValueProductDTO = dtoFactory.getByIface(AttrValueProductDTO.class);
-            attrValueProductDTO.setAttributeDTO(dtoAttrService.getById(2010L)); //POWERSUPPLY
-            attrValueProductDTO.setProductId(dto.getProductId());
-            attrValueProductDTO.setVal("Дрова"); //Firewood
-            attrValueProductDTO = (AttrValueProductDTO) dtoService.createEntityAttributeValue(attrValueProductDTO);
-            assertTrue(attrValueProductDTO.getAttrvalueId() > 0);
-            attrValueProductDTO.setVal("Peat");
-            attrValueProductDTO = (AttrValueProductDTO) dtoService.updateEntityAttributeValue(attrValueProductDTO);
-            assertEquals("Peat", attrValueProductDTO.getVal());
-
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
-
-    }
-
-
-    @Test
-    public void testGetEntityAttributes() {
-        try {
-            ProductDTO dto = getDto();
-            dto = dtoService.create(dto);
-            assertTrue(dto.getProductId() > 0);
-            List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(dto.getProductId());
-            for (AttrValueDTO attrValueDTO : list) {
-                assertNull(attrValueDTO.getVal()); // all must be empty when rpoduct is created
+    public void testDeleteAttributeValue() throws Exception {
+        ProductDTO dto = getDto();
+        dto = dtoService.create(dto);
+        assertTrue(dto.getProductId() > 0);
+        AttrValueProductDTO attrValueProductDTO = dtoFactory.getByIface(AttrValueProductDTO.class);
+        attrValueProductDTO.setAttributeDTO(dtoAttrService.getById(2010L)); //POWERSUPPLY
+        attrValueProductDTO.setProductId(dto.getProductId());
+        attrValueProductDTO.setVal("Дрова"); //Firewood
+        attrValueProductDTO = (AttrValueProductDTO) dtoService.createEntityAttributeValue(attrValueProductDTO);
+        assertTrue(attrValueProductDTO.getAttrvalueId() > 0);
+        List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(dto.getProductId());
+        for (AttrValueDTO attrValueDTO : list) {
+            if (attrValueDTO.getAttrvalueId() > 0) {
+                dtoService.deleteAttributeValue(attrValueDTO.getAttrvalueId());
             }
 
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
         }
-
+        list = dtoService.getEntityAttributes(dto.getProductId());
+        for (AttrValueDTO attrValueDTO : list) {
+            assertNull(attrValueDTO.getVal()); // all must be empty when rpoduct is created
+        }
     }
 
     @Test
-    public void testDeleteAttributeValue() {
-        try {
-            ProductDTO dto = getDto();
-            dto = dtoService.create(dto);
-            assertTrue(dto.getProductId() > 0);
-            AttrValueProductDTO attrValueProductDTO = dtoFactory.getByIface(AttrValueProductDTO.class);
-            attrValueProductDTO.setAttributeDTO(dtoAttrService.getById(2010L)); //POWERSUPPLY
-            attrValueProductDTO.setProductId(dto.getProductId());
-            attrValueProductDTO.setVal("Дрова"); //Firewood
-            attrValueProductDTO = (AttrValueProductDTO) dtoService.createEntityAttributeValue(attrValueProductDTO);
-            assertTrue(attrValueProductDTO.getAttrvalueId() > 0);
-            List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(dto.getProductId());
-            for (AttrValueDTO attrValueDTO : list) {
-                if (attrValueDTO.getAttrvalueId() > 0) {
-                    dtoService.deleteAttributeValue(attrValueDTO.getAttrvalueId());
-                }
-
-            }
-            list = dtoService.getEntityAttributes(dto.getProductId());
-            for (AttrValueDTO attrValueDTO : list) {
-                assertNull(attrValueDTO.getVal()); // all must be empty when rpoduct is created
-            }
-
-
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
-
-    }
-
-    @Test
-    public void testRemove() {
-        try {
-            ProductDTO dto = getDto();
-            dto = dtoService.create(dto);
-            assertTrue(dto.getProductId() > 0);
-            dtoService.remove(dto.getProductId());
-            dto = dtoService.getById(dto.getProductId());
-            assertNull(dto);
-
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
+    public void testRemove() throws Exception {
+        ProductDTO dto = getDto();
+        dto = dtoService.create(dto);
+        assertTrue(dto.getProductId() > 0);
+        dtoService.remove(dto.getProductId());
+        dto = dtoService.getById(dto.getProductId());
+        assertNull(dto);
     }
 
     private ProductDTO getDto() throws UnableToCreateInstanceException, UnmappedInterfaceException {

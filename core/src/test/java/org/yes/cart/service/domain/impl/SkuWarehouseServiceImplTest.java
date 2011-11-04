@@ -25,9 +25,9 @@ import static org.junit.Assert.*;
  */
 public class SkuWarehouseServiceImplTest extends BaseCoreDBTestCase {
 
-    WarehouseService warehouseService;
-    SkuWarehouseService skuWarehouseService;
-    ProductSkuService productSkuService;
+    private WarehouseService warehouseService;
+    private SkuWarehouseService skuWarehouseService;
+    private ProductSkuService productSkuService;
 
     @Before
     public void setUp() throws Exception {
@@ -78,15 +78,12 @@ public class SkuWarehouseServiceImplTest extends BaseCoreDBTestCase {
         warehouses.add(warehouseService.getById(2L));
         warehouses.add(warehouseService.getById(1L));
 
-
         ProductSku psku = productSkuService.getById(11006L);
 
         //dumpDataBase("after_testGetQuantity", new String[]{"TSKUWAREHOUSE"});
-
         Pair<BigDecimal, BigDecimal> rez = skuWarehouseService.getQuantity(warehouses, psku);
         assertEquals(new BigDecimal("14.00"), rez.getFirst());
         assertEquals(new BigDecimal("5.00"), rez.getSecond());
-
     }
 
     /**
@@ -94,7 +91,6 @@ public class SkuWarehouseServiceImplTest extends BaseCoreDBTestCase {
      */
     @Test
     public void testGetQuantity2() {
-
         List<Warehouse> warehouses = new ArrayList<Warehouse>();
         warehouses.add(warehouseService.getById(3L));
         warehouses.add(warehouseService.getById(2L));
@@ -106,7 +102,6 @@ public class SkuWarehouseServiceImplTest extends BaseCoreDBTestCase {
         Pair<BigDecimal, BigDecimal> rez = skuWarehouseService.getQuantity(warehouses, psku);
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), rez.getFirst());
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), rez.getSecond());
-
     }
 
     @Test
@@ -126,7 +121,6 @@ public class SkuWarehouseServiceImplTest extends BaseCoreDBTestCase {
         skuWarehouseService.delete(skuWarehouse);
         skuWarehouse = skuWarehouseService.getById(pk);
         assertNull(skuWarehouse);
-
     }
 
     @Test
@@ -141,7 +135,6 @@ public class SkuWarehouseServiceImplTest extends BaseCoreDBTestCase {
         skuWarehouseService.delete(skuWarehouse);
         skuWarehouse = skuWarehouseService.getById(pk);
         assertNull(skuWarehouse);
-
     }
 
     @Test
@@ -163,8 +156,6 @@ public class SkuWarehouseServiceImplTest extends BaseCoreDBTestCase {
         }}, productSku);
         assertEquals(new BigDecimal("4.00"), rez.getFirst());
         assertEquals(new BigDecimal("4.00"), rez.getSecond());
-
-
     }
 
     /**
@@ -172,7 +163,6 @@ public class SkuWarehouseServiceImplTest extends BaseCoreDBTestCase {
      */
     @Test
     public void testReservationandVoidReservation() {
-
         final Warehouse warehouse = warehouseService.getById(1L);
         ProductSku productSku = productSkuService.getById(10004L); // 4 items on 1 warehouse
 
@@ -211,7 +201,6 @@ public class SkuWarehouseServiceImplTest extends BaseCoreDBTestCase {
         }}, productSku);
         assertEquals(new BigDecimal("4.00"), rez.getFirst());
         assertEquals(new BigDecimal("0.00"), rez.getSecond());
-
     }
 
     @Test
@@ -264,23 +253,17 @@ public class SkuWarehouseServiceImplTest extends BaseCoreDBTestCase {
         assertEquals(new BigDecimal("74.00"), rez.getFirst());
         assertEquals(new BigDecimal("0.00"), rez.getSecond());
 
-
         assertEquals(new BigDecimal("6.00"), skuWarehouseService.debit(warehouse, productSku, new BigDecimal("80.00")));
         rez = skuWarehouseService.getQuantity(new ArrayList<Warehouse>() {{
             add(warehouse);
         }}, productSku);
         assertEquals(new BigDecimal("0.00"), rez.getFirst());
         assertEquals(new BigDecimal("0.00"), rez.getSecond());
-
-
     }
-
 
     @Test
     public void testFindProductSkusOnWarehouse() {
-
         //10000 product id - sobot has 4 skus on 1 warehouse
-
         List<SkuWarehouse> skusWarehouseList = skuWarehouseService.findProductSkusOnWarehouse(10000L, 1L);
         assertEquals(4, skusWarehouseList.size());
         for (SkuWarehouse skuWarehouse : skusWarehouseList) {
@@ -297,7 +280,5 @@ public class SkuWarehouseServiceImplTest extends BaseCoreDBTestCase {
                 assertEquals(4, skuWarehouse.getQuantity().intValue());
             }
         }
-
-
     }
 }

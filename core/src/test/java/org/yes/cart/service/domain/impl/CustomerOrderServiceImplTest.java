@@ -35,13 +35,9 @@ public class CustomerOrderServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testCreateAndDelete() throws Exception {
-
         final String customerPrefix = "testCreateAndDelete";
-
-
         final Customer customer = OrderAssemblerImplTest.createCustomer(ctx, customerPrefix);
         assertFalse(customer.getAddress().isEmpty());
-
 
         final ShoppingCart shoppingCart = getShoppingCart(ctx, customerPrefix);
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
@@ -51,8 +47,6 @@ public class CustomerOrderServiceImplTest extends BaseCoreDBTestCase {
         customerOrderService.delete(order);
 
         assertNull(customerOrderService.getById(pk));
-
-
     }
 
     @Test
@@ -103,8 +97,6 @@ public class CustomerOrderServiceImplTest extends BaseCoreDBTestCase {
         final ShoppingCart shoppingCart = getShoppingCart(ctx, customerPrefix);
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
         assertEquals(4, order.getDelivery().size());
-
-
     }
 
     @Test
@@ -138,8 +130,6 @@ public class CustomerOrderServiceImplTest extends BaseCoreDBTestCase {
 
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, true);
         assertEquals(2, order.getDelivery().size());
-
-
     }
 
     /**

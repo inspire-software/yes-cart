@@ -59,10 +59,8 @@ public class CustomerServiceImplTest extends BaseCoreDBTestCase {
         assertNull(customer);
     }
 
-
     @Test
     public void testFindCustomer() {
-
         //dumpDataBase("cust_addr", new String[]{"TADDRESS"});
 
         Customer customer = getCustomer("");
@@ -102,10 +100,7 @@ public class CustomerServiceImplTest extends BaseCoreDBTestCase {
 
         list = customerService.findCustomer(null, "SomeFirsname", "Akintola", null);
         assertEquals(1, list.size());
-
-
     }
-
 
     private Customer getCustomer(final String prefix) {
         Customer customer = customerService.getGenericDao().getEntityFactory().getByIface(Customer.class);
@@ -115,6 +110,4 @@ public class CustomerServiceImplTest extends BaseCoreDBTestCase {
         customer.setPassword("rawpassword");
         return customer;
     }
-
-
 }

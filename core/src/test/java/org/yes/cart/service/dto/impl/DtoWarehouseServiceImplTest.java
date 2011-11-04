@@ -32,106 +32,76 @@ public class DtoWarehouseServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testCreate() {
+    public void testCreate() throws Exception {
         WarehouseDTO dto = getDto(0);
-        try {
-            dto = dtoService.create(dto);
-            assertTrue(dto.getWarehouseId() > 0);
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
+        dto = dtoService.create(dto);
+        assertTrue(dto.getWarehouseId() > 0);
     }
 
     @Test
-    public void testUpdate() {
+    public void testUpdate() throws Exception {
         WarehouseDTO dto = getDto(1);
-        try {
-            dto = dtoService.create(dto);
-            assertTrue(dto.getWarehouseId() > 0);
-            dto.setName("testchangename");
-            dto = dtoService.update(dto);
-            assertEquals(dto.getName(), "testchangename");
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
+        dto = dtoService.create(dto);
+        assertTrue(dto.getWarehouseId() > 0);
+        dto.setName("testchangename");
+        dto = dtoService.update(dto);
+        assertEquals(dto.getName(), "testchangename");
     }
 
     @Test
-    public void testFindByShopId() {
-        try {
-            List<WarehouseDTO> dtos = dtoService.findByShopId(10L);
-            assertNotNull(dtos);
-            assertEquals(2, dtos.size());
+    public void testFindByShopId() throws Exception {
+        List<WarehouseDTO> dtos = dtoService.findByShopId(10L);
+        assertNotNull(dtos);
+        assertEquals(2, dtos.size());
 
-            //shop has not assigned warehouses
-            dtos = dtoService.findByShopId(20L);
-            assertNotNull(dtos);
-            assertTrue(dtos.isEmpty());
+        //shop has not assigned warehouses
+        dtos = dtoService.findByShopId(20L);
+        assertNotNull(dtos);
+        assertTrue(dtos.isEmpty());
 
-            //not existing shop
-            dtos = dtoService.findByShopId(21L);
-            assertNotNull(dtos);
-            assertTrue(dtos.isEmpty());
-
-
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
+        //not existing shop
+        dtos = dtoService.findByShopId(21L);
+        assertNotNull(dtos);
+        assertTrue(dtos.isEmpty());
     }
 
     @Test
-    public void testAssignWarehouse() {
+    public void testAssignWarehouse() throws Exception {
         WarehouseDTO dto = getDto(2);
-        try {
-            dto = dtoService.create(dto);
-            assertTrue(dto.getWarehouseId() > 0);
-            dtoService.assignWarehouse(dto.getWarehouseId(), 20L);
+        dto = dtoService.create(dto);
+        assertTrue(dto.getWarehouseId() > 0);
+        dtoService.assignWarehouse(dto.getWarehouseId(), 20L);
 
-            List<WarehouseDTO> dtos = dtoService.findByShopId(20L);
-            assertEquals(1, dtos.size());
+        List<WarehouseDTO> dtos = dtoService.findByShopId(20L);
+        assertEquals(1, dtos.size());
 
-            dtoService.unassignWarehouse(dto.getWarehouseId(), 20L);
-
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
+        dtoService.unassignWarehouse(dto.getWarehouseId(), 20L);
     }
 
     @Test
-    public void testUnassignWarehouse() {
+    public void testUnassignWarehouse() throws Exception {
         WarehouseDTO dto = getDto(3);
-        try {
-            dto = dtoService.create(dto);
-            assertTrue(dto.getWarehouseId() > 0);
-            dtoService.assignWarehouse(dto.getWarehouseId(), 30L);
+        dto = dtoService.create(dto);
+        assertTrue(dto.getWarehouseId() > 0);
+        dtoService.assignWarehouse(dto.getWarehouseId(), 30L);
 
-            List<WarehouseDTO> dtos = dtoService.findByShopId(30L);
-            assertEquals(1, dtos.size());
+        List<WarehouseDTO> dtos = dtoService.findByShopId(30L);
+        assertEquals(1, dtos.size());
 
-            dtoService.unassignWarehouse(dto.getWarehouseId(), 30L);
-            dtos = dtoService.findByShopId(30L);
-            assertTrue(dtos.isEmpty());
-
-
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
-
+        dtoService.unassignWarehouse(dto.getWarehouseId(), 30L);
+        dtos = dtoService.findByShopId(30L);
+        assertTrue(dtos.isEmpty());
     }
 
     @Test
-    public void testRemove() {
+    public void testRemove() throws Exception {
         WarehouseDTO dto = getDto(4);
-        try {
-            dto = dtoService.create(dto);
-            assertTrue(dto.getWarehouseId() > 0);
-            long id = dto.getWarehouseId();
-            dtoService.remove(id);
-            dto = dtoService.getById(id);
-            assertNull(dto);
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
+        dto = dtoService.create(dto);
+        assertTrue(dto.getWarehouseId() > 0);
+        long id = dto.getWarehouseId();
+        dtoService.remove(id);
+        dto = dtoService.getById(id);
+        assertNull(dto);
     }
 
     private WarehouseDTO getDto(int idx) {

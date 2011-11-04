@@ -175,7 +175,6 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
      */
     @Test
     public void testAuthorize3() throws Exception {
-
         try {
             TestPaymentGatewayImpl.getGatewayConfig().put(TestPaymentGatewayImpl.AUTH_FAIL, new PaymentGatewayParameterEntity());
             final Customer customer = createCustomer();
@@ -183,7 +182,6 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
             final CustomerOrder customerOrder = customerOrderService.createFromCart(getShoppingCart2(ctx, customer.getEmail()), false);
             final Iterator<CustomerOrderDelivery> iter = customerOrder.getDelivery().iterator();
             final CustomerOrderDelivery delivery0 = iter.next();
-
 
             assertEquals(Payment.PAYMENT_STATUS_FAILED, paymentProcessor.authorize(customerOrder, createParametersMap()));
             assertEquals(
@@ -200,16 +198,9 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
                     "No reverse auth operation, because nothing to reverse",
                     1,
                     customerOrderPaymentService.findBy(customerOrder.getOrdernum(), null, null, null).size());
-
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-
         } finally {
             TestPaymentGatewayImpl.getGatewayConfig().put(TestPaymentGatewayImpl.AUTH_FAIL, null);
-
         }
-
-
     }
 
     /**
@@ -224,7 +215,6 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
     @Test
     public void testAuthorize4() throws Exception {
         try {
-
             TestPaymentGatewayImpl.setAuthNum(0);
             TestPaymentGatewayImpl.getGatewayConfig().put(TestPaymentGatewayImpl.AUTH_FAIL_NO + "1", new PaymentGatewayParameterEntity());
 
@@ -252,8 +242,6 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
                     "One reverse auth with ok status",
                     1,
                     customerOrderPaymentService.findBy(customerOrder.getOrdernum(), null, Payment.PAYMENT_STATUS_OK, PaymentGateway.REVERSE_AUTH).size());
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
         } finally {
             TestPaymentGatewayImpl.getGatewayConfig().put(TestPaymentGatewayImpl.AUTH_FAIL, null);
             TestPaymentGatewayImpl.getGatewayConfig().put(TestPaymentGatewayImpl.AUTH_FAIL_NO + "1", null);
@@ -273,7 +261,6 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
     @Test
     public void testAuthorize5() throws Exception {
         try {
-
             TestPaymentGatewayImpl.setAuthNum(0);
             TestPaymentGatewayImpl.getGatewayConfig().put(TestPaymentGatewayImpl.AUTH_EXCEPTION_NO + "1", new PaymentGatewayParameterEntity());
             final Customer customer = createCustomer();
@@ -300,14 +287,11 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
                     "One reverse auth with ok status",
                     1,
                     customerOrderPaymentService.findBy(customerOrder.getOrdernum(), null, Payment.PAYMENT_STATUS_OK, PaymentGateway.REVERSE_AUTH).size());
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
         } finally {
             TestPaymentGatewayImpl.getGatewayConfig().put(TestPaymentGatewayImpl.AUTH_FAIL, null);
             TestPaymentGatewayImpl.getGatewayConfig().put(TestPaymentGatewayImpl.AUTH_EXCEPTION_NO + "1", null);
         }
     }
-
 
     /**
      * Test, to prove, that one order with two shipments produce one AUTH operation, in case if payment gateway
@@ -318,7 +302,6 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
      */
     @Test
     public void testAuthorize6() throws Exception {
-
         BigDecimal amountForOnePayment = BigDecimal.ZERO;
         BigDecimal amountForTwoPayments;
         final Customer customer = createCustomer();
@@ -333,7 +316,6 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
                 customerOrder2.getOrdernum(), null, null, null).get(0).getPaymentAmount();
         amountForTwoPayments = amountForTwoPayments.add(customerOrderPaymentService.findBy(
                 customerOrder2.getOrdernum(), null, null, null).get(1).getPaymentAmount());
-
 
         try {
             paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().setSupportAuthorizePerShipment(false);
@@ -370,7 +352,6 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
      */
     @Test
     public void testShipmentComplete1() throws Exception {
-
         final Customer customer = createCustomer();
         final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL);
         final CustomerOrder customerOrder = customerOrderService.createFromCart(getShoppingCart1(ctx, customer.getEmail()), false); //multiple delivery enabled
@@ -448,10 +429,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
 
         assertEquals(2, customerOrderPaymentService.findBy( //two captures
                 customerOrder.getOrdernum(), null, null, PaymentGateway.CAPTURE).size());
-
-
     }
-
 
     /**
      * Test , to prove , that fund will captured on second delivery
@@ -477,7 +455,6 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
         assertEquals(1, customerOrderPaymentService.findBy(
                 customerOrder.getOrdernum(), delivery1.getDevileryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.AUTH).size());
 
-
         TestPaymentGatewayImpl.getGatewayConfig().put(TestPaymentGatewayImpl.CAPTURE_FAIL, new PaymentGatewayParameterEntity());
         assertEquals(Payment.PAYMENT_STATUS_FAILED, paymentProcessor.shipmentComplete(customerOrder, delivery1.getDevileryNum()));
         TestPaymentGatewayImpl.getGatewayConfig().put(TestPaymentGatewayImpl.CAPTURE_FAIL, null);
@@ -496,10 +473,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
                 customerOrder.getOrdernum(), null, Payment.PAYMENT_STATUS_OK, null).size());
         assertEquals(4, customerOrderPaymentService.findBy( //two auth and two capture
                 customerOrder.getOrdernum(), null, null, null).size());
-
-
     }
-
 
     /**
      * Test, to prove, that shipment complete not impact auth_capture records
@@ -515,7 +489,6 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
         final CustomerOrderDelivery delivery0 = iter.next();
         final CustomerOrderDelivery delivery1 = iter.next();
 
-
         try {
             paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().setSupportAuthorize(false);
 
@@ -527,20 +500,13 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
             assertEquals(Payment.PAYMENT_STATUS_OK, paymentProcessor.shipmentComplete(customerOrder, delivery0.getDevileryNum()));
             assertEquals(2, customerOrderPaymentService.findBy(
                     customerOrder.getOrdernum(), null, null, null).size());
-
-
         } finally {
             paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().setSupportAuthorize(true);
-
         }
-
-
     }
-
 
     @Test
     public void testCancelOrder1() throws Exception {
-
         final Customer customer = createCustomer();
         final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL);
         final CustomerOrder customerOrder = customerOrderService.createFromCart(getShoppingCart2(ctx, customer.getEmail()), false);
@@ -576,26 +542,17 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
         assertEquals(2, customerOrderPaymentService.findBy( //two captures
                 customerOrder.getOrdernum(), null, null, PaymentGateway.CAPTURE).size());
 
-
         //cancel order
         assertEquals(Payment.PAYMENT_STATUS_OK, paymentProcessor.cancelOrder(customerOrder));
 
-
-        //
         assertEquals(1, customerOrderPaymentService.findBy(
                 customerOrder.getOrdernum(), delivery0.getDevileryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.VOID_CAPTURE).size());
         assertEquals(1, customerOrderPaymentService.findBy(
                 customerOrder.getOrdernum(), delivery1.getDevileryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.VOID_CAPTURE).size());
-
-
         //TODO test with cancel state wait till customerOrder.setOrderStatus();
-
-
     }
 
-
     private Customer createCustomer() {
-
         Customer customer = customerService.getGenericDao().getEntityFactory().getByIface(Customer.class);
         customer.setEmail(UUID.randomUUID().toString() + "jd@domain.com");
         customer.setFirstname("John");
@@ -615,7 +572,6 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
 
         addressService.create(address);
 
-
         address = addressService.getGenericDao().getEntityFactory().getByIface(Address.class);
         address.setFirstname("John");
         address.setLastname("Dou");
@@ -629,7 +585,6 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
         return customer;
     }
 
-
     private Map<String, String> createParametersMap() {
         Map<String, String> rez = new HashMap<String, String>();
         rez.put("ccHolderName", "John Dou");
@@ -641,7 +596,6 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
         return rez;
     }
 
-
     /**
      * Create simple cart with products, that have a standard availibility and enough qty on warehouses.
      *
@@ -649,19 +603,13 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
      * @return cart
      */
     private ShoppingCart getShoppingCart1(final ApplicationContext context, final String customerEmail) {
-
-
         ShoppingCart shoppingCart = getEmptyCart(context, customerEmail);
-
         new AddSkuToCartEventCommandImpl(context, Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST1"))
                 .execute(shoppingCart);
-
         new AddSkuToCartEventCommandImpl(context, Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST3"))
                 .execute(shoppingCart);
-
         new AddSkuToCartEventCommandImpl(context, Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST3"))
                 .execute(shoppingCart);
-
         return shoppingCart;
     }
 
@@ -672,40 +620,27 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
      * @return cart
      */
     private ShoppingCart getShoppingCart2(final ApplicationContext context, final String customerEmail) {
-
         ShoppingCart shoppingCart = getEmptyCart(context, customerEmail);
-
         new AddSkuToCartEventCommandImpl(context, Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST4"))
                 .execute(shoppingCart);
-
         new AddSkuToCartEventCommandImpl(context, Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST4-M"))
                 .execute(shoppingCart);
-
         return shoppingCart;
     }
 
     private ShoppingCart getEmptyCart(final ApplicationContext context, final String customerEmail) {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
-
         Map<String, String> params = new HashMap<String, String>();
         params.put(LoginCommandImpl.EMAIL, customerEmail);
         params.put(LoginCommandImpl.NAME, "John Doe");
-
-
         new SetShopCartCommandImpl(ctx, Collections.singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
                 .execute(shoppingCart);
-
         new ChangeCurrencyEventCommandImpl(context, Collections.singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "USD"))
                 .execute(shoppingCart);
-
         new LoginCommandImpl(null, params)
                 .execute(shoppingCart);
-
         new SetCarrierSlaCartCommandImpl(null, Collections.singletonMap(SetCarrierSlaCartCommandImpl.CMD_KEY, "1"))
                 .execute(shoppingCart);
-
         return shoppingCart;
     }
-
-
 }

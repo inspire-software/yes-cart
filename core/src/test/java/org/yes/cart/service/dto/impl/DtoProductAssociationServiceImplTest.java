@@ -34,74 +34,56 @@ public class DtoProductAssociationServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testUpdate() {
-        try {
-            ProductAssociationDTO dto = getDto();
-            dto = dtoProductAssociationService.create(dto);
-            assertTrue(dto.getProductassociationId() > 0);
-            assertEquals(0, dto.getRank());
-            dto.setRank(11324);
-            dto = dtoProductAssociationService.update(dto);
-            assertEquals(11324, dto.getRank());
+    public void testUpdate() throws Exception {
+        ProductAssociationDTO dto = getDto();
+        dto = dtoProductAssociationService.create(dto);
+        assertTrue(dto.getProductassociationId() > 0);
+        assertEquals(0, dto.getRank());
+        dto.setRank(11324);
+        dto = dtoProductAssociationService.update(dto);
+        assertEquals(11324, dto.getRank());
 
-            long pk = dto.getProductassociationId();
-            dtoProductAssociationService.remove(pk);
+        long pk = dto.getProductassociationId();
+        dtoProductAssociationService.remove(pk);
 
-            dto = dtoProductAssociationService.getById(pk);
-            assertNull(dto);
-
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
-    }
-
-
-    @Test
-    public void testGetProductAssociations() {
-        try {
-            ProductAssociationDTO dto = getDto();
-            dto = dtoProductAssociationService.create(dto);
-            assertTrue(dto.getProductassociationId() > 0);
-
-
-            List<ProductAssociationDTO> list = dtoProductAssociationService.getProductAssociations(11002L);
-            assertEquals(1, list.size());
-
-            list = dtoProductAssociationService.getProductAssociations(11004L);
-            assertEquals(5, list.size());
-
-            dtoProductAssociationService.remove(dto.getProductassociationId());
-
-
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
+        dto = dtoProductAssociationService.getById(pk);
+        assertNull(dto);
     }
 
     @Test
-    public void testGetProductAssociationsByProductAssociationType() {
-        try {
-            ProductAssociationDTO dto = getDto();
-            dto = dtoProductAssociationService.create(dto);
-            assertTrue(dto.getProductassociationId() > 0);
+    public void testGetProductAssociations() throws Exception {
+        ProductAssociationDTO dto = getDto();
+        dto = dtoProductAssociationService.create(dto);
+        assertTrue(dto.getProductassociationId() > 0);
 
-            long pk = dto.getProductassociationId();
+        List<ProductAssociationDTO> list = dtoProductAssociationService.getProductAssociations(11002L);
+        assertEquals(1, list.size());
 
-            List<ProductAssociationDTO> list = dtoProductAssociationService.getProductAssociationsByProductAssociationType(11002L, "accessories");
-            assertEquals(0, list.size());
+        list = dtoProductAssociationService.getProductAssociations(11004L);
+        assertEquals(5, list.size());
 
-            list = dtoProductAssociationService.getProductAssociationsByProductAssociationType(11002L, "up");
-            assertEquals(0, list.size());
+        dtoProductAssociationService.remove(dto.getProductassociationId());
+    }
 
-            list = dtoProductAssociationService.getProductAssociationsByProductAssociationType(11002L, "cross");
-            assertEquals(1, list.size());
+    @Test
+    public void testGetProductAssociationsByProductAssociationType() throws Exception {
+        ProductAssociationDTO dto = getDto();
+        dto = dtoProductAssociationService.create(dto);
+        assertTrue(dto.getProductassociationId() > 0);
 
-            list = dtoProductAssociationService.getProductAssociationsByProductAssociationType(11002L, "buywiththis");
-            assertEquals(0, list.size());
+        long pk = dto.getProductassociationId();
 
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
+        List<ProductAssociationDTO> list = dtoProductAssociationService.getProductAssociationsByProductAssociationType(11002L, "accessories");
+        assertEquals(0, list.size());
+
+        list = dtoProductAssociationService.getProductAssociationsByProductAssociationType(11002L, "up");
+        assertEquals(0, list.size());
+
+        list = dtoProductAssociationService.getProductAssociationsByProductAssociationType(11002L, "cross");
+        assertEquals(1, list.size());
+
+        list = dtoProductAssociationService.getProductAssociationsByProductAssociationType(11002L, "buywiththis");
+        assertEquals(0, list.size());
     }
 
     private ProductAssociationDTO getDto() throws UnmappedInterfaceException, UnableToCreateInstanceException {

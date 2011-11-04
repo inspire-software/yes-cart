@@ -23,6 +23,5 @@ public class ProductSkuServiceImplTest extends BaseCoreDBTestCase {
         Collection<ProductSku> skus = productSkuService.getAllProductSkus(10000L); //SOBOT
         assertNotNull(skus);
         assertEquals(4, skus.size());
-        productSkuService = null;
     }
 }

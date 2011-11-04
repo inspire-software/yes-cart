@@ -30,7 +30,6 @@ public class AssociationServiceImplTest extends BaseCoreDBTestCase {
         assertEquals(4, list.size());
     }
 
-
     @Test
     public void testCreate() {
         Association association = associationService.getGenericDao().getEntityFactory().getByIface(Association.class);
@@ -48,7 +47,6 @@ public class AssociationServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testUpdate() {
-
         Association association = associationService.getGenericDao().getEntityFactory().getByIface(Association.class);
         association.setCode("someCode");
         association.setName("someName");
@@ -65,13 +63,10 @@ public class AssociationServiceImplTest extends BaseCoreDBTestCase {
         assertEquals("someCode2", association.getCode());
         assertEquals("someName2", association.getName());
         assertEquals("someDescription2", association.getDescription());
-
-
     }
 
     @Test
     public void testDelete() {
-
         Association association = associationService.getGenericDao().getEntityFactory().getByIface(Association.class);
         association.setCode("someCode");
         association.setName("someName");
@@ -85,6 +80,5 @@ public class AssociationServiceImplTest extends BaseCoreDBTestCase {
 
         association = associationService.getById(pk);
         assertNull(association);
-
     }
 }
