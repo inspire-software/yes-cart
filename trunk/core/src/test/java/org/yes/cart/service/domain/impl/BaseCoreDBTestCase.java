@@ -14,13 +14,15 @@ import org.yes.cart.dao.impl.AbstractTestDAO;
  */
 public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
 
-    protected ApplicationContext createContext() {
-        if (DomainTestSuite.sharedContext == null) {
-            DomainTestSuite.sharedContext = new ClassPathXmlApplicationContext(
+    private static ApplicationContext sharedContext;
+
+    protected synchronized ApplicationContext createContext() {
+        if (sharedContext == null) {
+            sharedContext = new ClassPathXmlApplicationContext(
                     "testApplicationContext.xml",
                     "core-aspects.xml");
         }
-        return DomainTestSuite.sharedContext;
+        return sharedContext;
     }
 
     @After

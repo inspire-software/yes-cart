@@ -35,6 +35,7 @@ public class CustomerServiceImplTest extends BaseCoreDBTestCase {
         assertFalse(customer.getShops().isEmpty());
     }
 
+    // TODO fix to not depend on order of running
     @Test
     public void testUpdate() {
         Customer customer = getCustomer("testUpdate");
@@ -48,6 +49,7 @@ public class CustomerServiceImplTest extends BaseCoreDBTestCase {
         assertEquals("Freeman", customer.getLastname());
     }
 
+    // TODO fix to not depend on order of running
     @Test
     public void testDelete() {
         Customer customer = getCustomer("testDelete");
