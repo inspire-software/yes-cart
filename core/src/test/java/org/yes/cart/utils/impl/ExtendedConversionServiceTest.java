@@ -18,7 +18,6 @@ public class ExtendedConversionServiceTest {
     public void testExecuteConversion() {
         ExtendedConversionService extendedConversionService = new ExtendedConversionService();
 
-
         String values = "Red,Green,Blue";
         List<Pair<String, String>> pairList = (List)
                 extendedConversionService.convert(
@@ -26,7 +25,7 @@ public class ExtendedConversionServiceTest {
                         TypeDescriptor.valueOf(String.class),
                         TypeDescriptor.valueOf(List.class)
                 );
-                //extendedConversionService.executeConversion(values, List.class);
+        //extendedConversionService.executeConversion(values, List.class);
         assertEquals(3, pairList.size());
         assertEquals("Red", pairList.get(0).getFirst());
         assertEquals("Red", pairList.get(0).getSecond());
@@ -40,12 +39,11 @@ public class ExtendedConversionServiceTest {
                         TypeDescriptor.valueOf(String.class),
                         TypeDescriptor.valueOf(List.class)
                 );
-                //extendedConversionService.executeConversion(values, List.class);
+        //extendedConversionService.executeConversion(values, List.class);
         assertEquals(3, pairList.size());
         assertEquals("Red", pairList.get(0).getFirst());
         assertEquals("Red", pairList.get(0).getSecond());
         assertEquals("G", pairList.get(1).getFirst());
         assertEquals("Green", pairList.get(1).getSecond());
-
     }
 }

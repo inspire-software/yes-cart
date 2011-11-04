@@ -6,10 +6,7 @@ import java.math.BigDecimal;
 
 import static org.junit.Assert.*;
 
-
 /**
- * MoneyUtils test.
- * <p/>
  * User: dogma
  * Date: Jan 15, 2011
  * Time: 11:47:04 PM
@@ -36,7 +33,6 @@ public class MoneyUtilsTest {
         assertEquals("Must return zero if bot arguments are null", BigDecimal.TEN, MoneyUtils.max(BigDecimal.TEN, BigDecimal.ONE));
     }
 
-    /* -- IsFirstBiggerThanSecond ----------------------------------- */
     @Test
     public void testNotNullIsNullSafe() {
         assertEquals("Must return zero if bot arguments are null", BigDecimal.ZERO, MoneyUtils.notNull(null, null));
@@ -51,9 +47,6 @@ public class MoneyUtilsTest {
     public void testNotNullWithThree() {
         assertEquals("Must return value (3) for non-null value", new BigDecimal(3), MoneyUtils.notNull(new BigDecimal(3), BigDecimal.TEN));
     }
-
-
-    /* -- IsFirstBiggerThanSecond ----------------------------------- */
 
     @Test
     public void testIsFirstNullBiggerThanSecondNulls() {
@@ -85,8 +78,6 @@ public class MoneyUtilsTest {
         assertFalse("ten is not bigger than ten", MoneyUtils.isFirstBiggerThanSecond(BigDecimal.TEN, new BigDecimal(10.00)));
     }
 
-    /* -- IsFirstBiggerThanOrEqualToSecond ----------------------------------- */
-
     @Test
     public void testIsFirstNullBiggerThanOrEqualToSecondNulls() {
         assertFalse("Two nulls must give a false", MoneyUtils.isFirstBiggerThanOrEqualToSecond(null, null));
@@ -117,7 +108,6 @@ public class MoneyUtilsTest {
         assertTrue("ten is bigger than or equal to ten", MoneyUtils.isFirstBiggerThanOrEqualToSecond(BigDecimal.TEN, BigDecimal.ZERO));
     }
 
-    /* -- isFirstEqualToSecond ----------------------------------- */
     @Test
     public void testIsFirstNullEqualToSecondNulls() {
         assertFalse("Two nulls must give a false", MoneyUtils.isFirstEqualToSecond(null, null));
@@ -147,6 +137,4 @@ public class MoneyUtilsTest {
     public void testIsFirstTenEqualToSecondTen() {
         assertTrue("ten is equal to ten", MoneyUtils.isFirstEqualToSecond(BigDecimal.TEN, new BigDecimal("10.0000")));
     }
-
-
 }

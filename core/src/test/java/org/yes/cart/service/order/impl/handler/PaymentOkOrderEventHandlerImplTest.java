@@ -29,23 +29,15 @@ public class PaymentOkOrderEventHandlerImplTest extends AbstractEventHandlerImpl
         orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
     }
 
-    /**
-     * Test with ok payment
-     */
     @Test
     public void testHandle() {
-
         final Customer customer = OrderAssemblerImplTest.createCustomer(ctx);
         assertFalse(customer.getAddress().isEmpty());
-
         final CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
-
         customerOrder.setPgLabel("testPaymentGatewayLabel");
         orderService.update(customerOrder);
-
         assertTrue(handler.handle(new OrderEventImpl("", customerOrder, null, Collections.EMPTY_MAP)));
-
         assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
         assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED,
                 customerOrder.getDelivery().iterator().next().getDeliveryStatus());

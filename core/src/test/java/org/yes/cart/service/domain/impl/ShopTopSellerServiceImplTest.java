@@ -68,7 +68,6 @@ public class ShopTopSellerServiceImplTest extends BaseCoreDBTestCase {
         shopTopSellerService.updateTopSellers(10);
 
         List<ShopTopSeller> allTopSellers = shopTopSellerDao.findAll();
-        System.out.println(allTopSellers.size());
         for (ShopTopSeller ts : allTopSellers) {
             Long key = ts.getProduct().getId();
             assertEquals(expectation.remove(key), ts.getCounter());

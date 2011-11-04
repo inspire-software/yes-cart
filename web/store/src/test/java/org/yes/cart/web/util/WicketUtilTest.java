@@ -17,7 +17,6 @@ public class WicketUtilTest {
 
     @Test
     public void testGetFilteredRequestParameters() throws Exception {
-
         WicketUtil wicketUtil = new WicketUtil();
         wicketUtil.setCmdKeys(new ArrayList<String>() {{
             add("cmd1");
@@ -33,13 +32,10 @@ public class WicketUtilTest {
         assertNotNull(filtered);
         assertEquals(1, filtered.getNamedKeys().size());
         assertEquals("dsa", filtered.get("asd").toString());
-
-
     }
 
     @Test
     public void testGetFilteredRequestParametersForSearch() {
-
         PageParameters parametersToFilter = new PageParameters("query=val1,query=val2,query=val3");
         assertEquals(1, parametersToFilter.getNamedKeys().size());
         assertEquals(3, parametersToFilter.getValues("query").size());
@@ -48,6 +44,5 @@ public class WicketUtilTest {
         for (StringValue val : parametersToFilter.getValues("query")) {
             assertFalse("val2".equals(val.toString()));
         }
-
     }
 }

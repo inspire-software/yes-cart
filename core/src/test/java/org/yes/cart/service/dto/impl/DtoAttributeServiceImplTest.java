@@ -55,7 +55,6 @@ public class DtoAttributeServiceImplTest extends BaseCoreDBTestCase {
         List<AttributeDTO> dtos = dtoAttributeService.findByAttributeGroupCode("CATEGORY");
         assertNotNull(dtos);
         assertEquals(3, dtos.size());
-
         dtos = dtoAttributeService.findByAttributeGroupCode("NONEXISTINGGROUP");
         assertNotNull(dtos);
         assertTrue(dtos.isEmpty());
@@ -83,7 +82,6 @@ public class DtoAttributeServiceImplTest extends BaseCoreDBTestCase {
         for (AttributeDTO dto : dtos) {
             assertTrue(dto.isAllowduplicate());
         }
-
         dtos = dtoAttributeService.findAttributesWithMultipleValues(
                 "SYSTEM");
         assertNull(dtos);

@@ -10,8 +10,6 @@ import java.math.BigDecimal;
 import static org.junit.Assert.*;
 
 /**
- * ShoppingCartImpl test.
- * <p/>
  * User: dogma
  * Date: Jan 16, 2011
  * Time: 1:19:22 AM
@@ -25,7 +23,6 @@ public class ShoppingCartImplTest {
         final ProductSkuDTO sku = getProductSkuDTO("sku");
         assertEquals("Size should be 0", 0, cart.getCartItemsCount());
         assertEquals("Index must be -1 for inexistent sku", -1, cart.indexOf(sku));
-
     }
 
     @Test
@@ -56,7 +53,6 @@ public class ShoppingCartImplTest {
     public void testAddProductSkuToCartExistentAndInexistent() {
         final ProductSkuDTO sku = getProductSkuDTO("sku01");
         final ProductSkuDTO sku2 = getProductSkuDTO("sku02");
-
         final boolean newItem1 = cart.addProductSkuToCart(sku, BigDecimal.TEN);
         final boolean newItem2 = cart.addProductSkuToCart(sku, BigDecimal.TEN);
         final boolean newItem3 = cart.addProductSkuToCart(sku2, BigDecimal.TEN);
@@ -115,7 +111,6 @@ public class ShoppingCartImplTest {
     public void testRemoveCartItemQuantityExistent() {
         final ProductSkuDTO sku = getProductSkuDTO("sku01");
         final ProductSkuDTO sku2 = getProductSkuDTO("sku02");
-
         cart.addProductSkuToCart(sku, BigDecimal.TEN);
         cart.addProductSkuToCart(sku, BigDecimal.TEN);
         cart.addProductSkuToCart(sku2, BigDecimal.TEN);
@@ -130,7 +125,6 @@ public class ShoppingCartImplTest {
     public void testRemoveCartItemQuantityExistentFull() {
         final ProductSkuDTO sku = getProductSkuDTO("sku01");
         final ProductSkuDTO sku2 = getProductSkuDTO("sku02");
-
         cart.addProductSkuToCart(sku, BigDecimal.TEN);
         cart.addProductSkuToCart(sku, BigDecimal.TEN);
         cart.addProductSkuToCart(sku2, BigDecimal.TEN);
@@ -144,7 +138,6 @@ public class ShoppingCartImplTest {
     public void testRemoveCartItemQuantityExistentMoreThanInCart() {
         final ProductSkuDTO sku = getProductSkuDTO("sku01");
         final ProductSkuDTO sku2 = getProductSkuDTO("sku02");
-
         cart.addProductSkuToCart(sku, BigDecimal.TEN);
         cart.addProductSkuToCart(sku, BigDecimal.TEN);
         cart.addProductSkuToCart(sku2, BigDecimal.TEN);

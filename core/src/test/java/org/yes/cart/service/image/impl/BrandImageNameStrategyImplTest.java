@@ -24,17 +24,13 @@ public class BrandImageNameStrategyImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetFileName() {
-        assertEquals(
-                /*Constants.BRAND_IMAGE_FILE_PREFIX + File.separator +*/ "1261644759_627724_russkaya-magiya.jpg",
+        assertEquals("1261644759_627724_russkaya-magiya.jpg",
                 imageNameStrategy.getFileName("posts/2009-12/1261644759_627724_russkaya-magiya.jpg"));
-        assertEquals(
-                /* Constants.BRAND_IMAGE_FILE_PREFIX + File.separator + */"1261644759_627724_russkaya-magiya.jpg",
+        assertEquals("1261644759_627724_russkaya-magiya.jpg",
                 imageNameStrategy.getFileName("posts/2009-12/1261644759_627724_russkaya-magiya.jpg?w=10&h=4"));
-        assertEquals(
-                /*Constants.BRAND_IMAGE_FILE_PREFIX + File.separator + */"1261644759_627724_russkaya-magiya.jpg",
+        assertEquals("1261644759_627724_russkaya-magiya.jpg",
                 imageNameStrategy.getFileName("posts/2009-12/1261644759_627724_russkaya-magiya.jpg?w=10&h=4"));
-        assertEquals(
-                /*Constants.BRAND_IMAGE_FILE_PREFIX + File.separator +*/ "1261644759_627724_russkaya-magiya.jpg",
+        assertEquals("1261644759_627724_russkaya-magiya.jpg",
                 imageNameStrategy.getFileName("posts/2009-12/1261644759_627724_russkaya-magiya.jpg?w=10&h=4~!@#$%^&*()_+"));
     }
 }

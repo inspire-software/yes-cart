@@ -37,10 +37,8 @@ public class AddressServiceImplTest extends BaseCoreDBTestCase {
         customer.setFirstname("Bender");
         customer.setLastname("Rodriguez");
         customer.setPassword("rawpassword");
-
         customer = customerService.create(customer, shopService.getById(10L));
         assertTrue(customer.getCustomerId() > 0);
-
         Address address = addressService.getGenericDao().getEntityFactory().getByIface(Address.class);
         address.setFirstname("Bender");
         address.setLastname("Rodriguez");
@@ -49,9 +47,7 @@ public class AddressServiceImplTest extends BaseCoreDBTestCase {
         address.setCountryCode("US");
         address.setAddressType(Address.ADDR_TYPE_BILLING);
         address.setCustomer(customer);
-
         addressService.create(address);
-
         address = addressService.getGenericDao().getEntityFactory().getByIface(Address.class);
         address.setFirstname("Bender");
         address.setLastname("Rodriguez");
@@ -60,11 +56,8 @@ public class AddressServiceImplTest extends BaseCoreDBTestCase {
         address.setCountryCode("ZH");
         address.setAddressType(Address.ADDR_TYPE_BILLING);
         address.setCustomer(customer);
-
         addressService.create(address);
-
         customer = customerService.getById(customer.getCustomerId());
-
         assertEquals(2, customer.getAddress().size());
         assertEquals(2, addressService.getAddressesByCustomerId(customer.getCustomerId()).size());
         assertTrue(addressService.getAddressesByCustomerId(customer.getCustomerId(), Address.ADDR_TYPE_SHIPING).isEmpty());

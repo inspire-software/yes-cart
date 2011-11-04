@@ -33,14 +33,12 @@ import static org.junit.Assert.*;
 @RunWith(org.jmock.integration.junit4.JMock.class)
 public class MailComposerImplTest {
 
-    private final Mockery mockery = new JUnit4Mockery();
-
+    private Mockery mockery = new JUnit4Mockery();
     private SystemService systemService;
     private ShopService shopService;
     private Shop shop;
 
     @Before
-    @SuppressWarnings("unchecked")
     public void setUp() {
         systemService = mockery.mock(SystemService.class);
         shopService = mockery.mock(ShopService.class);
@@ -85,45 +83,29 @@ public class MailComposerImplTest {
 
     @Test
     public void getPathToTemplate() {
-
         mockery.checking(new Expectations() {{
-
             // allowing(systemService).getMailResourceDirectory();
             // will(returnValue("/a/b/c/"));
-
-
             allowing(shopService).getShopByCode("SHOIP1");
             will(returnValue(shop));
-
-
             allowing(shop).getMailFolder();
             will(returnValue("/a/b/c/default/"));
-
-
         }});
-
-
         final MailComposerImpl mailComposer = new MailComposerImpl(systemService, shopService);
-
-
         assertEquals(
                 ("/a/b/c/default" + File.separator + "priceReduced" + File.separator).replace("\\", "/"),
                 (mailComposer.getPathToTemplate("SHOIP1", "priceReduced")).replace("\\", "/")
         );
-
-
     }
 
 
     @Test
     public void testComposeMessageInternal0() throws MessagingException, IOException, ClassNotFoundException {
-
         // of course you would use DI in any real-world cases
         JavaMailSenderImpl sender = new JavaMailSenderImpl();
         sender.setHost("localhost");
         MimeMessage message = sender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-
         final String textTemplate = "$name lives in theme park with <% with.each{ out.print(it + ' ');}%>";
         final String htmlTemplate = "<h2>$name</h2> lives in theme park with:<br> <% with.each{ out.print(it + '<br>');}%>";
         final Map<String, Object> model = new HashMap<String, Object>();
@@ -133,23 +115,15 @@ public class MailComposerImplTest {
         list.add("poetess");
         model.put("with", list);
         final MailComposerImpl mailComposer = new MailComposerImpl(null, null);
-
         mailComposer.composeMessage(helper, textTemplate, htmlTemplate, null, model);
-
         assertTrue(helper.isMultipart());
-
-
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-
         helper.getMimeMessage().writeTo(byteArrayOutputStream);
-
         String str = byteArrayOutputStream.toString("UTF-8");
-
         assertNotNull(str);
         // html and text present in mail message
         assertTrue(str.contains("Bender lives in theme park with blackjack poetess"));
         assertTrue(str.contains("<h2>Bender</h2> lives in theme park with:<br> blackjack<br>poetess<br>"));
-
     }
 
     /**
@@ -157,13 +131,11 @@ public class MailComposerImplTest {
      */
     @Test
     public void testComposeMessageInternal1() throws MessagingException, IOException, ClassNotFoundException {
-
         // of course you would use DI in any real-world cases
         JavaMailSenderImpl sender = new JavaMailSenderImpl();
         sender.setHost("localhost");
         MimeMessage message = sender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-
         final String textTemplate = "$name lives in theme park with <% with.each{ out.print(it + ' ');}%>";
         final String htmlTemplate = null;
         final Map<String, Object> model = new HashMap<String, Object>();
@@ -173,23 +145,14 @@ public class MailComposerImplTest {
         list.add("poetess");
         model.put("with", list);
         final MailComposerImpl mailComposer = new MailComposerImpl(null, null);
-
         mailComposer.composeMessage(helper, textTemplate, htmlTemplate, null, model);
-
         assertTrue(helper.isMultipart());
-
-
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-
         helper.getMimeMessage().writeTo(byteArrayOutputStream);
-
         String str = byteArrayOutputStream.toString("UTF-8");
-
         assertNotNull(str);
         // html and text present in mail message
         assertTrue(str.contains("Bender lives in theme park with blackjack poetess"));
-
-
     }
 
     /**
@@ -197,13 +160,11 @@ public class MailComposerImplTest {
      */
     @Test
     public void testComposeMessageInternal2() throws MessagingException, IOException, ClassNotFoundException {
-
         // of course you would use DI in any real-world cases
         JavaMailSenderImpl sender = new JavaMailSenderImpl();
         sender.setHost("localhost");
         MimeMessage message = sender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-
         final String textTemplate = null;
         final String htmlTemplate = "<h2>$name</h2> lives in theme park with:<br> <% with.each{ out.print(it + '<br>');}%>";
         final Map<String, Object> model = new HashMap<String, Object>();
@@ -213,48 +174,30 @@ public class MailComposerImplTest {
         list.add("poetess");
         model.put("with", list);
         final MailComposerImpl mailComposer = new MailComposerImpl(null, null);
-
         mailComposer.composeMessage(helper, textTemplate, htmlTemplate, null, model);
-
         assertTrue(helper.isMultipart());
-
-
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-
         helper.getMimeMessage().writeTo(byteArrayOutputStream);
-
         String str = byteArrayOutputStream.toString("UTF-8");
-
         assertNotNull(str);
         // html and text present in mail message
-
         assertTrue(str.contains("<h2>Bender</h2> lives in theme park with:<br> blackjack<br>poetess<br>"));
-
     }
-
 
     /**
      * Inline resources
      */
     @Test
     public void testComposeMessageInternal3() throws MessagingException, IOException, ClassNotFoundException {
-
-
         mockery.checking(new Expectations() {{
-
             allowing(systemService).getMailResourceDirectory();
             will(returnValue("src/test/resources/mailtemplates/"));
-
-
         }});
-
-
         // of course you would use DI in any real-world cases
         JavaMailSenderImpl sender = new JavaMailSenderImpl();
         sender.setHost("localhost");
         MimeMessage message = sender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-
         final Map<String, Object> model = new HashMap<String, Object>();
         model.put("name", "Bender");
         List list = new ArrayList();
@@ -262,7 +205,6 @@ public class MailComposerImplTest {
         list.add("poetess");
         model.put("with", list);
         final MailComposer mailComposer = new MailComposerImpl(systemService, null);
-
         mailComposer.composeMessage(
                 message,
                 null,
@@ -273,17 +215,10 @@ public class MailComposerImplTest {
                 "cc@somedomain.com",
                 "bcc@somedomain.com",
                 model);
-
-
         assertTrue(helper.isMultipart());
-
-
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-
         helper.getMimeMessage().writeTo(byteArrayOutputStream);
-
         String str = byteArrayOutputStream.toString("UTF-8");
-
         assertNotNull(str);
         // html and text present in mail message
         assertTrue(str.contains("Bender lives in theme park with blackjack poetess"));
@@ -292,9 +227,5 @@ public class MailComposerImplTest {
         assertTrue(str.contains("To: to@somedomain.com"));
         assertTrue(str.contains("cc@somedomain.com"));
         assertTrue(str.contains("Bcc: bcc@somedomain.com"));
-
-
     }
-
-
 }

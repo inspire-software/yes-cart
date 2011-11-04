@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 /**
- * * User: Igor Azarny iazarny@yahoo.com
+ * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
@@ -42,8 +42,7 @@ public class AttributeServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testFindAttributesWithMultipleValues() {
-        assertEquals(
-                5,
+        assertEquals(5,
                 attributeService.findAttributesWithMultipleValues(AttributeGroupNames.PRODUCT).size());
     }
 
@@ -58,5 +57,4 @@ public class AttributeServiceImplTest extends BaseCoreDBTestCase {
         attrs = attributeService.findAvailableAttributes(AttributeGroupNames.PRODUCT, assignedAttributes);
         assertEquals(0, attrs.size());
     }
-
 }

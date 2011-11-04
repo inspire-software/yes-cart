@@ -59,45 +59,35 @@ public class CustomerServiceImplTest extends BaseCoreDBTestCase {
         assertNull(customer);
     }
 
+    //TODO refactor to param test
     @Test
     public void testFindCustomer() {
-        //dumpDataBase("cust_addr", new String[]{"TADDRESS"});
-
         Customer customer = getCustomer("");
         customer.setEmail("user1@somedomain.com");
         customer.setFirstname("SomeFirsname");
         customer.setLastname("user1LastName");
         customer.setPassword("rawpassword");
         customerService.create(customer, shopService.getById(10L));
-
         customer = getCustomer("testFindCustomer2");
         customer.setFirstname("SomeFirsname");
         customer.setLastname("Akintola");
         customer.setPassword("rawpassword");
         customer.setEmail("user2@somedomain.com");
         customerService.create(customer, shopService.getById(10L));
-
         List<Customer> list = customerService.findCustomer("", null, null, null);
         assertNotNull(list);
-
         list = customerService.findCustomer("user2", null, null, null);
         assertEquals(1, list.size());
-
         list = customerService.findCustomer("omedomain", null, null, null);
         assertEquals(2, list.size());
-
         list = customerService.findCustomer(null, "SomeFirsname", null, null);
         assertEquals(2, list.size());
-
         list = customerService.findCustomer(null, null, "user1LastName", null);
         assertEquals(1, list.size());
-
         list = customerService.findCustomer(null, null, "kintola", null);
         assertEquals(1, list.size());
-
         list = customerService.findCustomer(null, "SomeFirsname", null, null);
         assertEquals(2, list.size());
-
         list = customerService.findCustomer(null, "SomeFirsname", "Akintola", null);
         assertEquals(1, list.size());
     }

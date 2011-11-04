@@ -38,26 +38,19 @@ public class ProductImageNameStrategyImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetFileName() {
-
         assertEquals("1261644759_627724_russkaya-magiya.jpg",
                 imageNameStrategy.getFileName("posts/2009-12/1261644759_627724_russkaya-magiya.jpg"));
-
         assertEquals("1261644759_627724_russkaya-magiya.jpg",
                 imageNameStrategy.getFileName("posts/2009-12/1261644759_627724_russkaya-magiya.jpg?w=10&h=4"));
-
         assertEquals("1261644759_627724_russkaya-magiya.jpg",
                 imageNameStrategy.getFileName("posts/2009-12/1261644759_627724_russkaya-magiya.jpg?w=10&h=4"));
-
         assertEquals("1261644759_627724_russkaya-magiya.jpg",
                 imageNameStrategy.getFileName("posts/2009-12/1261644759_627724_russkaya-magiya.jpg?w=10&h=4~!@#$%^&*()_+"));
-
-
     }
 
 
     @Test
     public void testGetCode() {
-
         List<String> expectation = new ArrayList<String>();
         expectation.add("PRODUCT-or-SKU-CODE");
         expectation.add("PRODUCT1");
@@ -66,7 +59,6 @@ public class ProductImageNameStrategyImplTest extends BaseCoreDBTestCase {
         expectation.add("ЕЩЕ-КОД-пРОДУКТА");
         expectation.add("-КОД-Сосики-");
         expectation.add("ЕЩЕ-КОД-ПРОДУКТА!");
-
         for (String fileName : fileNames) {
             String code = imageNameStrategy.getCode(fileName);
             assertNotNull(code);
@@ -74,29 +66,22 @@ public class ProductImageNameStrategyImplTest extends BaseCoreDBTestCase {
             assertTrue(fileName + " not in expectations", expectation.contains(code));
             assertTrue(expectation.remove(code));
         }
-
         assertTrue(expectation.isEmpty());
-
-
         assertEquals("code",
                 imageNameStrategy.getCode("seo_name_code_1.jpg"));
         assertEquals("code",
                 imageNameStrategy.getCode("_code_1.jpg"));
         assertEquals("code",
                 imageNameStrategy.getCode("code_1.jpg"));
-
         //test case to support file names without product or sku code
-
         assertEquals("SOBOT",
                 imageNameStrategy.getCode("sobot-picture.jpeg"));
     }
 
     @Test
     public void testGetCodeForIncorrectFileName() {
-
         assertEquals(Constants.NO_IMAGE, imageNameStrategy.getCode(null));
         assertEquals(Constants.NO_IMAGE, imageNameStrategy.getCode(""));
         assertEquals(Constants.NO_IMAGE, imageNameStrategy.getCode("some-incorrect-code-in-file-name"));
-
     }
 }

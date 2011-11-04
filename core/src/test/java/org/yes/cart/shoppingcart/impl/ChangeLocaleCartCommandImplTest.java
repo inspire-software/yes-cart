@@ -9,8 +9,7 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.impl.BaseCoreDBTestCase;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
-import java.util.Collections;
-
+import static java.util.Collections.singletonMap;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -33,21 +32,12 @@ public class ChangeLocaleCartCommandImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testExecute() {
-
         ShoppingCart shoppingCart = new ShoppingCartImpl();
-        new ChangeLocaleCartCommandImpl(
-                null,
-                Collections.singletonMap(ChangeLocaleCartCommandImpl.CMD_KEY, "en")
-        ).execute(shoppingCart);
-
+        new ChangeLocaleCartCommandImpl(null, singletonMap(ChangeLocaleCartCommandImpl.CMD_KEY, "en"))
+                .execute(shoppingCart);
         assertEquals("en", shoppingCart.getCurrentLocale());
-
-
-        new ChangeLocaleCartCommandImpl(
-                null,
-                Collections.singletonMap(ChangeLocaleCartCommandImpl.CMD_KEY, "uk")
-        ).execute(shoppingCart);
-
+        new ChangeLocaleCartCommandImpl(null, singletonMap(ChangeLocaleCartCommandImpl.CMD_KEY, "uk"))
+                .execute(shoppingCart);
         assertEquals("uk", shoppingCart.getCurrentLocale());
     }
 }

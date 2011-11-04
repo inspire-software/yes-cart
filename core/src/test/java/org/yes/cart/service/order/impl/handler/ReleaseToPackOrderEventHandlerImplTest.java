@@ -30,25 +30,14 @@ public class ReleaseToPackOrderEventHandlerImplTest extends AbstractEventHandler
 
     @Test
     public void testHandle() {
-
         final Customer customer = OrderAssemblerImplTest.createCustomer(ctx);
         assertFalse(customer.getAddress().isEmpty());
-
         final CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
-
         CustomerOrderDelivery delivery = customerOrder.getDelivery().iterator().next();
-
-        handler.handle(
-                new OrderEventImpl(
-                        "", //evt.payment.offline
-                        customerOrder,
-                        delivery
-
-                )
-        );
+        handler.handle(new OrderEventImpl("", //evt.payment.offline
+                customerOrder,
+                delivery));
         assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_PACKING, delivery.getDeliveryStatus());
-
     }
-
 }

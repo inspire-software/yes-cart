@@ -21,6 +21,7 @@ import static org.junit.Assert.*;
  * Date: 07-May-2011
  * Time: 16:13:01
  */
+// TODO refactor to param test
 public class TestProductDAO extends AbstractTestDAO {
 
     private GenericDAO<Product, Long> productDao;
@@ -48,7 +49,6 @@ public class TestProductDAO extends AbstractTestDAO {
 
     @Test
     public void testCreateProduct() {
-
         Product product = new ProductEntity();
         product.setAvailability(availabilityDao.findById(1L));
         Brand brand = brandDao.findById(100L);
@@ -60,21 +60,15 @@ public class TestProductDAO extends AbstractTestDAO {
         ProductType productType = productTypeDao.findById(1L);
         assertNotNull(productType);
         product.setProducttype(productType);
-
         Attribute attribute = attributeDao.findById(2006L);  //WEIGHT
         AttrValueProduct attrValueProduct = new AttrValueEntityProduct();
         //attrValueProduct.setAttrvalueId(33L);
         attrValueProduct.setProduct(product);
         attrValueProduct.setVal("100");
         attrValueProduct.setAttribute(attribute);
-
         product.getAttribute().add(attrValueProduct);
-
-
         long pk = productDao.create(product).getProductId();
         assertTrue(pk > 0L);
-
-
         product = new ProductEntity();
         product.setAvailability(availabilityDao.findById(1L));
         brand = brandDao.findById(100L);
@@ -86,367 +80,181 @@ public class TestProductDAO extends AbstractTestDAO {
         productType = productTypeDao.findById(1L);
         assertNotNull(productType);
         product.setProducttype(productType);
-
         attribute = attributeDao.findById(2004L);  //WEIGHT
         attrValueProduct = new AttrValueEntityProduct();
-        //attrValueProduct.setAttrvalueId(33L);
         attrValueProduct.setProduct(product);
         attrValueProduct.setVal("asdfasdf");
         attrValueProduct.setAttribute(attribute);
-
         product.getAttribute().add(attrValueProduct);
-
         pk = productDao.create(product).getProductId();
         assertTrue(pk > 0L);
-
-
-        /*try {
-            dumpDataBase("createNewProductTest2",
-                    new String[]{"tproduct", "tproductattrvalue"});
-        } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } */
-
         productDao.fullTextSearchReindex();
-
     }
 
     @Test
     public void testSimpleSearchTest() {
-
         productDao.fullTextSearchReindex();
-
         GlobalSearchQueryBuilderImpl queryBuilder = new GlobalSearchQueryBuilderImpl();
-
-        try {
-            Query query = queryBuilder.createQuery("bender", Arrays.asList(101L, 104L));
-            List<Product> products = productDao.fullTextSearch(query);
-            assertTrue(!products.isEmpty());
-        } catch (IllegalArgumentException e) {
-            assertFalse(e.getMessage(), true);
-        }
-
-        /**
-         * search by Sku code
-         */
-        try {
-            Query query = queryBuilder.createQuery("CC_TEST4", (Long) null);
-            List<Product> products = productDao.fullTextSearch(query);
-            assertEquals(1, products.size());
-        } catch (IllegalArgumentException e) {
-            assertFalse(e.getMessage(), true);
-        }
-
-
-        /** search by sku id */
-        try {
-            Query query = new SkuQueryBuilderImpl().createQuery("11004");
-            List<Product> products = productDao.fullTextSearch(query);
-            assertEquals(1, products.size());
-            assertEquals("PRODUCT5", products.get(0).getSku().iterator().next().getCode());
-        } catch (IllegalArgumentException e) {
-            assertFalse(e.getMessage(), true);
-        }
-
-
-        //Not only latin search
-        //This test depends form locale, so lets skip it atm
-        /*try {
-            Query query = queryBuilder.createQuery("Бендер", Arrays.asList(101L,104L));
-            List<Product> products =  productDao.fullTextSearch(query);
-            assertTrue(!products.isEmpty());
-        } catch (IllegalArgumentException e) {
-            assertFalse(e.getMessage(), true);
-        }    */
-
-
+        Query query = queryBuilder.createQuery("bender", Arrays.asList(101L, 104L));
+        List<Product> products = productDao.fullTextSearch(query);
+        assertTrue(!products.isEmpty());
+        // search by Sku code
+        query = queryBuilder.createQuery("CC_TEST4", (Long) null);
+        products = productDao.fullTextSearch(query);
+        assertEquals(1, products.size());
+        // search by sku id
+        query = new SkuQueryBuilderImpl().createQuery("11004");
+        products = productDao.fullTextSearch(query);
+        assertEquals(1, products.size());
+        assertEquals("PRODUCT5", products.get(0).getSku().iterator().next().getCode());
         //test fuzzy search
-        try {
-            Query query = queryBuilder.createQuery("blender", Arrays.asList(101L, 104L));
-            List<Product> products = productDao.fullTextSearch(query);
-            assertTrue(!products.isEmpty());
-        } catch (IllegalArgumentException e) {
-            assertFalse(e.getMessage(), true);
-        }
-
+        query = queryBuilder.createQuery("blender", Arrays.asList(101L, 104L));
+        products = productDao.fullTextSearch(query);
+        assertTrue(!products.isEmpty());
         //test search by description
-        try {
-            Query query = queryBuilder.createQuery("Rodriguez Bending", Arrays.asList(101L, 104L));
-            List<Product> products = productDao.fullTextSearch(query);
-            assertTrue(!products.isEmpty());
-
-            query = queryBuilder.createQuery("DiMaggio", Arrays.asList(101L, 104L));
-            products = productDao.fullTextSearch(query);
-            assertTrue(!products.isEmpty());
-        } catch (IllegalArgumentException e) {
-            assertFalse(e.getMessage(), true);
-        }
-
+        query = queryBuilder.createQuery("Rodriguez Bending", Arrays.asList(101L, 104L));
+        products = productDao.fullTextSearch(query);
+        assertTrue(!products.isEmpty());
+        query = queryBuilder.createQuery("DiMaggio", Arrays.asList(101L, 104L));
+        products = productDao.fullTextSearch(query);
+        assertTrue(!products.isEmpty());
         // search on empty string
-        try {
-            Query query = queryBuilder.createQuery("", Arrays.asList(101L, 104L));
-            List<Product> products = productDao.fullTextSearch(query);
-            assertTrue(!products.isEmpty()); //return all product in described categories
-        } catch (IllegalArgumentException e) {
-            assertFalse(e.getMessage(), true);
-        }
-
+        query = queryBuilder.createQuery("", Arrays.asList(101L, 104L));
+        products = productDao.fullTextSearch(query);
+        assertTrue(!products.isEmpty()); //return all product in described categories
         // search on brand
-        try {
-            Query query = queryBuilder.createQuery("FutureRobots", Arrays.asList(101L, 104L));
-            List<Product> products = productDao.fullTextSearch(query);
-            assertEquals(2, products.size());
-        } catch (IllegalArgumentException e) {
-            assertFalse(e.getMessage(), true);
-        }
-
-
+        query = queryBuilder.createQuery("FutureRobots", Arrays.asList(101L, 104L));
+        products = productDao.fullTextSearch(query);
+        assertEquals(2, products.size());
     }
 
     @Test
     public void testSearchByCategoryTest() {
-
         productDao.fullTextSearchReindex();
-
         ProductsInCategoryQueryBuilderImpl queryBuilder = new ProductsInCategoryQueryBuilderImpl();
-
-        try {
-            Query query = queryBuilder.createQuery(Arrays.asList(101L));
-            List<Product> products = productDao.fullTextSearch(query);
-            assertEquals(2, products.size());
-        } catch (IllegalArgumentException e) {
-            assertTrue(false);
-        }
-
-        try {
-            Query query = queryBuilder.createQuery(Arrays.asList(101L, 200L, 123L, 2435L));
-            List<Product> products = productDao.fullTextSearch(query);
-            assertEquals(query.toString(), 2, products.size());
-        } catch (IllegalArgumentException e) {
-            assertTrue(false);
-        }
-
-        try {
-            Query query = queryBuilder.createQuery(Arrays.asList(101L, 104L));
-            List<Product> products = productDao.fullTextSearch(query);
-            assertEquals(3, products.size());
-        } catch (IllegalArgumentException e) {
-            assertTrue(false);
-        }
-
+        Query query = queryBuilder.createQuery(Arrays.asList(101L));
+        List<Product> products = productDao.fullTextSearch(query);
+        assertEquals(2, products.size());
+        query = queryBuilder.createQuery(Arrays.asList(101L, 200L, 123L, 2435L));
+        products = productDao.fullTextSearch(query);
+        assertEquals(query.toString(), 2, products.size());
+        query = queryBuilder.createQuery(Arrays.asList(101L, 104L));
+        products = productDao.fullTextSearch(query);
+        assertEquals(3, products.size());
     }
 
 
     @Test
     public void testSearchByAttributeAndValueTest() {
-
         productDao.fullTextSearchReindex();
-
         AttributiveSearchQueryBuilderImpl queryBuilder = new AttributiveSearchQueryBuilderImpl();
         Map<String, String> attributeMap = new HashMap<String, String>();
         // Test that we able to find Beder by his material in category where he exists
         attributeMap.put("MATERIAL", "metal");
-        try {
-            Query query = queryBuilder.createQuery(Arrays.asList(101L), attributeMap);
-            List<Product> products = productDao.fullTextSearch(query);
-            assertEquals(1, products.size());
-        } catch (IllegalArgumentException e) {
-            assertTrue(false);
-        }
-
+        Query query = queryBuilder.createQuery(Arrays.asList(101L), attributeMap);
+        List<Product> products = productDao.fullTextSearch(query);
+        assertEquals(1, products.size());
         // Test that we able to find Beder by his material in  list of categories where he exists
         attributeMap.put("MATERIAL", "metal");
-        try {
-            Query query = queryBuilder.createQuery(Arrays.asList(101L, 200L), attributeMap);
-            List<Product> products = productDao.fullTextSearch(query);
-            assertEquals(1, products.size());
-        } catch (IllegalArgumentException e) {
-            assertTrue(false);
-        }
-
+        query = queryBuilder.createQuery(Arrays.asList(101L, 200L), attributeMap);
+        products = productDao.fullTextSearch(query);
+        assertEquals(1, products.size());
         // Test that we able to find Sobot by his material in category where he exists
         attributeMap.put("MATERIAL", "Plastik");
-        try {
-            Query query = queryBuilder.createQuery(Arrays.asList(101L), attributeMap);
-            List<Product> products = productDao.fullTextSearch(query);
-            assertEquals(1, products.size());
-        } catch (IllegalArgumentException e) {
-            assertTrue(false);
-        }
-
-
+        query = queryBuilder.createQuery(Arrays.asList(101L), attributeMap);
+        products = productDao.fullTextSearch(query);
+        assertEquals(1, products.size());
         //We are unable to getByKey products mafactured from bananas
         attributeMap.put("MATERIAL", "banana");
-        try {
-            Query query = queryBuilder.createQuery(Arrays.asList(101L), attributeMap);
-            List<Product> products = productDao.fullTextSearch(query);
-            assertEquals(0, products.size());
-        } catch (IllegalArgumentException e) {
-            assertTrue(false);
-        }
-
+        query = queryBuilder.createQuery(Arrays.asList(101L), attributeMap);
+        products = productDao.fullTextSearch(query);
+        assertEquals(0, products.size());
         //We are unable to getByKey products mafactured from bananas
         attributeMap.put("MATERIAL", "banana");
-        try {
-            Query query = queryBuilder.createQuery(Collections.EMPTY_LIST, attributeMap);
-            List<Product> products = productDao.fullTextSearch(query);
-            assertEquals(0, products.size());
-        } catch (IllegalArgumentException e) {
-            assertTrue(false);
-        }
-
-
+        query = queryBuilder.createQuery(Collections.EMPTY_LIST, attributeMap);
+        products = productDao.fullTextSearch(query);
+        assertEquals(0, products.size());
         //No category limitation, so we expect all plastic robots
         attributeMap.put("MATERIAL", "Plastik");
-        try {
-            Query query = queryBuilder.createQuery(Collections.EMPTY_LIST, attributeMap);
-            List<Product> products = productDao.fullTextSearch(query);
-            assertEquals(1, products.size());
-        } catch (IllegalArgumentException e) {
-            assertTrue(false);
-        }
-
+        query = queryBuilder.createQuery(Collections.EMPTY_LIST, attributeMap);
+        products = productDao.fullTextSearch(query);
+        assertEquals(1, products.size());
         // Robot from plastic not in 104 category
         attributeMap.put("MATERIAL", "Plastik");
-        try {
-            Query query = queryBuilder.createQuery(Arrays.asList(104L), attributeMap);
-            List<Product> products = productDao.fullTextSearch(query);
-            assertEquals(0, products.size());
-        } catch (IllegalArgumentException e) {
-            assertTrue(false);
-        }
-
+        query = queryBuilder.createQuery(Arrays.asList(104L), attributeMap);
+        products = productDao.fullTextSearch(query);
+        assertEquals(0, products.size());
         // Robot from plastic not in 104 category
         attributeMap.put("MATERIAL", "Plastik");
-        try {
-            Query query = queryBuilder.createQuery(Arrays.asList(105L), attributeMap);
-            List<Product> products = productDao.fullTextSearch(query);
-            assertEquals(0, products.size());
-        } catch (IllegalArgumentException e) {
-            assertTrue(false);
-        }
-
-        // ---------------------------------- search by sku attribute value ----------------------------- //
+        query = queryBuilder.createQuery(Arrays.asList(105L), attributeMap);
+        products = productDao.fullTextSearch(query);
+        assertEquals(0, products.size());
+        // search by sku attribute value
         attributeMap.clear();
         attributeMap.put("SMELL", "apple");
-        try {
-            Query query = queryBuilder.createQuery(null, attributeMap);
-            List<Product> products = productDao.fullTextSearch(query);
-            assertEquals(1, products.size());
-        } catch (IllegalArgumentException e) {
-            assertTrue(false);
-        }
-
-
+        query = queryBuilder.createQuery(null, attributeMap);
+        products = productDao.fullTextSearch(query);
+        assertEquals(1, products.size());
     }
-
 
     @Test
     public void getSearchByAttributeAndValuesRangeTest() {
-
         productDao.fullTextSearchReindex();
-
         AttributiveSearchQueryBuilderImpl queryBuilder = new AttributiveSearchQueryBuilderImpl();
-
-        try {
-            Query query = queryBuilder.createQuery(
-                    Arrays.asList(130L, 131L, 132L),
-                    "WEIGHT",
-                    new Pair<String, String>("0.001", "2.3"));
-            List<Product> products = productDao.fullTextSearch(query);
-            assertEquals("Range search with query [" + query + "] incorrect", 3, products.size());
-        } catch (IllegalArgumentException e) {
-            assertTrue(false);
-        }
-
-        try {
-            Query query = queryBuilder.createQuery(
-                    Arrays.asList(130L, 131L, 132L),
-                    "WEIGHT",
-                    new Pair<String, String>("2.1", "2.3"));
-            List<Product> products = productDao.fullTextSearch(query);
-            assertEquals("Range search with query [" + query + "] incorrect", 3, products.size());
-        } catch (IllegalArgumentException e) {
-            assertTrue(false);
-        }
-
-        try {
-            Query query = queryBuilder.createQuery(
-                    Arrays.asList(130L, 131L, 132L),
-                    "WEIGHT",
-                    new Pair<String, String>("2.35", "2.35"));
-            List<Product> products = productDao.fullTextSearch(query);
-            assertEquals("Range search with query [" + query + "] incorrect", 1, products.size());
-        } catch (IllegalArgumentException e) {
-            assertTrue(false);
-        }
-
-
-        try {
-            Query query = queryBuilder.createQuery(
-                    Arrays.asList(130L, 131L, 132L),
-                    "WEIGHT",
-                    new Pair<String, String>("2.34", "2.35"));
-            List<Product> products = productDao.fullTextSearch(query);
-            assertEquals("Range search with query [" + query + "] incorrect", 1, products.size());
-        } catch (IllegalArgumentException e) {
-            assertTrue(false);
-        }
-
-        try {
-            Query query = queryBuilder.createQuery(
-                    Arrays.asList(130L, 131L, 132L),
-                    "WEIGHT",
-                    new Pair<String, String>("2.35", "2.38"));
-            List<Product> products = productDao.fullTextSearch(query);
-            assertEquals("Range search with query [" + query + "] incorrect", 1, products.size());
-        } catch (IllegalArgumentException e) {
-            assertTrue(false);
-        }
-
-        try {
-            Query query = queryBuilder.createQuery(
-                    Arrays.asList(130L, 131L, 132L),
-                    "WEIGHT",
-                    new Pair<String, String>("2.4", "2.49"));
-            List<Product> products = productDao.fullTextSearch(query);
-            assertEquals("Range search with query [" + query + "] incorrect", 0, products.size());
-        } catch (IllegalArgumentException e) {
-            assertTrue(false);
-        }
-
-
-        try {
-            Query query = queryBuilder.createQuery(
-                    100L,      //products not assigned to this category
-                    "WEIGHT",
-                    new Pair<String, String>("2.1", "2.5"));
-            List<Product> products = productDao.fullTextSearch(query);
-            assertEquals("Range search with query [" + query + "] incorrect", 0, products.size());
-        } catch (IllegalArgumentException e) {
-            assertTrue(false);
-        }
-
-        try {
-            Query query = queryBuilder.createQuery(
-                    Arrays.asList(100L, 101L, 102L),      //products not assigned to this categories.  
-                    "WEIGHT",
-                    new Pair<String, String>("2.1", "2.5"));
-            List<Product> products = productDao.fullTextSearch(query);
-            assertEquals("Range search with query [" + query + "] incorrect", 0, products.size());
-        } catch (IllegalArgumentException e) {
-            assertTrue(false);
-        }
-
-
+        Query query = queryBuilder.createQuery(
+                Arrays.asList(130L, 131L, 132L),
+                "WEIGHT",
+                new Pair<String, String>("0.001", "2.3"));
+        List<Product> products = productDao.fullTextSearch(query);
+        assertEquals("Range search with query [" + query + "] incorrect", 3, products.size());
+        query = queryBuilder.createQuery(
+                Arrays.asList(130L, 131L, 132L),
+                "WEIGHT",
+                new Pair<String, String>("2.1", "2.3"));
+        products = productDao.fullTextSearch(query);
+        assertEquals("Range search with query [" + query + "] incorrect", 3, products.size());
+        query = queryBuilder.createQuery(
+                Arrays.asList(130L, 131L, 132L),
+                "WEIGHT",
+                new Pair<String, String>("2.35", "2.35"));
+        products = productDao.fullTextSearch(query);
+        assertEquals("Range search with query [" + query + "] incorrect", 1, products.size());
+        query = queryBuilder.createQuery(
+                Arrays.asList(130L, 131L, 132L),
+                "WEIGHT",
+                new Pair<String, String>("2.34", "2.35"));
+        products = productDao.fullTextSearch(query);
+        assertEquals("Range search with query [" + query + "] incorrect", 1, products.size());
+        query = queryBuilder.createQuery(
+                Arrays.asList(130L, 131L, 132L),
+                "WEIGHT",
+                new Pair<String, String>("2.35", "2.38"));
+        products = productDao.fullTextSearch(query);
+        assertEquals("Range search with query [" + query + "] incorrect", 1, products.size());
+        query = queryBuilder.createQuery(
+                Arrays.asList(130L, 131L, 132L),
+                "WEIGHT",
+                new Pair<String, String>("2.4", "2.49"));
+        products = productDao.fullTextSearch(query);
+        assertEquals("Range search with query [" + query + "] incorrect", 0, products.size());
+        query = queryBuilder.createQuery(
+                100L,      //products not assigned to this category
+                "WEIGHT",
+                new Pair<String, String>("2.1", "2.5"));
+        products = productDao.fullTextSearch(query);
+        assertEquals("Range search with query [" + query + "] incorrect", 0, products.size());
+        query = queryBuilder.createQuery(
+                Arrays.asList(100L, 101L, 102L),      //products not assigned to this categories.
+                "WEIGHT",
+                new Pair<String, String>("2.1", "2.5"));
+        products = productDao.fullTextSearch(query);
+        assertEquals("Range search with query [" + query + "] incorrect", 0, products.size());
     }
 
 
     @Test
     public void testCreateNewProductTest() {
-
         productDao.fullTextSearchReindex();
-
         Product product = new ProductEntity();
         product.setAvailability(availabilityDao.findById(1L));
         Brand brand = brandDao.findById(100L);
@@ -458,7 +266,6 @@ public class TestProductDAO extends AbstractTestDAO {
         ProductType productType = productTypeDao.findById(1L);
         assertNotNull(productType);
         product.setProducttype(productType);
-
         long pk = productDao.create(product).getProductId();
         assertTrue(pk > 0L);
         // add sku
@@ -468,118 +275,75 @@ public class TestProductDAO extends AbstractTestDAO {
         productSku.setName("product sony name");
         product.getSku().add(productSku);
         productDao.saveOrUpdate(product);
-
         // add quantity on warehoues
         SkuWarehouse skuWarehouse = new SkuWarehouseEntity();
         skuWarehouse.setSku(productSku);
         skuWarehouse.setQuantity(BigDecimal.ONE);
-        skuWarehouse.setWarehouse(
-                warehouseDao.findById(2L)
-        );
-
+        skuWarehouse.setWarehouse(warehouseDao.findById(2L));
         skuWareHouseDao.create(skuWarehouse);
-
-
         // assign it to category
         ProductCategory productCategory = new ProductCategoryEntity();
         productCategory.setProduct(product);
         productCategory.setCategory(categoryDao.findById(128L));
         productCategory.setRank(0);
         productCategory = productCategoryDao.create(productCategory);
-
         List<Product> products = null;
-
-
         productDao.fullTextSearchReindex(product.getProductId());
-
-
         GlobalSearchQueryBuilderImpl queryBuilder = new GlobalSearchQueryBuilderImpl();
-        try {
-            Query query = queryBuilder.createQuery("sony", Arrays.asList(128L));
-            products = productDao.fullTextSearch(query);
-            assertTrue(!products.isEmpty());
-        } catch (IllegalArgumentException e) {
-            assertFalse(e.getMessage(), true);
-        }
-
+        Query query = queryBuilder.createQuery("sony", Arrays.asList(128L));
+        products = productDao.fullTextSearch(query);
+        assertTrue(!products.isEmpty());
         skuWareHouseDao.delete(skuWarehouse);
         productCategoryDao.delete(productCategory);
-
         for (Product prod : products) {
             productDao.delete(prod);
         }
         //no need to reidex, because db and lucene indexes must me consistent
-
-        try {
-            Query query = queryBuilder.createQuery("sony", Arrays.asList(128L));
-            products = productDao.fullTextSearch(query);
-            assertTrue(products.isEmpty());
-        } catch (IllegalArgumentException e) {
-            assertFalse(e.getMessage(), true);
-        }
-
+        query = queryBuilder.createQuery("sony", Arrays.asList(128L));
+        products = productDao.fullTextSearch(query);
+        assertTrue(products.isEmpty());
     }
-
 
     /**
      * Test for PRODUCTS.ATTR.CODE.VALUES.BY.ASSIGNED.CATEGORIES named query
      */
     @Test
     public void testGetUniqueBrandsByCateroriesTest() {
-
         productDao.fullTextSearchReindex();
-
         ArrayList<Long> createdProducts = new ArrayList<Long>();
         createdProducts.add(createProduct(102L, "LG_DVD_PLAYER", "product lg dvd player", 3L, 134L));
         createdProducts.add(createProduct(104L, "SAM_DVD_PLAYER", "product sam mp3 player", 3L, 134L));
-
         createdProducts.add(createProduct(102L, "LG_MP3_PLAYER", "product lg mp3 player", 2L, 135L));
         createdProducts.add(createProduct(103L, "SONY_MP3_PLAYER", "product sony mp3 player", 2L, 135L));
-
         createdProducts.add(createProduct(104L, "SAM_MP3_PLAYER", "product sam mp3 player", 2L, 136L));
-
-
         List<Object> params = new ArrayList<Object>();
         params.add(134L);
         params.add(135L);
         params.add(136L);
-
-
         List<Object[]> brands = productDao.findQueryObjectsByNamedQueryWithList(
                 "PRODUCTS.ATTR.CODE.VALUES.BY.ASSIGNED.CATEGORIES",
                 params);
-
         assertNotNull(brands);
         assertEquals(3, brands.size());
         // test that list is alphabeticaly ordered
         assertEquals("LG", brands.get(0)[0]);
         assertEquals("Samsung", brands.get(1)[0]);
         assertEquals("Sony", brands.get(2)[0]);
-
-
     }
 
     @Test
     public void testFindByBrandsInCateroriesTest() {
-
         ArrayList<Long> createdProducts = new ArrayList<Long>();
         createdProducts.add(createProduct(102L, "LG_DVD_PLAYER", "product lg dvd player", 3L, 134L));
         createdProducts.add(createProduct(104L, "SAM_DVD_PLAYER", "product sam mp3 player", 3L, 134L));
-
         createdProducts.add(createProduct(102L, "LG_MP3_PLAYER", "product lg mp3 player", 2L, 135L));
         createdProducts.add(createProduct(103L, "SONY_MP3_PLAYER", "product sony mp3 player", 2L, 135L));
-
         createdProducts.add(createProduct(104L, "SAM_MP3_PLAYER", "product sam mp3 player", 2L, 136L));
-
-
         productDao.fullTextSearchReindex();
-
         List<Product> foundedProducts;
         BooleanQuery query;
         List<Long> categories = new ArrayList<Long>();
         BrandSearchQueryBuilder brandSearchQueryBuilder = new BrandSearchQueryBuilder();
-
-
         //exisitng LG product in category 134
         categories.clear();
         categories.add(134L);
@@ -587,7 +351,6 @@ public class TestProductDAO extends AbstractTestDAO {
         foundedProducts = productDao.fullTextSearch(query);
         assertNotNull(foundedProducts);
         assertEquals(query.toString(), 1, foundedProducts.size());
-
         //exisitng two LG products in category 135 135
         categories.clear();
         categories.add(134L);
@@ -596,8 +359,6 @@ public class TestProductDAO extends AbstractTestDAO {
         foundedProducts = productDao.fullTextSearch(query);
         assertNotNull(foundedProducts);
         assertEquals(query.toString(), 2, foundedProducts.size());
-
-
         //only one Sony product in categories 135, 134,136
         categories.clear();
         categories.add(134L);
@@ -607,8 +368,6 @@ public class TestProductDAO extends AbstractTestDAO {
         foundedProducts = productDao.fullTextSearch(query);
         assertNotNull(foundedProducts);
         assertEquals(query.toString(), 1, foundedProducts.size());
-
-
         //LG prod not exists in 136 category
         categories.clear();
         categories.add(136L);
@@ -616,7 +375,6 @@ public class TestProductDAO extends AbstractTestDAO {
         foundedProducts = productDao.fullTextSearch(query);
         assertNotNull(foundedProducts);
         assertEquals(0, foundedProducts.size());
-
     }
 
     private long createProduct(long brandId, String productCode, String productName, long productTypeId, long productCategoryId) {
@@ -638,27 +396,19 @@ public class TestProductDAO extends AbstractTestDAO {
         productCategory.setRank(0);
         productCategory = productCategoryDao.create(productCategory);
         assertNotNull(productCategory);
-
         ProductSku productSku = new ProductSkuEntity();
         productSku.setCode(product.getCode());
         productSku.setName(product.getName());
         productSku.setProduct(product);
         product.getSku().add(productSku);
         productDao.saveOrUpdate(product);
-
         // add quantity on warehoues
         SkuWarehouse skuWarehouse = new SkuWarehouseEntity();
         skuWarehouse.setSku(productSku);
         skuWarehouse.setQuantity(BigDecimal.ONE);
-        skuWarehouse.setWarehouse(
-                warehouseDao.findById(2L)
-        );
-
+        skuWarehouse.setWarehouse(warehouseDao.findById(2L));
         skuWareHouseDao.create(skuWarehouse);
-
-
         return pk;
-
     }
 
 
@@ -671,15 +421,12 @@ public class TestProductDAO extends AbstractTestDAO {
         assertTrue(!list.isEmpty());
         assertTrue(list.contains("Plastik"));
         assertTrue(list.contains("metal"));
-
         list = productDao.findQueryObjectByNamedQuery("PRODUCTS.ATTRIBUTE.VALUES.BY.CODE.PRODUCTTYPEID",
                 1L,
                 "BATTERY_TYPE");
         assertNotNull(list);
         assertTrue(!list.isEmpty());
         assertTrue(list.contains("Plutonium"));
-
-
     }
 
     @Test
@@ -689,15 +436,12 @@ public class TestProductDAO extends AbstractTestDAO {
                 1L);
         assertNotNull(list);
         assertTrue(!list.isEmpty());
-
         // be sure, that list is ranked
         for (Object[] array : list) {
             int rank = Integer.valueOf(String.valueOf(array[4]));
             assertTrue(rank >= currentRank);
             currentRank = rank;
-
         }
-
     }
 
     @Test
@@ -720,9 +464,7 @@ public class TestProductDAO extends AbstractTestDAO {
             if (skuCode.equals(prod.getCode())) {
                 return prod;
             }
-
         }
         return null;
     }
-
 }

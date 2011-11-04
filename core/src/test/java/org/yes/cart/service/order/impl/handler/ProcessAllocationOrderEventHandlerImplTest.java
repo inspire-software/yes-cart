@@ -38,27 +38,17 @@ public class ProcessAllocationOrderEventHandlerImplTest extends AbstractEventHan
         warehouseService = (WarehouseService) ctx.getBean("warehouseService");
     }
 
-    /**
-     * Test with ok payment
-     */
     @Test
     public void testHandle() {
-
         final Customer customer = OrderAssemblerImplTest.createCustomer(ctx);
         assertFalse(customer.getAddress().isEmpty());
-
         final CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
-
         customerOrder.setPgLabel("testPaymentGatewayLabel");
         orderService.update(customerOrder);
-
         CustomerOrderDelivery customerOrderDelivery = customerOrder.getDelivery().iterator().next();
-
         assertTrue(handler.handle(new OrderEventImpl("", customerOrder, customerOrderDelivery)));
-
         final Warehouse warehouse = warehouseService.getById(1);
-
         // check reserved quantity
         ProductSku sku = productSkuService.getProductSkuBySkuCode("CC_TEST1");
         Pair<BigDecimal, BigDecimal> qty = skuWarehouseService.getQuantity(
@@ -69,8 +59,6 @@ public class ProcessAllocationOrderEventHandlerImplTest extends AbstractEventHan
         );
         assertEquals(new BigDecimal("7.00"), qty.getFirst());
         assertEquals(new BigDecimal("0.00"), qty.getSecond());
-
-
         sku = productSkuService.getProductSkuBySkuCode("CC_TEST2");
         qty = skuWarehouseService.getQuantity(
                 new ArrayList<Warehouse>() {{
@@ -80,10 +68,7 @@ public class ProcessAllocationOrderEventHandlerImplTest extends AbstractEventHan
         );
         assertEquals(new BigDecimal("0.00"), qty.getFirst());
         assertEquals(new BigDecimal("0.00"), qty.getSecond());
-
-
         assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED,
                 customerOrderDelivery.getDeliveryStatus());
-
     }
 }

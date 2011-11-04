@@ -124,16 +124,12 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         assertEquals(1, dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP).size());
         assertEquals(1, dgroups.get(CustomerOrderDelivery.ELECTONIC_DELIVERY_GROUP).size());
         assertEquals(1, dgroups.get(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP).size());
-
     }
 
     @Test
     public void testAssembleCustomerOrder() {
-
         Customer customer = OrderAssemblerImplTest.createCustomer(ctx, "testAssembleCustomerOrder");
         assertFalse(customer.getAddress().isEmpty());
-
-
         ShoppingCart shoppingCart = getShoppingCart7(ctx, customer.getEmail());
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         assertNotNull("Customer can not be null", shoppingCart.getCustomerEmail());
@@ -143,23 +139,16 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         for (CustomerOrderDelivery cod : customerOrder.getDelivery()) {
             assertTrue(cod.getCustomerOrderDeliveryId() > 0);
             assertNotNull(cod.getDevileryNum());
-
             if (CustomerOrderDelivery.ELECTONIC_DELIVERY_GROUP.equals(cod.getDeliveryGroup())) {
                 assertEquals(BigDecimal.ZERO, cod.getPrice());
-
             } else {
                 assertEquals(new BigDecimal("16.77"), cod.getPrice());
             }
-
-
             for (CustomerOrderDeliveryDet det : cod.getDetail()) {
                 assertTrue(det.getCustomerorderdeliveryId() > 0);
                 assertTrue(MoneyUtils.isFirstBiggerThanSecond(det.getQty(), BigDecimal.ZERO));
-
             }
-
         }
-
     }
 
     /**
@@ -169,33 +158,23 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
      * @return cart
      */
     private ShoppingCart getShoppingCart1(final ApplicationContext context, final String customerEmail) {
-
         ShoppingCart shoppingCart = getEmptyCart(context, customerEmail);
-
         new AddSkuToCartEventCommandImpl(context, Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST1"))
                 .execute(shoppingCart);
-
         new AddSkuToCartEventCommandImpl(context, Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST3"))
                 .execute(shoppingCart);
-
         new AddSkuToCartEventCommandImpl(context, Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST3"))
                 .execute(shoppingCart);
-
         return shoppingCart;
     }
 
-
     //Bot sku with standard availability , but one of the has not qty on warehouse
     private ShoppingCart getShoppingCart2(final ApplicationContext context, final String customerEmail) {
-
         ShoppingCart shoppingCart = getEmptyCart(context, customerEmail);
-
         new AddSkuToCartEventCommandImpl(context, Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST4"))
                 .execute(shoppingCart);
-
         new AddSkuToCartEventCommandImpl(context, Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST4-M"))
                 .execute(shoppingCart);
-
         return shoppingCart;
     }
 
@@ -207,15 +186,11 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
      * @return cart
      */
     private ShoppingCart getShoppingCart3(final ApplicationContext context, final String customerEmail) {
-
         ShoppingCart shoppingCart = getEmptyCart(context, customerEmail);
-
         new AddSkuToCartEventCommandImpl(context, Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST4"))
                 .execute(shoppingCart);
-
         new AddSkuToCartEventCommandImpl(context, Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST5"))
                 .execute(shoppingCart);
-
         return shoppingCart;
     }
 
@@ -228,20 +203,13 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
      * @return cart
      */
     private ShoppingCart getShoppingCart4(final ApplicationContext context, final String customerEmail) {
-
         ShoppingCart shoppingCart = getEmptyCart(context, customerEmail);
-
         new AddSkuToCartEventCommandImpl(context, Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST4"))
                 .execute(shoppingCart);
-
         Map<String, String> param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST5");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "23.00");
-
-        new SetSkuQuantityToCartEventCommandImpl(context,
-                param)
-                .execute(shoppingCart);
-
+        new SetSkuQuantityToCartEventCommandImpl(context, param).execute(shoppingCart);
         return shoppingCart;
     }
 
@@ -253,26 +221,17 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
      * @return cart
      */
     private ShoppingCart getShoppingCart5(final ApplicationContext context, final String customerEmail) {
-
         ShoppingCart shoppingCart = getEmptyCart(context, customerEmail);
-
         Map<String, String> param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST4");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "34.00");
-
-        new SetSkuQuantityToCartEventCommandImpl(context,
-                param)
+        new SetSkuQuantityToCartEventCommandImpl(context, param)
                 .execute(shoppingCart);
-
-
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST5");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "23.00");
-
-        new SetSkuQuantityToCartEventCommandImpl(context,
-                param)
+        new SetSkuQuantityToCartEventCommandImpl(context, param)
                 .execute(shoppingCart);
-
         return shoppingCart;
     }
 
@@ -284,34 +243,22 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
      * @return cart
      */
     private ShoppingCart getShoppingCart6(final ApplicationContext context, final String customerEmail) {
-
         ShoppingCart shoppingCart = getEmptyCart(context, customerEmail);
-
         Map<String, String> param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST4");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
-
-        new SetSkuQuantityToCartEventCommandImpl(context,
-                param)
+        new SetSkuQuantityToCartEventCommandImpl(context, param)
                 .execute(shoppingCart);
-
-
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST5");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "2.00");
-
-        new SetSkuQuantityToCartEventCommandImpl(context,
-                param)
+        new SetSkuQuantityToCartEventCommandImpl(context, param)
                 .execute(shoppingCart);
-
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST6");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "3.00");
-
-        new SetSkuQuantityToCartEventCommandImpl(context,
-                param)
+        new SetSkuQuantityToCartEventCommandImpl(context, param)
                 .execute(shoppingCart);
-
         return shoppingCart;
     }
 
@@ -323,81 +270,53 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
      * @return cart
      */
     private ShoppingCart getShoppingCart7(final ApplicationContext context, final String customerEmail) {
-
         ShoppingCart shoppingCart = getEmptyCart(context, customerEmail);
-
         Map<String, String> param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST4");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
-
-        new SetSkuQuantityToCartEventCommandImpl(context,
-                param)
+        new SetSkuQuantityToCartEventCommandImpl(context, param)
                 .execute(shoppingCart);
-
-
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST5");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "200.00");
-
-        new SetSkuQuantityToCartEventCommandImpl(context,
-                param)
+        new SetSkuQuantityToCartEventCommandImpl(context, param)
                 .execute(shoppingCart);
-
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST6");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "3.00");
-
-        new SetSkuQuantityToCartEventCommandImpl(context,
-                param)
+        new SetSkuQuantityToCartEventCommandImpl(context, param)
                 .execute(shoppingCart);
-
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST7");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
-
-        new SetSkuQuantityToCartEventCommandImpl(context,
-                param)
+        new SetSkuQuantityToCartEventCommandImpl(context, param)
                 .execute(shoppingCart);
-
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST8");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
-
-        new SetSkuQuantityToCartEventCommandImpl(context,
-                param)
+        new SetSkuQuantityToCartEventCommandImpl(context, param)
                 .execute(shoppingCart);
-
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST9");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
-
-        new SetSkuQuantityToCartEventCommandImpl(context,
-                param)
+        new SetSkuQuantityToCartEventCommandImpl(context, param)
                 .execute(shoppingCart);
-
         return shoppingCart;
     }
 
     private ShoppingCart getEmptyCart(final ApplicationContext context, final String customerEmail) {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
-
         Map<String, String> params = new HashMap<String, String>();
         params.put(LoginCommandImpl.EMAIL, customerEmail);
         params.put(LoginCommandImpl.NAME, "John Doe");
-
-
         new SetShopCartCommandImpl(ctx, Collections.singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
                 .execute(shoppingCart);
-
         new ChangeCurrencyEventCommandImpl(context, Collections.singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "USD"))
                 .execute(shoppingCart);
-
         new LoginCommandImpl(null, params)
                 .execute(shoppingCart);
-
         new SetCarrierSlaCartCommandImpl(null, Collections.singletonMap(SetCarrierSlaCartCommandImpl.CMD_KEY, "1"))
                 .execute(shoppingCart);
-
         return shoppingCart;
     }
 }

@@ -24,12 +24,10 @@ public class CustomerRegistrationMessageListenerTest extends BaseCoreDBTestCase 
         CustomerRegistrationMessageListener customerRegistrationMessageListener = (CustomerRegistrationMessageListener)
                 ctx.getBean("customerRegistrationListener");
         RegistrationMessage registrationMessage = new RegistrationMessageImpl();
-
         registrationMessage.setFirstname("Bender");
         registrationMessage.setLastname("Rodrigez");
         registrationMessage.setEmail("bender@bar.localhost");
         registrationMessage.setPassword("neWpaSswOrd");
-
         registrationMessage.setShopId(10L);
         registrationMessage.setShopCode("SHOIP1");
         registrationMessage.setShopMailFrom("noreply@shop.com");
@@ -39,16 +37,12 @@ public class CustomerRegistrationMessageListenerTest extends BaseCoreDBTestCase 
         registrationMessage.getShopUrl().add("somegadget.com");
         registrationMessage.setPathToTemplateFolder("src/test/resources/mailtemplates/SHOIP1/");
         registrationMessage.setTemplateName("customerChangePassword");
-
         SimpleSmtpServer server = SimpleSmtpServer.start(2525);
-
         customerRegistrationMessageListener.processMessage(registrationMessage);
-
         server.stop();
         assertTrue(server.getReceivedEmailSize() == 1);
         Iterator emailIter = server.getReceivedEmail();
         SmtpMessage email = (SmtpMessage) emailIter.next();
-
         assertTrue(email.getBody().contains("neWpaSswOrd"));
         assertTrue(email.getBody().contains("Bender"));
         assertTrue(email.getBody().contains("Rodrigez"));

@@ -153,7 +153,6 @@ public class DtoCategoryServiceImplTest extends BaseCoreDBTestCase {
                 dtoService.deleteAttributeValue(dto.getAttrvalueId());
             }
         }
-
         list = dtoService.getEntityAttributes(100L);
         assertEquals(qty, list.size());
         for (AttrValueDTO dto : list) {
@@ -172,7 +171,6 @@ public class DtoCategoryServiceImplTest extends BaseCoreDBTestCase {
                 dtoService.deleteAttributeValue(dto.getAttrvalueId());
             }
         }
-
         list = dtoService.getEntityAttributes(100L);
         assertEquals(qty, list.size());
         for (AttrValueDTO dto : list) {
@@ -183,13 +181,11 @@ public class DtoCategoryServiceImplTest extends BaseCoreDBTestCase {
         attrValueCategory.setVal("1,2,3");
         attrValueCategory.setCategoryId(100L);
         dtoService.createEntityAttributeValue(attrValueCategory);
-
         attrValueCategory = dtoFactory.getByIface(AttrValueCategoryDTO.class);
         attrValueCategory.setAttributeDTO(dtoAttrService.getById(1004L));//URI
         attrValueCategory.setVal("val2");
         attrValueCategory.setCategoryId(100L);
         dtoService.createEntityAttributeValue(attrValueCategory);
-
         list = dtoService.getEntityAttributes(100L);
         assertEquals(qty, list.size());
         for (AttrValueDTO dto : list) {

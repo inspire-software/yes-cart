@@ -26,7 +26,6 @@ public class DtoWarehouseServiceImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        // Add your code here
         dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
         dtoService = (DtoWarehouseService) ctx.getBean(ServiceSpringKeys.DTO_WAREHOUSE_SERVICE);
     }
@@ -53,12 +52,10 @@ public class DtoWarehouseServiceImplTest extends BaseCoreDBTestCase {
         List<WarehouseDTO> dtos = dtoService.findByShopId(10L);
         assertNotNull(dtos);
         assertEquals(2, dtos.size());
-
         //shop has not assigned warehouses
         dtos = dtoService.findByShopId(20L);
         assertNotNull(dtos);
         assertTrue(dtos.isEmpty());
-
         //not existing shop
         dtos = dtoService.findByShopId(21L);
         assertNotNull(dtos);
@@ -71,10 +68,8 @@ public class DtoWarehouseServiceImplTest extends BaseCoreDBTestCase {
         dto = dtoService.create(dto);
         assertTrue(dto.getWarehouseId() > 0);
         dtoService.assignWarehouse(dto.getWarehouseId(), 20L);
-
         List<WarehouseDTO> dtos = dtoService.findByShopId(20L);
         assertEquals(1, dtos.size());
-
         dtoService.unassignWarehouse(dto.getWarehouseId(), 20L);
     }
 
@@ -84,10 +79,8 @@ public class DtoWarehouseServiceImplTest extends BaseCoreDBTestCase {
         dto = dtoService.create(dto);
         assertTrue(dto.getWarehouseId() > 0);
         dtoService.assignWarehouse(dto.getWarehouseId(), 30L);
-
         List<WarehouseDTO> dtos = dtoService.findByShopId(30L);
         assertEquals(1, dtos.size());
-
         dtoService.unassignWarehouse(dto.getWarehouseId(), 30L);
         dtos = dtoService.findByShopId(30L);
         assertTrue(dtos.isEmpty());
@@ -118,10 +111,8 @@ public class DtoWarehouseServiceImplTest extends BaseCoreDBTestCase {
         skuWarehouseDTO.setQuantity(BigDecimal.TEN);
         skuWarehouseDTO.setWarehouseId(1L);
         skuWarehouseDTO.setProductSkuId(9999L);
-
         skuWarehouseDTO = dtoService.createSkuOnWarehouse(skuWarehouseDTO);
         assertTrue(skuWarehouseDTO.getSkuWarehouseId() > 0);
-
     }
 
     @Test
@@ -130,14 +121,11 @@ public class DtoWarehouseServiceImplTest extends BaseCoreDBTestCase {
         skuWarehouseDTO.setQuantity(BigDecimal.TEN);
         skuWarehouseDTO.setWarehouseId(1L);
         skuWarehouseDTO.setProductSkuId(9999L);
-
         skuWarehouseDTO = dtoService.createSkuOnWarehouse(skuWarehouseDTO);
         assertTrue(skuWarehouseDTO.getSkuWarehouseId() > 0);
-
         skuWarehouseDTO.setQuantity(BigDecimal.ONE);
         skuWarehouseDTO = dtoService.updateSkuOnWarehouse(skuWarehouseDTO);
         assertEquals(BigDecimal.ONE, skuWarehouseDTO.getQuantity());
-
     }
 
     @Test
