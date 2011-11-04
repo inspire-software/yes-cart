@@ -46,11 +46,9 @@ public class CustomerWishListServiceImplTest extends BaseCoreDBTestCase {
         customer = customerService.create(customer, shopService.getById(10L));
         assertTrue(customer.getCustomerId() > 0);
 
-
         Collection<ProductSku> skus = productSkuService.getAllProductSkus(10000L); //SOBOT
         assertNotNull(skus);
         assertEquals(4, skus.size());
-
 
         CustomerWishList customerWishList = service.getGenericDao().getEntityFactory().getByIface(CustomerWishList.class);
         customerWishList.setCustomer(customer);

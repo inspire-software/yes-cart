@@ -27,64 +27,43 @@ public class DtoAttributeGroupServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testGetAttributeGroupByCode() {
-        try {
-            AttributeGroupDTO attributeGroupDTO = dtoAttributeGroupService.getAttributeGroupByCode("CATEGORY");
-            assertNotNull(attributeGroupDTO);
-            assertEquals("CATEGORY", attributeGroupDTO.getCode());
+    public void testGetAttributeGroupByCode() throws Exception {
+        AttributeGroupDTO attributeGroupDTO = dtoAttributeGroupService.getAttributeGroupByCode("CATEGORY");
+        assertNotNull(attributeGroupDTO);
+        assertEquals("CATEGORY", attributeGroupDTO.getCode());
 
-            attributeGroupDTO = dtoAttributeGroupService.getAttributeGroupByCode("NOTEXISTINGGROUP");
-            assertNull(attributeGroupDTO);
-
-
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
-
+        attributeGroupDTO = dtoAttributeGroupService.getAttributeGroupByCode("NOTEXISTINGGROUP");
+        assertNull(attributeGroupDTO);
     }
 
     @Test
-    public void testCreate() {
+    public void testCreate() throws Exception {
         AttributeGroupDTO attributeGroupDTO = getDto();
-        try {
-            attributeGroupDTO = dtoAttributeGroupService.create(attributeGroupDTO);
-            assertTrue(attributeGroupDTO.getAttributegroupId() > 0);
-            dtoAttributeGroupService.remove(attributeGroupDTO.getAttributegroupId());
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
+        attributeGroupDTO = dtoAttributeGroupService.create(attributeGroupDTO);
+        assertTrue(attributeGroupDTO.getAttributegroupId() > 0);
+        dtoAttributeGroupService.remove(attributeGroupDTO.getAttributegroupId());
     }
 
     @Test
-    public void testUpdate() {
+    public void testUpdate() throws Exception {
         AttributeGroupDTO attributeGroupDTO = getDto();
-        try {
-            attributeGroupDTO = dtoAttributeGroupService.create(attributeGroupDTO);
-            assertTrue(attributeGroupDTO.getAttributegroupId() > 0);
-            attributeGroupDTO.setName("other name");
-            attributeGroupDTO = dtoAttributeGroupService.update(attributeGroupDTO);
-            assertEquals("other name", attributeGroupDTO.getName());
-            dtoAttributeGroupService.remove(attributeGroupDTO.getAttributegroupId());
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
-
+        attributeGroupDTO = dtoAttributeGroupService.create(attributeGroupDTO);
+        assertTrue(attributeGroupDTO.getAttributegroupId() > 0);
+        attributeGroupDTO.setName("other name");
+        attributeGroupDTO = dtoAttributeGroupService.update(attributeGroupDTO);
+        assertEquals("other name", attributeGroupDTO.getName());
+        dtoAttributeGroupService.remove(attributeGroupDTO.getAttributegroupId());
     }
 
-
     @Test
-    public void testRemove() {
+    public void testRemove() throws Exception {
         AttributeGroupDTO attributeGroupDTO = getDto();
-        try {
-            attributeGroupDTO = dtoAttributeGroupService.create(attributeGroupDTO);
-            assertTrue(attributeGroupDTO.getAttributegroupId() > 0);
-            long id = attributeGroupDTO.getAttributegroupId();
-            dtoAttributeGroupService.remove(id);
-            attributeGroupDTO = dtoAttributeGroupService.getById(id);
-            assertNull(attributeGroupDTO);
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
+        attributeGroupDTO = dtoAttributeGroupService.create(attributeGroupDTO);
+        assertTrue(attributeGroupDTO.getAttributegroupId() > 0);
+        long id = attributeGroupDTO.getAttributegroupId();
+        dtoAttributeGroupService.remove(id);
+        attributeGroupDTO = dtoAttributeGroupService.getById(id);
+        assertNull(attributeGroupDTO);
     }
 
     private AttributeGroupDTO getDto() {

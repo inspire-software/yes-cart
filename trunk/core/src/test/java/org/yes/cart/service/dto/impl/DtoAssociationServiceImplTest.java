@@ -29,73 +29,48 @@ public class DtoAssociationServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testCreate() {
+    public void testCreate() throws Exception {
         AssociationDTO dto = getDto();
-
-        try {
-            dto = dtoAssociationService.create(dto);
-            assertTrue(dto.getAssociationId() > 0);
-            dtoAssociationService.remove(dto.getAssociationId());
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
-
-
-    }
-
-
-    @Test
-    public void testUpdate() {
-        AssociationDTO dto = getDto();
-
-        try {
-            dto = dtoAssociationService.create(dto);
-            assertTrue(dto.getAssociationId() > 0);
-            dto.setCode("code2");
-            dto.setName("name2");
-            dto.setDescription("description2");
-
-            dto = dtoAssociationService.update(dto);
-            assertEquals("code2", dto.getCode());
-            assertEquals("name2", dto.getName());
-            assertEquals("description2", dto.getDescription());
-
-            dtoAssociationService.remove(dto.getAssociationId());
-
-
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
-
+        dto = dtoAssociationService.create(dto);
+        assertTrue(dto.getAssociationId() > 0);
+        dtoAssociationService.remove(dto.getAssociationId());
     }
 
     @Test
-    public void testGetAll() {
-        try {
-            List<AssociationDTO> list = dtoAssociationService.getAll();
-            assertEquals(4, list.size());
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
+    public void testUpdate() throws Exception {
+        AssociationDTO dto = getDto();
+        dto = dtoAssociationService.create(dto);
+        assertTrue(dto.getAssociationId() > 0);
+        dto.setCode("code2");
+        dto.setName("name2");
+        dto.setDescription("description2");
+
+        dto = dtoAssociationService.update(dto);
+        assertEquals("code2", dto.getCode());
+        assertEquals("name2", dto.getName());
+        assertEquals("description2", dto.getDescription());
+
+        dtoAssociationService.remove(dto.getAssociationId());
     }
 
     @Test
-    public void testRemove() {
+    public void testGetAll() throws Exception {
+        List<AssociationDTO> list = dtoAssociationService.getAll();
+        assertEquals(4, list.size());
+    }
+
+    @Test
+    public void testRemove() throws Exception {
         AssociationDTO dto = getDto();
-        try {
-            dto = dtoAssociationService.create(dto);
-            assertTrue(dto.getAssociationId() > 0);
+        dto = dtoAssociationService.create(dto);
+        assertTrue(dto.getAssociationId() > 0);
 
-            long pk = dto.getAssociationId();
+        long pk = dto.getAssociationId();
 
-            dtoAssociationService.remove(pk);
+        dtoAssociationService.remove(pk);
 
-            dto = dtoAssociationService.getById(pk);
-            assertNull(dto);
-
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
+        dto = dtoAssociationService.getById(pk);
+        assertNull(dto);
     }
 
     private AssociationDTO getDto() {
@@ -105,6 +80,4 @@ public class DtoAssociationServiceImplTest extends BaseCoreDBTestCase {
         dto.setDescription("description");
         return dto;
     }
-
-
 }

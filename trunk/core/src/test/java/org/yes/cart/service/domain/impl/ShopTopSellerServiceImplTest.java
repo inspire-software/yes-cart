@@ -74,12 +74,7 @@ public class ShopTopSellerServiceImplTest extends BaseCoreDBTestCase {
             assertEquals(expectation.remove(key), ts.getCounter());
             expectation.remove(key);
         }
-
-
         //dumpDataBase("topsell", new String[]{"TCUSTOMERORDER", "TCUSTOMERORDERDET", "TSHOPTOPSELLER"});
-
         assertTrue("Expectation must be empty but has " + expectation.size(), expectation.isEmpty());
-
-
     }
 }

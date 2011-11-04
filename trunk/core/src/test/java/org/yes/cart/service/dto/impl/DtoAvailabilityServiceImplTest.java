@@ -58,14 +58,9 @@ public class DtoAvailabilityServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testGetAll() {
-        try {
-            List<AvailabilityDTO> list = dtoService.getAll();
-            assertFalse(list.isEmpty());
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
-
+    public void testGetAll() throws Exception {
+        List<AvailabilityDTO> list = dtoService.getAll();
+        assertFalse(list.isEmpty());
     }
 
     @Test

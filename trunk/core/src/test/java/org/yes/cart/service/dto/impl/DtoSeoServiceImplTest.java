@@ -26,47 +26,33 @@ public class DtoSeoServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testCreate() {
-        try {
-            SeoDTO seoDTO = getDto();
-            seoDTO = dtoService.create(seoDTO);
-            assertTrue(seoDTO.getSeoId() > 0);
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
-    }
-
-
-    @Test
-    public void testUpdate() {
-        try {
-            SeoDTO seoDTO = getDto();
-            seoDTO = dtoService.create(seoDTO);
-            assertTrue(seoDTO.getSeoId() > 0);
-            long pk = seoDTO.getSeoId();
-            seoDTO.setUri("Bender-Bending-Rodríguez-Robot");
-            dtoService.update(seoDTO);
-            seoDTO = dtoService.getById(pk);
-            assertEquals("Bender-Bending-Rodríguez-Robot", seoDTO.getUri());
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
-
+    public void testCreate() throws Exception {
+        SeoDTO seoDTO = getDto();
+        seoDTO = dtoService.create(seoDTO);
+        assertTrue(seoDTO.getSeoId() > 0);
     }
 
     @Test
-    public void testRemove() {
-        try {
-            SeoDTO seoDTO = getDto();
-            seoDTO = dtoService.create(seoDTO);
-            assertTrue(seoDTO.getSeoId() > 0);
-            long pk = seoDTO.getSeoId();
-            dtoService.remove(pk);
-            seoDTO = dtoService.getById(pk);
-            assertNull(seoDTO);
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
+    public void testUpdate() throws Exception {
+        SeoDTO seoDTO = getDto();
+        seoDTO = dtoService.create(seoDTO);
+        assertTrue(seoDTO.getSeoId() > 0);
+        long pk = seoDTO.getSeoId();
+        seoDTO.setUri("Bender-Bending-Rodríguez-Robot");
+        dtoService.update(seoDTO);
+        seoDTO = dtoService.getById(pk);
+        assertEquals("Bender-Bending-Rodríguez-Robot", seoDTO.getUri());
+    }
+
+    @Test
+    public void testRemove() throws Exception {
+        SeoDTO seoDTO = getDto();
+        seoDTO = dtoService.create(seoDTO);
+        assertTrue(seoDTO.getSeoId() > 0);
+        long pk = seoDTO.getSeoId();
+        dtoService.remove(pk);
+        seoDTO = dtoService.getById(pk);
+        assertNull(seoDTO);
     }
 
     private SeoDTO getDto() throws UnableToCreateInstanceException, UnmappedInterfaceException {

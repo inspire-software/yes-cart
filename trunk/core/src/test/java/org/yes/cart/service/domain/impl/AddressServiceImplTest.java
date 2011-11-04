@@ -32,7 +32,6 @@ public class AddressServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetAddressesByCustomerId() {
-
         Customer customer = customerService.getGenericDao().getEntityFactory().getByIface(Customer.class);
         customer.setEmail("bender@domain.com");
         customer.setFirstname("Bender");
@@ -53,7 +52,6 @@ public class AddressServiceImplTest extends BaseCoreDBTestCase {
 
         addressService.create(address);
 
-
         address = addressService.getGenericDao().getEntityFactory().getByIface(Address.class);
         address.setFirstname("Bender");
         address.setLastname("Rodriguez");
@@ -68,12 +66,8 @@ public class AddressServiceImplTest extends BaseCoreDBTestCase {
         customer = customerService.getById(customer.getCustomerId());
 
         assertEquals(2, customer.getAddress().size());
-
         assertEquals(2, addressService.getAddressesByCustomerId(customer.getCustomerId()).size());
-
         assertTrue(addressService.getAddressesByCustomerId(customer.getCustomerId(), Address.ADDR_TYPE_SHIPING).isEmpty());
-
         assertEquals(2, addressService.getAddressesByCustomerId(customer.getCustomerId(), Address.ADDR_TYPE_BILLING).size());
-
     }
 }

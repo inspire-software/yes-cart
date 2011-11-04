@@ -26,14 +26,10 @@ public class DtoImageServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testCreate() {
-        try {
-            SeoImageDTO dto = getDto();
-            dto = dtoService.create(dto);
-            assertTrue(dto.getSeoImageId() > 0);
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
+    public void testCreate() throws Exception {
+        SeoImageDTO dto = getDto();
+        dto = dtoService.create(dto);
+        assertTrue(dto.getSeoImageId() > 0);
     }
 
     private SeoImageDTO getDto() throws UnableToCreateInstanceException, UnmappedInterfaceException {
@@ -45,36 +41,27 @@ public class DtoImageServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testUpdate() {
-        try {
-            SeoImageDTO dto = getDto();
-            dto = dtoService.create(dto);
-            assertTrue(dto.getSeoImageId() > 0);
-            dto.setAlt("alt2");
-            dto.setImageName("image1.jpeg2");
-            dto.setTitle("title2");
-            dto = dtoService.update(dto);
-            assertEquals("alt2", dto.getAlt());
-            assertEquals("image1.jpeg2", dto.getImageName());
-            assertEquals("title2", dto.getTitle());
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
+    public void testUpdate() throws Exception {
+        SeoImageDTO dto = getDto();
+        dto = dtoService.create(dto);
+        assertTrue(dto.getSeoImageId() > 0);
+        dto.setAlt("alt2");
+        dto.setImageName("image1.jpeg2");
+        dto.setTitle("title2");
+        dto = dtoService.update(dto);
+        assertEquals("alt2", dto.getAlt());
+        assertEquals("image1.jpeg2", dto.getImageName());
+        assertEquals("title2", dto.getTitle());
     }
 
     @Test
-    public void testRemove() {
-        try {
-            SeoImageDTO dto = getDto();
-            dto = dtoService.create(dto);
-            assertTrue(dto.getSeoImageId() > 0);
-            long pk = dto.getSeoImageId();
-            dtoService.remove(pk);
-            dto = dtoService.getById(pk);
-            assertNull(dto);
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
-
+    public void testRemove() throws Exception {
+        SeoImageDTO dto = getDto();
+        dto = dtoService.create(dto);
+        assertTrue(dto.getSeoImageId() > 0);
+        long pk = dto.getSeoImageId();
+        dtoService.remove(pk);
+        dto = dtoService.getById(pk);
+        assertNull(dto);
     }
 }

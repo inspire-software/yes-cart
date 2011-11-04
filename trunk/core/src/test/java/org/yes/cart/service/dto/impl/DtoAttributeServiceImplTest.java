@@ -30,90 +30,63 @@ public class DtoAttributeServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testCreate() {
+    public void testCreate() throws Exception {
         AttributeDTO dto = getDto();
-        try {
-            dto = dtoAttributeService.create(dto);
-            assertTrue(dto.getAttributeId() > 0);
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
+        dto = dtoAttributeService.create(dto);
+        assertTrue(dto.getAttributeId() > 0);
     }
 
 
     @Test
-    public void testUpdate() {
+    public void testUpdate() throws Exception {
         AttributeDTO dto = getDto();
-        try {
-            dto = dtoAttributeService.create(dto);
-            long id = dto.getAttributeId();
-            assertTrue(dto.getAttributeId() > 0);
-            assertEquals("string value", dto.getVal());
-            dto.setVal("i love you meat bags");
-            dtoAttributeService.update(dto);
-            dto = dtoAttributeService.getById(id);
-            assertEquals("i love you meat bags", dto.getVal());
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
-
+        dto = dtoAttributeService.create(dto);
+        long id = dto.getAttributeId();
+        assertTrue(dto.getAttributeId() > 0);
+        assertEquals("string value", dto.getVal());
+        dto.setVal("i love you meat bags");
+        dtoAttributeService.update(dto);
+        dto = dtoAttributeService.getById(id);
+        assertEquals("i love you meat bags", dto.getVal());
     }
 
     @Test
-    public void testFindByAttributeGroupCode() {
-        try {
+    public void testFindByAttributeGroupCode() throws Exception {
+        List<AttributeDTO> dtos = dtoAttributeService.findByAttributeGroupCode("CATEGORY");
+        assertNotNull(dtos);
+        assertEquals(3, dtos.size());
 
-            List<AttributeDTO> dtos = dtoAttributeService.findByAttributeGroupCode("CATEGORY");
-            assertNotNull(dtos);
-            assertEquals(3, dtos.size());
-
-            dtos = dtoAttributeService.findByAttributeGroupCode("NONEXISTINGGROUP");
-            assertNotNull(dtos);
-            assertTrue(dtos.isEmpty());
-
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
+        dtos = dtoAttributeService.findByAttributeGroupCode("NONEXISTINGGROUP");
+        assertNotNull(dtos);
+        assertTrue(dtos.isEmpty());
     }
 
     @Test
-    public void testFindAvailableAttributes() {
-        try {
-            List<AttributeDTO> dtos = dtoAttributeService.findAvailableAttributes(
-                    "CATEGORY",
-                    Collections.singletonList("CATEGORY_ITEMS_PER_PAGE")
-            );
-            assertNotNull(dtos);
-            assertEquals(2, dtos.size());
-            for (AttributeDTO dto : dtos) {
-                assertFalse("CATEGORY_ITEMS_PER_PAGE".equals(dto.getCode()));
-            }
-
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
+    public void testFindAvailableAttributes() throws Exception {
+        List<AttributeDTO> dtos = dtoAttributeService.findAvailableAttributes(
+                "CATEGORY",
+                Collections.singletonList("CATEGORY_ITEMS_PER_PAGE")
+        );
+        assertNotNull(dtos);
+        assertEquals(2, dtos.size());
+        for (AttributeDTO dto : dtos) {
+            assertFalse("CATEGORY_ITEMS_PER_PAGE".equals(dto.getCode()));
         }
     }
 
     @Test
-    public void testFindAttributesWithMultipleValues() {
-        //
-        try {
-            List<AttributeDTO> dtos = dtoAttributeService.findAttributesWithMultipleValues(
-                    "PRODUCT");
-            assertNotNull(dtos);
-            assertFalse(dtos.isEmpty());
-            for (AttributeDTO dto : dtos) {
-                assertTrue(dto.isAllowduplicate());
-            }
-
-            dtos = dtoAttributeService.findAttributesWithMultipleValues(
-                    "SYSTEM");
-            assertNull(dtos);
-
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
+    public void testFindAttributesWithMultipleValues() throws Exception {
+        List<AttributeDTO> dtos = dtoAttributeService.findAttributesWithMultipleValues(
+                "PRODUCT");
+        assertNotNull(dtos);
+        assertFalse(dtos.isEmpty());
+        for (AttributeDTO dto : dtos) {
+            assertTrue(dto.isAllowduplicate());
         }
 
+        dtos = dtoAttributeService.findAttributesWithMultipleValues(
+                "SYSTEM");
+        assertNull(dtos);
     }
 
     private AttributeDTO getDto() {

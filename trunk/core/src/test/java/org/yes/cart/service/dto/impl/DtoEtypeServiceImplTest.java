@@ -29,63 +29,42 @@ public class DtoEtypeServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testCreate() {
+    public void testCreate() throws Exception {
         EtypeDTO etypeDTO = getDto();
-        try {
-            assertEquals(0, etypeDTO.getEtypeId());
-            etypeDTO = dtoEtypeService.create(etypeDTO);
-            assertTrue(etypeDTO.getEtypeId() > 0);
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
-
-    }
-
-
-    @Test
-    public void testUpdate() {
-        EtypeDTO etypeDTO = getDto();
-        try {
-            assertEquals(0, etypeDTO.getEtypeId());
-            etypeDTO = dtoEtypeService.create(etypeDTO);
-            long id = etypeDTO.getEtypeId();
-            assertTrue(etypeDTO.getEtypeId() > 0);
-            etypeDTO.setJavatype("java.math.BigDecimal");
-            dtoEtypeService.update(etypeDTO);
-            etypeDTO = dtoEtypeService.getById(id);
-            assertEquals("java.math.BigDecimal", etypeDTO.getJavatype());
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
-
+        assertEquals(0, etypeDTO.getEtypeId());
+        etypeDTO = dtoEtypeService.create(etypeDTO);
+        assertTrue(etypeDTO.getEtypeId() > 0);
     }
 
     @Test
-    public void testGetAll() {
-        try {
-            List<EtypeDTO> list = dtoEtypeService.getAll();
-            assertFalse(list.isEmpty());
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
-
+    public void testUpdate() throws Exception {
+        EtypeDTO etypeDTO = getDto();
+        assertEquals(0, etypeDTO.getEtypeId());
+        etypeDTO = dtoEtypeService.create(etypeDTO);
+        long id = etypeDTO.getEtypeId();
+        assertTrue(etypeDTO.getEtypeId() > 0);
+        etypeDTO.setJavatype("java.math.BigDecimal");
+        dtoEtypeService.update(etypeDTO);
+        etypeDTO = dtoEtypeService.getById(id);
+        assertEquals("java.math.BigDecimal", etypeDTO.getJavatype());
     }
 
     @Test
-    public void testRemove() {
-        EtypeDTO etypeDTO = getDto();
-        try {
-            assertEquals(0, etypeDTO.getEtypeId());
-            etypeDTO = dtoEtypeService.create(etypeDTO);
-            long id = etypeDTO.getEtypeId();
-            assertTrue(etypeDTO.getEtypeId() > 0);
-            dtoEtypeService.remove(id);
-            etypeDTO = dtoEtypeService.getById(id);
-            assertNull(etypeDTO);
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
-        }
+    public void testGetAll() throws Exception {
+        List<EtypeDTO> list = dtoEtypeService.getAll();
+        assertFalse(list.isEmpty());
+    }
 
+    @Test
+    public void testRemove() throws Exception {
+        EtypeDTO etypeDTO = getDto();
+        assertEquals(0, etypeDTO.getEtypeId());
+        etypeDTO = dtoEtypeService.create(etypeDTO);
+        long id = etypeDTO.getEtypeId();
+        assertTrue(etypeDTO.getEtypeId() > 0);
+        dtoEtypeService.remove(id);
+        etypeDTO = dtoEtypeService.getById(id);
+        assertNull(etypeDTO);
     }
 
     private EtypeDTO getDto() {

@@ -21,7 +21,6 @@ public class CustomerRegistrationMessageListenerTest extends BaseCoreDBTestCase 
 
     @Test
     public void testOnMessage0() throws Exception {
-
         CustomerRegistrationMessageListener customerRegistrationMessageListener = (CustomerRegistrationMessageListener)
                 ctx.getBean("customerRegistrationListener");
         RegistrationMessage registrationMessage = new RegistrationMessageImpl();
@@ -50,7 +49,6 @@ public class CustomerRegistrationMessageListenerTest extends BaseCoreDBTestCase 
         Iterator emailIter = server.getReceivedEmail();
         SmtpMessage email = (SmtpMessage) emailIter.next();
 
-
         assertTrue(email.getBody().contains("neWpaSswOrd"));
         assertTrue(email.getBody().contains("Bender"));
         assertTrue(email.getBody().contains("Rodrigez"));
@@ -58,9 +56,5 @@ public class CustomerRegistrationMessageListenerTest extends BaseCoreDBTestCase 
         assertTrue(email.getBody().contains("somegadget.com"));
         assertEquals("noreply@shop.com", email.getHeaderValue("From"));
         assertEquals("Password has been changed", email.getHeaderValue("Subject"));
-
-
     }
-
-
 }
