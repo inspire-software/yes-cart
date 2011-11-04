@@ -27,6 +27,7 @@ public class CancelOrderEventHandlerImplTest extends AbstractEventHandlerImplTes
         orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
     }
 
+    // FIX to allow running from IDE
     @Test
     public void testHandle() {
         final Customer customer = OrderAssemblerImplTest.createCustomer(ctx);

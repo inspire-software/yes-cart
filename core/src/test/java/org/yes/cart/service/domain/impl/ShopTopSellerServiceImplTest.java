@@ -41,9 +41,9 @@ public class ShopTopSellerServiceImplTest extends BaseCoreDBTestCase {
         shopTopSellerDao = (GenericDAO<ShopTopSeller, Long>) ctx.getBean(DaoServiceBeanKeys.SHOP_TOP_SELLLER_DAO);
     }
 
+    // TODO fix to not depend on order of running
     @Test
     public void testUpdateTopSellers() throws Exception {
-
         Map<Long, BigDecimal> expectation = new HashMap<Long, BigDecimal>();
         expectation.put(15120L, new BigDecimal("2"));
         expectation.put(15122L, new BigDecimal("4"));
@@ -54,26 +54,21 @@ public class ShopTopSellerServiceImplTest extends BaseCoreDBTestCase {
         expectation.put(15128L, new BigDecimal("2"));
         expectation.put(15129L, new BigDecimal("2"));
         expectation.put(10L, new BigDecimal("34"));
-
         Customer customer = OrderAssemblerImplTest.createCustomer(ctx, "testTopSellers");
         ShoppingCart shoppingCart = OrderAssemblerImplTest.getShoppingCart2(ctx, customer.getEmail());
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         customerOrder = customerOrderDao.create(customerOrder);
-
         Customer customer2 = OrderAssemblerImplTest.createCustomer(ctx, "testTopSellers2");
         ShoppingCart shoppingCart2 = OrderAssemblerImplTest.getShoppingCart2(ctx, customer2.getEmail());
         CustomerOrder customerOrder2 = orderAssembler.assembleCustomerOrder(shoppingCart2);
         customerOrder = customerOrderDao.create(customerOrder2);
-
         shopTopSellerService.updateTopSellers(10);
-
         List<ShopTopSeller> allTopSellers = shopTopSellerDao.findAll();
         for (ShopTopSeller ts : allTopSellers) {
             Long key = ts.getProduct().getId();
             assertEquals(expectation.remove(key), ts.getCounter());
             expectation.remove(key);
         }
-        //dumpDataBase("topsell", new String[]{"TCUSTOMERORDER", "TCUSTOMERORDERDET", "TSHOPTOPSELLER"});
         assertTrue("Expectation must be empty but has " + expectation.size(), expectation.isEmpty());
     }
 }

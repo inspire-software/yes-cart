@@ -51,6 +51,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
     /**
      * Test with ok payment and offline payment gw
      */
+    // TODO fix to not depend on order or running
     @Test
     public void testHandle0_0() throws Exception {
         final Customer customer = OrderAssemblerImplTest.createCustomer(ctx);
@@ -98,6 +99,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
     /**
      * Test with ok payment and online payment gw
      */
+    // TODO fix to not depend on order or running
     @Test
     public void testHandle0_1() throws Exception {
         final Customer customer = OrderAssemblerImplTest.createCustomer(ctx);
@@ -144,6 +146,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
     /**
      * Test with failed payment
      */
+    // TODO fix to not depend on order or running
     @Test
     public void testHandle1_1() throws Exception {
         TestPaymentGatewayImpl.getGatewayConfig().put(TestPaymentGatewayImpl.AUTH_FAIL, new PaymentGatewayParameterEntity());

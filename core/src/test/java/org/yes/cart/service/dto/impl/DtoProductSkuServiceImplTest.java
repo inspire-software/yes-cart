@@ -139,6 +139,7 @@ public class DtoProductSkuServiceImplTest extends BaseCoreDBTestCase {
         assertTrue((new BigDecimal("2.32")).equals(skuPriceDTO.getMinimalPrice()));
     }
 
+    // TODO fix to not depend on order of running
     @Test
     public void testCreateEntityAttributeValue() throws Exception {
         ProductSkuDTO dto = getDto();

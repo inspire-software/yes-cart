@@ -39,6 +39,7 @@ public class CancelOrderWithRefundOrderEventHandlerImplTest extends AbstractEven
     /**
      * Test on order , that not completed.
      */
+    // TODO fix to not depend on order or running
     @Test
     public void testHandle0() throws Exception {
         final Customer customer = OrderAssemblerImplTest.createCustomer(ctx);
@@ -69,6 +70,7 @@ public class CancelOrderWithRefundOrderEventHandlerImplTest extends AbstractEven
     /**
      * Test on order , that not completed.
      */
+    // TODO fix to not depend on order or running
     @Test
     public void testHandle1() throws Exception {
         final Customer customer = OrderAssemblerImplTest.createCustomer(ctx);
