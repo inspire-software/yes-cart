@@ -48,6 +48,7 @@ public class SkuWarehouseServiceImplTest extends BaseCoreDBTestCase {
         skuWarehouseService.delete(skuWarehouse);
     }
 
+    // TODO fix to not depend on order or running
     @Test
     public void testGetQuantity() {
         SkuWarehouse skuWarehouse;
@@ -88,6 +89,7 @@ public class SkuWarehouseServiceImplTest extends BaseCoreDBTestCase {
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), rez.getSecond());
     }
 
+    // TODO fix to not depend on order or running
     @Test
     public void testUpdate() {
         SkuWarehouse skuWarehouse = skuWarehouseService.getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);

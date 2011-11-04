@@ -32,6 +32,7 @@ public class CustomerOrderServiceImplTest extends BaseCoreDBTestCase {
         customerOrderService = (CustomerOrderService) ctx.getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
     }
 
+    // TODO fix to not depend on order or running
     @Test
     public void testCreateAndDelete() throws Exception {
         final String customerPrefix = "testCreateAndDelete";
@@ -45,6 +46,7 @@ public class CustomerOrderServiceImplTest extends BaseCoreDBTestCase {
         assertNull(customerOrderService.getById(pk));
     }
 
+    // TODO fix to not depend on order or running
     @Test
     public void testFindByGuid() throws Exception {
         final String customerPrefix = "testFindByGuid";
@@ -61,6 +63,7 @@ public class CustomerOrderServiceImplTest extends BaseCoreDBTestCase {
         assertNull(customerOrderService.findByGuid(shoppingCart.getGuid()));
     }
 
+    // TODO fix to not depend on order or running
     @Test
     public void testGetCustomerOrders() throws Exception {
         final String customerPrefix = "cosit2";
@@ -83,6 +86,7 @@ public class CustomerOrderServiceImplTest extends BaseCoreDBTestCase {
         assertEquals(4, order.getDelivery().size());
     }
 
+    // TODO fix to not depend on order or running
     @Test
     public void testPersistReassembledOrder2() throws Exception {
         final String customerPrefix = "cosit4";
@@ -93,6 +97,7 @@ public class CustomerOrderServiceImplTest extends BaseCoreDBTestCase {
         assertEquals(2, order.getDelivery().size());
     }
 
+    // TODO fix to not depend on order or running
     @Test
     public void testPersistReassembledOrder3() throws Exception {
         final String customerPrefix = "testPersistReassembledOrder3";

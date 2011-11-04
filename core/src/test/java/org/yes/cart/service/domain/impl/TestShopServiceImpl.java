@@ -20,19 +20,12 @@ public class TestShopServiceImpl extends BaseCoreDBTestCase {
 
     @Test
     public void testGetShopByCode() {
-
         final ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
-
         assertNull(shopService.getShopByCode("NOTEXISTING-SHOP"));
-
         assertNotNull(shopService.getShopByCode("SHOIP3"));
-
     }
 
-
-    /**
-     *
-     */
+    // TODO fix to not depend on order or running
     @Test
     public void testGetAllCategoriesTestOnShopWithoutAssignedCategories() {
         final ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
@@ -61,8 +54,9 @@ public class TestShopServiceImpl extends BaseCoreDBTestCase {
     }
 
     /**
-     * Prove, that supperted currency can be assigned via shop attributes.
+     * Prove, that supported currency can be assigned via shop attributes.
      */
+    // TODO fix to not depend on order or running
     @Test
     public void testAssignCurrency() {
         final ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
@@ -73,26 +67,20 @@ public class TestShopServiceImpl extends BaseCoreDBTestCase {
                 "Supported currency is incorrect",
                 "QWE,ASD,ZXC",
                 shop.getAttributeByCode(AttributeNamesKeys.SUPPORTED_CURRENSIES).getVal());
-
     }
 
-
     /**
-     * Prove, that supperted currency can be assigned via shop attributes.
+     * Prove, that supported currency can be assigned via shop attributes.
      */
     @Test
     public void testAssignCurrencys() {
         final ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
         Shop shop = shopService.getShopByDomainName("long.live.robots");
         shopService.updateAttributeValue(shop.getShopId(), AttributeNamesKeys.SUPPORTED_CURRENSIES, "QWE,ZXC");
-
         shop = shopService.getShopByDomainName("eddie.lives.somewhere.in.time");
         shopService.updateAttributeValue(shop.getShopId(), AttributeNamesKeys.SUPPORTED_CURRENSIES, "ASD,USD,QWE,UAH");
-
         shop = shopService.getShopByDomainName("gadget.npa.com");
         shopService.updateAttributeValue(shop.getShopId(), AttributeNamesKeys.SUPPORTED_CURRENSIES, "");
-
-
         Collection<String> currencies = shopService.getAllSupportedCurrenciesByShops();
         assertEquals(5, currencies.size());
         Iterator<String> iter = currencies.iterator();
@@ -101,8 +89,5 @@ public class TestShopServiceImpl extends BaseCoreDBTestCase {
         assertEquals("UAH", iter.next());
         assertEquals("USD", iter.next());
         assertEquals("ZXC", iter.next());
-
-
-    }
-
+   }
 }
