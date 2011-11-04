@@ -5,6 +5,8 @@ import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 import org.yes.cart.payment.persistence.entity.impl.PaymentGatewayParameterEntity;
 import org.yes.cart.payment.service.PaymentGatewayParameterService;
 
+import static org.junit.Assert.*;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011

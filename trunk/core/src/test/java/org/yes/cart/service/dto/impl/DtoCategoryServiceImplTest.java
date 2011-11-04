@@ -13,6 +13,8 @@ import org.yes.cart.service.dto.DtoCategoryService;
 
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -20,13 +22,12 @@ import java.util.List;
  */
 public class DtoCategoryServiceImplTest extends BaseCoreDBTestCase {
 
-    private DtoFactory dtoFactory = null;
-    private DtoCategoryService dtoService = null;
-    private DtoAttributeService dtoAttrService = null;
+    private DtoFactory dtoFactory;
+    private DtoCategoryService dtoService;
+    private DtoAttributeService dtoAttrService;
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
         dtoService = (DtoCategoryService) ctx.getBean(ServiceSpringKeys.DTO_CATEGORY_SERVICE);
         dtoAttrService = (DtoAttributeService) ctx.getBean(ServiceSpringKeys.DTO_ATTRIBUTE_SERVICE);
@@ -267,6 +268,4 @@ public class DtoCategoryServiceImplTest extends BaseCoreDBTestCase {
         dto.setParentId(100L);
         return dto;
     }
-
-
 }

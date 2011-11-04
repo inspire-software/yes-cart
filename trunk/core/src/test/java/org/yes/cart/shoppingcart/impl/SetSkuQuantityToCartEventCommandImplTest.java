@@ -15,6 +15,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -22,18 +25,15 @@ import java.util.Map;
  */
 public class SetSkuQuantityToCartEventCommandImplTest extends BaseCoreDBTestCase {
 
-    ShopService shopService = null;
-    PriceService priceService = null;
-    ProductService productService = null;
-
+    ShopService shopService;
+    PriceService priceService;
+    ProductService productService;
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         productService = (ProductService) ctx.getBean(ServiceSpringKeys.PRODUCT_SERVICE);
         priceService = (PriceService) ctx.getBean(ServiceSpringKeys.PRICE_SERVICE);
         shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
-
     }
 
     @Test

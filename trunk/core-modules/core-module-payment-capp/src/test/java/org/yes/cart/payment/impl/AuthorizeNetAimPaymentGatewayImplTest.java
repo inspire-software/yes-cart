@@ -1,6 +1,5 @@
 package org.yes.cart.payment.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.domain.entity.CustomerOrder;
@@ -12,6 +11,8 @@ import org.yes.cart.payment.service.CustomerOrderPaymentService;
 
 import java.util.Iterator;
 import java.util.UUID;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -31,18 +32,9 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends CappPaymentModuleDBTe
     @Before
     public void setUp() throws Exception {
         if (isTestAllowed()) {
-            super.setUp();
             customerOrderPaymentService = (CustomerOrderPaymentService) ctx.getBean("customerOrderPaymentService");
             authorizeNetAimPaymentGateway = (AuthorizeNetAimPaymentGatewayImpl) ctx.getBean("authorizeNetAimPaymentGateway");
             paymentProcessor = new PaymentProcessorSurrogate(customerOrderPaymentService, authorizeNetAimPaymentGateway);
-        }
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        if (isTestAllowed()) {
-            super.tearDown();
-
         }
     }
 
@@ -103,7 +95,7 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends CappPaymentModuleDBTe
                                 Payment.PAYMENT_STATUS_OK,
                                 null).size());
             } finally {
-                dumpDataBase("testAuthPlusReverseAuthorization", new String[]{"TCUSTOMERORDERPAYMENT"});
+                //dumpDataBase("testAuthPlusReverseAuthorization", new String[]{"TCUSTOMERORDERPAYMENT"});
             }
         }
     }
@@ -160,7 +152,7 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends CappPaymentModuleDBTe
                                 Payment.PAYMENT_STATUS_OK,
                                 PaymentGateway.CAPTURE).size());
             } finally {
-                dumpDataBase("testAuthPlusCapture", new String[]{"TCUSTOMERORDERPAYMENT"});
+                //dumpDataBase("testAuthPlusCapture", new String[]{"TCUSTOMERORDERPAYMENT"});
 
             }
 
@@ -176,7 +168,7 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends CappPaymentModuleDBTe
             try {
                 orderCancelationFlow(false);
             } finally {
-                dumpDataBase("void", new String[]{"TCUSTOMERORDERPAYMENT"});
+                //dumpDataBase("void", new String[]{"TCUSTOMERORDERPAYMENT"});
             }
 
         }
@@ -291,7 +283,7 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends CappPaymentModuleDBTe
                                 PaymentGateway.AUTH_CAPTURE).size());
 
             } finally {
-                dumpDataBase("testAuthCapture", new String[]{"TCUSTOMERORDERPAYMENT"});
+                //dumpDataBase("testAuthCapture", new String[]{"TCUSTOMERORDERPAYMENT"});
 
             }
 

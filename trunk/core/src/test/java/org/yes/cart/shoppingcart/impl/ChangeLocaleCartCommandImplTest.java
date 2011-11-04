@@ -11,6 +11,8 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.util.Collections;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 6/25/11
@@ -18,15 +20,12 @@ import java.util.Collections;
  */
 public class ChangeLocaleCartCommandImplTest extends BaseCoreDBTestCase {
 
-
-    ShopService shopService = null;
-    PriceService priceService = null;
-    ProductService productService = null;
-
+    ShopService shopService;
+    PriceService priceService;
+    ProductService productService;
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         productService = (ProductService) ctx.getBean(ServiceSpringKeys.PRODUCT_SERVICE);
         priceService = (PriceService) ctx.getBean(ServiceSpringKeys.PRICE_SERVICE);
         shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
@@ -50,8 +49,5 @@ public class ChangeLocaleCartCommandImplTest extends BaseCoreDBTestCase {
         ).execute(shoppingCart);
 
         assertEquals("uk", shoppingCart.getCurrentLocale());
-
     }
-
-
 }

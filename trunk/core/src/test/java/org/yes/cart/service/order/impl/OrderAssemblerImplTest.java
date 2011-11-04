@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static org.junit.Assert.*;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -32,21 +34,13 @@ import java.util.UUID;
  */
 public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
 
-
     private OrderAssembler orderAssembler;
     private GenericDAO<CustomerOrder, Long> customerOrderDao;
 
-
     @Before
     public void setUp() throws Exception {
-        super.setUp();
-
-
         orderAssembler = (OrderAssembler) ctx.getBean(ServiceSpringKeys.ORDER_ASSEMBLER);
-
         customerOrderDao = (GenericDAO<CustomerOrder, Long>) ctx.getBean("customerOrderDao");
-
-
     }
 
     @Test

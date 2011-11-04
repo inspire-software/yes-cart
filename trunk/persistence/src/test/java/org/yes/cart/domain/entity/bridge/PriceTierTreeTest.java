@@ -1,10 +1,8 @@
-
-
 package org.yes.cart.domain.entity.bridge;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.misc.navigation.price.PriceTierNode;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
@@ -15,15 +13,17 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 /**
-* User: Igor Azarny iazarny@yahoo.com
+ * User: Igor Azarny iazarny@yahoo.com
  * Date: 08-May-2011
  * Time: 11:12:54
- *
+ * <p/>
  * This test just prove, that we can serialize / deserialize Price Tier Object.
- *
  */
-public class PriceTierTreeTest  extends TestCase {
+public class PriceTierTreeTest {
 
     private XStream getXStream() {
         XStream xStream = new XStream(new DomDriver());
@@ -32,8 +32,8 @@ public class PriceTierTreeTest  extends TestCase {
         return xStream;
     }
 
+    @Test
     public void testXmlSerialization() {
-
         PriceTierTree tree = new PriceTierTreeImpl();
 
         List<PriceTierNode> list = new ArrayList<PriceTierNode>();
@@ -51,10 +51,5 @@ public class PriceTierTreeTest  extends TestCase {
         assertTrue(result.indexOf("USD") > -1);
         assertTrue(result.indexOf("EUR") > -1);
         assertTrue(result.indexOf("UAH") == -1);
-
-
-
-
     }
-
 }

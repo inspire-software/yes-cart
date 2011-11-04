@@ -10,6 +10,8 @@ import org.yes.cart.service.image.ImageNameStrategy;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -29,10 +31,8 @@ public class ProductImageNameStrategyImplTest extends BaseCoreDBTestCase {
             "Очень-Вкусная-Сосиска3-с-камнями-от-Булыжникова_ЕЩЕ-КОД-ПРОДУКТА!_g.jpg"
     };
 
-
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         imageNameStrategy = (ImageNameStrategy) ctx.getBean(ServiceSpringKeys.PRODUCT_IMAGE_NAME_STRATEGY);
     }
 
@@ -89,10 +89,7 @@ public class ProductImageNameStrategyImplTest extends BaseCoreDBTestCase {
 
         assertEquals("SOBOT",
                 imageNameStrategy.getCode("sobot-picture.jpeg"));
-
-
     }
-
 
     @Test
     public void testGetCodeForIncorrectFileName() {
@@ -102,6 +99,4 @@ public class ProductImageNameStrategyImplTest extends BaseCoreDBTestCase {
         assertEquals(Constants.NO_IMAGE, imageNameStrategy.getCode("some-incorrect-code-in-file-name"));
 
     }
-
-
 }

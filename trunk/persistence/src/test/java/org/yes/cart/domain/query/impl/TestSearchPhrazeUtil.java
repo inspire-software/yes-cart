@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -41,6 +41,4 @@ public class TestSearchPhrazeUtil {
         assertEquals(0, rez.size());
 
     }
-
-
 }

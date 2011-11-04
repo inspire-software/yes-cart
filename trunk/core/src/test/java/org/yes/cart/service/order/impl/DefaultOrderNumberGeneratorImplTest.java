@@ -10,14 +10,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 /**
-* User: Igor Azarny iazarny@yahoo.com
+ * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
- * Time: 14:12:54 */
+ * Time: 14:12:54
+ */
 public class DefaultOrderNumberGeneratorImplTest {
-
-
-
-
 
     @Test
     public void testGetNextOrderNumber() {
@@ -43,15 +40,13 @@ public class DefaultOrderNumberGeneratorImplTest {
         for (int i = 0; i < THREADGROUPSIZE; i++) {
             try {
                 th[i].join();
-            }  catch (InterruptedException e) {
+            } catch (InterruptedException e) {
                 System.out.print("Join interrupted\n");
             }
         }
 
         assertEquals(THREADGROUPSIZE, rez.size());
     }
-
-
 
     class MyOrderCreatorThread extends Thread {
 

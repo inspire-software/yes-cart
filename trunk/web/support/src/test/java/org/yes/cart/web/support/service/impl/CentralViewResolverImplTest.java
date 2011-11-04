@@ -2,7 +2,6 @@ package org.yes.cart.web.support.service.impl;
 
 import org.junit.Test;
 import org.yes.cart.domain.entity.Category;
-import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.impl.AttributeServiceImpl;
 import org.yes.cart.service.domain.impl.CategoryServiceImpl;
 import org.yes.cart.web.support.constants.CentralViewLabel;
@@ -13,8 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static junit.framework.Assert.assertEquals;
-
+import static org.junit.Assert.assertEquals;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -90,7 +88,7 @@ public class CentralViewResolverImplTest {
         assertEquals(
                 CentralViewLabel.PRODUCTS_LIST,
                 centralViewResolver.resolveMainPanelRendererLabel(
-                       getRequestParams2(WebParametersKeys.CATEGORY_ID, "11"))
+                        getRequestParams2(WebParametersKeys.CATEGORY_ID, "11"))
         );
 
 

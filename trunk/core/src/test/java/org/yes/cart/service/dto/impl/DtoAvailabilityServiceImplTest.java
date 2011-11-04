@@ -10,6 +10,8 @@ import org.yes.cart.service.dto.DtoAvailabilityService;
 
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -17,15 +19,13 @@ import java.util.List;
  */
 public class DtoAvailabilityServiceImplTest extends BaseCoreDBTestCase {
 
-    private DtoAvailabilityService dtoService = null;
-    private DtoFactory dtoFactory = null;
+    private DtoAvailabilityService dtoService;
+    private DtoFactory dtoFactory;
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         dtoService = (DtoAvailabilityService) ctx.getBean(ServiceSpringKeys.DTO_AVAILABILITY_SERVICE);
         dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
-
     }
 
     @Test
@@ -83,5 +83,4 @@ public class DtoAvailabilityServiceImplTest extends BaseCoreDBTestCase {
         dto.setDescription("description");
         return dto;
     }
-
 }

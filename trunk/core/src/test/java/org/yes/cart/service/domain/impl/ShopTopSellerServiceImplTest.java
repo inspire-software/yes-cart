@@ -18,6 +18,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 6/5/11
@@ -32,12 +35,10 @@ public class ShopTopSellerServiceImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         shopTopSellerService = (ShopTopSellerService) ctx.getBean(ServiceSpringKeys.SHOP_TOP_SELLER_SERVICE);
         orderAssembler = (OrderAssembler) ctx.getBean(ServiceSpringKeys.ORDER_ASSEMBLER);
         customerOrderDao = (GenericDAO<CustomerOrder, Long>) ctx.getBean(DaoServiceBeanKeys.CUSTOMER_ORDER_DAO);
         shopTopSellerDao = (GenericDAO<ShopTopSeller, Long>) ctx.getBean(DaoServiceBeanKeys.SHOP_TOP_SELLLER_DAO);
-
     }
 
     @Test
@@ -75,7 +76,7 @@ public class ShopTopSellerServiceImplTest extends BaseCoreDBTestCase {
         }
 
 
-        dumpDataBase("topsell", new String[]{"TCUSTOMERORDER", "TCUSTOMERORDERDET", "TSHOPTOPSELLER"});
+        //dumpDataBase("topsell", new String[]{"TCUSTOMERORDER", "TCUSTOMERORDERDET", "TSHOPTOPSELLER"});
 
         assertTrue("Expectation must be empty but has " + expectation.size(), expectation.isEmpty());
 

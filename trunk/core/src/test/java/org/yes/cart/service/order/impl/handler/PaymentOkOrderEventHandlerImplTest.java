@@ -5,12 +5,13 @@ import org.junit.Test;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.impl.OrderAssemblerImplTest;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 
 import java.util.Collections;
+
+import static org.junit.Assert.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -19,18 +20,13 @@ import java.util.Collections;
  */
 public class PaymentOkOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
-    private CustomerOrderService orderService = null;
-    private PaymentOkOrderEventHandlerImpl handler = null;
-    private CustomerOrderPaymentService customerOrderPaymentService = null;
+    private CustomerOrderService orderService;
+    private PaymentOkOrderEventHandlerImpl handler;
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
-
-
         handler = (PaymentOkOrderEventHandlerImpl) ctx.getBean("paymentOkOrderEventHandler");
         orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
-        customerOrderPaymentService = (CustomerOrderPaymentService) ctx.getBean("customerOrderPaymentService");
     }
 
     /**
@@ -53,8 +49,5 @@ public class PaymentOkOrderEventHandlerImplTest extends AbstractEventHandlerImpl
         assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
         assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED,
                 customerOrder.getDelivery().iterator().next().getDeliveryStatus());
-
-
     }
-
 }

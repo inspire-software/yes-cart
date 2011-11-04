@@ -1,13 +1,11 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.junit.Test;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 /**
@@ -23,14 +21,14 @@ public class ExpireCartCommandImplTest {
 
         //assertNull(shoppingCart.getAuthentication());
 
-        Map<String,String> params = new HashMap<String,String>();
-        params.put(LoginCommandImpl.EMAIL,"test@test.com");
-        params.put(LoginCommandImpl.NAME,"John Doe");
+        Map<String, String> params = new HashMap<String, String>();
+        params.put(LoginCommandImpl.EMAIL, "test@test.com");
+        params.put(LoginCommandImpl.NAME, "John Doe");
 
         LoginCommandImpl loginCommand = new LoginCommandImpl(
                 null,
                 params
-                );
+        );
 
         loginCommand.execute(shoppingCart);
 
@@ -44,14 +42,11 @@ public class ExpireCartCommandImplTest {
         expireCartCommand.execute(shoppingCart);
 
         //assertNull(shoppingCart.getAuthentication());
-        assertNull(shoppingCart.getCustomerEmail());        
+        assertNull(shoppingCart.getCustomerEmail());
 
         assertNull(shoppingCart.getCustomerName());
 
         //assertEquals(ShoppingCart.SESSION_EXPIRED, shoppingCart.getLogonState());
-
         //TODO remake test
-
-
     }
 }

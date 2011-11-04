@@ -12,6 +12,8 @@ import org.yes.cart.service.dto.DtoWarehouseService;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -19,13 +21,12 @@ import java.util.List;
  */
 public class DtoWarehouseServiceImplTest extends BaseCoreDBTestCase {
 
-    private DtoWarehouseService dtoService = null;
-    private DtoFactory dtoFactory = null;
+    private DtoWarehouseService dtoService;
+    private DtoFactory dtoFactory;
 
     @Before
     public void setUp() throws Exception {
         // Add your code here
-        super.setUp();
         dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
         dtoService = (DtoWarehouseService) ctx.getBean(ServiceSpringKeys.DTO_WAREHOUSE_SERVICE);
     }
@@ -39,7 +40,6 @@ public class DtoWarehouseServiceImplTest extends BaseCoreDBTestCase {
         } catch (Exception e) {
             assertTrue(e.getMessage(), false);
         }
-
     }
 
     @Test
@@ -54,7 +54,6 @@ public class DtoWarehouseServiceImplTest extends BaseCoreDBTestCase {
         } catch (Exception e) {
             assertTrue(e.getMessage(), false);
         }
-
     }
 
     @Test
@@ -176,6 +175,4 @@ public class DtoWarehouseServiceImplTest extends BaseCoreDBTestCase {
         dtoService.removeSkuOnWarehouse(13L);
         assertNull(dtoService.getSkuWarehouseService().getById(13L));
     }
-
-
 }

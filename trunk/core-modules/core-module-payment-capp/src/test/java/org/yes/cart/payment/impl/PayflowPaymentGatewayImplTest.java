@@ -1,6 +1,5 @@
 package org.yes.cart.payment.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.domain.entity.CustomerOrder;
@@ -13,6 +12,8 @@ import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import java.util.Iterator;
 import java.util.UUID;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * PayFlow payment gateway test.
  * <p/>
@@ -22,9 +23,9 @@ import java.util.UUID;
  */
 public class PayflowPaymentGatewayImplTest extends CappPaymentModuleDBTestCase {
 
-    private PaymentProcessorSurrogate paymentProcessor = null;
-    private PayflowPaymentGatewayImpl payflowPaymentGateway = null;
-    private CustomerOrderPaymentService customerOrderPaymentService = null;
+    private PaymentProcessorSurrogate paymentProcessor;
+    private PayflowPaymentGatewayImpl payflowPaymentGateway;
+    private CustomerOrderPaymentService customerOrderPaymentService;
 
     private boolean isTestAllowed() {
         return "true".equals(System.getProperty("testPgPayFlow"));
@@ -33,17 +34,9 @@ public class PayflowPaymentGatewayImplTest extends CappPaymentModuleDBTestCase {
     @Before
     public void setUp() throws Exception {
         if (isTestAllowed()) {
-            super.setUp();
             customerOrderPaymentService = (CustomerOrderPaymentService) ctx.getBean("customerOrderPaymentService");
             payflowPaymentGateway = (PayflowPaymentGatewayImpl) ctx.getBean("payflowPaymentGateway");
             paymentProcessor = new PaymentProcessorSurrogate(customerOrderPaymentService, payflowPaymentGateway);
-        }
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        if (isTestAllowed()) {
-            super.tearDown();
         }
     }
 
@@ -116,13 +109,10 @@ Discover: 6011111111111117
                                 Payment.PAYMENT_STATUS_OK,
                                 null).size());
             } finally {
-                dumpDataBase("testAuthPlusReverseAuthorization", new String[]{"TCUSTOMERORDERPAYMENT"});
+                //dumpDataBase("testAuthPlusReverseAuthorization", new String[]{"TCUSTOMERORDERPAYMENT"});
             }
-
-
         }
     }
-
 
     @Test
     public void testAuthPlusCapture() {
@@ -175,10 +165,8 @@ Discover: 6011111111111117
                                 Payment.PAYMENT_STATUS_OK,
                                 PaymentGateway.CAPTURE).size());
             } finally {
-                dumpDataBase("testAuthPlusCapture", new String[]{"TCUSTOMERORDERPAYMENT"});
+                //dumpDataBase("testAuthPlusCapture", new String[]{"TCUSTOMERORDERPAYMENT"});
             }
-
-
         }
     }
 
@@ -186,13 +174,11 @@ Discover: 6011111111111117
     @Test
     public void testAuthPlusCapturePlusVoidCapture() {
         if (isTestAllowed()) {
-
             try {
                 orderCancelationFlow(false);
             } finally {
-                dumpDataBase("void", new String[]{"TCUSTOMERORDERPAYMENT"});
+//                dumpDataBase("void", new String[]{"TCUSTOMERORDERPAYMENT"});
             }
-
         }
     }
 
@@ -200,13 +186,11 @@ Discover: 6011111111111117
     public void testAuthPlusCapturePlusRefund() {
         //??? how to submit settlement
         if (isTestAllowed()) {
-
             try {
                 orderCancelationFlow(true);
             } finally {
-                dumpDataBase("refund", new String[]{"TCUSTOMERORDERPAYMENT"});
+//                dumpDataBase("refund", new String[]{"TCUSTOMERORDERPAYMENT"});
             }
-
         }
     }
 

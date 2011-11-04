@@ -1,6 +1,5 @@
 package org.yes.cart.payment.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.domain.entity.CustomerOrder;
@@ -13,6 +12,8 @@ import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import java.util.Iterator;
 import java.util.UUID;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -20,9 +21,9 @@ import java.util.UUID;
  */
 public class PayPalNvpPaymentGatewayImplTest extends CappPaymentModuleDBTestCase {
 
-    private PaymentProcessorSurrogate paymentProcessor = null;
+    private PaymentProcessorSurrogate paymentProcessor;
     private PayPalNvpPaymentGatewayImpl payPalNvpPaymentGateway;
-    private CustomerOrderPaymentService customerOrderPaymentService = null;
+    private CustomerOrderPaymentService customerOrderPaymentService;
 
     private boolean isTestAllowed() {
         return "true".equals(System.getProperty("testPgPayPal"));
@@ -32,18 +33,9 @@ public class PayPalNvpPaymentGatewayImplTest extends CappPaymentModuleDBTestCase
     @Before
     public void setUp() throws Exception {
         if (isTestAllowed()) {
-            super.setUp();
             customerOrderPaymentService = (CustomerOrderPaymentService) ctx.getBean("customerOrderPaymentService");
             payPalNvpPaymentGateway = (PayPalNvpPaymentGatewayImpl) ctx.getBean("payPalNvpPaymentGateway");
             paymentProcessor = new PaymentProcessorSurrogate(customerOrderPaymentService, payPalNvpPaymentGateway);
-        }
-
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        if (isTestAllowed()) {
-            super.tearDown();
         }
     }
 
@@ -104,7 +96,7 @@ public class PayPalNvpPaymentGatewayImplTest extends CappPaymentModuleDBTestCase
                                 Payment.PAYMENT_STATUS_OK,
                                 null).size());
             } finally {
-                dumpDataBase("testAuthPlusReverseAuthorization", new String[]{"TCUSTOMERORDERPAYMENT"});
+                //dumpDataBase("testAuthPlusReverseAuthorization", new String[]{"TCUSTOMERORDERPAYMENT"});
             }
 
 
@@ -163,7 +155,7 @@ public class PayPalNvpPaymentGatewayImplTest extends CappPaymentModuleDBTestCase
                                 Payment.PAYMENT_STATUS_OK,
                                 PaymentGateway.CAPTURE).size());
             } finally {
-                dumpDataBase("testAuthPlusCapture", new String[]{"TCUSTOMERORDERPAYMENT"});
+                //dumpDataBase("testAuthPlusCapture", new String[]{"TCUSTOMERORDERPAYMENT"});
             }
 
 
@@ -178,7 +170,7 @@ public class PayPalNvpPaymentGatewayImplTest extends CappPaymentModuleDBTestCase
             try {
                 orderCancelationFlow(false);
             } finally {
-                dumpDataBase("void", new String[]{"TCUSTOMERORDERPAYMENT"});
+                //dumpDataBase("void", new String[]{"TCUSTOMERORDERPAYMENT"});
             }
 
         }
@@ -192,7 +184,7 @@ public class PayPalNvpPaymentGatewayImplTest extends CappPaymentModuleDBTestCase
             try {
                 orderCancelationFlow(true);
             } finally {
-                dumpDataBase("refund", new String[]{"TCUSTOMERORDERPAYMENT"});
+                //dumpDataBase("refund", new String[]{"TCUSTOMERORDERPAYMENT"});
             }
 
         }
@@ -290,7 +282,7 @@ public class PayPalNvpPaymentGatewayImplTest extends CappPaymentModuleDBTestCase
                                 PaymentGateway.AUTH_CAPTURE).size());
 
             } finally {
-                dumpDataBase("testAuthCapture", new String[]{"TCUSTOMERORDERPAYMENT"});
+                //dumpDataBase("testAuthCapture", new String[]{"TCUSTOMERORDERPAYMENT"});
 
             }
 

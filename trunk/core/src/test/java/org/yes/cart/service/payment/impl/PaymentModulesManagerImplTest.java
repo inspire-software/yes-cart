@@ -12,6 +12,9 @@ import org.yes.cart.service.payment.PaymentModulesManager;
 
 import java.util.Collection;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 /**
  * Test some OOTB payment modules.
  * <p/>
@@ -21,13 +24,10 @@ import java.util.Collection;
  */
 public class PaymentModulesManagerImplTest extends BaseCoreDBTestCase {
 
-
     PaymentModulesManager paymentModulesManager;
-
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         paymentModulesManager = (PaymentModulesManager) ctx.getBean(ServiceSpringKeys.PAYMENT_MODULES_MANAGER);
     }
 
@@ -65,6 +65,4 @@ public class PaymentModulesManagerImplTest extends BaseCoreDBTestCase {
         assertEquals("testPaymentGateway", paymentGateway.getLabel());
 
     }
-
-
 }

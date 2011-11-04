@@ -14,17 +14,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static org.junit.Assert.*;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
 public class TestCategoryServiceImpl extends BaseCoreDBTestCase {
-
-
-    public TestCategoryServiceImpl() {
-        super();
-    }
 
     @Test
     public void testGetByProductId() {
@@ -49,25 +46,22 @@ public class TestCategoryServiceImpl extends BaseCoreDBTestCase {
 
 
         // assign created product it to categories
-        ProductCategory productCategory =  entityFactory.getByIface(ProductCategory.class);
+        ProductCategory productCategory = entityFactory.getByIface(ProductCategory.class);
         productCategory.setProduct(product);
         productCategory.setCategory(categoryService.getById(128L));
         productCategory.setRank(0);
         productCategory = productCategoryService.create(productCategory);
         assertTrue(productCategory.getProductCategoryId() > 0);
 
-        productCategory =  entityFactory.getByIface(ProductCategory.class);
+        productCategory = entityFactory.getByIface(ProductCategory.class);
         productCategory.setProduct(product);
         productCategory.setCategory(categoryService.getById(133L));
         productCategory.setRank(0);
         productCategory = productCategoryService.create(productCategory);
         assertTrue(productCategory.getProductCategoryId() > 0);
 
-        List<Category> list =  categoryService.getByProductId(product.getProductId());
+        List<Category> list = categoryService.getByProductId(product.getProductId());
         assertEquals(2, list.size());
-
-
-
     }
 
     @Test
@@ -126,7 +120,7 @@ public class TestCategoryServiceImpl extends BaseCoreDBTestCase {
      * Test, that we able to getByKey value atrtibutes in category hierarchy
      */
     @Test
-    public void  testGetCategoryAttributeRecursive() {
+    public void testGetCategoryAttributeRecursive() {
         CategoryService categoryService = (CategoryService) ctx.getBean(ServiceSpringKeys.CATEGORY_SERVICE);
         GenericDAO<Category, Long> categoryDAO = (GenericDAO<Category, Long>) ctx.getBean(DaoServiceBeanKeys.CATEGORY_DAO);
         String val = categoryService.getCategoryAttributeRecursive(categoryDAO.findById(105L), "SOME_NOT_EXISTING_ATTR", null);

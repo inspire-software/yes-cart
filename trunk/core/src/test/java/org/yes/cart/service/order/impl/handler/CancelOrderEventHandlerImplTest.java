@@ -8,6 +8,9 @@ import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.impl.OrderAssemblerImplTest;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -15,14 +18,11 @@ import org.yes.cart.service.order.impl.OrderEventImpl;
  */
 public class CancelOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
-    private CustomerOrderService orderService = null;
-    private CancelOrderEventHandlerImpl handler = null;
+    private CustomerOrderService orderService;
+    private CancelOrderEventHandlerImpl handler;
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
-
-
         handler = (CancelOrderEventHandlerImpl) ctx.getBean("cancelOrderEventHandler");
         orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
     }

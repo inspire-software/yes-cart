@@ -1,19 +1,19 @@
 package org.yes.cart.service.domain.impl;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.yes.cart.service.domain.HashHelper;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class MD5HashHelperImplTest extends TestCase {
+public class MD5HashHelperImplTest {
 
-    /**
-     * Test custom  md5 function.
-     */
+    @Test
     public void testGetMD5Hash() {
         HashHelper hashHelper = new MD5HashHelperImpl();
         try {
@@ -24,5 +24,4 @@ public class MD5HashHelperImplTest extends TestCase {
             assertTrue(e.getMessage(), false);
         }
     }
-
 }

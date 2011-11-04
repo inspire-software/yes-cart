@@ -11,7 +11,6 @@ import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.persistence.entity.impl.PaymentGatewayParameterEntity;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
-import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.impl.OrderAssemblerImplTest;
@@ -21,6 +20,8 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -28,29 +29,21 @@ import java.util.List;
  */
 public class ShipmentCompleteOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
-    private CustomerOrderService orderService = null;
-    private ShipmentCompleteOrderEventHandlerImpl handler = null;
-    private PendingOrderEventHandlerImpl pendingHandler = null;
-    private SkuWarehouseService skuWarehouseService = null;
-    private CustomerOrderPaymentService customerOrderPaymentService = null;
-
+    private CustomerOrderService orderService;
+    private ShipmentCompleteOrderEventHandlerImpl handler;
+    private PendingOrderEventHandlerImpl pendingHandler;
+    private SkuWarehouseService skuWarehouseService;
+    private CustomerOrderPaymentService customerOrderPaymentService;
     private WarehouseService warehouseService;
-    private ProductSkuService productSkuService;
-
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
-
-
         handler = (ShipmentCompleteOrderEventHandlerImpl) ctx.getBean("shipmentCompleteOrderEventHandler");
         orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
         skuWarehouseService = (SkuWarehouseService) ctx.getBean("skuWarehouseService");
         customerOrderPaymentService = (CustomerOrderPaymentService) ctx.getBean("customerOrderPaymentService");
         pendingHandler = (PendingOrderEventHandlerImpl) ctx.getBean("pendingOrderEventHandler");
-        productSkuService = (ProductSkuService) ctx.getBean("productSkuService");
         warehouseService = (WarehouseService) ctx.getBean("warehouseService");
-
     }
 
     @Test
@@ -138,8 +131,5 @@ public class ShipmentCompleteOrderEventHandlerImplTest extends AbstractEventHand
 
         assertEquals(CustomerOrder.ORDER_STATUS_COMPLETED, customerOrder.getOrderStatus());
         assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_SHIPPED, delivery.getDeliveryStatus());
-
-
     }
-
 }

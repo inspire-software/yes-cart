@@ -9,6 +9,9 @@ import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.impl.OrderAssemblerImplTest;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -16,14 +19,11 @@ import org.yes.cart.service.order.impl.OrderEventImpl;
  */
 public class PackCompleteOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
-    private CustomerOrderService orderService = null;
-    private PackCompleteOrderEventHandlerImpl handler = null;
+    private CustomerOrderService orderService;
+    private PackCompleteOrderEventHandlerImpl handler;
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
-
-
         handler = (PackCompleteOrderEventHandlerImpl) ctx.getBean("packCompleteOrderEventHandler");
         orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
     }
@@ -48,7 +48,5 @@ public class PackCompleteOrderEventHandlerImplTest extends AbstractEventHandlerI
                 )
         );
         assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY, delivery.getDeliveryStatus());
-
     }
-
 }

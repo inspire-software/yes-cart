@@ -10,9 +10,10 @@ import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.impl.BaseCoreDBTestCase;
 import org.yes.cart.service.dto.DtoAssociationService;
 import org.yes.cart.service.dto.DtoProductAssociationService;
-import org.yes.cart.service.dto.DtoProductService;
 
 import java.util.List;
+
+import static org.junit.Assert.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -21,18 +22,15 @@ import java.util.List;
  */
 public class DtoProductAssociationServiceImplTest extends BaseCoreDBTestCase {
 
-    private DtoFactory dtoFactory = null;
-    private DtoProductAssociationService dtoProductAssociationService = null;
-    private DtoAssociationService dtoAssociationService = null;
-    private DtoProductService dtoProductService = null;
+    private DtoFactory dtoFactory;
+    private DtoProductAssociationService dtoProductAssociationService;
+    private DtoAssociationService dtoAssociationService;
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         dtoProductAssociationService = (DtoProductAssociationService) ctx.getBean(ServiceSpringKeys.DTO_PRODUCT_ASSOCIATION_SERVICE);
         dtoAssociationService = (DtoAssociationService) ctx.getBean(ServiceSpringKeys.DTO_ASSOCIATION_SERVICE);
         dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
-        dtoProductService = (DtoProductService) ctx.getBean(ServiceSpringKeys.DTO_PRODUCT_SERVICE);
     }
 
     @Test
@@ -106,7 +104,6 @@ public class DtoProductAssociationServiceImplTest extends BaseCoreDBTestCase {
         }
     }
 
-
     private ProductAssociationDTO getDto() throws UnmappedInterfaceException, UnableToCreateInstanceException {
         ProductAssociationDTO dto = dtoFactory.getByIface(ProductAssociationDTO.class);
         dto.setAssociationId(dtoAssociationService.getById(3L).getAssociationId());
@@ -114,5 +111,4 @@ public class DtoProductAssociationServiceImplTest extends BaseCoreDBTestCase {
         dto.setAssociatedProductId(11003L);
         return dto;
     }
-
 }

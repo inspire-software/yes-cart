@@ -7,12 +7,15 @@ import org.yes.cart.service.domain.ProductSkuService;
 
 import java.util.Collection;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class ProductSkuServiceImplTest  extends BaseCoreDBTestCase  {
+public class ProductSkuServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetAllProductSkus() {
@@ -22,5 +25,4 @@ public class ProductSkuServiceImplTest  extends BaseCoreDBTestCase  {
         assertEquals(4, skus.size());
         productSkuService = null;
     }
-
 }

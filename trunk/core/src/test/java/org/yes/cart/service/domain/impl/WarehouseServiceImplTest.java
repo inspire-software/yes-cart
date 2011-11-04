@@ -14,6 +14,8 @@ import org.yes.cart.service.domain.WarehouseService;
 
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -31,7 +33,6 @@ public class WarehouseServiceImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
         warehouseService = (WarehouseService) ctx.getBean(ServiceSpringKeys.WAREHOUSE_SERVICE);
         entityFactory = warehouseService.getGenericDao().getEntityFactory();
@@ -86,9 +87,6 @@ public class WarehouseServiceImplTest extends BaseCoreDBTestCase {
 
     }
 
-    /**/
-
-
     /**
      * Unassign warehouse to shop test.
      */
@@ -121,6 +119,4 @@ public class WarehouseServiceImplTest extends BaseCoreDBTestCase {
         warehouse = warehouseService.create(warehouse);
         assertNotNull(warehouse);
     }
-
-
 }

@@ -1,6 +1,7 @@
 package org.yes.cart.service.dto.impl;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.ManagerDTO;
@@ -10,6 +11,8 @@ import org.yes.cart.service.domain.impl.BaseCoreDBTestCase;
 import org.yes.cart.service.dto.ManagementService;
 
 import java.util.List;
+
+import static org.junit.Assert.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -23,7 +26,6 @@ public class UserManagmentServiceImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         managementService = (ManagementService) ctx.getBean(ServiceSpringKeys.USER_MANAGMENT_SERVICE);
         managerService = (ManagerService) ctx.getBean(ServiceSpringKeys.MANAGER_SERVICE);
     }
@@ -57,7 +59,8 @@ public class UserManagmentServiceImplTest extends BaseCoreDBTestCase {
 
     }
 
-    /*@Test
+    @Ignore
+    @Test
     public void testResetPassword() throws Exception { //TODO !!!!!!!!!!!!!
 
         managementService.addUser("bender4@futurama.com", "Bender4", "Rodríguez4");
@@ -72,8 +75,7 @@ public class UserManagmentServiceImplTest extends BaseCoreDBTestCase {
 
         assertTrue("old and new pwd can not be the same " + newPwdHash, !pwdHash.equals(newPwdHash));
 
-    } */
-
+    }
 
     @Test
     public void testGetManagers() throws Exception {
@@ -158,10 +160,6 @@ public class UserManagmentServiceImplTest extends BaseCoreDBTestCase {
         }
 
         assertEquals(0, managementService.getAssignedManagerRoles("bender13@futurama.com").size());
-
-
     }
-
-
 }
 

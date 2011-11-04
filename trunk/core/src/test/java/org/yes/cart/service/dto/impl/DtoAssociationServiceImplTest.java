@@ -10,6 +10,8 @@ import org.yes.cart.service.dto.DtoAssociationService;
 
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 /**
  * * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -17,12 +19,11 @@ import java.util.List;
  */
 public class DtoAssociationServiceImplTest extends BaseCoreDBTestCase {
 
-    private DtoAssociationService dtoAssociationService = null;
-    private DtoFactory dtoFactory = null;
+    private DtoAssociationService dtoAssociationService;
+    private DtoFactory dtoFactory;
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         dtoAssociationService = (DtoAssociationService) ctx.getBean(ServiceSpringKeys.DTO_ASSOCIATION_SERVICE);
         dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
     }

@@ -1,6 +1,5 @@
 package org.yes.cart.payment.impl;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.domain.entity.CustomerOrder;
@@ -13,6 +12,8 @@ import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import java.util.Iterator;
 import java.util.UUID;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -20,9 +21,9 @@ import java.util.UUID;
  */
 public class CyberSourcePaymentGatewayImplTest extends CappPaymentModuleDBTestCase {
 
-    private PaymentProcessorSurrogate paymentProcessor = null;
-    private CyberSourcePaymentGatewayImpl cyberSourcePaymentGateway = null;
-    private CustomerOrderPaymentService customerOrderPaymentService = null;
+    private PaymentProcessorSurrogate paymentProcessor;
+    private CyberSourcePaymentGatewayImpl cyberSourcePaymentGateway;
+    private CustomerOrderPaymentService customerOrderPaymentService;
 
     private boolean isTestAllowed() {
         return "true".equals(System.getProperty("testPgCyberSource"));
@@ -31,17 +32,9 @@ public class CyberSourcePaymentGatewayImplTest extends CappPaymentModuleDBTestCa
     @Before
     public void setUp() throws Exception {
         if (isTestAllowed()) {
-            super.setUp();
             customerOrderPaymentService = (CustomerOrderPaymentService) ctx.getBean("customerOrderPaymentService");
             cyberSourcePaymentGateway = (CyberSourcePaymentGatewayImpl) ctx.getBean("cyberSourcePaymentGateway");
             paymentProcessor = new PaymentProcessorSurrogate(customerOrderPaymentService, cyberSourcePaymentGateway);
-        }
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        if (isTestAllowed()) {
-            super.tearDown();
         }
     }
 
@@ -104,7 +97,7 @@ public class CyberSourcePaymentGatewayImplTest extends CappPaymentModuleDBTestCa
                             Payment.PAYMENT_STATUS_OK,
                             null).size());
 
-            dumpDataBase("testAuthPlusReverseAuthorization", new String[]{"TCUSTOMERORDERPAYMENT"});
+            //dumpDataBase("testAuthPlusReverseAuthorization", new String[]{"TCUSTOMERORDERPAYMENT"});
 
 
         }
@@ -160,7 +153,7 @@ public class CyberSourcePaymentGatewayImplTest extends CappPaymentModuleDBTestCa
                             null,
                             Payment.PAYMENT_STATUS_OK,
                             PaymentGateway.CAPTURE).size());
-            dumpDataBase("testAuthPlusCapture", new String[]{"TCUSTOMERORDERPAYMENT"});
+            //dumpDataBase("testAuthPlusCapture", new String[]{"TCUSTOMERORDERPAYMENT"});
 
 
         }
@@ -174,7 +167,7 @@ public class CyberSourcePaymentGatewayImplTest extends CappPaymentModuleDBTestCa
             try {
                 orderCancelationFlow(false);
             } finally {
-                dumpDataBase("void", new String[]{"TCUSTOMERORDERPAYMENT"});
+                //dumpDataBase("void", new String[]{"TCUSTOMERORDERPAYMENT"});
             }
 
         }
@@ -188,7 +181,7 @@ public class CyberSourcePaymentGatewayImplTest extends CappPaymentModuleDBTestCa
             try {
                 orderCancelationFlow(true);
             } finally {
-                dumpDataBase("refund", new String[]{"TCUSTOMERORDERPAYMENT"});
+                //dumpDataBase("refund", new String[]{"TCUSTOMERORDERPAYMENT"});
             }
 
         }

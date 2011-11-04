@@ -10,6 +10,8 @@ import org.yes.cart.service.dto.DtoEtypeService;
 
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -22,10 +24,8 @@ public class DtoEtypeServiceImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         dtoEtypeService = (DtoEtypeService) ctx.getBean(ServiceSpringKeys.DTO_ETYPE_SERVICE);
         dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
-
     }
 
     @Test
@@ -94,6 +94,4 @@ public class DtoEtypeServiceImplTest extends BaseCoreDBTestCase {
         etypeDTO.setJavatype("java.lang.Float");
         return etypeDTO;
     }
-
-
 }

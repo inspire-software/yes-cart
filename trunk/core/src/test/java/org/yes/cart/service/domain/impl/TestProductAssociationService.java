@@ -1,4 +1,3 @@
-
 package org.yes.cart.service.domain.impl;
 
 import org.junit.Test;
@@ -10,6 +9,9 @@ import org.yes.cart.service.domain.ProductService;
 
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -19,8 +21,6 @@ public class TestProductAssociationService extends BaseCoreDBTestCase {
 
     @Test
     public void testGetProductAssociations() {
-
-
         ProductService productService = (ProductService) ctx.getBean(ServiceSpringKeys.PRODUCT_SERVICE);
 
         ProductAssociationService associationService = (ProductAssociationService) ctx.getBean(ServiceSpringKeys.PRODUCT_ASSOCIATIONS_SERVICE);
@@ -43,12 +43,5 @@ public class TestProductAssociationService extends BaseCoreDBTestCase {
         assertEquals(2, associations.size());
         assertEquals(13005L, associations.get(0).getProductAssociated().getProductId());
         assertEquals(13004L, associations.get(1).getProductAssociated().getProductId());
-
-        productService = null;
-        associationService = null;
-        
-
-
     }
-
 }

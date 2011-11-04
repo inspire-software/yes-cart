@@ -4,7 +4,8 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
+
 
 /**
  * MoneyUtils test.
@@ -22,7 +23,7 @@ public class MoneyUtilsTest {
 
     @Test
     public void testMaxWithFirstNull() {
-        assertEquals("Must return zero if bot arguments are null", BigDecimal.ONE, MoneyUtils.max(null,  BigDecimal.ONE));
+        assertEquals("Must return zero if bot arguments are null", BigDecimal.ONE, MoneyUtils.max(null, BigDecimal.ONE));
     }
 
     @Test

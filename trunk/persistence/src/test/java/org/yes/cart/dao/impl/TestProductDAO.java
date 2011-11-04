@@ -14,6 +14,8 @@ import org.yes.cart.domain.query.impl.*;
 import java.math.BigDecimal;
 import java.util.*;
 
+import static org.junit.Assert.*;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
@@ -30,11 +32,9 @@ public class TestProductDAO extends AbstractTestDAO {
     private GenericDAO<Attribute, Long> attributeDao;
     private GenericDAO<SkuWarehouse, Long> skuWareHouseDao;
     private GenericDAO<Warehouse, Long> warehouseDao;
-    private Set<Long> cleanupPks = new HashSet<Long>();
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         productDao = (GenericDAO<Product, Long>) ctx.getBean(DaoServiceBeanKeys.PRODUCT_DAO);
         availabilityDao = (GenericDAO<Availability, Long>) ctx.getBean(DaoServiceBeanKeys.AVAILABILITY_DAO);
         brandDao = (GenericDAO<Brand, Long>) ctx.getBean(DaoServiceBeanKeys.BRAND_DAO);
@@ -44,15 +44,6 @@ public class TestProductDAO extends AbstractTestDAO {
         attributeDao = (GenericDAO<Attribute, Long>) ctx.getBean(DaoServiceBeanKeys.ATTRIBUTE_DAO);
         skuWareHouseDao = (GenericDAO<SkuWarehouse, Long>) ctx.getBean(DaoServiceBeanKeys.SKU_WAREHOUSE_DAO);
         warehouseDao = (GenericDAO<Warehouse, Long>) ctx.getBean(DaoServiceBeanKeys.WAREHOUSE_DAO);
-    }
-
-    public void cleanUp() {
-        for (Long pk : cleanupPks) {
-            productDao.delete(productDao.findById(pk));
-        }
-        for (Long pk : cleanupPks) {
-            assertNull(productDao.findById(pk));
-        }
     }
 
     @Test

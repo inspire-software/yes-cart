@@ -11,6 +11,8 @@ import org.yes.cart.service.dto.DtoAttributeService;
 import java.util.Collections;
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -18,12 +20,11 @@ import java.util.List;
  */
 public class DtoAttributeServiceImplTest extends BaseCoreDBTestCase {
 
-    private DtoAttributeService dtoAttributeService = null;
-    private DtoFactory dtoFactory = null;
+    private DtoAttributeService dtoAttributeService;
+    private DtoFactory dtoFactory;
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         dtoAttributeService = (DtoAttributeService) ctx.getBean(ServiceSpringKeys.DTO_ATTRIBUTE_SERVICE);
         dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
     }
@@ -129,6 +130,4 @@ public class DtoAttributeServiceImplTest extends BaseCoreDBTestCase {
         dto.setRegexp("[a-zA-Z]");
         return dto;
     }
-
-
 }

@@ -16,6 +16,8 @@ import org.yes.cart.service.dto.DtoCustomerService;
 
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -29,7 +31,6 @@ public class DtoCustomerServiceImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
         dtoService = (DtoCustomerService) ctx.getBean(ServiceSpringKeys.DTO_CUSTOMER_SERVICE);
         dtoAttrService = (DtoAttributeService) ctx.getBean(ServiceSpringKeys.DTO_ATTRIBUTE_SERVICE);
@@ -57,6 +58,7 @@ public class DtoCustomerServiceImplTest extends BaseCoreDBTestCase {
         dtoService.remove(dto.getCustomerId());
     }
 
+    @Test
     public void testCreateEntityAttributeValue() throws UnmappedInterfaceException, UnableToCreateInstanceException {
         CustomerDTO dto = getCustomerDto("testCreateEntityAttributeValue");
         dto = dtoService.create(dto);
@@ -77,9 +79,9 @@ public class DtoCustomerServiceImplTest extends BaseCoreDBTestCase {
 
     }
 
-
+    @Test
     public void testGetEntityAttributes() throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        dumpDataBase("ffffffff", new String[]{"TCUSTOMER"});
+        //dumpDataBase("ffffffff", new String[]{"TCUSTOMER"});
         CustomerDTO dto = getCustomerDto("testGetEntityAttributes");
         dto = dtoService.create(dto);
         assertTrue(dto.getCustomerId() > 0);
@@ -100,6 +102,7 @@ public class DtoCustomerServiceImplTest extends BaseCoreDBTestCase {
 
     }
 
+    @Test
     public void testUpdateEntityAttributeValue() throws UnmappedInterfaceException, UnableToCreateInstanceException {
         CustomerDTO dto = getCustomerDto("testUpdateEntityAttributeValue");
         dto = dtoService.create(dto);
@@ -126,7 +129,7 @@ public class DtoCustomerServiceImplTest extends BaseCoreDBTestCase {
 
     }
 
-
+    @Test
     public void testDeleteAttributeValue() throws UnmappedInterfaceException, UnableToCreateInstanceException {
         CustomerDTO dto = getCustomerDto("testDeleteAttributeValue");
         dto = dtoService.create(dto);
@@ -152,7 +155,6 @@ public class DtoCustomerServiceImplTest extends BaseCoreDBTestCase {
 
     }
 
-
     private CustomerDTO getCustomerDto(final String prefix) {
         CustomerDTO dto = dtoFactory.getByIface(CustomerDTO.class);
         dto.setEmail(prefix + "john@doe.com");
@@ -160,6 +162,4 @@ public class DtoCustomerServiceImplTest extends BaseCoreDBTestCase {
         dto.setLastname(prefix + "Doe");
         return dto;
     }
-
-
 }

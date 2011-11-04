@@ -6,9 +6,7 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 import java.util.HashMap;
 import java.util.Map;
 
-import static junit.framework.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertEquals;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -19,7 +17,6 @@ public class LoginCommandImplTest {
 
     @Test
     public void testExecute() {
-
         ShoppingCart shoppingCart = new ShoppingCartImpl();
 
         //TODO rethink tis test
@@ -27,14 +24,14 @@ public class LoginCommandImplTest {
         //assertNull(shoppingCart.getAuthentication());
         assertEquals(ShoppingCart.NOT_LOGGED, shoppingCart.getLogonState());
 
-        Map<String,String> params = new HashMap<String,String>();
-        params.put(LoginCommandImpl.EMAIL,"test@test.com");
-        params.put(LoginCommandImpl.NAME,"John Doe");
+        Map<String, String> params = new HashMap<String, String>();
+        params.put(LoginCommandImpl.EMAIL, "test@test.com");
+        params.put(LoginCommandImpl.NAME, "John Doe");
 
         LoginCommandImpl loginCommand = new LoginCommandImpl(
                 null,
                 params
-                );
+        );
 
         loginCommand.execute(shoppingCart);
 
@@ -44,11 +41,5 @@ public class LoginCommandImplTest {
         /*assertEquals("TEst that auth in spring security context",
                 SecurityContextHolder.getContext().getAuthentication(),
                 shoppingCart.getAuthentication());  */
-
-
-
-
     }
-
-
 }

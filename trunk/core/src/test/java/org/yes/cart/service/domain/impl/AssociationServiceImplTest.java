@@ -8,6 +8,8 @@ import org.yes.cart.service.domain.AssociationService;
 
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -15,11 +17,10 @@ import java.util.List;
  */
 public class AssociationServiceImplTest extends BaseCoreDBTestCase {
 
-    private AssociationService associationService = null;
+    private AssociationService associationService;
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         associationService = (AssociationService) ctx.getBean(ServiceSpringKeys.ASSOCIATION_SERVICE);
     }
 

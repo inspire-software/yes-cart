@@ -9,6 +9,8 @@ import org.yes.cart.service.domain.ShopService;
 
 import java.util.*;
 
+import static org.junit.Assert.*;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -89,8 +91,6 @@ public class TestShopServiceImpl extends BaseCoreDBTestCase {
 
         shop = shopService.getShopByDomainName("gadget.npa.com");
         shopService.updateAttributeValue(shop.getShopId(), AttributeNamesKeys.SUPPORTED_CURRENSIES, "");
-
-
 
 
         Collection<String> currencies = shopService.getAllSupportedCurrenciesByShops();

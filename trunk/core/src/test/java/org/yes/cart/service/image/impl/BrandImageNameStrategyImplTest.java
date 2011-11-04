@@ -6,6 +6,8 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.service.domain.impl.BaseCoreDBTestCase;
 import org.yes.cart.service.image.ImageNameStrategy;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -15,34 +17,24 @@ public class BrandImageNameStrategyImplTest extends BaseCoreDBTestCase {
 
     private ImageNameStrategy imageNameStrategy;
 
-
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         imageNameStrategy = (ImageNameStrategy) ctx.getBean(ServiceSpringKeys.BRAND_IMAGE_NAME_STRATEGY);
     }
 
     @Test
     public void testGetFileName() {
-
         assertEquals(
                 /*Constants.BRAND_IMAGE_FILE_PREFIX + File.separator +*/ "1261644759_627724_russkaya-magiya.jpg",
                 imageNameStrategy.getFileName("posts/2009-12/1261644759_627724_russkaya-magiya.jpg"));
-
         assertEquals(
                 /* Constants.BRAND_IMAGE_FILE_PREFIX + File.separator + */"1261644759_627724_russkaya-magiya.jpg",
                 imageNameStrategy.getFileName("posts/2009-12/1261644759_627724_russkaya-magiya.jpg?w=10&h=4"));
-
         assertEquals(
                 /*Constants.BRAND_IMAGE_FILE_PREFIX + File.separator + */"1261644759_627724_russkaya-magiya.jpg",
                 imageNameStrategy.getFileName("posts/2009-12/1261644759_627724_russkaya-magiya.jpg?w=10&h=4"));
-
         assertEquals(
                 /*Constants.BRAND_IMAGE_FILE_PREFIX + File.separator +*/ "1261644759_627724_russkaya-magiya.jpg",
                 imageNameStrategy.getFileName("posts/2009-12/1261644759_627724_russkaya-magiya.jpg?w=10&h=4~!@#$%^&*()_+"));
-
-
     }
-
-
 }

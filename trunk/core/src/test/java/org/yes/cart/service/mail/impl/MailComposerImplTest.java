@@ -39,22 +39,13 @@ public class MailComposerImplTest {
     private ShopService shopService;
     private Shop shop;
 
-
-
     @Before
     @SuppressWarnings("unchecked")
     public void setUp() {
-
         systemService = mockery.mock(SystemService.class);
         shopService = mockery.mock(ShopService.class);
         shop = mockery.mock(Shop.class);
-
-
-
-
     }
-
-
 
     @Test
     public void testMerge1() throws ClassNotFoundException, IOException {
@@ -80,18 +71,16 @@ public class MailComposerImplTest {
         assertEquals("Bender lives in theme park with blackjack poetess ", result);
     }
 
-
-
     @Test
     public void testGetResourcesId() {
         final MailComposerImpl mailComposer = new MailComposerImpl(null, null);
-                                                            //'cid:identifier1234' "cid:id" 'cid:ident' "cid:identifier5678"
+        //'cid:identifier1234' "cid:id" 'cid:ident' "cid:identifier5678"
         final List<String> rez = mailComposer.getResourcesId("'cid:identifier1234' \"cid:id\" 'cid:ident' \"cid:identifier5678\"");
         assertEquals(4, rez.size());
         assertEquals("identifier1234", rez.get(0));
         assertEquals("id", rez.get(1));
         assertEquals("ident", rez.get(2));
-        assertEquals("identifier5678", rez.get(3)); 
+        assertEquals("identifier5678", rez.get(3));
     }
 
     @Test
@@ -99,8 +88,8 @@ public class MailComposerImplTest {
 
         mockery.checking(new Expectations() {{
 
-           // allowing(systemService).getMailResourceDirectory();
-           // will(returnValue("/a/b/c/"));
+            // allowing(systemService).getMailResourceDirectory();
+            // will(returnValue("/a/b/c/"));
 
 
             allowing(shopService).getShopByCode("SHOIP1");
@@ -112,17 +101,15 @@ public class MailComposerImplTest {
 
 
         }});
-        
+
 
         final MailComposerImpl mailComposer = new MailComposerImpl(systemService, shopService);
 
 
         assertEquals(
-                ("/a/b/c/default" + File.separator + "priceReduced" + File.separator).replace("\\","/"),
-                (mailComposer.getPathToTemplate("SHOIP1", "priceReduced")).replace("\\","/")
+                ("/a/b/c/default" + File.separator + "priceReduced" + File.separator).replace("\\", "/"),
+                (mailComposer.getPathToTemplate("SHOIP1", "priceReduced")).replace("\\", "/")
         );
-
-
 
 
     }
@@ -165,7 +152,9 @@ public class MailComposerImplTest {
 
     }
 
-    /** Text template only */
+    /**
+     * Text template only
+     */
     @Test
     public void testComposeMessageInternal1() throws MessagingException, IOException, ClassNotFoundException {
 
@@ -203,7 +192,9 @@ public class MailComposerImplTest {
 
     }
 
-    /** html only */
+    /**
+     * html only
+     */
     @Test
     public void testComposeMessageInternal2() throws MessagingException, IOException, ClassNotFoundException {
 
@@ -236,7 +227,7 @@ public class MailComposerImplTest {
 
         assertNotNull(str);
         // html and text present in mail message
-        
+
         assertTrue(str.contains("<h2>Bender</h2> lives in theme park with:<br> blackjack<br>poetess<br>"));
 
     }
@@ -256,8 +247,6 @@ public class MailComposerImplTest {
 
 
         }});
-
-
 
 
         // of course you would use DI in any real-world cases
@@ -303,7 +292,6 @@ public class MailComposerImplTest {
         assertTrue(str.contains("To: to@somedomain.com"));
         assertTrue(str.contains("cc@somedomain.com"));
         assertTrue(str.contains("Bcc: bcc@somedomain.com"));
-
 
 
     }

@@ -11,6 +11,9 @@ import org.yes.cart.service.domain.AttributeService;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 /**
  * * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -18,11 +21,10 @@ import java.util.List;
  */
 public class AttributeServiceImplTest extends BaseCoreDBTestCase {
 
-    private AttributeService attributeService = null;
+    private AttributeService attributeService;
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         attributeService = (AttributeService) ctx.getBean(ServiceSpringKeys.ATTRIBUTE_SERVICE);
     }
 

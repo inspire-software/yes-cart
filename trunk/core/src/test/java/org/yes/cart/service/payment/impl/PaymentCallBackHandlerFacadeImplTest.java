@@ -16,6 +16,8 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.util.HashMap;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -30,7 +32,6 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         paymentCallBackHandlerFacade = (PaymentCallBackHandlerFacade) ctx.getBean(ServiceSpringKeys.PAYMENT_CALLBACK_HANDLER);
         orderAssembler = (OrderAssembler) ctx.getBean(ServiceSpringKeys.ORDER_ASSEMBLER);
         customerOrderService = (CustomerOrderService) ctx.getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);

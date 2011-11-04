@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -29,18 +31,15 @@ import java.util.List;
  */
 public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
-    private CustomerOrderService orderService = null;
-    private PendingOrderEventHandlerImpl handler = null;
-    private CustomerOrderPaymentService customerOrderPaymentService = null;
+    private CustomerOrderService orderService;
+    private PendingOrderEventHandlerImpl handler;
+    private CustomerOrderPaymentService customerOrderPaymentService;
     private WarehouseService warehouseService;
     private ProductSkuService productSkuService;
     private SkuWarehouseService skuWarehouseService;
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
-
-
         handler = (PendingOrderEventHandlerImpl) ctx.getBean("pendingOrderEventHandler");
         orderService = (CustomerOrderService) ctx.getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
         customerOrderPaymentService = (CustomerOrderPaymentService) ctx.getBean(ServiceSpringKeys.ORDER_PAYMENT_SERICE);
@@ -239,8 +238,5 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertEquals(Payment.PAYMENT_STATUS_FAILED, customerOrderPayment.getPaymentProcessorResult());
 
         TestPaymentGatewayImpl.getGatewayConfig().put(TestPaymentGatewayImpl.AUTH_FAIL, null);
-
-
     }
-
 }

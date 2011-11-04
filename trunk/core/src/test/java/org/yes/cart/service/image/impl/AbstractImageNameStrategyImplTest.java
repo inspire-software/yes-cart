@@ -8,6 +8,8 @@ import org.yes.cart.service.image.ImageNameStrategy;
 
 import java.io.File;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -15,30 +17,20 @@ import java.io.File;
  */
 public class AbstractImageNameStrategyImplTest extends BaseCoreDBTestCase {
 
-
     private ImageNameStrategy imageNameStrategy;
-
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
         imageNameStrategy = (ImageNameStrategy) ctx.getBean(ServiceSpringKeys.PRODUCT_IMAGE_NAME_STRATEGY);
     }
 
     @Test
     public void testGetFullFileNamePath() {
-
         assertEquals("file-name_CODE_a.jpej",
                 imageNameStrategy.getFullFileNamePath("file-name_CODE_a.jpej", null));
-
-
         assertEquals("C" + File.separator + "CODE" + File.separator + "file-name_CODE_a.jpej",
                 imageNameStrategy.getFullFileNamePath("file-name_CODE_a.jpej", "CODE"));
-
         assertEquals("10x30" + File.separator + "C" + File.separator + "CODE" + File.separator + "file-name_CODE_a.jpej",
                 imageNameStrategy.getFullFileNamePath("file-name_CODE_a.jpej", "CODE", "10", "30"));
-
     }
-
-
 }
