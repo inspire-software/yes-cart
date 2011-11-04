@@ -10,7 +10,7 @@ import org.yes.cart.service.domain.impl.BaseCoreDBTestCase;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
