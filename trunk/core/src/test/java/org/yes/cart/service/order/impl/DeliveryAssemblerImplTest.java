@@ -126,6 +126,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         assertEquals(1, dgroups.get(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP).size());
     }
 
+    // TODO fix to not depend on order of running
     @Test
     public void testAssembleCustomerOrder() {
         Customer customer = OrderAssemblerImplTest.createCustomer(ctx, "testAssembleCustomerOrder");

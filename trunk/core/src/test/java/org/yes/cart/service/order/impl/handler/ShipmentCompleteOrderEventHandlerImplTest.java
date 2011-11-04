@@ -46,6 +46,7 @@ public class ShipmentCompleteOrderEventHandlerImplTest extends AbstractEventHand
         warehouseService = (WarehouseService) ctx.getBean("warehouseService");
     }
 
+    // TODO fix to not depend on order or running
     @Test
     public void testHandle() throws Exception {
         final Customer customer = OrderAssemblerImplTest.createCustomer(ctx);

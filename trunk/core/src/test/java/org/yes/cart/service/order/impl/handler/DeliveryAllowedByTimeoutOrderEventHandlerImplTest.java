@@ -30,6 +30,7 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImplTest extends AbstractE
         orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
     }
 
+    // TODO fix to not depend on order or running
     @Test
     public void testHandle() {
         final Customer customer = OrderAssemblerImplTest.createCustomer(ctx);

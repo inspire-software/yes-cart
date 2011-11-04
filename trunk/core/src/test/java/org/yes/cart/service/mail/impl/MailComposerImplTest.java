@@ -184,9 +184,7 @@ public class MailComposerImplTest {
         assertTrue(str.contains("<h2>Bender</h2> lives in theme park with:<br> blackjack<br>poetess<br>"));
     }
 
-    /**
-     * Inline resources
-     */
+    // TODO fix to allow running from IDE
     @Test
     public void testComposeMessageInternal3() throws MessagingException, IOException, ClassNotFoundException {
         mockery.checking(new Expectations() {{
