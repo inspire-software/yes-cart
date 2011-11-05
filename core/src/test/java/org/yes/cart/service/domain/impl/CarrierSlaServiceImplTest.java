@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class Test_CarrierSlaServiceImpl extends BaseCoreDBTestCase {
+public class CarrierSlaServiceImplTest extends BaseCoreDBTestCase {
 
     private CarrierService carrierService;
 
