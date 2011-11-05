@@ -11,7 +11,7 @@ import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.impl.Test_CustomerOrderServiceImpl;
 import org.yes.cart.service.dto.DtoCustomerOrderService;
-import org.yes.cart.service.order.impl.OrderAssemblerImplTest;
+import org.yes.cart.service.order.impl.TestOrderAssemblerImpl;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
 import static org.junit.Assert.*;
@@ -41,7 +41,7 @@ public class TestDtoCustomerOrderServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testUpdate() throws Exception {
         final String customerPrefix = "testUpdate";
-        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx, customerPrefix);
+        final Customer customer = TestOrderAssemblerImpl.createCustomer(ctx, customerPrefix);
         assertFalse(customer.getAddress().isEmpty());
 
         final ShoppingCart shoppingCart = Test_CustomerOrderServiceImpl.getShoppingCart(ctx, customerPrefix);

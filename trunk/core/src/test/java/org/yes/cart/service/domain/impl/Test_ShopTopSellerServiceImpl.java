@@ -11,7 +11,7 @@ import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.ShopTopSeller;
 import org.yes.cart.service.domain.ShopTopSellerService;
 import org.yes.cart.service.order.OrderAssembler;
-import org.yes.cart.service.order.impl.OrderAssemblerImplTest;
+import org.yes.cart.service.order.impl.TestOrderAssemblerImpl;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.math.BigDecimal;
@@ -55,12 +55,12 @@ public class Test_ShopTopSellerServiceImpl extends BaseCoreDBTestCase {
         expectation.put(15128L, new BigDecimal("2"));
         expectation.put(15129L, new BigDecimal("2"));
         expectation.put(10L, new BigDecimal("34"));
-        Customer customer = OrderAssemblerImplTest.createCustomer(ctx, "testTopSellers");
-        ShoppingCart shoppingCart = OrderAssemblerImplTest.getShoppingCart2(ctx, customer.getEmail());
+        Customer customer = TestOrderAssemblerImpl.createCustomer(ctx, "testTopSellers");
+        ShoppingCart shoppingCart = TestOrderAssemblerImpl.getShoppingCart2(ctx, customer.getEmail());
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         customerOrder = customerOrderDao.create(customerOrder);
-        Customer customer2 = OrderAssemblerImplTest.createCustomer(ctx, "testTopSellers2");
-        ShoppingCart shoppingCart2 = OrderAssemblerImplTest.getShoppingCart2(ctx, customer2.getEmail());
+        Customer customer2 = TestOrderAssemblerImpl.createCustomer(ctx, "testTopSellers2");
+        ShoppingCart shoppingCart2 = TestOrderAssemblerImpl.getShoppingCart2(ctx, customer2.getEmail());
         CustomerOrder customerOrder2 = orderAssembler.assembleCustomerOrder(shoppingCart2);
         customerOrder = customerOrderDao.create(customerOrder2);
         shopTopSellerService.updateTopSellers(10);

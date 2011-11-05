@@ -9,10 +9,10 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        PaymentCallBackHandlerFacadeImplTest.class,
-        PaymentModulesManagerImplTest.class,
-        PaymentProcessorFactoryImplTest.class,
-        PaymentProcessorImplTest.class
+        TestPaymentCallBackHandlerFacadeImpl.class,
+        TestPaymentModulesManagerImpl.class,
+        TestPaymentProcessorFactoryImpl.class,
+        TestPaymentProcessorImpl.class
 
 })
 public class PaymentTestSuite {

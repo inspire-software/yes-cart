@@ -14,7 +14,7 @@ import static org.junit.Assert.assertNotSame;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class PaymentProcessorFactoryImplTest extends BaseCoreDBTestCase {
+public class TestPaymentProcessorFactoryImpl extends BaseCoreDBTestCase {
 
     private PaymentProcessorFactory paymentProcessorFactory;
 
