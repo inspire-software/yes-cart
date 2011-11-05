@@ -10,7 +10,7 @@ import org.yes.cart.payment.impl.TestExtFormPaymentGatewayImpl;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderAssembler;
 import org.yes.cart.service.order.impl.DeliveryAssemblerImpl;
-import org.yes.cart.service.order.impl.OrderAssemblerImplTest;
+import org.yes.cart.service.order.impl.TestOrderAssemblerImpl;
 import org.yes.cart.service.payment.PaymentCallBackHandlerFacade;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
@@ -23,7 +23,7 @@ import static org.junit.Assert.assertEquals;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
+public class TestPaymentCallBackHandlerFacadeImpl extends BaseCoreDBTestCase {
 
     private PaymentCallBackHandlerFacade paymentCallBackHandlerFacade;
     private OrderAssembler orderAssembler;
@@ -41,8 +41,8 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
     // TODO fix to not depend on order or running
     @Test
     public void testHandlePaymentCallback() {
-        Customer customer = OrderAssemblerImplTest.createCustomer(ctx, "testHandlePaymentCallback");
-        ShoppingCart shoppingCart = OrderAssemblerImplTest.getShoppingCart(ctx, customer.getEmail());
+        Customer customer = TestOrderAssemblerImpl.createCustomer(ctx, "testHandlePaymentCallback");
+        ShoppingCart shoppingCart = TestOrderAssemblerImpl.getShoppingCart(ctx, customer.getEmail());
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, true);
         customerOrder.setPgLabel("testExtFormPaymentGatewayLabel");

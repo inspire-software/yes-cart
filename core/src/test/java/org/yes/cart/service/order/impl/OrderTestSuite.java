@@ -10,10 +10,10 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        DefaultOrderNumberGeneratorImplTest.class,
+        TestDefaultOrderNumberGeneratorImpl.class,
         DeliveryAssemblerImplTest.class,
-        OrderAssemblerImplTest.class,
-        OrderStateManagerImplTest.class
+        TestOrderAssemblerImpl.class,
+        TestOrderStateManagerImpl.class
 
 })
 public class OrderTestSuite {

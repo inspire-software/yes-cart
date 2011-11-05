@@ -43,7 +43,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
     @Test
     public void testGetDeliveryGroups() {
 
-        Customer customer = OrderAssemblerImplTest.createCustomer(ctx, "testGetDeliveryGroups");
+        Customer customer = TestOrderAssemblerImpl.createCustomer(ctx, "testGetDeliveryGroups");
         assertFalse(customer.getAddress().isEmpty());
 
         ShoppingCart shoppingCart = getShoppingCart1(ctx, customer.getEmail());
@@ -129,7 +129,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
     // TODO fix to not depend on order of running
     @Test
     public void testAssembleCustomerOrder() {
-        Customer customer = OrderAssemblerImplTest.createCustomer(ctx, "testAssembleCustomerOrder");
+        Customer customer = TestOrderAssemblerImpl.createCustomer(ctx, "testAssembleCustomerOrder");
         assertFalse(customer.getAddress().isEmpty());
         ShoppingCart shoppingCart = getShoppingCart7(ctx, customer.getEmail());
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);

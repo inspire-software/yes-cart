@@ -9,7 +9,7 @@ import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.SkuWarehouseService;
-import org.yes.cart.service.order.impl.OrderAssemblerImplTest;
+import org.yes.cart.service.order.impl.TestOrderAssemblerImpl;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 
 import java.math.BigDecimal;
@@ -42,7 +42,7 @@ public class CancelOrderWithRefundOrderEventHandlerImplTest extends AbstractEven
     // TODO fix to not depend on order or running
     @Test
     public void testHandle0() throws Exception {
-        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx);
+        final Customer customer = TestOrderAssemblerImpl.createCustomer(ctx);
         assertFalse(customer.getAddress().isEmpty());
         final CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
@@ -73,7 +73,7 @@ public class CancelOrderWithRefundOrderEventHandlerImplTest extends AbstractEven
     // TODO fix to not depend on order or running
     @Test
     public void testHandle1() throws Exception {
-        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx);
+        final Customer customer = TestOrderAssemblerImpl.createCustomer(ctx);
         assertFalse(customer.getAddress().isEmpty());
         CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());

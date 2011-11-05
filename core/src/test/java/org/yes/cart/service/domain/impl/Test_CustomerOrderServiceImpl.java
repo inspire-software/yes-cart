@@ -9,7 +9,7 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.service.domain.CustomerOrderService;
-import org.yes.cart.service.order.impl.OrderAssemblerImplTest;
+import org.yes.cart.service.order.impl.TestOrderAssemblerImpl;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.impl.*;
 
@@ -37,7 +37,7 @@ public class Test_CustomerOrderServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testCreateAndDelete() throws Exception {
         final String customerPrefix = "testCreateAndDelete";
-        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx, customerPrefix);
+        final Customer customer = TestOrderAssemblerImpl.createCustomer(ctx, customerPrefix);
         assertFalse(customer.getAddress().isEmpty());
         final ShoppingCart shoppingCart = getShoppingCart(ctx, customerPrefix);
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
@@ -51,7 +51,7 @@ public class Test_CustomerOrderServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testFindByGuid() throws Exception {
         final String customerPrefix = "testFindByGuid";
-        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx, customerPrefix);
+        final Customer customer = TestOrderAssemblerImpl.createCustomer(ctx, customerPrefix);
         assertFalse(customer.getAddress().isEmpty());
         final ShoppingCart shoppingCart = getShoppingCart(ctx, customerPrefix);
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
@@ -68,7 +68,7 @@ public class Test_CustomerOrderServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testGetCustomerOrders() throws Exception {
         final String customerPrefix = "cosit2";
-        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx, customerPrefix);
+        final Customer customer = TestOrderAssemblerImpl.createCustomer(ctx, customerPrefix);
         assertFalse(customer.getAddress().isEmpty());
         final ShoppingCart shoppingCart = getShoppingCart(ctx, customerPrefix);
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
@@ -80,7 +80,7 @@ public class Test_CustomerOrderServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testPersistReassembledOrder1() throws Exception {
         final String customerPrefix = "cosit3";
-        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx, customerPrefix);
+        final Customer customer = TestOrderAssemblerImpl.createCustomer(ctx, customerPrefix);
         assertFalse(customer.getAddress().isEmpty());
         final ShoppingCart shoppingCart = getShoppingCart(ctx, customerPrefix);
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
@@ -91,7 +91,7 @@ public class Test_CustomerOrderServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testPersistReassembledOrder2() throws Exception {
         final String customerPrefix = "cosit4";
-        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx, customerPrefix);
+        final Customer customer = TestOrderAssemblerImpl.createCustomer(ctx, customerPrefix);
         assertFalse(customer.getAddress().isEmpty());
         final ShoppingCart shoppingCart = getShoppingCart(ctx, customerPrefix);
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, true);
@@ -102,7 +102,7 @@ public class Test_CustomerOrderServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testPersistReassembledOrder3() throws Exception {
         final String customerPrefix = "testPersistReassembledOrder3";
-        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx, customerPrefix);
+        final Customer customer = TestOrderAssemblerImpl.createCustomer(ctx, customerPrefix);
         assertFalse(customer.getAddress().isEmpty());
         final ShoppingCart shoppingCart = getShoppingCart2(customerPrefix);
         assertFalse(customerOrderService.isOrderCanHasMultipleDeliveries(shoppingCart));

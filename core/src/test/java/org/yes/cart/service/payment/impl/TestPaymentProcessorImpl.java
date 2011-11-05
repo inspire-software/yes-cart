@@ -34,7 +34,7 @@ import static org.junit.Assert.assertTrue;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
+public class TestPaymentProcessorImpl extends BaseCoreDBTestCase {
 
     private static final String PGLABEL = "testPaymentGatewayLabel";
 

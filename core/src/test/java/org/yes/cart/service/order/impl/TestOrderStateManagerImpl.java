@@ -17,7 +17,7 @@ import static org.junit.Assert.assertTrue;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class OrderStateManagerImplTest {
+public class TestOrderStateManagerImpl {
 
     private Map<String, OrderEventHandler> handlersOk;
     private Map<String, OrderEventHandler> handlersFailed;
