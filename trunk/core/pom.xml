@@ -266,6 +266,7 @@
                             <goals>
                                 <goal>test</goal>
                             </goals>
+                            <phase>test-compile</phase>
                             <configuration>
                                 <includes>
                                     <include>**/*Suite.java</include>
