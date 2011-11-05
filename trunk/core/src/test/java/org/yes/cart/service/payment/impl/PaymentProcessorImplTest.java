@@ -60,7 +60,6 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
      *
      * @throws Exception in case of errors
      */
-    // TODO fix to not depend on order or running
     @Test
     public void testAuthorize1() throws Exception {
         final Customer customer = createCustomer();
@@ -107,7 +106,6 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
      *
      * @throws Exception in case of errors
      */
-    // TODO fix to not depend on order or running
     @Test
     public void testAuthorize2() throws Exception {
         final Customer customer = createCustomer();
@@ -131,7 +129,6 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
      *
      * @throws Exception in case of errors
      */
-    // TODO fix to not depend on order or running
     @Test
     public void testAuthCapture2() throws Exception {
         final Customer customer = createCustomer();
@@ -304,7 +301,6 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
      *
      * @throws Exception in case of errors
      */
-    // TODO fix to not depend on order or running
     @Test
     public void testShipmentComplete1() throws Exception {
         final Customer customer = createCustomer();
@@ -341,7 +337,6 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
      *
      * @throws Exception in case of errors
      */
-    // TODO fix to not depend on order or running
     @Test
     public void testShipmentComplete2() throws Exception {
         final Customer customer = createCustomer();

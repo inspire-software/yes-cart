@@ -1,5 +1,6 @@
 package org.yes.cart.service.domain.impl;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.AttributeNamesKeys;
@@ -19,9 +20,15 @@ import static org.junit.Assert.*;
  */
 public class TestShopServiceImpl extends BaseCoreDBTestCase {
 
+    private ShopService shopService;
+
+    @Before
+    public void setUp() throws Exception {
+        shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
+    }
+
     @Test
     public void testGetShopByCode() {
-        final ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
         assertNull(shopService.getShopByCode("NOTEXISTING-SHOP"));
         assertNotNull(shopService.getShopByCode("SHOIP3"));
     }
@@ -29,7 +36,6 @@ public class TestShopServiceImpl extends BaseCoreDBTestCase {
     // TODO fix to not depend on order or running
     @Test
     public void testGetAllCategoriesTestOnShopWithoutAssignedCategories() {
-        final ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
         final Shop shop = shopService.getShopByDomainName("eddie.lives.somewhere.in.time");
         final Set<Category> categorySet = shopService.getShopCategories(shop);
         assertTrue(categorySet.isEmpty());
@@ -42,7 +48,6 @@ public class TestShopServiceImpl extends BaseCoreDBTestCase {
     public void testGetAllCategoriesTestOnShopWithLimitedAssignedCategories() {
         final List<Long> categories = Arrays.asList(200L, 203L, 204L, 205L, 206L, 207L, 208L);
         final List<Long> notAvailableCategories = Arrays.asList(201L, 202L);
-        final ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
         final Shop shop = shopService.getShopByDomainName("long.live.robots");
         final Set<Category> categorySet = shopService.getShopCategories(shop);
         assertFalse(categorySet.isEmpty());
@@ -51,7 +56,6 @@ public class TestShopServiceImpl extends BaseCoreDBTestCase {
             assertTrue(categories.contains(category.getCategoryId()));
             assertFalse(notAvailableCategories.contains(category.getCategoryId()));
         }
-
     }
 
     /**
@@ -60,12 +64,10 @@ public class TestShopServiceImpl extends BaseCoreDBTestCase {
     // TODO fix to not depend on order or running
     @Test
     public void testAssignCurrency() {
-        final ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
         Shop shop = shopService.getShopByDomainName("long.live.robots");
         shopService.updateAttributeValue(shop.getShopId(), AttributeNamesKeys.SUPPORTED_CURRENSIES, "QWE,ASD,ZXC");
         shop = shopService.getShopByDomainName("long.live.robots");
-        assertEquals(
-                "Supported currency is incorrect",
+        assertEquals("Supported currency is incorrect",
                 "QWE,ASD,ZXC",
                 shop.getAttributeByCode(AttributeNamesKeys.SUPPORTED_CURRENSIES).getVal());
     }
@@ -75,7 +77,6 @@ public class TestShopServiceImpl extends BaseCoreDBTestCase {
      */
     @Test
     public void testAssignCurrencys() {
-        final ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
         Shop shop = shopService.getShopByDomainName("long.live.robots");
         shopService.updateAttributeValue(shop.getShopId(), AttributeNamesKeys.SUPPORTED_CURRENSIES, "QWE,ZXC");
         shop = shopService.getShopByDomainName("eddie.lives.somewhere.in.time");
@@ -90,5 +91,5 @@ public class TestShopServiceImpl extends BaseCoreDBTestCase {
         assertEquals("UAH", iter.next());
         assertEquals("USD", iter.next());
         assertEquals("ZXC", iter.next());
-   }
+    }
 }

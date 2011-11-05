@@ -51,7 +51,6 @@ public class DtoAssociationServiceImplTest extends BaseCoreDBTestCase {
         dtoAssociationService.remove(dto.getAssociationId());
     }
 
-    // TODO fix to not depend on order of running
     @Test
     public void testGetAll() throws Exception {
         List<AssociationDTO> list = dtoAssociationService.getAll();

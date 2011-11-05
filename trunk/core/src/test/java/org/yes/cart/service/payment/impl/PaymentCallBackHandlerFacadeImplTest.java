@@ -38,7 +38,6 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
         deliveryAssembler = (DeliveryAssemblerImpl) ctx.getBean(ServiceSpringKeys.DELIVERY_ASSEMBLER);
     }
 
-    // TODO fix to not depend on order or running
     @Test
     public void testHandlePaymentCallback() {
         Customer customer = OrderAssemblerImplTest.createCustomer(ctx, "testHandlePaymentCallback");
