@@ -2,12 +2,12 @@ package org.yes.cart.service.payment.impl;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.PaymentModule;
 import org.yes.cart.payment.persistence.entity.Descriptor;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
-import org.yes.cart.service.domain.impl.BaseCoreDBTestCase;
 import org.yes.cart.service.payment.PaymentModulesManager;
 
 import java.util.Collection;

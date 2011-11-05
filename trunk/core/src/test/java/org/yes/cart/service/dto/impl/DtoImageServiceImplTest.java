@@ -2,11 +2,11 @@ package org.yes.cart.service.dto.impl;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.SeoImageDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
-import org.yes.cart.service.domain.impl.BaseCoreDBTestCase;
 import org.yes.cart.service.dto.DtoImageService;
 
 import static org.junit.Assert.*;

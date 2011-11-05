@@ -3,6 +3,7 @@ package org.yes.cart.service.dto.impl;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.AttrValueDTO;
 import org.yes.cart.domain.dto.AttrValueProductDTO;
@@ -12,7 +13,6 @@ import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.entity.Availability;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
-import org.yes.cart.service.domain.impl.BaseCoreDBTestCase;
 import org.yes.cart.service.dto.*;
 
 import java.util.Date;

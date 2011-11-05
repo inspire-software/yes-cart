@@ -2,13 +2,13 @@ package org.yes.cart.service.dto.impl;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.CustomerOrderDTO;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.service.domain.CustomerOrderService;
-import org.yes.cart.service.domain.impl.BaseCoreDBTestCase;
 import org.yes.cart.service.domain.impl.CustomerOrderServiceImplTest;
 import org.yes.cart.service.dto.DtoCustomerOrderService;
 import org.yes.cart.service.order.impl.OrderAssemblerImplTest;

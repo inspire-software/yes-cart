@@ -2,11 +2,11 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.service.domain.impl.BaseCoreDBTestCase;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
 import static java.util.Collections.singletonMap;

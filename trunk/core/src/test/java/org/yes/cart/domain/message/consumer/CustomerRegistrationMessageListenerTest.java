@@ -3,9 +3,9 @@ package org.yes.cart.domain.message.consumer;
 import com.dumbster.smtp.SimpleSmtpServer;
 import com.dumbster.smtp.SmtpMessage;
 import org.junit.Test;
+import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.domain.message.RegistrationMessage;
 import org.yes.cart.domain.message.impl.RegistrationMessageImpl;
-import org.yes.cart.service.domain.impl.BaseCoreDBTestCase;
 
 import java.util.HashSet;
 import java.util.Iterator;

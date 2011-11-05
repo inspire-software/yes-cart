@@ -3,6 +3,7 @@ package org.yes.cart.service.domain.impl;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.constants.DaoServiceBeanKeys;

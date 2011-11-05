@@ -2,9 +2,9 @@ package org.yes.cart.service.image.impl;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.service.domain.impl.BaseCoreDBTestCase;
 import org.yes.cart.service.image.ImageNameStrategy;
 
 import java.util.ArrayList;
