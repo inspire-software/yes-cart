@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class MD5HashHelperImplTest {
+public class Test_MD5HashHelperImpl {
 
     @Test
     public void testGetMD5Hash() throws Exception {

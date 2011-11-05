@@ -18,16 +18,16 @@ import org.junit.runners.Suite;
         DtoBrandServiceImplTest.class,
         DtoCategoryServiceImplTest.class,
         DtoCustomerOrderServiceImplTest.class,
-        DtoCustomerServiceImplTest.class,
-        DtoEtypeServiceImplTest.class,
-        DtoImageServiceImplTest.class,
-        DtoProductAssociationServiceImplTest.class,
-        DtoProductServiceImplTest.class,
-        DtoProductSkuServiceImplTest.class,
-        DtoProductTypeAttrServiceImplTest.class,
-        DtoSeoServiceImplTest.class,
-        DtoWarehouseServiceImplTest.class,
-        UserManagmentServiceImplTest.class
+        TestDtoCustomerServiceImpl.class,
+        TestDtoEtypeServiceImpl.class,
+        TestDtoImageServiceImpl.class,
+        TestDtoProductAssociationServiceImpl.class,
+        TestDtoProductServiceImpl.class,
+        TestDtoProductSkuServiceImpl.class,
+        TestDtoProductTypeAttrServiceImpl.class,
+        TestDtoSeoServiceImpl.class,
+        TestDtoWarehouseServiceImpl.class,
+        TestUserManagmentServiceImpl.class
 })
 public class DtoTestSuite {
 

@@ -16,7 +16,7 @@ import static org.junit.Assert.assertNull;
  * Date: 18-Sep-2011
  * Time: 11:44:52
  */
-public class ShopCategoryServiceImplTest extends BaseCoreDBTestCase {
+public class Test__ShopCategoryServiceImpl extends BaseCoreDBTestCase {
 
     private ShopCategoryService shopCategoryService;
     private ShopService shopService;

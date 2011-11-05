@@ -19,7 +19,7 @@ import static org.junit.Assert.assertTrue;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class DtoProductTypeAttrServiceImplTest extends BaseCoreDBTestCase {
+public class TestDtoProductTypeAttrServiceImpl extends BaseCoreDBTestCase {
 
     private DtoProductTypeAttrService dtoService;
     private DtoProductTypeService dtoProductTypeService;

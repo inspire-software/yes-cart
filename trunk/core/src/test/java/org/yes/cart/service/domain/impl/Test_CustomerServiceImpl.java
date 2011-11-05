@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class CustomerServiceImplTest extends BaseCoreDBTestCase {
+public class Test_CustomerServiceImpl extends BaseCoreDBTestCase {
 
     private CustomerService customerService;
     private ShopService shopService;

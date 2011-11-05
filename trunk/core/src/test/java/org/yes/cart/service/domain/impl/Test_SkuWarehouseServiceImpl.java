@@ -25,7 +25,7 @@ import static org.junit.Assert.*;
  * Time: 14:12:54
  */
 //TODO refactor to param test
-public class SkuWarehouseServiceImplTest extends BaseCoreDBTestCase {
+public class Test_SkuWarehouseServiceImpl extends BaseCoreDBTestCase {
 
     private WarehouseService warehouseService;
     private SkuWarehouseService skuWarehouseService;

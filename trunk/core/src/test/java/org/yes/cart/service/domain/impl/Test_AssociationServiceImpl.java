@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class AssociationServiceImplTest extends BaseCoreDBTestCase {
+public class Test_AssociationServiceImpl extends BaseCoreDBTestCase {
 
     private AssociationService associationService;
 
