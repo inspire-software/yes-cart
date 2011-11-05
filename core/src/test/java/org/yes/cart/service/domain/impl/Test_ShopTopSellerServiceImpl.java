@@ -27,7 +27,7 @@ import static org.junit.Assert.assertTrue;
  * Date: 6/5/11
  * Time: 10:34 AM
  */
-public class ShopTopSellerServiceImplTest extends BaseCoreDBTestCase {
+public class Test_ShopTopSellerServiceImpl extends BaseCoreDBTestCase {
 
     private ShopTopSellerService shopTopSellerService;
     private OrderAssembler orderAssembler;

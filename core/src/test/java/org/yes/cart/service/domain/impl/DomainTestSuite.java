@@ -11,17 +11,17 @@ import org.springframework.context.ApplicationContext;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        ShopCategoryServiceImplTest.class,
-        AddressServiceImplTest.class,
-        AssociationServiceImplTest.class,
-        AttributeServiceImplTest.class,
-        CarrierSlaServiceImplTest.class,
-        CustomerOrderServiceImplTest.class,
-        CustomerServiceImplTest.class,
-        CustomerWishListServiceImplTest.class,
-        MD5HashHelperImplTest.class,
-        ProductSkuServiceImplTest.class,
-        SkuWarehouseServiceImplTest.class,
+        Test__ShopCategoryServiceImpl.class,
+        Test_AddressServiceImpl.class,
+        Test_AssociationServiceImpl.class,
+        Test_AttributeServiceImpl.class,
+        Test_CarrierSlaServiceImpl.class,
+        Test_CustomerOrderServiceImpl.class,
+        Test_CustomerServiceImpl.class,
+        Test_CustomerWishListServiceImpl.class,
+        Test_MD5HashHelperImpl.class,
+        Test_ProductSkuServiceImpl.class,
+        Test_SkuWarehouseServiceImpl.class,
         TestAttributeServiceImpl.class,
         TestCategoryServiceImpl.class,
         TestImageService.class,
@@ -30,7 +30,7 @@ import org.springframework.context.ApplicationContext;
         TestProductCategoryServiceImpl.class,
         TestProductServiceImpl.class,
         TestShopServiceImpl.class,
-        WarehouseServiceImplTest.class
+        TestWarehouseServiceImpl.class
 })
 public class DomainTestSuite {
 

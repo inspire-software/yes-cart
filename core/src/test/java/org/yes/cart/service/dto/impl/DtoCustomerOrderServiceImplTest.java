@@ -9,7 +9,7 @@ import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.service.domain.CustomerOrderService;
-import org.yes.cart.service.domain.impl.CustomerOrderServiceImplTest;
+import org.yes.cart.service.domain.impl.Test_CustomerOrderServiceImpl;
 import org.yes.cart.service.dto.DtoCustomerOrderService;
 import org.yes.cart.service.order.impl.OrderAssemblerImplTest;
 import org.yes.cart.shoppingcart.ShoppingCart;
@@ -44,7 +44,7 @@ public class DtoCustomerOrderServiceImplTest extends BaseCoreDBTestCase {
         final Customer customer = OrderAssemblerImplTest.createCustomer(ctx, customerPrefix);
         assertFalse(customer.getAddress().isEmpty());
 
-        final ShoppingCart shoppingCart = CustomerOrderServiceImplTest.getShoppingCart(ctx, customerPrefix);
+        final ShoppingCart shoppingCart = Test_CustomerOrderServiceImpl.getShoppingCart(ctx, customerPrefix);
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
         long pk = order.getCustomerorderId();
         assertTrue(pk > 0);

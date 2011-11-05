@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class DtoProductSkuServiceImplTest extends BaseCoreDBTestCase {
+public class TestDtoProductSkuServiceImpl extends BaseCoreDBTestCase {
 
     private DtoProductSkuService dtoService;
     private DtoProductService dtoProductService;
