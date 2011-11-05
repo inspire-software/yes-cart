@@ -26,7 +26,7 @@ import static org.junit.Assert.*;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class TestDeliveryAssemblerImpl extends BaseCoreDBTestCase {
+public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
 
     private OrderAssembler orderAssembler;
     private DeliveryAssemblerImpl deliveryAssembler;
@@ -43,7 +43,7 @@ public class TestDeliveryAssemblerImpl extends BaseCoreDBTestCase {
     @Test
     public void testGetDeliveryGroups() {
 
-        Customer customer = TestOrderAssemblerImpl.createCustomer(ctx, "testGetDeliveryGroups");
+        Customer customer = OrderAssemblerImplTest.createCustomer(ctx, "testGetDeliveryGroups");
         assertFalse(customer.getAddress().isEmpty());
 
         ShoppingCart shoppingCart = getShoppingCart1(ctx, customer.getEmail());
@@ -129,7 +129,7 @@ public class TestDeliveryAssemblerImpl extends BaseCoreDBTestCase {
     // TODO fix to not depend on order of running
     @Test
     public void testAssembleCustomerOrder() {
-        Customer customer = TestOrderAssemblerImpl.createCustomer(ctx, "testAssembleCustomerOrder");
+        Customer customer = OrderAssemblerImplTest.createCustomer(ctx, "testAssembleCustomerOrder");
         assertFalse(customer.getAddress().isEmpty());
         ShoppingCart shoppingCart = getShoppingCart7(ctx, customer.getEmail());
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);

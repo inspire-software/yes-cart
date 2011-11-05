@@ -32,7 +32,7 @@ import static org.junit.Assert.*;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class TestOrderAssemblerImpl extends BaseCoreDBTestCase {
+public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
 
     private OrderAssembler orderAssembler;
     private GenericDAO<CustomerOrder, Long> customerOrderDao;

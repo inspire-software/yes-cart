@@ -8,7 +8,7 @@ import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
-import org.yes.cart.service.order.impl.TestOrderAssemblerImpl;
+import org.yes.cart.service.order.impl.OrderAssemblerImplTest;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 
 import java.math.BigDecimal;
@@ -41,7 +41,7 @@ public class TestProcessAllocationOrderEventHandlerImpl extends AbstractEventHan
     // TODO fix to not depend on order or running
     @Test
     public void testHandle() {
-        final Customer customer = TestOrderAssemblerImpl.createCustomer(ctx);
+        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx);
         assertFalse(customer.getAddress().isEmpty());
         final CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
