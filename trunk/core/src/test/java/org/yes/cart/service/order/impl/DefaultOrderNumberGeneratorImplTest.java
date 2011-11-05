@@ -14,7 +14,7 @@ import static org.junit.Assert.assertFalse;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class TestDefaultOrderNumberGeneratorImpl {
+public class DefaultOrderNumberGeneratorImplTest {
 
     @Test
     public void testGetNextOrderNumber() {

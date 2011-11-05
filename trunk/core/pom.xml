@@ -274,7 +274,6 @@
                                     <include>**/DomainTestSuite.java</include>
                                     <include>**/DtoTestSuite.java</include>
                                     <include>**/HandlerTestSuite.java</include>
-                                    <include>**/OrderTestSuite.java</include>
                                 </includes>
                                 <excludes>
                                     <exclude>**/Test*.java</exclude>
