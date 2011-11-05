@@ -17,14 +17,14 @@ import static org.junit.Assert.assertFalse;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class TestReleaseToPackOrderEventHandlerImpl extends AbstractEventHandlerImplTest {
+public class ReleaseToShipmentOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
     private CustomerOrderService orderService;
-    private ReleaseToPackOrderEventHandlerImpl handler;
+    private ReleaseToShipmentOrderEventHandlerImpl handler;
 
     @Before
     public void setUp() throws Exception {
-        handler = (ReleaseToPackOrderEventHandlerImpl) ctx.getBean("releaseToPackOrderEventHandler");
+        handler = (ReleaseToShipmentOrderEventHandlerImpl) ctx.getBean("releaseToShipmentOrderEventHandler");
         orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
     }
 
@@ -35,9 +35,10 @@ public class TestReleaseToPackOrderEventHandlerImpl extends AbstractEventHandler
         final CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
         CustomerOrderDelivery delivery = customerOrder.getDelivery().iterator().next();
-        handler.handle(new OrderEventImpl("", //evt.payment.offline
-                customerOrder,
-                delivery));
-        assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_PACKING, delivery.getDeliveryStatus());
+        handler.handle(
+                new OrderEventImpl("", //evt.payment.offline
+                        customerOrder,
+                        delivery));
+        assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS, delivery.getDeliveryStatus());
     }
 }

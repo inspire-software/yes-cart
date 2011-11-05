@@ -9,23 +9,22 @@ import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.impl.OrderAssemblerImplTest;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 
-import java.util.Collections;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class TestPaymentOkOrderEventHandlerImpl extends AbstractEventHandlerImplTest {
+public class ReleaseToPackOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
     private CustomerOrderService orderService;
-    private PaymentOkOrderEventHandlerImpl handler;
+    private ReleaseToPackOrderEventHandlerImpl handler;
 
     @Before
     public void setUp() throws Exception {
-        handler = (PaymentOkOrderEventHandlerImpl) ctx.getBean("paymentOkOrderEventHandler");
+        handler = (ReleaseToPackOrderEventHandlerImpl) ctx.getBean("releaseToPackOrderEventHandler");
         orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
     }
 
@@ -35,11 +34,10 @@ public class TestPaymentOkOrderEventHandlerImpl extends AbstractEventHandlerImpl
         assertFalse(customer.getAddress().isEmpty());
         final CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
-        customerOrder.setPgLabel("testPaymentGatewayLabel");
-        orderService.update(customerOrder);
-        assertTrue(handler.handle(new OrderEventImpl("", customerOrder, null, Collections.EMPTY_MAP)));
-        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
-        assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED,
-                customerOrder.getDelivery().iterator().next().getDeliveryStatus());
+        CustomerOrderDelivery delivery = customerOrder.getDelivery().iterator().next();
+        handler.handle(new OrderEventImpl("", //evt.payment.offline
+                customerOrder,
+                delivery));
+        assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_PACKING, delivery.getDeliveryStatus());
     }
 }

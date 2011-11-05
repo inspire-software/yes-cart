@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class TestDeliveryAllowedByTimeoutOrderEventHandlerImpl extends AbstractEventHandlerImplTest {
+public class DeliveryAllowedByTimeoutOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
     private CustomerOrderService orderService;
     private DeliveryAllowedByTimeoutOrderEventHandlerImpl handler;
