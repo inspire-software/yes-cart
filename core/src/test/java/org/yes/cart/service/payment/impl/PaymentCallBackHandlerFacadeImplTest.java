@@ -23,7 +23,7 @@ import static org.junit.Assert.assertEquals;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class TestPaymentCallBackHandlerFacadeImpl extends BaseCoreDBTestCase {
+public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
 
     private PaymentCallBackHandlerFacade paymentCallBackHandlerFacade;
     private OrderAssembler orderAssembler;

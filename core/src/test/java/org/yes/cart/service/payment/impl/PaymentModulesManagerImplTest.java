@@ -22,7 +22,7 @@ import static org.junit.Assert.assertNotNull;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class TestPaymentModulesManagerImpl extends BaseCoreDBTestCase {
+public class PaymentModulesManagerImplTest extends BaseCoreDBTestCase {
 
     PaymentModulesManager paymentModulesManager;
 
