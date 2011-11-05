@@ -29,7 +29,7 @@ import static org.junit.Assert.*;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
+public class TestPendingOrderEventHandlerImpl extends AbstractEventHandlerImplTest {
 
     private CustomerOrderService orderService;
     private PendingOrderEventHandlerImpl handler;

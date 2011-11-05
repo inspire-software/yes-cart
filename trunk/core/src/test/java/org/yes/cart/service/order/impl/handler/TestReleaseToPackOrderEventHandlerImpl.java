@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.impl.TestOrderAssemblerImpl;
 import org.yes.cart.service.order.impl.OrderEventImpl;
@@ -16,30 +17,27 @@ import static org.junit.Assert.assertFalse;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class CancelOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
+public class TestReleaseToPackOrderEventHandlerImpl extends AbstractEventHandlerImplTest {
 
     private CustomerOrderService orderService;
-    private CancelOrderEventHandlerImpl handler;
+    private ReleaseToPackOrderEventHandlerImpl handler;
 
     @Before
     public void setUp() throws Exception {
-        handler = (CancelOrderEventHandlerImpl) ctx.getBean("cancelOrderEventHandler");
+        handler = (ReleaseToPackOrderEventHandlerImpl) ctx.getBean("releaseToPackOrderEventHandler");
         orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
     }
 
-    // FIX to allow running from IDE
     @Test
     public void testHandle() {
         final Customer customer = TestOrderAssemblerImpl.createCustomer(ctx);
         assertFalse(customer.getAddress().isEmpty());
         final CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
-        handler.handle(
-                new OrderEventImpl(
-                        "", //evt.payment.offline
-                        customerOrder
-                )
-        );
-        assertEquals(CustomerOrder.ORDER_STATUS_CANCELLED, customerOrder.getOrderStatus());
+        CustomerOrderDelivery delivery = customerOrder.getDelivery().iterator().next();
+        handler.handle(new OrderEventImpl("", //evt.payment.offline
+                customerOrder,
+                delivery));
+        assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_PACKING, delivery.getDeliveryStatus());
     }
 }
