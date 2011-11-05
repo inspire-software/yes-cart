@@ -4,6 +4,7 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.junit.Before;
 import org.junit.Test;
+import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Carrier;
 import org.yes.cart.service.domain.CarrierService;

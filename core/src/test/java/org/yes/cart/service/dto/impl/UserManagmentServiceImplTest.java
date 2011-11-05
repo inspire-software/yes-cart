@@ -3,11 +3,11 @@ package org.yes.cart.service.dto.impl;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.ManagerDTO;
 import org.yes.cart.domain.dto.RoleDTO;
 import org.yes.cart.service.domain.ManagerService;
-import org.yes.cart.service.domain.impl.BaseCoreDBTestCase;
 import org.yes.cart.service.dto.ManagementService;
 
 import java.util.List;

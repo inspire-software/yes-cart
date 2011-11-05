@@ -2,6 +2,7 @@ package org.yes.cart.service.domain.impl;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;

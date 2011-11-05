@@ -3,10 +3,10 @@ package org.yes.cart.service.dto.impl;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.AvailabilityDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
-import org.yes.cart.service.domain.impl.BaseCoreDBTestCase;
 import org.yes.cart.service.dto.DtoAvailabilityService;
 
 import java.util.List;

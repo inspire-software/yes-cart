@@ -1,4 +1,4 @@
-package org.yes.cart.service.domain.impl;
+package org.yes.cart;
 
 import org.hornetq.jms.server.impl.JMSServerManagerImpl;
 import org.junit.After;
