@@ -30,9 +30,9 @@ import static org.junit.Assert.*;
  */
 public class PriceServiceImplTest extends BaseCoreDBTestCase {
 
-    ShopService shopService;
-    PriceService priceService;
-    ProductService productService;
+    private ShopService shopService;
+    private PriceService priceService;
+    private ProductService productService;
 
     @Before
     public void setUp() throws Exception {
@@ -57,10 +57,7 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
         assertEquals("EUR-0-100", navigationRecords.get(0).getValue());
         assertEquals("EUR-100-300", navigationRecords.get(1).getValue());
         assertEquals("EUR-300-500", navigationRecords.get(2).getValue());
-
-        /**
-         * In other currency
-         */
+        // In other currency
         navigationRecords = priceService.getPriceNavigationRecords(priceTierTree, "UAH", shop);
         assertNotNull(navigationRecords);
         assertEquals(3, navigationRecords.size());
@@ -77,45 +74,34 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
     public void getMinimalRegularPriceTest() {
         Shop shop = shopService.getShopByDomainName("www.gadget.npa.com");
         Product product = productService.getProductById(10000L);
-
         assertNotNull(product);
         assertEquals(4, product.getSku().size());
-
         SkuPrice skuPrice = priceService.getMinimalRegularPrice(product.getSku(), shop, "EUR", BigDecimal.ONE);
         assertNotNull(skuPrice);
         assertNull(skuPrice.getSalePrice());
         assertTrue((new BigDecimal("150.00")).equals(skuPrice.getRegularPrice()));
-
         skuPrice = priceService.getMinimalRegularPrice(product.getSku(), shop, "EUR", new BigDecimal("2"));
         assertNotNull(skuPrice);
         assertNull(skuPrice.getSalePrice());
         assertTrue((new BigDecimal("145.00")).equals(skuPrice.getRegularPrice()));
-
         //Test than we are can not getByKey the minimal price through price tiers for multisku product for not cofigured currency
         skuPrice = priceService.getMinimalRegularPrice(product.getSku(), shop, "BYR", BigDecimal.ONE);
         assertNotNull(skuPrice);
         assertNull(skuPrice.getRegularPrice());
         assertNull(skuPrice.getSalePrice());
-
         //Test than we are can getByKey the minimal price through price tiers for multisku product.
         skuPrice = priceService.getMinimalRegularPrice(product.getSku(), shop, "UAH", BigDecimal.ONE);
         assertNotNull(skuPrice);
         assertTrue(MoneyUtils.isFirstEqualToSecond(new BigDecimal("1707.00"), skuPrice.getRegularPrice()));
-
     }
 
     @Test
     public void testGetSkuPricesFilteredByQuantity() {
-
         Shop shop = shopService.getShopByDomainName("www.gadget.npa.com");
         Product product = productService.getProductById(10000L);
-
         List<SkuPrice> skus = priceService.getSkuPriceFilteredByShop(product.getSku(), shop);
-
         skus = priceService.getSkuPriceFilteredByCurrency(
-                priceService.getSkuPricesFilteredByQuantity(skus, new BigDecimal(2))
-                , "EUR");
-
+                priceService.getSkuPricesFilteredByQuantity(skus, new BigDecimal(2)), "EUR");
         boolean found = false;
         for (SkuPrice skuPrice : skus) {
             if ("SOBOT-LIGHT".equals(skuPrice.getSku().getCode())) {
@@ -123,7 +109,6 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
                 found = true;
             }
         }
-
         assertTrue(found);
     }
 
@@ -134,12 +119,8 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
     public void testGetMinimalRegularPriceForNosupportedCurrencyTest() {
         Shop shop = shopService.getShopByDomainName("www.gadget.npa.com");
         Product product = productService.getProductById(10000L);
-
         assertNotNull(product);
         assertEquals(4, product.getSku().size());
-
-        //Pair<BigDecimal, BigDecimal>
-
     }
 
     /**
@@ -148,13 +129,9 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testGetMinimalRegularPriceForsupportedCurrencyTest() {
         Product product = productService.getProductById(10000L);
-
         Shop shop = shopService.getShopByDomainName("www.gadget.npa.com");
-
-
         assertNotNull(product);
         assertEquals(4, product.getSku().size());
-
         SkuPrice skuPrice = priceService.getMinimalRegularPrice(product.getSku(), shop, "UAH", BigDecimal.ONE);
         assertNotNull(skuPrice);
         assertTrue(MoneyUtils.isFirstEqualToSecond(new BigDecimal("1707.00"), skuPrice.getRegularPrice()));

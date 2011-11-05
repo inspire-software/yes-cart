@@ -18,34 +18,14 @@ public class ExpireCartCommandImplTest {
     @Test
     public void testExecute() {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
-
-        //assertNull(shoppingCart.getAuthentication());
-
         Map<String, String> params = new HashMap<String, String>();
         params.put(LoginCommandImpl.EMAIL, "test@test.com");
         params.put(LoginCommandImpl.NAME, "John Doe");
-
-        LoginCommandImpl loginCommand = new LoginCommandImpl(
-                null,
-                params
-        );
-
-        loginCommand.execute(shoppingCart);
-
-        //assertNotNull(shoppingCart.getAuthentication());
-
-        /*assertEquals("TEst that auth in spring security context",
-                SecurityContextHolder.getContext().getAuthentication(),
-                shoppingCart.getAuthentication());   */
-
-        ExpireCartCommandImpl expireCartCommand = new ExpireCartCommandImpl(null, null);
-        expireCartCommand.execute(shoppingCart);
-
-        //assertNull(shoppingCart.getAuthentication());
+        new LoginCommandImpl(null, params).execute(shoppingCart);
+        new ExpireCartCommandImpl(null, null)
+                .execute(shoppingCart);
         assertNull(shoppingCart.getCustomerEmail());
-
         assertNull(shoppingCart.getCustomerName());
-
         //assertEquals(ShoppingCart.SESSION_EXPIRED, shoppingCart.getLogonState());
         //TODO remake test
     }

@@ -16,7 +16,7 @@ import static org.junit.Assert.assertNull;
  * Date: 07-May-2011
  * Time: 16:13:01
  */
-public class TestGenericDAO extends AbstractTestDAO {
+public class GenericDAOTest extends AbstractTestDAO {
 
     private GenericDAO<Brand, Long> brandDao;
     private EntityFactory entityFactory;

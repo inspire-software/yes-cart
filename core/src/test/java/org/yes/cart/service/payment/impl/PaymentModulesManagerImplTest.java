@@ -40,7 +40,6 @@ public class PaymentModulesManagerImplTest extends BaseCoreDBTestCase {
         assertEquals(1, modules.size());
         Descriptor descriptor = modules.iterator().next().getPaymentModuleDescriptor();
         assertEquals("basePaymentModule", descriptor.getLabel());
-
     }
 
     /**

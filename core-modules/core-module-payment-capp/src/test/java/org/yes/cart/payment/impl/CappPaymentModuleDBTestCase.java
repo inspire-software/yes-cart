@@ -23,41 +23,6 @@ public abstract class CappPaymentModuleDBTestCase extends BasePaymentModuleDBTes
         return new ClassPathXmlApplicationContext("test-core-module-payment-capp.xml");
     }
 
-    protected Customer createCustomer() {
-        Customer customer = new CustomerEntity();
-        customer.setEmail("john.dou@domain.com");
-        customer.setFirstname("John");
-        customer.setLastname("Dou");
-        customer.setPassword("rawpassword");
-
-        Address address = new AddressEntity();
-        address.setFirstname("John");
-        address.setLastname("Dou");
-        address.setCity("Los Angeles");
-        address.setAddrline1("2684 Lacy Street Suite 208");
-        address.setCountryCode("US");
-        address.setStateCode("CA");
-        address.setPostcode("90031");
-        address.setAddressType(Address.ADDR_TYPE_BILLING);
-        address.setDefaultAddress(true);
-
-        customer.getAddress().add(address);
-
-        address = new AddressEntity();
-        address.setFirstname("Jane");
-        address.setLastname("Dou");
-        address.setCity("Los Angeles");
-        address.setAddrline1("713 Happy Street Suite 101");
-        address.setCountryCode("US");
-        address.setStateCode("CA");
-        address.setPostcode("90555");
-        address.setAddressType(Address.ADDR_TYPE_SHIPING);
-        address.setDefaultAddress(true);
-
-        customer.getAddress().add(address);
-        return customer;
-    }
-
     protected CustomerOrderDeliveryDet createDeliveryItem(
             final String productSkuName, final String skuCode, final BigDecimal price, final BigDecimal qty) {
         CustomerOrderDeliveryDet deliveryDet = new CustomerOrderDeliveryDetEntity();
@@ -105,7 +70,7 @@ public abstract class CappPaymentModuleDBTestCase extends BasePaymentModuleDBTes
     }
 
     protected Map createCardParameters() {
-        Map params = new HashMap();
+        Map<String, String> params = new HashMap<String, String>();
         params.put("ccHolderName", "JOHN DOU");
         params.put("ccNumber", getVisaCardNumber());
         params.put("ccExpireMonth", "02");  // paypal test account
@@ -118,8 +83,6 @@ public abstract class CappPaymentModuleDBTestCase extends BasePaymentModuleDBTes
 
     protected CustomerOrder createCustomerOrder(String orderNum) {
         final CustomerOrder customerOrder = new CustomerOrderEntity();
-
-
         customerOrder.setOrderTimestamp(new Date());
         customerOrder.setCurrency("USD");
         customerOrder.setOrdernum(orderNum);
@@ -129,10 +92,50 @@ public abstract class CappPaymentModuleDBTestCase extends BasePaymentModuleDBTes
         customerOrder.setShippingAddress("713 Happy Street Suite 101, Los Angeles, 90555,  CA");
         customerOrder.getDelivery().add(createDelivery0(orderNum));
         customerOrder.getDelivery().add(createDelivery1(orderNum));
-
         customerOrder.setOrderStatus(CustomerOrder.ORDER_STATUS_IN_PROGRESS);
-
         return customerOrder;
+    }
+
+    protected Customer createCustomer() {
+        Customer customer = new CustomerEntity();
+        customer.setEmail("john.dou@domain.com");
+        customer.setFirstname("John");
+        customer.setLastname("Dou");
+        customer.setPassword("rawpassword");
+        Address address = createAddress1();
+        customer.getAddress().add(address);
+        address = createAddress2();
+        customer.getAddress().add(address);
+        return customer;
+    }
+
+    private Address createAddress2() {
+        Address address;
+        address = new AddressEntity();
+        address.setFirstname("Jane");
+        address.setLastname("Dou");
+        address.setCity("Los Angeles");
+        address.setAddrline1("713 Happy Street Suite 101");
+        address.setCountryCode("US");
+        address.setStateCode("CA");
+        address.setPostcode("90555");
+        address.setAddressType(Address.ADDR_TYPE_SHIPING);
+        address.setDefaultAddress(true);
+        return address;
+    }
+
+    private Address createAddress1() {
+        Address address = new AddressEntity();
+        address.setFirstname("John");
+        address.setLastname("Dou");
+        address.setCity("Los Angeles");
+        address.setAddrline1("2684 Lacy Street Suite 208");
+        address.setCountryCode("US");
+        address.setStateCode("CA");
+        address.setPostcode("90031");
+        address.setAddressType(Address.ADDR_TYPE_BILLING);
+        address.setDefaultAddress(true);
+        return address;
     }
 
     /**

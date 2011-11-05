@@ -24,7 +24,6 @@ public class StringValueToPairListConverterTest {
         assertEquals("Red", pairList.get(0).getSecond());
         assertEquals("Green", pairList.get(1).getFirst());
         assertEquals("Green", pairList.get(1).getSecond());
-
         values = "Red,G-Green,Blue";
         pairList = converter.getChoises(values);
         assertEquals(3, pairList.size());

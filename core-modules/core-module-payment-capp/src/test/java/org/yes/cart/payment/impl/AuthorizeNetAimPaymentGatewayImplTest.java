@@ -21,9 +21,9 @@ import static org.junit.Assert.assertEquals;
  */
 public class AuthorizeNetAimPaymentGatewayImplTest extends CappPaymentModuleDBTestCase {
 
-    private PaymentProcessorSurrogate paymentProcessor = null;
-    private AuthorizeNetAimPaymentGatewayImpl authorizeNetAimPaymentGateway = null;
-    private CustomerOrderPaymentService customerOrderPaymentService = null;
+    private PaymentProcessorSurrogate paymentProcessor;
+    private AuthorizeNetAimPaymentGatewayImpl authorizeNetAimPaymentGateway;
+    private CustomerOrderPaymentService customerOrderPaymentService;
 
     private boolean isTestAllowed() {
         return "true".equals(System.getProperty("testPgAuthorizeNetAim"));
@@ -46,7 +46,6 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends CappPaymentModuleDBTe
             }
         }
     }
-
 
     @Test
     public void testAuthPlusReverseAuthorization() {

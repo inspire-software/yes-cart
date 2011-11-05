@@ -31,7 +31,6 @@ public class DtoAttributeGroupServiceImplTest extends BaseCoreDBTestCase {
         AttributeGroupDTO attributeGroupDTO = dtoAttributeGroupService.getAttributeGroupByCode("CATEGORY");
         assertNotNull(attributeGroupDTO);
         assertEquals("CATEGORY", attributeGroupDTO.getCode());
-
         attributeGroupDTO = dtoAttributeGroupService.getAttributeGroupByCode("NOTEXISTINGGROUP");
         assertNull(attributeGroupDTO);
     }

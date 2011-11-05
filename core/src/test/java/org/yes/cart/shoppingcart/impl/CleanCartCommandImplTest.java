@@ -19,13 +19,10 @@ public class CleanCartCommandImplTest {
     public void testExecute() {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
         shoppingCart.addProductSkuToCart(new ProductSkuDTOImpl(), BigDecimal.ONE);
-
         shoppingCart.getOrderInfo().setOrderMessage("hi im cart");
         final String oldGuid = shoppingCart.getGuid();
-
-        CleanCartCommandImpl command = new CleanCartCommandImpl(null, null);
-        command.execute(shoppingCart);
-
+        new CleanCartCommandImpl(null, null)
+                .execute(shoppingCart);
         assertNull(shoppingCart.getOrderMessage());
         assertNotNull(shoppingCart.getModifiedDate());
         assertTrue(shoppingCart.getCartItemList().isEmpty());
