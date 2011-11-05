@@ -255,37 +255,20 @@
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <inherited>true</inherited>
+                    <configuration>
+                        <excludes>
+                            <exclude>**/Test*.java</exclude>
+                        </excludes>
+                    </configuration>
                     <executions>
-                        <execution>
-                            <id>default-test</id>
-                            <configuration>
-                                <skipTests>true</skipTests>
-                            </configuration>
-                        </execution>
                         <execution>
                             <id>order-depended-test</id>
                             <goals>
                                 <goal>test</goal>
                             </goals>
                             <configuration>
-                                <runOrder>alphabetical</runOrder>
                                 <includes>
-                                    <include>**/DomainTestSuite.java</include>
-                                    <include>**/DtoTestSuite.java</include>
-                                </includes>
-                                <excludes>
-                                    <exclude>**/Test*.java</exclude>
-                                </excludes>
-                            </configuration>
-                        </execution>
-                        <execution>
-                            <id>unordered-test</id>
-                            <goals>
-                                <goal>test</goal>
-                            </goals>
-                            <configuration>
-                                <includes>
-                                    <include>**/*Test.java</include>
+                                    <include>**/*Suite.java</include>
                                 </includes>
                                 <excludes>
                                     <exclude>**/Test*.java</exclude>
