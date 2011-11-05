@@ -268,7 +268,6 @@
                                 <goal>test</goal>
                             </goals>
                             <configuration>
-                                <forkMode>pertest</forkMode>
                                 <runOrder>alphabetical</runOrder>
                                 <includes>
                                     <include>**/DomainTestSuite.java</include>
