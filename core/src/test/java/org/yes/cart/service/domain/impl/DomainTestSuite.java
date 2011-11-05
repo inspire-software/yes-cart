@@ -22,8 +22,6 @@ import org.springframework.context.ApplicationContext;
         TestAttributeServiceImpl.class,
         TestCategoryServiceImpl.class,
         TestPriceServiceImpl.class,
-        TestProductAssociationService.class,
-        TestProductCategoryServiceImpl.class,
         TestProductServiceImpl.class,
         TestShopServiceImpl.class,
         TestWarehouseServiceImpl.class
