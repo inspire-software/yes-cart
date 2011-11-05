@@ -11,22 +11,6 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestDtoAssociationServiceImpl.class,
-        TestDtoAttributeGroupServiceImpl.class,
-        TestDtoAttributeServiceImpl.class,
-        TestDtoAvailabilityServiceImpl.class,
-        TestDtoBrandServiceImpl.class,
-        TestDtoCategoryServiceImpl.class,
-        TestDtoCustomerOrderServiceImpl.class,
-        TestDtoCustomerServiceImpl.class,
-        TestDtoEtypeServiceImpl.class,
-        TestDtoImageServiceImpl.class,
-        TestDtoProductAssociationServiceImpl.class,
-        TestDtoProductServiceImpl.class,
-        TestDtoProductSkuServiceImpl.class,
-        TestDtoProductTypeAttrServiceImpl.class,
-        TestDtoSeoServiceImpl.class,
-        TestDtoWarehouseServiceImpl.class,
         TestUserManagmentServiceImpl.class
 })
 public class DtoTestSuite {

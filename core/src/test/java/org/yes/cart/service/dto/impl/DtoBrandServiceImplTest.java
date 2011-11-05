@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class TestDtoBrandServiceImpl extends BaseCoreDBTestCase {
+public class DtoBrandServiceImplTest extends BaseCoreDBTestCase {
 
     private DtoBrandService dtoService;
     private DtoFactory dtoFactory;
