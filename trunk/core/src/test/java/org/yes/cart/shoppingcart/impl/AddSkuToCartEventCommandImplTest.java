@@ -1,13 +1,8 @@
 package org.yes.cart.shoppingcart.impl;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.Constants;
-import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.service.domain.PriceService;
-import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.math.BigDecimal;
@@ -25,24 +20,13 @@ import static org.junit.Assert.assertTrue;
  */
 public class AddSkuToCartEventCommandImplTest extends BaseCoreDBTestCase {
 
-    ShopService shopService;
-    PriceService priceService;
-    ProductService productService;
-
-    @Before
-    public void setUp() throws Exception {
-        productService = (ProductService) ctx.getBean(ServiceSpringKeys.PRODUCT_SERVICE);
-        priceService = (PriceService) ctx.getBean(ServiceSpringKeys.PRICE_SERVICE);
-        shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
-    }
-
     @Test
     public void testExecute() {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
-        new ChangeCurrencyEventCommandImpl(ctx,
-                singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "EUR")).execute(shoppingCart);
-        new SetShopCartCommandImpl(ctx,
-                singletonMap(SetShopCartCommandImpl.CMD_KEY, 10)).execute(shoppingCart);
+        new ChangeCurrencyEventCommandImpl(ctx, singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "EUR"))
+                .execute(shoppingCart);
+        new SetShopCartCommandImpl(ctx, singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
+                .execute(shoppingCart);
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getCartSubTotal(shoppingCart.getCartItemList()));
         Map<String, String> params = new HashMap<String, String>();
         params.put(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST1");

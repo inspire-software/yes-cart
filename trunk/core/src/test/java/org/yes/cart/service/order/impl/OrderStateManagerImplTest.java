@@ -17,6 +17,7 @@ import static org.junit.Assert.assertTrue;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
+// TODO simplify using JMock
 public class OrderStateManagerImplTest {
 
     private Map<String, OrderEventHandler> handlersOk;
@@ -96,7 +97,6 @@ public class OrderStateManagerImplTest {
         ));
         assertTrue(afterTransitionListenerWasFired);
         assertTrue(beforeTransitionListenerWasFired);
-
     }
 
     /**
@@ -113,7 +113,6 @@ public class OrderStateManagerImplTest {
         assertTrue(beforeTransitionListenerWasFired);
         assertFalse(afterTransitionListenerWasFired);
     }
-
 
     /**
      * Test to prove, that dynamic handles are operational.

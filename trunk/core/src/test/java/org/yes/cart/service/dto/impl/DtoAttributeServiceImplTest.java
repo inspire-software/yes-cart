@@ -36,7 +36,6 @@ public class DtoAttributeServiceImplTest extends BaseCoreDBTestCase {
         assertTrue(dto.getAttributeId() > 0);
     }
 
-
     @Test
     public void testUpdate() throws Exception {
         AttributeDTO dto = getDto();

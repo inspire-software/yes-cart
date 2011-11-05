@@ -16,28 +16,18 @@ import static org.junit.Assert.assertTrue;
  */
 public class SetBillingSeparateFromShippingAddressCommandImplTest {
 
-
     @Test
     public void testExecute() {
-        // Add your code here
-
         ShoppingCart shoppingCart = new ShoppingCartImpl();
         assertFalse(shoppingCart.isSeparateBillingAddress());
-
         Map params = new HashMap();
-
         params.put(SetBillingSeparateFromShippingAddressCommandImpl.CMD_KEY, "true");
-
         SetBillingSeparateFromShippingAddressCommandImpl command =
                 new SetBillingSeparateFromShippingAddressCommandImpl(null, params);
-
         command.execute(shoppingCart);
         assertTrue(shoppingCart.isSeparateBillingAddress());
-
         params.put(SetBillingSeparateFromShippingAddressCommandImpl.CMD_KEY, "false");
-        command =
-                new SetBillingSeparateFromShippingAddressCommandImpl(null, params);
-        command.execute(shoppingCart);
+        new SetBillingSeparateFromShippingAddressCommandImpl(null, params).execute(shoppingCart);
         assertFalse(shoppingCart.isSeparateBillingAddress());
     }
 }

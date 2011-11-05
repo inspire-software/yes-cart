@@ -3,7 +3,6 @@ package org.yes.cart.service.mail.impl;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -34,16 +33,9 @@ import static org.junit.Assert.*;
 public class MailComposerImplTest {
 
     private Mockery mockery = new JUnit4Mockery();
-    private SystemService systemService;
-    private ShopService shopService;
-    private Shop shop;
-
-    @Before
-    public void setUp() {
-        systemService = mockery.mock(SystemService.class);
-        shopService = mockery.mock(ShopService.class);
-        shop = mockery.mock(Shop.class);
-    }
+    private SystemService systemService = mockery.mock(SystemService.class);
+    private ShopService shopService = mockery.mock(ShopService.class);
+    private Shop shop = mockery.mock(Shop.class);
 
     @Test
     public void testMerge1() throws ClassNotFoundException, IOException {
@@ -97,7 +89,6 @@ public class MailComposerImplTest {
                 (mailComposer.getPathToTemplate("SHOIP1", "priceReduced")).replace("\\", "/")
         );
     }
-
 
     @Test
     public void testComposeMessageInternal0() throws MessagingException, IOException, ClassNotFoundException {

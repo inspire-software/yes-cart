@@ -165,7 +165,6 @@ public class DtoProductServiceImplTest extends BaseCoreDBTestCase {
             if (attrValueDTO.getAttrvalueId() > 0) {
                 dtoService.deleteAttributeValue(attrValueDTO.getAttrvalueId());
             }
-
         }
         list = dtoService.getEntityAttributes(dto.getProductId());
         for (AttrValueDTO attrValueDTO : list) {

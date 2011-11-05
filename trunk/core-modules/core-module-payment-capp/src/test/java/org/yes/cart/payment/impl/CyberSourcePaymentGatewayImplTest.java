@@ -41,7 +41,6 @@ public class CyberSourcePaymentGatewayImplTest extends CappPaymentModuleDBTestCa
     @Test
     public void testGetPaymentGatewayParameters() {
         if (isTestAllowed()) {
-
             //not sure is proxy will be used or not
             for (PaymentGatewayParameter parameter : cyberSourcePaymentGateway.getPaymentGatewayParameters()) {
                 assertEquals("cyberSourcePaymentGateway", parameter.getPgLabel());
@@ -76,8 +75,7 @@ public class CyberSourcePaymentGatewayImplTest extends CappPaymentModuleDBTestCa
                             Payment.PAYMENT_STATUS_OK,
                             PaymentGateway.REVERSE_AUTH).size());
             //total 54 records
-            assertEquals(
-                    4,
+            assertEquals(4,
                     customerOrderPaymentService.findBy(
                             orderNum,
                             null,
@@ -85,7 +83,6 @@ public class CyberSourcePaymentGatewayImplTest extends CappPaymentModuleDBTestCa
                             null).size());
         }
     }
-
 
     @Test
     public void testAuthPlusCapture() {

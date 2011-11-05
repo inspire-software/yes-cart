@@ -22,7 +22,7 @@ import static org.junit.Assert.*;
  * Time: 16:13:01
  */
 // TODO refactor to param test
-public class TestProductDAO extends AbstractTestDAO {
+public class ProductDAOTest extends AbstractTestDAO {
 
     private GenericDAO<Product, Long> productDao;
     private GenericDAO<Availability, Long> availabilityDao;

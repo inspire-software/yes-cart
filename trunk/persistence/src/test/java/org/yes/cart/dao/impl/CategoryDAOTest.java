@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
  * Date: 07-May-2011
  * Time: 16:13:01
  */
-public class TestCategoryDAO extends AbstractTestDAO {
+public class CategoryDAOTest extends AbstractTestDAO {
 
     private GenericDAO<Category, Long> categoryDao;
     private GenericDAO<Shop, Long> shopDao;

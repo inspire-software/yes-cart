@@ -23,8 +23,7 @@ public class CentralViewResolverImplTest {
 
     @Test
     public void testResolveMainPanelRendererLabel() throws Exception {
-
-        CentralViewResolverImpl centralViewResolver = new CentralViewResolverImpl(
+        CentralViewResolverImpl resolver = new CentralViewResolverImpl(
                 new CategoryServiceImpl(null, null, null) {
                     public int getProductQuantity(long categoryId, boolean includeChild) {
                         if (categoryId == 10) {
@@ -53,42 +52,18 @@ public class CentralViewResolverImplTest {
                 },
                 null
         );
-
-        assertEquals(
-                CentralViewLabel.SKU,
-                centralViewResolver.resolveMainPanelRendererLabel(
-                        getRequestParams(WebParametersKeys.SKU_ID, null))
-        );
-
-        assertEquals(
-                CentralViewLabel.PRODUCT,
-                centralViewResolver.resolveMainPanelRendererLabel(
-                        getRequestParams(WebParametersKeys.PRODUCT_ID, null))
-        );
-
-        assertEquals(
-                CentralViewLabel.SEARCH_LIST,
-                centralViewResolver.resolveMainPanelRendererLabel(
-                        getRequestParams(WebParametersKeys.QUERY, null))
-        );
-
-        assertEquals(
-                CentralViewLabel.SEARCH_LIST,
-                centralViewResolver.resolveMainPanelRendererLabel(
-                        getRequestParams("mayBePagingParam", null))
-        );
-
-        assertEquals(
-                CentralViewLabel.SUBCATEGORIES_LIST,
-                centralViewResolver.resolveMainPanelRendererLabel(
-                        getRequestParams2(WebParametersKeys.CATEGORY_ID, "10"))
-        );
-
-        assertEquals(
-                CentralViewLabel.PRODUCTS_LIST,
-                centralViewResolver.resolveMainPanelRendererLabel(
-                        getRequestParams2(WebParametersKeys.CATEGORY_ID, "11"))
-        );
+        assertEquals(CentralViewLabel.SKU,
+                resolver.resolveMainPanelRendererLabel(getRequestParams(WebParametersKeys.SKU_ID, null)));
+        assertEquals(CentralViewLabel.PRODUCT,
+                resolver.resolveMainPanelRendererLabel(getRequestParams(WebParametersKeys.PRODUCT_ID, null)));
+        assertEquals(CentralViewLabel.SEARCH_LIST,
+                resolver.resolveMainPanelRendererLabel(getRequestParams(WebParametersKeys.QUERY, null)));
+        assertEquals(CentralViewLabel.SEARCH_LIST,
+                resolver.resolveMainPanelRendererLabel(getRequestParams("mayBePagingParam", null)));
+        assertEquals(CentralViewLabel.SUBCATEGORIES_LIST,
+                resolver.resolveMainPanelRendererLabel(getRequestParams2(WebParametersKeys.CATEGORY_ID, "10")));
+        assertEquals(CentralViewLabel.PRODUCTS_LIST,
+                resolver.resolveMainPanelRendererLabel(getRequestParams2(WebParametersKeys.CATEGORY_ID, "11")));
     }
 
     private Map<String, String> getRequestParams(final String param, final String val) {

@@ -42,12 +42,10 @@ public class DtoCustomerOrderServiceImplTest extends BaseCoreDBTestCase {
         final String customerPrefix = "testUpdate";
         final Customer customer = OrderAssemblerImplTest.createCustomer(ctx, customerPrefix);
         assertFalse(customer.getAddress().isEmpty());
-
         final ShoppingCart shoppingCart = Test_CustomerOrderServiceImpl.getShoppingCart(ctx, customerPrefix);
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
         long pk = order.getCustomerorderId();
         assertTrue(pk > 0);
-
         CustomerOrderDTO dto = dtoService.getById(pk);
         assertNotNull(dto);
     }

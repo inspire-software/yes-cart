@@ -19,9 +19,7 @@ import static org.junit.Assert.*;
  */
 public class ProductImageNameStrategyImplTest extends BaseCoreDBTestCase {
 
-    private ImageNameStrategy imageNameStrategy;
-
-    private String[] fileNames = {
+    private static final String[] FILE_NAMES = {
             "some_seo_image_file-name_PRODUCT-or-SKU-CODE_a.jpeg",
             "some_seo_image_file-name_PRODUCT1_b.jpeg",
             "some_seo_image_file-name_PROD+UCT1_c.jpeg",
@@ -30,6 +28,8 @@ public class ProductImageNameStrategyImplTest extends BaseCoreDBTestCase {
             "очень-вкусная-сосиска-с-камнями-от-Сваровски_-КОД-Сосики-_f.jpg",
             "Очень-Вкусная-Сосиска3-с-камнями-от-Булыжникова_ЕЩЕ-КОД-ПРОДУКТА!_g.jpg"
     };
+
+    private ImageNameStrategy imageNameStrategy;
 
     @Before
     public void setUp() throws Exception {
@@ -59,7 +59,7 @@ public class ProductImageNameStrategyImplTest extends BaseCoreDBTestCase {
         expectation.add("ЕЩЕ-КОД-пРОДУКТА");
         expectation.add("-КОД-Сосики-");
         expectation.add("ЕЩЕ-КОД-ПРОДУКТА!");
-        for (String fileName : fileNames) {
+        for (String fileName : FILE_NAMES) {
             String code = imageNameStrategy.getCode(fileName);
             assertNotNull(code);
             assertFalse("Contains _ ", code.indexOf('_') > -1);

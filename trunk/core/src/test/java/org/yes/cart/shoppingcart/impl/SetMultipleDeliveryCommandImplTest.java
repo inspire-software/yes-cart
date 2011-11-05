@@ -18,25 +18,14 @@ public class SetMultipleDeliveryCommandImplTest {
 
     @Test
     public void testExecute() {
-        // Add your code here
-
         ShoppingCart shoppingCart = new ShoppingCartImpl();
         assertFalse(shoppingCart.getOrderInfo().isMultipleDelivery());
-
         Map params = new HashMap();
-
         params.put(SetMultipleDeliveryCommandImpl.CMD_KEY, "true");
-
-        SetMultipleDeliveryCommandImpl command =
-                new SetMultipleDeliveryCommandImpl(null, params);
-
-        command.execute(shoppingCart);
+        new SetMultipleDeliveryCommandImpl(null, params).execute(shoppingCart);
         assertTrue(shoppingCart.getOrderInfo().isMultipleDelivery());
-
         params.put(SetMultipleDeliveryCommandImpl.CMD_KEY, "false");
-        command =
-                new SetMultipleDeliveryCommandImpl(null, params);
-        command.execute(shoppingCart);
+        new SetMultipleDeliveryCommandImpl(null, params).execute(shoppingCart);
         assertFalse(shoppingCart.getOrderInfo().isMultipleDelivery());
     }
 }

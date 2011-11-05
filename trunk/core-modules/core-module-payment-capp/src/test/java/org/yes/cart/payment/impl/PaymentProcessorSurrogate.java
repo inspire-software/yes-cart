@@ -1,31 +1,31 @@
 package org.yes.cart.payment.impl;
 
-import org.yes.cart.payment.*;
-import org.yes.cart.payment.dto.Payment;
-import org.yes.cart.payment.dto.PaymentLine;
-import org.yes.cart.payment.dto.PaymentAddress;
-import org.yes.cart.payment.dto.impl.PaymentLineImpl;
-import org.yes.cart.payment.dto.impl.PaymentAddressImpl;
-import org.yes.cart.payment.dto.impl.PaymentImpl;
-import org.yes.cart.payment.service.CustomerOrderPaymentService;
-import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
-import org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity;
-import org.yes.cart.domain.entity.CustomerOrder;
-import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
-import org.yes.cart.domain.entity.Address;
-import org.yes.cart.constants.Constants;
-
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
-import java.text.MessageFormat;
-import java.math.BigDecimal;
-
-import org.springframework.beans.BeanUtils;
 import org.apache.commons.lang.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.yes.cart.constants.Constants;
+import org.yes.cart.domain.entity.Address;
+import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
+import org.yes.cart.payment.PaymentGateway;
+import org.yes.cart.payment.PaymentGatewayInternalForm;
+import org.yes.cart.payment.dto.Payment;
+import org.yes.cart.payment.dto.PaymentAddress;
+import org.yes.cart.payment.dto.PaymentLine;
+import org.yes.cart.payment.dto.impl.PaymentAddressImpl;
+import org.yes.cart.payment.dto.impl.PaymentImpl;
+import org.yes.cart.payment.dto.impl.PaymentLineImpl;
+import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
+import org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity;
+import org.yes.cart.payment.service.CustomerOrderPaymentService;
+
+import java.math.BigDecimal;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This is surrogate for real processor, need to keep common processing logic during different pg tests.
@@ -144,7 +144,6 @@ public class PaymentProcessorSurrogate {
         return authorizeCapture(order, params);
     }
 
-
     /**
      * Check is reverse auth operation available for given auth op.
      * Auth can be reversed in case if op has not other successfully operation.
@@ -164,7 +163,6 @@ public class PaymentProcessorSurrogate {
         }
         return true;
     }
-
 
     /**
      * Reverse authorized payments. This can be when one of the payments from whole set is failed.
@@ -279,7 +277,6 @@ public class PaymentProcessorSurrogate {
         return wasError ? Payment.PAYMENT_STATUS_FAILED : Payment.PAYMENT_STATUS_OK;
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -348,7 +345,6 @@ public class PaymentProcessorSurrogate {
         );
         return Payment.PAYMENT_STATUS_FAILED;
     }
-
 
     /**
      * Create list of payment to authorize.
@@ -449,32 +445,24 @@ public class PaymentProcessorSurrogate {
      * @return payment prototype;
      */
     private Payment fillPaymentPrototype(final CustomerOrder order, final Payment templatePayment) {
-
-
         Address billingAddr = order.getCustomer().getDefaultAddress(Address.ADDR_TYPE_BILLING);
         Address shippingAddr = order.getCustomer().getDefaultAddress(Address.ADDR_TYPE_SHIPING);
-
         if (billingAddr != null) {
             PaymentAddress addr = new PaymentAddressImpl();
             BeanUtils.copyProperties(billingAddr, addr);
             templatePayment.setBillingAddress(addr);
         }
-
         if (shippingAddr != null) {
             PaymentAddress addr = new PaymentAddressImpl();
             BeanUtils.copyProperties(shippingAddr, addr);
             templatePayment.setShippingAddress(addr);
         }
-
         templatePayment.setBillingAddressString(order.getBillingAddress());
         templatePayment.setShippingAddressString(order.getShippingAddress());
-
         templatePayment.setOrderDate(order.getOrderTimestamp());
         templatePayment.setOrderCurrency(order.getCurrency());
         templatePayment.setOrderNumber(order.getOrdernum());
-
         templatePayment.setBillingEmail(order.getCustomer().getEmail());
-
         return templatePayment;
     }
 
@@ -484,7 +472,6 @@ public class PaymentProcessorSurrogate {
      * @param order order
      * @return true in case if all shipments,
      */
-
     boolean isLastShipmentComplete(final CustomerOrder order) {
         for (CustomerOrderDelivery delivery : order.getDelivery()) {
             if (!CustomerOrderDelivery.DELIVERY_STATUS_SHIPPED.equalsIgnoreCase(delivery.getDeliveryStatus())) {

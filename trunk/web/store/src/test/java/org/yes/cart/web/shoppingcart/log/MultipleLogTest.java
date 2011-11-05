@@ -21,21 +21,17 @@ public class MultipleLogTest {
     public void testMultipleLogFiles() throws IOException {
         Logger log20 = LoggerFactory.getLogger("SHOP20");
         log20.info("shop20");
-
         Logger log10 = LoggerFactory.getLogger("SHOP10");
         log10.info("shop10");
-
         String log10content = readFileAsString("target/shop10.log");
         assertTrue(log10content.indexOf("shop10") > -1);
         assertTrue(log10content.indexOf("shop20") == -1);
-
         String log20content = readFileAsString("target/shop20.log");
         assertTrue(log20content.indexOf("shop20") > -1);
         assertTrue(log20content.indexOf("shop10") == -1);
     }
 
-    private static String readFileAsString(String filePath)
-            throws java.io.IOException {
+    private static String readFileAsString(String filePath) throws IOException {
         StringBuffer fileData = new StringBuffer(1000);
         BufferedReader reader = new BufferedReader(
                 new FileReader(filePath));

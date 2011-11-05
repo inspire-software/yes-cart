@@ -40,10 +40,8 @@ public class DtoProductAssociationServiceImplTest extends BaseCoreDBTestCase {
         dto.setRank(11324);
         dto = dtoProductAssociationService.update(dto);
         assertEquals(11324, dto.getRank());
-
         long pk = dto.getProductassociationId();
         dtoProductAssociationService.remove(pk);
-
         dto = dtoProductAssociationService.getById(pk);
         assertNull(dto);
     }
