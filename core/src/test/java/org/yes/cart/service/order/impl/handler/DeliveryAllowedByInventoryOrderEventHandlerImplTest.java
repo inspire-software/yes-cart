@@ -34,7 +34,6 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImplTest extends Abstrac
         skuWarehouseService = (SkuWarehouseService) ctx.getBean("skuWarehouseService");
     }
 
-    // TODO fix to not depend on order or running
     @Test
     public void testHandle() {
         final Customer customer = OrderAssemblerImplTest.createCustomer(ctx);

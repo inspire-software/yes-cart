@@ -65,15 +65,10 @@ public class TestWarehouseServiceImpl extends BaseCoreDBTestCase {
         assertNotNull(shopWarehouses);
         assertTrue(shopWarehouses.isEmpty());
         ShopWarehouse shopWarehouse = warehouseService.assignWarehouse(warehouse.getWarehouseId(), shop.getShopId());
-
         assertEquals("Test default rank", 100, shopWarehouse.getRank());
-
         warehouseService.setShopWarehouseRank(shopWarehouse.getShopWarehouseId(), 200);
-
         shopWarehouse = shopWarehouseDao.findById(shopWarehouse.getShopWarehouseId());
-
         assertEquals("Test default rank", 200, shopWarehouse.getRank());
-
     }
 
     /**
@@ -81,16 +76,11 @@ public class TestWarehouseServiceImpl extends BaseCoreDBTestCase {
      */
     @Test
     public void testUnassignWarehouse() {
-
         testAssignWarehouse();
-
         warehouseService.unassignWarehouse(warehouse.getWarehouseId(), shop.getShopId());
-
         List<Warehouse> shopWarehouses = warehouseService.findByShopId(shop.getShopId());
         assertNotNull(shopWarehouses);
         assertTrue(shopWarehouses.isEmpty());
-
-
     }
 
     private void createShopAndWareHouse(final String shopCode, final String warehouseCode) {
@@ -101,7 +91,6 @@ public class TestWarehouseServiceImpl extends BaseCoreDBTestCase {
         shop.setImageVaultFolder("/imagevault");
         shop = shopService.create(shop);
         assertNotNull(shop);
-
         warehouse = entityFactory.getByIface(Warehouse.class);
         warehouse.setCode(warehouseCode);
         warehouse.setName("Test warehouse");

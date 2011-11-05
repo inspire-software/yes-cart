@@ -2,7 +2,6 @@ package org.yes.cart.service.domain.impl;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-import org.springframework.context.ApplicationContext;
 
 /**
  * Igor Azarny iazarny@yahoo.com

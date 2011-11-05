@@ -37,7 +37,6 @@ public class DtoCustomerOrderServiceImplTest extends BaseCoreDBTestCase {
         dtoService.create(null);
     }
 
-    // TODO fix to not depend on order or running
     @Test
     public void testUpdate() throws Exception {
         final String customerPrefix = "testUpdate";
