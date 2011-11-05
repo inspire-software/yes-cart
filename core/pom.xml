@@ -273,7 +273,6 @@
                                 <includes>
                                     <include>**/DomainTestSuite.java</include>
                                     <include>**/DtoTestSuite.java</include>
-                                    <include>**/HandlerTestSuite.java</include>
                                 </includes>
                                 <excludes>
                                     <exclude>**/Test*.java</exclude>

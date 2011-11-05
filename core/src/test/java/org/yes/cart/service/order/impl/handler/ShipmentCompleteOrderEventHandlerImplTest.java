@@ -27,7 +27,7 @@ import static org.junit.Assert.*;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class TestShipmentCompleteOrderEventHandlerImpl extends AbstractEventHandlerImplTest {
+public class ShipmentCompleteOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
     private CustomerOrderService orderService;
     private ShipmentCompleteOrderEventHandlerImpl handler;

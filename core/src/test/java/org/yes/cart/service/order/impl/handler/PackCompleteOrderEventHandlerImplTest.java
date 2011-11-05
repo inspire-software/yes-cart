@@ -17,14 +17,14 @@ import static org.junit.Assert.assertFalse;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class TestProcessInventoryWaitOrderEventHandlerImpl extends AbstractEventHandlerImplTest {
+public class PackCompleteOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
     private CustomerOrderService orderService;
-    private ProcessInventoryWaitOrderEventHandlerImpl handler;
+    private PackCompleteOrderEventHandlerImpl handler;
 
     @Before
     public void setUp() throws Exception {
-        handler = (ProcessInventoryWaitOrderEventHandlerImpl) ctx.getBean("processInventoryWaitOrderEventHandler");
+        handler = (PackCompleteOrderEventHandlerImpl) ctx.getBean("packCompleteOrderEventHandler");
         orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
     }
 
@@ -36,9 +36,12 @@ public class TestProcessInventoryWaitOrderEventHandlerImpl extends AbstractEvent
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
         CustomerOrderDelivery delivery = customerOrder.getDelivery().iterator().next();
         handler.handle(
-                new OrderEventImpl("", //evt.payment.offline
+                new OrderEventImpl(
+                        "", //evt.payment.offline
                         customerOrder,
-                        delivery));
-        assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT, delivery.getDeliveryStatus());
+                        delivery
+                )
+        );
+        assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY, delivery.getDeliveryStatus());
     }
 }

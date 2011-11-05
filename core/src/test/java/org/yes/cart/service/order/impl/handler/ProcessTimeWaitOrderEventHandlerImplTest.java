@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.impl.OrderAssemblerImplTest;
 import org.yes.cart.service.order.impl.OrderEventImpl;
@@ -16,14 +17,14 @@ import static org.junit.Assert.assertFalse;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class TestPaymentOfflineOrderEventHandlerImpl extends AbstractEventHandlerImplTest {
+public class ProcessTimeWaitOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
     private CustomerOrderService orderService;
-    private PaymentOfflineOrderEventHandlerImpl handler;
+    private ProcessTimeWaitOrderEventHandlerImpl handler;
 
     @Before
     public void setUp() throws Exception {
-        handler = (PaymentOfflineOrderEventHandlerImpl) ctx.getBean("paymentOfflineOrderEventHandler");
+        handler = (ProcessTimeWaitOrderEventHandlerImpl) ctx.getBean("processTimeWaitOrderEventHandler");
         orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
     }
 
@@ -33,12 +34,11 @@ public class TestPaymentOfflineOrderEventHandlerImpl extends AbstractEventHandle
         assertFalse(customer.getAddress().isEmpty());
         final CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
+        CustomerOrderDelivery delivery = customerOrder.getDelivery().iterator().next();
         handler.handle(
-                new OrderEventImpl(
-                        "", //evt.payment.offline
-                        customerOrder
-                )
-        );
-        assertEquals(CustomerOrder.ORDER_STATUS_WAITING, customerOrder.getOrderStatus());
+                new OrderEventImpl("", //evt.payment.offline
+                        customerOrder,
+                        delivery));
+        assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT, delivery.getDeliveryStatus());
     }
 }
