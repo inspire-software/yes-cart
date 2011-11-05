@@ -11,7 +11,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         TestDefaultOrderNumberGeneratorImpl.class,
-        DeliveryAssemblerImplTest.class,
+        TestDeliveryAssemblerImpl.class,
         TestOrderAssemblerImpl.class,
         TestOrderStateManagerImpl.class
 

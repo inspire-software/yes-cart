@@ -26,7 +26,7 @@ import static org.junit.Assert.*;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
+public class TestDeliveryAssemblerImpl extends BaseCoreDBTestCase {
 
     private OrderAssembler orderAssembler;
     private DeliveryAssemblerImpl deliveryAssembler;

@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
-import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.impl.TestOrderAssemblerImpl;
 import org.yes.cart.service.order.impl.OrderEventImpl;
@@ -17,28 +16,30 @@ import static org.junit.Assert.assertFalse;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class ReleaseToShipmentOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
+public class TestCancelOrderEventHandlerImpl extends AbstractEventHandlerImplTest {
 
     private CustomerOrderService orderService;
-    private ReleaseToShipmentOrderEventHandlerImpl handler;
+    private CancelOrderEventHandlerImpl handler;
 
     @Before
     public void setUp() throws Exception {
-        handler = (ReleaseToShipmentOrderEventHandlerImpl) ctx.getBean("releaseToShipmentOrderEventHandler");
+        handler = (CancelOrderEventHandlerImpl) ctx.getBean("cancelOrderEventHandler");
         orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
     }
 
+    // FIX to allow running from IDE
     @Test
     public void testHandle() {
         final Customer customer = TestOrderAssemblerImpl.createCustomer(ctx);
         assertFalse(customer.getAddress().isEmpty());
         final CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
-        CustomerOrderDelivery delivery = customerOrder.getDelivery().iterator().next();
         handler.handle(
-                new OrderEventImpl("", //evt.payment.offline
-                        customerOrder,
-                        delivery));
-        assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS, delivery.getDeliveryStatus());
+                new OrderEventImpl(
+                        "", //evt.payment.offline
+                        customerOrder
+                )
+        );
+        assertEquals(CustomerOrder.ORDER_STATUS_CANCELLED, customerOrder.getOrderStatus());
     }
 }

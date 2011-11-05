@@ -9,20 +9,20 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        CancelOrderEventHandlerImplTest.class,
-        CancelOrderWithRefundOrderEventHandlerImplTest.class,
-        DeliveryAllowedByInventoryOrderEventHandlerImplTest.class,
-        DeliveryAllowedByTimeoutOrderEventHandlerImplTest.class,
-        PackCompleteOrderEventHandlerImplTest.class,
-        PaymentOfflineOrderEventHandlerImplTest.class,
-        PaymentOkOrderEventHandlerImplTest.class,
-        PendingOrderEventHandlerImplTest.class,
-        ProcessAllocationOrderEventHandlerImplTest.class,
-        ProcessInventoryWaitOrderEventHandlerImplTest.class,
-        ProcessTimeWaitOrderEventHandlerImplTest.class,
-        ReleaseToPackOrderEventHandlerImplTest.class,
-        ReleaseToShipmentOrderEventHandlerImplTest.class,
-        ShipmentCompleteOrderEventHandlerImplTest.class
+        TestCancelOrderEventHandlerImpl.class,
+        TestCancelOrderWithRefundOrderEventHandlerImpl.class,
+        TestDeliveryAllowedByInventoryOrderEventHandlerImpl.class,
+        TestDeliveryAllowedByTimeoutOrderEventHandlerImpl.class,
+        TestPackCompleteOrderEventHandlerImpl.class,
+        TestPaymentOfflineOrderEventHandlerImpl.class,
+        TestPaymentOkOrderEventHandlerImpl.class,
+        TestPendingOrderEventHandlerImpl.class,
+        TestProcessAllocationOrderEventHandlerImpl.class,
+        TestProcessInventoryWaitOrderEventHandlerImpl.class,
+        TestProcessTimeWaitOrderEventHandlerImpl.class,
+        TestReleaseToPackOrderEventHandlerImpl.class,
+        TestReleaseToShipmentOrderEventHandlerImpl.class,
+        TestShipmentCompleteOrderEventHandlerImpl.class
         
 })
 public class HandlerTestSuite {
