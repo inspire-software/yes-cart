@@ -21,7 +21,7 @@ import static org.hamcrest.Matchers.*;
  * Time: 11:51:21 PM
  */
 @RunWith(org.jmock.integration.junit4.JMock.class)
-public class TestDtoFactoryImpl {
+public class DtoFactoryImplTest {
 
     private static final String KEY = "java.util.List";
     private DtoFactoryImpl factory;
