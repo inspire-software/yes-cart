@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
  * Date: 08-May-2011
  * Time: 11:12:54
  */
-public class TestSearchPhrazeUtil {
+public class SearchPhrazeUtilTest {
 
     @Test
     public void testSplit() {
@@ -39,6 +39,5 @@ public class TestSearchPhrazeUtil {
         assertEquals(0, rez.size());
         rez = SearchPhrazeUtil.splitForSearch("  ,,++||-- + - ");
         assertEquals(0, rez.size());
-
     }
 }

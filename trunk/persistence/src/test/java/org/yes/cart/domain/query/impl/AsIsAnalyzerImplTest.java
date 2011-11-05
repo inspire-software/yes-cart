@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
  * Date: 08-May-2011
  * Time: 11:12:54
  */
-public class TestAsIsAnalyzerImpl {
+public class AsIsAnalyzerImplTest {
 
     private static final String LUCENE_QUERY = "+productCategory.category:104 +attribute.attribute:BATTERY_TYPE +attribute.val:Litium";
     private static final String[] FIELDS = {"productCategory.category", "attribute.attribute", "attribute.val"};

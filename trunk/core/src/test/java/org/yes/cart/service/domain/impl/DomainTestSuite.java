@@ -11,7 +11,6 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         Test_AddressServiceImpl.class,
-        Test_AssociationServiceImpl.class,
         Test_AttributeServiceImpl.class,
         Test_CustomerOrderServiceImpl.class,
         Test_CustomerServiceImpl.class,
