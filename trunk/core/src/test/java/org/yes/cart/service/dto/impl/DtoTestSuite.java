@@ -11,13 +11,13 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        DtoAssociationServiceImplTest.class,
-        DtoAttributeGroupServiceImplTest.class,
-        DtoAttributeServiceImplTest.class,
-        DtoAvailabilityServiceImplTest.class,
-        DtoBrandServiceImplTest.class,
-        DtoCategoryServiceImplTest.class,
-        DtoCustomerOrderServiceImplTest.class,
+        TestDtoAssociationServiceImpl.class,
+        TestDtoAttributeGroupServiceImpl.class,
+        TestDtoAttributeServiceImpl.class,
+        TestDtoAvailabilityServiceImpl.class,
+        TestDtoBrandServiceImpl.class,
+        TestDtoCategoryServiceImpl.class,
+        TestDtoCustomerOrderServiceImpl.class,
         TestDtoCustomerServiceImpl.class,
         TestDtoEtypeServiceImpl.class,
         TestDtoImageServiceImpl.class,
