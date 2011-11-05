@@ -16,7 +16,7 @@ import static org.junit.Assert.assertNotNull;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class Test_ProductSkuServiceImpl extends BaseCoreDBTestCase {
+public class ProductSkuServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetAllProductSkus() {
