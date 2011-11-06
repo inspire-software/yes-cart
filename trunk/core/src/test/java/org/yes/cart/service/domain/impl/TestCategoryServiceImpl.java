@@ -29,17 +29,17 @@ public class TestCategoryServiceImpl extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        categoryService = (CategoryService) ctx.getBean(ServiceSpringKeys.CATEGORY_SERVICE);
+        categoryService = (CategoryService) ctx().getBean(ServiceSpringKeys.CATEGORY_SERVICE);
     }
 
     @Test
     public void testGetByProductId() {
-        ProductCategoryService productCategoryService = (ProductCategoryService) ctx.getBean(ServiceSpringKeys.PRODUCT_CATEGORY_SERVICE);
+        ProductCategoryService productCategoryService = (ProductCategoryService) ctx().getBean(ServiceSpringKeys.PRODUCT_CATEGORY_SERVICE);
         EntityFactory entityFactory = productCategoryService.getGenericDao().getEntityFactory();
-        ProductService productService = (ProductService) ctx.getBean(ServiceSpringKeys.PRODUCT_SERVICE);
-        ProductTypeService productTypeService = (ProductTypeService) ctx.getBean(ServiceSpringKeys.PRODUCT_TYPE_SERVICE);
-        BrandService brandService = (BrandService) ctx.getBean(ServiceSpringKeys.BRAND_SERVICE);
-        AvailabilityService availabilityService = (AvailabilityService) ctx.getBean(ServiceSpringKeys.AVAILABILITY_SERVICE);
+        ProductService productService = (ProductService) ctx().getBean(ServiceSpringKeys.PRODUCT_SERVICE);
+        ProductTypeService productTypeService = (ProductTypeService) ctx().getBean(ServiceSpringKeys.PRODUCT_TYPE_SERVICE);
+        BrandService brandService = (BrandService) ctx().getBean(ServiceSpringKeys.BRAND_SERVICE);
+        AvailabilityService availabilityService = (AvailabilityService) ctx().getBean(ServiceSpringKeys.AVAILABILITY_SERVICE);
         Product product = entityFactory.getByIface(Product.class);
         product.setCode("PROD_CODE");
         product.setName("product");
@@ -68,7 +68,7 @@ public class TestCategoryServiceImpl extends BaseCoreDBTestCase {
 
     @Test
     public void testAssignUnassignCategoryToShop() {
-        ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
+        ShopService shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
         EntityFactory entityFactory = shopService.getGenericDao().getEntityFactory();
         Category rootCategory = categoryService.getRootCategory();
         Category category = entityFactory.getByIface(Category.class);
@@ -105,7 +105,7 @@ public class TestCategoryServiceImpl extends BaseCoreDBTestCase {
      */
     @Test
     public void testGetCategoryAttributeRecursive() {
-        GenericDAO<Category, Long> categoryDAO = (GenericDAO<Category, Long>) ctx.getBean(DaoServiceBeanKeys.CATEGORY_DAO);
+        GenericDAO<Category, Long> categoryDAO = (GenericDAO<Category, Long>) ctx().getBean(DaoServiceBeanKeys.CATEGORY_DAO);
         String val = categoryService.getCategoryAttributeRecursive(categoryDAO.findById(105L), "SOME_NOT_EXISTING_ATTR", null);
         assertNull(val);
         val = categoryService.getCategoryAttributeRecursive(categoryDAO.findById(105L), AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
@@ -119,7 +119,7 @@ public class TestCategoryServiceImpl extends BaseCoreDBTestCase {
      */
     @Test
     public void testGetItemsPerPageTest() {
-        GenericDAO<Category, Long> categoryDAO = (GenericDAO<Category, Long>) ctx.getBean(DaoServiceBeanKeys.CATEGORY_DAO);
+        GenericDAO<Category, Long> categoryDAO = (GenericDAO<Category, Long>) ctx().getBean(DaoServiceBeanKeys.CATEGORY_DAO);
         // Category with seted CATEGORY_ITEMS_PER_PAGE
         Category category = categoryDAO.findById(105L);
         assertNotNull(category);
@@ -148,7 +148,7 @@ public class TestCategoryServiceImpl extends BaseCoreDBTestCase {
      */
     @Test
     public void testGetUIVariationTest() {
-        GenericDAO<Category, Long> categoryDAO = (GenericDAO<Category, Long>) ctx.getBean(DaoServiceBeanKeys.CATEGORY_DAO);
+        GenericDAO<Category, Long> categoryDAO = (GenericDAO<Category, Long>) ctx().getBean(DaoServiceBeanKeys.CATEGORY_DAO);
         Category category = categoryDAO.findById(139L);
         assertNotNull(category);
         assertNull(category.getUitemplate());
@@ -168,7 +168,7 @@ public class TestCategoryServiceImpl extends BaseCoreDBTestCase {
 
     @Test
     public void testIsCategoryHasSubcategory() {
-        CategoryService categoryService = (CategoryService) ctx.getBean(ServiceSpringKeys.CATEGORY_SERVICE);
+        CategoryService categoryService = (CategoryService) ctx().getBean(ServiceSpringKeys.CATEGORY_SERVICE);
         assertTrue(categoryService.isCategoryHasSubcategory(300, 304));
         assertTrue(categoryService.isCategoryHasSubcategory(301, 304));
         assertFalse(categoryService.isCategoryHasSubcategory(301, 312));

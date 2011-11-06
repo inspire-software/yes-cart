@@ -30,18 +30,18 @@ public class ProcessAllocationOrderEventHandlerImplTest extends AbstractEventHan
 
     @Before
     public void setUp() throws Exception {
-        handler = (ProcessAllocationOrderEventHandlerImpl) ctx.getBean("processAllocationOrderEventHandler");
-        orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
-        productSkuService = (ProductSkuService) ctx.getBean("productSkuService");
-        skuWarehouseService = (SkuWarehouseService) ctx.getBean("skuWarehouseService");
-        warehouseService = (WarehouseService) ctx.getBean("warehouseService");
+        handler = (ProcessAllocationOrderEventHandlerImpl) ctx().getBean("processAllocationOrderEventHandler");
+        orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
+        productSkuService = (ProductSkuService) ctx().getBean("productSkuService");
+        skuWarehouseService = (SkuWarehouseService) ctx().getBean("skuWarehouseService");
+        warehouseService = (WarehouseService) ctx().getBean("warehouseService");
     }
 
     @Test
     public void testHandle() {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
+        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx(), customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
         customerOrder.setPgLabel("testPaymentGatewayLabel");
         orderService.update(customerOrder);

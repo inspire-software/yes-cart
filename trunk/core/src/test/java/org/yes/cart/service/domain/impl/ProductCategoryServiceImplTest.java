@@ -17,7 +17,7 @@ public class ProductCategoryServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testGetProductById() {
         ProductCategoryService productCategoryService =
-                (ProductCategoryService) ctx.getBean(ServiceSpringKeys.PRODUCT_CATEGORY_SERVICE);
+                (ProductCategoryService) ctx().getBean(ServiceSpringKeys.PRODUCT_CATEGORY_SERVICE);
         int rez = productCategoryService.getNextRank(211L);
         assertEquals("Next rank must be 450 for 211 category", 450, rez);
         rez = productCategoryService.getNextRank(-777L);

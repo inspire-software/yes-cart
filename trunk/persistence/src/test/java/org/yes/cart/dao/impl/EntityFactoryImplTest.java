@@ -20,7 +20,7 @@ public class EntityFactoryImplTest extends AbstractTestDAO {
 
     @Before
     public void setUp() throws Exception {
-        entityFactory = (EntityFactory) ctx.getBean("internalEntityFactory");
+        entityFactory = (EntityFactory) ctx().getBean("internalEntityFactory");
     }
 
     @Test

@@ -24,8 +24,8 @@ public class DtoBrandServiceImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        dtoService = (DtoBrandService) ctx.getBean(ServiceSpringKeys.DTO_BRAND_SERVICE);
-        dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
+        dtoService = (DtoBrandService) ctx().getBean(ServiceSpringKeys.DTO_BRAND_SERVICE);
+        dtoFactory = (DtoFactory) ctx().getBean(ServiceSpringKeys.DTO_FACTORY);
     }
 
     @Test

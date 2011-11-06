@@ -36,16 +36,16 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        productService = (ProductService) ctx.getBean(ServiceSpringKeys.PRODUCT_SERVICE);
-        priceService = (PriceService) ctx.getBean(ServiceSpringKeys.PRICE_SERVICE);
-        shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
+        productService = (ProductService) ctx().getBean(ServiceSpringKeys.PRODUCT_SERVICE);
+        priceService = (PriceService) ctx().getBean(ServiceSpringKeys.PRICE_SERVICE);
+        shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
     }
 
     @Ignore("java.lang.AssertionError")
     @Test
     public void testGetPriceNavigationRecords() {
         Shop shop = shopService.getShopByDomainName("www.gadget.npa.com");
-        GenericDAO<Category, Long> categoryDAO = (GenericDAO<Category, Long>) ctx.getBean(DaoServiceBeanKeys.CATEGORY_DAO);
+        GenericDAO<Category, Long> categoryDAO = (GenericDAO<Category, Long>) ctx().getBean(DaoServiceBeanKeys.CATEGORY_DAO);
         Category cat = categoryDAO.findById(129L); // this category hold navigation by price tiers
         assertNotNull(cat);
         PriceTierTree priceTierTree = cat.getNavigationByPriceTree();

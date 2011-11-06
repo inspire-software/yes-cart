@@ -36,15 +36,15 @@ public class ProductDAOTest extends AbstractTestDAO {
 
     @Before
     public void setUp() throws Exception {
-        productDao = (GenericDAO<Product, Long>) ctx.getBean(DaoServiceBeanKeys.PRODUCT_DAO);
-        availabilityDao = (GenericDAO<Availability, Long>) ctx.getBean(DaoServiceBeanKeys.AVAILABILITY_DAO);
-        brandDao = (GenericDAO<Brand, Long>) ctx.getBean(DaoServiceBeanKeys.BRAND_DAO);
-        productTypeDao = (GenericDAO<ProductType, Long>) ctx.getBean(DaoServiceBeanKeys.PRODUCT_TYPE_DAO);
-        productCategoryDao = (GenericDAO<ProductCategory, Long>) ctx.getBean(DaoServiceBeanKeys.PRODUCT_CATEGORY_DAO);
-        categoryDao = (GenericDAO<Category, Long>) ctx.getBean(DaoServiceBeanKeys.CATEGORY_DAO);
-        attributeDao = (GenericDAO<Attribute, Long>) ctx.getBean(DaoServiceBeanKeys.ATTRIBUTE_DAO);
-        skuWareHouseDao = (GenericDAO<SkuWarehouse, Long>) ctx.getBean(DaoServiceBeanKeys.SKU_WAREHOUSE_DAO);
-        warehouseDao = (GenericDAO<Warehouse, Long>) ctx.getBean(DaoServiceBeanKeys.WAREHOUSE_DAO);
+        productDao = (GenericDAO<Product, Long>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_DAO);
+        availabilityDao = (GenericDAO<Availability, Long>) ctx().getBean(DaoServiceBeanKeys.AVAILABILITY_DAO);
+        brandDao = (GenericDAO<Brand, Long>) ctx().getBean(DaoServiceBeanKeys.BRAND_DAO);
+        productTypeDao = (GenericDAO<ProductType, Long>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_TYPE_DAO);
+        productCategoryDao = (GenericDAO<ProductCategory, Long>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_CATEGORY_DAO);
+        categoryDao = (GenericDAO<Category, Long>) ctx().getBean(DaoServiceBeanKeys.CATEGORY_DAO);
+        attributeDao = (GenericDAO<Attribute, Long>) ctx().getBean(DaoServiceBeanKeys.ATTRIBUTE_DAO);
+        skuWareHouseDao = (GenericDAO<SkuWarehouse, Long>) ctx().getBean(DaoServiceBeanKeys.SKU_WAREHOUSE_DAO);
+        warehouseDao = (GenericDAO<Warehouse, Long>) ctx().getBean(DaoServiceBeanKeys.WAREHOUSE_DAO);
     }
 
     @Test

@@ -29,10 +29,10 @@ public class DtoProductTypeAttrServiceImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        dtoService = (DtoProductTypeAttrService) ctx.getBean(ServiceSpringKeys.DTO_PRODUCT_TYPE_ATTR_SERVICE);
-        dtoProductTypeService = (DtoProductTypeService) ctx.getBean(ServiceSpringKeys.DTO_PRODUCT_TYPE_SERVICE);
-        dtoAttributeService = (DtoAttributeService) ctx.getBean(ServiceSpringKeys.DTO_ATTRIBUTE_SERVICE);
-        dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
+        dtoService = (DtoProductTypeAttrService) ctx().getBean(ServiceSpringKeys.DTO_PRODUCT_TYPE_ATTR_SERVICE);
+        dtoProductTypeService = (DtoProductTypeService) ctx().getBean(ServiceSpringKeys.DTO_PRODUCT_TYPE_SERVICE);
+        dtoAttributeService = (DtoAttributeService) ctx().getBean(ServiceSpringKeys.DTO_ATTRIBUTE_SERVICE);
+        dtoFactory = (DtoFactory) ctx().getBean(ServiceSpringKeys.DTO_FACTORY);
     }
 
     @Test

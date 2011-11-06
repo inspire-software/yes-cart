@@ -43,9 +43,9 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
         Map<String, String> params = new HashMap<String, String>();
         params.put(LoginCommandImpl.EMAIL, customerEmail);
         params.put(LoginCommandImpl.NAME, "John Doe");
-        new SetShopCartCommandImpl(ctx, singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
+        new SetShopCartCommandImpl(ctx(), singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
                 .execute(shoppingCart);
-        new ChangeCurrencyEventCommandImpl(ctx, singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "USD"))
+        new ChangeCurrencyEventCommandImpl(ctx(), singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "USD"))
                 .execute(shoppingCart);
         new LoginCommandImpl(null, params)
                 .execute(shoppingCart);

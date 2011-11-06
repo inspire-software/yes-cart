@@ -22,15 +22,15 @@ public class PaymentOfflineOrderEventHandlerImplTest extends AbstractEventHandle
 
     @Before
     public void setUp() throws Exception {
-        handler = (PaymentOfflineOrderEventHandlerImpl) ctx.getBean("paymentOfflineOrderEventHandler");
-        orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
+        handler = (PaymentOfflineOrderEventHandlerImpl) ctx().getBean("paymentOfflineOrderEventHandler");
+        orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
     }
 
     @Test
     public void testHandle() {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
+        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx(), customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
         handler.handle(
                 new OrderEventImpl(

@@ -24,8 +24,8 @@ public class DtoEtypeServiceImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        dtoEtypeService = (DtoEtypeService) ctx.getBean(ServiceSpringKeys.DTO_ETYPE_SERVICE);
-        dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
+        dtoEtypeService = (DtoEtypeService) ctx().getBean(ServiceSpringKeys.DTO_ETYPE_SERVICE);
+        dtoFactory = (DtoFactory) ctx().getBean(ServiceSpringKeys.DTO_FACTORY);
     }
 
     @Test

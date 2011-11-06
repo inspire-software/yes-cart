@@ -34,8 +34,8 @@ public class PayflowPaymentGatewayImplTest extends CappPaymentModuleDBTestCase {
     @Before
     public void setUp() throws Exception {
         if (isTestAllowed()) {
-            customerOrderPaymentService = (CustomerOrderPaymentService) ctx.getBean("customerOrderPaymentService");
-            payflowPaymentGateway = (PayflowPaymentGatewayImpl) ctx.getBean("payflowPaymentGateway");
+            customerOrderPaymentService = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
+            payflowPaymentGateway = (PayflowPaymentGatewayImpl) ctx().getBean("payflowPaymentGateway");
             paymentProcessor = new PaymentProcessorSurrogate(customerOrderPaymentService, payflowPaymentGateway);
         }
     }

@@ -26,7 +26,7 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        customerOrderService = (CustomerOrderService) ctx.getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
+        customerOrderService = (CustomerOrderService) ctx().getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
     }
 
     // TODO fix to not depend on order or running
@@ -108,12 +108,12 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
         Map<String, String> param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST9");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
-        new SetSkuQuantityToCartEventCommandImpl(ctx, param)
+        new SetSkuQuantityToCartEventCommandImpl(ctx(), param)
                 .execute(shoppingCart);
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST5");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "200.00");
-        new SetSkuQuantityToCartEventCommandImpl(ctx, param)
+        new SetSkuQuantityToCartEventCommandImpl(ctx(), param)
                 .execute(shoppingCart);
         return shoppingCart;
     }

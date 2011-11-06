@@ -24,15 +24,15 @@ public class PaymentOkOrderEventHandlerImplTest extends AbstractEventHandlerImpl
 
     @Before
     public void setUp() throws Exception {
-        handler = (PaymentOkOrderEventHandlerImpl) ctx.getBean("paymentOkOrderEventHandler");
-        orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
+        handler = (PaymentOkOrderEventHandlerImpl) ctx().getBean("paymentOkOrderEventHandler");
+        orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
     }
 
     @Test
     public void testHandle() {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
+        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx(), customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
         customerOrder.setPgLabel("testPaymentGatewayLabel");
         orderService.update(customerOrder);

@@ -24,8 +24,8 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        orderAssembler = (OrderAssembler) ctx.getBean(ServiceSpringKeys.ORDER_ASSEMBLER);
-        customerOrderDao = (GenericDAO<CustomerOrder, Long>) ctx.getBean("customerOrderDao");
+        orderAssembler = (OrderAssembler) ctx().getBean(ServiceSpringKeys.ORDER_ASSEMBLER);
+        customerOrderDao = (GenericDAO<CustomerOrder, Long>) ctx().getBean("customerOrderDao");
     }
 
     @Test

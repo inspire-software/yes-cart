@@ -33,10 +33,10 @@ public class TestWarehouseServiceImpl extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
-        warehouseService = (WarehouseService) ctx.getBean(ServiceSpringKeys.WAREHOUSE_SERVICE);
+        shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
+        warehouseService = (WarehouseService) ctx().getBean(ServiceSpringKeys.WAREHOUSE_SERVICE);
         entityFactory = warehouseService.getGenericDao().getEntityFactory();
-        shopWarehouseDao = (GenericDAO) ctx.getBean(DaoServiceBeanKeys.SHOP_WAREHOUSE_DAO);
+        shopWarehouseDao = (GenericDAO) ctx().getBean(DaoServiceBeanKeys.SHOP_WAREHOUSE_DAO);
     }
 
     /**

@@ -36,10 +36,10 @@ public class TestShopTopSellerServiceImpl extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        shopTopSellerService = (ShopTopSellerService) ctx.getBean(ServiceSpringKeys.SHOP_TOP_SELLER_SERVICE);
-        orderAssembler = (OrderAssembler) ctx.getBean(ServiceSpringKeys.ORDER_ASSEMBLER);
-        customerOrderDao = (GenericDAO<CustomerOrder, Long>) ctx.getBean(DaoServiceBeanKeys.CUSTOMER_ORDER_DAO);
-        shopTopSellerDao = (GenericDAO<ShopTopSeller, Long>) ctx.getBean(DaoServiceBeanKeys.SHOP_TOP_SELLLER_DAO);
+        shopTopSellerService = (ShopTopSellerService) ctx().getBean(ServiceSpringKeys.SHOP_TOP_SELLER_SERVICE);
+        orderAssembler = (OrderAssembler) ctx().getBean(ServiceSpringKeys.ORDER_ASSEMBLER);
+        customerOrderDao = (GenericDAO<CustomerOrder, Long>) ctx().getBean(DaoServiceBeanKeys.CUSTOMER_ORDER_DAO);
+        shopTopSellerDao = (GenericDAO<ShopTopSeller, Long>) ctx().getBean(DaoServiceBeanKeys.SHOP_TOP_SELLLER_DAO);
     }
 
     // TODO fix to not depend on order of running

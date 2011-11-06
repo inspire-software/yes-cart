@@ -30,7 +30,7 @@ public class ShopDAOTest extends AbstractTestDAO {
 
     @Before
     public void setUp() throws Exception {
-        shopDao = (GenericDAO<Shop, Long>) ctx.getBean(DaoServiceBeanKeys.SHOP_DAO);
+        shopDao = (GenericDAO<Shop, Long>) ctx().getBean(DaoServiceBeanKeys.SHOP_DAO);
     }
 
     @After

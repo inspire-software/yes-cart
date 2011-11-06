@@ -29,9 +29,9 @@ public class DtoCustomerServiceImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
-        dtoService = (DtoCustomerService) ctx.getBean(ServiceSpringKeys.DTO_CUSTOMER_SERVICE);
-        dtoAttrService = (DtoAttributeService) ctx.getBean(ServiceSpringKeys.DTO_ATTRIBUTE_SERVICE);
+        dtoFactory = (DtoFactory) ctx().getBean(ServiceSpringKeys.DTO_FACTORY);
+        dtoService = (DtoCustomerService) ctx().getBean(ServiceSpringKeys.DTO_CUSTOMER_SERVICE);
+        dtoAttrService = (DtoAttributeService) ctx().getBean(ServiceSpringKeys.DTO_ATTRIBUTE_SERVICE);
     }
 
     @Test

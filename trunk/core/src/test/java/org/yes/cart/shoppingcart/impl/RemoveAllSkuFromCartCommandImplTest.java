@@ -23,19 +23,19 @@ public class RemoveAllSkuFromCartCommandImplTest extends BaseCoreDBTestCase {
     @Test
     public void testExecute() {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
-        new ChangeCurrencyEventCommandImpl(ctx, Collections.singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "EUR"))
+        new ChangeCurrencyEventCommandImpl(ctx(), Collections.singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "EUR"))
                 .execute(shoppingCart);
-        new SetShopCartCommandImpl(ctx, Collections.singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
+        new SetShopCartCommandImpl(ctx(), Collections.singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
                 .execute(shoppingCart);
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getCartSubTotal(shoppingCart.getCartItemList()));
         Map<String, String> params = new HashMap<String, String>();
         params.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST2");
         params.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "10");
-        new SetSkuQuantityToCartEventCommandImpl(ctx, params).execute(shoppingCart);
+        new SetSkuQuantityToCartEventCommandImpl(ctx(), params).execute(shoppingCart);
         assertTrue("Expected 221.70 but was " + shoppingCart.getCartSubTotal(shoppingCart.getCartItemList()), (new BigDecimal("221.70")).equals(shoppingCart.getCartSubTotal(shoppingCart.getCartItemList())));
         params = new HashMap<String, String>();
         params.put(RemoveAllSkuFromCartCommandImpl.CMD_KEY, "CC_TEST2");
-        new RemoveAllSkuFromCartCommandImpl(ctx, params)
+        new RemoveAllSkuFromCartCommandImpl(ctx(), params)
                 .execute(shoppingCart);
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getCartSubTotal(shoppingCart.getCartItemList()));
         assertTrue(shoppingCart.getCartItemList().isEmpty());

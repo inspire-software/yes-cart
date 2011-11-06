@@ -26,8 +26,8 @@ public class DtoWarehouseServiceImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
-        dtoService = (DtoWarehouseService) ctx.getBean(ServiceSpringKeys.DTO_WAREHOUSE_SERVICE);
+        dtoFactory = (DtoFactory) ctx().getBean(ServiceSpringKeys.DTO_FACTORY);
+        dtoService = (DtoWarehouseService) ctx().getBean(ServiceSpringKeys.DTO_WAREHOUSE_SERVICE);
     }
 
     @Test

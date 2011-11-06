@@ -27,8 +27,8 @@ public class CategoryDAOTest extends AbstractTestDAO {
 
     @Before
     public void setUp() throws Exception {
-        shopDao = (GenericDAO<Shop, Long>) ctx.getBean(DaoServiceBeanKeys.SHOP_DAO);
-        categoryDao = (GenericDAO<Category, Long>) ctx.getBean(DaoServiceBeanKeys.CATEGORY_DAO);
+        shopDao = (GenericDAO<Shop, Long>) ctx().getBean(DaoServiceBeanKeys.SHOP_DAO);
+        categoryDao = (GenericDAO<Category, Long>) ctx().getBean(DaoServiceBeanKeys.CATEGORY_DAO);
     }
 
     @Test

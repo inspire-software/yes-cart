@@ -19,7 +19,7 @@ public class CategoryImageNameStrategyImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        imageNameStrategy = (ImageNameStrategy) ctx.getBean(ServiceSpringKeys.CATEGORY_IMAGE_NAME_STRATEGY);
+        imageNameStrategy = (ImageNameStrategy) ctx().getBean(ServiceSpringKeys.CATEGORY_IMAGE_NAME_STRATEGY);
     }
 
     @Test

@@ -23,7 +23,7 @@ public class GenericDAOTest extends AbstractTestDAO {
 
     @Before
     public void setUp() throws Exception {
-        brandDao = (GenericDAO<Brand, Long>) ctx.getBean(DaoServiceBeanKeys.BRAND_DAO);
+        brandDao = (GenericDAO<Brand, Long>) ctx().getBean(DaoServiceBeanKeys.BRAND_DAO);
         entityFactory = brandDao.getEntityFactory();
     }
 

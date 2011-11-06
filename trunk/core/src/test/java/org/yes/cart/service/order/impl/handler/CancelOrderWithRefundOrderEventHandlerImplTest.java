@@ -29,10 +29,10 @@ public class CancelOrderWithRefundOrderEventHandlerImplTest extends AbstractEven
 
     @Before
     public void setUp() throws Exception {
-        orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
-        skuWarehouseService = (SkuWarehouseService) ctx.getBean("skuWarehouseService");
-        pendingHandler = (PendingOrderEventHandlerImpl) ctx.getBean("pendingOrderEventHandler");
-        handler = (CancelOrderWithRefundOrderEventHandlerImpl) ctx.getBean("cancelOrderWithRefundOrderEventHandler");
+        orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
+        skuWarehouseService = (SkuWarehouseService) ctx().getBean("skuWarehouseService");
+        pendingHandler = (PendingOrderEventHandlerImpl) ctx().getBean("pendingOrderEventHandler");
+        handler = (CancelOrderWithRefundOrderEventHandlerImpl) ctx().getBean("cancelOrderWithRefundOrderEventHandler");
     }
 
     /**
@@ -42,7 +42,7 @@ public class CancelOrderWithRefundOrderEventHandlerImplTest extends AbstractEven
     public void testHandle0() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
+        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx(), customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
         customerOrder.setPgLabel("testPaymentGatewayLabel");
         orderService.update(customerOrder);
@@ -72,7 +72,7 @@ public class CancelOrderWithRefundOrderEventHandlerImplTest extends AbstractEven
     public void testHandle1() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
+        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx(), customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
         customerOrder.setPgLabel("testPaymentGatewayLabel");
         orderService.update(customerOrder);

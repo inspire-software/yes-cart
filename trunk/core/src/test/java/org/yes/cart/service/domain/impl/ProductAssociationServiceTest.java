@@ -22,8 +22,8 @@ public class ProductAssociationServiceTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetProductAssociations() {
-        ProductService productService = (ProductService) ctx.getBean(ServiceSpringKeys.PRODUCT_SERVICE);
-        ProductAssociationService associationService = (ProductAssociationService) ctx.getBean(ServiceSpringKeys.PRODUCT_ASSOCIATIONS_SERVICE);
+        ProductService productService = (ProductService) ctx().getBean(ServiceSpringKeys.PRODUCT_SERVICE);
+        ProductAssociationService associationService = (ProductAssociationService) ctx().getBean(ServiceSpringKeys.PRODUCT_ASSOCIATIONS_SERVICE);
         Product product = productService.getProductById(11004L);
         List<ProductAssociation> associations = associationService.getProductAssociations(product.getProductId());
         assertNotNull(associations);

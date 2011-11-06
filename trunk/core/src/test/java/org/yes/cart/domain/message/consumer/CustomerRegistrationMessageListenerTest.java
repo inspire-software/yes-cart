@@ -24,7 +24,7 @@ public class CustomerRegistrationMessageListenerTest extends BaseCoreDBTestCase 
     @Test
     public void testOnMessage0() throws Exception {
         CustomerRegistrationMessageListener customerRegistrationMessageListener = (CustomerRegistrationMessageListener)
-                ctx.getBean("customerRegistrationListener");
+                ctx().getBean("customerRegistrationListener");
         RegistrationMessage registrationMessage = createRegistrationMessage();
         SimpleSmtpServer server = SimpleSmtpServer.start(2525);
         customerRegistrationMessageListener.processMessage(registrationMessage);

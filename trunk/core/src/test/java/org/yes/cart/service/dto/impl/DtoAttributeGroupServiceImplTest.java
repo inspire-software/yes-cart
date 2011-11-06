@@ -22,8 +22,8 @@ public class DtoAttributeGroupServiceImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        dtoAttributeGroupService = (DtoAttributeGroupService) ctx.getBean(ServiceSpringKeys.DTO_ATTRIBUTE_GROUP_SERVICE);
-        dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
+        dtoAttributeGroupService = (DtoAttributeGroupService) ctx().getBean(ServiceSpringKeys.DTO_ATTRIBUTE_GROUP_SERVICE);
+        dtoFactory = (DtoFactory) ctx().getBean(ServiceSpringKeys.DTO_FACTORY);
     }
 
     @Test

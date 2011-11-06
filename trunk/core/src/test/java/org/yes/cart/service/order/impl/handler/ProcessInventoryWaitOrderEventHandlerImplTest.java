@@ -23,15 +23,15 @@ public class ProcessInventoryWaitOrderEventHandlerImplTest extends AbstractEvent
 
     @Before
     public void setUp() throws Exception {
-        handler = (ProcessInventoryWaitOrderEventHandlerImpl) ctx.getBean("processInventoryWaitOrderEventHandler");
-        orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
+        handler = (ProcessInventoryWaitOrderEventHandlerImpl) ctx().getBean("processInventoryWaitOrderEventHandler");
+        orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
     }
 
     @Test
     public void testHandle() {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
+        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx(), customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
         CustomerOrderDelivery delivery = customerOrder.getDelivery().iterator().next();
         handler.handle(

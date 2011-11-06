@@ -33,10 +33,10 @@ public class DtoProductSkuServiceImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        dtoService = (DtoProductSkuService) ctx.getBean(ServiceSpringKeys.DTO_PRODUCT_SKU_SERVICE);
-        dtoProductService = (DtoProductService) ctx.getBean(ServiceSpringKeys.DTO_PRODUCT_SERVICE);
-        dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
-        dtoAttrService = (DtoAttributeService) ctx.getBean(ServiceSpringKeys.DTO_ATTRIBUTE_SERVICE);
+        dtoService = (DtoProductSkuService) ctx().getBean(ServiceSpringKeys.DTO_PRODUCT_SKU_SERVICE);
+        dtoProductService = (DtoProductService) ctx().getBean(ServiceSpringKeys.DTO_PRODUCT_SERVICE);
+        dtoFactory = (DtoFactory) ctx().getBean(ServiceSpringKeys.DTO_FACTORY);
+        dtoAttrService = (DtoAttributeService) ctx().getBean(ServiceSpringKeys.DTO_ATTRIBUTE_SERVICE);
     }
 
     @Test

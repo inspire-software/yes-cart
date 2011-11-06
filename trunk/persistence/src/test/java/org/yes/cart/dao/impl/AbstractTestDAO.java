@@ -22,17 +22,17 @@ import java.io.FileOutputStream;
  */
 public abstract class AbstractTestDAO {
 
-    protected ApplicationContext ctx;
-    protected SessionFactory sessionFactory;
-    protected Session session;
-    protected AbstractDatabaseTester dbTester;
+    private ApplicationContext ctx;
+    private SessionFactory sessionFactory;
+    private Session session;
+    private AbstractDatabaseTester dbTester;
 
     @Rule
     public ExternalResource dbResource = new ExternalResource() {
         @Override
         protected void before() throws Throwable {
             ctx = createContext();
-            sessionFactory = (SessionFactory) ctx.getBean("sessionFactory");
+            sessionFactory = (SessionFactory) ctx().getBean("sessionFactory");
             session = sessionFactory.openSession();
             dbTester = createDatabaseTester();
             dbTester.onSetup();
@@ -49,6 +49,10 @@ public abstract class AbstractTestDAO {
             session.close();
         }
     };
+
+    public ApplicationContext ctx() {
+        return ctx;
+    }
 
     protected ApplicationContext createContext() {
         return new ClassPathXmlApplicationContext("testApplicationContext.xml");

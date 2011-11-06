@@ -35,7 +35,12 @@ import static java.util.Collections.singletonMap;
  */
 public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
 
-    private static ApplicationContext sharedContext;
+    private static ThreadLocal<ApplicationContext> sharedContext = new ThreadLocal<ApplicationContext>() {
+        @Override
+        protected ApplicationContext initialValue() {
+            return new ClassPathXmlApplicationContext("testApplicationContext.xml", "core-aspects.xml");
+        }
+    };
 
     @Rule
     public TestName testName = new TestName();
@@ -44,19 +49,14 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         return this.getClass().getSimpleName() + "." + testName.getMethodName();
     }
 
-    protected synchronized ApplicationContext createContext() {
-        if (sharedContext == null) {
-            sharedContext = new ClassPathXmlApplicationContext(
-                    "testApplicationContext.xml",
-                    "core-aspects.xml");
-        }
-        return sharedContext;
+    protected ApplicationContext createContext() {
+        return sharedContext.get();
     }
 
     @After
     public void tearDown() throws Exception {
         try {
-            JMSServerManagerImpl jmsServerManager = (JMSServerManagerImpl) ctx.getBean("jmsServerManagerImpl");
+            JMSServerManagerImpl jmsServerManager = (JMSServerManagerImpl) ctx().getBean("jmsServerManagerImpl");
             if (jmsServerManager != null) {
                 jmsServerManager.stop();
             }
@@ -70,9 +70,9 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         Map<String, String> params = new HashMap<String, String>();
         params.put(LoginCommandImpl.EMAIL, prefix + "jd@domain.com");
         params.put(LoginCommandImpl.NAME, prefix + "John Doe");
-        new SetShopCartCommandImpl(ctx, Collections.singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
+        new SetShopCartCommandImpl(ctx(), Collections.singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
                 .execute(shoppingCart);
-        new ChangeCurrencyEventCommandImpl(ctx, Collections.singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "USD"))
+        new ChangeCurrencyEventCommandImpl(ctx(), Collections.singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "USD"))
                 .execute(shoppingCart);
         new LoginCommandImpl(null, params)
                 .execute(shoppingCart);
@@ -93,34 +93,34 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         Map<String, String> param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST4");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
-        new SetSkuQuantityToCartEventCommandImpl(ctx, param)
+        new SetSkuQuantityToCartEventCommandImpl(ctx(), param)
                 .execute(shoppingCart);
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST5");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "200.00");
-        new SetSkuQuantityToCartEventCommandImpl(ctx, param)
+        new SetSkuQuantityToCartEventCommandImpl(ctx(), param)
                 .execute(shoppingCart);
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST6");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "3.00");
-        new SetSkuQuantityToCartEventCommandImpl(ctx, param)
+        new SetSkuQuantityToCartEventCommandImpl(ctx(), param)
                 .execute(shoppingCart);
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST7");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
-        new SetSkuQuantityToCartEventCommandImpl(ctx, param)
+        new SetSkuQuantityToCartEventCommandImpl(ctx(), param)
                 .execute(shoppingCart);
         // this digital product not available till date
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST8");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
-        new SetSkuQuantityToCartEventCommandImpl(ctx, param)
+        new SetSkuQuantityToCartEventCommandImpl(ctx(), param)
                 .execute(shoppingCart);
         // this digital product available
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST9");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
-        new SetSkuQuantityToCartEventCommandImpl(ctx, param)
+        new SetSkuQuantityToCartEventCommandImpl(ctx(), param)
                 .execute(shoppingCart);
         return shoppingCart;
     }
@@ -131,42 +131,42 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         params = new HashMap<String, String>();
         params.put(LoginCommandImpl.EMAIL, customerEmail);
         params.put(LoginCommandImpl.NAME, "John Doe");
-        new SetShopCartCommandImpl(ctx, singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
+        new SetShopCartCommandImpl(ctx(), singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
                 .execute(shoppingCart);
-        new ChangeCurrencyEventCommandImpl(ctx, singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "USD"))
+        new ChangeCurrencyEventCommandImpl(ctx(), singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "USD"))
                 .execute(shoppingCart);
         new LoginCommandImpl(null, params)
                 .execute(shoppingCart);
-        new AddSkuToCartEventCommandImpl(ctx, singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST1"))
+        new AddSkuToCartEventCommandImpl(ctx(), singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST1"))
                 .execute(shoppingCart);
-        new AddSkuToCartEventCommandImpl(ctx, singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST3"))
+        new AddSkuToCartEventCommandImpl(ctx(), singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST3"))
                 .execute(shoppingCart);
-        new AddSkuToCartEventCommandImpl(ctx, singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST3"))
+        new AddSkuToCartEventCommandImpl(ctx(), singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST3"))
                 .execute(shoppingCart);
         Map<String, String> param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST4");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
-        new SetSkuQuantityToCartEventCommandImpl(ctx, param).execute(shoppingCart);
+        new SetSkuQuantityToCartEventCommandImpl(ctx(), param).execute(shoppingCart);
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST5");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "200.00");
-        new SetSkuQuantityToCartEventCommandImpl(ctx, param).execute(shoppingCart);
+        new SetSkuQuantityToCartEventCommandImpl(ctx(), param).execute(shoppingCart);
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST6");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "3.00");
-        new SetSkuQuantityToCartEventCommandImpl(ctx, param).execute(shoppingCart);
+        new SetSkuQuantityToCartEventCommandImpl(ctx(), param).execute(shoppingCart);
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST7");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
-        new SetSkuQuantityToCartEventCommandImpl(ctx, param).execute(shoppingCart);
+        new SetSkuQuantityToCartEventCommandImpl(ctx(), param).execute(shoppingCart);
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST8");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
-        new SetSkuQuantityToCartEventCommandImpl(ctx, param).execute(shoppingCart);
+        new SetSkuQuantityToCartEventCommandImpl(ctx(), param).execute(shoppingCart);
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST9");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
-        new SetSkuQuantityToCartEventCommandImpl(ctx, param).execute(shoppingCart);
+        new SetSkuQuantityToCartEventCommandImpl(ctx(), param).execute(shoppingCart);
         new SetCarrierSlaCartCommandImpl(null, singletonMap(SetCarrierSlaCartCommandImpl.CMD_KEY, "1"))
                 .execute(shoppingCart);
         return shoppingCart;
@@ -182,11 +182,11 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
 
     protected Customer createCustomer(String number) {
         String prefix = getTestName() + number;
-        ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
-        CustomerService customerService = (CustomerService) ctx.getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
-        AttributeService attributeService = (AttributeService) ctx.getBean(ServiceSpringKeys.ATTRIBUTE_SERVICE);
-        AddressService addressService = (AddressService) ctx.getBean(ServiceSpringKeys.ADDRESS_SERVICE);
-        GenericDAO<Customer, Long> customerDao = (GenericDAO<Customer, Long>) ctx.getBean("customerDao");
+        ShopService shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
+        CustomerService customerService = (CustomerService) ctx().getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
+        AttributeService attributeService = (AttributeService) ctx().getBean(ServiceSpringKeys.ATTRIBUTE_SERVICE);
+        AddressService addressService = (AddressService) ctx().getBean(ServiceSpringKeys.ADDRESS_SERVICE);
+        GenericDAO<Customer, Long> customerDao = (GenericDAO<Customer, Long>) ctx().getBean("customerDao");
         Customer customer = customerService.getGenericDao().getEntityFactory().getByIface(Customer.class);
         customer.setEmail(prefix + "jd@domain.com");
         customer.setFirstname(prefix + "John");

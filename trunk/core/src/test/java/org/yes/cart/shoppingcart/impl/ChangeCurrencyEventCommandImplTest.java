@@ -21,17 +21,17 @@ public class ChangeCurrencyEventCommandImplTest extends BaseCoreDBTestCase {
     @Test
     public void testExecute() {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
-        new ChangeCurrencyEventCommandImpl(ctx, singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "EUR"))
+        new ChangeCurrencyEventCommandImpl(ctx(), singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "EUR"))
                 .execute(shoppingCart);
-        new SetShopCartCommandImpl(ctx, singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
+        new SetShopCartCommandImpl(ctx(), singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
                 .execute(shoppingCart);
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getCartSubTotal(shoppingCart.getCartItemList()));
         for (int i = 0; i < 3; i++) {
-            new AddSkuToCartEventCommandImpl(ctx, singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST1"))
+            new AddSkuToCartEventCommandImpl(ctx(), singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST1"))
                     .execute(shoppingCart);
         }
         assertTrue("Expected 57.00", (new BigDecimal("57.00")).equals(shoppingCart.getCartSubTotal(shoppingCart.getCartItemList())));
-        new ChangeCurrencyEventCommandImpl(ctx, singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "USD"))
+        new ChangeCurrencyEventCommandImpl(ctx(), singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "USD"))
                 .execute(shoppingCart);
         assertEquals("USD", shoppingCart.getCurrencyCode());
         assertTrue("Expected 570.03", (new BigDecimal("570.03")).equals(shoppingCart.getCartSubTotal(shoppingCart.getCartItemList())));

@@ -16,7 +16,7 @@ public class PaymentGatewayParametersServiceTest extends BasePaymentModuleDBTest
 
     @Test
     public void testCrud() {
-        PaymentGatewayParameterService service = (PaymentGatewayParameterService) ctx.getBean("paymentGatewayParameterService");
+        PaymentGatewayParameterService service = (PaymentGatewayParameterService) ctx().getBean("paymentGatewayParameterService");
         PaymentGatewayParameter parameter = new PaymentGatewayParameterEntity();
         parameter.setDescription("desc");
         parameter.setPgLabel("pgLabel");
@@ -37,7 +37,7 @@ public class PaymentGatewayParametersServiceTest extends BasePaymentModuleDBTest
 
     @Test
     public void testDeleteByLabel() {
-        PaymentGatewayParameterService service = (PaymentGatewayParameterService) ctx.getBean("paymentGatewayParameterService");
+        PaymentGatewayParameterService service = (PaymentGatewayParameterService) ctx().getBean("paymentGatewayParameterService");
         PaymentGatewayParameter parameter = new PaymentGatewayParameterEntity();
         parameter.setDescription("desc");
         parameter.setPgLabel("pgLabel");

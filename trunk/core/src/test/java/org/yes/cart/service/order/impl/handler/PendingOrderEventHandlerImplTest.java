@@ -39,12 +39,12 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
 
     @Before
     public void setUp() throws Exception {
-        handler = (PendingOrderEventHandlerImpl) ctx.getBean("pendingOrderEventHandler");
-        orderService = (CustomerOrderService) ctx.getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
-        customerOrderPaymentService = (CustomerOrderPaymentService) ctx.getBean(ServiceSpringKeys.ORDER_PAYMENT_SERICE);
-        productSkuService = (ProductSkuService) ctx.getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE);
-        skuWarehouseService = (SkuWarehouseService) ctx.getBean(ServiceSpringKeys.SKU_WAREHOUSE_SERVICE);
-        warehouseService = (WarehouseService) ctx.getBean(ServiceSpringKeys.WAREHOUSE_SERVICE);
+        handler = (PendingOrderEventHandlerImpl) ctx().getBean("pendingOrderEventHandler");
+        orderService = (CustomerOrderService) ctx().getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
+        customerOrderPaymentService = (CustomerOrderPaymentService) ctx().getBean(ServiceSpringKeys.ORDER_PAYMENT_SERICE);
+        productSkuService = (ProductSkuService) ctx().getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE);
+        skuWarehouseService = (SkuWarehouseService) ctx().getBean(ServiceSpringKeys.SKU_WAREHOUSE_SERVICE);
+        warehouseService = (WarehouseService) ctx().getBean(ServiceSpringKeys.WAREHOUSE_SERVICE);
     }
 
     /**
@@ -54,7 +54,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
     public void testHandle0_0() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
+        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx(), customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
         customerOrder.setPgLabel("courierPaymentGatewayLabel");
         orderService.update(customerOrder);
@@ -101,7 +101,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
     public void testHandle0_1() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
+        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx(), customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
         customerOrder.setPgLabel("testPaymentGatewayLabel");
         orderService.update(customerOrder);
@@ -148,7 +148,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         TestPaymentGatewayImpl.getGatewayConfig().put(TestPaymentGatewayImpl.AUTH_FAIL, new PaymentGatewayParameterEntity());
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
+        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx(), customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
         customerOrder.setPgLabel("testPaymentGatewayLabel");
         orderService.update(customerOrder);

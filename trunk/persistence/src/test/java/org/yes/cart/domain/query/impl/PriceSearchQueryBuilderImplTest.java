@@ -25,7 +25,7 @@ public class PriceSearchQueryBuilderImplTest extends AbstractTestDAO {
 
     @Before
     public void setUp() throws Exception {
-        productDao = (GenericDAO<Product, Long>) ctx.getBean(DaoServiceBeanKeys.PRODUCT_DAO);
+        productDao = (GenericDAO<Product, Long>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_DAO);
     }
 
     @Test

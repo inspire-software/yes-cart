@@ -37,19 +37,19 @@ public class ShipmentCompleteOrderEventHandlerImplTest extends AbstractEventHand
 
     @Before
     public void setUp() throws Exception {
-        handler = (ShipmentCompleteOrderEventHandlerImpl) ctx.getBean("shipmentCompleteOrderEventHandler");
-        orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
-        skuWarehouseService = (SkuWarehouseService) ctx.getBean("skuWarehouseService");
-        customerOrderPaymentService = (CustomerOrderPaymentService) ctx.getBean("customerOrderPaymentService");
-        pendingHandler = (PendingOrderEventHandlerImpl) ctx.getBean("pendingOrderEventHandler");
-        warehouseService = (WarehouseService) ctx.getBean("warehouseService");
+        handler = (ShipmentCompleteOrderEventHandlerImpl) ctx().getBean("shipmentCompleteOrderEventHandler");
+        orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
+        skuWarehouseService = (SkuWarehouseService) ctx().getBean("skuWarehouseService");
+        customerOrderPaymentService = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
+        pendingHandler = (PendingOrderEventHandlerImpl) ctx().getBean("pendingOrderEventHandler");
+        warehouseService = (WarehouseService) ctx().getBean("warehouseService");
     }
 
     @Test
     public void testHandle() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
+        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx(), customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
         customerOrder.setPgLabel("testPaymentGatewayLabel");
         orderService.update(customerOrder);

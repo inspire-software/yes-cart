@@ -25,8 +25,8 @@ public class TestUserManagementServiceImpl extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        managementService = (ManagementService) ctx.getBean(ServiceSpringKeys.USER_MANAGMENT_SERVICE);
-        managerService = (ManagerService) ctx.getBean(ServiceSpringKeys.MANAGER_SERVICE);
+        managementService = (ManagementService) ctx().getBean(ServiceSpringKeys.USER_MANAGMENT_SERVICE);
+        managerService = (ManagerService) ctx().getBean(ServiceSpringKeys.MANAGER_SERVICE);
     }
 
     @Test
