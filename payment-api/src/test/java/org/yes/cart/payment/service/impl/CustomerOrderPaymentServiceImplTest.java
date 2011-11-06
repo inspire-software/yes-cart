@@ -21,7 +21,7 @@ public class CustomerOrderPaymentServiceImplTest extends BasePaymentModuleDBTest
 
     @Test
     public void testFindBy() {
-        CustomerOrderPaymentService service = (CustomerOrderPaymentService) ctx.getBean("customerOrderPaymentService");
+        CustomerOrderPaymentService service = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
         CustomerOrderPayment payment = getCustomerOrderPayment(new BigDecimal("123.00"), "123-45", "123-45-0");
         payment = service.create(payment);
         assertTrue(payment.getCustomerOrderPaymentId() > 0);
@@ -36,7 +36,7 @@ public class CustomerOrderPaymentServiceImplTest extends BasePaymentModuleDBTest
 
     @Test
     public void testGetOrderAmount() {
-        CustomerOrderPaymentService service = (CustomerOrderPaymentService) ctx.getBean("customerOrderPaymentService");
+        CustomerOrderPaymentService service = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
         service.create(getCustomerOrderPayment(new BigDecimal("223.00"), "223-45", "223-45-0"));
         service.create(getCustomerOrderPayment(new BigDecimal("0.45"), "223-45", "223-45-1"));
         assertEquals(new BigDecimal("223.45"), service.getOrderAmount("223-45"));

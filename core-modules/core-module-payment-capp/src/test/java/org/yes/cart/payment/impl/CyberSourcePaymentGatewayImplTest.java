@@ -32,8 +32,8 @@ public class CyberSourcePaymentGatewayImplTest extends CappPaymentModuleDBTestCa
     @Before
     public void setUp() throws Exception {
         if (isTestAllowed()) {
-            customerOrderPaymentService = (CustomerOrderPaymentService) ctx.getBean("customerOrderPaymentService");
-            cyberSourcePaymentGateway = (CyberSourcePaymentGatewayImpl) ctx.getBean("cyberSourcePaymentGateway");
+            customerOrderPaymentService = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
+            cyberSourcePaymentGateway = (CyberSourcePaymentGatewayImpl) ctx().getBean("cyberSourcePaymentGateway");
             paymentProcessor = new PaymentProcessorSurrogate(customerOrderPaymentService, cyberSourcePaymentGateway);
         }
     }

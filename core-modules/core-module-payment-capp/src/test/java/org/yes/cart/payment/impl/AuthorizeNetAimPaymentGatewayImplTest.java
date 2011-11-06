@@ -32,8 +32,8 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends CappPaymentModuleDBTe
     @Before
     public void setUp() throws Exception {
         if (isTestAllowed()) {
-            customerOrderPaymentService = (CustomerOrderPaymentService) ctx.getBean("customerOrderPaymentService");
-            authorizeNetAimPaymentGateway = (AuthorizeNetAimPaymentGatewayImpl) ctx.getBean("authorizeNetAimPaymentGateway");
+            customerOrderPaymentService = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
+            authorizeNetAimPaymentGateway = (AuthorizeNetAimPaymentGatewayImpl) ctx().getBean("authorizeNetAimPaymentGateway");
             paymentProcessor = new PaymentProcessorSurrogate(customerOrderPaymentService, authorizeNetAimPaymentGateway);
         }
     }

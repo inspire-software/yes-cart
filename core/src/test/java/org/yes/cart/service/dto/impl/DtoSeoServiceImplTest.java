@@ -22,7 +22,7 @@ public class DtoSeoServiceImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        dtoService = (DtoSeoService) ctx.getBean(ServiceSpringKeys.DTO_SEO_SERVICE);
+        dtoService = (DtoSeoService) ctx().getBean(ServiceSpringKeys.DTO_SEO_SERVICE);
     }
 
     @Test

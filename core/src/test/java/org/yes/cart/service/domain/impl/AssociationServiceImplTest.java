@@ -26,7 +26,7 @@ public class AssociationServiceImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        associationService = (AssociationService) ctx.getBean(ServiceSpringKeys.ASSOCIATION_SERVICE);
+        associationService = (AssociationService) ctx().getBean(ServiceSpringKeys.ASSOCIATION_SERVICE);
     }
 
     @After

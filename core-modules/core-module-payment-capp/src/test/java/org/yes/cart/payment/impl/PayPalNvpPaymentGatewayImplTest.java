@@ -32,8 +32,8 @@ public class PayPalNvpPaymentGatewayImplTest extends CappPaymentModuleDBTestCase
     @Before
     public void setUp() throws Exception {
         if (isTestAllowed()) {
-            customerOrderPaymentService = (CustomerOrderPaymentService) ctx.getBean("customerOrderPaymentService");
-            payPalNvpPaymentGateway = (PayPalNvpPaymentGatewayImpl) ctx.getBean("payPalNvpPaymentGateway");
+            customerOrderPaymentService = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
+            payPalNvpPaymentGateway = (PayPalNvpPaymentGatewayImpl) ctx().getBean("payPalNvpPaymentGateway");
             paymentProcessor = new PaymentProcessorSurrogate(customerOrderPaymentService, payPalNvpPaymentGateway);
         }
     }

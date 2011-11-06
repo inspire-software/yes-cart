@@ -34,9 +34,9 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        orderAssembler = (OrderAssembler) ctx.getBean(ServiceSpringKeys.ORDER_ASSEMBLER);
-        customerOrderDao = (GenericDAO<CustomerOrder, Long>) ctx.getBean("customerOrderDao");
-        deliveryAssembler = (DeliveryAssemblerImpl) ctx.getBean(ServiceSpringKeys.DELIVERY_ASSEMBLER);
+        orderAssembler = (OrderAssembler) ctx().getBean(ServiceSpringKeys.ORDER_ASSEMBLER);
+        customerOrderDao = (GenericDAO<CustomerOrder, Long>) ctx().getBean("customerOrderDao");
+        deliveryAssembler = (DeliveryAssemblerImpl) ctx().getBean(ServiceSpringKeys.DELIVERY_ASSEMBLER);
     }
 
     @Ignore("expected:<2> but was:<1>")
@@ -44,7 +44,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
     public void testGetDeliveryGroups() {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        ShoppingCart shoppingCart = getShoppingCart1(ctx, customer.getEmail());
+        ShoppingCart shoppingCart = getShoppingCart1(ctx(), customer.getEmail());
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, false);
         Map<String, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, false);
@@ -162,9 +162,9 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
     //Bot sku with standard availability , but one of the has not qty on warehouse
     protected ShoppingCart getShoppingCart2(final String customerEmail) {
         ShoppingCart shoppingCart = getEmptyCart(customerEmail);
-        new AddSkuToCartEventCommandImpl(ctx, singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST4"))
+        new AddSkuToCartEventCommandImpl(ctx(), singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST4"))
                 .execute(shoppingCart);
-        new AddSkuToCartEventCommandImpl(ctx, singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST4-M"))
+        new AddSkuToCartEventCommandImpl(ctx(), singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST4-M"))
                 .execute(shoppingCart);
         return shoppingCart;
     }
@@ -177,9 +177,9 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
      */
     private ShoppingCart getShoppingCart3(String customerEmail) {
         ShoppingCart shoppingCart = getEmptyCart(customerEmail);
-        new AddSkuToCartEventCommandImpl(ctx, singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST4"))
+        new AddSkuToCartEventCommandImpl(ctx(), singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST4"))
                 .execute(shoppingCart);
-        new AddSkuToCartEventCommandImpl(ctx, singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST5"))
+        new AddSkuToCartEventCommandImpl(ctx(), singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST5"))
                 .execute(shoppingCart);
         return shoppingCart;
     }
@@ -193,12 +193,12 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
      */
     private ShoppingCart getShoppingCart4(String customerEmail) {
         ShoppingCart shoppingCart = getEmptyCart(customerEmail);
-        new AddSkuToCartEventCommandImpl(ctx, singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST4"))
+        new AddSkuToCartEventCommandImpl(ctx(), singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST4"))
                 .execute(shoppingCart);
         Map<String, String> param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST5");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "23.00");
-        new SetSkuQuantityToCartEventCommandImpl(ctx, param).execute(shoppingCart);
+        new SetSkuQuantityToCartEventCommandImpl(ctx(), param).execute(shoppingCart);
         return shoppingCart;
     }
 
@@ -213,12 +213,12 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         Map<String, String> param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST4");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "34.00");
-        new SetSkuQuantityToCartEventCommandImpl(ctx, param)
+        new SetSkuQuantityToCartEventCommandImpl(ctx(), param)
                 .execute(shoppingCart);
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST5");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "23.00");
-        new SetSkuQuantityToCartEventCommandImpl(ctx, param)
+        new SetSkuQuantityToCartEventCommandImpl(ctx(), param)
                 .execute(shoppingCart);
         return shoppingCart;
     }
@@ -234,17 +234,17 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         Map<String, String> param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST4");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
-        new SetSkuQuantityToCartEventCommandImpl(ctx, param)
+        new SetSkuQuantityToCartEventCommandImpl(ctx(), param)
                 .execute(shoppingCart);
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST5");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "2.00");
-        new SetSkuQuantityToCartEventCommandImpl(ctx, param)
+        new SetSkuQuantityToCartEventCommandImpl(ctx(), param)
                 .execute(shoppingCart);
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST6");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "3.00");
-        new SetSkuQuantityToCartEventCommandImpl(ctx, param)
+        new SetSkuQuantityToCartEventCommandImpl(ctx(), param)
                 .execute(shoppingCart);
         return shoppingCart;
     }
@@ -260,32 +260,32 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         Map<String, String> param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST4");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
-        new SetSkuQuantityToCartEventCommandImpl(ctx, param)
+        new SetSkuQuantityToCartEventCommandImpl(ctx(), param)
                 .execute(shoppingCart);
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST5");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "200.00");
-        new SetSkuQuantityToCartEventCommandImpl(ctx, param)
+        new SetSkuQuantityToCartEventCommandImpl(ctx(), param)
                 .execute(shoppingCart);
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST6");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "3.00");
-        new SetSkuQuantityToCartEventCommandImpl(ctx, param)
+        new SetSkuQuantityToCartEventCommandImpl(ctx(), param)
                 .execute(shoppingCart);
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST7");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
-        new SetSkuQuantityToCartEventCommandImpl(ctx, param)
+        new SetSkuQuantityToCartEventCommandImpl(ctx(), param)
                 .execute(shoppingCart);
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST8");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
-        new SetSkuQuantityToCartEventCommandImpl(ctx, param)
+        new SetSkuQuantityToCartEventCommandImpl(ctx(), param)
                 .execute(shoppingCart);
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST9");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
-        new SetSkuQuantityToCartEventCommandImpl(ctx, param)
+        new SetSkuQuantityToCartEventCommandImpl(ctx(), param)
                 .execute(shoppingCart);
         return shoppingCart;
     }
@@ -295,9 +295,9 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         Map<String, String> params = new HashMap<String, String>();
         params.put(LoginCommandImpl.EMAIL, customerEmail);
         params.put(LoginCommandImpl.NAME, "John Doe");
-        new SetShopCartCommandImpl(ctx, singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
+        new SetShopCartCommandImpl(ctx(), singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
                 .execute(shoppingCart);
-        new ChangeCurrencyEventCommandImpl(ctx, singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "USD"))
+        new ChangeCurrencyEventCommandImpl(ctx(), singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "USD"))
                 .execute(shoppingCart);
         new LoginCommandImpl(null, params)
                 .execute(shoppingCart);

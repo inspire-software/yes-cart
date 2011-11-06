@@ -26,9 +26,9 @@ public class DtoProductAssociationServiceImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        dtoProductAssociationService = (DtoProductAssociationService) ctx.getBean(ServiceSpringKeys.DTO_PRODUCT_ASSOCIATION_SERVICE);
-        dtoAssociationService = (DtoAssociationService) ctx.getBean(ServiceSpringKeys.DTO_ASSOCIATION_SERVICE);
-        dtoFactory = (DtoFactory) ctx.getBean(ServiceSpringKeys.DTO_FACTORY);
+        dtoProductAssociationService = (DtoProductAssociationService) ctx().getBean(ServiceSpringKeys.DTO_PRODUCT_ASSOCIATION_SERVICE);
+        dtoAssociationService = (DtoAssociationService) ctx().getBean(ServiceSpringKeys.DTO_ASSOCIATION_SERVICE);
+        dtoFactory = (DtoFactory) ctx().getBean(ServiceSpringKeys.DTO_FACTORY);
     }
 
     @Test

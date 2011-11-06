@@ -22,8 +22,8 @@ public class CancelOrderEventHandlerImplTest extends AbstractEventHandlerImplTes
 
     @Before
     public void setUp() throws Exception {
-        handler = (CancelOrderEventHandlerImpl) ctx.getBean("cancelOrderEventHandler");
-        orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
+        handler = (CancelOrderEventHandlerImpl) ctx().getBean("cancelOrderEventHandler");
+        orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
     }
 
     // FIX to allow running from IDE
@@ -31,7 +31,7 @@ public class CancelOrderEventHandlerImplTest extends AbstractEventHandlerImplTes
     public void testHandle() {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
+        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx(), customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
         handler.handle(
                 new OrderEventImpl(

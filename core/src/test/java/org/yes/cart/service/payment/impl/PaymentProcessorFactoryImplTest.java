@@ -20,7 +20,7 @@ public class PaymentProcessorFactoryImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        paymentProcessorFactory = (PaymentProcessorFactory) ctx.getBean(ServiceSpringKeys.PAYMENT_PROCESSOR_FACTORY);
+        paymentProcessorFactory = (PaymentProcessorFactory) ctx().getBean(ServiceSpringKeys.PAYMENT_PROCESSOR_FACTORY);
     }
 
     /**

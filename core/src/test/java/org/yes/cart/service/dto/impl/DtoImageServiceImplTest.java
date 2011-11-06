@@ -22,7 +22,7 @@ public class DtoImageServiceImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        dtoService = (DtoImageService) ctx.getBean(ServiceSpringKeys.DTO_IMAGE_SERVICE);
+        dtoService = (DtoImageService) ctx().getBean(ServiceSpringKeys.DTO_IMAGE_SERVICE);
     }
 
     @Test

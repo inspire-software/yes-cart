@@ -23,15 +23,15 @@ public class ReleaseToShipmentOrderEventHandlerImplTest extends AbstractEventHan
 
     @Before
     public void setUp() throws Exception {
-        handler = (ReleaseToShipmentOrderEventHandlerImpl) ctx.getBean("releaseToShipmentOrderEventHandler");
-        orderService = (CustomerOrderService) ctx.getBean("customerOrderService");
+        handler = (ReleaseToShipmentOrderEventHandlerImpl) ctx().getBean("releaseToShipmentOrderEventHandler");
+        orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
     }
 
     @Test
     public void testHandle() {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
+        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx(), customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
         CustomerOrderDelivery delivery = customerOrder.getDelivery().iterator().next();
         handler.handle(

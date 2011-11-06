@@ -1,6 +1,5 @@
 package org.yes.cart.dao.impl;
 
-import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +10,8 @@ import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.Brand;
 import org.yes.cart.domain.entity.impl.AttrValueEntityBrand;
 import org.yes.cart.domain.entity.impl.BrandEntity;
+
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -27,20 +28,20 @@ public class BrandDAOTest extends AbstractTestDAO {
 
     @Before
     public void setUp() {
-        attributeDAO = (GenericDAO<Attribute, Long>) ctx.getBean(DaoServiceBeanKeys.ATTRIBUTE_DAO);
-        brandDAO = (GenericDAO<Brand, Long>) ctx.getBean(DaoServiceBeanKeys.BRAND_DAO);
+        attributeDAO = (GenericDAO<Attribute, Long>) ctx().getBean(DaoServiceBeanKeys.ATTRIBUTE_DAO);
+        brandDAO = (GenericDAO<Brand, Long>) ctx().getBean(DaoServiceBeanKeys.BRAND_DAO);
     }
 
     @Test
     public void testAddEmptyBrand() {
-        // create simle brand without attributes
+        // create simple brand without attributes
         Brand entity = new BrandEntity();
         entity.setName("brandName without attributes");
         long pk = brandDAO.create(entity).getBrandId();
         assertTrue(entity.getBrandId() != 0);
         assertTrue(entity.getAttribute().isEmpty());
-        Criteria checkRiteria = session.createCriteria(Brand.class).add(Restrictions.eq("brandId", pk));
-        assertEquals(1, checkRiteria.list().size());
+        List<Brand> brands = brandDAO.findByCriteria(Restrictions.eq("brandId", pk));
+        assertEquals(1, brands.size());
     }
 
     @Test
@@ -53,9 +54,9 @@ public class BrandDAOTest extends AbstractTestDAO {
         //BRAND_IMAGE
         entityWithAttributes.getAttribute().add(attrValueBrandEntity);
         long pk = brandDAO.create(entityWithAttributes).getBrandId();
-        Criteria checkRiteria = session.createCriteria(Brand.class).add(Restrictions.eq("brandId", pk));
-        assertEquals(1, checkRiteria.list().size());
-        entityWithAttributes = (Brand) checkRiteria.list().get(0);
+        List<Brand> brands = brandDAO.findByCriteria(Restrictions.eq("brandId", pk));
+        assertEquals(1, brands.size());
+        entityWithAttributes = brands.get(0);
         assertEquals(1, entityWithAttributes.getAttribute().size());
     }
 }

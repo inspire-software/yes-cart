@@ -46,12 +46,12 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp() throws Exception {
-        paymentProcessorFactory = (PaymentProcessorFactory) ctx.getBean(ServiceSpringKeys.PAYMENT_PROCESSOR_FACTORY);
-        customerOrderService = (CustomerOrderService) ctx.getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
-        customerOrderPaymentService = (CustomerOrderPaymentService) ctx.getBean(ServiceSpringKeys.ORDER_PAYMENT_SERICE);
-        addressService = (AddressService) ctx.getBean(ServiceSpringKeys.ADDRESS_SERVICE);
-        customerService = (CustomerService) ctx.getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
-        shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
+        paymentProcessorFactory = (PaymentProcessorFactory) ctx().getBean(ServiceSpringKeys.PAYMENT_PROCESSOR_FACTORY);
+        customerOrderService = (CustomerOrderService) ctx().getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
+        customerOrderPaymentService = (CustomerOrderPaymentService) ctx().getBean(ServiceSpringKeys.ORDER_PAYMENT_SERICE);
+        addressService = (AddressService) ctx().getBean(ServiceSpringKeys.ADDRESS_SERVICE);
+        customerService = (CustomerService) ctx().getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
+        shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
     }
 
     /**
@@ -517,11 +517,11 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
      */
     protected ShoppingCart getShoppingCart1(String customerEmail) {
         ShoppingCart shoppingCart = getEmptyCart(customerEmail);
-        new AddSkuToCartEventCommandImpl(ctx, Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST1"))
+        new AddSkuToCartEventCommandImpl(ctx(), Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST1"))
                 .execute(shoppingCart);
-        new AddSkuToCartEventCommandImpl(ctx, Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST3"))
+        new AddSkuToCartEventCommandImpl(ctx(), Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST3"))
                 .execute(shoppingCart);
-        new AddSkuToCartEventCommandImpl(ctx, Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST3"))
+        new AddSkuToCartEventCommandImpl(ctx(), Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST3"))
                 .execute(shoppingCart);
         return shoppingCart;
     }
@@ -533,9 +533,9 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
      */
     protected ShoppingCart getShoppingCart2(String customerEmail) {
         ShoppingCart shoppingCart = getEmptyCart(customerEmail);
-        new AddSkuToCartEventCommandImpl(ctx, Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST4"))
+        new AddSkuToCartEventCommandImpl(ctx(), Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST4"))
                 .execute(shoppingCart);
-        new AddSkuToCartEventCommandImpl(ctx, Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST4-M"))
+        new AddSkuToCartEventCommandImpl(ctx(), Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST4-M"))
                 .execute(shoppingCart);
         return shoppingCart;
     }
@@ -545,9 +545,9 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
         Map<String, String> params = new HashMap<String, String>();
         params.put(LoginCommandImpl.EMAIL, customerEmail);
         params.put(LoginCommandImpl.NAME, "John Doe");
-        new SetShopCartCommandImpl(ctx, Collections.singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
+        new SetShopCartCommandImpl(ctx(), Collections.singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
                 .execute(shoppingCart);
-        new ChangeCurrencyEventCommandImpl(ctx, Collections.singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "USD"))
+        new ChangeCurrencyEventCommandImpl(ctx(), Collections.singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "USD"))
                 .execute(shoppingCart);
         new LoginCommandImpl(null, params)
                 .execute(shoppingCart);
