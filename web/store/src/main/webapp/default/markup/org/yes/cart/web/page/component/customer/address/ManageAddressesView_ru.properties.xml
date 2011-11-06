@@ -17,7 +17,7 @@
     <entry key="state">Область</entry>
     <entry key="postcode">Индекс</entry>
     <entry key="phoneList">Телефоны</entry>
-    <entry key="create">Сохранить</entry>
+    <entry key="save">Сохранить</entry>
     <entry key="cancel">Отмена</entry>
 
 </properties>

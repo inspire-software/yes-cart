@@ -10,7 +10,6 @@
     <packaging>war</packaging>
     <name>Yes cart storefront</name>
     <properties>
-        <!--wicket.version>1.5-RC5.1</wicket.version-->
         <wicket.version>1.5.1</wicket.version>
         <jetty.version>6.1.4</jetty.version>
         <mysql-connector.version>5.1.13</mysql-connector.version>

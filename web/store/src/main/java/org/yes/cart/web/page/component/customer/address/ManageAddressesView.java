@@ -16,6 +16,7 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.service.domain.AddressService;
+import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.web.page.CustomerSelfCarePage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.WebParametersKeys;
@@ -55,16 +56,22 @@ public class ManageAddressesView extends BaseComponent {
     private AddressService addressService;
 
 
+    @SpringBean(name = ServiceSpringKeys.CUSTOMER_SERVICE)
+    private CustomerService customerService;
+
+
     /**
      * Create panel to manage addresses
      *
-     * @param s             panel id
+     * @param panelId             panel id
      * @param customerModel customer model
      * @param addressType   address type to show
+     * @param returnToCheckout true if need to return to checkout page after address creation.
      */
-    public ManageAddressesView(final String s, final IModel<Customer> customerModel, final String addressType) {
+    public ManageAddressesView(final String panelId, final IModel<Customer> customerModel,
+                               final String addressType, final boolean returnToCheckout) {
 
-        super(s);
+        super(panelId);
 
         add(
                 new Form(SELECT_ADDRESSES_FORM).add(
@@ -92,7 +99,9 @@ public class ManageAddressesView extends BaseComponent {
                                             @Override
                                             public void onSubmit() {
                                                 final PageParameters pageParameters = new PageParameters();
-                                                pageParameters.add(WebParametersKeys.ADDRESS_FORM_RETURN_LABEL, CreateEditAddressPage.RETURN_TO_SELFCARE); //todo checkout
+                                                pageParameters.add(WebParametersKeys.ADDRESS_FORM_RETURN_LABEL,
+                                                        returnToCheckout ? CreateEditAddressPage.RETURN_TO_CHECKOUT :
+                                                                CreateEditAddressPage.RETURN_TO_SELFCARE);
                                                 pageParameters.add(WebParametersKeys.ADDRESS_ID, "0");
                                                 pageParameters.add(WebParametersKeys.ADDRESS_TYPE, addressType);
                                                 setResponsePage(CreateEditAddressPage.class, pageParameters);
@@ -103,7 +112,7 @@ public class ManageAddressesView extends BaseComponent {
                                 .add(
                                         new ListView<Address>(ADDRESSES_LIST, customerModel.getObject().getAddresses(addressType)) {
                                             protected void populateItem(final ListItem<Address> addressListItem) {
-                                                populateAddress(addressListItem, addressListItem.getModelObject());
+                                                populateAddress(addressListItem, addressListItem.getModelObject(), returnToCheckout);
                                             }
                                         }
                                 )
@@ -118,7 +127,7 @@ public class ManageAddressesView extends BaseComponent {
      * @param addressListItem list item
      * @param address         address entry
      */
-    protected void populateAddress(final ListItem<Address> addressListItem, final Address address) {
+    protected void populateAddress(final ListItem<Address> addressListItem, final Address address, final boolean returnToCheckout) {
 
         addressListItem
                 .add(new Radio<Address>(ADDRESS_RADIO, new Model<Address>(address)))
@@ -133,7 +142,8 @@ public class ManageAddressesView extends BaseComponent {
                             public void onSubmit() {
 
                                 final PageParameters pageParameters = new PageParameters();
-                                pageParameters.add(WebParametersKeys.ADDRESS_FORM_RETURN_LABEL, CreateEditAddressPage.RETURN_TO_SELFCARE); //todo checkout
+                                pageParameters.add(WebParametersKeys.ADDRESS_FORM_RETURN_LABEL,
+                                        returnToCheckout ? CreateEditAddressPage.RETURN_TO_CHECKOUT : CreateEditAddressPage.RETURN_TO_SELFCARE);
                                 pageParameters.add(WebParametersKeys.ADDRESS_ID, String.valueOf(address.getAddressId()));
                                 pageParameters.add(WebParametersKeys.ADDRESS_TYPE, address.getAddressType());
                                 setResponsePage(CreateEditAddressPage.class, pageParameters);

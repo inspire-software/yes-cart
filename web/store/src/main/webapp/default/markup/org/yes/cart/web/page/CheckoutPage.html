@@ -26,7 +26,7 @@
     <tr>
         <td>
             <wicket:container wicket:id="content">
-                 [current content]
+                [current content]
             </wicket:container>
         </td>
     </tr>
@@ -51,23 +51,138 @@
 </wicket:fragment>
 
 
+<wicket:fragment wicket:id="addressFragment">
+    <table>
+        <tr>
+            <td>
+                <wicket:container wicket:id="shippingAddress">
+                    [Shipping address]
+                </wicket:container>
+            </td>
+            <td>
+                <wicket:container wicket:id="billingAddress">
+                    [Shipping address]
+                </wicket:container>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <form wicket:id="billingTheSameForm">
+                    <input type="checkbox" wicket:id="billingTheSame">
+                    <wicket:message key="billingAddrTheSame">[Billing address the same]</wicket:message>
+                </form>
+            </td>
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td>
+                &nbsp;
+            </td>
+            <td>
+                <wicket:link>
+                    <a href="?thp=true&amp;step=ship">
+                        <wicket:message key="shipmentStep">[Shipping method]</wicket:message>
+                    </a>
+                </wicket:link>
+            </td>
+        </tr>
+    </table>
+</wicket:fragment>
+
+
+<wicket:fragment wicket:id="shipmentFragment">
+    <table>
+        <tr>
+            <td>
+                <wicket:container wicket:id="shipmentView">
+                    [Shipping address]
+                </wicket:container>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <wicket:link>
+                    <a href="?thp=true&amp;step=address">
+                        <wicket:message key="addressStep">[Address]</wicket:message>
+                    </a>
+                </wicket:link>
+                <wicket:link>
+                    <a href="?thp=true&amp;step=payment">
+                        <wicket:message key="paymentStep">[Verification and payment]</wicket:message>
+                    </a>
+                </wicket:link>
+            </td>
+        </tr>
+    </table>
+</wicket:fragment>
+
+<wicket:fragment wicket:id="paymentFragment">
+    <table>
+        <tr>
+            <td>
+                <wicket:container wicket:id="orderVerificationView">
+                    [Order verification]
+                </wicket:container>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <form wicket:id="paymentForm">
+                    <table align="center">
+                        <tr>
+                            <td colspan="5" align="left">
+                                <input wicket:id="multipleDelivery" wicket:message="title:multipleDeliveryHint"
+                                       type="checkbox">
+                                <label wicket:id="multipleDeliveryLabel">[multiple delivery]</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5">
+                                <span><wicket:message key="paymentGatewayLabel">[Payment method]</wicket:message></span>
+                                <select class="input-select" wicket:id="paymentGateway"/>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Dynamic part of payment form
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <wicket:link>
+                    <a href="?thp=true&amp;step=ship">
+                        <wicket:message key="shipmentStep">[Shipping method]</wicket:message>
+                    </a>
+                </wicket:link>
+            </td>
+        </tr>
+    </table>
+</wicket:fragment>
+
+
 <wicket:fragment wicket:id="threeStepNavigationFragment">
 
     <wicket:link>
         <a href="?thp=true&amp;step=address">
-            <wicket:message key="addressStep"> [Shipping and Billing Addresses] </wicket:message>
+            <wicket:message key="addressStep"> [Shipping and Billing Addresses]</wicket:message>
         </a>
     </wicket:link>
-     |
+    |
     <wicket:link>
         <a href="?thp=true&amp;step=ship">
-            <wicket:message key="shipMethodStep"> [Shipping Method] </wicket:message>
+            <wicket:message key="shipMethodStep"> [Shipping Method]</wicket:message>
         </a>
     </wicket:link>
-     |
+    |
     <wicket:link>
         <a href="?thp=true&amp;step=payment">
-            <wicket:message key="paymentStep"> [Verification and Payment] </wicket:message>
+            <wicket:message key="paymentStep"> [Verification and Payment]</wicket:message>
         </a>
     </wicket:link>
 
@@ -78,25 +193,25 @@
 
     <wicket:link>
         <a href="?thp=true&amp;step=login">
-            <wicket:message key="loginStep"> [Login Or Registration] </wicket:message>
+            <wicket:message key="loginStep"> [Login Or Registration]</wicket:message>
         </a>
     </wicket:link>
-     |
+    |
     <wicket:link>
         <a href="?thp=true&amp;step=address">
-            <wicket:message key="addressStep"> [Shipping and Billing Addresses] </wicket:message>
+            <wicket:message key="addressStep"> [Shipping and Billing Addresses]</wicket:message>
         </a>
     </wicket:link>
-     |
+    |
     <wicket:link>
         <a href="?thp=true&amp;step=ship">
-            <wicket:message key="shipMethodStep"> [Shipping Method] </wicket:message>
+            <wicket:message key="shipMethodStep"> [Shipping Method]</wicket:message>
         </a>
     </wicket:link>
-     |
+    |
     <wicket:link>
         <a href="?thp=true&amp;step=payment">
-            <wicket:message key="paymentStep"> [Verification and Payment] </wicket:message>
+            <wicket:message key="paymentStep"> [Verification and Payment]</wicket:message>
         </a>
     </wicket:link>
 

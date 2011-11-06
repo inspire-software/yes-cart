@@ -9,8 +9,19 @@
 
 <body>
 
-
 <table id="mainTable" border="1" align="center" width="1024">
+    <tr>
+        <td>
+            <wicket:link>
+                <a href="HomePage.html">
+                    <wicket:message key="shopping"> [Shopping &lt;&lt;&lt;]</wicket:message>
+                </a>
+                <a href="CheckoutPage.html">
+                    <wicket:message key="checkout"> [Checkout &gt;&gt;&gt;]</wicket:message>
+                </a>
+            </wicket:link>
+        </td>
+    </tr>
     <tr>
         <td>
             <wicket:container wicket:id="shoppingCartView">
@@ -18,6 +29,7 @@
             </wicket:container>
         </td>
     </tr>
+
 </table>
 
 </body>

@@ -5,4 +5,10 @@
 	<entry key="shipMethodStep">Shipping Method</entry>
 	<entry key="paymentStep">Verification and Payment</entry>
 	<entry key="loginStep">Login</entry>
+    <entry key="billingAddrTheSame">Billing address the same as shipping</entry>
+    <entry key="shipmentStep">Shipment method</entry>
+    <entry key="paymentStep">Payment</entry>
+    <entry key="paymentGatewayLabel">Payment method</entry>
+	<entry key="multipleDeliveryLabel">Multiple delivery</entry>
+    <entry key="multipleDeliveryHint">This order may have several delivery</entry>
 </properties>

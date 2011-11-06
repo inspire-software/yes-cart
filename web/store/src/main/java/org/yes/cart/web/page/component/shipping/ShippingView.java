@@ -1,5 +1,6 @@
 package org.yes.cart.web.page.component.shipping;
 
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.PropertyModel;
@@ -7,6 +8,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Carrier;
 import org.yes.cart.domain.entity.CarrierSla;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CarrierService;
 import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
@@ -14,9 +16,11 @@ import org.yes.cart.shoppingcart.impl.SetCarrierSlaCartCommandImpl;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.BaseComponent;
+import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.page.component.util.CarrierRenderer;
 import org.yes.cart.web.page.component.util.CarrierSlaRenderer;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -32,6 +36,7 @@ public class ShippingView extends BaseComponent {
     private final static String SHIPPING_FORM = "shippingForm";
     private final static String CARRIER_LIST = "carrier";
     private final static String CARRIER_SLA_LIST = "carrierSla";
+    private final static String PRICE_VIEW = "priceView";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
 
@@ -45,8 +50,6 @@ public class ShippingView extends BaseComponent {
     private ShoppingCartCommandFactory shoppingCartCommandFactory;
 
 
-
-
     private Carrier carrier;
 
     private CarrierSla carrierSla;
@@ -54,11 +57,15 @@ public class ShippingView extends BaseComponent {
 
     /**
      * Restore carrier by sla from shoppint cart into current model.
+     *
      * @param carriers list of carriers
      */
     private void restoreCarrierSla(final List<Carrier> carriers) {
 
         final Integer slaId = ApplicationDirector.getShoppingCart().getCarrierSlaId();
+
+        setCarrier(null);
+        setCarrierSla(null);
 
         if (slaId != null) {
             carrierSlaService.getById(slaId);
@@ -89,12 +96,11 @@ public class ShippingView extends BaseComponent {
                 null, //todo get from default shipping addr
                 null,
                 null,
-               ApplicationDirector.getShoppingCart().getCurrencyCode());
+                ApplicationDirector.getShoppingCart().getCurrencyCode());
 
         restoreCarrierSla(carriers);
 
         final Form form = new Form(SHIPPING_FORM);
-
 
         final DropDownChoice<CarrierSla> carrierSlaChoice = new DropDownChoice<CarrierSla>(
                 CARRIER_SLA_LIST,
@@ -111,18 +117,26 @@ public class ShippingView extends BaseComponent {
                                 String.valueOf(carrierSla.getCarrierslaId()))
                 ).execute(ApplicationDirector.getShoppingCart());
 
-
-                //todo ((AbstractWebPage) getPage()).setResponsePageExt(CheckoutPage.class, new PageParameters("step=address"));
+                addPriceView(form);
 
             }
 
+            /** {@inheritDoc} */
             @Override
             protected boolean wantOnSelectionChangedNotifications() {
                 return true;
             }
+
+            /** {@inheritDoc} */
+            protected CharSequence getDefaultChoice(final String selectedValue) {
+                return super.getDefaultChoice(carrierSla == null ? "" : selectedValue);
+            }
+
         };
 
         carrierSlaChoice.setChoiceRenderer(new CarrierSlaRenderer()).setRequired(true);
+
+        form.addOrReplace(carrierSlaChoice);
 
 
         form.add(
@@ -131,14 +145,23 @@ public class ShippingView extends BaseComponent {
 
                     @Override
                     protected void onSelectionChanged(final Carrier carrier) {
+
                         super.onSelectionChanged(carrier);
-                        carrierSlaChoice.setChoices(new ArrayList<CarrierSla>(carrier.getCarrierSla()));
+
                         setCarrierSla(null);
+
+                        carrierSlaChoice.setChoices((List) null);
+
+                        carrierSlaChoice.setChoices(new ArrayList<CarrierSla>(carrier.getCarrierSla()));
+
+
                         shoppingCartCommandFactory.create(
                                 Collections.singletonMap(
-                                SetCarrierSlaCartCommandImpl.CMD_KEY,
-                                null)
+                                        SetCarrierSlaCartCommandImpl.CMD_KEY,
+                                        null)
                         ).execute(ApplicationDirector.getShoppingCart());
+
+                        addPriceView(form);
 
                     }
 
@@ -150,16 +173,46 @@ public class ShippingView extends BaseComponent {
 
         );
 
-        form.add(carrierSlaChoice);
+
+        addPriceView(form);
 
         add(form);
 
 
     }
 
+
+    /**
+     * Add shipping price view to given form if shipping methid is selected.
+     *
+     * @param form given form.
+     */
+    private void addPriceView(final Form form) {
+
+        final Integer slaId = ApplicationDirector.getShoppingCart().getCarrierSlaId();
+
+        if (slaId == null) {
+            form.addOrReplace(
+                    new Label(PRICE_VIEW)
+            );
+        } else {
+            final CarrierSla carrierSla = carrierSlaService.getById(slaId);
+            form.addOrReplace(
+                    new PriceView(
+                            PRICE_VIEW,
+                            new Pair<BigDecimal, BigDecimal>(carrierSla.getPrice(), null),
+                            carrierSla.getCurrency(),
+                            true
+                    )
+            );
+
+        }
+
+    }
+
     private List<CarrierSla> getCarrierSlas() {
         if (this.carrier == null) {
-            return  Collections.EMPTY_LIST;
+            return Collections.EMPTY_LIST;
         }
         return new ArrayList<CarrierSla>(carrier.getCarrierSla());
     }
