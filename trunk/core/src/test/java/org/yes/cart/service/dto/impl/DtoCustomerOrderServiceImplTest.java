@@ -9,7 +9,7 @@ import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.service.domain.CustomerOrderService;
-import org.yes.cart.service.domain.impl.Test_CustomerOrderServiceImpl;
+import org.yes.cart.service.domain.impl.TestCustomerOrderServiceImpl;
 import org.yes.cart.service.dto.DtoCustomerOrderService;
 import org.yes.cart.service.order.impl.OrderAssemblerImplTest;
 import org.yes.cart.shoppingcart.ShoppingCart;
@@ -39,14 +39,12 @@ public class DtoCustomerOrderServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testUpdate() throws Exception {
-        final String customerPrefix = "testUpdate";
-        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx, customerPrefix);
+        String customerPrefix = "testUpdate";
+        Customer customer = OrderAssemblerImplTest.createCustomer(ctx, customerPrefix);
         assertFalse(customer.getAddress().isEmpty());
-        final ShoppingCart shoppingCart = Test_CustomerOrderServiceImpl.getShoppingCart(ctx, customerPrefix);
+        final ShoppingCart shoppingCart = TestCustomerOrderServiceImpl.getShoppingCart(ctx, customerPrefix);
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
         long pk = order.getCustomerorderId();
-        assertTrue(pk > 0);
-        CustomerOrderDTO dto = dtoService.getById(pk);
-        assertNotNull(dto);
+        assertNotNull(dtoService.getById(pk));
     }
 }

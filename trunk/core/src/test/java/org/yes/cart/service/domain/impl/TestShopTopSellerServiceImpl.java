@@ -29,7 +29,7 @@ import static org.hamcrest.Matchers.*;
  * Date: 6/5/11
  * Time: 10:34 AM
  */
-public class Test_ShopTopSellerServiceImpl extends BaseCoreDBTestCase {
+public class TestShopTopSellerServiceImpl extends BaseCoreDBTestCase {
 
     private ShopTopSellerService shopTopSellerService;
     private OrderAssembler orderAssembler;
