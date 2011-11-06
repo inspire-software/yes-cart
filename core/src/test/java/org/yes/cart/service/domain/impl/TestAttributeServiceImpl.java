@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.AttributeGroupNames;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Attribute;
@@ -33,12 +34,43 @@ public class TestAttributeServiceImpl extends BaseCoreDBTestCase {
         attributeService = (AttributeService) ctx.getBean(ServiceSpringKeys.ATTRIBUTE_SERVICE);
     }
 
+    // TODO fix to not depend on order or running
+    @Test
+    public void testFindByAttributeGroupCode() {
+        List<Attribute> attrs = attributeService.findByAttributeGroupCode(AttributeGroupNames.CUSTOMER);
+        assertEquals(1, attrs.size());
+    }
+
+    @Test
+    public void testFindByAttributeCode() {
+        Attribute attrs = attributeService.findByAttributeCode(AttributeNamesKeys.CUSTOMER_PHONE);
+        assertNotNull(attrs);
+    }
+
+    @Test
+    public void testFindAttributesWithMultipleValues1() {
+        assertEquals(5,
+                attributeService.findAttributesWithMultipleValues(AttributeGroupNames.PRODUCT).size());
+    }
+
+    @Test
+    public void testFindAvailableAttributes1() {
+        List<Attribute> attrs = attributeService.findAvailableAttributes(AttributeGroupNames.PRODUCT, null); // getByKey all
+        assertEquals(20, attrs.size());
+        List<String> assignedAttributes = new ArrayList<String>();
+        for (Attribute attr : attrs) {
+            assignedAttributes.add(attr.getCode());
+        }
+        attrs = attributeService.findAvailableAttributes(AttributeGroupNames.PRODUCT, assignedAttributes);
+        assertEquals(0, attrs.size());
+    }
+
     /**
      * Prove of availability to getByKey list of attributes, that can have mupliple values within given
      * <code>attributeGroupCode</code>.
      */
     @Test
-    public void testFindAttributesWithMultipleValues() {
+    public void testFindAttributesWithMultipleValues2() {
         //product has 5 attributes with allowed multiple values
         List<Attribute> list = attributeService.findAttributesWithMultipleValues(AttributeGroupNames.PRODUCT);
         assertNotNull(list);
@@ -53,7 +85,7 @@ public class TestAttributeServiceImpl extends BaseCoreDBTestCase {
      * <code>attributeGroupCode</code>, that can be assigned to business entity.
      */
     @Test
-    public void testFindAvailableAttributes() {
+    public void testFindAvailableAttributes2() {
         final List<String> allCodes = Arrays.asList("URI", "CATEGORY_ITEMS_PER_PAGE", "CATEGORY_IMAGE_RETREIVE_STRATEGY");
         // getByKey all attributes available for category
         List<Attribute> attributes = attributeService.findAvailableAttributes(AttributeGroupNames.CATEGORY, null);
