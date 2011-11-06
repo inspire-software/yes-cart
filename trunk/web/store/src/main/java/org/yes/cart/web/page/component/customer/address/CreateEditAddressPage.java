@@ -12,6 +12,7 @@ import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
+import org.yes.cart.web.page.CheckoutPage;
 import org.yes.cart.web.page.CustomerSelfCarePage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.WebParametersKeys;
@@ -55,7 +56,7 @@ public class CreateEditAddressPage extends AbstractWebPage {
 
         final Class<? extends Page>  returnToPageClass = RETURN_TO_SELFCARE.equals(
                 params.get(WebParametersKeys.ADDRESS_FORM_RETURN_LABEL).toString()) ?
-                CustomerSelfCarePage.class : CustomerSelfCarePage.class;
+                CustomerSelfCarePage.class : CheckoutPage.class;
 
         final PageParameters successPageParameters = new PageParameters();
 

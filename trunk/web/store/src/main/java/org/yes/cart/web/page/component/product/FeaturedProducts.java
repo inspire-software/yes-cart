@@ -63,12 +63,21 @@ public class FeaturedProducts  extends AbstractProductList {
         return products;
     }
 
-    private List<Long> adapt(Collection<ShopCategory> categories) {
-        final List<Long> rez = new ArrayList<Long>(categories.size());
-        for (ShopCategory cat : categories) {
-            rez.add(cat.getCategory().getCategoryId());
+    /**
+     * Transform list of categories to list of category ids
+     * @param categories given category list
+     * @return category IDs.
+     */
+    private List<Long> adapt(final Collection<ShopCategory> categories) {
+        if (categories == null) {
+            return Collections.EMPTY_LIST;
+        } else {
+            final List<Long> rez = new ArrayList<Long>(categories.size());
+            for (ShopCategory cat : categories) {
+                rez.add(cat.getCategory().getCategoryId());
+            }
+            return rez;
         }
-        return rez;
     }
 
     /**

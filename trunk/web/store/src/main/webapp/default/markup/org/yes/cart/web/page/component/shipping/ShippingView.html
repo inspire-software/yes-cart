@@ -1,0 +1,28 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<body>
+<wicket:panel>
+    <form wicket:id="shippingForm">
+        <table border="1">
+            <tr>
+                <td>
+                    <wicket:message key="carrier">[Carrier]</wicket:message>
+                </td>
+                <td><select wicket:id="carrier"/></td>
+                <td rowspan="2" align="center" valign="middle">
+                    <wicket:container wicket:id="priceView">
+                        [price]
+                    </wicket:container>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <wicket:message key="carrierSla">[Carrier SLA]</wicket:message>
+                </td>
+                <td><select wicket:id="carrierSla"/></td>
+            </tr>
+
+        </table>
+    </form>
+</wicket:panel>
+</body>
+</html>

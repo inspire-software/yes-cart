@@ -58,9 +58,9 @@ public class CustomerSelfCarePage extends AbstractWebPage {
         ).add(
                 new PasswordPanel(PASSWORD_PANEL, customerModel)
         ).add(
-                new ManageAddressesView(SHIPPING_ADDR_PANEL, customerModel, Address.ADDR_TYPE_SHIPING)
+                new ManageAddressesView(SHIPPING_ADDR_PANEL, customerModel, Address.ADDR_TYPE_SHIPING, false)
         ).add(
-                new ManageAddressesView(BILLING_ADDR_PANEL, customerModel, Address.ADDR_TYPE_BILLING)
+                new ManageAddressesView(BILLING_ADDR_PANEL, customerModel, Address.ADDR_TYPE_BILLING, false)
         ).add(
                 new DynaFormPanel(ATTR_PANEL, customerModel)
         ).add(
