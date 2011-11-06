@@ -255,22 +255,31 @@
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <inherited>true</inherited>
-                    <configuration>
-                        <excludes>
-                            <exclude>**/Test*.java</exclude>
-                        </excludes>
-                    </configuration>
                     <executions>
                         <execution>
-                            <id>order-depended-test</id>
+                            <id>isolated-dirty-test</id>
                             <goals>
                                 <goal>test</goal>
                             </goals>
                             <phase>test-compile</phase>
                             <configuration>
-                                <includes>
-                                    <include>**/*Suite.java</include>
-                                </includes>
+                                <!-- Running only isolated dirty tests -->
+                                <excludes>
+                                    <exclude>**/*Test.java</exclude>
+                                </excludes>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>default-test</id>
+                            <goals>
+                                <goal>test</goal>
+                            </goals>
+                            <phase>test</phase>
+                            <configuration>
+                                <!-- Exclude running of isolated dirty tests -->
+                                <excludes>
+                                    <exclude>**/Test*.java</exclude>
+                                </excludes>
                             </configuration>
                         </execution>
                     </executions>
