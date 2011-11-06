@@ -7,7 +7,6 @@ import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
 import org.yes.cart.service.domain.CustomerOrderService;
-import org.yes.cart.service.order.impl.OrderAssemblerImplTest;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 
 import java.util.Calendar;
@@ -32,9 +31,9 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImplTest extends AbstractE
 
     @Test
     public void testHandle() {
-        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx);
+        Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        final CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
+        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
         CustomerOrderDelivery delivery = customerOrder.getDelivery().iterator().next();
         Calendar calendar = Calendar.getInstance();
@@ -64,6 +63,5 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImplTest extends AbstractE
         ));
         assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
                 delivery.getDeliveryStatus());
-
     }
 }

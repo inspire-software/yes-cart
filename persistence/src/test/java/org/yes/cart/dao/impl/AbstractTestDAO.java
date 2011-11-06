@@ -72,6 +72,6 @@ public abstract class AbstractTestDAO {
             queryDataSet.addTable(tableName);
         }
         FlatXmlDataSet.write(queryDataSet,
-                new FileOutputStream("target/test-classes/" + this.getClass().getName() + "_" + prefix + "_dataset.xml"));
+                new FileOutputStream("target/test-classes/" + prefix + "_dataset.xml"));
     }
 }

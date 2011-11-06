@@ -36,7 +36,7 @@ public class DtoCustomerServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testCreate() throws Exception {
-        CustomerDTO dto = getCustomerDto("testCreate");
+        CustomerDTO dto = getCustomerDto(getTestName());
         dto = dtoService.create(dto);
         assertTrue(dto.getCustomerId() > 0);
         dtoService.remove(dto.getCustomerId());
@@ -44,7 +44,7 @@ public class DtoCustomerServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testUpdate() throws Exception {
-        CustomerDTO dto = getCustomerDto("testUpdate");
+        CustomerDTO dto = getCustomerDto(getTestName());
         dto = dtoService.create(dto);
         assertTrue(dto.getCustomerId() > 0);
         dto.setFirstname("Jane");
@@ -57,7 +57,7 @@ public class DtoCustomerServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testCreateEntityAttributeValue() throws Exception {
-        CustomerDTO dto = getCustomerDto("testCreateEntityAttributeValue");
+        CustomerDTO dto = getCustomerDto(getTestName());
         dto = dtoService.create(dto);
         assertTrue(dto.getCustomerId() > 0);
         AttributeDTO attrDto = dtoAttrService.getById(1030); //CUSTOMER_PHONE
@@ -73,8 +73,7 @@ public class DtoCustomerServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetEntityAttributes() throws Exception {
-        //dumpDataBase("ffffffff", new String[]{"TCUSTOMER"});
-        CustomerDTO dto = getCustomerDto("testGetEntityAttributes");
+        CustomerDTO dto = getCustomerDto(getTestName());
         dto = dtoService.create(dto);
         assertTrue(dto.getCustomerId() > 0);
         AttributeDTO attrDto = dtoAttrService.getById(1030); //CUSTOMER_PHONE
@@ -90,7 +89,7 @@ public class DtoCustomerServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testUpdateEntityAttributeValue() throws Exception {
-        CustomerDTO dto = getCustomerDto("testUpdateEntityAttributeValue");
+        CustomerDTO dto = getCustomerDto(getTestName());
         dto = dtoService.create(dto);
         assertTrue(dto.getCustomerId() > 0);
         AttributeDTO attrDto = dtoAttrService.getById(1030); //CUSTOMER_PHONE
@@ -110,7 +109,7 @@ public class DtoCustomerServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testDeleteAttributeValue() throws Exception {
-        CustomerDTO dto = getCustomerDto("testDeleteAttributeValue");
+        CustomerDTO dto = getCustomerDto(getTestName());
         dto = dtoService.create(dto);
         assertTrue(dto.getCustomerId() > 0);
         AttributeDTO attrDto = dtoAttrService.getById(1030); //CUSTOMER_PHONE
@@ -127,7 +126,7 @@ public class DtoCustomerServiceImplTest extends BaseCoreDBTestCase {
         assertTrue(dto.getAttribute().isEmpty());
     }
 
-    private CustomerDTO getCustomerDto(final String prefix) {
+    private CustomerDTO getCustomerDto(String prefix) {
         CustomerDTO dto = dtoFactory.getByIface(CustomerDTO.class);
         dto.setEmail(prefix + "john@doe.com");
         dto.setFirstname(prefix + "John");

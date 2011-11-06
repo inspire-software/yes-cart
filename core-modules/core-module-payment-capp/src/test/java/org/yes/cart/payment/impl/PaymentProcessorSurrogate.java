@@ -36,18 +36,18 @@ import java.util.Map;
  */
 public class PaymentProcessorSurrogate {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PaymentProcessorSurrogate.class);
+    private static Logger LOG = LoggerFactory.getLogger(PaymentProcessorSurrogate.class);
 
-    private final PaymentGatewayInternalForm paymentGateway;
-    private final CustomerOrderPaymentService customerOrderPaymentService;
+    private PaymentGatewayInternalForm paymentGateway;
+    private CustomerOrderPaymentService customerOrderPaymentService;
 
     /**
      * Construct payment processor.
      *
      * @param customerOrderPaymentService generic service to use.
      */
-    public PaymentProcessorSurrogate(final CustomerOrderPaymentService customerOrderPaymentService,
-                                     final PaymentGatewayInternalForm paymentGateway) {
+    public PaymentProcessorSurrogate(CustomerOrderPaymentService customerOrderPaymentService,
+                                     PaymentGatewayInternalForm paymentGateway) {
         this.customerOrderPaymentService = customerOrderPaymentService;
         this.paymentGateway = paymentGateway;
     }
@@ -67,21 +67,14 @@ public class PaymentProcessorSurrogate {
      * @param params for payment gateway to create template from
      * @return status of operation.
      */
-    String authorizeCapture(final CustomerOrder order, final Map params) {
-
-        final Payment templatePayment =
-                fillPaymentPrototype(order, getPaymentGateway().createPaymentPrototype(params));
+    String authorizeCapture(CustomerOrder order, Map params) {
+        Payment templatePayment = fillPaymentPrototype(order, getPaymentGateway().createPaymentPrototype(params));
         templatePayment.setTransactionOperation(PaymentGateway.AUTH_CAPTURE);
         templatePayment.setTransactionGatewayLabel(getPaymentGateway().getLabel());
-
-        final List<Payment> paymentsToAuthorize = createPaymentsToAuthorize(order, templatePayment, false);
+        List<Payment> paymentsToAuthorize = createPaymentsToAuthorize(order, templatePayment, false);
         // will be only one
-
         String paymentResult = null;
-
         for (Payment payment : paymentsToAuthorize) {
-
-
             try {
                 payment = paymentGateway.authorizeCapture(payment);
                 paymentResult = payment.getPaymentProcessorResult();
@@ -89,35 +82,26 @@ public class PaymentProcessorSurrogate {
                 paymentResult = Payment.PAYMENT_STATUS_FAILED;
                 payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
                 payment.setTransactionOperationResultMessage(th.getMessage());
-
             } finally {
-                final CustomerOrderPayment customerOrderPayment = new CustomerOrderPaymentEntity();
+                CustomerOrderPayment customerOrderPayment = new CustomerOrderPaymentEntity();
                 //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
                 BeanUtils.copyProperties(payment, customerOrderPayment); //from PG object to persisted
                 customerOrderPayment.setPaymentProcessorResult(paymentResult);
                 customerOrderPaymentService.create(customerOrderPayment);
             }
-
         }
-
         return paymentResult;
-
-
     }
-
 
     /**
      * {@inheritDoc}
      */
-    public String authorize(final CustomerOrder order, final Map params) {
+    public String authorize(CustomerOrder order, Map params) {
         if (getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorize()) {
-            final Payment templatePayment =
-                    fillPaymentPrototype(order, getPaymentGateway().createPaymentPrototype(params));
+            Payment templatePayment = fillPaymentPrototype(order, getPaymentGateway().createPaymentPrototype(params));
             templatePayment.setTransactionOperation(PaymentGateway.AUTH);
             templatePayment.setTransactionGatewayLabel(getPaymentGateway().getLabel());
-
-            final List<Payment> paymentsToAuthorize = createPaymentsToAuthorize(order, templatePayment, false);
-
+            List<Payment> paymentsToAuthorize = createPaymentsToAuthorize(order, templatePayment, false);
             for (Payment payment : paymentsToAuthorize) {
                 String paymentResult = null;
                 try {
@@ -128,7 +112,7 @@ public class PaymentProcessorSurrogate {
                     payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
                     payment.setTransactionOperationResultMessage(th.getMessage());
                 } finally {
-                    final CustomerOrderPayment customerOrderPayment = new CustomerOrderPaymentEntity();
+                    CustomerOrderPayment customerOrderPayment = new CustomerOrderPaymentEntity();
                     //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
                     BeanUtils.copyProperties(payment, customerOrderPayment); //from PG object to persisted
                     customerOrderPayment.setPaymentProcessorResult(paymentResult);
@@ -152,8 +136,8 @@ public class PaymentProcessorSurrogate {
      * @param checkRevAuth  set set of all operations with ok status.
      * @return true if revrse operation can be performed.
      */
-    boolean canPerformReverseAuth(final CustomerOrderPayment authToReverce, final List<CustomerOrderPayment> checkRevAuth) {
-        final String shipmentNo = authToReverce.getOrderShipment();
+    boolean canPerformReverseAuth(CustomerOrderPayment authToReverce, List<CustomerOrderPayment> checkRevAuth) {
+        String shipmentNo = authToReverce.getOrderShipment();
         for (CustomerOrderPayment paymentOp : checkRevAuth) {
             if (shipmentNo.equals(paymentOp.getOrderShipment())) {
                 if (!PaymentGateway.AUTH.equals(paymentOp.getTransactionOperation())) {
@@ -170,28 +154,24 @@ public class PaymentProcessorSurrogate {
      *
      * @param orderNum order with some authorized payments
      */
-    void reverseAuthorizatios(final String orderNum) {
+    void reverseAuthorizatios(String orderNum) {
         if (getPaymentGateway().getPaymentGatewayFeatures().isSupportReverseAuthorization()) {
-
-            final List<CustomerOrderPayment> paymentsToRevAuth = customerOrderPaymentService.findBy(
+            List<CustomerOrderPayment> paymentsToRevAuth = customerOrderPaymentService.findBy(
                     orderNum,
                     null,
                     Payment.PAYMENT_STATUS_OK,
                     PaymentGateway.AUTH
             );
-
-            final List<CustomerOrderPayment> checkRevAuth = customerOrderPaymentService.findBy(
+            List<CustomerOrderPayment> checkRevAuth = customerOrderPaymentService.findBy(
                     orderNum,
                     null,
                     Payment.PAYMENT_STATUS_OK,
                     null
             );
-
             for (CustomerOrderPayment customerOrderPayment : paymentsToRevAuth) {
                 if (canPerformReverseAuth(customerOrderPayment, checkRevAuth)) {
                     Payment payment = new PaymentImpl();
                     BeanUtils.copyProperties(customerOrderPayment, payment); //from persisted to PG object
-
                     String paymentResult = null;
                     try {
                         payment = getPaymentGateway().reverseAuthorization(payment); //pass "original" to perform reverse autghorization.
@@ -202,14 +182,13 @@ public class PaymentProcessorSurrogate {
                         payment.setTransactionOperationResultMessage(th.getMessage());
 
                     } finally {
-                        final CustomerOrderPayment authReversedOrderPayment = new CustomerOrderPaymentEntity();
+                        CustomerOrderPayment authReversedOrderPayment = new CustomerOrderPaymentEntity();
                         //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
                         BeanUtils.copyProperties(payment, authReversedOrderPayment); //from PG object to persisted
                         authReversedOrderPayment.setPaymentProcessorResult(paymentResult);
                         customerOrderPaymentService.create(authReversedOrderPayment);
                     }
                 }
-
             }
         }
     }
@@ -223,18 +202,16 @@ public class PaymentProcessorSurrogate {
      *                            Each order has at least one delivery.
      * @return status of operation.
      */
-    public String shipmentComplete(final CustomerOrder order, final String orderShipmentNumber) {
-        final boolean isMultiplePaymentsSupports = getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorizePerShipment();
-        final List<CustomerOrderPayment> paymentsToCapture = customerOrderPaymentService.findBy(
+    public String shipmentComplete(CustomerOrder order, String orderShipmentNumber) {
+        boolean isMultiplePaymentsSupports = getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorizePerShipment();
+        List<CustomerOrderPayment> paymentsToCapture = customerOrderPaymentService.findBy(
                 order.getOrdernum(),
                 isMultiplePaymentsSupports ? orderShipmentNumber : order.getOrdernum(),
                 Payment.PAYMENT_STATUS_OK,
                 PaymentGateway.AUTH
         );
-        if (
-                paymentsToCapture.size() > 1
-                        ||
-                        (paymentsToCapture.size() == 0 && !getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorize())) {
+        if (paymentsToCapture.size() > 1 ||
+                (paymentsToCapture.size() == 0 && !getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorize())) {
             LOG.warn( //must be only one record
                     MessageFormat.format(
                             "Payment gateway {0} with features {1}. Found {2} records to capture, but expected 1 only. Order num {3} Shipment num {4}",
@@ -242,7 +219,6 @@ public class PaymentProcessorSurrogate {
                     )
             );
         }
-
         boolean wasError = false;
         String paymentResult = null;
         if (isMultiplePaymentsSupports || isLastShipmentComplete(order)) { //each completed delivery or last in case of single pay for several delivery
@@ -250,8 +226,6 @@ public class PaymentProcessorSurrogate {
                 Payment payment = new PaymentImpl();
                 BeanUtils.copyProperties(paymentToCapture, payment); //from persisted to PG object
                 payment.setTransactionOperation(PaymentGateway.CAPTURE);
-
-
                 try {
                     payment = getPaymentGateway().capture(payment); //pass "original" to perform fund capture.
                     paymentResult = payment.getPaymentProcessorResult();
@@ -260,9 +234,8 @@ public class PaymentProcessorSurrogate {
                     paymentResult = Payment.PAYMENT_STATUS_FAILED;
                     payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
                     payment.setTransactionOperationResultMessage(th.getMessage());
-
                 } finally {
-                    final CustomerOrderPayment authReversedOrderPayment = new CustomerOrderPaymentEntity();
+                    CustomerOrderPayment authReversedOrderPayment = new CustomerOrderPaymentEntity();
                     //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
                     BeanUtils.copyProperties(payment, authReversedOrderPayment); //from PG object to persisted
                     authReversedOrderPayment.setPaymentProcessorResult(paymentResult);
@@ -273,28 +246,21 @@ public class PaymentProcessorSurrogate {
                 }
             }
         }
-
         return wasError ? Payment.PAYMENT_STATUS_FAILED : Payment.PAYMENT_STATUS_OK;
     }
 
     /**
      * {@inheritDoc}
      */
-    public String cancelOrder(final CustomerOrder order, boolean useRefund) {
-
+    public String cancelOrder(CustomerOrder order, boolean useRefund) {
         if (!CustomerOrder.ORDER_STATUS_CANCELLED.equalsIgnoreCase(order.getOrderStatus())) {
-
             boolean wasError = false;
-
-            final List<CustomerOrderPayment> paymentsToRollBack = new ArrayList<CustomerOrderPayment>();
-
+            List<CustomerOrderPayment> paymentsToRollBack = new ArrayList<CustomerOrderPayment>();
             paymentsToRollBack.addAll(
                     customerOrderPaymentService.findBy(order.getOrdernum(), null, Payment.PAYMENT_STATUS_OK, PaymentGateway.AUTH_CAPTURE));
             paymentsToRollBack.addAll(
                     customerOrderPaymentService.findBy(order.getOrdernum(), null, Payment.PAYMENT_STATUS_OK, PaymentGateway.CAPTURE));
-
             reverseAuthorizatios(order.getOrdernum());
-
             for (CustomerOrderPayment customerOrderPayment : paymentsToRollBack) {
                 Payment payment = null;
                 String paymentResult = null;
@@ -322,7 +288,7 @@ public class PaymentProcessorSurrogate {
                     );
                     wasError = true;
                 } finally {
-                    final CustomerOrderPayment authReversedOrderPayment = new CustomerOrderPaymentEntity();
+                    CustomerOrderPayment authReversedOrderPayment = new CustomerOrderPaymentEntity();
                     //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
                     BeanUtils.copyProperties(payment, authReversedOrderPayment); //from PG object to persisted
                     authReversedOrderPayment.setPaymentProcessorResult(paymentResult);
@@ -331,10 +297,7 @@ public class PaymentProcessorSurrogate {
                 if (!Payment.PAYMENT_STATUS_OK.equals(paymentResult)) {
                     wasError = true;
                 }
-
-
             }
-
             return wasError ? Payment.PAYMENT_STATUS_FAILED : Payment.PAYMENT_STATUS_OK;
         }
         LOG.warn(
@@ -355,8 +318,8 @@ public class PaymentProcessorSurrogate {
      *                           order
      * @return list of
      */
-    private List<Payment> createPaymentsToAuthorize(final CustomerOrder order, final Payment templatePayment, final boolean forceSinglePayment) {
-        final List<Payment> rez = new ArrayList<Payment>();
+    private List<Payment> createPaymentsToAuthorize(CustomerOrder order, Payment templatePayment, boolean forceSinglePayment) {
+        List<Payment> rez = new ArrayList<Payment>();
         if (forceSinglePayment || !getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorizePerShipment()) {
 
             Payment payment = (Payment) SerializationUtils.clone(templatePayment);
@@ -383,7 +346,7 @@ public class PaymentProcessorSurrogate {
      * @param payment   payment to fill
      * @param singlePay is it single pay for whole order
      */
-    private void fillPayment(final CustomerOrder order, final CustomerOrderDelivery delivery, final Payment payment, final boolean singlePay) {
+    private void fillPayment(CustomerOrder order, CustomerOrderDelivery delivery, Payment payment, boolean singlePay) {
         payment.setTransactionReferenceId(delivery.getDevileryNum());
 
         payment.setOrderShipment(singlePay ? order.getOrdernum() : delivery.getDevileryNum());
@@ -400,9 +363,9 @@ public class PaymentProcessorSurrogate {
      * @param delivery delivery
      * @param payment  payment
      */
-    private void fillPaymentAmount(final CustomerOrder order,
-                                   final CustomerOrderDelivery delivery,
-                                   final Payment payment) {
+    private void fillPaymentAmount(CustomerOrder order,
+                                   CustomerOrderDelivery delivery,
+                                   Payment payment) {
         //TODO more sofisticated, include discount and free shipping per one and multiple delivery
         BigDecimal rez = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
         for (PaymentLine paymentLine : payment.getOrderItems()) {
@@ -411,7 +374,7 @@ public class PaymentProcessorSurrogate {
         payment.setPaymentAmount(rez);
     }
 
-    private void fillPaymentShipment(final CustomerOrderDelivery delivery, final Payment payment) {
+    private void fillPaymentShipment(CustomerOrderDelivery delivery, Payment payment) {
         payment.getOrderItems().add(
                 new PaymentLineImpl(
                         String.valueOf(delivery.getCarrierSla().getCarrierslaId()),
@@ -423,7 +386,7 @@ public class PaymentProcessorSurrogate {
         );
     }
 
-    private void fillPaymentItems(final CustomerOrderDelivery delivery, final Payment payment) {
+    private void fillPaymentItems(CustomerOrderDelivery delivery, Payment payment) {
         for (CustomerOrderDeliveryDet deliveryDet : delivery.getDetail()) {
             payment.getOrderItems().add(
                     new PaymentLineImpl(
@@ -444,7 +407,7 @@ public class PaymentProcessorSurrogate {
      * @param order           order
      * @return payment prototype;
      */
-    private Payment fillPaymentPrototype(final CustomerOrder order, final Payment templatePayment) {
+    private Payment fillPaymentPrototype(CustomerOrder order, Payment templatePayment) {
         Address billingAddr = order.getCustomer().getDefaultAddress(Address.ADDR_TYPE_BILLING);
         Address shippingAddr = order.getCustomer().getDefaultAddress(Address.ADDR_TYPE_SHIPING);
         if (billingAddr != null) {
@@ -472,7 +435,7 @@ public class PaymentProcessorSurrogate {
      * @param order order
      * @return true in case if all shipments,
      */
-    boolean isLastShipmentComplete(final CustomerOrder order) {
+    boolean isLastShipmentComplete(CustomerOrder order) {
         for (CustomerOrderDelivery delivery : order.getDelivery()) {
             if (!CustomerOrderDelivery.DELIVERY_STATUS_SHIPPED.equalsIgnoreCase(delivery.getDeliveryStatus())) {
                 return false;

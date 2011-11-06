@@ -1,7 +1,5 @@
 package org.yes.cart.service.domain.impl;
 
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
@@ -13,7 +11,6 @@ import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.ShopTopSeller;
 import org.yes.cart.service.domain.ShopTopSellerService;
 import org.yes.cart.service.order.OrderAssembler;
-import org.yes.cart.service.order.impl.OrderAssemblerImplTest;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.math.BigDecimal;
@@ -21,8 +18,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.hasSize;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -56,14 +54,13 @@ public class TestShopTopSellerServiceImpl extends BaseCoreDBTestCase {
             put(15127L, new BigDecimal("2"));
             put(15128L, new BigDecimal("2"));
             put(15129L, new BigDecimal("2"));
-            put(10L, new BigDecimal("34"));
         }};
-        Customer customer = OrderAssemblerImplTest.createCustomer(ctx, "testTopSellers");
-        ShoppingCart shoppingCart = OrderAssemblerImplTest.getShoppingCart2(ctx, customer.getEmail());
+        Customer customer = createCustomer();
+        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail());
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         customerOrderDao.create(customerOrder);
-        Customer customer2 = OrderAssemblerImplTest.createCustomer(ctx, "testTopSellers2");
-        ShoppingCart shoppingCart2 = OrderAssemblerImplTest.getShoppingCart2(ctx, customer2.getEmail());
+        Customer customer2 = createCustomer2();
+        ShoppingCart shoppingCart2 = getShoppingCart2(customer2.getEmail());
         CustomerOrder customerOrder2 = orderAssembler.assembleCustomerOrder(shoppingCart2);
         customerOrderDao.create(customerOrder2);
         shopTopSellerService.updateTopSellers(10);
@@ -72,7 +69,7 @@ public class TestShopTopSellerServiceImpl extends BaseCoreDBTestCase {
             Long key = ts.getProduct().getId();
             BigDecimal expectedCounter = expectation.remove(key);
             // counter can be increased by other tests
-            assertThat("Unexpected counter for product with id = " + key, 
+            assertThat("Unexpected counter for product with id = " + key,
                     ts.getCounter(), greaterThanOrEqualTo(expectedCounter));
         }
         assertThat(expectation.keySet(), hasSize(0));

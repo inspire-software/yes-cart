@@ -65,9 +65,9 @@ public class DtoProductServiceImplTest extends BaseCoreDBTestCase {
         dto = dtoService.create(dto);
         assertTrue(dto.getProductId() > 0);
         long pk = dto.getProductId();
-        final Date availavleFrom = new Date();
-        dto.setAvailablefrom(availavleFrom);
-        dto.setAvailabletill(availavleFrom);
+        Date availableFrom = new Date();
+        dto.setAvailablefrom(availableFrom);
+        dto.setAvailabletill(availableFrom);
         dto.setName("new-name");
         dto.setDescription("new desciption");
         dto.setBrandDTO(dtoBrandService.getById(102L));
@@ -75,8 +75,8 @@ public class DtoProductServiceImplTest extends BaseCoreDBTestCase {
         dto.setAvailabilityDTO(dtoAvailabilityService.getById(Availability.ALWAYS));
         dtoService.update(dto);
         dto = dtoService.getById(pk);
-        assertEquals(availavleFrom, dto.getAvailablefrom());
-        assertEquals(availavleFrom, dto.getAvailabletill());
+        assertEquals(availableFrom, dto.getAvailablefrom());
+        assertEquals(availableFrom, dto.getAvailabletill());
         assertEquals("new-name", dto.getName());
         assertEquals("new desciption", dto.getDescription());
         assertEquals(102L, dto.getBrandDTO().getBrandId());

@@ -20,10 +20,9 @@ public class DefaultOrderNumberGeneratorImplTest {
     public void testGetNextOrderNumber() {
         DefaultOrderNumberGeneratorImpl defaultOrderNumberGenerator = new DefaultOrderNumberGeneratorImpl();
         for (int i = 1; i <= 10000; i = i + 1) {
-            final String orderNum = defaultOrderNumberGenerator.getNextOrderNumber();
-            final String expected = "-" + i;
-            assertEquals(expected,
-                    orderNum.substring(orderNum.indexOf("-")));
+            String orderNum = defaultOrderNumberGenerator.getNextOrderNumber();
+            String expected = "-" + i;
+            assertEquals(expected, orderNum.substring(orderNum.indexOf("-")));
         }
         //Multithread.
         int THREADGROUPSIZE = 100;

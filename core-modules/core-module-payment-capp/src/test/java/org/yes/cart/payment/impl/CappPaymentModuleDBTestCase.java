@@ -24,7 +24,7 @@ public abstract class CappPaymentModuleDBTestCase extends BasePaymentModuleDBTes
     }
 
     protected CustomerOrderDeliveryDet createDeliveryItem(
-            final String productSkuName, final String skuCode, final BigDecimal price, final BigDecimal qty) {
+            String productSkuName, String skuCode, BigDecimal price, BigDecimal qty) {
         CustomerOrderDeliveryDet deliveryDet = new CustomerOrderDeliveryDetEntity();
         ProductSku sku = new ProductSkuEntity();
         sku.setCode(skuCode);
@@ -44,8 +44,8 @@ public abstract class CappPaymentModuleDBTestCase extends BasePaymentModuleDBTes
         return carrierSla;
     }
 
-    protected CustomerOrderDelivery createDelivery0(final String orderNum) {
-        final CustomerOrderDelivery delivery = new CustomerOrderDeliveryEntity();
+    protected CustomerOrderDelivery createDelivery0(String orderNum) {
+        CustomerOrderDelivery delivery = new CustomerOrderDeliveryEntity();
         delivery.setCarrierSla(createCarrierSla());
         delivery.setPrice(delivery.getCarrierSla().getPrice());
         delivery.setDevileryNum(orderNum + "-0");
@@ -58,8 +58,8 @@ public abstract class CappPaymentModuleDBTestCase extends BasePaymentModuleDBTes
         return delivery;
     }
 
-    protected CustomerOrderDelivery createDelivery1(final String orderNum) {
-        final CustomerOrderDelivery delivery = new CustomerOrderDeliveryEntity();
+    protected CustomerOrderDelivery createDelivery1(String orderNum) {
+        CustomerOrderDelivery delivery = new CustomerOrderDeliveryEntity();
         delivery.setCarrierSla(createCarrierSla());
         delivery.setPrice(delivery.getCarrierSla().getPrice());
         delivery.setDevileryNum(orderNum + "-1");
@@ -82,7 +82,7 @@ public abstract class CappPaymentModuleDBTestCase extends BasePaymentModuleDBTes
     }
 
     protected CustomerOrder createCustomerOrder(String orderNum) {
-        final CustomerOrder customerOrder = new CustomerOrderEntity();
+        CustomerOrder customerOrder = new CustomerOrderEntity();
         customerOrder.setOrderTimestamp(new Date());
         customerOrder.setCurrency("USD");
         customerOrder.setOrdernum(orderNum);

@@ -52,8 +52,8 @@ public class CyberSourcePaymentGatewayImplTest extends CappPaymentModuleDBTestCa
     @Test
     public void testAuthPlusReverseAuthorization() {
         if (isTestAllowed()) {
-            final String orderNum = UUID.randomUUID().toString();
-            final CustomerOrder customerOrder = createCustomerOrder(orderNum);
+            String orderNum = UUID.randomUUID().toString();
+            CustomerOrder customerOrder = createCustomerOrder(orderNum);
             // The whole operation is completed successfully
             assertEquals(Payment.PAYMENT_STATUS_OK,
                     paymentProcessor.authorize(
@@ -87,8 +87,8 @@ public class CyberSourcePaymentGatewayImplTest extends CappPaymentModuleDBTestCa
     @Test
     public void testAuthPlusCapture() {
         if (isTestAllowed()) {
-            final String orderNum = UUID.randomUUID().toString();
-            final CustomerOrder customerOrder = createCustomerOrder(orderNum);
+            String orderNum = UUID.randomUUID().toString();
+            CustomerOrder customerOrder = createCustomerOrder(orderNum);
             // The whole operation is completed successfully
             assertEquals(Payment.PAYMENT_STATUS_OK,
                     paymentProcessor.authorize(
@@ -138,8 +138,8 @@ public class CyberSourcePaymentGatewayImplTest extends CappPaymentModuleDBTestCa
     }
 
     private void orderCancelationFlow(boolean useRefund) {
-        final String orderNum = UUID.randomUUID().toString();
-        final CustomerOrder customerOrder = createCustomerOrder(orderNum);
+        String orderNum = UUID.randomUUID().toString();
+        CustomerOrder customerOrder = createCustomerOrder(orderNum);
         // The whole operation is completed successfully
         assertEquals(Payment.PAYMENT_STATUS_OK,
                 paymentProcessor.authorize(

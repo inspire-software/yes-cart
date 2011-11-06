@@ -66,7 +66,7 @@ public class TestProductServiceImpl extends BaseCoreDBTestCase {
 
     @Test
     public void testGetProductQuantity0() {
-        final ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
+        ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
         Shop shop = shopService.getById(10L);
         assertNotNull(shop);
         Product product = productService.getProductById(10000L);
@@ -80,7 +80,7 @@ public class TestProductServiceImpl extends BaseCoreDBTestCase {
 
     @Test
     public void testGetProductQuantity1() {
-        final ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
+        ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
         Shop shop = shopService.getById(10L);
         assertNotNull(shop);
         BigDecimal qty;
@@ -95,7 +95,7 @@ public class TestProductServiceImpl extends BaseCoreDBTestCase {
 
     @Test
     public void testGetProductQuantity2() {
-        final ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
+        ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
         Shop shop = shopService.getById(10L);
         assertNotNull(shop);
         BigDecimal qty;
@@ -113,7 +113,7 @@ public class TestProductServiceImpl extends BaseCoreDBTestCase {
      */
     @Test
     public void testGetProductQuantityByProdShop0() {
-        final ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
+        ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
         Shop shop = shopService.getById(10L);
         assertNotNull(shop);
         Product product = productService.getProductById(10000L);
@@ -130,7 +130,7 @@ public class TestProductServiceImpl extends BaseCoreDBTestCase {
      */
     @Test
     public void testGetProductQuantityByProdShop1() {
-        final ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
+        ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
         Shop shop = shopService.getById(10L);
         assertNotNull(shop);
         Product product = productService.getProductById(14004L);
@@ -147,7 +147,7 @@ public class TestProductServiceImpl extends BaseCoreDBTestCase {
      */
     @Test
     public void testGetProductQuantityByProdShop2() {
-        final ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
+        ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
         Shop shop = shopService.getById(10L);
         assertNotNull(shop);
         Product product = productService.getProductById(15005L);
@@ -165,7 +165,7 @@ public class TestProductServiceImpl extends BaseCoreDBTestCase {
      */
     @Test
     public void testGetProductQuantityByProdShop3() {
-        final ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
+        ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
         Shop shop = shopService.getById(50L);
         assertNotNull(shop);
         Product product = productService.getProductById(10000L);
@@ -215,9 +215,9 @@ public class TestProductServiceImpl extends BaseCoreDBTestCase {
 
     @Test
     public void testGetRandomProductByCategory() {
-        final CategoryService categoryService = (CategoryService) ctx.getBean(ServiceSpringKeys.CATEGORY_SERVICE);
-        final Category category = categoryService.getById(211L);
-        final Set<Long> list = new HashSet<Long>();
+        CategoryService categoryService = (CategoryService) ctx.getBean(ServiceSpringKeys.CATEGORY_SERVICE);
+        Category category = categoryService.getById(211L);
+        Set<Long> list = new HashSet<Long>();
         for (int i = 0; i < 10; i++) {
             list.add(productService.getRandomProductByCategory(category).getProductId());
         }
@@ -228,8 +228,8 @@ public class TestProductServiceImpl extends BaseCoreDBTestCase {
     @Ignore("java.lang.AssertionError")
     @Test
     public void testGetFeaturedProducts() {
-        final ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
-        final CategoryService categoryService = (CategoryService) ctx.getBean(ServiceSpringKeys.CATEGORY_SERVICE);
+        ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
+        CategoryService categoryService = (CategoryService) ctx.getBean(ServiceSpringKeys.CATEGORY_SERVICE);
         Shop shop = shopService.getById(10L);
         assertNotNull(shop);
         Set<Category> shopCategories = shopService.getShopCategories(shop);

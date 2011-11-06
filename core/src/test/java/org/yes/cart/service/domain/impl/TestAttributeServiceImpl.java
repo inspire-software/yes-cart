@@ -86,7 +86,7 @@ public class TestAttributeServiceImpl extends BaseCoreDBTestCase {
      */
     @Test
     public void testFindAvailableAttributes2() {
-        final List<String> allCodes = Arrays.asList("URI", "CATEGORY_ITEMS_PER_PAGE", "CATEGORY_IMAGE_RETREIVE_STRATEGY");
+        List<String> allCodes = Arrays.asList("URI", "CATEGORY_ITEMS_PER_PAGE", "CATEGORY_IMAGE_RETREIVE_STRATEGY");
         // getByKey all attributes available for category
         List<Attribute> attributes = attributeService.findAvailableAttributes(AttributeGroupNames.CATEGORY, null);
         assertNotNull(attributes);

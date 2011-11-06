@@ -28,8 +28,8 @@ public class PaymentProcessorFactoryImplTest extends BaseCoreDBTestCase {
      */
     @Test
     public void testCreate() {
-        final PaymentProcessor paymentProcessor0 = paymentProcessorFactory.create("testPaymentGatewayLabel");
-        final PaymentProcessor paymentProcessor1 = paymentProcessorFactory.create("testPaymentGatewayLabel");
+        PaymentProcessor paymentProcessor0 = paymentProcessorFactory.create("testPaymentGatewayLabel");
+        PaymentProcessor paymentProcessor1 = paymentProcessorFactory.create("testPaymentGatewayLabel");
         assertNotSame(paymentProcessor0, paymentProcessor1);
     }
 }
