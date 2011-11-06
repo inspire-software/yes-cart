@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class TestUserManagmentServiceImpl extends BaseCoreDBTestCase {
+public class TestUserManagementServiceImpl extends BaseCoreDBTestCase {
 
     private ManagementService managementService;
     private ManagerService managerService;
@@ -31,18 +31,20 @@ public class TestUserManagmentServiceImpl extends BaseCoreDBTestCase {
 
     @Test
     public void testAddUser() throws Exception {
+        int numberOfAllManagers = managementService.getManagers(null, null, null).size();
         managementService.addUser("bender@futurama.com", "Bender", "Rodríguez");
         managementService.addUser("optimus.prime@transformers.com", "Optimus", "Prime");
         managementService.addUser("megatron.beast@transformers.com", "Megatron", "Beast");
-        assertEquals(3, managementService.getManagers(null, null, null).size());
+        assertEquals(3, managementService.getManagers(null, null, null).size() - numberOfAllManagers);
     }
 
     @Test
     public void testDeleteUser() throws Exception {
+        int numberOfAllManagers = managementService.getManagers(null, null, null).size();
         managementService.addUser("bender2@futurama.com", "Bender2", "Rodriguez2");
-        assertEquals(4, managementService.getManagers(null, null, null).size());
+        assertEquals(1, managementService.getManagers(null, null, null).size() - numberOfAllManagers);
         managementService.deleteUser("bender2@futurama.com");
-        assertEquals(3, managementService.getManagers(null, null, null).size());
+        assertEquals(0, managementService.getManagers(null, null, null).size() - numberOfAllManagers);
     }
 
     @Test
