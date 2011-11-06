@@ -17,7 +17,7 @@ import javax.mail.internet.MimeMessage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,33 +39,27 @@ public class MailComposerImplTest {
 
     @Test
     public void testMerge1() throws ClassNotFoundException, IOException {
-        final String template = "$name lives...somewhere in time.";
-        final Map<String, Object> model = new HashMap<String, Object>();
+        String template = "$name lives...somewhere in time.";
+        Map<String, Object> model = new HashMap<String, Object>();
         model.put("name", "Bender");
-        final MailComposerImpl mailComposer = new MailComposerImpl(null, null);
-        final String result = mailComposer.merge(template, model);
+        MailComposerImpl mailComposer = new MailComposerImpl(null, null);
+        String result = mailComposer.merge(template, model);
         assertEquals("Bender lives...somewhere in time.", result);
     }
 
     @Test
     public void testMerge2() throws ClassNotFoundException, IOException {
-        final String template = "$name lives in theme park with <% with.each{ out.print(it + ' ');}%>";
-        final Map<String, Object> model = new HashMap<String, Object>();
-        model.put("name", "Bender");
-        List list = new ArrayList();
-        list.add("blackjack");
-        list.add("poetess");
-        model.put("with", list);
-        final MailComposerImpl mailComposer = new MailComposerImpl(null, null);
-        final String result = mailComposer.merge(template, model);
+        String template = "$name lives in theme park with <% with.each{ out.print(it + ' ');}%>";
+        MailComposerImpl mailComposer = new MailComposerImpl(null, null);
+        String result = mailComposer.merge(template, createModel());
         assertEquals("Bender lives in theme park with blackjack poetess ", result);
     }
 
     @Test
     public void testGetResourcesId() {
-        final MailComposerImpl mailComposer = new MailComposerImpl(null, null);
+        MailComposerImpl mailComposer = new MailComposerImpl(null, null);
         //'cid:identifier1234' "cid:id" 'cid:ident' "cid:identifier5678"
-        final List<String> rez = mailComposer.getResourcesId("'cid:identifier1234' \"cid:id\" 'cid:ident' \"cid:identifier5678\"");
+        List<String> rez = mailComposer.getResourcesId("'cid:identifier1234' \"cid:id\" 'cid:ident' \"cid:identifier5678\"");
         assertEquals(4, rez.size());
         assertEquals("identifier1234", rez.get(0));
         assertEquals("id", rez.get(1));
@@ -83,11 +77,9 @@ public class MailComposerImplTest {
             allowing(shop).getMailFolder();
             will(returnValue("/a/b/c/default/"));
         }});
-        final MailComposerImpl mailComposer = new MailComposerImpl(systemService, shopService);
-        assertEquals(
-                ("/a/b/c/default" + File.separator + "priceReduced" + File.separator).replace("\\", "/"),
-                (mailComposer.getPathToTemplate("SHOIP1", "priceReduced")).replace("\\", "/")
-        );
+        MailComposerImpl mailComposer = new MailComposerImpl(systemService, shopService);
+        assertEquals(("/a/b/c/default" + File.separator + "priceReduced" + File.separator).replace("\\", "/"),
+                (mailComposer.getPathToTemplate("SHOIP1", "priceReduced")).replace("\\", "/"));
     }
 
     @Test
@@ -97,18 +89,12 @@ public class MailComposerImplTest {
         sender.setHost("localhost");
         MimeMessage message = sender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-        final String textTemplate = "$name lives in theme park with <% with.each{ out.print(it + ' ');}%>";
-        final String htmlTemplate = "<h2>$name</h2> lives in theme park with:<br> <% with.each{ out.print(it + '<br>');}%>";
-        final Map<String, Object> model = new HashMap<String, Object>();
-        model.put("name", "Bender");
-        List list = new ArrayList();
-        list.add("blackjack");
-        list.add("poetess");
-        model.put("with", list);
-        final MailComposerImpl mailComposer = new MailComposerImpl(null, null);
-        mailComposer.composeMessage(helper, textTemplate, htmlTemplate, null, model);
+        String textTemplate = "$name lives in theme park with <% with.each{ out.print(it + ' ');}%>";
+        String htmlTemplate = "<h2>$name</h2> lives in theme park with:<br> <% with.each{ out.print(it + '<br>');}%>";
+        MailComposerImpl mailComposer = new MailComposerImpl(null, null);
+        mailComposer.composeMessage(helper, textTemplate, htmlTemplate, null, createModel());
         assertTrue(helper.isMultipart());
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         helper.getMimeMessage().writeTo(byteArrayOutputStream);
         String str = byteArrayOutputStream.toString("UTF-8");
         assertNotNull(str);
@@ -127,18 +113,12 @@ public class MailComposerImplTest {
         sender.setHost("localhost");
         MimeMessage message = sender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-        final String textTemplate = "$name lives in theme park with <% with.each{ out.print(it + ' ');}%>";
-        final String htmlTemplate = null;
-        final Map<String, Object> model = new HashMap<String, Object>();
-        model.put("name", "Bender");
-        List list = new ArrayList();
-        list.add("blackjack");
-        list.add("poetess");
-        model.put("with", list);
-        final MailComposerImpl mailComposer = new MailComposerImpl(null, null);
-        mailComposer.composeMessage(helper, textTemplate, htmlTemplate, null, model);
+        String textTemplate = "$name lives in theme park with <% with.each{ out.print(it + ' ');}%>";
+        String htmlTemplate = null;
+        MailComposerImpl mailComposer = new MailComposerImpl(null, null);
+        mailComposer.composeMessage(helper, textTemplate, htmlTemplate, null, createModel());
         assertTrue(helper.isMultipart());
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         helper.getMimeMessage().writeTo(byteArrayOutputStream);
         String str = byteArrayOutputStream.toString("UTF-8");
         assertNotNull(str);
@@ -156,18 +136,12 @@ public class MailComposerImplTest {
         sender.setHost("localhost");
         MimeMessage message = sender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-        final String textTemplate = null;
-        final String htmlTemplate = "<h2>$name</h2> lives in theme park with:<br> <% with.each{ out.print(it + '<br>');}%>";
-        final Map<String, Object> model = new HashMap<String, Object>();
-        model.put("name", "Bender");
-        List list = new ArrayList();
-        list.add("blackjack");
-        list.add("poetess");
-        model.put("with", list);
-        final MailComposerImpl mailComposer = new MailComposerImpl(null, null);
-        mailComposer.composeMessage(helper, textTemplate, htmlTemplate, null, model);
+        String textTemplate = null;
+        String htmlTemplate = "<h2>$name</h2> lives in theme park with:<br> <% with.each{ out.print(it + '<br>');}%>";
+        MailComposerImpl mailComposer = new MailComposerImpl(null, null);
+        mailComposer.composeMessage(helper, textTemplate, htmlTemplate, null, createModel());
         assertTrue(helper.isMultipart());
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         helper.getMimeMessage().writeTo(byteArrayOutputStream);
         String str = byteArrayOutputStream.toString("UTF-8");
         assertNotNull(str);
@@ -186,13 +160,7 @@ public class MailComposerImplTest {
         sender.setHost("localhost");
         MimeMessage message = sender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-        final Map<String, Object> model = new HashMap<String, Object>();
-        model.put("name", "Bender");
-        List list = new ArrayList();
-        list.add("blackjack");
-        list.add("poetess");
-        model.put("with", list);
-        final MailComposer mailComposer = new MailComposerImpl(systemService, null);
+        MailComposer mailComposer = new MailComposerImpl(systemService, null);
         mailComposer.composeMessage(
                 message,
                 null,
@@ -202,9 +170,9 @@ public class MailComposerImplTest {
                 "to@somedomain.com",
                 "cc@somedomain.com",
                 "bcc@somedomain.com",
-                model);
+                createModel());
         assertTrue(helper.isMultipart());
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         helper.getMimeMessage().writeTo(byteArrayOutputStream);
         String str = byteArrayOutputStream.toString("UTF-8");
         assertNotNull(str);
@@ -215,5 +183,12 @@ public class MailComposerImplTest {
         assertTrue(str.contains("To: to@somedomain.com"));
         assertTrue(str.contains("cc@somedomain.com"));
         assertTrue(str.contains("Bcc: bcc@somedomain.com"));
+    }
+
+    private Map<String, Object> createModel() {
+        Map<String, Object> model = new HashMap<String, Object>();
+        model.put("name", "Bender");
+        model.put("with", Arrays.asList("blackjack", "poetess"));
+        return model;
     }
 }

@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.service.domain.CustomerOrderService;
-import org.yes.cart.service.order.impl.OrderAssemblerImplTest;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 
 import static org.junit.Assert.assertEquals;
@@ -30,9 +29,9 @@ public class CancelOrderEventHandlerImplTest extends AbstractEventHandlerImplTes
     // FIX to allow running from IDE
     @Test
     public void testHandle() {
-        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx);
+        Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        final CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
+        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
         handler.handle(
                 new OrderEventImpl(

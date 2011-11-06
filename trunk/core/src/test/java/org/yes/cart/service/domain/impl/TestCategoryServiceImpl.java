@@ -34,12 +34,12 @@ public class TestCategoryServiceImpl extends BaseCoreDBTestCase {
 
     @Test
     public void testGetByProductId() {
-        final ProductCategoryService productCategoryService = (ProductCategoryService) ctx.getBean(ServiceSpringKeys.PRODUCT_CATEGORY_SERVICE);
-        final EntityFactory entityFactory = productCategoryService.getGenericDao().getEntityFactory();
-        final ProductService productService = (ProductService) ctx.getBean(ServiceSpringKeys.PRODUCT_SERVICE);
-        final ProductTypeService productTypeService = (ProductTypeService) ctx.getBean(ServiceSpringKeys.PRODUCT_TYPE_SERVICE);
-        final BrandService brandService = (BrandService) ctx.getBean(ServiceSpringKeys.BRAND_SERVICE);
-        final AvailabilityService availabilityService = (AvailabilityService) ctx.getBean(ServiceSpringKeys.AVAILABILITY_SERVICE);
+        ProductCategoryService productCategoryService = (ProductCategoryService) ctx.getBean(ServiceSpringKeys.PRODUCT_CATEGORY_SERVICE);
+        EntityFactory entityFactory = productCategoryService.getGenericDao().getEntityFactory();
+        ProductService productService = (ProductService) ctx.getBean(ServiceSpringKeys.PRODUCT_SERVICE);
+        ProductTypeService productTypeService = (ProductTypeService) ctx.getBean(ServiceSpringKeys.PRODUCT_TYPE_SERVICE);
+        BrandService brandService = (BrandService) ctx.getBean(ServiceSpringKeys.BRAND_SERVICE);
+        AvailabilityService availabilityService = (AvailabilityService) ctx.getBean(ServiceSpringKeys.AVAILABILITY_SERVICE);
         Product product = entityFactory.getByIface(Product.class);
         product.setCode("PROD_CODE");
         product.setName("product");
@@ -68,8 +68,8 @@ public class TestCategoryServiceImpl extends BaseCoreDBTestCase {
 
     @Test
     public void testAssignUnassignCategoryToShop() {
-        final ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
-        final EntityFactory entityFactory = shopService.getGenericDao().getEntityFactory();
+        ShopService shopService = (ShopService) ctx.getBean(ServiceSpringKeys.SHOP_SERVICE);
+        EntityFactory entityFactory = shopService.getGenericDao().getEntityFactory();
         Category rootCategory = categoryService.getRootCategory();
         Category category = entityFactory.getByIface(Category.class);
         category.setName("test category");

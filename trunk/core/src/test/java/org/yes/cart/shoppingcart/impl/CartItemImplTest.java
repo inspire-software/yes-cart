@@ -20,9 +20,9 @@ public class CartItemImplTest {
 
     @Test
     public void testGetQuantityPreventsModificationsToQuantity() {
-        final BigDecimal original = BigDecimal.TEN;
+        BigDecimal original = BigDecimal.TEN;
         item.setQuantity(original);
-        final BigDecimal read = item.getQty();
+        BigDecimal read = item.getQty();
         assertNotSame("must be different big decimal instances to prevent modifications", original, read);
         assertTrue("must be of equal value", MoneyUtils.isFirstEqualToSecond(original, read));
     }
@@ -47,40 +47,40 @@ public class CartItemImplTest {
 
     @Test
     public void testAddQuantityNullSafe() {
-        final BigDecimal original = item.getQty();
-        final BigDecimal newValue = item.addQuantity(null);
+        BigDecimal original = item.getQty();
+        BigDecimal newValue = item.addQuantity(null);
         assertTrue("must be of equal value to original when null is added", MoneyUtils.isFirstEqualToSecond(original, newValue));
         assertTrue("must be of equal value to original when null is added", MoneyUtils.isFirstEqualToSecond(original, item.getQty()));
     }
 
     @Test
     public void testAddQuantityNegativeSafe() {
-        final BigDecimal original = item.getQty();
-        final BigDecimal newValue = item.addQuantity(BigDecimal.ZERO.subtract(BigDecimal.TEN));
+        BigDecimal original = item.getQty();
+        BigDecimal newValue = item.addQuantity(BigDecimal.ZERO.subtract(BigDecimal.TEN));
         assertTrue("must be of equal value to original when negative is added", MoneyUtils.isFirstEqualToSecond(original, newValue));
         assertTrue("must be of equal value to original when negative is added", MoneyUtils.isFirstEqualToSecond(newValue, item.getQty()));
     }
 
     @Test
     public void testAddQuantity() {
-        final BigDecimal original = item.getQty();
-        final BigDecimal newValue = item.addQuantity(BigDecimal.TEN);
+        BigDecimal original = item.getQty();
+        BigDecimal newValue = item.addQuantity(BigDecimal.TEN);
         assertTrue("must add value correctly", MoneyUtils.isFirstEqualToSecond(original.add(BigDecimal.TEN), newValue));
         assertTrue("must add value correctly", MoneyUtils.isFirstEqualToSecond(newValue, item.getQty()));
     }
 
     @Test
     public void testRemoveQuantityNullSafe() throws CartItemRequiresDeletion {
-        final BigDecimal original = item.getQty();
-        final BigDecimal newValue = item.removeQuantity(null);
+        BigDecimal original = item.getQty();
+        BigDecimal newValue = item.removeQuantity(null);
         assertTrue("must be of equal value to original when null is removed", MoneyUtils.isFirstEqualToSecond(original, newValue));
         assertTrue("must be of equal value to original when null is removed", MoneyUtils.isFirstEqualToSecond(original, item.getQty()));
     }
 
     @Test
     public void testRemoveQuantityNegativeSafe() throws CartItemRequiresDeletion {
-        final BigDecimal original = item.getQty();
-        final BigDecimal newValue = item.removeQuantity(BigDecimal.ZERO.subtract(BigDecimal.ONE));
+        BigDecimal original = item.getQty();
+        BigDecimal newValue = item.removeQuantity(BigDecimal.ZERO.subtract(BigDecimal.ONE));
         assertTrue("must be of equal value to original when negative is removed", MoneyUtils.isFirstEqualToSecond(original, newValue));
         assertTrue("must be of equal value to original when negative is removed", MoneyUtils.isFirstEqualToSecond(newValue, item.getQty()));
     }
@@ -92,8 +92,8 @@ public class CartItemImplTest {
 
     @Test
     public void testRemoveQuantity() throws CartItemRequiresDeletion {
-        final BigDecimal original = item.addQuantity(new BigDecimal(100));
-        final BigDecimal newValue = item.removeQuantity(BigDecimal.TEN);
+        BigDecimal original = item.addQuantity(new BigDecimal(100));
+        BigDecimal newValue = item.removeQuantity(BigDecimal.TEN);
         assertFalse("must be of equal value to original when negative is removed", MoneyUtils.isFirstEqualToSecond(original, newValue));
         assertTrue("must be of equal value to original when negative is removed", MoneyUtils.isFirstEqualToSecond(newValue, item.getQty()));
         assertTrue("must be of equal value to original when negative is removed", MoneyUtils.isFirstEqualToSecond(newValue, new BigDecimal(91)));

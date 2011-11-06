@@ -10,7 +10,6 @@ import org.yes.cart.payment.impl.TestExtFormPaymentGatewayImpl;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderAssembler;
 import org.yes.cart.service.order.impl.DeliveryAssemblerImpl;
-import org.yes.cart.service.order.impl.OrderAssemblerImplTest;
 import org.yes.cart.service.payment.PaymentCallBackHandlerFacade;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
@@ -40,8 +39,8 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testHandlePaymentCallback() {
-        Customer customer = OrderAssemblerImplTest.createCustomer(ctx, "testHandlePaymentCallback");
-        ShoppingCart shoppingCart = OrderAssemblerImplTest.getShoppingCart(ctx, customer.getEmail());
+        Customer customer = createCustomer();
+        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail());
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, true);
         customerOrder.setPgLabel("testExtFormPaymentGatewayLabel");
@@ -51,7 +50,7 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
                 customerOrder.getOrderStatus());
         final String ordGuid = customerOrder.getCartGuid();
         paymentCallBackHandlerFacade.handlePaymentCallback(
-                new HashMap() {{
+                new HashMap<String, String>() {{
                     put(TestExtFormPaymentGatewayImpl.ORDER_GUID_PARAM_KEY, ordGuid);
                     put(TestExtFormPaymentGatewayImpl.RESPONCE_CODE_PARAM_KEY, "1"); // 1 - means ok 
                 }},

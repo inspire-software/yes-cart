@@ -25,6 +25,7 @@ public class DtoCategoryServiceImplTest extends BaseCoreDBTestCase {
     private DtoFactory dtoFactory;
     private DtoCategoryService dtoService;
     private DtoAttributeService dtoAttrService;
+    public static final int QTY = 3;
 
     @Before
     public void setUp() throws Exception {
@@ -144,17 +145,16 @@ public class DtoCategoryServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testDeleteAttributeValue() throws Exception {
-        final int qty = 3;
         List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(100L);
-        assertEquals(qty, list.size());
-        for (int i = 0; i < qty; i++) {
+        assertEquals(QTY, list.size());
+        for (int i = 0; i < QTY; i++) {
             AttrValueDTO dto = list.get(i);
             if (dto.getVal() != null) {
                 dtoService.deleteAttributeValue(dto.getAttrvalueId());
             }
         }
         list = dtoService.getEntityAttributes(100L);
-        assertEquals(qty, list.size());
+        assertEquals(QTY, list.size());
         for (AttrValueDTO dto : list) {
             assertNull(dto.getVal());
         }
@@ -162,17 +162,16 @@ public class DtoCategoryServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testCreateEntityAttributeValue() throws Exception {
-        final int qty = 3;
         List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(100L);
         assertEquals(3, list.size());
-        for (int i = 0; i < qty; i++) {
+        for (int i = 0; i < QTY; i++) {
             AttrValueDTO dto = list.get(i);
             if (dto.getVal() != null) {
                 dtoService.deleteAttributeValue(dto.getAttrvalueId());
             }
         }
         list = dtoService.getEntityAttributes(100L);
-        assertEquals(qty, list.size());
+        assertEquals(QTY, list.size());
         for (AttrValueDTO dto : list) {
             assertNull(dto.getVal());
         }
@@ -187,7 +186,7 @@ public class DtoCategoryServiceImplTest extends BaseCoreDBTestCase {
         attrValueCategory.setCategoryId(100L);
         dtoService.createEntityAttributeValue(attrValueCategory);
         list = dtoService.getEntityAttributes(100L);
-        assertEquals(qty, list.size());
+        assertEquals(QTY, list.size());
         for (AttrValueDTO dto : list) {
             if (dto.getAttributeDTO().getCode().equals("CATEGORY_ITEMS_PER_PAGE")) {
                 assertEquals("1,2,3", dto.getVal());

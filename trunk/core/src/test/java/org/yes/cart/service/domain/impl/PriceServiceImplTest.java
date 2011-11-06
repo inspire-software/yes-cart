@@ -45,11 +45,10 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testGetPriceNavigationRecords() {
         Shop shop = shopService.getShopByDomainName("www.gadget.npa.com");
-
         GenericDAO<Category, Long> categoryDAO = (GenericDAO<Category, Long>) ctx.getBean(DaoServiceBeanKeys.CATEGORY_DAO);
         Category cat = categoryDAO.findById(129L); // this category hold navigation by price tiers
         assertNotNull(cat);
-        final PriceTierTree priceTierTree = cat.getNavigationByPriceTree();
+        PriceTierTree priceTierTree = cat.getNavigationByPriceTree();
         assertNotNull(priceTierTree);
         List<FiteredNavigationRecord> navigationRecords = priceService.getPriceNavigationRecords(priceTierTree, "EUR", shop);
         assertNotNull(navigationRecords);

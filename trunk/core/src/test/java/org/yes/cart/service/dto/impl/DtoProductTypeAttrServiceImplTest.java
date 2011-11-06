@@ -25,6 +25,7 @@ public class DtoProductTypeAttrServiceImplTest extends BaseCoreDBTestCase {
     private DtoProductTypeService dtoProductTypeService;
     private DtoAttributeService dtoAttributeService;
     private DtoFactory dtoFactory;
+    public static final String RANGE_NAV = "<rangeList serialization=\"custom\"><unserializable-parents/><list><default><size>10</size></default><int>10</int><range><range><first class=\"string\">0.10</first><second class=\"string\">1.00</second></range></range><range><range><first class=\"string\">1.00</first><second class=\"string\">2.00</second></range></range><range><range><first class=\"string\">2.00</first><second class=\"string\">3.00</second></range></range><range><range><first class=\"string\">3.00</first><second class=\"string\">4.00</second></range></range><range><range><first class=\"string\">4.00</first><second class=\"string\">5.00</second></range></range><range><range><first class=\"string\">5.00</first><second class=\"string\">6.00</second></range></range><range><range><first class=\"string\">6.00</first><second class=\"string\">7.00</second></range></range><range><range><first class=\"string\">7.00</first><second class=\"string\">8.00</second></range></range><range><range><first class=\"string\">8.00</first><second class=\"string\">10.00</second></range></range><range><range><first class=\"string\">10.00</first><second class=\"string\">20.00</second></range></range></list></rangeList>";
 
     @Before
     public void setUp() throws Exception {
@@ -43,14 +44,13 @@ public class DtoProductTypeAttrServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testUpdate() throws Exception {
-        final String rangeNav = "<rangeList serialization=\"custom\"><unserializable-parents/><list><default><size>10</size></default><int>10</int><range><range><first class=\"string\">0.10</first><second class=\"string\">1.00</second></range></range><range><range><first class=\"string\">1.00</first><second class=\"string\">2.00</second></range></range><range><range><first class=\"string\">2.00</first><second class=\"string\">3.00</second></range></range><range><range><first class=\"string\">3.00</first><second class=\"string\">4.00</second></range></range><range><range><first class=\"string\">4.00</first><second class=\"string\">5.00</second></range></range><range><range><first class=\"string\">5.00</first><second class=\"string\">6.00</second></range></range><range><range><first class=\"string\">6.00</first><second class=\"string\">7.00</second></range></range><range><range><first class=\"string\">7.00</first><second class=\"string\">8.00</second></range></range><range><range><first class=\"string\">8.00</first><second class=\"string\">10.00</second></range></range><range><range><first class=\"string\">10.00</first><second class=\"string\">20.00</second></range></range></list></rangeList>";
         ProductTypeAttrDTO dtoProductTypeAttr = getDto();
         dtoProductTypeAttr = dtoService.create(dtoProductTypeAttr);
         assertTrue(dtoProductTypeAttr.getProductTypeAttrId() > 0);
         dtoProductTypeAttr.setNavigation(true);
         dtoProductTypeAttr.setNavigationType("R");
         dtoProductTypeAttr.setProducttypeId(1L);
-        dtoProductTypeAttr.setRangeNavigation(rangeNav);
+        dtoProductTypeAttr.setRangeNavigation(RANGE_NAV);
         dtoProductTypeAttr.setSimulariry(true);
         dtoProductTypeAttr.setVisible(true);
         dtoProductTypeAttr = dtoService.update(dtoProductTypeAttr);
@@ -59,7 +59,7 @@ public class DtoProductTypeAttrServiceImplTest extends BaseCoreDBTestCase {
         assertTrue(dtoProductTypeAttr.isVisible());
         assertEquals("R", dtoProductTypeAttr.getNavigationType());
         assertEquals(1, dtoProductTypeAttr.getProducttypeId());
-        assertEquals(rangeNav, dtoProductTypeAttr.getRangeNavigation());
+        assertEquals(RANGE_NAV, dtoProductTypeAttr.getRangeNavigation());
     }
 
     private ProductTypeAttrDTO getDto() throws Exception {
@@ -67,7 +67,7 @@ public class DtoProductTypeAttrServiceImplTest extends BaseCoreDBTestCase {
         dtoProductTypeAttr.setAttributeDTO(dtoAttributeService.getById(7000L));
         dtoProductTypeAttr.setNavigation(false);
         dtoProductTypeAttr.setNavigationType("S");
-        final ProductTypeDTO productTypeDTO = dtoProductTypeService.getById(1L);
+        ProductTypeDTO productTypeDTO = dtoProductTypeService.getById(1L);
         dtoProductTypeAttr.setProducttypeId(productTypeDTO.getProducttypeId());
         dtoProductTypeAttr.setRangeNavigation(null);
         dtoProductTypeAttr.setSimulariry(false);

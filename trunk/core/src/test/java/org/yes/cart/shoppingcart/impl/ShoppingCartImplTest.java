@@ -20,15 +20,15 @@ public class ShoppingCartImplTest {
 
     @Test
     public void testIndexOfSkuInexistent() {
-        final ProductSkuDTO sku = getProductSkuDTO("sku");
+        ProductSkuDTO sku = getProductSkuDTO("sku");
         assertEquals("Size should be 0", 0, cart.getCartItemsCount());
         assertEquals("Index must be -1 for inexistent sku", -1, cart.indexOf(sku));
     }
 
     @Test
     public void testAddProductSkuDTOToCartInexistent() {
-        final ProductSkuDTO sku = getProductSkuDTO("sku");
-        final boolean newItem = cart.addProductSkuToCart(sku, BigDecimal.TEN);
+        ProductSkuDTO sku = getProductSkuDTO("sku");
+        boolean newItem = cart.addProductSkuToCart(sku, BigDecimal.TEN);
         assertTrue("Must create new item", newItem);
         assertEquals("Size should be 10", 10, cart.getCartItemsCount());
         assertEquals("Index must be 0 for sku01", 0, cart.indexOf(sku));
@@ -38,9 +38,9 @@ public class ShoppingCartImplTest {
 
     @Test
     public void testAddProductSkuDTOToCartExistent() {
-        final ProductSkuDTO sku = getProductSkuDTO("sku");
-        final boolean newItem1 = cart.addProductSkuToCart(sku, BigDecimal.TEN);
-        final boolean newItem2 = cart.addProductSkuToCart(sku, BigDecimal.TEN);
+        ProductSkuDTO sku = getProductSkuDTO("sku");
+        boolean newItem1 = cart.addProductSkuToCart(sku, BigDecimal.TEN);
+        boolean newItem2 = cart.addProductSkuToCart(sku, BigDecimal.TEN);
         assertTrue("Must create new item", newItem1);
         assertFalse("Must not create new item", newItem2);
         assertEquals("Size should be 20", 20, cart.getCartItemsCount());
@@ -51,11 +51,11 @@ public class ShoppingCartImplTest {
 
     @Test
     public void testAddProductSkuToCartExistentAndInexistent() {
-        final ProductSkuDTO sku = getProductSkuDTO("sku01");
-        final ProductSkuDTO sku2 = getProductSkuDTO("sku02");
-        final boolean newItem1 = cart.addProductSkuToCart(sku, BigDecimal.TEN);
-        final boolean newItem2 = cart.addProductSkuToCart(sku, BigDecimal.TEN);
-        final boolean newItem3 = cart.addProductSkuToCart(sku2, BigDecimal.TEN);
+        ProductSkuDTO sku = getProductSkuDTO("sku01");
+        ProductSkuDTO sku2 = getProductSkuDTO("sku02");
+        boolean newItem1 = cart.addProductSkuToCart(sku, BigDecimal.TEN);
+        boolean newItem2 = cart.addProductSkuToCart(sku, BigDecimal.TEN);
+        boolean newItem3 = cart.addProductSkuToCart(sku2, BigDecimal.TEN);
         assertTrue("Must create new item", newItem1);
         assertFalse("Must not create new item", newItem2);
         assertTrue("Must create new item", newItem3);
@@ -69,25 +69,25 @@ public class ShoppingCartImplTest {
 
     @Test
     public void testRemoveCartItemInexistent() {
-        final ProductSkuDTO sku = getProductSkuDTO("sku01");
-        final ProductSkuDTO sku2 = getProductSkuDTO("sku02");
-        final ProductSkuDTO sku3 = getProductSkuDTO("sku03");
+        ProductSkuDTO sku = getProductSkuDTO("sku01");
+        ProductSkuDTO sku2 = getProductSkuDTO("sku02");
+        ProductSkuDTO sku3 = getProductSkuDTO("sku03");
         cart.addProductSkuToCart(sku, BigDecimal.TEN);
         cart.addProductSkuToCart(sku, BigDecimal.TEN);
         cart.addProductSkuToCart(sku2, BigDecimal.TEN);
-        final boolean removed = cart.removeCartItem(sku3);
+        boolean removed = cart.removeCartItem(sku3);
         assertFalse("Must not be removed", removed);
         assertEquals("Size should be 30", 30, cart.getCartItemsCount());
     }
 
     @Test
     public void testRemoveCartItemExistent() {
-        final ProductSkuDTO sku = getProductSkuDTO("sku01");
-        final ProductSkuDTO sku2 = getProductSkuDTO("sku02");
+        ProductSkuDTO sku = getProductSkuDTO("sku01");
+        ProductSkuDTO sku2 = getProductSkuDTO("sku02");
         cart.addProductSkuToCart(sku, BigDecimal.TEN);
         cart.addProductSkuToCart(sku, BigDecimal.TEN);
         cart.addProductSkuToCart(sku2, BigDecimal.TEN);
-        final boolean removed = cart.removeCartItem(sku2);
+        boolean removed = cart.removeCartItem(sku2);
         assertTrue("Must be removed", removed);
         assertEquals("Size should be 20", 20, cart.getCartItemsCount());
         assertEquals("Index of removed should be -1", -1, cart.indexOf(sku2));
@@ -95,26 +95,26 @@ public class ShoppingCartImplTest {
 
     @Test
     public void testRemoveCartItemQuantityInexistent() {
-        final ProductSkuDTO sku = getProductSkuDTO("sku01");
-        final ProductSkuDTO sku2 = getProductSkuDTO("sku02");
-        final ProductSkuDTO sku3 = getProductSkuDTO("sku03");
+        ProductSkuDTO sku = getProductSkuDTO("sku01");
+        ProductSkuDTO sku2 = getProductSkuDTO("sku02");
+        ProductSkuDTO sku3 = getProductSkuDTO("sku03");
 
         cart.addProductSkuToCart(sku, BigDecimal.TEN);
         cart.addProductSkuToCart(sku, BigDecimal.TEN);
         cart.addProductSkuToCart(sku2, BigDecimal.TEN);
-        final boolean removed = cart.removeCartItemQuantity(sku3, BigDecimal.TEN);
+        boolean removed = cart.removeCartItemQuantity(sku3, BigDecimal.TEN);
         assertFalse("Must not be removed", removed);
         assertEquals("Size should be 30", 30, cart.getCartItemsCount());
     }
 
     @Test
     public void testRemoveCartItemQuantityExistent() {
-        final ProductSkuDTO sku = getProductSkuDTO("sku01");
-        final ProductSkuDTO sku2 = getProductSkuDTO("sku02");
+        ProductSkuDTO sku = getProductSkuDTO("sku01");
+        ProductSkuDTO sku2 = getProductSkuDTO("sku02");
         cart.addProductSkuToCart(sku, BigDecimal.TEN);
         cart.addProductSkuToCart(sku, BigDecimal.TEN);
         cart.addProductSkuToCart(sku2, BigDecimal.TEN);
-        final boolean removed = cart.removeCartItemQuantity(sku2, BigDecimal.ONE);
+        boolean removed = cart.removeCartItemQuantity(sku2, BigDecimal.ONE);
         assertTrue("Must be removed", removed);
         assertEquals("Size should be 29", 29, cart.getCartItemsCount());
         assertEquals("Index of removed should be 1", 1, cart.indexOf(sku2));
@@ -123,12 +123,12 @@ public class ShoppingCartImplTest {
 
     @Test
     public void testRemoveCartItemQuantityExistentFull() {
-        final ProductSkuDTO sku = getProductSkuDTO("sku01");
-        final ProductSkuDTO sku2 = getProductSkuDTO("sku02");
+        ProductSkuDTO sku = getProductSkuDTO("sku01");
+        ProductSkuDTO sku2 = getProductSkuDTO("sku02");
         cart.addProductSkuToCart(sku, BigDecimal.TEN);
         cart.addProductSkuToCart(sku, BigDecimal.TEN);
         cart.addProductSkuToCart(sku2, BigDecimal.TEN);
-        final boolean removed = cart.removeCartItemQuantity(sku2, BigDecimal.TEN);
+        boolean removed = cart.removeCartItemQuantity(sku2, BigDecimal.TEN);
         assertTrue("Must be removed", removed);
         assertEquals("Size should be 20", 20, cart.getCartItemsCount());
         assertEquals("Index of removed should be -1", -1, cart.indexOf(sku2));
@@ -136,19 +136,19 @@ public class ShoppingCartImplTest {
 
     @Test
     public void testRemoveCartItemQuantityExistentMoreThanInCart() {
-        final ProductSkuDTO sku = getProductSkuDTO("sku01");
-        final ProductSkuDTO sku2 = getProductSkuDTO("sku02");
+        ProductSkuDTO sku = getProductSkuDTO("sku01");
+        ProductSkuDTO sku2 = getProductSkuDTO("sku02");
         cart.addProductSkuToCart(sku, BigDecimal.TEN);
         cart.addProductSkuToCart(sku, BigDecimal.TEN);
         cart.addProductSkuToCart(sku2, BigDecimal.TEN);
-        final boolean removed = cart.removeCartItemQuantity(sku2, new BigDecimal(100));
+        boolean removed = cart.removeCartItemQuantity(sku2, new BigDecimal(100));
         assertTrue("Must be removed", removed);
         assertEquals("Size should be 20", 20, cart.getCartItemsCount());
         assertEquals("Index of removed should be -1", -1, cart.indexOf(sku2));
     }
 
-    private ProductSkuDTO getProductSkuDTO(final String skuCode) {
-        final ProductSkuDTO productSkuDTO = new ProductSkuDTOImpl();
+    private ProductSkuDTO getProductSkuDTO(String skuCode) {
+        ProductSkuDTO productSkuDTO = new ProductSkuDTOImpl();
         productSkuDTO.setCode(skuCode);
         return productSkuDTO;
     }

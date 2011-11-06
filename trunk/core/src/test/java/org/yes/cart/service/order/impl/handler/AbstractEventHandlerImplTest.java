@@ -5,9 +5,10 @@ import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.impl.*;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import static java.util.Collections.singletonMap;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -23,7 +24,7 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
      * @return cart
      */
     protected ShoppingCart getStdCard(final ApplicationContext context, final String customerEmail) {
-        ShoppingCart shoppingCart = getEmptyCart(context, customerEmail);
+        ShoppingCart shoppingCart = getEmptyCart(customerEmail);
         Map<String, String> param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST1");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "2.00");
@@ -37,18 +38,18 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
         return shoppingCart;
     }
 
-    protected ShoppingCart getEmptyCart(final ApplicationContext context, final String customerEmail) {
+    protected ShoppingCart getEmptyCart(final String customerEmail) {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
         Map<String, String> params = new HashMap<String, String>();
         params.put(LoginCommandImpl.EMAIL, customerEmail);
         params.put(LoginCommandImpl.NAME, "John Doe");
-        new SetShopCartCommandImpl(ctx, Collections.singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
+        new SetShopCartCommandImpl(ctx, singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
                 .execute(shoppingCart);
-        new ChangeCurrencyEventCommandImpl(context, Collections.singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "USD"))
+        new ChangeCurrencyEventCommandImpl(ctx, singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "USD"))
                 .execute(shoppingCart);
         new LoginCommandImpl(null, params)
                 .execute(shoppingCart);
-        new SetCarrierSlaCartCommandImpl(null, Collections.singletonMap(SetCarrierSlaCartCommandImpl.CMD_KEY, "1"))
+        new SetCarrierSlaCartCommandImpl(null, singletonMap(SetCarrierSlaCartCommandImpl.CMD_KEY, "1"))
                 .execute(shoppingCart);
         return shoppingCart;
     }

@@ -13,7 +13,6 @@ import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
-import org.yes.cart.service.order.impl.OrderAssemblerImplTest;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 
 import java.math.BigDecimal;
@@ -48,9 +47,9 @@ public class ShipmentCompleteOrderEventHandlerImplTest extends AbstractEventHand
 
     @Test
     public void testHandle() throws Exception {
-        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx);
+        Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        final CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
+        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
         customerOrder.setPgLabel("testPaymentGatewayLabel");
         orderService.update(customerOrder);

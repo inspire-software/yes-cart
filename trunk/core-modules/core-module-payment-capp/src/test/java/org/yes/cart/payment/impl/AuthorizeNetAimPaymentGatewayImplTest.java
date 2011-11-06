@@ -50,8 +50,8 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends CappPaymentModuleDBTe
     @Test
     public void testAuthPlusReverseAuthorization() {
         if (isTestAllowed()) {
-            final String orderNum = UUID.randomUUID().toString();
-            final CustomerOrder customerOrder = createCustomerOrder(orderNum);
+            String orderNum = UUID.randomUUID().toString();
+            CustomerOrder customerOrder = createCustomerOrder(orderNum);
             // The whole operation is completed successfully
             assertEquals(Payment.PAYMENT_STATUS_OK,
                     paymentProcessor.authorize(
@@ -85,8 +85,8 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends CappPaymentModuleDBTe
     @Test
     public void testAuthPlusCapture() {
         if (isTestAllowed()) {
-            final String orderNum = UUID.randomUUID().toString();
-            final CustomerOrder customerOrder = createCustomerOrder(orderNum);
+            String orderNum = UUID.randomUUID().toString();
+            CustomerOrder customerOrder = createCustomerOrder(orderNum);
             // The whole operation is completed successfully
             assertEquals(Payment.PAYMENT_STATUS_OK,
                     paymentProcessor.authorize(
@@ -140,8 +140,8 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends CappPaymentModuleDBTe
    } */
 
     private void orderCancelationFlow(boolean useRefund) {
-        final String orderNum = UUID.randomUUID().toString();
-        final CustomerOrder customerOrder = createCustomerOrder(orderNum);
+        String orderNum = UUID.randomUUID().toString();
+        CustomerOrder customerOrder = createCustomerOrder(orderNum);
         // The whole operation is completed successfully
         assertEquals(Payment.PAYMENT_STATUS_OK,
                 paymentProcessor.authorize(
@@ -191,8 +191,8 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends CappPaymentModuleDBTe
     @Test
     public void testAuthCapture() {
         if (isTestAllowed()) {
-            final String orderNum = UUID.randomUUID().toString();
-            final CustomerOrder customerOrder = createCustomerOrder(orderNum);
+            String orderNum = UUID.randomUUID().toString();
+            CustomerOrder customerOrder = createCustomerOrder(orderNum);
             // The whole operation is completed successfully
             assertEquals(Payment.PAYMENT_STATUS_OK,
                     paymentProcessor.authorizeCapture(

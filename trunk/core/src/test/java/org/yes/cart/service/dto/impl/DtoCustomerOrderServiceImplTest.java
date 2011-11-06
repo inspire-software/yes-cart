@@ -4,17 +4,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.dto.CustomerOrderDTO;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.service.domain.CustomerOrderService;
-import org.yes.cart.service.domain.impl.TestCustomerOrderServiceImpl;
 import org.yes.cart.service.dto.DtoCustomerOrderService;
-import org.yes.cart.service.order.impl.OrderAssemblerImplTest;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -39,10 +37,9 @@ public class DtoCustomerOrderServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testUpdate() throws Exception {
-        String customerPrefix = "testUpdate";
-        Customer customer = OrderAssemblerImplTest.createCustomer(ctx, customerPrefix);
+        Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        final ShoppingCart shoppingCart = TestCustomerOrderServiceImpl.getShoppingCart(ctx, customerPrefix);
+        ShoppingCart shoppingCart = getShoppingCart();
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
         long pk = order.getCustomerorderId();
         assertNotNull(dtoService.getById(pk));

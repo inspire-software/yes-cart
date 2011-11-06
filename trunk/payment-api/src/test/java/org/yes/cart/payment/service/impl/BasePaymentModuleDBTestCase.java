@@ -66,12 +66,12 @@ public abstract class BasePaymentModuleDBTestCase {
         return new FlatXmlDataSet(getClass().getClassLoader().getResourceAsStream("payinitialdata.xml"), false);
     }
 
-    protected void dumpDataBase(final String prefix, final String[] tables) throws Exception {
+    protected void dumpDataBase(String prefix, String[] tables) throws Exception {
         QueryDataSet queryDataSet = new QueryDataSet(dbTester.getConnection());
         for (String tableName : tables) {
             queryDataSet.addTable(tableName);
         }
         FlatXmlDataSet.write(queryDataSet,
-                new FileOutputStream("target/test-classes/" + this.getClass().getName() + "_" + prefix + "_dataset.xml"));
+                new FileOutputStream("target/test-classes/" + prefix + "_dataset.xml"));
     }
 }

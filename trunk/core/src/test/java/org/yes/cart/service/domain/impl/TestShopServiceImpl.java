@@ -36,8 +36,8 @@ public class TestShopServiceImpl extends BaseCoreDBTestCase {
     // TODO fix to not depend on order or running
     @Test
     public void testGetAllCategoriesTestOnShopWithoutAssignedCategories() {
-        final Shop shop = shopService.getShopByDomainName("eddie.lives.somewhere.in.time");
-        final Set<Category> categorySet = shopService.getShopCategories(shop);
+        Shop shop = shopService.getShopByDomainName("eddie.lives.somewhere.in.time");
+        Set<Category> categorySet = shopService.getShopCategories(shop);
         assertTrue(categorySet.isEmpty());
     }
 
@@ -46,10 +46,10 @@ public class TestShopServiceImpl extends BaseCoreDBTestCase {
      */
     @Test
     public void testGetAllCategoriesTestOnShopWithLimitedAssignedCategories() {
-        final List<Long> categories = Arrays.asList(200L, 203L, 204L, 205L, 206L, 207L, 208L);
-        final List<Long> notAvailableCategories = Arrays.asList(201L, 202L);
-        final Shop shop = shopService.getShopByDomainName("long.live.robots");
-        final Set<Category> categorySet = shopService.getShopCategories(shop);
+        List<Long> categories = Arrays.asList(200L, 203L, 204L, 205L, 206L, 207L, 208L);
+        List<Long> notAvailableCategories = Arrays.asList(201L, 202L);
+        Shop shop = shopService.getShopByDomainName("long.live.robots");
+        Set<Category> categorySet = shopService.getShopCategories(shop);
         assertFalse(categorySet.isEmpty());
         assertEquals(categories.size(), categorySet.size());
         for (Category category : categorySet) {

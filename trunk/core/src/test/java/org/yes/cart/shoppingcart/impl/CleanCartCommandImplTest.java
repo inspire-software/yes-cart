@@ -20,7 +20,7 @@ public class CleanCartCommandImplTest {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
         shoppingCart.addProductSkuToCart(new ProductSkuDTOImpl(), BigDecimal.ONE);
         shoppingCart.getOrderInfo().setOrderMessage("hi im cart");
-        final String oldGuid = shoppingCart.getGuid();
+        String oldGuid = shoppingCart.getGuid();
         new CleanCartCommandImpl(null, null)
                 .execute(shoppingCart);
         assertNull(shoppingCart.getOrderMessage());

@@ -14,7 +14,6 @@ import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
-import org.yes.cart.service.order.impl.OrderAssemblerImplTest;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 
 import java.math.BigDecimal;
@@ -53,9 +52,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
      */
     @Test
     public void testHandle0_0() throws Exception {
-        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx);
+        Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        final CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
+        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
         customerOrder.setPgLabel("courierPaymentGatewayLabel");
         orderService.update(customerOrder);
@@ -100,9 +99,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
      */
     @Test
     public void testHandle0_1() throws Exception {
-        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx);
+        Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        final CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
+        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
         customerOrder.setPgLabel("testPaymentGatewayLabel");
         orderService.update(customerOrder);
@@ -147,9 +146,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
     @Test
     public void testHandle1_1() throws Exception {
         TestPaymentGatewayImpl.getGatewayConfig().put(TestPaymentGatewayImpl.AUTH_FAIL, new PaymentGatewayParameterEntity());
-        final Customer customer = OrderAssemblerImplTest.createCustomer(ctx);
+        Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        final CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
+        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx, customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
         customerOrder.setPgLabel("testPaymentGatewayLabel");
         orderService.update(customerOrder);
@@ -184,7 +183,6 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         for (CustomerOrderDelivery delivery : customerOrder.getDelivery()) {
             assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_VOID_RESERVATION,
                     delivery.getDeliveryStatus());
-
         }
         List<CustomerOrderPayment> rezList = customerOrderPaymentService.findBy(customerOrder.getOrdernum(), null, null, null);
         assertEquals(1, rezList.size());
