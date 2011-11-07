@@ -55,8 +55,7 @@
         <exec-mvn arg="clean install"/>
     </target>
 
-    <target name="setup" depends="init"
-            description="'Setup development environment'">
+    <target name="setup" depends="init" description="'Setup development environment'">
         <exec-mvn dir="./util/lib3rdparty/authozize.net"
                   arg="install:install-file -DgroupId=net.authorize -DartifactId=authorize-client -Dversion=1.4.2 -Dpackaging=jar -Dfile=anet-java-sdk-1.4.2.jar"/>
         <exec-mvn dir="./util/lib3rdparty/cybersource"
@@ -78,17 +77,17 @@
     </target>
 
     <target name="help" depends="init">
-        <echo message="List of available operations:"/>
+        <echo message="List of available targets:"/>
         <exec-ant arg="-p"/>
     </target>
 
     <target name="init">
+        <echo message="user.name     : ${user.name}"/>
+        <echo message="user.home     : ${user.home}"/>
         <echo message="env.ANT_HOME  : ${env.ANT_HOME}"/>
         <echo message="env.FLEX_HOME : ${env.FLEX_HOME}"/>
         <echo message="env.JAVA_HOME : ${env.JAVA_HOME}"/>
         <echo message="env.M2_HOME   : ${env.M2_HOME}"/>
-        <echo message="user.name     : ${user.name}"/>
-        <echo message="user.home     : ${user.home}"/>
     </target>
 
 </project>
