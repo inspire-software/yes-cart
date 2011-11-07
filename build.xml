@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="yes-cart" default="help" basedir=".">
+
+    <property environment="env"/>
+
+    <taskdef resource="net/sf/antcontrib/antlib.xml"/>
+
+    <macrodef name="exec-mvn">
+        <attribute name="dir" default="."/>
+        <attribute name="arg"/>
+        <sequential>
+            <echo message="Running Maven with [-B @{arg}] in [@dir] ..."/>
+            <if>
+                <os family="windows"/>
+                <then>
+                    <exec dir="@{dir}" executable="${env.M2_HOME}\bin\mvn.bat">
+                        <arg line="-B @{arg}"/>
+                    </exec>
+                </then>
+                <else>
+                    <exec dir="@{dir}" executable="${env.M2_HOME}/bin/mvn">
+                        <arg line="-B @{arg}"/>
+                    </exec>
+                </else>
+            </if>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="exec-ant">
+        <attribute name="dir" default="."/>
+        <attribute name="arg"/>
+        <sequential>
+            <echo message="Running Ant with [@{arg}] in [@dir] ..."/>
+            <if>
+                <os family="windows"/>
+                <then>
+                    <exec dir="@{dir}" executable="${env.ANT_HOME}\bin\ant.bat">
+                        <arg line="@{arg}"/>
+                    </exec>
+                </then>
+                <else>
+                    <exec dir="@{dir}" executable="${env.ANT_HOME}/bin/ant">
+                        <arg line="@{arg}"/>
+                    </exec>
+                </else>
+            </if>
+        </sequential>
+    </macrodef>
+
+    <target name="all" depends="update,setup,build" description="'All targets: update, setup, build'"/>
+
+    <target name="build" depends="init" description="'Build the project'">
+        <!-- TODO Fix to build the client by Maven -->
+        <exec-ant dir="./manager/client" arg="depl"/>
+        <exec-mvn arg="clean install"/>
+    </target>
+
+    <target name="setup" depends="init"
+            description="'Setup development environment'">
+        <exec-mvn dir="./util/lib3rdparty/authozize.net"
+                  arg="install:install-file -DgroupId=net.authorize -DartifactId=authorize-client -Dversion=1.4.2 -Dpackaging=jar -Dfile=anet-java-sdk-1.4.2.jar"/>
+        <exec-mvn dir="./util/lib3rdparty/cybersource"
+                  arg="install:install-file -DgroupId=com.cybersource -DartifactId=cybersource-security -Dversion=1.5 -Dpackaging=jar -Dfile=cybssecurity.jar"/>
+        <exec-mvn dir="./util/lib3rdparty/cybersource"
+                  arg="install:install-file -DgroupId=com.cybersource -DartifactId=cybersource-client -Dversion=1.5 -Dpackaging=jar -Dfile=cybsclients15.jar"/>
+        <exec-mvn dir="./util/lib3rdparty/geda"
+                  arg="install:install-file -DgroupId=dp.lib -DartifactId=dp.lib-dto.GeDA -Dversion=1.1.2 -Dpackaging=jar -Dfile=dp.lib-dto.GeDA-1.1.2.jar -Dsources=dp.lib-dto.GeDA-1.1.2-sources.jar"/>
+        <exec-mvn dir="./util/lib3rdparty/payflow"
+                  arg="install:install-file -DgroupId=paypal.payflow -DartifactId=payflow-client -Dversion=4.31 -Dpackaging=jar -Dfile=payflow.jar"/>
+        <exec-mvn dir="./util/lib3rdparty/paypal"
+                  arg="install:install-file -DgroupId=com.paypal -DartifactId=paypal-client -Dversion=5.1.1 -Dpackaging=jar -Dfile=paypal_base.jar"/>
+    </target>
+
+    <target name="update" depends="init" description="'Update working copy'">
+        <exec executable="svn">
+            <arg line="up"/>
+        </exec>
+    </target>
+
+    <target name="help" depends="init">
+        <echo message="List of available operations:"/>
+        <exec-ant arg="-p"/>
+    </target>
+
+    <target name="init">
+        <echo message="env.ANT_HOME  : ${env.ANT_HOME}"/>
+        <echo message="env.FLEX_HOME : ${env.FLEX_HOME}"/>
+        <echo message="env.JAVA_HOME : ${env.JAVA_HOME}"/>
+        <echo message="env.M2_HOME   : ${env.M2_HOME}"/>
+        <echo message="user.name     : ${user.name}"/>
+        <echo message="user.home     : ${user.home}"/>
+    </target>
+
+</project>
+
+

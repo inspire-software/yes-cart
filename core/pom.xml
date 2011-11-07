@@ -282,28 +282,6 @@
                         </execution>
                     </executions>
                 </plugin>
-                <plugin>
-                    <artifactId>maven-install-plugin</artifactId>
-                    <version>2.3.1</version>
-                    <executions>
-                        <execution>
-                            <id>install-dega</id>
-                            <phase>validate</phase>
-                            <goals>
-                                <goal>install-file</goal>
-                            </goals>
-                            <configuration>
-                                <file>${basedir}/../util/lib3rdparty/geda/dp.lib-dto.GeDA-1.1.2.jar</file>
-                                <groupId>dp.lib</groupId>
-                                <artifactId>dp.lib-dto.GeDA</artifactId>
-                                <version>1.1.2</version>
-                                <packaging>jar</packaging>
-                                <createChecksum>true</createChecksum>
-                                <generatePom>true</generatePom>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
