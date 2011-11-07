@@ -1,11 +1,7 @@
 package org.yes.cart.web.page;
 
-import org.apache.commons.collections.map.SingletonMap;
-import org.apache.wicket.Application;
-import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -14,13 +10,12 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.convert.IConverter;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.CustomerService;
@@ -35,8 +30,9 @@ import org.yes.cart.web.page.component.customer.auth.LoginPanel;
 import org.yes.cart.web.page.component.customer.auth.RegisterPanel;
 import org.yes.cart.web.page.component.shipping.ShippingView;
 import org.yes.cart.web.page.component.util.PaymentGatewayDescriptorModel;
-import org.yes.cart.web.support.util.HttpUtil;
+import org.yes.cart.web.page.component.util.PaymentGatewayDescriptorRenderer;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 
 /**
@@ -73,10 +69,11 @@ public class CheckoutPage extends AbstractWebPage {
     public static final String SHIPMENT_VIEW = "shipmentView";
 
     private static final String PAYMENT_FRAGMENT = "paymentFragment";
-    private static final String PAYMENT_FRAGMENT_FORM = "paymentForm";
+    private static final String PAYMENT_FRAGMENT_OPTIONS_FORM = "paymentOptionsForm";
     private static final String PAYMENT_FRAGMENT_MD_CHECKBOX = "multipleDelivery";
     private static final String PAYMENT_FRAGMENT_MD_LABEL = "multipleDeliveryLabel";
     private static final String PAYMENT_FRAGMENT_GATEWAY_CHECKBOX = "paymentGateway";
+    private static final String PAYMENT_FRAGMENT_PAYMENT_FORM = "dynamicPaymentForm";
 
 
     public static final String CONTENT_VIEW = "content";
@@ -149,13 +146,13 @@ public class CheckoutPage extends AbstractWebPage {
      */
     private MarkupContainer getContent(final String currentStep) {
         if (STEP_ADDR.equals(currentStep)) {
-            return  createAddressFragment();
+            return createAddressFragment();
         } else if (STEP_SHIPMENT.equals(currentStep)) {
-            return  createShippmentFragment();
+            return createShippmentFragment();
         } else if (STEP_PAY.equals(currentStep)) {
-            return  createPaymentFragment();
+            return createPaymentFragment();
         } else {
-            return  createLoginFragment();
+            return createLoginFragment();
         }
     }
 
@@ -216,12 +213,18 @@ public class CheckoutPage extends AbstractWebPage {
 
         final boolean showMultipleDelivery = true; //todo
 
+
+        rez.add(
+                new Label(PAYMENT_FRAGMENT_PAYMENT_FORM)
+        );
+
         rez.add(
                 new Label("orderVerificationView")
         );
 
+
         rez.add(
-                new Form(PAYMENT_FRAGMENT_FORM).add(
+                new Form(PAYMENT_FRAGMENT_OPTIONS_FORM).add(
                         new CheckBox(PAYMENT_FRAGMENT_MD_CHECKBOX, new PropertyModel(orderInfo, "multipleDelivery")) {
 
                             /** {@inheritDoc} */
@@ -234,7 +237,7 @@ public class CheckoutPage extends AbstractWebPage {
                                 setModelObject(!getModelObject());
                                 new SetMultipleDeliveryCommandImpl(
                                         null,
-                                        Collections.singletonMap(SetMultipleDeliveryCommandImpl.CMD_KEY, getModelObject().toString()) )
+                                        Collections.singletonMap(SetMultipleDeliveryCommandImpl.CMD_KEY, getModelObject().toString()))
                                         .execute(ApplicationDirector.getShoppingCart());
 
                                 System.out.print(">>>>>>>>>>>>> " + ApplicationDirector.getShoppingCart());
@@ -252,16 +255,28 @@ public class CheckoutPage extends AbstractWebPage {
                 ).add(
                         new DropDownChoice<PaymentGatewayDescriptor>(
                                 PAYMENT_FRAGMENT_GATEWAY_CHECKBOX,
-                                new PaymentGatewayDescriptorModel(
-                                        new PropertyModel<String>(orderInfo, "paymentGatewayLabel"),
-                                        paymentModulesManager.getPaymentGatewaysDescriptors(false)),
+                                new PaymentGatewayDescriptorModel(new PropertyModel<String>(orderInfo, "paymentGatewayLabel"), paymentModulesManager.getPaymentGatewaysDescriptors(false)),
                                 paymentModulesManager.getPaymentGatewaysDescriptors(false)) {
 
                             /** {@inheritDoc} */
                             protected void onSelectionChanged(final PaymentGatewayDescriptor descriptor) {
-                                 new SetPaymentGatewayLabelCommandImpl(
+
+                                final PaymentGateway gateway = paymentModulesManager.getPaymentGateway(descriptor.getLabel());
+
+                                final String htmlForm = gateway.getHtmlForm(
+                                        "IVAN PUPKIN",
                                         null,
-                                        Collections.singletonMap(SetPaymentGatewayLabelCommandImpl.CMD_KEY, descriptor.getLabel()) )
+                                        BigDecimal.TEN,
+                                        "AASDF-asdf-1234"
+                                );
+
+                                rez.addOrReplace(
+                                        new Label(PAYMENT_FRAGMENT_PAYMENT_FORM, htmlForm)
+                                );
+
+                                new SetPaymentGatewayLabelCommandImpl(
+                                        null,
+                                        Collections.singletonMap(SetPaymentGatewayLabelCommandImpl.CMD_KEY, descriptor.getLabel()))
                                         .execute(ApplicationDirector.getShoppingCart());
 
                             }
@@ -271,7 +286,7 @@ public class CheckoutPage extends AbstractWebPage {
                                 return true;
                             }
 
-                        }
+                        }.setChoiceRenderer(new PaymentGatewayDescriptorRenderer())
                 )
         );
 
