@@ -185,7 +185,6 @@
                     <version>2.10</version>
                     <configuration>
                         <runOrder>hourly</runOrder>
-                        <parallel>true</parallel>
                     </configuration>
                 </plugin>
                 <plugin>
