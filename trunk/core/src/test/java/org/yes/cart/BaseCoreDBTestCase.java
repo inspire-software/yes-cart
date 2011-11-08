@@ -35,12 +35,7 @@ import static java.util.Collections.singletonMap;
  */
 public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
 
-    private static ThreadLocal<ApplicationContext> sharedContext = new ThreadLocal<ApplicationContext>() {
-        @Override
-        protected ApplicationContext initialValue() {
-            return new ClassPathXmlApplicationContext("testApplicationContext.xml", "core-aspects.xml");
-        }
-    };
+    private static ApplicationContext sharedContext;
 
     @Rule
     public TestName testName = new TestName();
@@ -49,8 +44,11 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         return this.getClass().getSimpleName() + "." + testName.getMethodName();
     }
 
-    protected ApplicationContext createContext() {
-        return sharedContext.get();
+    protected synchronized ApplicationContext createContext() {
+        if (sharedContext == null) {
+            sharedContext = new ClassPathXmlApplicationContext("testApplicationContext.xml", "core-aspects.xml");
+        }
+        return sharedContext;
     }
 
     @After
