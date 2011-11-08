@@ -272,6 +272,7 @@ public class CheckoutPage extends AbstractWebPage {
 
                                 rez.addOrReplace(
                                         new Label(PAYMENT_FRAGMENT_PAYMENT_FORM, htmlForm)
+                                                .setEscapeModelStrings(false)
                                 );
 
                                 new SetPaymentGatewayLabelCommandImpl(
