@@ -21,8 +21,6 @@ import java.io.IOException;
  */
 public class PaymentFilter  extends AbstractFilter implements Filter {
 
-    private final CustomerOrderService customerOrderService;
-    private final OrderStateManager orderStateManager;
 
 
     /**
@@ -33,12 +31,8 @@ public class PaymentFilter  extends AbstractFilter implements Filter {
      * @param orderStateManager order state manager
      */
     public PaymentFilter(
-            final ApplicationDirector applicationDirector,
-            final CustomerOrderService customerOrderService,
-            final OrderStateManager orderStateManager) {
+            final ApplicationDirector applicationDirector) {
         super(applicationDirector);
-        this.orderStateManager = orderStateManager;
-        this.customerOrderService = customerOrderService;
     }
 
     /** {@inheritDoc} */
