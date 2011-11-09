@@ -919,6 +919,13 @@
         <constructor-arg index="1" value="paymentProcessor"/>
     </bean>
 
+
+    <bean id="paymentProcessFacade" class="org.yes.cart.service.payment.impl.PaymentProcessFacadeImpl">
+        <constructor-arg index="0" ref="customerOrderService"/>
+        <constructor-arg index="1" ref="orderStateManager"/>
+    </bean>
+
+
     <bean id="paymentCallBackHandlerFacade" class="org.yes.cart.service.payment.impl.PaymentCallBackHandlerFacadeImpl">
         <constructor-arg index="0" ref="paymentModulesManager"/>
         <constructor-arg index="1" ref="customerOrderService"/>

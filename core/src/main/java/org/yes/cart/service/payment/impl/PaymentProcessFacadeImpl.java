@@ -5,9 +5,7 @@ import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.impl.OrderEventImpl;
-import org.yes.cart.service.payment.PaymentFailedException;
 import org.yes.cart.service.payment.PaymentProcessFacade;
-import org.yes.cart.service.payment.PaymentResult;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.util.Map;
@@ -38,12 +36,10 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     /**
      * Perform order payment.
      * @param paymentParameter the payment parameters.
-     * @return {@link PaymentResult} in cae of succesfull payment
-     * @throws PaymentFailedException in case of payment failure.
+     * @param shoppingCart the shopping cart.
+     * @return true in case of succesfull payment
      */
-    public PaymentResult pay(final Map paymentParameter) throws PaymentFailedException {
-
-        ShoppingCart shoppingCart = null;//todo get from map ShoppingCart
+    public boolean pay(final ShoppingCart shoppingCart, final Map paymentParameter){
 
 
         final OrderEvent orderEvent = new OrderEventImpl(
@@ -60,18 +56,13 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
             System.out.println("Payment(s) for order " + orderNumber + " was successful");
             customerOrderService.update(order);
-            //setResponsePage(PaymentSuccessfulPage.class, new PageParameters("orderNum=" + orderNumber));
-
+            return true;
         } else {
-
             System.out.println("Payment(s) for order " + orderNumber + " was failed");
             customerOrderService.update(order);
-            //setResponsePage(PaymentFailedPage.class);
+            return false;
 
         }
-
-        return new PaymentResultImpl(); //not sure do we need excption or not
-
 
     }
 }

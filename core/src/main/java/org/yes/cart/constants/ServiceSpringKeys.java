@@ -359,6 +359,11 @@ public interface ServiceSpringKeys {
     String PAYMENT_MODULES_MANAGER = "paymentModulesManager";
 
     /**
+     * Payment process facade. Used of payment filter.
+     */
+    String PAYMENT_PROCESS_FACADE = "paymentProcessFacade";
+
+    /**
      * Payment processor factory.
      */
     String PAYMENT_PROCESSOR_FACTORY = "paymentProcessorFactory";
