@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="orderPayment">Order Payment</entry>
+	<entry key="negativePaymentNotes">Order payment failed</entry>
+	<entry key="positivePaymentNotes">Order payment was ok </entry>
+	<entry key="continueShopping">Continue shopping</entry>
+	<entry key="checkStatus">Check order status</entry>
+</properties>

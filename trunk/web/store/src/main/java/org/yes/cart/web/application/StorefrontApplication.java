@@ -165,6 +165,13 @@ public class StorefrontApplication
                         CheckoutPage.class
                 )
         );
+
+       mount(
+                new MountedMapper(
+                        "/payment",
+                        PaymentPage.class
+                )
+        );
     }
 
     /**

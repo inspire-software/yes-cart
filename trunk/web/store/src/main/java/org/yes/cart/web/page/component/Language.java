@@ -63,7 +63,7 @@ public class Language extends BaseComponent {
             final String selectedLocale = ThreadContext.getSession().getLocale().getLanguage();
 
             if (StringUtils.isBlank(ApplicationDirector.getShoppingCart().getCurrentLocale())) {
-
+                       //todo set locale into cart
             }
 
             final PageParameters basePageParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters());

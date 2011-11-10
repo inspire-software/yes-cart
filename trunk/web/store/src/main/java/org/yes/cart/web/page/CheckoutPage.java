@@ -15,6 +15,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.service.domain.CustomerOrderService;
@@ -125,6 +126,16 @@ public class CheckoutPage extends AbstractWebPage {
         final String currentStep =
                 params.get(STEP).toString(threeStepsProcess ? STEP_ADDR : STEP_LOGIN);
 
+        if (STEP_PAY.equals(currentStep)) {
+            customerOrderService.createFromCart(
+                    ApplicationDirector.getShoppingCart(),
+                    true            //todo customer service isOrderCanHasMultipleDeliveries
+                    //ApplicationDirector.getShoppingCart().isMultipleDelivery()
+            );
+        }
+
+
+
         add(
                 new FeedbackPanel(FEEDBACK)
         ).add(
@@ -206,13 +217,9 @@ public class CheckoutPage extends AbstractWebPage {
     private MarkupContainer createPaymentFragment() {
 
         final MarkupContainer rez = new Fragment(CONTENT_VIEW, PAYMENT_FRAGMENT, this);
-
         final ShoppingCart shoppingCart = ApplicationDirector.getShoppingCart();
-
         final OrderInfo orderInfo = shoppingCart.getOrderInfo();
-
         final boolean showMultipleDelivery = true; //todo
-
 
         rez.add(
                 new Label(PAYMENT_FRAGMENT_PAYMENT_FORM)
@@ -262,13 +269,19 @@ public class CheckoutPage extends AbstractWebPage {
                             protected void onSelectionChanged(final PaymentGatewayDescriptor descriptor) {
 
                                 final PaymentGateway gateway = paymentModulesManager.getPaymentGateway(descriptor.getLabel());
+                                final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+                                final CustomerOrder order = customerOrderService.findByGuid(cart.getGuid());
+                                final BigDecimal grandTotal = BigDecimal.TEN;
 
-                                final String htmlForm = gateway.getHtmlForm(
-                                        "IVAN PUPKIN",
-                                        null,
-                                        BigDecimal.TEN,
-                                        "AASDF-asdf-1234"
-                                );
+                                final String htmlForm =
+                                        "<form action=\"payment\">"
+                                        + gateway.getHtmlForm(
+                                            (order.getCustomer().getFirstname() + " " + order.getCustomer().getLastname()).toUpperCase(),
+                                            cart.getCurrentLocale(),
+                                            grandTotal,
+                                            cart.getGuid()
+                                        )
+                                        + "<hr><input type=\"submit\" value=\"Pay\"></form>"; //localization
 
                                 rez.addOrReplace(
                                         new Label(PAYMENT_FRAGMENT_PAYMENT_FORM, htmlForm)

@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="../../../../style/default.css" media="screen"/>
+    <title><wicket:message key="orderPayment">[Order payment]</wicket:message></title>
+</head>
+
+<body>
+
+
+<table border="1" align="center" width="1024">
+    <tr>
+        <td>
+            <wicket:container wicket:id="paymentResult">
+                [auth panel]
+            </wicket:container>
+        </td>
+    </tr>
+</table>
+
+
+<wicket:fragment wicket:id="negativeResultFragment">
+    <span wicket:id="negativePaymentNotes">[error message]</span>
+    <table width="100%">
+        <tr wicket:id="paymentDetail">
+            <td valign="top"><span wicket:id="id">[id]</span></td>
+            <td valign="top"><span wicket:id="transactionId">[transaction id]</span></td>
+            <td valign="top"><span wicket:id="authCode">[auchorization code]</span></td>
+            <td valign="top"><span wicket:id="errorCode">[error code]</span></td>
+            <td valign="top"><span wicket:id="errorDecription">[error decription]</span></td>
+        </tr>
+    </table>
+</wicket:fragment>
+
+<wicket:fragment wicket:id="positiveResultFragment">
+    <span><span wicket:id="positivePaymentNotes">[error message]</span></span>
+    <wicket:link>
+        <a href="HomePage.html">
+            <wicket:message key="continueShopping">[new shopping session]</wicket:message>
+        </a>
+        <br>
+        <a href="CustomerSelfCarePage.html">
+            <wicket:message key="checkStatus">[check order status]</wicket:message>
+        </a>
+    </wicket:link>
+</wicket:fragment>
+
+</body>
+</html>
