@@ -17,6 +17,7 @@ import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.payment.PaymentGateway;
+import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.CustomerService;
@@ -274,14 +275,16 @@ public class CheckoutPage extends AbstractWebPage {
                                 final BigDecimal grandTotal = BigDecimal.TEN;
 
                                 final String htmlForm =
-                                        "<form action=\"payment\">"
+                                        "<form action=\""+getPostActionUrl(gateway)+"\">"
                                         + gateway.getHtmlForm(
                                             (order.getCustomer().getFirstname() + " " + order.getCustomer().getLastname()).toUpperCase(),
                                             cart.getCurrentLocale(),
                                             grandTotal,
                                             cart.getGuid()
                                         )
-                                        + "<hr><input type=\"submit\" value=\"Pay\"></form>"; //localization
+                                        + "<div id=\"paymentDiv\"><input type=\"submit\" value=\""
+                                        +getLocalizer().getString("paymentSubmit", this)
+                                        +"\"></div></form>";
 
                                 rez.addOrReplace(
                                         new Label(PAYMENT_FRAGMENT_PAYMENT_FORM, htmlForm)
@@ -304,7 +307,21 @@ public class CheckoutPage extends AbstractWebPage {
                 )
         );
 
+
+
         return rez;
+    }
+
+    /**
+     * Get the post action url for payment.
+     * @param gateway gateway
+     * @return url for post
+     */
+    private String getPostActionUrl(final PaymentGateway gateway) {
+        if (gateway instanceof PaymentGatewayExternalForm) {
+            return ((PaymentGatewayExternalForm) gateway).getPostActionUrl();
+        }
+        return "payment";
     }
 
     /**
