@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-	<entry key="addressStep">Billing &amp; Shipping Address</entry>
-	<entry key="shipMethodStep">Shipping Method</entry>
-	<entry key="paymentStep">Verification and Payment</entry>
-	<entry key="loginStep">Login</entry>
-    <entry key="billingAddrTheSame">Billing address the same as shipping</entry>
-    <entry key="shipmentStep">Shipment method</entry>
-    <entry key="paymentStep">Payment</entry>
-    <entry key="paymentGatewayLabel">Payment method</entry>
-	<entry key="multipleDeliveryLabel">Multiple delivery</entry>
-    <entry key="multipleDeliveryHint">This order may have several delivery</entry>
+	<entry key="addressStep">Адреса для счета и доставики</entry>
+	<entry key="shipMethodStep">Метод доставки</entry>
+	<entry key="paymentStep">Проверка и оплата</entry>
+	<entry key="loginStep">Вход</entry>
+    <entry key="billingAddrTheSame">Одинаковый адрес доставки и выставления счета</entry>
+    <entry key="shipmentStep">Доставка</entry>
+    <entry key="paymentStep">Оплата</entry>
+    <entry key="paymentGatewayLabel">Метод оплаты</entry>
+	<entry key="multipleDeliveryLabel">Множественная доставка</entry>
+    <entry key="multipleDeliveryHint">Этот заказ может быть доставлен по частям</entry>
+    <entry key="paymentSubmit">Оплатить</entry>
 </properties>

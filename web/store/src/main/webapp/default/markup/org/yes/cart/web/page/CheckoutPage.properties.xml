@@ -11,4 +11,5 @@
 	<entry key="paymentGatewayLabel">Payment method</entry>
 	<entry key="multipleDeliveryLabel">Multiple delivery</entry>
 	<entry key="multipleDeliveryHint">This order may have several delivery</entry>
+    <entry key="paymentSubmit">Pay</entry>
 </properties>
