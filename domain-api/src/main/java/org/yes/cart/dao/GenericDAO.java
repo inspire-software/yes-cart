@@ -141,10 +141,10 @@ public interface GenericDAO<T, PK extends Serializable> {
      * @param maxResults     size of result set
      * @return list of found entities
      */
-    List<T> findByNamedQuery(String namedQueryName,
-                             int firtsResult,
-                             int maxResults,
-                             Object... parameters);
+    List<T> findRangeByNamedQuery(String namedQueryName,
+                                  int firtsResult,
+                                  int maxResults,
+                                  Object... parameters);
 
     /**
      * Find entities by criteria.

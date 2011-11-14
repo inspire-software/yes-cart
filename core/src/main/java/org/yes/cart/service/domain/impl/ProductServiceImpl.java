@@ -208,7 +208,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     public List<Product> getNewArrivalsProductInCategory(
             final long categoryId,
             final int maxResults) {
-        return productDao.findByNamedQuery("NEW.PRODUCTS.IN.CATEGORYID",
+        return productDao.findRangeByNamedQuery("NEW.PRODUCTS.IN.CATEGORYID",
                 0,
                 maxResults,
                 categoryId,
@@ -248,7 +248,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             final long categoryId,
             final int firtsResult,
             final int maxResults) {
-        return productDao.findByNamedQuery("PRODUCTS.BY.CATEGORYID",
+        return productDao.findRangeByNamedQuery("PRODUCTS.BY.CATEGORYID",
                 firtsResult,
                 maxResults,
                 categoryId,

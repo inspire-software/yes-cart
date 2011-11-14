@@ -223,10 +223,10 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
-    public List<T> findByNamedQuery(final String namedQueryName,
-                                    final int firtsResult,
-                                    final int maxResults,
-                                    final Object... parameters) {
+    public List<T> findRangeByNamedQuery(final String namedQueryName,
+                                         final int firtsResult,
+                                         final int maxResults,
+                                         final Object... parameters) {
         Query query = getSession().getNamedQuery(namedQueryName);
         query.setFirstResult(firtsResult);
         query.setMaxResults(maxResults);
