@@ -1,0 +1,21 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<head>
+    <title wicket:id="pageTitle">[page title]</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../../style/default.css" media="screen"/>
+
+    <script wicket:id="redirectJavaScript" type="text/javascript">
+        [redirectJs]
+    </script>
+    <noscript>
+        <meta wicket:id="metaRefresh" http-equiv="refresh" content=""> <!-- Without JavaScript -->  </meta>
+    </noscript>
+</head>
+<body>
+<a wicket:id="redirectLink">
+    <span>
+        <wicket:message key="paymentWasOk">[payment was ok , redirect to home page]</wicket:message>
+    </span>
+</a>
+</body>
+</html>

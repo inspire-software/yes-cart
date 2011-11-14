@@ -17,6 +17,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.yes.cart.web.page.*;
 import org.yes.cart.web.page.component.customer.address.CreateEditAddressPage;
+import org.yes.cart.web.page.payment.callback.AuthorizeNetSimPaymentOkPage;
+import org.yes.cart.web.page.payment.callback.ResultPage;
 import org.yes.cart.web.util.SeoBookmarkablePageParametersEncoder;
 
 import java.util.Map;
@@ -172,6 +174,30 @@ public class StorefrontApplication
                         PaymentPage.class
                 )
         );
+
+        mountPaymentGatewayCallBackPages();
+
+    }
+
+
+    /**
+     * Mount pages for gateways, that works via redirect to
+     * gateway page and back.
+     */
+    private void mountPaymentGatewayCallBackPages() {
+        mount(
+                 new MountedMapper(
+                         "/paymentresult",
+                         ResultPage.class
+                 )
+         );
+
+        mount(
+                 new MountedMapper(
+                         "/anetsim",
+                         AuthorizeNetSimPaymentOkPage.class
+                 )
+         );
     }
 
     /**

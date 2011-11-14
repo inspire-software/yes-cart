@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+
+    <entry key="paymentWasOk">Payment was successful</entry>
+    <entry key="paymentWasFailed">Payment was failed</entry>
+    <entry key="pageTitle">Payment result</entry>
+    <entry key="home">Home</entry>
+
+</properties>
