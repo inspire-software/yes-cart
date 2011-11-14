@@ -136,7 +136,6 @@ public class CheckoutPage extends AbstractWebPage {
         }
 
 
-
         add(
                 new FeedbackPanel(FEEDBACK)
         ).add(
@@ -274,17 +273,20 @@ public class CheckoutPage extends AbstractWebPage {
                                 final CustomerOrder order = customerOrderService.findByGuid(cart.getGuid());
                                 final BigDecimal grandTotal = BigDecimal.TEN;
 
+                                order.setPgLabel(descriptor.getLabel());
+                                customerOrderService.update(order);
+
                                 final String htmlForm =
-                                        "<form action=\""+getPostActionUrl(gateway)+"\">"
-                                        + gateway.getHtmlForm(
-                                            (order.getCustomer().getFirstname() + " " + order.getCustomer().getLastname()).toUpperCase(),
-                                            cart.getCurrentLocale(),
-                                            grandTotal,
-                                            cart.getGuid()
-                                        )
-                                        + "<div id=\"paymentDiv\"><input type=\"submit\" value=\""
-                                        +getLocalizer().getString("paymentSubmit", this)
-                                        +"\"></div></form>";
+                                        "<form action=\"" + getPostActionUrl(gateway) + "\">"
+                                                + gateway.getHtmlForm(
+                                                        (order.getCustomer().getFirstname() + " " + order.getCustomer().getLastname()).toUpperCase(),
+                                                        cart.getCurrentLocale(),
+                                                        grandTotal,
+                                                        cart.getGuid()
+                                                )
+                                                + "<div id=\"paymentDiv\"><input type=\"submit\" value=\""
+                                                + getLocalizer().getString("paymentSubmit", this)
+                                                + "\"></div></form>";
 
                                 rez.addOrReplace(
                                         new Label(PAYMENT_FRAGMENT_PAYMENT_FORM, htmlForm)
@@ -308,12 +310,12 @@ public class CheckoutPage extends AbstractWebPage {
         );
 
 
-
         return rez;
     }
 
     /**
      * Get the post action url for payment.
+     *
      * @param gateway gateway
      * @return url for post
      */

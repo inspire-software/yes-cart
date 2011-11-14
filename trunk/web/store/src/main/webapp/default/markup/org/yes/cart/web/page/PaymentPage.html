@@ -22,7 +22,9 @@
 
 
 <wicket:fragment wicket:id="negativeResultFragment">
-    <span wicket:id="negativePaymentNotes">[error message]</span>
+    <span>
+        <wicket:message key="negativePaymentNotes">[negative payments]</wicket:message>">
+    </span>
     <table width="100%">
         <tr wicket:id="paymentDetail">
             <td valign="top"><span wicket:id="id">[id]</span></td>
@@ -35,7 +37,9 @@
 </wicket:fragment>
 
 <wicket:fragment wicket:id="positiveResultFragment">
-    <span><span wicket:id="positivePaymentNotes">[error message]</span></span>
+    <span>
+        <wicket:message key="positivePaymentNotes">[negative payments]</wicket:message>">
+    </span>
     <wicket:link>
         <a href="HomePage.html">
             <wicket:message key="continueShopping">[new shopping session]</wicket:message>
