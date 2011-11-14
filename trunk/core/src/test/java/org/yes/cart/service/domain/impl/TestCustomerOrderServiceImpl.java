@@ -56,6 +56,7 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
         customerOrderService.delete(order);
         assertNull(customerOrderService.getById(pk));
         assertNull(customerOrderService.findByGuid(shoppingCart.getGuid()));
+        assertNull(customerOrderService.findByGuid(null));
     }
 
     // TODO fix to not depend on order or running
