@@ -37,6 +37,11 @@
         <property name="entityInterceptor">
             <bean class="org.yes.cart.payment.persistence.service.impl.AuditInterceptor"/>
         </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.search.default.indexBase">#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'}</prop>
+            </props>
+        </property>
     </bean>
 
 
