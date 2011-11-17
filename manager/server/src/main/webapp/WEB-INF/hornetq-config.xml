@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd"
+       default-init-method="init" default-destroy-method="destroy">
+
+    <bean name="Configuration" class="org.hornetq.core.config.impl.ConfigurationImpl">
+        <property name="clustered" value="false"/>
+        <property name="persistenceEnabled" value="true"/>
+        <property name="JMXManagementEnabled" value="false"/>
+        <property name="pagingDirectory" value="#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart-hornetq-management'+systemProperties['file.separator']+'paging'}"/>
+        <property name="bindingsDirectory" value="#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart-hornetq-management'+systemProperties['file.separator']+'bindings'}"/>
+        <property name="largeMessagesDirectory" value="#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart-hornetq-management'+systemProperties['file.separator']+'large-messages'}"/>
+        <property name="journalDirectory" value="#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart-hornetq-management'+systemProperties['file.separator']+'journal'}"/>
+        <property name="journalMinFiles" value="${conf.hornetq.journalMinFiles:10}"/>
+        <property name="journalType">
+            <util:constant static-field="${conf.hornetq.journal.type:org.hornetq.core.server.JournalType.NIO}"/>
+        </property>
+        <property name="clusterUser" value="HORNETQ-CLUSTER-USER"/>
+        <property name="clusterPassword" value="HORNETQ-CLUSTER-PASS"/>
+        <property name="threadPoolMaxSize" value="${conf.hornetq.threadPoolMaxSize:-1}"/>
+
+        <!-- Security settings -->
+        <!-- Disable security to get a small performance boost -->
+        <property name="securityEnabled" value="${conf.hornetq.securityEnabled:false}"/>
+        <property name="securityRoles">
+            <map>
+                <!-- Entry keys are the matching parameters -->
+                <entry key="#">
+                    <set>
+                        <bean class="org.hornetq.core.security.Role">
+                            <!-- Name -->
+                            <constructor-arg value="guest"/>
+                            <!-- send? -->
+                            <constructor-arg value="true"/>
+                            <!-- consume? -->
+                            <constructor-arg value="true"/>
+                            <!-- create durable queue? -->
+                            <constructor-arg value="false"/>
+                            <!-- delete durable queue? -->
+                            <constructor-arg value="false"/>
+                            <!-- create non-durable queue? -->
+                            <constructor-arg value="true"/>
+                            <!-- delete non-durable queue? -->
+                            <constructor-arg value="true"/>
+                            <!-- manage? -->
+                            <constructor-arg value="false"/>
+                        </bean>
+                    </set>
+                </entry>
+            </map>
+        </property>
+
+        <!-- Addresses settings -->
+        <property name="addressesSettings">
+            <map>
+                <!-- Entry keys are the matching parameters -->
+                <entry key="#">
+                    <bean class="org.hornetq.core.settings.impl.AddressSettings">
+                        <property name="deadLetterAddress" value="jms.queue.DLQ"/>
+                        <property name="expiryAddress" value="jms.queue.ExpiryQueue"/>
+                        <!-- In milliseconds -->
+                        <property name="redeliveryDelay" value="${conf.hornetq.addresses.redeliveryDelay:0}"/>
+                        <property name="maxSizeBytes" value="${conf.hornetq.addresses.maxSizeBytes:20971520}"/>
+                        <property name="messageCounterHistoryDayLimit" value="${conf.hornetq.addresses.dayLimit:10}"/>
+                        <property name="addressFullMessagePolicy">
+                            <util:constant static-field="org.hornetq.core.settings.impl.AddressFullMessagePolicy.PAGE"/>
+                        </property>
+                    </bean>
+                </entry>
+            </map>
+        </property>
+
+        <!-- Already defined as named beans (see above) -->
+        <property name="connectorConfigurations">
+            <map>
+                <entry key="netty-internal">
+                    <ref bean="NettyInternalConnector"/>
+                </entry>
+                <entry key="netty-external">
+                    <ref bean="NettyExternalConnector"/>
+                </entry>
+                <entry key="netty-invm">
+                    <ref bean="NettyInVMConnector"/>
+                </entry>
+            </map>
+        </property>
+
+        <!-- Acceptors: match ports with connectors -->
+        <property name="acceptorConfigurations">
+            <set>
+                <bean class="org.hornetq.api.core.TransportConfiguration">
+                    <constructor-arg value="org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory"/>
+                    <constructor-arg>
+                        <map>
+                            <entry key="host" value="${conf.hornetq.acceptor.internal.host:localhost}"/>
+                            <entry key="port" value="${conf.hornetq.acceptor.internal.port:5446}"/>
+                            <entry key="use-nio" value="${conf.hornetq.acceptor.internal.useNIO:true}"/>
+                            <entry key="direct-deliver" value="${conf.hornetq.acceptor.internal.directDeliver:false}"/>
+                        </map>
+                    </constructor-arg>
+                    <!-- Name -->
+                    <constructor-arg value="netty-internal"/>
+                </bean>
+                <bean class="org.hornetq.api.core.TransportConfiguration">
+                    <constructor-arg value="org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory"/>
+                    <constructor-arg>
+                        <map>
+                            <entry key="host" value="${conf.hornetq.acceptor.external.host:0.0.0.0}"/>
+                            <entry key="port" value="${conf.hornetq.acceptor.external.port:5445}"/>
+                            <entry key="use-nio" value="${conf.hornetq.acceptor.external.useNIO:true}"/>
+                            <entry key="direct-deliver" value="${conf.hornetq.acceptor.external.directDeliver:false}"/>
+                        </map>
+                    </constructor-arg>
+                    <!-- Name -->
+                    <constructor-arg value="netty-external"/>
+                </bean>
+                <bean class="org.hornetq.api.core.TransportConfiguration">
+                    <constructor-arg value="org.hornetq.core.remoting.impl.invm.InVMAcceptorFactory"/>
+                    <constructor-arg>
+                        <map>
+                            <entry key="server-id" value="${conf.hornetq.acceptor.invm.serverId:0}"/>
+                        </map>
+                    </constructor-arg>
+                    <!-- Name -->
+                    <constructor-arg value="netty-invm"/>
+                </bean>
+            </set>
+        </property>
+
+        <!-- Broadcast groups -->
+        <property name="broadcastGroupConfigurations">
+            <list>
+                <bean class="org.hornetq.core.config.BroadcastGroupConfiguration">
+                    <!-- Group name -->
+                    <constructor-arg value="${conf.hornetq.broadcastGroup.name:hornetq-bg}"/>
+                    <!-- Local bind address -->
+                    <constructor-arg value="${conf.hornetq.broadcastGroup.bindingAddress:0.0.0.0}"/>
+                    <!-- Local bind port -->
+                    <constructor-arg value="${conf.hornetq.broadcastGroup.bindingPort:9875}"/>
+                    <!-- Group address -->
+                    <constructor-arg value="${conf.hornetq.broadcastGroup.groupAddress:231.7.7.7}"/>
+                    <!-- Group port -->
+                    <constructor-arg value="${conf.hornetq.broadcastGroup.groupPort:9876}"/>
+                    <!-- Broadcast period -->
+                    <constructor-arg value="${conf.hornetq.broadcastGroup.broadcastPeriod:5000}"/>
+                    <!-- Connector infos -->
+                    <constructor-arg>
+                        <list>
+                            <!-- A list of connector-backup connector name pairs -->
+                            <bean class="org.hornetq.api.core.Pair">
+                                <constructor-arg value="netty-external"/>
+                                <constructor-arg>
+                                    <null/>
+                                </constructor-arg>
+                            </bean>
+                        </list>
+                    </constructor-arg>
+                </bean>
+            </list>
+        </property>
+
+        <!-- Discovery groups -->
+        <property name="discoveryGroupConfigurations">
+            <map>
+                <!-- Match map key with name constructor arg -->
+                <entry key="${conf.hornetq.discoveryGroup.name}">
+                    <bean class="org.hornetq.core.config.DiscoveryGroupConfiguration">
+                        <!-- Group name -->
+                        <constructor-arg value="${conf.hornetq.discoveryGroup.name:hornetq-dg}"/>
+                        <!-- Local bind address -->
+                        <constructor-arg value="${conf.hornetq.discoveryGroup.bindingAddress:0.0.0.0}"/>
+                        <!-- Group address -->
+                        <constructor-arg value="${conf.hornetq.broadcastGroup.groupAddress:231.7.7.7}"/>
+                        <!-- Group port -->
+                        <constructor-arg value="${conf.hornetq.broadcastGroup.groupPort:9876}"/>
+                        <!-- Refresh timeout -->
+                        <constructor-arg value="${conf.hornetq.discoveryGroup.refreshTimeout:1000}"/>
+                    </bean>
+                </entry>
+            </map>
+        </property>
+
+        <!-- Cluster connections -->
+        <property name="clusterConfigurations">
+            <list>
+                <bean class="org.hornetq.core.config.ClusterConnectionConfiguration">
+                    <constructor-arg value="${conf.hornetq.cluster.name:HORNETQ-CLUSTER}"/>
+                    <!-- Address : prefix of addresses being clustered-->
+                    <constructor-arg value="jms"/>
+                    <constructor-arg value="${conf.hornetq.cluster.retryInterval:500}"/>
+                    <constructor-arg value="${conf.hornetq.cluster.duplicateDetection:true}"/>
+                    <constructor-arg value="${conf.hornetq.cluster.forwardNoConsumers:false}"/>
+                    <constructor-arg value="${conf.hornetq.cluster.maxHops:1}"/>
+                    <constructor-arg value="${conf.hornetq.cluster.confirmationWindowSize:4096}"/>
+                    <constructor-arg value="${conf.hornetq.discoveryGroup.name:hornetq-dg}"/>
+                </bean>
+            </list>
+        </property>
+
+    </bean>
+    <!-- End Core configuration -->
+
+</beans>
