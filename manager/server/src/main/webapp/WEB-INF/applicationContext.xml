@@ -58,8 +58,19 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
     <bean name="mbeanServer" class="java.lang.management.ManagementFactory" factory-method="getPlatformMBeanServer"/>
     <bean name="hornetQSecurityManagerImpl" class="org.hornetq.spi.core.security.HornetQSecurityManagerImpl"/>
 
+
     <bean name="fileConfiguration" class="org.hornetq.core.config.impl.FileConfiguration" init-method="start"
-          destroy-method="stop"/>
+          destroy-method="stop">
+        <property name="journalType" value="NIO"/>
+        <property name="pagingDirectory"
+                  value="#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'+systemProperties['file.separator']+'hornetq'+systemProperties['file.separator']+'management'+systemProperties['file.separator']+'paging'}"/>
+        <property name="bindingsDirectory"
+                  value="#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'+systemProperties['file.separator']+'hornetq'+systemProperties['file.separator']+'management'+systemProperties['file.separator']+'bindings'}"/>
+        <property name="largeMessagesDirectory"
+                  value="#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'+systemProperties['file.separator']+'hornetq'+systemProperties['file.separator']+'management'+systemProperties['file.separator']+'large-messages'}"/>
+        <property name="journalDirectory"
+                  value="#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'+systemProperties['file.separator']+'hornetq'+systemProperties['file.separator']+'management'+systemProperties['file.separator']+'journal'}"/>
+     </bean>
 
     <!-- The core server -->
     <bean name="hornetQServerImpl" class="org.hornetq.core.server.impl.HornetQServerImpl">
@@ -76,6 +87,7 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
     </bean>
 
     <bean id="inVmConnectionFactory" class="org.hornetq.jms.client.HornetQConnectionFactory">
+        <constructor-arg value="false"/>
         <constructor-arg ref="inVmTransportConfiguration"/>
     </bean>
 

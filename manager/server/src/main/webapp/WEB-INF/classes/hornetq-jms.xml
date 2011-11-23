@@ -3,14 +3,11 @@
 
     <connection-factory name="InVMConnectionFactory">
       <connectors>
-         <!--connector-ref connector-name="in-vm"/-->
 		 <connector-ref connector-name="netty"/>
 		 
       </connectors>
       <entries>
           <entry name="/HQConnectionFactory"/>
-         <!--<entry name="java:/ConnectionFactory"/>-->
-         <!--<entry name="java:/XAConnectionFactory"/>-->
       </entries>
    </connection-factory>
 
