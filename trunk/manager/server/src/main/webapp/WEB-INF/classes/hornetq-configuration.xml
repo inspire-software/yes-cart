@@ -3,24 +3,15 @@
                xsi:schemaLocation="urn:hornetq /schema/hornetq-configuration.xsd">
 
    <connectors>
-<!--       <connector name="in-vm">
-         <factory-class>org.hornetq.core.remoting.impl.invm.InVMConnectorFactory</factory-class>
-      </connector>
--->	  
 	  <connector name="netty">
-         <factory-class>org.hornetq.integration.transports.netty.NettyConnectorFactory</factory-class>
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyConnectorFactory</factory-class>
          <param key="port"  value="5447"/>
       </connector>
    </connectors>
 
    <acceptors>
-<!--       <acceptor name="in-vm">
-         <factory-class>org.hornetq.core.remoting.impl.invm.InVMAcceptorFactory</factory-class>
-         <param key="server-id" value="0"/>         
-      </acceptor>
--->	  
 	  <acceptor name="netty">
-         <factory-class>org.hornetq.integration.transports.netty.NettyAcceptorFactory</factory-class>         
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
          <param key="port"  value="5447"/>
       </acceptor>
    </acceptors>
@@ -50,8 +41,4 @@
       </address-setting>
    </address-settings>
 
-   <paging-directory>/npa/hornetq/shop-manage/paging</paging-directory>
-   <bindings-directory>/npa/hornetq/shop-manage/bindings</bindings-directory>
-   <journal-directory>/npa/hornetq/shop-manage/journal</journal-directory>
-   <large-messages-directory>/npa/hornetq/shop-manage/large-messages</large-messages-directory>
 </configuration>

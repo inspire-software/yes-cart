@@ -3,14 +3,11 @@
 
     <connection-factory name="InVMConnectionFactory">
       <connectors>
-         <!--connector-ref connector-name="in-vm"/-->
 		 <connector-ref connector-name="netty"/>
 		 
       </connectors>
       <entries>
           <entry name="/HQConnectionFactory"/>
-         <!--<entry name="java:/ConnectionFactory"/>-->
-         <!--<entry name="java:/XAConnectionFactory"/>-->
       </entries>
    </connection-factory>
 
@@ -26,37 +23,6 @@
     <queue name="CustomerRegistrationQueue">
         <entry name="/queue/CustomerRegistrationQueue"/>
     </queue>
-
-
-    <!-- queue used on admin -->
-<!--
-    <queue name="ManagerRegistrationQueue">
-        <entry name="/queue/ManagerRegistrationQueue"/>
-    </queue>
-
-
-    <queue name="RecalculateProductPriceQueue">
-        <entry name="/queue/RecalculateProductPriceQueue"/>
-    </queue>
-
-    <queue name="ProductPriceChangedQueue">
-        <entry name="/queue/ProductPriceChangedQueue"/>
-    </queue>
-
-
-    <queue name="ReindexProductQueue">
-        <entry name="/queue/ReindexProductQueue"/>
-    </queue>
-
-    <queue name="ProductAvailableQueue">
-        <entry name="/queue/ProductAvailableQueue"/>
-    </queue>
-
-    <queue name="ProductNotAvailableQueue">
-        <entry name="/queue/ProductNotAvailableQueue"/>
-    </queue>
--->
-
 
 
 </configuration>
