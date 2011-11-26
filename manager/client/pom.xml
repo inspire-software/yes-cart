@@ -9,11 +9,20 @@
     </parent>
     <artifactId>yes-manager-client</artifactId>
     <name>Yes cart manager client</name>
-    <!--packaging>swf</packaging-->
+    <packaging>swf</packaging>
+
+    <properties>
+        <skipTests>true</skipTests>
+    </properties>
+
     <repositories>
         <repository>
-            <id>flexgroupsonatype</id>
-            <url>http://repository.sonatype.org/content/groups/flexgroup</url>
+            <id>nexus-public</id>
+            <url>http://repository.sonatype.org/content/groups/public</url>
+        </repository>
+        <repository>
+            <id>flex-mojos-repository</id>
+            <url>http://repository.sonatype.org/content/groups/flexgroup/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -22,20 +31,12 @@
             </snapshots>
         </repository>
     </repositories>
+
+
     <pluginRepositories>
         <pluginRepository>
-            <id>flexpmd.opensource.adobe</id>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <url>http://opensource.adobe.com/svn/opensource/flexpmd/maven-repository/release/</url>
-        </pluginRepository>
-        <pluginRepository>
-            <id>flexgroupsonatype</id>
-            <url>http://repository.sonatype.org/content/groups/flexgroup</url>
+            <id>local</id>
+            <url>http://repository.sonatype.org/content/groups/flexgroup/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -44,45 +45,69 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
-    <properties>
-        <flex.version>4.5.0.17855</flex.version>
-        <sonar.language>flex</sonar.language>
-        <sonar.dynamicAnalysis>false</sonar.dynamicAnalysis>
-    </properties>
+
+    <build>
+        <sourceDirectory>src/main/flex</sourceDirectory>
+        <testSourceDirectory>src/test/flex</testSourceDirectory>
+        <finalName>${flex.client.build.finalName}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.sonatype.flexmojos</groupId>
+                <artifactId>flexmojos-maven-plugin</artifactId>
+                <version>${flexmojos.version}</version>
+                <extensions>true</extensions>
+
+                <configuration>
+                    <debug>true</debug>
+                    <webappDirectory>${basedir}../server/src/main/webapp</webappDirectory>
+                    <localesSourcePath>${basedir}/src/main/resources/{locale}</localesSourcePath>
+                    <localesCompiled>
+                        <locale>en_US</locale>
+                        <locale>ru_RU</locale>
+                    </localesCompiled>
+                </configuration>
+
+            </plugin>
+
+            <plugin>
+                <groupId>org.sonatype.flexmojos</groupId>
+                <artifactId>flexmojos-maven-plugin</artifactId>
+                <version>${flexmojos.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>wrapper</goal>
+                        </goals>
+                        <configuration>
+                            <parameters>
+                                <swf>${build.finalName}</swf>
+                                <width>100%</width>
+                                <height>100%</height>
+                            </parameters>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+
+    </build>
+
     <dependencies>
-        <dependency>
-            <groupId>com.adobe.flex</groupId>
-            <artifactId>compiler</artifactId>
-            <version>${flex.version}</version>
-            <type>pom</type>
-        </dependency>
         <dependency>
             <groupId>com.adobe.flex.framework</groupId>
             <artifactId>flex-framework</artifactId>
-            <version>${flex.version}</version>
+            <version>4.5.1.21328</version>
             <type>pom</type>
         </dependency>
         <dependency>
             <groupId>com.adobe.flexunit</groupId>
             <artifactId>flexunit</artifactId>
-            <version>4.0-rc-1</version>
+            <version>0.85</version>
             <type>swc</type>
             <scope>test</scope>
         </dependency>
     </dependencies>
-    <build>
-        <sourceDirectory>src/main/flex</sourceDirectory>
-        <testSourceDirectory>src/test/flex</testSourceDirectory>
-        <plugins>
-            <plugin>
-                <groupId>org.sonatype.flexmojos</groupId>
-                <artifactId>flexmojos-maven-plugin</artifactId>
-                <version>4.0-beta-3</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+
+
 </project>

@@ -19,12 +19,61 @@
         <servlet-api.version>2.5</servlet-api.version>
         <mysql-connector.version>5.1.13</mysql-connector.version>
     </properties>
+
+
+    <repositories>
+        <repository>
+            <id>nexus-public</id>
+            <url>http://repository.sonatype.org/content/groups/public</url>
+        </repository>
+        <repository>
+            <id>flex-mojos-repository</id>
+            <url>http://repository.sonatype.org/content/groups/flexgroup/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>local</id>
+            <url>http://repository.sonatype.org/content/groups/flexgroup/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+
     <dependencies>
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>core</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>yes-manager-client</artifactId>
+            <version>${project.parent.version}</version>
+            <type>swf</type>
+        </dependency>
+
+        <dependency>
+            <groupId>com.adobe.flex.framework</groupId>
+            <artifactId>flex-framework</artifactId>
+            <version>4.5.1.21328</version>
+            <type>pom</type>
+        </dependency>
+
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>domain-api</artifactId>
@@ -131,6 +180,37 @@
         <finalName>yes-manager</finalName>
         <pluginManagement>
             <plugins>
+                <!--Seems to me ,that problem was not solved
+                http://groups.google.com/group/flex-mojos/browse_thread/thread/2b83a6cbeb751772?fwc=1
+                <plugin>
+                    <groupId>org.sonatype.flexmojos</groupId>
+                    <artifactId>flexmojos-maven-plugin</artifactId>
+                    <version>${flexmojos.version}</version>
+                    <extensions>true</extensions>
+
+                    <executions>
+                        <execution>
+                            <phase>prepare-package</phase>
+                            <goals>
+                                <goal>wrapper</goal>
+                                <goal>copy-flex-resources</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <wrapperArtifact>
+                            <groupId>org.yes</groupId>
+                            <artifactId>yes-manager-client</artifactId>
+                            <version>${project.parent.version}</version>
+                        </wrapperArtifact>
+                        <parameters>
+                            <swf>${flex.client.build.finalName}</swf>
+                            <width>100%</width>
+                            <height>100%</height>
+                        </parameters>
+                    </configuration>
+
+                </plugin>-->
                 <plugin>
                     <artifactId>maven-war-plugin</artifactId>
                     <configuration>
@@ -142,11 +222,23 @@
                                     <include>**/*.xml</include>
                                 </includes>
                             </resource>
+                            <resource>
+                                <filtering>true</filtering>
+                                <directory>../client/target</directory>
+                                <includes>
+                                    <include>playerProductInstall.swf</include>
+                                    <include>ShopManagerApplication.html</include>
+                                    <include>ShopManagerApplication.swf</include>
+                                    <include>AC_OETags.js</include>
+                                    <include>history/**</include>
+                                </includes>
+                            </resource>
                         </webResources>
                         <!-- web.xml is added to the project by other means, and shouldn't be packaged by default -->
                         <packagingExcludes>WEB-INF/web.xml</packagingExcludes>
                     </configuration>
                 </plugin>
+
             </plugins>
         </pluginManagement>
     </build>

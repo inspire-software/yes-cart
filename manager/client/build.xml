@@ -63,13 +63,13 @@
             <fileset dir="src/main/resources/en_EN"/>
         </copy>
         <exec executable="subWCRev"  osfamily="windows">
-          <arg value="src/main/resources/en_EN"/>
-          <arg value="src/main/resources/en_EN/ShopManagerApplication.properties"/>
+          <arg value="src/main/resources/en_US"/>
+          <arg value="src/main/resources/en_US/ShopManagerApplication.properties"/>
           <arg value="src/main/flex/ShopManagerApplication.properties"/>
         </exec>
         <exec executable="svnwcrev"  osfamily="unix">
-          <arg value="src/main/resources/en_EN"/>
-          <arg value="src/main/resources/en_EN/ShopManagerApplication.properties"/>
+          <arg value="src/main/resources/en_US"/>
+          <arg value="src/main/resources/en_US/ShopManagerApplication.properties"/>
           <arg value="src/main/flex/ShopManagerApplication.properties"/>
         </exec>
 
@@ -118,7 +118,7 @@
                 version-minor="0"
                 version-revision="0"
                 history="true"
-                output="../server/src/main/webapp/en_EN"/>
+                output="../server/src/main/webapp/en_US"/>
     </target>
 
 
