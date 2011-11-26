@@ -41,24 +41,15 @@
         import mx.controls.Alert;
         import mx.messaging.channels.AMFChannel;
 
-
         import org.yes.cart.shopmanager.ShopManagerGlobal;
-
 
         private var shopManagerGlobal:ShopManagerGlobal;
 
 
         public function init():void {
             currentState = "loginState";
-            var url:String;
-            if (Application.application.parameters.serviceurl == undefined || Application.application.parameters.serviceurl == '') {
-                url = "http://localhost:8080/yes-manager/spring/amf";
-                Alert.show(
-                        resourceManager.getString("ShopManagerApplication", "serviceUrlNotConfigured") + url,
-                        resourceManager.getString("ShopManagerApplication", "warning"));
-            } else {
-                url = Application.application.parameters.serviceurl;
-            }
+            var url:String = "http://{server.name}:{server.port}/yes-manager/spring/amf";
+
             ShopManagerGlobal.getInstance().url = url;
 
             channelSet.removeChannel(myamf);
