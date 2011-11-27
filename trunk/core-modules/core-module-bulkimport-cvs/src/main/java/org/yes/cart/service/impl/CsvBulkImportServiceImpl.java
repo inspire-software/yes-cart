@@ -107,7 +107,7 @@ public class CsvBulkImportServiceImpl implements BulkImportService {
                 final ImportColumn pkColumn = cvsImportDescriptor.getPrimaryKeyColumn();
                 if (pkColumn == null) {
                     errorReport.append(
-                            "ERROR: import can not be strted, because can not fild column to locate primary key");
+                            "ERROR: import can not be started, because can not fild column to locate primary key");
                     return BulkImportResult.ERROR;
                 }
                 doImport(errorReport, filesToImport, pkColumn, importedFiles);
