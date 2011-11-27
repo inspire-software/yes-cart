@@ -10,89 +10,6 @@
     <artifactId>yes-manager-client</artifactId>
     <name>Yes cart manager client</name>
     <packaging>swf</packaging>
-
-    <properties>
-        <skipTests>true</skipTests>
-    </properties>
-
-    <repositories>
-        <repository>
-            <id>nexus-public</id>
-            <url>http://repository.sonatype.org/content/groups/public</url>
-        </repository>
-        <repository>
-            <id>flex-mojos-repository</id>
-            <url>http://repository.sonatype.org/content/groups/flexgroup/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>local</id>
-            <url>http://repository.sonatype.org/content/groups/flexgroup/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
-
-    <build>
-        <sourceDirectory>src/main/flex</sourceDirectory>
-        <testSourceDirectory>src/test/flex</testSourceDirectory>
-        <finalName>${flex.client.build.finalName}</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.sonatype.flexmojos</groupId>
-                <artifactId>flexmojos-maven-plugin</artifactId>
-                <version>${flexmojos.version}</version>
-                <extensions>true</extensions>
-
-                <configuration>
-                    <debug>true</debug>
-                    <webappDirectory>${basedir}../server/src/main/webapp</webappDirectory>
-                    <localesSourcePath>${basedir}/src/main/resources/{locale}</localesSourcePath>
-                    <localesCompiled>
-                        <locale>en_US</locale>
-                        <locale>ru_RU</locale>
-                    </localesCompiled>
-                </configuration>
-
-            </plugin>
-
-            <plugin>
-                <groupId>org.sonatype.flexmojos</groupId>
-                <artifactId>flexmojos-maven-plugin</artifactId>
-                <version>${flexmojos.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>wrapper</goal>
-                        </goals>
-                        <configuration>
-                            <parameters>
-                                <swf>${build.finalName}</swf>
-                                <width>100%</width>
-                                <height>100%</height>
-                            </parameters>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-        </plugins>
-
-    </build>
-
     <dependencies>
         <dependency>
             <groupId>com.adobe.flex.framework</groupId>
@@ -108,6 +25,48 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-
+    <build>
+        <sourceDirectory>src/main/flex</sourceDirectory>
+        <!--testSourceDirectory>src/test/flex</testSourceDirectory-->
+        <finalName>ShopManagerApplication</finalName>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.sonatype.flexmojos</groupId>
+                    <artifactId>flexmojos-maven-plugin</artifactId>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <!--storepass>TODO</storepass-->
+                        <debug>true</debug>
+                        <webappDirectory>${basedir}../server/src/main/webapp</webappDirectory>
+                        <localesSourcePath>${basedir}/src/main/resources/{locale}</localesSourcePath>
+                        <localesCompiled>
+                            <locale>en_US</locale>
+                            <locale>ru_RU</locale>
+                        </localesCompiled>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.sonatype.flexmojos</groupId>
+                <artifactId>flexmojos-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>wrapper</goal>
+                        </goals>
+                        <configuration>
+                            <parameters>
+                                <swf>${project.build.finalName}</swf>
+                                <width>100%</width>
+                                <height>100%</height>
+                            </parameters>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
