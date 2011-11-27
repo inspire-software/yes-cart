@@ -35,12 +35,39 @@
         <maven.compiler.source>1.5</maven.compiler.source>
         <maven.compiler.target>1.5</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <flexmojos.version>4.0-RC2</flexmojos.version>
-        <flex.client.build.finalName>ShopManagerApplication</flex.client.build.finalName>
-
-
     </properties>
+    <repositories>
+        <repository>
+            <id>maven-central</id>
+            <url>http://repo1.maven.org/maven2</url>
+        </repository>
+        <repository>
+            <id>sonatype-public</id>
+            <url>http://repository.sonatype.org/content/groups/public</url>
+        </repository>
+        <repository>
+            <id>sonatype-flexgroup</id>
+            <url>http://repository.sonatype.org/content/groups/flexgroup</url>
+        </repository>
+        <repository>
+            <id>jboss-public</id>
+            <url>https://repository.jboss.org/nexus/content/groups/public</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>maven-central</id>
+            <url>http://repo1.maven.org/maven2</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>sonatype-public</id>
+            <url>http://repository.sonatype.org/content/groups/public</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>sonatype-flexgroup</id>
+            <url>http://repository.sonatype.org/content/groups/flexgroup</url>
+        </pluginRepository>
+    </pluginRepositories>
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -205,6 +232,11 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>hibernate3-maven-plugin</artifactId>
                     <version>2.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonatype.flexmojos</groupId>
+                    <artifactId>flexmojos-maven-plugin</artifactId>
+                    <version>4.0-RC2</version>
                 </plugin>
             </plugins>
         </pluginManagement>
