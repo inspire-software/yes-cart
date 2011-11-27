@@ -9,7 +9,7 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>core-module-payment-capp</artifactId>
-    <name>Yes cart payment gateways</name>
+    <name>Yes cart module: cybersource, authorize.net, paypal, payflow payment modules provider</name>
     <properties>
         <testPgCyberSource>false</testPgCyberSource>
         <testPgAuthorizeNetAim>false</testPgAuthorizeNetAim>

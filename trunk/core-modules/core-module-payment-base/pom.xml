@@ -9,7 +9,7 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>core-module-payment-base</artifactId>
-    <name>Yes cart base payment modules provider</name>
+    <name>Yes cart module: base payment modules provider</name>
     <dependencies>
         <dependency>
             <groupId>org.yes</groupId>
