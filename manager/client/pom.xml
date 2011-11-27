@@ -36,7 +36,6 @@
                     <artifactId>flexmojos-maven-plugin</artifactId>
                     <extensions>true</extensions>
                     <configuration>
-                        <!--storepass>TODO</storepass-->
                         <debug>true</debug>
                         <webappDirectory>${basedir}../server/src/main/webapp</webappDirectory>
                         <localesSourcePath>${basedir}/src/main/resources/{locale}</localesSourcePath>

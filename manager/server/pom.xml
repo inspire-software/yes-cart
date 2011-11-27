@@ -32,12 +32,6 @@
             <type>swf</type>
         </dependency>
         <dependency>
-            <groupId>com.adobe.flex.framework</groupId>
-            <artifactId>flex-framework</artifactId>
-            <version>4.5.1.21328</version>
-            <type>pom</type>
-        </dependency>
-        <dependency>
             <groupId>org.yes</groupId>
             <artifactId>domain-api</artifactId>
             <version>1.0.0-SNAPSHOT</version>

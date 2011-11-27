@@ -5,6 +5,6 @@
 <hibernate-configuration>
     <session-factory>
         
-        <mapping resource="../../../../../../../../db/main/config/hibernate/npa.xml" />
+        <mapping resource="../../../../persistence/src/main/config/hibernate/npa.xml" />
     </session-factory>
 </hibernate-configuration>

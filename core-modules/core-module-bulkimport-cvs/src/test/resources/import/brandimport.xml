@@ -1,6 +1,6 @@
 <import-descriptor>
 
-    <entityIntface>com.npa.db.entity.Brand</entityIntface>
+    <entityIntface>org.yes.cart.domain.entity.Brand</entityIntface>
 
     <importFile class="file-descriptor">
         <columnDelimeter>;</columnDelimeter>

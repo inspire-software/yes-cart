@@ -1,6 +1,6 @@
 <import-descriptor>
 
-    <entityIntface>com.npa.db.entity.Shop</entityIntface>
+    <entityIntface>org.yes.cart.domain.entity.Shop</entityIntface>
 
     <importFile class="file-descriptor">
         <columnDelimeter>;</columnDelimeter>
@@ -44,7 +44,7 @@
             <name>shopUrl</name>
 
             <importDescriptor class="import-descriptor">
-                <entityIntface>com.npa.db.entity.ShopUrl</entityIntface>
+                <entityIntface>org.yes.cart.domain.entity.ShopUrl</entityIntface>
                 <importFile class="file-descriptor">
                     <columnDelimeter>;</columnDelimeter>
                     <textQualifier null="true"/>

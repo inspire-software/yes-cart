@@ -2,7 +2,7 @@
     <!--
     Example how related bulk import can consune the same file several times
     -->
-    <entityIntface>com.npa.db.entity.ProductSku</entityIntface>
+    <entityIntface>org.yes.cart.domain.entity.ProductSku</entityIntface>
 
     <importFile class="file-descriptor">
         <columnDelimeter>;</columnDelimeter>
@@ -63,7 +63,7 @@
             <fieldType>SIMPLE_SLAVE_FIELD</fieldType>
             <name>attribute</name>
             <importDescriptor class="import-descriptor">
-                <entityIntface>com.npa.db.entity.AttrValueProductSku</entityIntface>
+                <entityIntface>org.yes.cart.domain.entity.AttrValueProductSku</entityIntface>
                 <importFile class="file-descriptor">
                     <columnDelimeter>;</columnDelimeter>
                     <textQualifier null="true"/>
@@ -103,7 +103,7 @@
             <fieldType>SIMPLE_SLAVE_FIELD</fieldType>
             <name>attribute</name>
             <importDescriptor class="import-descriptor">
-                <entityIntface>com.npa.db.entity.AttrValueProductSku</entityIntface>
+                <entityIntface>org.yes.cart.domain.entity.AttrValueProductSku</entityIntface>
                 <importFile class="file-descriptor">
                     <columnDelimeter>;</columnDelimeter>
                     <textQualifier null="true"/>
