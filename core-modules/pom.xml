@@ -13,5 +13,7 @@
     <modules>
         <module>core-module-payment-base</module>
         <module>core-module-payment-capp</module>
+        <module>core-module-bulkimport-cvs</module>
+        <module>core-module-bulkimport-image</module>
     </modules>
 </project>
