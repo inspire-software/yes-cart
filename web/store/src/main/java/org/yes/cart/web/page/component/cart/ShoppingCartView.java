@@ -58,9 +58,7 @@ public class ShoppingCartView extends BaseComponent {
                         new PriceView(
                                 SUB_TOTAL_VIEW,
                                 new Pair<BigDecimal, BigDecimal>(
-                                        ApplicationDirector.getShoppingCart().getCartSubTotal(
-                                                ApplicationDirector.getShoppingCart().getCartItemList()
-                                        ),
+                                        ApplicationDirector.getShoppingCart().getCartSubTotal(),
                                         null),
                                 ApplicationDirector.getShoppingCart().getCurrencyCode(),
                                 true)

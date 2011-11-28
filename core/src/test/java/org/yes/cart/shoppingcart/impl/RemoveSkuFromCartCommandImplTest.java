@@ -27,18 +27,18 @@ public class RemoveSkuFromCartCommandImplTest extends BaseCoreDBTestCase {
                 .execute(shoppingCart);
         new SetShopCartCommandImpl(ctx(), singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
                 .execute(shoppingCart);
-        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getCartSubTotal(shoppingCart.getCartItemList()));
+        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getCartSubTotal());
         Map<String, String> params = new HashMap<String, String>();
         params.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST3");
         params.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "3");
         new SetSkuQuantityToCartEventCommandImpl(ctx(), params)
                 .execute(shoppingCart);
-        assertTrue("Expected 21.00 but was " + shoppingCart.getCartSubTotal(shoppingCart.getCartItemList()), (new BigDecimal("21.00")).equals(shoppingCart.getCartSubTotal(shoppingCart.getCartItemList())));
+        assertTrue("Expected 21.00 but was " + shoppingCart.getCartSubTotal(), (new BigDecimal("21.00")).equals(shoppingCart.getCartSubTotal()));
         params = new HashMap<String, String>();
         params.put(RemoveSkuFromCartCommandImpl.CMD_KEY, "CC_TEST3");
         new RemoveSkuFromCartCommandImpl(ctx(), params)
                 .execute(shoppingCart);
-        assertTrue("Expected 15.98 but was " + shoppingCart.getCartSubTotal(shoppingCart.getCartItemList()), (new BigDecimal("15.98")).equals(shoppingCart.getCartSubTotal(shoppingCart.getCartItemList())));
+        assertTrue("Expected 15.98 but was " + shoppingCart.getCartSubTotal(), (new BigDecimal("15.98")).equals(shoppingCart.getCartSubTotal()));
         assertEquals(2, shoppingCart.getCartItemsCount());
     }
 }

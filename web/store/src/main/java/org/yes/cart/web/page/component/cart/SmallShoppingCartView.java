@@ -60,7 +60,7 @@ public class SmallShoppingCartView extends BaseComponent {
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
         final Integer itemsInCart = cart.getCartItemsCount();
         final SkuPrice skuPrice = priceService.getGenericDao().getEntityFactory().getByIface(SkuPrice.class);
-        skuPrice.setRegularPrice(cart.getCartSubTotal(cart.getCartItemList()));
+        skuPrice.setRegularPrice(cart.getCartSubTotal());
         skuPrice.setCurrency(cart.getCurrencyCode());
         skuPrice.setQuantity(BigDecimal.ONE);
 
