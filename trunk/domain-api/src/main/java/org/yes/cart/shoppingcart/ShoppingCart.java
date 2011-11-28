@@ -97,13 +97,11 @@ public interface ShoppingCart extends Serializable {
     int getCartItemsCount();
 
     /**
-     * TODO need total refactoring about money calculation
      * Get cart sub total by given item list.
      *
-     * @param items given items
      * @return total amount for all items in the shopping cart.
      */
-    BigDecimal getCartSubTotal(List<? extends CartItem> items);
+    BigDecimal getCartSubTotal();
 
     /**
      * Get current currency from shopping cart.

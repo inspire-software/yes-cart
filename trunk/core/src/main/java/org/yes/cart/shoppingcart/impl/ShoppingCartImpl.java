@@ -199,7 +199,9 @@ public class ShoppingCartImpl implements ShoppingCart {
     /**
      * {@inheritDoc}
      */
-    public BigDecimal getCartSubTotal(final List<? extends CartItem> items) {
+    public BigDecimal getCartSubTotal() {
+
+        final List<? extends CartItem> items = this.getCartItemList();
 
         BigDecimal cartSubTotal = BigDecimal.ZERO;
         if (items != null) {

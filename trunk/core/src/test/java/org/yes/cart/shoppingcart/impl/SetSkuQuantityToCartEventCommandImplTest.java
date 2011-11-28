@@ -27,19 +27,19 @@ public class SetSkuQuantityToCartEventCommandImplTest extends BaseCoreDBTestCase
                 .execute(shoppingCart);
         new SetShopCartCommandImpl(ctx(), singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
                 .execute(shoppingCart);
-        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getCartSubTotal(shoppingCart.getCartItemList()));
+        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getCartSubTotal());
         Map<String, String> params = new HashMap<String, String>();
         params.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST4");
         params.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1");
         SetSkuQuantityToCartEventCommandImpl setSkuQuantityToCartEventCommand = new SetSkuQuantityToCartEventCommandImpl(ctx(), params);
         setSkuQuantityToCartEventCommand.execute(shoppingCart);
-        assertTrue("Expected 123.00", (new BigDecimal("123.00")).equals(shoppingCart.getCartSubTotal(shoppingCart.getCartItemList())));
+        assertTrue("Expected 123.00", (new BigDecimal("123.00")).equals(shoppingCart.getCartSubTotal()));
         params = new HashMap<String, String>();
         params.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST4");
         params.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "5");
         setSkuQuantityToCartEventCommand = new SetSkuQuantityToCartEventCommandImpl(ctx(), params);
         setSkuQuantityToCartEventCommand.execute(shoppingCart);
-        assertTrue("Expected 499.55 but got " + shoppingCart.getCartSubTotal(shoppingCart.getCartItemList()),
-                (new BigDecimal("499.95")).equals(shoppingCart.getCartSubTotal(shoppingCart.getCartItemList())));
+        assertTrue("Expected 499.55 but got " + shoppingCart.getCartSubTotal(),
+                (new BigDecimal("499.95")).equals(shoppingCart.getCartSubTotal()));
     }
 }
