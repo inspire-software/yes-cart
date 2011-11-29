@@ -60,7 +60,7 @@
 
         <!-- copy english localization files -->
         <copy todir="src/main/flex" flatten="true">
-            <fileset dir="src/main/resources/en_EN"/>
+            <fileset dir="src/main/resources/en_US"/>
         </copy>
         <exec executable="subWCRev"  osfamily="windows">
           <arg value="src/main/resources/en_US"/>
@@ -77,7 +77,7 @@
             <load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
             <source-path path-element="${FLEX_HOME}/frameworks"/>
        </mxmlc>
-        <copy file="${basedir}/src/main/flex/ShopManagerApplication.swf" tofile="${basedir}/target/en_EN/ShopManagerApplication_en_EN.swf"/>
+        <copy file="${basedir}/src/main/flex/ShopManagerApplication.swf" tofile="${basedir}/target/en_US/ShopManagerApplication_en_US.swf"/>
         <delete file="${basedir}/src/main/flex/ShopManagerApplication.swf"/>
     </target>
 
@@ -101,7 +101,7 @@
                 version-minor="0"
                 version-revision="0"
                 history="true"
-                output="../server/src/main/webapp/ru_RU"/>
+                output="../server/src/main/webapp"/>
     </target>
 
     <target name="wrapper_en">
@@ -113,12 +113,12 @@
                 file="index.html"
                 bgcolor="red"
                 application="app"
-                swf="ShopManagerApplication_en_EN"
+                swf="ShopManagerApplication_en_US"
                 version-major="10"
                 version-minor="0"
                 version-revision="0"
                 history="true"
-                output="../server/src/main/webapp/en_US"/>
+                output="../server/src/main/webapp"/>
     </target>
 
 
@@ -157,8 +157,8 @@
     </target>
 
     <target name="depl" depends="all">
-	<copy file="target/en_EN/ShopManagerApplication_en_EN.swf" tofile="../server/src/main/webapp/en_EN/ShopManagerApplication_en_EN.swf"/>
-	<copy file="target/ru_RU/ShopManagerApplication_ru_RU.swf" tofile="../server/src/main/webapp/ru_RU/ShopManagerApplication_ru_RU.swf"/>
+	<copy file="target/en_US/ShopManagerApplication_en_US.swf" tofile="../server/src/main/webapp/ShopManagerApplication_en_US.swf"/>
+	<copy file="target/ru_RU/ShopManagerApplication_ru_RU.swf" tofile="../server/src/main/webapp/ShopManagerApplication_ru_RU.swf"/>
     </target>
 
 
