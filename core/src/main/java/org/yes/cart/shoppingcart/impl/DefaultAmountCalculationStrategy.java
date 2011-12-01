@@ -28,4 +28,6 @@ public class DefaultAmountCalculationStrategy {
     public boolean isTaxIncluded() {
         return true;
     }
+
+
 }
