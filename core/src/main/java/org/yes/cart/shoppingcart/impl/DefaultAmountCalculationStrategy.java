@@ -1,6 +1,12 @@
 package org.yes.cart.shoppingcart.impl;
 
+import org.yes.cart.domain.entity.CarrierSla;
+import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.shoppingcart.AmountCalculationResult;
+import org.yes.cart.shoppingcart.CartItem;
+
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Igor Azarny iazarny@yahoo.com
@@ -13,7 +19,7 @@ public class DefaultAmountCalculationStrategy {
 
     /**
      * Construct default amount calculator with included tax.
-     * @param tax vat value
+     * @param tax vat value in percents
      */
     public DefaultAmountCalculationStrategy(final BigDecimal tax) {
         this.tax = tax;
@@ -27,6 +33,17 @@ public class DefaultAmountCalculationStrategy {
     /** {@inheritDoc} */
     public boolean isTaxIncluded() {
         return true;
+    }
+
+
+    /** {@inheritDoc} */
+    public AmountCalculationResult calculate(final Shop shop,
+                                             final List<? extends CartItem> items,
+                                             final CarrierSla carrierSla) {
+        final AmountCalculationResult rez = new AmountCalculationResultImpl();
+
+
+        return rez;
     }
 
 
