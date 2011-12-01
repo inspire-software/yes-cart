@@ -19,6 +19,7 @@ package org.yes.cart.shoppingcart;
  */
 public interface AmountCalculationStrategy {
 
+
     //List<? extends CartItem> items
 
 }

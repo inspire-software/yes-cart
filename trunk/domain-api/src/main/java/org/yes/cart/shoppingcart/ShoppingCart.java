@@ -96,12 +96,6 @@ public interface ShoppingCart extends Serializable {
      */
     int getCartItemsCount();
 
-    /**
-     * Get cart sub total by given item list.
-     *
-     * @return total amount for all items in the shopping cart.
-     */
-    BigDecimal getCartSubTotal();
 
     /**
      * Get current currency from shopping cart.
@@ -219,7 +213,18 @@ public interface ShoppingCart extends Serializable {
      * Set processing start date.
      * @param processingStartDate start date.
      */
-    void setProcessingStartDate(Date processingStartDate);    
+    void setProcessingStartDate(Date processingStartDate);
+
+
+
+
+    /**
+     * Get cart sub total without any tax calculation.
+     *
+     * @return total amount for all items in the shopping cart.
+     */
+    BigDecimal getCartSubTotal();
+
 
 
 }
