@@ -1,6 +1,7 @@
 package org.yes.cart.shoppingcart;
 
 import org.yes.cart.domain.dto.ProductSkuDTO;
+import org.yes.cart.domain.entity.CustomerOrderDelivery;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -20,6 +21,13 @@ public interface ShoppingCart extends Serializable {
     int NOT_LOGGED = 0;
     int SESSION_EXPIRED = 1;
     int LOGGED_IN = 2;
+
+
+    /**
+     * Set amount calculation strategy.
+     * @param calculationStrategy {@link AmountCalculationStrategy}
+     */
+    void setCalculationStrategy(AmountCalculationStrategy calculationStrategy);
 
 
     /**
@@ -224,6 +232,14 @@ public interface ShoppingCart extends Serializable {
      * @return total amount for all items in the shopping cart.
      */
     BigDecimal getCartSubTotal();
+
+    /**
+     * Calculate taxes and amount withing current cart shopping context.
+     * @param items items to perform calculation on.
+     * @param orderDelivery optional delivery
+     * @return {@link AmountCalculationResult} calculation result.
+     */
+    AmountCalculationResult getCartSubTotal(List<? extends CartItem> items, CustomerOrderDelivery orderDelivery);
 
 
 

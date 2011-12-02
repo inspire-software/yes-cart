@@ -80,6 +80,11 @@
     <bean id="shoppingCartFilter" class="org.yes.cart.web.filter.ShoppingCartFilter">
         <constructor-arg index="0" ref="applicationDirector"/>
         <constructor-arg index="1" ref="cookieTuplizer"/>
+        <constructor-arg index="2">
+            <bean class="org.yes.cart.shoppingcart.impl.DefaultAmountCalculationStrategy">  <!-- CPOINT tax and amount calculation strategy -->
+                <constructor-arg index="0"  value="20.00"/>
+            </bean>
+        </constructor-arg>
     </bean>
 
     <bean id="shoppingCartPersister" class="org.yes.cart.web.support.util.cookie.impl.ShoppingCartPersisterImpl">

@@ -4,6 +4,7 @@ package org.yes.cart.web.filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.shoppingcart.impl.WebShoppingCartImpl;
@@ -33,16 +34,21 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
 
     private final CookieTuplizer tuplizer;
 
+    private final AmountCalculationStrategy calculationStrategy;
+
 
     /**
      * @param tuplizer   tuplizer to manage cookie to object to cookie transformation
      * @param applicationDirector app director.
+     * @param calculationStrategy calculation strategy
      */
     public ShoppingCartFilter(
             final ApplicationDirector applicationDirector,
-            final CookieTuplizer tuplizer) {
+            final CookieTuplizer tuplizer,
+            final AmountCalculationStrategy calculationStrategy) {
         super(applicationDirector);
         this.tuplizer = tuplizer;
+        this.calculationStrategy = calculationStrategy;
     }
 
 
@@ -67,6 +73,7 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
                 }
             }
             cart.setProcessingStartDate(new Date());
+            cart.setCalculationStrategy(calculationStrategy);
             ApplicationDirector.setShoppingCart(cart);
         }
         return request;
