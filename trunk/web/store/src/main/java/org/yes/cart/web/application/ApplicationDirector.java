@@ -1,6 +1,9 @@
 package org.yes.cart.web.application;
 
 import com.google.common.collect.MapMaker;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.ShoppingCart;
@@ -17,9 +20,10 @@ import java.util.concurrent.TimeUnit;
  * Time: 7:11 PM
  */
 
-public class ApplicationDirector {
+public class ApplicationDirector implements ApplicationContextAware {
 
     private ShopService shopService;
+    private ApplicationContext applicationContext;
 
     private static ThreadLocal<Shop> shopThreadLocal =  new ThreadLocal<Shop>();
     private static ThreadLocal<ShoppingCart> shoppingCartThreadLocal =  new ThreadLocal<ShoppingCart>();
@@ -114,5 +118,10 @@ public class ApplicationDirector {
      */
     public static void setShoppingCart(final ShoppingCart shoppingCart) {
         shoppingCartThreadLocal.set(shoppingCart);
+    }
+
+    /** {@inheritDoc} */
+    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 }

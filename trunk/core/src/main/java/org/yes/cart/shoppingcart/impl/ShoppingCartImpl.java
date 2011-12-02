@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.ProductSkuDTO;
+import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.shoppingcart.*;
 
 import java.math.BigDecimal;
@@ -41,9 +42,24 @@ public class ShoppingCartImpl implements ShoppingCart {
 
     private OrderInfo orderInfo;
 
+    private transient AmountCalculationStrategy calculationStrategy;
 
 
+    private AmountCalculationStrategy getCalculationStrategy() {
+        if (calculationStrategy == null) {
+            calculationStrategy = new DefaultAmountCalculationStrategy(BigDecimal.ZERO);
+            LOG.error("Default amount calculation strategy used with 0% tax. Please configure \"calculationStrategy\" and set it to cart");
+        }
+        return calculationStrategy;
+    }
 
+    /**
+     * Set amount calculation strategy.
+     * @param calculationStrategy {@link AmountCalculationStrategy}
+     */
+    public void setCalculationStrategy(final AmountCalculationStrategy calculationStrategy) {
+        this.calculationStrategy = calculationStrategy;
+    }
 
     /**
      * Clean current cart and prepare it to reuse.
@@ -201,24 +217,20 @@ public class ShoppingCartImpl implements ShoppingCart {
      */
     public BigDecimal getCartSubTotal() {
 
-        return getCartSubTotal(this.getCartItemList());
+        return getCartSubTotal(this.getCartItemList(), null).getSubTotal();
 
     }
 
     /**
      * {@inheritDoc}
      */
-    public BigDecimal getCartSubTotal(final List<? extends CartItem> items) {
-
-        BigDecimal cartSubTotal = BigDecimal.ZERO;
-        if (items != null) {
-            for (CartItem cartItem : items) {
-                final BigDecimal price = cartItem.getPrice();
-                cartSubTotal = cartSubTotal.add(price.multiply(cartItem.getQty()).setScale(Constants.DEFAULT_SCALE));
-            }
-        }
-
-        return cartSubTotal.setScale(Constants.DEFAULT_SCALE);
+    public AmountCalculationResult getCartSubTotal(final List<? extends CartItem> items,
+                                                   final CustomerOrderDelivery orderDelivery) {
+        return getCalculationStrategy().calculate(
+                getShoppingContext(),
+                items,
+                orderDelivery
+        );
     }
 
     /**
@@ -241,7 +253,6 @@ public class ShoppingCartImpl implements ShoppingCart {
             }
         }
         return -1;
-
     }
 
 
