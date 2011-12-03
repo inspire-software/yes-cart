@@ -174,7 +174,7 @@ public class CsvBulkImportServiceImplTest  extends CvsImportBaseTestCase {
 
     }
 
-    /*@Ignore //todo
+    @Test
     public void testDoImportWithSimpleSlaveFiled() {
         StringBuilder stringBuilder = new StringBuilder();
         Set<String> importedFilesSet = new HashSet<String>();
@@ -183,6 +183,7 @@ public class CsvBulkImportServiceImplTest  extends CvsImportBaseTestCase {
         bulkImportService.doImport(stringBuilder, importedFilesSet);
 
         try {
+
 
             PreparedStatement pst = getConnection().getConnection().prepareStatement(
                     "select shop_id  from tshop where code='zzz'");
@@ -202,14 +203,13 @@ public class CsvBulkImportServiceImplTest  extends CvsImportBaseTestCase {
             rs.close();
             pst.close();
 
-            dumpDataBase(
-                    "shop",
-                    new String[]{"tshop", "tshopurl"}
-            );
+
         } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
+            e.printStackTrace();
+            assertTrue(e.getMessage() + " \n\n\n" + stringBuilder.toString(), false);
+
         }
 
-    }   */
+    }
 
 }
