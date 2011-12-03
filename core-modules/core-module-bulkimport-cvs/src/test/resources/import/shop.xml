@@ -77,6 +77,12 @@
         </column-descriptor>
 
 
+        <column-descriptor>
+            <columnIndex>5</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>imageVaultFolder</name>
+        </column-descriptor>
+
 
     </importColumns>
     <importFolder>src/test/resources/import</importFolder>
