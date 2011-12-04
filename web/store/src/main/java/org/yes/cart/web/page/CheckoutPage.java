@@ -16,26 +16,34 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.payment.PaymentModulesManager;
+import org.yes.cart.shoppingcart.AmountCalculationResult;
+import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.OrderInfo;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.impl.SetMultipleDeliveryCommandImpl;
 import org.yes.cart.shoppingcart.impl.SetPaymentGatewayLabelCommandImpl;
 import org.yes.cart.web.application.ApplicationDirector;
+import org.yes.cart.web.page.component.cart.ShoppingCartPaymentVerificationView;
 import org.yes.cart.web.page.component.customer.address.ManageAddressesView;
 import org.yes.cart.web.page.component.customer.auth.LoginPanel;
 import org.yes.cart.web.page.component.customer.auth.RegisterPanel;
 import org.yes.cart.web.page.component.shipping.ShippingView;
 import org.yes.cart.web.page.component.util.PaymentGatewayDescriptorModel;
 import org.yes.cart.web.page.component.util.PaymentGatewayDescriptorRenderer;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 
 import java.math.BigDecimal;
+import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Checkout page has following main steps:
@@ -112,6 +120,9 @@ public class CheckoutPage extends AbstractWebPage {
 
     @SpringBean(name = ServiceSpringKeys.PAYMENT_MODULES_MANAGER)
     private PaymentModulesManager paymentModulesManager;
+
+    @SpringBean(name = StorefrontServiceSpringKeys.AMOUNT_CALCULATION_STRATEGY)
+    private AmountCalculationStrategy amountCalculationStrategy;
 
 
     /**
@@ -219,98 +230,126 @@ public class CheckoutPage extends AbstractWebPage {
         final MarkupContainer rez = new Fragment(CONTENT_VIEW, PAYMENT_FRAGMENT, this);
         final ShoppingCart shoppingCart = ApplicationDirector.getShoppingCart();
         final OrderInfo orderInfo = shoppingCart.getOrderInfo();
-        final boolean showMultipleDelivery = true; //todo
+        final boolean showMultipleDelivery = customerOrderService.isOrderCanHasMultipleDeliveries(shoppingCart);
 
-        rez.add(
-                new Label(PAYMENT_FRAGMENT_PAYMENT_FORM)
-        );
-
-        rez.add(
-                new Label("orderVerificationView")
-        );
-
-
-        rez.add(
-                new Form(PAYMENT_FRAGMENT_OPTIONS_FORM).add(
-                        new CheckBox(PAYMENT_FRAGMENT_MD_CHECKBOX, new PropertyModel(orderInfo, "multipleDelivery")) {
-
-                            /** {@inheritDoc} */
-                            protected boolean wantOnSelectionChangedNotifications() {
-                                return true;
-                            }
-
-                            @Override
-                            public void onSelectionChanged() {
-                                setModelObject(!getModelObject());
-                                new SetMultipleDeliveryCommandImpl(
-                                        null,
-                                        Collections.singletonMap(SetMultipleDeliveryCommandImpl.CMD_KEY, getModelObject().toString()))
-                                        .execute(ApplicationDirector.getShoppingCart());
-
-                                System.out.print(">>>>>>>>>>>>> " + ApplicationDirector.getShoppingCart());
-                                super.onSelectionChanged();
-                            }
-
-                        }.setVisible(showMultipleDelivery)
-
-                ).add(
-                        new Label(PAYMENT_FRAGMENT_MD_LABEL,
-                                getLocalizer().getString(PAYMENT_FRAGMENT_MD_LABEL, this)
-
-                        ).setVisible(showMultipleDelivery)
-
-                ).add(
-                        new DropDownChoice<PaymentGatewayDescriptor>(
-                                PAYMENT_FRAGMENT_GATEWAY_CHECKBOX,
-                                new PaymentGatewayDescriptorModel(new PropertyModel<String>(orderInfo, "paymentGatewayLabel"), paymentModulesManager.getPaymentGatewaysDescriptors(false)),
-                                paymentModulesManager.getPaymentGatewaysDescriptors(false)) {
-
-                            /** {@inheritDoc} */
-                            protected void onSelectionChanged(final PaymentGatewayDescriptor descriptor) {
-
-                                final PaymentGateway gateway = paymentModulesManager.getPaymentGateway(descriptor.getLabel());
-                                final ShoppingCart cart = ApplicationDirector.getShoppingCart();
-                                final CustomerOrder order = customerOrderService.findByGuid(cart.getGuid());
-                                final BigDecimal grandTotal = BigDecimal.TEN;
-
-                                order.setPgLabel(descriptor.getLabel());
-                                customerOrderService.update(order);
-
-                                final String htmlForm =
-                                        "<form action=\"" + getPostActionUrl(gateway) + "\">"
-                                                + gateway.getHtmlForm(
-                                                        (order.getCustomer().getFirstname() + " " + order.getCustomer().getLastname()).toUpperCase(),
-                                                        cart.getCurrentLocale(),
-                                                        grandTotal,
-                                                        cart.getGuid()
-                                                )
-                                                + "<div id=\"paymentDiv\"><input type=\"submit\" value=\""
-                                                + getLocalizer().getString("paymentSubmit", this)
-                                                + "\"></div></form>";
-
-                                rez.addOrReplace(
-                                        new Label(PAYMENT_FRAGMENT_PAYMENT_FORM, htmlForm)
-                                                .setEscapeModelStrings(false)
-                                );
-
-                                new SetPaymentGatewayLabelCommandImpl(
-                                        null,
-                                        Collections.singletonMap(SetPaymentGatewayLabelCommandImpl.CMD_KEY, descriptor.getLabel()))
-                                        .execute(ApplicationDirector.getShoppingCart());
-
-                            }
-
-                            /** {@inheritDoc} */
-                            protected boolean wantOnSelectionChangedNotifications() {
-                                return true;
-                            }
-
-                        }.setChoiceRenderer(new PaymentGatewayDescriptorRenderer())
+        rez
+                .add(
+                        new Label(PAYMENT_FRAGMENT_PAYMENT_FORM)
                 )
-        );
+                .addOrReplace(
+
+                        new ShoppingCartPaymentVerificationView("orderVerificationView", shoppingCart.getShoppingContext(), getDeliveries(shoppingCart))
+
+                )
+                .add(
+                        new Form(PAYMENT_FRAGMENT_OPTIONS_FORM)
+                                .add(
+                                        new CheckBox(PAYMENT_FRAGMENT_MD_CHECKBOX, new PropertyModel(orderInfo, "multipleDelivery")) {
+
+                                            /** {@inheritDoc} */
+                                            protected boolean wantOnSelectionChangedNotifications() {
+                                                return true;
+                                            }
+
+                                            @Override
+                                            public void onSelectionChanged() {
+                                                setModelObject(!getModelObject());
+                                                new SetMultipleDeliveryCommandImpl(
+                                                        null,
+                                                        Collections.singletonMap(SetMultipleDeliveryCommandImpl.CMD_KEY, getModelObject().toString()))
+                                                        .execute(ApplicationDirector.getShoppingCart());
+
+                                                super.onSelectionChanged();
+                                            }
+
+                                        }.setVisible(showMultipleDelivery)
+
+                                )
+                                .add(
+                                        new Label(PAYMENT_FRAGMENT_MD_LABEL,
+                                                getLocalizer().getString(PAYMENT_FRAGMENT_MD_LABEL, this)
+
+                                        ).setVisible(showMultipleDelivery)
+
+                                )
+                                .add(
+                                        new DropDownChoice<PaymentGatewayDescriptor>(
+                                                PAYMENT_FRAGMENT_GATEWAY_CHECKBOX,
+                                                new PaymentGatewayDescriptorModel(
+                                                        new PropertyModel<String>(orderInfo, "paymentGatewayLabel"),
+                                                        paymentModulesManager.getPaymentGatewaysDescriptors(false)
+                                                ),
+                                                paymentModulesManager.getPaymentGatewaysDescriptors(false)) {
+
+                                            /** {@inheritDoc} */
+                                            protected void onSelectionChanged(final PaymentGatewayDescriptor descriptor) {
+
+                                                final PaymentGateway gateway = paymentModulesManager.getPaymentGateway(descriptor.getLabel());
+                                                final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+                                                final CustomerOrder order = customerOrderService.findByGuid(cart.getGuid());
+                                                final AmountCalculationResult amountCalculationResult = amountCalculationStrategy.calculate(
+                                                        shoppingCart.getShoppingContext(), getDeliveries(shoppingCart)
+                                                );
+                                                final BigDecimal grandTotal = amountCalculationResult.getTotalAmount();
+
+                                                order.setPgLabel(descriptor.getLabel());
+                                                customerOrderService.update(order);
+
+                                                final String htmlForm = getPaymentForm(gateway, cart, order, grandTotal);
+
+                                                rez.addOrReplace(
+                                                        new Label(PAYMENT_FRAGMENT_PAYMENT_FORM, htmlForm)
+                                                                .setEscapeModelStrings(false)
+                                                );
+
+                                                new SetPaymentGatewayLabelCommandImpl(
+                                                        null,
+                                                        Collections.singletonMap(SetPaymentGatewayLabelCommandImpl.CMD_KEY, descriptor.getLabel()))
+                                                        .execute(ApplicationDirector.getShoppingCart());
+
+                                            }
+
+
+                                            /** {@inheritDoc} */
+                                            protected boolean wantOnSelectionChangedNotifications() {
+                                                return true;
+                                            }
+
+                                        }.setChoiceRenderer(new PaymentGatewayDescriptorRenderer())
+                                )
+                );
 
 
         return rez;
+    }
+
+    /**
+     * Get html form for payment.
+     *
+     * @param gateway    gateway
+     * @param cart       current cart
+     * @param order      order
+     * @param grandTotal amount
+     * @return payment form
+     */
+    protected String getPaymentForm(final PaymentGateway gateway,
+                                    final ShoppingCart cart,
+                                    final CustomerOrder order,
+                                    final BigDecimal grandTotal) {
+        final String fullName = (order.getCustomer().getFirstname()
+                + " "
+                + order.getCustomer().getLastname()).toUpperCase();
+        final String submitBtnValue = getLocalizer().getString("paymentSubmit", this);
+        final String postActionUrl = getPostActionUrl(gateway);
+        final String htmlFragment = gateway.getHtmlForm(fullName, cart.getCurrentLocale(), grandTotal, cart.getGuid());
+
+        return MessageFormat.format(
+                "<form action=\"{0}\">\n{1}\n<div id=\"paymentDiv\"><input type=\"submit\" value=\"{2}\"></div></form>",
+                postActionUrl,
+                htmlFragment,
+                submitBtnValue
+        );
+
     }
 
     /**
@@ -389,6 +428,18 @@ public class CheckoutPage extends AbstractWebPage {
                 )
         );
         return rez;
+    }
+
+    /**
+     * Get deliveries.
+     *
+     * @param cart {@link ShoppingCart}
+     * @return list of deliveries
+     */
+    private List<CustomerOrderDelivery> getDeliveries(final ShoppingCart cart) {
+
+        return new ArrayList<CustomerOrderDelivery>(customerOrderService.findByGuid(cart.getGuid()).getDelivery());
+
     }
 
     /**

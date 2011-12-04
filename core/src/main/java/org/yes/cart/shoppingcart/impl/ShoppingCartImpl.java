@@ -3,7 +3,6 @@ package org.yes.cart.shoppingcart.impl;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.ProductSkuDTO;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.shoppingcart.*;
@@ -217,18 +216,17 @@ public class ShoppingCartImpl implements ShoppingCart {
      */
     public BigDecimal getCartSubTotal() {
 
-        return getCartSubTotal(this.getCartItemList(), null).getSubTotal();
+        return getCalculationStrategy().calculateSubTotal(this.getCartItemList());
 
     }
 
     /**
      * {@inheritDoc}
      */
-    public AmountCalculationResult getCartSubTotal(final List<? extends CartItem> items,
-                                                   final CustomerOrderDelivery orderDelivery) {
+    public AmountCalculationResult getCartAmount(final List<? extends CartItem> items,
+                                                 final CustomerOrderDelivery orderDelivery) {
         return getCalculationStrategy().calculate(
                 getShoppingContext(),
-                items,
                 orderDelivery
         );
     }
