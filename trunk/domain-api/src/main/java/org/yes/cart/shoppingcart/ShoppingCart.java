@@ -239,7 +239,7 @@ public interface ShoppingCart extends Serializable {
      * @param orderDelivery optional delivery
      * @return {@link AmountCalculationResult} calculation result.
      */
-    AmountCalculationResult getCartSubTotal(List<? extends CartItem> items, CustomerOrderDelivery orderDelivery);
+    AmountCalculationResult getCartAmount(List<? extends CartItem> items, CustomerOrderDelivery orderDelivery);
 
 
 

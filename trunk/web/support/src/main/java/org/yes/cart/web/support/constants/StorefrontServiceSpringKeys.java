@@ -22,6 +22,11 @@ public interface StorefrontServiceSpringKeys {
      */
     public String CENTRAL_VIEW_RESOLVER = "centralViewResolver";
 
+    /**
+     * Service to resolve central view from request parameters.
+     */
+    public String AMOUNT_CALCULATION_STRATEGY = "amountCalculationStrategy";
+
      /**
       * Category image service .
       */

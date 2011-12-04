@@ -1,0 +1,48 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<body>
+<wicket:panel>
+
+    <table border="1"> <!-- verify and pay -->
+        <tr wicket:id="deliveryList">
+            <td>
+                <span wicket:id="deliveryCode">[delivery Code]</span>
+
+            </td>
+            <td>
+                <table width="100%">
+                    <tr wicket:id="itemList">
+                        <td>
+                            <img  wicket:id="defaultImage"/>
+                            <span wicket:id="itemName">[sku name]</span>
+                            <span wicket:id="itemCode">[sku code]</span>
+                            <span wicket:id="itemPrice">[sku price]</span>
+                            <span wicket:id="itemQty">[qty]</span>
+                            <span wicket:id="itemTotal">[total line]</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span wicket:id="deliverySubTotal">[sub total]</span>
+                            <span wicket:id="deliverySubTotalTax">[sub total tax ]</span>
+                            <span wicket:id="deliverySubTotalAmount">[sub total amount ]</span>
+                            <hr>
+                            <span wicket:id="deliveryCost">[delivery cost]</span>
+                            <span wicket:id="deliveryCostTax">[delivery tax]</span>
+                            <span wicket:id="deliveryCostAmount ">[delivery amount]</span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" align="right">
+                <span wicket:id="grandTotal">[sub total]</span>
+                <span wicket:id="grandTotalTax">[sub total tax ]</span>
+                <span wicket:id="grandTotalAmount">[sub total amount ]</span>
+            </td>
+        </tr>
+    </table>
+
+</wicket:panel>
+</body>
+</html>

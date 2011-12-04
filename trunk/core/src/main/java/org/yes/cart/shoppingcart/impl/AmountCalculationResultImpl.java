@@ -1,5 +1,6 @@
 package org.yes.cart.shoppingcart.impl;
 
+import org.yes.cart.constants.Constants;
 import org.yes.cart.shoppingcart.AmountCalculationResult;
 
 import java.math.BigDecimal;
@@ -25,42 +26,75 @@ public class AmountCalculationResultImpl implements AmountCalculationResult {
     private BigDecimal totalTax;
     private BigDecimal totalAmount;
 
-    /** {@inheritDoc} */
+
+    public AmountCalculationResultImpl() {
+
+        subTotal = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+        subTotalTax = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+        subTotalAmount = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+
+        delivery = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+        deliveryTax = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+        deliveryAmount = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+
+        total = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+        totalTax = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+        totalAmount = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public BigDecimal getSubTotal() {
         return subTotal;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setSubTotal(final BigDecimal subTotal) {
         this.subTotal = subTotal;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public BigDecimal getSubTotalTax() {
         return subTotalTax;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setSubTotalTax(final BigDecimal subTotalTax) {
         this.subTotalTax = subTotalTax;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public BigDecimal getSubTotalAmount() {
         return subTotalAmount;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setSubTotalAmount(final BigDecimal subTotalAmount) {
         this.subTotalAmount = subTotalAmount;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public BigDecimal getDelivery() {
         return delivery;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setDelivery(final BigDecimal delivery) {
         this.delivery = delivery;
     }
@@ -69,47 +103,65 @@ public class AmountCalculationResultImpl implements AmountCalculationResult {
         return deliveryTax;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setDeliveryTax(final BigDecimal deliveryTax) {
         this.deliveryTax = deliveryTax;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public BigDecimal getDeliveryAmount() {
         return deliveryAmount;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setDeliveryAmount(final BigDecimal deliveryAmount) {
         this.deliveryAmount = deliveryAmount;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public BigDecimal getTotal() {
         return total;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setTotal(final BigDecimal total) {
         this.total = total;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public BigDecimal getTotalTax() {
         return totalTax;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setTotalTax(final BigDecimal totalTax) {
         this.totalTax = totalTax;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public BigDecimal getTotalAmount() {
         return totalAmount;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setTotalAmount(final BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
     }

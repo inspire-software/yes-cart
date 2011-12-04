@@ -48,7 +48,7 @@
 <!--            <include-sources dir="resources/com/npa/org.yes.cart.shopmanager" includes="ShopManagerGlobal.as"/>-->
 <!--            <compiler.source-path path-element="scr/main/resources/com/npa/org.yes.cart.shopmanager"/>-->
         </mxmlc>
-        <copy file="src/main/flex/ShopManagerApplication.swf" tofile="target/ru_RU/ShopManagerApplication_ru_RU.swf"/>
+        <copy file="src/main/flex/ShopManagerApplication.swf" tofile="target/ru_RU/ShopManagerApplication.swf"/>
         <delete file="src/main/flex/ShopManagerApplication.swf"/>
     </target>
 
@@ -77,7 +77,7 @@
             <load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
             <source-path path-element="${FLEX_HOME}/frameworks"/>
        </mxmlc>
-        <copy file="${basedir}/src/main/flex/ShopManagerApplication.swf" tofile="${basedir}/target/en_US/ShopManagerApplication_en_US.swf"/>
+        <copy file="${basedir}/src/main/flex/ShopManagerApplication.swf" tofile="${basedir}/target/en_US/ShopManagerApplication.swf"/>
         <delete file="${basedir}/src/main/flex/ShopManagerApplication.swf"/>
     </target>
 

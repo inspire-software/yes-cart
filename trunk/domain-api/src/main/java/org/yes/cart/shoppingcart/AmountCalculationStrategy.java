@@ -4,6 +4,7 @@ import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.Shop;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -42,12 +43,28 @@ public interface AmountCalculationStrategy {
     /**
      * Calculate shopping cart amount.
      * @param shoppingContext  current {@link ShoppingContext}
-     * @param items {@link CartItem}s to  calculate amount
-     * @param orderDelivery optional {@link CustomerOrderDelivery}
+     * @param orderDelivery  {@link CustomerOrderDelivery}
      * @return {@link AmountCalculationResult}
      */
     AmountCalculationResult calculate(ShoppingContext shoppingContext,
-                                      List<? extends CartItem> items,
                                       CustomerOrderDelivery orderDelivery);
+
+    /**
+     * Calculate shopping cart amount.
+     * @param shoppingContext  current {@link ShoppingContext}
+     * @param orderDelivery list of {@link CustomerOrderDelivery}
+     * @return {@link AmountCalculationResult}
+     */
+    AmountCalculationResult calculate(ShoppingContext shoppingContext,
+                                      Collection<CustomerOrderDelivery> orderDelivery);
+
+
+    /**
+     * Calculate sub total of shopping cart by given list of {@link CartItem}.
+     *
+     * @param items given list of cart items.
+     * @return cart sub total.
+     */
+    BigDecimal calculateSubTotal(List<CartItem> items);
 
 }
