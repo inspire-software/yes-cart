@@ -1,0 +1,184 @@
+<import-descriptor>
+
+    <entityIntface>com.npa.db.entity.Product</entityIntface>
+
+    <importFile class="file-descriptor">
+        <columnDelimeter>;</columnDelimeter>
+        <textQualifier>&quot;</textQualifier>
+        <ignoreFirstLine>true</ignoreFirstLine>
+        <fileNameMask>product_entity*.csv$</fileNameMask>
+        <fileEncoding>UTF-8</fileEncoding>
+    </importFile>
+
+    <importColumns class="list">
+
+        <!--  Product name -->
+        <column-descriptor>
+            <columnIndex>0</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>name</name>
+            <regExp>(.*)</regExp>
+        </column-descriptor>
+
+        <!-- Product type -->
+        <column-descriptor>
+            <columnIndex>2</columnIndex>
+            <fieldType>FK_FIELD</fieldType>
+            <name>producttype</name>
+            <regExp>(.*)</regExp>
+            <lookupQuery>select pt from ProductTypeEntity pt where pt.name = ?1</lookupQuery>
+        </column-descriptor>
+
+        <!-- Brand name -->
+        <column-descriptor>
+            <columnIndex>3</columnIndex>
+            <fieldType>FK_FIELD</fieldType>
+            <name>brand</name>
+            <regExp>(.*)</regExp>
+            <lookupQuery>select b from BrandEntity b where b.name = ?1</lookupQuery>
+        </column-descriptor>
+
+        <!-- Availability type -->
+        <column-descriptor>
+            <columnIndex>4</columnIndex>
+            <fieldType>FK_FIELD</fieldType>
+            <name>availability</name>
+            <regExp>(.*)</regExp>
+            <lookupQuery>select a from AvailabilityEntity a where a.name = ?1</lookupQuery>
+        </column-descriptor>
+
+        <!-- Available from -->
+        <column-descriptor>
+            <columnIndex>5</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>availablefrom</name>
+            <regExp>(.*)</regExp>
+        </column-descriptor>
+
+        <!-- Available from -->
+        <column-descriptor>
+            <columnIndex>6</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>availabletill</name>
+            <regExp>(.*)</regExp>
+        </column-descriptor>
+
+        <!-- Product code filed for lookup object -->
+        <column-descriptor>
+            <columnIndex>7</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>code</name>
+            <regExp>(.*)</regExp>
+            <lookupQuery>select p from ProductEntity p where p.code = ?1</lookupQuery>
+        </column-descriptor>
+
+
+        <!-- Made of  -->
+        <column-descriptor>
+            <columnIndex>9</columnIndex>
+            <fieldType>SIMPLE_SLAVE_FIELD</fieldType>
+            <name>attribute</name>
+            <importDescriptor class="import-descriptor">
+
+                <entityIntface>com.npa.db.entity.AttrValueProduct</entityIntface>
+
+                <importFile class="file-descriptor">
+                    <columnDelimeter>;</columnDelimeter>
+                    <textQualifier null="true"/>
+                    <ignoreFirstLine>false</ignoreFirstLine>
+                </importFile>
+
+                <importColumns class="list">
+
+                    <column-descriptor>
+                        <columnIndex>-1</columnIndex>
+                        <fieldType>FK_FIELD</fieldType>
+                        <name>product</name>
+                        <useMasterObject>true</useMasterObject>
+                    </column-descriptor>
+
+                    <column-descriptor>
+                        <columnIndex>0</columnIndex>
+                        <fieldType>FIELD</fieldType>
+                        <name>val</name>
+                        <regExp>^(.*)\s{1,}</regExp>
+                        <useMasterObject>true</useMasterObject>
+                        <lookupQuery>select v from AttrValueEntityProduct v where v.val = ?1 and v.product = ?2 and
+                            v.attribute.code = 'Материал'
+                        </lookupQuery>
+                    </column-descriptor>
+
+                    <column-descriptor>
+                        <columnIndex>-1</columnIndex>
+                        <fieldType>FK_FIELD</fieldType>
+                        <name>attribute</name>
+                        <lookupQuery>select a from AttributeEntity a where a.code = 'Материал'</lookupQuery>
+                    </column-descriptor>
+
+                </importColumns>
+
+            </importDescriptor>
+
+        </column-descriptor>
+
+        <!-- Weight -->
+        <column-descriptor>
+            <columnIndex>11</columnIndex>
+            <fieldType>SIMPLE_SLAVE_FIELD</fieldType>
+            <name>attribute</name>
+            <importDescriptor class="import-descriptor">
+
+                <entityIntface>com.npa.db.entity.AttrValueProduct</entityIntface>
+
+                <importFile class="file-descriptor">
+                    <columnDelimeter>;</columnDelimeter>
+                    <textQualifier null="true"/>
+                    <ignoreFirstLine>false</ignoreFirstLine>
+                </importFile>
+
+                <importColumns class="list">
+
+                    <column-descriptor>
+                        <columnIndex>-1</columnIndex>
+                        <fieldType>FK_FIELD</fieldType>
+                        <name>product</name>
+                        <useMasterObject>true</useMasterObject>
+                    </column-descriptor>
+
+                    <column-descriptor>
+                        <columnIndex>0</columnIndex>
+                        <fieldType>FIELD</fieldType>
+                        <name>val</name>
+                        <regExp>(.*)</regExp>
+                        <useMasterObject>true</useMasterObject>
+                        <lookupQuery>select v from AttrValueEntityProduct v where v.val = ?1 and v.product = ?2 and
+                            v.attribute.code = 'WEIGHT'
+                        </lookupQuery>
+                    </column-descriptor>
+
+                    <column-descriptor>
+                        <columnIndex>-1</columnIndex>
+                        <fieldType>FK_FIELD</fieldType>
+                        <name>attribute</name>
+                        <lookupQuery>select a from AttributeEntity a where a.code = 'WEIGHT'</lookupQuery>
+                    </column-descriptor>
+
+                </importColumns>
+
+            </importDescriptor>
+
+        </column-descriptor>
+
+
+        <!--  description  -->
+        <column-descriptor>
+            <columnIndex>15</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>description</name>
+            <regExp>(.*)</regExp>
+        </column-descriptor>
+
+
+    </importColumns>
+    <importFolder></importFolder>
+</import-descriptor>

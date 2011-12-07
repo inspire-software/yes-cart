@@ -1,0 +1,31 @@
+<import-descriptor>
+
+    <entityIntface>com.npa.db.entity.Brand</entityIntface>
+
+    <importFile class="file-descriptor">
+        <columnDelimeter>;</columnDelimeter>
+        <textQualifier>&quot;</textQualifier>
+        <ignoreFirstLine>true</ignoreFirstLine>
+        <fileNameMask>brand*.csv$</fileNameMask>
+        <fileEncoding>UTF-8</fileEncoding>
+    </importFile>
+
+    <importColumns class="list">
+
+        <column-descriptor>
+            <columnIndex>0</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>name</name>
+            <regExp>(.*)</regExp>
+            <lookupQuery>select b from BrandEntity b where b.name = ?1</lookupQuery>
+        </column-descriptor>
+
+        <column-descriptor>
+            <columnIndex>1</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>description</name>
+        </column-descriptor>
+
+    </importColumns>
+    <importFolder/>
+</import-descriptor>
