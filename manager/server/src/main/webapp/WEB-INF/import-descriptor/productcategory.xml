@@ -1,0 +1,56 @@
+<import-descriptor>
+    <!--
+    Example how related bulk import can consune the same file several times
+    -->
+    <entityIntface>com.npa.db.entity.ProductCategory</entityIntface>
+
+    <importFile class="file-descriptor">
+        <columnDelimeter>;</columnDelimeter>
+        <textQualifier>&quot;</textQualifier>
+        <ignoreFirstLine>true</ignoreFirstLine>
+        <fileNameMask>product_entity*.csv$</fileNameMask>
+        <fileEncoding>UTF-8</fileEncoding>
+    </importFile>
+
+    <importColumns class="list">
+
+        <column-descriptor>
+            <columnIndex>7</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <regExp>(.*)</regExp>
+            <lookupQuery>
+                select p from ProductCategoryEntity p
+                where p.product.code = ?1
+            </lookupQuery>
+        </column-descriptor>
+
+        <!-- Category -->
+        <column-descriptor>
+            <columnIndex>1</columnIndex>
+            <fieldType>FK_FIELD</fieldType>
+            <name>category</name>
+            <regExp>(.*)</regExp>
+            <lookupQuery>select c from CategoryEntity c where c.name = ?1</lookupQuery>
+        </column-descriptor>
+
+
+        <!-- Product sku code -->
+        <column-descriptor>
+            <columnIndex>7</columnIndex>
+            <fieldType>FK_FIELD</fieldType>
+            <name>product</name>
+            <regExp>(.*)</regExp>
+            <lookupQuery>select p from ProductEntity p where p.code = ?1</lookupQuery>
+        </column-descriptor>
+
+        <!-- Producr rank in category -->
+        <column-descriptor>
+            <columnIndex>-1</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>rank</name>
+            <constant>500</constant>
+        </column-descriptor>
+
+    </importColumns>
+    <importFolder></importFolder>
+</import-descriptor>
