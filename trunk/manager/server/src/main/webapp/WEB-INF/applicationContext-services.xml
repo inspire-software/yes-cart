@@ -434,6 +434,13 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
         </security:intercept-methods>
     </bean>
 
+    <bean id="remoteUploadService" class="org.yes.cart.remote.service.impl.RemoteUploadServiceImpl">
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="upload" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
+        </security:intercept-methods>
+    </bean>
+
 
     <!--bean id="csvBulkImport" class="org.yes.cart.service.impl.CsvBulkImportServiceImpl">
         <property name="extendedConversionService" ref="extendedConversionService"/>
@@ -454,13 +461,14 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
         <constructor-arg index="1" ref="imageBulkImport"/>
         <constructor-arg index="2">
             <list>
-                <value>brand.xml</value>
-                <value>producttype.xml</value>
-                <value>product.xml</value>
-                <value>productsku.xml</value>
-                <value>productskuquantity.xml</value>
-                <value>productskuprice.xml</value>
-                <value>productcategory.xml</value>
+                <value>import-descriptor\product.xml</value>
+                <value>import-descriptor\productskuprice.xml</value>
+                <value>import-descriptor\brand.xml</value>
+                <value>import-descriptor\productcategory.xml</value>
+                <value>import-descriptor\productskuquantity.xml</value>
+                <value>import-descriptor\carriersla.xml</value>
+                <value>import-descriptor\productsku.xml</value>
+                <value>import-descriptor\producttype.xml</value>
             </list>
         </constructor-arg>
         <flex:remoting-destination/>
