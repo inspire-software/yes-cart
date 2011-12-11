@@ -66,26 +66,8 @@ public interface SystemService {
      */
     String getImageRepositoryDirectory();
 
-    /**
-     * Get the folder with import descriptors
-     *
-     * @return path to import descriptors directory.
-     */
-    String getImportDescritorsDirectory();
 
-    /**
-     * Get the system archive folder where import files will be moved after import with import.
-     *
-     * @return path to import descriptors directory.
-     */
-    String getImportArchiveDirectory();
 
-    /**
-     * Get the system folder where import files are located.
-     *
-     * @return path to import directory.
-     */
-    String getImportDirectory();
 
 
 }

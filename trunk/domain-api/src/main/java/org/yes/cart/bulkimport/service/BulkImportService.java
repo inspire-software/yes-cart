@@ -39,7 +39,7 @@ public interface BulkImportService {
      * @param fileName optional file  name
      * @return {@link BulkImportResult}
      */
-    BulkImportResult doImport(StringBuilder errorReport, Set<String> importedFiles, String fileName);
+    BulkImportResult doImport(StringBuilder errorReport, Set<String> importedFiles, String fileName, String pathToImportFolder);
 
 
 }

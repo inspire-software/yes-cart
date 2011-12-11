@@ -1,6 +1,6 @@
 <import-descriptor>
 
-    <entityIntface>com.npa.db.entity.CarrierSla</entityIntface>
+    <entityIntface>org.yes.cart.domain.entity.CarrierSla</entityIntface>
 
     <importFile class="file-descriptor">
         <columnDelimeter>;</columnDelimeter>

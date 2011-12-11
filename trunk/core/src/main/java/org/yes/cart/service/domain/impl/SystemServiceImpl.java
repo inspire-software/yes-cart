@@ -64,30 +64,6 @@ public class SystemServiceImpl implements SystemService {
                         getSystem().getAttribute()));
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public String getImportDescritorsDirectory() {
-        return addTailFileSeparator(DomainApiUtil.getAttirbuteValue(AttributeNamesKeys.System.SYSTEM_IMPORT_DESCRIPTORS,
-                getSystem().getAttribute()));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getImportArchiveDirectory() {
-        return addTailFileSeparator(DomainApiUtil.getAttirbuteValue(AttributeNamesKeys.System.SYSTEM_IMPORT_ARCHIVE,
-                getSystem().getAttribute()));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getImportDirectory() {
-        return addTailFileSeparator(DomainApiUtil.getAttirbuteValue(AttributeNamesKeys.System.SYSTEM_IMPORT,
-                getSystem().getAttribute()));
-    }
-
 
 
     /**

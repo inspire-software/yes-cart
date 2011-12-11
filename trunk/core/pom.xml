@@ -85,11 +85,11 @@
             <artifactId>hornetq-logging</artifactId>
             <version>2.2.5.Final</version>
         </dependency>
-        <!--dependency>
-            <groupId>org.hornetq</groupId>
-            <artifactId>hornetq-transports</artifactId>
-            <version>2.0.0.GA</version>
-        </dependency-->
+	<dependency>
+		<groupId>net.sf.opencsv</groupId>
+		<artifactId>opencsv</artifactId>
+		<version>2.0</version>
+	</dependency>
         <dependency>
             <groupId>org.jboss.netty</groupId>
             <artifactId>netty</artifactId>
@@ -100,12 +100,6 @@
             <artifactId>geronimo-jms_1.1_spec</artifactId>
             <version>1.0.1</version>
         </dependency>
-        <!-- some crap with repository -->
-        <!-- dependency>
-            <groupId>org.jboss.javaee</groupId>
-            <artifactId>jboss-jms-api</artifactId>
-            <version>1.1.0.GA</version>
-        </dependency -->
         <!-- hornetq end -->
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
@@ -265,6 +259,9 @@
             <plugins>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
+		    <configuration>
+                        <argLine>-Xms512m -Xmx1024m</argLine>
+		    </configuration>
                     <inherited>true</inherited>
                     <executions>
                         <execution>

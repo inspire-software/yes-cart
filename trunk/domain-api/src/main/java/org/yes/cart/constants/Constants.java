@@ -110,4 +110,8 @@ public interface Constants {
     long ROOT_CATEGORY_ID = 100L;
 
 
+    String IMPORT_FOLDER = "import";
+    String ARCHIVE_FOLDER = "archive";
+
+
 }

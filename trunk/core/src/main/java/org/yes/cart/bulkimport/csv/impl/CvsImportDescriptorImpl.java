@@ -1,10 +1,10 @@
 package org.yes.cart.bulkimport.csv.impl;
 
-import org.yes.cart.bulkimport.model.FieldTypeEnum;
-import org.yes.cart.bulkimport.model.ImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportFile;
 import org.yes.cart.bulkimport.csv.CvsImportDescriptor;
+import org.yes.cart.bulkimport.model.FieldTypeEnum;
+import org.yes.cart.bulkimport.model.ImportColumn;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -35,7 +35,8 @@ public class CvsImportDescriptorImpl implements CvsImportDescriptor, Serializabl
     }
 
     /**
-     * Get full qualiffied entity interface. For example - com.npa.db.entity.Brand
+     * Get full qualiffied entity interface. For example - org.yes.cart.domain.entity.Brand
+     *
      * @return full qualiffied entity interface
      */
     public String getEntityIntface() {
@@ -44,6 +45,7 @@ public class CvsImportDescriptorImpl implements CvsImportDescriptor, Serializabl
 
     /**
      * Set full qualiffied entity interface.
+     *
      * @param entityIntface entity interface
      */
     public void setEntityIntface(final String entityIntface) {
@@ -52,6 +54,7 @@ public class CvsImportDescriptorImpl implements CvsImportDescriptor, Serializabl
 
     /**
      * Get the {@link ImportColumn} for object lookup.
+     *
      * @return {@link ImportColumn} if found, otherwise null.
      */
     public ImportColumn getPrimaryKeyColumn() {
@@ -128,7 +131,6 @@ public class CvsImportDescriptorImpl implements CvsImportDescriptor, Serializabl
     public void setImportFolder(final String importFolder) {
         this.importFolder = importFolder;
     }
-
 
 
 }

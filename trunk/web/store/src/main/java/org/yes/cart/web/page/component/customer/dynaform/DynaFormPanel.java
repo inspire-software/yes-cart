@@ -153,7 +153,7 @@ public class DynaFormPanel extends BaseComponent {
     /**
      * Get the particular editor for given attribute value. Type of editor depends from type of attibute value.
      *
-     * @param attrValue give {@link com.npa.db.entity.AttrValue}
+     * @param attrValue give {@link org.yes.cart.domain.entity.AttrValue}
      * @return editor;
      */
     protected Component getEditor(final AttrValue attrValue) {

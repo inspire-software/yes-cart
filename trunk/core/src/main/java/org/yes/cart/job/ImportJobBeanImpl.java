@@ -34,9 +34,6 @@ public class ImportJobBeanImpl extends QuartzJobBean {
      */
     protected void executeInternal(final JobExecutionContext jobExecutionContext) throws JobExecutionException {
 
-        importDirector.setPathToImportDescriptors(systemService.getImportDescritorsDirectory());
-        importDirector.setPathToImportImagesFolder(systemService.getImportDirectory());
-        importDirector.setPathToArchiveFolder(systemService.getImportArchiveDirectory());
         importDirector.doImport();
         productService.clearEmptyAttributes();
         productService.reindexProducts();

@@ -6,10 +6,9 @@ import org.yes.cart.bulkimport.csv.CsvFileReader;
 import java.io.*;
 
 /**
- *
  * Csv file reader implementation.
- *
- *
+ * <p/>
+ * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 11/27/11
  * Time: 12:02 PM
@@ -27,7 +26,9 @@ public class CsvFileReaderImpl implements CsvFileReader {
     boolean ignoreFirstLine;
 
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void open(final String csvFileName,
                      final char columnDelimeter,
                      final char textQualifier,
@@ -41,7 +42,9 @@ public class CsvFileReaderImpl implements CsvFileReader {
         this.rowsRead = 0;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public String[] readLine() throws IOException {
         if (rowsRead == 0 && ignoreFirstLine) {
             rowsRead++;
@@ -54,7 +57,9 @@ public class CsvFileReaderImpl implements CsvFileReader {
         return line;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void close() throws IOException {
         if (csvReader != null) {
             csvReader.close();
@@ -67,7 +72,9 @@ public class CsvFileReaderImpl implements CsvFileReader {
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public int getRowsRead() {
         return rowsRead;
     }

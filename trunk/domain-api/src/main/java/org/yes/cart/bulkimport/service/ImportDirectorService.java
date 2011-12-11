@@ -13,27 +13,6 @@ import java.util.Set;
  */
 public interface ImportDirectorService {
 
-    /**
-     * Set path to import descriptors.
-     * @param pathToImportDescriptors path to use.
-     */
-    void setPathToImportDescriptors(String pathToImportDescriptors);
-
-    /**
-     * Set path to folder where located images to import.
-     * @param pathToImportImagesFolder import images folder.
-     */
-    void setPathToImportImagesFolder(String pathToImportImagesFolder);
-
-
-    /**
-     * Set path to archive folder where files will be moved after import procedure.
-     * @param pathToArchiveFolder path to archive folder.
-     */
-    void setPathToArchiveFolder(final String pathToArchiveFolder);    
-
-
-
 
     /**
      * Perform bulk import.
