@@ -2,7 +2,7 @@
     <!--
     Example how related bulk import can consune the same file several times
     -->
-    <entityIntface>com.npa.db.entity.ProductCategory</entityIntface>
+    <entityIntface>org.yes.cart.domain.entity.ProductCategory</entityIntface>
 
     <importFile class="file-descriptor">
         <columnDelimeter>;</columnDelimeter>

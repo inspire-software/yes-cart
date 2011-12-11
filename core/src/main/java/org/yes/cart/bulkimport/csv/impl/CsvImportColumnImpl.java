@@ -37,19 +37,19 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     private String constant;
 
 
-
     public CsvImportColumnImpl() {
         super();
     }
 
     /**
      * Construct import column.
-     * @param columnIndex  0 based index
+     *
+     * @param columnIndex 0 based index
      * @param fieldType   {@link FieldTypeEnum} filed type
-     * @param name         name
-     * @param regExp       regular expression to extract data
-     * @param lookupQuery  lookup query to determinate duplication, in this case the update
-     * or insert strategy will be selected
+     * @param name        name
+     * @param regExp      regular expression to extract data
+     * @param lookupQuery lookup query to determinate duplication, in this case the update
+     *                    or insert strategy will be selected
      */
     public CsvImportColumnImpl(final int columnIndex, final FieldTypeEnum fieldType,
                                final String name, final String regExp, final String lookupQuery) {
@@ -69,14 +69,14 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     }
 
 
-
     /**
      * In case if column has reg exp.
+     *
      * @return mathced groups or 0 if column has not reg exp.
      */
     public int getGroupCount(final String rawValue) {
-        if (getPattern() != null)  {
-            if (forceGroupCount == 0 ) {
+        if (getPattern() != null) {
+            if (forceGroupCount == 0) {
                 Matcher matcher = getPattern().matcher(rawValue);
                 if (matcher.find()) {
                     return matcher.groupCount();
@@ -87,13 +87,15 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
         return 0;
     }
 
-   /** {@inheritDoc} */
-    public String [] getValues(final String rawValue) {
-        if (getPattern() != null)  {
+    /**
+     * {@inheritDoc}
+     */
+    public String[] getValues(final String rawValue) {
+        if (getPattern() != null) {
             Matcher matcher = getPattern().matcher(rawValue);
             if (matcher.find()) {
                 int groupCount = getGroupCount(rawValue);
-                String [] result = new String[groupCount];
+                String[] result = new String[groupCount];
                 for (int i = 0; i < groupCount; i++) {
                     result[i] = matcher.group(i + 1).trim();
                 }
@@ -103,9 +105,11 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
         return new String[0];
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public String getValue(final String rawValue) {
-        if (getPattern() != null)  {
+        if (getPattern() != null) {
             Matcher matcher = getPattern().matcher(rawValue);
             if (matcher.find()) {
                 return matcher.group(1).trim();
@@ -117,94 +121,130 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
 
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public int getColumnIndex() {
         return columnIndex;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setColumnIndex(final int columnIndex) {
         this.columnIndex = columnIndex;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public FieldTypeEnum getFieldType() {
         return fieldType;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setFieldType(final FieldTypeEnum fieldType) {
         this.fieldType = fieldType;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public String getName() {
         return name;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setName(final String name) {
         this.name = name;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public String getRegExp() {
         return regExp;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setRegExp(final String regExp) {
         this.regExp = regExp;
         this.pattern = null;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public String getLookupQuery() {
         return lookupQuery;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setLookupQuery(final String lookupQuery) {
         this.lookupQuery = lookupQuery;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public ImportDescriptor getImportDescriptor() {
         return importDescriptor;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setImportDescriptor(ImportDescriptor importDescriptor) {
         this.importDescriptor = importDescriptor;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isUseMasterObject() {
         return useMasterObject;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setUseMasterObject(final boolean useMasterObject) {
         this.useMasterObject = useMasterObject;
     }
 
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public String getConstant() {
         return constant;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setConstant(final String constant) {
         this.constant = constant;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public int getForceGroupCount() {
         return forceGroupCount;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setForceGroupCount(final int forceGroupCount) {
         this.forceGroupCount = forceGroupCount;
     }

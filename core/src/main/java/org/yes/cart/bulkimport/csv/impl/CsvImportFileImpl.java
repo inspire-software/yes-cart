@@ -20,6 +20,7 @@ public class CsvImportFileImpl implements CsvImportFile, Serializable {
 
     /**
      * Get the entity interface name.
+     *
      * @return entity interface name
      */
     public String getEntityName() {
@@ -28,58 +29,79 @@ public class CsvImportFileImpl implements CsvImportFile, Serializable {
 
     /**
      * Set the entity interface name.
+     *
      * @param entityName entity interface name
      */
     public void setEntityName(final String entityName) {
         this.entityName = entityName;
     }
 
-    /** {@inheritDoc */
+    /**
+     * {@inheritDoc
+     */
     public char getColumnDelimeter() {
         return columnDelimeter;
     }
 
-    /** {@inheritDoc */
+    /**
+     * {@inheritDoc
+     */
     public void setColumnDelimeter(char columnDelimeter) {
         this.columnDelimeter = columnDelimeter;
     }
 
-    /** {@inheritDoc */
+    /**
+     * {@inheritDoc
+     */
     public char getTextQualifier() {
         return textQualifier;
     }
 
-    /** {@inheritDoc */
+    /**
+     * {@inheritDoc
+     */
     public void setTextQualifier(char textQualifier) {
         this.textQualifier = textQualifier;
     }
 
-    /** {@inheritDoc */
+    /**
+     * {@inheritDoc
+     */
     public boolean isIgnoreFirstLine() {
         return ignoreFirstLine;
     }
 
-    /** {@inheritDoc */
+    /**
+     * {@inheritDoc
+     */
     public void setIgnoreFirstLine(boolean ignoreFirstLine) {
         this.ignoreFirstLine = ignoreFirstLine;
     }
 
-    /** {@inheritDoc */
+    /**
+     * {@inheritDoc
+     */
     public String getFileNameMask() {
         return fileNameMask;
     }
 
-    /** {@inheritDoc */
+    /**
+     * {@inheritDoc
+     */
     public void setFileNameMask(String fileNameMask) {
         this.fileNameMask = fileNameMask;
     }
 
-    /** {@inheritDoc */
+    /**
+     * {@inheritDoc
+     */
     public String getFileEncoding() {
         return fileEncoding;
     }
 
-    /** {@inheritDoc */
+    /**
+     * {@inheritDoc
+     */
     public void setFileEncoding(String fileEncoding) {
         this.fileEncoding = fileEncoding;
     }

@@ -38,33 +38,33 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             BulkImportService bulkImportService = null;
 
             bulkImportService = getBulkImportService("src/test/resources/import/brandimport.xml");
-            bulkImportService.doImport(stringBuilder, importedFilesSet, null);
+            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
 
             bulkImportService = getBulkImportService("src/test/resources/import/availability.xml");
-            bulkImportService.doImport(stringBuilder, importedFilesSet, null);
+            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
 
 
             bulkImportService = getBulkImportService("src/test/resources/import/product_type.xml");
-            bulkImportService.doImport(stringBuilder, importedFilesSet, null);
+            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
 
 
             bulkImportService = getBulkImportService("src/test/resources/import/product.xml");
-            bulkImportService.doImport(stringBuilder, importedFilesSet, null);
+            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
 
             bulkImportService = getBulkImportService("src/test/resources/import/product_sku.xml");
-            bulkImportService.doImport(stringBuilder, importedFilesSet, null);
+            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
 
             bulkImportService = getBulkImportService("src/test/resources/import/warehouse.xml");
-            bulkImportService.doImport(stringBuilder, importedFilesSet, null);
+            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
 
             bulkImportService = getBulkImportService("src/test/resources/import/skuquantity.xml");
-            bulkImportService.doImport(stringBuilder, importedFilesSet, null);
+            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
 
             bulkImportService = getBulkImportService("src/test/resources/import/skuprice.xml");
-            bulkImportService.doImport(stringBuilder, importedFilesSet, null);
+            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
 
             bulkImportService = getBulkImportService("src/test/resources/import/product_category.xml");
-            bulkImportService.doImport(stringBuilder, importedFilesSet, null);
+            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
 
             dumpDataBase(
                     "product",
@@ -83,18 +83,18 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testDoImportSimple() {
+    public void testDoImportSimple() throws Exception {
         StringBuilder stringBuilder = new StringBuilder();
         Set<String> importedFilesSet = new HashSet<String>();
         BulkImportService bulkImportService = getBulkImportService("src/test/resources/import/brandimport.xml");
-        bulkImportService.doImport(stringBuilder, importedFilesSet, null);
+        bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
         try {
             //check the total qty of imported rows
             PreparedStatement pst = getConnection().getConnection().prepareStatement(
                     "select count(*) as cnt from tbrand where name like 'imported brand name%'");
             ResultSet rs = pst.executeQuery();
             rs.next();
-            assertEquals(7, rs.getInt("cnt"));
+            assertEquals( stringBuilder.toString(), 7, rs.getInt("cnt"));
             rs.close();
             pst.close();
 
@@ -107,13 +107,16 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
             pst.close();
 
+
+
+        } catch (Exception e) {
+
             dumpDataBase(
                     "brand",
                     new String[]{"tbrand"}
             );
 
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
+            assertTrue(e.getMessage() + " " + stringBuilder.toString(), false);
         }
 
     }
@@ -124,10 +127,10 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
         Set<String> importedFilesSet = new HashSet<String>();
 
         BulkImportService bulkImportService = getBulkImportService("src/test/resources/import/carrier.xml");
-        bulkImportService.doImport(stringBuilder, importedFilesSet, null);
+        bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
 
         bulkImportService = getBulkImportService("src/test/resources/import/carriersla.xml");
-        bulkImportService.doImport(stringBuilder, importedFilesSet, null);
+        bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
 
         try {
             dumpDataBase(
@@ -179,7 +182,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
         Set<String> importedFilesSet = new HashSet<String>();
 
         BulkImportService bulkImportService = getBulkImportService("src/test/resources/import/shop.xml");
-        bulkImportService.doImport(stringBuilder, importedFilesSet, null);
+        bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
 
         try {
 

@@ -1,6 +1,6 @@
 <import-descriptor>
 
-    <entityIntface>com.npa.db.entity.SkuPrice</entityIntface>
+    <entityIntface>org.yes.cart.domain.entity.SkuPrice</entityIntface>
 
 
     <importFile class="file-descriptor">

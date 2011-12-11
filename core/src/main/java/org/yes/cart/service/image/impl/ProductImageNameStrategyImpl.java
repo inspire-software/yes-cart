@@ -50,7 +50,7 @@ public class ProductImageNameStrategyImpl extends AbstractImageNameStrategyImpl 
     @Cacheable(value = "productServiceImplMethodCache")
     public String getCode(final String url) {
 
-        if (url != null) {
+        if (StringUtils.isNotBlank(url)) {
 
             if (url.indexOf('_') > -1) {
                 final String[] nameParts = url.split("_");

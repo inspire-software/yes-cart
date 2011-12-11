@@ -3,11 +3,14 @@ package org.yes.cart.bulkimport.service.impl;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.core.io.Resource;
 import org.yes.cart.bulkimport.service.BulkImportImagesService;
 import org.yes.cart.bulkimport.service.BulkImportService;
 import org.yes.cart.bulkimport.service.ImportDirectorService;
 import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.service.domain.SystemService;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,62 +29,52 @@ import java.util.Set;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class ImportDirectorImplService implements ImportDirectorService {
+public class ImportDirectorImplService implements ImportDirectorService, ApplicationContextAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(ImportDirectorImplService.class);
 
-    private BulkImportService bulkImportService;
+    private final BulkImportService bulkImportService;
 
     private BulkImportImagesService bulkImportImagesService;
 
-    private List<String> importDescriptors;
+    private final List<String> importDescriptors;
 
-    private String pathToImportDescriptors;
+    private final String pathToImportDescriptors;
 
-    private String pathToArchiveFolder;
+    private final String pathToArchiveFolder;
 
-    private String pathToImportImagesFolder;
+    private final String pathToImportFolder;
 
-    private SystemService systemService;
+    private final ProductService productService;
 
-    private ProductService productService;
+    private ApplicationContext applicationContext;
 
-
-    /**
-     * IoC. Set product service to use.
-     *
-     * @param productService product service.
-     */
-    public void setProductService(final ProductService productService) {
-        this.productService = productService;
-    }
 
     /**
-     * IoC.
-     * Set system service to get the imports path.
+     * Construct the import director
      *
-     * @param systemService {@link SystemService}
-     */
-    public void setSystemService(final SystemService systemService) {
-        this.systemService = systemService;
-    }
-
-    /**
-     * Set path to folder where located images to import.
-     *
-     * @param pathToImportImagesFolder import images folder.
-     */
-    public void setPathToImportImagesFolder(final String pathToImportImagesFolder) {
-        this.pathToImportImagesFolder = pathToImportImagesFolder;
-    }
-
-    /**
-     * Set path to import descriptors.
-     *
+     * @param bulkImportService       {@link BulkImportService}
+     * @param importDescriptors       import descriptors
+     * @param pathToArchiveFolder     path to archive folder.
      * @param pathToImportDescriptors path to use.
+     * @param pathToImportFolder      path to use.
+     * @ par am bulkImportImagesService {@link BulkImportImagesService}
      */
-    public void setPathToImportDescriptors(final String pathToImportDescriptors) {
+    public ImportDirectorImplService(
+            final BulkImportService bulkImportService,
+            //final BulkImportImagesService bulkImportImagesService,
+            final List<String> importDescriptors,
+            final String pathToArchiveFolder,
+            final String pathToImportDescriptors,
+            final String pathToImportFolder,
+            final ProductService productService) {
+        this.bulkImportService = bulkImportService;
         this.pathToImportDescriptors = pathToImportDescriptors;
+        this.pathToArchiveFolder = pathToArchiveFolder;
+        this.pathToImportFolder = pathToImportFolder;
+        this.importDescriptors = importDescriptors;
+        //this.bulkImportImagesService = bulkImportImagesService;
+        this.productService = productService;
     }
 
 
@@ -90,8 +83,9 @@ public class ImportDirectorImplService implements ImportDirectorService {
      *
      * @param errorReport   error report place holder
      * @param importedFiles imported files
+     * @param fileName      file name to import
      */
-    public void doImportInternal(final StringBuilder errorReport, final Set<String> importedFiles, final String fileName) {
+    public void doImportInternal(final StringBuilder errorReport, final Set<String> importedFiles, final String fileName) throws IOException {
         doDataImport(errorReport, importedFiles, fileName);
         //doImageImport(errorReport, importedFiles, fileName);
         moveImportFilesToArchive(importedFiles);
@@ -112,22 +106,17 @@ public class ImportDirectorImplService implements ImportDirectorService {
      * @return error report
      */
     public String doImport(final String fileName) {
-
-
-        this.setPathToImportDescriptors(systemService.getImportDescritorsDirectory());
-        this.setPathToImportImagesFolder(systemService.getImportDirectory());
-        this.setPathToArchiveFolder(systemService.getImportArchiveDirectory());
-
-
         Set<String> importedFiles = new HashSet<String>();
         StringBuilder stringBuilder = new StringBuilder();
-        doImportInternal(stringBuilder, importedFiles, fileName);
+        try {
+            doImportInternal(stringBuilder, importedFiles, fileName);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "ERROR " + e.getMessage();
 
+        }
         productService.clearEmptyAttributes();
-
         return stringBuilder.toString();
-
-
     }
 
     /*private void doImageImport(final StringBuilder errorReport, final Set<String> importedFiles, final String fileName) {
@@ -135,13 +124,11 @@ public class ImportDirectorImplService implements ImportDirectorService {
         bulkImportImagesService.doImport(errorReport, importedFiles);
     } */
 
-    private void doDataImport(final StringBuilder errorReport, final Set<String> importedFiles, final String fileName) {
-        String fullPathToDescriptor = pathToImportDescriptors;
+    private void doDataImport(final StringBuilder errorReport, final Set<String> importedFiles, final String fileName) throws IOException {
         for (String descriptor : importDescriptors) {
-            bulkImportService.setPathToImportDescriptor(
-                    fullPathToDescriptor + descriptor
-            );
-            bulkImportService.doImport(errorReport, importedFiles, fileName);
+            Resource res = applicationContext.getResource("WEB-INF" + File.separator + pathToImportDescriptors + File.separator + descriptor);
+            bulkImportService.setPathToImportDescriptor(res.getFile().getAbsolutePath());
+            bulkImportService.doImport(errorReport, importedFiles, fileName, this.pathToImportFolder);
         }
     }
 
@@ -154,7 +141,7 @@ public class ImportDirectorImplService implements ImportDirectorService {
         if (!importedFiles.isEmpty()) {
             final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd-hh-mm-ss");
             final String fullPathToArchiveFolder = pathToArchiveFolder;
-            File dir = new File(fullPathToArchiveFolder + dateFormat.format(new Date()) + File.separator);
+            File dir = new File(fullPathToArchiveFolder + File.separator + dateFormat.format(new Date()) + File.separator);
             dir.mkdirs();
             for (String importFileName : importedFiles) {
                 try {
@@ -173,63 +160,9 @@ public class ImportDirectorImplService implements ImportDirectorService {
 
 
     /**
-     * IoC. Set the {@link BulkImportService}
-     *
-     * @param bulkImportService {@link BulkImportService}
+     * {@inheritDoc}
      */
-    public void setBulkImportService(final BulkImportService bulkImportService) {
-        this.bulkImportService = bulkImportService;
-    }
-
-    /**
-     * IoC. Set the list of import descriptors.
-     *
-     * @param importDescriptors import descriptors
-     */
-    public void setImportDescriptors(final List<String> importDescriptors) {
-        this.importDescriptors = importDescriptors;
-    }
-
-    /**
-     * Construct the import director
-     *
-     * @param bulkImportService       {@link BulkImportService}
-     * @ par am bulkImportImagesService {@link BulkImportImagesService}
-     * @param importDescriptors       import descriptors
-     */
-    public ImportDirectorImplService(
-            final BulkImportService bulkImportService,
-            //final BulkImportImagesService bulkImportImagesService,
-            final List<String> importDescriptors) {
-        this.bulkImportService = bulkImportService;
-        this.importDescriptors = importDescriptors;
-        //this.bulkImportImagesService = bulkImportImagesService;
-    }
-
-    /**
-     * Get path to archive folder.
-     *
-     * @return path to archive folder
-     */
-    protected String getPathToArchiveFolder() {
-        return pathToArchiveFolder;
-    }
-
-    /**
-     * IoC or config. Set path to archive folder where files will be moved after import procedure.
-     *
-     * @param pathToArchiveFolder path to archive folder.
-     */
-    public void setPathToArchiveFolder(final String pathToArchiveFolder) {
-        this.pathToArchiveFolder = pathToArchiveFolder;
-    }
-
-    /**
-     * IoC. Set the {@link BulkImportImagesService} to use.
-     *
-     * @param bulkImportImagesService the {@link BulkImportImagesService} to use.
-     */
-    public void setBulkImportImagesService(final BulkImportImagesService bulkImportImagesService) {
-        this.bulkImportImagesService = bulkImportImagesService;
+    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 }

@@ -1,6 +1,7 @@
 package org.yes.cart.remote.service.impl;
 
 import org.apache.commons.io.FilenameUtils;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.remote.service.RemoteUploadService;
 
 import java.io.File;
@@ -22,11 +23,19 @@ public class RemoteUploadServiceImpl implements RemoteUploadService {
      */
     public String upload(final byte[] bytes, final String fileName) throws IOException {
 
+        final String folder = System.getProperty("java.io.tmpdir")
+                + File.separator
+                + "yes-cart"
+                + File.separator
+                + Constants.IMPORT_FOLDER;
+
         final String fullFileName = FilenameUtils.normalize(
-                System.getProperty("java.io.tmpdir")
+                folder
                         + File.separator
                         + fileName
         );
+
+        new File(folder).mkdirs();
 
         File file = new File(fullFileName);
 

@@ -1,6 +1,6 @@
 <import-descriptor>
 
-    <entityIntface>com.npa.db.entity.Product</entityIntface>
+    <entityIntface>org.yes.cart.domain.entity.Product</entityIntface>
 
     <importFile class="file-descriptor">
         <columnDelimeter>;</columnDelimeter>
@@ -80,7 +80,7 @@
             <name>attribute</name>
             <importDescriptor class="import-descriptor">
 
-                <entityIntface>com.npa.db.entity.AttrValueProduct</entityIntface>
+                <entityIntface>org.yes.cart.domain.entity.AttrValueProduct</entityIntface>
 
                 <importFile class="file-descriptor">
                     <columnDelimeter>;</columnDelimeter>
@@ -128,7 +128,7 @@
             <name>attribute</name>
             <importDescriptor class="import-descriptor">
 
-                <entityIntface>com.npa.db.entity.AttrValueProduct</entityIntface>
+                <entityIntface>org.yes.cart.domain.entity.AttrValueProduct</entityIntface>
 
                 <importFile class="file-descriptor">
                     <columnDelimeter>;</columnDelimeter>

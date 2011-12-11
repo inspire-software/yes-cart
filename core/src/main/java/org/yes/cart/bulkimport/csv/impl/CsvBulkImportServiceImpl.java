@@ -16,7 +16,6 @@ import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.bulkimport.service.BulkImportService;
 import org.yes.cart.dao.GenericDAO;
 
-
 import java.beans.PropertyDescriptor;
 import java.io.*;
 import java.text.MessageFormat;
@@ -79,11 +78,16 @@ public class CsvBulkImportServiceImpl implements BulkImportService {
      * @param fileName      optional file  name
      * @return {@link BulkImportResult}
      */
-    public BulkImportResult doImport(final StringBuilder errorReport, final Set<String> importedFiles, final String fileName) {
+    public BulkImportResult doImport(final StringBuilder errorReport, final Set<String> importedFiles,
+                                     final String fileName, final String pathToImportFolder) {
 
         try {
             final InputStream inputStream = new FileInputStream(pathToImportDescriptor);
             final CvsImportDescriptor cvsImportDescriptor = (CvsImportDescriptor) getXStream().fromXML(inputStream);
+            if (StringUtils.isNotBlank(pathToImportFolder)) {
+                cvsImportDescriptor.setImportFolder(pathToImportFolder);
+            }
+
             final File[] filesToImport = getFilesToImport(cvsImportDescriptor, fileName);
             if (filesToImport == null) {
                 errorReport.append(
@@ -286,11 +290,6 @@ public class CsvBulkImportServiceImpl implements BulkImportService {
                                 TypeDescriptor.valueOf((propertyDescriptor.getPropertyType())
                                 ));
 
-                /* before spring 3
-                final Object singleObjectValue = extendedConversionService.getConversionExecutor(
-                        String.class,
-                        propertyDescriptor.getPropertyType()
-                ).execute(singleStringValue);*/
 
                 propertyDescriptor.getWriteMethod().invoke(object, singleObjectValue);
             }
