@@ -1048,6 +1048,12 @@
 
     <bean id="passwordHashHelper" class="org.yes.cart.service.domain.impl.MD5HashHelperImpl"/>
 
+    <!-- ########################################## bulk import ########################## -->
+    <bean id="bulkImportServiceImpl" class="org.yes.cart.bulkimport.csv.impl.CsvBulkImportServiceImpl">
+        <property name="genericDAO" ref="genericDao"/>
+        <property name="extendedConversionService" ref="extendedConversionService"/>
+    </bean>
+
 
 
 

@@ -2,6 +2,7 @@ package org.yes.cart.dao.impl;
 
 import org.dbunit.AbstractDatabaseTester;
 import org.dbunit.JdbcDatabaseTester;
+import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.QueryDataSet;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
@@ -77,5 +78,15 @@ public abstract class AbstractTestDAO {
         }
         FlatXmlDataSet.write(queryDataSet,
                 new FileOutputStream("target/test-classes/" + prefix + "_dataset.xml"));
+
+    }
+
+    /**
+     * Get db connection to perform verifications.
+     * @return db connection
+     * @throws Exception  in case or error
+     */
+    public IDatabaseConnection getConnection() throws Exception {
+        return dbTester.getConnection();
     }
 }

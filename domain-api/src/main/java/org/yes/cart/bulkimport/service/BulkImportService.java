@@ -33,11 +33,13 @@ public interface BulkImportService {
     /**
      * Perform bulk import.
      *
+     *
      * @param errorReport   error report place holder
      * @param importedFiles imported files
+     * @param fileName optional file  name
      * @return {@link BulkImportResult}
      */
-    BulkImportResult doImport(StringBuilder errorReport, Set<String> importedFiles);
+    BulkImportResult doImport(StringBuilder errorReport, Set<String> importedFiles, String fileName);
 
 
 }

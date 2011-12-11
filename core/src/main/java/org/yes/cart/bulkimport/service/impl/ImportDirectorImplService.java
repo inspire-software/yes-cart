@@ -49,15 +49,18 @@ public class ImportDirectorImplService implements ImportDirectorService {
 
     /**
      * IoC. Set product service to use.
+     *
      * @param productService product service.
      */
     public void setProductService(final ProductService productService) {
         this.productService = productService;
     }
 
-    /** IoC.
+    /**
+     * IoC.
      * Set system service to get the imports path.
-     * @param systemService {@link SystemService} 
+     *
+     * @param systemService {@link SystemService}
      */
     public void setSystemService(final SystemService systemService) {
         this.systemService = systemService;
@@ -88,17 +91,28 @@ public class ImportDirectorImplService implements ImportDirectorService {
      * @param errorReport   error report place holder
      * @param importedFiles imported files
      */
-    public void doImportInternal(final StringBuilder errorReport, final Set<String> importedFiles) {
-        doDataImport(errorReport, importedFiles);
-        doImageImport(errorReport, importedFiles);
+    public void doImportInternal(final StringBuilder errorReport, final Set<String> importedFiles, final String fileName) {
+        doDataImport(errorReport, importedFiles, fileName);
+        //doImageImport(errorReport, importedFiles, fileName);
         moveImportFilesToArchive(importedFiles);
     }
 
     /**
      * Perform bulk import.
+     *
      * @return error report
      */
     public String doImport() {
+        return doImport(null);
+    }
+
+    /**
+     * Perform bulk import.
+     *
+     * @return error report
+     */
+    public String doImport(final String fileName) {
+
 
         this.setPathToImportDescriptors(systemService.getImportDescritorsDirectory());
         this.setPathToImportImagesFolder(systemService.getImportDirectory());
@@ -107,25 +121,27 @@ public class ImportDirectorImplService implements ImportDirectorService {
 
         Set<String> importedFiles = new HashSet<String>();
         StringBuilder stringBuilder = new StringBuilder();
-        doImportInternal(stringBuilder, importedFiles);
+        doImportInternal(stringBuilder, importedFiles, fileName);
 
         productService.clearEmptyAttributes();
-        
+
         return stringBuilder.toString();
+
+
     }
 
-    private void doImageImport(final StringBuilder errorReport, final Set<String> importedFiles) {
+    /*private void doImageImport(final StringBuilder errorReport, final Set<String> importedFiles, final String fileName) {
         bulkImportImagesService.setPathToImportFolder(pathToImportImagesFolder);
         bulkImportImagesService.doImport(errorReport, importedFiles);
-    }
+    } */
 
-    private void doDataImport(final StringBuilder errorReport, final Set<String> importedFiles) {
+    private void doDataImport(final StringBuilder errorReport, final Set<String> importedFiles, final String fileName) {
         String fullPathToDescriptor = pathToImportDescriptors;
         for (String descriptor : importDescriptors) {
             bulkImportService.setPathToImportDescriptor(
                     fullPathToDescriptor + descriptor
             );
-            bulkImportService.doImport(errorReport, importedFiles);
+            bulkImportService.doImport(errorReport, importedFiles, fileName);
         }
     }
 
@@ -177,17 +193,17 @@ public class ImportDirectorImplService implements ImportDirectorService {
     /**
      * Construct the import director
      *
-     * @param bulkImportService {@link BulkImportService}
-     * @param bulkImportImagesService {@link BulkImportImagesService}
-     * @param importDescriptors import descriptors
+     * @param bulkImportService       {@link BulkImportService}
+     * @ par am bulkImportImagesService {@link BulkImportImagesService}
+     * @param importDescriptors       import descriptors
      */
     public ImportDirectorImplService(
             final BulkImportService bulkImportService,
-            final BulkImportImagesService bulkImportImagesService,
+            //final BulkImportImagesService bulkImportImagesService,
             final List<String> importDescriptors) {
         this.bulkImportService = bulkImportService;
         this.importDescriptors = importDescriptors;
-        this.bulkImportImagesService = bulkImportImagesService;
+        //this.bulkImportImagesService = bulkImportImagesService;
     }
 
     /**

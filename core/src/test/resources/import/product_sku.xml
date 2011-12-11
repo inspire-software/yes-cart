@@ -1,0 +1,142 @@
+<import-descriptor>
+    <!--
+    Example how related bulk import can consune the same file several times
+    -->
+    <entityIntface>org.yes.cart.domain.entity.ProductSku</entityIntface>
+
+    <importFile class="file-descriptor">
+        <columnDelimeter>;</columnDelimeter>
+        <textQualifier>&quot;</textQualifier>
+        <ignoreFirstLine>true</ignoreFirstLine>
+        <fileNameMask>product_entity*.csv$</fileNameMask>
+        <fileEncoding>UTF-8</fileEncoding>
+    </importFile>
+
+    <importColumns class="list">
+
+        <!--  Наименование ТМЦ -->
+        <column-descriptor>
+            <columnIndex>0</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>name</name>
+            <regExp>(.*)</regExp>
+        </column-descriptor>
+
+        <!-- Код продукта field for lookup object -->
+        <column-descriptor>
+            <columnIndex>7</columnIndex>
+            <fieldType>FK_FIELD</fieldType>
+            <name>product</name>
+            <regExp>(.*)</regExp>
+            <lookupQuery>select p from ProductEntity p where p.code = ?1</lookupQuery>
+        </column-descriptor>
+
+        <!-- Код sku -->
+        <column-descriptor>
+            <columnIndex>14</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>code</name>
+            <regExp>(.*)</regExp>
+            <lookupQuery>select p from ProductSkuEntity p where p.code = ?1</lookupQuery>
+        </column-descriptor>
+
+        <!--  штрих код -->
+        <column-descriptor>
+            <columnIndex>14</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>barCode</name>
+            <regExp>(.*)</regExp>
+        </column-descriptor>
+        
+        <!--  описание -->
+        <column-descriptor>
+            <columnIndex>15</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>description</name>
+            <regExp>(.*)</regExp>
+        </column-descriptor>
+
+
+<!-- 8 вставкa материал -->
+        <column-descriptor>
+            <columnIndex>8</columnIndex>
+            <fieldType>SIMPLE_SLAVE_FIELD</fieldType>
+            <name>attribute</name>
+            <importDescriptor class="import-descriptor">
+                <entityIntface>org.yes.cart.domain.entity.AttrValueProductSku</entityIntface>
+                <importFile class="file-descriptor">
+                    <columnDelimeter>;</columnDelimeter>
+                    <textQualifier null="true"/>
+                    <ignoreFirstLine>false</ignoreFirstLine>
+                </importFile>
+                <importColumns class="list">
+                    <column-descriptor>
+                        <columnIndex>-1</columnIndex>
+                        <fieldType>FK_FIELD</fieldType>
+                        <name>productSku</name>
+                        <useMasterObject>true</useMasterObject>
+                    </column-descriptor>
+                    <column-descriptor>
+                        <columnIndex>0</columnIndex>
+                        <fieldType>FIELD</fieldType>
+                        <name>val</name>
+                        <regExp>((\D?\S{4,}){1,}).*-?.*</regExp>
+                        <forceGroupCount>1</forceGroupCount>
+                        <useMasterObject>true</useMasterObject>
+                        <lookupQuery>select v from AttrValueEntityProductSku v where v.val = ?1 and v.productSku = ?2 and
+                            v.attribute.code = 'Вставка'
+                        </lookupQuery>
+                    </column-descriptor>
+                    <column-descriptor>
+                        <columnIndex>-1</columnIndex>
+                        <fieldType>FK_FIELD</fieldType>
+                        <name>attribute</name>
+                        <lookupQuery>select a from AttributeEntity a where a.code = 'Вставка'</lookupQuery>
+                    </column-descriptor>
+                </importColumns>
+            </importDescriptor>
+        </column-descriptor>
+
+        <!-- 8 вставкa цвет -->
+        <column-descriptor>
+            <columnIndex>8</columnIndex>
+            <fieldType>SIMPLE_SLAVE_FIELD</fieldType>
+            <name>attribute</name>
+            <importDescriptor class="import-descriptor">
+                <entityIntface>org.yes.cart.domain.entity.AttrValueProductSku</entityIntface>
+                <importFile class="file-descriptor">
+                    <columnDelimeter>;</columnDelimeter>
+                    <textQualifier null="true"/>
+                    <ignoreFirstLine>false</ignoreFirstLine>
+                </importFile>
+                <importColumns class="list">
+                    <column-descriptor>
+                        <columnIndex>-1</columnIndex>
+                        <fieldType>FK_FIELD</fieldType>
+                        <name>productSku</name>
+                        <useMasterObject>true</useMasterObject>
+                    </column-descriptor>
+                    <column-descriptor>
+                        <columnIndex>0</columnIndex>
+                        <fieldType>FIELD</fieldType>
+                        <name>val</name>
+                        <regExp>.*-.*\s{1,}((\D?\S{4,}){1,})\s{0,}.*</regExp>
+                        <forceGroupCount>1</forceGroupCount>
+                        <useMasterObject>true</useMasterObject>
+                        <lookupQuery>select v from AttrValueEntityProductSku v where v.val = ?1 and v.productSku = ?2 and
+                            v.attribute.code = 'Колір_вставки'
+                        </lookupQuery>
+                    </column-descriptor>
+                    <column-descriptor>
+                        <columnIndex>-1</columnIndex>
+                        <fieldType>FK_FIELD</fieldType>
+                        <name>attribute</name>
+                        <lookupQuery>select a from AttributeEntity a where a.code = 'Колір_вставки'</lookupQuery>
+                    </column-descriptor>
+                </importColumns>
+            </importDescriptor>
+        </column-descriptor>
+
+    </importColumns>
+    <importFolder>src/test/resources/import</importFolder>
+</import-descriptor>

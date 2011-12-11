@@ -201,7 +201,7 @@
         private function onFileSelect(e:Event):void {
 
             loadFileRef.addEventListener(Event.COMPLETE, onFileLoadComplete);
-            loadFileRef.load(); //Flex SDK 4 only. dont pay attension in IDE, that configured for SDK 3 version support
+            loadFileRef.load();
         }
 
 
@@ -219,7 +219,7 @@
         private function onFileLoadComplete(e:Event):void {
             var loader:Loader = new Loader();
             loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onDataLoadComplete);
-            loader.loadBytes(loadFileRef.data);  //Flex SDK 4 only. dont pay attension in IDE, that configured for SDK 3 version support
+            loader.loadBytes(loadFileRef.data);
 
             var modifiedName:String = loadFileRef.name;
             /*if (code != null && code.length > 0) { // TO DO remove it after image service and image filter refactoring

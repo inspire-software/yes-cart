@@ -1,0 +1,59 @@
+<import-descriptor>
+
+    <entityIntface>org.yes.cart.domain.entity.CarrierSla</entityIntface>
+
+    <importFile class="file-descriptor">
+        <columnDelimeter>;</columnDelimeter>
+        <textQualifier>&quot;</textQualifier>
+        <ignoreFirstLine>true</ignoreFirstLine>
+        <fileNameMask>carriersla*.csv$</fileNameMask>
+        <fileEncoding>UTF-8</fileEncoding>
+    </importFile>
+
+    <importColumns class="list">
+
+        <column-descriptor>
+            <columnIndex>0</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>name</name>
+            <regExp>(.*)</regExp>
+            <lookupQuery>select c from CarrierSlaEntity c where c.name = ?1</lookupQuery>
+        </column-descriptor>
+
+        <column-descriptor>
+            <columnIndex>1</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>description</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <columnIndex>2</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>price</name>
+        </column-descriptor>
+        
+        <column-descriptor>
+            <columnIndex>3</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>currency</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <columnIndex>4</columnIndex>
+            <fieldType>FK_FIELD</fieldType>
+            <name>carrier</name>
+            <regExp>(.*)</regExp>
+            <lookupQuery>select c from CarrierEntity c where c.name = ?1</lookupQuery>
+        </column-descriptor>
+
+        <column-descriptor>
+            <columnIndex>5</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>slaType</name>
+        </column-descriptor>
+
+
+
+    </importColumns>
+    <importFolder>src/test/resources/import</importFolder>
+</import-descriptor>

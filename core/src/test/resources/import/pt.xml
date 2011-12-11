@@ -1,0 +1,90 @@
+<!--
+
+-->
+
+<pricetree>
+    <priceMap>
+        <entry>
+            <string>USD</string>
+            <list>
+                <pricenode>
+                    <priceRange>
+                        <first class="big-decimal">0</first>
+                        <second class="big-decimal">30</second>
+                    </priceRange>
+                </pricenode>
+                <pricenode>
+                    <priceRange>
+                        <first class="big-decimal">31</first>
+                        <second class="big-decimal">60</second>
+                    </priceRange>
+                </pricenode>
+                <pricenode>
+                    <priceRange>
+                        <first class="big-decimal">61</first>
+                        <second class="big-decimal">100</second>
+                    </priceRange>
+                </pricenode>
+                <pricenode>
+                    <priceRange>
+                        <first class="big-decimal">101</first>
+                        <second class="big-decimal">150</second>
+                    </priceRange>
+                </pricenode>
+                <pricenode>
+                    <priceRange>
+                        <first class="big-decimal">151</first>
+                        <second class="big-decimal">200</second>
+                    </priceRange>
+                </pricenode>
+                <pricenode>
+                    <priceRange>
+                        <first class="big-decimal">201</first>
+                        <second class="big-decimal">250</second>
+                    </priceRange>
+                </pricenode>
+            </list>
+        </entry>
+        <entry>
+            <string>UAH</string>
+            <list>
+                <pricenode>
+                    <priceRange>
+                        <first class="big-decimal">0</first>
+                        <second class="big-decimal">250</second>
+                    </priceRange>
+                </pricenode>
+                <pricenode>
+                    <priceRange>
+                        <first class="big-decimal">251</first>
+                        <second class="big-decimal">500</second>
+                    </priceRange>
+                </pricenode>
+                <pricenode>
+                    <priceRange>
+                        <first class="big-decimal">501</first>
+                        <second class="big-decimal">800</second>
+                    </priceRange>
+                </pricenode>
+                <pricenode>
+                    <priceRange>
+                        <first class="big-decimal">801</first>
+                        <second class="big-decimal">1200</second>
+                    </priceRange>
+                </pricenode>
+                <pricenode>
+                    <priceRange>
+                        <first class="big-decimal">1201</first>
+                        <second class="big-decimal">1600</second>
+                    </priceRange>
+                </pricenode>
+                <pricenode>
+                    <priceRange>
+                        <first class="big-decimal">1601</first>
+                        <second class="big-decimal">2000</second>
+                    </priceRange>
+                </pricenode>
+            </list>
+        </entry>
+    </priceMap>
+</pricetree>
