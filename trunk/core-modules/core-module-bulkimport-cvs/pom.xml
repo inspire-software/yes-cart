@@ -9,18 +9,18 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>core-module-bulkimport-csv</artifactId>
-    <name>Yes cart module: bulk import cvs</name>
+    <name>Yes cart module: bulk import csv</name>
     <dependencies>
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>domain-api</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-        <dependency>
+        <!--dependency>
             <groupId>org.yes</groupId>
             <artifactId>core</artifactId>
             <version>${project.parent.version}</version>
-        </dependency>
+        </dependency-->
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>persistence</artifactId>

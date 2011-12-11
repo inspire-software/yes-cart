@@ -22,7 +22,7 @@
 
     <import resource="classpath*:core-config.xml"/>
 
-    <bean id="bulkImportServiceImpl" class="org.yes.cart.service.impl.CsvBulkImportServiceImpl">
+    <bean id="bulkImportServiceImpl" class="org.yes.cart.bulkimport.csv.impl.CsvBulkImportServiceImpl">
         <property name="genericDAO" ref="genericDao"/>
         <property name="extendedConversionService" ref="extendedConversionService"/>
     </bean>
