@@ -14,7 +14,6 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
 
 
     <!--context:component-scan base-package="com.npa"/-->
-    
 
 
     <security:http entry-point-ref="entryPoint">
@@ -44,15 +43,6 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
     </bean>
 
 
-
-
-
-
-
-
-
-
-
     <!-- ########################################### HornetQ configuration begin  ################################# -->
 
     <bean name="mbeanServer" class="java.lang.management.ManagementFactory" factory-method="getPlatformMBeanServer"/>
@@ -70,7 +60,7 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
                   value="#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'+systemProperties['file.separator']+'hornetq'+systemProperties['file.separator']+'management'+systemProperties['file.separator']+'large-messages'}"/>
         <property name="journalDirectory"
                   value="#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'+systemProperties['file.separator']+'hornetq'+systemProperties['file.separator']+'management'+systemProperties['file.separator']+'journal'}"/>
-     </bean>
+    </bean>
 
     <!-- The core server -->
     <bean name="hornetQServerImpl" class="org.hornetq.core.server.impl.HornetQServerImpl">
@@ -128,23 +118,21 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
     <!-- #################################### queues and jms templates end ###############################-->
 
 
-
     <!-- #################################  aspects configurations begin ######################################-->
 
-    
+
     <bean id="managerRegistrationAspect" class="org.yes.cart.service.domain.aspect.impl.ManagerRegistrationAspect">
         <constructor-arg index="0" ref="managerRegistrationJMSTemplate"/>
         <constructor-arg index="1">
-			<bean class="org.yes.cart.service.domain.impl.PassPhraseGeneratorImpl">
+            <bean class="org.yes.cart.service.domain.impl.PassPhraseGeneratorImpl">
                 <constructor-arg index="0" value="8"/>
-			</bean>
-		</constructor-arg>
+            </bean>
+        </constructor-arg>
         <constructor-arg index="2">
-			<bean class="org.yes.cart.service.domain.impl.MD5HashHelperImpl"/>
-		</constructor-arg>
+            <bean class="org.yes.cart.service.domain.impl.MD5HashHelperImpl"/>
+        </constructor-arg>
     </bean>
     <!-- #################################  aspects configurations end ######################################-->
-
 
 
     <!-- #################################  message consumers begin ######################################-->
@@ -167,7 +155,8 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
 
     <!-- send notification with new customer account information and password -->
 
-    <bean id="managerRegistrationListener" class="org.yes.cart.domain.message.consumer.ManagerRegistrationMessageListener">
+    <bean id="managerRegistrationListener"
+          class="org.yes.cart.domain.message.consumer.ManagerRegistrationMessageListener">
         <constructor-arg index="0" type="org.springframework.mail.javamail.JavaMailSender" ref="mailSender"/>
         <constructor-arg index="1" type="org.yes.cart.service.mail.MailComposer" ref="mailComposer"/>
     </bean>
@@ -180,7 +169,7 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
 
 
     <!-- #################################  message consumers end ######################################-->
-	
+
     <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
           autowire="byName">
         <property name="configLocation" value="classpath:hibernate-nc.cfg.xml"/>
@@ -194,16 +183,16 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
         </property>
         <property name="hibernateProperties">
             <props>
-                <prop key="hibernate.search.default.indexBase">#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'}</prop>
+                <prop key="hibernate.search.default.indexBase">
+                    #{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'}
+                </prop>
             </props>
         </property>
     </bean>
-	
-	<import resource="classpath*:core-config.xml"/>
 
+    <import resource="classpath*:core-config.xml"/>
 
-
-
+    <import resource="classpath*:core-module-bulkimport-csv.xml"/>
 
 
 </beans>

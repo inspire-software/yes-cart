@@ -17,6 +17,13 @@
             <artifactId>payment-api</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>core-module-bulkimport-csv</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>core-module-payment-base</artifactId>

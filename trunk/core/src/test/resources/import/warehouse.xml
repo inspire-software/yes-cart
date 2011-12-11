@@ -1,0 +1,38 @@
+<import-descriptor>
+
+    <entityIntface>org.yes.cart.domain.entity.Warehouse</entityIntface>
+
+    <importFile class="file-descriptor">
+        <columnDelimeter>;</columnDelimeter>
+        <textQualifier>&quot;</textQualifier>
+        <ignoreFirstLine>true</ignoreFirstLine>
+        <fileNameMask>warehouse.csv$</fileNameMask>
+        <fileEncoding>UTF-8</fileEncoding>
+    </importFile>
+
+    <importColumns class="list">
+
+        <column-descriptor>
+            <columnIndex>0</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>code</name>
+            <regExp>(.*)</regExp>
+            <lookupQuery>select b from Warehouse b where b.code = ?1</lookupQuery>
+        </column-descriptor>
+
+        <column-descriptor>
+            <columnIndex>1</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>name</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <columnIndex>2</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>description</name>
+        </column-descriptor>
+
+
+    </importColumns>
+    <importFolder>src/test/resources/import</importFolder>
+</import-descriptor>

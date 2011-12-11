@@ -33,17 +33,20 @@ public interface ImportDirectorService {
     void setPathToArchiveFolder(final String pathToArchiveFolder);    
 
 
-    /**
-     * Perform bulk import.
-     * @param errorReport error report place holder
-     * @param importedFiles imported files
-     */
-    void doImportInternal(StringBuilder errorReport, Set<String> importedFiles);
+
 
     /**
      * Perform bulk import.
      * @return error report
      */
     String doImport();
+
+
+    /**
+     * Perform bulk import.
+     * @param fileName optional full filename to import
+     * @return error report
+     */
+    String doImport(String fileName);
 
 }

@@ -442,24 +442,23 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
     </bean>
 
 
-    <!--bean id="csvBulkImport" class="org.yes.cart.service.impl.CsvBulkImportServiceImpl">
+    <bean id="csvBulkImport" class="org.yes.cart.bulkimport.csv.impl.CsvBulkImportServiceImpl">
         <property name="extendedConversionService" ref="extendedConversionService"/>
         <property name="genericDAO" ref="genericDao"/>
     </bean>
 
 
-    <bean id="imageBulkImport" class="org.yes.cart.service.impl.BulkImportImagesServiceImpl">
+    <!--<bean id="imageBulkImport" class="org.yes.cart.service.impl.BulkImportImagesServiceImpl">
         <property name="attributeDao" ref="attributeDao"/>
         <property name="genericDAO" ref="genericDao"/>
         <property name="imageService" ref="imageService"/>
         <property name="regExp" value="_([.[^_]]*)_[a-z]\.jpe?g$"/>
         <property name="filePatterntRegExp" value="(.*)\.jpe?g"/>
-    </bean>
+    </bean>-->
 
     <bean id="bulkImportService" class="org.yes.cart.bulkimport.service.impl.ImportDirectorImplService">
         <constructor-arg index="0" ref="csvBulkImport"/>
-        <constructor-arg index="1" ref="imageBulkImport"/>
-        <constructor-arg index="2">
+        <constructor-arg index="1">
             <list>
                 <value>import-descriptor\product.xml</value>
                 <value>import-descriptor\productskuprice.xml</value>
@@ -479,7 +478,7 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
         <property name="systemService" ref="systemService"/>
         <property name="productService" ref="productService"/>
 
-    </bean-->
+    </bean>
 
 
 </beans>

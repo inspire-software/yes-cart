@@ -34,19 +34,12 @@ public class ImportJobBeanImpl extends QuartzJobBean {
      */
     protected void executeInternal(final JobExecutionContext jobExecutionContext) throws JobExecutionException {
 
-        final StringBuilder stringBuilder = new StringBuilder();
-        final Set<String> importedFiles = new HashSet<String>();
         importDirector.setPathToImportDescriptors(systemService.getImportDescritorsDirectory());
         importDirector.setPathToImportImagesFolder(systemService.getImportDirectory());
         importDirector.setPathToArchiveFolder(systemService.getImportArchiveDirectory());
-        importDirector.doImportInternal(stringBuilder, importedFiles);
+        importDirector.doImport();
         productService.clearEmptyAttributes();
         productService.reindexProducts();
-
-        if (!importedFiles.isEmpty()) {
-            LOG.info("Imported files " + importedFiles.size());
-            productService.reindexProducts();
-        }
 
     }
 

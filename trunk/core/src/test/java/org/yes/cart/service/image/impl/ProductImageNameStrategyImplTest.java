@@ -51,19 +51,22 @@ public class ProductImageNameStrategyImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetCode() {
-        List<String> expectation = new ArrayList<String>();
-        expectation.add("PRODUCT-or-SKU-CODE");
-        expectation.add("PRODUCT1");
-        expectation.add("PROD+UCT1");
-        expectation.add("КОД-ПРОДУКТА");
-        expectation.add("ЕЩЕ-КОД-пРОДУКТА");
-        expectation.add("-КОД-Сосики-");
-        expectation.add("ЕЩЕ-КОД-ПРОДУКТА!");
+        List<String> expectation = new ArrayList<String>() {{
+            add("PRODUCT-or-SKU-CODE");
+            add("PRODUCT1");
+            add("PROD+UCT1");
+            add("КОД-ПРОДУКТА");
+            add("ЕЩЕ-КОД-пРОДУКТА");
+            add("-КОД-Сосики-");
+            add("ЕЩЕ-КОД-ПРОДУКТА!");
+        }};
+
+
         for (String fileName : FILE_NAMES) {
             String code = imageNameStrategy.getCode(fileName);
             assertNotNull(code);
             assertFalse("Contains _ ", code.indexOf('_') > -1);
-            assertTrue(fileName + " not in expectations", expectation.contains(code));
+            assertTrue(fileName + " not in expectations. The code is " + code, expectation.contains(code));
             assertTrue(expectation.remove(code));
         }
         assertTrue(expectation.isEmpty());
