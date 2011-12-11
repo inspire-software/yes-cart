@@ -67,6 +67,7 @@ public class CvsImportBaseTestCase extends DBTestCase {
     }
 
     public CvsImportBaseTestCase() {
+        getConnection()
         System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_DRIVER_CLASS, "org.hsqldb.jdbcDriver");
         System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_CONNECTION_URL, "jdbc:hsqldb:mem:testnpadb");
         System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_USERNAME, "sa");
@@ -80,7 +81,7 @@ public class CvsImportBaseTestCase extends DBTestCase {
         // Load the applicationContext.xml file
         ctx = new ClassPathXmlApplicationContext(
                 "testApplicationContext.xml",
-                "core-module-bulkimport.xml"
+                "core-module-bulkimport-csv.xml"
         );
 
         sessionFactory = (SessionFactory) ctx.getBean("sessionFactory");
