@@ -442,23 +442,11 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
     </bean>
 
 
-    <bean id="csvBulkImport" class="org.yes.cart.bulkimport.csv.impl.CsvBulkImportServiceImpl">
-        <property name="extendedConversionService" ref="extendedConversionService"/>
-        <property name="genericDAO" ref="genericDao"/>
-    </bean>
-
-
-    <!--<bean id="imageBulkImport" class="org.yes.cart.service.impl.BulkImportImagesServiceImpl">
-        <property name="attributeDao" ref="attributeDao"/>
-        <property name="genericDAO" ref="genericDao"/>
-        <property name="imageService" ref="imageService"/>
-        <property name="regExp" value="_([.[^_]]*)_[a-z]\.jpe?g$"/>
-        <property name="filePatterntRegExp" value="(.*)\.jpe?g"/>
-    </bean>-->
 
     <bean id="bulkImportService" class="org.yes.cart.bulkimport.service.impl.ImportDirectorImplService">
-        <constructor-arg index="0" ref="csvBulkImport"/>
-        <constructor-arg index="1">
+        <constructor-arg index="0" ref="bulkImportServiceImpl"/>
+        <constructor-arg index="1" ref="bulkImportImageService"/>
+        <constructor-arg index="2">
             <list>
                 <value>product.xml</value>
                 <value>productskuprice.xml</value>
@@ -471,10 +459,10 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
             </list>
         </constructor-arg>
 
-        <constructor-arg index="2" value="#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'+systemProperties['file.separator']+'archive'}"/>
-        <constructor-arg index="3" value="import-descriptor"/>
-        <constructor-arg index="4" value="#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'+systemProperties['file.separator']+'import'}"/>
-        <constructor-arg index="5" value="productService"/>
+        <constructor-arg index="3" value="#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'+systemProperties['file.separator']+'archive'}"/>
+        <constructor-arg index="4" value="import-descriptor"/>
+        <constructor-arg index="5" value="#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'+systemProperties['file.separator']+'import'}"/>
+        <constructor-arg index="6" ref="productService"/>
 
 
         <flex:remoting-destination/>

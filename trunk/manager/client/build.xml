@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="shop-manager" default="depl" basedir=".">
+<project name="shop-manager" default="all" basedir=".">
 
     <property environment="env"/>
 
@@ -85,7 +85,6 @@
    <target name="build" depends="build_en, build_ru" description="Build all swf">
 
     </target>
-    <!-- serviceurl="http://localhost:8080/shop-manager-server/spring/amf" -->
 
     <target name="wrapper_ru">
         <html-wrapper
@@ -93,15 +92,15 @@
                 height="100%"
                 width="100%"
                 title="Welcome to Shop Manager (Russian)"
-                file="index.html"
+                file="ShopManagerApplication.html"
                 bgcolor="red"
                 application="app"
-                swf="ShopManagerApplication_ru_RU"
+                swf="ShopManagerApplication"
                 version-major="10"
                 version-minor="0"
                 version-revision="0"
                 history="true"
-                output="../server/src/main/webapp"/>
+                output="target/ru_RU"/>
     </target>
 
     <target name="wrapper_en">
@@ -110,36 +109,25 @@
                 height="100%"
                 width="100%"
                 title="Welcome to Shop Manager (English)"
-                file="index.html"
+                file="ShopManagerApplication.html"
                 bgcolor="red"
                 application="app"
-                swf="ShopManagerApplication_en_US"
+                swf="ShopManagerApplication"
                 version-major="10"
                 version-minor="0"
                 version-revision="0"
                 history="true"
-                output="../server/src/main/webapp"/>
+                output="target/en_US"/>
     </target>
 
 
-    <target name="wrapper" depends="wrapper_ru, wrapper_en">
-    </target>
+    <target name="wrapper" depends="wrapper_ru, wrapper_en"/>
 
     <target name="info">
 	<tstamp prefix="end">
       		<format property="time" pattern="yyyy-MM-dd hh:mm aa" />
   	</tstamp>
-
-        <echo message="-----------------------------------------------------"/>
-        <echo message="Set the flashVars manually !!!"/>
-        <echo message="Locale index.html under local assembly and add following lines:"/>
-        <echo message="1. AC_FL_RunContent( &quot;FlashVars&quot;, &quot;serviceurl=http://localhost:8080/shop-manager-server/spring/amf&quot;, "/>
-        <echo message="2. &lt;param name=&quot;serviceurl&quot; value=&quot;http://localhost:8080/shop-manager-server/spring/amf&quot;/&gt;, "/>
-        <echo message="3. &lt;embed src=&quot;ShopManagerApplication_lo_LO.swf&quot; serviceurl=&quot;http://localhost:8080/shop-manager-server/spring/amf&quot; "/>
-        <echo message="-----------------------------------------------------"/>
 	<echo message="${end.time}" />
-
-
     </target>
 
     <target name="checkenv" description="Check the environment variable">
@@ -153,13 +141,6 @@
             <fileset dir="src/main/flex" includes="**/*.properties"/>
         </delete>
 	<delete file="flex-compiler-config.xml"/>
-
     </target>
-
-    <target name="depl" depends="all">
-	<copy file="target/en_US/ShopManagerApplication_en_US.swf" tofile="../server/src/main/webapp/ShopManagerApplication_en_US.swf"/>
-	<copy file="target/ru_RU/ShopManagerApplication_ru_RU.swf" tofile="../server/src/main/webapp/ShopManagerApplication_ru_RU.swf"/>
-    </target>
-
 
 </project>

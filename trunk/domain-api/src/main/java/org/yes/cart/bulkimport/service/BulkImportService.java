@@ -1,26 +1,13 @@
 package org.yes.cart.bulkimport.service;
 
-import java.util.Set;
 
 /**
- * Bulk Import desriptor service. All implementations in particular modules.
+ * Bulk Import desriptor service.
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public interface BulkImportService {
-
-    public enum BulkImportResult {
-        OK("OK"),
-        ERROR("ERROR");
-
-        private final String result;
-
-        BulkImportResult(final String result) {
-            this.result = result;
-        }
-    }
-
+public interface BulkImportService extends ImportService {
 
     /**
      * Set path to import descriptor.
@@ -28,18 +15,6 @@ public interface BulkImportService {
      * @param pathToImportDescriptor path to use.
      */
     void setPathToImportDescriptor(String pathToImportDescriptor);
-
-
-    /**
-     * Perform bulk import.
-     *
-     *
-     * @param errorReport   error report place holder
-     * @param importedFiles imported files
-     * @param fileName optional file  name
-     * @return {@link BulkImportResult}
-     */
-    BulkImportResult doImport(StringBuilder errorReport, Set<String> importedFiles, String fileName, String pathToImportFolder);
 
 
 }

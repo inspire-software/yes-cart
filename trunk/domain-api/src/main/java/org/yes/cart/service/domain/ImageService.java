@@ -52,10 +52,12 @@ public interface ImageService extends GenericService<SeoImage> {
      *
      * @param fullFileName full path to image file.
      * @param code         product or sku code.
+     * @param pathToRepository path to repo
      * @return true if file was added successfully
+     *
      * @throws IOException in case of io errors.
      */
-    boolean addImageToRepository(String fullFileName, String code) throws IOException;
+    boolean addImageToRepository(String fullFileName, String code, final String pathToRepository) throws IOException;
 
     /**
      * Add the given file to image repository.

@@ -7,20 +7,19 @@ import java.util.Set;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public interface BulkImportImagesService {
+public interface BulkImportImagesService extends ImportService {
 
     /**
-     * Set path to import folder, that hold images.
-     *
-     * @param pathToImportFolder path to use.
+     * Set path to import folder.
+     * @param pathToImportFolder import folder.
      */
-    void setPathToImportFolder(String pathToImportFolder);
+    public void setPathToImportFolder(String pathToImportFolder);
+
 
     /**
-     * Perform images bulk import.
-     *
-     * @param errorReport   error report place holder
-     * @param importedFiles imported files
+     * The path to product image repository.
+     * @param pathToRepository  path to product image repository.
      */
-    void doImport(StringBuilder errorReport, Set<String> importedFiles);
+    public void setPathToRepository(String pathToRepository);
+
 }
