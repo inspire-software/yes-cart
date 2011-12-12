@@ -157,7 +157,6 @@
                                 <filtering>true</filtering>
                                 <directory>../client/target</directory>
                                 <includes>
-                                    <include>playerProductInstall.swf</include>
                                     <include>ShopManagerApplication.html</include>
                                     <include>ShopManagerApplication.swf</include>
                                     <include>AC_OETags.js</include>

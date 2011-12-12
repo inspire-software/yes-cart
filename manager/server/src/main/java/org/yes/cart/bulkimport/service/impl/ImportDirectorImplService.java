@@ -1,5 +1,6 @@
 package org.yes.cart.bulkimport.service.impl;
 
+import flex.messaging.FlexContext;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,7 @@ import org.yes.cart.bulkimport.service.BulkImportImagesService;
 import org.yes.cart.bulkimport.service.BulkImportService;
 import org.yes.cart.bulkimport.service.ImportDirectorService;
 import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.utils.impl.ZipUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,7 +37,7 @@ public class ImportDirectorImplService implements ImportDirectorService, Applica
 
     private final BulkImportService bulkImportService;
 
-    private BulkImportImagesService bulkImportImagesService;
+    private final BulkImportImagesService bulkImportImagesService;
 
     private final List<String> importDescriptors;
 
@@ -62,7 +64,7 @@ public class ImportDirectorImplService implements ImportDirectorService, Applica
      */
     public ImportDirectorImplService(
             final BulkImportService bulkImportService,
-            //final BulkImportImagesService bulkImportImagesService,
+            final BulkImportImagesService bulkImportImagesService,
             final List<String> importDescriptors,
             final String pathToArchiveFolder,
             final String pathToImportDescriptors,
@@ -73,7 +75,7 @@ public class ImportDirectorImplService implements ImportDirectorService, Applica
         this.pathToArchiveFolder = pathToArchiveFolder;
         this.pathToImportFolder = pathToImportFolder;
         this.importDescriptors = importDescriptors;
-        //this.bulkImportImagesService = bulkImportImagesService;
+        this.bulkImportImagesService = bulkImportImagesService;
         this.productService = productService;
     }
 
@@ -87,7 +89,7 @@ public class ImportDirectorImplService implements ImportDirectorService, Applica
      */
     public void doImportInternal(final StringBuilder errorReport, final Set<String> importedFiles, final String fileName) throws IOException {
         doDataImport(errorReport, importedFiles, fileName);
-        //doImageImport(errorReport, importedFiles, fileName);
+        doImageImport(errorReport, importedFiles, fileName);
         moveImportFilesToArchive(importedFiles);
     }
 
@@ -109,7 +111,13 @@ public class ImportDirectorImplService implements ImportDirectorService, Applica
         Set<String> importedFiles = new HashSet<String>();
         StringBuilder stringBuilder = new StringBuilder();
         try {
-            doImportInternal(stringBuilder, importedFiles, fileName);
+            if (fileName.endsWith(".zip")) {
+                importedFiles.add(fileName);
+                ZipUtils.unzipArchive(fileName, pathToImportFolder);
+                doImportInternal(stringBuilder, importedFiles, null);
+            } else {
+                doImportInternal(stringBuilder, importedFiles, fileName); //single file import
+            }
         } catch (IOException e) {
             e.printStackTrace();
             return "ERROR " + e.getMessage();
@@ -119,10 +127,10 @@ public class ImportDirectorImplService implements ImportDirectorService, Applica
         return stringBuilder.toString();
     }
 
-    /*private void doImageImport(final StringBuilder errorReport, final Set<String> importedFiles, final String fileName) {
-        bulkImportImagesService.setPathToImportFolder(pathToImportImagesFolder);
-        bulkImportImagesService.doImport(errorReport, importedFiles);
-    } */
+    private void doImageImport(final StringBuilder errorReport, final Set<String> importedFiles, final String fileName) {
+        bulkImportImagesService.setPathToRepository(FlexContext.getServletContext().getRealPath("/../yes-shop/default/imagevault") + File.separator); //TODO remove this hardcode. alsoo see remoteImageServiceimpl
+        bulkImportImagesService.doImport(errorReport, importedFiles, fileName, this.pathToImportFolder);
+    }
 
     private void doDataImport(final StringBuilder errorReport, final Set<String> importedFiles, final String fileName) throws IOException {
         for (String descriptor : importDescriptors) {

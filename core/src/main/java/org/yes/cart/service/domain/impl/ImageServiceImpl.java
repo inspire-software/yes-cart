@@ -230,9 +230,11 @@ public class ImageServiceImpl
      * @param code         product or sku code.
      * @return true if file was added successfully
      */
-    public boolean addImageToRepository(final String fullFileName, final String code) throws IOException {
+    public boolean addImageToRepository(final String fullFileName,
+                                        final String code,
+                                        final String pathToRepository) throws IOException {
         File file = new File(fullFileName);
-        String pathInRepository = getImageNameStrategy(StringUtils.EMPTY).getFullFileNamePath(file.getName(), code);
+        String pathInRepository = pathToRepository + getImageNameStrategy(StringUtils.EMPTY).getFullFileNamePath(file.getName(), code);
         File destinationFile = new File(pathInRepository);
         FileUtils.copyFile(file, destinationFile);
         return destinationFile.exists();

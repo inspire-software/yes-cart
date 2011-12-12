@@ -14,6 +14,7 @@ import org.yes.cart.bulkimport.model.FieldTypeEnum;
 import org.yes.cart.bulkimport.model.ImportColumn;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.bulkimport.service.BulkImportService;
+import org.yes.cart.bulkimport.service.impl.AbstractImportService;
 import org.yes.cart.dao.GenericDAO;
 
 import java.beans.PropertyDescriptor;
@@ -21,7 +22,6 @@ import java.io.*;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 /**
  * Pefrorm import from csv files. Import based on xml import description, that include
@@ -35,7 +35,7 @@ import java.util.regex.Pattern;
  * example - shop and shop url, in this case {@link ImportColumn} has a
  * {@link ImportDescriptor}. At this moment rows in cell splitted by comma by default.
  */
-public class CsvBulkImportServiceImpl implements BulkImportService {
+public class CsvBulkImportServiceImpl extends AbstractImportService implements BulkImportService {
 
     private static final Logger LOG = LoggerFactory.getLogger(CsvBulkImportServiceImpl.class);
 
@@ -441,32 +441,7 @@ public class CsvBulkImportServiceImpl implements BulkImportService {
     }
 
 
-    private File[] getFilesToImport(final CvsImportDescriptor importDescriptor, final String fileName) {
-        final FilenameFilter filenameFilter =
-                new RegexPatternFilenameFilter(importDescriptor.getImportFile().getFileNameMask());
-        final File importDirectory = new File(importDescriptor.getImportFolder());
-        return filterFiles(importDirectory.listFiles(filenameFilter), fileName);
-    }
 
-    /**
-     * Limit list of possible file to import.
-     *
-     * @param toFilter set of files to  import
-     * @param fileName optional file name
-     * @return the filtered file array
-     */
-    File[] filterFiles(final File[] toFilter, final String fileName) {
-        if (fileName != null && toFilter != null) {
-            final File fileAsFilter = new File(fileName);
-            for (File file : toFilter) {
-                if (file.compareTo(fileAsFilter) == 0) {
-                    return new File[]{fileAsFilter};
-                }
-            }
-            return new File[0];
-        }
-        return toFilter;
-    }
 
     protected XStream getXStream() {
         XStream xStream = new XStream(new DomDriver());
@@ -474,39 +449,6 @@ public class CsvBulkImportServiceImpl implements BulkImportService {
         xStream.alias("file-descriptor", CsvImportFileImpl.class);
         xStream.alias("column-descriptor", CsvImportColumnImpl.class);
         return xStream;
-    }
-
-
-    private class RegexPatternFilenameFilter implements FilenameFilter {
-
-        private final Pattern pattern;
-
-        /**
-         * Constructor.
-         *
-         * @param pattern reg exp pattern.
-         */
-        public RegexPatternFilenameFilter(final Pattern pattern) {
-            this.pattern = pattern;
-        }
-
-        /**
-         * Constructor.
-         *
-         * @param regExp regular expression.
-         */
-        public RegexPatternFilenameFilter(final String regExp) {
-            pattern = Pattern.compile(regExp);
-        }
-
-        /**
-         * {@inheritDoc
-         */
-        public boolean accept(final File dir, final String name) {
-            return (name != null) && this.pattern.matcher(name).matches();
-        }
-
-
     }
 
 

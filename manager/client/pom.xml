@@ -37,7 +37,7 @@
                     <extensions>true</extensions>
                     <configuration>
                         <debug>true</debug>
-                        <webappDirectory>${basedir}../server/src/main/webapp</webappDirectory>
+                        <!--webappDirectory>${basedir}../server/src/main/webapp</webappDirectory-->
                         <localesSourcePath>${basedir}/src/main/resources/{locale}</localesSourcePath>
                         <localesCompiled>
                             <locale>en_US</locale>
@@ -66,6 +66,10 @@
                     </execution>
                 </executions>
             </plugin>
+
+
+
+
         </plugins>
     </build>
 </project>

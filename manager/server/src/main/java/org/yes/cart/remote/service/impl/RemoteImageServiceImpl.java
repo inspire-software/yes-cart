@@ -66,7 +66,7 @@ public class RemoteImageServiceImpl extends AbstractRemoteService<SeoImageDTO> i
     /**
      * TODO
      * TODO yes-shop !!! This is dirty hack !!!!! Eliminate this !!!!
-     * TODO it work under tomcat, but not sure aabout other AS
+     * TODO it work under tomcat, but not sure about other AS
      * @return   path to external web context
      */
     private String getRealPathPrefix() {
