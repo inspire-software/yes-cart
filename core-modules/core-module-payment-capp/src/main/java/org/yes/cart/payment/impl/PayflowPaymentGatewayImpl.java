@@ -16,9 +16,6 @@ import java.util.Map;
 
 /**
  * Adapter for payflow payment gateway.
- * WARNING !!! The paypal policy not allow to get test account for payflow in appropriate way.
- * So payflow is untested.
- * Please send back successfully tested gateway, if you have possibility
  * <p/>
  * API (https://www.x.com/community/ppx/sdks#PayflowPro).
  * <p/>
@@ -253,7 +250,7 @@ public class PayflowPaymentGatewayImpl extends AbstractCappPaymentGatewayImpl im
                 paymentIn.getOrderCurrency()
         ));
         invoice.setPoNum(paymentIn.getOrderShipment());
-        invoice.setInvNum(paymentIn.getOrderShipment());
+        invoice.setInvNum(paymentIn.getOrderShipment().replace("-","")); //alphachar , the - prohibited
 
         fillDeliveryDetails(paymentIn, invoice);
 

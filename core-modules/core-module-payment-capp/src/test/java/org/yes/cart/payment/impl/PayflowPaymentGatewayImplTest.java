@@ -93,6 +93,11 @@ Discover: 6011111111111117
                             null,
                             Payment.PAYMENT_STATUS_OK,
                             null).size());
+            try {
+                dumpDataBase("testAuthPlusReverseAuthorization", new String[]{"TCUSTOMERORDERPAYMENT"});
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -131,6 +136,11 @@ Discover: 6011111111111117
                             null,
                             Payment.PAYMENT_STATUS_OK,
                             PaymentGateway.CAPTURE).size());
+            try {
+                dumpDataBase("testAuthPlusCapture", new String[]{"TCUSTOMERORDERPAYMENT"});
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -139,6 +149,11 @@ Discover: 6011111111111117
     public void testAuthPlusCapturePlusVoidCapture() {
         if (isTestAllowed()) {
             orderCancelationFlow(false);
+            try {
+                dumpDataBase("void", new String[]{"TCUSTOMERORDERPAYMENT"});
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -147,6 +162,11 @@ Discover: 6011111111111117
         //??? how to submit settlement
         if (isTestAllowed()) {
             orderCancelationFlow(true);
+            try {
+                dumpDataBase("refund", new String[]{"TCUSTOMERORDERPAYMENT"});
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -196,5 +216,6 @@ Discover: 6011111111111117
                         null,
                         Payment.PAYMENT_STATUS_OK,
                         null).size());
+
     }
 }
