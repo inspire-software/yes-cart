@@ -58,6 +58,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
             if (jmsServerManager != null) {
                 jmsServerManager.stop();
             }
+            sharedContext =  null;
         } catch (NoSuchBeanDefinitionException noSuchBeanDefinitionException) {
             //nothing
         }

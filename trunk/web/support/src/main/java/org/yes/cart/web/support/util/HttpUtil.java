@@ -1,5 +1,6 @@
 package org.yes.cart.web.support.util;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.text.MessageFormat;
 import java.util.Collection;
@@ -12,11 +13,11 @@ import java.util.Enumeration;
  */
 public class HttpUtil {
 
-    public static void requestDump(final HttpServletRequest request) {
+    public static void dumpRequest(final ServletRequest request) {
         Enumeration en = request.getParameterNames();
         while (en.hasMoreElements()) {
             final Object key = en.nextElement();
-            System.out.println(MessageFormat.format("HttpUtil#requestDump param key = [{0}] value = [{1}]",
+            System.out.println(MessageFormat.format("HttpUtil#dumpRequest param key = [{0}] value = [{1}]",
                     key,
                     request.getParameter((String) key)));
         }
@@ -24,7 +25,7 @@ public class HttpUtil {
         en = request.getAttributeNames();
         while (en.hasMoreElements()) {
             final Object key = en.nextElement();
-            System.out.println(MessageFormat.format("HttpUtil#requestDump attr  key = [{0}] value = [{1}]",
+            System.out.println(MessageFormat.format("HttpUtil#dumpRequest attr  key = [{0}] value = [{1}]",
                     key,
                     request.getAttribute((String) key)));
         }

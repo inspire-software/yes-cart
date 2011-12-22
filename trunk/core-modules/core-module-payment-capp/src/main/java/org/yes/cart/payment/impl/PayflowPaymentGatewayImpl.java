@@ -23,7 +23,6 @@ import java.util.Map;
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
-
  */
 public class PayflowPaymentGatewayImpl extends AbstractCappPaymentGatewayImpl implements PaymentGatewayInternalForm {
 
@@ -56,7 +55,12 @@ public class PayflowPaymentGatewayImpl extends AbstractCappPaymentGatewayImpl im
 
     private Map<String, String> props;
     private static final Map<Integer, String> ERROR_CODE_DESC_MAP;
-    private PaymentGatewayFeature paymentGatewayFeature;
+    private static final PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
+            true, true, true, true,
+            true, true, true, false,
+            true,
+            null
+    );
 
     static {
 
@@ -250,7 +254,7 @@ public class PayflowPaymentGatewayImpl extends AbstractCappPaymentGatewayImpl im
                 paymentIn.getOrderCurrency()
         ));
         invoice.setPoNum(paymentIn.getOrderShipment());
-        invoice.setInvNum(paymentIn.getOrderShipment().replace("-","")); //alphachar , the - prohibited
+        invoice.setInvNum(paymentIn.getOrderShipment().replace("-", "")); //alphachar , the - prohibited
 
         fillDeliveryDetails(paymentIn, invoice);
 
@@ -350,15 +354,6 @@ public class PayflowPaymentGatewayImpl extends AbstractCappPaymentGatewayImpl im
      * {@inheritDoc}
      */
     public synchronized PaymentGatewayFeature getPaymentGatewayFeatures() {
-        if (paymentGatewayFeature == null) {
-            paymentGatewayFeature = new PaymentGatewayFeatureImpl(
-                    true, true, true, true,
-                    true, true, true, false,
-                    true,
-                    null
-            );
-        }
-
         return paymentGatewayFeature;
     }
 

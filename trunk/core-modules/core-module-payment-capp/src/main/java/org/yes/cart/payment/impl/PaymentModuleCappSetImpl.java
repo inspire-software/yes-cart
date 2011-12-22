@@ -9,7 +9,7 @@ import java.util.Map;
 
 /**
  *
- * This set of payment gateways not included in community edition.
+ * This set of payment gateways  included in community edition.
  *
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011

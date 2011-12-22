@@ -204,6 +204,7 @@ public class PayPalNvpPaymentGatewayImplTest extends CappPaymentModuleDBTestCase
     }
 
     public String getVisaCardNumber() {
-        return "4444750601380435";  //this is from test account
+        return "4200341341826822";  //this is from test account
+        //4200341341826822
     }
 }

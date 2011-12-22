@@ -28,7 +28,6 @@ import java.util.*;
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
- 
  */
 public class CyberSourcePaymentGatewayImpl extends AbstractCappPaymentGatewayImpl implements PaymentGatewayInternalForm {
 
@@ -124,10 +123,12 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCappPaymentGatewayImp
     }
 
 
-
-
-    private PaymentGatewayFeature paymentGatewayFeature;
-
+    private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
+            true, true, true, false,
+            true, true, true, false,
+            true,
+            null
+    );
 
 
     /**
@@ -141,21 +142,8 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCappPaymentGatewayImp
      * {@inheritDoc}
      */
     public synchronized PaymentGatewayFeature getPaymentGatewayFeatures() {
-
-        if (paymentGatewayFeature == null) {
-            paymentGatewayFeature = new PaymentGatewayFeatureImpl(
-                    true, true, true, false,
-                    true, true, true, false,
-                    true,
-                    null
-            );
-        }
-
         return paymentGatewayFeature;
     }
-
-
-
 
 
     /**
@@ -232,10 +220,10 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCappPaymentGatewayImp
              * invalidField_0=billTo_phoneNumber
              * invalidField_1=shipTo_phoneNumber
 
-            if (address.getPhoneList() != null) {
-                request.put(addressPrefix + "phoneNumber", address.getCountryCode());
-            }
-            */
+             if (address.getPhoneList() != null) {
+             request.put(addressPrefix + "phoneNumber", address.getCountryCode());
+             }
+             */
 
         }
 
@@ -391,8 +379,6 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCappPaymentGatewayImp
     }
 
 
-
-
     /**
      * Create properties for cs client.
      *
@@ -413,8 +399,6 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCappPaymentGatewayImp
         }
         return props;
     }
-
-
 
 
 }

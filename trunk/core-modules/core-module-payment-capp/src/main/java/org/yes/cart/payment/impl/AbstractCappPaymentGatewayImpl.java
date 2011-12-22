@@ -29,10 +29,11 @@ public abstract class AbstractCappPaymentGatewayImpl implements PaymentGateway {
     private Collection<PaymentGatewayParameter> allParameters = null;
 
 
+
     /**
     * {@inheritDoc}
     */
-    public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount, final String orderGuid) {
+    public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount, final String currencyCode, final String orderGuid) {
         return getHtmlForm(cardHolderName, locale);
     }
 
@@ -177,7 +178,7 @@ public abstract class AbstractCappPaymentGatewayImpl implements PaymentGateway {
      * @param valueLabel key to search
      * @return value or null if not found
      */
-    protected String getParameterValue(final String valueLabel) {
+    public String getParameterValue(final String valueLabel) {
         final Collection<PaymentGatewayParameter> values = getPaymentGatewayParameters();
         for (PaymentGatewayParameter keyValue : values) {
             if (keyValue.getLabel().equals(valueLabel)) {
@@ -203,6 +204,11 @@ public abstract class AbstractCappPaymentGatewayImpl implements PaymentGateway {
                         StringUtils.EMPTY)
                 ;
 
+    }
+
+
+    protected String getHiddenFiled(final String fieldName, final Object value) {
+        return "<input type='hidden' name='" + fieldName + "' value='" + value + "'>\n";
     }
 
 

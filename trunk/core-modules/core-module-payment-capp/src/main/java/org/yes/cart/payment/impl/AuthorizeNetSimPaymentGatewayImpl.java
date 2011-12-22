@@ -7,8 +7,10 @@ import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
 import org.yes.cart.payment.PaymentGateway;
 
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Random;
 import java.util.Date;
 import java.util.Map;
@@ -20,14 +22,18 @@ import org.apache.commons.lang.StringUtils;
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
- 
  */
 public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPaymentGatewayImpl implements PaymentGatewayExternalForm {
 
 
     private static final String ORDER_GUID = "orderGuid";
 
-    private PaymentGatewayFeature paymentGatewayFeature;
+    private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
+            false, false, false, true,
+            false, false, false, true,
+            true,
+            null
+    );
 
 
     /**
@@ -41,15 +47,6 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
      * {@inheritDoc}
      */
     public PaymentGatewayFeature getPaymentGatewayFeatures() {
-        if (paymentGatewayFeature == null) {
-            paymentGatewayFeature = new PaymentGatewayFeatureImpl(
-                    false, false, false, true,
-                    false, false, false, true,
-                    true,
-                    null
-            );
-        }
-
         return paymentGatewayFeature;
     }
 
@@ -63,32 +60,44 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     }
 
 
-    /** {@inheritDoc}  */
-    public Payment authorizeCapture(Payment payment) {
+    /**
+     * {@inheritDoc}
+     */
+    public Payment authorizeCapture(final Payment payment) {
         return payment;
     }
 
-    /** {@inheritDoc}  */
+    /**
+     * {@inheritDoc}
+     */
     public Payment authorize(final Payment payment) {
         return payment;
     }
 
-    /** {@inheritDoc}  */
+    /**
+     * {@inheritDoc}
+     */
     public Payment reverseAuthorization(final Payment payment) {
         return payment;
     }
 
-    /** {@inheritDoc}  */
+    /**
+     * {@inheritDoc}
+     */
     public Payment capture(final Payment payment) {
         return payment;
     }
 
-    /** {@inheritDoc}  */
+    /**
+     * {@inheritDoc}
+     */
     public Payment voidCapture(final Payment payment) {
         return payment;
     }
 
-    /** {@inheritDoc}  */
+    /**
+     * {@inheritDoc}
+     */
     public Payment refund(final Payment payment) {
         return payment;
     }
@@ -102,10 +111,40 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
 
     /**
      * {@inheritDoc}
+     */
+    public Map<String, String> setExpressCheckoutMethod(BigDecimal amount, String currencyCode) throws IOException {
+        return Collections.EMPTY_MAP; //nothing to do
+    }
+
+
+     /**
+     * {@inheritDoc}
+     */
+    public Map<String, String> doDoExpressCheckoutPayment(final String token, final String payerId,
+                                                          final BigDecimal amount, final String currencyCode) throws IOException {
+        return null;//nothing to do
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Map<String, String> getExpressCheckoutDetails(final String token) throws IOException {
+        return null; //nothing to do
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isSuccess(final Map<String, String> nvpCallResult) {
+        return true; //nothing to do
+    }
+
+    /**
+     * {@inheritDoc}
      * All fields are hidden, hence not need to localize and etc.
      */
     @Override
-    public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount, final String orderGuid) {
+    public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount, final String currencyCode, final String orderGuid) {
 
         final String apiLoginId = getParameterValue(AN_API_LOGIN_ID);
         final String amountString = "" + amount;
@@ -151,10 +190,6 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     }
 
 
-    public String getHiddenFiled(final String fieldName, final Object value) {
-        return "<input type='hidden' name='" + fieldName + "' value='" + value + "'>\n";
-    }
-
     /**
      * Process public call back request from payment gateway.
      *
@@ -168,9 +203,8 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
         payment.setTransactionAuthorizationCode(AbstractCappPaymentGatewayImpl.getSingleValue(privateCallBackParameters.get("x_auth_code")));
 
 
-
         String responseCode = AbstractCappPaymentGatewayImpl.getSingleValue(privateCallBackParameters.get("x_response_code"));
-        if("1".equalsIgnoreCase(responseCode)) {
+        if ("1".equalsIgnoreCase(responseCode)) {
             payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
         } else {
             payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
@@ -178,8 +212,8 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
         payment.setTransactionOperationResultCode(responseCode);
         payment.setTransactionOperationResultMessage(
                 AbstractCappPaymentGatewayImpl.getSingleValue(privateCallBackParameters.get("x_response_reason_code"))
-                + " "
-                + AbstractCappPaymentGatewayImpl.getSingleValue(privateCallBackParameters.get("x_response_reason_text"))
+                        + " "
+                        + AbstractCappPaymentGatewayImpl.getSingleValue(privateCallBackParameters.get("x_response_reason_text"))
         );
         payment.setCardNumber(AbstractCappPaymentGatewayImpl.getSingleValue(privateCallBackParameters.get("x_account_number")));
 

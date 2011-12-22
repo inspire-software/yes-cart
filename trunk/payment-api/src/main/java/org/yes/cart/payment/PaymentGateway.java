@@ -7,6 +7,7 @@ import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -23,15 +24,18 @@ public interface PaymentGateway extends Serializable {
     String VOID_CAPTURE = "VOID_CAPTURE";
     String REFUND = "REFUND";
 
+
     /**
      * Get the whole or part of html form to fill data for payment.
      *
      * @param cardHolderName card  hiolder name hint based on customer profile
      * @param locale         to get localized html
+     * @param currencyCode   shopping cart currency code
      * @param amount         amount payment , used for external payment processing
+     * @param orderGuid order guid to restore real order after jumping of payment gateway sites.
      * @return html.
      */
-    String getHtmlForm(String cardHolderName, String locale, BigDecimal amount, String orderGuid);
+    String getHtmlForm(String cardHolderName, String locale, BigDecimal amount, String currencyCode, String orderGuid);
 
     /**
      * Authorize and capture payment. Not all gataways allow to capture payment without order delivery.
@@ -165,5 +169,13 @@ public interface PaymentGateway extends Serializable {
      * @param paymentGatewayParameter {@link PaymentGatewayParameter}
      */
     void updateParameter(PaymentGatewayParameter paymentGatewayParameter);
+
+    /**
+     * Get the parameter value from given collection.
+     *
+     * @param valueLabel key to search
+     * @return value or null if not found
+     */
+    String getParameterValue(String valueLabel);
 
 }

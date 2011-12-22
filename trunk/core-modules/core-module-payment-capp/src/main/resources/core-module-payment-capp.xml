@@ -39,6 +39,10 @@
         <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
     </bean>
 
+    <bean id="payPalExpressPaymentGateway" class="org.yes.cart.payment.impl.PayPalExpressCheckoutPaymentGatewayImpl" scope="prototype">
+        <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
+    </bean>
+
 
     <bean id="cyberSourcePaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
         <property name="label" value="cyberSourcePaymentGatewayLabel"/>
@@ -75,6 +79,13 @@
         <property name="description" value="Paypal nvp payment gateway"/>
     </bean>
 
+    <bean id="payPalExpressPaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
+        <property name="label" value="payPalExpressPaymentGatewayLabel"/>
+        <property name="name" value="Paypal express checkout payment gateway"/>
+        <property name="url" value="payPalExpressPaymentGateway"/>
+        <property name="description" value="Paypal express checkout payment gateway"/>
+    </bean>
+
     <bean id="cappPaymentModule" class="org.yes.cart.payment.impl.PaymentModuleCappSetImpl">
         <property name="descriptor">
             <bean class="org.yes.cart.payment.persistence.entity.impl.DescriptorImpl">
@@ -91,6 +102,7 @@
                 <entry key="authorizeNetSimPaymentGateway" value-ref="authorizeNetSimPaymentGatewayDescriptor"/>
                 <entry key="payflowPaymentGateway" value-ref="payflowPaymentGatewayDescriptor"/>
                 <entry key="payPalNvpPaymentGateway" value-ref="payPalNvpPaymentGatewayDescriptor"/>
+                <entry key="payPalExpressPaymentGateway" value-ref="payPalExpressPaymentGatewayDescriptor"/>
             </map>
         </property>
     </bean>

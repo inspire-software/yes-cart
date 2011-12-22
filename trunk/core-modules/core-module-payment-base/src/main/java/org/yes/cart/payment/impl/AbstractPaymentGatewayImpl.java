@@ -10,6 +10,7 @@ import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 import org.yes.cart.payment.service.PaymentGatewayParameterService;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.math.BigDecimal;
 
@@ -30,7 +31,7 @@ public abstract class AbstractPaymentGatewayImpl implements PaymentGateway {
     /**
     * {@inheritDoc}
     */
-    public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount, final String orderGuid) {
+    public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount, final String currencyCode, final String orderGuid) {
         return getHtmlForm(cardHolderName, locale);
     }
 
@@ -55,7 +56,7 @@ public abstract class AbstractPaymentGatewayImpl implements PaymentGateway {
      * @param valueLabel key to search
      * @return value or null if not found
      */
-    protected String getParameterValue(final String valueLabel) {
+    public String getParameterValue(final String valueLabel) {
         final Collection<PaymentGatewayParameter> values = getPaymentGatewayParameters();
         for (PaymentGatewayParameter keyValue : values) {
             if (keyValue.getLabel().equals(valueLabel)) {

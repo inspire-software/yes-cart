@@ -25,26 +25,20 @@ import org.apache.commons.lang.StringUtils;
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
-
  */
-public class PayPalNvpPaymentGatewayImpl extends AbstractCappPaymentGatewayImpl implements PaymentGatewayInternalForm {
+public class PayPalNvpPaymentGatewayImpl extends AbstractPayPalPaymentGatewayImpl implements PaymentGatewayInternalForm {
 
     private static final Logger LOG = LoggerFactory.getLogger(PayPalNvpPaymentGatewayImpl.class);
 
 
-    private static final String PP_API_USER_NAME = "API_USER_NAME";
-    private static final String PP_API_USER_PASSWORD = "API_USER_PASSWORD";
-    private static final String PP_SIGNATURE = "SIGNATURE";
-
-    private static final String PP_ENVIRONMENT = "ENVIRONMENT";
-    /*
-    private static final String PP_KEY_PASSWORD = "KEY_PASSWORD";
-    private static final String PP_KEY_PATH = "KEY_PATH";
-    */
-
     private NVPCallerServices nvpCallerServices = null;
 
-    private PaymentGatewayFeature paymentGatewayFeature;
+    private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
+            true, true, true, false,
+            true, true, true, false,
+            true,
+            null
+    );
 
 
     private NVPCallerServices getNvpCallerServices() {
@@ -83,16 +77,6 @@ public class PayPalNvpPaymentGatewayImpl extends AbstractCappPaymentGatewayImpl 
      * {@inheritDoc}
      */
     public synchronized PaymentGatewayFeature getPaymentGatewayFeatures() {
-
-        if (paymentGatewayFeature == null) {
-            paymentGatewayFeature = new PaymentGatewayFeatureImpl(
-                    true, true, true, false,
-                    true, true, true, false,
-                    true,
-                    null
-            );
-        }
-
         return paymentGatewayFeature;
     }
 
@@ -131,9 +115,8 @@ public class PayPalNvpPaymentGatewayImpl extends AbstractCappPaymentGatewayImpl 
     }
 
     /**
-     *
-     * Void capture perfomred as refund 
-     *
+     * Void capture perfomred as refund
+     * <p/>
      * {@inheritDoc}
      */
     public Payment voidCapture(final Payment paymentIn) {
@@ -152,7 +135,7 @@ public class PayPalNvpPaymentGatewayImpl extends AbstractCappPaymentGatewayImpl 
 
     }
 
- /**
+    /**
      * {@inheritDoc}
      */
     public Payment refund(final Payment paymentIn) {
@@ -164,7 +147,7 @@ public class PayPalNvpPaymentGatewayImpl extends AbstractCappPaymentGatewayImpl 
         encoder.add("TRANSACTIONID", payment.getTransactionReferenceId());
         return runTransaction(encoder, payment, REFUND);
 
-    }    
+    }
 
 
     /**
@@ -183,9 +166,6 @@ public class PayPalNvpPaymentGatewayImpl extends AbstractCappPaymentGatewayImpl 
         return runTransaction(encoder, payment, CAPTURE);
 
     }
-
-
-
 
 
     private NVPEncoder createAuthRequest(final Payment payment, final String paymentAction) {
@@ -213,11 +193,11 @@ public class PayPalNvpPaymentGatewayImpl extends AbstractCappPaymentGatewayImpl 
         return encoder;
     }
 
-    private String maskCadrNumber(final String stringWithCardnumber, final String cardNumber) {
+    private String maskCardNumber(final String stringWithCardnumber, final String cardNumber) {
         if (StringUtils.isBlank(cardNumber)) {
             return stringWithCardnumber;
         }
-        return stringWithCardnumber.replace(cardNumber , "ZXCV-ZXCV-ZXCV-ZXCV");
+        return stringWithCardnumber.replace(cardNumber, "ZXCV-ZXCV-ZXCV-ZXCV");
     }
 
     private Payment runTransaction(final NVPEncoder requestEncoder, final Payment payment, final String operation) {
@@ -234,16 +214,15 @@ public class PayPalNvpPaymentGatewayImpl extends AbstractCappPaymentGatewayImpl 
             responce = getNvpCallerServices().call(request);
 
             if (LOG.isDebugEnabled()) {
-                LOG.debug( MessageFormat.format( "Responce is {0}", responce));
+                LOG.debug(MessageFormat.format("Responce is {0}", responce));
             }
 
             NVPDecoder nvpDecoder = new NVPDecoder();
             nvpDecoder.decode(responce);
 
 
-
             final String strAck = nvpDecoder.get("ACK");
-            if (strAck != null && !(strAck.equals("Success") || strAck.equals("SuccessWithWarning"))) {                
+            if (strAck != null && !(strAck.equals("Success") || strAck.equals("SuccessWithWarning"))) {
                 payment.setTransactionOperationResultCode(nvpDecoder.get("L_ERRORCODE0"));
                 payment.setTransactionOperationResultMessage(responce);
                 payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
@@ -251,7 +230,7 @@ public class PayPalNvpPaymentGatewayImpl extends AbstractCappPaymentGatewayImpl 
                 final String transactionId = nvpDecoder.get("TRANSACTIONID");
 
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug( MessageFormat.format( "Transaction Id is {0}", responce));
+                    LOG.debug(MessageFormat.format("Transaction Id is {0}", responce));
                 }
 
                 payment.setTransactionReferenceId(transactionId);
@@ -261,8 +240,8 @@ public class PayPalNvpPaymentGatewayImpl extends AbstractCappPaymentGatewayImpl 
         } catch (PayPalException e) {
             String message = MessageFormat.format(
                     "Can not run transaction\n request = {0}\n responce = {1}\n payment = {2}. Original message {3}",
-                    maskCadrNumber(request, payment.getCardNumber()),
-                    maskCadrNumber(responce, payment.getCardNumber()),
+                    maskCardNumber(request, payment.getCardNumber()),
+                    maskCardNumber(responce, payment.getCardNumber()),
                     payment,
                     e.getMessage()
             );

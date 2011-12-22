@@ -52,7 +52,7 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
         paymentCallBackHandlerFacade.handlePaymentCallback(
                 new HashMap<String, String>() {{
                     put(TestExtFormPaymentGatewayImpl.ORDER_GUID_PARAM_KEY, ordGuid);
-                    put(TestExtFormPaymentGatewayImpl.RESPONCE_CODE_PARAM_KEY, "1"); // 1 - means ok 
+                    put(TestExtFormPaymentGatewayImpl.RESPONSE_CODE_PARAM_KEY, "1"); // 1 - means ok
                 }},
                 "testExtFormPaymentGatewayLabel");
         customerOrder = customerOrderService.findByGuid(customerOrder.getCartGuid());

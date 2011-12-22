@@ -52,7 +52,7 @@ public class BasePaymentGatewayCallBackFilter extends AbstractFilter implements 
 
         if (isCallerIpAllowed()) {
 
-            HttpUtil.requestDump((HttpServletRequest) servletRequest);
+            HttpUtil.dumpRequest((HttpServletRequest) servletRequest);
 
             final Map parameters = servletRequest.getParameterMap();
 

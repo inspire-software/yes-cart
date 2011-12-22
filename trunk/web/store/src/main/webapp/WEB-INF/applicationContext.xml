@@ -66,6 +66,21 @@
         <constructor-arg index="1" ref="imageService"/>
         <constructor-arg index="2" ref="systemService"/>
     </bean>
+
+    <bean id="shoppingCartFilter" class="org.yes.cart.web.filter.ShoppingCartFilter">
+        <constructor-arg index="0" ref="applicationDirector"/>
+        <constructor-arg index="1" ref="cookieTuplizer"/>
+        <constructor-arg index="2" ref="amountCalculationStrategy"/>
+    </bean>
+
+    <!--CPOINT do you reaaly need paypal express checkout ?-->
+    <bean id="payPalExpressCheckoutFilter" class="org.yes.cart.web.filter.PayPalExpressCheckoutFilter">
+        <constructor-arg index="0" ref="applicationDirector"/>
+        <constructor-arg index="1" ref="paymentModulesManager"/>
+        <constructor-arg index="2" ref="paymentProcessor"/>
+        <constructor-arg index="3" ref="customerOrderService"/>
+    </bean>
+
     <!-- ################################### filter delegates end ################################### -->
 
     <bean id="cookieTuplizer" class="org.yes.cart.web.support.util.cookie.impl.CookieTuplizerImpl"
@@ -81,11 +96,6 @@
     </bean>
 
 
-    <bean id="shoppingCartFilter" class="org.yes.cart.web.filter.ShoppingCartFilter">
-        <constructor-arg index="0" ref="applicationDirector"/>
-        <constructor-arg index="1" ref="cookieTuplizer"/>
-        <constructor-arg index="2" ref="amountCalculationStrategy"/>
-    </bean>
 
     <bean id="shoppingCartPersister" class="org.yes.cart.web.support.util.cookie.impl.ShoppingCartPersisterImpl">
         <constructor-arg index="0" ref="cookieTuplizer"/>

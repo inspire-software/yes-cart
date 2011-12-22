@@ -6,5 +6,8 @@
     <entry key="paymentWasFailed">Payment was failed</entry>
     <entry key="pageTitle">Payment result</entry>
     <entry key="home">Home</entry>
+    <entry key="pageTitle">Payment result page</entry>
+    <entry key="paymentResult">Payment result</entry>
+    <entry key="home">Home</entry>
 
 </properties>
