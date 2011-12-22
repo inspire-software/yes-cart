@@ -12,7 +12,7 @@
     <name>Yes cart module: cybersource, authorize.net, paypal, payflow payment modules provider</name>
     <properties>
         <testPgCyberSource>false</testPgCyberSource>
-        <testPgAuthorizeNetAim>true</testPgAuthorizeNetAim>
+        <testPgAuthorizeNetAim>false</testPgAuthorizeNetAim>
         <testPgPayFlow>false</testPgPayFlow>
         <testPgPayPal>false</testPgPayPal>
         <testPgPayPalExpress>false</testPgPayPalExpress>

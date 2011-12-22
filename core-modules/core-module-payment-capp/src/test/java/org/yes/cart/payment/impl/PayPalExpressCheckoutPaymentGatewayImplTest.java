@@ -19,8 +19,8 @@ public class PayPalExpressCheckoutPaymentGatewayImplTest extends CappPaymentModu
     private PayPalExpressCheckoutPaymentGatewayImpl paymentGateway;
 
     private boolean isTestAllowed() {
-        //return "true".equals(System.getProperty("testPgPayPalExpress"));
-        return true;
+        return "true".equals(System.getProperty("testPgPayPalExpress"));
+        //return true;
     }
 
     @Before
