@@ -1,5 +1,7 @@
 package org.yes.cart.bulkimport.csv.impl;
 
+import org.junit.Before;
+import org.junit.After;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.bulkimport.service.BulkImportService;
@@ -17,17 +19,37 @@ import static junit.framework.Assert.assertTrue;
  * Date: 12/11/11
  * Time: 10:20 AM
  */
-public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
+public class TestCsvBulkImportServiceImpl extends BaseCoreDBTestCase {
+
+
+    BulkImportService bulkImportService = null;
+
+    @Before
+    public void setUp() throws Exception {
+
+        if (bulkImportService == null) {
+            bulkImportService = (BulkImportService) createContext().getBean("bulkImportServiceImpl");
+        }
+
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        bulkImportService = null;
+        super.tearDown();
+
+    }
+
 
     private BulkImportService getBulkImportService(final String pathToDescriptor) {
-        BulkImportService bulkImportService = (BulkImportService) createContext().getBean("bulkImportServiceImpl");
+
         bulkImportService.setPathToImportDescriptor(pathToDescriptor);
         return bulkImportService;
 
     }
 
     @Test
-    public void testDoProductImportWithSimpleSlaveFiled() {
+    public void testDoProductImportWithSimpleSlaveFiled() throws Exception {
         try {
 
             //Каблучка
@@ -66,6 +88,12 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             bulkImportService = getBulkImportService("src/test/resources/import/product_category.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
 
+
+            assertTrue(stringBuilder.toString(), stringBuilder.toString().indexOf("ERROR") == -1);
+
+        } catch (Exception e) {
+            assertTrue(e.getMessage(), false);
+        } finally {
             dumpDataBase(
                     "product",
                     new String[]{"tproduct", "tsku", "tattribute",
@@ -73,11 +101,6 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
                             "tbrand", "twarehouse", "tskuwarehouse",
                             "tskuprice", "tproductcategory"}
             );
-
-            assertTrue(stringBuilder.toString(), stringBuilder.toString().indexOf("ERROR") == -1);
-
-        } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
         }
 
     }
@@ -94,7 +117,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
                     "select count(*) as cnt from tbrand where name like 'imported brand name%'");
             ResultSet rs = pst.executeQuery();
             rs.next();
-            assertEquals( stringBuilder.toString(), 7, rs.getInt("cnt"));
+            assertEquals(stringBuilder.toString(), 7, rs.getInt("cnt"));
             rs.close();
             pst.close();
 
@@ -106,7 +129,6 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             assertEquals("imported brand description two", rs.getString("description"));
             rs.close();
             pst.close();
-
 
 
         } catch (Exception e) {
@@ -138,7 +160,8 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
                     new String[]{"tcarrier", "tcarriersla"}
             );
         } catch (Exception e1) {
-            //nothing
+            e1.printStackTrace();
+            assertTrue(e1.getMessage(), false);
         }
 
 
@@ -169,8 +192,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
 
         } catch (Exception e) {
-
-
+            e.printStackTrace();
             assertTrue(e.getMessage(), false);
         }
 

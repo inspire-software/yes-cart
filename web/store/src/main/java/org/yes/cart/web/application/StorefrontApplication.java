@@ -18,6 +18,8 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.yes.cart.web.page.*;
 import org.yes.cart.web.page.component.customer.address.CreateEditAddressPage;
 import org.yes.cart.web.page.payment.callback.AuthorizeNetSimPaymentOkPage;
+import org.yes.cart.web.page.payment.callback.PayPalCancelUrlPage;
+import org.yes.cart.web.page.payment.callback.PayPalReturnUrlPage;
 import org.yes.cart.web.page.payment.callback.ResultPage;
 import org.yes.cart.web.util.SeoBookmarkablePageParametersEncoder;
 
@@ -33,8 +35,7 @@ public class StorefrontApplication
         extends AuthenticatedWebApplication
         implements
         IResourceFinder,
-        IRequestCycleProvider
-{
+        IRequestCycleProvider {
 
     /**
      * Home page mount path.
@@ -51,6 +52,7 @@ public class StorefrontApplication
 
     /**
      * Lazy getter of spring injector.
+     *
      * @return
      */
     public SpringComponentInjector getSpringComponentInjector() {
@@ -99,12 +101,16 @@ public class StorefrontApplication
         return super.newSession(request, response);    //To change body of overridden methods use File | Settings | File Templates.
     }
 
-    /**  {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     protected Class<? extends AbstractAuthenticatedWebSession> getWebSessionClass() {
         return StorefrontWebSession.class;
     }
 
-   /**  {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     protected Class<? extends WebPage> getSignInPageClass() {
         return LoginPage.class;
     }
@@ -140,40 +146,41 @@ public class StorefrontApplication
                 )
         );
 
-       mount(
+        mount(
                 new MountedMapper(
                         "/login",
                         LoginPage.class
                 )
         );
 
-       mount(
+        mount(
                 new MountedMapper(
                         "/registration",
                         RegistrationPage.class
                 )
         );
 
-       mount(
+        mount(
                 new MountedMapper(
                         "/address",
                         CreateEditAddressPage.class
                 )
         );
 
-       mount(
+        mount(
                 new MountedMapper(
                         "/checkout",
                         CheckoutPage.class
                 )
         );
 
-       mount(
+        mount(
                 new MountedMapper(
                         "/payment",
                         PaymentPage.class
                 )
         );
+
 
         mountPaymentGatewayCallBackPages();
 
@@ -185,19 +192,34 @@ public class StorefrontApplication
      * gateway page and back.
      */
     private void mountPaymentGatewayCallBackPages() {
-        mount(
-                 new MountedMapper(
-                         "/paymentresult",
-                         ResultPage.class
-                 )
-         );
 
         mount(
-                 new MountedMapper(
-                         "/anetsim",
-                         AuthorizeNetSimPaymentOkPage.class
-                 )
-         );
+                new MountedMapper(
+                        "/paymentresult",
+                        ResultPage.class
+                )
+        );
+
+        mount(
+                new MountedMapper(
+                        "/anetsim",
+                        AuthorizeNetSimPaymentOkPage.class
+                )
+        );
+
+        mount(
+                new MountedMapper(
+                        "/paypallreturn",
+                        PayPalReturnUrlPage.class
+                )
+        );
+
+        mount(
+                new MountedMapper(
+                        "/paypallcancel",
+                        PayPalCancelUrlPage.class
+                )
+        );
     }
 
     /**
@@ -226,7 +248,7 @@ public class StorefrontApplication
         if (MultiWebApplicationPath == null) { //first request to this shop, lets create a resolver
             MultiWebApplicationPath = new MultiWebApplicationPath(getServletContext());
 
-            MultiWebApplicationPath.add(ApplicationDirector.getCurrentShop().getFspointer()+"/markup");  // shop specific markup folder
+            MultiWebApplicationPath.add(ApplicationDirector.getCurrentShop().getFspointer() + "/markup");  // shop specific markup folder
             MultiWebApplicationPath.add("default/markup"); // default place to search resource
 
             resourceResolvers.put(ApplicationDirector.getCurrentShop().getCode(), MultiWebApplicationPath);

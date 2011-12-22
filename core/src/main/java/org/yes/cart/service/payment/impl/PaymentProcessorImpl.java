@@ -73,7 +73,8 @@ public class PaymentProcessorImpl implements PaymentProcessor {
      * AuthCapture or immediate sale operation wil be use if payment gateway not supports normal flow authorize - delivery - capture.
      *
      * @param order  to authorize payments.
-     * @param params for payment gateway to create template from
+     * @param params for payment gateway to create template from. Also if this map contains key
+     * forceSinglePayment, only one payment will be created (hack to support pay pal express).
      * @return status of operation.
      */
     String authorizeCapture(final CustomerOrder order, final Map params) {
@@ -83,7 +84,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
         templatePayment.setTransactionOperation(PaymentGateway.AUTH_CAPTURE);
         templatePayment.setTransactionGatewayLabel(getPaymentGateway().getLabel());
 
-        final List<Payment> paymentsToAuthorize = createPaymentsToAuthorize(order, templatePayment, false);
+        final List<Payment> paymentsToAuthorize = createPaymentsToAuthorize(order, templatePayment, params.containsKey("forceSinglePayment"));
         // will be only one
 
         String paymentResult = null;
@@ -126,7 +127,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
             templatePayment.setTransactionOperation(PaymentGateway.AUTH);
             templatePayment.setTransactionGatewayLabel(getPaymentGateway().getLabel());
 
-            final List<Payment> paymentsToAuthorize = createPaymentsToAuthorize(order, templatePayment, false);
+            final List<Payment> paymentsToAuthorize = createPaymentsToAuthorize(order, templatePayment, params.containsKey("forceSinglePayment"));
 
             for (Payment payment : paymentsToAuthorize) {
                 String paymentResult = null;
@@ -376,7 +377,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
      *                           order
      * @return list of
      */
-    private List<Payment> createPaymentsToAuthorize(final CustomerOrder order, final Payment templatePayment, final boolean forceSinglePayment) {
+    public List<Payment> createPaymentsToAuthorize(final CustomerOrder order, final Payment templatePayment, final boolean forceSinglePayment) {
 
         final List<Payment> rez = new ArrayList<Payment>();
         if (forceSinglePayment || !getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorizePerShipment()) {
@@ -431,11 +432,13 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                                    final CustomerOrderDelivery delivery,
                                    final Payment payment) {
         //TODO more sofisticated, include discount and free shipping per one and multiple delivery
+        //TODO need calculate at shopping cart !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         BigDecimal rez = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
         for (PaymentLine paymentLine : payment.getOrderItems()) {
             rez = rez.add(paymentLine.getQuantity().multiply(paymentLine.getUnitPrice()).setScale(Constants.DEFAULT_SCALE));
         }
         payment.setPaymentAmount(rez);
+        payment.setOrderCurrency(order.getCurrency());
     }
 
     private void fillPaymentShipment(final CustomerOrderDelivery delivery, final Payment payment) {

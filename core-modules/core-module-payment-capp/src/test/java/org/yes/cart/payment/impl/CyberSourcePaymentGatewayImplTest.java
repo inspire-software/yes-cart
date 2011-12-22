@@ -39,12 +39,15 @@ public class CyberSourcePaymentGatewayImplTest extends CappPaymentModuleDBTestCa
     }
 
     @Test
-    public void testGetPaymentGatewayParameters() {
+    public void testGetPaymentGatewayParameters() throws Exception {
         if (isTestAllowed()) {
             //not sure is proxy will be used or not
             for (PaymentGatewayParameter parameter : cyberSourcePaymentGateway.getPaymentGatewayParameters()) {
                 assertEquals("cyberSourcePaymentGateway", parameter.getPgLabel());
             }
+
+            dumpDataBase("cybdata" , new String[] {"TPAYMENTGATEWAYPARAMETER"});
+
         }
     }
 

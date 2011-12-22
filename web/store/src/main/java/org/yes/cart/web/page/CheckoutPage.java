@@ -292,8 +292,15 @@ public class CheckoutPage extends AbstractWebPage {
                                                 );
                                                 final BigDecimal grandTotal = amountCalculationResult.getTotalAmount();
 
+
+                                                //pay pall express checkout support
+
+                                                //gateway.
+
                                                 order.setPgLabel(descriptor.getLabel());
                                                 customerOrderService.update(order);
+
+
 
                                                 final String htmlForm = getPaymentForm(gateway, cart, order, grandTotal);
 
@@ -341,10 +348,19 @@ public class CheckoutPage extends AbstractWebPage {
                 + order.getCustomer().getLastname()).toUpperCase();
         final String submitBtnValue = getLocalizer().getString("paymentSubmit", this);
         final String postActionUrl = getPostActionUrl(gateway);
-        final String htmlFragment = gateway.getHtmlForm(fullName, cart.getCurrentLocale(), grandTotal, cart.getGuid());
+        final String htmlFragment = gateway.getHtmlForm(
+                fullName,
+                cart.getCurrentLocale(),
+                grandTotal,
+                cart.getCurrencyCode(),
+                cart.getGuid());
 
         return MessageFormat.format(
-                "<form action=\"{0}\">\n{1}\n<div id=\"paymentDiv\"><input type=\"submit\" value=\"{2}\"></div></form>",
+                "<form action=\"{0}\">\n" +
+                        "{1}\n" +
+                        "<div id=\"paymentDiv\">\n" +
+                        "<input type=\"submit\" value=\"{2}\">" +
+                        "</div></form>",
                 postActionUrl,
                 htmlFragment,
                 submitBtnValue
@@ -360,8 +376,12 @@ public class CheckoutPage extends AbstractWebPage {
      */
     private String getPostActionUrl(final PaymentGateway gateway) {
         if (gateway instanceof PaymentGatewayExternalForm) {
+            //paypal express checkout will return internal url , than mounted with "paymentpaypalexpress" url
             return ((PaymentGatewayExternalForm) gateway).getPostActionUrl();
         }
+        /**
+         * By default all payment processorsand gateways  parked to page, that mounted with this url
+         */
         return "payment";
     }
 

@@ -191,6 +191,7 @@ public class HomePage extends AbstractWebPage {
             /*if (LOG.isErrorEnabled()) {
                 LOG.error(MessageFormat.format("Can not create instance of panel for label {0}", rendererLabel), e);
             }*/
+            e.printStackTrace();
             return new EmptyCentralView(id, categoryId, booleanQuery);
 
         }

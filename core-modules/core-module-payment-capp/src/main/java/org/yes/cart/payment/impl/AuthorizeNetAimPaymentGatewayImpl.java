@@ -12,40 +12,40 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- *
  * Class represent authorize net advanced integration method payment gateway.
- *
+ * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
- 
  */
 public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPaymentGatewayImpl implements PaymentGatewayInternalForm {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuthorizeNetAimPaymentGatewayImpl.class);
 
-    private PaymentGatewayFeature paymentGatewayFeature;
+    private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
+            true, true, true, true,
+            true, true, true, false,
+            true,
+            null
+    );
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public String getLabel() {
         return "authorizeNetAimPaymentGateway";
     }
 
-    /** {@inheritDoc} */
-    public  PaymentGatewayFeature getPaymentGatewayFeatures() {
-        if (paymentGatewayFeature == null) {
-            paymentGatewayFeature = new PaymentGatewayFeatureImpl(
-                    true, true, true, true,
-                    true, true, true, false,
-                    true,
-                    null
-            );
-        }
-
+    /**
+     * {@inheritDoc}
+     */
+    public PaymentGatewayFeature getPaymentGatewayFeatures() {
         return paymentGatewayFeature;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Payment authorize(final Payment paymentIn) {
 
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
@@ -67,7 +67,9 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     }
 
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Payment reverseAuthorization(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REVERSE_AUTH);
@@ -85,7 +87,9 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     }
 
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Payment voidCapture(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(VOID_CAPTURE);
@@ -104,7 +108,9 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     }
 
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Payment authorizeCapture(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(AUTH_CAPTURE);
@@ -141,10 +147,11 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
         return runTransaction(merchant, transaction, payment);
 
     }
-    
 
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Payment refund(final Payment paymentIn) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REFUND);
@@ -164,12 +171,12 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     }
 
 
-
     /**
      * Run transaction and perform result parsing.
-     * @param merchant merchant
+     *
+     * @param merchant    merchant
      * @param transaction transaction
-     * @param payment payment
+     * @param payment     payment
      * @return payment
      */
     private Payment runTransaction(final net.authorize.Merchant merchant,
@@ -184,7 +191,7 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
                     String.valueOf(transTez.getReasonResponseCode().getResponseReasonCode())
             );
             payment.setTransactionOperationResultMessage(
-                    transTez.getReasonResponseCode().getReasonText() + " " +  transTez.getReasonResponseCode().getNotes());
+                    transTez.getReasonResponseCode().getReasonText() + " " + transTez.getReasonResponseCode().getNotes());
 
             if (net.authorize.ResponseCode.DECLINED == transTez.getReasonResponseCode().getResponseCode()
                     ||
@@ -207,7 +214,7 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
                 LOG.debug(payment.getTransactionOperation() + " transaction response code was : "
                         + transTez.getReasonResponseCode().getResponseCode().getCode()
                         + " - "
-                        +  transTez.getReasonResponseCode().getResponseCode().getDescription()
+                        + transTez.getReasonResponseCode().getResponseCode().getDescription()
                 );
             }
         } catch (Throwable th) {
@@ -217,8 +224,6 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
         }
         return payment;
     }
-    
-
 
 
 }

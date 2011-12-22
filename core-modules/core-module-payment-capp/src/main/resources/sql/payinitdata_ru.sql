@@ -380,19 +380,19 @@ VALUES (156, 'payflowPaymentGateway',
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (170, 'payPalNvpPaymentGateway',
 'API_USER_NAME',
-'azarny_1297870225_biz_api1.gmail.com'
+'azarny_1324325086_biz_api1.gmail.com'
 , 'Api user name', 'Api user name');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (171, 'payPalNvpPaymentGateway',
 'API_USER_PASSWORD',
-'1297870238'
+'1324325124'
 , 'Api user password', 'Api user password');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (172, 'payPalNvpPaymentGateway',
 'SIGNATURE',
-'AYO61ctxlVv74PkuhOUf5diHLktaAkHiTUFN6SzMlUxpTmL0ny1s1UVs'
+'AlH.6ZOY.CsakUGCdfdTg4JxaG4tA71FLEoZ5abQPArA5wL.poNPPQcB'
 , 'Signature', 'Signature');
 
 --INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
@@ -510,4 +510,53 @@ VALUES (206, 'authorizeNetSimPaymentGateway',
 'ORDER_RECEIPT_URL',
 'http://shop.enigma.biz.ua/webshopwicket/shop/receipt/page'
 , 'SIM/DPM order receipt url', 'SIM/DPM order receipt url. SIM only');
+
+
+
+
+
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (220, 'payPalExpressPaymentGateway',
+'API_USER_NAME',
+'yescas_1324326469_biz_api1.gmail.com'
+, 'Api user name', 'Api user name');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (221, 'payPalExpressPaymentGateway',
+'API_USER_PASSWORD',
+'1324326494'
+, 'Api user password', 'Api user password');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (222, 'payPalExpressPaymentGateway',
+'SIGNATURE',
+'AarMlaEPlNPHEsSS-tLgoTRafwgYAkJWGgDrLpn-Wp90NhGz102UYPy2'
+, 'Signature', 'Signature');
+
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (223, 'payPalExpressPaymentGateway',
+'RETURNURL',
+'http://shop.enigma.biz.ua/webshopwicket/shop'
+, 'Return url', 'Return url');
+
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (224, 'payPalExpressPaymentGateway',
+'CANCELURL',
+'http://shop.enigma.biz.ua/webshopwicket/shop/product/38'
+, 'Cancel url', 'Cancel url');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (225, 'payPalExpressPaymentGateway',
+'PP_EC_API_URL',
+'https://api-3t.sandbox.paypal.com/nvp'
+, 'Api call url', 'Cancel url');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (226, 'payPalExpressPaymentGateway',
+'PP_EC_PAYPAL_URL',
+'https://www.sandbox.paypal.com/cgi-bin/webscr'
+, 'Paypal url to perform payment', 'Paypal url to perform payment');
 

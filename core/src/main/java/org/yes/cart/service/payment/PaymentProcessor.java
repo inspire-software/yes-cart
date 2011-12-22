@@ -3,7 +3,9 @@ package org.yes.cart.service.payment;
 
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.payment.PaymentGateway;
+import org.yes.cart.payment.dto.Payment;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,7 +28,8 @@ public interface PaymentProcessor {
      * payment gateway the auth_capture operation will be use instead.
      *
      * @param order to authorize payments.
-     * @param params for payment gateway to create template from
+     * @param params for payment gateway to create template from. Also if this map contains key
+     * forceSinglePayment, only one payment will be created (hack to support pay pal express).
      * @return status of operation.
      */
     String authorize(CustomerOrder order, Map params);
@@ -62,5 +65,16 @@ public interface PaymentProcessor {
      * @return {@link PaymentGateway}
      */
     PaymentGateway getPaymentGateway();
+
+    /**
+     * Create list of payment to authorize.
+     *
+     * @param order              order
+     * @param templatePayment    template payment
+     * @param forceSinglePayment flag is true for authCapture operation, when paymeng gateway not supports several payments per
+     *                           order
+     * @return list of  {@link Payment} to process
+     */
+    List<Payment> createPaymentsToAuthorize(CustomerOrder order, Payment templatePayment, boolean forceSinglePayment);
 
 }

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
 
-
+<!-- mark -->
 
     <TPAYMENTGATEWAYPARAMETER
         PAYMENTGATEWAYPARAMETER_ID = "50"
         PG_LABEL="testPaymentGateway"
         P_LABEL="htmlForm"
-        P_VALUE="&lt;table&gt;
+        P_VALUE="&lt;ztable&gt;
 &lt;tr&gt;
         &lt;td&gt;Name on card&lt;/td&gt;&lt;td&gt;&lt;input type=&quot;text&quot; class=&quot;groovyqtytext2&quot; name=&quot;ccHolderName&quot; value=&quot;@CARDHOLDERNAME@&quot;/&gt;
 &lt;/tr&gt;
@@ -359,13 +359,13 @@
 
 <!-- ################################################## Paypal NVP  ################################################################# -->
     <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "170"
-        PG_LABEL="payPalNvpPaymentGateway" P_LABEL="API_USER_NAME" P_VALUE="azarny_1297870225_biz_api1.gmail.com"  P_NAME="Api user name "  P_DESCRIPTION="Api user name"/>
+        PG_LABEL="payPalNvpPaymentGateway" P_LABEL="API_USER_NAME" P_VALUE="azarny_1324325086_biz_api1.gmail.com"  P_NAME="Api user name "  P_DESCRIPTION="Api user name"/>
 
     <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "171"
-        PG_LABEL="payPalNvpPaymentGateway" P_LABEL="API_USER_PASSWORD" P_VALUE="1297870238"  P_NAME="Api user password"  P_DESCRIPTION="Api user password"/>
+        PG_LABEL="payPalNvpPaymentGateway" P_LABEL="API_USER_PASSWORD" P_VALUE="1324325124"  P_NAME="Api user password"  P_DESCRIPTION="Api user password"/>
 
     <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "172"
-        PG_LABEL="payPalNvpPaymentGateway" P_LABEL="SIGNATURE" P_VALUE="AYO61ctxlVv74PkuhOUf5diHLktaAkHiTUFN6SzMlUxpTmL0ny1s1UVs"  P_NAME="Signature"  P_DESCRIPTION="Signature"/>
+        PG_LABEL="payPalNvpPaymentGateway" P_LABEL="SIGNATURE" P_VALUE="AlH.6ZOY.CsakUGCdfdTg4JxaG4tA71FLEoZ5abQPArA5wL.poNPPQcB"  P_NAME="Signature"  P_DESCRIPTION="Signature"/>
 
 <!--
     <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "173"
@@ -433,6 +433,27 @@
 
 
 
+<!-- ################################################## Paypal EXpress  ################################################################# -->
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "220"
+        PG_LABEL="payPalExpressPaymentGateway" P_LABEL="API_USER_NAME" P_VALUE="yescas_1324326469_biz_api1.gmail.com"  P_NAME="Api user name "  P_DESCRIPTION="Api user name"/>
+
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "221"
+        PG_LABEL="payPalExpressPaymentGateway" P_LABEL="API_USER_PASSWORD" P_VALUE="1324326494"  P_NAME="Api user password"  P_DESCRIPTION="Api user password"/>
+
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "222"
+        PG_LABEL="payPalExpressPaymentGateway" P_LABEL="SIGNATURE" P_VALUE="AarMlaEPlNPHEsSS-tLgoTRafwgYAkJWGgDrLpn-Wp90NhGz102UYPy2"  P_NAME="Signature"  P_DESCRIPTION="Signature"/>
+
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "223"
+        PG_LABEL="payPalExpressPaymentGateway" P_LABEL="RETURNURL" P_VALUE="http://shop.enigma.biz.ua/webshopwicket/shop"  P_NAME="ret"  P_DESCRIPTION="ret"/>
+
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "224"
+        PG_LABEL="payPalExpressPaymentGateway" P_LABEL="CANCELURL" P_VALUE="http://shop.enigma.biz.ua/webshopwicket/shop/product/38"  P_NAME="can"  P_DESCRIPTION="can"/>
+
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "225"
+        PG_LABEL="payPalExpressPaymentGateway" P_LABEL="PP_EC_API_URL" P_VALUE="https://api-3t.sandbox.paypal.com/nvp"  P_NAME="url"  P_DESCRIPTION="url"/>
+
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "226"
+        PG_LABEL="payPalExpressPaymentGateway" P_LABEL="PP_EC_PAYPAL_URL" P_VALUE="https://www.sandbox.paypal.com/cgi-bin/webscr"  P_NAME="url"  P_DESCRIPTION="url"/>
 
 
 </dataset>
