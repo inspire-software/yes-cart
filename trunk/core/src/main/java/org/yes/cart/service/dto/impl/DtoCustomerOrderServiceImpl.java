@@ -12,6 +12,7 @@ import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.dto.DtoCustomerOrderService;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -89,5 +90,17 @@ public class DtoCustomerOrderServiceImpl
         return ordersDtos;
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void fillDTOs(final Collection<CustomerOrder> entities, final Collection<CustomerOrderDTO> dtos)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        for (CustomerOrder entity : entities) {
+            CustomerOrderDTO dto = (CustomerOrderDTO) dtoFactory.getByIface(getDtoIFace());
+            assembler.assembleDto(dto, entity, getValueConverterRepository(), dtoFactory);
+            dto.setAmount(((CustomerOrderService) service).getOrderAmount(entity.getOrdernum()));
+            dtos.add(dto);
+        }
+    }
 }

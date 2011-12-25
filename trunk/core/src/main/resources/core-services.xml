@@ -320,10 +320,11 @@
     <bean id="customerOrderService" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.CustomerOrderServiceImpl">
-                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="customerOrderDao"/>
-                <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="customerDao"/>
-                <constructor-arg index="2" type="org.yes.cart.service.order.OrderAssembler" ref="orderAssembler"/>
-                <constructor-arg index="3" type="org.yes.cart.service.order.DeliveryAssembler" ref="deliveryAssembler"/>
+                <constructor-arg index="0"  ref="customerOrderDao"/>
+                <constructor-arg index="1"  ref="customerDao"/>
+                <constructor-arg index="2"  ref="orderAssembler"/>
+                <constructor-arg index="3"  ref="deliveryAssembler"/>
+                <constructor-arg index="4"  ref="customerOrderPaymentService"/>
             </bean>
         </property>
     </bean>

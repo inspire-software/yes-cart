@@ -29,6 +29,7 @@ public abstract class AbstractPayPalPaymentGatewayImpl extends AbstractCappPayme
     protected static final String PP_EC_RETURNURL = "RETURNURL";
     protected static final String PP_EC_CANCELURL = "CANCELURL";
     protected static final String PP_EC_METHOD = "METHOD";
+    protected static final String PP_EC_NOSHIPPING = "NOSHIPPING";
 
 
     /**

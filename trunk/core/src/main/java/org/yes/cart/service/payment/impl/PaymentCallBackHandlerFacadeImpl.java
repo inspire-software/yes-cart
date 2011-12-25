@@ -71,7 +71,7 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
 
                     boolean rez = orderStateManager.fireTransition(orderEvent);
 
-                    LOG.info("Order state transitin performed for " + orderGuid + " . Result is " + rez);
+                    LOG.info("Order state transition performed for " + orderGuid + " . Result is " + rez);
 
                     customerOrderService.update(order);
 

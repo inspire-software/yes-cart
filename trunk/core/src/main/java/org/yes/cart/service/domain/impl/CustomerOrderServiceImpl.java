@@ -4,6 +4,7 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
@@ -11,6 +12,7 @@ import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.DeliveryAssembler;
 import org.yes.cart.service.order.OrderAssembler;
 
+import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.List;
@@ -30,6 +32,8 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
 
     private final GenericDAO<Customer, Long> customerDao;
 
+    private final CustomerOrderPaymentService customerOrderPaymentService;
+
     /**
      * Construct order service.
      *
@@ -37,21 +41,34 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
      * @param orderAssembler order assembler
      * @param deliveryAssembler delivery assembler
      * @param customerDao customer dao to use
+     * @param customerOrderPaymentService to calculate order amount payments.
      */
     public CustomerOrderServiceImpl(
             final GenericDAO<CustomerOrder, Long> customerOrderDao,
             final GenericDAO<Customer, Long> customerDao,
             final OrderAssembler orderAssembler,
-            final DeliveryAssembler deliveryAssembler) {
+            final DeliveryAssembler deliveryAssembler,
+            final CustomerOrderPaymentService customerOrderPaymentService) {
         super(customerOrderDao);
         this.orderAssembler = orderAssembler;
         this.deliveryAssembler = deliveryAssembler;
         this.customerDao = customerDao;
+        this.customerOrderPaymentService = customerOrderPaymentService;
+    }
+
+    /**
+     * Get order amount
+     *
+     * @param orderNumber given order number
+     * @return order amount
+     */
+    public BigDecimal getOrderAmount(final String orderNumber) {
+        return customerOrderPaymentService.getOrderAmount(orderNumber);
     }
 
 
 
-   /**
+    /**
      * {@inheritDoc}
      */
     public List<CustomerOrder> findCustomerOrdersByCriterias(
