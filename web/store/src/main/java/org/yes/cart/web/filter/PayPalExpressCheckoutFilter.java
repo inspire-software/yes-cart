@@ -65,8 +65,6 @@ public class PayPalExpressCheckoutFilter extends AbstractFilter implements Filte
     @Override
     public ServletRequest doBefore(ServletRequest servletRequest, ServletResponse servletResponse) throws IOException, ServletException {
 
-        HttpUtil.dumpRequest(servletRequest);
-
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
 
         final String orderGuid = cart.getGuid();
@@ -87,38 +85,24 @@ public class PayPalExpressCheckoutFilter extends AbstractFilter implements Filte
                 payment.getPaymentAmount(), payment.getOrderCurrency());
 
         final String redirectUrl;
-
-        if (nvpCallResult.get("ACK") != null && nvpCallResult.get("ACK").equalsIgnoreCase("Success")) {
-            //not encoded answer will be like this
-            //TOKEN=EC%2d8DX631540T256421Y&TIMESTAMP=2011%2d12%2d21T20%3a12%3a37Z&CORRELATIONID=2d2aa98bcd550&ACK=Success&VERSION=2%2e3&BUILD=2271164
-            final String token = nvpCallResult.get("TOKEN");
-            final String correlationId = nvpCallResult.get("CORRELATIONID");
-
-            // Redirect url  to paypal.com
+        
+        if (paymentGatewayExternalForm.isSuccess(nvpCallResult)) {
+            /*not encoded answer will be like this
+            TOKEN=EC%2d8DX631540T256421Y&TIMESTAMP=2011%2d12%2d21T20%3a12%3a37Z&CORRELATIONID=2d2aa98bcd550&ACK=Success&VERSION=2%2e3&BUILD=2271164
+             Redirect url  to paypal for perform login and payment */
             redirectUrl = paymentGatewayExternalForm.getParameterValue("PP_EC_PAYPAL_URL")
-                    + "?orderGuid="
-                    + orderGuid
-                    + "&token="
-                    + token
+                    + "?orderGuid="  + orderGuid
+                    + "&token="      + nvpCallResult.get("TOKEN")
                     + "&cmd=_express-checkout";
 
         } else {
-            // Display a user friendly Error on the page using any of the following error information returned by PayPal
-            final String errMsg = new StringBuilder()
-                    .append(nvpCallResult.get("L_ERRORCODE0"))
-                    .append("|")
-                    .append(nvpCallResult.get("L_SHORTMESSAGE0"))
-                    .append("|")
-                    .append(nvpCallResult.get("L_LONGMESSAGE0"))
-                    .append("|")
-                    .append(nvpCallResult.get("L_SEVERITYCODE0"))
-                    .toString();
-
             redirectUrl = "paymentresult" //mounted page
-                    + "?orderNum="
-                    + orderGuid
-                    + "&errMsg="
-                    + errMsg;
+                    + "?orderNum="   + orderGuid
+                    + "&errMsg="     + nvpCallResult.get("L_ERRORCODE0")
+                    + '|'   + nvpCallResult.get("L_SHORTMESSAGE0")
+                    + '|'   + nvpCallResult.get("L_LONGMESSAGE0")
+                    + '|'   + nvpCallResult.get("L_SEVERITYCODE0") ;
+
 
             //todo move order to failed state
         }

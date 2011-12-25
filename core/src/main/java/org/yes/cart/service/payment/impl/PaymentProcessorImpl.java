@@ -84,14 +84,15 @@ public class PaymentProcessorImpl implements PaymentProcessor {
         templatePayment.setTransactionOperation(PaymentGateway.AUTH_CAPTURE);
         templatePayment.setTransactionGatewayLabel(getPaymentGateway().getLabel());
 
-        final List<Payment> paymentsToAuthorize = createPaymentsToAuthorize(order, templatePayment, params.containsKey("forceSinglePayment"));
+        final List<Payment> paymentsToAuthorize = createPaymentsToAuthorize(
+                order,
+                templatePayment,
+                params.containsKey("forceSinglePayment"));
         // will be only one
 
         String paymentResult = null;
 
         for (Payment payment : paymentsToAuthorize) {
-
-
             try {
                 payment = getPaymentGateway().authorizeCapture(payment);
                 paymentResult = payment.getPaymentProcessorResult();

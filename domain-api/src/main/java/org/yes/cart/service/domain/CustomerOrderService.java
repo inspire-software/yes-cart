@@ -4,6 +4,7 @@ import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +14,6 @@ import java.util.List;
  * Time: 11:13:01
  */
 public interface CustomerOrderService extends GenericService<CustomerOrder> {
-
 
 
     /**
@@ -33,6 +33,14 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
      * @return list of all orders
      */
     List<CustomerOrder> findCustomerOrders(long customerId, Date since);
+
+    /**
+     * Get order amount
+     *
+     * @param orderNumber given order number
+     * @return order amount
+     */
+    BigDecimal getOrderAmount(String orderNumber);
 
     /**
      * Find customer's order by given criteria.

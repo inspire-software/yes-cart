@@ -192,5 +192,7 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
 
     <import resource="classpath*:core-config.xml"/>
 
+    <import resource="classpath*:payment-api.xml"/>
+
 
 </beans>

@@ -5,8 +5,14 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.payment.dto.Payment;
+import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
+import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.web.page.AbstractWebPage;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Just show the result of payment operation for
@@ -21,6 +27,9 @@ public class ResultPage extends AbstractWebPage {
 
     @SpringBean(name = ServiceSpringKeys.CUSTOMER_ORDER_SERVICE)
     private CustomerOrderService customerOrderService;
+
+     @SpringBean(name = ServiceSpringKeys.ORDER_PAYMENT_SERICE)
+    private CustomerOrderPaymentService customerOrderPaymentService;
 
     /**
      * Construct page.
@@ -45,11 +54,13 @@ public class ResultPage extends AbstractWebPage {
 
     /**
      * Get payment status from order.
+     * We expected one payment only.
      * @param customerOrder  given customer order.
      * @return  true in case of successful page
      */
     private boolean isOk(final CustomerOrder customerOrder) {
-        return true; //todo get from payment services
+        final List<CustomerOrderPayment> payments = customerOrderPaymentService.findBy(customerOrder.getOrdernum(), null, null, null);
+        return (payments != null && !payments.isEmpty() && Payment.PAYMENT_STATUS_OK.equals(payments.get(0).getPaymentProcessorResult()));
     }
 
 

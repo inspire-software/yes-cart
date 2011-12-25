@@ -22,8 +22,8 @@ import javax.servlet.http.HttpServletRequest;
  * Authorize do not perform call back in case of failed payment
  * <p/>
  * Page responsible to change order status and redirect to home page.
- * Redirection performed javascript and meta tag. The 302 error code nor used,
- * because of output of this page  aggregated/included into other page on
+ * Redirection performed javascript and meta tag.  Output of this page
+ * aggregated/included into other page on
  * payment gateway side.
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com

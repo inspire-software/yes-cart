@@ -2,6 +2,22 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 
-           <entry key="pageTitle">Payment with pay pal</entry>
-           <entry key="pay">Pay</entry>
+    <entry key="pageTitle">Payment with pay pal</entry>
+    <entry key="pay">Confirm</entry>
+    <entry key="paymentFailed">Payment was failed</entry>
+    <entry key="badStatus">Your status was not verified on pay pal or can not get the payment details</entry>
+    <entry key="confirmPayment">
+        <![CDATA[
+                    Payment amount is {0} {1}. Confirm payment to contnue.
+                     ]]>
+    </entry>
+    <entry key="paymentOk">
+        <![CDATA[
+                    The payment was successful. Order number {0} .
+                    Check order status on <a href="selfcare">this page</a>.
+                    <br>
+                    <a href=".">Continue shopping !</a>.
+               ]]>
+    </entry>
+
 </properties>

@@ -4,16 +4,28 @@ import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
+import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.service.domain.CustomerOrderService;
+import org.yes.cart.service.order.OrderAssembler;
+import org.yes.cart.service.order.impl.DeliveryAssemblerImpl;
+import org.yes.cart.service.order.impl.OrderEventImpl;
+import org.yes.cart.service.order.impl.handler.PendingOrderEventHandlerImpl;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl;
+import org.yes.cart.shoppingcart.impl.SetCarrierSlaCartCommandImpl;
 import org.yes.cart.shoppingcart.impl.SetSkuQuantityToCartEventCommandImpl;
 
+import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
+import static java.util.Collections.singletonMap;
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -24,12 +36,15 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
 
     private CustomerOrderService customerOrderService;
 
+    private PendingOrderEventHandlerImpl handler;
+
+
     @Before
     public void setUp() throws Exception {
         customerOrderService = (CustomerOrderService) ctx().getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
+        handler = (PendingOrderEventHandlerImpl) ctx().getBean("pendingOrderEventHandler");
     }
 
-    // TODO fix to not depend on order or running
     @Test
     public void testCreateAndDelete() throws Exception {
         Customer customer = createCustomer();
@@ -42,7 +57,6 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
         assertNull(customerOrderService.getById(pk));
     }
 
-    // TODO fix to not depend on order or running
     @Test
     public void testFindByGuid() throws Exception {
         Customer customer = createCustomer();
@@ -59,7 +73,6 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
         assertNull(customerOrderService.findByGuid(null));
     }
 
-    // TODO fix to not depend on order or running
     @Test
     public void testGetCustomerOrders() throws Exception {
         Customer customer = createCustomer();
@@ -79,7 +92,6 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
         assertEquals(3, order.getDelivery().size());
     }
 
-    // TODO fix to not depend on order or running
     @Test
     public void testPersistReassembledOrder2() throws Exception {
         Customer customer = createCustomer();
@@ -89,7 +101,6 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
         assertEquals(2, order.getDelivery().size());
     }
 
-    // TODO fix to not depend on order or running
     @Test
     public void testPersistReassembledOrder3() throws Exception {
         Customer customer = createCustomer();
@@ -98,6 +109,57 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
         assertFalse(customerOrderService.isOrderCanHasMultipleDeliveries(shoppingCart));
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, true);
         assertEquals(2, order.getDelivery().size());
+    }
+
+    @Test
+    public void testOrderAmountCalculation() throws Exception {
+        String prefix = UUID.randomUUID().toString();
+        Customer customer = createCustomer(prefix);
+        assertFalse(customer.getAddress().isEmpty());
+        assertNotNull(customer.getDefaultAddress(Address.ADDR_TYPE_BILLING));
+        assertNotNull(customer.getDefaultAddress(Address.ADDR_TYPE_SHIPING));
+
+        ShoppingCart shoppingCart = getEmptyCart(getTestName() + prefix);
+
+        assertEquals(getTestName() + prefix + "jd@domain.com", shoppingCart.getCustomerEmail());
+        assertEquals(customer.getEmail(), shoppingCart.getCustomerEmail());
+
+        //one delivery 16.77 usd
+        new SetCarrierSlaCartCommandImpl(null, singletonMap(SetCarrierSlaCartCommandImpl.CMD_KEY, "3"))
+                .execute(shoppingCart);
+
+        new AddSkuToCartEventCommandImpl(ctx(), singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST1"))
+                .execute(shoppingCart);
+        new AddSkuToCartEventCommandImpl(ctx(), singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST1"))
+                .execute(shoppingCart);
+        new AddSkuToCartEventCommandImpl(ctx(), singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST1"))
+                .execute(shoppingCart);
+        // 3 x 180  usd
+        new AddSkuToCartEventCommandImpl(ctx(), singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST3"))
+                .execute(shoppingCart);
+        new AddSkuToCartEventCommandImpl(ctx(), singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST3"))
+                .execute(shoppingCart);
+        //2 x 7.99  usd
+
+        CustomerOrder order = customerOrderService.createFromCart(shoppingCart, true);
+
+        assertEquals(CustomerOrder.ORDER_STATUS_NONE, order.getOrderStatus());
+        order.setPgLabel("testPaymentGatewayLabel");
+        order = customerOrderService.update(order);
+
+        assertTrue(handler.handle(
+                new OrderEventImpl("", //evt.pending
+                        order,
+                        null,
+                        Collections.EMPTY_MAP)));
+
+        BigDecimal amount = customerOrderService.getOrderAmount(order.getOrdernum());
+
+        assertTrue("payment must be 16.77 + 3 * 190.01 + 2 * 70.99 = 728.78, but was  " + amount
+                , new BigDecimal("728.78").equals(amount));
+
+
+        assertEquals(1, order.getDelivery().size());
     }
 
     /**

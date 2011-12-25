@@ -32,7 +32,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
     private static final String AND = "&";
 
     private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
-            true, false, false, true,
+            false, false, false, true,
             false, false, false, true,
             true,
             null
@@ -53,13 +53,29 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
      */
     public String getPostActionUrl() {
         //must be special mounted page in UI
-        return "paymentpaypalexpress?cmd=setExpressCheckoutMethod";
+        return "paymentpaypalexpress";
     }
 
     /**
      * {@inheritDoc}
      */
     public Payment authorizeCapture(final Payment payment) {
+
+        payment.setTransactionOperation(AUTH_CAPTURE);
+
+        try {
+            final Map<String, String> paymentResult = doDoExpressCheckoutPayment(
+                    payment.getTransactionRequestToken(),
+                    payment.getTransactionReferenceId(),
+                    payment.getPaymentAmount(), payment.getOrderCurrency());
+            payment.setPaymentProcessorResult( isSuccess(paymentResult)
+                    ? Payment.PAYMENT_STATUS_OK
+                    : Payment.PAYMENT_STATUS_FAILED);
+
+        } catch (IOException e) {
+            payment.setPaymentProcessorResult( Payment.PAYMENT_STATUS_FAILED);
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
         return payment;
     }
 
@@ -103,7 +119,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
      * {@inheritDoc}
      */
     public String restoreOrderGuid(final Map privateCallBackParameters) {
-        return AbstractCappPaymentGatewayImpl.getSingleValue(privateCallBackParameters.get(PP_EC_TOKEN));
+        return AbstractCappPaymentGatewayImpl.getSingleValue(privateCallBackParameters.get(ORDER_GUID));
     }
 
 
@@ -185,7 +201,10 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
 
 
     /**
-     * Support for pp express checkout. In case if gateway not support this operation , return will be empty hashmap
+     * Support for pp express checkout. In case if gateway not support this operation , return will be empty hashmap.
+     *
+     * All info about SetExpressCheckout see here:
+     * https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_SetExpressCheckout
      *
      * @param amount       amount
      * @param currencyCode currecny
@@ -221,6 +240,11 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
         stringBuilder.append(PP_EC_CANCELURL);
         stringBuilder.append(EQ);
         stringBuilder.append(URLEncoder.encode(getParameterValue(PP_EC_CANCELURL)));
+        stringBuilder.append(AND);
+
+        stringBuilder.append(PP_EC_NOSHIPPING);
+        stringBuilder.append(EQ);
+        stringBuilder.append("1");
         stringBuilder.append(AND);
 
 
@@ -339,14 +363,10 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
      * {@inheritDoc}
      * All fields are hidden, hence not need to localize and etc.
      */
-    public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount, final String currencyCode, final String orderGuid) {
-
-
+    public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount,
+                              final String currencyCode, final String orderGuid) {
         final StringBuilder stringBuilder = new StringBuilder();
-
         stringBuilder.append(getHiddenFiled(ORDER_GUID, orderGuid));  // this will be bypassed via payment gateway to restore it latter
-
-
         return stringBuilder.toString();
     }
 
@@ -354,8 +374,11 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
      * {@inheritDoc}
      */
     public Payment createPaymentPrototype(final Map parametersMap) {
-        return new PaymentImpl();
-
+        final Payment payment = new PaymentImpl();
+        payment.setTransactionRequestToken((String) parametersMap.get("TOKEN"));
+        payment.setTransactionReferenceId((String) parametersMap.get("PAYERID"));
+        payment.setTransactionAuthorizationCode((String) parametersMap.get("CORRELATIONID"));
+        return payment;
     }
 
     /**

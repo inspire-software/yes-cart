@@ -470,6 +470,8 @@ public class CheckoutPage extends AbstractWebPage {
 
         processCommands();
 
+        super.onBeforeRender();
+
     }
 
 
