@@ -292,14 +292,9 @@ public class CheckoutPage extends AbstractWebPage {
                                                 );
                                                 final BigDecimal grandTotal = amountCalculationResult.getTotalAmount();
 
-
-                                                //pay pall express checkout support
-
-                                                //gateway.
-
+                                                //pay pall express checkout gateway support
                                                 order.setPgLabel(descriptor.getLabel());
                                                 customerOrderService.update(order);
-
 
 
                                                 final String htmlForm = getPaymentForm(gateway, cart, order, grandTotal);
@@ -380,7 +375,7 @@ public class CheckoutPage extends AbstractWebPage {
             return ((PaymentGatewayExternalForm) gateway).getPostActionUrl();
         }
         /**
-         * By default all payment processorsand gateways  parked to page, that mounted with this url
+         * By default all payment processors and gateways  parked to page, that mounted with this url
          */
         return "payment";
     }

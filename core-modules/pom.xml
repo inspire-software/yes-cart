@@ -13,5 +13,6 @@
     <modules>
         <module>core-module-payment-base</module>
         <module>core-module-payment-capp</module>
+        <module>core-module-payment-gcwm</module>
     </modules>
 </project>

@@ -15,9 +15,12 @@ import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.payment.PaymentProcessFacade;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
+import org.yes.cart.shoppingcart.impl.CleanCartCommandImpl;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.util.WicketUtil;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -58,6 +61,10 @@ public class PaymentPage extends AbstractWebPage {
     @SpringBean(name = ServiceSpringKeys.CUSTOMER_ORDER_SERVICE)
     private CustomerOrderService customerOrderService;
 
+    @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)
+    private ShoppingCartCommandFactory shoppingCartCommandFactory;
+
+
     private final boolean result;
 
 
@@ -74,7 +81,14 @@ public class PaymentPage extends AbstractWebPage {
                     ApplicationDirector.getShoppingCart(),
                     WicketUtil.pageParametesAsMap(getPage().getPageParameters())
                 );
-        //todo new cart in case of ok payment
+
+        if (result) {
+            shoppingCartCommandFactory.create(
+                                        Collections.singletonMap(
+                                                CleanCartCommandImpl.CMD_KEY,
+                                                null)
+                                ).execute(ApplicationDirector.getShoppingCart());
+        }
 
     }
 

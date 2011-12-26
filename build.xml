@@ -10,19 +10,9 @@
         <attribute name="arg"/>
         <sequential>
             <echo message="Running Maven with [-B @{arg}] in [@dir] ..."/>
-            <if>
-                <os family="windows"/>
-                <then>
                     <exec dir="@{dir}" executable="${env.M2_HOME}\bin\mvn.bat">
                         <arg line="-B @{arg}"/>
                     </exec>
-                </then>
-                <else>
-                    <exec dir="@{dir}" executable="${env.M2_HOME}/bin/mvn">
-                        <arg line="-B @{arg}"/>
-                    </exec>
-                </else>
-            </if>
         </sequential>
     </macrodef>
 
@@ -68,6 +58,9 @@
                   arg="install:install-file -DgroupId=paypal.payflow -DartifactId=payflow-client -Dversion=4.31 -Dpackaging=jar -Dfile=payflow.jar"/>
         <exec-mvn dir="./util/lib3rdparty/paypal"
                   arg="install:install-file -DgroupId=com.paypal -DartifactId=paypal-client -Dversion=5.1.1 -Dpackaging=jar -Dfile=paypal_base.jar"/>
+        <exec-mvn dir="./util/lib3rdparty/google.checkout"
+                  arg="install:install-file -DgroupId=com.google.checkout -DartifactId=checkout-sdk -Dversion=2.5.0 -Dpackaging=jar -Dfile=checkout-sdk-2.5.0.jar"/>
+
     </target>
 
     <target name="update" depends="init" description="'Update working copy'">

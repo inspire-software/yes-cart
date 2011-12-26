@@ -19,6 +19,7 @@ public class PaymentLineImpl implements PaymentLine {
 
     private BigDecimal taxAmount;
 
+    private boolean shipment;
 
 
     /**
@@ -40,7 +41,34 @@ public class PaymentLineImpl implements PaymentLine {
         this.quantity = quantity;
         this.unitPrice = unitPrice;
         this.taxAmount = taxAmount;
+        shipment = false;
     }
+
+    /**
+     * Construct payment line.
+     *
+     * @param skuName   product sku name
+     * @param skuCode   sku code
+     * @param quantity  qty
+     * @param unitPrice price of one unit
+     * @param taxAmount taxes if any
+     * @param shipment  shipment flag
+     */
+    public PaymentLineImpl(final String skuCode,
+                           final String skuName,
+                           final BigDecimal quantity,
+                           final BigDecimal unitPrice,
+                           final BigDecimal taxAmount,
+                           final boolean shipment) {
+        this.skuName = skuName;
+        this.skuCode = skuCode;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+        this.taxAmount = taxAmount;
+        this.shipment = shipment;
+    }
+
+
 
     /**
      * Get sku name.
@@ -131,4 +159,22 @@ public class PaymentLineImpl implements PaymentLine {
     public void setUnitPrice(final BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
     }
+
+
+    /**
+     * Is item shipment.
+     * @return true if item is shipment
+     */
+    public boolean isShipment() {
+        return shipment;
+    }
+
+    /**
+     * Set shpipment flag
+     * @param shipment shipment flag
+     */
+    public void setShipment(final boolean shipment) {
+        this.shipment = shipment;
+    }
+
 }
