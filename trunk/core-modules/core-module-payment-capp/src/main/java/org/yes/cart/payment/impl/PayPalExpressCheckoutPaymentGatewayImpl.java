@@ -1,6 +1,7 @@
 package org.yes.cart.payment.impl;
 
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.lang.SerializationUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
@@ -59,7 +60,9 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
     /**
      * {@inheritDoc}
      */
-    public Payment authorizeCapture(final Payment payment) {
+    public Payment authorizeCapture(final Payment paymentIn) {
+
+        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
 
         payment.setTransactionOperation(AUTH_CAPTURE);
 
@@ -253,12 +256,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
         stringBuilder.append(currencyCode);
 
 
-        //todo address
-
-
         return performHttpCall("SetExpressCheckout", stringBuilder.toString());
-
-
     }
 
 

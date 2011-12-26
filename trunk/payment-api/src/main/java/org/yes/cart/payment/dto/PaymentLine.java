@@ -83,4 +83,17 @@ public interface PaymentLine extends Serializable {
      */
     void setUnitPrice(BigDecimal unitPrice);
 
+
+    /**
+     * Is item shipment.
+     * @return true if item is shipment
+     */
+    public boolean isShipment();
+
+    /**
+     * Set shpipment flag
+     * @param shipment shipment flag
+     */
+    public void setShipment(boolean shipment);
+
 }

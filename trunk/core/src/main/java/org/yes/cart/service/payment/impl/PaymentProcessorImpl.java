@@ -449,7 +449,8 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                         delivery.getCarrierSla().getName(),
                         BigDecimal.ONE,
                         delivery.getPrice(),
-                        BigDecimal.ZERO
+                        BigDecimal.ZERO,
+                        true
                 )
         );
     }
