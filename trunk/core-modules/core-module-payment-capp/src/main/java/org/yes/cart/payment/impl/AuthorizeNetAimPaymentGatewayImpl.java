@@ -25,7 +25,7 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
             true, true, true, true,
             true, true, true, false,
-            true,
+            true, false,
             null
     );
 

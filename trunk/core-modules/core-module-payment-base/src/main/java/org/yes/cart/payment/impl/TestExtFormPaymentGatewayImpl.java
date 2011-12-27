@@ -37,7 +37,7 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl im
         return new PaymentGatewayFeatureImpl(
                 false, false, false, true,
                 false, false, false, true,
-                true,
+                true,  false,
                 null
         );
     }

@@ -43,12 +43,14 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
      * {@inheritDoc}
      */
     public boolean handle(final OrderEvent orderEvent) {
-        try {
-            reserveQuantity(orderEvent.getCustomerOrderDelivery());//TOTO all
-            return true;
-        } catch (Exception e) {
-            LOG.error(e.getMessage());
-            return false;
+        synchronized (OrderEventHandler.syncMonitor) {
+            try {
+                reserveQuantity(orderEvent.getCustomerOrderDelivery());//TOdO all
+                return true;
+            } catch (Exception e) {
+                LOG.error(e.getMessage());
+                return false;
+            }
         }
     }
 
@@ -73,7 +75,7 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
             for (Warehouse warehouse : warehouses) {
                 skuWarehouseService.voidReservation(warehouse, productSku, toAllocate);
 
-                toAllocate =  skuWarehouseService.debit(warehouse, productSku, toAllocate);
+                toAllocate = skuWarehouseService.debit(warehouse, productSku, toAllocate);
                 if (toAllocate.equals(BigDecimal.ZERO)) {
                     break; // quantity allocated
                 }
@@ -90,6 +92,7 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
 
     /**
      * Get warehouse service.
+     *
      * @return {@link WarehouseService}
      */
     protected WarehouseService getWarehouseService() {
@@ -98,7 +101,8 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
 
     /**
      * Get sku warehouse service.
-     * @return {@link SkuWarehouseService} 
+     *
+     * @return {@link SkuWarehouseService}
      */
     protected SkuWarehouseService getSkuWarehouseService() {
         return skuWarehouseService;

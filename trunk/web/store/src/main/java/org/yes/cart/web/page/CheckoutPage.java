@@ -19,10 +19,12 @@ import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
+import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.payment.PaymentModulesManager;
+import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.shoppingcart.AmountCalculationResult;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.OrderInfo;
@@ -123,6 +125,9 @@ public class CheckoutPage extends AbstractWebPage {
 
     @SpringBean(name = StorefrontServiceSpringKeys.AMOUNT_CALCULATION_STRATEGY)
     private AmountCalculationStrategy amountCalculationStrategy;
+
+    @SpringBean(name = ServiceSpringKeys.PAYMENT_PROCESSOR)
+    private PaymentProcessor paymentProcessor;
 
 
     /**
@@ -343,12 +348,25 @@ public class CheckoutPage extends AbstractWebPage {
                 + order.getCustomer().getLastname()).toUpperCase();
         final String submitBtnValue = getLocalizer().getString("paymentSubmit", this);
         final String postActionUrl = getPostActionUrl(gateway);
-        final String htmlFragment = gateway.getHtmlForm(
+
+        Payment payment = null;
+        if (gateway.getPaymentGatewayFeatures().isRequireDetails()) {
+            payment = paymentProcessor.createPaymentsToAuthorize(
+                    order,
+                    true,
+                    Collections.EMPTY_MAP,
+                    PaymentGateway.AUTH
+            ).get(0) ;
+        }
+
+        final String  htmlFragment = gateway.getHtmlForm(
                 fullName,
                 cart.getCurrentLocale(),
                 grandTotal,
                 cart.getCurrencyCode(),
-                cart.getGuid());
+                cart.getGuid(),
+                payment);
+
 
         return MessageFormat.format(
                 "<form action=\"{0}\">\n" +

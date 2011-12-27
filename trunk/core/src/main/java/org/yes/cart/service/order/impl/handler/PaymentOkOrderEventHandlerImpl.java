@@ -33,13 +33,13 @@ public class PaymentOkOrderEventHandlerImpl extends AbstractOrderEventHandlerImp
 
     private static final Map<String, String> GROUP_TRIGGER_MAP = new HashMap<String, String>() {{
 
-            put(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, OrderStateManager.EVT_PROCESS_ALLOCATION);
-            put(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, OrderStateManager.EVT_PROCESS_TIME_WAIT);
-            put(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, OrderStateManager.EVT_PROCESS_INVENTORY_WAIT);
-            put(CustomerOrderDelivery.ELECTONIC_DELIVERY_GROUP, OrderStateManager.EVT_SHIPMENT_COMPLETE);
-            put(CustomerOrderDelivery.MIX_DELIVERY_GROUP, OrderStateManager.EVT_PROCESS_TIME_WAIT);
+        put(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, OrderStateManager.EVT_PROCESS_ALLOCATION);
+        put(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, OrderStateManager.EVT_PROCESS_TIME_WAIT);
+        put(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, OrderStateManager.EVT_PROCESS_INVENTORY_WAIT);
+        put(CustomerOrderDelivery.ELECTONIC_DELIVERY_GROUP, OrderStateManager.EVT_SHIPMENT_COMPLETE);
+        put(CustomerOrderDelivery.MIX_DELIVERY_GROUP, OrderStateManager.EVT_PROCESS_TIME_WAIT);
 
-        }};
+    }};
 
 
     /**
@@ -60,18 +60,20 @@ public class PaymentOkOrderEventHandlerImpl extends AbstractOrderEventHandlerImp
      * {@inheritDoc}
      */
     public boolean handle(final OrderEvent orderEvent) {
-        handleInternal(orderEvent);
-        CustomerOrder order = orderEvent.getCustomerOrder();
-        for (CustomerOrderDelivery delivery : order.getDelivery()) {
-            final String eventId = GROUP_TRIGGER_MAP.get(delivery.getDeliveryGroup());
-            if (LOG.isInfoEnabled()) {
-                LOG.info(MessageFormat.format("Delivery {0} for order {1} event {2}",
-                        delivery.getDevileryNum(), order.getOrdernum(), eventId));
+        synchronized (OrderEventHandler.syncMonitor) {
+            handleInternal(orderEvent);
+            CustomerOrder order = orderEvent.getCustomerOrder();
+            for (CustomerOrderDelivery delivery : order.getDelivery()) {
+                final String eventId = GROUP_TRIGGER_MAP.get(delivery.getDeliveryGroup());
+                if (LOG.isInfoEnabled()) {
+                    LOG.info(MessageFormat.format("Delivery {0} for order {1} event {2}",
+                            delivery.getDevileryNum(), order.getOrdernum(), eventId));
+                }
+                final OrderEvent deliveryEvent = new OrderEventImpl(eventId, order, delivery);
+                getOrderStateManager().fireTransition(deliveryEvent);
             }
-            final OrderEvent deliveryEvent = new OrderEventImpl(eventId, order, delivery);
-            getOrderStateManager().fireTransition(deliveryEvent);
+            return true;
         }
-        return true;
     }
 
     /**

@@ -11,13 +11,19 @@ import org.yes.cart.service.order.OrderEventHandler;
  */
 public class PaymentOfflineOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl implements OrderEventHandler {
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean handle(final OrderEvent orderEvent) {
-        handleInternal(orderEvent);
-        return true;
+        synchronized (OrderEventHandler.syncMonitor) {
+            handleInternal(orderEvent);
+            return true;
+        }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     protected String getTransitionTarget(final OrderEvent orderEvent) {
         return CustomerOrder.ORDER_STATUS_WAITING;
     }

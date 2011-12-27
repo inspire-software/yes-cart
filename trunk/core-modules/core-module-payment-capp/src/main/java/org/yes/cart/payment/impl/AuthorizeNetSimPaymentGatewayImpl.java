@@ -31,7 +31,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
             false, false, false, true,
             false, false, false, true,
-            true,
+            true, false,
             null
     );
 
@@ -144,7 +144,8 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
      * All fields are hidden, hence not need to localize and etc.
      */
     @Override
-    public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount, final String currencyCode, final String orderGuid) {
+    public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount,
+                              final String currencyCode, final String orderGuid, final Payment payment) {
 
         final String apiLoginId = getParameterValue(AN_API_LOGIN_ID);
         final String amountString = "" + amount;

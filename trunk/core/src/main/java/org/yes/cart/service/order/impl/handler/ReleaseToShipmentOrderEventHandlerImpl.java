@@ -11,10 +11,14 @@ import org.yes.cart.service.order.OrderEventHandler;
  */
 public class ReleaseToShipmentOrderEventHandlerImpl implements OrderEventHandler {
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean handle(final OrderEvent orderEvent) {
-        orderEvent.getCustomerOrderDelivery().setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS);
-        return true;
+        synchronized (OrderEventHandler.syncMonitor) {
+            orderEvent.getCustomerOrderDelivery().setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS);
+            return true;
+        }
     }
 
 }

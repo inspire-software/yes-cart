@@ -138,4 +138,16 @@ public interface PaymentGatewayFeature extends Serializable {
      */
     void setOnlineGateway(boolean onlineGateway);
 
+    /**
+     * Is deen to pass details in case of html for constrcution
+     * @return   true in case if need provide detail info
+     */
+    public boolean isRequireDetails();
+
+    /**
+     * Set require detail flag
+     * @param requireDetails  flag to set.
+     */
+    void setRequireDetails(boolean requireDetails);
+
 }

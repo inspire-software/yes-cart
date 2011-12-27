@@ -19,7 +19,6 @@ import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.payment.PaymentCallBackHandlerFacade;
 import org.yes.cart.service.payment.PaymentModulesManager;
 import org.yes.cart.service.payment.PaymentProcessor;
-import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.shoppingcart.impl.CleanCartCommandImpl;
 import org.yes.cart.web.application.ApplicationDirector;
@@ -99,8 +98,9 @@ public class PayPalReturnUrlPage extends AbstractWebPage {
 
         final Payment payment = paymentProcessor.createPaymentsToAuthorize(
                 customerOrder,
-                paymentGatewayExternalForm.createPaymentPrototype(Collections.EMPTY_MAP),
-                true)
+                true,
+                Collections.EMPTY_MAP,
+                "tmp")
                 .get(0);
 
         try {

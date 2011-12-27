@@ -70,11 +70,17 @@ public interface PaymentProcessor {
      * Create list of payment to authorize.
      *
      * @param order              order
-     * @param templatePayment    template payment
-     * @param forceSinglePayment flag is true for authCapture operation, when paymeng gateway not supports several payments per
-     *                           order
+     * @param params for payment gateway to create template from. Also if this map contains key
+     * forceSinglePayment, only one payment will be created (hack to support pay pal express).
+     * @param forceSinglePayment flag is true for authCapture operation, when paymeng gateway not supports several payments per   order
+     * @param transactionOperation operation name on YC payment processor
      * @return list of  {@link Payment} to process
      */
-    List<Payment> createPaymentsToAuthorize(CustomerOrder order, Payment templatePayment, boolean forceSinglePayment);
+    List<Payment> createPaymentsToAuthorize(
+            CustomerOrder order,
+            boolean forceSinglePayment,
+            final Map params,
+            final String transactionOperation);
+
 
 }

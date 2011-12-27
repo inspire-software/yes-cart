@@ -19,11 +19,12 @@ import java.util.List;
  * Time: 14:12:54
  */
 public class DeliveryAllowedByInventoryOrderEventHandlerImpl
-        extends ProcessAllocationOrderEventHandlerImpl 
+        extends ProcessAllocationOrderEventHandlerImpl
         implements OrderEventHandler {
 
     /**
      * Construct transition
+     *
      * @param warehouseService    warehouse service
      * @param skuWarehouseService sku on warehouse service to change quantity
      */
@@ -36,29 +37,27 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImpl
      * {@inheritDoc}
      */
     public boolean handle(final OrderEvent orderEvent) {
-        final List<Warehouse> warehouses = getWarehouseService().findByShopId(orderEvent.getCustomerOrder().getShop().getShopId());
-        final CustomerOrderDelivery orderDelivery =  orderEvent.getCustomerOrderDelivery();
-        for (CustomerOrderDeliveryDet det : orderDelivery.getDetail()) {
+        synchronized (OrderEventHandler.syncMonitor) {
+            final List<Warehouse> warehouses = getWarehouseService().findByShopId(orderEvent.getCustomerOrder().getShop().getShopId());
+            final CustomerOrderDelivery orderDelivery = orderEvent.getCustomerOrderDelivery();
+            for (CustomerOrderDeliveryDet det : orderDelivery.getDetail()) {
 
-            if (!det.getSku().getProduct().getProducttype().isDigital()) {
-                
-                final Pair<BigDecimal, BigDecimal> qtyPair = getSkuWarehouseService().getQuantity(
-                        warehouses,
-                        det.getSku()
-                );
-                if (MoneyUtils.isFirstBiggerThanSecond(
-                        qtyPair.getSecond().add(det.getQty()),
-                        qtyPair.getFirst())) {
-                    return false; //reserved plus to reserve biger, than on warehouses
+                if (!det.getSku().getProduct().getProducttype().isDigital()) {
+
+                    final Pair<BigDecimal, BigDecimal> qtyPair = getSkuWarehouseService().getQuantity(
+                            warehouses,
+                            det.getSku()
+                    );
+                    if (MoneyUtils.isFirstBiggerThanSecond(
+                            qtyPair.getSecond().add(det.getQty()),
+                            qtyPair.getFirst())) {
+                        return false; //reserved plus to reserve biger, than on warehouses
+                    }
                 }
-
             }
-
+            return super.handle(orderEvent);
         }
-        return super.handle(orderEvent);
     }
-
-
 
 
 }

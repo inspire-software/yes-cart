@@ -35,7 +35,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
     private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
             false, false, false, true,
             false, false, false, true,
-            true,
+            true,  false,
             null
     );
 
@@ -362,7 +362,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
      * All fields are hidden, hence not need to localize and etc.
      */
     public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount,
-                              final String currencyCode, final String orderGuid) {
+                              final String currencyCode, final String orderGuid, final Payment payment) {
         final StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(getHiddenFiled(ORDER_GUID, orderGuid));  // this will be bypassed via payment gateway to restore it latter
         return stringBuilder.toString();
