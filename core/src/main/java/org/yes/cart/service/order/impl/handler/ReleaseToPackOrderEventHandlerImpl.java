@@ -11,10 +11,14 @@ import org.yes.cart.service.order.OrderEventHandler;
  */
 public class ReleaseToPackOrderEventHandlerImpl implements OrderEventHandler {
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean handle(final OrderEvent orderEvent) {
-        orderEvent.getCustomerOrderDelivery().setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_PACKING);
-        return true;
+        synchronized (OrderEventHandler.syncMonitor) {
+            orderEvent.getCustomerOrderDelivery().setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_PACKING);
+            return true;
+        }
     }
 
 }

@@ -77,8 +77,9 @@ public class PayPalExpressCheckoutFilter extends AbstractFilter implements Filte
 
         final Payment payment = paymentProcessor.createPaymentsToAuthorize(
                 customerOrder,
-                paymentGatewayExternalForm.createPaymentPrototype(servletRequest.getParameterMap()),
-                true)
+                true,
+                servletRequest.getParameterMap(),
+                "tmp")
                 .get(0);
 
         final Map<String, String> nvpCallResult = paymentGatewayExternalForm.setExpressCheckoutMethod(

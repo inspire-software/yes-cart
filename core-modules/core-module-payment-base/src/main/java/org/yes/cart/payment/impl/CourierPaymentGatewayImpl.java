@@ -38,7 +38,7 @@ public class CourierPaymentGatewayImpl extends AbstractPaymentGatewayImpl implem
             paymentGatewayFeature = new PaymentGatewayFeatureImpl(
                     true, true, true, true,
                     true, true, true, false,
-                    false,
+                    false, false,
                     null
             );
         }

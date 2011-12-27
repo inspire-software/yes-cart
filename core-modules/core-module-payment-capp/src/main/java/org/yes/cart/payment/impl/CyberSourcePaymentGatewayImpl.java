@@ -126,7 +126,7 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCappPaymentGatewayImp
     private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
             true, true, true, false,
             true, true, true, false,
-            true,
+            true, false,
             null
     );
 

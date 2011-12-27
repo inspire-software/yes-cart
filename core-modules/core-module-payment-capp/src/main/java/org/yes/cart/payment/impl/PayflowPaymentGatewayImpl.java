@@ -58,7 +58,7 @@ public class PayflowPaymentGatewayImpl extends AbstractCappPaymentGatewayImpl im
     private static final PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
             true, true, true, true,
             true, true, true, false,
-            true,
+            true, false,
             null
     );
 

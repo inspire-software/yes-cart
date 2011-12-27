@@ -29,7 +29,7 @@ import java.util.Map;
 
 
 /**
-* User: Igor Azarny iazarny@yahoo.com
+ * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
@@ -67,28 +67,21 @@ public class PaymentProcessorImpl implements PaymentProcessor {
     }
 
 
-
-
     /**
      * AuthCapture or immediate sale operation wil be use if payment gateway not supports normal flow authorize - delivery - capture.
      *
      * @param order  to authorize payments.
      * @param params for payment gateway to create template from. Also if this map contains key
-     * forceSinglePayment, only one payment will be created (hack to support pay pal express).
+     *               forceSinglePayment, only one payment will be created (hack to support pay pal express).
      * @return status of operation.
      */
     String authorizeCapture(final CustomerOrder order, final Map params) {
 
-        final Payment templatePayment =
-                fillPaymentPrototype(order, getPaymentGateway().createPaymentPrototype(params));
-        templatePayment.setTransactionOperation(PaymentGateway.AUTH_CAPTURE);
-        templatePayment.setTransactionGatewayLabel(getPaymentGateway().getLabel());
-
         final List<Payment> paymentsToAuthorize = createPaymentsToAuthorize(
                 order,
-                templatePayment,
-                params.containsKey("forceSinglePayment"));
-        // will be only one
+                params.containsKey("forceSinglePayment"),
+                params,
+                PaymentGateway.AUTH_CAPTURE);
 
         String paymentResult = null;
 
@@ -123,12 +116,12 @@ public class PaymentProcessorImpl implements PaymentProcessor {
     public String authorize(final CustomerOrder order, final Map params) {
 
         if (getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorize()) {
-            final Payment templatePayment =
-                    fillPaymentPrototype(order, getPaymentGateway().createPaymentPrototype(params));
-            templatePayment.setTransactionOperation(PaymentGateway.AUTH);
-            templatePayment.setTransactionGatewayLabel(getPaymentGateway().getLabel());
 
-            final List<Payment> paymentsToAuthorize = createPaymentsToAuthorize(order, templatePayment, params.containsKey("forceSinglePayment"));
+            final List<Payment> paymentsToAuthorize = createPaymentsToAuthorize(
+                    order,
+                    params.containsKey("forceSinglePayment"),
+                    params,
+                    PaymentGateway.AUTH);
 
             for (Payment payment : paymentsToAuthorize) {
                 String paymentResult = null;
@@ -191,7 +184,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
      *
      * @param orderNum order with some authorized payments
      */
-    private void reverseAuthorizatios(final String orderNum) {
+    public void reverseAuthorizatios(final String orderNum) {
         if (getPaymentGateway().getPaymentGatewayFeatures().isSupportReverseAuthorization()) {
             final List<CustomerOrderPayment> paymentsToRevAuth = customerOrderPaymentService.findBy(
                     orderNum,
@@ -372,13 +365,26 @@ public class PaymentProcessorImpl implements PaymentProcessor {
     /**
      * Create list of payment to authorize.
      *
-     * @param order              order
-     * @param templatePayment    teplate payment
-     * @param forceSinglePayment flag is true for authCapture operation, when paymeng gateway not supports several payments per
-     *                           order
-     * @return list of
+     * @param order                order
+     * @param transactionOperation operation in term of payment processor
+     * @param forceSinglePaymentIn flag is true for authCapture operation, when paymeng gateway not supports several payments per
+     *                             order
+     * @return list of  payments with details
      */
-    public List<Payment> createPaymentsToAuthorize(final CustomerOrder order, final Payment templatePayment, final boolean forceSinglePayment) {
+    public List<Payment> createPaymentsToAuthorize(
+            final CustomerOrder order,
+            final boolean forceSinglePaymentIn,
+            final Map params,
+            final String transactionOperation) {
+
+
+        final boolean forceSinglePayment = forceSinglePaymentIn || params.containsKey("forceSinglePayment");
+
+        final Payment templatePayment = fillPaymentPrototype(
+                order,
+                getPaymentGateway().createPaymentPrototype(params),
+                transactionOperation,
+                getPaymentGateway().getLabel());
 
         final List<Payment> rez = new ArrayList<Payment>();
         if (forceSinglePayment || !getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorizePerShipment()) {
@@ -472,11 +478,16 @@ public class PaymentProcessorImpl implements PaymentProcessor {
     /**
      * Add information to template payment object.
      *
-     * @param templatePayment template payment.
-     * @param order           order
+     * @param templatePayment         template payment.
+     * @param order                   order
+     * @param transactionOperation    operation in term of payment processor
+     * @param transactionGatewayLabel label of payment gateway
      * @return payment prototype;
      */
-    private Payment fillPaymentPrototype(final CustomerOrder order, final Payment templatePayment) {
+    private Payment fillPaymentPrototype(final CustomerOrder order,
+                                         final Payment templatePayment,
+                                         final String transactionOperation,
+                                         final String transactionGatewayLabel) {
 
 
         Address shippingAddr = order.getCustomer().getDefaultAddress(Address.ADDR_TYPE_SHIPING);
@@ -506,6 +517,9 @@ public class PaymentProcessorImpl implements PaymentProcessor {
         templatePayment.setOrderNumber(order.getOrdernum());
 
         templatePayment.setBillingEmail(order.getCustomer().getEmail());
+
+        templatePayment.setTransactionOperation(transactionOperation);
+        templatePayment.setTransactionGatewayLabel(transactionGatewayLabel);
 
         return templatePayment;
     }

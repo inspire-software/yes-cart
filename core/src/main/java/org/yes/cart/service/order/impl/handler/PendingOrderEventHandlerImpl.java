@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Initial {@link CustomerOrder#ORDER_STATUS_PENDING} state.
  * <p/>
-* User: Igor Azarny iazarny@yahoo.com
+ * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
@@ -39,8 +39,8 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
      * Construct transition handler.
      *
      * @param paymentProcessorFactory to perform authorize operation
-     * @param warehouseService    warehouse service
-     * @param skuWarehouseService sku on warehouse service to change quantity
+     * @param warehouseService        warehouse service
+     * @param skuWarehouseService     sku on warehouse service to change quantity
      */
     public PendingOrderEventHandlerImpl(final PaymentProcessorFactory paymentProcessorFactory,
                                         final WarehouseService warehouseService,
@@ -67,24 +67,29 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
     /**
      * {@inheritDoc}
      */
-    public boolean handle(final OrderEvent orderEvent)  throws Exception {
-        for (CustomerOrderDelivery customerOrderDelivery : orderEvent.getCustomerOrder().getDelivery()) {
-            reserveQuantity(customerOrderDelivery);
-        }
-        handleInternal(orderEvent);
-        final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(orderEvent.getCustomerOrder().getPgLabel());
-        if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isOnlineGateway()) {
-            if (Payment.PAYMENT_STATUS_OK.equals(paymentProcessor.authorize(orderEvent.getCustomerOrder(), orderEvent.getParams()))) {
-                getOrderStateManager().fireTransition(new OrderEventImpl(OrderStateManager.EVT_PAYMENT_OK, orderEvent.getCustomerOrder()));    // allocate qty
-            } else {
-                getOrderStateManager().fireTransition(new OrderEventImpl(OrderStateManager.EVT_CANCEL, orderEvent.getCustomerOrder()));        //void reservation
-            }
-        } else {
-            // wait for confirmation about payment
-            getOrderStateManager().fireTransition(new OrderEventImpl(OrderStateManager.EVT_PAYMENT_OFFLINE, orderEvent.getCustomerOrder()));
-        }
+    public boolean handle(final OrderEvent orderEvent) throws Exception {
+        synchronized (OrderEventHandler.syncMonitor) {
 
-        return true;
+            for (CustomerOrderDelivery customerOrderDelivery : orderEvent.getCustomerOrder().getDelivery()) {
+                reserveQuantity(customerOrderDelivery);
+            }
+            handleInternal(orderEvent);
+            final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(orderEvent.getCustomerOrder().getPgLabel());
+            if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isOnlineGateway()) {
+                if (Payment.PAYMENT_STATUS_OK.equals(paymentProcessor.authorize(orderEvent.getCustomerOrder(), orderEvent.getParams()))) {
+                    //payment was ok, so quantity oh warehouses will be decreased
+                    getOrderStateManager().fireTransition(new OrderEventImpl(OrderStateManager.EVT_PAYMENT_OK, orderEvent.getCustomerOrder()));
+                } else {
+                    //in case of bad payment reserved product quantity will be returned from reservation
+                    getOrderStateManager().fireTransition(new OrderEventImpl(OrderStateManager.EVT_CANCEL, orderEvent.getCustomerOrder()));
+                }
+            } else {
+                // wait for confirmation about payment
+                getOrderStateManager().fireTransition(new OrderEventImpl(OrderStateManager.EVT_PAYMENT_OFFLINE, orderEvent.getCustomerOrder()));
+            }
+
+            return true;
+        }
     }
 
     /**
@@ -108,7 +113,7 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
             for (Warehouse warehouse : warehouses) {
 
                 toReserve = skuWarehouseService.reservation(warehouse, productSku, toReserve);
-                if (BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE).equals( toReserve.setScale(Constants.DEFAULT_SCALE))) {
+                if (BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE).equals(toReserve.setScale(Constants.DEFAULT_SCALE))) {
                     break; // quantity allocated
                 }
             }
@@ -123,9 +128,9 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
                  * Availability.PREORDER - can order from manafacturer
                  * Availability.ALWAYS - always
                  */
-                    throw new Exception("PendingOrderEventHandlerImpl. Can not allocate total qty = " + det.getQty()   //TODO need patricular type of exception
-                            + " for sku = " + productSku.getCode()
-                            + " in delivery " + orderDelivery.getDevileryNum());
+                throw new Exception("PendingOrderEventHandlerImpl. Can not allocate total qty = " + det.getQty()   //TODO need patricular type of exception
+                        + " for sku = " + productSku.getCode()
+                        + " in delivery " + orderDelivery.getDevileryNum());
             }
         }
         orderDelivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);

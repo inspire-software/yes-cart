@@ -18,6 +18,7 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
     protected boolean supportRefund;
     protected boolean externalFormProcessing;
     protected boolean onlineGateway;
+    protected boolean requireDetails;
 
 
     protected boolean supportAuthorizePerShipment;
@@ -39,6 +40,7 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
      * @param externalFormProcessing
      * @param additionalFeatures
      * @param onlineGateway               is this online payment gateway
+     * @param requireDetails true in case if gateway require paymnet details for html form
      */
     @SuppressWarnings("PMD.ExcessiveParameterList")
     public PaymentGatewayFeatureImpl(
@@ -51,6 +53,7 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
             final boolean supportRefund,
             final boolean externalFormProcessing,
             final boolean onlineGateway,
+            final boolean requireDetails,
             final String additionalFeatures) {
         this.supportAuthorize = supportAuthorize;
         this.supportAuthorizePerShipment = supportAuthorizePerShipment;
@@ -62,6 +65,7 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
         this.externalFormProcessing = externalFormProcessing;
         this.additionalFeatures = additionalFeatures;
         this.onlineGateway = onlineGateway;
+        this.requireDetails = requireDetails;
     }
 
     /**
@@ -202,6 +206,20 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
      */
     public void setAdditionalFeatures(final String additionalFeatures) {
         this.additionalFeatures = additionalFeatures;
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    public boolean isRequireDetails() {
+        return requireDetails;
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    public void setRequireDetails(boolean requireDetails) {
+        this.requireDetails = requireDetails;
     }
 
     /**

@@ -17,6 +17,9 @@ import org.yes.cart.service.domain.AddressService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.service.order.OrderEvent;
+import org.yes.cart.service.order.OrderStateManager;
+import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.service.payment.PaymentProcessorFactory;
 import org.yes.cart.shoppingcart.ShoppingCart;
@@ -43,6 +46,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
     private AddressService addressService;
     private CustomerService customerService;
     private ShopService shopService;
+    private OrderStateManager orderStateManager;
 
     @Before
     public void setUp() throws Exception {
@@ -52,6 +56,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
         addressService = (AddressService) ctx().getBean(ServiceSpringKeys.ADDRESS_SERVICE);
         customerService = (CustomerService) ctx().getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
         shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
+        orderStateManager = (OrderStateManager) ctx().getBean(ServiceSpringKeys.ORDER_STATE_MANAGER);
     }
 
     /**
@@ -470,6 +475,68 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
         //TODO test with cancel state wait till customerOrder.setOrderStatus();
     }
 
+    /**
+     * Test to prove, that only one shopper can buy product with standard availability
+     * in case of concurrent shopping. The rest of shoppers get the exceptins.
+     */
+    @Test
+    public void testMultipleShoppersOneItem() {
+        //Create several customers, each of them has the one product in
+        //hos cart, but only one item is available
+        final int customerQty = 10;
+        final Customer[] customers = new Customer[customerQty];
+        final ShoppingCart[] cart  = new ShoppingCart [customerQty];
+        final OrderEvent[] events = new OrderEventImpl[customerQty];
+        for (int i = 0; i < customerQty; i++) {
+            customers[i] = createCustomer();
+            cart[i] = getShoppingCartWithOneAvailableItem(customers[i].getEmail());
+
+            CustomerOrder order  = customerOrderService.createFromCart(cart[i], false);
+            order.setPgLabel(PGLABEL);
+            customerOrderService.update(order);
+
+            events[i] = new OrderEventImpl(
+                    OrderStateManager.EVT_PENDING,
+                    customerOrderService.findByGuid(cart[i].getGuid()),
+                    null,
+                    createParametersMap()
+            );
+        }
+
+        // start several thread to process order
+        for (int i = 0; i < customerQty; i++) {
+            final int j  = i;
+            new Thread() {
+                @Override
+                public void run() {
+                    orderStateManager.fireTransition(events[j]);
+                }
+            }.start();
+        }
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        int okCnt = 0;
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < customerQty; i++) {
+           stringBuilder.append(events[i].getCustomerOrder().getOrderStatus());
+           stringBuilder.append( "," );
+            if (CustomerOrder.ORDER_STATUS_IN_PROGRESS.equals(events[i].getCustomerOrder().getOrderStatus())) {
+                okCnt ++;
+            }
+        }
+
+        assertEquals("Only one order may be in rogress state :" + stringBuilder.toString(), 1, okCnt);
+
+
+
+
+    }
+
     protected Customer createCustomer() {
         Customer customer = customerService.getGenericDao().getEntityFactory().getByIface(Customer.class);
         customer.setEmail(UUID.randomUUID().toString() + "jd@domain.com");
@@ -527,15 +594,27 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
     }
 
     /**
-     * Bot sku with standard availability , but one of the has not qty on warehouse
+     * Both sku with standard availability , but one of the has not qty on warehouse
      *
      * @return cart
      */
-    protected ShoppingCart getShoppingCart2(String customerEmail) {
+    protected ShoppingCart getShoppingCart2(final String customerEmail) {
         ShoppingCart shoppingCart = getEmptyCart(customerEmail);
         new AddSkuToCartEventCommandImpl(ctx(), Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST4"))
                 .execute(shoppingCart);
         new AddSkuToCartEventCommandImpl(ctx(), Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST4-M"))
+                .execute(shoppingCart);
+        return shoppingCart;
+    }
+
+    /**
+     * Bot sku with standard availability , but one of the has not qty on warehouse
+     *
+     * @return cart
+     */
+    protected ShoppingCart getShoppingCartWithOneAvailableItem(final String customerEmail) {
+        ShoppingCart shoppingCart = getEmptyCart(customerEmail);
+        new AddSkuToCartEventCommandImpl(ctx(), Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST11"))
                 .execute(shoppingCart);
         return shoppingCart;
     }

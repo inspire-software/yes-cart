@@ -15,8 +15,10 @@ public class ProcessInventoryWaitOrderEventHandlerImpl implements OrderEventHand
      * {@inheritDoc}
      */
     public boolean handle(final OrderEvent orderEvent) {
-        orderEvent.getCustomerOrderDelivery().setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT);
-        return true;
+        synchronized (OrderEventHandler.syncMonitor) {
+            orderEvent.getCustomerOrderDelivery().setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT);
+            return true;
+        }
     }
 
 }

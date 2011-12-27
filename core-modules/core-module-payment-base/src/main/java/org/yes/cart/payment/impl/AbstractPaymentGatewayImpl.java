@@ -31,7 +31,8 @@ public abstract class AbstractPaymentGatewayImpl implements PaymentGateway {
     /**
     * {@inheritDoc}
     */
-    public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount, final String currencyCode, final String orderGuid) {
+    public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount,
+                              final String currencyCode, final String orderGuid, final Payment payment) {
         return getHtmlForm(cardHolderName, locale);
     }
 

@@ -83,10 +83,11 @@ public class OrderEventImpl  implements OrderEvent {
 
     @Override
     public String toString() {
-        return "OrderEventImpl{" +
-                "eventId='" + eventId + '\'' +
-                ", customerOrder=" + customerOrder.getOrdernum() + " status " + customerOrder.getOrderStatus() +
-                (customerOrderDelivery==null?"":", customerOrderDelivery=" + customerOrderDelivery.getDevileryNum() + " status = " + customerOrderDelivery.getDeliveryStatus()) +
+        return "OrderEventImpl{"
+                + "eventId='" + eventId + '\''
+                + ", customerOrder=" +  (customerOrder == null ? "" : customerOrder.getOrdernum())
+                + " order status " + (customerOrder == null ? "" : customerOrder.getOrderStatus() )
+                + (customerOrderDelivery==null?"":", customerOrderDelivery=" + customerOrderDelivery.getDevileryNum() + " delivery status = " + customerOrderDelivery.getDeliveryStatus()) +
                 '}';
     }
 }

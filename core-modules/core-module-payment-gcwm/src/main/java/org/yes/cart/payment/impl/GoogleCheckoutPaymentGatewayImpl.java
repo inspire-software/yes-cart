@@ -5,6 +5,7 @@ import com.google.checkout.sdk.commands.CartPoster;
 import com.google.checkout.sdk.commands.Environment;
 import com.google.checkout.sdk.domain.*;
 import org.apache.commons.lang.SerializationUtils;
+import org.springframework.util.Assert;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
@@ -40,7 +41,7 @@ public class GoogleCheckoutPaymentGatewayImpl extends AbstractGswmPaymentGateway
     private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
             true, false, true, true,
             false, false, false, false,
-            true,
+            true,  true,
             null
     );
 
@@ -148,9 +149,11 @@ public class GoogleCheckoutPaymentGatewayImpl extends AbstractGswmPaymentGateway
     /**
      * {@inheritDoc}
      * All fields are hidden, hence not need to localize and etc.
+     *
      */
     public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount,
-                              final String currencyCode, final String orderGuid) {
+                              final String currencyCode, final String orderGuid, final Payment payment) {
+        Assert.notNull(payment, "The payment details require for google checkout payment gateway");
         final StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(getHiddenFiled(ORDER_GUID, orderGuid));  // this will be bypassed via payment gateway to restore it latter
         return stringBuilder.toString();

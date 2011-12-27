@@ -39,9 +39,11 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
      * {@inheritDoc}
      */
     public boolean handle(final OrderEvent orderEvent) {
-        creditQuantity(orderEvent.getCustomerOrder());
-        handleInternal(orderEvent);
-        return true;
+        synchronized (OrderEventHandler.syncMonitor) {
+            creditQuantity(orderEvent.getCustomerOrder());
+            handleInternal(orderEvent);
+            return true;
+        }
     }
 
     /**

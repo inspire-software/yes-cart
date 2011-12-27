@@ -22,22 +22,23 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImpl implements OrderEvent
      * {@inheritDoc}
      */
     public boolean handle(final OrderEvent orderEvent) {
+        synchronized (OrderEventHandler.syncMonitor) {
+            final Date now = getCurrentDate();
 
-        final Date now = getCurrentDate();
+            final Collection<CustomerOrderDeliveryDet> deliveryDetails = orderEvent.getCustomerOrderDelivery().getDetail();
 
-        final Collection<CustomerOrderDeliveryDet> deliveryDetails = orderEvent.getCustomerOrderDelivery().getDetail();
-
-        for (CustomerOrderDeliveryDet det : deliveryDetails) {
-            final ProductSku productSku = det.getSku();
-            final Date availableFrom = productSku.getProduct().getAvailablefrom();
-            if ((availableFrom != null) && (availableFrom.getTime() > now.getTime())) {
-                return false; // no transition, because need to wait
+            for (CustomerOrderDeliveryDet det : deliveryDetails) {
+                final ProductSku productSku = det.getSku();
+                final Date availableFrom = productSku.getProduct().getAvailablefrom();
+                if ((availableFrom != null) && (availableFrom.getTime() > now.getTime())) {
+                    return false; // no transition, because need to wait
+                }
             }
+
+            orderEvent.getCustomerOrderDelivery().setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT);
+
+            return true;
         }
-
-        orderEvent.getCustomerOrderDelivery().setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT);
-
-        return true;
     }
 
     private Date getCurrentDate() {
