@@ -1,0 +1,18 @@
+wsif.version: 1.3.1
+wsif.generator: woas
+wsif.generator.version: 0.12.0
+woas.author: legolas558
+woas.pages: 1
+
+woas.page.title: WoaS::Plugins::@jsMath
+woas.page.attributes: 0
+woas.page.encoding: 8bit/plain
+woas.page.disposition: inline
+woas.page.boundary: DFQRCTsKlU
+
+--DFQRCTsKlU
+plugins/jsMath/plugins/noImageFonts.js = @*
+plugins/jsMath.js = +*
+plugins/jsMath/jsMath.js = @*
+
+--DFQRCTsKlU

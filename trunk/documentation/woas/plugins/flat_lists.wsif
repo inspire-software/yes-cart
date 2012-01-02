@@ -1,0 +1,42 @@
+wsif.version: 1.3.1
+wsif.generator: woas
+wsif.generator.version: 0.12.0
+woas.author: legolas558
+woas.pages: 1
+
+woas.page.title: WoaS::Plugins::FlatLists
+woas.page.attributes: 0
+woas.page.encoding: 8bit/plain
+woas.page.disposition: inline
+woas.page.boundary: DFQRCTsKlU
+
+--DFQRCTsKlU
+// NOTE: THIS IS NOT OFFICIALLY SUPPORTED BEFORE API1.0
+// override WoaS listing function
+woas.custom.flat_lists = {
+	_prev_ns_listing: null,
+	_new_ns_listing: function(folds, flat_arr, sorted) {
+		// use default listing for tagged pages
+		if ((woas.parser.render_title.substr(0, 8) === "Tagged::") ||
+			(woas.parser.render_title.substr(0,10) === "Untagged::"))
+			return this._prev_ns_listing(folds, flat_arr, sorted);
+		if (flat_arr.length === 0)
+			return "/No pages in this listing/";
+		if (typeof sorted == "undefined")
+			sorted = false;
+		var s="";
+		// generate the flat list
+		if (flat_arr.length) {
+			if (sorted)
+				flat_arr.sort();
+			s += "* [["+flat_arr.join("]]\n* [[")+"]]\n";
+		}
+		return s;
+	}
+};
+
+// manually register the new listing hook function
+woas.custom.flat_lists._prev_ns_listing = woas.ns_listing;
+woas.ns_listing = woas.custom.flat_lists._new_ns_listing;
+
+--DFQRCTsKlU

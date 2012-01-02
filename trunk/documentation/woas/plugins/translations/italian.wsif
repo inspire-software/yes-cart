@@ -1,0 +1,98 @@
+wsif.version: 1.3.1
+wsif.generator: woas
+wsif.generator.version: 0.12.0
+woas.author: legolas558
+woas.pages: 1
+
+woas.page.title: WoaS::Plugins::@I18N_IT
+woas.page.attributes: 0
+woas.page.encoding: 8bit/plain
+woas.page.disposition: inline
+woas.page.boundary: DFQRCTsKlU
+
+--DFQRCTsKlU
+/* Italian translation */
+
+// internationalization language resources
+woas.i18n = {
+	ACCESS_DENIED: "Accesso non consentito alla pagina '%s'",
+	ALT_BROWSER_INPUT: "Per favore specifica il percorso completo per il file '%s', il tuo browser per ragioni di sicurezza non permette che questo tipo di percorso venga letto direttamente.",
+	ASK_MENU_LINK: "Vuoi aggiungere un link nel menu principale?",
+	B64_REQ: " (\u00e8 richiesto %s a causa della codifica base64)",
+	CANCEL_EDITING:"Le modifiche effettuate a questa pagina non verranno salvate.",
+	CONFIRM_DELETE:"Sei sicuro di voler ELIMINARE la pagina '%s'?",
+	CONFIRM_DELETE_ALL1: "Sei intenzionato a CANCELLARE tutte le tue pagine?",
+	CONFIRM_DELETE_ALL2: "Questa \u00e8 la conferma definitiva per CANCELLARE tutte le tue pagine.\\n\\nTUTTE LE TUE PAGINE ANDRANNO PERSE\\n\\nSei sicuro di voler continuare?",
+	CONFIRM_DELETE_FILE: "Sei sicuro di voler eliminare questo file?",
+	CONFIRM_DELETE_IMAGE: "Sei sicuro di voler eliminare l'immagine '%s'?",
+	CONFIRM_EXPORT: "Vuoi esportare %s nel percorso specificato qui sotto?",
+	CONFIRM_LOCK: "Vuoi utilizzare l'ultima password che hai inserito per proteggere questa pagina '%s'?",
+	CONFIRM_LOCK_LAST: "La password \u00e8 stata utilizzata per l'ultima volta per la pagina: %s",
+	CONFIRM_READ_ONLY: "Sei sicuro di voler impostae questo WoaS in modalit\u00e0 sola lettura? Dovrai modificare manualmente il file per ripristinare questa modifica.",
+	CONFIRM_REMOVE_ENCRYPT: "Vuoi decriptare la pagina '%s'?",
+	DELETE:"Elimina la pagina:",
+ 	DELETE_FILE:"Eliminare il file incorporato",
+ 	DELETE_IMAGE:"Eliminare l'immagine incorporata",
+	DELETE_PAGE_PROMPT: "Eliminare la pagina:",
+	DISPLAY_FULL_FILE: "Visualizza completamente il file",
+	DUP_NS_ERROR: "Non \u00e8 possibile creare duplicati nel namespace di File:: o Image::!",
+	EDITING:"Elaborazione di %s",
+	EMPTY_TITLE: "Non \u00e8 consentito creare pagine senza titolo",
+	ERR_MARKER: "Marcatore non trovato per %s!",
+	ERR_NO_PWD: "Non \u00e8 stata impostata una password per criptare la pagina '%s'\\nClicca sull'icona fatta a chiave e inserisci una password",
+	ERR_PAGE_NS: "Non puoi creare una pagina come un namespace",
+	ERR_RESERVED_NS: "Il namespace '%s' \u00e8 riservato",
+	ERR_SEL_FILE: "Devi selezionare un file",
+	ERR_VAR_MARKER: "Variabile marcatore non trovata!",
+ 	EXPORT_FILE:"Esporta file",
+ 	EXPORT_IMAGE:"Esporta immagine",
+	EXPORT_OK: "%d/%d pagine esportate con successo",
+	FAILED_ERASE:"Il salvataggio di WoaS dopo la cancellazione \u00e8 fallito, ricarica WoaS o i dati su cui lavori saranno inconsistenti.",
+	FILE_DISPLAY_LIMIT: "Sono visualizzati soltanto i primi 1024 bytes",
+	FILE_SELECT_ERR: "Devi selezionare un file",
+	FILE_SIZE: "Dimensione del file",
+	HEIGHT: "Altezza",
+	IMPORT_INCOMPAT: "Versione non compatibile: %s",
+	IMPORT_OLD_VER: "Se questo WoaS \u00e8 antecedente alla versione v0.9.6B, avrai bisogno di WoaS 0.11.x per effettuare l'importazione",
+	IMPORT_OK: "%s pagine importate con successo (%d pagine saltate)",
+	IMPORT_UNRECON: "Formato sconosciuto",
+	INSERT_NEW:"Inserisci il titolo per la nuova pagina",
+	INVALID_ALIAS: "Alias non valido: '%s', non verr\u00e0 considerato",
+	INVALID_DATA:"Gruppo di dati non validi!",
+	INVALID_SPECIAL: "Pagina speciale non valida.",
+	INVALID_TITLE: "Il titolo non pu\u00f2 contenere ':::' e nessuno dei seguenti caratteri:\\n< > | [ ] { }",
+	LAST_MODIFIED: "Ultima modifica: ",
+	LOADING: "Sto caricando Wiki on a Stick...",
+	LOAD_ERR: "Non \u00e8 possibile caricare il file specificato",
+	MIME_TYPE: "Mime type",
+	NO_ERROR: "Nessun errore",
+	NO_JAVA:"Non \u00e8 stato possibile utilizzare l'applet Java TiddlySaver e nemmeno eseguire il salvataggio diretto di Java.",
+	NO_TIDDLY_SAVER:"L'applet Java TiddlySaver non \u00e8 disponibile.",
+	PAGE_EXISTS: "Esiste gi\u00e0 una pagina con il titolo '%s'!",
+	PAGE_NOT_EXISTS: "Pagina inesistente: ",
+	PAGE_NOT_FOUND: "Pagina non trovata. Vuoi crearla?",
+	PRINT_MODE_WARN: "Spiacente, ma non \u00e8 possibile navigare il wiki mentre ti trovi in modalit\u00e0 stampa",
+	PWD_QUERY: "Inserisci una password",
+	READ_ONLY: "Questo Wiki on a Stick \u00e8 in modalit\u00e0 solo-lettura",
+	SAVE_ERROR:"Non riesco a salvare il file '%s'.",
+	SERVER_MODE: "Stai utilizzando Wiki on a Stick su un webserver; le modifiche che apporterai non possono essere salvate n\u00e9 attraverso il server n\u00e9 in locale.\\n\\n"+
+					"L'uso corretto di Wiki on a Stick \u00e8 in locale, dovresti quindi utilizzare una copia di questa pagina in locale per poter espletare le operazioni di salvataggio.\\n"+
+					"Tutte le modifiche fatte a questa copia di Wiki on a Stick andranno perse.",
+	STATIC_NOT_FOUND: "La pagina statica '%s' non \u00e8 stata trovata!",
+	TIDDLY_HELP:"Controlla che TiddlySaver.jar si trovi nella stessa directory di WoaS e controlla di aver abilitato i permessi Java per poterlo eseguire",
+	TOO_LONG_TITLE: "La lunghezza massima per il tilolo \u00e8 %d caratteri",
+	UNSPECIFIED_JAVA_ERROR: "Controlla la console Java per verificare la presenza di eventuali errori riguardanti l'ultima operazione.",
+	UNSUPPORTED_BROWSER: "Il tuo browser potrebbe non essere supportato, per favore invia un bug report con la stringa di testo del tuo UserAgent:\\n%s",
+	WIDTH: "Larghezza",
+	WRITE_PROTECTED: "Scusa, ma questo Wiki on a Stick \u00e8 protetto da scrittura",
+	WSIF_BAD_HV: "Non \u00e8 possibile localizzare la fine del header value",
+	WSIF_NO_HN: "Non \u00e8 possibile localizzare il nome del header",
+	WSIF_NO_VER: "Non \u00e8 possibile leggere la versione WSIF",
+	WSIF_NS_VER: "La versione WSIF %s non \u00e8 supportata!",
+	CANNOT_LOCK_RESERVED: "Non \u00e8 possibile proteggere una pagina appartenente a un namespace riservato",
+	CONTINUE_WAIT_LOAD: "Il processo di caricamento sembra bloccato.\\nClicca su OK per continuare ad aspettare o su ANNULLA per interrompere."
+};
+
+// do not use any copyrighted wordlist here
+woas.i18n.common_words = ['il','di','e','a','un','in','che','non','si','da','lo','per','con','ma','come','su','mi','anche','o','io','se','perch\u00e9','li','ci','ne','lei','ancora','tu','lui','senza','bene','cui','chi','gi\u00e0','dopo','uno','noi','dove','qui','no','allora','tra','vi','ora','fra','prima','forse','s\u00ec','sotto','voi','fino','oggi','quasi','pure','egli','mentre','contro','invece','esso','l\u00e0','per\u00f2','n\u00e9','subito','verso','ci\u00f2','ecco','loro','essa','fuori','meno','adesso','niente','cio\u00e8','male','nulla','ah','oh','quindi','appena','insieme','dunque','dentro','durante','almeno','secondo','anzi','oramai','oltre','intorno','sopra','dietro','davanti','soltanto','infatti','qualcosa','spesso','accordo','ieri','davvero','l\u00ec','qualcuno','avanti','assai','presto','qua','domani','circa','gi\u00f9','soprattutto','nemmeno','grazie','tuttavia','appunto','neppure','eh','veramente','tardi','insomma','presso','intanto','lungo','neanche','piuttosto','stasera','perci\u00f2','naturalmente','accanto','eppure','eccetera','finalmente','infine','poich\u00e9','comunque','dinanzi','abbastanza','peccato','certamente','coloro','attorno','magari','oppure','inoltre','indietro','addosso','addirittura','finch\u00e9','perfino','affatto','stamattina','completamente','probabilmente','chiss\u00e0','sino','ognuno','entro' ];
+--DFQRCTsKlU

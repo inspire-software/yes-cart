@@ -1,0 +1,314 @@
+Version 0.12.0 (legolas558)
+* dynamic newlines after TOC, rulers, nowiki, macro, comments, transclusion, style and script syntax
+* disallow unsupported file modes on non-Gecko browsers
+* dropped 'Special::Aliases' and 'Special::Edit CSS'
+* fixed a bug happening in case of encrypted page duplication
+* dropped support of 'woas_level' divs for sections
+* will remember import options
+* better import options and overwrite settings
+* macros shall return a true/false value to tell about failure
+* commas are again best-preference for tags specification
+* deprecated "Tags" usage for tagging
+* now using 'woas_nowiki' and 'woas_nowiki_multiline' to render nowiki syntax, coupled with <pre/> tag
+* fixed help pages browsing for Opera
+* only check for page title validity when renaming
+* addedd 'woas_' prefix to CSS classes for links
+* fixed some wrong dead pages listings
+* fixed section reference in wiki links
+* fixed page deletion bug (2994251, reported by rad30n)
+* fixed page rename bug (2997948, reported by thinker5555)
+* removed 'double-click to clear' feature of debug console
+* fixed file load issue on Chrome/Safari
+* fixed many WSIF load inconsistencies
+* macro arguments support
+* introduced DOM manager
+* optimized DOM head save code
+* development of jsMath, shjs, flot plugins
+* plugins implementation
+* removed bootscript (will be automatically converted to a plugin)
+* fixed locking issue on IE (2991747, reported by deroock)
+* fixed unparsed option during WSIF export (M.Ellison)
+* fixed some issues with WSIF external loading
+* new tables syntax (FBNil)
+* reorganized Special::Advanced
+* removed import code for WoaS < 0.9.6B
+* refresh CSS after XHTML import
+
+Version 0.11.9 (legolas558) released 2010-04-22
+* fixed tail removal
+* fix data corruption issue and title missing on IE
+* debug check for DOM data not correctly retrieved
+* use CRLF in nowiki preformatted blocks under IE
+* do not display "BUG" log lines for locking
+* fixed CSS not imported issue (reported by littlegirl, found by M.Ellison,akazia)
+* fixed corruption on save issue
+
+Version 0.11.8 (legolas558) released 2010-04-21
+* fixed loading overlay not hidden when changing debug mode
+* fixed deleted WoaS namespace from reserved list
+
+Version 0.11.7 (legolas558) released 2010-04-20
+* added foldable listing options
+* keep log area scrolled to bottom (suggested by S.Tunis)
+* WSIF datasource mode implemented
+
+Version 0.11.6 (legolas558) released 2010-04-16
+* lot of fixes for active Safari support
+* fixed saving issue on IE browsers (found by Akazia,deroock)
+
+Version 0.11.5 (legolas558) released 2010-04-15
+* fixed nowiki newline bug
+* fixed custom scripts bug
+* fixed Safari/Chrome CSS issues
+
+Version 0.11.4 (legolas558) released 2010-04-14
+* fixed import issue
+* renamed CSS classes: wiki_toc -> woas_toc, wiki_toc_title -> woas_toc_title, embedded -> woas_embedded
+* foldable namespace listing is now collapsed by default
+
+Version 0.11.3 (legolas558) released 2010-04-14
+* updated documentation to reflect CSS changes
+* improved remember history option (pvhl,legolas558)
+* logo fixes for IE (pvhl)
+* optimization for CSS during save operation
+* disable import features when WoaS is read-only
+* allow IE8 features when useragent tells it is IE6 (deroock)
+* editable reserved pages not shown in Special::Recentchanges (reported by deroock)
+* fixed direct WoaS import failure (found by littlegirl)
+
+Version 0.11.2 (legolas558,pvhl) released 2010-04-12
+* prospected WSIF datasource options
+* fixed main page auto-override bug
+* fixed 'Special::Go to' glitches
+* fixed double-edit bug when editing some special pages
+* added background color for core pages
+* fixed bug which allowed deletion of reserved pages
+* renamed all CSS classes to have 'woas_' prefix
+* implemented safe mode option
+* fixed native WSIF mode when running from webserver
+* fixed issue 2980936 namespaces not being transcluded (reported by littlegirl)
+* fixed issue 2981069 glitch when editing menu (reported by deroock)
+* fixed WSIF import issue with WoaS:: pages
+* configurable and custom access keys
+* preliminary support for section anchors in querystring page requests
+* fixed import issue related to 'var' declarations inside content pages (found by deroock)
+* converted source code from array notation to dot notation (pvhl)
+* fixed help pages browsing issue with IE (deroock)
+* some optimizations/bugfixes (pvhl)
+
+Version 0.11.1 (legolas558) released 2010-03-26
+* added 'wsif.generator' header to generated WSIF files
+* fixed bugs 2975523, 2969920 regarding Include::Image:: wiki links (reported by sonofdog, brianedwards9)
+* fixed title restore glitches when exiting edit mode
+* fixed bug 2976153 renaming a page fails (reported by d6095t)
+* fixed bugs 2968654,2976459 javascript error when retrieving local filename in IE (reported by deroock, KHS)
+* fixed bug 2976695 special pages being shown in most special listings (reported by deroock)
+* fixed bug 2976719 set key and help icons don't fail gracefully in IE6 (reported by d6095t)
+* added internationalization for "Editing" string shown in title when editing a page
+
+Version 0.11.0 (legolas558) released 2010-03-13
+* fixed import/save issues with IE (2968654, reported by KHS)
+* fixed home button not working (2969514, reported by deroock)
+* added default macro 'include' for advanced transclusion
+* fixed bug regarding new pages not being saved (2969247, reported by mk-berlin)
+* documentation fixes and extension
+
+Version 0.10.9 (legolas558) released 2010-03-12
+* added some style from Stanky's WoaS
+* fixed save feature for IE (reported by J.Rosink)
+* added WoaS logo to left of title
+* border widths will now display properly in Chrome and other browsers
+* "<" and ">" are now forbidden in titles
+* added title attributes to editor buttons (by littlegirl, suggested by ChrisClemson)
+
+Version 0.10.8 (legolas558) released 2010-03-11
+* faster AES encryption/decryption (thanks to dixon)
+* various user interface improvements and bugfixes
+* fixed load/save bugs with IE
+* fixed a bug which prevented WoaS from correctly remembering about last encrypted page
+* incremented infinite recursion limit to 256
+* XHTML comments and CSS style blocks are now pre-parsed
+* URLs will not get italics
+* fixed ghost page bug when creating new page and then canceling it
+* fixed misleading wait cursor when javascript is disabled
+* improved error messages when no file is selected but attempted to import
+* added better explanation for java load/save failures
+* proper page title validation & page title maximum length check
+* added a notice in decryption password mask
+* added help icon, implemented help popups and added documentation pages in WoaS::Help:: namespace
+* added button for wiki links in editor mode
+* added new menu/submenu edit button (based on work by littlegirl)
+
+Version 0.10.7 (legolas558) released 2010-03-06
+* added 'mime' parameter to woas.load_file() function
+* correct implementation of blob import (was broken)
+* added exclusive check for WSIF 1.0.0 files
+* fixed WSIF import bug from older WSIF versions
+* changed WoaS::Bootscript from embedded to plain text
+* fixed a couple of navigation bugs (reported by deroock)
+* fixed bug with non-overwritten pages being reported as not imported
+* implementation of javascript security settings upon import
+* implementation of macro pluggable syntax (based on FBNil's work)
+* fixed many old syntax parsing bugs
+
+Version 0.10.6 (legolas558) released 2010-03-02
+* fixed XHTML tags corruption issue (reported by littlegirl)
+
+Version 0.10.5 (legolas558) released 2010-03-01
+* fixed various syntax bugs in lists, headers and templates parsing
+* minor fixes for Chrome
+* unified progress status indicators
+* fixed import/export feature on Opera browsers
+* fixed tags negation bug (found by littlegirl)
+* major improvements for Opera support
+* minor fixes for other browsers (IE)
+
+Version 0.10.4 (legolas558) released 2010-02-14
+* fixed export issue of images (found by D.Strohmayer)
+* fixed encryption dialog UI issue (found by M.Ellison)
+* fixed encryption pages issues (found by D.De Roock)
+* fixed UTF8 encoding/decoding issues
+* some CSS improvements
+
+Version 0.10.3 (legolas558) released 2010-02-12
+* fixed embedding/import issues with FF3
+* fixed some WSIF import issues
+
+Version 0.10.2 (legolas558) released 2010-02-09
+* WSIF 1.1.0 format support (import/export)
+* other UI improvements/minor bugfixes
+
+Version 0.10.1 (legolas558) released 2010-02-02
+* major API1.0 improvements
+* fixed file embedding bugs
+* fixed file deletion bugs
+* fixed tagging bugs
+* support for WSIF export and native WSIF (not yet documented)
+
+Version 0.10.0 (legolas558) released 2010-01-31
+* fixed XHTML export feature
+* fixed tags recognition
+* added some core i18n language resources
+* general loop optimizations
+* re-enabled fix for search focus bug
+* added sample WoaS logo to default Main Page
+* moved set key menu icon to left of edit menu icon
+* incremented text returned in search results
+* fixed Special::Dead pages listing which did not show all pages
+* added last modified timestamp to all pages
+* added image gallery feature to 'Image::' namespace (fbnil)
+* fixed image embedding with FF3 (fbnil)
+
+Version 0.9.7 (legolas558 - official - NEVER RELEASED but supported)
+* implemented password scrambling
+* added multiple tags and tags filtering
+* added Duplicate Page feature
+* fixed some syntax and editor bugs
+* added aliases support (WoaS::Aliases and Special::Aliases command)
+* implemented Special::Go To 
+
+Version 0.9.5
+* object oriented whole code
+* added support of raw transclusion (for SVG for example - not yet working)
+* fixed some UI bugs
+* added License in <iframe />
+* save over network paths also works with IE
+* icon themes support
+* fixed bugs in UTF8 exporting
+
+Version 0.9.4 (legolas558 - official)
+* tooltip text on icons
+* fixed icons for IE (no more Wingdings)
+* cumulative save feature
+* auto-save feature
+* export feature
+
+Version 0.9.3 (legolas558 - official)
+
+* introduced alternative equal sign '=' syntax for headers (WikiCreole compliance)
+* introduced {{{ }}} nowiki syntax (WikiCreole compliant)
+* converted Special::All Tags to Tagged::
+* fixed import from v0.9.x
+* horizontal rulers now accept more than 3 hyphens (WikiCreole compliance)
+* support for external javascript through src attribute in <script /> tags
+* support of scripts also active in the menu
+* added search box to left menu
+* added Creole 0.1 testcases
+* implemented print preview mode
+* implemented file embedding
+* implemened raw file transclusion
+* implemented images embedding
+* internal marker gets automatically incremented after save
+* more realistic password quality estimation
+* implemented Special::Bootscript
+* added "Loading..." message
+
+Version 0.9.2 (legolas558 - official)
+
+* fixed a plenty of bugs and syntax bugs
+* implemented Special::All Tags
+* implemented server mode option flag
+* implement open last page option flag
+* implemented transclusion (original patch by martinellison)
+
+Version 0.9 (legolas558 - official)
+-------------
+
+* rewritten core javascript functions
+* import feature working ok also from IE saved files
+* history gets saved
+* embedded pictures of the topbar
+* new data storage format (faster & allow diffs)
+* much better syntax parsing
+* backlinks
+* erase wiki
+* possible versioning through consistent newlines splitting of saved data
+* fixed topbar and menu
+* automatic TOC generation
+* tags
+* namespaces
+* namespace-specific additional menus
+* AES page encryption
+* support of HTML tags
+* support of <pre> tag whose content is not parsed for wiki syntax
+* custom scripts support
+* page titles are case sensitive
+* new special pages for backlinks
+* new special page to automatically create new pages
+* new special page to always reference the Main page
+* search feature (thanks to C.Mazard)
+
+Version 0.04G (legolas558's unofficial)
+-------------
+
+* double click to edit
+* escape key to cancel editing
+* backspace key to go backward
+* textarea is focused when editing
+* correct lists parsing
+* hid special pages in "All pages"
+* corrected rulers parsing in IE
+* fixed bug with #anchors when saving to file
+* reference link for "Pages not yet created"
+
+Version 0.04
+------------
+ * unicode support added
+ * tables support added
+ * bugfixes: multiple rulers in one document now work, dead pages
+ * search for orphaned pages (pages that exist but have no link to them anymore)
+ * fixed bug when importing documents from current version
+ * line saying when file was last modified added in the advanced page
+ * option to block editing added (to use WoaS as a webpage)
+ * added possibility to go directly to a page inside the wiki
+ * Opera support added (read-only)
+ * _Underline_ added
+
+Version 0.03
+------------
+ * IE support added (still in alpha)
+ * bugs related to linebreaks in Linux corrected
+ * importing from a earlier version added
+ * a page now can be deleted
+ * now a page title can have any character (like 15", for example)
+ * lots of small corrections 
