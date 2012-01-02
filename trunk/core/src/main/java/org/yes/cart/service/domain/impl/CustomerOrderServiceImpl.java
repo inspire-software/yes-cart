@@ -138,7 +138,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
                 Restrictions.eq("cartGuid", shoppingCart.getGuid())
         );
         if (customerOrderToDelete != null) {
-            //CP Two ways - delete or not delete existing order with not NONE status
+            //CPOINT Two ways - delete or not delete existing order with not NONE status
             if (!CustomerOrder.ORDER_STATUS_NONE.equals(customerOrderToDelete.getOrderStatus())) {
                 LOG.error(
                         MessageFormat.format(

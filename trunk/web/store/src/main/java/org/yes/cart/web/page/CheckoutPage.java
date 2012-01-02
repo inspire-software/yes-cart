@@ -1,5 +1,6 @@
 package org.yes.cart.web.page;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.basic.Label;
@@ -90,6 +91,7 @@ public class CheckoutPage extends AbstractWebPage {
 
     public static final String CONTENT_VIEW = "content";
     public static final String NAVIGATION_VIEW = "navigation";
+    public static final String GOOGLECHECKOUT_VIEW = "googleCheckout";
 
     public static final String PART_REGISTER_VIEW = "registerView";
     public static final String PART_LOGIN_VIEW = "loginView";
@@ -136,19 +138,34 @@ public class CheckoutPage extends AbstractWebPage {
      * @param params page parameters
      */
     public CheckoutPage(final PageParameters params) {
+
         super(params);
+
         final boolean threeStepsProcess = params.get(THREE_STEPS_PROCESS).toBoolean(
                 ((AuthenticatedWebSession) getSession()).isSignedIn()
         );
+
         final String currentStep =
                 params.get(STEP).toString(threeStepsProcess ? STEP_ADDR : STEP_LOGIN);
 
-        if (STEP_PAY.equals(currentStep)) {
-            customerOrderService.createFromCart(
+        Label googleCheckoutLabel = null;
+
+        if (STEP_PAY.equals(currentStep) || ApplicationDirector.getInstance().isGoogleCheckoutEnabled()) {
+
+            final CustomerOrder customerOrder = customerOrderService.createFromCart(
                     ApplicationDirector.getShoppingCart(),
                     true            //todo customer service isOrderCanHasMultipleDeliveries
                     //ApplicationDirector.getShoppingCart().isMultipleDelivery()
             );
+
+            if (ApplicationDirector.getInstance().isGoogleCheckoutEnabled()) {
+                googleCheckoutLabel = getGoogleCheckoutLabel(customerOrder);
+            }
+
+        }
+
+        if (googleCheckoutLabel == null) {
+            googleCheckoutLabel = new Label(GOOGLECHECKOUT_VIEW, StringUtils.EMPTY);
         }
 
 
@@ -158,10 +175,31 @@ public class CheckoutPage extends AbstractWebPage {
                 new Fragment(NAVIGATION_VIEW, threeStepsProcess ?
                         NAVIGATION_THREE_FRAGMENT : NAVIGATION_FOUR_FRAGMENT, this)
         ).add(
+                googleCheckoutLabel.setVisible(ApplicationDirector.getInstance().isGoogleCheckoutEnabled())
+        ).add(
                 getContent(currentStep)
         );
 
 
+    }
+
+    private Label getGoogleCheckoutLabel(final CustomerOrder customerOrder) {
+
+        final String htmlForm = getPaymentForm(
+                        paymentModulesManager.getPaymentGateway("googleCheckoutPaymentGatewayLabel"),
+                        customerOrder,
+                        null);
+
+        final Label googleCheckoutLabel = new Label(
+                GOOGLECHECKOUT_VIEW,
+                htmlForm
+        );
+
+        googleCheckoutLabel
+                .setEscapeModelStrings(false);
+
+
+        return googleCheckoutLabel;
     }
 
 
@@ -290,8 +328,7 @@ public class CheckoutPage extends AbstractWebPage {
                                             protected void onSelectionChanged(final PaymentGatewayDescriptor descriptor) {
 
                                                 final PaymentGateway gateway = paymentModulesManager.getPaymentGateway(descriptor.getLabel());
-                                                final ShoppingCart cart = ApplicationDirector.getShoppingCart();
-                                                final CustomerOrder order = customerOrderService.findByGuid(cart.getGuid());
+                                                final CustomerOrder order = customerOrderService.findByGuid(shoppingCart.getGuid());
                                                 final AmountCalculationResult amountCalculationResult = amountCalculationStrategy.calculate(
                                                         shoppingCart.getShoppingContext(), getDeliveries(shoppingCart)
                                                 );
@@ -302,7 +339,7 @@ public class CheckoutPage extends AbstractWebPage {
                                                 customerOrderService.update(order);
 
 
-                                                final String htmlForm = getPaymentForm(gateway, cart, order, grandTotal);
+                                                final String htmlForm = getPaymentForm(gateway, order, grandTotal);
 
                                                 rez.addOrReplace(
                                                         new Label(PAYMENT_FRAGMENT_PAYMENT_FORM, htmlForm)
@@ -334,32 +371,40 @@ public class CheckoutPage extends AbstractWebPage {
      * Get html form for payment.
      *
      * @param gateway    gateway
-     * @param cart       current cart
      * @param order      order
      * @param grandTotal amount
      * @return payment form
      */
     protected String getPaymentForm(final PaymentGateway gateway,
-                                    final ShoppingCart cart,
                                     final CustomerOrder order,
                                     final BigDecimal grandTotal) {
+
+        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+
         final String fullName = (order.getCustomer().getFirstname()
                 + " "
                 + order.getCustomer().getLastname()).toUpperCase();
-        final String submitBtnValue = getLocalizer().getString("paymentSubmit", this);
+
+        final String submitBtnValue = getSubmitButton(gateway);
+
         final String postActionUrl = getPostActionUrl(gateway);
 
         Payment payment = null;
+
+        if (paymentProcessor.getPaymentGateway() == null) {
+            paymentProcessor.setPaymentGateway(gateway);
+        }
+
         if (gateway.getPaymentGatewayFeatures().isRequireDetails()) {
             payment = paymentProcessor.createPaymentsToAuthorize(
                     order,
                     true,
                     Collections.EMPTY_MAP,
                     PaymentGateway.AUTH
-            ).get(0) ;
+            ).get(0);
         }
 
-        final String  htmlFragment = gateway.getHtmlForm(
+        final String htmlFragment = gateway.getHtmlForm(
                 fullName,
                 cart.getCurrentLocale(),
                 grandTotal,
@@ -369,16 +414,33 @@ public class CheckoutPage extends AbstractWebPage {
 
 
         return MessageFormat.format(
-                "<form action=\"{0}\">\n" +
+                "<form method=\"POST\" action=\"{0}\">\n" +
                         "{1}\n" +
                         "<div id=\"paymentDiv\">\n" +
-                        "<input type=\"submit\" value=\"{2}\">" +
+                        "{2}" +
                         "</div></form>",
                 postActionUrl,
                 htmlFragment,
                 submitBtnValue
         );
 
+    }
+
+    /**
+     * Get submit button html code.
+     *
+     * @param gateway selected gateway
+     * @return html code for submit button.
+     */
+    private String getSubmitButton(PaymentGateway gateway) {
+        String rez = null;
+        if (gateway instanceof PaymentGatewayExternalForm) {
+            rez = ((PaymentGatewayExternalForm) gateway).getSubmitButton();
+        }
+        if (StringUtils.isBlank(rez)) {
+            rez = "<input type=\"submit\" value=\"" + getLocalizer().getString("paymentSubmit", this) + "\">";
+        }
+        return rez;
     }
 
     /**

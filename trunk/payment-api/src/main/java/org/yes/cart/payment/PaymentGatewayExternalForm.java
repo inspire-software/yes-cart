@@ -22,6 +22,13 @@ public interface PaymentGatewayExternalForm extends PaymentGateway {
     String getPostActionUrl();
 
     /**
+     * Get submit button, that can be different for different eternal gateways,
+     * because of regulation policy about button view.
+     * @return html code for submit button if it supported by gateway, otherwise null, so the default submit button has to be used.
+     */
+    String getSubmitButton();
+
+    /**
      * Restore order number by given parameters
      *
      * @param privateCallBackParameters request parameters

@@ -60,6 +60,13 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
     /**
      * {@inheritDoc}
      */
+    public String getSubmitButton() {
+        return getParameterValue(PP_SUBMIT_BTN);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public Payment authorizeCapture(final Payment paymentIn) {
 
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);

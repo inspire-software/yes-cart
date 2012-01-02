@@ -30,6 +30,11 @@
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
+            <artifactId>core-module-payment-gcwm</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yes</groupId>
             <artifactId>domain-api</artifactId>
             <version>${project.parent.version}</version>
         </dependency>

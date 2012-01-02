@@ -50,9 +50,7 @@
     <import resource="modules.xml"/>
 
 
-    <bean id="applicationDirector" class="org.yes.cart.web.application.ApplicationDirector">
-        <constructor-arg index="0" ref="shopService"/>
-    </bean>
+    <bean id="applicationDirector" class="org.yes.cart.web.application.ApplicationDirector"/>
 
     <!-- ################################### filter delegates begin ################################### -->
     <bean id="shopResolverFilter" class="org.yes.cart.web.filter.ShopResolverFilter">
