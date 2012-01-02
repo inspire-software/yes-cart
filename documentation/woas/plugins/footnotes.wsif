@@ -1,0 +1,145 @@
+wsif.version: 1.3.1
+wsif.generator: woas
+wsif.generator.version: 0.12.0
+woas.author: legolas558
+woas.pages: 2
+
+woas.page.title: Example::Footnotes
+woas.page.attributes: 0
+woas.page.encoding: 8bit/plain
+woas.page.disposition: inline
+woas.page.boundary: DFQRCTsKlU
+
+--DFQRCTsKlU
+= Footnotes
+Footnotes are small, numbered links you can put next to any word on a page. Clicking a footnote takes you to a container at the bottom of the page that displays the contents of the footnote links. Clicking a footnote link in the container takes you back up to its corresponding link in the page.
+== Instructions
+Use this code, replacing TOOLTIP with the text displayed when the mouse hovers over the link, and CONTENT with the contents of the footnote:
+{{{
+<<<woas.footnote("TOOLTIP"): CONTENT>>>
+}}}To create this:
+
+<<<woas.footnote("TOOLTIP"): CONTENT>>>
+== Examples
+=== Plain footnote
+Use this code:<br>{{{
+This<<<woas.footnote("This is the tooltip."): This is a footnote.>>> contains plain text.
+}}}To create this:<br><br>This<<<woas.footnote("This is the tooltip."): This is a footnote.>>> contains plain text.
+
+=== Footnote using bold syntax
+Use this code:<br>{{{
+This<<<woas.footnote("This is the tooltip."): *This is a bold footnote.*>>> contains plain text with wiki *bold* syntax.
+}}}To create this:<br><br>This<<<woas.footnote("This is the tooltip."): *This is a bold footnote.*>>> contains plain text with wiki *bold* syntax.
+
+=== Footnote using italic syntax
+Use this code:<br>{{{
+This<<<woas.footnote("This is the tooltip."): /This is an italic footnote./>>> contains plain text with wiki /italic/ syntax.
+}}}To create this:<br><br>This<<<woas.footnote("This is the tooltip."): /This is an italic footnote./>>> contains plain text with wiki /italic/ syntax.
+
+=== Footnote using underline syntax
+Use this code:<br>{{{
+This<<<woas.footnote("This is the tooltip."): _This is an underlined footnote._>>> contains plain text with wiki _underline_ syntax.
+}}}To create this:<br><br>This<<<woas.footnote("This is the tooltip."): _This is an underlined footnote._>>> contains plain text with wiki _underline_ syntax.
+
+=== Footnote containing an external wiki link
+Use this code:<br>{{{
+This<<<woas.footnote("WoaS Official Website"): [[http://stickwiki.sf.net/]]>>> contains an external wiki link.
+}}}To create this:<br><br>This<<<woas.footnote("WoaS Official Website"): [[http://stickwiki.sf.net/]]>>> contains an external wiki link.
+
+=== Footnote containing an internal wiki link
+Use this code:<br>{{{
+This<<<woas.footnote("Main Page"): [[Main Page]]>>> contains an internal wiki link.
+}}}To create this:<br><br>This<<<woas.footnote("Main Page"): [[Main Page]]>>> contains an internal wiki link.
+
+=== Footnote containing a wiki list
+Use this code:<br>{{{
+This<<<woas.footnote("This is the tooltip."):
+* item 1
+* item 2
+* item 3
+>>> contains a wiki list.
+}}}To create this:<br><br>This<<<woas.footnote("This is the tooltip."):
+* item 1
+* item 2
+* item 3
+>>> contains a wiki list.
+
+=== Footnote containing a wiki table
+Use this code:<br>{{{
+This<<<woas.footnote("This is the tooltip."):
+{|
+| cell 1 || cell 2
+| cell 1 || cell 2
+|}
+>>> contains a wiki table.
+}}}To create this:<br><br>This<<<woas.footnote("This is the tooltip."):
+{|
+| cell 1 || cell 2
+| cell 1 || cell 2
+|}
+>>> contains a wiki table.
+<style type="text/css">
+/* FOOTNOTES */
+.footnote {line-height:1em; font-size:0.55em; vertical-align:super; font-style:italic; color:mediumblue; text-decoration:underline;}
+.footnotecontainer {line-height:1em; font-size:0.75em; vertical-align:super; font-style:italic; background-color:#EEEEFF; margin-top:-3em;}
+</style>
+--DFQRCTsKlU
+woas.page.title: WoaS::Plugins::Footnotes
+woas.page.attributes: 0
+woas.page.encoding: 8bit/plain
+woas.page.disposition: inline
+woas.page.boundary: DFQRCTsKlU
+
+--DFQRCTsKlU
+/* Footnotes plugin by legolas558 - based on original work by FBNil */
+	
+woas.custom.footnotes = {
+	_footnotes: [],
+	
+	_orig_after_parse: null,
+	_after_parse: function(NP) {
+		var that = woas.custom.footnotes, n;
+		if (woas.parser.force_inline || !that._footnotes.length) {
+			that._orig_after_parse(NP);
+			return;
+		}
+		
+		NP.body += '<br/><br/><div width="90%" class="footnotecontainer"><table border="0">';
+		var P = {body:null};
+        for(var i=0,l=that._footnotes.length;i<l;++i){
+			n = i+1;
+			P.body = that._footnotes[i];
+			woas.parser.syntax_parse(P, []);
+			NP.body += '<tr><td valign="top"><a name="_footnote'+n+'" href="#_notefoot'+n+'">[' +n+ "]</a></td><td>"+P.body+"</td></tr>";
+        }
+        NP.body +=  '</table></div>';
+		// reset footnotes before rendering next page
+		woas.custom.footnotes._footnotes = [];
+		NP.modified = true;
+        that._orig_after_parse(NP);
+	},
+	
+	// the actual macro code
+	_macro_hook: function(macro, tooltip) {
+		// save the footnote
+		var note = woas.trim(macro.text);
+		if (typeof tooltip == "undefined")
+			tooltip = "";
+		else tooltip = ' title="' + woas.xhtml_encode(tooltip)+'" ';
+		woas.custom.footnotes._footnotes.push(note);
+		var n = woas.custom.footnotes._footnotes.length;
+		macro.text = '<sup><a class="footnote" '+ tooltip +
+						'name="_notefoot'+n+'" href="#_footnote'+n+'">['+n+']</a></sup>';
+		return true;
+	}
+
+};
+
+// register the parse hook
+woas.custom.footnotes._orig_after_parse = woas.parser.after_parse;
+woas.parser.after_parse = woas.custom.footnotes._after_parse;
+
+// register the macro
+woas.macro.register('woas.footnote', woas.custom.footnotes._macro_hook);
+
+--DFQRCTsKlU

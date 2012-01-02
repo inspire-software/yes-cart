@@ -1,0 +1,28 @@
+wsif.version: 1.3.1
+wsif.generator: woas
+wsif.generator.version: 0.12.0
+woas.author: legolas558
+woas.pages: 1
+
+woas.page.title: Macro::Code block
+woas.page.attributes: 0
+woas.page.encoding: 8bit/plain
+woas.page.disposition: inline
+woas.page.boundary: DFQRCTsKlU
+
+--DFQRCTsKlU
+<<<%woas.codeblock:
+// codeblock sample macro by legolas558
+
+// count the number of newlines
+var nl=0;
+macro.text.replace(/\n/g, function() { ++nl; });
+
+macro.text = '<strong>Code:</strong><br /><textarea style="border: 0px; color: black; background-color: #FAFAAC" wrap="off" rows="'+nl+'" cols="80" disabled="disabled">'+woas.xhtml_encode(macro.text)+"</textarea>";
+return true;
+>>>
+
+<<<woas.codeblock:
+this is a code block
+>>>
+--DFQRCTsKlU

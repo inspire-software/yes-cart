@@ -1,0 +1,55 @@
+= Wiki on a Stick
+
+Wiki on a Stick (WoaS) is a personal wiki that lives in one self-modifying
+XHTML containing software, interface and data. Very useful for creating small
+websites and mantaining notes or todo-lists; completely javascript-
+programmable, supports images and files embedding.
+
+= Installation instructions
+
+WoaS needs a modern javascript-capable browser, currently supported browsers
+are:
+
+- Firefox (Gecko-based, all versions)
+- Internet Explorer (6.0 and above) *
+- Chrome and Safari (AppleWebkit-based) **
+- Opera **
+
+You can't use WoaS with javascript disabled.
+
+* = Renaming woas.html to woas.hta might help with file permissions errors in
+more recent versions of IE
+
+** = You will need java applets to exploit file loading/saving features for
+browsers like Chrome, Safari and Opera.
+
+TiddlySaver.jar is the java applet used in such cases (borrowed from
+TiddlyWiki project); if you do not need TiddlySaver.jar feature, you can remove
+it.
+
+In order to start WoaS, open the woas-*.html file, which contains the software
+and the default pages.
+
+= Usage
+
+WoaS contains all the necessary documentation in its help pages.
+
+= Plugins
+
+WoaS comes with some officially supported plugins, you can find them in
+the 'plugins/' directory.
+
+Some plugins (those based on 3rd-party libraries) require that you download
+the relative library in order to work; you can find the download location URL
+in the GETME files dropped into plugins' empty directories.
+
+You can import a plugin by importing the relative WSIF file, see documentation
+for more information.
+
+= Macros
+
+WoaS comes with some sample macros which can be found in 'macros/' directory.
+
+= Removal instructions
+
+Delete the files you extracted from the release archive.

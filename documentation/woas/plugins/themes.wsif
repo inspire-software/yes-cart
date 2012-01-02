@@ -1,0 +1,72 @@
+wsif.version: 1.3.1
+wsif.generator: woas
+wsif.generator.version: 0.12.0
+woas.author: legolas558
+woas.pages: 2
+
+woas.page.title: Example::Change icons
+woas.page.attributes: 0
+woas.page.encoding: 8bit/plain
+woas.page.disposition: inline
+woas.page.boundary: DFQRCTsKlU
+
+--DFQRCTsKlU
+= Replace WoaS icons
+
+Select an image file:
+<input id="filename_" type="file" />
+
+== 2. Click on an icon to replace it with the selected file:
+<div id="themes_layer"></div>
+<script type="text/javascript">
+woas.custom.themes._load();
+</script>
+--DFQRCTsKlU
+woas.page.title: WoaS::Plugins::Themes
+woas.page.attributes: 0
+woas.page.encoding: 8bit/plain
+woas.page.disposition: inline
+woas.page.boundary: DFQRCTsKlU
+
+--DFQRCTsKlU
+/* Themes plugin by legolas558
+	Adaption of FBNil's work from Littlegirl's woasmods
+*/
+	
+woas.custom.themes = {
+	_load: function () {
+		woas.setHTMLDiv(d$('themes_layer'), woas.custom.themes._get_img('img_logo') +
+			woas.custom.themes._get_img('img_back') +
+			woas.custom.themes._get_img('img_forward') +
+			woas.custom.themes._get_img('img_advanced') +
+			woas.custom.themes._get_img('img_home') +
+			woas.custom.themes._get_img('img_lock') +
+			woas.custom.themes._get_img('img_unlock') +
+			woas.custom.themes._get_img('img_print') +
+			woas.custom.themes._get_img('img_setkey') +
+			woas.custom.themes._get_img('img_help') +
+			woas.custom.themes._get_img('img_edit') +
+			woas.custom.themes._get_img('img_cancel') +
+			woas.custom.themes._get_img('img_save') );
+	},
+	_get_img: function(id) {
+		var src = "";
+		try {
+			src = d$(id).src;
+		}
+		catch (e) { woas.crash(e); }
+		return '<'+'img id="themes_'+id.substr(4)+'" title="Change '+id.substr(4)+' icon" style="margin: 5px; border-color: green; cursor: pointer" border="2" src="'+src+'" onclick="javascript:woas.custom.themes._replace_from_file(\''+id+'\');" alt="'+id+'"/'+'>';
+	},
+	_replace_from_file: function(button) {
+		var ct = woas.load_file(null, woas.file_mode.DATA_URI);
+		if ((ct === false) || ((typeof ct != "string") || !ct.length)) {
+			woas.alert(woas.i18n.LOAD_ERR);
+			return false;
+		}
+		d$("themes_"+button.substr(4)).src = d$(button).src = ct;
+		woas.full_commit();
+	}
+
+};
+
+--DFQRCTsKlU

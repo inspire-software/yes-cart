@@ -1,0 +1,69 @@
+wsif.version: 1.3.1
+wsif.generator: woas
+wsif.generator.version: 0.12.0
+woas.author: legolas558
+woas.pages: 1
+
+woas.page.title: Macro::Spoiler
+woas.page.attributes: 0
+woas.page.encoding: 8bit/plain
+woas.page.disposition: inline
+woas.page.boundary: DFQRCTsKlU
+
+--DFQRCTsKlU
+= Setup
+Edit this page to see definitions necessary for this macro.
+
+/definitions are here/<style type="text/css">
+/* SPOILERS MOD */
+.spoiler_normal {background-color:black; color:black;}
+.spoiler_normal:hover {color:white; background-color:black;}
+.spoiler_block a:link {text-decoration:none;}
+.spoiler_block a:visited {text-decoration:none;}
+.spoiler_block a:hover .spoiler_exposed {display:block; background-color:black; color:white;}
+.spoiler_block a:active {text-decoration:none;}
+.spoiler_block a span {display:none;}
+.spoiler_inline a:link {text-decoration:none;}
+.spoiler_inline a:visited {text-decoration:none;}
+.spoiler_inline a:hover .spoiler_exposed {display:inline; background-color:black; color:white;}
+.spoiler_inline a:active {text-decoration:none;}
+.spoiler_inline a span {display:none;}
+</style><<<%woas.spoiler(type, title):
+// spoiler sample macro by legolas558
+// based on work by littlegirl
+
+switch (type) {
+	case 'normal':
+		macro.text = '<span class="spoiler_normal">'+woas.xhtml_encode(macro.text)+'</span>';
+	break;
+	case 'inline': case 'block':
+		macro.text = '<span class="spoiler_'+type+'"><a href="#">'+woas.xhtml_encode(title)+
+		'&nbsp;<span class="spoiler_exposed">'+woas.xhtml_encode(macro.text)+
+		'</span></a></span>';
+	break;
+	default:
+		return false;
+}
+
+return true;
+>>>
+= Example usage
+This is a normal spoiler:
+
+<<<woas.spoiler('normal'):
+There is no spoon
+>>>
+
+This is a hidden inline spoiler:
+
+<<<woas.spoiler('inline', 'SPOILER HERE'):
+There is no spoon
+>>>
+
+This is a block spoiler:
+
+<<<woas.spoiler('block', 'SPOILER HERE'):
+There is no spoon
+>>>
+
+--DFQRCTsKlU
