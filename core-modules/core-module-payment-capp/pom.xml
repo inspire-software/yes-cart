@@ -11,11 +11,11 @@
     <artifactId>core-module-payment-capp</artifactId>
     <name>Yes cart module: cybersource, authorize.net, paypal, payflow payment modules provider</name>
     <properties>
-        <testPgCyberSource>true</testPgCyberSource>
-        <testPgAuthorizeNetAim>true</testPgAuthorizeNetAim>
-        <testPgPayFlow>true</testPgPayFlow>
+        <testPgCyberSource>false</testPgCyberSource>
+        <testPgAuthorizeNetAim>false</testPgAuthorizeNetAim>
+        <testPgPayFlow>false</testPgPayFlow>
         <testPgPayPal>false</testPgPayPal>
-        <testPgPayPalExpress>true</testPgPayPalExpress>
+        <testPgPayPalExpress>false</testPgPayPalExpress>
     </properties>
     <dependencies>
         <dependency>

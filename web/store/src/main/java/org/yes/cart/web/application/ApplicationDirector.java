@@ -6,13 +6,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Storefornt director class responsible for data caching,
+ * Storefront  director class responsible for data caching,
  * common used operations, etc.
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
@@ -23,22 +24,30 @@ import java.util.concurrent.TimeUnit;
 public class ApplicationDirector implements ApplicationContextAware {
 
     private ShopService shopService;
-    private ApplicationContext applicationContext;
+    private SystemService systemService;
+    //private ApplicationContext applicationContext;
+    private static ApplicationDirector applicationDirector;
 
-    private static ThreadLocal<Shop> shopThreadLocal =  new ThreadLocal<Shop>();
-    private static ThreadLocal<ShoppingCart> shoppingCartThreadLocal =  new ThreadLocal<ShoppingCart>();
+    private static ThreadLocal<Shop> shopThreadLocal = new ThreadLocal<Shop>();
+    private static ThreadLocal<ShoppingCart> shoppingCartThreadLocal = new ThreadLocal<ShoppingCart>();
 
 
     private final ConcurrentMap<String, Shop> urlShopCache;
     private final ConcurrentMap<Long, Shop> idShopCache;
 
     /**
-     * Construct application director.
-     *
-     * @param shopService shop service to use.
+     * Get app director instance.
+     * @return app directorr instance.
      */
-    public ApplicationDirector(final ShopService shopService) {
-        this.shopService = shopService;
+    public static ApplicationDirector getInstance() {
+        return applicationDirector;
+    }
+
+    /**
+     * Construct application director.
+     */
+    public ApplicationDirector() {
+        applicationDirector = this;
         urlShopCache = new MapMaker().concurrencyLevel(16).softValues().expiration(3, TimeUnit.MINUTES).makeMap();
         idShopCache = new MapMaker().concurrencyLevel(16).softValues().expiration(3, TimeUnit.MINUTES).makeMap();
     }
@@ -90,6 +99,7 @@ public class ApplicationDirector implements ApplicationContextAware {
 
     /**
      * Get current shop from local thread.
+     *
      * @return {@link Shop} instance
      */
     public static Shop getCurrentShop() {
@@ -98,6 +108,7 @@ public class ApplicationDirector implements ApplicationContextAware {
 
     /**
      * Set {@link Shop} instance to current thread.
+     *
      * @param currentShop current shop.
      */
     public static void setCurrentShop(final Shop currentShop) {
@@ -106,6 +117,7 @@ public class ApplicationDirector implements ApplicationContextAware {
 
     /**
      * Get shopping cart from local thread storage.
+     *
      * @return {@link ShoppingCart}
      */
     public static ShoppingCart getShoppingCart() {
@@ -114,14 +126,29 @@ public class ApplicationDirector implements ApplicationContextAware {
 
     /**
      * Set shopping cart to storage.
-     * @param shoppingCart  current cart.
+     *
+     * @param shoppingCart current cart.
      */
     public static void setShoppingCart(final ShoppingCart shoppingCart) {
         shoppingCartThreadLocal.set(shoppingCart);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * Is Google checkout enabled.
+     *
+     * @return true if google checkout enabled.
+     */
+    public boolean isGoogleCheckoutEnabled() {
+        return systemService.isGoogleCheckoutEnabled();
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
+        //this.applicationContext = applicationContext;
+        this.shopService = applicationContext.getBean("shopService", ShopService.class);
+        this.systemService = applicationContext.getBean("systemService", SystemService.class);
     }
 }

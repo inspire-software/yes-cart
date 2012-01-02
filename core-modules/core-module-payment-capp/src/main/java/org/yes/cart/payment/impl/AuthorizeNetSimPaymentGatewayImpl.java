@@ -59,6 +59,13 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
         return getParameterValue(AN_POST_URL);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public String getSubmitButton() {
+        return null;
+    }
+
 
     /**
      * {@inheritDoc}

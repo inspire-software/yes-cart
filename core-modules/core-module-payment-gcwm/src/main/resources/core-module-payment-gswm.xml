@@ -32,7 +32,7 @@
 
 
 
-    <bean id="gswmPaymentModule" class="org.yes.cart.payment.impl.PaymentModuleCappSetImpl">
+    <bean id="gswmPaymentModule" class="org.yes.cart.payment.impl.PaymentModuleGswmSetImpl">
         <property name="descriptor">
             <bean class="org.yes.cart.payment.persistence.entity.impl.DescriptorImpl">
                 <property name="name" value="GSWM payment module"/>

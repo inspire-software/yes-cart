@@ -67,6 +67,13 @@ public interface SystemService {
     String getImageRepositoryDirectory();
 
 
+    /**
+     * Is Google checkout enabled.
+     * @return    true if google checkout enabled.
+     */
+    boolean isGoogleCheckoutEnabled();
+
+
 
 
 

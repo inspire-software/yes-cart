@@ -17,7 +17,7 @@ import java.text.MessageFormat;
 import java.util.Date;
 
 /**
-* User: Igor Azarny iazarny@yahoo.com
+ * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
@@ -32,11 +32,12 @@ public class OrderAssemblerImpl implements OrderAssembler {
 
     /**
      * Create order assembler.
+     *
      * @param orderNumberGenerator order bumber generator
-     * @param customerDao customer dao to get customer from email
-     * @param shopDao shop dao
-     * @param productSkuDao product sku dao
-     * @param addressFormat format string to create address in one string from {@link Address} entity.
+     * @param customerDao          customer dao to get customer from email
+     * @param shopDao              shop dao
+     * @param productSkuDao        product sku dao
+     * @param addressFormat        format string to create address in one string from {@link Address} entity.
      */
     public OrderAssemblerImpl(
             final OrderNumberGenerator orderNumberGenerator,
@@ -44,7 +45,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
             final GenericDAO<Shop, Long> shopDao,
             final GenericDAO<ProductSku, Long> productSkuDao,
             final String addressFormat
-            ) {
+    ) {
         this.entityFactory = customerDao.getEntityFactory();
         this.orderNumberGenerator = orderNumberGenerator;
         this.customerDao = customerDao;
@@ -83,7 +84,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
         customerOrder.setGuid(shoppingCart.getGuid());
         customerOrder.setCartGuid(shoppingCart.getGuid());
 
-        if(!temp) {
+        if (!temp) {
             customerOrder.setOrdernum(orderNumberGenerator.getNextOrderNumber());
             customerOrder.setShop(shopDao.findById(shoppingCart.getShoppingContext().getShopId()));
         }
@@ -93,16 +94,17 @@ public class OrderAssemblerImpl implements OrderAssembler {
 
     /**
      * Fill customer data
+     *
      * @param customerOrder order to fill
-     * @param shoppingCart cart
+     * @param shoppingCart  cart
      */
     private void fillCustomerData(final CustomerOrder customerOrder, final ShoppingCart shoppingCart) {
 
         final Customer customer = customerDao.findSingleByCriteria(
                 Restrictions.eq("email", shoppingCart.getCustomerEmail()));
 
-        Address billingAddress  = customer.getDefaultAddress(Address.ADDR_TYPE_BILLING);
-        Address shippingAddress  = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPING);
+        Address billingAddress = customer.getDefaultAddress(Address.ADDR_TYPE_BILLING);
+        Address shippingAddress = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPING);
 
         customerOrder.setShippingAddress(formatAddress(shippingAddress));
 
@@ -111,22 +113,23 @@ public class OrderAssemblerImpl implements OrderAssembler {
         }
 
         customerOrder.setBillingAddress(formatAddress(billingAddress));
-        
+
         customerOrder.setCustomer(customer);
         customerOrder.setOrderMessage(shoppingCart.getOrderMessage());
-        
+
     }
 
     /**
      * Fill details records in order.
+     *
      * @param customerOrder order to fill
-     * @param shoppingCart cart
+     * @param shoppingCart  cart
      */
     private void fillOrderDetails(final CustomerOrder customerOrder, final ShoppingCart shoppingCart) {
 
         for (CartItem item : shoppingCart.getCartItemList()) {
 
-            CustomerOrderDet customerOrderDet =  entityFactory.getByIface(CustomerOrderDet.class);
+            CustomerOrderDet customerOrderDet = entityFactory.getByIface(CustomerOrderDet.class);
             customerOrderDet.setCustomerOrder(customerOrder);
             customerOrder.getOrderDetail().add(customerOrderDet);
 
@@ -152,22 +155,27 @@ public class OrderAssemblerImpl implements OrderAssembler {
 
     /**
      * Format given address to string.
+     *
      * @param defaultAddress given address
      * @return formated address
      */
     private String formatAddress(final Address defaultAddress) {
 
-        return MessageFormat.format(
-                addressFormat,
-                StringUtils.defaultString(defaultAddress.getAddrline1()),
-                StringUtils.defaultString(defaultAddress.getAddrline2()),
-                StringUtils.defaultString(defaultAddress.getPostcode()),
-                StringUtils.defaultString(defaultAddress.getCity()),
-                StringUtils.defaultString(defaultAddress.getCountryCode()),
-                StringUtils.defaultString(defaultAddress.getStateCode()),
-                StringUtils.defaultString(defaultAddress.getFirstname()),
-                StringUtils.defaultString(defaultAddress.getLastname()),
-                StringUtils.defaultString(defaultAddress.getPhoneList())
-        );
+        if (defaultAddress != null) {
+
+            return MessageFormat.format(
+                    addressFormat,
+                    StringUtils.defaultString(defaultAddress.getAddrline1()),
+                    StringUtils.defaultString(defaultAddress.getAddrline2()),
+                    StringUtils.defaultString(defaultAddress.getPostcode()),
+                    StringUtils.defaultString(defaultAddress.getCity()),
+                    StringUtils.defaultString(defaultAddress.getCountryCode()),
+                    StringUtils.defaultString(defaultAddress.getStateCode()),
+                    StringUtils.defaultString(defaultAddress.getFirstname()),
+                    StringUtils.defaultString(defaultAddress.getLastname()),
+                    StringUtils.defaultString(defaultAddress.getPhoneList())
+            );
+        }
+        return StringUtils.EMPTY;
     }
 }

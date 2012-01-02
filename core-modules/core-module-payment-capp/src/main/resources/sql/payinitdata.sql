@@ -567,3 +567,10 @@ VALUES (226, 'payPalExpressPaymentGateway',
 'https://www.sandbox.paypal.com/cgi-bin/webscr'
 , 'Paypal url to perform payment', 'Paypal url to perform payment');
 
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (227, 'payPalExpressPaymentGateway',
+'PP_SUBMIT_BTN',
+'<input type="image" name="Paypal checkout" alt="Fast checkout with paypal"  src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif">'
+, 'Paypal submit button', 'Paypal submit button');
+

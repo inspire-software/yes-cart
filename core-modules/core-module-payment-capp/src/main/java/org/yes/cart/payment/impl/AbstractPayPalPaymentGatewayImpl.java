@@ -15,6 +15,8 @@ public abstract class AbstractPayPalPaymentGatewayImpl extends AbstractCappPayme
     protected static final String PP_API_USER_PASSWORD = "API_USER_PASSWORD";
     protected static final String PP_SIGNATURE = "SIGNATURE";
 
+    protected static final String PP_SUBMIT_BTN = "PP_SUBMIT_BTN";
+
     protected static final String PP_ENVIRONMENT = "ENVIRONMENT";
     /*
     private static final String PP_KEY_PASSWORD = "KEY_PASSWORD";

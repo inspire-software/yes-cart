@@ -378,6 +378,7 @@ public class PaymentProcessorSurrogate {
      * Create list of payment to authorize.
      *
      * @param order                order
+     * @param params
      * @param transactionOperation operation in term of payment processor
      * @param forceSinglePaymentIn flag is true for authCapture operation, when paymeng gateway not supports several payments per
      *                             order
