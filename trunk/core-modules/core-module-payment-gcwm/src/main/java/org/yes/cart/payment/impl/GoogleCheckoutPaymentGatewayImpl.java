@@ -7,6 +7,7 @@ import com.google.checkout.sdk.domain.*;
 import org.apache.commons.lang.SerializationUtils;
 import org.springframework.security.core.codec.Base64;
 import org.springframework.util.Assert;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
@@ -132,6 +133,8 @@ public class GoogleCheckoutPaymentGatewayImpl extends AbstractGswmPaymentGateway
 
         final String  cartXml = checkoutShoppingCart.toString();
 
+        System.out.println(">>>>> " + cartXml);
+
         final StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append(getHiddenFiled("cart", new String(Base64.encode(cartXml.getBytes()))));
@@ -161,6 +164,22 @@ public class GoogleCheckoutPaymentGatewayImpl extends AbstractGswmPaymentGateway
         final CartPoster.CheckoutShoppingCartBuilder cartBuilder = apiContext.cartPoster().makeCart();
 
         final MerchantCheckoutFlowSupport flowSupport = objectFactory.createMerchantCheckoutFlowSupport();
+
+        /*flowSupport.setParameterizedUrls(objectFactory.createMerchantCheckoutFlowSupportParameterizedUrls());
+        flowSupport.getParameterizedUrls().getParameterizedUrl().add()
+
+
+        final ParameterizedUrl.Parameters params = objectFactory.createParameterizedUrlParameters();
+        params.getUrlParameter();
+
+        final MerchantCheckoutFlowSupport.ParameterizedUrls   parameterizedUrls    = ;
+
+        final ParameterizedUrl purl = objectFactory.createParameterizedUrl();
+        purl.setParameters(params);
+
+        parameterizedUrls.getParameterizedUrl().add(purl); */
+
+
 
         final CheckoutShoppingCart.CheckoutFlowSupport cartFlowSupport = objectFactory.createCheckoutShoppingCartCheckoutFlowSupport();
 
