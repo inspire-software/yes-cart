@@ -48,7 +48,7 @@ public class GoogleCheckoutPaymentGatewayImplTest extends TestCase {
              }
         };
 
-        CheckoutShoppingCart checkoutShoppingCart = googleCheckoutPaymentGateway.createGoogleCart(createTesPayment());
+        CheckoutShoppingCart checkoutShoppingCart = googleCheckoutPaymentGateway.createGoogleCart(createTesPayment(), "1234-1234-5678-5678");
 
         assertNotNull(checkoutShoppingCart);
 
@@ -65,7 +65,7 @@ public class GoogleCheckoutPaymentGatewayImplTest extends TestCase {
         System.out.println(xml);
 
         String formPart = googleCheckoutPaymentGateway.getHtmlForm(
-                null, null, null, null, null, createTesPayment());
+                null, null, null, null, "134-1234-1234-124", createTesPayment());
 
         System.out.println(formPart);
 

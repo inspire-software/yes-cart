@@ -4,6 +4,8 @@ import com.google.checkout.sdk.commands.ApiContext;
 import com.google.checkout.sdk.commands.CartPoster;
 import com.google.checkout.sdk.commands.Environment;
 import com.google.checkout.sdk.domain.*;
+import com.google.checkout.sdk.notifications.BaseNotificationDispatcher;
+import com.google.checkout.sdk.notifications.Notification;
 import org.apache.commons.lang.SerializationUtils;
 import org.springframework.security.core.codec.Base64;
 import org.springframework.util.Assert;
@@ -19,6 +21,8 @@ import org.yes.cart.payment.dto.impl.PaymentImpl;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import java.io.IOException;
@@ -37,6 +41,8 @@ import java.util.Map;
  */
 public class GoogleCheckoutPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl implements PaymentGatewayExternalForm {
 
+
+
     public static final String ORDER_GUID = "orderGuid";  //this id our order guid
 
     //test or lice env
@@ -54,12 +60,16 @@ public class GoogleCheckoutPaymentGatewayImpl extends AbstractGswmPaymentGateway
     // html code for submit btn
     static final String GC_SUBMIT_BTN = "GC_SUBMIT_BTN";
 
+    private final ObjectFactory objectFactory = new ObjectFactory();
+
+
     private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
             false, false, false, true,
             false, false, false, false,
             true, true,
             null
     );
+
 
     /**
      * {@inheritDoc}
@@ -129,9 +139,9 @@ public class GoogleCheckoutPaymentGatewayImpl extends AbstractGswmPaymentGateway
 
         Assert.notNull(payment, "The payment details require for google checkout payment gateway");
 
-        final CheckoutShoppingCart checkoutShoppingCart = createGoogleCart(payment);
+        final CheckoutShoppingCart checkoutShoppingCart = createGoogleCart(payment, orderGuid);
 
-        final String  cartXml = checkoutShoppingCart.toString();
+        final String cartXml = checkoutShoppingCart.toString();
 
         System.out.println(">>>>> " + cartXml);
 
@@ -145,12 +155,78 @@ public class GoogleCheckoutPaymentGatewayImpl extends AbstractGswmPaymentGateway
 
     }
 
+    public void handleNotification(final HttpServletRequest request, final HttpServletResponse response) {
+
+        final ApiContext apiContext = new ApiContext(
+                "PRODUCTION".equalsIgnoreCase(getParameterValue(GC_ENVIRONMENT)) ? Environment.PRODUCTION : Environment.SANDBOX,
+                getParameterValue(GC_MERCHANT_ID),
+                getParameterValue(GC_MERCHANT_KEY),
+                "USD" //wtf
+        );
+
+        apiContext.handleNotification(
+
+                new BaseNotificationDispatcher(request, response) {
+
+                    @Override
+                    protected void onNewOrderNotification(final OrderSummary orderSummary, final NewOrderNotification notification) throws Exception {
+
+
+
+
+
+                    }
+
+                    @Override
+                    public void onAllNotifications(final OrderSummary orderSummary,
+                                                   final Notification notification) {
+                        //ORDERS.put(orderSummary.getGoogleOrderNumber(), orderSummary);
+                    }
+
+                    @Override
+                    public void onAuthorizationAmountNotification(final OrderSummary orderSummary,
+                                                                  final AuthorizationAmountNotification notification) {
+                        System.out.println(
+                                "Order " + notification.getGoogleOrderNumber()
+                                        + " authorized and ready to ship to:"
+                                        + orderSummary.getBuyerShippingAddress().getContactName());
+                    }
+
+                    @Override
+                    protected void onOrderStateChangeNotification(final OrderSummary orderSummary, final OrderStateChangeNotification notification) throws Exception {
+                        super.onOrderStateChangeNotification(orderSummary, notification);    //To change body of overridden methods use File | Settings | File Templates.
+                    }
+
+                    @Override
+                    public boolean hasAlreadyHandled(final String serialNumber,
+                                                     final OrderSummary orderSummary,
+                                                     final Notification notification) {
+                        // NOTE: We'll have to look up serial numbers in our database
+                        // before using this for real
+                        return false;
+                    }
+
+                    @Override
+                    protected void rememberSerialNumber(final String serialNumber,
+                                                        final OrderSummary orderSummary, Notification notification) {
+                        // NOTE: We'll have to remember serial numbers in our database,
+                        // before using this for real
+                    }
+                }
+
+        );
+
+
+    }
+
     /**
      * Create {@link CheckoutShoppingCart} from given payment and payment details.
-     * @param payment given {@link Payment}
+     *
+     * @param payment   given {@link Payment}
+     * @param orderGuid order guid.
      * @return created {@link CheckoutShoppingCart}
      */
-    CheckoutShoppingCart createGoogleCart(final Payment payment) {
+    CheckoutShoppingCart createGoogleCart(final Payment payment, final String orderGuid) {
 
         final ApiContext apiContext = new ApiContext(
                 "PRODUCTION".equalsIgnoreCase(getParameterValue(GC_ENVIRONMENT)) ? Environment.PRODUCTION : Environment.SANDBOX,
@@ -159,26 +235,20 @@ public class GoogleCheckoutPaymentGatewayImpl extends AbstractGswmPaymentGateway
                 payment.getOrderCurrency()
         );
 
-        final ObjectFactory objectFactory = new ObjectFactory();
 
         final CartPoster.CheckoutShoppingCartBuilder cartBuilder = apiContext.cartPoster().makeCart();
 
         final MerchantCheckoutFlowSupport flowSupport = objectFactory.createMerchantCheckoutFlowSupport();
 
-        /*flowSupport.setParameterizedUrls(objectFactory.createMerchantCheckoutFlowSupportParameterizedUrls());
+        /* ATM i am not going to support partner tracking
+        flowSupport.setParameterizedUrls(objectFactory.createMerchantCheckoutFlowSupportParameterizedUrls());
         flowSupport.getParameterizedUrls().getParameterizedUrl().add()
-
-
         final ParameterizedUrl.Parameters params = objectFactory.createParameterizedUrlParameters();
         params.getUrlParameter();
-
         final MerchantCheckoutFlowSupport.ParameterizedUrls   parameterizedUrls    = ;
-
         final ParameterizedUrl purl = objectFactory.createParameterizedUrl();
         purl.setParameters(params);
-
         parameterizedUrls.getParameterizedUrl().add(purl); */
-
 
 
         final CheckoutShoppingCart.CheckoutFlowSupport cartFlowSupport = objectFactory.createCheckoutShoppingCartCheckoutFlowSupport();
@@ -205,18 +275,29 @@ public class GoogleCheckoutPaymentGatewayImpl extends AbstractGswmPaymentGateway
             }
         }
 
+        final AnyMultiple anyMultiple = objectFactory.createAnyMultiple(); //just put our order id
+
+        anyMultiple.getContent().add(orderGuid);
+
         final CheckoutShoppingCart checkoutShoppingCart = cartBuilder.build();
 
         checkoutShoppingCart.setCheckoutFlowSupport(cartFlowSupport);
+
+        /**
+         * The <merchant-private-data> tag contains any well-formed XML sequence that should accompany an order.
+         * Google Checkout will return this XML in the <merchant-calculation-callback> and the <new-order-notification> for the order.
+         */
+        checkoutShoppingCart.getShoppingCart().setMerchantPrivateData(anyMultiple);
 
         return checkoutShoppingCart;
     }
 
     /**
      * Create item in cart.
-     * @param currency currency
-     * @param apiContext api context
-     * @param paymentLine  payment line, that represent item in cart
+     *
+     * @param currency    currency
+     * @param apiContext  api context
+     * @param paymentLine payment line, that represent item in cart
      * @return item for google cart
      */
     private Item createShipmentItem(final String currency, final ApiContext apiContext, final PaymentLine paymentLine) {
@@ -237,10 +318,11 @@ public class GoogleCheckoutPaymentGatewayImpl extends AbstractGswmPaymentGateway
     /**
      * Create shipment method. CPOINT shipment method already selected by customer, so
      * is sme cases need customise how it should be represent in google cart.
-     * @param currency order curreny
+     *
+     * @param currency      order curreny
      * @param objectFactory object factory
-     * @param paymentLine  payment line, that represent shipment in cart
-     * @return  {@link MerchantCheckoutFlowSupport.ShippingMethods}
+     * @param paymentLine   payment line, that represent shipment in cart
+     * @return {@link MerchantCheckoutFlowSupport.ShippingMethods}
      */
     private MerchantCheckoutFlowSupport.ShippingMethods createShipmentMethod(final String currency, final ObjectFactory objectFactory, final PaymentLine paymentLine) {
 
