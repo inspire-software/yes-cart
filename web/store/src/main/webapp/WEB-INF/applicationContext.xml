@@ -71,12 +71,18 @@
         <constructor-arg index="2" ref="amountCalculationStrategy"/>
     </bean>
 
-    <!--CPOINT do you reaaly need paypal express checkout ?-->
-    <bean id="payPalExpressCheckoutFilter" class="org.yes.cart.web.filter.PayPalExpressCheckoutFilter">
+    <!--CPOINT do you need paypal express checkout ?-->
+    <bean id="payPalExpressCheckoutFilter" class="org.yes.cart.web.filter.payment.PayPalExpressCheckoutFilter">
         <constructor-arg index="0" ref="applicationDirector"/>
         <constructor-arg index="1" ref="paymentModulesManager"/>
         <constructor-arg index="2" ref="paymentProcessor"/>
         <constructor-arg index="3" ref="customerOrderService"/>
+    </bean>
+
+    <!--CPOINT do you need google checkout ?-->
+    <bean id="googleCheckoutCallBackFilter" class="org.yes.cart.web.filter.payment.GoogleCheckoutCallBackFilter">
+        <constructor-arg index="0" ref="applicationDirector"/>
+        <constructor-arg index="1" ref="paymentCallBackHandlerFacade"/>
     </bean>
 
     <!-- ################################### filter delegates end ################################### -->

@@ -100,6 +100,19 @@
     </filter>
 
     <filter>
+        <filter-name>googleCheckoutCallBackFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <init-param>
+            <param-name>targetFilterLifecycle</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>paymentGatewayLabel</param-name>
+            <param-value>googleCheckoutPaymentGateway</param-value>
+        </init-param>
+    </filter>
+
+    <filter>
         <filter-name>imageFilter</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
         <init-param>
@@ -119,20 +132,10 @@
 
 
 
-    <!--filter>
-        <filter-name>contextResolverFilter</filter-name>
-        <filter-class>com.npa.web.filter.ContextResolverFilter</filter-class>
-        <init-param>
-            <param-name>targetFilterLifecycle</param-name>
-            <param-value>true</param-value>
-        </init-param>
-    </filter-->
-
     <filter-mapping>
         <filter-name>CharacterEncodingFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-
 
     <filter-mapping>
         <filter-name>shoppingCartFilter</filter-name>
@@ -144,9 +147,22 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <!--
+    Paypal express checkout call back filter.
+    For security reason change default mapping.
+    -->
     <filter-mapping>
         <filter-name>payPalExpressCheckoutFilter</filter-name>
         <url-pattern>/paymentpaypalexpress</url-pattern>
+    </filter-mapping>
+
+    <!--
+    Mapping of goggle checkout call back filter.
+    For security reason change default mapping.
+    -->
+    <filter-mapping>
+        <filter-name>googleCheckoutCallBackFilter</filter-name>
+        <url-pattern>/googlecheckoutcallback</url-pattern>
     </filter-mapping>
 
     <!-- product, sku and brand images filter -->
