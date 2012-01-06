@@ -21,6 +21,7 @@ import org.yes.cart.payment.dto.impl.PaymentImpl;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
@@ -30,6 +31,8 @@ import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.text.MessageFormat;
+import java.util.Enumeration;
 import java.util.Map;
 
 /**
@@ -163,6 +166,8 @@ public class GoogleCheckoutPaymentGatewayImpl extends AbstractGswmPaymentGateway
                 getParameterValue(GC_MERCHANT_KEY),
                 "USD" //wtf
         );
+
+        dumpRequest(request);
 
         apiContext.handleNotification(
 
@@ -422,4 +427,25 @@ public class GoogleCheckoutPaymentGatewayImpl extends AbstractGswmPaymentGateway
     public boolean isSuccess(Map<String, String> nvpCallResult) {
         return true;  //todo
     }
+
+
+
+    public static void dumpRequest(final ServletRequest request) {
+        Enumeration en = request.getParameterNames();
+        while (en.hasMoreElements()) {
+            final Object key = en.nextElement();
+            System.out.println(MessageFormat.format("HttpUtil#dumpRequest param key = [{0}] value = [{1}]",
+                    key,
+                    request.getParameter((String) key)));
+        }
+
+        en = request.getAttributeNames();
+        while (en.hasMoreElements()) {
+            final Object key = en.nextElement();
+            System.out.println(MessageFormat.format("HttpUtil#dumpRequest attr  key = [{0}] value = [{1}]",
+                    key,
+                    request.getAttribute((String) key)));
+        }
+    }
+
 }
