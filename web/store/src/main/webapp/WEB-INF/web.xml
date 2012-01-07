@@ -91,11 +91,32 @@
     </filter>
 
     <filter>
+        <filter-name>anetPaymentCallBackFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+         <init-param>
+            <param-name>targetFilterLifecycle</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>paymentGatewayLabel</param-name>
+            <param-value>authorizeNetSimPaymentGatewayLabel</param-value>
+        </init-param>
+        <init-param>
+            <param-name>allowedIPs</param-name>
+            <param-value></param-value>
+        </init-param>
+    </filter>
+
+    <filter>
         <filter-name>payPalExpressCheckoutFilter</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
         <init-param>
             <param-name>targetFilterLifecycle</param-name>
             <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>allowedIPs</param-name>
+            <param-value></param-value>
         </init-param>
     </filter>
 
@@ -109,6 +130,10 @@
         <init-param>
             <param-name>paymentGatewayLabel</param-name>
             <param-value>googleCheckoutPaymentGateway</param-value>
+        </init-param>
+        <init-param>
+            <param-name>allowedIPs</param-name>
+            <param-value></param-value>
         </init-param>
     </filter>
 
@@ -145,6 +170,15 @@
     <filter-mapping>
         <filter-name>shopResolverFilter</filter-name>
         <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!--
+    Authorize net call back filter.
+    For security reason change default mapping.
+    -->
+    <filter-mapping>
+        <filter-name>anetPaymentCallBackFilter</filter-name>
+        <url-pattern>/authnetsimcallback</url-pattern>
     </filter-mapping>
 
     <!--
