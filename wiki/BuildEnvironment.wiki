@@ -73,6 +73,12 @@ CREATE DATABASE `yes` CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `yes`;
 SOURCE create-tables.sql
 SOURCE initdata.sql
+
+CREATE DATABASE `yespay` CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `yespay`;
+SOURCE create-npa-pay.sql
+--and for each payment  module
+SOURCE payinitdata.sql 
 }}}
 
 Derby usage for development. 
@@ -82,4 +88,4 @@ Run ij and type following
 connect 'jdbc:derby://localhost:1527/yespay;create=true';
 connect 'jdbc:derby://localhost:1527/yes;create=true';
 }}}
-Run  create-tables.sql and initdata.sql scripts
+Run  create-tables.sql, initdata.sql and create-npa-pay.sql, payinitdata.sql scripts
