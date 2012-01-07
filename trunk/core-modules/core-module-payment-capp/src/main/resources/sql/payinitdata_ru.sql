@@ -502,15 +502,20 @@ VALUES (203, 'authorizeNetSimPaymentGateway',
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (205, 'authorizeNetSimPaymentGateway',
 'RELAY_RESPONCE_URL',
-'http://shop.enigma.biz.ua/webshopwicket/shop/responce/page'
+'http://testdevshop.yes-cart.org:8080/yes-shop/responce/page'
 , 'Releay responce url', 'Releay responce url. SIM only');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (206, 'authorizeNetSimPaymentGateway',
 'ORDER_RECEIPT_URL',
-'http://shop.enigma.biz.ua/webshopwicket/shop/receipt/page'
+'http://testdevshop.yes-cart.org:8080/yes-shop/receipt/page'
 , 'SIM/DPM order receipt url', 'SIM/DPM order receipt url. SIM only');
 
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (207, 'authorizeNetSimPaymentGateway',
+'TEST_REQUEST',
+'FALSE'
+, 'SIM test request flag', 'SIM test request flag');
 
 
 
@@ -538,15 +543,16 @@ VALUES (222, 'payPalExpressPaymentGateway',
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (223, 'payPalExpressPaymentGateway',
 'RETURNURL',
-'http://shop.enigma.biz.ua/webshopwicket/shop'
+'http://testdevshop.yes-cart.org:8080/yes-shop/paypallreturn'
 , 'Return url', 'Return url');
 
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (224, 'payPalExpressPaymentGateway',
 'CANCELURL',
-'http://shop.enigma.biz.ua/webshopwicket/shop/product/38'
+'http://testdevshop.yes-cart.org:8080/yes-shop'
 , 'Cancel url', 'Cancel url');
+
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (225, 'payPalExpressPaymentGateway',
@@ -554,12 +560,12 @@ VALUES (225, 'payPalExpressPaymentGateway',
 'https://api-3t.sandbox.paypal.com/nvp'
 , 'Api call url', 'Cancel url');
 
+
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (226, 'payPalExpressPaymentGateway',
 'PP_EC_PAYPAL_URL',
 'https://www.sandbox.paypal.com/cgi-bin/webscr'
 , 'Paypal url to perform payment', 'Paypal url to perform payment');
-
 
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
