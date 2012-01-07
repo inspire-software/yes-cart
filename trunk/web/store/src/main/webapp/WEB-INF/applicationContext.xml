@@ -85,6 +85,12 @@
         <constructor-arg index="1" ref="paymentCallBackHandlerFacade"/>
     </bean>
 
+    <!-- CPOINT is authorize net need for you ? -->
+    <bean id="anetPaymentCallBackFilter"  class="org.yes.cart.web.filter.payment.BasePaymentGatewayCallBackFilter">
+        <constructor-arg index="0" ref="applicationDirector"/>
+        <constructor-arg index="1" ref="paymentCallBackHandlerFacade"/>
+    </bean>
+
     <!-- ################################### filter delegates end ################################### -->
 
     <bean id="cookieTuplizer" class="org.yes.cart.web.support.util.cookie.impl.CookieTuplizerImpl"
