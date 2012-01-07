@@ -274,13 +274,13 @@
                 <db.config.yes.login>root</db.config.yes.login>
                 <db.config.yes.password></db.config.yes.password>
                 <db.config.yes.driver>com.mysql.jdbc.Driver</db.config.yes.driver>
-                <db.config.yes.url>jdbc:mysql://localhost/yes?AutoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8</db.config.yes.url>
+                <db.config.yes.url><![CDATA[jdbc:mysql://localhost/yes?AutoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8]]></db.config.yes.url>
                 <db.config.yespay.hibernate.dialect>org.hibernate.dialect.MySQL5Dialect
                 </db.config.yespay.hibernate.dialect>
                 <db.config.yespay.login>root</db.config.yespay.login>
                 <db.config.yespay.password></db.config.yespay.password>
                 <db.config.yespay.driver>com.mysql.jdbc.Driver</db.config.yespay.driver>
-                <db.config.yespay.url>jdbc:mysql://localhost/yespay?AutoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8</db.config.yespay.url>
+                <db.config.yespay.url><![CDATA[jdbc:mysql://localhost/yespay?AutoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8]]></db.config.yespay.url>
             </properties>
         </profile>
         <profile>

@@ -1,5 +1,6 @@
 package org.yes.cart.service.order.impl;
 
+import org.springframework.util.Assert;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.domain.entity.*;
@@ -139,8 +140,10 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
                                                       final List<CustomerOrderDet> items,
                                                       final String deliveryGroup,
                                                       final int idx) {
+        Assert.notNull(order, "Expecting order, but found null");
+        Assert.notNull(shoppingCart, "Expecting shopping cart, but found null");
         final CustomerOrderDelivery customerOrderDelivery = entityFactory.getByIface(CustomerOrderDelivery.class);
-        customerOrderDelivery.setCarrierSla(carrierSlaService.getById(shoppingCart.getCarrierSlaId()));
+        customerOrderDelivery.setCarrierSla(carrierSlaService.getById(shoppingCart.getCarrierSlaId() == null ? 0 : shoppingCart.getCarrierSlaId() ));
         customerOrderDelivery.setDevileryNum(order.getOrdernum() + "-" + idx);
         customerOrderDelivery.setDeliveryGroup(deliveryGroup);
 

@@ -10,9 +10,19 @@
         <attribute name="arg"/>
         <sequential>
             <echo message="Running Maven with [-B @{arg}] in [@dir] ..."/>
+            <if>
+                <os family="windows"/>
+                <then>
                     <exec dir="@{dir}" executable="${env.M2_HOME}\bin\mvn.bat">
                         <arg line="-B @{arg}"/>
                     </exec>
+                </then>
+                <else>
+                    <exec dir="@{dir}" executable="${env.M2_HOME}/bin/mvn">
+                        <arg line="-B @{arg}"/>
+                    </exec>
+                </else>
+            </if>
         </sequential>
     </macrodef>
 
