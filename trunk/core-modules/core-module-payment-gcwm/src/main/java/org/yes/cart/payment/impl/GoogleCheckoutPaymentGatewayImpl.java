@@ -7,9 +7,13 @@ import com.google.checkout.sdk.domain.*;
 import com.google.checkout.sdk.notifications.BaseNotificationDispatcher;
 import com.google.checkout.sdk.notifications.Notification;
 import org.apache.commons.lang.SerializationUtils;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.security.core.codec.Base64;
 import org.springframework.util.Assert;
 import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
@@ -17,6 +21,7 @@ import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.PaymentLine;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
+import org.yes.cart.service.domain.CarrierSlaService;
 
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
@@ -32,8 +37,7 @@ import java.math.BigDecimal;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.MessageFormat;
-import java.util.Enumeration;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Google checkout payment gateway
@@ -42,8 +46,14 @@ import java.util.Map;
  * Date: 12/25/11
  * Time: 5:13 PM
  */
-public class GoogleCheckoutPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl implements PaymentGatewayExternalForm {
+public class GoogleCheckoutPaymentGatewayImpl
+        extends AbstractGswmPaymentGatewayImpl
+        implements PaymentGatewayExternalForm, ApplicationContextAware {
 
+
+    private ApplicationContext applicationContext;
+
+    private CarrierSlaService carrierSlaService;
 
 
     public static final String ORDER_GUID = "orderGuid";  //this id our order guid
@@ -177,9 +187,6 @@ public class GoogleCheckoutPaymentGatewayImpl extends AbstractGswmPaymentGateway
                     protected void onNewOrderNotification(final OrderSummary orderSummary, final NewOrderNotification notification) throws Exception {
 
 
-
-
-
                     }
 
                     @Override
@@ -263,14 +270,8 @@ public class GoogleCheckoutPaymentGatewayImpl extends AbstractGswmPaymentGateway
         final String currency = payment.getOrderCurrency();
 
         for (PaymentLine paymentLine : payment.getOrderItems()) {
-            if (paymentLine.isShipment()) {
-                flowSupport.setShippingMethods(
-                        createShipmentMethod(
-                                currency,
-                                objectFactory,
-                                paymentLine)
-                );
-            } else {
+            //Products only
+            if (!paymentLine.isShipment()) {
                 cartBuilder.addItem(
                         createShipmentItem(
                                 currency,
@@ -279,6 +280,14 @@ public class GoogleCheckoutPaymentGatewayImpl extends AbstractGswmPaymentGateway
                 );
             }
         }
+
+        //set shipping methods to select on google
+        flowSupport.setShippingMethods(
+                createShipmentMethod(
+                        currency,
+                        objectFactory)
+        );
+
 
         final AnyMultiple anyMultiple = objectFactory.createAnyMultiple(); //just put our order id
 
@@ -326,24 +335,43 @@ public class GoogleCheckoutPaymentGatewayImpl extends AbstractGswmPaymentGateway
      *
      * @param currency      order curreny
      * @param objectFactory object factory
-     * @param paymentLine   payment line, that represent shipment in cart
      * @return {@link MerchantCheckoutFlowSupport.ShippingMethods}
      */
-    private MerchantCheckoutFlowSupport.ShippingMethods createShipmentMethod(final String currency, final ObjectFactory objectFactory, final PaymentLine paymentLine) {
+    private MerchantCheckoutFlowSupport.ShippingMethods createShipmentMethod(final String currency,
+                                                                             final ObjectFactory objectFactory) {
 
         final MerchantCheckoutFlowSupport.ShippingMethods shippingMethods =
                 objectFactory.createMerchantCheckoutFlowSupportShippingMethods();
 
-        final FlatRateShipping.Price price = objectFactory.createFlatRateShippingPrice();
-        price.setCurrency(currency);
-        price.setValue(paymentLine.getUnitPrice());
+        for (CarrierSla sla : getUniqueNames(getCarrierSlaService().findByCurrency(currency)) ) {
 
-        final FlatRateShipping flatRateShipping = objectFactory.createFlatRateShipping();
-        flatRateShipping.setName(paymentLine.getSkuName());
-        flatRateShipping.setPrice(price);
+            final FlatRateShipping.Price price = objectFactory.createFlatRateShippingPrice();
+            price.setCurrency(currency);
+            price.setValue(sla.getPrice());
 
-        shippingMethods.getFlatRateShippingOrMerchantCalculatedShippingOrPickup().add(flatRateShipping);
+            final FlatRateShipping flatRateShipping = objectFactory.createFlatRateShipping();
+            flatRateShipping.setName(sla.getName());
+            flatRateShipping.setPrice(price);
+
+            shippingMethods.getFlatRateShippingOrMerchantCalculatedShippingOrPickup().add(flatRateShipping);
+
+        }
+
+
         return shippingMethods;
+    }
+
+    private List<CarrierSla> getUniqueNames(final List<CarrierSla> slas) {
+        final Set<String> stringSet = new HashSet<String>(slas.size());
+        final List<CarrierSla> carrierSlas  = new ArrayList<CarrierSla>(slas.size());
+        for (CarrierSla sla : slas) {
+            if (!stringSet.contains(sla.getName())) {
+                stringSet.add(sla.getName());
+                carrierSlas.add(sla);
+            }
+
+        }
+        return carrierSlas;
     }
 
 
@@ -429,7 +457,6 @@ public class GoogleCheckoutPaymentGatewayImpl extends AbstractGswmPaymentGateway
     }
 
 
-
     public static void dumpRequest(final ServletRequest request) {
         Enumeration en = request.getParameterNames();
         while (en.hasMoreElements()) {
@@ -448,4 +475,23 @@ public class GoogleCheckoutPaymentGatewayImpl extends AbstractGswmPaymentGateway
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
+
+
+    /**
+     * Set the {@link CarrierSlaService} to work with sla.
+     *
+     * @return {@link CarrierSlaService}
+     */
+    private CarrierSlaService getCarrierSlaService() {
+        if (carrierSlaService == null) {
+            carrierSlaService = applicationContext.getBean("carrierSlaService", CarrierSlaService.class);
+        }
+        return carrierSlaService;
+    }
 }

@@ -5,10 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.entity.Address;
-import org.yes.cart.domain.entity.CustomerOrder;
-import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentAddress;
@@ -451,8 +448,8 @@ public class PaymentProcessorImpl implements PaymentProcessor {
     private void fillPaymentShipment(final CustomerOrderDelivery delivery, final Payment payment) {
         payment.getOrderItems().add(
                 new PaymentLineImpl(
-                        String.valueOf(delivery.getCarrierSla().getCarrierslaId()),
-                        delivery.getCarrierSla().getName(),
+                        delivery.getCarrierSla() == null ? "N/A" : String.valueOf(delivery.getCarrierSla().getCarrierslaId()),
+                        delivery.getCarrierSla() == null ? "No SLA" : delivery.getCarrierSla().getName(),
                         BigDecimal.ONE,
                         delivery.getPrice(),
                         BigDecimal.ZERO,
@@ -489,34 +486,40 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                                          final String transactionOperation,
                                          final String transactionGatewayLabel) {
 
+        final Customer customer = order.getCustomer();
 
-        Address shippingAddr = order.getCustomer().getDefaultAddress(Address.ADDR_TYPE_SHIPING);
-        Address billingAddr = order.getCustomer().getDefaultAddress(Address.ADDR_TYPE_BILLING);
+        if (customer != null) {
 
-        if (billingAddr == null) {
-            billingAddr = shippingAddr;
+            Address shippingAddr = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPING);
+            Address billingAddr = customer.getDefaultAddress(Address.ADDR_TYPE_BILLING);
+
+            if (billingAddr == null) {
+                billingAddr = shippingAddr;
+            }
+
+            if (billingAddr != null) {
+                PaymentAddress addr = new PaymentAddressImpl();
+                BeanUtils.copyProperties(billingAddr, addr);
+                templatePayment.setBillingAddress(addr);
+            }
+
+            if (shippingAddr != null) {
+                PaymentAddress addr = new PaymentAddressImpl();
+                BeanUtils.copyProperties(shippingAddr, addr);
+                templatePayment.setShippingAddress(addr);
+            }
+
+            templatePayment.setBillingAddressString(order.getBillingAddress());
+            templatePayment.setShippingAddressString(order.getShippingAddress());
+
+            templatePayment.setBillingEmail(customer.getEmail());
+
         }
 
-        if (billingAddr != null) {
-            PaymentAddress addr = new PaymentAddressImpl();
-            BeanUtils.copyProperties(billingAddr, addr);
-            templatePayment.setBillingAddress(addr);
-        }
-
-        if (shippingAddr != null) {
-            PaymentAddress addr = new PaymentAddressImpl();
-            BeanUtils.copyProperties(shippingAddr, addr);
-            templatePayment.setShippingAddress(addr);
-        }
-
-        templatePayment.setBillingAddressString(order.getBillingAddress());
-        templatePayment.setShippingAddressString(order.getShippingAddress());
 
         templatePayment.setOrderDate(order.getOrderTimestamp());
         templatePayment.setOrderCurrency(order.getCurrency());
         templatePayment.setOrderNumber(order.getOrdernum());
-
-        templatePayment.setBillingEmail(order.getCustomer().getEmail());
 
         templatePayment.setTransactionOperation(transactionOperation);
         templatePayment.setTransactionGatewayLabel(transactionGatewayLabel);

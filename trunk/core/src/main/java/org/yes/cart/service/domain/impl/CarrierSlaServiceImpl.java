@@ -1,5 +1,6 @@
 package org.yes.cart.service.domain.impl;
 
+import org.hibernate.criterion.Restrictions;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.CarrierSla;
@@ -39,6 +40,13 @@ public class CarrierSlaServiceImpl extends BaseGenericServiceImpl<CarrierSla> im
             return BigDecimal.ZERO;
         }
         return carrierSla.getPrice();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<CarrierSla> findByCurrency(final String currency) {
+        return findByCriteria(Restrictions.eq("currency", currency));
     }
     
 

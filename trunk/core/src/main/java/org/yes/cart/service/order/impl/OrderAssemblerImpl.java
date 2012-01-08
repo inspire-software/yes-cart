@@ -103,18 +103,21 @@ public class OrderAssemblerImpl implements OrderAssembler {
         final Customer customer = customerDao.findSingleByCriteria(
                 Restrictions.eq("email", shoppingCart.getCustomerEmail()));
 
-        Address billingAddress = customer.getDefaultAddress(Address.ADDR_TYPE_BILLING);
-        Address shippingAddress = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPING);
+        if (customer != null) {
+            Address billingAddress = customer.getDefaultAddress(Address.ADDR_TYPE_BILLING);
+            Address shippingAddress = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPING);
 
-        customerOrder.setShippingAddress(formatAddress(shippingAddress));
+            customerOrder.setShippingAddress(formatAddress(shippingAddress));
 
-        if (!shoppingCart.isSeparateBillingAddress() || billingAddress == null) {
-            billingAddress = shippingAddress;
+            if (!shoppingCart.isSeparateBillingAddress() || billingAddress == null) {
+                billingAddress = shippingAddress;
+            }
+
+            customerOrder.setBillingAddress(formatAddress(billingAddress));
+
+            customerOrder.setCustomer(customer);
         }
 
-        customerOrder.setBillingAddress(formatAddress(billingAddress));
-
-        customerOrder.setCustomer(customer);
         customerOrder.setOrderMessage(shoppingCart.getOrderMessage());
 
     }
