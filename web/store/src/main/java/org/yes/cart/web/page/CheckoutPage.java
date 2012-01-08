@@ -381,9 +381,16 @@ public class CheckoutPage extends AbstractWebPage {
 
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
 
-        final String fullName = (order.getCustomer().getFirstname()
+        String fullName = StringUtils.EMPTY;
+
+        if(order.getCustomer() != null) {
+
+            fullName = (order.getCustomer().getFirstname()
                 + " "
                 + order.getCustomer().getLastname()).toUpperCase();
+
+        }
+
 
         final String submitBtnValue = getSubmitButton(gateway);
 

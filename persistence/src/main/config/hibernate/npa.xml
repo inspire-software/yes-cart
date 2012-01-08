@@ -3817,7 +3817,7 @@ public void setRangeList(final RangeList rangeList) {
             </property>
             <property name="orderStatus" column="ORDERSTATUS" type="string" length="64" not-null="true"/>
             <many-to-one name="customer" class="org.yes.cart.domain.entity.Customer" foreign-key="FK_ORDER_CUSTOMER" lazy="false">
-                <column name="CUSTOMER_ID" not-null="true"/>
+                <column name="CUSTOMER_ID" not-null="false"/>
             </many-to-one>
             <many-to-one name="shop" class="org.yes.cart.domain.entity.Shop" foreign-key="FK_ORDER_SHOP">
                 <column name="SHOP_ID" not-null="true"/>
@@ -3833,13 +3833,13 @@ public void setRangeList(final RangeList rangeList) {
                 <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.CustomerOrderDelivery"/>
             </bag>
 
-            <property name="billingAddress" type="string" not-null="true" length="4000">
+            <property name="billingAddress" type="string" not-null="false" length="4000">
                 <column name="BILLING_ADDRESS">
                     <comment>Address composed for billing</comment>
                 </column>
             </property>
 
-            <property name="shippingAddress" type="string" not-null="true" length="4000">
+            <property name="shippingAddress" type="string" not-null="false" length="4000">
                 <column name="SHIPPING_ADDRESS">
                     <comment>Shipping address</comment>
                 </column>
@@ -4000,7 +4000,7 @@ public void setRangeList(final RangeList rangeList) {
                 <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.CustomerOrderDeliveryDet"/>
             </bag>
             <many-to-one name="carrierSla" class="org.yes.cart.domain.entity.CarrierSla" foreign-key="FK_OD_CSLA" lazy="false">
-                <column name="CARRIERSLA_ID" not-null="true"/>
+                <column name="CARRIERSLA_ID" not-null="false"/>
             </many-to-one>
             <many-to-one name="customerOrder" class="org.yes.cart.domain.entity.CustomerOrder" foreign-key="FK_OD_ORD">
                 <column name="CUSTOMERORDER_ID" not-null="true"/>

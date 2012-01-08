@@ -69,6 +69,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
                                                final ShoppingCart shoppingCart,
                                                final boolean onePhysicalDelivery) {
 
+
         final Map<String, List<CustomerOrderDet>> groups = getDeliveryGroups(order, onePhysicalDelivery);
 
         int idx = 0;
@@ -84,7 +85,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
                     entry.getKey(),
                     idx);
 
-            if (CustomerOrderDelivery.ELECTONIC_DELIVERY_GROUP.equals(entry.getKey())) {
+            if (order.getCustomer() == null || CustomerOrderDelivery.ELECTONIC_DELIVERY_GROUP.equals(entry.getKey())) {
                 // this is electronic delivery
                 customerOrderDelivery.setPrice(BigDecimal.ZERO);
 
@@ -98,13 +99,12 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
                 );
 
             }
-
-
             order.getDelivery().add(customerOrderDelivery);
 
             idx++;
 
         }
+
 
         return order;
 
@@ -143,7 +143,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
         Assert.notNull(order, "Expecting order, but found null");
         Assert.notNull(shoppingCart, "Expecting shopping cart, but found null");
         final CustomerOrderDelivery customerOrderDelivery = entityFactory.getByIface(CustomerOrderDelivery.class);
-        customerOrderDelivery.setCarrierSla(carrierSlaService.getById(shoppingCart.getCarrierSlaId() == null ? 0 : shoppingCart.getCarrierSlaId() ));
+        customerOrderDelivery.setCarrierSla(carrierSlaService.getById(shoppingCart.getCarrierSlaId() == null ? 0 : shoppingCart.getCarrierSlaId()));
         customerOrderDelivery.setDevileryNum(order.getOrdernum() + "-" + idx);
         customerOrderDelivery.setDeliveryGroup(deliveryGroup);
 

@@ -32,4 +32,12 @@ public interface CarrierSlaService extends GenericService<CarrierSla> {
      * @return price of delivery
      */
     BigDecimal getDeliveryPrice(CarrierSla carrierSla, Collection<CustomerOrderDeliveryDet> items, Address defaultAddress);
+
+
+    /**
+     * Fin all sla for given currency.
+     * @param currency fiven currency.
+     * @return   list of found currency
+     */
+    List<CarrierSla> findByCurrency(String currency);
 }
