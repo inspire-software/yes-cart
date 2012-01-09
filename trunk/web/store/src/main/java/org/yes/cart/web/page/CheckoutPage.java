@@ -398,9 +398,7 @@ public class CheckoutPage extends AbstractWebPage {
 
         Payment payment = null;
 
-        if (paymentProcessor.getPaymentGateway() == null) {
-            paymentProcessor.setPaymentGateway(gateway);
-        }
+        paymentProcessor.setPaymentGateway(gateway);
 
         if (gateway.getPaymentGatewayFeatures().isRequireDetails()) {
             payment = paymentProcessor.createPaymentsToAuthorize(

@@ -50,14 +50,16 @@ public class ResultPage extends AbstractWebPage {
 
         final CustomerOrder customerOrder = customerOrderService.findByGuid(orderNum);
 
-        if (isOk(customerOrder)) {
+        final boolean isPaymentWasOk = isOk(customerOrder);
+
+        if (isPaymentWasOk) {
             cleanCart();
         }
 
         add(
                 new Label(
                         "paymentResult",
-                        getLocalizer().getString(isOk(customerOrder) ? "paymentWasOk" : "paymentWasFailed", this)
+                        getLocalizer().getString(isPaymentWasOk ? "paymentWasOk" : "paymentWasFailed", this)
                 )
         );
 
@@ -90,6 +92,9 @@ public class ResultPage extends AbstractWebPage {
      * @return  true in case of successful page
      */
     private boolean isOk(final CustomerOrder customerOrder) {
+        if (customerOrder == null) {
+            return false;
+        }
         final List<CustomerOrderPayment> payments = customerOrderPaymentService.findBy(customerOrder.getOrdernum(), null, null, null);
         return (payments != null && !payments.isEmpty() && Payment.PAYMENT_STATUS_OK.equals(payments.get(0).getPaymentProcessorResult()));
     }
