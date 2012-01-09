@@ -10,6 +10,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.ShopUrl;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
@@ -81,12 +82,30 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
 
         } else {
 
-            final String shopUrl = shopService.getShopByOrderGuid(orderGuid).getShopUrl().iterator().next().getUrl();
-
-            redirectTo = "http://" + shopUrl + httpServletRequest.getContextPath() + "/paymentresult?orderNum=" + orderGuid;
+            redirectTo = "http://"
+                    + getShopUrl(httpServletRequest)
+                    + httpServletRequest.getContextPath()
+                    + "/paymentresult?orderNum="
+                    + orderGuid;
 
         }
 
+    }
+
+    /**
+     * Get shop url. Shop may be registered for several urls, so need to get one, that related to call back request.
+     * @param httpServletRequest httpServletRequest
+     * @return return shop url.
+     *
+     */
+    private String getShopUrl(final HttpServletRequest httpServletRequest) {
+        for (ShopUrl url : shopService.getShopByOrderGuid(orderGuid).getShopUrl()) {
+            final String urlCandidate = url.getUrl();
+            if (urlCandidate.contains(httpServletRequest.getServerName())) {
+                return urlCandidate;
+            }
+        }
+        return shopService.getShopByOrderGuid(orderGuid).getShopUrl().iterator().next().getUrl();
     }
 
 
