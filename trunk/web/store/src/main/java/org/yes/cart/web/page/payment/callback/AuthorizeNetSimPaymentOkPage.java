@@ -85,6 +85,7 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
             redirectTo = "http://"
                     + getShopUrl(httpServletRequest)
                     + httpServletRequest.getContextPath()
+                    + (httpServletRequest.getServerPort() != 80 ? ":" + httpServletRequest.getServerPort() : "")
                     + "/paymentresult?orderNum="
                     + orderGuid;
 
@@ -99,12 +100,21 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
      *
      */
     private String getShopUrl(final HttpServletRequest httpServletRequest) {
+
+        for (ShopUrl url : shopService.getShopByOrderGuid(orderGuid).getShopUrl()) {
+            final String urlCandidate = url.getUrl();
+            if (urlCandidate.startsWith(httpServletRequest.getServerName())) {
+                return urlCandidate;
+            }
+        }
+
         for (ShopUrl url : shopService.getShopByOrderGuid(orderGuid).getShopUrl()) {
             final String urlCandidate = url.getUrl();
             if (urlCandidate.contains(httpServletRequest.getServerName())) {
                 return urlCandidate;
             }
         }
+
         return shopService.getShopByOrderGuid(orderGuid).getShopUrl().iterator().next().getUrl();
     }
 
