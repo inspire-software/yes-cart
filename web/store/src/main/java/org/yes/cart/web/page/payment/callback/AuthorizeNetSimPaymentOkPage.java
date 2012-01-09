@@ -84,8 +84,8 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
 
             redirectTo = "http://"
                     + getShopUrl(httpServletRequest)
-                    + httpServletRequest.getContextPath()
                     + (httpServletRequest.getServerPort() != 80 ? ":" + httpServletRequest.getServerPort() : "")
+                    + httpServletRequest.getContextPath()
                     + "/paymentresult?orderNum="
                     + orderGuid;
 
@@ -95,9 +95,9 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
 
     /**
      * Get shop url. Shop may be registered for several urls, so need to get one, that related to call back request.
+     *
      * @param httpServletRequest httpServletRequest
      * @return return shop url.
-     *
      */
     private String getShopUrl(final HttpServletRequest httpServletRequest) {
 
