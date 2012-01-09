@@ -4,6 +4,7 @@ import org.apache.commons.lang.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.util.Assert;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.payment.PaymentGateway;
@@ -374,6 +375,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
             final Map params,
             final String transactionOperation) {
 
+        Assert.notNull(order, "Customer order expected");
 
         final boolean forceSinglePayment = forceSinglePaymentIn || params.containsKey("forceSinglePayment");
 

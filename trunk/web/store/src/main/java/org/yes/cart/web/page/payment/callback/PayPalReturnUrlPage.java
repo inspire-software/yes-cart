@@ -96,6 +96,8 @@ public class PayPalReturnUrlPage extends AbstractWebPage {
                 (PaymentGatewayExternalForm) paymentModulesManager.getPaymentGateway(
                         ApplicationDirector.getShoppingCart().getOrderInfo().getPaymentGatewayLabel());
 
+        paymentProcessor.setPaymentGateway(paymentGatewayExternalForm);
+
         final Payment payment = paymentProcessor.createPaymentsToAuthorize(
                 customerOrder,
                 true,
