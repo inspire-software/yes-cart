@@ -77,6 +77,8 @@ public class PayPalExpressCheckoutFilter extends AbstractFilter implements Filte
                 (PaymentGatewayExternalForm) paymentModulesManager.getPaymentGateway(
                         cart.getOrderInfo().getPaymentGatewayLabel());
 
+        paymentProcessor.setPaymentGateway(paymentGatewayExternalForm);
+
         final Payment payment = paymentProcessor.createPaymentsToAuthorize(
                 customerOrder,
                 true,
