@@ -156,7 +156,7 @@ public class GoogleCheckoutPaymentGatewayImpl
 
         final String cartXml = checkoutShoppingCart.toString();
 
-        System.out.println(">>>>> " + cartXml);
+        //System.out.println(">>>>> " + cartXml);
 
         final StringBuilder stringBuilder = new StringBuilder();
 
