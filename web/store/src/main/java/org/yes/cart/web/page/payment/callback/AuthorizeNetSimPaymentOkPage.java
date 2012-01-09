@@ -48,10 +48,10 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
     @SpringBean(name = ServiceSpringKeys.SYSTEM_SERVICE)
     private SystemService systemService;
 
+    private final String redirectTo;
 
-    private String shopUrl;
+    private final String orderGuid;
 
-    private String orderNum = "orderNotFound";
 
     /**
      * Construct page.
@@ -62,30 +62,30 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
 
         super(params);
 
+        final HttpServletRequest httpServletRequest = (HttpServletRequest)
+                ((WebRequest) getRequest()).getContainerRequest();
+
         System.out.println("##################################################################");
-        HttpUtil.dumpRequest((ServletRequest) getRequestCycle().getRequest().getContainerRequest());
+        HttpUtil.dumpRequest(httpServletRequest);
         System.out.println("------------------------------------------------------------------");
 
-        final String orderGuid = getPageParameters().get(ORDER_GUID).toString();
+        orderGuid = getPageParameters().get(ORDER_GUID).toString();
 
         System.out.println("#### orderGuid = " + orderGuid);
 
         final CustomerOrder order = customerOrderService.findByGuid(orderGuid);
 
-        try {
+        if (order == null) {
 
-            orderNum = order.getCartGuid();
+            redirectTo = systemService.getDefaultShopURL();
 
-            shopUrl = shopService.getShopByOrderGuid(orderGuid).getShopUrl().iterator().next().getUrl();
+        } else {
 
-        } catch (Exception e) {
+            final String shopUrl = shopService.getShopByOrderGuid(orderGuid).getShopUrl().iterator().next().getUrl();
 
-            e.printStackTrace(); //todo
-
-            shopUrl = systemService.getDefaultShopURL();
+            redirectTo = "http://" + shopUrl + httpServletRequest.getContextPath() + "/paymentresult?orderNum=" + orderGuid;
 
         }
-
 
     }
 
@@ -93,16 +93,9 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
     @Override
     protected void onBeforeRender() {
 
-        final HttpServletRequest httpServletRequest = (HttpServletRequest)
-                ((WebRequest) getRequest()).getContainerRequest();
-
-        final String redirectTo = "http://" + shopUrl + httpServletRequest.getContextPath() + "/paymentresult?orderNum=" + orderNum;
-
         System.out.println("Redirect from authorize net page to " + redirectTo);
 
-
         //"http://shop.domain.com/context/paymentresult?orderNum=" + 123
-
 
         add(
                 new Label("redirectJavaScript", "<!--\nlocation.replace(\"" + redirectTo + "\"); \n//-->").setEscapeModelStrings(false)
@@ -118,7 +111,7 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
                 new BookmarkablePageLink<ResultPage>(
                         "redirectLink",
                         ResultPage.class,
-                        new PageParameters("orderNum=" + orderNum))
+                        new PageParameters("orderNum=" + orderGuid))
         );
 
         super.onBeforeRender();
