@@ -7,13 +7,16 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.web.page.AbstractWebPage;
+import org.yes.cart.web.support.util.HttpUtil;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -59,7 +62,13 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
 
         super(params);
 
+        System.out.println("##################################################################");
+        HttpUtil.dumpRequest((ServletRequest) getRequestCycle().getRequest().getContainerRequest());
+        System.out.println("------------------------------------------------------------------");
+
         final String orderGuid = getPageParameters().get(ORDER_GUID).toString();
+
+        System.out.println("#### orderGuid = " + orderGuid);
 
         final CustomerOrder order = customerOrderService.findByGuid(orderGuid);
 

@@ -46,7 +46,10 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
      * {@inheritDoc}
      */
     public void handlePaymentCallback(final Map parameters, final String paymentGatewayLabel) {
+
         final String orderGuid = getOrderGuid(parameters, paymentGatewayLabel);
+
+        LOG.info("Order guid to handle at call back handler is " + orderGuid);
 
         if (StringUtils.isNotBlank(orderGuid)) {
 
