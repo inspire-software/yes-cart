@@ -69,7 +69,7 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
         HttpUtil.dumpRequest(httpServletRequest);
         System.out.println("------------------------------------------------------------------");
 
-        orderGuid = getPageParameters().get(ORDER_GUID).toString();
+        orderGuid = httpServletRequest.getParameter(ORDER_GUID);
 
         System.out.println("#### orderGuid = " + orderGuid);
 
