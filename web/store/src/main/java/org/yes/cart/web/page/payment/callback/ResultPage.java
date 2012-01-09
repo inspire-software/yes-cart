@@ -9,6 +9,9 @@ import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
+import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
+import org.yes.cart.shoppingcart.impl.CleanCartCommandImpl;
+import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 
 import java.util.Collections;
@@ -31,6 +34,9 @@ public class ResultPage extends AbstractWebPage {
      @SpringBean(name = ServiceSpringKeys.ORDER_PAYMENT_SERICE)
     private CustomerOrderPaymentService customerOrderPaymentService;
 
+    @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)
+    protected ShoppingCartCommandFactory shoppingCartCommandFactory;
+
     /**
      * Construct page.
      *
@@ -44,12 +50,37 @@ public class ResultPage extends AbstractWebPage {
 
         final CustomerOrder customerOrder = customerOrderService.findByGuid(orderNum);
 
+        if (isOk(customerOrder)) {
+            cleanCart();
+        }
+
         add(
                 new Label(
                         "paymentResult",
                         getLocalizer().getString(isOk(customerOrder) ? "paymentWasOk" : "paymentWasFailed", this)
                 )
         );
+
+
+    }
+
+    @Override
+    protected void onRender() {
+
+        processCommands();
+
+        super.onRender();
+    }
+
+    /**
+     * Clean shopiing cart end prepare it to reusing.
+     */
+    private void cleanCart() {
+        shoppingCartCommandFactory.create(
+                Collections.singletonMap(
+                        CleanCartCommandImpl.CMD_KEY,
+                        null)
+        ).execute(ApplicationDirector.getShoppingCart());
     }
 
     /**
