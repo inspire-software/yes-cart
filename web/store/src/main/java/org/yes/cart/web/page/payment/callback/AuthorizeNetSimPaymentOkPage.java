@@ -48,7 +48,7 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
 
     private String shopUrl;
 
-    private final String orderNum;
+    private String orderNum = "orderNotFound";
 
     /**
      * Construct page.
@@ -63,9 +63,9 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
 
         final CustomerOrder order = customerOrderService.findByGuid(orderGuid);
 
-        orderNum = order.getCartGuid();
-
         try {
+
+            orderNum = order.getCartGuid();
 
             shopUrl = shopService.getShopByOrderGuid(orderGuid).getShopUrl().iterator().next().getUrl();
 
