@@ -7,6 +7,8 @@ import com.google.checkout.sdk.domain.*;
 import com.google.checkout.sdk.notifications.BaseNotificationDispatcher;
 import com.google.checkout.sdk.notifications.Notification;
 import org.apache.commons.lang.SerializationUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -49,6 +51,8 @@ import java.util.*;
 public class GoogleCheckoutPaymentGatewayImpl
         extends AbstractGswmPaymentGatewayImpl
         implements PaymentGatewayExternalForm, ApplicationContextAware {
+
+    private static final Logger LOG = LoggerFactory.getLogger(GoogleCheckoutPaymentGatewayImpl.class);
 
 
     private ApplicationContext applicationContext;
@@ -104,6 +108,8 @@ public class GoogleCheckoutPaymentGatewayImpl
      * Shipment not included. Will be added at capture operation.
      */
     public Payment authorize(final Payment paymentIn) {
+        LOG.info("#authorize");
+        System.out.println("#authorize");
 
         return (Payment) SerializationUtils.clone(paymentIn);
 
@@ -118,6 +124,9 @@ public class GoogleCheckoutPaymentGatewayImpl
      * {@inheritDoc}
      */
     public Payment reverseAuthorization(final Payment payment) {
+        LOG.info("#reverseAuthorization");
+        System.out.println("#reverseAuthorization");
+
         return payment;
     }
 
@@ -125,6 +134,9 @@ public class GoogleCheckoutPaymentGatewayImpl
      * {@inheritDoc}
      */
     public Payment capture(final Payment payment) {
+        LOG.info("#capture");
+        System.out.println("#capture");
+
         payment.setTransactionOperation(CAPTURE);
         return payment;
     }
@@ -133,6 +145,9 @@ public class GoogleCheckoutPaymentGatewayImpl
      * {@inheritDoc}
      */
     public Payment voidCapture(final Payment payment) {
+        LOG.info("#voidCapture");
+        System.out.println("#voidCapture");
+
         return payment;
     }
 
@@ -140,6 +155,9 @@ public class GoogleCheckoutPaymentGatewayImpl
      * {@inheritDoc}
      */
     public Payment refund(final Payment payment) {
+        LOG.info("#refund");
+        System.out.println("#refund");
+
         return payment;
     }
 
@@ -168,6 +186,8 @@ public class GoogleCheckoutPaymentGatewayImpl
 
     }
 
+
+    /** {@inheritDoc} */
     public void handleNotification(final HttpServletRequest request, final HttpServletResponse response) {
 
         final ApiContext apiContext = new ApiContext(
@@ -183,21 +203,30 @@ public class GoogleCheckoutPaymentGatewayImpl
 
                 new BaseNotificationDispatcher(request, response) {
 
+                    /** {@inheritDoc} */
                     @Override
                     protected void onNewOrderNotification(final OrderSummary orderSummary, final NewOrderNotification notification) throws Exception {
-
-
+                        final String msg = "#onNewOrderNotification order summary is : " + orderSummary.toString() + " notification is  " + notification;
+                        LOG.info(msg);
+                        System.out.println(msg);
                     }
 
                     @Override
                     public void onAllNotifications(final OrderSummary orderSummary,
                                                    final Notification notification) {
-                        //ORDERS.put(orderSummary.getGoogleOrderNumber(), orderSummary);
+                        final String msg = "#onAllNotifications order summary is : " + orderSummary.toString() + " notification is  " + notification;
+                        LOG.info(msg);
+                        System.out.println(msg);
+
                     }
 
                     @Override
                     public void onAuthorizationAmountNotification(final OrderSummary orderSummary,
                                                                   final AuthorizationAmountNotification notification) {
+                        final String msg = "#onAuthorizationAmountNotification order summary is : " + orderSummary.toString() + " notification is  " + notification;
+                        LOG.info(msg);
+                        System.out.println(msg);
+
                         System.out.println(
                                 "Order " + notification.getGoogleOrderNumber()
                                         + " authorized and ready to ship to:"
@@ -206,13 +235,20 @@ public class GoogleCheckoutPaymentGatewayImpl
 
                     @Override
                     protected void onOrderStateChangeNotification(final OrderSummary orderSummary, final OrderStateChangeNotification notification) throws Exception {
-                        super.onOrderStateChangeNotification(orderSummary, notification);    //To change body of overridden methods use File | Settings | File Templates.
+                        final String msg = "#onOrderStateChangeNotification order summary is : " + orderSummary.toString() + " notification is  " + notification;
+                        LOG.info(msg);
+                        System.out.println(msg);
+
                     }
 
                     @Override
                     public boolean hasAlreadyHandled(final String serialNumber,
                                                      final OrderSummary orderSummary,
                                                      final Notification notification) {
+                        final String msg = "#hasAlreadyHandled order summary is : " + orderSummary.toString() + " notification is  " + notification + " serialNumber " + serialNumber;
+                        LOG.info(msg);
+                        System.out.println(msg);
+
                         // NOTE: We'll have to look up serial numbers in our database
                         // before using this for real
                         return false;
@@ -221,6 +257,10 @@ public class GoogleCheckoutPaymentGatewayImpl
                     @Override
                     protected void rememberSerialNumber(final String serialNumber,
                                                         final OrderSummary orderSummary, Notification notification) {
+                        final String msg = "#rememberSerialNumber order summary is : " + orderSummary.toString() + " notification is  " + notification + " serialNumber " + serialNumber;
+                        LOG.info(msg);
+                        System.out.println(msg);
+
                         // NOTE: We'll have to remember serial numbers in our database,
                         // before using this for real
                     }
@@ -337,13 +377,13 @@ public class GoogleCheckoutPaymentGatewayImpl
      * @param objectFactory object factory
      * @return {@link MerchantCheckoutFlowSupport.ShippingMethods}
      */
-    private MerchantCheckoutFlowSupport.ShippingMethods createShipmentMethod(final String currency,
-                                                                             final ObjectFactory objectFactory) {
+    MerchantCheckoutFlowSupport.ShippingMethods createShipmentMethod(final String currency,
+                                                                     final ObjectFactory objectFactory) {
 
         final MerchantCheckoutFlowSupport.ShippingMethods shippingMethods =
                 objectFactory.createMerchantCheckoutFlowSupportShippingMethods();
 
-        for (CarrierSla sla : getUniqueNames(getCarrierSlaService().findByCurrency(currency)) ) {
+        for (CarrierSla sla : getUniqueNames(getCarrierSlaService().findByCurrency(currency))) {
 
             final FlatRateShipping.Price price = objectFactory.createFlatRateShippingPrice();
             price.setCurrency(currency);
@@ -363,13 +403,12 @@ public class GoogleCheckoutPaymentGatewayImpl
 
     private List<CarrierSla> getUniqueNames(final List<CarrierSla> slas) {
         final Set<String> stringSet = new HashSet<String>(slas.size());
-        final List<CarrierSla> carrierSlas  = new ArrayList<CarrierSla>(slas.size());
+        final List<CarrierSla> carrierSlas = new ArrayList<CarrierSla>(slas.size());
         for (CarrierSla sla : slas) {
             if (!stringSet.contains(sla.getName())) {
                 stringSet.add(sla.getName());
                 carrierSlas.add(sla);
             }
-
         }
         return carrierSlas;
     }
@@ -401,30 +440,19 @@ public class GoogleCheckoutPaymentGatewayImpl
 
         Assert.notNull(xmlToSign, "XML to sign must be provided");
         Assert.notNull(merchantKey, "the merchant key must be provided");
-
         final SecretKey secretKey = new SecretKeySpec(merchantKey.getBytes(), "HmacSHA1");
 
         try {
-
             final Mac mac = Mac.getInstance("HmacSHA1");
-
             mac.init(secretKey);
-
             final byte[] text = xmlToSign.getBytes();
-
             return new String(Base64.encode(mac.doFinal(text))).trim();
-
         } catch (NoSuchAlgorithmException e) {
-
-            e.printStackTrace();
-
+            LOG.error("Cant create signature", e);
         } catch (InvalidKeyException e) {
-
-            e.printStackTrace();
+            LOG.error("Cant create signature", e);
         }
-
         return null;
-
     }
 
 

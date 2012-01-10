@@ -1,5 +1,7 @@
 package org.yes.cart.payment;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Map;
@@ -80,6 +82,15 @@ public interface PaymentGatewayExternalForm extends PaymentGateway {
      * @return  true in case of success
      */
     boolean isSuccess(Map<String, String> nvpCallResult);
+
+
+    /**
+     * Handle raw request. Call to this method will be delegated from particular filter if
+     * gateway support several commands / notification via single call back filter. Like google checkout.
+     * @param request http request
+     * @param response http responce.
+     */
+    void handleNotification(final HttpServletRequest request, final HttpServletResponse response);
 
     /**
      * Process public call back request from payment gateway.

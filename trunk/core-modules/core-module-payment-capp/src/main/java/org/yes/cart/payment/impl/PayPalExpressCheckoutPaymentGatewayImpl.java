@@ -14,6 +14,8 @@ import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
@@ -338,6 +340,12 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
     public boolean isSuccess(final Map<String, String> nvpCallResult) {
         return nvpCallResult.get("ACK") != null && nvpCallResult.get("ACK").equalsIgnoreCase("Success");
     }
+
+    /** {@inheritDoc} */
+    public void handleNotification(final HttpServletRequest request, final HttpServletResponse response) {
+        //nothing to do
+    }
+
 
 
     /**

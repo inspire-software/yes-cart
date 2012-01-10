@@ -7,6 +7,8 @@ import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -93,6 +95,10 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl im
         return true;
     }
 
+    /** {@inheritDoc} */
+    public void handleNotification(final HttpServletRequest request, final HttpServletResponse response) {
+        //nothing to do
+    }
 
     /**
      * Process public call back request from payment gateway.
