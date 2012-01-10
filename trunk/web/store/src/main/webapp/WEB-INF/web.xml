@@ -129,7 +129,7 @@
         </init-param>
         <init-param>
             <param-name>paymentGatewayLabel</param-name>
-            <param-value>googleCheckoutPaymentGateway</param-value>
+            <param-value>googleCheckoutPaymentGatewayLabel</param-value>
         </init-param>
         <init-param>
             <param-name>allowedIPs</param-name>
