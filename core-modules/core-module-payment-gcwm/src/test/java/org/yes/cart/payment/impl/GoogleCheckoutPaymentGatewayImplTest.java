@@ -1,8 +1,12 @@
 package org.yes.cart.payment.impl;
 
 import com.google.checkout.sdk.domain.CheckoutShoppingCart;
+import com.google.checkout.sdk.domain.FlatRateShipping;
+import com.google.checkout.sdk.domain.MerchantCheckoutFlowSupport;
+import com.google.checkout.sdk.domain.ObjectFactory;
 import junit.framework.TestCase;
 import org.junit.Test;
+import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentLine;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
@@ -33,19 +37,42 @@ public class GoogleCheckoutPaymentGatewayImplTest extends TestCase {
     public void testGoogleCheckoutCart() {
 
         GoogleCheckoutPaymentGatewayImpl googleCheckoutPaymentGateway = new GoogleCheckoutPaymentGatewayImpl() {
+
             /** {@inheritDoc} */
-             public String getParameterValue(final String valueLabel) {
-                 if ("GC_ENVIRONMENT".equals(valueLabel))  {
-                     return "SANDBOX";
-                 } else if ("GC_MERCHANT_ID".equals(valueLabel))  {
-                     return "951076354081708";
-                 } else if ("GC_MERCHANT_KEY".equals(valueLabel))  {
-                     return "1DbImipHlIEVsi0liSeA_A";
-                 } else if ("GC_POST_URL".equals(valueLabel))  {
-                     return "https://sandbox.google.com/checkout/api/checkout/v2/checkout/Merchant/951076354081708";
-                 }
-                 throw new IllegalArgumentException("The " + valueLabel + " argument is illegal");
-             }
+            public String getParameterValue(final String valueLabel) {
+                if ("GC_ENVIRONMENT".equals(valueLabel)) {
+                    return "SANDBOX";
+                } else if ("GC_MERCHANT_ID".equals(valueLabel)) {
+                    return "951076354081708";
+                } else if ("GC_MERCHANT_KEY".equals(valueLabel)) {
+                    return "1DbImipHlIEVsi0liSeA_A";
+                } else if ("GC_POST_URL".equals(valueLabel)) {
+                    return "https://sandbox.google.com/checkout/api/checkout/v2/checkout/Merchant/951076354081708";
+                }
+                throw new IllegalArgumentException("The " + valueLabel + " argument is illegal");
+            }
+
+
+            /** {@inheritDoc} */
+            @Override
+            MerchantCheckoutFlowSupport.ShippingMethods createShipmentMethod(String currency, ObjectFactory objectFactory) {
+                final MerchantCheckoutFlowSupport.ShippingMethods shippingMethods =
+                        objectFactory.createMerchantCheckoutFlowSupportShippingMethods();
+
+
+                final FlatRateShipping.Price price = objectFactory.createFlatRateShippingPrice();
+                price.setCurrency(currency);
+                price.setValue(new BigDecimal("3.0"));
+
+                final FlatRateShipping flatRateShipping = objectFactory.createFlatRateShipping();
+                flatRateShipping.setName("Cheap delivery");
+                flatRateShipping.setPrice(price);
+
+                shippingMethods.getFlatRateShippingOrMerchantCalculatedShippingOrPickup().add(flatRateShipping);
+
+
+                return shippingMethods;
+            }
         };
 
         CheckoutShoppingCart checkoutShoppingCart = googleCheckoutPaymentGateway.createGoogleCart(createTesPayment(), "1234-1234-5678-5678");
@@ -78,7 +105,6 @@ public class GoogleCheckoutPaymentGatewayImplTest extends TestCase {
             add(new PaymentLineImpl("code2", "name2", BigDecimal.ONE, BigDecimal.TEN, BigDecimal.ZERO, false));
             add(new PaymentLineImpl("delivery1", "Cheap delivery", BigDecimal.ONE, new BigDecimal("3.0"), BigDecimal.ZERO, true));
         }};
-
 
 
         final Payment payment = new PaymentImpl();

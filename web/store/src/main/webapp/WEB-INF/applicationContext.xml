@@ -83,6 +83,7 @@
     <bean id="googleCheckoutCallBackFilter" class="org.yes.cart.web.filter.payment.GoogleCheckoutCallBackFilter">
         <constructor-arg index="0" ref="applicationDirector"/>
         <constructor-arg index="1" ref="paymentCallBackHandlerFacade"/>
+        <constructor-arg index="2" ref="paymentModulesManager"/>
     </bean>
 
     <!-- CPOINT is authorize net need for you ? -->

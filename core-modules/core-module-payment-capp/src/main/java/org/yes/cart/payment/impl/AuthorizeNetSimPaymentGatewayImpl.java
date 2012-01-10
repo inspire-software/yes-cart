@@ -18,6 +18,9 @@ import java.util.Map;
 import net.authorize.sim.Fingerprint;
 import org.apache.commons.lang.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -145,6 +148,12 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     public boolean isSuccess(final Map<String, String> nvpCallResult) {
         return true; //nothing to do
     }
+
+    /** {@inheritDoc} */
+    public void handleNotification(final HttpServletRequest request, final HttpServletResponse response) {
+        //nothing to do
+    }
+
 
     /**
      * {@inheritDoc}
