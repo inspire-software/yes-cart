@@ -67,7 +67,7 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
                 ((WebRequest) getRequest()).getContainerRequest();
 
         System.out.println("##################################################################");
-        HttpUtil.dumpRequest(httpServletRequest);
+        HttpUtil.dumpRequest("AuthorizeNetSimPaymentOkPage" , httpServletRequest);
         System.out.println("------------------------------------------------------------------");
 
         orderGuid = httpServletRequest.getParameter(ORDER_GUID);

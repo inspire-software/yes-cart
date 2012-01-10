@@ -50,12 +50,16 @@ public class GoogleCheckoutCallBackFilter extends BasePaymentGatewayCallBackFilt
 
         if (isCallerIpAllowed()) {
 
-            HttpUtil.dumpRequest(servletRequest);
+            HttpUtil.dumpRequest("GoogleCheckoutCallBackFilter" , servletRequest);
 
             final String paymentGatewayLabel = getFilterConfig().getInitParameter("paymentGatewayLabel");
 
+            System.out.println("paymentGatewayLabel = " + paymentGatewayLabel);
+
             final PaymentGatewayExternalForm paymentGatewayExternalForm =
                     (PaymentGatewayExternalForm) paymentModulesManager.getPaymentGateway(paymentGatewayLabel);
+
+            System.out.println("paymentGatewayExternalForm = " + paymentGatewayExternalForm);
 
             paymentGatewayExternalForm.handleNotification((HttpServletRequest) servletRequest,
                     (HttpServletResponse)servletResponse);

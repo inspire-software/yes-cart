@@ -13,7 +13,7 @@ import java.util.Enumeration;
  */
 public class HttpUtil {
 
-    public static void dumpRequest(final ServletRequest request) {
+    public static void dumpRequest(final String prefix, final ServletRequest request) {
         Enumeration en = request.getParameterNames();
         while (en.hasMoreElements()) {
             final Object key = en.nextElement();

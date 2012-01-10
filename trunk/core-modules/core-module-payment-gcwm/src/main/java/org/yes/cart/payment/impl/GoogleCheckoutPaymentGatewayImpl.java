@@ -489,7 +489,7 @@ public class GoogleCheckoutPaymentGatewayImpl
         Enumeration en = request.getParameterNames();
         while (en.hasMoreElements()) {
             final Object key = en.nextElement();
-            System.out.println(MessageFormat.format("HttpUtil#dumpRequest param key = [{0}] value = [{1}]",
+            System.out.println(MessageFormat.format("HttpUtil#dumpRequest local at gc param key = [{0}] value = [{1}]",
                     key,
                     request.getParameter((String) key)));
         }
@@ -497,7 +497,7 @@ public class GoogleCheckoutPaymentGatewayImpl
         en = request.getAttributeNames();
         while (en.hasMoreElements()) {
             final Object key = en.nextElement();
-            System.out.println(MessageFormat.format("HttpUtil#dumpRequest attr  key = [{0}] value = [{1}]",
+            System.out.println(MessageFormat.format("HttpUtil#dumpRequest local at gc attr  key = [{0}] value = [{1}]",
                     key,
                     request.getAttribute((String) key)));
         }
