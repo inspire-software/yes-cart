@@ -187,7 +187,15 @@ public class GoogleCheckoutPaymentGatewayImpl
     }
 
 
-    /** {@inheritDoc} */
+    /**
+     * Actual  notification flow is here
+     * http://code.google.com/intl/uk-UA/apis/checkout/developer/Google_Checkout_XML_API_Alternate_Order_Flow_Diagrams.html
+     *
+     * @param request http request
+     * @param response http responce.
+     *
+     *
+     * */
     public void handleNotification(final HttpServletRequest request, final HttpServletResponse response) {
 
         final ApiContext apiContext = new ApiContext(
@@ -211,14 +219,14 @@ public class GoogleCheckoutPaymentGatewayImpl
                         System.out.println(msg);
                     }
 
-                    @Override
+                    /*@Override
                     public void onAllNotifications(final OrderSummary orderSummary,
                                                    final Notification notification) {
                         final String msg = "#onAllNotifications order summary is : " + orderSummary.toString() + " notification is  " + notification;
                         LOG.info(msg);
                         System.out.println(msg);
 
-                    }
+                    } */
 
                     @Override
                     public void onAuthorizationAmountNotification(final OrderSummary orderSummary,
