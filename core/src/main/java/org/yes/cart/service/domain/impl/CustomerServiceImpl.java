@@ -22,7 +22,7 @@ import java.util.List;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class CustomerServiceImpl  extends BaseGenericServiceImpl<Customer> implements CustomerService {
+public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implements CustomerService {
 
     private final HashHelper hashHelper;
 
@@ -31,12 +31,12 @@ public class CustomerServiceImpl  extends BaseGenericServiceImpl<Customer> imple
     private final AttributeService attributeService;
 
 
-    
     /**
      * Construct customer service.
+     *
      * @param genericDao customer dao to use.
-     * @param hashHelper      to generate password hash
-     * @param shopDao to assing o shop
+     * @param hashHelper to generate password hash
+     * @param shopDao    to assing o shop
      */
     public CustomerServiceImpl(final GenericDAO<Customer, Long> genericDao,
                                final HashHelper hashHelper,
@@ -50,6 +50,7 @@ public class CustomerServiceImpl  extends BaseGenericServiceImpl<Customer> imple
 
     /**
      * Get customer by email.
+     *
      * @param email email
      * @return {@link Customer}
      */
@@ -58,25 +59,27 @@ public class CustomerServiceImpl  extends BaseGenericServiceImpl<Customer> imple
     }
 
 
-    /** {@inheritDoc}  */
-    public List<Customer> findCustomer(final String email, final String firstname, 
-                                 final String lastname, final String middlename) {
+    /**
+     * {@inheritDoc}
+     */
+    public List<Customer> findCustomer(final String email, final String firstname,
+                                       final String lastname, final String middlename) {
 
         final List<Criterion> criterionList = new ArrayList<Criterion>();
 
-        if(StringUtils.isNotBlank(email)) {
+        if (StringUtils.isNotBlank(email)) {
             criterionList.add(Restrictions.like("email", email, MatchMode.ANYWHERE));
         }
 
-        if(StringUtils.isNotBlank(firstname)) {
+        if (StringUtils.isNotBlank(firstname)) {
             criterionList.add(Restrictions.like("firstname", firstname, MatchMode.ANYWHERE));
         }
 
-        if(StringUtils.isNotBlank(lastname)) {
+        if (StringUtils.isNotBlank(lastname)) {
             criterionList.add(Restrictions.like("lastname", lastname, MatchMode.ANYWHERE));
         }
 
-        if(StringUtils.isNotBlank(middlename)) {
+        if (StringUtils.isNotBlank(middlename)) {
             criterionList.add(Restrictions.like("middlename", middlename, MatchMode.ANYWHERE));
         }
 
@@ -91,23 +94,28 @@ public class CustomerServiceImpl  extends BaseGenericServiceImpl<Customer> imple
         }
 
 
-
     }
 
 
-    /** {@inheritDoc}  */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isEmailUnique(final String email) {
-        List<Customer> cust =  findCustomer(email, null, null, null);
+        List<Customer> cust = findCustomer(email, null, null, null);
         return (cust == null || cust.isEmpty());
     }
 
-    /** {@inheritDoc}  */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isCustomerExists(final String email) {
-        List<Customer> cust =  findCustomer(email, null, null, null);
+        List<Customer> cust = findCustomer(email, null, null, null);
         return (cust != null && !cust.isEmpty());
     }
 
-    /** {@inheritDoc}  */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isPasswordValid(final String email, final String password) {
         try {
             final List<Criterion> criterionList = new ArrayList<Criterion>();
@@ -118,16 +126,45 @@ public class CustomerServiceImpl  extends BaseGenericServiceImpl<Customer> imple
             criterionList.add(Restrictions.eq("password", hash));
 
             final List<Customer> customer = getGenericDao().findByCriteria(
-                criterionList.toArray(new Criterion[criterionList.size()])
+                    criterionList.toArray(new Criterion[criterionList.size()])
             );
-            
+
             return (customer != null && customer.size() == 1);
         } catch (Exception e) {
             return false;
         }
     }
 
-    /** {@inheritDoc}  */
+
+    /**
+     * Add new attribute to customer. If attribute already exists, his value will be changed.
+     * This method not perform any actions to persist changes.
+     *
+     * @param customer       given customer
+     * @param attributeCode  given attribute code
+     * @param attributeValue given attribute value
+     */
+    public void addAttribute(final Customer customer, final String attributeCode, final String attributeValue) {
+        if (StringUtils.isNotBlank(attributeValue)) {
+            AttrValueCustomer attrVal = customer.getAttributeByCode(attributeCode);
+            if (attrVal != null) {
+                attrVal.setVal(attributeValue);
+            } else {
+                Attribute attr = attributeService.findByAttributeCode(attributeCode);
+                if (attr != null) {
+                    attrVal = getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
+                    attrVal.setVal(attributeValue);
+                    attrVal.setAttribute(attr);
+                    attrVal.setCustomer(customer);
+                    customer.getAttribute().add(attrVal);
+                }
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public List<AttrValueCustomer> getRankedAttributeValues(final Customer customer) {
         final List<String> filledAttributes = getFilledAttributes(customer.getAttribute());
         final List<Attribute> emptyAttributes = attributeService.findAvailableAttributes(AttributeGroupNames.CUSTOMER, filledAttributes);
@@ -144,13 +181,15 @@ public class CustomerServiceImpl  extends BaseGenericServiceImpl<Customer> imple
 
     private List<String> getFilledAttributes(final Collection<AttrValueCustomer> attrValues) {
         final List<String> rez = new ArrayList<String>(attrValues.size());
-        for (AttrValueCustomer attrVal :  attrValues) {
+        for (AttrValueCustomer attrVal : attrValues) {
             rez.add(attrVal.getAttribute().getCode());
         }
         return rez;
     }
 
-    /** {@inheritDoc}  */
+    /**
+     * {@inheritDoc}
+     */
     public Customer create(final Customer customer, final Shop shop) {
         if (shop != null) {
             final CustomerShop customerShop = getGenericDao().getEntityFactory().getByIface(CustomerShop.class);
@@ -162,7 +201,9 @@ public class CustomerServiceImpl  extends BaseGenericServiceImpl<Customer> imple
     }
 
 
-    /** {@inheritDoc}  */
+    /**
+     * {@inheritDoc}
+     */
     public void resetPassword(final Customer customer, final Shop shop) {
         getGenericDao().update(customer);
     }

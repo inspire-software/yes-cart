@@ -191,11 +191,12 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         customer.setFirstname(prefix + "John");
         customer.setLastname(prefix + "Doe");
         customer.setPassword("rawpassword");
-        AttrValueCustomer attrValueCustomer = customerService.getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
-        attrValueCustomer.setCustomer(customer);
-        attrValueCustomer.setVal("555-55-51");
-        attrValueCustomer.setAttribute(attributeService.findByAttributeCode(AttributeNamesKeys.CUSTOMER_PHONE));
-        customer.getAttribute().add(attrValueCustomer);
+        //AttrValueCustomer attrValueCustomer = customerService.getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
+        //attrValueCustomer.setCustomer(customer);
+        //attrValueCustomer.setVal("555-55-51");
+        //attrValueCustomer.setAttribute(attributeService.findByAttributeCode(AttributeNamesKeys.CUSTOMER_PHONE));
+        //customer.getAttribute().add(attrValueCustomer);
+        customerService.addAttribute(customer, AttributeNamesKeys.CUSTOMER_PHONE, "555-55-51");
         customer = customerService.create(customer, shopService.getById(10L));
         Address address = addressService.getGenericDao().getEntityFactory().getByIface(Address.class);
         address.setFirstname("John");
