@@ -6,7 +6,9 @@ import com.google.checkout.sdk.commands.Environment;
 import com.google.checkout.sdk.domain.*;
 import com.google.checkout.sdk.notifications.BaseNotificationDispatcher;
 import com.google.checkout.sdk.notifications.Notification;
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.SerializationUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -16,6 +18,9 @@ import org.springframework.security.core.codec.Base64;
 import org.springframework.util.Assert;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.CarrierSla;
+import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
@@ -23,7 +28,10 @@ import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.PaymentLine;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
+import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CarrierSlaService;
+import org.yes.cart.service.domain.CustomerOrderService;
+import org.yes.cart.service.domain.CustomerService;
 
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
@@ -58,6 +66,12 @@ public class GoogleCheckoutPaymentGatewayImpl
     private ApplicationContext applicationContext;
 
     private CarrierSlaService carrierSlaService;
+
+    private CustomerOrderService customerOrderService;
+
+    private CustomerService customerService;
+
+    private AttributeService attributeService;
 
 
     public static final String ORDER_GUID = "orderGuid";  //this id our order guid
@@ -186,24 +200,31 @@ public class GoogleCheckoutPaymentGatewayImpl
 
     }
 
+    /**
+     * Get order guid from {@link OrderSummary} .
+     *
+     * @param orderSummary given {@link OrderSummary} .
+     * @return order guid if it present in order summary, null otherwise
+     */
+    String getOrderGuid(final OrderSummary orderSummary) {
+        List merchantData = orderSummary.getShoppingCart().getMerchantPrivateData().getContent();
+        if (merchantData != null && !merchantData.isEmpty()) {
+            return (String) merchantData.get(0);
+        }
+        return null;
+    }
+
 
     /**
      * Actual  notification flow is here
      * http://code.google.com/intl/uk-UA/apis/checkout/developer/Google_Checkout_XML_API_Alternate_Order_Flow_Diagrams.html
      *
-     * @param request http request
+     * @param request  http request
      * @param response http responce.
-     *
-     *
-     * */
+     */
     public void handleNotification(final HttpServletRequest request, final HttpServletResponse response) {
 
-        final ApiContext apiContext = new ApiContext(
-                "PRODUCTION".equalsIgnoreCase(getParameterValue(GC_ENVIRONMENT)) ? Environment.PRODUCTION : Environment.SANDBOX,
-                getParameterValue(GC_MERCHANT_ID),
-                getParameterValue(GC_MERCHANT_KEY),
-                "USD" //wtf
-        );
+        final ApiContext apiContext = getApiContext();
 
         dumpRequest(request);
 
@@ -214,9 +235,25 @@ public class GoogleCheckoutPaymentGatewayImpl
                     /** {@inheritDoc} */
                     @Override
                     protected void onNewOrderNotification(final OrderSummary orderSummary, final NewOrderNotification notification) throws Exception {
-                        final String msg = "#onNewOrderNotification order summary is : " + orderSummary.toString() + " notification is  " + notification;
-                        LOG.info(msg);
-                        System.out.println(msg);
+                        if (LOG.isInfoEnabled()) {
+                            LOG.info("BaseNotificationDispatcher#onNewOrderNotification  " + notification);
+                        }
+                        final String orderGuid = getOrderGuid(orderSummary);
+                        final CustomerOrder customerOrder = getCustomerOrderService().findByGuid(orderGuid);
+
+                        if (customerOrder.getCustomer() == null) {
+                            Customer customer = createrCustomer(notification, customerOrder.getShop());
+
+
+                        }
+
+
+                        // notification.getBuyerBillingAddress()
+                        /*final AnyMultiple anyMultiple = objectFactory.createAnyMultiple(); //just put our order id
+
+        anyMultiple.getContent().add(orderGuid);*/
+
+
                     }
 
                     /*@Override
@@ -275,6 +312,77 @@ public class GoogleCheckoutPaymentGatewayImpl
                 }
 
         );
+
+
+    }
+
+    private ApiContext apiContext;
+
+
+    /**
+     * Getr google api context;
+     *
+     * @return {@link ApiContext}
+     */
+    ApiContext getApiContext() {
+        if (apiContext == null) {
+            apiContext = new ApiContext(
+                    "PRODUCTION".equalsIgnoreCase(getParameterValue(GC_ENVIRONMENT)) ? Environment.PRODUCTION : Environment.SANDBOX,
+                    getParameterValue(GC_MERCHANT_ID),
+                    getParameterValue(GC_MERCHANT_KEY),
+                    "USD" //wtf
+            );
+        }
+        return apiContext;
+    }
+
+    /**
+     * Create customer if it not exists or just find by email.
+     *
+     * @param notification google notification about new order.
+     * @param shop         given shop
+     * @return created customer
+     */
+    private Customer createrCustomer(final NewOrderNotification notification, final Shop shop) {
+
+
+        final Address gAddress = (Address) ObjectUtils.defaultIfNull(
+                notification.getBuyerBillingAddress(), notification.getBuyerShippingAddress());
+
+        final String email = StringUtils.defaultIfEmpty(
+                gAddress.getEmail(),
+                String.valueOf(notification.getBuyerId())
+        );
+
+        Customer customer = getCustomerService().findCustomer(email);
+
+        if (customer == null) {
+
+            customer = getCustomerService().getGenericDao().getEntityFactory().getByIface(Customer.class);
+
+            customer.setEmail(email);
+
+            customer.setFirstname(
+                    gAddress.getStructuredName().getFirstName()
+            );
+
+            customer.setLastname(
+                    gAddress.getStructuredName().getLastName()
+            );
+
+            customer.setPassword("change-me");
+
+            getCustomerService().addAttribute(customer, AttributeNamesKeys.CUSTOMER_PHONE, gAddress.getPhone());
+
+            if (notification.getBuyerMarketingPreferences() != null) {
+                getCustomerService().addAttribute(customer, AttributeNamesKeys.MARKETING_MAIL_ALLOWED, Boolean.toString(notification.getBuyerMarketingPreferences().isEmailAllowed()));
+            }
+
+
+            return getCustomerService().create(customer, shop);
+        }
+
+        return customer;
 
 
     }
@@ -529,5 +637,37 @@ public class GoogleCheckoutPaymentGatewayImpl
             carrierSlaService = applicationContext.getBean("carrierSlaService", CarrierSlaService.class);
         }
         return carrierSlaService;
+    }
+
+    /**
+     * Get customer service.
+     *
+     * @return {@link CustomerService}
+     */
+    private CustomerService getCustomerService() {
+        if (customerService == null) {
+            customerService = applicationContext.getBean("customerService", CustomerService.class);
+        }
+        return customerService;
+    }
+
+
+    private AttributeService getAttributeService() {
+        if (attributeService == null) {
+            attributeService = applicationContext.getBean("attributeService", AttributeService.class);
+        }
+        return attributeService;
+    }
+
+    /**
+     * Get customer order service.
+     *
+     * @return {@link CustomerOrderService}
+     */
+    private CustomerOrderService getCustomerOrderService() {
+        if (customerOrderService == null) {
+            customerOrderService = applicationContext.getBean("customerOrderService", CustomerOrderService.class);
+        }
+        return customerOrderService;
     }
 }

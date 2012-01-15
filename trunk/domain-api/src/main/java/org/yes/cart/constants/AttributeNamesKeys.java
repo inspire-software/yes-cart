@@ -125,6 +125,11 @@ public interface AttributeNamesKeys {
     String CUSTOMER_PHONE = "CUSTOMER_PHONE";
 
     /**
+     * Customer phone.
+     */
+    String MARKETING_MAIL_ALLOWED = "MARKETING_MAIL_ALLOWED";
+
+    /**
      * Shop mail from.
      */
     String SHOP_MAIL_FROM = "SHOP_MAIL_FROM";

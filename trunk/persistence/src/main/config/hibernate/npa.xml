@@ -3553,6 +3553,18 @@ public void setRangeList(final RangeList rangeList) {
         return null;
     }
 
+    @Override
+    public String toString() {
+        return "CustomerEntity{" +
+                "email='" + email + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", middlename='" + middlename + '\'' +
+                ", guid='" + guid + '\'' +
+                ", customerId=" + customerId +
+                '}';
+    }
+
 
                 ]]>
             </meta>
@@ -3794,6 +3806,21 @@ public void setRangeList(final RangeList rangeList) {
             }
         }
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return "CustomerOrderEntity{" +
+                "pgLabel='" + pgLabel + '\'' +
+                ", ordernum='" + ordernum + '\'' +
+                ", cartGuid='" + cartGuid + '\'' +
+                ", currency='" + currency + '\'' +
+                ", customer=" + customer +
+                ", orderStatus='" + orderStatus + '\'' +
+                ", shop=" + shop +
+                ", guid='" + guid + '\'' +
+                ", multipleShipmentOption=" + multipleShipmentOption +
+                '}';
     }
 
                 ]]>

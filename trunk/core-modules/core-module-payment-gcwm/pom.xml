@@ -11,7 +11,7 @@
     <artifactId>core-module-payment-gcwm</artifactId>
     <name>Yes cart module: Payment google and etc. </name>
     <properties>
-        <testPgGoogle>false</testPgGoogle>
+        <testPgGoogle>true</testPgGoogle>
     </properties>
     <dependencies>
         <dependency>
@@ -122,6 +122,11 @@
             <version>2.5</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.4</version>
+        </dependency>
 
     </dependencies>
     <build>
@@ -153,8 +158,8 @@
                     <configuration>
                         <systemProperties>
                             <property>
-                                <name>testPgCyberSource</name>
-                                <value>${testPgCyberSource}</value>
+                                <name>testPgGoogle</name>
+                                <value>${testPgGoogle}</value>
                             </property>
                         </systemProperties>
                     </configuration>

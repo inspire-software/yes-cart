@@ -87,5 +87,14 @@ public interface CustomerService extends GenericService<Customer> {
      */
     List<AttrValueCustomer> getRankedAttributeValues(Customer customer);
 
+    /**
+     * Add new attribute to customer. If attribute already exists, his value will be changed.
+     * This method not perform any actions to persist changes.  Blank value will not be added
+     * @param customer given customer
+     * @param attributeCode given attribute code
+     * @param attributeValue given attribute value
+     */
+    void addAttribute(final Customer customer, final String attributeCode, final String attributeValue);
+
 
 }
