@@ -1,0 +1,346 @@
+package org.yes.cart.payment.impl;
+
+
+import com.google.checkout.sdk.domain.*;
+import com.google.checkout.sdk.domain.Address;
+import com.google.checkout.sdk.notifications.BaseNotificationDispatcher;
+import com.google.checkout.sdk.notifications.Notification;
+import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.domain.entity.*;
+import org.yes.cart.service.domain.AttributeService;
+import org.yes.cart.service.domain.CarrierSlaService;
+import org.yes.cart.service.domain.CustomerOrderService;
+import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.service.order.OrderAssembler;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+
+/**
+ * Google checkout notification dispatched.
+ * <p/>
+ * User: Igor Azarny iazarny@yahoo.com
+ * Date: 16/01/12
+ * Time: 5:13 PM
+ */
+public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher implements ApplicationContextAware {
+
+    private static final Logger LOG = LoggerFactory.getLogger(GoogleNotificationDispatcherImpl.class);
+
+    private ApplicationContext applicationContext;
+
+    private CustomerOrderService customerOrderService;
+
+    private CustomerService customerService;
+
+    private AttributeService attributeService;
+
+    private OrderAssembler orderAssembler;
+
+    private CarrierSlaService carrierSlaService;
+
+
+    /**
+     * Construct dispatcher.
+     *
+     * @param request  request
+     * @param response responce.
+     */
+    public GoogleNotificationDispatcherImpl(final HttpServletRequest request, final HttpServletResponse response) {
+        super(request, response);
+
+        //carrierSlaService.f
+    }
+
+    /**
+     * Here we
+     * 1. Collect information about customer, create new one if it not existst.
+     * 2. Wire billing and shipping addresses to order.
+     * 3. Update shipping information.
+     * <p/>
+     * {@inheritDoc}
+     */
+    protected void onNewOrderNotification(final OrderSummary orderSummary,
+                                          final NewOrderNotification notification) throws Exception {
+        if (LOG.isInfoEnabled()) {
+            LOG.info("BaseNotificationDispatcher#onNewOrderNotification  " + notification);
+        }
+
+        final String orderGuid = getOrderGuid(orderSummary);
+        final CustomerOrder customerOrder = getCustomerOrderService().findByGuid(orderGuid);
+        final Customer customer = createrCustomer(notification, customerOrder.getShop());
+
+        if (customerOrder.getCustomer() == null) {
+            customerOrder.setCustomer(customer);
+            getCustomerOrderService().update(customerOrder);
+        }
+
+        enrichWithAddresses(customer, notification);
+
+        customerOrder.setBillingAddress(getOrderAssembler().formatAddress(adaptGoogleAddress(notification.getBuyerBillingAddress())));
+        customerOrder.setShippingAddress(getOrderAssembler().formatAddress(adaptGoogleAddress(notification.getBuyerShippingAddress())));
+
+
+
+        final CustomerOrderDelivery customerOrderDelivery = customerOrder.getDelivery().iterator().next();
+        final CarrierSla carrierSla = getCarrierSlaService().finaByName(orderSummary.getOrderAdjustment().getShipping().getFlatRateShippingAdjustment().getShippingName());
+        customerOrderDelivery.setCarrierSla(carrierSla); // only one delivery, so just set sla
+        customerOrderDelivery.setPrice(carrierSla.getPrice());
+
+        customerOrder.setOrdernum(orderSummary.getGoogleOrderNumber()); //switch to google order number instead of internal
+
+        final StringBuilder stringBuilder = new StringBuilder();
+        for (Object str : notification.getShoppingCart().getBuyerMessages().getGiftMessageOrIncludeGiftReceiptOrDeliveryInstructions()) {
+            stringBuilder.append(str);
+            stringBuilder.append('\n');
+        }
+        customerOrder.setOrderMessage(stringBuilder.toString());
+
+        getCustomerOrderService().update(customerOrder);
+
+    }
+
+
+    /*@Override
+   public void onAllNotifications(final OrderSummary orderSummary,
+                                  final Notification notification) {
+       final String msg = "#onAllNotifications order summary is : " + orderSummary.toString() + " notification is  " + notification;
+       LOG.info(msg);
+       System.out.println(msg);
+
+   } */
+
+    @Override
+    public void onAuthorizationAmountNotification(final OrderSummary orderSummary, final AuthorizationAmountNotification notification) {
+        final String msg = "#onAuthorizationAmountNotification order summary is : " + orderSummary.toString() + " notification is  " + notification;
+        LOG.info(msg);
+        System.out.println(msg);
+
+        System.out.println(
+                "Order " + notification.getGoogleOrderNumber()
+                        + " authorized and ready to ship to:"
+                        + orderSummary.getBuyerShippingAddress().getContactName());
+    }
+
+    @Override
+    protected void onOrderStateChangeNotification(
+            final OrderSummary orderSummary,
+            final OrderStateChangeNotification notification) throws Exception {
+        final String msg = "#onOrderStateChangeNotification order summary is : " + orderSummary.toString() + " notification is  " + notification;
+        LOG.info(msg);
+        System.out.println(msg);
+
+    }
+
+    @Override
+    public boolean hasAlreadyHandled(final String serialNumber,
+                                     final OrderSummary orderSummary,
+                                     final Notification notification) {
+        final String msg = "#hasAlreadyHandled order summary is : " + orderSummary.toString() + " notification is  " + notification + " serialNumber " + serialNumber;
+        LOG.info(msg);
+        System.out.println(msg);
+
+        // NOTE: We'll have to look up serial numbers in our database
+        // before using this for real
+        return false;
+    }
+
+    @Override
+    protected void rememberSerialNumber(
+            final String serialNumber,
+            final OrderSummary orderSummary, Notification
+            notification) {
+        final String msg = "#rememberSerialNumber order summary is : " + orderSummary.toString() + " notification is  " + notification + " serialNumber " + serialNumber;
+        LOG.info(msg);
+        System.out.println(msg);
+
+        // NOTE: We'll have to remember serial numbers in our database,
+        // before using this for real
+    }
+
+
+    /**
+     * Enrich customer with addresses in case if customer has not any addreses.
+     *
+     * @param customer     customer.
+     * @param notification notification to get addrtesses from .
+     */
+    private void enrichWithAddresses(final Customer customer, final NewOrderNotification notification) {
+
+        if (!customer.getAddress().isEmpty()) {
+
+            final org.yes.cart.domain.entity.Address billingAddress = adaptGoogleAddress(notification.getBuyerBillingAddress());
+            if (billingAddress != null) {
+                billingAddress.setDefaultAddress(true);
+                billingAddress.setAddressType(org.yes.cart.domain.entity.Address.ADDR_TYPE_BILLING);
+            }
+
+            final org.yes.cart.domain.entity.Address shippingAddress = adaptGoogleAddress(notification.getBuyerShippingAddress());
+            if (shippingAddress != null) {
+                shippingAddress.setAddressType(org.yes.cart.domain.entity.Address.ADDR_TYPE_SHIPING);
+            }
+
+            getCustomerService().update(customer);
+
+        }
+    }
+
+    /**
+     * Adapt google address to out address.
+     * @param address address to adapt
+     * @return address form our domain.
+     */
+    private org.yes.cart.domain.entity.Address adaptGoogleAddress(final Address address) {
+        if (address != null) {
+            org.yes.cart.domain.entity.Address rez =
+                    getCustomerService().getGenericDao().getEntityFactory().getByIface(org.yes.cart.domain.entity.Address.class);
+            rez.setAddrline1(address.getAddress1());
+            rez.setAddrline2(address.getAddress2());
+            rez.setCountryCode(address.getCountryCode());
+            rez.setCity(address.getCity());
+            rez.setStateCode(address.getRegion());
+            rez.setFirstname(address.getStructuredName() == null ? "" : address.getStructuredName().getFirstName());
+            rez.setLastname(address.getStructuredName() == null ? "" : address.getStructuredName().getLastName());
+            rez.setPhoneList(address.getPhone());
+            rez.setPostcode(address.getPostalCode());
+            return rez;
+        }
+        return null;
+    }
+
+
+    /**
+     * Get order guid from {@link OrderSummary} .
+     *
+     * @param orderSummary given {@link OrderSummary} .
+     * @return order guid if it present in order summary, null otherwise
+     */
+    String getOrderGuid(final OrderSummary orderSummary) {
+        List merchantData = orderSummary.getShoppingCart().getMerchantPrivateData().getContent();
+        if (merchantData != null && !merchantData.isEmpty()) {
+            return (String) merchantData.get(0);
+        }
+        return null;
+    }
+
+
+    /**
+     * Create customer if it not exists or just find by email.
+     *
+     * @param notification google notification about new order.
+     * @param shop         given shop
+     * @return created customer
+     */
+    private Customer createrCustomer(final NewOrderNotification notification, final Shop shop) {
+
+        final Address gAddress = (Address) ObjectUtils.defaultIfNull(
+                notification.getBuyerBillingAddress(), notification.getBuyerShippingAddress());
+
+        final String email = StringUtils.defaultIfEmpty(
+                gAddress.getEmail(),
+                String.valueOf(notification.getBuyerId())
+        );
+
+        Customer customer = getCustomerService().findCustomer(email);
+
+        if (customer == null) {
+
+            customer = getCustomerService().getGenericDao().getEntityFactory().getByIface(Customer.class);
+
+            customer.setEmail(email);
+
+            customer.setFirstname(
+                    gAddress.getStructuredName().getFirstName()
+            );
+
+            customer.setLastname(
+                    gAddress.getStructuredName().getLastName()
+            );
+
+            customer.setPassword("change-me");
+
+            getCustomerService().addAttribute(customer, AttributeNamesKeys.CUSTOMER_PHONE, gAddress.getPhone());
+
+            if (notification.getBuyerMarketingPreferences() != null) {
+                getCustomerService().addAttribute(customer, AttributeNamesKeys.MARKETING_MAIL_ALLOWED, Boolean.toString(notification.getBuyerMarketingPreferences().isEmailAllowed()));
+            }
+
+
+            return getCustomerService().create(customer, shop);
+        }
+
+        return customer;
+
+
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
+
+
+    private AttributeService getAttributeService() {
+        if (attributeService == null) {
+            attributeService = applicationContext.getBean("attributeService", AttributeService.class);
+        }
+        return attributeService;
+    }
+
+    /**
+     * Get customer order service.
+     *
+     * @return {@link org.yes.cart.service.domain.CustomerOrderService}
+     */
+    private CustomerOrderService getCustomerOrderService() {
+        if (customerOrderService == null) {
+            customerOrderService = applicationContext.getBean("customerOrderService", CustomerOrderService.class);
+        }
+        return customerOrderService;
+    }
+
+    /**
+     * Get customer service.
+     *
+     * @return {@link CustomerService}
+     */
+    private CustomerService getCustomerService() {
+        if (customerService == null) {
+            customerService = applicationContext.getBean("customerService", CustomerService.class);
+        }
+        return customerService;
+    }
+
+    /**
+     * Get the order assempbler
+     * @return {@link OrderAssembler}
+     */
+    private OrderAssembler getOrderAssembler() {
+        if (orderAssembler == null) {
+            orderAssembler = applicationContext.getBean("orderAssembler", OrderAssembler.class);
+        }
+        return orderAssembler;
+    }
+
+    /**
+     * Get carrier sla service.
+     * @return {@link CarrierSlaService}
+     */
+    private CarrierSlaService getCarrierSlaService() {
+        if (carrierSlaService == null) {
+            carrierSlaService = applicationContext.getBean("carrierSlaService", CarrierSlaService.class);
+        }
+        return carrierSlaService;
+    }
+}

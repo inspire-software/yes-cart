@@ -67,11 +67,6 @@ public class GoogleCheckoutPaymentGatewayImpl
 
     private CarrierSlaService carrierSlaService;
 
-    private CustomerOrderService customerOrderService;
-
-    private CustomerService customerService;
-
-    private AttributeService attributeService;
 
 
     public static final String ORDER_GUID = "orderGuid";  //this id our order guid
@@ -200,20 +195,6 @@ public class GoogleCheckoutPaymentGatewayImpl
 
     }
 
-    /**
-     * Get order guid from {@link OrderSummary} .
-     *
-     * @param orderSummary given {@link OrderSummary} .
-     * @return order guid if it present in order summary, null otherwise
-     */
-    String getOrderGuid(final OrderSummary orderSummary) {
-        List merchantData = orderSummary.getShoppingCart().getMerchantPrivateData().getContent();
-        if (merchantData != null && !merchantData.isEmpty()) {
-            return (String) merchantData.get(0);
-        }
-        return null;
-    }
-
 
     /**
      * Actual  notification flow is here
@@ -223,97 +204,11 @@ public class GoogleCheckoutPaymentGatewayImpl
      * @param response http responce.
      */
     public void handleNotification(final HttpServletRequest request, final HttpServletResponse response) {
-
         final ApiContext apiContext = getApiContext();
-
         dumpRequest(request);
-
         apiContext.handleNotification(
-
-                new BaseNotificationDispatcher(request, response) {
-
-                    /** {@inheritDoc} */
-                    @Override
-                    protected void onNewOrderNotification(final OrderSummary orderSummary, final NewOrderNotification notification) throws Exception {
-                        if (LOG.isInfoEnabled()) {
-                            LOG.info("BaseNotificationDispatcher#onNewOrderNotification  " + notification);
-                        }
-                        final String orderGuid = getOrderGuid(orderSummary);
-                        final CustomerOrder customerOrder = getCustomerOrderService().findByGuid(orderGuid);
-
-                        if (customerOrder.getCustomer() == null) {
-                            Customer customer = createrCustomer(notification, customerOrder.getShop());
-
-
-                        }
-
-
-                        // notification.getBuyerBillingAddress()
-                        /*final AnyMultiple anyMultiple = objectFactory.createAnyMultiple(); //just put our order id
-
-        anyMultiple.getContent().add(orderGuid);*/
-
-
-                    }
-
-                    /*@Override
-                    public void onAllNotifications(final OrderSummary orderSummary,
-                                                   final Notification notification) {
-                        final String msg = "#onAllNotifications order summary is : " + orderSummary.toString() + " notification is  " + notification;
-                        LOG.info(msg);
-                        System.out.println(msg);
-
-                    } */
-
-                    @Override
-                    public void onAuthorizationAmountNotification(final OrderSummary orderSummary,
-                                                                  final AuthorizationAmountNotification notification) {
-                        final String msg = "#onAuthorizationAmountNotification order summary is : " + orderSummary.toString() + " notification is  " + notification;
-                        LOG.info(msg);
-                        System.out.println(msg);
-
-                        System.out.println(
-                                "Order " + notification.getGoogleOrderNumber()
-                                        + " authorized and ready to ship to:"
-                                        + orderSummary.getBuyerShippingAddress().getContactName());
-                    }
-
-                    @Override
-                    protected void onOrderStateChangeNotification(final OrderSummary orderSummary, final OrderStateChangeNotification notification) throws Exception {
-                        final String msg = "#onOrderStateChangeNotification order summary is : " + orderSummary.toString() + " notification is  " + notification;
-                        LOG.info(msg);
-                        System.out.println(msg);
-
-                    }
-
-                    @Override
-                    public boolean hasAlreadyHandled(final String serialNumber,
-                                                     final OrderSummary orderSummary,
-                                                     final Notification notification) {
-                        final String msg = "#hasAlreadyHandled order summary is : " + orderSummary.toString() + " notification is  " + notification + " serialNumber " + serialNumber;
-                        LOG.info(msg);
-                        System.out.println(msg);
-
-                        // NOTE: We'll have to look up serial numbers in our database
-                        // before using this for real
-                        return false;
-                    }
-
-                    @Override
-                    protected void rememberSerialNumber(final String serialNumber,
-                                                        final OrderSummary orderSummary, Notification notification) {
-                        final String msg = "#rememberSerialNumber order summary is : " + orderSummary.toString() + " notification is  " + notification + " serialNumber " + serialNumber;
-                        LOG.info(msg);
-                        System.out.println(msg);
-
-                        // NOTE: We'll have to remember serial numbers in our database,
-                        // before using this for real
-                    }
-                }
-
+                new GoogleNotificationDispatcherImpl(request, response)
         );
-
-
     }
 
     private ApiContext apiContext;
@@ -336,56 +231,7 @@ public class GoogleCheckoutPaymentGatewayImpl
         return apiContext;
     }
 
-    /**
-     * Create customer if it not exists or just find by email.
-     *
-     * @param notification google notification about new order.
-     * @param shop         given shop
-     * @return created customer
-     */
-    private Customer createrCustomer(final NewOrderNotification notification, final Shop shop) {
 
-
-        final Address gAddress = (Address) ObjectUtils.defaultIfNull(
-                notification.getBuyerBillingAddress(), notification.getBuyerShippingAddress());
-
-        final String email = StringUtils.defaultIfEmpty(
-                gAddress.getEmail(),
-                String.valueOf(notification.getBuyerId())
-        );
-
-        Customer customer = getCustomerService().findCustomer(email);
-
-        if (customer == null) {
-
-            customer = getCustomerService().getGenericDao().getEntityFactory().getByIface(Customer.class);
-
-            customer.setEmail(email);
-
-            customer.setFirstname(
-                    gAddress.getStructuredName().getFirstName()
-            );
-
-            customer.setLastname(
-                    gAddress.getStructuredName().getLastName()
-            );
-
-            customer.setPassword("change-me");
-
-            getCustomerService().addAttribute(customer, AttributeNamesKeys.CUSTOMER_PHONE, gAddress.getPhone());
-
-            if (notification.getBuyerMarketingPreferences() != null) {
-                getCustomerService().addAttribute(customer, AttributeNamesKeys.MARKETING_MAIL_ALLOWED, Boolean.toString(notification.getBuyerMarketingPreferences().isEmailAllowed()));
-            }
-
-
-            return getCustomerService().create(customer, shop);
-        }
-
-        return customer;
-
-
-    }
 
     /**
      * Create {@link CheckoutShoppingCart} from given payment and payment details.
@@ -639,35 +485,5 @@ public class GoogleCheckoutPaymentGatewayImpl
         return carrierSlaService;
     }
 
-    /**
-     * Get customer service.
-     *
-     * @return {@link CustomerService}
-     */
-    private CustomerService getCustomerService() {
-        if (customerService == null) {
-            customerService = applicationContext.getBean("customerService", CustomerService.class);
-        }
-        return customerService;
-    }
 
-
-    private AttributeService getAttributeService() {
-        if (attributeService == null) {
-            attributeService = applicationContext.getBean("attributeService", AttributeService.class);
-        }
-        return attributeService;
-    }
-
-    /**
-     * Get customer order service.
-     *
-     * @return {@link CustomerOrderService}
-     */
-    private CustomerOrderService getCustomerOrderService() {
-        if (customerOrderService == null) {
-            customerOrderService = applicationContext.getBean("customerOrderService", CustomerOrderService.class);
-        }
-        return customerOrderService;
-    }
 }

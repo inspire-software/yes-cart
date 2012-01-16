@@ -1,5 +1,6 @@
 package org.yes.cart.service.order;
 
+import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
@@ -29,6 +30,16 @@ public interface OrderAssembler {
      * @return order
      */
     CustomerOrder assembleCustomerOrder(ShoppingCart shoppingCart, boolean temp);
+
+    /**
+     *
+     * Format given address to string.
+     *
+     * @param defaultAddress given address
+     * @return formated address
+     */
+    String formatAddress(Address defaultAddress);
+
 
 
 }

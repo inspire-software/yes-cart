@@ -154,7 +154,7 @@ public class CheckoutPage extends AbstractWebPage {
 
             final CustomerOrder customerOrder = customerOrderService.createFromCart(
                     ApplicationDirector.getShoppingCart(),
-                    true            //todo customer service isOrderCanHasMultipleDeliveries
+                    ApplicationDirector.getInstance().isGoogleCheckoutEnabled() || true            //todo customer service isOrderCanHasMultipleDeliveries
                     //ApplicationDirector.getShoppingCart().isMultipleDelivery()
             );
 

@@ -45,7 +45,7 @@ public class GoogleCheckoutPaymentGatewayImplTest extends TestCase {
     }
 
 
-    @Test
+    /*@Test
     public void testHandleNotification() {
 
         final GoogleCheckoutPaymentGatewayImpl googleCheckoutPaymentGateway = new GoogleCheckoutPaymentGatewayImpl() {
@@ -99,7 +99,7 @@ public class GoogleCheckoutPaymentGatewayImplTest extends TestCase {
 
 
 
-    }
+    }     */
 
     @Test
     public void testGoogleCheckoutCart() {

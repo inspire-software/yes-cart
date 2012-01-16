@@ -24,6 +24,13 @@ public interface CarrierSlaService extends GenericService<CarrierSla> {
     List<CarrierSla> findByCarrier(long carrierId);
 
     /**
+     * Get sla by name. Sla name is unique
+     * @param slaName given sla name.
+     * @return {@link CarrierSla}
+     */
+    CarrierSla finaByName(final String slaName);
+
+    /**
      * Get the price of delivery.
      *
      * @param carrierSla     carries sla
