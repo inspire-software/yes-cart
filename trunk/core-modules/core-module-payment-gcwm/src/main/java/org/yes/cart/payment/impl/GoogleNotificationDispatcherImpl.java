@@ -7,6 +7,7 @@ import com.google.checkout.sdk.notifications.BaseNotificationDispatcher;
 import com.google.checkout.sdk.notifications.Notification;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -14,6 +15,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.payment.persistence.entity.GoogleNotificationHistory;
+import org.yes.cart.payment.persistence.entity.impl.GoogleNotificationHistoryEntity;
+import org.yes.cart.payment.persistence.service.PaymentModuleGenericDAO;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.service.domain.CustomerOrderService;
@@ -31,11 +35,11 @@ import java.util.List;
  * Date: 16/01/12
  * Time: 5:13 PM
  */
-public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher implements ApplicationContextAware {
+public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher {
 
     private static final Logger LOG = LoggerFactory.getLogger(GoogleNotificationDispatcherImpl.class);
 
-    private ApplicationContext applicationContext;
+    private final ApplicationContext applicationContext;
 
     private CustomerOrderService customerOrderService;
 
@@ -47,17 +51,20 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
 
     private CarrierSlaService carrierSlaService;
 
+    private PaymentModuleGenericDAO<GoogleNotificationHistory, Long> googleNotificationPaymentDao;
+
 
     /**
      * Construct dispatcher.
      *
      * @param request  request
      * @param response responce.
+     * @param applicationContext spring app context
      */
-    public GoogleNotificationDispatcherImpl(final HttpServletRequest request, final HttpServletResponse response) {
+    public GoogleNotificationDispatcherImpl(final ApplicationContext applicationContext, final HttpServletRequest request, final HttpServletResponse response) {
         super(request, response);
-
-        //carrierSlaService.f
+        this.applicationContext = applicationContext;
+        System.out.println(">>>>>>>>>>>>>>>> applicationContext " + applicationContext);
     }
 
     /**
@@ -144,26 +151,28 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
     public boolean hasAlreadyHandled(final String serialNumber,
                                      final OrderSummary orderSummary,
                                      final Notification notification) {
-        final String msg = "#hasAlreadyHandled order summary is : " + orderSummary.toString() + " notification is  " + notification + " serialNumber " + serialNumber;
-        LOG.info(msg);
-        System.out.println(msg);
 
-        // NOTE: We'll have to look up serial numbers in our database
-        // before using this for real
-        return false;
+        if (LOG.isInfoEnabled()) {
+            LOG.info("BaseNotificationDispatcher#rememberSerialNumber  " + serialNumber + " "  +  notification);
+        }
+
+        return getPaymentModuleGenericDAO().findSingleByCriteria(Restrictions.eq("serialNumber", serialNumber)) != null;
+
     }
 
     @Override
-    protected void rememberSerialNumber(
-            final String serialNumber,
-            final OrderSummary orderSummary, Notification
-            notification) {
-        final String msg = "#rememberSerialNumber order summary is : " + orderSummary.toString() + " notification is  " + notification + " serialNumber " + serialNumber;
-        LOG.info(msg);
-        System.out.println(msg);
+    protected void rememberSerialNumber(final String serialNumber,
+            final OrderSummary orderSummary, final Notification  notification) {
 
-        // NOTE: We'll have to remember serial numbers in our database,
-        // before using this for real
+        if (LOG.isInfoEnabled()) {
+            LOG.info("BaseNotificationDispatcher#rememberSerialNumber  " + serialNumber + " "  + notification);
+        }
+
+        final GoogleNotificationHistory entity = new GoogleNotificationHistoryEntity();
+        entity.setSerialNumber(serialNumber);
+        entity.setNotification(notification.toString());
+        getPaymentModuleGenericDAO().create(entity);
+
     }
 
 
@@ -283,12 +292,6 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
-    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
 
 
     private AttributeService getAttributeService() {
@@ -342,5 +345,17 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
             carrierSlaService = applicationContext.getBean("carrierSlaService", CarrierSlaService.class);
         }
         return carrierSlaService;
+    }
+
+
+    /**
+     * Get notificatin dao.
+     * @return  notification dao.
+     */
+    private PaymentModuleGenericDAO<GoogleNotificationHistory, Long>  getPaymentModuleGenericDAO() {
+        if (googleNotificationPaymentDao == null) {
+            googleNotificationPaymentDao = applicationContext.getBean("googleNotificationPaymentDao", PaymentModuleGenericDAO.class);
+        }
+        return googleNotificationPaymentDao;
     }
 }

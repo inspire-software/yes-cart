@@ -19,6 +19,15 @@
 
     <import resource="classpath*:payment-api.xml"/>
 
+    <bean id="googleNotificationPaymentDao" parent="txPayProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.payment.persistence.service.impl.PaymentModuleGenericDAOImpl">
+                <constructor-arg index="0" value="org.yes.cart.payment.persistence.entity.impl.GoogleNotificationHistoryEntity"/>
+                <property name="sessionFactory" ref="paySessionFactory"/>
+            </bean>
+        </property>
+    </bean>
+
     <bean id="googleCheckoutPaymentGateway" class="org.yes.cart.payment.impl.GoogleCheckoutPaymentGatewayImpl" scope="prototype">
         <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
     </bean>
