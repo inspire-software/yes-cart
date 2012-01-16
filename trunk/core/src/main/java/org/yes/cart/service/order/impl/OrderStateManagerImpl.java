@@ -56,7 +56,7 @@ public class OrderStateManagerImpl implements OrderStateManager {
             ));
         } else {
             fireEventListeners(beforeListenersMap, orderEvent);
-            boolean result = false;
+            boolean result;
             try {
                 result = handler.handle(orderEvent);
                 if (result) {

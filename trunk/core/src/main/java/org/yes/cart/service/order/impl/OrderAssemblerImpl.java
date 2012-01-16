@@ -162,8 +162,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
      * @param defaultAddress given address
      * @return formated address
      */
-    private String formatAddress(final Address defaultAddress) {
-
+    public String formatAddress(final Address defaultAddress) {
         if (defaultAddress != null) {
 
             return MessageFormat.format(
