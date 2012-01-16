@@ -207,7 +207,7 @@ public class GoogleCheckoutPaymentGatewayImpl
         final ApiContext apiContext = getApiContext();
         dumpRequest(request);
         apiContext.handleNotification(
-                new GoogleNotificationDispatcherImpl(request, response)
+                new GoogleNotificationDispatcherImpl(applicationContext, request, response)
         );
     }
 

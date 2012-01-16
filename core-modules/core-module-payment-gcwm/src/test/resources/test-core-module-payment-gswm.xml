@@ -20,5 +20,14 @@
     
     <import resource="../../../../payment-api/src/test/resources/test-payment-api.xml"/>
 
+    <bean id="googleNotificationPaymentDao" parent="txPayProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.payment.persistence.service.impl.PaymentModuleGenericDAOImpl">
+                <constructor-arg index="0" value="org.yes.cart.payment.persistence.entity.impl.GoogleNotificationHistoryEntity"/>
+                <property name="sessionFactory" ref="paySessionFactory"/>
+            </bean>
+        </property>
+    </bean>
+
 
 </beans>
