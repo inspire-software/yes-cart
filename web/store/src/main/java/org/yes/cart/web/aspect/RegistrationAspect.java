@@ -1,14 +1,11 @@
 package org.yes.cart.web.aspect;
 
-import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jms.core.JmsTemplate;
-import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.RegisteredPerson;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShopUrl;
@@ -17,7 +14,7 @@ import org.yes.cart.domain.message.impl.RegistrationMessageImpl;
 import org.yes.cart.service.domain.HashHelper;
 import org.yes.cart.service.domain.PassPhrazeGenerator;
 import org.yes.cart.service.domain.aspect.impl.BaseNotificationAspect;
-import org.yes.cart.web.application.StorefrontApplication;
+import org.yes.cart.web.application.ApplicationDirector;
 
 import java.io.File;
 import java.util.HashSet;
@@ -81,7 +78,7 @@ public class RegistrationAspect extends BaseNotificationAspect {
      * @param pjp
      * @param newPerson in case if new person was created.
      * @return inherited return
-     * @throws Throwable  in case it was in underlaing method
+     * @throws Throwable in case it was in underlaing method
      */
     protected Object notifyInternal(final ProceedingJoinPoint pjp, final boolean newPerson) throws Throwable {
         final Object[] args = pjp.getArgs();
@@ -105,9 +102,10 @@ public class RegistrationAspect extends BaseNotificationAspect {
         registrationMessage.setLastname(registeredPerson.getLastname());
         registrationMessage.setPassword(generatedPassword);
 
+
         registrationMessage.setPathToTemplateFolder(
-                StorefrontApplication.get().getServletContext().getRealPath(shop.getMailFolder()) + File.separator);
-        registrationMessage.setTemplateName(newPerson?"customerRegistered" : "customerChangePassword");
+                ApplicationDirector.getCurrentServletContext().getRealPath(shop.getMailFolder()) + File.separator);
+        registrationMessage.setTemplateName(newPerson ? "customerRegistered" : "customerChangePassword");
 
         registrationMessage.setShopMailFrom(null); // will be used from properties at email template
 
@@ -122,7 +120,6 @@ public class RegistrationAspect extends BaseNotificationAspect {
 
         return pjp.proceed();
     }
-
 
 
     private Set<String> transformShopUrls(final Set<ShopUrl> urls) {
