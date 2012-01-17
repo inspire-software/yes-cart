@@ -31,3 +31,16 @@ VALUES (404, 'googleCheckoutPaymentGateway',
 '<input type="image" name="Google Checkout" alt="Fast checkout through Google"  src="http://sandbox.google.com/checkout/buttons/checkout.gif?merchant_id=951076354081708&w=180&h=46&style=white&variant=text&loc=en_US"  height="46" width="180">'
 , 'Submit button', 'Submit button');
 
+
+
+CREATE TABLE TGOOGLENOTIFICATION (
+  GOOGLENOTIFICATION_ID bigint NOT NULL AUTO_INCREMENT,
+  SERIAL_NUMBER varchar(64) DEFAULT NULL,
+  NOTIFICATION LONGTEXT,
+  CREATED_BY varchar(64) DEFAULT NULL,
+  CREATED_TIMESTAMP datetime DEFAULT NULL,
+  GUID varchar(36) DEFAULT NULL,
+  UPDATED_BY varchar(64) DEFAULT NULL,
+  UPDATED_TIMESTAMP datetime DEFAULT NULL,
+  PRIMARY KEY (GOOGLENOTIFICATION_ID)
+);

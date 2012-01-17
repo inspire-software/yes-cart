@@ -57,8 +57,8 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
     /**
      * Construct dispatcher.
      *
-     * @param request  request
-     * @param response responce.
+     * @param request            request
+     * @param response           responce.
      * @param applicationContext spring app context
      */
     public GoogleNotificationDispatcherImpl(final ApplicationContext applicationContext, final HttpServletRequest request, final HttpServletResponse response) {
@@ -96,7 +96,6 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
         customerOrder.setShippingAddress(getOrderAssembler().formatAddress(adaptGoogleAddress(notification.getBuyerShippingAddress())));
 
 
-
         final CustomerOrderDelivery customerOrderDelivery = customerOrder.getDelivery().iterator().next();
         final CarrierSla carrierSla = getCarrierSlaService().finaByName(orderSummary.getOrderAdjustment().getShipping().getFlatRateShippingAdjustment().getShippingName());
         customerOrderDelivery.setCarrierSla(carrierSla); // only one delivery, so just set sla
@@ -104,12 +103,15 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
 
         customerOrder.setOrdernum(orderSummary.getGoogleOrderNumber()); //switch to google order number instead of internal
 
-        final StringBuilder stringBuilder = new StringBuilder();
-        for (Object str : notification.getShoppingCart().getBuyerMessages().getGiftMessageOrIncludeGiftReceiptOrDeliveryInstructions()) {
-            stringBuilder.append(str);
-            stringBuilder.append('\n');
+
+        if (notification.getShoppingCart().getBuyerMessages() != null && notification.getShoppingCart().getBuyerMessages().getGiftMessageOrIncludeGiftReceiptOrDeliveryInstructions() != null) {
+            final StringBuilder stringBuilder = new StringBuilder();
+            for (Object str : notification.getShoppingCart().getBuyerMessages().getGiftMessageOrIncludeGiftReceiptOrDeliveryInstructions()) {
+                stringBuilder.append(str);
+                stringBuilder.append('\n');
+            }
+            customerOrder.setOrderMessage(stringBuilder.toString());
         }
-        customerOrder.setOrderMessage(stringBuilder.toString());
 
         getCustomerOrderService().update(customerOrder);
 
@@ -153,7 +155,7 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
                                      final Notification notification) {
 
         if (LOG.isInfoEnabled()) {
-            LOG.info("BaseNotificationDispatcher#rememberSerialNumber  " + serialNumber + " "  +  notification);
+            LOG.info("BaseNotificationDispatcher#rememberSerialNumber  " + serialNumber + " " + notification);
         }
 
         return getPaymentModuleGenericDAO().findSingleByCriteria(Restrictions.eq("serialNumber", serialNumber)) != null;
@@ -162,10 +164,10 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
 
     @Override
     protected void rememberSerialNumber(final String serialNumber,
-            final OrderSummary orderSummary, final Notification  notification) {
+                                        final OrderSummary orderSummary, final Notification notification) {
 
         if (LOG.isInfoEnabled()) {
-            LOG.info("BaseNotificationDispatcher#rememberSerialNumber  " + serialNumber + " "  + notification);
+            LOG.info("BaseNotificationDispatcher#rememberSerialNumber  " + serialNumber + " " + notification);
         }
 
         final GoogleNotificationHistory entity = new GoogleNotificationHistoryEntity();
@@ -204,6 +206,7 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
 
     /**
      * Adapt google address to out address.
+     *
      * @param address address to adapt
      * @return address form our domain.
      */
@@ -292,8 +295,6 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
     }
 
 
-
-
     private AttributeService getAttributeService() {
         if (attributeService == null) {
             attributeService = applicationContext.getBean("attributeService", AttributeService.class);
@@ -327,6 +328,7 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
 
     /**
      * Get the order assempbler
+     *
      * @return {@link OrderAssembler}
      */
     private OrderAssembler getOrderAssembler() {
@@ -338,6 +340,7 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
 
     /**
      * Get carrier sla service.
+     *
      * @return {@link CarrierSlaService}
      */
     private CarrierSlaService getCarrierSlaService() {
@@ -350,9 +353,10 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
 
     /**
      * Get notificatin dao.
-     * @return  notification dao.
+     *
+     * @return notification dao.
      */
-    private PaymentModuleGenericDAO<GoogleNotificationHistory, Long>  getPaymentModuleGenericDAO() {
+    private PaymentModuleGenericDAO<GoogleNotificationHistory, Long> getPaymentModuleGenericDAO() {
         if (googleNotificationPaymentDao == null) {
             googleNotificationPaymentDao = applicationContext.getBean("googleNotificationPaymentDao", PaymentModuleGenericDAO.class);
         }
