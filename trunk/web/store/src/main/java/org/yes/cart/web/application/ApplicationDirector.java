@@ -30,13 +30,13 @@ public class ApplicationDirector implements ApplicationContextAware {
 
     private static ThreadLocal<Shop> shopThreadLocal = new ThreadLocal<Shop>();
     private static ThreadLocal<ShoppingCart> shoppingCartThreadLocal = new ThreadLocal<ShoppingCart>();
-    private static ThreadLocal<ServletContext> servletContextThreadLocal = new ThreadLocal<ServletContext>();
+    //private static ThreadLocal<ServletContext> servletContextThreadLocal = new ThreadLocal<ServletContext>();
     private static ThreadLocal<String> mailTemplatePathThreadLocal = new ThreadLocal<String>();
 
 
 
     private final ConcurrentMap<String, Shop> urlShopCache = new MapMaker().concurrencyLevel(16).softValues().expiration(3, TimeUnit.MINUTES).makeMap();
-    private final ConcurrentMap<Long, Shop> idShopCache = new MapMaker().concurrencyLevel(16).softValues().expiration(3, TimeUnit.MINUTES).makeMap();
+    //private final ConcurrentMap<Long, Shop> idShopCache = new MapMaker().concurrencyLevel(16).softValues().expiration(3, TimeUnit.MINUTES).makeMap();
 
     /**
      * Get app director instance.
@@ -58,9 +58,9 @@ public class ApplicationDirector implements ApplicationContextAware {
     }
 
 
-    private ConcurrentMap<Long, Shop> getIdShopCache() {
+    /*private ConcurrentMap<Long, Shop> getIdShopCache() {
         return idShopCache;
-    }
+    }  */
 
     /**
      * Get {@link Shop} from cache by his id.
@@ -68,7 +68,7 @@ public class ApplicationDirector implements ApplicationContextAware {
      * @param shopId given shop id
      * @return {@link Shop}
      */
-    public Shop getShopById(final Long shopId) {
+    /*public Shop getShopById(final Long shopId) {
         Shop shop = getIdShopCache().get(shopId);
         if (shop == null) {
             shop = shopService.findById(shopId);
@@ -77,7 +77,7 @@ public class ApplicationDirector implements ApplicationContextAware {
             }
         }
         return shop;
-    }
+    }*/
 
 
     /**
@@ -92,7 +92,7 @@ public class ApplicationDirector implements ApplicationContextAware {
             shop = shopService.getShopByDomainName(serverDomainName);
             if (shop != null) {
                 getUrlShopCache().put(serverDomainName, shop);
-                getIdShopCache().put(shop.getId(), shop);
+                //getIdShopCache().put(shop.getId(), shop);
             }
         }
         return shop;
@@ -120,17 +120,17 @@ public class ApplicationDirector implements ApplicationContextAware {
      * Get current servlet context.
      * @return  {@link ServletContext}
      */
-    public static ServletContext getCurrentServletContext() {
+   /* public static ServletContext getCurrentServletContext() {
         return servletContextThreadLocal.get();
-    }
+    }       */
 
     /**
      * Set current servlet context.
      * @param context servlet context.
      */
-    public static void setCurrentServletContext(ServletContext context) {
+   /* public static void setCurrentServletContext(ServletContext context) {
         servletContextThreadLocal.set(context);
-    }
+    }  */
 
 
     /**

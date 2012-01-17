@@ -3846,7 +3846,7 @@ public void setRangeList(final RangeList rangeList) {
             <many-to-one name="customer" class="org.yes.cart.domain.entity.Customer" foreign-key="FK_ORDER_CUSTOMER" lazy="false">
                 <column name="CUSTOMER_ID" not-null="false"/>
             </many-to-one>
-            <many-to-one name="shop" class="org.yes.cart.domain.entity.Shop" foreign-key="FK_ORDER_SHOP">
+            <many-to-one name="shop" class="org.yes.cart.domain.entity.Shop" foreign-key="FK_ORDER_SHOP" lazy="false">
                 <column name="SHOP_ID" not-null="true"/>
             </many-to-one>
 
