@@ -31,6 +31,7 @@ public class ApplicationDirector implements ApplicationContextAware {
     private static ThreadLocal<Shop> shopThreadLocal = new ThreadLocal<Shop>();
     private static ThreadLocal<ShoppingCart> shoppingCartThreadLocal = new ThreadLocal<ShoppingCart>();
     private static ThreadLocal<ServletContext> servletContextThreadLocal = new ThreadLocal<ServletContext>();
+    private static ThreadLocal<String> mailTemplatePathThreadLocal = new ThreadLocal<String>();
 
 
 
@@ -97,7 +98,23 @@ public class ApplicationDirector implements ApplicationContextAware {
         return shop;
     }
 
-    //public ServletContext getServletContext()
+    /**
+     * Get current mail template folder.
+     * @return  current mail template folder.
+     */
+    public static String getCurrentMailTemplateFolder() {
+        return mailTemplatePathThreadLocal.get();
+    }
+
+    /**
+     * Set current mail template folder.
+     * @param currentMailTemplateFolder  current mail template folder.
+     */
+    public static void setCurrentMailTemplateFolder(final String currentMailTemplateFolder)  {
+        System.out.println("currentMailTemplateFolder = " + currentMailTemplateFolder);
+        mailTemplatePathThreadLocal.set(currentMailTemplateFolder);
+
+    }
 
     /**
      * Get current servlet context.
