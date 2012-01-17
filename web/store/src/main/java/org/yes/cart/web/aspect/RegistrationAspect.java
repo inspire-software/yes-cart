@@ -84,7 +84,7 @@ public class RegistrationAspect extends BaseNotificationAspect {
         final Object[] args = pjp.getArgs();
 
         final RegisteredPerson registeredPerson = (RegisteredPerson) args[0];
-        final Shop shop = (Shop) args[1];
+        final Shop shop = ApplicationDirector.getCurrentShop();// (Shop) args[1];
 
 
         final String generatedPassword;
