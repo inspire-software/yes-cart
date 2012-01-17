@@ -27,12 +27,15 @@
     <bean id="paySessionFactory"
           class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
         <property name="dataSource" ref="payDataSource"/>
-        <property name="annotatedClasses">
+        <!--<property name="annotatedClasses">
             <list>
                 <value>org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity</value>
                 <value>org.yes.cart.payment.persistence.entity.impl.PaymentGatewayParameterEntity</value>
             </list>
-        </property>
+        </property>-->
+
+        <property name="packagesToScan" value="org.yes.cart.payment.persistence.entity.impl"/>
+
         <property name="hibernateProperties">
             <map>
                 <entry key="hibernate.show_sql" value="false"/>
