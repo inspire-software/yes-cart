@@ -155,7 +155,7 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
                                      final Notification notification) {
 
         if (LOG.isInfoEnabled()) {
-            LOG.info("BaseNotificationDispatcher#rememberSerialNumber  " + serialNumber + " " + notification);
+            LOG.info("BaseNotificationDispatcher#hasAlreadyHandled  " + serialNumber + " " + notification);
         }
 
         return getPaymentModuleGenericDAO().findSingleByCriteria(Restrictions.eq("serialNumber", serialNumber)) != null;
