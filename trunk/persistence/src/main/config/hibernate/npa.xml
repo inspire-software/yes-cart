@@ -2780,14 +2780,14 @@ public void setRangeList(final RangeList rangeList) {
 
                 ]]>
             </meta>
-            <property name="code" column="CODE" type="string" length="32" not-null="true"/>
-            <property name="name" type="string" length="64" not-null="true">
+            <property name="code" column="CODE" type="string" length="32" not-null="true" lazy="false"/>
+            <property name="name" type="string" length="64" not-null="true" lazy="false">
                 <column name="NAME" length="64" not-null="true"/>
             </property>
             <property name="description" length="4000" type="string">
                 <column name="DESCRIPTION" length="4000"/>
             </property>
-            <property name="fspointer" length="4000" type="string">
+            <property name="fspointer" length="4000" type="string" lazy="false">
                 <column name="FSPOINTER" length="4000" not-null="true">
                     <comment>
                         Point to jsps
@@ -3273,7 +3273,7 @@ public void setRangeList(final RangeList rangeList) {
 
                 ]]>
             </meta>
-            <property name="url" column="URL" type="string" length="512" not-null="true"/>
+            <property name="url" column="URL" type="string" length="512" not-null="true" lazy="false"/>
             <many-to-one name="shop" class="org.yes.cart.domain.entity.Shop" foreign-key="FK_SHOPURL_SHOP">
                 <column name="SHOP_ID" not-null="true"/>
             </many-to-one>
