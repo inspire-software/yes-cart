@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.shoppingcart.ShoppingCart;
@@ -15,10 +16,7 @@ import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.request.HttpServletRequestWrapper;
 import org.yes.cart.web.support.service.LanguageService;
 
-import javax.servlet.Filter;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -36,13 +34,15 @@ import java.util.Date;
  * If shop can not be resolved by server/domain name
  * filter redirect to default url.
  */
-public class ShopResolverFilter extends AbstractFilter implements Filter, ApplicationContextAware {
+public class ShopResolverFilter extends AbstractFilter implements Filter, ApplicationContextAware, ServletContextAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(ShopResolverFilter.class);
 
     private final SystemService systemService;
 
     private ApplicationContext applicationContext;
+
+    private ServletContext servletContext;
 
     private final LanguageService languageService;
 
@@ -86,6 +86,8 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Applic
         setDefaultValues(shop);
 
         ApplicationDirector.setCurrentShop(shop);
+        ApplicationDirector.setCurrentServletContext(servletContext);
+
 
         return getModifiedRequest(servletRequest, shop);
 
@@ -162,4 +164,8 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Applic
         this.applicationContext = applicationContext;
     }
 
+    /** {@inheritDoc} */
+    public void setServletContext(final ServletContext servletContext) {
+        this.servletContext = servletContext;
+    }
 }

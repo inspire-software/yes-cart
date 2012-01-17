@@ -9,6 +9,7 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
+import javax.servlet.ServletContext;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
@@ -25,15 +26,16 @@ public class ApplicationDirector implements ApplicationContextAware {
 
     private ShopService shopService;
     private SystemService systemService;
-    //private ApplicationContext applicationContext;
     private static ApplicationDirector applicationDirector;
 
     private static ThreadLocal<Shop> shopThreadLocal = new ThreadLocal<Shop>();
     private static ThreadLocal<ShoppingCart> shoppingCartThreadLocal = new ThreadLocal<ShoppingCart>();
+    private static ThreadLocal<ServletContext> servletContextThreadLocal = new ThreadLocal<ServletContext>();
 
 
-    private final ConcurrentMap<String, Shop> urlShopCache;
-    private final ConcurrentMap<Long, Shop> idShopCache;
+
+    private final ConcurrentMap<String, Shop> urlShopCache = new MapMaker().concurrencyLevel(16).softValues().expiration(3, TimeUnit.MINUTES).makeMap();
+    private final ConcurrentMap<Long, Shop> idShopCache = new MapMaker().concurrencyLevel(16).softValues().expiration(3, TimeUnit.MINUTES).makeMap();
 
     /**
      * Get app director instance.
@@ -48,8 +50,6 @@ public class ApplicationDirector implements ApplicationContextAware {
      */
     public ApplicationDirector() {
         applicationDirector = this;
-        urlShopCache = new MapMaker().concurrencyLevel(16).softValues().expiration(3, TimeUnit.MINUTES).makeMap();
-        idShopCache = new MapMaker().concurrencyLevel(16).softValues().expiration(3, TimeUnit.MINUTES).makeMap();
     }
 
     private ConcurrentMap<String, Shop> getUrlShopCache() {
@@ -96,6 +96,25 @@ public class ApplicationDirector implements ApplicationContextAware {
         }
         return shop;
     }
+
+    //public ServletContext getServletContext()
+
+    /**
+     * Get current servlet context.
+     * @return  {@link ServletContext}
+     */
+    public static ServletContext getCurrentServletContext() {
+        return servletContextThreadLocal.get();
+    }
+
+    /**
+     * Set current servlet context.
+     * @param context servlet context.
+     */
+    public static void setCurrentServletContext(ServletContext context) {
+        servletContextThreadLocal.set(context);
+    }
+
 
     /**
      * Get current shop from local thread.
