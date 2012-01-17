@@ -4377,13 +4377,13 @@ public void setRangeList(final RangeList rangeList) {
 
     <query name="SHOP.BY.URL">
         <![CDATA[
-       select o.shop from ShopUrlEntity o where o.url = ?1
+       select o.shop  from ShopUrlEntity o fetch all properties where o.url = ?1
        ]]>
     </query>
 
    <query name="SHOP.BY.CODE">
         <![CDATA[
-       select o from ShopEntity o where o.code = ?1
+       select o from ShopEntity o fetch all properties  where o.code = ?1
        ]]>
     </query>
 
