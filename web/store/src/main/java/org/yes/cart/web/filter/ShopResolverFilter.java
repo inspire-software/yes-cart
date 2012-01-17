@@ -19,6 +19,7 @@ import org.yes.cart.web.support.service.LanguageService;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Collections;
@@ -87,6 +88,7 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Applic
 
         ApplicationDirector.setCurrentShop(shop);
         ApplicationDirector.setCurrentServletContext(servletContext);
+        ApplicationDirector.setCurrentMailTemplateFolder(servletContext.getRealPath(shop.getMailFolder()) + File.separator);
 
 
         return getModifiedRequest(servletRequest, shop);
