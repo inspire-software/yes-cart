@@ -1,8 +1,8 @@
 package org.yes.cart.payment.impl;
 
 
-import com.google.checkout.sdk.domain.*;
 import com.google.checkout.sdk.domain.Address;
+import com.google.checkout.sdk.domain.*;
 import com.google.checkout.sdk.notifications.BaseNotificationDispatcher;
 import com.google.checkout.sdk.notifications.Notification;
 import org.apache.commons.lang.ObjectUtils;
@@ -10,9 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.payment.persistence.entity.GoogleNotificationHistory;
@@ -29,7 +27,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- * Google checkout notification dispatched.
+ *
+ * Google checkout notification dispatcher.
+ *
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 16/01/12
@@ -64,10 +64,13 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
     public GoogleNotificationDispatcherImpl(final ApplicationContext applicationContext, final HttpServletRequest request, final HttpServletResponse response) {
         super(request, response);
         this.applicationContext = applicationContext;
-        System.out.println(">>>>>>>>>>>>>>>> applicationContext " + applicationContext);
     }
 
     /**
+     *
+     * The onNewOrderNotification called by GC when customer confirm order.
+     * Amount is authorized by google.
+     *
      * Here we
      * 1. Collect information about customer, create new one if it not existst.
      * 2. Wire billing and shipping addresses to order.
@@ -92,51 +95,46 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
 
         enrichWithAddresses(customer, notification);
 
+        enrichWithMessage(customerOrder, notification);
+
         customerOrder.setBillingAddress(getOrderAssembler().formatAddress(adaptGoogleAddress(notification.getBuyerBillingAddress())));
+
         customerOrder.setShippingAddress(getOrderAssembler().formatAddress(adaptGoogleAddress(notification.getBuyerShippingAddress())));
 
 
         final CustomerOrderDelivery customerOrderDelivery = customerOrder.getDelivery().iterator().next();
-        final CarrierSla carrierSla = getCarrierSlaService().finaByName(orderSummary.getOrderAdjustment().getShipping().getFlatRateShippingAdjustment().getShippingName());
+        final CarrierSla carrierSla = getCarrierSlaService().finaByName(
+                orderSummary.getOrderAdjustment().getShipping().getFlatRateShippingAdjustment().getShippingName());
         customerOrderDelivery.setCarrierSla(carrierSla); // only one delivery, so just set sla
         customerOrderDelivery.setPrice(carrierSla.getPrice());
 
         customerOrder.setOrdernum(orderSummary.getGoogleOrderNumber()); //switch to google order number instead of internal
 
 
-        if (notification.getShoppingCart().getBuyerMessages() != null && notification.getShoppingCart().getBuyerMessages().getGiftMessageOrIncludeGiftReceiptOrDeliveryInstructions() != null) {
-            final StringBuilder stringBuilder = new StringBuilder();
-            for (Object str : notification.getShoppingCart().getBuyerMessages().getGiftMessageOrIncludeGiftReceiptOrDeliveryInstructions()) {
-                stringBuilder.append(str);
-                stringBuilder.append('\n');
-            }
-            customerOrder.setOrderMessage(stringBuilder.toString());
-        }
-
         getCustomerOrderService().update(customerOrder);
+        //todo perform auth transition
 
     }
 
 
-    /*@Override
-   public void onAllNotifications(final OrderSummary orderSummary,
-                                  final Notification notification) {
-       final String msg = "#onAllNotifications order summary is : " + orderSummary.toString() + " notification is  " + notification;
-       LOG.info(msg);
-       System.out.println(msg);
-
-   } */
-
+    /**
+     *
+     * The onAuthAmountNotification method is called when you receive notice that an order is ready to be
+     * shipped and charged; in the above code, we print out the order number and buyer's name.
+     *
+     * So the GC make card authorization before on new order notification.
+     * onAuthAmountNotification called on fund capture.
+     *
+     * @param orderSummary {@link OrderSummary}
+     * @param notification {@link AuthorizationAmountNotification}
+     */
     @Override
     public void onAuthorizationAmountNotification(final OrderSummary orderSummary, final AuthorizationAmountNotification notification) {
-        final String msg = "#onAuthorizationAmountNotification order summary is : " + orderSummary.toString() + " notification is  " + notification;
-        LOG.info(msg);
-        System.out.println(msg);
 
-        System.out.println(
-                "Order " + notification.getGoogleOrderNumber()
-                        + " authorized and ready to ship to:"
-                        + orderSummary.getBuyerShippingAddress().getContactName());
+        if (LOG.isInfoEnabled()) {
+            LOG.info("BaseNotificationDispatcher#onAuthorizationAmountNotification  " + notification);
+        }
+        //todo perform transition to ????
     }
 
     @Override
@@ -153,13 +151,10 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
     public boolean hasAlreadyHandled(final String serialNumber,
                                      final OrderSummary orderSummary,
                                      final Notification notification) {
-
         if (LOG.isInfoEnabled()) {
             LOG.info("BaseNotificationDispatcher#hasAlreadyHandled  " + serialNumber + " " + notification);
         }
-
         return getPaymentModuleGenericDAO().findSingleByCriteria(Restrictions.eq("serialNumber", serialNumber)) != null;
-
     }
 
     @Override
@@ -176,6 +171,25 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
         getPaymentModuleGenericDAO().create(entity);
 
     }
+
+    /**
+     * Enrich with message.
+     * @param customerOrder order to enrich.
+     * @param notification notification.
+     */
+    private void enrichWithMessage(CustomerOrder customerOrder, NewOrderNotification notification) {
+        if (notification.getShoppingCart().getBuyerMessages() != null
+                && notification.getShoppingCart().getBuyerMessages().getGiftMessageOrIncludeGiftReceiptOrDeliveryInstructions() != null) {
+            final StringBuilder stringBuilder = new StringBuilder();
+            for (Object str : notification.getShoppingCart().getBuyerMessages().getGiftMessageOrIncludeGiftReceiptOrDeliveryInstructions()) {
+                stringBuilder.append(str);
+                stringBuilder.append('\n');
+            }
+            customerOrder.setOrderMessage(stringBuilder.toString());
+        }
+    }
+
+
 
 
     /**
@@ -295,6 +309,10 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
     }
 
 
+    /**
+     * Get attibute service from application context.
+     * @return {@link AttributeService}
+     */
     private AttributeService getAttributeService() {
         if (attributeService == null) {
             attributeService = applicationContext.getBean("attributeService", AttributeService.class);
@@ -356,6 +374,7 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
      *
      * @return notification dao.
      */
+    @SuppressWarnings("unchecked")
     private PaymentModuleGenericDAO<GoogleNotificationHistory, Long> getPaymentModuleGenericDAO() {
         if (googleNotificationPaymentDao == null) {
             googleNotificationPaymentDao = applicationContext.getBean("googleNotificationPaymentDao", PaymentModuleGenericDAO.class);
