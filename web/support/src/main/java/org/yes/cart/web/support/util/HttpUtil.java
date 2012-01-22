@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Enumeration;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -12,6 +13,8 @@ import java.util.Enumeration;
  * Time: 9:52 PM
  */
 public class HttpUtil {
+
+
 
     public static void dumpRequest(final String prefix, final ServletRequest request) {
         Enumeration en = request.getParameterNames();

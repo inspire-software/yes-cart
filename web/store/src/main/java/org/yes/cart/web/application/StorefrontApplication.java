@@ -18,6 +18,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.yes.cart.web.page.*;
 import org.yes.cart.web.page.component.customer.address.CreateEditAddressPage;
 import org.yes.cart.web.page.payment.callback.AuthorizeNetSimPaymentOkPage;
+import org.yes.cart.web.page.payment.callback.LiqPayReturnUrlPage;
 import org.yes.cart.web.page.payment.callback.PayPalReturnUrlPage;
 import org.yes.cart.web.page.payment.callback.ResultPage;
 import org.yes.cart.web.util.SeoBookmarkablePageParametersEncoder;
@@ -199,6 +200,8 @@ public class StorefrontApplication
                 )
         );
 
+
+        //TODO mount only available payment gateways
         mount(
                 new MountedMapper(
                         "/anetsim",
@@ -210,6 +213,13 @@ public class StorefrontApplication
                 new MountedMapper(
                         "/paypallreturn",
                         PayPalReturnUrlPage.class
+                )
+        );
+
+        mount(
+                new MountedMapper(
+                        "/liqpayreturn",
+                        LiqPayReturnUrlPage.class
                 )
         );
 

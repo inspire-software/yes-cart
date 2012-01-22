@@ -16,10 +16,7 @@ import org.yes.cart.domain.entity.*;
 import org.yes.cart.payment.persistence.entity.GoogleNotificationHistory;
 import org.yes.cart.payment.persistence.entity.impl.GoogleNotificationHistoryEntity;
 import org.yes.cart.payment.persistence.service.PaymentModuleGenericDAO;
-import org.yes.cart.service.domain.AttributeService;
-import org.yes.cart.service.domain.CarrierSlaService;
-import org.yes.cart.service.domain.CustomerOrderService;
-import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.service.domain.*;
 import org.yes.cart.service.order.OrderAssembler;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,9 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- *
  * Google checkout notification dispatcher.
- *
+ * <p/>
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 16/01/12
@@ -67,10 +63,9 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
     }
 
     /**
-     *
      * The onNewOrderNotification called by GC when customer confirm order.
      * Amount is authorized by google.
-     *
+     * <p/>
      * Here we
      * 1. Collect information about customer, create new one if it not existst.
      * 2. Wire billing and shipping addresses to order.
@@ -105,8 +100,12 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
         final CustomerOrderDelivery customerOrderDelivery = customerOrder.getDelivery().iterator().next();
         final CarrierSla carrierSla = getCarrierSlaService().finaByName(
                 orderSummary.getOrderAdjustment().getShipping().getFlatRateShippingAdjustment().getShippingName());
-        customerOrderDelivery.setCarrierSla(carrierSla); // only one delivery, so just set sla
-        customerOrderDelivery.setPrice(carrierSla.getPrice());
+
+        if (carrierSla != null) {
+
+            customerOrderDelivery.setCarrierSla(carrierSla); // only one delivery, so just set sla
+            customerOrderDelivery.setPrice(carrierSla.getPrice());
+        }
 
         customerOrder.setOrdernum(orderSummary.getGoogleOrderNumber()); //switch to google order number instead of internal
 
@@ -118,10 +117,9 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
 
 
     /**
-     *
      * The onAuthAmountNotification method is called when you receive notice that an order is ready to be
      * shipped and charged; in the above code, we print out the order number and buyer's name.
-     *
+     * <p/>
      * So the GC make card authorization before on new order notification.
      * onAuthAmountNotification called on fund capture.
      *
@@ -176,8 +174,9 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
 
     /**
      * Enrich with message.
+     *
      * @param customerOrder order to enrich.
-     * @param notification notification.
+     * @param notification  notification.
      */
     private void enrichWithMessage(CustomerOrder customerOrder, NewOrderNotification notification) {
         if (notification.getShoppingCart().getBuyerMessages() != null
@@ -190,8 +189,6 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
             customerOrder.setOrderMessage(stringBuilder.toString());
         }
     }
-
-
 
 
     /**
@@ -293,7 +290,7 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
                     gAddress.getStructuredName().getLastName()
             );
 
-            customer.setPassword("change-me");
+            customer.setPassword(getPassPhrazeGenerator().getNextPassPhrase());
 
             getCustomerService().addAttribute(customer, AttributeNamesKeys.CUSTOMER_PHONE, gAddress.getPhone());
 
@@ -310,9 +307,19 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
 
     }
 
+    /**
+     * Get passworg generator.
+     * @return {@link PassPhrazeGenerator}
+     */
+    private PassPhrazeGenerator getPassPhrazeGenerator() {
+        return  applicationContext.getBean("passPhraseGenerator", PassPhrazeGenerator.class);
+    }
+
+
 
     /**
      * Get attibute service from application context.
+     *
      * @return {@link AttributeService}
      */
     private AttributeService getAttributeService() {

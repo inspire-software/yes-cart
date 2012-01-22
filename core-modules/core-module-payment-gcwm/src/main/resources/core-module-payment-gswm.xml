@@ -40,6 +40,18 @@
     </bean>
 
 
+    <bean id="liqPayPaymentGateway" class="org.yes.cart.payment.impl.LiqPayPaymentGatewayImp" scope="prototype">
+        <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
+    </bean>
+
+    <bean id="liqPayPaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
+        <property name="label" value="liqPayPaymentGatewayLabel"/>
+        <property name="name" value="Liq Pay Payment Gateway"/>
+        <property name="url" value="liqPayPaymentGateway"/>
+        <property name="description" value="Liq Pay Payment Gateway"/>
+    </bean>
+
+
 
     <bean id="gswmPaymentModule" class="org.yes.cart.payment.impl.PaymentModuleGswmSetImpl">
         <property name="descriptor">
@@ -52,6 +64,7 @@
         </property>
         <property name="gateways">
             <map>
+                <entry key="liqPayPaymentGateway" value-ref="liqPayPaymentGatewayDescriptor"/>
                 <entry key="googleCheckoutPaymentGateway" value-ref="googleCheckoutPaymentGatewayDescriptor"/>
             </map>
         </property>
