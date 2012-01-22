@@ -1,6 +1,9 @@
 package org.yes.cart.payment.impl;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 import junit.framework.TestCase;
+import org.junit.Test;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentLine;
@@ -19,6 +22,7 @@ import java.util.Locale;
  */
 public class LiqPayPaymentGatewayImpTest extends TestCase {
 
+    @Test
     public void testGetHtmlForm() throws Exception {
 
         final LiqPayPaymentGatewayImp gatewayImp = new LiqPayPaymentGatewayImp() {
@@ -29,7 +33,7 @@ public class LiqPayPaymentGatewayImpTest extends TestCase {
 
             @Override
             public String getParameterValue(String valueLabel) {
-                if("LP_MERCHANT_KEY".endsWith(valueLabel)) {
+                if ("LP_MERCHANT_KEY".endsWith(valueLabel)) {
                     return "signature";
                 }
                 return "";
@@ -46,8 +50,8 @@ public class LiqPayPaymentGatewayImpTest extends TestCase {
 
         );
 
-        assertTrue("Xml body must be present" , htmlFormPart.contains("eG1s"));
-        assertTrue("Signature must be present" , htmlFormPart.contains("Lg7KbFKVh0aLNq7auqzqRaERFks="));
+        assertTrue("Xml body must be present", htmlFormPart.contains("eG1s"));
+        assertTrue("Signature must be present", htmlFormPart.contains("Lg7KbFKVh0aLNq7auqzqRaERFks="));
 
 
     }
@@ -67,6 +71,50 @@ public class LiqPayPaymentGatewayImpTest extends TestCase {
 
         return payment;
 
+    }
+
+
+    @Test
+    public void testUmramshalLiqResponce() throws Exception {
+        final String xml = "<response>\n" +
+                "      <version>1.2</version>\n" +
+                "      <merchant_id>2134</merchant_id>\n" +
+                "      <order_id>ORDER_123456</order_id>\n" +
+                "      <amount>1.01</amount>\n" +
+                "      <currency>UAH</currency>\n" +
+                "      <description>Comment</description>\n" +
+                "      <status>success</status>\n" +
+                "      <code>42</code>\n" +
+                "      <transaction_id>31</transaction_id>\n" +
+                "      <pay_way>card</pay_way>\n" +
+                "      <sender_phone>+3801234567890</sender_phone>\n" +
+                "      <goods_id>1234</goods_id>\n" +
+                "      <pays_count>5</pays_count>\n" +
+                "</response>";
+        final LiqPayResponce liqPayResponce = (LiqPayResponce) getXStream().fromXML(xml);
+
+        assertEquals("1.2", liqPayResponce.getVersion());
+        assertEquals("2134", liqPayResponce.getMerchant_id());
+        assertEquals("ORDER_123456", liqPayResponce.getOrder_id());
+        assertEquals("1.01", liqPayResponce.getAmount());
+        assertEquals("UAH", liqPayResponce.getCurrency());
+        assertEquals("Comment", liqPayResponce.getDescription());
+        assertEquals("success", liqPayResponce.getStatus());
+        assertEquals("42", liqPayResponce.getCode());
+        assertEquals("31", liqPayResponce.getTransaction_id());
+        assertEquals("card", liqPayResponce.getPay_way());
+        assertEquals("+3801234567890", liqPayResponce.getSender_phone());
+        assertEquals("1234", liqPayResponce.getGoods_id());
+        assertEquals("5", liqPayResponce.getPays_count());
+
+
+    }
+
+
+    private XStream getXStream() {
+        XStream xStream = new XStream(new DomDriver());
+        xStream.alias("response", LiqPayResponce.class);
+        return xStream;
     }
 
 
