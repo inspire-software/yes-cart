@@ -65,8 +65,10 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
 
                 if (CustomerOrder.ORDER_STATUS_NONE.endsWith(order.getOrderStatus())) {
 
+                    boolean paymentWasOk = getPaymentGateway(paymentGatewayLabel).isSuccess(parameters);
+
                     OrderEvent orderEvent = new OrderEventImpl(
-                            OrderStateManager.EVT_PENDING,
+                            paymentWasOk ? OrderStateManager.EVT_PENDING : OrderStateManager.EVT_CANCEL,
                             order,
                             null,
                             parameters
@@ -93,13 +95,16 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
     }
 
     private String getOrderGuid(final Map privateCallBackParameters, final String paymentGatewayLabel) {
-        final PaymentGatewayExternalForm paymentGateway =
-                (PaymentGatewayExternalForm) paymentModulesManager.getPaymentGateway(paymentGatewayLabel);
+        final PaymentGatewayExternalForm paymentGateway = getPaymentGateway(paymentGatewayLabel);
         final String orderGuid = paymentGateway.restoreOrderGuid(privateCallBackParameters);
         if (LOG.isDebugEnabled()) {
             LOG.debug("Get order guid " + orderGuid + "  from http request with "
                     + paymentGatewayLabel + " payment gateway.");
         }
         return orderGuid;
+    }
+
+    private PaymentGatewayExternalForm getPaymentGateway(String paymentGatewayLabel) {
+        return (PaymentGatewayExternalForm) paymentModulesManager.getPaymentGateway(paymentGatewayLabel);
     }
 }
