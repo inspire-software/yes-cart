@@ -1,5 +1,7 @@
 package org.yes.cart.payment.impl;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
@@ -89,6 +91,7 @@ public class LiqPayPaymentGatewayImp extends AbstractGswmPaymentGatewayImpl
     public boolean isSuccess(Map<String, String> nvpCallResult) {
 
         final String operationXmlEncoded = nvpCallResult.get("operation_xml");
+
         final String signatureEncoded = nvpCallResult.get("signature");
 
         if (StringUtils.isNotBlank(operationXmlEncoded)) {
@@ -101,17 +104,7 @@ public class LiqPayPaymentGatewayImp extends AbstractGswmPaymentGatewayImpl
 
             if (signToCheck.equals(signatureEncoded)) {
 
-                /*DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
-        try {
-            DocumentBuilder builder = domFactory.newDocumentBuilder();
-            Document dDoc = builder.parse("E:/test.xml");
-
-            XPath xPath = XPathFactory.newInstance().newXPath();
-            Node node = (NodeList) xPath.evaluate("/Request/@name", dDoc, XPathConstants.NODE);
-            System.out.println(node.getNodeValue());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
+                final LiqPayResponce liqPayResponce = (LiqPayResponce) getXStream().fromXML(operationXml);
                 //todo
 
             } else {
@@ -311,5 +304,15 @@ public class LiqPayPaymentGatewayImp extends AbstractGswmPaymentGatewayImpl
      */
     public PaymentGatewayFeature getPaymentGatewayFeatures() {
         return paymentGatewayFeature;
+    }
+
+    /**
+     * Get {@link XStream}  .
+     * @return    {@link XStream} instance.
+     */
+    private XStream getXStream() {
+        XStream xStream = new XStream(new DomDriver());
+        xStream.alias("response", LiqPayResponce.class);
+        return xStream;
     }
 }
