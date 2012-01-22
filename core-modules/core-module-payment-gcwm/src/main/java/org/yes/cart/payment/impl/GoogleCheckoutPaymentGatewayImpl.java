@@ -355,7 +355,7 @@ public class GoogleCheckoutPaymentGatewayImpl
             flatRateShipping.setName(sla.getName());
             flatRateShipping.setPrice(price);
 
-            shippingMethods.getFlatRateShippingOrMerchantCalculatedShippingOrPickup().add(flatRateShipping);
+            shippingMethods.getAllShippingMethods().add(flatRateShipping);
 
         }
 

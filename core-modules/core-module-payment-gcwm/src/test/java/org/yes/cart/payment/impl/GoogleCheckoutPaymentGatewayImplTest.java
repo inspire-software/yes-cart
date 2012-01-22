@@ -136,7 +136,7 @@ public class GoogleCheckoutPaymentGatewayImplTest extends TestCase {
                 flatRateShipping.setName("Cheap delivery");
                 flatRateShipping.setPrice(price);
 
-                shippingMethods.getFlatRateShippingOrMerchantCalculatedShippingOrPickup().add(flatRateShipping);
+                shippingMethods.getAllShippingMethods().add(flatRateShipping);
 
 
                 return shippingMethods;
@@ -153,7 +153,7 @@ public class GoogleCheckoutPaymentGatewayImplTest extends TestCase {
         assertEquals("One shipment method",
                 1,
                 checkoutShoppingCart.getCheckoutFlowSupport().getMerchantCheckoutFlowSupport()
-                        .getShippingMethods().getFlatRateShippingOrMerchantCalculatedShippingOrPickup().size());
+                        .getShippingMethods().getAllShippingMethods().size());
 
 
         String xml = checkoutShoppingCart.toString();
