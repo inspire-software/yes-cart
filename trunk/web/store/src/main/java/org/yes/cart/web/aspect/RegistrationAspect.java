@@ -16,7 +16,6 @@ import org.yes.cart.service.domain.PassPhrazeGenerator;
 import org.yes.cart.service.domain.aspect.impl.BaseNotificationAspect;
 import org.yes.cart.web.application.ApplicationDirector;
 
-import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -84,7 +83,7 @@ public class RegistrationAspect extends BaseNotificationAspect {
         final Object[] args = pjp.getArgs();
 
         final RegisteredPerson registeredPerson = (RegisteredPerson) args[0];
-        final Shop shop = ApplicationDirector.getCurrentShop();// (Shop) args[1];
+        final Shop shop = (Shop) args[1]; //ApplicationDirector.getCurrentShop();// (Shop) args[1];
 
 
         final String generatedPassword;

@@ -135,6 +135,8 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
             LOG.info("BaseNotificationDispatcher#onAuthorizationAmountNotification  " + notification);
         }
         //todo perform transition to ????
+
+        System.out.println("BaseNotificationDispatcher#onAuthorizationAmountNotification  " + notification);
     }
 
     @Override
@@ -179,9 +181,9 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
      */
     private void enrichWithMessage(CustomerOrder customerOrder, NewOrderNotification notification) {
         if (notification.getShoppingCart().getBuyerMessages() != null
-                && notification.getShoppingCart().getBuyerMessages().getGiftMessageOrIncludeGiftReceiptOrDeliveryInstructions() != null) {
+                && notification.getShoppingCart().getBuyerMessages().getAllBuyerMessages() != null) {
             final StringBuilder stringBuilder = new StringBuilder();
-            for (Object str : notification.getShoppingCart().getBuyerMessages().getGiftMessageOrIncludeGiftReceiptOrDeliveryInstructions()) {
+            for (Object str : notification.getShoppingCart().getBuyerMessages().getAllBuyerMessages()) {
                 stringBuilder.append(str);
                 stringBuilder.append('\n');
             }

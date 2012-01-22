@@ -69,7 +69,7 @@
         <exec-mvn dir="./util/lib3rdparty/paypal"
                   arg="install:install-file -DgroupId=com.paypal -DartifactId=paypal-client -Dversion=5.1.1 -Dpackaging=jar -Dfile=paypal_base.jar"/>
         <exec-mvn dir="./util/lib3rdparty/google.checkout"
-                  arg="install:install-file -DgroupId=com.google.checkout -DartifactId=checkout-sdk -Dversion=2.5.0 -Dpackaging=jar -Dfile=checkout-sdk-2.5.0.jar"/>
+                  arg="install:install-file -DgroupId=com.google.checkout -DartifactId=checkout-sdk -Dversion=2.5.1 -Dpackaging=jar -Dfile=checkout-sdk-2.5.1.jar"/>
 
     </target>
 
