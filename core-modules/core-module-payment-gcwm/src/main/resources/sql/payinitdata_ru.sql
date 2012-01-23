@@ -78,7 +78,7 @@ VALUES (454, 'liqPayPaymentGateway',
 , 'Post URL формы отправки платежа', 'Post URL формы отправки платежа');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (454, 'liqPayPaymentGateway',
+VALUES (455, 'liqPayPaymentGateway',
 'LP_PAYWAY_URL',
 'card'
 , 'способ которым оплатит покупатель с карты, с телефона card, liqpay', 'способ которым оплатит покупатель с карты, с телефона card, liqpay');

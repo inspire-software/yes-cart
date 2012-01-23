@@ -1,0 +1,92 @@
+Unexpected RuntimeException
+
+Last cause: null
+WicketMessage: Method onSelectionChanged of interface org.apache.wicket.markup.html.form.IOnChangeListener targeted at [ [Component id = paymentGateway]] on component [ [Component id = paymentGateway]] threw an exception
+
+Stacktrace
+
+Root cause:
+
+java.lang.NullPointerException
+     at org.yes.cart.payment.impl.LiqPayPaymentGatewayImp.getDescription(LiqPayPaymentGatewayImp.java:239)
+     at org.yes.cart.payment.impl.LiqPayPaymentGatewayImp.getHtmlForm(LiqPayPaymentGatewayImp.java:193)
+     at org.yes.cart.web.page.CheckoutPage.getPaymentForm(CheckoutPage.java:412)
+     at org.yes.cart.web.page.CheckoutPage$1.onSelectionChanged(CheckoutPage.java:342)
+     at org.yes.cart.web.page.CheckoutPage$1.onSelectionChanged(CheckoutPage.java:325)
+     at org.apache.wicket.markup.html.form.DropDownChoice.onSelectionChanged(DropDownChoice.java:213)
+     at java.lang.reflect.Method.invoke(Method.java:597)
+     at org.apache.wicket.RequestListenerInterface.internalInvoke(RequestListenerInterface.java:260)
+     at org.apache.wicket.RequestListenerInterface.invoke(RequestListenerInterface.java:216)
+     at org.apache.wicket.request.handler.ListenerInterfaceRequestHandler.invokeListener(ListenerInterfaceRequestHandler.java:248)
+     at org.apache.wicket.request.handler.ListenerInterfaceRequestHandler.respond(ListenerInterfaceRequestHandler.java:234)
+     at org.apache.wicket.request.cycle.RequestCycle$HandlerExecutor.respond(RequestCycle.java:750)
+     at org.apache.wicket.request.RequestHandlerStack.execute(RequestHandlerStack.java:64)
+     at org.apache.wicket.request.RequestHandlerStack.execute(RequestHandlerStack.java:97)
+     at org.apache.wicket.request.cycle.RequestCycle.execute(RequestCycle.java:252)
+     at org.apache.wicket.request.cycle.RequestCycle.processRequest(RequestCycle.java:209)
+     at org.apache.wicket.request.cycle.RequestCycle.processRequestAndDetach(RequestCycle.java:280)
+     at org.apache.wicket.protocol.http.WicketFilter.processRequest(WicketFilter.java:162)
+     at org.apache.wicket.protocol.http.WicketFilter.doFilter(WicketFilter.java:218)
+     at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+     at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+     at org.yes.cart.web.filter.AbstractFilter.doFilter(AbstractFilter.java:46)
+     at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:237)
+     at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:167)
+     at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+     at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+     at org.yes.cart.web.filter.AbstractFilter.doFilter(AbstractFilter.java:46)
+     at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:237)
+     at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:167)
+     at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+     at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+     at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:88)
+     at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:76)
+     at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+     at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+     at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:224)
+     at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:169)
+     at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:472)
+     at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:168)
+     at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:98)
+     at org.apache.catalina.valves.AccessLogValve.invoke(AccessLogValve.java:928)
+     at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:118)
+     at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:407)
+     at org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:987)
+     at org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:539)
+     at org.apache.tomcat.util.net.JIoEndpoint$SocketProcessor.run(JIoEndpoint.java:300)
+     at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(ThreadPoolExecutor.java:886)
+     at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:908)
+     at java.lang.Thread.run(Thread.java:662)
+
+Complete stack:
+
+org.apache.wicket.WicketRuntimeException: Method onSelectionChanged of interface org.apache.wicket.markup.html.form.IOnChangeListener targeted at [ [Component id = paymentGateway]] on component [ [Component id = paymentGateway]] threw an exception
+     at org.apache.wicket.RequestListenerInterface.internalInvoke(RequestListenerInterface.java:270)
+     at org.apache.wicket.RequestListenerInterface.invoke(RequestListenerInterface.java:216)
+     at org.apache.wicket.request.handler.ListenerInterfaceRequestHandler.invokeListener(ListenerInterfaceRequestHandler.java:248)
+     at org.apache.wicket.request.handler.ListenerInterfaceRequestHandler.respond(ListenerInterfaceRequestHandler.java:234)
+     at org.apache.wicket.request.cycle.RequestCycle$HandlerExecutor.respond(RequestCycle.java:750)
+     at org.apache.wicket.request.RequestHandlerStack.execute(RequestHandlerStack.java:64)
+     at org.apache.wicket.request.RequestHandlerStack.execute(RequestHandlerStack.java:97)
+     at org.apache.wicket.request.cycle.RequestCycle.execute(RequestCycle.java:252)
+     at org.apache.wicket.request.cycle.RequestCycle.processRequest(RequestCycle.java:209)
+     at org.apache.wicket.request.cycle.RequestCycle.processRequestAndDetach(RequestCycle.java:280)
+     at org.apache.wicket.protocol.http.WicketFilter.processRequest(WicketFilter.java:162)
+
+java.lang.reflect.InvocationTargetException
+     at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+     at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+     at java.lang.reflect.Method.invoke(Method.java:597)
+     at org.apache.wicket.RequestListenerInterface.internalInvoke(RequestListenerInterface.java:260)
+     at org.apache.wicket.RequestListenerInterface.invoke(RequestListenerInterface.java:216)
+     at org.apache.wicket.request.handler.ListenerInterfaceRequestHandler.invokeListener(ListenerInterfaceRequestHandler.java:248)
+     at org.apache.wicket.request.handler.ListenerInterfaceRequestHandler.respond(ListenerInterfaceRequestHandler.java:234)
+     at org.apache.wicket.request.cycle.RequestCycle$HandlerExecutor.respond(RequestCycle.java:750)
+     at org.apache.wicket.request.RequestHandlerStack.execute(RequestHandlerStack.java:64)
+     at org.apache.wicket.request.RequestHandlerStack.execute(RequestHandlerStack.java:97)
+     at org.apache.wicket.request.cycle.RequestCycle.execute(RequestCycle.java:252)
+     at org.apache.wicket.request.cycle.RequestCycle.processRequest(RequestCycle.java:209)
+     at org.apache.wicket.request.cycle.RequestCycle.processRequestAndDetach(RequestCycle.java:280)
+     at org.apache.wicket.protocol.http.WicketFilter.processRequest(WicketFilter.java:162)
+
+display page view
