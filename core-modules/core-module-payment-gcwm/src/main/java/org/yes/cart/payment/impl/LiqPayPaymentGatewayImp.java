@@ -7,26 +7,19 @@ import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.constants.AttributeNamesKeys;
+import org.springframework.security.core.codec.Base64;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
-
-import javax.crypto.Mac;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.math.BigDecimal;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.text.MessageFormat;
-import java.util.Map;
-
-import org.springframework.security.core.codec.Base64;
 import org.yes.cart.payment.dto.PaymentLine;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
+import java.text.MessageFormat;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -82,13 +75,31 @@ public class LiqPayPaymentGatewayImp extends AbstractGswmPaymentGatewayImpl
      * {@inheritDoc}
      */
     public String restoreOrderGuid(Map privateCallBackParameters) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+
+        final LiqPayResponce liqPayResponce = getLiqPayResponce(privateCallBackParameters);
+
+        if (liqPayResponce != null) {
+            return liqPayResponce.getOrder_id();
+        }
+
+        return null;
+
     }
 
     /**
      * {@inheritDoc}
      */
-    public boolean isSuccess(Map<String, String> nvpCallResult) {
+    public boolean isSuccess(final Map<String, String> nvpCallResult) {
+
+        final LiqPayResponce liqPayResponce = getLiqPayResponce(nvpCallResult);
+
+        return liqPayResponce != null && "success".equalsIgnoreCase(liqPayResponce.getStatus());
+
+
+    }
+
+
+    private LiqPayResponce getLiqPayResponce(final Map<String, String> nvpCallResult) {
 
         final String operationXmlEncoded = nvpCallResult.get("operation_xml");
 
@@ -104,8 +115,7 @@ public class LiqPayPaymentGatewayImp extends AbstractGswmPaymentGatewayImpl
 
             if (signToCheck.equals(signatureEncoded)) {
 
-                final LiqPayResponce liqPayResponce = (LiqPayResponce) getXStream().fromXML(operationXml);
-                //todo
+                return (LiqPayResponce) getXStream().fromXML(operationXml);
 
             } else {
                 LOG.error(
@@ -116,25 +126,22 @@ public class LiqPayPaymentGatewayImp extends AbstractGswmPaymentGatewayImpl
                                 operationXml,
                                 dump(nvpCallResult))
 
-                        );
-                return false;
+                );
             }
 
         } else {
-
             LOG.error("Cant get operation_xml. " + dump(nvpCallResult));
-
         }
+        return null;
 
-
-        return false;
     }
 
 
     /**
      * Dump map value into String.
+     *
      * @param map given map
-     * @return  dump map as string
+     * @return dump map as string
      */
     public static String dump(Map<?, ?> map) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -145,8 +152,6 @@ public class LiqPayPaymentGatewayImp extends AbstractGswmPaymentGatewayImpl
         }
         return stringBuilder.toString();
     }
-
-
 
 
     public void handleNotification(HttpServletRequest request, HttpServletResponse response) {
@@ -308,7 +313,8 @@ public class LiqPayPaymentGatewayImp extends AbstractGswmPaymentGatewayImpl
 
     /**
      * Get {@link XStream}  .
-     * @return    {@link XStream} instance.
+     *
+     * @return {@link XStream} instance.
      */
     private XStream getXStream() {
         XStream xStream = new XStream(new DomDriver());
