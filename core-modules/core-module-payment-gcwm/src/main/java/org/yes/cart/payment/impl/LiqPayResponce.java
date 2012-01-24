@@ -125,4 +125,23 @@ public class LiqPayResponce {
     public void setPays_count(String pays_count) {
         this.pays_count = pays_count;
     }
+
+    @Override
+    public String toString() {
+        return "LiqPayResponce{" +
+                "version='" + version + '\'' +
+                ", merchant_id='" + merchant_id + '\'' +
+                ", order_id='" + order_id + '\'' +
+                ", amount='" + amount + '\'' +
+                ", currency='" + currency + '\'' +
+                ", description='" + description + '\'' +
+                ", status='" + status + '\'' +
+                ", code='" + code + '\'' +
+                ", transaction_id='" + transaction_id + '\'' +
+                ", pay_way='" + pay_way + '\'' +
+                ", sender_phone='" + sender_phone + '\'' +
+                ", goods_id='" + goods_id + '\'' +
+                ", pays_count='" + pays_count + '\'' +
+                '}';
+    }
 }

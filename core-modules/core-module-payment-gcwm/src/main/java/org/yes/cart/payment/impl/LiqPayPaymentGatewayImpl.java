@@ -96,6 +96,8 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
 
         final LiqPayResponce liqPayResponce = getLiqPayResponce(nvpCallResult);
 
+        System.out.println(liqPayResponce);
+
         return liqPayResponce != null && "success".equalsIgnoreCase(liqPayResponce.getStatus());
 
     }
