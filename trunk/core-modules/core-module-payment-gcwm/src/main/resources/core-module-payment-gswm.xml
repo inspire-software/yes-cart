@@ -40,7 +40,7 @@
     </bean>
 
 
-    <bean id="liqPayPaymentGateway" class="org.yes.cart.payment.impl.LiqPayPaymentGatewayImp" scope="prototype">
+    <bean id="liqPayPaymentGateway" class="org.yes.cart.payment.impl.LiqPayPaymentGatewayImpl" scope="prototype">
         <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
     </bean>
 

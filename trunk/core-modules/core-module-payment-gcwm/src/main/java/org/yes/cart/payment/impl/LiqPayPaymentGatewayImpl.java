@@ -22,11 +22,14 @@ import java.text.MessageFormat;
 import java.util.Map;
 
 /**
+ *
+ * LiqPay payment gateway implementation.
+ *
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 1/22/12
  * Time: 12:53 PM
  */
-public class LiqPayPaymentGatewayImp extends AbstractGswmPaymentGatewayImpl
+public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
         implements PaymentGatewayExternalForm {
 
     private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
@@ -55,7 +58,7 @@ public class LiqPayPaymentGatewayImp extends AbstractGswmPaymentGatewayImpl
     static final String LP_PAYWAY_URL = "LP_PAYWAY_URL";
 
 
-    private static final Logger LOG = LoggerFactory.getLogger(LiqPayPaymentGatewayImp.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LiqPayPaymentGatewayImpl.class);
 
     /**
      * {@inheritDoc}
@@ -95,10 +98,14 @@ public class LiqPayPaymentGatewayImp extends AbstractGswmPaymentGatewayImpl
 
         return liqPayResponce != null && "success".equalsIgnoreCase(liqPayResponce.getStatus());
 
-
     }
 
 
+    /**
+     * Get the {@link LiqPayResponce} from request parameter map.
+     * @param nvpCallResult request parameter map
+     * @return {@link LiqPayResponce}.
+     */
     private LiqPayResponce getLiqPayResponce(final Map<String, String> nvpCallResult) {
 
         final String operationXmlEncoded = nvpCallResult.get("operation_xml");
@@ -145,11 +152,13 @@ public class LiqPayPaymentGatewayImp extends AbstractGswmPaymentGatewayImpl
      */
     public static String dump(Map<?, ?> map) {
         StringBuilder stringBuilder = new StringBuilder();
+
         for (Map.Entry<?, ?> entry : map.entrySet()) {
             stringBuilder.append(entry.getKey());
             stringBuilder.append(" : ");
             stringBuilder.append(entry.getValue());
         }
+
         return stringBuilder.toString();
     }
 
@@ -236,11 +245,13 @@ public class LiqPayPaymentGatewayImp extends AbstractGswmPaymentGatewayImpl
      */
     private String getDescription(final Payment payment) {
         final StringBuilder stringBuilder = new StringBuilder();
-        for (PaymentLine line : payment.getOrderItems()) {
-            stringBuilder.append(line.getSkuName());
-            stringBuilder.append(" x ");
-            stringBuilder.append(line.getQuantity());
-            stringBuilder.append("\n");
+        if (payment != null) {
+            for (PaymentLine line : payment.getOrderItems()) {
+                stringBuilder.append(line.getSkuName());
+                stringBuilder.append(" x ");
+                stringBuilder.append(line.getQuantity());
+                stringBuilder.append("\n");
+            }
         }
         return stringBuilder.toString();
     }
