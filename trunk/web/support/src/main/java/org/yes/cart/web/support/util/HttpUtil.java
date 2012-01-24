@@ -1,5 +1,7 @@
 package org.yes.cart.web.support.util;
 
+import org.yes.cart.constants.AttributeNamesKeys;
+
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.text.MessageFormat;
@@ -16,11 +18,13 @@ public class HttpUtil {
 
 
 
-    public static void dumpRequest(final String prefix, final ServletRequest request) {
+    public static String dumpRequest(final String prefix, final ServletRequest request) {
+
+        final StringBuilder stringBuilder = new StringBuilder();
         Enumeration en = request.getParameterNames();
         while (en.hasMoreElements()) {
             final Object key = en.nextElement();
-            System.out.println(MessageFormat.format("HttpUtil#dumpRequest param key = [{0}] value = [{1}]",
+            stringBuilder.append(MessageFormat.format("\nHttpUtil#dumpRequest param key = [{0}] value = [{1}]",
                     key,
                     request.getParameter((String) key)));
         }
@@ -28,10 +32,14 @@ public class HttpUtil {
         en = request.getAttributeNames();
         while (en.hasMoreElements()) {
             final Object key = en.nextElement();
-            System.out.println(MessageFormat.format("HttpUtil#dumpRequest attr  key = [{0}] value = [{1}]",
+            stringBuilder.append(MessageFormat.format("\nHttpUtil#dumpRequest attr  key = [{0}] value = [{1}]",
                     key,
                     request.getAttribute((String) key)));
         }
+
+        System.out.println(stringBuilder.toString());
+
+        return stringBuilder.toString();
     }
 
 

@@ -6,6 +6,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.web.page.AbstractWebPage;
+import org.yes.cart.web.support.util.HttpUtil;
+import org.yes.cart.web.util.WicketUtil;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -28,7 +30,7 @@ public class LiqPayReturnUrlPage  extends AbstractWebPage {
         add(
                 new FeedbackPanel("feedback")
         ).add(
-                new Label("infoLabel", "Hi there")
+                new Label("infoLabel", "Hi there " + HttpUtil.dumpRequest("LiqPayReturnUrlPage", WicketUtil.getHttpServletRequest()) )
         );
     }
 

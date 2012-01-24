@@ -3,6 +3,7 @@ package org.yes.cart.service.payment.impl;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.service.domain.CustomerOrderService;
@@ -50,6 +51,7 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
         final String orderGuid = getOrderGuid(parameters, paymentGatewayLabel);
 
         LOG.info("Order guid to handle at call back handler is " + orderGuid);
+        System.out.println("Order guid to handle at call back handler is " + orderGuid);
 
         if (StringUtils.isNotBlank(orderGuid)) {
 
@@ -59,6 +61,7 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
 
                 if (LOG.isWarnEnabled()) {
                     LOG.warn("Can not get order with guid " + orderGuid);
+                    System.out.println("Can not get order with guid " + orderGuid);
                 }
 
             } else {
@@ -77,15 +80,16 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
                     boolean rez = orderStateManager.fireTransition(orderEvent);
 
                     LOG.info("Order state transition performed for " + orderGuid + " . Result is " + rez);
+                    System.out.println("Order state transition performed for " + orderGuid + " . Result is " + rez);
 
                     customerOrderService.update(order);
 
                 } else {
 
-                    if (LOG.isWarnEnabled()) {
                         LOG.warn("Order with guid " + orderGuid + " not in " + CustomerOrder.ORDER_STATUS_NONE
                                 + " state, but " + order.getOrderStatus());
-                    }
+                        System.out.println("Order with guid " + orderGuid + " not in " + CustomerOrder.ORDER_STATUS_NONE
+                                + " state, but " + order.getOrderStatus());
 
                 }
 
