@@ -208,7 +208,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
                 "" + amount,
                 currencyCode,
                 getDescription(payment),
-                payment.getBillingAddress() == null ? "" : StringUtils.defaultIfEmpty(payment.getBillingAddress().getPhoneList(), ""),
+                payment == null ? "" : payment.getBillingAddress() == null ? "" : StringUtils.defaultIfEmpty(payment.getBillingAddress().getPhoneList(), ""),
                 getParameterValue(LP_PAYWAY_URL)
         );
 
