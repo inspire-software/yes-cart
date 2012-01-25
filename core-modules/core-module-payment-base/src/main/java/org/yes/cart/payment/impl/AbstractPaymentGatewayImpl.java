@@ -8,6 +8,7 @@ import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 import org.yes.cart.payment.service.PaymentGatewayParameterService;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -21,7 +22,7 @@ import java.math.BigDecimal;
  */
 public abstract class AbstractPaymentGatewayImpl implements PaymentGateway {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractPaymentGatewayImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private PaymentGatewayParameterService paymentGatewayParameterService;
 

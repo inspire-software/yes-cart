@@ -18,6 +18,7 @@ import org.yes.cart.payment.persistence.entity.impl.GoogleNotificationHistoryEnt
 import org.yes.cart.payment.persistence.service.PaymentModuleGenericDAO;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.service.order.OrderAssembler;
+import org.yes.cart.util.ShopCodeContext;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +34,7 @@ import java.util.List;
  */
 public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher {
 
-    private static final Logger LOG = LoggerFactory.getLogger(GoogleNotificationDispatcherImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final ApplicationContext applicationContext;
 
@@ -132,9 +133,6 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
         if (LOG.isInfoEnabled()) {
             LOG.info("BaseNotificationDispatcher#onAuthorizationAmountNotification  " + notification);
         }
-        //todo perform transition to ????
-
-        System.out.println("BaseNotificationDispatcher#onAuthorizationAmountNotification  " + notification);
     }
 
     @Override
@@ -143,7 +141,6 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
             final OrderStateChangeNotification notification) throws Exception {
         final String msg = "#onOrderStateChangeNotification order summary is : " + orderSummary.toString() + " notification is  " + notification;
         LOG.info(msg);
-        System.out.println(msg);
 
     }
 

@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
@@ -20,7 +21,7 @@ public class AddSkuToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
 
     private static final long serialVersionUID = 20100122L;
 
-    private static final Logger LOG = LoggerFactory.getLogger(AddSkuToCartEventCommandImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     public static final String CMD_KEY = "addToCartCmd";
 

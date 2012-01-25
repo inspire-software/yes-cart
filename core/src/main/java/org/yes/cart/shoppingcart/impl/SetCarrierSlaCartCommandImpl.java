@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.util.Map;
 
@@ -18,7 +19,7 @@ public class SetCarrierSlaCartCommandImpl  extends AbstractCartCommandImpl imple
 
     private static final long serialVersionUID = 20100313L;
 
-    private static final Logger LOG = LoggerFactory.getLogger(SetCarrierSlaCartCommandImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     public static final String CMD_KEY = "setCarrierSlaCmd";
 

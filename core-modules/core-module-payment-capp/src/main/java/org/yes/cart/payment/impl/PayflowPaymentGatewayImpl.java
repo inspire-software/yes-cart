@@ -9,6 +9,7 @@ import org.yes.cart.payment.exception.PaymentException;
 import org.apache.commons.lang.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.math.RoundingMode;
 import java.util.HashMap;
@@ -26,7 +27,7 @@ import java.util.Map;
  */
 public class PayflowPaymentGatewayImpl extends AbstractCappPaymentGatewayImpl implements PaymentGatewayInternalForm {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PayflowPaymentGatewayImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private static final String PF_HOST = "HOST";
     private static final String PF_PORT = "PORT";

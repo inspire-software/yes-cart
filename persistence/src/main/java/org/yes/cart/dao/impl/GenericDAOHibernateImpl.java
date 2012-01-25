@@ -12,6 +12,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -27,7 +28,7 @@ import java.util.List;
 public class GenericDAOHibernateImpl<T, PK extends Serializable> extends HibernateDaoSupport
         implements GenericDAO<T, PK> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(GenericDAOHibernateImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     final private Class<T> persistentClass;
     final private EntityFactory entityFactory;

@@ -5,6 +5,7 @@ import com.sun.mail.util.BASE64EncoderStream;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.util.cookie.CookieTuplizer;
 import org.yes.cart.web.support.util.cookie.UnableToCookielizeObjectException;
 import org.yes.cart.web.support.util.cookie.UnableToObjectizeCookieException;
@@ -39,7 +40,7 @@ public class CookieTuplizerImpl implements CookieTuplizer {
 
     private static final long serialVersionUID = 20100116L;
 
-    private static final Logger LOG = LoggerFactory.getLogger(CookieTuplizerImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private static final Cookie[] EMPTY_COOKIES = new Cookie[0];
 

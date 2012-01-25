@@ -14,6 +14,7 @@ import org.yes.cart.domain.message.RegistrationMessage;
 import org.yes.cart.domain.message.impl.RegistrationMessageImpl;
 import org.yes.cart.service.domain.HashHelper;
 import org.yes.cart.service.domain.PassPhrazeGenerator;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -25,7 +26,7 @@ import java.util.Set;
  */
 public class BaseRegisteredPersonAspect extends BaseNotificationAspect {
 
-    private static final Logger LOG = LoggerFactory.getLogger(BaseRegisteredPersonAspect.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final HashHelper hashHelper;
 

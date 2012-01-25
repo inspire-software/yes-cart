@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.commons.lang.StringUtils;
+import org.yes.cart.util.ShopCodeContext;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -22,7 +23,7 @@ import org.apache.commons.lang.StringUtils;
  */
 public abstract class AbstractCappPaymentGatewayImpl implements PaymentGateway {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractCappPaymentGatewayImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private PaymentGatewayParameterService paymentGatewayParameterService;
 

@@ -9,6 +9,7 @@ import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.payment.PaymentModulesManager;
 import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.filter.AbstractFilter;
 import org.yes.cart.web.filter.ShopResolverFilter;
@@ -38,7 +39,7 @@ import java.util.Map;
  */
 public class PayPalExpressCheckoutFilter extends AbstractFilter implements Filter {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ShopResolverFilter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final PaymentModulesManager paymentModulesManager;
 

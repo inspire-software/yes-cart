@@ -32,6 +32,7 @@ import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.util.ShopCodeContext;
 
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
@@ -60,7 +61,7 @@ public class GoogleCheckoutPaymentGatewayImpl
         extends AbstractGswmPaymentGatewayImpl
         implements PaymentGatewayExternalForm, ApplicationContextAware {
 
-    private static final Logger LOG = LoggerFactory.getLogger(GoogleCheckoutPaymentGatewayImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
 
     private ApplicationContext applicationContext;
@@ -118,7 +119,6 @@ public class GoogleCheckoutPaymentGatewayImpl
      */
     public Payment authorize(final Payment paymentIn) {
         LOG.info("#authorize");
-        System.out.println("#authorize");
 
         return (Payment) SerializationUtils.clone(paymentIn);
 
@@ -134,7 +134,6 @@ public class GoogleCheckoutPaymentGatewayImpl
      */
     public Payment reverseAuthorization(final Payment payment) {
         LOG.info("#reverseAuthorization");
-        System.out.println("#reverseAuthorization");
 
         return payment;
     }
@@ -144,7 +143,6 @@ public class GoogleCheckoutPaymentGatewayImpl
      */
     public Payment capture(final Payment payment) {
         LOG.info("#capture");
-        System.out.println("#capture");
 
         payment.setTransactionOperation(CAPTURE);
         return payment;
@@ -155,7 +153,6 @@ public class GoogleCheckoutPaymentGatewayImpl
      */
     public Payment voidCapture(final Payment payment) {
         LOG.info("#voidCapture");
-        System.out.println("#voidCapture");
 
         return payment;
     }
@@ -165,7 +162,6 @@ public class GoogleCheckoutPaymentGatewayImpl
      */
     public Payment refund(final Payment payment) {
         LOG.info("#refund");
-        System.out.println("#refund");
 
         return payment;
     }
@@ -451,7 +447,7 @@ public class GoogleCheckoutPaymentGatewayImpl
         Enumeration en = request.getParameterNames();
         while (en.hasMoreElements()) {
             final Object key = en.nextElement();
-            System.out.println(MessageFormat.format("HttpUtil#dumpRequest local at gc param key = [{0}] value = [{1}]",
+            LOG.info(MessageFormat.format("HttpUtil#dumpRequest local at gc param key = [{0}] value = [{1}]",
                     key,
                     request.getParameter((String) key)));
         }
@@ -459,7 +455,7 @@ public class GoogleCheckoutPaymentGatewayImpl
         en = request.getAttributeNames();
         while (en.hasMoreElements()) {
             final Object key = en.nextElement();
-            System.out.println(MessageFormat.format("HttpUtil#dumpRequest local at gc attr  key = [{0}] value = [{1}]",
+            LOG.info(MessageFormat.format("HttpUtil#dumpRequest local at gc attr  key = [{0}] value = [{1}]",
                     key,
                     request.getAttribute((String) key)));
         }

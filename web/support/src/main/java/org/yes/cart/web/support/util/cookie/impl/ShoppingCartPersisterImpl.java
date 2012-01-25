@@ -3,6 +3,7 @@ package org.yes.cart.web.support.util.cookie.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.util.cookie.CookieTuplizer;
 import org.yes.cart.web.support.util.cookie.UnableToCookielizeObjectException;
 import org.yes.cart.web.support.util.cookie.ShoppingCartPersister;
@@ -19,7 +20,7 @@ import java.text.MessageFormat;
  */
 public class ShoppingCartPersisterImpl implements ShoppingCartPersister {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ShoppingCartPersisterImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final CookieTuplizer cookieTuplizer;
 

@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.util.HttpUtil;
 import org.yes.cart.web.util.WicketUtil;
@@ -24,7 +25,7 @@ import java.util.*;
  */
 public class BreadCrumbsBuilder {
 
-    private static final Logger LOG = LoggerFactory.getLogger(BreadCrumbsBuilder.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final CrumbNamePrefixProvider namePrefixProvider;
     private final List<Long> shopCategoryIds;

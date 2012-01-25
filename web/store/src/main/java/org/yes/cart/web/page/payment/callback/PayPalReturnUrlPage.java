@@ -21,6 +21,7 @@ import org.yes.cart.service.payment.PaymentModulesManager;
 import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.shoppingcart.impl.CleanCartCommandImpl;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 
@@ -50,7 +51,7 @@ import java.util.Map;
  */
 public class PayPalReturnUrlPage extends AbstractWebPage {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PayPalReturnUrlPage.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private static final long serialVersionUID = 20111612L;
 

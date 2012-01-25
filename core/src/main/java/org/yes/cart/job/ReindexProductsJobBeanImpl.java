@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.text.MessageFormat;
 import java.util.Date;
@@ -17,7 +18,7 @@ import java.util.Date;
  */
 public class ReindexProductsJobBeanImpl extends QuartzJobBean {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ReindexProductsJobBeanImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private ProductService productService;
 

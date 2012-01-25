@@ -111,9 +111,7 @@ public class ApplicationDirector implements ApplicationContextAware {
      * @param currentMailTemplateFolder  current mail template folder.
      */
     public static void setCurrentMailTemplateFolder(final String currentMailTemplateFolder)  {
-        System.out.println("currentMailTemplateFolder = " + currentMailTemplateFolder);
         mailTemplatePathThreadLocal.set(currentMailTemplateFolder);
-
     }
 
     /**

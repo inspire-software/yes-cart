@@ -12,6 +12,7 @@ import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.service.payment.PaymentCallBackHandlerFacade;
 import org.yes.cart.service.payment.PaymentModulesManager;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.util.Map;
 
@@ -22,7 +23,7 @@ import java.util.Map;
  */
 public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerFacade {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PaymentCallBackHandlerFacadeImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final PaymentModulesManager paymentModulesManager;
     private final CustomerOrderService customerOrderService;
@@ -51,7 +52,6 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
         final String orderGuid = getOrderGuid(parameters, paymentGatewayLabel);
 
         LOG.info("Order guid to handle at call back handler is " + orderGuid);
-        System.out.println("Order guid to handle at call back handler is " + orderGuid);
 
         if (StringUtils.isNotBlank(orderGuid)) {
 
@@ -61,7 +61,6 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
 
                 if (LOG.isWarnEnabled()) {
                     LOG.warn("Can not get order with guid " + orderGuid);
-                    System.out.println("Can not get order with guid " + orderGuid);
                 }
 
             } else {
@@ -80,17 +79,12 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
                     boolean rez = orderStateManager.fireTransition(orderEvent);
 
                     LOG.info("Order state transition performed for " + orderGuid + " . Result is " + rez);
-                    System.out.println("Order state transition performed for " + orderGuid + " . Result is " + rez);
 
                     customerOrderService.update(order);
 
                 } else {
-
                         LOG.warn("Order with guid " + orderGuid + " not in " + CustomerOrder.ORDER_STATUS_NONE
                                 + " state, but " + order.getOrderStatus());
-                        System.out.println("Order with guid " + orderGuid + " not in " + CustomerOrder.ORDER_STATUS_NONE
-                                + " state, but " + order.getOrderStatus());
-
                 }
 
             }

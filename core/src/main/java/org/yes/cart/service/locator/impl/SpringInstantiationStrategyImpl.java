@@ -6,6 +6,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.service.locator.InstantiationStrategy;
+import org.yes.cart.util.ShopCodeContext;
 
 /**
  * Used to locate services in local spring context.
@@ -17,7 +18,7 @@ import org.yes.cart.service.locator.InstantiationStrategy;
  */
 public class SpringInstantiationStrategyImpl implements InstantiationStrategy, ApplicationContextAware {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SpringInstantiationStrategyImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private ApplicationContext applicationContext;
 

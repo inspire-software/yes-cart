@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.text.MessageFormat;
 
@@ -14,7 +15,7 @@ import java.text.MessageFormat;
  */
 public abstract class AbstractOrderEventHandlerImpl implements OrderEventHandler {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractOrderEventHandlerImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     /**
      * Get transition target.

@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
+import org.yes.cart.util.ShopCodeContext;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -28,7 +29,7 @@ import org.apache.commons.lang.StringUtils;
  */
 public class PayPalNvpPaymentGatewayImpl extends AbstractPayPalPaymentGatewayImpl implements PaymentGatewayInternalForm {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PayPalNvpPaymentGatewayImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
 
     private NVPCallerServices nvpCallerServices = null;

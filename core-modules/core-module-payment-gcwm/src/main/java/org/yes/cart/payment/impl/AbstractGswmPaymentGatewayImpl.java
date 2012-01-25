@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 import org.yes.cart.payment.service.PaymentGatewayParameterService;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -18,7 +19,7 @@ import java.util.Map;
  */
 public abstract class AbstractGswmPaymentGatewayImpl implements PaymentGateway {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractGswmPaymentGatewayImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private PaymentGatewayParameterService paymentGatewayParameterService;
 

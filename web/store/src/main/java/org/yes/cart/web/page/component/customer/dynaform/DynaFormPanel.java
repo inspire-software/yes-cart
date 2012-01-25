@@ -24,6 +24,7 @@ import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.utils.impl.ExtendedConversionService;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.util.PairChoiceRenderer;
@@ -45,7 +46,7 @@ import java.util.Map;
 public class DynaFormPanel extends BaseComponent {
 
 
-    private static final Logger LOG = LoggerFactory.getLogger(DynaFormPanel.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private final static String FORM = "form";

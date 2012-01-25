@@ -6,6 +6,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.message.RegistrationMessage;
 import org.yes.cart.service.mail.MailComposer;
+import org.yes.cart.util.ShopCodeContext;
 
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -32,7 +33,7 @@ import java.util.Map;
  */
 public class CustomerRegistrationMessageListener implements MessageListener {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CustomerRegistrationMessageListener.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final JavaMailSender javaMailSender;
 
@@ -54,15 +55,17 @@ public class CustomerRegistrationMessageListener implements MessageListener {
      * {@inheritDoc}
      */
     public void onMessage(final Message message) {
+
         final ObjectMessage objectMessage = (ObjectMessage) message;
+
         try {
             final RegistrationMessage registrationMessage = (RegistrationMessage) objectMessage.getObject();
-            System.out.println(">>>>>>>>>>>>>>>>> " +registrationMessage);
+
+            LOG.info("CustomerRegistrationMessageListener#onMessage responce :" + registrationMessage);
 
             if (registrationMessage.getPathToTemplateFolder() != null) {
                 processMessage(registrationMessage);
             }
-
 
         } catch (Exception e) {
             LOG.error("Cant process " + message, e);

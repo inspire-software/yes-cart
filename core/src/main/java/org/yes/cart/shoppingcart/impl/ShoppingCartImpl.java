@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.dto.ProductSkuDTO;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.shoppingcart.*;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class ShoppingCartImpl implements ShoppingCart {
 
     private static final long serialVersionUID =  20110509L;
 
-    private static final Logger LOG = LoggerFactory.getLogger(ShoppingCartImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private List<CartItemImpl> items = new ArrayList<CartItemImpl>();
 

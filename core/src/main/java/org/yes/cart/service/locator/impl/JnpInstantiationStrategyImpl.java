@@ -3,6 +3,7 @@ package org.yes.cart.service.locator.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.service.locator.InstantiationStrategy;
+import org.yes.cart.util.ShopCodeContext;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -17,7 +18,7 @@ import java.util.Properties;
  */
 public class JnpInstantiationStrategyImpl implements InstantiationStrategy {
 
-    private static final Logger LOG = LoggerFactory.getLogger(JnpInstantiationStrategyImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
     private static final String AT_DELIMITER = "@"; // delimiter between server and jndi name
 
     /**

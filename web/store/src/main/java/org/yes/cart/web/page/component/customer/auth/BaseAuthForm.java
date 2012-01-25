@@ -13,6 +13,7 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.shoppingcart.impl.LoginCommandImpl;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 
 import java.text.MessageFormat;
@@ -28,7 +29,7 @@ public class BaseAuthForm extends Form {
 
     protected static final int MIN_LEN = 6;
     protected static final int MAX_LEN = 256;
-    private static final Logger LOG = LoggerFactory.getLogger(BaseAuthForm.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
 
     @SpringBean(name = ServiceSpringKeys.CUSTOMER_SERVICE)

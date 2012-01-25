@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.yes.cart.domain.message.RegistrationMessage;
 import org.yes.cart.service.mail.MailComposer;
+import org.yes.cart.util.ShopCodeContext;
 
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -20,7 +21,7 @@ import java.util.Map;
  */
 public class ManagerRegistrationMessageListener implements MessageListener {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ManagerRegistrationMessageListener.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final JavaMailSender javaMailSender;
 
