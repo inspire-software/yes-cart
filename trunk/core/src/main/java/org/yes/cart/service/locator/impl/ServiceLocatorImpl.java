@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.service.locator.InstantiationStrategy;
 import org.yes.cart.service.locator.ServiceLocator;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.text.MessageFormat;
 import java.util.Map;
@@ -19,7 +20,7 @@ import java.util.Map;
 public class ServiceLocatorImpl implements ServiceLocator {
 
 
-    private static final Logger LOG = LoggerFactory.getLogger(ServiceLocatorImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final Map<String, InstantiationStrategy> protocolStrategyMap;
 

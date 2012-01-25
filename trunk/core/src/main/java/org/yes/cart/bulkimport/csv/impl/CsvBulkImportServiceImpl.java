@@ -16,6 +16,7 @@ import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.bulkimport.service.BulkImportService;
 import org.yes.cart.bulkimport.service.impl.AbstractImportService;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.beans.PropertyDescriptor;
 import java.io.*;
@@ -37,7 +38,7 @@ import java.util.Set;
  */
 public class CsvBulkImportServiceImpl extends AbstractImportService implements BulkImportService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CsvBulkImportServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private GenericDAO<Object, Long> genericDAO;
 

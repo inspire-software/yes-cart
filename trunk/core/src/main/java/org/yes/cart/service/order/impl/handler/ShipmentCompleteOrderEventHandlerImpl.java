@@ -9,6 +9,7 @@ import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.service.payment.PaymentProcessorFactory;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.text.MessageFormat;
 
@@ -19,7 +20,7 @@ import java.text.MessageFormat;
  */
 public class ShipmentCompleteOrderEventHandlerImpl implements OrderEventHandler {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ShipmentCompleteOrderEventHandlerImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
 
     private final PaymentProcessorFactory paymentProcessorFactory;

@@ -20,6 +20,7 @@ import org.yes.cart.payment.dto.impl.PaymentLineImpl;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
@@ -36,7 +37,7 @@ import java.util.Map;
  */
 public class PaymentProcessorSurrogate {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PaymentProcessorSurrogate.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private PaymentGateway paymentGateway;
     private final CustomerOrderPaymentService customerOrderPaymentService;

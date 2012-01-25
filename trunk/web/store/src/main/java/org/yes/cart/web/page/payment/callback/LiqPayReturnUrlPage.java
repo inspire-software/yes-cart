@@ -5,6 +5,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.support.util.HttpUtil;
 import org.yes.cart.web.util.WicketUtil;
@@ -16,7 +17,7 @@ import org.yes.cart.web.util.WicketUtil;
  */
 public class LiqPayReturnUrlPage  extends AbstractWebPage {
 
-    private static final Logger LOG = LoggerFactory.getLogger(LiqPayReturnUrlPage.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
 
     /**
@@ -30,7 +31,7 @@ public class LiqPayReturnUrlPage  extends AbstractWebPage {
         add(
                 new FeedbackPanel("feedback")
         ).add(
-                new Label("infoLabel", "Hi there " + HttpUtil.dumpRequest("LiqPayReturnUrlPage", WicketUtil.getHttpServletRequest()) )
+                new Label("infoLabel", "Hi there " + HttpUtil.dumpRequest(WicketUtil.getHttpServletRequest()) )
         );
     }
 

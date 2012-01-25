@@ -8,6 +8,7 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.yes.cart.bulkimport.service.ImportDirectorService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -21,7 +22,7 @@ import java.util.Set;
  */
 public class ImportJobBeanImpl extends QuartzJobBean {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ImportJobBeanImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private ImportDirectorService importDirector;
 

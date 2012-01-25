@@ -14,6 +14,7 @@ import org.yes.cart.service.dto.DtoProductService;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
@@ -30,7 +31,7 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
 
     private static final long serialVersionUID = 20100313L;
 
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractSkuCartCommandImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private ProductSkuDTO productSkuDTO;
 

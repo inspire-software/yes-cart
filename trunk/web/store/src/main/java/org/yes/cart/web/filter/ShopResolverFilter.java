@@ -12,6 +12,7 @@ import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.impl.ChangeCurrencyEventCommandImpl;
 import org.yes.cart.shoppingcart.impl.SetShopCartCommandImpl;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.request.HttpServletRequestWrapper;
 import org.yes.cart.web.support.service.LanguageService;
@@ -37,7 +38,7 @@ import java.util.Date;
  */
 public class ShopResolverFilter extends AbstractFilter implements Filter, ApplicationContextAware, ServletContextAware {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ShopResolverFilter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final SystemService systemService;
 
@@ -87,6 +88,7 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Applic
         setDefaultValues(shop);
 
         ApplicationDirector.setCurrentShop(shop);
+        ShopCodeContext.setShopCode(shop.getCode());
         //ApplicationDirector.setCurrentServletContext(servletContext);
         ApplicationDirector.setCurrentMailTemplateFolder(servletContext.getRealPath(shop.getMailFolder()) + File.separator);
 

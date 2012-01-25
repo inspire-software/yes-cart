@@ -10,6 +10,7 @@ import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.service.payment.PaymentProcessorFactory;
+import org.yes.cart.util.ShopCodeContext;
 
 /**
  * Cancel order transition with funds return.
@@ -34,7 +35,7 @@ import org.yes.cart.service.payment.PaymentProcessorFactory;
  */
 public class CancelOrderWithRefundOrderEventHandlerImpl extends CancelOrderEventHandlerImpl implements OrderEventHandler {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ShipmentCompleteOrderEventHandlerImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
 
     private final PaymentProcessorFactory paymentProcessorFactory;

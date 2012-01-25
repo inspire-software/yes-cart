@@ -3,6 +3,7 @@ package org.yes.cart.service.locator.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.service.locator.InstantiationStrategy;
+import org.yes.cart.util.ShopCodeContext;
 
 import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
@@ -14,7 +15,7 @@ import javax.xml.namespace.QName;
  */
 public class WebServiceInstantiationStrategyImpl implements InstantiationStrategy {
 
-    private static final Logger LOG = LoggerFactory.getLogger(WebServiceInstantiationStrategyImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private static final String NAMESPACE_URI = XMLConstants.NULL_NS_URI; // TODO is separate namespace need ?
 

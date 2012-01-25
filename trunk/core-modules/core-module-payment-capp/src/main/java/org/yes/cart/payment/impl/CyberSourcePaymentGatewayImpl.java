@@ -14,6 +14,7 @@ import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.math.RoundingMode;
 import java.util.*;
@@ -31,7 +32,7 @@ import java.util.*;
  */
 public class CyberSourcePaymentGatewayImpl extends AbstractCappPaymentGatewayImpl implements PaymentGatewayInternalForm {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CyberSourcePaymentGatewayImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private static final String CS_MERCHANT_ID = "merchantID";
     private static final String CS_KEYS_DIRECTORY = "keysDirectory";

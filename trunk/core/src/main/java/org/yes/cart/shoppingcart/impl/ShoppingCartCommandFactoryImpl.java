@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.lang.reflect.Constructor;
 import java.text.MessageFormat;
@@ -24,7 +25,7 @@ public class ShoppingCartCommandFactoryImpl implements ShoppingCartCommandFactor
 
     private static final long serialVersionUID = 20100122L;
 
-    private static final Logger LOG = LoggerFactory.getLogger(ShoppingCartCommandFactoryImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private Map<String, Class<? extends ShoppingCartCommand>> commands;
 

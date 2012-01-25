@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.text.MessageFormat;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class RemoveAllSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl 
 
     public static final String CMD_KEY = "removeAllSkuCmd";
 
-    private static final Logger LOG = LoggerFactory.getLogger(RemoveAllSkuFromCartCommandImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
 
     /** {@inheritDoc} */

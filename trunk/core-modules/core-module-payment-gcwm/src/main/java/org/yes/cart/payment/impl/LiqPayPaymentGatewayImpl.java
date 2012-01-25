@@ -14,6 +14,7 @@ import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.PaymentLine;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
+import org.yes.cart.util.ShopCodeContext;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -58,7 +59,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
     static final String LP_PAYWAY_URL = "LP_PAYWAY_URL";
 
 
-    private static final Logger LOG = LoggerFactory.getLogger(LiqPayPaymentGatewayImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     /**
      * {@inheritDoc}
@@ -96,7 +97,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
 
         final LiqPayResponce liqPayResponce = getLiqPayResponce(nvpCallResult);
 
-        System.out.println(liqPayResponce);
+        LOG.info("LiqPayPaymentGatewayImpl#isSuccess " + liqPayResponce);
 
         return liqPayResponce != null && "success".equalsIgnoreCase(liqPayResponce.getStatus());
 

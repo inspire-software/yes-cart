@@ -6,6 +6,7 @@ import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.OrderStateTransitionListener;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.Map;
  */
 public class OrderStateManagerImpl implements OrderStateManager {
 
-    private static final Logger LOG = LoggerFactory.getLogger(OrderStateManagerImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final Map<String, OrderEventHandler> handlers;
 

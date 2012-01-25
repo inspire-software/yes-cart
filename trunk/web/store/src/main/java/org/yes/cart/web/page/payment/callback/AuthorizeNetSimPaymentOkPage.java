@@ -7,6 +7,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.CustomerOrder;
@@ -14,8 +16,10 @@ import org.yes.cart.domain.entity.ShopUrl;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.support.util.HttpUtil;
+import org.yes.cart.web.util.WicketUtil;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
@@ -37,6 +41,8 @@ import javax.servlet.http.HttpServletRequest;
 public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
 
     private static final long serialVersionUID = 20110323L;
+
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private static final String ORDER_GUID = "orderGuid";     // correspond to  AuthorizeNetSimPaymentGatewayImpl
 
@@ -63,16 +69,15 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
 
         super(params);
 
-        final HttpServletRequest httpServletRequest = (HttpServletRequest)
-                ((WebRequest) getRequest()).getContainerRequest();
+        final HttpServletRequest httpServletRequest = WicketUtil.getHttpServletRequest();
 
-        System.out.println("##################################################################");
-        HttpUtil.dumpRequest("AuthorizeNetSimPaymentOkPage" , httpServletRequest);
-        System.out.println("------------------------------------------------------------------");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(HttpUtil.dumpRequest(httpServletRequest));
+        }
 
         orderGuid = httpServletRequest.getParameter(ORDER_GUID);
 
-        System.out.println("#### orderGuid = " + orderGuid);
+        LOG.info("#### orderGuid = " + orderGuid);
 
         final CustomerOrder order = customerOrderService.findByGuid(orderGuid);
 
@@ -122,9 +127,7 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
     @Override
     protected void onBeforeRender() {
 
-        System.out.println("Redirect from authorize net page to " + redirectTo);
-
-        //"http://shop.domain.com/context/paymentresult?orderNum=" + 123
+        LOG.info("Redirect from authorize net page to " + redirectTo);
 
         add(
                 new Label("redirectJavaScript", "<!--\nlocation.replace(\"" + redirectTo + "\"); \n//-->").setEscapeModelStrings(false)

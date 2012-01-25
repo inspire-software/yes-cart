@@ -13,6 +13,7 @@ import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.domain.query.PriceNavigation;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.AttributeService;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
@@ -25,7 +26,7 @@ import java.util.*;
  */
 public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
 
-    private static final Logger LOG = LoggerFactory.getLogger(LuceneQueryFactoryImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     /**
      * Only this indexes allowed for attributive filtered navigaion.

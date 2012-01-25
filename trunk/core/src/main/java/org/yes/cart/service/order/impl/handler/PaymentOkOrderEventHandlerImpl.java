@@ -11,6 +11,7 @@ import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.impl.OrderEventImpl;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
@@ -26,7 +27,7 @@ import java.util.Map;
  */
 public class PaymentOkOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl implements OrderEventHandler, ApplicationContextAware {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PaymentOkOrderEventHandlerImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private OrderStateManager orderStateManager = null;
     private ApplicationContext applicationContext;

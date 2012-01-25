@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.shoppingcart.impl.WebShoppingCartImpl;
 import org.yes.cart.web.support.constants.WebParametersKeys;
@@ -30,7 +31,7 @@ import java.util.Date;
  */
 public class ShoppingCartFilter extends AbstractFilter implements Filter {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ShoppingCartFilter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final CookieTuplizer tuplizer;
 

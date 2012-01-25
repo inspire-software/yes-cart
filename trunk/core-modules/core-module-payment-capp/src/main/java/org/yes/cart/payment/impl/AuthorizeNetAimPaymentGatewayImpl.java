@@ -9,6 +9,7 @@ import org.yes.cart.payment.exception.PaymentException;
 import org.apache.commons.lang.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.util.ShopCodeContext;
 
 
 /**
@@ -20,7 +21,7 @@ import org.slf4j.LoggerFactory;
  */
 public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPaymentGatewayImpl implements PaymentGatewayInternalForm {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AuthorizeNetAimPaymentGatewayImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
             true, true, true, true,

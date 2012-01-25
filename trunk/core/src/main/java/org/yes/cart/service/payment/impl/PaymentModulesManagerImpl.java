@@ -10,6 +10,7 @@ import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.locator.ServiceLocator;
 import org.yes.cart.service.payment.PaymentModulesManager;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.text.MessageFormat;
 import java.util.*;
@@ -26,7 +27,7 @@ import java.util.*;
  */
 public class PaymentModulesManagerImpl implements PaymentModulesManager {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PaymentModulesManagerImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final ServiceLocator serviceLocator;
 

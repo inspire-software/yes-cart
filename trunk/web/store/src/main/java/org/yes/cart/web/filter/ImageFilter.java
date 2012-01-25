@@ -8,6 +8,7 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.image.ImageNameStrategy;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 //import org.yes.cart.web.support.shoppingcart.RequestRuntimeContainer;
 
@@ -53,7 +54,7 @@ public class ImageFilter extends AbstractFilter implements Filter {
 
     private static final String LAST_MODIFIED = "Last-Modified";
 
-    private static final Logger LOG = LoggerFactory.getLogger(ImageFilter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final MimetypesFileTypeMap fileTypeMap;
 

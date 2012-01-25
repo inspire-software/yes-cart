@@ -11,6 +11,7 @@ import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -23,7 +24,7 @@ import java.util.List;
  */
 public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PaymentOkOrderEventHandlerImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final WarehouseService warehouseService;
     private final SkuWarehouseService skuWarehouseService;

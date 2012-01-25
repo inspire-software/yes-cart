@@ -1,8 +1,11 @@
 package org.yes.cart.web.filter.payment;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.service.payment.PaymentCallBackHandlerFacade;
 import org.yes.cart.service.payment.PaymentModulesManager;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.util.HttpUtil;
 
@@ -25,6 +28,8 @@ import java.util.Map;
  * Time: 11:44:41
  */
 public class GoogleCheckoutCallBackFilter extends BasePaymentGatewayCallBackFilter {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final PaymentModulesManager paymentModulesManager;
 
@@ -50,16 +55,19 @@ public class GoogleCheckoutCallBackFilter extends BasePaymentGatewayCallBackFilt
 
         if (isCallerIpAllowed()) {
 
-            HttpUtil.dumpRequest("GoogleCheckoutCallBackFilter" , servletRequest);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(HttpUtil.dumpRequest((HttpServletRequest) servletRequest));
+            }
+
 
             final String paymentGatewayLabel = getFilterConfig().getInitParameter("paymentGatewayLabel");
 
-            System.out.println("paymentGatewayLabel = " + paymentGatewayLabel);
+            LOG.info("paymentGatewayLabel = " + paymentGatewayLabel);
 
             final PaymentGatewayExternalForm paymentGatewayExternalForm =
                     (PaymentGatewayExternalForm) paymentModulesManager.getPaymentGateway(paymentGatewayLabel);
 
-            System.out.println("paymentGatewayExternalForm = " + paymentGatewayExternalForm);
+            LOG.info("paymentGatewayExternalForm = " + paymentGatewayExternalForm);
 
             paymentGatewayExternalForm.handleNotification((HttpServletRequest) servletRequest,
                     (HttpServletResponse)servletResponse);

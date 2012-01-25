@@ -9,6 +9,7 @@ import org.apache.wicket.util.resource.UrlResourceStream;
 import org.apache.wicket.util.string.StringList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.util.ShopCodeContext;
 
 import javax.servlet.ServletContext;
 import java.net.URL;
@@ -23,7 +24,7 @@ import java.util.List;
  */
 public class MultiWebApplicationPath   implements IResourcePath {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MultiWebApplicationPath.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     /** The list of urls in the path */
     private final List<String> webappPaths = new ArrayList<String>();

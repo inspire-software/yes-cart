@@ -79,7 +79,7 @@ public class PaymentPage extends AbstractWebPage {
 
         result = paymentProcessFacade.pay(
                     ApplicationDirector.getShoppingCart(),
-                    WicketUtil.pageParametesAsMap(getPage().getPageParameters())
+                    WicketUtil.getHttpServletRequest().getParameterMap()
                 );
 
         if (result) {
