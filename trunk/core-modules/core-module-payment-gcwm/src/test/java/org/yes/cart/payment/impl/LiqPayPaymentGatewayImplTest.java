@@ -9,9 +9,12 @@ import org.yes.cart.payment.dto.PaymentLine;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
 import org.yes.cart.payment.dto.impl.PaymentLineImpl;
 
+import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -104,6 +107,51 @@ public class LiqPayPaymentGatewayImplTest extends TestCase {
         assertEquals("+3801234567890", liqPayResponce.getSender_phone());
         assertEquals("1234", liqPayResponce.getGoods_id());
         assertEquals("5", liqPayResponce.getPays_count());
+
+
+    }
+
+    @Test
+    public void testIsSuccess() {
+
+        final LiqPayPaymentGatewayImpl gatewayImpl = new LiqPayPaymentGatewayImpl() {
+
+            @Override
+            public String getParameterValue(String valueLabel) {
+                if ("LP_MERCHANT_KEY".endsWith(valueLabel)) {
+                    return "JMkUT6En0uglRAKCK7STlFA7HLk1g6Xk75Wpdf9ogarpET";
+                }
+                return "";
+            }
+        };
+
+        Map<String, String> callBackresult = new HashMap<String, String>() {{
+
+            put("operation_xml", "PHJlc3BvbnNlPgogIDxhY3Rpb24+cmVzdWx0X3VybDwvYWN0aW9uPgogIDxhbW91bnQ+MC4xODwv\n" +
+                    "YW1vdW50PgogIDxjdXJyZW5jeT5VQUg8L2N1cnJlbmN5PgogIDxkZXNjcmlwdGlvbj48L2Rlc2Ny\n" +
+                    "aXB0aW9uPgogIDxtZXJjaGFudF9pZD5pNjg0MDY4NTU5MjwvbWVyY2hhbnRfaWQ+CiAgPG9yZGVy\n" +
+                    "X2lkPjhjOWJjNTllLWRhNjEtNGM4Mi1iMzg0LTc0NTk5NjFiNzMxYjwvb3JkZXJfaWQ+CiAgPHBh\n" +
+                    "eV93YXk+Y2FyZDwvcGF5X3dheT4KICA8c2VuZGVyX3Bob25lPiszODA5NzgxNTkxMTI8L3NlbmRl\n" +
+                    "cl9waG9uZT4KICA8c3RhdHVzPmZhaWx1cmU8L3N0YXR1cz4KICA8dHJhbnNhY3Rpb25faWQ+MTUz\n" +
+                    "NDc4MjI8L3RyYW5zYWN0aW9uX2lkPgogIDx2ZXJzaW9uPjEuMjwvdmVyc2lvbj4KPC9yZXNwb25z\n" +
+                    "ZT4K");
+            put("signature", "8n+xpiaBia9i4AsxSo+X5AbC68U=");
+
+
+        }};
+
+        assertFalse(gatewayImpl.isSuccess(callBackresult));
+
+
+        callBackresult = new HashMap<String, String>() {{
+
+            put("operation_xml", "PHJlc3BvbnNlPgogIDxhY3Rpb24+cmVzdWx0X3VybDwvYWN0aW9uPgogIDxhbW91bnQ+MC4xODwvYW1vdW50PgogIDxjdXJyZW5jeT5VQUg8L2N1cnJlbmN5PgogIDxkZXNjcmlwdGlvbj48L2Rlc2NyaXB0aW9uPgogIDxtZXJjaGFudF9pZD5pNjg0MDY4NTU5MjwvbWVyY2hhbnRfaWQ+CiAgPG9yZGVyX2lkPjhjOWJjNTllLWRhNjEtNGM4Mi1iMzg0LTc0NTk5NjFiNzMxYjwvb3JkZXJfaWQ+CiAgPHBheV93YXk+Y2FyZDwvcGF5X3dheT4KICA8c2VuZGVyX3Bob25lPiszODA5NzgxNTkxMTI8L3NlbmRlcl9waG9uZT4KICA8c3RhdHVzPnN1Y2Nlc3M8L3N0YXR1cz4KICA8dHJhbnNhY3Rpb25faWQ+MTUzNDc4MjI8L3RyYW5zYWN0aW9uX2lkPgogIDx2ZXJzaW9uPjEuMjwvdmVyc2lvbj4KPC9yZXNwb25zZT4K");
+            put("signature", "xjK6QZJ6RXwVGNFcKxxkvep4DZ8=");
+
+
+        }};
+
+        assertTrue(gatewayImpl.isSuccess(callBackresult));
 
 
     }

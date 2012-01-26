@@ -21,6 +21,15 @@ public class LiqPayResponce {
     private String sender_phone;
     private String goods_id;
     private String pays_count;
+    private String action;
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
 
     public String getVersion() {
         return version;
