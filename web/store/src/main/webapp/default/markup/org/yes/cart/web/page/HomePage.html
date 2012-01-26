@@ -3,46 +3,60 @@
 
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" type="text/css" href="../../../../style/default.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../style/default.css" media="screen"/>
     <title>Yes shop</title>
 </head>
 
 <body>
 
 
-
 <hr>
+
+<div class="container_16">
+
+    <div class="clear"></div>
+    <div class="grid_13">
+        <p>
+            <wicket:container wicket:id="search">
+                [search]
+            </wicket:container>
+        </p>
+    </div>
+    <div class="grid_3">
+        <p>
+            <wicket:container wicket:id="smallCart">
+                [small shopping cart]
+            </wicket:container>
+        </p>
+    </div>
+    <div class="clear"></div>
+    <div class="grid_4">
+        <p>
+            <wicket:container wicket:id="currency">
+                [switch currency]
+            </wicket:container>
+        </p>
+    </div>
+    <div class="grid_4">
+        <p>
+            <wicket:container wicket:id="language">
+                [switch language]
+            </wicket:container>
+        </p>
+    </div>
+    <div class="grid_8">
+        <p>
+            <wicket:link>
+                <a href="CustomerSelfCarePage.html">Profile</a>
+            </wicket:link>
+        </p>
+    </div>
+
+</div>
 
 <hr>
 
 <table id="mainTable" border="1" align="center" width="1024">
-    <tr>
-        <td colspan="2">
-            <wicket:container wicket:id="search">
-                [search]
-            </wicket:container>
-        </td>
-        <td rowspan="2">
-            <wicket:container wicket:id="smallCart">
-                [small shopping cart]
-            </wicket:container>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <wicket:container wicket:id="currency">
-                [switch currency]
-            </wicket:container>
-            <wicket:container wicket:id="language">
-                [switch language]
-            </wicket:container>
-        </td>
-        <td>
-            <wicket:link>
-                <a href="CustomerSelfCarePage.html">Profile</a>
-            </wicket:link>
-        </td>
-    </tr>
     <tr>
         <td colspan="3">
             <table width="100%">
@@ -73,7 +87,7 @@
     </tr>
     <tr>
         <td valign="top" width="180">
-             <wicket:container wicket:id="topCategories">
+            <wicket:container wicket:id="topCategories">
                 [switch language]
             </wicket:container>
 
