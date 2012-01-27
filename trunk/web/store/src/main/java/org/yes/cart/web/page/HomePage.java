@@ -101,8 +101,6 @@ public class HomePage extends AbstractWebPage {
         );
 
 
-
-        add(new Label("version",centralViewLabel));
         add(new Currency("currency"));
         add(new Language("language"));
         add(new TopCategories("topCategories"));
