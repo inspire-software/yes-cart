@@ -3,118 +3,189 @@
 
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" type="text/css" href="../../../../../style/default.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../style/reset.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../style/text.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../style/1024_16_10_10.css"/>
+    <style type="text/css" media="all">
+        body {
+            background: #efefef;
+            color: #333;
+            font-size: 11px;
+        }
+
+        a {
+            color: #333;
+            text-decoration: underline;
+        }
+
+        a:hover {
+            text-decoration: none;
+        }
+
+        h1 {
+            font-family: Georgia, serif;
+            font-weight: normal;
+            text-align: center;
+        }
+
+        h2 {
+            padding: 20px 0 0;
+            font-family: Georgia, serif;
+            font-weight: normal;
+            text-align: center;
+        }
+
+        p {
+            border: 1px solid #666;
+            overflow: hidden;
+            padding: 10px 0;
+            margin: 0 0 20px 0;
+            text-align: center;
+            font-size: 80%;
+        }
+    </style>
     <title>Yes shop</title>
 </head>
 
 <body>
 
 
-<hr>
+<div class="row">
+    <div class="column grid_16">
+        <p>
+            Header
+        </p>
+    </div>
+</div>
 
-<div class="container_16">
-
-    <div class="clear"></div>
-    <div class="grid_13">
+<div class="row">
+    <div class="column grid_13">
         <p>
             <wicket:container wicket:id="search">
                 [search]
             </wicket:container>
         </p>
     </div>
-    <div class="grid_3">
+    <div class="column grid_3">
         <p>
             <wicket:container wicket:id="smallCart">
                 [small shopping cart]
             </wicket:container>
         </p>
     </div>
-    <div class="clear"></div>
-    <div class="grid_4">
+</div>
+
+<div class="row">
+    <div class="column grid_4">
         <p>
             <wicket:container wicket:id="currency">
                 [switch currency]
             </wicket:container>
         </p>
     </div>
-    <div class="grid_4">
+    <div class="column grid_4">
         <p>
             <wicket:container wicket:id="language">
                 [switch language]
             </wicket:container>
         </p>
     </div>
-    <div class="grid_8">
+    <div class="column grid_8">
         <p>
             <wicket:link>
                 <a href="CustomerSelfCarePage.html">Profile</a>
             </wicket:link>
         </p>
     </div>
-
 </div>
 
-<hr>
+<div class="row">
+    <div class="column grid_4">
+        <p>
+            [Logo]
+        </p>
+    </div>
+    <div class="column grid_12">
+        <p>
+            <wicket:container wicket:id="featured">
+                [featured products]
+            </wicket:container>
+        </p>
+    </div>
+</div>
 
-<table id="mainTable" border="1" align="center" width="1024">
-    <tr>
-        <td colspan="3">
-            <table width="100%">
-                <tr>
-                    <td>
-                        [Logo]
-                    </td>
-                    <td>
-                        <wicket:container wicket:id="featured">
-                            [featured products]
-                        </wicket:container>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="3">
-            Home | Special offer | Sale | New products | FAQ | Contect us | Rss
-        </td>
-    </tr>
-    <tr>
-        <td colspan="3">
+
+<div class="row">
+    <div class="column grid_15">
+        <p>
+            Home | Special offer | Sale | New products | FAQ | Contect us
+        </p>
+    </div>
+    <div class="column grid_1">
+        <p>
+            Rss
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="column grid_16">
+        <p>
             <wicket:container wicket:id="breadCrumbs">
                 [bread crumbs]
             </wicket:container>
-        </td>
-    </tr>
-    <tr>
-        <td valign="top" width="180">
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="column grid_4">
+        <p>
             <wicket:container wicket:id="topCategories">
                 [switch language]
             </wicket:container>
-
+        </p>
+        <p>
             <wicket:container wicket:id="brandFilter">
                 [brand filter]
             </wicket:container>
-
+        </p>
+        <p>
             <wicket:container wicket:id="attributeFilter">
                 [brand filter]
             </wicket:container>
-
+        </p>
+        <p>
             <wicket:container wicket:id="priceFilter">
                 [brand filter]
             </wicket:container>
-        </td>
-        <td valign="top">
-            <wicket:container wicket:id="version">1.5-SNAPSHOT</wicket:container>
+        </p>
+    </div>
+    <div class="column grid_9">
+        <p>
             <wicket:container wicket:id="centralView">
                 [switch language]
             </wicket:container>
-        </td>
-        <td width="180" valign="top">
+        </p>
+    </div>
+    <div class="column grid_3">
+        <p>
             <wicket:container wicket:id="newArrival">
                 [category new arrival and promo]
             </wicket:container>
-        </td>
-    </tr>
-</table>
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="column grid_16">
+        <p>
+            Hi there footer
+        </p>
+
+    </div>
+</div>
+
+
 </body>
 </html>
