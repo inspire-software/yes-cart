@@ -6,6 +6,7 @@
        xmlns:security="http://www.springframework.org/schema/security"
        xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:lang="http://www.springframework.org/schema/lang"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
            http://www.springframework.org/schema/tx 
@@ -14,8 +15,10 @@
            http://www.springframework.org/schema/context/spring-context-2.5.xsd
            http://www.springframework.org/schema/aop
            http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
-           http://www.springframework.org/schema/security 
-           http://www.springframework.org/schema/security/spring-security-2.0.xsd
+           http://www.springframework.org/schema/security
+           http://www.springframework.org/schema/security/spring-security-3.0.xsd
+           http://cxf.apache.org/jaxws
+           http://cxf.apache.org/schemas/jaxws.xsd
            http://www.springframework.org/schema/lang 
            http://www.springframework.org/schema/lang/spring-lang-2.5.xsd">
 
@@ -23,7 +26,6 @@
     <context:component-scan base-package="org.yes.cart"/>
 
     <aop:aspectj-autoproxy/>
-
 
 
     <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
@@ -39,7 +41,9 @@
         </property>
         <property name="hibernateProperties">
             <props>
-                <prop key="hibernate.search.default.indexBase">#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'}</prop>
+                <prop key="hibernate.search.default.indexBase">
+                    #{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'}
+                </prop>
             </props>
         </property>
     </bean>
@@ -87,13 +91,13 @@
     </bean>
 
     <!-- CPOINT is authorize net need for you ? -->
-    <bean id="anetPaymentCallBackFilter"  class="org.yes.cart.web.filter.payment.BasePaymentGatewayCallBackFilter">
+    <bean id="anetPaymentCallBackFilter" class="org.yes.cart.web.filter.payment.BasePaymentGatewayCallBackFilter">
         <constructor-arg index="0" ref="applicationDirector"/>
         <constructor-arg index="1" ref="paymentCallBackHandlerFacade"/>
     </bean>
 
     <!-- CPOINT is liq pay need for you ? -->
-    <bean id="liqPayCallBackFilter"  class="org.yes.cart.web.filter.payment.BasePaymentGatewayCallBackFilter">
+    <bean id="liqPayCallBackFilter" class="org.yes.cart.web.filter.payment.BasePaymentGatewayCallBackFilter">
         <constructor-arg index="0" ref="applicationDirector"/>
         <constructor-arg index="1" ref="paymentCallBackHandlerFacade"/>
     </bean>
@@ -108,10 +112,10 @@
         <constructor-arg index="3" value="DES/ECB/PKCS5Padding"/>
     </bean>
 
-    <bean id="amountCalculationStrategy" class="org.yes.cart.shoppingcart.impl.DefaultAmountCalculationStrategy">  <!-- CPOINT tax and amount calculation strategy -->
-                <constructor-arg index="0"  value="20.00"/>
+    <bean id="amountCalculationStrategy"
+          class="org.yes.cart.shoppingcart.impl.DefaultAmountCalculationStrategy">  <!-- CPOINT tax and amount calculation strategy -->
+        <constructor-arg index="0" value="20.00"/>
     </bean>
-
 
 
     <bean id="shoppingCartPersister" class="org.yes.cart.web.support.util.cookie.impl.ShoppingCartPersisterImpl">
@@ -430,6 +434,52 @@
     </bean>
 
     <!-- #################################  message consumers end ######################################-->
+
+    <security:authentication-manager alias="authenticationManager">
+        <security:authentication-provider>
+            <security:password-encoder hash="md5"/>
+            <security:jdbc-user-service
+                    data-source-ref="dataSourceSec"
+                    group-authorities-by-username-query=""
+                    users-by-username-query="SELECT m.email as username, m.password, 1 as enabled FROM TMANAGER m where m.email = ?"
+                    authorities-by-username-query="SELECT mr.email as username, mr.code as authority FROM TMANAGERROLE mr  WHERE mr.email = ?"/>
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+
+    <bean id="dataSourceSec" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="java:comp/env/jdbc/yesjndi"/>
+        <property name="lookupOnStartup" value="true"/>
+        <property name="cache" value="true"/>
+        <property name="proxyInterface" value="javax.sql.DataSource"/>
+    </bean>
+
+
+    <bean id="backDoorBean" class="org.yes.cart.web.service.ws.impl.BackdoorServiceImpl">
+        <property name="productService" ref="productService"/>
+    </bean>
+
+    <jaxws:endpoint id="backDoor" implementor="#backDoorBean" address="/backdoor">
+        <jaxws:properties>
+            <entry key="ws-security.validate.token">
+                <value>false</value>
+            </entry>
+        </jaxws:properties>
+        <jaxws:inInterceptors>
+            <ref bean="wsAuthenticationInterceptor"/>
+        </jaxws:inInterceptors>
+    </jaxws:endpoint>
+
+    <bean id="wsAuthenticationInterceptor" class="org.yes.cart.web.service.ws.impl.BackdoorAuthenticationInInterceptor">
+        <constructor-arg>
+            <map>
+                <entry key="action" value="UsernameToken"/>
+                <entry key="passwordType" value="PasswordText"/>
+                <entry key="passwordCallbackClass" value="org.yes.cart.web.service.ws.impl.BackdoorCallback"/>
+            </map>
+        </constructor-arg>
+        <property name="authenticationManager" ref="authenticationManager"/>
+    </bean>
 
 
 </beans>

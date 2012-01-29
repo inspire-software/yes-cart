@@ -9,7 +9,7 @@
 
     <session-factory>
         <property name="cache.use_query_cache">false</property>
-        <property name="hibernate.search.default.indexBase">${lucene.config.index.dir}</property>
+       <!-- <property name="hibernate.search.default.indexBase">${lucene.config.index.dir}</property>-->
         <property name="hibernate.dialect">${db.config.yes.hibernate.dialect}</property>
         <property name="hibernate.hbm2ddl.auto">update</property>
         <property name="show_sql">false</property>
@@ -17,7 +17,7 @@
 
 
 
-        <event type="post-update">
+        <!--<event type="post-update">
             <listener class="org.hibernate.search.event.FullTextIndexEventListener"/>
         </event>
         <event type="post-insert">
@@ -34,7 +34,7 @@
         </event>
         <event type="post-collection-update">
             <listener class="org.hibernate.search.event.FullTextIndexEventListener"/>
-        </event>
+        </event>-->
 
 
     </session-factory>
