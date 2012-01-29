@@ -19,8 +19,9 @@
         <module>web</module>
     </modules>
     <properties>
-        <spring-security.version>3.0.3.RELEASE</spring-security.version>
-        <spring.version>3.0.5.RELEASE</spring.version>
+        <cxf.version>2.5.2</cxf.version>
+        <spring-security.version>3.0.6.RELEASE</spring-security.version>
+        <spring.version>3.0.6.RELEASE</spring.version>
         <lucene.config.index.dir>/yes-cart/lucene-index</lucene.config.index.dir>
         <db.config.yes.hibernate.dialect>org.hibernate.dialect.DerbyDialect</db.config.yes.hibernate.dialect>
         <db.config.yes.login>app</db.config.yes.login>

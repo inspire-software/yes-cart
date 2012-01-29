@@ -93,7 +93,7 @@
     <filter>
         <filter-name>liqPayCallBackFilter</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-         <init-param>
+        <init-param>
             <param-name>targetFilterLifecycle</param-name>
             <param-value>true</param-value>
         </init-param>
@@ -110,7 +110,7 @@
     <filter>
         <filter-name>anetPaymentCallBackFilter</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-         <init-param>
+        <init-param>
             <param-name>targetFilterLifecycle</param-name>
             <param-value>true</param-value>
         </init-param>
@@ -170,8 +170,11 @@
             <param-name>applicationClassName</param-name>
             <param-value>org.yes.cart.web.application.StorefrontApplication</param-value>
         </init-param>
+        <init-param>
+            <param-name>ignorePaths</param-name>
+            <param-value>services/</param-value>
+        </init-param>
     </filter>
-
 
 
     <filter-mapping>
@@ -190,7 +193,7 @@
     </filter-mapping>
 
 
-     <!--
+    <!--
     Liq Pay call back filter.
     For security reason change default mapping.
     -->
@@ -238,17 +241,16 @@
     </filter-mapping>
 
 
-
     <!--filter>
-         <filter-name>springSecurityFilterChain</filter-name>
-         <filter-class>
-             org.springframework.web.filter.DelegatingFilterProxy
-         </filter-class>
-     </filter>
-     <filter-mapping>
-         <filter-name>springSecurityFilterChain</filter-name>
-         <url-pattern>/*</url-pattern>
-     </filter-mapping-->
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>
+            org.springframework.web.filter.DelegatingFilterProxy
+        </filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping-->
 
     <!--servlet>
         <servlet-name>Faces Servlet</servlet-name>
@@ -271,14 +273,36 @@
         <url-pattern>/primefaces_resource/*</url-pattern>
     </servlet-mapping-->
 
-<!-- Datasource Configuration -->
-	<resource-ref>
-		<description>Database connection</description>
-		<res-ref-name>jdbc/yesjndi</res-ref-name>
-		<res-type>javax.sql.DataSource</res-type>
-		<res-auth>Container</res-auth>
-	</resource-ref>
 
+    <servlet>
+        <servlet-name>cxf</servlet-name>
+        <servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>cxf</servlet-name>
+        <url-pattern>/services/*</url-pattern>
+    </servlet-mapping>
+
+
+    <!--<servlet>
+        <servlet-name>spring-ws</servlet-name>
+        <servlet-class>org.springframework.ws.transport.http.MessageDispatcherServlet</servlet-class>
+    </servlet>-->
+
+    <!--<servlet-mapping>
+        <servlet-name>spring-ws</servlet-name>
+        <url-pattern>/services/*</url-pattern>
+    </servlet-mapping>-->
+
+    <!-- Datasource Configuration -->
+    <resource-ref>
+        <description>Database connection</description>
+        <res-ref-name>jdbc/yesjndi</res-ref-name>
+        <res-type>javax.sql.DataSource</res-type>
+        <res-auth>Container</res-auth>
+    </resource-ref>
 
 
 </web-app>

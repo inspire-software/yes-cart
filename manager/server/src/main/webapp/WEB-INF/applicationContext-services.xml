@@ -21,10 +21,9 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
 
     <bean id="reindexService"
           class="org.yes.cart.remote.service.impl.ReindexServiceImpl">
-        <constructor-arg index="0" ref="productService"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
-            <security:protect method="reindexAllProducts" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="reindexAllProducts" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
         </security:intercept-methods>
     </bean>
 

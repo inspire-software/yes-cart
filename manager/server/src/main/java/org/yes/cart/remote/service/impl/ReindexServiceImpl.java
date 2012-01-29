@@ -1,7 +1,12 @@
 package org.yes.cart.remote.service.impl;
 
+import flex.messaging.FlexContext;
+import flex.messaging.FlexRemoteCredentials;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.yes.cart.remote.service.ReindexService;
 import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.web.service.ws.BackdoorService;
+import org.yes.cart.web.service.ws.client.BackdoorServiceClientFactory;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -10,16 +15,6 @@ import org.yes.cart.service.domain.ProductService;
  */
 public class ReindexServiceImpl implements ReindexService {
 
-    private final ProductService productService;
-
-    /**
-     * Construct reindex service.
-     *
-     * @param productService product service to use.
-     */
-    public ReindexServiceImpl(final ProductService productService) {
-        this.productService = productService;
-    }
 
     /**
      * Reindex all products
@@ -27,7 +22,7 @@ public class ReindexServiceImpl implements ReindexService {
      * @return quantity product in created index.
      */
     public int reindexAllProducts() {
-        return productService.reindexProducts();
+        return getBackdoorService().reindexAllProducts();
     }
 
     /**
@@ -37,7 +32,32 @@ public class ReindexServiceImpl implements ReindexService {
      * @return quantity product in created index.
      */
     public int reindexProduct(long pk) {
-        return productService.reindexProduct(pk);
+        return getBackdoorService().reindexProduct(pk);
+    }
+
+
+    private BackdoorServiceClientFactory backdoorServiceClientFactory = null;
+
+    private synchronized BackdoorServiceClientFactory getBackdoorServiceClientFactory() {
+
+        if (backdoorServiceClientFactory == null) {
+            backdoorServiceClientFactory = new BackdoorServiceClientFactory();
+        }
+
+        return backdoorServiceClientFactory;
+
+    }
+
+    private BackdoorService getBackdoorService() {
+
+        String userName =  ((UsernamePasswordAuthenticationToken) FlexContext.getUserPrincipal()).getName();
+        String password = (String) ((UsernamePasswordAuthenticationToken) FlexContext.getUserPrincipal()).getCredentials();
+
+        return getBackdoorServiceClientFactory().getBackdoorService(
+                userName,
+                password,
+                "http://localhost:8080/yes-shop/services/backdoor");
+
     }
 
 }
