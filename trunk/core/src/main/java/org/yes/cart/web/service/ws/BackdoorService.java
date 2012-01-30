@@ -65,7 +65,7 @@ public interface BackdoorService {
      * @return list of rows
      */
     @WebMethod
-    //@WebResult(name = "queryResult")
+    @WebResult(name = "queryResult")
     List<Object[]> hsqlQuery(String query);
 
     /**

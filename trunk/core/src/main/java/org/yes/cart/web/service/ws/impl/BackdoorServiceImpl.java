@@ -40,13 +40,9 @@ public class BackdoorServiceImpl implements BackdoorService {
     private GenericDAO<Object, Long> genericDAO;
 
 
-
-
     /**
      * {@inheritDoc}
      */
-    @WebMethod
-    @WebResult(name = "quantity")
     public int reindexAllProducts() {
         return  productService.reindexProducts();
     }
@@ -54,8 +50,6 @@ public class BackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
-    @WebMethod
-    @WebResult(name = "quantity")
     public int reindexProduct(@WebParam(name = "productPk") long productPk) {
         return productService.reindexProduct(productPk);
     }
@@ -63,8 +57,6 @@ public class BackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
-    @WebMethod
-    @WebResult(name = "quantity")
     public int reindexProducts(@WebParam(name = "productPks") long[] productPks) {
         int rez = 0;
         for (long pk : productPks) {

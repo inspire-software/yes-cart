@@ -36,7 +36,7 @@
         <class-cache class="org.yes.cart.domain.entity.Seo" usage="read-only"/>
 
         <class-cache class="org.yes.cart.domain.entity.Etype" usage="read-only"/>
-        <collection-cache collection="org.yes.cart.domain.entity.impl.EtypeEntity.attributes" usage="read-only"/>
+        <!--<collection-cache collection="org.yes.cart.domain.entity.impl.EtypeEntity.attributes" usage="read-only"/>-->
 
         <class-cache class="org.yes.cart.domain.entity.Attribute" usage="read-only"/>
 
