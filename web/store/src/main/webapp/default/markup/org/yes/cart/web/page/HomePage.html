@@ -3,19 +3,37 @@
 
 <wicket:head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-<wicket:link>
-    <link rel="stylesheet" type="text/css" href="../../../../../style/reset.css"/>
-    <link rel="stylesheet" type="text/css" href="../../../../../style/text.css"/>
-    <link rel="stylesheet" type="text/css" href="../../../../../style/1024_16_10_10.css"/>
-</wicket:link>
+    <wicket:link>
+        <link rel="stylesheet" type="text/css" href="../../../../../style/reset.css"/>
+        <link rel="stylesheet" type="text/css" href="../../../../../style/text.css"/>
+        <link rel="stylesheet" type="text/css" href="../../../../../style/1024_16_10_10.css"/>
+    </wicket:link>
     <style type="text/css" media="all">
         body {
             background: #efefef;
         }
+
+        a:hover {
+            text-decoration: underline;
+            color: red;
+        }
+
+        a {
+            color: black;
+            text-decoration: underline;
+        }
+
         p {
             overflow: hidden;
             padding: 10px 0;
             margin: 0 0 20px 0;
+        }
+
+        .mainpage {
+            border: solid 1px #d6d6d6;
+            width: 1024px;
+            margin: 0 auto;
+            overflow: hidden;
         }
     </style>
     <title>Yes shop</title>
@@ -24,142 +42,146 @@
 <body>
 
 
-<div class="row">
-    <div class="column grid_16">
-        <p>
-            Header
-        </p>
+<div class="mainpage">
+
+
+    <div class="row">
+        <div class="column grid_16">
+            <p>
+                Header
+            </p>
+        </div>
     </div>
+
+    <div class="row">
+        <div class="column grid_13">
+            <p>
+                <wicket:container wicket:id="search">
+                    [search]
+                </wicket:container>
+            </p>
+        </div>
+        <div class="column grid_3">
+            <p>
+                <wicket:container wicket:id="smallCart">
+                    [small shopping cart]
+                </wicket:container>
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="column grid_4">
+            <p>
+                <wicket:container wicket:id="currency">
+                    [switch currency]
+                </wicket:container>
+            </p>
+        </div>
+        <div class="column grid_4">
+            <p>
+                <wicket:container wicket:id="language">
+                    [switch language]
+                </wicket:container>
+            </p>
+        </div>
+        <div class="column grid_8">
+            <p>
+                <wicket:link>
+                    <a href="CustomerSelfCarePage.html">Profile</a>
+                </wicket:link>
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="column grid_4">
+            <p>
+                [Logo]
+            </p>
+        </div>
+        <div class="column grid_12">
+            <p>
+                <wicket:container wicket:id="featured">
+                    [featured products]
+                </wicket:container>
+            </p>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="column grid_15">
+            <p>
+                Home | Special offer | Sale | New products | FAQ | Contect us
+            </p>
+        </div>
+        <div class="column grid_1">
+            <p>
+                Rss
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="column grid_16">
+            <p>
+                <wicket:container wicket:id="breadCrumbs">
+                    [bread crumbs]
+                </wicket:container>
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="column grid_4">
+            <p>
+                <wicket:container wicket:id="topCategories">
+                    [switch language]
+                </wicket:container>
+            </p>
+            <p>
+                <wicket:container wicket:id="brandFilter">
+                    [brand filter]
+                </wicket:container>
+            </p>
+            <p>
+                <wicket:container wicket:id="attributeFilter">
+                    [brand filter]
+                </wicket:container>
+            </p>
+            <p>
+                <wicket:container wicket:id="priceFilter">
+                    [brand filter]
+                </wicket:container>
+            </p>
+        </div>
+        <div class="column grid_9">
+            <p>
+                <wicket:container wicket:id="centralView">
+                    [switch language]
+                </wicket:container>
+            </p>
+        </div>
+        <div class="column grid_3">
+            <p>
+                <wicket:container wicket:id="newArrival">
+                    [category new arrival and promo]
+                </wicket:container>
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="column grid_16">
+            <p>
+                Hi there footer
+            </p>
+
+        </div>
+    </div>
+
+
 </div>
-
-<div class="row">
-    <div class="column grid_13">
-        <p>
-            <wicket:container wicket:id="search">
-                [search]
-            </wicket:container>
-        </p>
-    </div>
-    <div class="column grid_3">
-        <p>
-            <wicket:container wicket:id="smallCart">
-                [small shopping cart]
-            </wicket:container>
-        </p>
-    </div>
-</div>
-
-<div class="row">
-    <div class="column grid_4">
-        <p>
-            <wicket:container wicket:id="currency">
-                [switch currency]
-            </wicket:container>
-        </p>
-    </div>
-    <div class="column grid_4">
-        <p>
-            <wicket:container wicket:id="language">
-                [switch language]
-            </wicket:container>
-        </p>
-    </div>
-    <div class="column grid_8">
-        <p>
-            <wicket:link>
-                <a href="CustomerSelfCarePage.html">Profile</a>
-            </wicket:link>
-        </p>
-    </div>
-</div>
-
-<div class="row">
-    <div class="column grid_4">
-        <p>
-            [Logo]
-        </p>
-    </div>
-    <div class="column grid_12">
-        <p>
-            <wicket:container wicket:id="featured">
-                [featured products]
-            </wicket:container>
-        </p>
-    </div>
-</div>
-
-
-<div class="row">
-    <div class="column grid_15">
-        <p>
-            Home | Special offer | Sale | New products | FAQ | Contect us
-        </p>
-    </div>
-    <div class="column grid_1">
-        <p>
-            Rss
-        </p>
-    </div>
-</div>
-
-<div class="row">
-    <div class="column grid_16">
-        <p>
-            <wicket:container wicket:id="breadCrumbs">
-                [bread crumbs]
-            </wicket:container>
-        </p>
-    </div>
-</div>
-
-<div class="row">
-    <div class="column grid_4">
-        <p>
-            <wicket:container wicket:id="topCategories">
-                [switch language]
-            </wicket:container>
-        </p>
-        <p>
-            <wicket:container wicket:id="brandFilter">
-                [brand filter]
-            </wicket:container>
-        </p>
-        <p>
-            <wicket:container wicket:id="attributeFilter">
-                [brand filter]
-            </wicket:container>
-        </p>
-        <p>
-            <wicket:container wicket:id="priceFilter">
-                [brand filter]
-            </wicket:container>
-        </p>
-    </div>
-    <div class="column grid_9">
-        <p>
-            <wicket:container wicket:id="centralView">
-                [switch language]
-            </wicket:container>
-        </p>
-    </div>
-    <div class="column grid_3">
-        <p>
-            <wicket:container wicket:id="newArrival">
-                [category new arrival and promo]
-            </wicket:container>
-        </p>
-    </div>
-</div>
-
-<div class="row">
-    <div class="column grid_16">
-        <p>
-            Hi there footer
-        </p>
-
-    </div>
-</div>
-
-
 </body>
 </html>
