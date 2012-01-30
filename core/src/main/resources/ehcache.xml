@@ -74,8 +74,10 @@
     <cache name="org.yes.cart.domain.entity.Etype" maxElementsInMemory="100" overflowToDisk="false" eternal="false"
            timeToLiveSeconds="600"/>
 
+<!--
     <cache name="org.yes.cart.domain.entity.impl.EtypeEntity.attributes" maxElementsInMemory="1000" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="600"/>
+-->
 
     <cache name="org.yes.cart.domain.entity.Attribute" maxElementsInMemory="5000" overflowToDisk="false" eternal="false"
            timeToLiveSeconds="600"/>
