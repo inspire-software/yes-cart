@@ -29,11 +29,13 @@ Learn more ~ http://www.gridsystemgenerator.com/
          overflow: hidden;
          float: left;
          display: inline;
-    background-color: #cccccc;
+    background-color: white;
 }
 .row {width: 1024px;
          margin: 0 auto;
-         overflow: hidden;}
+         overflow: hidden;
+    background-color: white;
+}
 .row .row {margin: 0 -10px 0 -10px;
          width: auto;
          display: inline-block;}
