@@ -62,14 +62,14 @@ public interface Etype extends Auditable {
      *
      * @return attributes.
      */
-    Set<Attribute> getAttributes();
+   // Set<Attribute> getAttributes();
 
     /**
      * Set attributes.
      *
      * @param attributes attribute collection
      */
-    void setAttributes(Set<Attribute> attributes);
+    //void setAttributes(Set<Attribute> attributes);
 
 }
 

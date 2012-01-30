@@ -23,7 +23,7 @@ public class ProductCategoryServiceImpl extends BaseGenericServiceImpl<ProductCa
 
     /** {@inheritDoc} */
     public void removeByCategoryProductIds(final long categoryId, final long productId) {
-        getGenericDao().executeNativeQuery(
+        getGenericDao().executeNativeUpdate(
                 "delete from tproductcategory where category_id = :1 and product_id = :2",
                 categoryId,
                 productId);

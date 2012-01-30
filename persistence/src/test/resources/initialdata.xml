@@ -44,6 +44,7 @@
     <TETYPE ETYPE_ID="1005" JAVATYPE="java.lang.Float" BUSINESSTYPE="Float"/>
     <TETYPE ETYPE_ID="1006" JAVATYPE="java.lang.Integer" BUSINESSTYPE="Integer"/>
     <TETYPE ETYPE_ID="1007" JAVATYPE="java.lang.String" BUSINESSTYPE="Phone"/>
+    <TETYPE ETYPE_ID="1008" JAVATYPE="java.lang.Boolean" BUSINESSTYPE="Boolean"/>
 
     <TATTRIBUTEGROUP ATTRIBUTEGROUP_ID="1000" CODE="SYSTEM" NAME="System settings." DESCRIPTION = "System wide settings"/>
     <TATTRIBUTEGROUP ATTRIBUTEGROUP_ID="1001" CODE="SHOP" NAME="Shop settings." DESCRIPTION = "Shop settings."/>

@@ -339,7 +339,7 @@ public class PriceServiceImpl
         String sql = MessageFormat.format("delete from tskuprice where shop_id = {0} and currency = ''{1}''",
                 shopId,
                 derivedCurrency);
-        skuPriceDao.executeNativeQuery(sql);
+        skuPriceDao.executeNativeUpdate(sql);
 
 
         sql = MessageFormat.format("insert into tskuprice (sku_id, shop_id, currency, qty, regular_price, sale_price, minimal_price, sale_from, sale_till)" +
@@ -351,7 +351,7 @@ public class PriceServiceImpl
                 defaultCurrency);
 
 
-        return skuPriceDao.executeNativeQuery(sql);
+        return skuPriceDao.executeNativeUpdate(sql);
     }
 
 

@@ -489,7 +489,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * {@inheritDoc}
      */
     public void clearEmptyAttributes() {
-        productDao.executeNativeQuery("DELETE FROM TPRODUCTATTRVALUE WHERE VAL IS NULL OR VAL =''");
+        productDao.executeNativeUpdate("DELETE FROM TPRODUCTATTRVALUE WHERE VAL IS NULL OR VAL =''");
     }
 
     /**

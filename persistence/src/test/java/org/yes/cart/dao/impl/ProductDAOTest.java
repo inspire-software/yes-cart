@@ -1,5 +1,6 @@
 package org.yes.cart.dao.impl;
 
+import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.junit.Before;
@@ -145,9 +146,10 @@ public class ProductDAOTest extends AbstractTestDAO {
 
 
     @Test
-    public void testSearchByAttributeAndValueTest() {
+    public void testSearchByAttributeAndValueTest() throws Exception {
         productDao.fullTextSearchReindex();
         AttributiveSearchQueryBuilderImpl queryBuilder = new AttributiveSearchQueryBuilderImpl();
+
         Map<String, String> attributeMap = new HashMap<String, String>();
         // Test that we able to find Beder by his material in category where he exists
         attributeMap.put("MATERIAL", "metal");
@@ -155,10 +157,21 @@ public class ProductDAOTest extends AbstractTestDAO {
         List<Product> products = productDao.fullTextSearch(query);
         assertEquals(1, products.size());
         // Test that we able to find Beder by his material in  list of categories where he exists
+
         attributeMap.put("MATERIAL", "metal");
         query = queryBuilder.createQuery(Arrays.asList(101L, 200L), attributeMap);
         products = productDao.fullTextSearch(query);
         assertEquals(1, products.size());
+        //The same as previ , but via query parsing
+
+
+        QueryParser qp = new QueryParser("", new AsIsAnalyzerImpl());
+
+
+        List rez =  productDao.fullTextSearch(qp.parse("productCategory.category:101 productCategory.category:200 +(attribute.attribute:MATERIAL sku.attribute.attribute:MATERIAL) +(attribute.val:metal sku.attribute.val:metal)")) ;
+        assertEquals(1, rez.size());
+
+
         // Test that we able to find Sobot by his material in category where he exists
         attributeMap.put("MATERIAL", "Plastik");
         query = queryBuilder.createQuery(Arrays.asList(101L), attributeMap);

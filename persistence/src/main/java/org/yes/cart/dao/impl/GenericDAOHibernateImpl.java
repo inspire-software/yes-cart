@@ -472,10 +472,49 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
     /**
      * {@inheritDoc}
      */
-    public int executeNativeQuery(final String nativeQuery) {
+    public int executeNativeUpdate(final String nativeQuery) {
         SQLQuery sqlQuery = getSession().createSQLQuery(nativeQuery);
         return sqlQuery.executeUpdate();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List executeNativeQuery(final String nativeQuery) {
+        SQLQuery sqlQuery = getSession().createSQLQuery(nativeQuery);
+        return sqlQuery.list();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List executeHsqlQuery(final String hsql) {
+        Query query = getSession().createQuery(hsql);
+        return query.list();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int executeHsqlUpdate(final String hsql) {
+        Query query = getSession().createQuery(hsql);
+        return query.executeUpdate();
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public int executeNativeUpdate(final String nativeQuery, final Object... parameters) {
+        SQLQuery sqlQuery = getSession().createSQLQuery(nativeQuery);
+        int idx = 1;
+        for (Object param : parameters) {
+            sqlQuery.setParameter(String.valueOf(idx), param);
+            idx++;
+        }
+        return sqlQuery.executeUpdate();
+    }
+
 
     /**
      * {@inheritDoc}
@@ -492,21 +531,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
         return query.executeUpdate();
     }
 
-    /*) {
-*/
 
-    /**
-     * {@inheritDoc}
-     */
-    public int executeNativeQuery(final String nativeQuery, final Object...parameters) {
-        SQLQuery sqlQuery = getSession().createSQLQuery(nativeQuery);
-        int idx = 1;
-        for (Object param : parameters) {
-            sqlQuery.setParameter(String.valueOf(idx), param);
-            idx++;
-        }
-        return sqlQuery.executeUpdate();
-    }
 
 
 }

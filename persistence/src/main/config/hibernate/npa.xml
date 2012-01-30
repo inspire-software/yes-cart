@@ -222,12 +222,12 @@
                     <comment>Used mosty on UI. How to represent product, category, attibutes, etc</comment>
                 </column>
             </property>
-            <set name="attributes" inverse="false" lazy="false">
+            <!--set name="attributes" inverse="false" lazy="false">
                 <key>
                     <column name="ETYPE_ID" not-null="true"/>
                 </key>
                 <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.Attribute"/>
-            </set>
+            </set-->
 
             <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
