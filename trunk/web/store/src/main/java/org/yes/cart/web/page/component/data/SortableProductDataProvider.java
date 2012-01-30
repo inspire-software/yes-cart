@@ -40,6 +40,8 @@ public class SortableProductDataProvider extends SortableDataProvider<ProductDec
      * Construct product data provider.
      *
      * @param productService product service to get the products.
+     * @param attributableImageService image service
+     * @param categoryService category service
      * @param query          lucene query.
      * @param imageService image service
      */

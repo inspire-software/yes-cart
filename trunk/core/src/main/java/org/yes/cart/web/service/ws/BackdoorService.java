@@ -2,7 +2,9 @@ package org.yes.cart.web.service.ws;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
+import javax.jws.WebResult;
 import javax.jws.WebService;
+import java.util.List;
 
 /**
  * Back door administrative service.
@@ -22,6 +24,7 @@ public interface BackdoorService {
      * @return quantity of objects in index
      */
     @WebMethod
+    @WebResult(name = "quantity")
     int reindexAllProducts();
 
     /**
@@ -30,6 +33,7 @@ public interface BackdoorService {
      * @return quantity of objects in index
      */
     @WebMethod
+    @WebResult(name = "quantity")
     int reindexProduct(@WebParam(name = "productPk") long productPk);
 
 
@@ -39,7 +43,40 @@ public interface BackdoorService {
      * @return quantity of objects in index
      */
     @WebMethod
+    @WebResult(name = "quantity")
     int reindexProducts(@WebParam(name = "productPks") long[] productPks);
+
+
+    /**
+     * Execute sql and return result.
+     * DML operatin also allowed, in this case result has quantity of affected rows.
+     *
+     * @param query query ot execute.
+     * @return list of rows
+     */
+    @WebMethod
+    @WebResult(name = "queryResult")
+    List<Object[]> sqlQuery(String query);
+
+    /**
+     * Execute hsql and return result.
+     *
+     * @param query query ot execute.
+     * @return list of rows
+     */
+    @WebMethod
+    //@WebResult(name = "queryResult")
+    List<Object[]> hsqlQuery(String query);
+
+    /**
+     * Execute lucene and return result.
+     *
+     * @param query query ot execute.
+     * @return list of rows
+     */
+    @WebMethod
+    @WebResult(name = "queryResult")
+    List<Object[]> luceneQuery(String query);
 
 
 }

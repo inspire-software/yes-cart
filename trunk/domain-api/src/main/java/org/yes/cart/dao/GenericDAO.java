@@ -283,7 +283,31 @@ public interface GenericDAO<T, PK extends Serializable> {
      * @param nativeQuery native sql
      * @return quantity of updated / deleted rows
      */
-    int executeNativeQuery(String nativeQuery);
+    int executeNativeUpdate(String nativeQuery);
+
+    /**
+     * Execute native sql.
+     *
+     * @param nativeQuery native sql
+     * @return result of select.
+     */
+    List executeNativeQuery(String nativeQuery);
+
+    /**
+     * Execute hsql.
+     *
+     * @param hsql hibernate sql
+     * @return result of select.
+     */
+    List executeHsqlQuery(String hsql);
+
+    /**
+     * Execute update.
+     *
+     * @param hsql hibernate sql
+     * @return quantity of updated resords.
+     */
+    int executeHsqlUpdate(String hsql);
 
     /**
      * Execute update.
@@ -301,7 +325,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      * @param parameters  sql query parameters.
      * @return quantity of updated / deleted rows
      */
-    int executeNativeQuery(String nativeQuery, Object... parameters);
+    int executeNativeUpdate(String nativeQuery, Object... parameters);
 
 
 }
