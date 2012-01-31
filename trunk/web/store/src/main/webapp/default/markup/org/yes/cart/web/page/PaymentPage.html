@@ -1,24 +1,40 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 
-<head>
+<wicket:head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" type="text/css" href="../../../../style/default.css" media="screen"/>
-    <title><wicket:message key="orderPayment">[Order payment]</wicket:message></title>
-</head>
+    <wicket:link>
+        <link rel="stylesheet" type="text/css" href="../../../../../style/reset.css"/>
+        <link rel="stylesheet" type="text/css" href="../../../../../style/text.css"/>
+        <link rel="stylesheet" type="text/css" href="../../../../../style/1024_16_10_10.css"/>
+    </wicket:link>
+    <title>
+        <wicket:message key="orderPayment">[Order payment]</wicket:message>
+    </title>
+</wicket:head>
 
 <body>
 
+<div class="mainpage">
+    <div class="row">
+        <div class="column grid_1">
+            &nbsp;
+        </div>
+        <div class="column grid_14">
+            <p>
+                <wicket:container wicket:id="paymentResult">
+                    [auth panel]
+                </wicket:container>
+            </p>
+        </div>
+        <div class="column grid_1">
+            &nbsp;
+        </div>
+    </div>
 
-<table border="1" align="center" width="1024">
-    <tr>
-        <td>
-            <wicket:container wicket:id="paymentResult">
-                [auth panel]
-            </wicket:container>
-        </td>
-    </tr>
-</table>
+
+
+</div>
 
 
 <wicket:fragment wicket:id="negativeResultFragment">
