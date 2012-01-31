@@ -1,74 +1,92 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 
-<head>
+<wicket:head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" type="text/css" href="../../../../style/default.css" media="screen"/>
-    <title>Self care page</title>
-</head>
+    <wicket:link>
+        <link rel="stylesheet" type="text/css" href="../../../../../style/reset.css"/>
+        <link rel="stylesheet" type="text/css" href="../../../../../style/text.css"/>
+        <link rel="stylesheet" type="text/css" href="../../../../../style/1024_16_10_10.css"/>
+    </wicket:link>
+    <title>Selfcare page</title>
+</wicket:head>
 
 <body>
 
 
-<table id="mainTable" border="1" align="center" width="1024">
-    <tr>
-        <td>
-            <wicket:link>
-                <a href="HomePage.html">
-                    <wicket:message key="homePage">[Back to shopping]</wicket:message>
-                </a>
-            </wicket:link>
-        </td>
-    </tr>
-    <tr>
-        <td>
+<div class="mainpage">
+    <div class="row">
+        <div class="grid_16 column">
+            <p>
+                <wicket:link>
+                    <a href="HomePage.html">
+                        <wicket:message key="homePage">[Back to shopping]</wicket:message>
+                    </a>
+                </wicket:link>
             <div wicket:id="feedback">[feedpack panel]</div>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <wicket:container wicket:id="summaryView">
-                [change password]
-            </wicket:container>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <wicket:container wicket:id="attributesView">
-                [change password]
-            </wicket:container>
+            </p>
+        </div>
+    </div>
 
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <wicket:container wicket:id="ordersView">
-                [change password]
-            </wicket:container>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <wicket:container wicket:id="passwordView">
-                [change password]
-            </wicket:container>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <wicket:container wicket:id="shippingAddressesView">
-                [shipping address]
-            </wicket:container>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <wicket:container wicket:id="billingAddressesView">
-                [billing address]
-            </wicket:container>
-        </td>
-    </tr>
-</table>
+    <div class="row">
+        <div class="grid_16 column">
+            <p>
+                <wicket:container wicket:id="summaryView">
+                    [summary info]
+                </wicket:container>
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="grid_16 column">
+            <p>
+                <wicket:container wicket:id="attributesView">
+                    [optional info]
+                </wicket:container>
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="grid_16 column">
+            <p>
+                <wicket:container wicket:id="ordersView">
+                    [list of orders]
+                </wicket:container>
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="grid_16 column">
+            <p>
+                <wicket:container wicket:id="passwordView">
+                    [change password]
+                </wicket:container>
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="grid_8 column">
+            <p>
+                <wicket:container wicket:id="shippingAddressesView">
+                    [shipping address]
+                </wicket:container>
+            </p>
+        </div>
+        <div class="grid_8 column">
+            <p>
+                <wicket:container wicket:id="billingAddressesView">
+                    [billing address]
+                </wicket:container>
+            </p>
+        </div>
+    </div>
+
+
+</div>
 
 </body>
 </html>
