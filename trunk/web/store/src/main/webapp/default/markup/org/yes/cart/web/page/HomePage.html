@@ -8,50 +8,14 @@
         <link rel="stylesheet" type="text/css" href="../../../../../style/text.css"/>
         <link rel="stylesheet" type="text/css" href="../../../../../style/1024_16_10_10.css"/>
     </wicket:link>
-    <style type="text/css" media="all">
-        body {
-            background: #efefef;
-        }
-
-        a:hover {
-            text-decoration: underline;
-            color: red;
-        }
-
-        a {
-            color: black;
-            text-decoration: underline;
-        }
-
-        p {
-            overflow: hidden;
-            padding: 10px 0;
-            margin: 0 0 20px 0;
-        }
-
-        .mainpage {
-            border: solid 1px #d6d6d6;
-            width: 1024px;
-            margin: 0 auto;
-            overflow: hidden;
-        }
-    </style>
     <title>Yes shop</title>
 </wicket:head>
 
 <body>
 
 
+
 <div class="mainpage">
-
-
-    <div class="row">
-        <div class="column grid_16">
-            <p>
-                Header
-            </p>
-        </div>
-    </div>
 
     <div class="row">
         <div class="column grid_13">
@@ -111,14 +75,12 @@
 
 
     <div class="row">
-        <div class="column grid_15">
+        <div class="column grid_16">
             <p>
-                Home | Special offer | Sale | New products | FAQ | Contect us
-            </p>
-        </div>
-        <div class="column grid_1">
-            <p>
-                Rss
+                <wicket:link>
+                    <a href="HomePage.html">Home</a>
+                </wicket:link>
+                 | Special offer | Sale | New products | FAQ | Contect us | rss
             </p>
         </div>
     </div>
@@ -141,17 +103,17 @@
                 </wicket:container>
             </p>
             <p>
-                <wicket:container wicket:id="brandFilter">
-                    [brand filter]
+                <wicket:container wicket:id="priceFilter">
+                    [price filter]
                 </wicket:container>
             </p>
             <p>
                 <wicket:container wicket:id="attributeFilter">
-                    [brand filter]
+                    [attribute filter]
                 </wicket:container>
             </p>
             <p>
-                <wicket:container wicket:id="priceFilter">
+                <wicket:container wicket:id="brandFilter">
                     [brand filter]
                 </wicket:container>
             </p>
@@ -177,7 +139,6 @@
             <p>
                 Hi there footer
             </p>
-
         </div>
     </div>
 

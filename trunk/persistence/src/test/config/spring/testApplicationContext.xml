@@ -6,14 +6,10 @@
 
     <!-- HSQLDB Data Source -->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
-
-
         <property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
         <property name="url" value="jdbc:hsqldb:mem:testnpadb"/>
         <property name="username" value="sa"/>
         <property name="password" value=""/>
-
-
         <property name="initialSize" value="5"/>
         <property name="maxActive" value="100"/>
         <property name="poolPreparedStatements" value="true"/>
@@ -36,9 +32,6 @@
                 <prop key="hibernate.show_sql">false</prop>
                 <prop key="hibernate.connection.autocommit">true</prop>
                 <prop key="hibernate.jdbc.batch_size">0</prop>
-
-
-                <!--prop key="hibernate.jdbc.batch_size">0</prop-->
             </props>
         </property>
         <property name="entityInterceptor">
