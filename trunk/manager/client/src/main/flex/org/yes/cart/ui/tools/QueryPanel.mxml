@@ -5,6 +5,8 @@
 
     <mx:Script>
     <![CDATA[
+        import mx.containers.VDividedBox;
+        import mx.controls.Alert;
         import mx.events.IndexChangedEvent;
 
         import org.yes.cart.shopmanager.ShopManagerGlobal;
@@ -69,10 +71,10 @@
 
         private function executeQueryHandler(event:MouseEvent):void {
 
+            var sql:String = ((queryTabNavigator.selectedChild as VDividedBox).getChildAt(0) as TextArea).text;
+
             if ("Sql" == (queryTabNavigator.selectedChild as VDividedBox).label) {
-
-                remoteBackdoorService.sqlQuery("select * from TSHOP");
-
+                remoteBackdoorService.sqlQuery(sql);
             } else if ("Hsql" == (queryTabNavigator.selectedChild as VDividedBox).label) {
 
             } else if ("Lucene" == (queryTabNavigator.selectedChild as VDividedBox).label) {
