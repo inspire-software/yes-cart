@@ -30,6 +30,7 @@
 
         import org.yes.cart.ui.role.RoleManagmentPanel;
         import org.yes.cart.ui.store.StoresManagmentPanel;
+        import org.yes.cart.ui.tools.QueryPanel;
         import org.yes.cart.ui.user.UserManagmentPanel;
 
         import org.yes.cart.ui.warehouse.WarehouseManagmentPanel;
@@ -214,6 +215,15 @@
         private function brandManagment_clickHandlre(event:flash.events.MouseEvent):void {
             
             mainPanel.addChild(new BrandManagementPanel());
+        }
+
+
+        private function queryData_clickHandlre (event:flash.events.MouseEvent):void {
+
+            mainPanel.removeAllChildren();
+
+            mainPanel.addChild(new QueryPanel());
+
         }
 
         /**
@@ -590,8 +600,7 @@
                                            width="100%" height="100%">
                                     <mx:VBox x="0" y="0" height="100%" width="100%">
                                         <mx:Spacer height="10"/>
-                                        <mx:LinkButton width="100%" label="SQL &amp; HSQL"/>
-                                        <mx:LinkButton width="100%" label="Lucene"/>
+                                        <mx:LinkButton id="sqlBtn" width="100%" label="@Resource(bundle='ShopManagerApplication',key='query')" click="setFontWeight(sqlBtn); queryData_clickHandlre(event)"/>
                                     </mx:VBox>
                                 </mx:Canvas>
                                 <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='help')"

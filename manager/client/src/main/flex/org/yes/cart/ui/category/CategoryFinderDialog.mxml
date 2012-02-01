@@ -15,7 +15,7 @@
                  change="categorySelectedEvent(event);"
                 />
 
-        <mx:ControlBar x="0" y="0" width="100%" horizontalAlign="right">
+        <mx:ControlBar  width="100%" horizontalAlign="right">
             <mx:Button label="@Resource(bundle='CategoryCreateDialog',key='close')"
                        click="PopUpManager.removePopUp(this)"/>
             <mx:Button id="selectProductButton" label="@Resource(bundle='ProductManagmentPanel',key='select')"

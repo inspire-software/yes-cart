@@ -666,7 +666,7 @@
          * @param token
          * @return
          */
-        function productAssignedResultHandler(event:ResultEvent, obj:Object = null):void {
+        private function productAssignedResultHandler(event:ResultEvent, obj:Object = null):void {
             assignedProductsTabSelected(null);
         }
 
@@ -924,7 +924,7 @@
                                                 visible="{categoryProductTypeComboBox.selectedIndex != -1}"
                                                 label="@Resource(bundle='CategoryManagmentPanel',key='clearType')"
                                                 toolTip="@Resource(bundle='CategoryManagmentPanel',key='clearTypeHint')"
-                                                click="categoryProductTypeComboBox.selectedIndex = -1; selectedProductTypeDTOImpl = null; selectedCategoryDTOImpl.productTypeId = null;"
+                                                click="categoryProductTypeComboBox.selectedIndex = -1; selectedProductTypeDTOImpl = null; selectedCategoryDTOImpl.productTypeId = 0;"
                                                 />
                                     </mx:HBox>
 
