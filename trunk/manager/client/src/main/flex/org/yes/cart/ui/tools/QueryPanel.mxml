@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+           xmlns:controls="controls.*" xmlns:georg="com.georg.*" width="100%" height="100%">
+
+
+    <mx:Script>
+    <![CDATA[
+        import mx.events.IndexChangedEvent;
+
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+
+        /**
+         * Add new tab to edit query and execute it.
+         * @param event maouse event
+         */
+        private function addTabHandler(event:MouseEvent):void {
+
+            //queryTabNavigator.add
+            var divBox:VDividedBox = new VDividedBox();
+            divBox.label = "" + queryType.selectedValue;
+            divBox.setStyle("width", "100%");
+            divBox.setStyle("height", "100%");
+            divBox.percentHeight = 100;
+            divBox.percentWidth = 100;
+
+            var textArea:TextArea = new TextArea();
+            textArea.percentWidth = 100;
+            textArea.height = 150;
+
+            var dataGrid:DataGrid = new DataGrid();
+            dataGrid.percentWidth = 100;
+
+            if ("Sql" == divBox.label) {
+
+                dataGrid.dataProvider = remoteBackdoorService.sqlQuery.lastResult;
+
+            } else if ("Hsql" == divBox.label) {
+
+                dataGrid.dataProvider = remoteBackdoorService.hsqlQuery.lastResult;
+
+            } else if ("Lucene" == divBox.label) {
+
+                dataGrid.dataProvider = remoteBackdoorService.luceneQuery.lastResult;
+
+            }
+
+
+
+
+            divBox.addChild(textArea);
+
+            divBox.addChild(dataGrid);
+
+
+
+            queryTabNavigator.addChild(divBox);
+
+        }
+
+        private function onTabClick(event:IndexChangedEvent):void {
+
+        }
+
+
+        private function deleteTabHandler(event:MouseEvent):void {
+            queryTabNavigator.removeChildAt(queryTabNavigator.selectedIndex);
+        }
+
+        private function executeQueryHandler(event:MouseEvent):void {
+
+            if ("Sql" == (queryTabNavigator.selectedChild as VDividedBox).label) {
+
+                remoteBackdoorService.sqlQuery("select * from TSHOP");
+
+            } else if ("Hsql" == (queryTabNavigator.selectedChild as VDividedBox).label) {
+
+            } else if ("Lucene" == (queryTabNavigator.selectedChild as VDividedBox).label) {
+
+            }
+
+        }
+
+
+        ]]>
+</mx:Script>
+
+    <mx:RemoteObject showBusyCursor="true"  id="remoteBackdoorService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     destination="remoteBackdoorService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+
+    <mx:VBox width="100%" height="100%">
+
+        <mx:ControlBar>
+
+            <mx:RadioButtonGroup id="queryType"/>
+
+                <mx:Label text="@Resource(bundle='QueryPanel',key='queryType')"/>
+
+                <mx:RadioButton group="{queryType}" selected="true" id="Sql"
+                                label="@Resource(bundle='QueryPanel',key='sql')"/>
+                <mx:RadioButton group="{queryType}" id="Hsql" label="@Resource(bundle='QueryPanel',key='hsql')"/>
+                <mx:RadioButton group="{queryType}" id="Lucene" label="@Resource(bundle='QueryPanel',key='lucene')"/>
+
+
+
+            <mx:Button id="executeSqlBtn" toolTip="@Resource(bundle='QueryPanel',key='executeHint')" label="@Resource(bundle='QueryPanel',key='execute')" click="executeQueryHandler(event)"/>
+            <mx:Button id="addTabBtn"     toolTip="@Resource(bundle='QueryPanel',key='newTabHint')" label="@Resource(bundle='QueryPanel',key='newTab')" click="addTabHandler(event)"/>
+            <mx:Button id="deleteTabBtn"  toolTip="@Resource(bundle='QueryPanel',key='deleteTabHint')" label="@Resource(bundle='QueryPanel',key='deleteTab')" click="deleteTabHandler(event)"/>
+
+        </mx:ControlBar>
+
+        <mx:TabNavigator id="queryTabNavigator" width="100%" height="100%">
+            <mx:VDividedBox width="100%"
+                            height="100%" label="Sql">
+                <mx:TextArea width="100%">
+
+                </mx:TextArea>
+                <mx:DataGrid width="100%">
+
+                </mx:DataGrid>
+
+            </mx:VDividedBox>
+
+        </mx:TabNavigator>
+
+
+    </mx:VBox>
+
+
+</mx:Canvas>

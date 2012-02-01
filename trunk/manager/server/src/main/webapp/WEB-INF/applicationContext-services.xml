@@ -440,6 +440,17 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
         </security:intercept-methods>
     </bean>
 
+    <bean id="remoteBackdoorService" class="org.yes.cart.remote.service.impl.RemoteBackdoorServiceImpl">
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="reindexAllProducts" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="reindexProduct"     access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="reindexProducts"    access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="sqlQuery"           access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="hsqlQuery"          access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="luceneQuery"        access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+        </security:intercept-methods>
+    </bean>
 
 
     <bean id="bulkImportService" class="org.yes.cart.bulkimport.service.impl.ImportDirectorImplService">
