@@ -37,7 +37,6 @@ public class BackdoorServiceImpl implements BackdoorService {
 
     private ProductService productService;
 
-    private GenericDAO<Object, Long> genericDAO;
 
 
     /**
@@ -74,11 +73,11 @@ public class BackdoorServiceImpl implements BackdoorService {
 
             if (query.toLowerCase().contains("select ")) {
 
-                return genericDAO.executeNativeQuery(query);
+                return getGenericDao().executeNativeQuery(query);
 
             } else {
 
-                return Collections.singletonList(new Object[] {genericDAO.executeNativeUpdate(query)});
+                return Collections.singletonList(new Object[] {getGenericDao().executeNativeUpdate(query)});
 
             }
         }
@@ -96,13 +95,13 @@ public class BackdoorServiceImpl implements BackdoorService {
 
             if (query.toLowerCase().contains("select ")) {
 
-                final List queryRez = genericDAO.executeHsqlQuery(query);
+                final List queryRez = getGenericDao().executeHsqlQuery(query);
 
                 return transformTypedResultListToArrayList(queryRez);
 
             } else {
 
-                return Collections.singletonList(new Object[] {genericDAO.executeHsqlQuery(query)});
+                return Collections.singletonList(new Object[] {getGenericDao().executeHsqlQuery(query)});
 
             }
         }
@@ -137,7 +136,7 @@ public class BackdoorServiceImpl implements BackdoorService {
 
             final Query query = queryParser.parse(luceneQuery);
 
-            return transformTypedResultListToArrayList(genericDAO.fullTextSearch(query));
+            return transformTypedResultListToArrayList(getGenericDao().fullTextSearch(query));
 
         } catch (ParseException e) {
 
@@ -160,14 +159,14 @@ public class BackdoorServiceImpl implements BackdoorService {
         this.productService = productService;
     }
 
-/**
-     * IoC. Set the {@link org.yes.cart.dao.GenericDAO} instance.
-     *
-     * @param genericDAO {@link GenericDAO} to use.
-     */
-    public void setGenericDAO(final GenericDAO<Object, Long> genericDAO) {
-        this.genericDAO = genericDAO;
+
+
+
+    private GenericDAO<Object, Long> getGenericDao() {
+        return productService.getGenericDao();
     }
+
+
 
 
 }

@@ -1067,7 +1067,6 @@
 
     <bean id="backDoorBean" class="org.yes.cart.web.service.ws.impl.BackdoorServiceImpl">
         <property name="productService" ref="productService"/>
-        <property name="genericDAO" ref="genericDao"/>
     </bean>
 
 
