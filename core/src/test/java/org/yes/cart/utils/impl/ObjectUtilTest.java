@@ -6,6 +6,7 @@ import org.yes.cart.domain.misc.Pair;
 import java.util.Date;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
 
 /**
  *
@@ -15,16 +16,18 @@ import static junit.framework.Assert.assertEquals;
  */
 public class ObjectUtilTest {
 
-    @Test (expected = IllegalArgumentException.class)
-    public void testToObjectArrayFailed() throws Exception {
-        ObjectUtil.toObjectArray(null);
-    }
-
     @Test
     public void testToObjectArrayOk() throws Exception {
+
+        assertNotNull(ObjectUtil.toObjectArray(null));
+
+
         Object [] objarr = ObjectUtil.toObjectArray(new Pair<String, Integer>("first", 10));
         assertEquals("first", objarr[1]);
         assertEquals(10, objarr[2]);
+
+        assertEquals(1, ObjectUtil.toObjectArray(12).length);
+        assertEquals("12" , ObjectUtil.toObjectArray(12)[0]);
     }
 
 

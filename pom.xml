@@ -19,6 +19,9 @@
         <module>web</module>
     </modules>
     <properties>
+         <hibernate.core.version>3.6.9.Final</hibernate.core.version>
+        <hibernate.search.version>3.4.1.Final</hibernate.search.version> <!--  -->
+       <!-- <hibernate.annotations.vesrion>3.5.6-Final</hibernate.annotations.vesrion>-->
         <cxf.version>2.5.2</cxf.version>
         <spring-security.version>3.0.6.RELEASE</spring-security.version>
         <spring.version>3.0.6.RELEASE</spring.version>

@@ -3,7 +3,7 @@ package org.yes.cart.domain.query.impl;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.RangeQuery;
+import org.apache.lucene.search.TermRangeQuery;
 import org.apache.lucene.search.TermQuery;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
@@ -214,17 +214,19 @@ public class AttributiveSearchQueryBuilderImpl extends ProductsInCategoryQueryBu
 
         final BooleanQuery productAttrValueRange  = new BooleanQuery();
         productAttrValueRange.add(
-                new RangeQuery(
-                        new Term(ATTRIBUTE_VALUE_FIELD, attributeValueLo),
-                        new Term(ATTRIBUTE_VALUE_FIELD, attributeValueHi),
-                        true), // inclusive search
+                new TermRangeQuery(
+                        ATTRIBUTE_VALUE_FIELD,
+                        attributeValueLo,
+                        attributeValueHi,
+                        true, true), // inclusive search
                 BooleanClause.Occur.SHOULD
         );
         productAttrValueRange.add(
-                new RangeQuery(
-                        new Term(SKU_ATTRIBUTE_VALUE_FIELD, attributeValueLo),
-                        new Term(SKU_ATTRIBUTE_VALUE_FIELD, attributeValueHi),
-                        true), // inclusive search
+                new TermRangeQuery(
+                        SKU_ATTRIBUTE_VALUE_FIELD,
+                        attributeValueLo,
+                        attributeValueHi,
+                        true, true), // inclusive search
                 BooleanClause.Occur.SHOULD
         );
         query.add(productAttrValueRange, BooleanClause.Occur.MUST);

@@ -213,12 +213,12 @@
                 ]]>
             </meta>
             <property name="javatype" type="string" not-null="true">
-                <column name="JAVATYPE" length="256" not-null="true">
+                <column name="JAVATYPE" length="255" not-null="true">
                     <comment>Shows the java type</comment>
                 </column>
             </property>
             <property name="businesstype" type="string" not-null="false">
-                <column name="BUSINESSTYPE" length="256" not-null="false">
+                <column name="BUSINESSTYPE" length="255" not-null="false">
                     <comment>Used mosty on UI. How to represent product, category, attibutes, etc</comment>
                 </column>
             </property>
@@ -697,7 +697,7 @@
             </meta>
 
             <property name="val" column="VAL" type="string" length="4000">
-                <meta attribute="field-description">UNCOMMENT @Fields( { @Field(index = Index.UN_TOKENIZED), @Field(name = "attrvalsearch", index = Index.TOKENIZED) } )    @ContainedIn</meta>
+                <!--<meta attribute="field-description">UNCOMMENT @Fields( { @Field(index = Index.UN_TOKENIZED), @Field(name = "attrvalsearch", index = Index.TOKENIZED) } )    @ContainedIn</meta>-->
             </property>
             <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
 
@@ -705,8 +705,10 @@
 
             <many-to-one name="attribute" class="org.yes.cart.domain.entity.Attribute" lazy="false" foreign-key="FK_P_ATTRIBUTE"
                          property-ref="code" insert="true" update="true">
+
                 <meta attribute="field-description">UNCOMMENT @Field(index = Index.UN_TOKENIZED) @ContainedIn  @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeBridge.class)
                 </meta>
+
                 <column name="CODE" not-null="true"/>
             </many-to-one>
 
@@ -762,7 +764,7 @@
             </meta>                                                                                     
 
             <property name="val" column="VAL" type="string" length="4000">
-                <meta attribute="field-description">UNCOMMENT @Fields( { @Field(index = Index.UN_TOKENIZED), @Field(name = "attrvalsearch", index = Index.TOKENIZED) } )    @ContainedIn</meta>
+               <!-- <meta attribute="field-description">UNCOMMENT @Fields( { @Field(index = Index.UN_TOKENIZED), @Field(name = "attrvalsearch", index = Index.TOKENIZED) } )    @ContainedIn</meta>-->
             </property>
             <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
 
@@ -770,8 +772,10 @@
 
             <many-to-one name="attribute" class="org.yes.cart.domain.entity.Attribute" lazy="false" foreign-key="KF_S_ATTRIBUTE"
                          property-ref="code" insert="true" update="true">
+<!--
                 <meta attribute="field-description">UNCOMMENT @Field(index = Index.UN_TOKENIZED) @ContainedIn  @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeBridge.class)
                 </meta>                
+-->
                 <column name="CODE" not-null="true"/>
             </many-to-one>
 
@@ -1012,15 +1016,15 @@
             </meta>
             <property name="city" type="string" column="CITY" length="128" not-null="true"/>
             <property name="postcode" type="string" column="POSTCODE" length="16" not-null="false"/>
-            <property name="addrline1" type="string" column="ADDRLINE1" length="256" not-null="true"/>
-            <property name="addrline2" type="string" column="ADDRLINE2" length="256" not-null="false"/>
+            <property name="addrline1" type="string" column="ADDRLINE1" length="255" not-null="true"/>
+            <property name="addrline2" type="string" column="ADDRLINE2" length="255" not-null="false"/>
             <property name="addressType" type="string"  not-null="true">
                 <column name="ADDRESS_TYPE"  length="1" not-null="true"/>  <!-- S shipping B billing -->
             </property>
 
             <property name="countryCode" type="string" column="COUNTRY_CODE" length="64" not-null="true"/>
             <property name="stateCode" type="string" column="STATE_CODE" length="64" not-null="false"/>
-            <property name="phoneList" type="string" column="PHONES" length="256" not-null="false"/>
+            <property name="phoneList" type="string" column="PHONES" length="255" not-null="false"/>
 
             <property name="firstname" type="string" column="FIRSTNAME" length="128" not-null="true"/>
             <property name="lastname" type="string" column="LASTNAME" length="128" not-null="true"/>
@@ -1149,8 +1153,8 @@
                     <comment>Absolute path to folder with html template files and images.</comment>
                 </column>
             </property>
-            <property name="name" type="string" length="256">
-                <column name="NAME" length="256" not-null="true"/>
+            <property name="name" type="string" length="255">
+                <column name="NAME" length="255" not-null="true"/>
             </property>
             <property name="description" type="string" length="4000">
                 <column name="DESCRIPTION"/>
@@ -1467,7 +1471,7 @@ public void setRangeList(final RangeList rangeList) {
                 ]]>
             </meta>
 
-            <property name="name" type="string" length="256" not-null="true">
+            <property name="name" type="string" length="255" not-null="true">
                 <column name="NAME"/>
             </property>
             <property name="description" type="string" length="4000">
@@ -1487,13 +1491,13 @@ public void setRangeList(final RangeList rangeList) {
             </bag>
             
 
-            <property name="uitemplate" type="string" length="256">
+            <property name="uitemplate" type="string" length="255">
                 <column name="UITEMPLATE">
                     <comment>What UI template will be used for show particular type of product.
                     </comment>
                 </column>
             </property>
-            <property name="uisearchtemplate" type="string" length="256">
+            <property name="uisearchtemplate" type="string" length="255">
                 <column name="UISEARCHTEMPLATE">
                     <comment>UI template label for search on category, if category has a default product type.
                     </comment>
@@ -1655,7 +1659,7 @@ public void setRangeList(final RangeList rangeList) {
 
                 ]]>
             </meta>
-            <property name="name" type="string" length="256" not-null="true">
+            <property name="name" type="string" length="255" not-null="true">
                 <column name="NAME"/>
             </property>
             <property name="description" type="string" length="4000">
@@ -1804,9 +1808,9 @@ public void setRangeList(final RangeList rangeList) {
                 </column>
             </many-to-one>
 
-            <property name="name" column="NAME" type="string" length="256" not-null="true"/>
+            <property name="name" column="NAME" type="string" length="255" not-null="true"/>
             <property name="description" column="DESCRIPTION" type="string" length="4000"/>
-            <property name="uitemplate" type="string" length="256" not-null="true">
+            <property name="uitemplate" type="string" length="255" not-null="true">
                 <column name="UITEMPLATE">
                     <comment>point to a products in list template. Can be used parent template if it not set. In case of
                         no templates at all, store product in list template will be used
@@ -1904,7 +1908,7 @@ public void setRangeList(final RangeList rangeList) {
 
                 ]]>
             </meta>
-            <property name="name" column="NAME" type="string" length="256" not-null="true"/>
+            <property name="name" column="NAME" type="string" length="255" not-null="true"/>
             <property name="description" column="DESCRIPTION" type="string" length="4000"/>
 
 
@@ -2031,9 +2035,9 @@ public void setRangeList(final RangeList rangeList) {
     }
                 ]]>
             </meta>
-            <property name="code" type="string" length="256" not-null="true">
+            <property name="code" type="string" length="255" not-null="true">
                 <meta attribute="field-description">UNCOMMENT @Field(index = Index.UN_TOKENIZED, store = Store.YES)</meta>
-                <column name="CODE" length="256" not-null="true">
+                <column name="CODE" length="255" not-null="true">
                     <comment>Product or product sku code</comment>
                 </column>
             </property>
@@ -2048,9 +2052,9 @@ public void setRangeList(final RangeList rangeList) {
             <property name="availabletill" column="AVAILABLETILL" type="timestamp" not-null="false">
                 <meta attribute="field-description">UNCOMMENT @Field(index = Index.UN_TOKENIZED, store = Store.YES)</meta>
             </property>
-            <property name="name" type="string" length="256" not-null="true">
-                <meta attribute="field-description">UNCOMMENT @Fields( { @Field(index = Index.TOKENIZED, store = Store.YES), @Field(name = "name_sort", index = Index.UN_TOKENIZED, store = Store.YES) }) </meta>
-                <column name="NAME" length="256" not-null="true"/>
+            <property name="name" type="string" length="255" not-null="true">
+                <!--<meta attribute="field-description">UNCOMMENT @Fields( { @Field(index = Index.TOKENIZED, store = Store.YES), @Field(name = "name_sort", index = Index.UN_TOKENIZED, store = Store.YES) }) </meta>-->
+                <column name="NAME" length="255" not-null="true"/>
             </property>
             <property name="description" length="4000" type="string">
                 <meta attribute="field-description">UNCOMMENT @Field(index = Index.TOKENIZED, store = Store.YES) </meta>
@@ -2058,12 +2062,12 @@ public void setRangeList(final RangeList rangeList) {
             </property>
 
             <many-to-one name="brand" class="org.yes.cart.domain.entity.Brand" foreign-key="FK_PROD_BRAND">
-                <meta attribute="field-description">UNCOMMENT @Field(index = Index.UN_TOKENIZED, store = Store.YES)    @FieldBridge(impl = org.yes.cart.domain.entity.bridge.BrandBridge.class)</meta>
+                <!--<meta attribute="field-description">UNCOMMENT @Field(index = Index.UN_TOKENIZED, store = Store.YES)    @FieldBridge(impl = org.yes.cart.domain.entity.bridge.BrandBridge.class)</meta>-->
                 <column name="BRAND_ID" not-null="true"/>
             </many-to-one>
 
             <many-to-one name="producttype" class="org.yes.cart.domain.entity.ProductType" foreign-key="FK_PROD_PRODTYPE" lazy="false">
-                <meta attribute="field-description">UNCOMMENT @Field(index = Index.UN_TOKENIZED, store = Store.YES)  @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductTypeValueBridge.class)</meta>
+                <!--<meta attribute="field-description">UNCOMMENT @Field(index = Index.UN_TOKENIZED, store = Store.YES)  @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductTypeValueBridge.class)</meta>-->
                 <column name="PRODUCTTYPE_ID" not-null="true"/>
             </many-to-one>
 
@@ -2072,11 +2076,11 @@ public void setRangeList(final RangeList rangeList) {
             </many-to-one>
 
 
-            <bag name="attribute" inverse="true" lazy="false" cascade="all">
+            <set name="attribute" inverse="true" lazy="false" cascade="all">
 			    <meta attribute="field-description">UNCOMMENT @IndexedEmbedded (targetElement =  AttrValueEntityProduct.class)</meta>
                 <key not-null="true" on-delete="cascade" column="PRODUCT_ID"/>
                 <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.AttrValueProduct" />
-            </bag>
+            </set>
 
 
             <set name="productCategory" inverse="false" lazy="true" cascade="all">
@@ -2255,7 +2259,7 @@ public void setRangeList(final RangeList rangeList) {
     ]]>
 
             </meta>
-            <property name="code" column="CODE" type="string" length="256" not-null="true">
+            <property name="code" column="CODE" type="string" length="255" not-null="true">
                 <meta attribute="field-description">UNCOMMENT @Field(index=Index.UN_TOKENIZED) @ContainedIn</meta>
             </property>
             <property name="name" type="string" length="64" not-null="true">
@@ -2283,7 +2287,7 @@ public void setRangeList(final RangeList rangeList) {
 
 
             <bag name="skuPrice" inverse="false" lazy="false" cascade="all" order-by="qty">
-                <meta attribute="field-description">UNCOMMENT @Field(index=Index.UN_TOKENIZED) @ContainedIn @IndexedEmbedded (targetElement =  SkuPriceEntity.class) @FieldBridge(impl = org.yes.cart.domain.entity.bridge.SkuPriceBridge.class)</meta>
+                <!--<meta attribute="field-description">UNCOMMENT @Field(index=Index.UN_TOKENIZED) @ContainedIn @IndexedEmbedded (targetElement =  SkuPriceEntity.class) @FieldBridge(impl = org.yes.cart.domain.entity.bridge.SkuPriceBridge.class)</meta>-->
                 <key>
                     <column name="SKU_ID" not-null="true"/>
                 </key>
@@ -2292,7 +2296,7 @@ public void setRangeList(final RangeList rangeList) {
 
 
             <bag name="attribute" inverse="false" lazy="false" cascade="all">
-                <meta attribute="field-description">UNCOMMENT @IndexedEmbedded (targetElement =  AttrValueEntityProductSku.class)</meta>
+                <!--<meta attribute="field-description">UNCOMMENT @IndexedEmbedded (targetElement =  AttrValueEntityProductSku.class)</meta>-->
                 <key>
                     <column name="SKU_ID" not-null="false"/>
                 </key>
@@ -2355,22 +2359,22 @@ public void setRangeList(final RangeList rangeList) {
                 <column name="SKU_ID" not-null="true"/>
             </many-to-one>
             <many-to-one name="shop" class="org.yes.cart.domain.entity.Shop" foreign-key="FK_SP_SHOP">
-                <meta attribute="field-description">UNCOMMENT @Field(index=Index.UN_TOKENIZED) @ContainedIn  @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ShopBridge.class)</meta>
+                <!--<meta attribute="field-description">UNCOMMENT @Field(index=Index.UN_TOKENIZED) @ContainedIn  @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ShopBridge.class)</meta>-->
                 <column name="SHOP_ID" not-null="true"/>
             </many-to-one>
 
             <property name="currency" type="string" length="3" not-null="true" column="CURRENCY">
-                <meta attribute="field-description">UNCOMMENT @Field(index=Index.UN_TOKENIZED) @ContainedIn</meta>
+                <!--<meta attribute="field-description">UNCOMMENT @Field(index=Index.UN_TOKENIZED) @ContainedIn</meta>-->
             </property>
 
             <property name="quantity" type="java.math.BigDecimal" not-null="false">
-                <meta attribute="field-description">UNCOMMENT @Field(index=Index.UN_TOKENIZED) @ContainedIn @FieldBridge(impl = org.yes.cart.domain.entity.bridge.BigDecimalBridge.class)</meta>
+<!--                <meta attribute="field-description">UNCOMMENT @Field(index=Index.UN_TOKENIZED) @ContainedIn @FieldBridge(impl = org.yes.cart.domain.entity.bridge.BigDecimalBridge.class)</meta>-->
                 <column name="QTY" not-null="true">
                     <comment>Quantity of SKU. Price tier</comment>
                 </column>
             </property>
             <property name="regularPrice" type="java.math.BigDecimal" not-null="true">
-                <meta attribute="field-description">UNCOMMENT @Field(index=Index.UN_TOKENIZED) @ContainedIn @FieldBridge(impl = org.yes.cart.domain.entity.bridge.BigDecimalBridge.class)</meta>
+              <!--  <meta attribute="field-description">UNCOMMENT @Field(index=Index.UN_TOKENIZED) @ContainedIn @FieldBridge(impl = org.yes.cart.domain.entity.bridge.BigDecimalBridge.class)</meta>-->
                 <column name="REGULAR_PRICE" not-null="true">
                     <comment>Regular price</comment>
                 </column>
@@ -2500,7 +2504,7 @@ public void setRangeList(final RangeList rangeList) {
                 ]]>
             </meta>
             <property name="code" column="CODE" type="string" length="32" not-null="true"/>
-            <property name="name" column="NAME" type="string" length="256" not-null="true"/>
+            <property name="name" column="NAME" type="string" length="255" not-null="true"/>
             <property name="description" column="DESCRIPTION" type="string" length="4000"/>
 
             <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -3157,7 +3161,7 @@ public void setRangeList(final RangeList rangeList) {
 
                 ]]>
             </meta>
-            <property name="name" column="NAME" type="string" length="256" not-null="true"/>
+            <property name="name" column="NAME" type="string" length="255" not-null="true"/>
             <property name="description" column="DESCRIPTION" type="string" length="4000"/>
             <property name="availablefrom" column="AVAILABLEFROM" type="timestamp"/>
             <property name="availabletill" column="AVAILABLETILL" type="timestamp"/>
@@ -3221,7 +3225,7 @@ public void setRangeList(final RangeList rangeList) {
                 <column name="SHOPDISCOUNT_ID" not-null="true"/>
             </many-to-one-->
             <property name="rule" column="RULE" type="string" length="4000"/>
-            <property name="name" column="NAME" type="string" length="256"/>
+            <property name="name" column="NAME" type="string" length="255"/>
             <property name="description" column="DESCRIPTION" type="string" length="4000"/>
             <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -3382,7 +3386,7 @@ public void setRangeList(final RangeList rangeList) {
 
                 ]]>
             </meta>
-            <property name="name" column="NAME" type="string" length="256" not-null="true"/>
+            <property name="name" column="NAME" type="string" length="255" not-null="true"/>
             <property name="description" column="DESCRIPTION" type="string" length="4000"/>
             <many-to-one name="shop" class="org.yes.cart.domain.entity.Shop" foreign-key="FK_ADVP_SHOP">
                 <column name="SHOP_ID" not-null="true"/>
@@ -3443,7 +3447,7 @@ public void setRangeList(final RangeList rangeList) {
                 ]]>
             </meta>
             <property name="rank" type="int" not-null="false"/>
-            <property name="name" column="NAME" type="string" length="256" not-null="true"/>
+            <property name="name" column="NAME" type="string" length="255" not-null="true"/>
             <property name="description" column="DESCRIPTION" type="string" length="4000"/>
             <property name="availablefrom" column="AVAILABLEFROM" type="timestamp"/>
             <property name="availabletill" column="AVAILABLETILL" type="timestamp"/>
@@ -4152,7 +4156,7 @@ public void setRangeList(final RangeList rangeList) {
     }
                 ]]>
             </meta>
-            <property name="name" column="NAME" type="string" length="256" not-null="true"/>
+            <property name="name" column="NAME" type="string" length="255" not-null="true"/>
             <property name="description" column="DESCRIPTION" type="string" length="4000"/>
 
             <property name="worldwide" type="boolean" column="WORLDWIDE" length="1"  not-null="false"/>
@@ -4216,7 +4220,7 @@ public void setRangeList(final RangeList rangeList) {
     }
                 ]]>
             </meta>
-            <property name="name" column="NAME" type="string" length="256" not-null="true"/>
+            <property name="name" column="NAME" type="string" length="255" not-null="true"/>
             <property name="description" column="DESCRIPTION" type="string" length="4000"/>
             <property name="currency" column="CURRENCY" type="string" length="3" not-null="true"/>
             <property name="maxDays" column="MAX_DAYS" type="java.lang.Integer"/>
@@ -4285,14 +4289,14 @@ public void setRangeList(final RangeList rangeList) {
      }
                 ]]>
             </meta>
-            <property name="imageName" type="string" length="256" not-null="false">
-                <column name="IMAGE_NAME" length="256"/>
+            <property name="imageName" type="string" length="255" not-null="false">
+                <column name="IMAGE_NAME" length="255"/>
             </property>
-            <property name="alt" type="string" length="256" not-null="false">
-                <column name="ALT" length="256"/>
+            <property name="alt" type="string" length="255" not-null="false">
+                <column name="ALT" length="255"/>
             </property>
-            <property name="title" type="string" length="256" not-null="false">
-                <column name="TITLE" length="256"/>
+            <property name="title" type="string" length="255" not-null="false">
+                <column name="TITLE" length="255"/>
             </property>
 
             <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -4362,10 +4366,10 @@ public void setRangeList(final RangeList rangeList) {
     
                 ]]>
             </meta>
-            <property name="uri" type="string" column="URI" length="256" not-null="false"/>
-            <property name="title" type="string" column="TITLE" length="256" not-null="false"/>
-            <property name="metakeywords" type="string" column="METAKEYWORDS" length="256" not-null="false"/>
-            <property name="metadescription" type="string" column="METADESCRIPTION" length="256" not-null="false"/>
+            <property name="uri" type="string" column="URI" length="255" not-null="false"/>
+            <property name="title" type="string" column="TITLE" length="255" not-null="false"/>
+            <property name="metakeywords" type="string" column="METAKEYWORDS" length="255" not-null="false"/>
+            <property name="metadescription" type="string" column="METADESCRIPTION" length="255" not-null="false"/>
             <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>

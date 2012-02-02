@@ -139,7 +139,7 @@ public interface Product extends Auditable, Attributable {
      *
      * @return collection of product attributes.
      */
-    Collection<AttrValueProduct> getAttribute();
+    Set<AttrValueProduct> getAttribute();
 
     /**
      * Get all products attributes filtered by given attribute code.
@@ -163,7 +163,7 @@ public interface Product extends Auditable, Attributable {
      *
      * @param attribute collection of products attributes
      */
-    void setAttribute(Collection<AttrValueProduct> attribute);
+    void setAttribute(Set<AttrValueProduct> attribute);
 
     /**
      * Get the assigned categories to product.

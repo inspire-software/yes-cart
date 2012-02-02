@@ -11,6 +11,9 @@ import org.yes.cart.domain.entity.Category;
 public class CategoryBridge  implements StringBridge {
     /** {@inheritDoc} */
     public String objectToString(final Object categoryObject) {
+        if (categoryObject instanceof String) {
+            return  (String) categoryObject;
+        }
         return String.valueOf( ((Category)categoryObject).getCategoryId());
     }
 }
