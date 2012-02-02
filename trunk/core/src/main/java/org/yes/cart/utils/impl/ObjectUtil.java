@@ -35,7 +35,14 @@ public class ObjectUtil {
      */
     public static Object [] toObjectArray(final Object obj) {
 
-        Assert.notNull(obj, "ObjectUtil#toObjectArray - Object to convernt must be not null");
+        if (obj == null) {
+            return new Object [] {"Null"};
+        }
+
+        if (obj.getClass().getName().startsWith("java.lang")) {
+            return new Object [] {String.valueOf(obj)};
+
+        }
 
         Field [] fields = obj.getClass().getDeclaredFields();
 

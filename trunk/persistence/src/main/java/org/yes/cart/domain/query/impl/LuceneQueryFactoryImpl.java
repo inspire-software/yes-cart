@@ -1,11 +1,13 @@
 package org.yes.cart.domain.query.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.util.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.misc.Pair;
@@ -17,7 +19,10 @@ import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -67,7 +72,7 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
 
     private MultiFieldQueryParser getMultiFieldQueryParser() {
         if (queryParser == null) {
-            queryParser = new MultiFieldQueryParser(fields, new AsIsAnalyzerImpl());
+            queryParser = new MultiFieldQueryParser(Version.LUCENE_30, fields, new SimpleAnalyzer());
         }
         return queryParser;
     }

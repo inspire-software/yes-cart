@@ -44,7 +44,7 @@ public class BackdoorServiceImplTest extends BaseCoreDBTestCase {
 
     }
 
-   @Test
+   /*@Test
    public void testLuceneQuery() throws Exception {
 
        GenericDAO<Product, Long>productDao = (GenericDAO<Product, Long>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_DAO);
@@ -57,6 +57,6 @@ public class BackdoorServiceImplTest extends BaseCoreDBTestCase {
 
        //assertEquals(1, rez.size());
 
-   }
+   }      */
 
 }

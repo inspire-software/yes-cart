@@ -1,22 +1,18 @@
 package org.yes.cart.web.service.ws.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.queryParser.MultiFieldQueryParser;
+import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.query.impl.AsIsAnalyzerImpl;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.utils.impl.ObjectUtil;
 import org.yes.cart.web.service.ws.BackdoorService;
 
-import javax.jws.WebMethod;
-import javax.jws.WebParam;
-import javax.jws.WebResult;
 import javax.jws.WebService;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,14 +45,14 @@ public class BackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
-    public int reindexProduct(@WebParam(name = "productPk") long productPk) {
+    public int reindexProduct(long productPk) {
         return productService.reindexProduct(productPk);
     }
 
     /**
      * {@inheritDoc}
      */
-    public int reindexProducts(@WebParam(name = "productPks") long[] productPks) {
+    public int reindexProducts( long[] productPks) {
         int rez = 0;
         for (long pk : productPks) {
             rez += productService.reindexProduct(pk);
@@ -123,14 +119,13 @@ public class BackdoorServiceImpl implements BackdoorService {
     }
 
 
-    private static final String[] FIELDS = {"productCategory.category", "attribute.attribute", "attribute.val"};
 
     /**
      * {@inheritDoc}
      */
     public List<Object[]> luceneQuery(final String luceneQuery) {
 
-        final QueryParser queryParser = new QueryParser("", new AsIsAnalyzerImpl());
+        final QueryParser queryParser = new QueryParser("", new SimpleAnalyzer());
 
         try {
 

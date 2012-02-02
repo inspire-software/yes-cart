@@ -3,7 +3,7 @@ package org.yes.cart.domain.query.impl;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.RangeQuery;
+import org.apache.lucene.search.TermRangeQuery;
 import org.apache.lucene.search.TermQuery;
 import org.yes.cart.domain.entity.bridge.SkuPriceBridge;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
@@ -55,9 +55,11 @@ public class PriceSearchQueryBuilderImpl implements ProductSearchQueryBuilder {
             currentQuery.add(new TermQuery(new Term(PRODUCT_CATEGORY_FIELD, category.toString())),
                     BooleanClause.Occur.MUST);
 
-            currentQuery.add(new RangeQuery(
-                    new Term(PRODUCT_SKU_PRICE, skuPriceBridge.objectToString(shopId, currencyCore, lowBorder)),
-                    new Term(PRODUCT_SKU_PRICE, skuPriceBridge.objectToString(shopId, currencyCore, hiBorder)),
+            currentQuery.add(new TermRangeQuery(
+                    PRODUCT_SKU_PRICE,
+                    skuPriceBridge.objectToString(shopId, currencyCore, lowBorder),
+                    skuPriceBridge.objectToString(shopId, currencyCore, hiBorder),
+                    true,
                     true),
                     BooleanClause.Occur.MUST);
 

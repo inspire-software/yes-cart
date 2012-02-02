@@ -6,7 +6,7 @@
     <session-factory>
         <mapping resource="../../../main/config/hibernate/npa.xml"/>
 
-        <event type="post-update">
+        <!--event type="post-update">
             <listener class="org.hibernate.search.event.FullTextIndexEventListener"/>
         </event>
         <event type="post-insert">
@@ -23,6 +23,6 @@
         </event>
         <event type="post-collection-update">
             <listener class="org.hibernate.search.event.FullTextIndexEventListener"/>
-        </event>
+        </event-->
     </session-factory>
 </hibernate-configuration>

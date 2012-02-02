@@ -1,5 +1,6 @@
 package org.yes.cart.dao.impl;
 
+import org.apache.lucene.search.SortField;
 import org.hibernate.*;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Example;
@@ -447,7 +448,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
             FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(query, getPersistentClass());
             if (sortFieldName != null) {
                 org.apache.lucene.search.Sort sort = new org.apache.lucene.search.Sort(
-                        new org.apache.lucene.search.SortField(sortFieldName, reverse));
+                        new org.apache.lucene.search.SortField( sortFieldName, SortField.STRING, reverse));
                 fullTextQuery.setSort(sort);
             }
             fullTextQuery.setFirstResult(firtsResult);
