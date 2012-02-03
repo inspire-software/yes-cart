@@ -98,11 +98,6 @@
             <artifactId>ejb3-persistence</artifactId>
             <version>1.0.2.GA</version>
         </dependency>
-        <!--<dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-annotations</artifactId>
-            <version>${hibernate.annotations.vesrion}</version>
-        </dependency>-->
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-core</artifactId>
@@ -244,6 +239,11 @@
                                 byline="false" flags="mg"/>
                         <replaceregexp
                                 file="src/main/java/org/yes/cart/domain/entity/impl/SkuPriceEntity.java"
+                                match="\* UNCOMMENT(.*)"
+                                replace="\*/\1 /\*"
+                                byline="false" flags="mg"/>
+                        <replaceregexp
+                                file="src/main/java/org/yes/cart/domain/entity/impl/AttributeEntity.java"
                                 match="\* UNCOMMENT(.*)"
                                 replace="\*/\1 /\*"
                                 byline="false" flags="mg"/>

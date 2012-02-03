@@ -1,13 +1,14 @@
 package org.yes.cart.web.service.ws.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.util.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.domain.query.impl.AsIsAnalyzer;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.utils.impl.ObjectUtil;
@@ -125,7 +126,7 @@ public class BackdoorServiceImpl implements BackdoorService {
      */
     public List<Object[]> luceneQuery(final String luceneQuery) {
 
-        final QueryParser queryParser = new QueryParser("", new SimpleAnalyzer());
+        final QueryParser queryParser = new QueryParser(Version.LUCENE_31, "", new AsIsAnalyzer());
 
         try {
 

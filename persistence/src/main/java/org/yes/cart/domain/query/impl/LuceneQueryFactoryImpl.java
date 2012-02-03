@@ -1,7 +1,6 @@
 package org.yes.cart.domain.query.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.search.BooleanClause;
@@ -72,7 +71,7 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
 
     private MultiFieldQueryParser getMultiFieldQueryParser() {
         if (queryParser == null) {
-            queryParser = new MultiFieldQueryParser(Version.LUCENE_30, fields, new SimpleAnalyzer());
+            queryParser = new MultiFieldQueryParser(Version.LUCENE_31, fields, new AsIsAnalyzer());
         }
         return queryParser;
     }

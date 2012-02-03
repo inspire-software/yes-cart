@@ -315,6 +315,8 @@
         <discriminator type="integer" formula="1"/>
         <property name="code" column="CODE" type="string" length="32" not-null="true"/>
         <subclass name="org.yes.cart.domain.entity.impl.AttributeEntity" discriminator-value="1">
+            <meta attribute="class-description">UNCOMMENT @Indexed (index = "luceneindex/attribute")</meta>
+            <meta attribute="extra-import">org.hibernate.search.annotations.*</meta>
             <meta attribute="extra-import">org.hibernate.annotations.Parameter</meta>
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
@@ -2053,7 +2055,7 @@ public void setRangeList(final RangeList rangeList) {
                 <meta attribute="field-description">UNCOMMENT @Field(index = Index.UN_TOKENIZED, store = Store.YES)</meta>
             </property>
             <property name="name" type="string" length="255" not-null="true">
-                <!--<meta attribute="field-description">UNCOMMENT @Fields( { @Field(index = Index.TOKENIZED, store = Store.YES), @Field(name = "name_sort", index = Index.UN_TOKENIZED, store = Store.YES) }) </meta>-->
+                <meta attribute="field-description">UNCOMMENT @Fields( { @Field(index = Index.TOKENIZED, store = Store.YES), @Field(name = "name_sort", index = Index.UN_TOKENIZED, store = Store.YES) }) </meta>
                 <column name="NAME" length="255" not-null="true"/>
             </property>
             <property name="description" length="4000" type="string">
@@ -2062,12 +2064,12 @@ public void setRangeList(final RangeList rangeList) {
             </property>
 
             <many-to-one name="brand" class="org.yes.cart.domain.entity.Brand" foreign-key="FK_PROD_BRAND">
-                <!--<meta attribute="field-description">UNCOMMENT @Field(index = Index.UN_TOKENIZED, store = Store.YES)    @FieldBridge(impl = org.yes.cart.domain.entity.bridge.BrandBridge.class)</meta>-->
+                <meta attribute="field-description">UNCOMMENT @Field(index = Index.UN_TOKENIZED, store = Store.YES)    @FieldBridge(impl = org.yes.cart.domain.entity.bridge.BrandBridge.class)</meta>
                 <column name="BRAND_ID" not-null="true"/>
             </many-to-one>
 
             <many-to-one name="producttype" class="org.yes.cart.domain.entity.ProductType" foreign-key="FK_PROD_PRODTYPE" lazy="false">
-                <!--<meta attribute="field-description">UNCOMMENT @Field(index = Index.UN_TOKENIZED, store = Store.YES)  @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductTypeValueBridge.class)</meta>-->
+                <meta attribute="field-description">UNCOMMENT @Field(index = Index.UN_TOKENIZED, store = Store.YES)  @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductTypeValueBridge.class)</meta>
                 <column name="PRODUCTTYPE_ID" not-null="true"/>
             </many-to-one>
 
@@ -2075,13 +2077,11 @@ public void setRangeList(final RangeList rangeList) {
                 <column name="AVAILABILITY_ID" not-null="true"/>
             </many-to-one>
 
-
             <set name="attribute" inverse="true" lazy="false" cascade="all">
-			    <meta attribute="field-description">UNCOMMENT @IndexedEmbedded (targetElement =  AttrValueEntityProduct.class)</meta>
+			    <meta attribute="field-description">UNCOMMENT @Field @ContainedIn @IndexedEmbedded (targetElement =  AttrValueEntityProduct.class) @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeValueBridge.class)</meta>
                 <key not-null="true" on-delete="cascade" column="PRODUCT_ID"/>
                 <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.AttrValueProduct" />
             </set>
-
 
             <set name="productCategory" inverse="false" lazy="true" cascade="all">
                 <meta attribute="field-description">UNCOMMENT @IndexedEmbedded (targetElement =  ProductCategoryEntity.class)</meta>
@@ -2287,7 +2287,7 @@ public void setRangeList(final RangeList rangeList) {
 
 
             <bag name="skuPrice" inverse="false" lazy="false" cascade="all" order-by="qty">
-                <!--<meta attribute="field-description">UNCOMMENT @Field(index=Index.UN_TOKENIZED) @ContainedIn @IndexedEmbedded (targetElement =  SkuPriceEntity.class) @FieldBridge(impl = org.yes.cart.domain.entity.bridge.SkuPriceBridge.class)</meta>-->
+                <meta attribute="field-description">UNCOMMENT @Field(index=Index.UN_TOKENIZED) @ContainedIn @IndexedEmbedded (targetElement =  SkuPriceEntity.class) @FieldBridge(impl = org.yes.cart.domain.entity.bridge.SkuPriceBridge.class)</meta>
                 <key>
                     <column name="SKU_ID" not-null="true"/>
                 </key>
@@ -2296,7 +2296,7 @@ public void setRangeList(final RangeList rangeList) {
 
 
             <bag name="attribute" inverse="false" lazy="false" cascade="all">
-                <!--<meta attribute="field-description">UNCOMMENT @IndexedEmbedded (targetElement =  AttrValueEntityProductSku.class)</meta>-->
+                <meta attribute="field-description">UNCOMMENT @Field @ContainedIn @IndexedEmbedded (targetElement =  AttrValueEntityProductSku.class) @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeValueBridge.class)</meta>
                 <key>
                     <column name="SKU_ID" not-null="false"/>
                 </key>
