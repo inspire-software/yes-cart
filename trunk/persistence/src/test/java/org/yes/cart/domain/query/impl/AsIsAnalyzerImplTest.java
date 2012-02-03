@@ -1,6 +1,5 @@
 package org.yes.cart.domain.query.impl;
 
-import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.search.Query;
@@ -21,7 +20,7 @@ public class AsIsAnalyzerImplTest {
 
     @Test
     public void testThatQueryIsNotTransformaedByAnalyzerWithMultipleFiledsQueryParser() throws ParseException {
-        MultiFieldQueryParser queryParser = new MultiFieldQueryParser(Version.LUCENE_30, FIELDS, new SimpleAnalyzer());
+        MultiFieldQueryParser queryParser = new MultiFieldQueryParser(Version.LUCENE_31, FIELDS, new AsIsAnalyzer());
         Query query = queryParser.parse(LUCENE_QUERY);
         assertEquals(LUCENE_QUERY, query.toString());
     }

@@ -245,6 +245,11 @@
             <artifactId>cxf-rt-ws-security</artifactId>
             <version>${cxf.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-core</artifactId>
+            <version>3.1.0</version>
+        </dependency>
     </dependencies>
     <build>
         <testResources>
