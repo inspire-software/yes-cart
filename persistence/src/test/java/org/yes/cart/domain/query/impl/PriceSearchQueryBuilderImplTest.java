@@ -29,8 +29,9 @@ public class PriceSearchQueryBuilderImplTest extends AbstractTestDAO {
     }
 
     @Test
-    public void testPriceSearchQueryBuilder() {
+    public void testPriceSearchQueryBuilder() throws Exception {
         productDao.fullTextSearchReindex();
+        Thread.currentThread().sleep(1000);
         PriceSearchQueryBuilderImpl queryBuilder = new PriceSearchQueryBuilderImpl();
         // test that price border is inclusive in search
         BooleanQuery query = queryBuilder.createQuery(Arrays.asList(129L, 130L, 131L, 132L),

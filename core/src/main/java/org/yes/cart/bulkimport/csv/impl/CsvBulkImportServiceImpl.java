@@ -228,10 +228,8 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
                     e.getMessage(),
                     additionalInfo
             );
-
-            if (LOG.isWarnEnabled()) {
-                LOG.warn(message);
-            }
+            LOG.warn(message, e);
+            e.printStackTrace();
             errorReport.append(message);
         }
     }
@@ -318,10 +316,12 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
 
         ImportColumn currentColumn = null;
         final Class clz = object.getClass();
+        Object singleObjectValue = null;
+
         try {
             for (ImportColumn importColumn : importColumns) {
                 currentColumn = importColumn;
-                Object singleObjectValue;
+
                 if (importColumn.isUseMasterObject()) {
                     singleObjectValue = masterObject;
                 } else {
@@ -331,7 +331,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
                 propertyDescriptor.getWriteMethod().invoke(object, singleObjectValue);
             }
         } catch (Exception e) {
-            throw new Exception(MessageFormat.format(" root cause {0} ", currentColumn), e);
+            throw new Exception(MessageFormat.format(" root cause {0} value {1} ", currentColumn, singleObjectValue), e);
         }
 
     }

@@ -84,7 +84,7 @@ public class DtoWarehouseServiceImpl
 
     /** {@inheritDoc}*/
     public void setShopWarehouseRank(final long shopWarehouseId, final int newRank) {
-       ((WarehouseService)service).setShopWarehouseRank(shopWarehouseId, newRank);
+       ((WarehouseService)service).updateShopWarehouseRank(shopWarehouseId, newRank);
     }
 
     /** {@inheritDoc}*/

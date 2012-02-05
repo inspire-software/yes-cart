@@ -347,6 +347,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
                 Transaction tx = fullTextSession.beginTransaction();
                 if (isIncludeInLuceneIndex(entity)) {
                     fullTextSession.index(entity);
+                    fullTextSession.flushToIndexes();
                     result++;
                 }
                 tx.commit();
@@ -359,12 +360,8 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
      * {@inheritDoc}
      */
     public int fullTextSearchReindex() {
-
         final int BATCH_SIZE = 20;
-
         int index = 0;
-
-
 
         if (null != getPersistentClass().getAnnotation(org.hibernate.search.annotations.Indexed.class)) {
             FullTextSession fullTextSession = Search.getFullTextSession(getSession());

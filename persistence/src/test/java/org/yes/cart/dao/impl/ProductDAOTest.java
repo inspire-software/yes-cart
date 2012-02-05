@@ -49,7 +49,7 @@ public class ProductDAOTest extends AbstractTestDAO {
         warehouseDao = (GenericDAO<Warehouse, Long>) ctx().getBean(DaoServiceBeanKeys.WAREHOUSE_DAO);
     }
 
-    @Test
+   @Test
     public void testCreateProduct() {
         Product product = new ProductEntity();
         product.setAvailability(availabilityDao.findById(1L));
@@ -99,7 +99,7 @@ public class ProductDAOTest extends AbstractTestDAO {
         GlobalSearchQueryBuilderImpl queryBuilder = new GlobalSearchQueryBuilderImpl();
         Query query = queryBuilder.createQuery("bender", Arrays.asList(101L, 104L));
         List<Product> products = productDao.fullTextSearch(query);
-        assertTrue(!products.isEmpty());
+        assertTrue("Failed [" + query.toString() +"]", !products.isEmpty());
         // search by Sku code
         query = queryBuilder.createQuery("CC_TEST4", (Long) null);
         products = productDao.fullTextSearch(query);
@@ -136,7 +136,7 @@ public class ProductDAOTest extends AbstractTestDAO {
         ProductsInCategoryQueryBuilderImpl queryBuilder = new ProductsInCategoryQueryBuilderImpl();
         Query query = queryBuilder.createQuery(Arrays.asList(101L));
         List<Product> products = productDao.fullTextSearch(query);
-        assertEquals(2, products.size());
+        assertEquals("Failed [" + query.toString() +"]",2, products.size());
         query = queryBuilder.createQuery(Arrays.asList(101L, 200L, 123L, 2435L));
         products = productDao.fullTextSearch(query);
         assertEquals(query.toString(), 2, products.size());
@@ -276,9 +276,11 @@ public class ProductDAOTest extends AbstractTestDAO {
     }
 
 
-    /*@Test
-    public void testCreateNewProductTest() {
+    @Test
+    public void testCreateNewProductTest() throws InterruptedException {
         productDao.fullTextSearchReindex();
+        Thread.currentThread().sleep(100);
+
         Product product = new ProductEntity();
         product.setAvailability(availabilityDao.findById(1L));
         Brand brand = brandDao.findById(100L);
@@ -287,11 +289,13 @@ public class ProductDAOTest extends AbstractTestDAO {
         product.setCode("SONY_PRODUCT_CODE");
         product.setName("product sony name");
         product.setDescription("Description ");
+
         ProductType productType = productTypeDao.findById(1L);
         assertNotNull(productType);
         product.setProducttype(productType);
         long pk = productDao.create(product).getProductId();
         assertTrue(pk > 0L);
+
         // add sku
         ProductSku productSku = new ProductSkuEntity();
         productSku.setProduct(product);
@@ -299,24 +303,36 @@ public class ProductDAOTest extends AbstractTestDAO {
         productSku.setName("product sony name");
         product.getSku().add(productSku);
         productDao.saveOrUpdate(product);
+
         // add quantity on warehoues
         SkuWarehouse skuWarehouse = new SkuWarehouseEntity();
         skuWarehouse.setSku(productSku);
         skuWarehouse.setQuantity(BigDecimal.ONE);
         skuWarehouse.setWarehouse(warehouseDao.findById(2L));
         skuWareHouseDao.create(skuWarehouse);
+
         // assign it to category
         ProductCategory productCategory = new ProductCategoryEntity();
         productCategory.setProduct(product);
         productCategory.setCategory(categoryDao.findById(128L));
-        productCategory.setRank(0);
-        productCategory = productCategoryDao.create(productCategory);
+        productCategory.setRank(123);
+
+        product.getProductCategory().add(productCategory);
+        //productCategory = productCategoryDao.create(productCategory);
+        //assertTrue(productCategory.getProductCategoryId() > 0);
+
+        product = productDao.update(product);
+        Thread.currentThread().sleep(1000);
+
         List<Product> products = null;
-        productDao.fullTextSearchReindex(product.getProductId());
+        //product = productDao.findById(product.getProductId());
+       // productDao.fullTextSearchReindex(product.getProductId());
+        //productDao.fullTextSearchReindex();
         GlobalSearchQueryBuilderImpl queryBuilder = new GlobalSearchQueryBuilderImpl();
         Query query = queryBuilder.createQuery("sony", Arrays.asList(128L));
+
         products = productDao.fullTextSearch(query);
-        assertTrue(!products.isEmpty());
+        assertTrue("Failed [" + query + "]", !products.isEmpty());
         skuWareHouseDao.delete(skuWarehouse);
         productCategoryDao.delete(productCategory);
         for (Product prod : products) {
@@ -325,13 +341,13 @@ public class ProductDAOTest extends AbstractTestDAO {
         //no need to reidex, because db and lucene indexes must me consistent
         query = queryBuilder.createQuery("sony", Arrays.asList(128L));
         products = productDao.fullTextSearch(query);
-        assertTrue(products.isEmpty());
-    }               */
+        assertTrue("Failed [" + query + "]", products.isEmpty());
+    }
 
     /**
      * Test for PRODUCTS.ATTR.CODE.VALUES.BY.ASSIGNED.CATEGORIES named query
      */
-    /*@Test
+    @Test
     public void testGetUniqueBrandsByCateroriesTest() {
         productDao.fullTextSearchReindex();
         ArrayList<Long> createdProducts = new ArrayList<Long>();
@@ -353,9 +369,9 @@ public class ProductDAOTest extends AbstractTestDAO {
         assertEquals("LG", brands.get(0)[0]);
         assertEquals("Samsung", brands.get(1)[0]);
         assertEquals("Sony", brands.get(2)[0]);
-    }         */
+    }
 
-    /*@Test
+    @Test
     public void testFindByBrandsInCateroriesTest() {
         ArrayList<Long> createdProducts = new ArrayList<Long>();
         createdProducts.add(createProduct(102L, "LG_DVD_PLAYER", "product lg dvd player", 3L, 134L));
@@ -363,7 +379,7 @@ public class ProductDAOTest extends AbstractTestDAO {
         createdProducts.add(createProduct(102L, "LG_MP3_PLAYER", "product lg mp3 player", 2L, 135L));
         createdProducts.add(createProduct(103L, "SONY_MP3_PLAYER", "product sony mp3 player", 2L, 135L));
         createdProducts.add(createProduct(104L, "SAM_MP3_PLAYER", "product sam mp3 player", 2L, 136L));
-        productDao.fullTextSearchReindex();
+       // productDao.fullTextSearchReindex();
         List<Product> foundedProducts;
         BooleanQuery query;
         List<Long> categories = new ArrayList<Long>();
@@ -399,7 +415,7 @@ public class ProductDAOTest extends AbstractTestDAO {
         foundedProducts = productDao.fullTextSearch(query);
         assertNotNull(foundedProducts);
         assertEquals(0, foundedProducts.size());
-    }  */
+    }
 
     private long createProduct(long brandId, String productCode, String productName, long productTypeId, long productCategoryId) {
         Product product = new ProductEntity();
@@ -418,7 +434,9 @@ public class ProductDAOTest extends AbstractTestDAO {
         productCategory.setProduct(product);
         productCategory.setCategory(categoryDao.findById(productCategoryId));
         productCategory.setRank(0);
-        productCategory = productCategoryDao.create(productCategory);
+        product.getProductCategory().add(productCategory);
+        //productCategory = productCategoryDao.create(productCategory);
+        productDao.saveOrUpdate(product);
         assertNotNull(productCategory);
         ProductSku productSku = new ProductSkuEntity();
         productSku.setCode(product.getCode());

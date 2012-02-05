@@ -25,7 +25,7 @@ import static org.junit.Assert.*;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class TestProductServiceImpl extends BaseCoreDBTestCase {
+public class ProductServiceImplTest extends BaseCoreDBTestCase {
 
     private ProductService productService;
 
@@ -225,7 +225,7 @@ public class TestProductServiceImpl extends BaseCoreDBTestCase {
         assertTrue("Set is " + list + " his size is " + list.size() + " but expected more that 1", list.size() > 1);
     }
 
-    @Ignore("java.lang.AssertionError")
+    //@Ignore("java.lang.AssertionError")
     @Test
     public void testGetFeaturedProducts() {
         ShopService shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
@@ -241,6 +241,11 @@ public class TestProductServiceImpl extends BaseCoreDBTestCase {
         assertTrue(shopCategoryIds.contains(211L));
         List<Product> rezLimit = productService.getFeaturedProducts(shopCategoryIds, 2);
         assertNotNull(rezLimit);
+        try {
+            dumpDataBase("x2x2", new String[] {"TPRODUCT"});
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
         assertFalse(rezLimit.isEmpty());
         assertEquals(2, rezLimit.size());
         rezLimit = productService.getFeaturedProducts(shopCategoryIds, 0);
@@ -256,7 +261,7 @@ public class TestProductServiceImpl extends BaseCoreDBTestCase {
         expectedProductCodes.add("FEATURED-PRODUCT5");
         expectedProductCodes.add("FEATURED-PRODUCT1");
         for (Product prod : rez) {
-            assertTrue(expectedProductCodes.contains(prod.getCode()));
+            assertTrue("add " + prod.getCode(), expectedProductCodes.contains(prod.getCode()));
             expectedProductCodes.remove(prod.getCode());
         }
         assertTrue(expectedProductCodes.isEmpty());

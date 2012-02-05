@@ -176,6 +176,9 @@
     <TCATEGORY CATEGORY_ID="100"   PARENT_ID="100"        RANK="0"  NAME="root"             DESCRIPTION="The root category"    UITEMPLATE="default"
                AVAILABLEFROM="2009-01-01 00:00:00.000000000"
                AVAILABLETILL="2108-12-28 00:00:00.000000000"
+               NAV_BY_PRICE="0"
+               NAV_BY_PRICE_TIERS=""
+
             />
     <!-- failover settings-->
     <TCATEGORYATTRVALUE ATTRVALUE_ID="20" CODE="CATEGORY_ITEMS_PER_PAGE" VAL="6,12,24" CATEGORY_ID="100"/>
@@ -214,7 +217,7 @@
 	<TCATEGORY CATEGORY_ID="127"   PARENT_ID="120"        RANK="70" NAME="Batteries" DESCRIPTION="Batteries"/>
 	<TCATEGORY CATEGORY_ID="128"   PARENT_ID="120"        RANK="80" NAME="Accessories for iPods" DESCRIPTION="Accessories for iPods"/>
 
-	<TCATEGORY CATEGORY_ID="129"   PARENT_ID="100"        RANK="50" NAME="Outdoor Gadgets" DESCRIPTION="Outdoor Gadgets" NAV_BY_PRICE="1"
+	<TCATEGORY CATEGORY_ID="129"   PARENT_ID="100"        RANK="49" NAME="Outdoor Gadgets" DESCRIPTION="Outdoor Gadgets 2" NAV_BY_PRICE="1"
                NAV_BY_PRICE_TIERS="&lt;pricetree&gt;&lt;priceMap&gt;&lt;entry&gt;&lt;string&gt;EUR&lt;/string&gt;&lt;list&gt;&lt;pricenode&gt;&lt;priceRange&gt;&lt;first class=&quot;big-decimal&quot;&gt;0&lt;/first&gt;&lt;second class=&quot;big-decimal&quot;&gt;100&lt;/second&gt;&lt;/priceRange&gt;&lt;/pricenode&gt;&lt;pricenode&gt;&lt;priceRange&gt;&lt;first class=&quot;big-decimal&quot;&gt;100&lt;/first&gt;&lt;second class=&quot;big-decimal&quot;&gt;300&lt;/second&gt;&lt;/priceRange&gt;&lt;/pricenode&gt;&lt;pricenode&gt;&lt;priceRange&gt;&lt;first class=&quot;big-decimal&quot;&gt;300&lt;/first&gt;&lt;second class=&quot;big-decimal&quot;&gt;500&lt;/second&gt;&lt;/priceRange&gt;&lt;/pricenode&gt;&lt;/list&gt;&lt;/entry&gt;&lt;/priceMap&gt;&lt;/pricetree&gt;"/>
 	<TCATEGORY CATEGORY_ID="130"   PARENT_ID="129"        RANK="10" NAME="Summer Time" DESCRIPTION="Summer Time"/>
 	<TCATEGORY CATEGORY_ID="131"   PARENT_ID="129"        RANK="20" NAME="Outdoor Fun" DESCRIPTION="Outdoor Fun"/>
@@ -358,7 +361,8 @@
               CODE="BENDER-ua"
               NAME="Бендер Згинач Родріґес"
               DESCRIPTION="Бендер — комічний антигерой, п'яниця, лихослов і завзятий курець, шанувальник порнографії для роботів (у вигляді електричних схем), злодій-рецидивіст (вірніше, клептоман), кухар (хоча, зважаючи на відсутність відчуття смаку, його їжа в переважній більшості випадків щонайменше неїстівна, ба навіть небезпечна для життя)."
-              BRAND_ID="101"              PRODUCTTYPE_ID="1"              AVAILABILITY_ID="1"              SEO_ID="9998" />
+              BRAND_ID="101"              PRODUCTTYPE_ID="1"              AVAILABILITY_ID="1"              SEO_ID="9998" FEATURED="0" AVAILABLEFROM="2010-04-08 11:15:17.451" AVAILABLETILL="2040-04-08 11:15:17.451"/>
+
 
     <TSKU SKU_ID="9998"
           PRODUCT_ID="9998"

@@ -19,20 +19,13 @@
             }
         </script>
 
-
-        <table cellpadding="0" cellspacing="0" width="100%">
-            <tr valign="top">
-                <td>
-                    <input id="searchPhraze" type="text"
+        <input id="searchPhraze" type="text"
                            onkeydown="if(event.keyCode == 13 ) {search();}"/>
-                </td>
-                <td width="32">
-                    <input id="searchButton" type="button"
-                           onclick="search();"
-                           src="images/layout/nav/search/nav-search-butt.jpg"/>
-                </td>
-            </tr>
-        </table>
+
+        <input id="searchButton" type="button" wicket:message="value:search"
+               onclick="search();"
+               src="images/layout/nav/search/nav-search-butt.jpg"/>
+
 
     </div>
 </wicket:panel>

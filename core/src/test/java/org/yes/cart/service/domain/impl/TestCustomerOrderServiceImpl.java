@@ -89,7 +89,7 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
         assertFalse(customer.getAddress().isEmpty());
         ShoppingCart shoppingCart = getShoppingCart();
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
-        assertEquals(3, order.getDelivery().size());
+        assertEquals(4, order.getDelivery().size());
     }
 
     @Test

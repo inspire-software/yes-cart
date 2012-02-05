@@ -83,6 +83,9 @@ public class PriceServiceImpl
                 rez = skuPrice;
             }
         }
+        if (rez == null) {
+            rez = skuPriceDao.getEntityFactory().getByIface(SkuPrice.class);
+        }
         return rez;
     }
 

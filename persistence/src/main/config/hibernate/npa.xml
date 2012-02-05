@@ -2084,7 +2084,7 @@ public void setRangeList(final RangeList rangeList) {
             </set>
 
             <set name="productCategory" inverse="false" lazy="true" cascade="all">
-                <meta attribute="field-description">UNCOMMENT @IndexedEmbedded (targetElement =  ProductCategoryEntity.class)</meta>
+                <meta attribute="field-description">UNCOMMENT @Field  @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductCategoryBridge.class)</meta>
                 <key>
                     <column name="PRODUCT_ID" not-null="false"/>
                 </key>
@@ -2092,7 +2092,7 @@ public void setRangeList(final RangeList rangeList) {
             </set>
 
             <bag name="sku" inverse="false" lazy="false" cascade="all" order-by="RANK">
-			    <meta attribute="field-description">UNCOMMENT @IndexedEmbedded (targetElement =  ProductSkuEntity.class)</meta>
+			    <meta attribute="field-description">UNCOMMENT @Field  @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductSkuBridge.class)</meta>
                 <key>
                     <column name="PRODUCT_ID" not-null="false"/>
                 </key>
@@ -2199,7 +2199,7 @@ public void setRangeList(final RangeList rangeList) {
         </id>
         <discriminator type="integer" formula="1"/>
         <subclass name="org.yes.cart.domain.entity.impl.ProductSkuEntity" discriminator-value="1">
-            <!--meta attribute="class-description">UNCOMMENT @Indexed (index = "luceneindex/productsku")</meta-->
+            <meta attribute="class-description">UNCOMMENT @Indexed (index = "luceneindex/productsku")</meta>
             <meta attribute="extra-import">org.hibernate.annotations.Parameter</meta>
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
@@ -2214,7 +2214,6 @@ public void setRangeList(final RangeList rangeList) {
     //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
     @Id @GeneratedValue /*(generator="generator")*/ 
     @Column(name="SKU_ID", nullable=false)
-    @Field(index=Index.UN_TOKENIZED) @ContainedIn
     public long getSkuId() {
         return this.skuId;
     }
@@ -2260,7 +2259,7 @@ public void setRangeList(final RangeList rangeList) {
 
             </meta>
             <property name="code" column="CODE" type="string" length="255" not-null="true">
-                <meta attribute="field-description">UNCOMMENT @Field(index=Index.UN_TOKENIZED) @ContainedIn</meta>
+                <!--<meta attribute="field-description">UNCOMMENT @Field(index=Index.UN_TOKENIZED) @ContainedIn</meta>-->
             </property>
             <property name="name" type="string" length="64" not-null="true">
                 <column name="NAME" length="64" not-null="true"/>
@@ -2287,7 +2286,7 @@ public void setRangeList(final RangeList rangeList) {
 
 
             <bag name="skuPrice" inverse="false" lazy="false" cascade="all" order-by="qty">
-                <meta attribute="field-description">UNCOMMENT @Field(index=Index.UN_TOKENIZED) @ContainedIn @IndexedEmbedded (targetElement =  SkuPriceEntity.class) @FieldBridge(impl = org.yes.cart.domain.entity.bridge.SkuPriceBridge.class)</meta>
+                <!--<meta attribute="field-description">UNCOMMENT @Field(index=Index.UN_TOKENIZED) @ContainedIn @IndexedEmbedded (targetElement =  SkuPriceEntity.class) @FieldBridge(impl = org.yes.cart.domain.entity.bridge.SkuPriceBridge.class)</meta>-->
                 <key>
                     <column name="SKU_ID" not-null="true"/>
                 </key>
@@ -2296,7 +2295,7 @@ public void setRangeList(final RangeList rangeList) {
 
 
             <bag name="attribute" inverse="false" lazy="false" cascade="all">
-                <meta attribute="field-description">UNCOMMENT @Field @ContainedIn @IndexedEmbedded (targetElement =  AttrValueEntityProductSku.class) @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeValueBridge.class)</meta>
+                <!--<meta attribute="field-description">UNCOMMENT @Field @ContainedIn @IndexedEmbedded (targetElement =  AttrValueEntityProductSku.class) @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeValueBridge.class)</meta>-->
                 <key>
                     <column name="SKU_ID" not-null="false"/>
                 </key>
@@ -2445,11 +2444,11 @@ public void setRangeList(final RangeList rangeList) {
                 <column name="PRODUCT_ID" not-null="true"/>
             </many-to-one>
             <many-to-one name="category" class="org.yes.cart.domain.entity.Category" foreign-key="FK_PC_CAT">
-                <meta attribute="field-description">UNCOMMENT @Field(index=Index.UN_TOKENIZED) @ContainedIn  @FieldBridge(impl = org.yes.cart.domain.entity.bridge.CategoryBridge.class)</meta>
+                <!--<meta attribute="field-description">UNCOMMENT @Field(index=Index.UN_TOKENIZED) @ContainedIn  @FieldBridge(impl = org.yes.cart.domain.entity.bridge.CategoryBridge.class)</meta>-->
                 <column name="CATEGORY_ID" not-null="true"/>
             </many-to-one>
             <property name="rank" type="int" not-null="false">
-                <meta attribute="field-description">UNCOMMENT @Field(index=Index.UN_TOKENIZED) @ContainedIn @FieldBridge(impl = org.yes.cart.domain.entity.bridge.RankBridge.class)</meta>
+                <!--<meta attribute="field-description">UNCOMMENT @Field(index=Index.UN_TOKENIZED) @ContainedIn @FieldBridge(impl = org.yes.cart.domain.entity.bridge.RankBridge.class)</meta>-->
                 <column name="RANK">
                     <comment>
                         What the default order of particular product in partcular category
@@ -4727,6 +4726,12 @@ public void setRangeList(final RangeList rangeList) {
              and sw.shop.id = ?1
              order by sw.rank
         ]]>
+    </query>
+
+    <query name="WAREHOUSE.UPDATE.RANK">
+        <![CDATA[
+                update  ShopWarehouseEntity w set w.rank = ?2 where w.shopWarehouseId = ?1
+         ]]>
     </query>
 
     <query name="ASSIGNED.SHOPWAREHOUSE">

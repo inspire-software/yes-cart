@@ -1,5 +1,6 @@
 package org.yes.cart.domain.entity.bridge;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 
@@ -32,29 +33,33 @@ public class AttributeValueBridge implements FieldBridge {
                 final AttrValue attrValue = (AttrValue) obj;
                 final String prefix = (obj instanceof AttrValueProductSku) ? "sku." : "";
 
-                document.add(new Field(
-                        prefix + "attribute.val",
-                        attrValue.getVal(),
-                        luceneOptions.getStore(),
-                        Field.Index.NOT_ANALYZED,
-                        luceneOptions.getTermVector()
-                ));
+                if (StringUtils.isNotBlank(attrValue.getVal())) {
+                    document.add(new Field(
+                            prefix + "attribute.val",
+                            attrValue.getVal(),
+                            luceneOptions.getStore(),
+                            Field.Index.NOT_ANALYZED,
+                            luceneOptions.getTermVector()
+                    ));
+                    document.add(new Field(
+                            prefix + "attribute.attrvalsearch",
+                            attrValue.getVal(),
+                            luceneOptions.getStore(),
+                            Field.Index.ANALYZED,
+                            luceneOptions.getTermVector()
+                    ));
 
-                document.add(new Field(
-                        prefix + "attribute.attrvalsearch",
-                        attrValue.getVal(),
-                        luceneOptions.getStore(),
-                        Field.Index.ANALYZED,
-                        luceneOptions.getTermVector()
-                ));
+                }
 
-                document.add(new Field(
-                        prefix + "attribute.attribute",
-                        attrValue.getAttribute().getCode(),
-                        luceneOptions.getStore(),
-                        Field.Index.NOT_ANALYZED,
-                        luceneOptions.getTermVector()
-                ));
+                if (StringUtils.isNotBlank(attrValue.getAttribute().getCode())) {
+                    document.add(new Field(
+                            prefix + "attribute.attribute",
+                            attrValue.getAttribute().getCode(),
+                            luceneOptions.getStore(),
+                            Field.Index.NOT_ANALYZED,
+                            luceneOptions.getTermVector()
+                    ));
+                }
 
             }
         }
