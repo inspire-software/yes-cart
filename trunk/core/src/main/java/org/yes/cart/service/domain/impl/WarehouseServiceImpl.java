@@ -41,10 +41,11 @@ public class WarehouseServiceImpl extends BaseGenericServiceImpl<Warehouse> impl
     }
 
     /** {@inheritDoc} */
-    public void setShopWarehouseRank(final long shopWarehouseId, final int newRank) {
-        final ShopWarehouse shopWarehouse = shopWarehouseDao.findById(shopWarehouseId);
-        shopWarehouse.setRank(newRank);
-        shopWarehouseDao.update(shopWarehouse);
+    public void updateShopWarehouseRank(final long shopWarehouseId, final int newRank) {
+         getGenericDao().executeUpdate(
+                "WAREHOUSE.UPDATE.RANK",
+                shopWarehouseId, newRank
+        );
     }
 
     /** {@inheritDoc} */

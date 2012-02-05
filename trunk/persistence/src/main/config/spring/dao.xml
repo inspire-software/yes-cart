@@ -21,6 +21,7 @@
                 <prop key="voidReservation">PROPAGATION_REQUIRED</prop>
                 <prop key="fireTransition">PROPAGATION_REQUIRED</prop>
                 <prop key="handle">PROPAGATION_REQUIRED</prop>
+                <prop key="reservation*">PROPAGATION_REQUIRED</prop>
                 <prop key="*">PROPAGATION_SUPPORTS,readOnly</prop>
             </props>
         </property>

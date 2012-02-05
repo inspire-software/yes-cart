@@ -39,9 +39,13 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
         productService = (ProductService) ctx().getBean(ServiceSpringKeys.PRODUCT_SERVICE);
         priceService = (PriceService) ctx().getBean(ServiceSpringKeys.PRICE_SERVICE);
         shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
+        try {
+            dumpDataBase("x0x0xx" , new String [] {"TCATEGORY"});
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
     }
 
-    @Ignore("java.lang.AssertionError")
     @Test
     public void testGetPriceNavigationRecords() {
         Shop shop = shopService.getShopByDomainName("www.gadget.npa.com");
@@ -49,6 +53,11 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
         Category cat = categoryDAO.findById(129L); // this category hold navigation by price tiers
         assertNotNull(cat);
         PriceTierTree priceTierTree = cat.getNavigationByPriceTree();
+        try {
+            dumpDataBase("x1x1xx" , new String [] {"TCATEGORY"});
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
         assertNotNull(priceTierTree);
         List<FiteredNavigationRecord> navigationRecords = priceService.getPriceNavigationRecords(priceTierTree, "EUR", shop);
         assertNotNull(navigationRecords);
@@ -68,7 +77,7 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
     /**
      * Test than we are can getByKey the minimal price through price tiers for multisku product.
      */
-    @Ignore("java.lang.AssertionError")
+    //@Ignore("java.lang.AssertionError")
     @Test
     public void getMinimalRegularPriceTest() {
         Shop shop = shopService.getShopByDomainName("www.gadget.npa.com");
@@ -83,6 +92,7 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
         assertNotNull(skuPrice);
         assertNull(skuPrice.getSalePrice());
         assertTrue((new BigDecimal("145.00")).equals(skuPrice.getRegularPrice()));
+
         //Test than we are can not getByKey the minimal price through price tiers for multisku product for not cofigured currency
         skuPrice = priceService.getMinimalRegularPrice(product.getSku(), shop, "BYR", BigDecimal.ONE);
         assertNotNull(skuPrice);

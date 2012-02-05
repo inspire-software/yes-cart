@@ -64,9 +64,11 @@ public class TestWarehouseServiceImpl extends BaseCoreDBTestCase {
         List<Warehouse> shopWarehouses = warehouseService.findByShopId(shop.getShopId());
         assertNotNull(shopWarehouses);
         assertTrue(shopWarehouses.isEmpty());
+
         ShopWarehouse shopWarehouse = warehouseService.assignWarehouse(warehouse.getWarehouseId(), shop.getShopId());
         assertEquals("Test default rank", 100, shopWarehouse.getRank());
-        warehouseService.setShopWarehouseRank(shopWarehouse.getShopWarehouseId(), 200);
+
+        warehouseService.updateShopWarehouseRank(shopWarehouse.getShopWarehouseId(), 200);
         shopWarehouse = shopWarehouseDao.findById(shopWarehouse.getShopWarehouseId());
         assertEquals("Test default rank", 200, shopWarehouse.getRank());
     }

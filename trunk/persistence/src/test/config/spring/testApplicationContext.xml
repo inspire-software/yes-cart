@@ -32,6 +32,10 @@
                 <prop key="hibernate.show_sql">false</prop>
                 <prop key="hibernate.connection.autocommit">true</prop>
                 <prop key="hibernate.jdbc.batch_size">0</prop>
+
+                <prop key="hibernate.search.worker.execution">async</prop>
+                <prop key="hibernate.search.worker.thread_pool.size">2</prop>
+
             </props>
         </property>
         <property name="entityInterceptor">

@@ -34,7 +34,7 @@ public class SkuPriceBridge implements FieldBridge {
                             proposedFiledName,
                             rez,
                             luceneOptions.getStore(),
-                            luceneOptions.getIndex(),
+                            Field.Index.NOT_ANALYZED,
                             luceneOptions.getTermVector()
                     );
                     document.add(field);

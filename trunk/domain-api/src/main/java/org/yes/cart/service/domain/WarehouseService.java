@@ -26,7 +26,7 @@ public interface WarehouseService extends GenericService<Warehouse> {
      * @param shopWarehouseId   pk of given ShopWarehouseDTO
      * @param newRank  rank to set
      */
-    void setShopWarehouseRank(long shopWarehouseId, int newRank);
+    void updateShopWarehouseRank(long shopWarehouseId, int newRank);
 
     /**
      * Assign given warehouse to given shop.

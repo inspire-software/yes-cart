@@ -23,7 +23,9 @@ import static org.junit.Assert.*;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class TestCategoryServiceImpl extends BaseCoreDBTestCase {
+public class CategoryServiceImplTest extends BaseCoreDBTestCase {
+
+
 
     private CategoryService categoryService;
 
