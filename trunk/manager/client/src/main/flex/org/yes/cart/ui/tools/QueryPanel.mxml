@@ -8,6 +8,8 @@
         import mx.containers.VDividedBox;
         import mx.controls.Alert;
         import mx.events.IndexChangedEvent;
+        import mx.rpc.AsyncResponder;
+        import mx.rpc.events.ResultEvent;
 
         import org.yes.cart.shopmanager.ShopManagerGlobal;
 
@@ -33,28 +35,10 @@
             var dataGrid:DataGrid = new DataGrid();
             dataGrid.percentWidth = 100;
 
-            if ("Sql" == divBox.label) {
-
-                dataGrid.dataProvider = remoteBackdoorService.sqlQuery.lastResult;
-
-            } else if ("Hsql" == divBox.label) {
-
-                dataGrid.dataProvider = remoteBackdoorService.hsqlQuery.lastResult;
-
-            } else if ("Lucene" == divBox.label) {
-
-                dataGrid.dataProvider = remoteBackdoorService.luceneQuery.lastResult;
-
-            }
-
-
-
 
             divBox.addChild(textArea);
 
             divBox.addChild(dataGrid);
-
-
 
             queryTabNavigator.addChild(divBox);
 
@@ -73,11 +57,49 @@
 
             var sql:String = ((queryTabNavigator.selectedChild as VDividedBox).getChildAt(0) as TextArea).text;
 
+            var dataGrid: DataGrid  = ((queryTabNavigator.selectedChild as VDividedBox).getChildAt(1) as DataGrid);
+
             if ("Sql" == (queryTabNavigator.selectedChild as VDividedBox).label) {
-                remoteBackdoorService.sqlQuery(sql);
+                
+                remoteBackdoorService.sqlQuery(sql).addResponder(
+
+                        new AsyncResponder(
+                                function (event:ResultEvent, obj:Object = null):void {
+                                    
+                                    dataGrid.dataProvider = event.result;
+
+                                },
+                                ShopManagerGlobal.instance.defaultFaultHandler)                        
+                        
+                );
+                
             } else if ("Hsql" == (queryTabNavigator.selectedChild as VDividedBox).label) {
+                
+                remoteBackdoorService.hsqlQuery(sql).addResponder(
+
+                        new AsyncResponder(
+                                function (event:ResultEvent, obj:Object = null):void {
+
+                                    dataGrid.dataProvider = event.result;
+
+                                },
+                                ShopManagerGlobal.instance.defaultFaultHandler)
+
+                );
 
             } else if ("Lucene" == (queryTabNavigator.selectedChild as VDividedBox).label) {
+                
+                remoteBackdoorService.luceneQuery(sql).addResponder(
+
+                        new AsyncResponder(
+                                function (event:ResultEvent, obj:Object = null):void {
+
+                                    dataGrid.dataProvider = event.result;
+
+                                },
+                                ShopManagerGlobal.instance.defaultFaultHandler)
+
+                );
 
             }
 
