@@ -183,9 +183,9 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
         </property>
         <property name="hibernateProperties">
             <props>
-               <!-- <prop key="hibernate.search.default.indexBase">
+               <prop key="hibernate.search.default.indexBase">
                     #{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'}
-                </prop>-->
+                </prop>
             </props>
         </property>
     </bean>
