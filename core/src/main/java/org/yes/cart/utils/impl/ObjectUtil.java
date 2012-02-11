@@ -3,6 +3,7 @@ package org.yes.cart.utils.impl;
 import org.hibernate.collection.AbstractPersistentCollection;
 import org.hibernate.proxy.HibernateProxy;
 import org.springframework.util.Assert;
+import org.yes.cart.domain.entity.Auditable;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -45,8 +46,9 @@ public class ObjectUtil {
 
         if (obj.getClass().getName().startsWith("java.lang")) {
             return new Object[]{String.valueOf(obj)};
-
         }
+
+
 
         Field[] fields = obj.getClass().getDeclaredFields();
 
@@ -61,8 +63,11 @@ public class ObjectUtil {
             try {
 
                 rez[i] = fields[i].get(obj);
+
                 if (rez[i] instanceof HibernateProxy
-                        || rez[i] instanceof AbstractPersistentCollection) {
+                        || rez[i] instanceof AbstractPersistentCollection
+                        || rez[i] instanceof Auditable
+                        ) {
                     rez[i] = fields[i].getName();
                 }
 
