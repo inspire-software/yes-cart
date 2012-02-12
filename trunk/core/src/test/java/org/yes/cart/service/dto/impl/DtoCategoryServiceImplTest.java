@@ -127,7 +127,10 @@ public class DtoCategoryServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testUpdateEntityAttributeValue() throws Exception {
+
         List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(100L);
+        assertEquals(QTY, list.size());
+
         for (AttrValueDTO dto : list) {
             if (dto.getAttributeDTO().getCode().equals("CATEGORY_ITEMS_PER_PAGE")) {
                 dto.setVal("5,15,35"); // default value in test data is 6,12,24
@@ -135,6 +138,7 @@ public class DtoCategoryServiceImplTest extends BaseCoreDBTestCase {
                 break;
             }
         }
+
         list = dtoService.getEntityAttributes(100L);
         for (AttrValueDTO dto : list) {
             if (dto.getAttributeDTO().getCode().equals("CATEGORY_ITEMS_PER_PAGE")) {
@@ -145,23 +149,28 @@ public class DtoCategoryServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testDeleteAttributeValue() throws Exception {
+
         List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(100L);
-        assertEquals(QTY, list.size());
-        for (int i = 0; i < QTY; i++) {
+
+
+        int totalSize =  list.size();
+        for (int i = 0; i < totalSize   ; i++) {
             AttrValueDTO dto = list.get(i);
             if (dto.getVal() != null) {
                 dtoService.deleteAttributeValue(dto.getAttrvalueId());
             }
         }
+
+
         list = dtoService.getEntityAttributes(100L);
-        assertEquals(QTY, list.size());
+        assertEquals(totalSize, list.size());
         for (AttrValueDTO dto : list) {
             assertNull(dto.getVal());
         }
     }
 
     @Test
-    public void testCreateEntityAttributeValue() throws Exception {
+    public void testzCreateEntityAttributeValue() throws Exception {
         List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(100L);
         assertEquals(3, list.size());
         for (int i = 0; i < QTY; i++) {
