@@ -38,7 +38,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
     /**
      * Default constructor.
      *
-     * @param type - entity type
+     * @param type          - entity type
      * @param entityFactory {@link EntityFactory} to create the entities
      */
     @SuppressWarnings("unchecked")
@@ -203,7 +203,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
 
     /**
      * {@inheritDoc}
-     */    
+     */
     @SuppressWarnings("unchecked")
     public List<T> findQueryObjectsByNamedQueryWithList(
             final String namedQueryName, final Collection<Object> listParameter,
@@ -388,8 +388,11 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
                     }
                 }
             }
+            fullTextSession.flushToIndexes(); //apply changes to indexes
+            fullTextSession.clear(); //clear since the queue is processed
             tx.commit();
         }
+
 
         return index;
     }
@@ -445,7 +448,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
             FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(query, getPersistentClass());
             if (sortFieldName != null) {
                 org.apache.lucene.search.Sort sort = new org.apache.lucene.search.Sort(
-                        new org.apache.lucene.search.SortField( sortFieldName, SortField.STRING, reverse));
+                        new org.apache.lucene.search.SortField(sortFieldName, SortField.STRING, reverse));
                 fullTextQuery.setSort(sort);
             }
             fullTextQuery.setFirstResult(firtsResult);
@@ -529,7 +532,13 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
         return query.executeUpdate();
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
+    public void flushClear() {
+        getSession().flush();
+        getSession().clear();
+    }
 
 
 }

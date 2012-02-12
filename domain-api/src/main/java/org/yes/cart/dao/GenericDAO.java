@@ -327,5 +327,10 @@ public interface GenericDAO<T, PK extends Serializable> {
      */
     int executeNativeUpdate(String nativeQuery, Object... parameters);
 
+    /**
+     * Flush clear.
+     */
+    void flushClear();
+
 
 }

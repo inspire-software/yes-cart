@@ -17,6 +17,7 @@ import org.yes.cart.bulkimport.service.BulkImportService;
 import org.yes.cart.bulkimport.service.impl.AbstractImportService;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.util.misc.ExceptionUtil;
 
 import java.beans.PropertyDescriptor;
 import java.io.*;
@@ -213,6 +214,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
             fillEntityForeignKeys(line, object, importDescriptor.getImportColumns(FieldTypeEnum.FK_FIELD), masterObject, importDescriptor);
             genericDAO.saveOrUpdate(object);
             performSubImport(errorReport, line, importDescriptor, object, importDescriptor.getImportColumns(FieldTypeEnum.SIMPLE_SLAVE_FIELD));
+            genericDAO.flushClear();
         } catch (Exception e) {
             String additionalInfo = null;
             if (propertyDescriptor != null) {
@@ -331,7 +333,13 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
                 propertyDescriptor.getWriteMethod().invoke(object, singleObjectValue);
             }
         } catch (Exception e) {
-            throw new Exception(MessageFormat.format(" root cause {0} value {1} ", currentColumn, singleObjectValue), e);
+            throw new Exception(
+                    MessageFormat.format(
+                            " \nroot cause: {0} \nvalue {1} \nstack trace is {2}",
+                            currentColumn,
+                            singleObjectValue,
+                            ExceptionUtil.toString(e)),
+                    e);
         }
 
     }
