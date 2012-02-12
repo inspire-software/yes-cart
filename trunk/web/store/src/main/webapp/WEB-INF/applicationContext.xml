@@ -476,7 +476,7 @@
             <map>
                 <entry key="action" value="UsernameToken"/>
                 <entry key="passwordType" value="PasswordText"/>
-                <entry key="passwordCallbackClass" value="org.yes.cart.web.service.ws.impl.BackdoorCallback"/>
+<!--                <entry key="passwordCallbackClass" value="org.yes.cart.web.service.ws.impl.BackdoorCallback"/>-->
             </map>
         </constructor-arg>
         <property name="authenticationManager" ref="authenticationManager"/>

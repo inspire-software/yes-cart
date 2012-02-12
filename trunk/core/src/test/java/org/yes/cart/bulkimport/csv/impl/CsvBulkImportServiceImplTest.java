@@ -19,7 +19,7 @@ import static junit.framework.Assert.assertTrue;
  * Date: 12/11/11
  * Time: 10:20 AM
  */
-public class TestCsvBulkImportServiceImpl extends BaseCoreDBTestCase {
+public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
 
     BulkImportService bulkImportService = null;

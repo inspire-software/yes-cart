@@ -35,12 +35,11 @@ public class BackdoorServiceImpl implements BackdoorService {
     private ProductService productService;
 
 
-
     /**
      * {@inheritDoc}
      */
     public int reindexAllProducts() {
-        return  productService.reindexProducts();
+        return productService.reindexProducts();
     }
 
     /**
@@ -53,7 +52,7 @@ public class BackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
-    public int reindexProducts( long[] productPks) {
+    public int reindexProducts(long[] productPks) {
         int rez = 0;
         for (long pk : productPks) {
             rez += productService.reindexProduct(pk);
@@ -66,20 +65,29 @@ public class BackdoorServiceImpl implements BackdoorService {
      */
     public List<Object[]> sqlQuery(final String query) {
 
-        if (StringUtils.isNotBlank(query)) {
+        try {
 
-            if (query.toLowerCase().contains("select ")) {
+            if (StringUtils.isNotBlank(query)) {
 
-                return getGenericDao().executeNativeQuery(query);
+                if (query.toLowerCase().contains("select ")) {
 
-            } else {
+                    return getGenericDao().executeNativeQuery(query);
 
-                return Collections.singletonList(new Object[] {getGenericDao().executeNativeUpdate(query)});
+                } else {
 
+                    return Collections.singletonList(new Object[]{getGenericDao().executeNativeUpdate(query)});
+
+                }
             }
+
+            return Collections.EMPTY_LIST;
+
+        } catch (Exception e) {
+            final String msg = "Cant parse query : " + query + " Error : " + e.getMessage();
+            LOG.warn(msg);
+            return Collections.singletonList(new Object[]{msg});
         }
 
-        return Collections.EMPTY_LIST;
     }
 
 
@@ -87,38 +95,27 @@ public class BackdoorServiceImpl implements BackdoorService {
      * {@inheritDoc}
      */
     public List<Object[]> hsqlQuery(final String query) {
+        try {
 
-        if (StringUtils.isNotBlank(query)) {
+            if (StringUtils.isNotBlank(query)) {
 
-            if (query.toLowerCase().contains("select ")) {
+                if (query.toLowerCase().contains("select ")) {
 
-                final List queryRez = getGenericDao().executeHsqlQuery(query);
+                    final List queryRez = getGenericDao().executeHsqlQuery(query);
+                    return transformTypedResultListToArrayList(queryRez);
 
-                return transformTypedResultListToArrayList(queryRez);
-
-            } else {
-
-                return Collections.singletonList(new Object[] {getGenericDao().executeHsqlQuery(query)});
-
+                } else {
+                    return Collections.singletonList(new Object[]{getGenericDao().executeHsqlQuery(query)});
+                }
             }
+            return Collections.EMPTY_LIST;
+        } catch (Exception e) {
+            final String msg = "Cant parse query : " + query + " Error : " + e.getMessage();
+            LOG.warn(msg);
+            return Collections.singletonList(new Object[]{msg});
         }
 
-        return Collections.EMPTY_LIST;
-
     }
-
-    private List<Object[]> transformTypedResultListToArrayList(List queryRez) {
-
-        final List<Object[]> rezList = new ArrayList<Object[]>(queryRez.size());
-
-        for( Object obj : queryRez) {
-
-            rezList.add(ObjectUtil.toObjectArray(obj));
-
-        }
-        return rezList;
-    }
-
 
 
     /**
@@ -134,17 +131,30 @@ public class BackdoorServiceImpl implements BackdoorService {
 
             return transformTypedResultListToArrayList(getGenericDao().fullTextSearch(query));
 
-        } catch (ParseException e) {
+        } catch (Exception e) {
 
-            final String msg = "Cant parse query : " + luceneQuery +  " Error : " + e.getMessage();
+            final String msg = "Cant parse query : " + luceneQuery + " Error : " + e.getMessage();
 
             LOG.warn(msg);
 
-            return Collections.singletonList(new Object[] {msg});
+            return Collections.singletonList(new Object[]{msg});
 
         }
 
     }
+
+    private List<Object[]> transformTypedResultListToArrayList(List queryRez) {
+
+        final List<Object[]> rezList = new ArrayList<Object[]>(queryRez.size());
+
+        for (Object obj : queryRez) {
+
+            rezList.add(ObjectUtil.toObjectArray(obj));
+
+        }
+        return rezList;
+    }
+
 
     /**
      * IoC. Set product service.
@@ -156,13 +166,9 @@ public class BackdoorServiceImpl implements BackdoorService {
     }
 
 
-
-
     private GenericDAO<Object, Long> getGenericDao() {
         return productService.getGenericDao();
     }
-
-
 
 
 }
