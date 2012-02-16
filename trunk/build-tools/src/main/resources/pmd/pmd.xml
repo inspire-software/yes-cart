@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ruleset name="elasticpathpmd">
-    <description>Elastic Path PMD Rules</description>
+<ruleset name="YCPmd">
+    <description>PMD Rules</description>
 
     <rule name="EmptyCatchBlock"
           message="Avoid empty catch blocks"
@@ -5152,25 +5152,4 @@ public class Foo {
         </example>
     </rule>
 
-    <rule name="DontUseElasticPathImplGetInstance"
-          message="ElasticPathImpl.getInstance increases coupling - inject ElasticPath (consider BeanFactory instead)"
-          class="net.sourceforge.pmd.rules.XPathRule">
-        <description>
-            ElasticPathImpl.getInstance increases coupling - inject ElasticPath (consider BeanFactory instead)
-        </description>
-        <properties>
-            <property name="xpath">
-                <value>
-                    <![CDATA[
-//PrimaryPrefix[Name/@Image='ElasticPathImpl.getInstance']  
-        ]]>
-                </value>
-            </property>
-        </properties>
-        <example>
-            <![CDATA[
-	ElasticPathImpl.getInstance()  // Don't do this!
-]]>
-        </example>
-    </rule>
 </ruleset>
