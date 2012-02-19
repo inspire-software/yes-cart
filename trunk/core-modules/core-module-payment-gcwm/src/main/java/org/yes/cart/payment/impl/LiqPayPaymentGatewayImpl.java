@@ -23,9 +23,8 @@ import java.text.MessageFormat;
 import java.util.Map;
 
 /**
- *
  * LiqPay payment gateway implementation.
- *
+ * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 1/22/12
  * Time: 12:53 PM
@@ -78,7 +77,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
-    public String restoreOrderGuid(Map privateCallBackParameters) {
+    public String restoreOrderGuid(final Map privateCallBackParameters) {
 
         final LiqPayResponce liqPayResponce = getLiqPayResponce(privateCallBackParameters);
 
@@ -105,95 +104,11 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
 
 
     /**
-     * Get the {@link LiqPayResponce} from request parameter map.
-     * @param nvpCallResult request parameter map
-     * @return {@link LiqPayResponce}.
+     * {@inheritDoc}
      */
-    private LiqPayResponce getLiqPayResponce(final Map<String, String> nvpCallResult) {
-
-        final String operationXmlEncoded = nvpCallResult.get("operation_xml");
-
-        final String signatureEncoded = nvpCallResult.get("signature");
-
-        if (StringUtils.isNotBlank(operationXmlEncoded)) {
-
-            final String merchantKey = getParameterValue(LP_MERCHANT_KEY);
-
-            final String operationXml = new String(Base64.decode(operationXmlEncoded.getBytes()));
-
-            final String signToCheck = createSignatire(merchantKey + operationXml + merchantKey);
-
-            if (signToCheck.equals(signatureEncoded)) {
-
-                return (LiqPayResponce) getXStream().fromXML(operationXml);
-
-            } else {
-                LOG.error(
-                        MessageFormat.format(
-                                "Calculated signature {0} not correspond to provided  {1} for xml {2}. Req. params {3}",
-                                signToCheck,
-                                signatureEncoded,
-                                operationXml,
-                                dump(nvpCallResult))
-
-                );
-            }
-
-        } else {
-            LOG.error("Cant get operation_xml. " + dump(nvpCallResult));
-        }
-        return null;
-
-    }
-
-
-    /**
-     * Dump map value into String.
-     *
-     * @param map given map
-     * @return dump map as string
-     */
-    public static String dump(Map<?, ?> map) {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        for (Map.Entry<?, ?> entry : map.entrySet()) {
-            stringBuilder.append(entry.getKey());
-            stringBuilder.append(" : ");
-            stringBuilder.append(entry.getValue());
-        }
-
-        return stringBuilder.toString();
-    }
-
-
     public void handleNotification(HttpServletRequest request, HttpServletResponse response) {
         ;
     }
-
-    private final String xmlTemplate =
-            "<request>\n" +
-                    "      <version>1.2</version>\n" +
-                    "      <merchant_id>{0}</merchant_id>\n" +
-                    "      <result_url>{1}</result_url>\n" +
-                    "      <server_url>{2}</server_url>\n" +
-                    "      <order_id>{3}</order_id>\n" +
-                    "      <amount>{4}</amount>\n" +
-                    "      <currency>{5}</currency>\n" +
-                    "      <description>{6}</description>\n" +
-                    "      <default_phone>{7}</default_phone>\n" +
-                    "      <pay_way>{8}</pay_way>\n" +
-                    "      <goods_id>1234</goods_id>\n" +
-                    "</request>";
-
-    /**
-     * Get xml template .
-     *
-     * @return xml template
-     */
-    String getXmlTemplate() {
-        return xmlTemplate;
-    }
-
 
     /**
      * {@inheritDoc}
@@ -307,7 +222,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
-    public Payment createPaymentPrototype(Map map) {
+    public Payment createPaymentPrototype(final Map map) {
         return new PaymentImpl();
     }
 
@@ -335,4 +250,73 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
         xStream.alias("response", LiqPayResponce.class);
         return xStream;
     }
+
+
+    /**
+     * Get the {@link LiqPayResponce} from request parameter map.
+     *
+     * @param nvpCallResult request parameter map
+     * @return {@link LiqPayResponce}.
+     */
+    private LiqPayResponce getLiqPayResponce(final Map<String, String> nvpCallResult) {
+
+        final String operationXmlEncoded = nvpCallResult.get("operation_xml");
+
+        final String signatureEncoded = nvpCallResult.get("signature");
+
+        if (StringUtils.isNotBlank(operationXmlEncoded)) {
+
+            final String merchantKey = getParameterValue(LP_MERCHANT_KEY);
+
+            final String operationXml = new String(Base64.decode(operationXmlEncoded.getBytes()));
+
+            final String signToCheck = createSignatire(merchantKey + operationXml + merchantKey);
+
+            if (signToCheck.equals(signatureEncoded)) {
+
+                return (LiqPayResponce) getXStream().fromXML(operationXml);
+
+            } else {
+                LOG.error(
+                        MessageFormat.format(
+                                "Calculated signature {0} not correspond to provided  {1} for xml {2}. Req. params {3}",
+                                signToCheck,
+                                signatureEncoded,
+                                operationXml,
+                                dump(nvpCallResult))
+
+                );
+            }
+
+        } else {
+            LOG.error("Cant get operation_xml. " + dump(nvpCallResult));
+        }
+        return null;
+
+    }
+
+    private final String xmlTemplate =
+            "<request>\n" +
+                    "      <version>1.2</version>\n" +
+                    "      <merchant_id>{0}</merchant_id>\n" +
+                    "      <result_url>{1}</result_url>\n" +
+                    "      <server_url>{2}</server_url>\n" +
+                    "      <order_id>{3}</order_id>\n" +
+                    "      <amount>{4}</amount>\n" +
+                    "      <currency>{5}</currency>\n" +
+                    "      <description>{6}</description>\n" +
+                    "      <default_phone>{7}</default_phone>\n" +
+                    "      <pay_way>{8}</pay_way>\n" +
+                    "      <goods_id>1234</goods_id>\n" +
+                    "</request>";
+
+    /**
+     * Get xml template .
+     *
+     * @return xml template
+     */
+    String getXmlTemplate() {
+        return xmlTemplate;
+    }
+
 }
