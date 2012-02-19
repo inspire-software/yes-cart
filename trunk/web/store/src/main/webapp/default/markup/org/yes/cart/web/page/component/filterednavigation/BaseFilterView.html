@@ -1,22 +1,23 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
 <wicket:panel>
-    <table width="100%">
-        <tr>
-            <td colspan="2">
-                &#9679; <span wicket:id="head">[attr name]</span>
-            </td>
-        </tr>
-        <tr wicket:id="linkList">
-            <td align="left" nowrap>
-                &nbsp;&nbsp;&#8226; <a wicket:id="link"><span wicket:id="linkName">[attr value]</span></a>
-            </td>
-            <td align="right"  class="info2">
+
+    <span wicket:id="head">[attr name]</span>
+
+    <ul wicket:id="linkList">
+        <li class="hmenuli gr">
+            <div class="filterdivone">
+                <a wicket:id="link">
+                    <span wicket:id="linkName">[attr value]</span>
+                </a>
+            </div>
+            <div  class="filterdivtwo" align="right">
                 [<span wicket:id="quantity">[qty]</span>]
-            </td>
-        </tr>
-    </table>
-    <br>
+            </div>
+        </li>
+    </ul>
+
 </wicket:panel>
+
 </body>
 </html>

@@ -5,13 +5,13 @@ body {
 a {
     color: black;
     text-decoration: none;
-    border-bottom:1px solid #888888;
+    border-bottom: 1px solid #888888;
 }
 
 a:hover {
     color: #330000;
     text-decoration: none;
-    border-bottom:2px solid red;
+    border-bottom: 2px solid red;
 }
 
 .hmenulink {
@@ -24,8 +24,6 @@ a:hover {
     margin: 0 auto;
     overflow: hidden;
 }
-
-
 
 p {
     overflow: hidden;
@@ -41,14 +39,32 @@ p {
 */
 
 .gr {
-    background: #999; /* for non-css3 browsers */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#efefef'); /* for IE */
+    background: #999999; /* for non-css3 browsers */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#ffffff', endColorstr = '#efefef'); /* for IE */
     background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#efefef)); /* for webkit browsers */
-    background: -moz-linear-gradient(top,  #ffffff,  #efefef); /* for firefox 3.6+ */
+    background: -moz-linear-gradient(top, #ffffff, #efefef); /* for firefox 3.6+ */
 
 }
 
+.hmenuli {
+    border-right: 1px #efefef solid;
+    margin-top: 3px;
+    padding-top: 1px;
+    padding-bottom: 9px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
 
+
+.filterdivone {
+    display:inline-block;
+    width: 200px;
+}
+
+.filterdivtwo {
+    text-align: right;
+    display: inline-block;
+}
 
 
 
