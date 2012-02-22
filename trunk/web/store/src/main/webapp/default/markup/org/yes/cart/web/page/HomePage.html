@@ -17,16 +17,16 @@
 
 <div class="mainpage">
 
-    <div class="row">
-        <div class="column grid_13">
+    <div class="row grhead">
+        <div class="column grid_13 grhead">
             <p>
                 <wicket:container wicket:id="search">
                     [search]
                 </wicket:container>
             </p>
         </div>
-        <div class="column grid_3">
-            <p>
+        <div class="column grid_3 grhead">
+            <p align="right">
                 <wicket:container wicket:id="smallCart">
                     [small shopping cart]
                 </wicket:container>
@@ -37,53 +37,64 @@
     <div class="row">
         <div class="column grid_4">
             <p>
-                <wicket:container wicket:id="currency">
-                    [switch currency]
-                </wicket:container>
-            </p>
-        </div>
-        <div class="column grid_4">
-            <p>
-                <wicket:container wicket:id="language">
-                    [switch language]
-                </wicket:container>
-            </p>
-        </div>
-        <div class="column grid_8">
-            <p>
-                <wicket:link>
-                    <a href="CustomerSelfCarePage.html">Profile</a>
-                </wicket:link>
-            </p>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="column grid_4">
-            <p>
                 [Logo]
             </p>
         </div>
-        <div class="column grid_12">
+        <div class="column grid_8">
             <p>
                 <wicket:container wicket:id="featured">
                     [featured products]
                 </wicket:container>
             </p>
         </div>
+        <div class="column grid_4">
+            <p align="right">
+                <wicket:container wicket:id="currency">
+                    [switch currency]
+                </wicket:container>
+            </p><p align="right">
+                <wicket:container wicket:id="language">
+                    [switch language]
+                </wicket:container>
+            </p>
+        </div>
     </div>
 
 
     <div class="row">
-        <div class="column grid_16">
+        <div class="column grid_8">
+            <p>
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="column grid_15">
             <p>
                 <wicket:link>
                     <a href="HomePage.html">Home</a>
                 </wicket:link>
-                 | Special offer | Sale | New products | FAQ | Contect us | rss
+                | Special offer | Sale | New products | FAQ | Contect us
+                |
+                <wicket:link>
+                    <a href="CustomerSelfCarePage.html">Profile</a>
+                </wicket:link>
+
             </p>
         </div>
+
+        <div class="column grid_1">
+            <p>
+                Rss
+            </p>
+        </div>
+
     </div>
+
+
+
+
 
     <div class="row">
         <div class="column grid_16">
@@ -134,8 +145,8 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="column grid_16">
+    <div class="row gr">
+        <div class="column grid_16 gr">
             <p>
                 Hi there footer
             </p>

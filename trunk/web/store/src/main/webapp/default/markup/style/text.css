@@ -45,6 +45,13 @@ p {
     background: -moz-linear-gradient(top, #ffffff, #efefef); /* for firefox 3.6+ */
 }
 
+.grhead {
+    background: #999999; /* for non-css3 browsers */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#efefef', endColorstr = '#ffffff'); /* for IE */
+    background: -webkit-gradient(linear, left top, left bottom, from(#efefef), to(#ffffff)); /* for webkit browsers */
+    background: -moz-linear-gradient(top, #efefef, #ffffff); /* for firefox 3.6+ */
+}
+
 .headergr {
 
 }
