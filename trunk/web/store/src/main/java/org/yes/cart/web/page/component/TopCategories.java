@@ -66,16 +66,23 @@ public class TopCategories extends BaseComponent {
 
                         final PageParameters pageParameters = new PageParameters().add(WebParametersKeys.CATEGORY_ID, category.getCategoryId());
 
+
                         categoryListItem.add(
+
                                 new BookmarkablePageLink<HomePage>(CATEGORY_NAME_LINK, HomePage.class, pageParameters).add(
+
                                         new Label(CATEGORY_NAME, category.getName()).setEscapeModelStrings(false)
-                                )
-                        ).add(
-                                new AttributeModifier(
-                                        "class",
-                                        categoryService.isCategoryHasSubcategory(category.getCategoryId(), categoryId) ?
-                                                "active-category":""
+
+                                ).add(
+
+                                        new AttributeModifier(
+                                                "class",
+                                                categoryService.isCategoryHasSubcategory(category.getCategoryId(), categoryId) ?
+                                                        "active-category":""
                                         )
+
+                                )
+
                         );
 
                     }
