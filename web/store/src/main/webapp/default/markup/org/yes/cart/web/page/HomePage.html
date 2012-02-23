@@ -14,7 +14,6 @@
 <body>
 
 
-
 <div class="mainpage">
 
     <div class="row grhead">
@@ -52,7 +51,8 @@
                 <wicket:container wicket:id="currency">
                     [switch currency]
                 </wicket:container>
-            </p><p align="right">
+            </p>
+            <p align="right">
                 <wicket:container wicket:id="language">
                     [switch language]
                 </wicket:container>
@@ -69,39 +69,43 @@
     </div>
 
     <div class="row">
-
-        <div class="column grid_15">
+        <div class="column grid_16">
             <p>
-                <wicket:link>
-                    <a href="HomePage.html">Home</a>
-                </wicket:link>
-                | Special offer | Sale | New products | FAQ | Contect us
-                |
-                <wicket:link>
-                    <a href="CustomerSelfCarePage.html">Profile</a>
-                </wicket:link>
-
+            <ul class="menu">
+                <li>
+                    <wicket:link>
+                        <a href="HomePage.html"><span>Home</span></a>
+                    </wicket:link>
+                </li>
+                <li><a href="#"><span>Sale</span></a></li>
+                <li><a href="#"><span>Special offer</span></a></li>
+                <li><a href="#"><span>New products</span></a></li>
+                <li><a href="#"><span>Sale</span></a></li>
+                <li>
+                    <wicket:link>
+                        <a href="CustomerSelfCarePage.html"><span>Profile</span></a>
+                    </wicket:link>
+                </li>
+                <li><a href="#"><span>FAQ</span></a></li>
+                <li><a href="#"><span>Connect us</span></a></li>
+                <li><a href="#"><span>Rss</span></a></li>
+            </ul>
             </p>
         </div>
-
-        <div class="column grid_1">
-            <p>
-                Rss
-            </p>
-        </div>
-
     </div>
-
-
-
 
 
     <div class="row">
         <div class="column grid_16">
             <p>
+
+            <div class="breadcrumb">
+                <span class="left"></span>
                 <wicket:container wicket:id="breadCrumbs">
                     [bread crumbs]
                 </wicket:container>
+                <span class="right"></span>
+            </div>
             </p>
         </div>
     </div>
