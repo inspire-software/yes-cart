@@ -70,12 +70,9 @@
 
     <div class="row">
         <div class="column grid_16">
-            <p>
             <ul class="menu">
                 <li>
-                    <wicket:link>
-                        <a href="HomePage.html"><span>Home</span></a>
-                    </wicket:link>
+                    <a href="/yes-shop"><span>Home</span></a>
                 </li>
                 <li><a href="#"><span>Sale</span></a></li>
                 <li><a href="#"><span>Special offer</span></a></li>
@@ -90,25 +87,14 @@
                 <li><a href="#"><span>Connect us</span></a></li>
                 <li><a href="#"><span>Rss</span></a></li>
             </ul>
-            </p>
         </div>
     </div>
 
 
-    <div class="row">
-        <div class="column grid_16">
-            <p>
+    <wicket:container wicket:id="breadCrumbs">
+        [bread crumbs]
+    </wicket:container>
 
-            <div class="breadcrumb">
-                <span class="left"></span>
-                <wicket:container wicket:id="breadCrumbs">
-                    [bread crumbs]
-                </wicket:container>
-                <span class="right"></span>
-            </div>
-            </p>
-        </div>
-    </div>
 
     <div class="row">
         <div class="column grid_4">

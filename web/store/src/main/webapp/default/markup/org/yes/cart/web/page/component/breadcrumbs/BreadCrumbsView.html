@@ -1,12 +1,20 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
 <wicket:panel>
-    <ul id="breadcrumbsId">
-        <li wicket:id="breadcrumbs">
-            <a wicket:id="link"><span wicket:id="linkName"></span></a>
-            <a wicket:id="remLink"><span>x</span></a>
-        </li>
-    </ul>
+    <div class="row">
+        <div class="column grid_16">
+            <div class="breadcrumb">
+                <span class="left"></span>
+                <ul id="breadcrumbsId">
+                    <li wicket:id="breadcrumbs">
+                        <a wicket:id="link"><span wicket:id="linkName"></span></a>
+                        <a wicket:id="remLink"><span>x</span></a>
+                    </li>
+                </ul>
+                <span class="right"></span>
+            </div>
+        </div>
+    </div>
 </wicket:panel>
 </body>
 </html>

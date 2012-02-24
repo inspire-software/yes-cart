@@ -78,22 +78,34 @@ public class BreadCrumbsView extends BaseComponent implements CrumbNamePrefixPro
 
     }
 
+    private List<Crumb> crumbs = null;
+
+    /**
+     * Get the crumbs
+     * @return bread crumbs
+     */
+    public List<Crumb> getCrumbs() {
+        if (crumbs == null) {
+            BreadCrumbsBuilder breadCrumbsBuilder = new BreadCrumbsBuilder(
+                    categoryId,
+                    getPage().getPageParameters(),
+                    allowedAttributeNames,
+                    shopCategoryIds,
+                    this,
+                    categoryService);
+            crumbs = breadCrumbsBuilder.getBreadCrumbs();
+
+        }
+        return crumbs;
+    }
+
     /** {@inheritDoc} */
     protected void onBeforeRender() {
-
-        final BreadCrumbsBuilder breadCrumbsBuilder = new BreadCrumbsBuilder(
-                categoryId,
-                getPage().getPageParameters(),
-                allowedAttributeNames,
-                shopCategoryIds,
-                this,
-                categoryService);
 
         add(
                 new ListView<Crumb>(
                         BREADCRUMBS_LIST,
-                        breadCrumbsBuilder.getBreadCrumbs()
-                ) {
+                        getCrumbs() ) {
 
                     protected void populateItem(final ListItem<Crumb> crumbListItem) {
                         final Crumb crumb = crumbListItem.getModelObject();
@@ -119,6 +131,12 @@ public class BreadCrumbsView extends BaseComponent implements CrumbNamePrefixPro
         );
 
         super.onBeforeRender();
+    }
+
+
+    @Override
+    public boolean isVisible() {
+        return !getCrumbs().isEmpty();
     }
 
     /**
@@ -159,4 +177,6 @@ public class BreadCrumbsView extends BaseComponent implements CrumbNamePrefixPro
         }
         return value;
     }
+
+
 }
