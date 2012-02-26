@@ -64,8 +64,8 @@ public class BaseFilterView extends BaseComponent {
                             final Label valueVabel = new Label(LINK_NAME, keyValue.getFirst().getFirst());
                             valueVabel.setEscapeModelStrings(false);
                             link.add(valueVabel);
+                            link.add(new Label(QUANTITY, keyValue.getFirst().getSecond().toString()));
                             pairListItem.add(link);
-                            pairListItem.add(new Label(QUANTITY, keyValue.getFirst().getSecond().toString()));
                         }
                     }
             );

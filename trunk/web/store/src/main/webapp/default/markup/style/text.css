@@ -77,25 +77,89 @@ p {
 
 
 
-.vmenu{margin:0; padding:0; width:300px; list-style:none;background:rgb(255,0,0);}
+.vmenu {margin:0; padding:0; width:226px; list-style:none;background:rgb(255,0,0);}
 .vmenu li{padding:0; margin:0 0 1px 0; height:40px; display:block; }
-.vmenu li a{text-align:left;height:40px; padding:0px 25px; font:12px Verdana, Arial, Helvetica, sans-serif; color:rgb(0,0,0); display:block; background:url('verMenuImages.png') 0px 0px no-repeat; text-decoration:none;}
+.vmenu li a {
+    text-align: left;
+    height: 40px;
+    padding: 0px 3px;
+    font: 12px Verdana, Arial, Helvetica, sans-serif;
+    color: rgb(0, 0, 0);
+    display: block;
+    background: url('verMenuImages.png') 0px 0px no-repeat;
+    text-decoration: none;
+}
 .vmenu li a:hover{background:url('verMenuImages.png') 0px -40px no-repeat; color:rgb(51,0,0);}
 .vmenu li a.active, .menu li a.active:hover{background:url('verMenuImages.png') 0px -80px no-repeat; color:rgb(0,0,0);}
-.vmenu li a span{line-height:40px;}
+.vmenu li a span {line-height:40px; }
+
+
+
+.filternav {margin:0; padding:0; width:226px; list-style:none;background:rgb(255,0,0);}
+.filternav li{padding:0; margin:0 0 1px 0; height:20px; display:block; }
+.filternav-head {
+    width: 226px;
+    background: rgb(255, 255, 255);
+    margin: 1px 0px 1px 0px;
+    height: 40px;
+    display: block;
+    text-align: center;
+    font: 12px Verdana, Arial, Helvetica, sans-serif;
+    color: rgb(0, 0, 0);
+    display: block;
+    background: url('verMenuImages.png') 0px 0px no-repeat;
+    text-decoration: none;
+    vertical-align : middle;
+    display : table-cell;
+}
+.filternav li a {
+    text-align: left;
+    height: 20px;
+    padding: 0px 3px;
+    font: 9px Verdana, Arial, Helvetica, sans-serif;
+    color: rgb(0, 0, 0);
+    display: block;
+    background: url('verMenuImages.png') 0px 0px no-repeat;
+    text-decoration: none;
+}
+.filternav li a:hover{background:url('verMenuImages.png') 0px -40px no-repeat; color:rgb(51,0,0);}
+.filternav li a.active, .menu li a.active:hover{background:url('verMenuImages.png') 0px -80px no-repeat; color:rgb(0,0,0);}
+.filternav li a span {line-height:20px; }
+.filternav li a em   {line-height:20px; float:right; font-style: normal;}
+.filternav li a em:before   {   content: "[" }
+.filternav li a em:after    {   content: "]" }
+
 
 
 .breadcrumb{position:relative; height:30px; width:100%;}
-.breadcrumb ul{position:relative; margin:0 5px 0 5px; padding:0; height:30px; background:url('breadcrumbImage.png') 0px -30px repeat-x; }
-.breadcrumb ul li{padding:0; margin:0; list-style:none; float:left; height:30px; display:inline;}
+.breadcrumb ul {position:relative; margin:0 5px 0 5px; padding:0; height:30px; background:url('breadcrumbImage.png') 0px -30px repeat-x; }
+.breadcrumb ul li {padding:0; margin:0; list-style:none; float:left; height:30px; display:inline;}
 
-.breadcrumb ul li a          {font:12px Arial, Helvetica, sans-serif; color:rgb(0,0,0); text-decoration:none; line-height:30px; display:block; background:url('breadcrumbImage.png') 100% -60px no-repeat; padding:0 17px 0 15px; }
-.breadcrumb ul li:last-child {font:12px Arial, Helvetica, sans-serif; color:rgb(0,0,0); text-decoration:none; line-height:30px; display:block; background:url('breadcrumbImage.png') 100% -60px no-repeat; padding:0 17px 0 15px; }
+.breadcrumb ul li a:nth-child(even) {
+    font: 10px Verdana, Arial, Helvetica, sans-serif;
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    line-height: 30px;
+    display: block;
+    float:left;
+    background: url('breadcrumbImage.png') 100% -60px no-repeat;
+    padding: 0 17px 0 15px;
+}
+
+.breadcrumb ul li a:nth-child(odd) {
+    font: 10px Verdana, Arial, Helvetica, sans-serif;
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    line-height: 30px;
+    display: block;
+    float:left;
+    background: url('breadcrumbImage.png') 100% -90px no-repeat;
+    padding: 0 1px 0 15px;
+}
+
 
 .breadcrumb ul li a:hover {text-decoration:underline; color:rgb(51,0,0);}
 .breadcrumb ul li a.active{background:none; color:rgb(0,0,0);}
 .breadcrumb ul li a.active:hover {text-decoration:none;}
 .breadcrumb .left{position:absolute; top:0px; left:0px; width:10px; height:30px; display:block; z-index:1; background:url('breadcrumbImage.png') 0% 0px no-repeat;}
 .breadcrumb .right{position:absolute; top:0px; right:0px; width:10px; height:30px; display:block; z-index:1; background:url('breadcrumbImage.png') 100% -90px no-repeat; }
-
-
