@@ -134,10 +134,10 @@ public class BreadCrumbsView extends BaseComponent implements CrumbNamePrefixPro
     }
 
 
-    @Override
+    /*@Override
     public boolean isVisible() {
         return !getCrumbs().isEmpty();
-    }
+    }  */
 
     /**
      * Get the explanation prefix for link text.

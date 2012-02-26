@@ -2,18 +2,13 @@
 <body>
 <wicket:panel>
 
-    <span wicket:id="head">[attr name]</span>
-
-    <ul wicket:id="linkList" class="vmenu">
+    <span wicket:id="head" class="filternav-head">[attr name]</span>
+    <ul wicket:id="linkList" class="filternav">
         <li>
-            <div class="filterdivone">
-                <a wicket:id="link">
-                    <span wicket:id="linkName">[attr value]</span>
-                </a>
-            </div>
-            <div  class="filterdivtwo" align="right">
-                [<span wicket:id="quantity">[qty]</span>]
-            </div>
+            <a wicket:id="link">
+                <span wicket:id="linkName">[attr value]</span>
+                <em wicket:id="quantity">[qty]</em>
+            </a>
         </li>
     </ul>
 
