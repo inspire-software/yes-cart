@@ -1,43 +1,61 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
 <wicket:panel>
-    <table border="1" width="200">
-        <tr>
-            <td>
-                <a wicket:id="productLinkSku">
-                    <span wicket:id="skuCode">[sku num]</span>
-                </a>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <a wicket:id="productLinkName">
-                    <span wicket:id="name">[name]</span>
-                </a>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <div>
-                    <a wicket:id="addToCartLink">
-                        <wicket:message key="add.to.cart">[add one to cart]</wicket:message>
+
+
+    <div class="gr">
+
+        <div class="sku-in-list-row">
+                <div class="sku-column sku-in-list-row-grid_1">
+                    <p>
+                        <wicket:message key="sku.code">[sku.code:]</wicket:message>
+                    </p>
+                </div>
+                <div class="sku-column sku-in-list-row-grid_4">
+                    <p>
+                        <a wicket:id="productLinkSku">
+                            <span wicket:id="skuCode">[sku num]</span>
+                        </a>
+                    </p>
+                </div>
+                <div class="sku-column sku-in-list-row-grid_2">
+                    <p>
+                        <a wicket:id="addToCartLink">
+                            <wicket:message key="add.to.cart">[add one to cart]</wicket:message>
+                        </a>
+                    </p>
+                </div>
+                <div class="sku-column sku-in-list-row-grid_3">
+                    <p>
+                        <wicket:container wicket:id="priceView">
+                            [price]
+                        </wicket:container>
+                    </p>
+                </div>
+        </div>
+
+        <div class="sku-in-list-row">
+            <div class="sku-column sku-in-list-row-grid_5">
+                <p align="center">
+                    <a wicket:id="productLinkImage">
+                        <img border="0" wicket:id="productDefaultImage"/>
                     </a>
-                </div>
-                <div>
-                    <wicket:container wicket:id="priceView">
-                        [price]
-                    </wicket:container>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <a wicket:id="productLinkImage">
-                    <img border="0" wicket:id="productDefaultImage"/>
-                </a>
-            </td>
-        </tr>
-    </table>
+                </p>
+            </div>
+        </div>
+
+        <div class="sku-in-list-row">
+            <div class="sku-column sku-in-list-row-grid_5">
+                <p>
+                    <a wicket:id="productLinkName">
+                        <span wicket:id="name">[name]</span>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+
 </wicket:panel>
 </body>
 </html>

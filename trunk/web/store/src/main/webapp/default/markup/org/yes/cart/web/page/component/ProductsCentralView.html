@@ -1,26 +1,31 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
 <wicket:panel>
-    <table width="100%">
-        <tr>
-            <td align="left">
-                <wicket:container wicket:id="sorter">
-                    [sorter]
-                </wicket:container>
-            </td>
-            <td align="right">
-                <span><wicket:message key="items">[items]</wicket:message></span>
-                <span wicket:id="itemsPerPageList">
-                    <a wicket:id="itemsPerPage"><span wicket:id="items"/></a>
-                </span>
-            </td>
-        </tr>
-        <tr>
-            <td align="center" colspan="2">
-                <span wicket:id="paginator">[dataview navigator]</span>
-            </td>
-        </tr>
-    </table>
+
+    <div class="column grid_10 menu">
+        <table width="98%" align="center">
+            <tr>
+                <td>
+                    <wicket:container wicket:id="sorter">
+                        [sorter]
+                    </wicket:container>
+                </td>
+                <td align="right">
+                    <span><wicket:message key="items">[items]</wicket:message></span>
+                    <wicket:container wicket:id="itemsPerPageList">
+                        <a wicket:id="itemsPerPage"><span wicket:id="items"/></a>
+                    </wicket:container>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="right">
+                    <span wicket:id="paginator">[dataview navigator]</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
     <table cellspacing="0" width="99%" align="right">
         <tr wicket:id="rows">
             <td wicket:id="cols" valign="top">

@@ -163,3 +163,32 @@ p {
 .breadcrumb ul li a.active:hover {text-decoration:none;}
 .breadcrumb .left{position:absolute; top:0px; left:0px; width:10px; height:30px; display:block; z-index:1; background:url('breadcrumbImage.png') 0% 0px no-repeat;}
 .breadcrumb .right{position:absolute; top:0px; right:0px; width:10px; height:30px; display:block; z-index:1; background:url('breadcrumbImage.png') 100% -90px no-repeat; }
+
+
+
+.sku-column {
+    margin: 0 10px 0 10px;
+    overflow: hidden;
+    float: left;
+    display: inline;
+}
+.sku-in-list-row {
+    width: 300px;
+    margin: 0 auto;
+    overflow: hidden;
+    background-color: transparent;
+}
+.sku-in-list-row * { background-color: transparent; }
+
+.sku-in-list-row-grid_1 {width: 34px;  background-color: transparent;}
+.sku-in-list-row-grid_2 {width: 98px; background-color: transparent;}
+.sku-in-list-row-grid_3 {width: 162px; background-color: transparent;}
+.sku-in-list-row-grid_4 {width: 226px; background-color: transparent;}
+.sku-in-list-row-grid_5 {width: 280px; background-color: transparent;}
+
+.sku-in-list-row-grid_1 * { background-color: transparent; }
+.sku-in-list-row-grid_2 * { background-color: transparent;}
+.sku-in-list-row-grid_3 * { background-color: transparent;}
+.sku-in-list-row-grid_4 * { background-color: transparent;}
+.sku-in-list-row-grid_5 * { background-color: transparent;}
+
