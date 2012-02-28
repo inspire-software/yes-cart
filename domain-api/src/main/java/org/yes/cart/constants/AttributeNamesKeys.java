@@ -63,7 +63,7 @@ public interface AttributeNamesKeys {
         String CATEGORY_SUBCATEGORIES_COLUMNS = "CATEGORY_SUBCATEGORIES_COLUMNS";
 
         /**
-         * Category omage attribute name
+         * Category image attribute name
          */
         String CATEGORY_IMAGE = "CATEGORY_IMAGE";
 
@@ -84,7 +84,7 @@ public interface AttributeNamesKeys {
         String CATEGORY_IMAGE_WIDTH = "CATEGORY_IMAGE_WIDTH";
         String CATEGORY_IMAGE_HEIGHT = "CATEGORY_IMAGE_HEIGHT";
 
-        /** Category images width and height.  */
+        /** Product image width and height in category.  */
         String PRODUCT_IMAGE_WIDTH = "PRODUCT_IMAGE_WIDTH";
         String PRODUCT_IMAGE_HEIGHT = "PRODUCT_IMAGE_HEIGHT";
 
