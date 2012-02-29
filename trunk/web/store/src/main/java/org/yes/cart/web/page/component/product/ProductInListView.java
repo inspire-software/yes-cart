@@ -40,6 +40,7 @@ public class ProductInListView extends BaseComponent {
     private final static String SKU_CODE_LABEL = "skuCode";
     private final static String PRODUCT_LINK_NAME = "productLinkName";
     private final static String NAME_LABEL = "name";
+    private final static String DESCRIPTION_LABEL = "description";
     private final static String ADD_TO_CART_LINK = "addToCartLink";
     private final static String PRICE_VIEW = "priceView";
     private final static String PRODUCT_LINK_IMAGE = "productLinkImage";
@@ -96,13 +97,17 @@ public class ProductInListView extends BaseComponent {
         final PageParameters linkToProductParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters());
         linkToProductParameters.set(WebParametersKeys.PRODUCT_ID, product.getId());
 
-        final String width = product.getThumbnailImageWidth(category);
-        final String height = product.getThumbnailImageHeight(category);
+        final String width = product.getDefaultImageWidth(category);
+        final String height = product.getDefaultImageHeight(category);
 
         add(
                 new BookmarkablePageLink<HomePage>(PRODUCT_LINK_SKU, HomePage.class, linkToProductParameters).add(
                         new Label(SKU_CODE_LABEL, product.getCode())
                 )
+        );
+        
+        add (
+            new Label(DESCRIPTION_LABEL, product.getDescription())
         );
 
         add(

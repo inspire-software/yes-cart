@@ -137,7 +137,7 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
      */
     public String getThumbnailImageWidth(final Category category) {
         return categoryService.getCategoryAttributeRecursive(category,
-                AttributeNamesKeys.Category.PRODUCT_IMAGE_WIDTH,
+                AttributeNamesKeys.Category.PRODUCT_IMAGE_TUMB_WIDTH,
                 PRODUCT_THUMBNAIL_IMAGE_WIDTH);
     }
 
@@ -146,7 +146,7 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
      */
     public String getThumbnailImageHeight(final Category category) {
         return categoryService.getCategoryAttributeRecursive(category,
-                AttributeNamesKeys.Category.PRODUCT_IMAGE_HEIGHT,
+                AttributeNamesKeys.Category.PRODUCT_IMAGE_TUMB_HEIGHT,
                 PRODUCT_THUMBNAIL_IMAGE_HEIGHT);
     }
 
