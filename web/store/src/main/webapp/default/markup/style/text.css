@@ -75,9 +75,13 @@ p {
 .menu li a.active, .menu li a.active:hover{line-height:30px; font:12px Verdana, Arial, Helvetica, sans-serif; background:url('topMenuImages.png') 0px -90px no-repeat; color:rgb(0,0,0);}
 .menu li a.active span, .menu li a.active:hover span {background:url('topMenuImages.png') 100% -90px no-repeat;  color:rgb(0,0,0);}
 
-
-
-.vmenu {margin:0; padding:0; width:226px; list-style:none;background:rgb(255,0,0);}
+.vmenu {
+    margin: 0;
+    padding: 0;
+    /*width: 226px; */
+    list-style: none;
+    background: rgb(255, 0, 0);
+}
 .vmenu li{padding:0; margin:0 0 1px 0; height:40px; display:block; }
 .vmenu li a {
     text-align: left;
@@ -95,10 +99,10 @@ p {
 
 
 
-.filternav {margin:0; padding:0; width:226px; list-style:none;background:rgb(255,0,0);}
+.filternav {margin:0; padding:0; width:236px; list-style:none;background:rgb(255,0,0);}
 .filternav li{padding:0; margin:0 0 1px 0; height:20px; display:block; }
 .filternav-head {
-    width: 226px;
+    width: 236px;
     background: rgb(255, 255, 255);
     margin: 1px 0px 1px 0px;
     height: 40px;
@@ -172,16 +176,19 @@ p {
     float: left;
     display: inline;
 }
+
 .sku-in-list-row {
     width: 300px;
-    margin: 0 auto;
+    margin: 1px 1px 1px 1px;
+    padding: 5px 5px 5px 5px;
     overflow: hidden;
     background-color: transparent;
 }
+
 .sku-in-list-row * { background-color: transparent; }
 
 .sku-in-list-row-grid_1 {width: 34px;  background-color: transparent;}
-.sku-in-list-row-grid_2 {width: 98px; background-color: transparent;}
+.sku-in-list-row-grid_2 {width: 98px;  background-color: transparent;}
 .sku-in-list-row-grid_3 {width: 162px; background-color: transparent;}
 .sku-in-list-row-grid_4 {width: 226px; background-color: transparent;}
 .sku-in-list-row-grid_5 {width: 280px; background-color: transparent;}
@@ -192,3 +199,27 @@ p {
 .sku-in-list-row-grid_4 * { background-color: transparent;}
 .sku-in-list-row-grid_5 * { background-color: transparent;}
 
+.sku-in-list {
+    background: #999999; /* for non-css3 browsers */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#ffffff', endColorstr = '#efefef'); /* for IE */
+    background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#efefef)); /* for webkit browsers */
+    background: -moz-linear-gradient(top, #ffffff, #efefef); /* for firefox 3.6+ */
+    width: 300px;
+    border: solid 1px #d6d6d6;
+    margin-top: 2px;
+    margin-left: 3px;
+}
+
+.sku-in-list-description {
+    height: 120px;
+    overflow: hidden;
+}
+
+.sku-in-list-description div p:before  {   content: "&npsp;&npsp;&npsp;&npsp;" }
+
+.sku-in-list-head {
+    padding-top: 2px;
+    padding-right: 5px;
+    padding-bottom: 2px;
+    padding-left: 5px;
+}

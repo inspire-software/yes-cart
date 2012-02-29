@@ -88,6 +88,10 @@ public interface AttributeNamesKeys {
         String PRODUCT_IMAGE_WIDTH = "PRODUCT_IMAGE_WIDTH";
         String PRODUCT_IMAGE_HEIGHT = "PRODUCT_IMAGE_HEIGHT";
 
+        /** Product image width and height in category.  */
+        String PRODUCT_IMAGE_TUMB_WIDTH = "PRODUCT_IMAGE_TUMB_WIDTH";
+        String PRODUCT_IMAGE_TUMB_HEIGHT = "PRODUCT_IMAGE_TUMB_HEIGHT";
+
         /** Product columns in grid */
         String CATEGORY_PRODUCTS_COLUMNS = "CATEGORY_PRODUCTS_COLUMNS";
 

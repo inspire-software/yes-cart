@@ -2,4 +2,5 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 	<entry key="add.to.cart">В корзину</entry>
+    <entry key="sku.code">Код</entry>
 </properties>
