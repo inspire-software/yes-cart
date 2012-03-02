@@ -55,6 +55,7 @@ public class SkuCentralView extends AbstractCentralView {
     private final static String SKU_CODE_LABEL = "skuCode";
     /** Product name */
     private final static String PRODUCT_NAME_LABEL = "name";
+    private final static String PRODUCT_NAME_LABEL2 = "name2";
     /** Product description */
     private final static String PRODUCT_DESCRIPTION_LABEL = "description";
     /** Product image panel */
@@ -130,20 +131,17 @@ public class SkuCentralView extends AbstractCentralView {
 
         add(
                 new PriceView(PRICE_VIEW, new Model<SkuPrice>(getSkuPrice()), true)
-        );
-        add(
+        ).add(
                 new PriceTierView(PRICE_TIERS_VIEW, getSkuPrices())
-        );
-        add(
+        ).add(
                 new SkuListView(SKU_LIST_VIEW, product.getSku(), sku, isProduct)
-        );
-        add(
+        ).add(
                 new Label(SKU_CODE_LABEL, sku.getCode())
-        );
-        add(
+        ).add(
                 new Label(PRODUCT_NAME_LABEL, isProduct?product.getName():sku.getName())
-        );
-        add(
+        ).add(
+                new Label(PRODUCT_NAME_LABEL2, isProduct?product.getName():sku.getName())
+        ).add(
                 new Label(PRODUCT_DESCRIPTION_LABEL, isProduct?product.getDescription():sku.getDescription())
         );
         
@@ -152,17 +150,11 @@ public class SkuCentralView extends AbstractCentralView {
 
         add(
                 new BookmarkablePageLink<HomePage>(ADD_TO_CART_LINK, HomePage.class, addToCartParameters)
-        );
-
-        add(
+        ).add(
                 new SkuAttributesView(SKU_ATTR_VIEW, sku, isProduct)
-        );
-
-        add(
+        ).add(
                 new ImageView(PRODUCT_IMAGE_VIEW, getDepictable())
-        );
-
-        add(
+        ).add(
                 new ProductAssociationsView(ACCESSORIES_VIEW, Association.ACCESSORIES).setVisible(true /*TODO is product not accessory */)
         );
 

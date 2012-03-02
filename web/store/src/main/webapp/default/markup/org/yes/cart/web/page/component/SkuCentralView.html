@@ -3,84 +3,89 @@
 <wicket:panel>
 
 
-	<div class="column grid_10 menu sku-in-list-head">
-		<table width="96%" align="center">
-			<tr>
-				<td>
-					<span wicket:id="name">[product or sku name]</span>
-				</td>				
-				<td align="right">
-					<wicket:message key="sku.code">[sku.code:]</wicket:message>
-					<span wicket:id="skuCode">[sku num]</span>
-				</td>								
-			</tr>
-		</table>
-	</div>			
-
-	
-	<div class="sku">
-		<div class="sku-row">
-			<div class="sku-column sku-row-grid_5">			
-				<wicket:container wicket:id="imageView">
-					[product image view]
-				</wicket:container>	
-			</div>
-			<div class="sku-column sku-row-grid_2">		
-				<a wicket:id="addToCartLink">
-					<wicket:message key="add.to.cart">[add one to cart]</wicket:message>
-				</a>
-			</div>			
-			<div class="sku-column sku-row-grid_3">		
-				<wicket:container wicket:id="priceView">
-					[price]
-				</wicket:container>
-			</div>			
-
-			<div class="sku-column sku-row-grid_5">		
-					<wicket:container wicket:id="description">
-						[product or sku description]
-					</wicket:container>
-			</div>									
-			
-		</div>
-		<div  class="sku-row">
-		
-			<div class="sku-column sku-row-grid_5">		
-				
-				<hr>
-				
-			<div class="sku-column sku-row-grid_5">		
-				<wicket:container wicket:id="skuList">
-					[product variation / sku list]
-				</wicket:container>
-			</div>			
-			
-			<div class="sku-column sku-row-grid_5">		
-					<wicket:container wicket:id="priceTiersView">
-						[price tiers view]
-					</wicket:container>
-			</div>									
+    <div class="column grid_10 menu sku-in-list-head">
+        <table width="96%" align="center">
+            <tr>
+                <td>
+                    <span wicket:id="name">[product or sku name]</span>
+                </td>
+                <td align="right">
+                    <wicket:message key="sku.code">[sku.code:]</wicket:message>
+                    <span wicket:id="skuCode">[sku num]</span>
+                </td>
+            </tr>
+        </table>
+    </div>
 
 
+    <div class="sku">
+
+        <div class="sku-row">
+
+            <div class="sku-column sku-row-grid_5">
+                <wicket:container wicket:id="imageView">
+                    [product image view]
+                </wicket:container>
+            </div>
+
+            <div class="sku-column sku-row-grid_5">
+                <span wicket:id="name2">[product or sku name 2]</span>
+            </div>
 
 
-					<wicket:container wicket:id="skuAttrView">
-						[attributes view]
-					</wicket:container>
+            <div class="sku-column sku-row-grid_2">
+                <a wicket:id="addToCartLink">
+                    <wicket:message key="add.to.cart">[add one to cart]</wicket:message>
+                </a>
+            </div>
+            <div class="sku-column sku-row-grid_3">
+                <wicket:container wicket:id="priceView">
+                    [price]
+                </wicket:container>
+            </div>
+            <div class="sku-column sku-row-grid_5">
+                <wicket:container wicket:id="priceTiersView">
+                    [price tiers view]
+                </wicket:container>
+            </div>
 
-					<wicket:container wicket:id="accessoriesView">
-						[accessories]
-					</wicket:container>
-				
-				<hr>
-				
-			</div>			
-		
-		
-		</div>
+        </div>
+        <div class="sku-row">
 
-    </div>			
+            <div class="sku-column sku-row-grid_10">
 
+
+                <wicket:container wicket:id="skuList">
+                    [product variation / sku list]
+                </wicket:container>
+            </div>
+
+        </div>
+
+
+        <div class="sku-row">
+
+            <div class="sku-column sku-row-grid_10">
+
+                <wicket:container wicket:id="description">
+                    [product or sku description]
+                </wicket:container>
+
+
+
+
+
+                <wicket:container wicket:id="skuAttrView">
+                    [attributes view]
+                </wicket:container>
+
+                <wicket:container wicket:id="accessoriesView">
+                    [accessories]
+                </wicket:container>
+
+            </div>
+        </div>
+    </div>
 
 </wicket:panel>
 </body>
