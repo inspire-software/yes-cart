@@ -255,10 +255,13 @@ p {
 .sku-row-grid_3 {width: 162px; background-color: transparent;}
 .sku-row-grid_4 {width: 226px; background-color: transparent;}
 .sku-row-grid_5 {width: 280px; background-color: transparent;}
+.sku-row-grid_10 {width: 570px; background-color: grey;}
 
 .sku-row-grid_1 * { background-color: transparent; }
 .sku-row-grid_2 * { background-color: transparent;}
 .sku-row-grid_3 * { background-color: transparent;}
 .sku-row-grid_4 * { background-color: transparent;}
 .sku-row-grid_5 * { background-color: transparent;}
+.sku-row-grid_10 * { background-color: transparent;}
 
+/* ------------------------------------------------ tabs ------------------------------------------ */
