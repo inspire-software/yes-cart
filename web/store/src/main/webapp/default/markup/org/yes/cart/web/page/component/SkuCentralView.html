@@ -1,7 +1,7 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
-<wicket:panel>
 
+<wicket:panel>
 
     <div class="column grid_10 menu sku-in-list-head">
         <table width="96%" align="center">
@@ -64,25 +64,47 @@
 
 
         <div class="sku-row">
-
             <div class="sku-column sku-row-grid_10">
+                <div id="content">
+                    <div id="wrapper">
+                        <div id="navigation" style="display:none;">
+                            <ul>
+                                <li class="selected">
+                                    <a href="#">Description</a>
+                                </li>
+                                <li>
+                                    <a href="#">Details</a>
+                                </li>
+                                <li>
+                                    <a href="#">Accessories</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div id="steps">
+                            <form id="formElem" name="formElem" action="#" method="post">
+                                <fieldset class="step">
+                                    <legend>Description</legend>
+                                    <wicket:container wicket:id="description">
+                                        [product or sku description]
+                                    </wicket:container>
+                                </fieldset>
+                                <fieldset class="step">
+                                    <legend>Details</legend>
+                                    <wicket:container wicket:id="skuAttrView">
+                                        [attributes view]
+                                    </wicket:container>
+                                </fieldset>
+                                <fieldset class="step">
+                                    <legend>Accessories</legend>
+                                    <wicket:container wicket:id="accessoriesView">
+                                        [accessories]
+                                    </wicket:container>
+                                </fieldset>
+                            </form>
+                        </div>
 
-                <wicket:container wicket:id="description">
-                    [product or sku description]
-                </wicket:container>
-
-
-
-
-
-                <wicket:container wicket:id="skuAttrView">
-                    [attributes view]
-                </wicket:container>
-
-                <wicket:container wicket:id="accessoriesView">
-                    [accessories]
-                </wicket:container>
-
+                    </div>
+                </div>
             </div>
         </div>
     </div>
