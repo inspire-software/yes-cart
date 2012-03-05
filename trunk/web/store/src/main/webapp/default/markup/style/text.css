@@ -255,7 +255,7 @@ p {
 .sku-row-grid_3 {width: 162px; background-color: transparent;}
 .sku-row-grid_4 {width: 226px; background-color: transparent;}
 .sku-row-grid_5 {width: 280px; background-color: transparent;}
-.sku-row-grid_10 {width: 570px; background-color: grey;}
+.sku-row-grid_10 {width: 570px; background-color: transparent;}
 
 .sku-row-grid_1 * { background-color: transparent; }
 .sku-row-grid_2 * { background-color: transparent;}
@@ -265,3 +265,126 @@ p {
 .sku-row-grid_10 * { background-color: transparent;}
 
 /* ------------------------------------------------ tabs ------------------------------------------ */
+
+#content{
+    margin:15px auto;
+    text-align:center;
+    width:600px;
+    position:relative;
+    height:100%;
+}
+#wrapper{
+    -moz-box-shadow:0px 0px 3px #aaa;
+    -webkit-box-shadow:0px 0px 3px #aaa;
+    box-shadow:0px 0px 3px #aaa;
+    border:2px solid #fff;
+    background-color:#f9f9f9;
+    width:600px;
+    overflow:hidden;
+}
+#steps{
+    width:600px;
+	/*height:320px;*/
+    overflow:hidden;
+}
+.step{
+    float:left;
+    width:600px;
+	/*height:320px;*/
+}
+#navigation{
+    height:40px;
+    background-color:#e9e9e9;
+    border-top:1px solid #fff;
+}
+#navigation ul{
+    list-style:none;
+	float:left;
+	margin-left:22px;
+}
+#navigation ul li{
+	float:left;
+    
+    position:relative;
+	
+}
+#navigation ul li a{
+    display:block;
+    height:40px;
+    background-color:#444;
+    color:#777;
+    outline:none;
+    font-weight:bold;
+    text-decoration:none;
+    line-height:40px;
+    padding:0px 20px;
+    
+    background:#f0f0f0;
+    background:
+        -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0.09, rgb(240,240,240)),
+        color-stop(0.55, rgb(227,227,227)),
+        color-stop(0.78, rgb(240,240,240))
+        );
+    background:
+        -moz-linear-gradient(
+        center bottom,
+        rgb(240,240,240) 9%,
+        rgb(227,227,227) 55%,
+        rgb(240,240,240) 78%
+        )
+}
+#navigation ul li a:hover,
+#navigation ul li.selected a{
+    background:#d8d8d8;
+    color:#666;
+    text-shadow:1px 1px 1px #fff;
+}
+span.checked{
+    
+    position:absolute;
+    top:0px;
+    left:1px;
+    width:20px;
+    height:20px;
+}
+span.error{
+   
+    position:absolute;
+    top:0px;
+    left:1px;
+    width:20px;
+    height:20px;
+}
+#steps form fieldset{
+    border:none;
+    padding-bottom:20px;
+}
+#steps form legend{
+    text-align:left;
+   
+    color:#666;
+    font-size:24px;
+    text-shadow:1px 1px 1px #fff;
+    font-weight:bold;
+    float:left;
+    width:590px;
+    padding:5px 0px 5px 10px;
+    
+}
+#steps form p{
+    float:left;
+    clear:both;
+    margin:5px 0px;
+    background-color:#f4f4f4;
+    border:1px solid #fff;
+    width:400px;
+    padding:10px;
+    margin-left:100px;
+    -moz-box-shadow:0px 0px 3px #aaa;
+    -webkit-box-shadow:0px 0px 3px #aaa;
+    box-shadow:0px 0px 3px #aaa;
+}

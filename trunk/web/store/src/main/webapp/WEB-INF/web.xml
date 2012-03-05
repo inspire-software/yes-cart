@@ -172,7 +172,7 @@
         </init-param>
         <init-param>
             <param-name>ignorePaths</param-name>
-            <param-value>services/</param-value>
+            <param-value>services/,js/</param-value>
         </init-param>
     </filter>
 
