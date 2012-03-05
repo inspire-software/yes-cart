@@ -7,7 +7,7 @@ body {
 a {
     color: black;
     text-decoration: none;
-    border-bottom: 1px solid #888888;
+    border-bottom: 2px solid #cccccc;
 }
 
 a:hover {
@@ -268,8 +268,7 @@ p {
 
 #content{
     margin:15px auto;
-    text-align:center;
-    width:600px;
+    width:580px;
     position:relative;
     height:100%;
 }
@@ -279,18 +278,18 @@ p {
     box-shadow:0px 0px 3px #aaa;
     border:2px solid #fff;
     background-color:#f9f9f9;
-    width:600px;
+    width:580px;
     overflow:hidden;
 }
 #steps{
-    width:600px;
-	/*height:320px;*/
+    width:568px;
+    /*height:320px;*/
     overflow:hidden;
 }
 .step{
     float:left;
-    width:600px;
-	/*height:320px;*/
+    width:568px;
+    /*height:320px;*/
 }
 #navigation{
     height:40px;
@@ -299,52 +298,52 @@ p {
 }
 #navigation ul{
     list-style:none;
-	float:left;
-	margin-left:22px;
+    float:left;
+    margin-left:22px;
 }
 #navigation ul li{
-	float:left;
-    
+    float:left;
+
     position:relative;
-	
+
 }
 #navigation ul li a{
     display:block;
     height:40px;
     background-color:#444;
-    color:#777;
+    /*color:#777;*/
     outline:none;
-    font-weight:bold;
+    /*font-weight:bold;*/
     text-decoration:none;
     line-height:40px;
     padding:0px 20px;
-    
+
     background:#f0f0f0;
     background:
         -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0.09, rgb(240,240,240)),
-        color-stop(0.55, rgb(227,227,227)),
-        color-stop(0.78, rgb(240,240,240))
+            linear,
+            left bottom,
+            left top,
+            color-stop(0.09, rgb(240,240,240)),
+            color-stop(0.55, rgb(227,227,227)),
+            color-stop(0.78, rgb(240,240,240))
         );
     background:
         -moz-linear-gradient(
-        center bottom,
-        rgb(240,240,240) 9%,
-        rgb(227,227,227) 55%,
-        rgb(240,240,240) 78%
+            center bottom,
+            rgb(240,240,240) 9%,
+            rgb(227,227,227) 55%,
+            rgb(240,240,240) 78%
         )
 }
 #navigation ul li a:hover,
 #navigation ul li.selected a{
     background:#d8d8d8;
-    color:#666;
+    /*color:#666;*/
     text-shadow:1px 1px 1px #fff;
 }
 span.checked{
-    
+
     position:absolute;
     top:0px;
     left:1px;
@@ -352,7 +351,7 @@ span.checked{
     height:20px;
 }
 span.error{
-   
+
     position:absolute;
     top:0px;
     left:1px;
@@ -365,15 +364,15 @@ span.error{
 }
 #steps form legend{
     text-align:left;
-   
-    color:#666;
-    font-size:24px;
+
+    color:#555555;
+    font-size:18px;
     text-shadow:1px 1px 1px #fff;
-    font-weight:bold;
+    /*font-weight:bold;*/
     float:left;
     width:590px;
-    padding:5px 0px 5px 10px;
-    
+    padding:10px 0px 10px 10px;
+
 }
 #steps form p{
     float:left;
