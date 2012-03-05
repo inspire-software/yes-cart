@@ -1,19 +1,13 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
 <wicket:panel>
-    <table border="1">
-        <tr>
-            <th colspan="2"><span wicket:id="head"/></th>
-        </tr>
-        <tr wicket:id="keyValues">
-            <td>
-                <span wicket:id="key"/>
-            </td>
-            <td align="right">
-                <span wicket:id="value"/>
-            </td>
-        </tr>
-    </table>
+    <div>
+        <span wicket:id="head"/>
+    </div>
+    <div wicket:id="keyValues">
+        <span wicket:id="key"/>
+        <span wicket:id="value"/>
+    </div>
 </wicket:panel>
 </body>
 </html>
