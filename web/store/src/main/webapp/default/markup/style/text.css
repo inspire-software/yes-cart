@@ -134,6 +134,37 @@ p {
 .filternav li a em:after    {   content: "]" }
 
 
+.attrhead {
+    /*width: 560px;
+    background: rgb(255, 255, 255);
+	margin-top: 10px;
+    margin: 1px 0px 1px 0px;
+    height: 25px;
+    display: block;
+    text-align: center;
+    font: 12px Verdana, Arial, Helvetica, sans-serif;
+    color: rgb(0, 0, 0);
+    display: block;
+    background: url('verMenuImages.png') 0px 0px repeat-x;
+    text-decoration: none;
+    vertical-align : middle;
+    display : table-cell;*/
+	display : none;
+}
+.attr   {
+    text-align: left;
+    height: 20px;
+    padding: 0px 3px;
+    font: 9px Verdana, Arial, Helvetica, sans-serif;
+    color: rgb(0, 0, 0);
+    display: block;
+    /*background: url('verMenuImages.png') 0px 0px no-repeat;*/
+    text-decoration: none;
+}
+.attr span{line-height:20px;}
+.attr em   {line-height:20px; float:right; font-style: normal;}
+
+
 
 .breadcrumb{position:relative; height:30px; width:100%;}
 .breadcrumb ul {position:relative; margin:0 5px 0 5px; padding:0; height:30px; background:url('breadcrumbImage.png') 0px -30px repeat-x; }
