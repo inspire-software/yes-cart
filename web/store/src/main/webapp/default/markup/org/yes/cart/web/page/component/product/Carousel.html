@@ -1,18 +1,21 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
 <wicket:panel>
-    <table border="1">
-        <tr>
-            <td wicket:id="products">
+    <div id="slider1">
+        <ul wicket:id="products" id="slider1Content">
+            <li class="slider1Image">
                 <a wicket:id="productLinkImage">
                     <img wicket:id="productDefaultImage" hspace="5" vspace="5"/>
                 </a>
-                <a wicket:id="productLinkName">
-                    <span wicket:id="name"/>
-                </a>
-            </td>
-        </tr>
-    </table>
+                <span class="left"><strong>Title text 1</strong><br />Content text...</span>
+
+
+            </li>
+
+            <a wicket:id="productLinkName"><span wicket:id="name"/></a>
+        </ul>
+    </div>
+
 </wicket:panel>
 </body>
 </html>
