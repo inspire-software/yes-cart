@@ -135,8 +135,8 @@ p {
 
 
 .attrhead {
-    /*width: 560px;
-    background: rgb(255, 255, 255);
+    width: 560px;
+   /* background: rgb(255, 255, 255);
 	margin-top: 10px;
     margin: 1px 0px 1px 0px;
     height: 25px;
@@ -149,7 +149,9 @@ p {
     text-decoration: none;
     vertical-align : middle;
     display : table-cell;*/
-	display : none;
+	/*display : none;*/
+	font: 9px Verdana, Arial, Helvetica, sans-serif;
+	font-weight: bold;
 }
 .attr   {
     text-align: left;
