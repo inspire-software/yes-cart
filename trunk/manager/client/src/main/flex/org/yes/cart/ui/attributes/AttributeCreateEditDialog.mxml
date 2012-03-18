@@ -60,6 +60,7 @@
 
         import mx.binding.utils.BindingUtils;
         import mx.managers.PopUpManager;
+        import com.hexagonstar.util.debug.Debug;
 
 
         private var attrbuteDTO:AttributeDTOImpl;

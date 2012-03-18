@@ -105,6 +105,8 @@
     <mx:Script><![CDATA[
         import com.hexagonstar.util.debug.Debug;
 
+        import mx.core.FlexGlobals;
+
         import org.yes.cart.constants.AttributeGroupNames;
         import org.yes.cart.impl.AttrValueProductDTOImpl;
         import org.yes.cart.impl.AttributeDTOImpl;
@@ -176,7 +178,7 @@
          * @return nothing
          */
         private function createBtnClickHandler(event:MouseEvent):void {
-            productCreateDialog = ProductCreateDialog(PopUpManager.createPopUp(this, ProductCreateDialog, true));
+            productCreateDialog = ProductCreateDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), ProductCreateDialog, true));
             productCreateDialog.brandComboBox.dataProvider = remoteBrandService.getAll.lastResult;
             productCreateDialog.productTypeComboBox.dataProvider = remoteProductTypeService.getAll.lastResult;
             productCreateDialog.availablilityComboBox.dataProvider = remoteAvailabilityService.getAll.lastResult;

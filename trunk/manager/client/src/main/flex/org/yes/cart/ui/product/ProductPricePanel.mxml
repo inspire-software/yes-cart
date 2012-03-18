@@ -215,6 +215,8 @@
 		<![CDATA[
         import com.hexagonstar.util.debug.Debug;
 
+        import mx.core.FlexGlobals;
+
         import org.yes.cart.impl.ProductDTOImpl;
         import org.yes.cart.impl.ProductSkuDTOImpl;
         import org.yes.cart.impl.ShopDTOImpl;
@@ -409,7 +411,7 @@
          * @return nothing
          */
         private function editPrice(event:MouseEvent):void {
-            createPriceDialog = CreatePriceDialog(PopUpManager.createPopUp(this, CreatePriceDialog, true));
+            createPriceDialog = CreatePriceDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CreatePriceDialog, true));
             createPriceDialog.skuComboBox.dataProvider = remoteProductSkuService.getAllProductSkus.lastResult;
             for (var i:int = 0; i < remoteProductSkuService.getAllProductSkus.lastResult.length; i++) {
                 var skuCandidate:ProductSkuDTOImpl = ProductSkuDTOImpl(remoteProductSkuService.getAllProductSkus.lastResult[i]);
@@ -436,7 +438,7 @@
          * @return nothing
          */
         private function addPrice(event:MouseEvent):void {
-            createPriceDialog = CreatePriceDialog(PopUpManager.createPopUp(this, CreatePriceDialog, true));
+            createPriceDialog = CreatePriceDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CreatePriceDialog, true));
             createPriceDialog.skuComboBox.dataProvider = remoteProductSkuService.getAllProductSkus.lastResult;
             createPriceDialog.currency = defaultCurrencyLabel.text;
             createPriceDialog.shopId = shopDTOImpl.shopId;

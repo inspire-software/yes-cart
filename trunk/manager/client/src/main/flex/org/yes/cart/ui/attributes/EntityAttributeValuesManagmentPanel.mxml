@@ -5,6 +5,8 @@
 		<![CDATA[
         import com.hexagonstar.util.debug.Debug;
 
+        import mx.core.FlexGlobals;
+
         import org.yes.cart.constants.AttributeGroupNames;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
 
@@ -192,7 +194,7 @@
          * @return nothing
          */
         private function addAttributeValue(event:flash.events.MouseEvent):void {
-            newAttrPopUp = AttributeValueAddDialog(PopUpManager.createPopUp(this, AttributeValueAddDialog, true));
+            newAttrPopUp = AttributeValueAddDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), AttributeValueAddDialog, true));
             newAttrPopUp.okBtn.addEventListener("click", selectAttr);
             newAttrPopUp.attributeComboBox.dataProvider = remoteAttributeService.findAttributesWithMultipleValues.lastResult;
             //newAttrPopUp.createNewAttr(currentAttributeDTO);
@@ -305,6 +307,8 @@
                                 <![CDATA[
                                     import com.hexagonstar.util.debug.Debug;
 
+                                    import mx.core.FlexGlobals;
+
                                     import org.yes.cart.ui.attributes.valuedialog.ImageDialog;
                                     import org.yes.cart.ui.attributes.valuedialog.SimpleTextDialog;
 
@@ -326,7 +330,7 @@
                                     private function openPopup():void {
                                         var clz:Class = getPopUpClassName();
 
-                                        popUp = ValueDialog(PopUpManager.createPopUp(DisplayObject(Application.application), clz, true));
+                                        popUp = ValueDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), clz, true));
                                         popUp.value = data.val;
                                         popUp.windowTitle = data.attributeDTO.name;
                                         popUp.code = outerDocument.entityCode;

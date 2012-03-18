@@ -88,6 +88,8 @@
     <mx:Script><![CDATA[
         import com.hexagonstar.util.debug.Debug;
 
+        import mx.core.FlexGlobals;
+
         import org.yes.cart.impl.ProductDTOImpl;
         import org.yes.cart.impl.SkuWarehouseDTOImpl;
         import org.yes.cart.impl.WarehouseDTOImpl;
@@ -188,7 +190,7 @@
          * @return
          */
         private function editQuantity(event:MouseEvent):void {
-            createQuantityDialog = CreateQuantityDialog(PopUpManager.createPopUp(this, CreateQuantityDialog, true));
+            createQuantityDialog = CreateQuantityDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CreateQuantityDialog, true));
             createQuantityDialog.skuComboBox.dataProvider = remoteProductSkuService.getAllProductSkus.lastResult;
             createQuantityDialog.saveBtn.addEventListener("click", updateSkuWarehouseServiceCall);
             createQuantityDialog.editSkuQuantity(selectedSkuWarehouse);
@@ -203,7 +205,7 @@
          * @return
          */
         private function addQuantity(event:MouseEvent):void {
-            createQuantityDialog = CreateQuantityDialog(PopUpManager.createPopUp(this, CreateQuantityDialog, true));
+            createQuantityDialog = CreateQuantityDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CreateQuantityDialog, true));
             createQuantityDialog.skuComboBox.dataProvider = remoteProductSkuService.getAllProductSkus.lastResult;
             createQuantityDialog.saveBtn.addEventListener("click", createSkuWarehouseServiceCall);
             createQuantityDialog.createSkuQuantity();

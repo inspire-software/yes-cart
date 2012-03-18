@@ -3,4 +3,7 @@
 <properties>
 	<entry key="add.to.cart">В корзину</entry>
     <entry key="sku.code">Код</entry>
+    <entry key="description">Описание</entry>
+    <entry key="details">Детали</entry>
+    <entry key="accessories">Аксессуары</entry>
 </properties>

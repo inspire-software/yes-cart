@@ -44,6 +44,8 @@
 		<![CDATA[
         import com.hexagonstar.util.debug.Debug;
 
+        import mx.core.FlexGlobals;
+
         import org.yes.cart.util.CurrencyProvider;
         import org.yes.cart.util.PriceRangeList;
 
@@ -103,7 +105,7 @@
         }
 
         private function showCurrenies(event:flash.events.MouseEvent):void {
-            selectCurrencyDialog = SelectCurrencyDialog(PopUpManager.createPopUp(this, SelectCurrencyDialog, true));
+            selectCurrencyDialog = SelectCurrencyDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), SelectCurrencyDialog, true));
             selectCurrencyDialog.currenciesComboBox.dataProvider = CurrencyProvider.getAllCurrencyCodes();
             selectCurrencyDialog.okBtn.addEventListener("click", newCurrencySelected);
             PopUpManager.centerPopUp(selectCurrencyDialog);

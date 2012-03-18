@@ -6,6 +6,8 @@
     <mx:Script><![CDATA[
         import com.hexagonstar.util.debug.Debug;
 
+        import mx.core.FlexGlobals;
+
         import org.yes.cart.impl.CarrierDTOImpl;
         import org.yes.cart.impl.CarrierSlaDTOImpl;
         import org.yes.cart.util.CloneUtil;
@@ -94,7 +96,7 @@
 
         private function createNewCarrierClickHandler(event:flash.events.MouseEvent):void {
 
-            carrierCreateEditDialog = CarrierCreateEditDialog(PopUpManager.createPopUp(this, CarrierCreateEditDialog, true));
+            carrierCreateEditDialog = CarrierCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CarrierCreateEditDialog, true));
             carrierCreateEditDialog.newCarrierFlag = true;
             carrierCreateEditDialog.carrierDTOImpl = new CarrierDTOImpl();
             carrierCreateEditDialog.saveBtn.addEventListener("click", createNewCarrier);
@@ -130,7 +132,7 @@
 
         private function editCarrierClickHandler(event:flash.events.MouseEvent):void {
 
-            carrierCreateEditDialog = CarrierCreateEditDialog(PopUpManager.createPopUp(this, CarrierCreateEditDialog, true));
+            carrierCreateEditDialog = CarrierCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CarrierCreateEditDialog, true));
             carrierCreateEditDialog.newCarrierFlag = false;
             carrierCreateEditDialog.carrierDTOImpl = CarrierDTOImpl(CloneUtil.clone(carrierDTO));
             carrierCreateEditDialog.saveBtn.addEventListener("click", updateCarrier);
@@ -210,7 +212,7 @@
 
         private function createNewCarrierSlaClickHandler(event:flash.events.MouseEvent):void {
 
-            carrierSlaCreateEditDialog = CarrierSlaCreateEditDialog(PopUpManager.createPopUp(this, CarrierSlaCreateEditDialog, true));
+            carrierSlaCreateEditDialog = CarrierSlaCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CarrierSlaCreateEditDialog, true));
             carrierSlaCreateEditDialog.newCarrierSlaFlag = true;
             carrierSlaCreateEditDialog.carrierSlaDTOImpl = new CarrierSlaDTOImpl();
             carrierSlaCreateEditDialog.carrierSlaDTOImpl.carrierId = carrierDTO.carrierId
@@ -246,7 +248,7 @@
 
         private function editCarrierSlaClickHandler(event:flash.events.MouseEvent):void {
 
-            carrierSlaCreateEditDialog = CarrierSlaCreateEditDialog(PopUpManager.createPopUp(this, CarrierSlaCreateEditDialog, true));
+            carrierSlaCreateEditDialog = CarrierSlaCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CarrierSlaCreateEditDialog, true));
             carrierSlaCreateEditDialog.newCarrierSlaFlag = false;
             carrierSlaCreateEditDialog.carrierSlaDTOImpl = CarrierSlaDTOImpl(CloneUtil.clone(carrierSlaDTO));
             carrierSlaCreateEditDialog.saveBtn.addEventListener("click", updateCarrierSla);

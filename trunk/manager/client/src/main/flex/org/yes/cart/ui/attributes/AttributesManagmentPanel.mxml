@@ -3,6 +3,10 @@
 
     <mx:Script>
 		<![CDATA[
+        import mx.core.Application;
+        import mx.core.FlexGlobals;
+        import mx.core.IFlexDisplayObject;
+
         import org.yes.cart.impl.AttributeDTOImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
 
@@ -14,6 +18,8 @@
         import mx.managers.PopUpManager;
         import mx.rpc.AsyncResponder;
         import mx.rpc.events.ResultEvent;
+
+        import com.hexagonstar.util.debug.Debug;
 
         private var newAttrGroupPopUp:AttributeGroupCreateEditDialog;
         private var newAttrPopUp:AttributeCreateEditDialog;
@@ -43,7 +49,7 @@
          * @return nothing
          */
         private function newAttrGroup_clickHandler(event:MouseEvent):void {
-            newAttrGroupPopUp = AttributeGroupCreateEditDialog(PopUpManager.createPopUp(this, AttributeGroupCreateEditDialog, true));
+            newAttrGroupPopUp = AttributeGroupCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), AttributeGroupCreateEditDialog, true));
             newAttrGroupPopUp.saveBtn.addEventListener("click", createAttrGroup);
             newAttrGroupPopUp.createNewAttrGroup();
             PopUpManager.centerPopUp(newAttrGroupPopUp);
@@ -73,7 +79,7 @@
          * @return nothing
          */
         private function editAttrGroup_clickHandler(event:MouseEvent):void {
-            newAttrGroupPopUp = AttributeGroupCreateEditDialog(PopUpManager.createPopUp(this, AttributeGroupCreateEditDialog, true));
+            newAttrGroupPopUp = AttributeGroupCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), AttributeGroupCreateEditDialog, true));
             newAttrGroupPopUp.saveBtn.addEventListener("click", updateAttrGroup);
             newAttrGroupPopUp.editAttrGroup(
                     selectedGroup.code,
@@ -149,11 +155,13 @@
                     new AsyncResponder(
                             function (event:ResultEvent, obj:Object = null):void {
                                 currentAttributeDTO = AttributeDTOImpl(event.result);
-                                newAttrPopUp = AttributeCreateEditDialog(PopUpManager.createPopUp(this, AttributeCreateEditDialog, true));
+                                var ifdd:IFlexDisplayObject = PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), AttributeCreateEditDialog, true);
+                                newAttrPopUp = AttributeCreateEditDialog(ifdd);
                                 newAttrPopUp.saveBtn.addEventListener("click", createAttr);
                                 newAttrPopUp.type.dataProvider = remoteEtypeService.getAll.lastResult;
                                 newAttrPopUp.createNewAttr(currentAttributeDTO);
                                 PopUpManager.centerPopUp(newAttrPopUp);
+
                             }
                             ,
                             ShopManagerGlobal.instance.defaultFaultHandler));
@@ -175,7 +183,7 @@
                     new AsyncResponder(
                             function (event:ResultEvent, obj:Object = null):void {
                                 currentAttributeDTO = AttributeDTOImpl(event.result);
-                                newAttrPopUp = AttributeCreateEditDialog(PopUpManager.createPopUp(this, AttributeCreateEditDialog, true));
+                                newAttrPopUp = AttributeCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), AttributeCreateEditDialog, true));
                                 newAttrPopUp.saveBtn.addEventListener("click", updateAttr);
                                 newAttrPopUp.type.dataProvider = remoteEtypeService.getAll.lastResult;
                                 newAttrPopUp.editAttr(currentAttributeDTO);

@@ -297,6 +297,35 @@ p {
 .sku-row-grid_5 * { background-color: transparent;}
 .sku-row-grid_10 * { background-color: transparent;}
 
+.sku-item-info {
+
+	/*font-weight : bold; */
+	font-size : 16px;  
+	margin-top: 60px; 
+	margin-bottom: 10px;  
+	padding-bottom: 10px;
+	padding-top: 6px;
+	
+}
+
+/* -- PRICE ------------------------------------------------------------ */
+
+
+.regular-price-whole        {  font-weight: bold;  }
+.regular-price-dot          {  font-weight: bold; font-size: 0.8em; vertical-align: baseline; top: -0.7em; position: relative; display:none; visibility:hidden;}
+.regular-price-decimal      {  font-weight: bold; font-size: 0.8em; vertical-align: baseline; top: -0.7em; position: relative; text-decoration: underline;}
+
+.regular-sale-price-whole   { color: #aaaaaa; font-weight: lighter; text-decoration:line-through; }
+.regular-sale-price-dot     { color: #aaaaaa; font-weight: lighter; font-size: 0.5em; vertical-align: baseline; top: -0.7em; position: relative; }
+.regular-sale-price-decimal { color: #aaaaaa; font-weight: lighter; font-size: 0.5em; vertical-align: baseline; top: -0.7em; position: relative; text-decoration:line-through;}
+
+.sale-price-whole   { color: #ff1111; font-weight: bold; font-size: 1.1em; }
+.sale-price-dot     { color: #ff1111; font-weight: bold; font-size: 0.5em; vertical-align: baseline; top: -0.7em; position: relative; }
+.sale-price-decimal { color: #ff1111; font-weight: bold; font-size: 0.5em; vertical-align: baseline; top: -0.7em; position: relative; }
+
+
+
+
 /* ------------------------------------------------ tabs ------------------------------------------ */
 
 #content{
@@ -419,4 +448,72 @@ span.error{
     -moz-box-shadow:0px 0px 3px #aaa;
     -webkit-box-shadow:0px 0px 3px #aaa;
     box-shadow:0px 0px 3px #aaa;
+}
+
+/* --------------------------------------------------------------------------- */
+
+#slider1 {
+    width: 720px; /* important to be same as image width */
+    height: 120px; /* important to be same as image height */
+    position: relative; /* important */
+	overflow: hidden; /* important */
+}
+
+#slider1Content {
+    width: 720px; /* important to be same as image width or wider */
+    position: absolute;
+	top: 0;
+	margin-left: 0;
+}
+.slider1Image {
+    float: left;
+    position: relative;
+	display: none;
+}
+.slider1Image span {
+    position: absolute;
+	font: 10px/15px Arial, Helvetica, sans-serif;
+    padding: 10px 13px;
+    width: 694px;
+    background-color: #000;
+    filter: alpha(opacity=70);
+    -moz-opacity: 0.7;
+	-khtml-opacity: 0.7;
+    opacity: 0.7;
+    color: #fff;
+    display: none;
+}
+.clear {
+	clear: both;
+}
+.slider1Image span strong {
+    font-size: 14px;
+}
+.left {
+	top: 0;
+    left: 0;
+	width: 110px !important;
+	height: 280px;
+}
+.right {
+	right: 0;
+	bottom: 0;
+	width: 90px !important;
+	height: 290px;
+}
+ul { list-style-type: none;}
+
+/*----------------------------- featured ---------------------*/
+.featured {
+	float: left;
+	margin-left: 15px;
+	margin-top:  10px;
+}
+
+.newarrival {
+
+	font-size: 10px;
+	margin-top: 15px;
+	text-align: center;
+
 }

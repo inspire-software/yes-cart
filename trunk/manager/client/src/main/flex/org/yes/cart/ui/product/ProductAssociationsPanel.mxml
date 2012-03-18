@@ -69,6 +69,8 @@
 
     <mx:Script>
         <![CDATA[
+        import mx.core.FlexGlobals;
+
         import org.yes.cart.impl.AssociationDTOImpl;
         import org.yes.cart.impl.ProductAssociationDTOImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
@@ -124,7 +126,7 @@
         private var createAssociationDialog:CreateAssociationDialog;
 
         private function addAssociationClick(event:MouseEvent):void {
-            createAssociationDialog = CreateAssociationDialog(PopUpManager.createPopUp(this, CreateAssociationDialog, true));
+            createAssociationDialog = CreateAssociationDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CreateAssociationDialog, true));
             createAssociationDialog.saveBtn.addEventListener("click", productSelected);
             PopUpManager.centerPopUp(createAssociationDialog);
         }

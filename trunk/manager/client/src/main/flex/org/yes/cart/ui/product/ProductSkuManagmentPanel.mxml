@@ -5,6 +5,8 @@
 		<![CDATA[
         import com.hexagonstar.util.debug.Debug;
 
+        import mx.core.FlexGlobals;
+
         import org.yes.cart.constants.AttributeGroupNames;
         import org.yes.cart.impl.AttrValueProductSkuDTOImpl;
         import org.yes.cart.impl.AttributeDTOImpl;
@@ -346,7 +348,7 @@
          * @return
          */
         protected function createSkuBtnHandler(event:MouseEvent):void {
-            productSkuCreateDialog = ProductSkuCreateDialog(PopUpManager.createPopUp(this, ProductSkuCreateDialog, true));
+            productSkuCreateDialog = ProductSkuCreateDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), ProductSkuCreateDialog, true));
             productSkuCreateDialog.saveBtn.addEventListener("click", createNewProductSku);
             PopUpManager.centerPopUp(productSkuCreateDialog);
         }

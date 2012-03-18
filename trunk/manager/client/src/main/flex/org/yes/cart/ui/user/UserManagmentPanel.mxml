@@ -5,6 +5,8 @@
            creationComplete="init();">
     <mx:Script>
 		<![CDATA[
+        import mx.core.FlexGlobals;
+
         import org.yes.cart.shopmanager.ShopManagerGlobal;
 
         import flash.events.MouseEvent;
@@ -111,14 +113,14 @@
 
 
         private function newUser_clickHandler(event:MouseEvent):void {
-            newPopUp = UserCreateEditDialog(PopUpManager.createPopUp(this, UserCreateEditDialog, true));
+            newPopUp = UserCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), UserCreateEditDialog, true));
             newPopUp.saveBtn.addEventListener("click", createNewUser);
             newPopUp.createNewUser();
             PopUpManager.centerPopUp(newPopUp);
         }
 
         private function editUser_clickHandler(event:MouseEvent):void {
-            newPopUp = UserCreateEditDialog(PopUpManager.createPopUp(this, UserCreateEditDialog, true));
+            newPopUp = UserCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), UserCreateEditDialog, true));
             newPopUp.saveBtn.addEventListener("click", updateUser);
             newPopUp.editUser(selectedUser.email, selectedUser.firstName, selectedUser.lastName);
             PopUpManager.centerPopUp(newPopUp);
