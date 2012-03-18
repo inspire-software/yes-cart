@@ -5,6 +5,8 @@
            creationComplete="init();">
     <mx:Script>
 		<![CDATA[
+        import mx.core.FlexGlobals;
+
         import org.yes.cart.impl.CountryDTOImpl;
         import org.yes.cart.impl.StateDTOImpl;
         import org.yes.cart.util.CloneUtil;
@@ -83,7 +85,7 @@
          */
         private function editCountryClickHandler(event:flash.events.MouseEvent):void {
             countryCreateEditDialog = CountryCreateEditDialog(
-                    PopUpManager.createPopUp(this, CountryCreateEditDialog, true));
+                    PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CountryCreateEditDialog, true));
             countryCreateEditDialog.newCountryFlag = false;
             countryCreateEditDialog.countryDTOImpl = CountryDTOImpl(CloneUtil.clone(countryDTO));
             countryCreateEditDialog.saveBtn.addEventListener("click", updateCountry);
@@ -127,7 +129,7 @@
          */
         private function newCountryClickHandler(event:flash.events.MouseEvent):void {
             countryCreateEditDialog = CountryCreateEditDialog(
-                    PopUpManager.createPopUp(this, CountryCreateEditDialog, true));
+                    PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CountryCreateEditDialog, true));
             countryCreateEditDialog.newCountryFlag = true;
             countryCreateEditDialog.countryDTOImpl = new CountryDTOImpl();
             countryCreateEditDialog.saveBtn.addEventListener("click", saveCountry);
@@ -187,7 +189,7 @@
          */
         private function editStateClickHandler(event:flash.events.MouseEvent):void {
             stateCreateEditDialog = StateCreateEditDialog(
-                    PopUpManager.createPopUp(this, StateCreateEditDialog, true));
+                    PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), StateCreateEditDialog, true));
             stateCreateEditDialog.newStateFlag = false;
             stateCreateEditDialog.stateDTOImpl = StateDTOImpl(CloneUtil.clone(stateDTO));
             stateCreateEditDialog.saveBtn.addEventListener("click", updateState);

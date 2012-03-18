@@ -5,6 +5,8 @@
            creationComplete="init();">
     <mx:Script>
 		<![CDATA[
+        import mx.core.FlexGlobals;
+
         import org.yes.cart.shopmanager.ShopManagerGlobal;
 
         import flash.events.MouseEvent;
@@ -41,14 +43,14 @@
         private var newPopUp:RoleCreateEditDialog;
 
         private function newRole_clickHandler(event:MouseEvent):void {
-            newPopUp = RoleCreateEditDialog(PopUpManager.createPopUp(this, RoleCreateEditDialog, true));
+            newPopUp = RoleCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), RoleCreateEditDialog, true));
             newPopUp.saveBtn.addEventListener("click", createNewRole);
             newPopUp.createNewRole();
             PopUpManager.centerPopUp(newPopUp);
         }
 
         private function editRole_clickHandler(event:MouseEvent):void {
-            newPopUp = RoleCreateEditDialog(PopUpManager.createPopUp(this, RoleCreateEditDialog, true));
+            newPopUp = RoleCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), RoleCreateEditDialog, true));
             newPopUp.saveBtn.addEventListener("click", updateRole);
             newPopUp.editRole(selectedRole.code, selectedRole.description);
             PopUpManager.centerPopUp(newPopUp);

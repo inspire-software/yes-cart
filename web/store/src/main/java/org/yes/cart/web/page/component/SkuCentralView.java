@@ -1,13 +1,15 @@
 package org.yes.cart.web.page.component;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.model.Model;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.Association;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.web.page.component.product.ImageView;
 import org.yes.cart.web.page.component.product.ProductAssociationsView;
@@ -24,20 +26,17 @@ import org.yes.cart.web.page.component.price.PriceTierView;
 import org.yes.cart.web.page.component.product.SkuListView;
 import org.yes.cart.web.page.component.product.SkuAttributesView;
 import org.yes.cart.web.application.ApplicationDirector;
-import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.ProductSku;
-import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
- *
  * Central view to show product sku.
- * Supports products is multisku and default sku is 
- *
+ * Supports products is multisku and default sku is
+ * <p/>
  * Igor Azarny iazarny@yahoo.com
  * Date: 10-Sep-2011
  * Time: 11:11:08
@@ -45,27 +44,64 @@ import java.math.BigDecimal;
 public class SkuCentralView extends AbstractCentralView {
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
-    /** Single item price panel*/
+    /**
+     * Single item price panel
+     */
     private final static String PRICE_VIEW = "priceView";
-    /** Price tiers if any */
+    /**
+     * Price tiers if any
+     */
     private final static String PRICE_TIERS_VIEW = "priceTiersView";
-    /** Add single item to cart */
+    /**
+     * Add single item to cart
+     */
     private final static String ADD_TO_CART_LINK = "addToCartLink";
-    /** Product sku code */
+    /**
+     * Product sku code
+     */
     private final static String SKU_CODE_LABEL = "skuCode";
-    /** Product name */
+    /**
+     * Product name
+     */
     private final static String PRODUCT_NAME_LABEL = "name";
     private final static String PRODUCT_NAME_LABEL2 = "name2";
-    /** Product description */
+    /**
+     * Product description
+     */
     private final static String PRODUCT_DESCRIPTION_LABEL = "description";
-    /** Product image panel */
+    /**
+     * Product image panel
+     */
     private final static String PRODUCT_IMAGE_VIEW = "imageView";
-    /** Product sku list */
+    /**
+     * Product sku list
+     */
     private final static String SKU_LIST_VIEW = "skuList";
-    /** View to show sku attributes */
+    /**
+     * View to show sku attributes
+     */
     private final static String SKU_ATTR_VIEW = "skuAttrView";
-    /** Product accessories or cross sell */
+    /**
+     * Product accessories or cross sell
+     */
     private final static String ACCESSORIES_VIEW = "accessoriesView";
+
+    /**
+     * Product accessories head container name
+     */
+    private final static String ACCESSORIES_HEAD_CONTAINER = "accessoriesHeadContainer";
+    /**
+     * Product accessories body container name
+     */
+    private final static String ACCESSORIES_BODY_CONTAINER = "accessoriesBodyContainer";
+    /**
+     * Product accessories head container name
+     */
+    private final static String ACCESSORIES_HEAD = "accessoriesHead";
+    /**
+     * Product accessories body container name
+     */
+    private final static String ACCESSORIES_BODY = "accessoriesBody";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
     @SpringBean(name = ServiceSpringKeys.PRODUCT_SERVICE)
@@ -85,6 +121,9 @@ public class SkuCentralView extends AbstractCentralView {
 
     @SpringBean(name = ServiceSpringKeys.PRICE_SERVICE)
     protected PriceService priceService;
+
+    @SpringBean(name = ServiceSpringKeys.PRODUCT_ASSOCIATIONS_SERVICE)
+    protected ProductAssociationService productAssociationService;
 
     private boolean isProduct;
     private Product product;
@@ -116,9 +155,8 @@ public class SkuCentralView extends AbstractCentralView {
         } else {
             throw new RuntimeException("Product or Sku id expected");
         }
-        
-    }
 
+    }
 
 
     /**
@@ -129,6 +167,11 @@ public class SkuCentralView extends AbstractCentralView {
 
         configureContext();
 
+        final PageParameters addToCartParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters())
+                .set(AddSkuToCartEventCommandImpl.CMD_KEY, sku.getCode());
+
+
+
         add(
                 new PriceView(PRICE_VIEW, new Model<SkuPrice>(getSkuPrice()), true)
         ).add(
@@ -138,50 +181,73 @@ public class SkuCentralView extends AbstractCentralView {
         ).add(
                 new Label(SKU_CODE_LABEL, sku.getCode())
         ).add(
-                new Label(PRODUCT_NAME_LABEL, isProduct?product.getName():sku.getName())
+                new Label(PRODUCT_NAME_LABEL, isProduct ? product.getName() : sku.getName())
         ).add(
-                new Label(PRODUCT_NAME_LABEL2, isProduct?product.getName():sku.getName())
+                new Label(PRODUCT_NAME_LABEL2, isProduct ? product.getName() : sku.getName())
         ).add(
-                new Label(PRODUCT_DESCRIPTION_LABEL, isProduct?product.getDescription():sku.getDescription())
-        );
-        
-        final PageParameters addToCartParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters())
-            .set(AddSkuToCartEventCommandImpl.CMD_KEY, sku.getCode());
-
-        add(
+                new Label(PRODUCT_DESCRIPTION_LABEL, isProduct ? product.getDescription() : sku.getDescription())
+        ).add(
                 new BookmarkablePageLink<HomePage>(ADD_TO_CART_LINK, HomePage.class, addToCartParameters)
         ).add(
                 new SkuAttributesView(SKU_ATTR_VIEW, sku, isProduct)
         ).add(
                 new ImageView(PRODUCT_IMAGE_VIEW, getDepictable())
-        ).add(
-                new ProductAssociationsView(ACCESSORIES_VIEW, Association.ACCESSORIES).setVisible(true /*TODO is product not accessory */)
         );
+
+
+        final List<ProductAssociation> associatedProducts = productAssociationService.getProductAssociations(
+                    isProduct ? product.getProductId() : sku.getProduct().getProductId(),
+                    Association.ACCESSORIES
+        );
+
+
+        if (associatedProducts.isEmpty()  /*|| false is accessory*/) {
+
+            add(
+                    new Label(ACCESSORIES_HEAD_CONTAINER, StringUtils.EMPTY)
+            ).add(
+                    new Label(ACCESSORIES_BODY_CONTAINER, StringUtils.EMPTY)
+            );
+
+        } else {
+
+
+            add(
+                    new Fragment(ACCESSORIES_HEAD_CONTAINER, ACCESSORIES_HEAD, this)
+            ).add(
+                    new Fragment(ACCESSORIES_BODY_CONTAINER, ACCESSORIES_BODY, this)
+                            .add(
+                                    new ProductAssociationsView(ACCESSORIES_VIEW, Association.ACCESSORIES)
+                            )
+            );
+
+        }
 
 
         super.onBeforeRender();
 
     }
 
-    private Depictable getDepictable()  {
+    private Depictable getDepictable() {
         if (isProduct) {
             return new ProductDecoratorImpl(
                     imageService,
                     attributableImageService,
                     categoryService,
                     product,
-                    WicketUtil.getHttpServletRequest().getContextPath() );
+                    WicketUtil.getHttpServletRequest().getContextPath());
         }
         return new ProductSkuDecoratorImpl(
-                    imageService,
-                    attributableImageService,
-                    categoryService,
-                    sku,
-                    WicketUtil.getHttpServletRequest().getContextPath() );
+                imageService,
+                attributableImageService,
+                categoryService,
+                sku,
+                WicketUtil.getHttpServletRequest().getContextPath());
     }
 
     /**
      * Get sku prices from default sku in case of product or from particular sku.
+     *
      * @return collection of sku prices.
      */
     private Collection<SkuPrice> getSkuPrices() {
@@ -195,6 +261,7 @@ public class SkuCentralView extends AbstractCentralView {
     /**
      * Get product or his sku price.
      * In case of multisku product the minimal regular price from multiple sku was used for single item.
+     *
      * @return {@link SkuPrice}
      */
     private SkuPrice getSkuPrice() {
@@ -209,7 +276,7 @@ public class SkuCentralView extends AbstractCentralView {
                 ApplicationDirector.getCurrentShop(),
                 ApplicationDirector.getShoppingCart().getCurrencyCode(),
                 BigDecimal.ONE
-                );
+        );
     }
 
 }

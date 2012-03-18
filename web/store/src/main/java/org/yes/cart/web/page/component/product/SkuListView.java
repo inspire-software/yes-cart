@@ -42,7 +42,7 @@ public class SkuListView extends BaseComponent {
         this.currentSku = currentSku;
         this.productView = productView;
         skusToShow = new ArrayList<ProductSku>(skus);
-        skusToShow.remove(currentSku);
+        //skusToShow.remove(currentSku);
 
     }
 
@@ -68,6 +68,7 @@ public class SkuListView extends BaseComponent {
      */
     @Override
     public boolean isVisible() {
-        return super.isVisible() && !skusToShow.isEmpty() && productView;
+       // return super.isVisible() && !skusToShow.isEmpty() && productView;
+        return super.isVisible() && skusToShow.size() > 1;
     }
 }

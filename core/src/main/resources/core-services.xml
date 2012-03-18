@@ -139,7 +139,7 @@
         <!--
         Allowed pictures sizes to resize. Original image will be returned if requested size not allowed.
         -->
-        <constructor-arg type="java.lang.String" value="40x40,50x50,60x60,80x80,200x200,160x160,360x360,120x120"/>
+        <constructor-arg type="java.lang.String" value="40x40,50x50,60x60,80x80,200x200,160x160,360x360,120x120,240x240"/>
         <!--
         Background RGB color for resized picture.
         -->

@@ -14,12 +14,11 @@ import org.yes.cart.web.util.WicketUtil;
  * Date: 17-Sep-2011
  * Time: 11:07:59
  */
-public class SkuInListView  extends BaseComponent {
+public class SkuInListView extends BaseComponent {
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
-    private final static String SKU_CODE_LINK = "skuCodeLink";
+    private final static String SKU_LINK = "skuLink";
     private final static String SKU_CODE_LABEL = "skuCode";
-    private final static String SKU_NAME_LINK = "skuNameLink";
     private final static String SKU_NAME_LABEL = "skuName";
     // ------------------------------------- MARKUP IDs END ------------------------------------ //
 
@@ -28,7 +27,8 @@ public class SkuInListView  extends BaseComponent {
 
     /**
      * Construct sku in list view.
-     * @param id component id
+     *
+     * @param id  component id
      * @param sku given {@link ProductSku} to show
      */
     public SkuInListView(final String id, final ProductSku sku) {
@@ -36,7 +36,9 @@ public class SkuInListView  extends BaseComponent {
         this.sku = sku;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void onBeforeRender() {
 
@@ -44,14 +46,11 @@ public class SkuInListView  extends BaseComponent {
         linkToSkuParameters.set(WebParametersKeys.SKU_ID, sku.getId());
 
         add(
-                new BookmarkablePageLink(SKU_CODE_LINK, HomePage.class, linkToSkuParameters)
-                    .add(new Label(SKU_CODE_LABEL, sku.getCode()))
+                new BookmarkablePageLink(SKU_LINK, HomePage.class, linkToSkuParameters)
+                        .add(new Label(SKU_CODE_LABEL, sku.getCode()))
+                        .add(new Label(SKU_NAME_LABEL, sku.getName()))
         );
 
-        add(
-                new BookmarkablePageLink(SKU_NAME_LINK, HomePage.class, linkToSkuParameters)
-                    .add(new Label(SKU_NAME_LABEL, sku.getName()))
-        );
 
         super.onBeforeRender();
 

@@ -17,6 +17,7 @@ import org.yes.cart.web.page.component.breadcrumbs.BreadCrumbsView;
 import org.yes.cart.web.page.component.filterednavigation.AttributeProductFilter;
 import org.yes.cart.web.page.component.filterednavigation.BrandProductFilter;
 import org.yes.cart.web.page.component.filterednavigation.PriceProductFilter;
+import org.yes.cart.web.page.component.product.Carousel;
 import org.yes.cart.web.page.component.product.FeaturedProducts;
 import org.yes.cart.web.page.component.product.NewArrivalProducts;
 import org.yes.cart.web.page.component.search.SearchView;
@@ -113,6 +114,7 @@ public class HomePage extends AbstractWebPage {
 
         add(new NewArrivalProducts("newArrival"));
         add(new FeaturedProducts("featured"));
+        //add(new Carousel("featured"));
 
         add(getCentralPanel(centralViewLabel, "centralView", categoryId, query));
 

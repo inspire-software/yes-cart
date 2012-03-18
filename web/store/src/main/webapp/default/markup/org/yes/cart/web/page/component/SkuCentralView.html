@@ -1,5 +1,10 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
+<wicket:head>
+    <wicket:link>
+        <script type="text/javascript" src="../../../../../../js/sliding.form.js"></script>
+    </wicket:link>
+</wicket:head>
 
 <wicket:panel>
 
@@ -28,21 +33,23 @@
                 </wicket:container>
             </div>
 
-            <div class="sku-column sku-row-grid_5">
-                <span wicket:id="name2">[product or sku name 2]</span>
+            <div class="sku-column sku-row-grid_5 sku-item-info">
+                <div wicket:id="name2">[product or sku name 2]</div>
             </div>
 
 
-            <div class="sku-column sku-row-grid_2">
+            <div class="sku-column sku-row-grid_2 sku-item-info">
                 <a wicket:id="addToCartLink">
                     <wicket:message key="add.to.cart">[add one to cart]</wicket:message>
                 </a>
             </div>
-            <div class="sku-column sku-row-grid_3">
+            <div class="sku-column sku-row-grid_3 sku-item-info">
                 <wicket:container wicket:id="priceView">
                     [price]
                 </wicket:container>
             </div>
+
+
             <div class="sku-column sku-row-grid_5">
                 <wicket:container wicket:id="priceTiersView">
                     [price tiers view]
@@ -70,36 +77,41 @@
                         <div id="navigation" style="display:none;">
                             <ul>
                                 <li class="selected">
-                                    <a href="#">Description</a>
+                                    <a href="#">
+                                        <wicket:message key="description">[description]</wicket:message>
+                                    </a>
                                 </li>
                                 <li>
-                                    <a href="#">Details</a>
+                                    <a href="#">
+                                        <wicket:message key="details">[details]</wicket:message>
+                                    </a>
                                 </li>
-                                <li>
-                                    <a href="#">Accessories</a>
-                                </li>
+                                <wicket:container wicket:id="accessoriesHeadContainer">
+                                       [attributes view]
+                                </wicket:container>
                             </ul>
                         </div>
                         <div id="steps">
                             <form id="formElem" name="formElem" action="#" method="post">
                                 <fieldset class="step">
-                                    <legend>Description</legend>
+                                    <legend>
+                                        <wicket:message key="description">[description]</wicket:message>
+                                    </legend>
                                     <wicket:container wicket:id="description">
                                         [product or sku description]
                                     </wicket:container>
                                 </fieldset>
                                 <fieldset class="step">
-                                    <legend>Details</legend>
+                                    <legend>
+                                        <wicket:message key="details">[details]</wicket:message>
+                                    </legend>
                                     <wicket:container wicket:id="skuAttrView">
                                         [attributes view]
                                     </wicket:container>
                                 </fieldset>
-                                <fieldset class="step">
-                                    <legend>Accessories</legend>
-                                    <wicket:container wicket:id="accessoriesView">
-                                        [accessories]
-                                    </wicket:container>
-                                </fieldset>
+                                 <wicket:container wicket:id="accessoriesBodyContainer">
+                                        [attributes view]
+                                 </wicket:container>
                             </form>
                         </div>
 
@@ -108,7 +120,28 @@
             </div>
         </div>
     </div>
-
 </wicket:panel>
+
+
+<wicket:fragment wicket:id="accessoriesHead">
+    <li>
+        <a href="#">
+            <wicket:message key="accessories">[accessories]</wicket:message>
+        </a>
+    </li>
+</wicket:fragment>
+
+<wicket:fragment wicket:id="accessoriesBody">
+    <fieldset class="step">
+        <legend>
+            <wicket:message key="accessories">[accessories]</wicket:message>
+        </legend>
+        <wicket:container wicket:id="accessoriesView">
+            [accessories]
+        </wicket:container>
+    </fieldset>
+</wicket:fragment>
+
+
 </body>
 </html>

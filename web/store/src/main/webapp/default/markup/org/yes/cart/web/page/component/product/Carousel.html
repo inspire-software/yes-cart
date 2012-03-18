@@ -1,5 +1,17 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
+<wicket:head>
+    <wicket:link>
+        <script type="text/javascript" src="../../../../../../../js/s3Slider.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('#slider1').s3Slider({
+                    timeOut: 4000
+                });
+            });
+        </script>
+    </wicket:link>
+</wicket:head>
 <wicket:panel>
     <div id="slider1">
         <ul wicket:id="products" id="slider1Content">
@@ -8,10 +20,7 @@
                     <img wicket:id="productDefaultImage" hspace="5" vspace="5"/>
                 </a>
                 <span class="left"><strong>Title text 1</strong><br />Content text...</span>
-
-
             </li>
-
             <a wicket:id="productLinkName"><span wicket:id="name"/></a>
         </ul>
     </div>

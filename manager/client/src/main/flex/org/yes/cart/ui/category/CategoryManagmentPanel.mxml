@@ -7,6 +7,8 @@
 <![CDATA[
         import com.hexagonstar.util.debug.Debug;
 
+        import mx.core.FlexGlobals;
+
         import org.yes.cart.constants.AttributeGroupNames;
         import org.yes.cart.impl.AttrValueCategoryDTOImpl;
         import org.yes.cart.impl.AttributeDTOImpl;
@@ -364,7 +366,7 @@
                         resourceManager.getString('CategoryManagmentPanel', 'info'));
 
             } else {
-                newCategoryPopUp = CategoryCreateDialog(PopUpManager.createPopUp(this, CategoryCreateDialog, true));
+                newCategoryPopUp = CategoryCreateDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CategoryCreateDialog, true));
                 newCategoryPopUp.saveBtn.addEventListener("click", createNewCategory);
                 PopUpManager.centerPopUp(newCategoryPopUp);
             }
@@ -610,7 +612,7 @@
          * @return nothing
          */
         private function openPriceNavigation(event:MouseEvent):void {
-            priceNavigationDialog = PriceNavigationDialog(PopUpManager.createPopUp(this, PriceNavigationDialog, true));
+            priceNavigationDialog = PriceNavigationDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), PriceNavigationDialog, true));
             priceNavigationDialog.xmlString = selectedCategoryDTOImpl.navigationByPriceTiers;
             priceNavigationDialog.saveBtn.addEventListener("click", updateCategoryPriceNavigation);
             PopUpManager.centerPopUp(priceNavigationDialog);
@@ -636,7 +638,7 @@
          * @return
          */
         private function assignProductToCategoryClickHandler(event:MouseEvent):void {
-            productFinderPopUp = ProductFinderDialog(PopUpManager.createPopUp(this, ProductFinderDialog, true));
+            productFinderPopUp = ProductFinderDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), ProductFinderDialog, true));
             productFinderPopUp.selectProductButton.addEventListener("click", assignSelectedProduct);
             PopUpManager.centerPopUp(productFinderPopUp);
         }

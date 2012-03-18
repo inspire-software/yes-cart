@@ -7,6 +7,8 @@
 		<![CDATA[
         import com.hexagonstar.util.debug.Debug;
 
+        import mx.core.FlexGlobals;
+
         import org.yes.cart.constants.AttributeGroupNames;
         import org.yes.cart.impl.AttrValueBrandDTOImpl;
         import org.yes.cart.impl.BrandDTOImpl;
@@ -214,7 +216,7 @@
          * @return nothing
          */
         private function newBrandClickHandler(event:MouseEvent):void {
-            newPopUp = BrandCreateDialog(PopUpManager.createPopUp(this, BrandCreateDialog, true));
+            newPopUp = BrandCreateDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), BrandCreateDialog, true));
             newPopUp.saveBtn.addEventListener("click", createBrand);
             newPopUp.brandDTOImpl = new BrandDTOImpl();
             PopUpManager.centerPopUp(newPopUp);
@@ -255,7 +257,7 @@
          * @return nothing
          */
         private function editBrandClickHandler(event:MouseEvent):void {
-            newPopUp = BrandCreateDialog(PopUpManager.createPopUp(this, BrandCreateDialog, true));
+            newPopUp = BrandCreateDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), BrandCreateDialog, true));
             newPopUp.saveBtn.addEventListener("click", updateExistingBrand);
             newPopUp.brandDTOImpl = selectedBrand;
             PopUpManager.centerPopUp(newPopUp);

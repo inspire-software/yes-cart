@@ -3,4 +3,7 @@
 <properties>
 	<entry key="add.to.cart">Add to cart</entry>
     <entry key="sku.code">Code</entry>
+    <entry key="description">Description</entry>
+    <entry key="details">Details</entry>
+    <entry key="accessories">Accessories</entry>
 </properties>

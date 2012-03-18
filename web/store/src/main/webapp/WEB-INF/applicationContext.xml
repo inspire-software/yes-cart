@@ -307,6 +307,7 @@
                 <value>setMultipleDeliveryCmd</value>
                 <value>setShopIdCmd</value>
                 <value>setQuantityToCartCmd</value>
+                <value>sku</value>
             </list>
         </property>
     </bean>

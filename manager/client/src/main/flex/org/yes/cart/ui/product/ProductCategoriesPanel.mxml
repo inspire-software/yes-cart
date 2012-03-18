@@ -52,6 +52,8 @@
 
 
     <mx:Script><![CDATA[
+        import mx.core.FlexGlobals;
+
         import org.yes.cart.impl.CategoryDTOImpl;
         import org.yes.cart.impl.ProductCategoryDTOImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
@@ -112,7 +114,7 @@
         }
 
         private function addProductCategory(event:MouseEvent):void {
-            categoryFinderPopUp = CategoryFinderDialog(PopUpManager.createPopUp(this, CategoryFinderDialog, true));
+            categoryFinderPopUp = CategoryFinderDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CategoryFinderDialog, true));
             categoryFinderPopUp.selectProductButton.addEventListener("click", assignSelectedProduct);
             PopUpManager.centerPopUp(categoryFinderPopUp);
 

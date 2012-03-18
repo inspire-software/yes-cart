@@ -7,6 +7,8 @@
 		<![CDATA[
         import com.hexagonstar.util.debug.Debug;
 
+        import mx.core.FlexGlobals;
+
         import org.yes.cart.impl.WarehouseDTOImpl;
         import org.yes.cart.util.CloneUtil;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
@@ -61,7 +63,7 @@
          */
         private function newWarehouseclickHandler(event:MouseEvent):void {
             Debug.trace("warehouse panel newWarehouseclickHandler");
-            newPopUp = WarehouseCreateEditDialog(PopUpManager.createPopUp(this, WarehouseCreateEditDialog, true));
+            newPopUp = WarehouseCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), WarehouseCreateEditDialog, true));
             newPopUp.saveBtn.addEventListener("click", createNewWarehouse);
             newPopUp.createEditWarehouse(new WarehouseDTOImpl(), true);
             PopUpManager.centerPopUp(newPopUp);
@@ -115,7 +117,7 @@
          */
         private function editWarehouseclickHandler(event:MouseEvent):void {
             Debug.trace("warehouse panel editWarehouseclickHandler");
-            newPopUp = WarehouseCreateEditDialog(PopUpManager.createPopUp(this, WarehouseCreateEditDialog, true));
+            newPopUp = WarehouseCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), WarehouseCreateEditDialog, true));
             newPopUp.saveBtn.addEventListener("click", updateExistingWarehouse);
             newPopUp.createEditWarehouse(WarehouseDTOImpl(CloneUtil.clone(selectedWarehouse)), false);
             PopUpManager.centerPopUp(newPopUp);

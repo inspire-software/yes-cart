@@ -7,6 +7,8 @@
 		<![CDATA[
         import com.hexagonstar.util.debug.Debug;
 
+        import mx.core.FlexGlobals;
+
         import org.yes.cart.constants.AttributeGroupNames;
         import org.yes.cart.impl.ProductTypeAttrDTOImpl;
         import org.yes.cart.impl.ProductTypeDTOImpl;
@@ -63,7 +65,7 @@
 
 
         private function editProductTypeAttrInternal(pta:ProductTypeAttrDTOImpl):void {
-            productTypeAttrCreateDialog = ProductTypeAttrCreateDialog(PopUpManager.createPopUp(this, ProductTypeAttrCreateDialog, true));
+            productTypeAttrCreateDialog = ProductTypeAttrCreateDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), ProductTypeAttrCreateDialog, true));
             productTypeAttrCreateDialog.attributeComboBox.dataProvider = remoteAttributeService.findByAttributeGroupCode.lastResult;
             productTypeAttrCreateDialog.productTypeAttr = pta;
             productTypeAttrCreateDialog.productTypeAttr.producttypeId = selectedProductTypeDTO.producttypeId;
@@ -174,7 +176,7 @@
          * @return  nothing
          */
         private function editProductType(event:flash.events.MouseEvent):void {
-            productTypeCreateDialog = ProductTypeCreateDialog(PopUpManager.createPopUp(this, ProductTypeCreateDialog, true));
+            productTypeCreateDialog = ProductTypeCreateDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), ProductTypeCreateDialog, true));
             productTypeCreateDialog.productType = ProductTypeDTOImpl(CloneUtil.clone(selectedProductTypeDTO));
             productTypeCreateDialog.saveBtn.addEventListener("click", saveProductType);
             PopUpManager.centerPopUp(productTypeCreateDialog);
@@ -209,7 +211,7 @@
          * @return  nothing
          */
         private function editNewProductType(event:flash.events.MouseEvent):void {
-            productTypeCreateDialog = ProductTypeCreateDialog(PopUpManager.createPopUp(this, ProductTypeCreateDialog, true));
+            productTypeCreateDialog = ProductTypeCreateDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), ProductTypeCreateDialog, true));
             productTypeCreateDialog.productType = new ProductTypeDTOImpl();
             productTypeCreateDialog.saveBtn.addEventListener("click", createProductType);
             PopUpManager.centerPopUp(productTypeCreateDialog);
