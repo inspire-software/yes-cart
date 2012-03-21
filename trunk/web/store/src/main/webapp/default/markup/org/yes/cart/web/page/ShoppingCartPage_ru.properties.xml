@@ -3,4 +3,5 @@
 <properties>
 	<entry key="shopping">Обратно в магазин</entry>
 	<entry key="checkout">Оформляем покупку</entry>
+	<entry key="shoppingCart">Корзина</entry>
 </properties>
