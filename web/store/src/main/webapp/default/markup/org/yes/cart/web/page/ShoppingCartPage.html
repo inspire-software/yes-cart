@@ -8,12 +8,19 @@
         <link rel="stylesheet" type="text/css" href="../../../../../style/text.css"/>
         <link rel="stylesheet" type="text/css" href="../../../../../style/1024_16_10_10.css"/>
     </wicket:link>
-    <title>Shopping cart</title>
+    <title><wicket:message key="shoppingCart">[Shopping cart]</wicket:message></title>
 </wicket:head>
 
 <body>
 
 <div class="mainpage">
+    <div class="row grhead">
+		<div class="column grid_16 grhead">
+			<p>
+				<wicket:message key="shoppingCart">[Shopping cart]</wicket:message>
+			</p>	
+		</div>
+	</div>
 
     <div class="row">
         <div class="column grid_1">
@@ -22,16 +29,22 @@
             </p>
         </div>
         <div class="column grid_14">
-            <p>
+            <ul class="menu">
+				<li>
                 <wicket:link>
                     <a href="HomePage.html">
-                        <wicket:message key="shopping"> [Shopping &lt;&lt;&lt;]</wicket:message>
+                        <span><wicket:message key="shopping"> [Shopping &lt;&lt;&lt;]</wicket:message></span>
                     </a>
-                    <a href="CheckoutPage.html">
-                        <wicket:message key="checkout"> [Checkout &gt;&gt;&gt;]</wicket:message>
+                </wicket:link>					
+				</li>
+				<li>
+                <wicket:link>				
+					<a href="CheckoutPage.html">
+                        <span><wicket:message key="checkout"> [Checkout &gt;&gt;&gt;]</wicket:message></span>
                     </a>
                 </wicket:link>
-            </p>
+				</li>
+            </ul>
         </div>
         <div class="column grid_1">
             <p>
