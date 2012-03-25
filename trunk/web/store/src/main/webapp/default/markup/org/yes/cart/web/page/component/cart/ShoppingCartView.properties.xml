@@ -9,9 +9,15 @@
     <entry key="amountMsg">Amount</entry>
 
 
-    <entry key="addOneLink">Add</entry>
-    <entry key="removeOneLink">Remove</entry>
-    <entry key="removeAllLink">Remove all</entry>
+    <entry key="addOneLink">+1</entry>
+    <entry key="removeOneLink">-1</entry>
+    <entry key="removeAllLink">X</entry>
+
+    <entry key="addOneLinkHint">Add one item</entry>
+    <entry key="removeOneLinkHint">Remove one item</entry>
+    <entry key="removeAllLinkHint">Remove all items</entry>
+
+    <entry key="nonzerodigits">Please, input valid items quantity</entry>
 
 
     <entry key="checkout">Checkout</entry>

@@ -3,70 +3,90 @@
 <wicket:panel>
 
     <form wicket:id="cartForm">
+		<div class="g864">
+				<div wicket:id="feedback">[feedpack panel]</div>
+		</div>
+		
+		<div class="g864">
+				<wicket:message key="productsInCart"> [products in cart] </wicket:message>
+		</div>
+		
+		<div class="g432">
+				<p><wicket:message key="product">[product]</wicket:message></p>
+		</div>
+		<div class="g144">
+				<p align="right"><wicket:message key="price">[price]</wicket:message></p>
+		</div>
+		<div class="g144">
+				<p align="right"><wicket:message key="qty">[qty]</wicket:message></p>
+		</div>
+		<div class="g144">
+				<p align="right"><wicket:message key="amountMsg">[amount]</wicket:message></p>
+		</div>
+		
+		
+        <table align="center" border="0">
 
-
-        <table align="center" border="1">
-            <tr><td colspan="5"> <div wicket:id="feedback">[feedpack panel]</div></td></tr>
-            <tr><td colspan="5"><wicket:message key="productsInCart"> [products in cart] </wicket:message></td></tr>
-            <tr>
-                <td colspan="2" width="190">
-                    <wicket:message key="product">[product]</wicket:message>
-                </td>
-                <td align="right" width="50">
-                    <wicket:message key="price">[price]</wicket:message>
-                </td>
-                <td align="right" width="170">
-                    <wicket:message key="qty">[qty]</wicket:message>
-                </td>
-                <td align="right">
-                    <wicket:message key="amountMsg">[amount]</wicket:message>
-                </td>
-            </tr>
             <tr wicket:id="itemsList">
-                <td width="90" valign="top">
-                    <div>
-                        <img border="0" wicket:id="defaultImage"/>
-                    </div>
-                </td>
-                <td width="350" valign="top">
-                    <a wicket:id="productLink">
-                        <span wicket:id="name">[product name]</span>
-                    </a>
-                    <br>
-                    <wicket:message key="skuNumber">
-                        [remove all]
-                    </wicket:message>
-                    <span wicket:id="skunum">[sku number]</span>
-                </td>
-                <td width="50" align="right" valign="top">
-                    <wicket:container wicket:id="skuPriceView">
-                        [sku price]
-                    </wicket:container>
-                </td>
-                <td width="170" nowrap align="right" valign="top">
-                    <input wicket:id="quantity" type="text"/>
-                    <input wicket:id="quantityButton" type="submit" value="Ok"/>
-                    <a wicket:id="addOneLink">
-                        <wicket:message key="addOneLink">[add one]</wicket:message>
-                    </a>
-                    <a wicket:id="removeOneLink">
-                        <wicket:message key="removeOneLink">[remove one]</wicket:message>
-                    </a>
-                    <a wicket:id="removeAllLink">
-                        <wicket:message key="removeAllLink">[remove all]</wicket:message>
-                    </a>
-                </td>
-                <td align="right" valign="top">
-                    <wicket:container wicket:id="lineAmountView">
-                        [line amount price]
-                    </wicket:container>
-                </td>
+			
+			<td>
+				<div class="g432">
+						<div class="g144">
+								<img border="0" wicket:id="defaultImage"/>
+							</div>
+							<div class="g216" style="margin-top : 20px;">
+								<a wicket:id="productLink">
+									<span wicket:id="name">[product name]</span>
+								</a>
+							</div>
+							<div class="g216"  style="margin-top : 20px;">	
+								<wicket:message key="skuNumber">
+									[sku code]
+								</wicket:message>
+								<span wicket:id="skunum">[sku number]</span>
+						</div>	
+				</div>
+				<div class="g144">
+						<p align="right" style="margin-top : 30px;">
+							<wicket:container wicket:id="skuPriceView">
+								[sku price]
+							</wicket:container>
+						</p>
+				</div>
+				<div class="g144">
+						<p align="right" style="margin-top : 25px;">
+							<input wicket:id="quantity" type="text" style="width:30px"/>
+							<input wicket:id="quantityButton" type="submit" style="width:30px" value="Ok"/>
+							<br>
+							<a wicket:id="addOneLink" style="margin-right : 5px;" wicket:message="title:addOneLinkHint">
+								<wicket:message key="addOneLink">[add one]</wicket:message>
+							</a>
+							<a wicket:id="removeOneLink" style="margin-right : 5px;" wicket:message="title:removeOneLinkHint">
+								<wicket:message key="removeOneLink">[remove one]</wicket:message>
+							</a>
+							<a wicket:id="removeAllLink" style="margin-right : 5px;" wicket:message="title:removeAllLinkHint">
+								<wicket:message key="removeAllLink">[remove all]</wicket:message>
+							</a>
+						
+						</p>
+				</div>
+				<div class="g144">
+						<p align="right" style="margin-top : 30px;">
+							<wicket:container wicket:id="lineAmountView">
+								[line amount price]
+							</wicket:container>
+						</p>
+				</div>
+			</td>
+			
             </tr>
             <tr>
-                <td colspan="5" align="right">
-                    <wicket:container wicket:id="subTotalView">
-                        [sub total]
-                    </wicket:container>
+                <td align="right">
+					<div style=" border-top: #999999 solid 1px; font-size:16px; margin-top: 5px; padding-top: 10px;	">
+						<wicket:container wicket:id="subTotalView">
+							[sub total]
+						</wicket:container>
+					</div>
                 </td>
             </tr>
         </table>

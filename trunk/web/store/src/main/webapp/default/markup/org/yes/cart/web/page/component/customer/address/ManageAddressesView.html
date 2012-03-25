@@ -3,45 +3,48 @@
 <wicket:panel>
 
     <form wicket:id="selectAddressForm">
-        <div wicket:id="addressRadioGroup">
-            <table border="1" width="1024">
-                <tr>
-                    <td colspan="2">
-                        <span wicket:id="addressTitle">[type dependend message]</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <a wicket:id="createLink">
-                    <span>
-                        <wicket:message key="create">[create]</wicket:message>
-                    </span>
-                        </a>
-                    </td>
-                </tr>
-                <tr wicket:id="addressList">
-                    <td>
-                        <input type="radio" wicket:id="addressRadio">
-                    </td>
-                    <td>
-                        <span wicket:id="addrLine1">[line 1]</span>
-                        <span wicket:id="addrLine2">[line 2]</span>
-                        <span wicket:id="addrLine3">[line 3]</span>
-                        <span wicket:id="addrLine4">[line 4]</span>
-                        <span wicket:id="addrLine5">[line 5]</span>
-                    </td>
-                    <td valign="top">
-                        <a wicket:id="deleteLink">
-                            <wicket:message key="delete">[delete]</wicket:message>
-                        </a>
-                        <a wicket:id="editLink">
-                            <wicket:message key="edit">[edit]</wicket:message>
-                        </a>
-                    </td>
-                </tr>
-            </table>
+        <div wicket:id="addressRadioGroup" >
+			<div class="g864 m5 menu"  style="border: solid 1px #d6d6d6;">
+				<p>
+					<span wicket:id="addressTitle">[type dependend message]</span>
+					<a wicket:id="createLink">
+						<span><wicket:message key="create">[create]</wicket:message></span>
+                    </a>
+				</p>
+			</div>
+            <div class="g864 m5" wicket:id="addressList" style="border: solid 1px #d6d6d6;">
+				<div class="g72 m5">
+					<p>
+						<input type="radio" wicket:id="addressRadio">
+					</p>
+				</div>
+				<div class="g648 m5">
+					<p>
+						<span wicket:id="addrLine1">[line 1]</span>
+						<span wicket:id="addrLine2">[line 2]</span>
+						<span wicket:id="addrLine3">[line 3]</span>
+						<span wicket:id="addrLine4">[line 4]</span>
+						<span wicket:id="addrLine5">[line 5]</span>
+					</p>
+				</div>
+				 <div class="g144 m5">
+					<p>
+						<a wicket:id="deleteLink">
+							<wicket:message key="delete">[delete]</wicket:message>
+						</a>
+						<a wicket:id="editLink">
+							<wicket:message key="edit">[edit]</wicket:message>
+						</a>
+					</p>
+				</div>
+            </div>
         </div>
+		
     </form>
+	<div class="g864">
+		<p>&nbsp;</p>
+	</div>
+	
 
 </wicket:panel>
 </body>

@@ -2,26 +2,60 @@
 <body>
 <wicket:panel>
     <form wicket:id="shippingForm">
-        <table border="1">
-            <tr>
-                <td>
+        <div class="row">
+            <div class="g72 m5">
+                <p>&nbsp;
+                </p>
+            </div>
+
+            <div class="g216 m5">
+                <p>
                     <wicket:message key="carrier">[Carrier]</wicket:message>
-                </td>
-                <td><select wicket:id="carrier"/></td>
-                <td rowspan="2" align="center" valign="middle">
+                </p>
+
+            </div>
+            <div class="g360 m5">
+                <p>
+                    <select wicket:id="carrier" class="input-select"/>
+                </p>
+            </div>
+            
+        </div>
+
+        <div class="row">
+            <div class="g72 m5">
+                <p>&nbsp;
+                </p>
+            </div>
+
+            <div class="g216 m5">
+                <p>
+                    <wicket:message key="carrierSla">[Carrier SLA]</wicket:message>
+                </p>
+
+            </div>
+            <div class="g576 m5">
+                <p>
+                    <select wicket:id="carrierSla" class="input-select"/>
+                </p>
+
+            </div>
+        </div>
+		
+		<div class="row">
+		<div class="g504 m5">
+                <p>&nbsp;
+                </p>
+            </div>
+		<div class="g144 m5"  style="  font-size:16px; margin-top: 5px; padding-top: 10px;	">
+                <p>&nbsp;
                     <wicket:container wicket:id="priceView">
                         [price]
                     </wicket:container>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <wicket:message key="carrierSla">[Carrier SLA]</wicket:message>
-                </td>
-                <td><select wicket:id="carrierSla"/></td>
-            </tr>
+                </p>
+            </div>
+		</div>
 
-        </table>
     </form>
 </wicket:panel>
 </body>

@@ -124,21 +124,18 @@ public class PriceView extends BaseComponent {
         }
         final String[] formated = getFormatedPrice(priceToFormat);
 
-        add(
+        addOrReplace(
                 new Label(WHOLE_LABEL, formated[0])
-                        .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_WHOLE))
-        );
-        add(
+                        .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_WHOLE)))
+        .addOrReplace(
                 new Label(DOT_LABEL, ".")
                         .setVisible(StringUtils.isNotBlank(formated[0]) || StringUtils.isNotBlank(formated[1]))
-                        .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_DOT))
-        );
-        add(
+                        .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_DOT)))
+        .addOrReplace(
                 new Label(DECIMAL_LABEL, formated[1])
                         .setVisible(StringUtils.isNotBlank(formated[0]) || StringUtils.isNotBlank(formated[1]))
-                        .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_DECIMAL))
-        );
-        add(
+                        .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_DECIMAL)))
+        .addOrReplace(
                 new Label(CURRENCY_LABEL, currencySymbolService.getCurrencySymbol(currencySymbol))
                         .setVisible(showCurrencySymbol)
                         .setEscapeModelStrings(false)

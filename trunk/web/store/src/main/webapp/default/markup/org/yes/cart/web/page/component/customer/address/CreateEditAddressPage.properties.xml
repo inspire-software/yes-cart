@@ -14,5 +14,9 @@
     <entry key="phoneList">Phones</entry>
     <entry key="create">Save</entry>
     <entry key="cancel">Cancel</entry>
+	
+	<entry key="createEditAddress">Manage address</entry>
+	
+	
 
 </properties>

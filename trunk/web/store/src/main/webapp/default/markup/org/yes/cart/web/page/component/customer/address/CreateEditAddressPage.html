@@ -3,87 +3,117 @@
 
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" type="text/css" href="../../../../style/default.css" media="screen"/>
-    <title>Registration</title>
+    <wicket:link>
+        <link rel="stylesheet" type="text/css" href="../../../../../style/reset.css"/>
+        <link rel="stylesheet" type="text/css" href="../../../../../style/text.css"/>
+        <link rel="stylesheet" type="text/css" href="../../../../../style/1024_16_10_10.css"/>
+    </wicket:link>
+    <title>
+        <wicket:message key="createEditAddress">[Create or edit address]</wicket:message>
+    </title>
 </head>
 
 <body>
 
-
-<table id="mainTable" border="1" align="center" width="1024">
-    <tr>
-        <td>
+<div class="mainpage">
+    <div class="row grhead">
+        <div class="column grid_16 grhead">
+            <p>
+                <wicket:message key="createEditAddress">[Checkout]</wicket:message>
+            </p>
+        </div>
+    </div>
+	
+	<div class="row">
+        <div class="column grid_1"><p>&nbsp;</p>
+            
+        </div>
+        <div class="column grid_14">
             <div wicket:id="feedback">[feedpack panel]</div>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <form wicket:id="addressForm">
+        </div>
+		<div class="column grid_1">
+            
+        </div>
+    </div>
+	
+	<form wicket:id="addressForm">
+	
+	<div class="row">
+        <div class="column grid_1"><p>&nbsp;</p>
+            
+        </div>
+        <div class="column grid_14">
+            <div class="g144 m5">
+					<wicket:message key="firstName">[First name]</wicket:message>
+			</div>
+            <div class="g720 m5">
+					<input type="text" class="input-text" wicket:id="firstName" maxlength="128"/>
+			</div>
 
-                <table cellpadding="0" cellspacing="0" class="table-in-form">
-                    <tr>
-                        <td colspan="2">
-                    <span class="table-title-in-form"><wicket:message key="adderessTitle">[Edit address]
-                    </wicket:message></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <wicket:message key="firstName">[First name]</wicket:message>
-                        </td>
-                        <td><input type="text" class="input-text" wicket:id="firstName"/></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <wicket:message key="lastName">[Last name]</wicket:message>
-                        </td>
-                        <td><input type="text" class="input-text" wicket:id="lastName"/></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <wicket:message key="line1">[line 1]</wicket:message>
-                        </td>
-                        <td><input type="text" class="input-text" wicket:id="line1"/></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <wicket:message key="line2">[line 2]</wicket:message>
-                        </td>
-                        <td><input type="text" class="input-text" wicket:id="line2"/></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <wicket:message key="country">[Country]</wicket:message>
-                        </td>
-                        <td><select class="input-select" wicket:id="country"/></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <wicket:message key="state">[State]</wicket:message>
-                        </td>
-                        <td><select class="input-select" wicket:id="state"/></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <wicket:message key="city">[City]</wicket:message>
-                        </td>
-                        <td><input type="text" class="input-text" wicket:id="city"/></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <wicket:message key="postcode">[postcode]</wicket:message>
-                        </td>
-                        <td><input type="text" class="input-text" wicket:id="postcode"/></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <wicket:message key="phoneList">[phoneList]</wicket:message>
-                        </td>
-                        <td><input type="text" class="input-text" wicket:id="phoneList"/></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <a style="padding-left: 150px;" wicket:id="cancel" class="saveg">
+            <div class="g144 m5">
+					<wicket:message key="lastName">[Last name]</wicket:message>
+			</div>
+            <div class="g720 m5">
+					<input type="text" class="input-text" wicket:id="lastName"  maxlength="128"/>
+			</div>
+
+            <div class="g144 m5">
+					<wicket:message key="line1">[line 1]</wicket:message>
+			</div>
+            <div class="g720 m5">
+					<input type="text" class="input-text" wicket:id="line1"  maxlength="255"/>
+			</div>
+
+            <div class="g144 m5">
+					<wicket:message key="line2">[line 2]</wicket:message>
+			</div>
+            <div class="g720 m5">
+					<input type="text" class="input-text" wicket:id="line2"  maxlength="255"/>
+			</div>				
+
+            <div class="g144 m5">
+					<wicket:message key="country">[Country]</wicket:message>
+			</div>
+            <div class="g720 m5">
+					<select class="input-select" wicket:id="country"/>
+			</div>			
+
+            <div class="g144 m5">
+					<wicket:message key="state">[State]</wicket:message>
+			</div>
+            <div class="g720 m5">
+					<select class="input-select" wicket:id="state"/>
+			</div>
+			
+            <div class="g144 m5">
+					<wicket:message key="city">[City]</wicket:message>
+			</div>
+            <div class="g720 m5">
+					<input type="text" class="input-text" wicket:id="city"  maxlength="128"/>
+			</div>		
+			
+            <div class="g144 m5">
+					<wicket:message key="postcode">[postcode]</wicket:message>
+			</div>
+            <div class="g720 m5">
+					<input type="text" class="input-text" wicket:id="postcode"  maxlength="16"/>
+			</div>		
+			
+            <div class="g144 m5">
+					<wicket:message key="phoneList">[phoneList]</wicket:message>
+			</div>
+            <div class="g720 m5">
+					 <input type="text" class="input-text" wicket:id="phoneList"  maxlength="256"/>
+			</div>					
+			
+            <div class="g144 m5">
+				<p>
+					
+				</p>
+			</div>
+            <div class="g720 m5">
+				<p>
+							<a wicket:id="cancel" class="saveg">
                                     <span>
                                         <wicket:message key="cancel">[cancel]</wicket:message>
                                     </span>
@@ -92,15 +122,39 @@
                                     <span>
                                         <wicket:message key="create">[create]</wicket:message>
                                     </span>
-                            </a>
-                        </td>
-                    </tr>
-                </table>
+                            </a>					
+				</p>
+			</div>		
+			
+            <div class="g144 m5">
+				<p>
+					
+				</p>
+			</div>
+            <div class="g720 m5">
+				<p>
+					
+				</p>
+			</div>				
+        </div>
+		<div class="column grid_1">
+            
+        </div>
+    </div>
+             
 
             </form>
-        </td>
-    </tr>
-</table>
+	
+	<div class="row gr">
+        <div class="column grid_16 gr">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+    </div>
+</div>
+
+
 
 </body>
 </html>
