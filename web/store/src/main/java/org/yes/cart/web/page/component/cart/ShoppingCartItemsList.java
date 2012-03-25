@@ -192,21 +192,18 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
 
 
                 if (NumberUtils.isDigits(qty) && NumberUtils.toInt(qty) >= 1) {
-                    final StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("/cart/");
-                    stringBuilder.append(SetSkuQuantityToCartEventCommandImpl.CMD_KEY);
-                    stringBuilder.append('/');
-                    stringBuilder.append(skuCode);
-                    stringBuilder.append('/');
-                    stringBuilder.append(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY);
-                    stringBuilder.append('/');
-                    stringBuilder.append(qty);
-                    /* getRequestCycle().setRequestTarget(
-                            new RedirectRequestTarget(stringBuilder.toString())
-                    );*/
+                    qtyField.setConvertedInput(new Integer(qty));
+                    setResponsePage(
+                            ShoppingCartPage.class,
+                            new PageParameters()
+                                    .add(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, skuCode)
+                                    .add(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, qty)
+                    );
+
+
                 } else {
                     qtyField.setConvertedInput(BigDecimal.ONE.intValue());
-                    error(getLocalizer().getString("nonzerodigits", this, "UTF-8"));
+                    error(getLocalizer().getString("nonzerodigits", this, "Need positive integer value"));
                 }
             }
         };

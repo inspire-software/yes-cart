@@ -22,14 +22,14 @@ public class ShoppingCartPage extends AbstractWebPage {
      */
     public ShoppingCartPage(final PageParameters params) {
         super(params);
+
     }
 
     @Override
     protected void onBeforeRender() {
-
         processCommands();
 
-        add(
+        addOrReplace(
                 new ShoppingCartView(CART_VIEW)
         );
 

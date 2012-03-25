@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+
+    <entry key="productName">Продукт</entry>
+    <entry key="price">Цена</entry>
+    <entry key="qty">Количество</entry>
+    <entry key="amount">Всего</entry>	
+	
+	<entry key="deliveryNum">Номер доставки</entry>
+
+	<entry key="deliverySubTotal">Итого по доставке</entry>
+	<entry key="deliverySubTotalTax">в т.ч. НДС</entry>
+	<entry key="deliverySubTotalAmount">Всего</entry>
+	
+	<entry key="deliveryCost">Доставка</entry>
+	<entry key="deliveryCostTax">в т.ч. НДС</entry>
+	<entry key="deliveryCostAmount">Всего</entry>
+	
+	<entry key="grandTotal">Сумма</entry>
+	<entry key="grandTotalTax">в т.ч. НДС</entry>
+	<entry key="grandTotalAmount">Всего</entry>	
+
+
+</properties>

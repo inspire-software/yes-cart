@@ -12,4 +12,6 @@
 	<entry key="multipleDeliveryLabel">Multiple delivery</entry>
 	<entry key="multipleDeliveryHint">This order may have several delivery</entry>
     <entry key="paymentSubmit">Pay</entry>
+	
+	<entry key="checkout">Checkout</entry>
 </properties>

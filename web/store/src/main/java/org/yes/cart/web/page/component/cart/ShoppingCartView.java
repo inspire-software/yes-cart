@@ -43,18 +43,13 @@ public class ShoppingCartView extends BaseComponent {
      */
     public ShoppingCartView(final String id) {
         super(id);
-    }
 
-    @Override
-    protected void onBeforeRender() {
-
-
-        add(
-                new Form(CART_FORM).add(
+        addOrReplace(
+                new Form(CART_FORM).addOrReplace(
                         new ShoppingCartItemsList(ITEMS_LIST, ApplicationDirector.getShoppingCart().getCartItemList())
-                ).add(
+                ).addOrReplace(
                         new FeedbackPanel(FEEDBACK)
-                ).add(
+                ).addOrReplace(
                         new PriceView(
                                 SUB_TOTAL_VIEW,
                                 new Pair<BigDecimal, BigDecimal>(
@@ -65,7 +60,7 @@ public class ShoppingCartView extends BaseComponent {
                 )
         );
 
-
-        super.onBeforeRender();
     }
+
+
 }

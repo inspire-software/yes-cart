@@ -16,6 +16,17 @@ a:hover {
     border-bottom: 2px solid red;
 }
 
+a.image-border {
+	text-decoration: none;
+	border: 0 none;
+}
+
+p {
+    overflow: hidden;
+    padding: 10px 0;
+    margin: 0 0 5px 0;
+}
+
 .hmenulink {
     color: black;
 }
@@ -27,10 +38,16 @@ a:hover {
     overflow: hidden;
 }
 
-p {
-    overflow: hidden;
-    padding: 10px 0;
-    margin: 0 0 5px 0;
+
+
+.input-text {
+	width:260px;
+	
+}
+
+.input-select {
+	width:260px;
+	
 }
 
 .gr {
@@ -507,7 +524,7 @@ ul { list-style-type: none;}
 .featured {
 	float: left;
 	margin-left: 15px;
-	margin-top:  10px;
+	
 }
 
 .newarrival {
@@ -516,4 +533,59 @@ ul { list-style-type: none;}
 	margin-top: 15px;
 	text-align: center;
 
+}
+
+
+
+/* ***************************************************** */
+
+/* =Grid >> Global
+--------------------------------------------------------------------------------*/
+.g72, .g144, .g216, .g288, .g360, .g432, .g504, .g576, .g648, .g720, .g792, .g864 {
+	display: inline;
+	float: left;
+	margin-left: 10px;
+}
+
+.m5 {
+	margin-left: 5px;
+}
+
+
+/* =Grid >> 12 Columns
+--------------------------------------------------------------------------------*/
+.g72{width:62px;}
+.g144{width:134px;}
+.g216{width:206px;}
+.g288{width:278px;}
+.g360{width:350px;}
+.g432{width:422px;}
+.g504{width:494px;}
+.g576{width:566px;}
+.g648{width:638px;}
+.g720{width:710px;}
+.g792{width:782px;}
+.g864{width:854px;}
+
+.ml72{margin-left:82px;}
+.ml144{margin-left:154px;}
+.ml216{margin-left:226px;}
+.ml288{margin-left:298px;}
+.ml360{margin-left:370px;}
+.ml432{margin-left:442px;}
+.ml504{margin-left:514px;}
+.ml576{margin-left:586px;}
+.ml648{margin-left:658px;}
+.ml720{margin-left:730px;}
+.ml792{margin-left:802px;}
+.ml864{margin-left:874px;}
+
+/* wicket */
+
+.feedbackPanelERROR {
+	font-size:16px;
+	font-weight:bold;
+	color: #ff4444;
+	margin-bottom:5px;
+	text-shadow:1px 1px 1px #ffaaaa;
 }

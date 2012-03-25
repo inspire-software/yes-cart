@@ -844,6 +844,7 @@
                 <entry key="cleanCartCmd" value="org.yes.cart.shoppingcart.impl.CleanCartCommandImpl"/>
 
                 <entry key="setShopIdCmd" value="org.yes.cart.shoppingcart.impl.SetShopCartCommandImpl"/>
+                <entry key="setQuantityToCartCmd" value="org.yes.cart.shoppingcart.impl.SetSkuQuantityToCartEventCommandImpl"/>
             </map>
         </constructor-arg>
     </bean>

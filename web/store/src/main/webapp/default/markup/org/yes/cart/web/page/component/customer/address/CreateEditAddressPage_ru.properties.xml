@@ -2,17 +2,19 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 
-    <entry key="adderessTitle">Addess</entry>
-    <entry key="firstName">First name</entry>
-    <entry key="lastName">Last name</entry>
-    <entry key="line1">Address line 1</entry>
-    <entry key="line2">Address line 2</entry>
-    <entry key="city">City</entry>
-    <entry key="country">Country</entry>
-    <entry key="state">State</entry>
-    <entry key="postcode">Post code</entry>
-    <entry key="phoneList">Phones</entry>
-    <entry key="create">Save</entry>
-    <entry key="cancel">Cancel</entry>
+    <entry key="adderessTitle">Адрес</entry>
+    <entry key="firstName">Имя</entry>
+    <entry key="lastName">Фамилия</entry>
+    <entry key="line1">Строка адреса 1</entry>
+    <entry key="line2">Строка адреса 2</entry>
+    <entry key="city">Город</entry>
+    <entry key="country">Страна</entry>
+    <entry key="state">Область</entry>
+    <entry key="postcode">Индекс</entry>
+    <entry key="phoneList">Телефоны</entry>
+    <entry key="create">Сохранить</entry>
+    <entry key="cancel">Отменить</entry>
+	
+	<entry key="createEditAddress">Адрес</entry>
 
 </properties>

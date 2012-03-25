@@ -9,9 +9,17 @@
     <entry key="amountMsg">Всего</entry>
 
 
-    <entry key="addOneLink">Добавить единицу</entry>
-    <entry key="removeOneLink">Удалить единицу</entry>
-    <entry key="removeAllLink">Удалить все</entry>
+    <entry key="addOneLink">+1</entry>
+    <entry key="removeOneLink">-1</entry>
+    <entry key="removeAllLink">X</entry>
+	
+    <entry key="addOneLinkHint">Добавить один</entry>
+    <entry key="removeOneLinkHint">Удалить один</entry>
+    <entry key="removeAllLinkHint">Удалить все</entry>
+
+    <entry key="nonzerodigits">Введи положительное целое количество</entry>
+
+
 
 
     <entry key="checkout">Оформить заказ</entry>

@@ -2569,10 +2569,10 @@ public void setRangeList(final RangeList rangeList) {
             <many-to-one name="association" class="org.yes.cart.domain.entity.Association" foreign-key="FK_PA_ASSOC">
                 <column name="ASSOCIATION_ID" not-null="true"/>
             </many-to-one>
-            <many-to-one name="product" class="org.yes.cart.domain.entity.Product" foreign-key="FK_PA_PRODUCT">
+            <many-to-one name="product" class="org.yes.cart.domain.entity.Product" foreign-key="FK_PA_PRODUCT" lazy="false">
                 <column name="PRODUCT_ID" not-null="true"/>
             </many-to-one>
-            <many-to-one name="productAssociated" class="org.yes.cart.domain.entity.Product" foreign-key="FK_PA_ASSOCPROD">
+            <many-to-one name="productAssociated" class="org.yes.cart.domain.entity.Product" foreign-key="FK_PA_ASSOCPROD"  lazy="false">
                 <column name="ASSOCIATEDPRODUCT_ID" not-null="true"/>
             </many-to-one>
 
