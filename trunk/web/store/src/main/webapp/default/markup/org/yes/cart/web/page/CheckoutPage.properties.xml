@@ -14,4 +14,6 @@
     <entry key="paymentSubmit">Pay</entry>
 	
 	<entry key="checkout">Checkout</entry>
+	<entry key="shopping">Continue shopping</entry>
+	
 </properties>

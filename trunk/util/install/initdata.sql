@@ -63,9 +63,6 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, E
   VALUES (  1005,  'CATEGORY_IMAGE_RETREIVE_STRATEGY',  0,  NULL,  'Strategy to get  image',
   'Strategy to get  image allowed: ATTRIBUTE - from  CATEGORY_IMAGE attribute or  RANDOM_PRODUCT - random product image will be used',  1000, 1002);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
-  VALUES (  1006,  'PRODUCT_IMAGE_WIDTH',  0,  NULL,  'Product image width in category',   'Product image width in category',  1003, 1002);
-
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  999,  'CURRENCY',  0,  NULL,  'Currensies',  'Supported currensies by shop. First one is default',  1004, 1001);

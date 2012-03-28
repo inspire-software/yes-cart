@@ -2,39 +2,50 @@
 <body>
 <wicket:panel>
 
-    <table align="center" width="800" cellpadding="0" cellspacing="0">
-        <tr><td>
-            <form wicket:id="loginForm">
-                <table>
-                    <tr>
-                        <td colspan="2">
-                            <span><wicket:message key="existingUser">[login existing user]</wicket:message></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <wicket:message key="email">[user email]</wicket:message>
-                        </td>
-                        <td><input type="text"  wicket:id="email"/></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <wicket:message key="password">[password]</wicket:message>
-                        </td>
-                        <td><input type="password"  wicket:id="password"/></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" align="right">
-                            <a wicket:id="registrationLink"><wicket:message key="registration">[registration]</wicket:message></a>
-                            <input type="submit" wicket:id="restorePasswordBtn"  wicket:message="value:restorePassword"/>
-                            <input type="submit" wicket:id="loginBtn"  wicket:message="value:signIn"/>
-                        </td>
-                    </tr>
-                </table>
-            </form>                
-        </td></tr>
-        <tr><td>&nbsp;</td></tr>
-    </table>
+    <form wicket:id="loginForm">
+			
+		<div <div style="clear:both;">
+			<p>
+				<div class="g360">
+					<wicket:message key="existingUser">[login existing user]</wicket:message>
+				</div>			
+			</p>
+		</div>
+
+		<div style="clear:both;">
+			<p>
+				<div class="g144">
+					<wicket:message key="email">[user email]</wicket:message>
+				</div>
+				<div class="g216">
+					<input type="text"  wicket:id="email" style="width:200px"/>
+				</div>			
+			</p>
+		</div>
+
+		<div style="clear:both;">
+			<p>
+				<div class="g144">
+					<wicket:message key="password">[password]</wicket:message>
+				</div>
+				<div class="g216">
+					<input type="password"  wicket:id="password" style="width:200px"/>
+				</div>			
+			</p>
+		</div>
+		
+		<div style="clear:both;">			
+			<div class="g360">
+				<p align="right">
+					<a wicket:id="registrationLink"><wicket:message key="registration">[registration]</wicket:message></a>
+					<input type="submit" wicket:id="restorePasswordBtn"  wicket:message="value:restorePassword"/>
+					<input type="submit" wicket:id="loginBtn"  wicket:message="value:signIn"/>					
+				</p>					
+			</div>			
+		</div>
+		
+		
+    </form>                
 
 </wicket:panel>
 </body>
