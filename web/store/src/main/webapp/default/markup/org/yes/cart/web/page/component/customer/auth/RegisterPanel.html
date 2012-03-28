@@ -1,55 +1,70 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
 <wicket:panel>
+	<form wicket:id="registerForm">
+	
+		<div <div style="clear:both;">
+			<p>
+				<div class="g360">
+						<wicket:message key="newUser">[new user]</wicket:message>
+				</div>			
+			</p>
+		</div>
+		
+		<div style="clear:both;">
+			<p>
+				<div class="g144">
+						<wicket:message key="email">[user email]</wicket:message>
+				</div>
+				<div class="g216">
+						<input type="text" wicket:id="email" style="width:200px"/>
+				</div>			
+			</p>
+		</div>
+		
+		<div style="clear:both;">
+			<p>
+				<div class="g144">
+						<wicket:message key="firstname">[first name]</wicket:message>
+				</div>
+				<div class="g216">
+						<input type="text" wicket:id="firstname" style="width:200px"/>
+				</div>			
+			</p>
+		</div>
+		
 
-    <table align="center" width="800" cellpadding="0" cellspacing="0">
-        <tr>
-            <td>
-                <form wicket:id="registerForm">
-                    <table>
-                        <tr>
-                            <td colspan="2">
-                                <span><wicket:message key="newUser">[new user]</wicket:message></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <wicket:message key="email">[user email]</wicket:message>
-                            </td>
-                            <td><input type="text" wicket:id="email"/></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <wicket:message key="firstname">[first name]</wicket:message>
-                            </td>
-                            <td><input type="text" wicket:id="firstname"/></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <wicket:message key="lastname">[last name]</wicket:message>
-                            </td>
-                            <td><input type="text" wicket:id="lastname"/></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <wicket:message key="phone">[phone]</wicket:message>
-                            </td>
-                            <td><input type="text" wicket:id="phone"/></td>
-                        </tr>
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td>
-                                <input type="submit" wicket:id="registerBtn" wicket:message="value:register"/>
-                            </td>
-                        </tr>
-                    </table>
-                </form>
-            </td>
-        </tr>
-        <tr>
-            <td>&nbsp;</td>
-        </tr>
-    </table>
+		<div style="clear:both;">
+			<p>
+				<div class="g144">
+						<wicket:message key="lastname">[last name]</wicket:message>
+				</div>
+				<div class="g216">
+						<input type="text" wicket:id="lastname" style="width:200px"/>
+				</div>			
+			</p>
+		</div>
+		
+		<div style="clear:both;">
+			<p>
+				<div class="g144">
+						<wicket:message key="phone">[phone]</wicket:message>
+				</div>
+				<div class="g216">
+						<input type="text" wicket:id="phone" style="width:200px"/>
+				</div>
+			</p>
+		</div>
+
+		<div style="clear:both;">			
+			<div class="g360">
+				<p align="right">
+					<input type="submit" wicket:id="registerBtn" wicket:message="value:register"/>
+				</p>					
+			</div>			
+		</div>
+
+	</form>
 </wicket:panel>
 </body>
 </html>

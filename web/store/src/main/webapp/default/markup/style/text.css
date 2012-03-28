@@ -1,5 +1,6 @@
 body {
-    background: #efefef;
+
+	background: #efefef url('storebg.png') repeat;
     font-family: Verdana, Arial, Helvetica;
     font-size: 12px;
 }

@@ -14,4 +14,5 @@
     <entry key="paymentSubmit">Оплатить</entry>
 	
 	<entry key="checkout">Оформление покупки</entry>
+	<entry key="shopping">Обратно в магазин</entry>
 </properties>
