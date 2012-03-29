@@ -4,8 +4,8 @@
     <entry key="create">Создать</entry>
     <entry key="delete">Удалить</entry>
     <entry key="edit">Редактировать</entry>
-    <entry key="addressTypeS">Доставка</entry>
-    <entry key="addressTypeB">Оплата</entry>
+    <entry key="addressTypeS">Адрес доставки</entry>
+    <entry key="addressTypeB">Адрес для счета</entry>
 
     <entry key="adderessTitle">Адрес</entry>
     <entry key="firstName">Имя</entry>
