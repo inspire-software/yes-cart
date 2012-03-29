@@ -8,7 +8,7 @@
         <link rel="stylesheet" type="text/css" href="../../../../../style/text.css"/>
         <link rel="stylesheet" type="text/css" href="../../../../../style/1024_16_10_10.css"/>
     </wicket:link>
-    <title>Selfcare page</title>
+    <title><wicket:message key="selfCare">[selfCare]</wicket:message></title>
 </wicket:head>
 
 <body>
@@ -16,75 +16,209 @@
 
 <div class="mainpage">
 
-    <div class="row">
-        <div class="grid_16 column">
+    <div class="row grhead">
+        <div class="column grid_16 grhead">
             <p>
-                <wicket:link>
-                    <a href="HomePage.html">
-                        <wicket:message key="homePage">[Back to shopping]</wicket:message>
-                    </a>
-                </wicket:link>
-                <div wicket:id="feedback">[feedpack panel]</div>
+                <wicket:message key="selfCare">[selfCare]</wicket:message>
             </p>
         </div>
     </div>
+	
+    <div class="row">
+        <div class="column grid_1">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+        <div class="column grid_14">
+            <ul class="menu">
+				<li>
+                <wicket:link>
+                    <a href="HomePage.html">
+                        <span><wicket:message key="shopping"> [Shopping &lt;&lt;&lt;]</wicket:message></span>
+                    </a>
+                </wicket:link>					
+				</li>
+            </ul>
+        </div>
+        <div class="column grid_1">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+    </div>
+	
+
 
     <div class="row">
-        <div class="grid_16 column">
+        <div class="column grid_1">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+	
+        <div class="grid_14 column">
+            <p>
+                <div wicket:id="feedback">[feedpack panel]</div>
+            </p>
+        </div>
+        <div class="column grid_1">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+		
+    </div>
+
+    <div class="row">
+	        <div class="column grid_1">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+
+        <div class="grid_14 column">
             <p>
                 <wicket:container wicket:id="summaryView">
                     [summary info]
                 </wicket:container>
             </p>
         </div>
+        <div class="column grid_1">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+		
     </div>
 
     <div class="row">
-        <div class="grid_16 column">
+        <div class="column grid_1">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+	
+        <div class="grid_14 column">
             <p>
                 <wicket:container wicket:id="attributesView">
                     [optional info]
                 </wicket:container>
             </p>
         </div>
+		
+        <div class="column grid_1">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+		
     </div>
 
     <div class="row">
-        <div class="grid_16 column">
+        <div class="column grid_1">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+	
+	
+        <div class="grid_14 column">
             <p>
                 <wicket:container wicket:id="ordersView">
                     [list of orders]
                 </wicket:container>
             </p>
         </div>
+		
+        <div class="column grid_1">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+		
     </div>
 
     <div class="row">
-        <div class="grid_16 column">
+        <div class="column grid_1">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+	
+        <div class="grid_14 column">
             <p>
                 <wicket:container wicket:id="passwordView">
                     [change password]
                 </wicket:container>
             </p>
         </div>
+		
+        <div class="column grid_1">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+		
     </div>
 
     <div class="row">
-        <div class="grid_8 column">
+	
+        <div class="column grid_1">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+	
+        <div class="grid_14 column">
             <p>
                 <wicket:container wicket:id="shippingAddressesView">
                     [shipping address]
                 </wicket:container>
             </p>
         </div>
-        <div class="grid_8 column">
+		
+        <div class="column grid_1">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+	
+    </div>
+	
+    <div class="row">
+	
+        <div class="column grid_1">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+	
+        <div class="grid_14 column">
             <p>
                 <wicket:container wicket:id="billingAddressesView">
                     [billing address]
                 </wicket:container>
             </p>
         </div>
+		
+        <div class="column grid_1">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+	
     </div>
+	
+	
+    <div class="row gr">
+        <div class="column grid_16 gr">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+    </div>
+	
 
 
 </div>

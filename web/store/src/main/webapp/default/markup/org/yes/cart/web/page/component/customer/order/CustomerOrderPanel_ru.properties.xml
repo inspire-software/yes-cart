@@ -17,6 +17,8 @@
 	<entry key="orderStatusHead">Статус</entry>
 	<entry key="orderItemsHead">Товар</entry>
 	<entry key="orderAmountHead">Сумма</entry>
+	
+	<entry key="orderInfo">Покупки</entry>
 
 
 </properties>

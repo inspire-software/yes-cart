@@ -17,6 +17,9 @@
 	<entry key="orderStatusHead">Status</entry>
 	<entry key="orderItemsHead">Product</entry>
 	<entry key="orderAmountHead">Sum</entry>
+	
+	<entry key="orderInfo">Orders</entry>
+	
 
 
 </properties>
