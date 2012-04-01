@@ -1,0 +1,23 @@
+<!DOCTYPE langpack PUBLIC "izpack-langpack"
+                          "http://svn.codehaus.org/izpack-svn/izpack-src/branches/4.3/src/dtd/langpack.dtd">
+<langpack>
+
+    <str id="JDKPathPanel.intro" txt=""/>
+    <str id="JDKPathPanel.info" txt="Укажите путь к JDK версии 1.6 или новее"/>
+
+    <str id="WebServerConfigurationPanel.title" txt="Настройка веб-сервера"/>
+    <str id="WebServerConfigurationPanel.http.port" txt="HTTP порт"/>
+    <str id="WebServerConfigurationPanel.http.port.validation.error" txt="HTTP порт должен быть указан"/>
+    <str id="WebServerConfigurationPanel.https.port" txt="HTTPS порт"/>
+    <str id="WebServerConfigurationPanel.port.validation.error" txt="Порт должен быть числом в диапазоне (0..65535)"/>
+    <str id="WebServerConfigurationPanel.ssl.keystore.file" txt="SSL ключ:"/>
+    <str id="WebServerConfigurationPanel.ssl.keystore.password" txt="Пароль на SSL ключ:"/>
+    <str id="WebServerConfigurationPanel.ssl.keystore.password.validation.error" txt="Пароли не совпадают."/>
+    <str id="WebServerConfigurationPanel.ssl.keystore.file.password.validation.error"
+         txt="Валидация пароля на SSL ключ неуспешна."/>
+    <str id="WebServerConfigurationPanelValidator.validation.failed" txt="Следующие проверки заканчились неудачей:"/>
+    <str id="WebServerConfigurationPanelValidator.http.port.unavailable" txt="HTTP порт не доступен."/>
+    <str id="WebServerConfigurationPanelValidator.https.port.unavailable" txt="HTTPS порт не доступен."/>
+    <str id="WebServerConfigurationPanelValidator.validation.confirmation" txt="Вы хотите продолжить?"/>
+
+</langpack>
