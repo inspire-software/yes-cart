@@ -127,7 +127,8 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         final List<AttrValue> attrNameValues = new ArrayList<AttrValue>(attributesNames.length);
         for (String attrName : attributesNames) {
             for (AttrValue attrValue : attrValueCollection) {
-                if (attrValue.getAttribute().getCode().equals(attrName)) {
+                final String candidatCode = attrValue.getAttribute().getCode();
+                if (candidatCode.equals(attrName) || candidatCode.equals("SKU" + attrName)) {
                     attrNameValues.add(attrValue);
                 }
             }

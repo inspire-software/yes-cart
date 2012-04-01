@@ -16,6 +16,39 @@
 <body>
 
 <div class="mainpage">
+
+	<div class="row grhead">
+		<div class="column grid_16 grhead">
+			<p>
+				<wicket:message key="orderPayment">[Order payment]</wicket:message>
+			</p>	
+		</div>
+	</div>
+	
+	<div class="row">
+        <div class="column grid_1">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+        <div class="column grid_14">
+            <ul class="menu">
+				<li>
+                <wicket:link>
+                    <a href="HomePage.html">
+                        <span><wicket:message key="continueShopping"> [Shopping ]</wicket:message></span>
+                    </a>
+                </wicket:link>					
+				</li>
+            </ul>
+        </div>
+        <div class="column grid_1">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+    </div>
+	
     <div class="row">
         <div class="column grid_1">
             &nbsp;
@@ -31,6 +64,15 @@
             &nbsp;
         </div>
     </div>
+	
+	<div class="row gr">
+        <div class="column grid_16 gr">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+    </div>
+	
 
 
 
@@ -57,10 +99,7 @@
         <wicket:message key="positivePaymentNotes">[negative payments]</wicket:message>
     </span>
     <wicket:link>
-        <a href="HomePage.html">
-            <wicket:message key="continueShopping">[new shopping session]</wicket:message>
-        </a>
-        <br>
+
         <a href="CustomerSelfCarePage.html">
             <wicket:message key="checkStatus">[check order status]</wicket:message>
         </a>
