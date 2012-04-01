@@ -1,18 +1,28 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
 <wicket:panel>
-    <div>
-        <a wicket:id="categoryLinkImage"   class="image-border">
-            <img border="0" wicket:id="categoryImage" align="left" hspace="10" vspace="10"/>
-        </a>
+    <div class="g288">
+		
+		<div class="g288 m5">
+			<div class="g144 m5">
+				<a wicket:id="categoryLinkImage"   class="image-border">
+					<img border="0" wicket:id="categoryImage" align="left" hspace="10" vspace="10"/>
+				</a>
+			</div>
+			<div class="g144 m5" style="margin-top:35px;">
+				<a wicket:id="categoryLinkName">
+					<span wicket:id="categoryName">[sub category name]</span>
+				</a>
+			</div>
+		</div>
 
-        <a wicket:id="categoryLinkName">
-            <span wicket:id="categoryName">[sub category name]</span>
-        </a>
-
-        <a wicket:id="categoryLinkDescription">
-            <span wicket:id="categoryDescription">[sub category description]</span>
-        </a>
+		<div class="g288 m5">
+			<p>
+				<a wicket:id="categoryLinkDescription">
+					<span wicket:id="categoryDescription">[sub category description]</span>
+				</a>
+			</p>
+		</div>
     </div>
 </wicket:panel>
 </body>

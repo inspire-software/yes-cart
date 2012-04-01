@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-	<entry key="orderPayment">Оплтата заказа</entry>
+	<entry key="orderPayment">Оплата заказа</entry>
 	<entry key="negativePaymentNotes">Оплата произведена неудачно</entry>
 	<entry key="positivePaymentNotes">Оплата произведена успешно</entry>
 	<entry key="continueShopping">За новыми покупками</entry>

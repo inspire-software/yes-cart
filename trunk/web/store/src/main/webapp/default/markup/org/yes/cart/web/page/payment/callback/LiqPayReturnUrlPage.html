@@ -1,15 +1,89 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
-<head>
+
+ <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <wicket:link>
+        <link rel="stylesheet" type="text/css" href="../../../../../../../style/reset.css"/>
+        <link rel="stylesheet" type="text/css" href="../../../../../../../style/text.css"/>
+        <link rel="stylesheet" type="text/css" href="../../../../../../../style/1024_16_10_10.css"/>
+    </wicket:link>
     <title>
         <wicket:message key="pageTitle">[page title]</wicket:message>
     </title>
-    <link rel="stylesheet" type="text/css" href="../../../../../../style/default.css" media="screen"/>
-</head>
+
 <body>
 
-<div wicket:id="feedback">[feedpack panel]</div>
-<span wicket:id="infoLabel"></span>
+
+<div class="mainpage">
+
+    <div class="row grhead">
+        <div class="column grid_16 grhead">
+            <p>
+                <wicket:message key="pageTitle">[page title]</wicket:message>
+            </p>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="column grid_1">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+        <div class="column grid_14">
+            <p>
+                
+				
+				<div wicket:id="feedback">[feedpack panel]</div>
+				<br>
+				<span wicket:id="infoLabel"></span>
+
+
+            </p>
+        </div>
+        <div class="column grid_1">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="column grid_1">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+        <div class="column grid_14">
+            <p>
+                
+				<wicket:link>
+					<a href="HomePage.html">
+						<wicket:message key="home"> [Login Or Registration]</wicket:message>
+					</a>
+				</wicket:link>
+            </p>
+        </div>
+        <div class="column grid_1">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+    </div>
+	
+    <div class="row gr">
+        <div class="column grid_16 gr">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+    </div>
+
+
+</div>
+
 
 </body>
 </html>
+

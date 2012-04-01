@@ -338,9 +338,12 @@ p {
 .regular-sale-price-dot     { color: #aaaaaa; font-weight: lighter; font-size: 0.5em; vertical-align: baseline; top: -0.7em; position: relative; }
 .regular-sale-price-decimal { color: #aaaaaa; font-weight: lighter; font-size: 0.5em; vertical-align: baseline; top: -0.7em; position: relative; text-decoration:line-through;}
 
-.sale-price-whole   { color: #ff1111; font-weight: bold; font-size: 1.1em; }
-.sale-price-dot     { color: #ff1111; font-weight: bold; font-size: 0.5em; vertical-align: baseline; top: -0.7em; position: relative; }
-.sale-price-decimal { color: #ff1111; font-weight: bold; font-size: 0.5em; vertical-align: baseline; top: -0.7em; position: relative; }
+
+
+
+.sale-price-whole        { color: #ff1111; font-weight: bold;  }
+.sale-price-dot          {  color: #ff1111;font-weight: bold; font-size: 0.8em; vertical-align: baseline; top: -0.7em; position: relative; display:none; visibility:hidden;}
+.sale-price-decimal      {color: #ff1111;  font-weight: bold; font-size: 0.8em; vertical-align: baseline; top: -0.7em; position: relative; text-decoration: underline;}
 
 
 
@@ -723,3 +726,41 @@ ul { list-style-type: none;}
 
 .back span:before   {   content: " < " }
 .forward span:after   {   content: " > " }
+
+
+/* payment forms */
+
+
+#paymentDiv  input{
+
+	margin-left:200px;
+	width:150px;
+	height:30px;
+	cursor:pointer;
+	color: #fef4e9;
+    border: solid 1px #da7c0c;
+    background: #f78d1d;
+    background: -webkit-gradient(linear, left top, left bottom, from(#faa51a), to(#f47a20));
+    background: -moz-linear-gradient(top,  #faa51a,  #f47a20);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#faa51a', endColorstr='#f47a20');
+
+
+}
+
+#paymentDiv  input:hover {
+	color: black;
+    background: #f47c20;
+	border: solid 1px #da7c0c;
+    background: -webkit-gradient(linear, left top, left bottom, from(#f88e11), to(#f06015));
+    background: -moz-linear-gradient(top,  #f88e11,  #f06015);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f88e11', endColorstr='#f06015');
+}
+
+
+#paymentDiv  input:active {
+    color: #fcd3a5;
+    background: -webkit-gradient(linear, left top, left bottom, from(#f47a20), to(#faa51a));
+    background: -moz-linear-gradient(top,  #f47a20,  #faa51a);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f47a20', endColorstr='#faa51a');
+
+}
