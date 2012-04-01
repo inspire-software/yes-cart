@@ -3,9 +3,7 @@
 = Introduction =
 
 Add your content here.
-[
-http://yes-cart.googlecode.com/files/screen1_tumb.jpeg
-http://yes-cart.googlecode.com/files/screen1.jpeg]
+[http://yes-cart.googlecode.com/files/screen1_tumb.jpeg http://yes-cart.googlecode.com/files/screen1.jpeg]
 
 
 = Details =
