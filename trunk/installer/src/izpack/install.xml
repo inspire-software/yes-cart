@@ -1,0 +1,65 @@
+<!DOCTYPE installation PUBLIC "izpack-installation"
+                              "http://svn.codehaus.org/izpack-svn/izpack-src/branches/4.3/src/dtd/installation.dtd">
+<installation version="1.0">
+    <info>
+        <appname>yes-cart</appname>
+        <appversion>${project.version}</appversion>
+        <authors>
+            <author name="Igor Azarny" email="iazarny@yahoo.com"/>
+        </authors>
+        <url>http://code.google.com/p/yes-cart</url>
+        <uninstaller write="no"/>
+    </info>
+
+    <variables>
+        <variable name="JDKPathPanel.minVersion" value="1.6.0" />
+        <variable name="JDKPathPanel.skipIfValid" value="yes" />
+    </variables>
+
+    <guiprefs width="640" height="480" resizable="yes"/>
+
+    <locale>
+        <langpack iso3="eng"/>
+        <langpack iso3="rus"/>
+    </locale>
+
+    <resources>
+        <res id="userInputSpec.xml" src="panels.xml"/>
+        <res id="CustomLangpack.xml_eng" src="i18n_eng.xml"/>
+        <res id="CustomLangpack.xml_rus" src="i18n_rus.xml"/>
+    </resources>
+
+    <panels>
+        <panel classname="HelloPanel"/>
+        <panel classname="JDKPathPanel"/>
+        <panel classname="TargetPanel"/>
+        <panel classname="PacksPanel"/>
+        <panel classname="UserInputPanel" id="WebServerConfigurationPanel">
+            <validator classname="org.yes.cart.installer.WebServerConfigurationPanelValidator"/>
+        </panel>
+        <panel classname="InstallPanel"/>
+        <panel classname="FinishPanel"/>
+    </panels>
+
+    <listeners>
+        <listener installer="org.yes.cart.installer.ApacheTomcat7PackPostInstaller"/>
+    </listeners>
+
+    <packs>
+        <pack name="Apache Tomcat 7" required="yes">
+            <description/>
+            <fileset dir="apache-tomcat-${tomcat.version}" targetdir="$INSTALL_PATH" override="true"/>
+        </pack>
+        <pack name="Yes Cart Manager Server" required="no">
+            <description/>
+            <file src="yes-shop.war" targetdir="$INSTALL_PATH/webapps"/>
+        </pack>
+        <pack name="Yes Cart StoreFront" required="no">
+            <description/>
+            <file src="yes-manager-server.war" targetdir="$INSTALL_PATH/webapps"/>
+        </pack>
+    </packs>
+
+    <jar src="installer-${project.version}.jar"/>
+    <jar src="guava-${guava.version}.jar"/>
+</installation>

@@ -17,6 +17,7 @@
         <module>core</module>
         <module>manager</module>
         <module>web</module>
+        <module>installer</module>
     </modules>
     <properties>
          <hibernate.core.version>3.6.9.Final</hibernate.core.version>
