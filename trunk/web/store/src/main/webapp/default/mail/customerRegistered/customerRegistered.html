@@ -1,11 +1,20 @@
-Hello $firstName $lastName !
-<br>
+<table width="440" border="0">
+    <tr>
+        <td>
+            <img src="cid:yes-logo_png" alt="Yes cart demo shop" vspace="10" hspace="10">
+            Dear $firstName !
+            You are registered at
+            <% if (shopUrl != null && !shopUrl.isEmpty()) { %>
+            "<a
+                href="<%out.print(shopUrl.iterator().next())%>">$shopName</a>" shop.
+            <% } else { %>
+                $shopName
+            <% }%>
+            <br>
+            Your password is <b>$password</b>
+            <hr>
+            Contact information
+        </td>
+    </tr>
+</table>
 
-<% if (shopUrl != null && !shopUrl.isEmpty()) { %>
-You are registered at "<a
-    href="<%out.print(shopUrl.iterator().next())%>">$shopName</a>" shop.
-<% } else { %>
-You are registered att $shopName
-<% }%>
-<br>
-With password is <b>$password</b>
