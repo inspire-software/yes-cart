@@ -1,4 +1,4 @@
-Hello $firstName $lastName !
+Hello $firstName !
 
 <% if (shopUrl != null && !shopUrl.isEmpty()) { %>
 You are registered at "<%out.print(shopUrl.iterator().next())%>" $shopName shop.
