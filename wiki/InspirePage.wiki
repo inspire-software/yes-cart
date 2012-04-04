@@ -1,9 +1,8 @@
 #summary Just set of links, that has useful information.
 
-= Introduction =
+= Set of tech articles =
 
-Add your content here.
-
+http://habrahabr.ru/post/22471/
 
 = Details =
 
