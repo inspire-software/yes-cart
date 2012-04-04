@@ -2,7 +2,7 @@
 
 = Set of tech articles =
 
-http://habrahabr.ru/post/22471/
+http://habrahabr.ru/post/22471/  right way to compose html email
 
 = Details =
 
