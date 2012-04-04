@@ -1,20 +1,35 @@
 <table width="440" border="0">
     <tr>
         <td>
-            <img src="cid:yes-logo_png" alt="Yes cart demo shop" vspace="10" hspace="10">
-            Dear $firstName !
-            You are registered at
-            <% if (shopUrl != null && !shopUrl.isEmpty()) { %>
-            "<a
-                href="<%out.print(shopUrl.iterator().next())%>">$shopName</a>" shop.
-            <% } else { %>
-                $shopName
-            <% }%>
-            <br>
-            Your password is <b>$password</b>
-            <hr>
-            Contact information
+            <img src="cid:mail-head_jpeg" border="0">
+        </td>
+    </tr>    
+    <tr>
+        <td>
+            <table width="100%">
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>
+                        Dear <b>$firstName</b> !
+                        You are registered at
+                        <% if (shopUrl != null && !shopUrl.isEmpty()) { %>
+                        <a href="<%out.print(shopUrl.iterator().next())%>">$shopName</a>
+                        <% } else { %>
+                        $shopName
+                        <% }%>
+                        shop.
+                        <br>
+                        Your password is <b>$password</b>
+                        <hr>
+                        Contact information:
+
+                    </td>
+                    <td>&nbsp;</td>
+                </tr>
+            </table>
         </td>
     </tr>
+    <tr>
+        <td>&nbsp;</td>
+    </tr>
 </table>
-

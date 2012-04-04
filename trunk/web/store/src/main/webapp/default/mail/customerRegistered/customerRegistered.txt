@@ -1,8 +1,4 @@
 Hello $firstName !
 
-<% if (shopUrl != null && !shopUrl.isEmpty()) { %>
-You are registered at "<%out.print(shopUrl.iterator().next())%>" $shopName shop.
-<% } else { %>
-You are registered att $shopName
-<% }%>
+You are registered at <% if (shopUrl != null && !shopUrl.isEmpty()) { %> "<%out.print(shopUrl.iterator().next())%>" $shopName <% } else { %>  $shopName <% }%>
 With password is $password
