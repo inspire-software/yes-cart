@@ -1,0 +1,5 @@
+Dear $firstName !
+Your payment  at <% if (shopUrl != null && !shopUrl.isEmpty()) { %> "<%out.print(shopUrl.iterator().next())%>" $shopName <% } else { %>  $shopName <% }%>
+for order $orderNum, delivery number $deliveryNum was $paymentResult.
+Payment amount is $amount
+
