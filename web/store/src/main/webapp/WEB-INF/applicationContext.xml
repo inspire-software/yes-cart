@@ -384,8 +384,17 @@
         <property name="jndiTemplate" ref="jndiTemplate"/>
         <property name="jndiName" value="queue/CustomerRegistrationQueue"/>
     </bean>
-
     <bean id="customerRegistrationJMSTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory" ref="jmsQueueConnectionFactory"/>
+        <property name="defaultDestination" ref="customerRegistrationQueue"/>
+    </bean>
+
+
+    <bean id="paymentNotificationTopic" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiTemplate" ref="jndiTemplate"/>
+        <property name="jndiName" value="topic/CustomerRegistrationTopic"/>
+    </bean>
+    <bean id="paymentNotificationJMSTemplate" class="org.springframework.jms.core.JmsTemplate">
         <property name="connectionFactory" ref="jmsQueueConnectionFactory"/>
         <property name="defaultDestination" ref="customerRegistrationQueue"/>
     </bean>
@@ -400,6 +409,10 @@
         <constructor-arg index="0" ref="customerRegistrationJMSTemplate"/>
         <constructor-arg index="1" ref="passPhraseGenerator"/>
         <constructor-arg index="2" ref="passwordHashHelper"/>
+    </bean>
+
+    <bean id="paymentNotificationAspect" class="org.yes.cart.web.aspect.PaymentAspect">
+        <constructor-arg index="0" ref="paymentNotificationJMSTemplate"/>
     </bean>
 
     <!-- #################################  aspects configurations end ######################################-->

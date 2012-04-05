@@ -1,5 +1,8 @@
 package org.yes.cart.web.aspect;
 
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jms.core.JmsTemplate;
@@ -13,6 +16,7 @@ import org.yes.cart.util.ShopCodeContext;
  * Time: 4:41 PM
  *
  */
+@Aspect
 public class PaymentAspect extends BaseNotificationAspect {
 
     private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
@@ -23,5 +27,20 @@ public class PaymentAspect extends BaseNotificationAspect {
      */
     public PaymentAspect(final JmsTemplate jmsTemplate) {
         super(jmsTemplate);
+    }
+    
+    
+    
+
+    /**
+     * Perform shopper notification, about payment authorize.
+     * @param pjp
+     * @return result of original operation.
+     */
+    @Around("execution(* org.yes.cart.service.payment.impl.PaymentProcessorImpl.authorize(..))")
+    public Object doAuthorize(final ProceedingJoinPoint pjp) throws Throwable {
+        final Object rez =  pjp.proceed();
+        sendNotification((String)rez);
+        return rez;
     }
 }
