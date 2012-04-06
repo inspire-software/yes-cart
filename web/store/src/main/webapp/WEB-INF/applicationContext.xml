@@ -392,11 +392,11 @@
 
     <bean id="paymentNotificationTopic" class="org.springframework.jndi.JndiObjectFactoryBean">
         <property name="jndiTemplate" ref="jndiTemplate"/>
-        <property name="jndiName" value="topic/CustomerRegistrationTopic"/>
+        <property name="jndiName" value="topic/PaymentNotificationTopic"/>
     </bean>
     <bean id="paymentNotificationJMSTemplate" class="org.springframework.jms.core.JmsTemplate">
         <property name="connectionFactory" ref="jmsQueueConnectionFactory"/>
-        <property name="defaultDestination" ref="customerRegistrationQueue"/>
+        <property name="defaultDestination" ref="paymentNotificationTopic"/>
     </bean>
 
 
@@ -436,18 +436,18 @@
     </bean>
 
 
-    <!-- send notification with new customer account information and password -->
-    <bean id="customerRegistrationListener"
-          class="org.yes.cart.domain.message.consumer.CustomerRegistrationMessageListener">
-        <constructor-arg index="0" type="org.springframework.mail.javamail.JavaMailSender" ref="mailSender"/>
-        <constructor-arg index="1" type="org.yes.cart.service.mail.MailComposer" ref="mailComposer"/>
-    </bean>
 
     <bean id="customerRegistrationJmsContainer"
           class="org.springframework.jms.listener.DefaultMessageListenerContainer">
         <property name="connectionFactory" ref="jmsQueueConnectionFactory"/>
         <property name="destination" ref="customerRegistrationQueue"/>
-        <property name="messageListener" ref="customerRegistrationListener"/>
+        <property name="messageListener">
+            <!-- send notification with new customer account information and password -->
+            <bean  class="org.yes.cart.domain.message.consumer.CustomerRegistrationMessageListener">
+                <constructor-arg index="0" type="org.springframework.mail.javamail.JavaMailSender" ref="mailSender"/>
+                <constructor-arg index="1" type="org.yes.cart.service.mail.MailComposer" ref="mailComposer"/>
+            </bean>
+        </property>
         <property name="sessionTransacted" value="true"/>
     </bean>
 
