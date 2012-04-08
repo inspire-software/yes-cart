@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.mail.MailComposer;
@@ -190,5 +191,24 @@ public class MailComposerImplTest {
         model.put("name", "Bender");
         model.put("with", Arrays.asList("blackjack", "poetess"));
         return model;
+    }
+
+    @Test
+    public void complexObjectNavigation()  throws MessagingException, IOException, ClassNotFoundException {
+        Map<String, Object> map = new HashMap<String,Object>();
+        map.put("root", new Pair("hi", "there"));
+        String textTemplate = "$root.first $root.second";
+        JavaMailSenderImpl sender = new JavaMailSenderImpl();
+        sender.setHost("localhost");
+        MimeMessage message = sender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+        MailComposerImpl mailComposer = new MailComposerImpl(null, null);
+        mailComposer.composeMessage(helper, textTemplate, null, null, map);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        helper.getMimeMessage().writeTo(byteArrayOutputStream);
+        String str = byteArrayOutputStream.toString("UTF-8");
+        assertNotNull(str);
+        // html and text present in mail message
+        assertTrue(str.contains("hi there"));
     }
 }

@@ -180,6 +180,12 @@ public interface Shop extends Auditable {
     String getMailFolder();
 
     /**
+     * Get default shop url. localhost will never be return.
+     * @return  default shop url
+     */
+    String getDefaultShopUrl();
+
+    /**
      * Get image vauld  folder. @see fspointer for more details.
      * @return folder with markup.
      */

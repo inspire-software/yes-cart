@@ -2779,7 +2779,16 @@ public void setRangeList(final RangeList rangeList) {
         return mailFolder;
     }
 
-
+    @Transient
+    public String getDefaultShopUrl() {
+        for (ShopUrl shopUrl : getShopUrl()) {
+            if (shopUrl.getUrl().contains("localhost") || shopUrl.getUrl().contains("127.0.0.1") ) {
+                continue;
+            }
+            return "http://" + shopUrl.getUrl();
+        }
+        return "";
+    }
 
                 ]]>
             </meta>
