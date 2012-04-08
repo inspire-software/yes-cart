@@ -1,5 +1,3 @@
-Dear $firstName !
-Your payment  at <% if (shopUrl != null && !shopUrl.isEmpty()) { %> "<%out.print(shopUrl.iterator().next())%>" $shopName <% } else { %>  $shopName <% }%>
-for order $orderNum, delivery number $deliveryNum was $paymentResult.
-Payment amount is $amount
-
+Dear $customer.firstname !
+Result of payment at $shop.name for $root.ordernum was $result
+Please check detail at self care page at "<%out.print(shop.getDefaultShopUrl())%>" $shop.name

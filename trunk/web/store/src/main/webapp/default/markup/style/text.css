@@ -231,10 +231,10 @@ p {
 
 .sku-in-list-row {
     width: 300px;
-    margin: 1px 1px 1px 1px;
+    margin: 0px 0px 0px 0px;
     padding: 5px 5px 5px 5px;
     overflow: hidden;
-    background-color: transparent;
+    background-color: white;
 }
 
 .sku-in-list-row * { background-color: transparent; }
@@ -282,10 +282,10 @@ p {
 
 .sku-row {
     width: 608px;
-    margin: 1px 1px 1px 1px;
+    margin: 0px 0px 0px 0px;
     padding: 5px 5px 5px 5px;
     overflow: hidden;
-    background-color: transparent;
+    background-color: white;
 
 }
 
@@ -684,7 +684,7 @@ ul { list-style-type: none;}
     background: #e7e7e7;
     background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#e7e7e7));
     background: -moz-linear-gradient(top,  #ffffff,  ##e7e7e7);
-    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='##e7e7e7');
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e7e7e7');
 }
 .gray:hover {
     background: #cccccc;
