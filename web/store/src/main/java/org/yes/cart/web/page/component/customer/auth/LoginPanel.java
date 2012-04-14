@@ -1,5 +1,6 @@
 package org.yes.cart.web.page.component.customer.auth;
 
+import org.apache.wicket.Application;
 import org.apache.wicket.Page;
 import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
@@ -161,16 +162,18 @@ public class LoginPanel extends BaseComponent {
                                 final IAuthenticationStrategy strategy = getApplication().getSecuritySettings()
                                         .getAuthenticationStrategy();
                                 strategy.save(getEmail(), getPassword());
+                                ((AbstractWebPage) getPage()).processCommands();
                                 if (!continueToOriginalDestination()) {
                                     setResponsePage(successfulPage, parameters);
                                 }
                             } else {
                                 if (isCustomerExists(getEmail())) {
                                     sendNewPasswordBtn.setVisible(true);
-                                    error("Try to restore password ");
+                                    error(getLocalizer().getString("tryToRestore", this));
+
                                 } else {
                                     sendNewPasswordBtn.setVisible(false);
-                                    error("Register ");
+                                    error(getLocalizer().getString("registration", this));
                                 }
                             }
                         }

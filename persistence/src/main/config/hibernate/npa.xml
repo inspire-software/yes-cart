@@ -313,7 +313,7 @@
             </generator>
         </id>
         <discriminator type="integer" formula="1"/>
-        <property name="code" column="CODE" type="string" length="32" not-null="true"/>
+        <property name="code" column="CODE" type="string" length="64" not-null="true"/>
         <subclass name="org.yes.cart.domain.entity.impl.AttributeEntity" discriminator-value="1">
             <meta attribute="class-description">UNCOMMENT @Indexed (index = "luceneindex/attribute")</meta>
             <meta attribute="extra-import">org.hibernate.search.annotations.*</meta>
@@ -415,7 +415,7 @@
             </property>
 
 
-            <property name="name" column="NAME" not-null="true" type="string" length="64"/>
+            <property name="name" column="NAME" not-null="true" type="string" length="255"/>
             <property name="description" column="DESCRIPTION" type="string" length="4000"/>
             <many-to-one name="etype" class="org.yes.cart.domain.entity.Etype" foreign-key="FK_ATTRIBUTE_ETYPE" lazy="false">
                 <column name="ETYPE_ID" not-null="true"/>
@@ -699,7 +699,7 @@
             </meta>
 
             <property name="val" column="VAL" type="string" length="4000">
-                <!--<meta attribute="field-description">UNCOMMENT @Fields( { @Field(index = Index.UN_TOKENIZED), @Field(name = "attrvalsearch", index = Index.TOKENIZED) } )    @ContainedIn</meta>-->
+                <!--<meta attribute="field-description">UNCOMMENT @Fields( { @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO), @Field(name = "attrvalsearch", index = Index.YES, analyze = Analyze.YES, norms = Norms.YES) } )    @ContainedIn</meta>-->
             </property>
             <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
 
@@ -708,7 +708,7 @@
             <many-to-one name="attribute" class="org.yes.cart.domain.entity.Attribute" lazy="false" foreign-key="FK_P_ATTRIBUTE"
                          property-ref="code" insert="true" update="true">
 
-                <meta attribute="field-description">UNCOMMENT @Field(index = Index.UN_TOKENIZED) @ContainedIn  @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeBridge.class)
+                <meta attribute="field-description">UNCOMMENT @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO) @ContainedIn  @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeBridge.class)
                 </meta>
 
                 <column name="CODE" not-null="true"/>
@@ -766,7 +766,7 @@
             </meta>                                                                                     
 
             <property name="val" column="VAL" type="string" length="4000">
-               <!-- <meta attribute="field-description">UNCOMMENT @Fields( { @Field(index = Index.UN_TOKENIZED), @Field(name = "attrvalsearch", index = Index.TOKENIZED) } )    @ContainedIn</meta>-->
+               <!-- <meta attribute="field-description">UNCOMMENT @Fields( { @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO), @Field(name = "attrvalsearch", index = Index.YES, analyze = Analyze.YES, norms = Norms.YES) } )    @ContainedIn</meta>-->
             </property>
             <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
 
@@ -775,7 +775,7 @@
             <many-to-one name="attribute" class="org.yes.cart.domain.entity.Attribute" lazy="false" foreign-key="KF_S_ATTRIBUTE"
                          property-ref="code" insert="true" update="true">
 <!--
-                <meta attribute="field-description">UNCOMMENT @Field(index = Index.UN_TOKENIZED) @ContainedIn  @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeBridge.class)
+                <meta attribute="field-description">UNCOMMENT @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO) @ContainedIn  @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeBridge.class)
                 </meta>                
 -->
                 <column name="CODE" not-null="true"/>
@@ -2038,13 +2038,13 @@ public void setRangeList(final RangeList rangeList) {
                 ]]>
             </meta>
             <property name="code" type="string" length="255" not-null="true">
-                <meta attribute="field-description">UNCOMMENT @Field(index = Index.UN_TOKENIZED, store = Store.YES)</meta>
+                <meta attribute="field-description">UNCOMMENT @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)</meta>
                 <column name="CODE" length="255" not-null="true">
                     <comment>Product or product sku code</comment>
                 </column>
             </property>
             <property name="availablefrom" type="timestamp" not-null="false">
-                <meta attribute="field-description">UNCOMMENT @Field(index = Index.UN_TOKENIZED, store = Store.YES)</meta>
+                <meta attribute="field-description">UNCOMMENT @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)</meta>
                 <column name="AVAILABLEFROM">
                     <comment>
                         AVAILABLEFROM AVAILABLETILL date range when product will be available, for pre and back orders
@@ -2052,24 +2052,24 @@ public void setRangeList(final RangeList rangeList) {
                 </column>
             </property>
             <property name="availabletill" column="AVAILABLETILL" type="timestamp" not-null="false">
-                <meta attribute="field-description">UNCOMMENT @Field(index = Index.UN_TOKENIZED, store = Store.YES)</meta>
+                <meta attribute="field-description">UNCOMMENT @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)</meta>
             </property>
             <property name="name" type="string" length="255" not-null="true">
-                <meta attribute="field-description">UNCOMMENT @Fields( { @Field(index = Index.TOKENIZED, store = Store.YES), @Field(name = "name_sort", index = Index.UN_TOKENIZED, store = Store.YES) }) </meta>
+                <meta attribute="field-description">UNCOMMENT @Fields( { @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES), @Field(name = "name_sort", index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES) }) </meta>
                 <column name="NAME" length="255" not-null="true"/>
             </property>
             <property name="description" length="4000" type="string">
-                <meta attribute="field-description">UNCOMMENT @Field(index = Index.TOKENIZED, store = Store.YES) </meta>
+                <meta attribute="field-description">UNCOMMENT @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES) </meta>
                 <column name="DESCRIPTION" length="4000"/>
             </property>
 
             <many-to-one name="brand" class="org.yes.cart.domain.entity.Brand" foreign-key="FK_PROD_BRAND">
-                <meta attribute="field-description">UNCOMMENT @Field(index = Index.UN_TOKENIZED, store = Store.YES)    @FieldBridge(impl = org.yes.cart.domain.entity.bridge.BrandBridge.class)</meta>
+                <meta attribute="field-description">UNCOMMENT @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)    @FieldBridge(impl = org.yes.cart.domain.entity.bridge.BrandBridge.class)</meta>
                 <column name="BRAND_ID" not-null="true"/>
             </many-to-one>
 
             <many-to-one name="producttype" class="org.yes.cart.domain.entity.ProductType" foreign-key="FK_PROD_PRODTYPE" lazy="false">
-                <meta attribute="field-description">UNCOMMENT @Field(index = Index.UN_TOKENIZED, store = Store.YES)  @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductTypeValueBridge.class)</meta>
+                <meta attribute="field-description">UNCOMMENT @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)  @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductTypeValueBridge.class)</meta>
                 <column name="PRODUCTTYPE_ID" not-null="true"/>
             </many-to-one>
 

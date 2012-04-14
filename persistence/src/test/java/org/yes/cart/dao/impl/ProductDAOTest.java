@@ -49,7 +49,7 @@ public class ProductDAOTest extends AbstractTestDAO {
         warehouseDao = (GenericDAO<Warehouse, Long>) ctx().getBean(DaoServiceBeanKeys.WAREHOUSE_DAO);
     }
 
-   @Test
+    @Test
     public void testCreateProduct() throws InterruptedException {
         Product product = new ProductEntity();
         product.setAvailability(availabilityDao.findById(1L));
@@ -91,13 +91,13 @@ public class ProductDAOTest extends AbstractTestDAO {
         pk = productDao.create(product).getProductId();
         assertTrue(pk > 0L);
         productDao.fullTextSearchReindex();
-       Thread.currentThread().sleep(100);
+       
     }
 
     @Test
     public void testSimpleSearchTest() throws InterruptedException {
         productDao.fullTextSearchReindex();
-        Thread.currentThread().sleep(100);
+        
         GlobalSearchQueryBuilderImpl queryBuilder = new GlobalSearchQueryBuilderImpl();
         Query query = queryBuilder.createQuery("bender", Arrays.asList(101L, 104L));
         List<Product> products = productDao.fullTextSearch(query);
@@ -135,7 +135,7 @@ public class ProductDAOTest extends AbstractTestDAO {
     @Test
     public void testSearchByCategoryTest() throws InterruptedException {
         productDao.fullTextSearchReindex();
-        Thread.currentThread().sleep(100);
+        
         ProductsInCategoryQueryBuilderImpl queryBuilder = new ProductsInCategoryQueryBuilderImpl();
         Query query = queryBuilder.createQuery(Arrays.asList(101L));
         List<Product> products = productDao.fullTextSearch(query);
@@ -152,7 +152,7 @@ public class ProductDAOTest extends AbstractTestDAO {
     @Test
     public void testSearchByAttributeAndValueTest() throws Exception {
         productDao.fullTextSearchReindex();
-        Thread.currentThread().sleep(100);
+        
         AttributiveSearchQueryBuilderImpl queryBuilder = new AttributiveSearchQueryBuilderImpl();
 
         Map<String, String> attributeMap = new HashMap<String, String>();
@@ -225,10 +225,11 @@ public class ProductDAOTest extends AbstractTestDAO {
 
     }
 
+
     @Test
     public void getSearchByAttributeAndValuesRangeTest() throws InterruptedException {
         productDao.fullTextSearchReindex();
-        Thread.currentThread().sleep(100);
+        
         AttributiveSearchQueryBuilderImpl queryBuilder = new AttributiveSearchQueryBuilderImpl();
         Query query = queryBuilder.createQuery(
                 Arrays.asList(130L, 131L, 132L),
@@ -284,7 +285,7 @@ public class ProductDAOTest extends AbstractTestDAO {
     @Test
     public void testCreateNewProductTest() throws InterruptedException {
         productDao.fullTextSearchReindex();
-        Thread.currentThread().sleep(100);
+        
 
         Product product = new ProductEntity();
         product.setAvailability(availabilityDao.findById(1L));
@@ -314,7 +315,9 @@ public class ProductDAOTest extends AbstractTestDAO {
         skuWarehouse.setSku(productSku);
         skuWarehouse.setQuantity(BigDecimal.ONE);
         skuWarehouse.setWarehouse(warehouseDao.findById(2L));
+
         skuWareHouseDao.create(skuWarehouse);
+
 
         // assign it to category
         ProductCategory productCategory = new ProductCategoryEntity();
@@ -323,15 +326,18 @@ public class ProductDAOTest extends AbstractTestDAO {
         productCategory.setRank(123);
 
         product.getProductCategory().add(productCategory);
-        //productCategory = productCategoryDao.create(productCategory);
+
+
+        productCategory = productCategoryDao.create(productCategory);
         //assertTrue(productCategory.getProductCategoryId() > 0);
 
         product = productDao.update(product);
-        Thread.currentThread().sleep(1000);
 
         List<Product> products = null;
         //product = productDao.findById(product.getProductId());
-       // productDao.fullTextSearchReindex(product.getProductId());
+        //productDao.fullTextSearchReindex(product.getProductId());
+
+
         //productDao.fullTextSearchReindex();
         GlobalSearchQueryBuilderImpl queryBuilder = new GlobalSearchQueryBuilderImpl();
         Query query = queryBuilder.createQuery("sony", Arrays.asList(128L));
@@ -355,7 +361,7 @@ public class ProductDAOTest extends AbstractTestDAO {
     @Test
     public void testGetUniqueBrandsByCateroriesTest() throws InterruptedException {
         productDao.fullTextSearchReindex();
-        Thread.currentThread().sleep(100);
+        
         ArrayList<Long> createdProducts = new ArrayList<Long>();
         createdProducts.add(createProduct(102L, "LG_DVD_PLAYER", "product lg dvd player", 3L, 134L));
         createdProducts.add(createProduct(104L, "SAM_DVD_PLAYER", "product sam mp3 player", 3L, 134L));
@@ -495,7 +501,7 @@ public class ProductDAOTest extends AbstractTestDAO {
     @Test
     public void testProductAvailability() throws InterruptedException {
         productDao.fullTextSearchReindex();
-        Thread.currentThread().sleep(100);
+        
         ProductsInCategoryQueryBuilderImpl productSearchQueryBuilder = new ProductsInCategoryQueryBuilderImpl();
         List<Product> products = productDao.fullTextSearch(productSearchQueryBuilder.createQuery(212L));
         assertEquals("Only 5 product available in 212 category", 5, products.size());

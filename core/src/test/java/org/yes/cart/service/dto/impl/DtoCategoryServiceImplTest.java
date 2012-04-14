@@ -204,6 +204,15 @@ public class DtoCategoryServiceImplTest extends BaseCoreDBTestCase {
 
             }
         }
+
+
+        for (AttrValueDTO dto : dtoService.getEntityAttributes(100L)) {
+            if (dto.getAttributeDTO().getCode().equals("CATEGORY_ITEMS_PER_PAGE")) {
+                dto.setVal("6,12,24");
+                dtoService.updateEntityAttributeValue(dto);
+                break;
+            }
+        }
     }
 
     private CategoryDTO getDto() {

@@ -73,6 +73,12 @@
                      fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
+    <!--<mx:RemoteObject showBusyCursor="true" id="remoteBackdoorService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     destination="remoteBackdoorService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>-->
+
     <mx:RemoteObject showBusyCursor="true" id="remoteProductService" destination="remoteProductService"
                      result="ShopManagerGlobal.instance.defaultResultHandler(event)"
                      fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
@@ -133,8 +139,8 @@
                                         ShopManagerGlobal.instance.defaultFaultHandler));
                             },
                             ShopManagerGlobal.instance.defaultFaultHandler
-                            )
-                    );
+                    )
+            );
 
         }
 
@@ -228,8 +234,8 @@
                     new AsyncResponder(
                             skusOnWarehouseChanged,
                             ShopManagerGlobal.instance.defaultFaultHandler
-                            )
-                    );
+                    )
+            );
             PopUpManager.removePopUp(createQuantityDialog);
             createQuantityDialog = null;
 

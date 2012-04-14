@@ -1,31 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
 
-<!--
-    <TCURRENCY CURRENCY_ID="1" CURRENCY="EUR" NAME="EUR"/>
-    <TCURRENCY CURRENCY_ID="2" CURRENCY="RUB" NAME="RUB"/>
-    <TCURRENCY CURRENCY_ID="1" CURRENCY="UAH" NAME="UAH"/>
--->
-
-<!--
-    <TORDERSTATUS ORDERSTATUS_ID="1" NAME="Pending"/>
-    <TORDERSTATUS ORDERSTATUS_ID="2" NAME="Waiting"/>
-    <TORDERSTATUS ORDERSTATUS_ID="4" NAME="In Progress"/>
-    <TORDERSTATUS ORDERSTATUS_ID="8" NAME="Cancelled"/>
-    <TORDERSTATUS ORDERSTATUS_ID="16" NAME="Partially Shipped"/>
-    <TORDERSTATUS ORDERSTATUS_ID="32" NAME="Completed"/>
-
-
-    <TDELIVERYSTATUS DELIVERYSTATUS_ID="1" NAME="On fullfilment"/>
-    <TDELIVERYSTATUS DELIVERYSTATUS_ID="2" NAME="Date wait"/>
-    <TDELIVERYSTATUS DELIVERYSTATUS_ID="4" NAME="Inventory wait"/>
-    <TDELIVERYSTATUS DELIVERYSTATUS_ID="8" NAME="Inventory allocated"/>
-    <TDELIVERYSTATUS DELIVERYSTATUS_ID="16" NAME="Packing"/>
-    <TDELIVERYSTATUS DELIVERYSTATUS_ID="32" NAME="Shipment ready"/>
-    <TDELIVERYSTATUS DELIVERYSTATUS_ID="64" NAME="Shipment in progress"/>
-    <TDELIVERYSTATUS DELIVERYSTATUS_ID="128" NAME="Shipped"/>
--->
-
 
 
 
@@ -80,7 +55,7 @@
 
     <TATTRIBUTE ATTRIBUTE_ID="1006" CODE="CURRENCY"                MANDATORY="0"  NAME="Currency"                         ETYPE_ID="1004"  ATTRIBUTEGROUP_ID="1001" ALLOWDUPLICATE="0"/>
     <TATTRIBUTE ATTRIBUTE_ID="1005" CODE="CATEGORY_IMAGE_RETREIVE_STRATEGY"
-                MANDATORY="0"  NAME="Label of category image retreive strategy. Allowed values  ATTRIBUTE RANDOM_PRODUCT"  ETYPE_ID="1000"  ATTRIBUTEGROUP_ID="1002" ALLOWDUPLICATE="0"/>
+                MANDATORY="0"  NAME="Category image retreive strategy [ATTRIBUTE RANDOM_PRODUCT]"  ETYPE_ID="1000"  ATTRIBUTEGROUP_ID="1002" ALLOWDUPLICATE="0"/>
 
     <TATTRIBUTE ATTRIBUTE_ID="1021" CODE="SYSTEM_IMPORT_DESCRIPTORS" MANDATORY="1"  NAME="Path to import descriptors"  ETYPE_ID="1000" ATTRIBUTEGROUP_ID="1000" ALLOWDUPLICATE="0"/>
     <TATTRIBUTE ATTRIBUTE_ID="1022" CODE="SYSTEM_IMPORT_ARCHIVE"     MANDATORY="1"  NAME="Path to import archive descriptors"  ETYPE_ID="1000" ATTRIBUTEGROUP_ID="1000" ALLOWDUPLICATE="0"/>
@@ -173,834 +148,834 @@
     <TSHOPURL STOREURL_ID="32" SHOP_ID="40" URL="eddie.lives.somewhere.in.time" />
     <TSHOPURL STOREURL_ID="33" SHOP_ID="50" URL="long.live.robots" />
 
-    <TCATEGORY CATEGORY_ID="100"   PARENT_ID="100"        RANK="0"  NAME="root"             DESCRIPTION="The root category"    UITEMPLATE="default"
-               AVAILABLEFROM="2009-01-01 00:00:00.000000000"
-               AVAILABLETILL="2108-12-28 00:00:00.000000000"
-               NAV_BY_PRICE="0"
-               NAV_BY_PRICE_TIERS=""
-
-            />
-    <!-- failover settings-->
-    <TCATEGORYATTRVALUE ATTRVALUE_ID="20" CODE="CATEGORY_ITEMS_PER_PAGE" VAL="6,12,24" CATEGORY_ID="100"/>
-    <TCATEGORYATTRVALUE ATTRVALUE_ID="21" CODE="CATEGORY_IMAGE_RETREIVE_STRATEGY" VAL="RANDOM_PRODUCT" CATEGORY_ID="100"/>
-
-	<TCATEGORY CATEGORY_ID="101"   PARENT_ID="100"        RANK="10" NAME="Big Boys Gadgets" DESCRIPTION="Big Boys Gadgets"     UITEMPLATE="boys" />
-    <TCATEGORY CATEGORY_ID="102"   PARENT_ID="101"        RANK="10" NAME="Flying Machines" DESCRIPTION="Flying Machines"/>
-	<TCATEGORY CATEGORY_ID="103"   PARENT_ID="101"        RANK="20" NAME="Paintballing" DESCRIPTION="Paintballing"/>
-	<TCATEGORY CATEGORY_ID="104"   PARENT_ID="101"        RANK="5" NAME="Robotics" DESCRIPTION="Robotics"/>
-	<TCATEGORY CATEGORY_ID="105"   PARENT_ID="101"        RANK="30" NAME="Ultimate Gadgets" DESCRIPTION="Ultimate Gadgets"/>
-    <TCATEGORYATTRVALUE ATTRVALUE_ID="22" CODE="CATEGORY_ITEMS_PER_PAGE" VAL="10,20,50" CATEGORY_ID="105"/>
-
-	<TCATEGORY CATEGORY_ID="106"   PARENT_ID="100"        RANK="20" NAME="Fun Gadgets" DESCRIPTION="Fun Gadgets" UITEMPLATE="fun" />
-	<TCATEGORY CATEGORY_ID="107"   PARENT_ID="106"        RANK="10" NAME="Party Gadgets" DESCRIPTION="Party Gadgets"/>
-	<TCATEGORY CATEGORY_ID="108"   PARENT_ID="106"        RANK="20" NAME="Books" DESCRIPTION="Books"/>
-	<TCATEGORY CATEGORY_ID="109"   PARENT_ID="106"        RANK="30" NAME="Retro Gadgets" DESCRIPTION="Retro Gadgets"/>
-	<TCATEGORY CATEGORY_ID="110"   PARENT_ID="106"        RANK="40" NAME="Office Fun" DESCRIPTION="Office Fun" UITEMPLATE="office"/>
-	<TCATEGORY CATEGORY_ID="111"   PARENT_ID="106"        RANK="50" NAME="TV and Film" DESCRIPTION="TV and Film"/>
-	<TCATEGORY CATEGORY_ID="112"   PARENT_ID="106"        RANK="60" NAME="KnickKnacks" DESCRIPTION="KnickKnacks"/>
-	
-	<TCATEGORY CATEGORY_ID="113"   PARENT_ID="100"        RANK="30" NAME="Lifestyle Gadgets" DESCRIPTION="Lifestyle Gadgets"/>
-	<TCATEGORY CATEGORY_ID="114"   PARENT_ID="113"        RANK="10" NAME="Kitch and Home" DESCRIPTION="Kitch and Home"/>
-	<TCATEGORY CATEGORY_ID="115"   PARENT_ID="113"        RANK="20" NAME="Urban Essentials" DESCRIPTION="Urban Essentials"/>
-	<TCATEGORY CATEGORY_ID="116"   PARENT_ID="113"        RANK="30" NAME="On The Go" DESCRIPTION="On The Go"/>
-	<TCATEGORY CATEGORY_ID="117"   PARENT_ID="113"        RANK="40" NAME="Eco Friendly" DESCRIPTION="Eco Friendly"/>
-	<TCATEGORY CATEGORY_ID="118"   PARENT_ID="113"        RANK="50" NAME="Clocks and Radios" DESCRIPTION="Clocks and Radios"/>
-	<TCATEGORY CATEGORY_ID="119"   PARENT_ID="113"        RANK="60" NAME="Lighting" DESCRIPTION="Lighting"/>
-	
-	<TCATEGORY CATEGORY_ID="120"   PARENT_ID="100"        RANK="40" NAME="Techno Gadgets" DESCRIPTION="Techno Gadgets"/>
-	<TCATEGORY CATEGORY_ID="121"   PARENT_ID="120"        RANK="10" NAME="USB Gadgets" DESCRIPTION="USB Gadgets"/>
-	<TCATEGORY CATEGORY_ID="122"   PARENT_ID="120"        RANK="20" NAME="Robotics" DESCRIPTION="Robotics"/>
-	<TCATEGORY CATEGORY_ID="123"   PARENT_ID="120"        RANK="30" NAME="Scientific Gadgets" DESCRIPTION="Scientific Gadgets"/>
-	<TCATEGORY CATEGORY_ID="124"   PARENT_ID="120"        RANK="40" NAME="Remote Control Gadgets" DESCRIPTION="Remote Control Gadgets"/>
-	<TCATEGORY CATEGORY_ID="125"   PARENT_ID="120"        RANK="50" NAME="USB Gadgets" DESCRIPTION="USB Gadgets"/>
-	<TCATEGORY CATEGORY_ID="126"   PARENT_ID="120"        RANK="60" NAME="Mobile Accessories" DESCRIPTION="Mobile Accessories"/>
-	<TCATEGORY CATEGORY_ID="127"   PARENT_ID="120"        RANK="70" NAME="Batteries" DESCRIPTION="Batteries"/>
-	<TCATEGORY CATEGORY_ID="128"   PARENT_ID="120"        RANK="80" NAME="Accessories for iPods" DESCRIPTION="Accessories for iPods"/>
-
-	<TCATEGORY CATEGORY_ID="129"   PARENT_ID="100"        RANK="49" NAME="Outdoor Gadgets" DESCRIPTION="Outdoor Gadgets 2" NAV_BY_PRICE="1"
-               NAV_BY_PRICE_TIERS="&lt;pricetree&gt;&lt;priceMap&gt;&lt;entry&gt;&lt;string&gt;EUR&lt;/string&gt;&lt;list&gt;&lt;pricenode&gt;&lt;priceRange&gt;&lt;first class=&quot;big-decimal&quot;&gt;0&lt;/first&gt;&lt;second class=&quot;big-decimal&quot;&gt;100&lt;/second&gt;&lt;/priceRange&gt;&lt;/pricenode&gt;&lt;pricenode&gt;&lt;priceRange&gt;&lt;first class=&quot;big-decimal&quot;&gt;100&lt;/first&gt;&lt;second class=&quot;big-decimal&quot;&gt;300&lt;/second&gt;&lt;/priceRange&gt;&lt;/pricenode&gt;&lt;pricenode&gt;&lt;priceRange&gt;&lt;first class=&quot;big-decimal&quot;&gt;300&lt;/first&gt;&lt;second class=&quot;big-decimal&quot;&gt;500&lt;/second&gt;&lt;/priceRange&gt;&lt;/pricenode&gt;&lt;/list&gt;&lt;/entry&gt;&lt;/priceMap&gt;&lt;/pricetree&gt;"/>
-	<TCATEGORY CATEGORY_ID="130"   PARENT_ID="129"        RANK="10" NAME="Summer Time" DESCRIPTION="Summer Time"/>
-	<TCATEGORY CATEGORY_ID="131"   PARENT_ID="129"        RANK="20" NAME="Outdoor Fun" DESCRIPTION="Outdoor Fun"/>
-	<TCATEGORY CATEGORY_ID="132"   PARENT_ID="129"        RANK="30" NAME="Outdoor Survival" DESCRIPTION="Outdoor Survival"/>
-	
-	<TCATEGORY CATEGORY_ID="133"   PARENT_ID="100"        RANK="60" NAME="Gadget Girl" DESCRIPTION="Gadget Girl" UITEMPLATE="girls"/>
-	
-	<TCATEGORY CATEGORY_ID="134"   PARENT_ID="100"        RANK="70" NAME="Games and Gifts" DESCRIPTION="Games and Gifts"/>
-	<TCATEGORY CATEGORY_ID="135"   PARENT_ID="134"        RANK="10" NAME="Games" DESCRIPTION="Games"/>
-	<TCATEGORY CATEGORY_ID="136"   PARENT_ID="134"        RANK="20" NAME="Puzzlers" DESCRIPTION="Puzzlers"/>	
-	<TCATEGORY CATEGORY_ID="137"   PARENT_ID="134"        RANK="30" NAME="Electric Shocking Games" DESCRIPTION="Electric Shocking Games"/>
-	<TCATEGORY CATEGORY_ID="138"   PARENT_ID="134"        RANK="40" NAME="Gift Boxes" DESCRIPTION="Gift Boxes"/>	
-	<TCATEGORY CATEGORY_ID="139"   PARENT_ID="134"        RANK="50" NAME="Games and Gifts" DESCRIPTION="Games and Gifts"/>
-
-	<TCATEGORY CATEGORY_ID="140"   PARENT_ID="100"        RANK="80" NAME="Christmas Catalogue 2009" DESCRIPTION="Christmas Catalogue 2009" UITEMPLATE="christmas"/>
-    <TCATEGORY CATEGORY_ID="141"   PARENT_ID="100"        RANK="80" NAME="Christmas Catalogue 2008" DESCRIPTION="Christmas Catalogue 2008"
-               UITEMPLATE="christmas"
-               AVAILABLEFROM="2008-12-12 00:00:00.000000000"
-               AVAILABLETILL="2008-12-28 00:00:00.000000000"
-            />
-    <TCATEGORY CATEGORY_ID="142"   PARENT_ID="100"        RANK="80" NAME="Christmas Catalogue 2108" DESCRIPTION="Christmas Catalogue 2108"
-               UITEMPLATE="christmas"
-               AVAILABLEFROM="2108-12-12 00:00:00.000000000"
-               AVAILABLETILL="2108-12-28 00:00:00.000000000"/>
-
-    <TCATEGORY CATEGORY_ID="143"   PARENT_ID="102"        RANK="10" NAME="Helicopters" DESCRIPTION="Helicopters"/>
-    <TCATEGORY CATEGORY_ID="144"   PARENT_ID="102"        RANK="7" NAME="Aircraft" DESCRIPTION="aircrafts"/>
-
-
-    <TCATEGORY CATEGORY_ID="200"   PARENT_ID="100"        RANK="80" NAME="Cat 200" DESCRIPTION="Cat 200"    UITEMPLATE="christmas"/>
-    <TCATEGORY CATEGORY_ID="201"   PARENT_ID="200"        RANK="80" NAME="Cat 201" DESCRIPTION="Cat 201"    UITEMPLATE="christmas"
-               AVAILABLEFROM="2108-12-12 00:00:00.000000000"
-               AVAILABLETILL="2108-12-28 00:00:00.000000000"/>
-    <TCATEGORY CATEGORY_ID="202"   PARENT_ID="201"        RANK="80" NAME="Cat 203" DESCRIPTION="Cat 203"   UITEMPLATE="christmas"
-               AVAILABLEFROM="2108-12-12 00:00:00.000000000"
-               AVAILABLETILL="2108-12-28 00:00:00.000000000"/>
-    <TCATEGORY CATEGORY_ID="203"   PARENT_ID="200"        RANK="80" NAME="Cat 202" DESCRIPTION="Cat 202"  UITEMPLATE="christmas"/>
-    <TCATEGORY CATEGORY_ID="204"   PARENT_ID="200"        RANK="80" NAME="Cat 202" DESCRIPTION="Cat 202"  UITEMPLATE="christmas"/>
-    <TCATEGORY CATEGORY_ID="205"   PARENT_ID="203"        RANK="80" NAME="Cat 202" DESCRIPTION="Cat 202"  UITEMPLATE="christmas"/>
-    <TCATEGORY CATEGORY_ID="206"   PARENT_ID="205"        RANK="80" NAME="Cat 202" DESCRIPTION="Cat 202"  UITEMPLATE="christmas"/>
-    <TCATEGORY CATEGORY_ID="207"   PARENT_ID="205"        RANK="80" NAME="Cat 202" DESCRIPTION="Cat 202"  UITEMPLATE="christmas"/>
-    <TCATEGORY CATEGORY_ID="208"   PARENT_ID="206"        RANK="80" NAME="Cat 202" DESCRIPTION="Cat 202"  UITEMPLATE="christmas"/>
-
-    <TCATEGORY CATEGORY_ID="209"   PARENT_ID="100"        RANK="80" NAME="Каблучки" DESCRIPTION="Каблучки"  UITEMPLATE="christmas"/>
-    <TCATEGORY CATEGORY_ID="210"   PARENT_ID="100"        RANK="81" NAME="Сережки" DESCRIPTION="Сережки"  UITEMPLATE="christmas"/>
-    <TCATEGORY CATEGORY_ID="211"   PARENT_ID="100"        RANK="81" NAME="Featured products" DESCRIPTION="featured products category"  UITEMPLATE="christmas"/>
-    <TCATEGORY CATEGORY_ID="212"   PARENT_ID="100"        RANK="82" NAME="Availability test category" DESCRIPTION="Availability test category"  UITEMPLATE="christmas"/>
-
-    <TCATEGORY CATEGORY_ID="300"   PARENT_ID="100"        RANK="0" NAME="Get parent chain test" DESCRIPTION=""  UITEMPLATE=""/>
-    <TCATEGORY CATEGORY_ID="301"   PARENT_ID="300"        RANK="0" NAME="Get parent chain test" DESCRIPTION=""  UITEMPLATE=""/>
-    <TCATEGORY CATEGORY_ID="302"   PARENT_ID="301"        RANK="0" NAME="Get parent chain test" DESCRIPTION=""  UITEMPLATE=""/>
-    <TCATEGORY CATEGORY_ID="303"   PARENT_ID="302"        RANK="0" NAME="Get parent chain test" DESCRIPTION=""  UITEMPLATE=""/>
-    <TCATEGORY CATEGORY_ID="304"   PARENT_ID="303"        RANK="0" NAME="Get parent chain test" DESCRIPTION=""  UITEMPLATE=""/>
-    <TCATEGORY CATEGORY_ID="310"   PARENT_ID="300"        RANK="0" NAME="Get parent chain test" DESCRIPTION=""  UITEMPLATE=""/>
-    <TCATEGORY CATEGORY_ID="311"   PARENT_ID="310"        RANK="0" NAME="Get parent chain test" DESCRIPTION=""  UITEMPLATE=""/>
-    <TCATEGORY CATEGORY_ID="312"   PARENT_ID="311"        RANK="0" NAME="Get parent chain test" DESCRIPTION=""  UITEMPLATE=""/>
+      <TCATEGORY CATEGORY_ID="100"   PARENT_ID="100"        RANK="0"  NAME="root"             DESCRIPTION="The root category"    UITEMPLATE="default"
+                 AVAILABLEFROM="2009-01-01 00:00:00.000000000"
+                 AVAILABLETILL="2108-12-28 00:00:00.000000000"
+                 NAV_BY_PRICE="0"
+                 NAV_BY_PRICE_TIERS=""
+
+              />
+      <!-- failover settings-->
+      <TCATEGORYATTRVALUE ATTRVALUE_ID="20" CODE="CATEGORY_ITEMS_PER_PAGE" VAL="6,12,24" CATEGORY_ID="100"/>
+      <TCATEGORYATTRVALUE ATTRVALUE_ID="21" CODE="CATEGORY_IMAGE_RETREIVE_STRATEGY" VAL="RANDOM_PRODUCT" CATEGORY_ID="100"/>
+
+      <TCATEGORY CATEGORY_ID="101"   PARENT_ID="100"        RANK="10" NAME="Big Boys Gadgets" DESCRIPTION="Big Boys Gadgets"     UITEMPLATE="boys" />
+      <TCATEGORY CATEGORY_ID="102"   PARENT_ID="101"        RANK="10" NAME="Flying Machines" DESCRIPTION="Flying Machines"/>
+      <TCATEGORY CATEGORY_ID="103"   PARENT_ID="101"        RANK="20" NAME="Paintballing" DESCRIPTION="Paintballing"/>
+      <TCATEGORY CATEGORY_ID="104"   PARENT_ID="101"        RANK="5" NAME="Robotics" DESCRIPTION="Robotics"/>
+      <TCATEGORY CATEGORY_ID="105"   PARENT_ID="101"        RANK="30" NAME="Ultimate Gadgets" DESCRIPTION="Ultimate Gadgets"/>
+      <TCATEGORYATTRVALUE ATTRVALUE_ID="22" CODE="CATEGORY_ITEMS_PER_PAGE" VAL="10,20,50" CATEGORY_ID="105"/>
+
+      <TCATEGORY CATEGORY_ID="106"   PARENT_ID="100"        RANK="20" NAME="Fun Gadgets" DESCRIPTION="Fun Gadgets" UITEMPLATE="fun" />
+      <TCATEGORY CATEGORY_ID="107"   PARENT_ID="106"        RANK="10" NAME="Party Gadgets" DESCRIPTION="Party Gadgets"/>
+      <TCATEGORY CATEGORY_ID="108"   PARENT_ID="106"        RANK="20" NAME="Books" DESCRIPTION="Books"/>
+      <TCATEGORY CATEGORY_ID="109"   PARENT_ID="106"        RANK="30" NAME="Retro Gadgets" DESCRIPTION="Retro Gadgets"/>
+      <TCATEGORY CATEGORY_ID="110"   PARENT_ID="106"        RANK="40" NAME="Office Fun" DESCRIPTION="Office Fun" UITEMPLATE="office"/>
+      <TCATEGORY CATEGORY_ID="111"   PARENT_ID="106"        RANK="50" NAME="TV and Film" DESCRIPTION="TV and Film"/>
+      <TCATEGORY CATEGORY_ID="112"   PARENT_ID="106"        RANK="60" NAME="KnickKnacks" DESCRIPTION="KnickKnacks"/>
+
+      <TCATEGORY CATEGORY_ID="113"   PARENT_ID="100"        RANK="30" NAME="Lifestyle Gadgets" DESCRIPTION="Lifestyle Gadgets"/>
+      <TCATEGORY CATEGORY_ID="114"   PARENT_ID="113"        RANK="10" NAME="Kitch and Home" DESCRIPTION="Kitch and Home"/>
+      <TCATEGORY CATEGORY_ID="115"   PARENT_ID="113"        RANK="20" NAME="Urban Essentials" DESCRIPTION="Urban Essentials"/>
+      <TCATEGORY CATEGORY_ID="116"   PARENT_ID="113"        RANK="30" NAME="On The Go" DESCRIPTION="On The Go"/>
+      <TCATEGORY CATEGORY_ID="117"   PARENT_ID="113"        RANK="40" NAME="Eco Friendly" DESCRIPTION="Eco Friendly"/>
+      <TCATEGORY CATEGORY_ID="118"   PARENT_ID="113"        RANK="50" NAME="Clocks and Radios" DESCRIPTION="Clocks and Radios"/>
+      <TCATEGORY CATEGORY_ID="119"   PARENT_ID="113"        RANK="60" NAME="Lighting" DESCRIPTION="Lighting"/>
+
+      <TCATEGORY CATEGORY_ID="120"   PARENT_ID="100"        RANK="40" NAME="Techno Gadgets" DESCRIPTION="Techno Gadgets"/>
+      <TCATEGORY CATEGORY_ID="121"   PARENT_ID="120"        RANK="10" NAME="USB Gadgets" DESCRIPTION="USB Gadgets"/>
+      <TCATEGORY CATEGORY_ID="122"   PARENT_ID="120"        RANK="20" NAME="Robotics" DESCRIPTION="Robotics"/>
+      <TCATEGORY CATEGORY_ID="123"   PARENT_ID="120"        RANK="30" NAME="Scientific Gadgets" DESCRIPTION="Scientific Gadgets"/>
+      <TCATEGORY CATEGORY_ID="124"   PARENT_ID="120"        RANK="40" NAME="Remote Control Gadgets" DESCRIPTION="Remote Control Gadgets"/>
+      <TCATEGORY CATEGORY_ID="125"   PARENT_ID="120"        RANK="50" NAME="USB Gadgets" DESCRIPTION="USB Gadgets"/>
+      <TCATEGORY CATEGORY_ID="126"   PARENT_ID="120"        RANK="60" NAME="Mobile Accessories" DESCRIPTION="Mobile Accessories"/>
+      <TCATEGORY CATEGORY_ID="127"   PARENT_ID="120"        RANK="70" NAME="Batteries" DESCRIPTION="Batteries"/>
+      <TCATEGORY CATEGORY_ID="128"   PARENT_ID="120"        RANK="80" NAME="Accessories for iPods" DESCRIPTION="Accessories for iPods"/>
+
+      <TCATEGORY CATEGORY_ID="129"   PARENT_ID="100"        RANK="49" NAME="Outdoor Gadgets" DESCRIPTION="Outdoor Gadgets 2" NAV_BY_PRICE="1"
+                 NAV_BY_PRICE_TIERS="&lt;pricetree&gt;&lt;priceMap&gt;&lt;entry&gt;&lt;string&gt;EUR&lt;/string&gt;&lt;list&gt;&lt;pricenode&gt;&lt;priceRange&gt;&lt;first class=&quot;big-decimal&quot;&gt;0&lt;/first&gt;&lt;second class=&quot;big-decimal&quot;&gt;100&lt;/second&gt;&lt;/priceRange&gt;&lt;/pricenode&gt;&lt;pricenode&gt;&lt;priceRange&gt;&lt;first class=&quot;big-decimal&quot;&gt;100&lt;/first&gt;&lt;second class=&quot;big-decimal&quot;&gt;300&lt;/second&gt;&lt;/priceRange&gt;&lt;/pricenode&gt;&lt;pricenode&gt;&lt;priceRange&gt;&lt;first class=&quot;big-decimal&quot;&gt;300&lt;/first&gt;&lt;second class=&quot;big-decimal&quot;&gt;500&lt;/second&gt;&lt;/priceRange&gt;&lt;/pricenode&gt;&lt;/list&gt;&lt;/entry&gt;&lt;/priceMap&gt;&lt;/pricetree&gt;"/>
+      <TCATEGORY CATEGORY_ID="130"   PARENT_ID="129"        RANK="10" NAME="Summer Time" DESCRIPTION="Summer Time"/>
+      <TCATEGORY CATEGORY_ID="131"   PARENT_ID="129"        RANK="20" NAME="Outdoor Fun" DESCRIPTION="Outdoor Fun"/>
+      <TCATEGORY CATEGORY_ID="132"   PARENT_ID="129"        RANK="30" NAME="Outdoor Survival" DESCRIPTION="Outdoor Survival"/>
+
+      <TCATEGORY CATEGORY_ID="133"   PARENT_ID="100"        RANK="60" NAME="Gadget Girl" DESCRIPTION="Gadget Girl" UITEMPLATE="girls"/>
+
+      <TCATEGORY CATEGORY_ID="134"   PARENT_ID="100"        RANK="70" NAME="Games and Gifts" DESCRIPTION="Games and Gifts"/>
+      <TCATEGORY CATEGORY_ID="135"   PARENT_ID="134"        RANK="10" NAME="Games" DESCRIPTION="Games"/>
+      <TCATEGORY CATEGORY_ID="136"   PARENT_ID="134"        RANK="20" NAME="Puzzlers" DESCRIPTION="Puzzlers"/>
+      <TCATEGORY CATEGORY_ID="137"   PARENT_ID="134"        RANK="30" NAME="Electric Shocking Games" DESCRIPTION="Electric Shocking Games"/>
+      <TCATEGORY CATEGORY_ID="138"   PARENT_ID="134"        RANK="40" NAME="Gift Boxes" DESCRIPTION="Gift Boxes"/>
+      <TCATEGORY CATEGORY_ID="139"   PARENT_ID="134"        RANK="50" NAME="Games and Gifts" DESCRIPTION="Games and Gifts"/>
+
+      <TCATEGORY CATEGORY_ID="140"   PARENT_ID="100"        RANK="80" NAME="Christmas Catalogue 2009" DESCRIPTION="Christmas Catalogue 2009" UITEMPLATE="christmas"/>
+      <TCATEGORY CATEGORY_ID="141"   PARENT_ID="100"        RANK="80" NAME="Christmas Catalogue 2008" DESCRIPTION="Christmas Catalogue 2008"
+                 UITEMPLATE="christmas"
+                 AVAILABLEFROM="2008-12-12 00:00:00.000000000"
+                 AVAILABLETILL="2008-12-28 00:00:00.000000000"
+              />
+      <TCATEGORY CATEGORY_ID="142"   PARENT_ID="100"        RANK="80" NAME="Christmas Catalogue 2108" DESCRIPTION="Christmas Catalogue 2108"
+                 UITEMPLATE="christmas"
+                 AVAILABLEFROM="2108-12-12 00:00:00.000000000"
+                 AVAILABLETILL="2108-12-28 00:00:00.000000000"/>
+
+      <TCATEGORY CATEGORY_ID="143"   PARENT_ID="102"        RANK="10" NAME="Helicopters" DESCRIPTION="Helicopters"/>
+      <TCATEGORY CATEGORY_ID="144"   PARENT_ID="102"        RANK="7" NAME="Aircraft" DESCRIPTION="aircrafts"/>
+
+
+      <TCATEGORY CATEGORY_ID="200"   PARENT_ID="100"        RANK="80" NAME="Cat 200" DESCRIPTION="Cat 200"    UITEMPLATE="christmas"/>
+      <TCATEGORY CATEGORY_ID="201"   PARENT_ID="200"        RANK="80" NAME="Cat 201" DESCRIPTION="Cat 201"    UITEMPLATE="christmas"
+                 AVAILABLEFROM="2108-12-12 00:00:00.000000000"
+                 AVAILABLETILL="2108-12-28 00:00:00.000000000"/>
+      <TCATEGORY CATEGORY_ID="202"   PARENT_ID="201"        RANK="80" NAME="Cat 203" DESCRIPTION="Cat 203"   UITEMPLATE="christmas"
+                 AVAILABLEFROM="2108-12-12 00:00:00.000000000"
+                 AVAILABLETILL="2108-12-28 00:00:00.000000000"/>
+      <TCATEGORY CATEGORY_ID="203"   PARENT_ID="200"        RANK="80" NAME="Cat 202" DESCRIPTION="Cat 202"  UITEMPLATE="christmas"/>
+      <TCATEGORY CATEGORY_ID="204"   PARENT_ID="200"        RANK="80" NAME="Cat 202" DESCRIPTION="Cat 202"  UITEMPLATE="christmas"/>
+      <TCATEGORY CATEGORY_ID="205"   PARENT_ID="203"        RANK="80" NAME="Cat 202" DESCRIPTION="Cat 202"  UITEMPLATE="christmas"/>
+      <TCATEGORY CATEGORY_ID="206"   PARENT_ID="205"        RANK="80" NAME="Cat 202" DESCRIPTION="Cat 202"  UITEMPLATE="christmas"/>
+      <TCATEGORY CATEGORY_ID="207"   PARENT_ID="205"        RANK="80" NAME="Cat 202" DESCRIPTION="Cat 202"  UITEMPLATE="christmas"/>
+      <TCATEGORY CATEGORY_ID="208"   PARENT_ID="206"        RANK="80" NAME="Cat 202" DESCRIPTION="Cat 202"  UITEMPLATE="christmas"/>
+
+      <TCATEGORY CATEGORY_ID="209"   PARENT_ID="100"        RANK="80" NAME="Каблучки" DESCRIPTION="Каблучки"  UITEMPLATE="christmas"/>
+      <TCATEGORY CATEGORY_ID="210"   PARENT_ID="100"        RANK="81" NAME="Сережки" DESCRIPTION="Сережки"  UITEMPLATE="christmas"/>
+      <TCATEGORY CATEGORY_ID="211"   PARENT_ID="100"        RANK="81" NAME="Featured products" DESCRIPTION="featured products category"  UITEMPLATE="christmas"/>
+      <TCATEGORY CATEGORY_ID="212"   PARENT_ID="100"        RANK="82" NAME="Availability test category" DESCRIPTION="Availability test category"  UITEMPLATE="christmas"/>
+
+      <TCATEGORY CATEGORY_ID="300"   PARENT_ID="100"        RANK="0" NAME="Get parent chain test" DESCRIPTION=""  UITEMPLATE=""/>
+      <TCATEGORY CATEGORY_ID="301"   PARENT_ID="300"        RANK="0" NAME="Get parent chain test" DESCRIPTION=""  UITEMPLATE=""/>
+      <TCATEGORY CATEGORY_ID="302"   PARENT_ID="301"        RANK="0" NAME="Get parent chain test" DESCRIPTION=""  UITEMPLATE=""/>
+      <TCATEGORY CATEGORY_ID="303"   PARENT_ID="302"        RANK="0" NAME="Get parent chain test" DESCRIPTION=""  UITEMPLATE=""/>
+      <TCATEGORY CATEGORY_ID="304"   PARENT_ID="303"        RANK="0" NAME="Get parent chain test" DESCRIPTION=""  UITEMPLATE=""/>
+      <TCATEGORY CATEGORY_ID="310"   PARENT_ID="300"        RANK="0" NAME="Get parent chain test" DESCRIPTION=""  UITEMPLATE=""/>
+      <TCATEGORY CATEGORY_ID="311"   PARENT_ID="310"        RANK="0" NAME="Get parent chain test" DESCRIPTION=""  UITEMPLATE=""/>
+      <TCATEGORY CATEGORY_ID="312"   PARENT_ID="311"        RANK="0" NAME="Get parent chain test" DESCRIPTION=""  UITEMPLATE=""/>
 
 
 
 
-    <!-- category to shop passignment -->
-    <!--Gadget world -->
-    <TSHOPCATEGORY SHOPCATEGORY_ID="100" RANK="10" SHOP_ID="10" CATEGORY_ID="101"/>
-    <TSHOPCATEGORY SHOPCATEGORY_ID="101" RANK="20" SHOP_ID="10" CATEGORY_ID="106"/>
-    <TSHOPCATEGORY SHOPCATEGORY_ID="102" RANK="30" SHOP_ID="10" CATEGORY_ID="113"/>
-    <TSHOPCATEGORY SHOPCATEGORY_ID="103" RANK="40" SHOP_ID="10" CATEGORY_ID="120"/>
-    <TSHOPCATEGORY SHOPCATEGORY_ID="104" RANK="50" SHOP_ID="10" CATEGORY_ID="129"/>
-    <TSHOPCATEGORY SHOPCATEGORY_ID="105" RANK="60" SHOP_ID="10" CATEGORY_ID="133"/>
-    <TSHOPCATEGORY SHOPCATEGORY_ID="106" RANK="70" SHOP_ID="10" CATEGORY_ID="134"/>
-    <TSHOPCATEGORY SHOPCATEGORY_ID="107" RANK="5" SHOP_ID="10" CATEGORY_ID="140"/>
-    <TSHOPCATEGORY SHOPCATEGORY_ID="108" RANK="5" SHOP_ID="10" CATEGORY_ID="141"/>
-    <TSHOPCATEGORY SHOPCATEGORY_ID="109" RANK="5" SHOP_ID="10" CATEGORY_ID="142"/>
-    <TSHOPCATEGORY SHOPCATEGORY_ID="211" RANK="5" SHOP_ID="10" CATEGORY_ID="211"/>
+      <!-- category to shop passignment -->
+      <!--Gadget world -->
+      <TSHOPCATEGORY SHOPCATEGORY_ID="100" RANK="10" SHOP_ID="10" CATEGORY_ID="101"/>
+      <TSHOPCATEGORY SHOPCATEGORY_ID="101" RANK="20" SHOP_ID="10" CATEGORY_ID="106"/>
+      <TSHOPCATEGORY SHOPCATEGORY_ID="102" RANK="30" SHOP_ID="10" CATEGORY_ID="113"/>
+      <TSHOPCATEGORY SHOPCATEGORY_ID="103" RANK="40" SHOP_ID="10" CATEGORY_ID="120"/>
+      <TSHOPCATEGORY SHOPCATEGORY_ID="104" RANK="50" SHOP_ID="10" CATEGORY_ID="129"/>
+      <TSHOPCATEGORY SHOPCATEGORY_ID="105" RANK="60" SHOP_ID="10" CATEGORY_ID="133"/>
+      <TSHOPCATEGORY SHOPCATEGORY_ID="106" RANK="70" SHOP_ID="10" CATEGORY_ID="134"/>
+      <TSHOPCATEGORY SHOPCATEGORY_ID="107" RANK="5" SHOP_ID="10" CATEGORY_ID="140"/>
+      <TSHOPCATEGORY SHOPCATEGORY_ID="108" RANK="5" SHOP_ID="10" CATEGORY_ID="141"/>
+      <TSHOPCATEGORY SHOPCATEGORY_ID="109" RANK="5" SHOP_ID="10" CATEGORY_ID="142"/>
+      <TSHOPCATEGORY SHOPCATEGORY_ID="211" RANK="5" SHOP_ID="10" CATEGORY_ID="211"/>
 
-    <!-- Shop 50 -->
-    <TSHOPCATEGORY SHOPCATEGORY_ID="150" RANK="5" SHOP_ID="50" CATEGORY_ID="200"/>
+      <!-- Shop 50 -->
+      <TSHOPCATEGORY SHOPCATEGORY_ID="150" RANK="5" SHOP_ID="50" CATEGORY_ID="200"/>
 
-    <!-- availablilyty  -->
+      <!-- availablilyty  -->
 
-    <TAVAILABILITY AVAILABILITY_ID="1" NAME="In stock"   DESCRIPTION="Show id available in stock" />
-    <TAVAILABILITY AVAILABILITY_ID="2" NAME="Preorder"   DESCRIPTION="Pre order" />
-    <TAVAILABILITY AVAILABILITY_ID="4" NAME="Back order"   DESCRIPTION="Back order" />
-    <TAVAILABILITY AVAILABILITY_ID="8" NAME="Always"   DESCRIPTION="Available at any time" />
+      <TAVAILABILITY AVAILABILITY_ID="1" NAME="In stock"   DESCRIPTION="Show id available in stock" />
+      <TAVAILABILITY AVAILABILITY_ID="2" NAME="Preorder"   DESCRIPTION="Pre order" />
+      <TAVAILABILITY AVAILABILITY_ID="4" NAME="Back order"   DESCRIPTION="Back order" />
+      <TAVAILABILITY AVAILABILITY_ID="8" NAME="Always"   DESCRIPTION="Available at any time" />
 
 
-    <!-- product types -->
+      <!-- product types -->
 
 
-    <TPRODUCTTYPE PRODUCTTYPE_ID="1" NAME="Robots" DESCRIPTION="Robots" UISEARCHTEMPLATE="default"
-                  SERVICE="0"   ENSEMBLE="0"  SHIPABLE="1" DIGITAL="0"/>
+      <TPRODUCTTYPE PRODUCTTYPE_ID="1" NAME="Robots" DESCRIPTION="Robots" UISEARCHTEMPLATE="default"
+                    SERVICE="0"   ENSEMBLE="0"  SHIPABLE="1" DIGITAL="0"/>
 
-    <TPRODUCTTYPE PRODUCTTYPE_ID="2" NAME="MP3 Player" DESCRIPTION="MP3 Player" UISEARCHTEMPLATE="default"
-                  SERVICE="0"   ENSEMBLE="0"  SHIPABLE="1" DIGITAL="0"/>
+      <TPRODUCTTYPE PRODUCTTYPE_ID="2" NAME="MP3 Player" DESCRIPTION="MP3 Player" UISEARCHTEMPLATE="default"
+                    SERVICE="0"   ENSEMBLE="0"  SHIPABLE="1" DIGITAL="0"/>
 
-    <TPRODUCTTYPE PRODUCTTYPE_ID="3" NAME="DVD Player" DESCRIPTION="DVD Player" UISEARCHTEMPLATE="default"
-                  SERVICE="0"   ENSEMBLE="0"  SHIPABLE="1" DIGITAL="0"/>
-    
-    <TPRODUCTTYPE PRODUCTTYPE_ID="5" NAME="Digital product" DESCRIPTION="Digital product" UISEARCHTEMPLATE="default"
-                  SERVICE="0"   ENSEMBLE="0"  SHIPABLE="0" DIGITAL="1"/>
+      <TPRODUCTTYPE PRODUCTTYPE_ID="3" NAME="DVD Player" DESCRIPTION="DVD Player" UISEARCHTEMPLATE="default"
+                    SERVICE="0"   ENSEMBLE="0"  SHIPABLE="1" DIGITAL="0"/>
 
+      <TPRODUCTTYPE PRODUCTTYPE_ID="5" NAME="Digital product" DESCRIPTION="Digital product" UISEARCHTEMPLATE="default"
+                    SERVICE="0"   ENSEMBLE="0"  SHIPABLE="0" DIGITAL="1"/>
 
-    <TPRODUCTTYPEATTR PRODTYPEATTR_ID="30" CODE="MATERIAL" PRODUCTTYPE_ID="1" RANK="15"
-                      VISIBLE="1" SIMULARITY="1" NAV="1" NAV_TYPE="S" RANGE_NAV=""/>
 
-    <TPRODUCTTYPEATTR PRODTYPEATTR_ID="31" CODE="BATTERY_TYPE" PRODUCTTYPE_ID="1" RANK="10"
-                      VISIBLE="1" SIMULARITY="1" NAV="1" NAV_TYPE="S" RANGE_NAV=""/>
+      <TPRODUCTTYPEATTR PRODTYPEATTR_ID="30" CODE="MATERIAL" PRODUCTTYPE_ID="1" RANK="15"
+                        VISIBLE="1" SIMULARITY="1" NAV="1" NAV_TYPE="S" RANGE_NAV=""/>
 
-    <TPRODUCTTYPEATTR PRODTYPEATTR_ID="32" CODE="WEIGHT" PRODUCTTYPE_ID="1" RANK="11"
-                      VISIBLE="1" SIMULARITY="1" NAV="1" NAV_TYPE="R" RANGE_NAV=""/>
+      <TPRODUCTTYPEATTR PRODTYPEATTR_ID="31" CODE="BATTERY_TYPE" PRODUCTTYPE_ID="1" RANK="10"
+                        VISIBLE="1" SIMULARITY="1" NAV="1" NAV_TYPE="S" RANGE_NAV=""/>
 
+      <TPRODUCTTYPEATTR PRODTYPEATTR_ID="32" CODE="WEIGHT" PRODUCTTYPE_ID="1" RANK="11"
+                        VISIBLE="1" SIMULARITY="1" NAV="1" NAV_TYPE="R" RANGE_NAV=""/>
 
-    <!-- attribute view group -->
-    <TATTRVIEWGROUP ATTRVIEWGROUP_ID="1" NAME="Power supply" DESCRIPTION="Power"/>
-    <TATTRVIEWGROUP ATTRVIEWGROUP_ID="2" NAME="Material and color" DESCRIPTION=""/>
-    <TATTRVIEWGROUP ATTRVIEWGROUP_ID="3" NAME="DVD Players view group" DESCRIPTION=""/>
 
-    <TPRODTYPEATTRVIEWGROUP PRODTYPEATTRIBUTEGROUP_ID="1" PRODUCTTYPE_ID="1" ATTRVIEWGROUP_ID="1" ATTRCODELIST="BATTERY_TYPE,POWERSUPPLY" RANK="1" />
-    <TPRODTYPEATTRVIEWGROUP PRODTYPEATTRIBUTEGROUP_ID="2" PRODUCTTYPE_ID="1" ATTRVIEWGROUP_ID="1" ATTRCODELIST="MATERIAL,COLOR" RANK="2" />
-    <TPRODTYPEATTRVIEWGROUP PRODTYPEATTRIBUTEGROUP_ID="3" PRODUCTTYPE_ID="1" ATTRVIEWGROUP_ID="1" ATTRCODELIST="WEIGHT,LENGHT,HEIGHT,WIDTH" RANK="3" />
+      <!-- attribute view group -->
+      <TATTRVIEWGROUP ATTRVIEWGROUP_ID="1" NAME="Power supply" DESCRIPTION="Power"/>
+      <TATTRVIEWGROUP ATTRVIEWGROUP_ID="2" NAME="Material and color" DESCRIPTION=""/>
+      <TATTRVIEWGROUP ATTRVIEWGROUP_ID="3" NAME="DVD Players view group" DESCRIPTION=""/>
 
-    <!-- brands -->
+      <TPRODTYPEATTRVIEWGROUP PRODTYPEATTRIBUTEGROUP_ID="1" PRODUCTTYPE_ID="1" ATTRVIEWGROUP_ID="1" ATTRCODELIST="BATTERY_TYPE,POWERSUPPLY" RANK="1" />
+      <TPRODTYPEATTRVIEWGROUP PRODTYPEATTRIBUTEGROUP_ID="2" PRODUCTTYPE_ID="1" ATTRVIEWGROUP_ID="1" ATTRCODELIST="MATERIAL,COLOR" RANK="2" />
+      <TPRODTYPEATTRVIEWGROUP PRODTYPEATTRIBUTEGROUP_ID="3" PRODUCTTYPE_ID="1" ATTRVIEWGROUP_ID="1" ATTRCODELIST="WEIGHT,LENGHT,HEIGHT,WIDTH" RANK="3" />
 
-    <TBRAND BRAND_ID="100" NAME="Unknown" DESCRIPTION="Unknown" />
-    <TBRAND BRAND_ID="101" NAME="FutureRobots" DESCRIPTION="Unknown" />
-    <TBRAND BRAND_ID="102" NAME="LG" DESCRIPTION="LG" />
-    <TBRAND BRAND_ID="103" NAME="Sony" DESCRIPTION="Sony" />
-    <TBRAND BRAND_ID="104" NAME="Samsung" DESCRIPTION="Samsung" />
-    <TBRAND BRAND_ID="105" NAME="cc tests" DESCRIPTION="cart and command tests" />
+      <!-- brands -->
 
+      <TBRAND BRAND_ID="100" NAME="Unknown" DESCRIPTION="Unknown" />
+      <TBRAND BRAND_ID="101" NAME="FutureRobots" DESCRIPTION="Unknown" />
+      <TBRAND BRAND_ID="102" NAME="LG" DESCRIPTION="LG" />
+      <TBRAND BRAND_ID="103" NAME="Sony" DESCRIPTION="Sony" />
+      <TBRAND BRAND_ID="104" NAME="Samsung" DESCRIPTION="Samsung" />
+      <TBRAND BRAND_ID="105" NAME="cc tests" DESCRIPTION="cart and command tests" />
 
 
-    <!-- products -->
 
-    <TSEO SEO_ID="9998"
-          URI="Бендер-Згинач-Родріґес"
-          TITLE="Бендер Згинач Родріґес"
-          METAKEYWORDS=""
-          METADESCRIPTION="Futurama" />
+      <!-- products -->
 
-    <TPRODUCT PRODUCT_ID="9998"
-              CODE="BENDER-ua"
-              NAME="Бендер Згинач Родріґес"
-              DESCRIPTION="Бендер — комічний антигерой, п'яниця, лихослов і завзятий курець, шанувальник порнографії для роботів (у вигляді електричних схем), злодій-рецидивіст (вірніше, клептоман), кухар (хоча, зважаючи на відсутність відчуття смаку, його їжа в переважній більшості випадків щонайменше неїстівна, ба навіть небезпечна для життя)."
-              BRAND_ID="101"              PRODUCTTYPE_ID="1"              AVAILABILITY_ID="1"              SEO_ID="9998" FEATURED="0" AVAILABLEFROM="2010-04-08 11:15:17.451" AVAILABLETILL="2040-04-08 11:15:17.451"/>
+      <TSEO SEO_ID="9998"
+            URI="Бендер-Згинач-Родріґес"
+            TITLE="Бендер Згинач Родріґес"
+            METAKEYWORDS=""
+            METADESCRIPTION="Futurama" />
 
+      <TPRODUCT PRODUCT_ID="9998"
+                CODE="BENDER-ua"
+                NAME="Бендер Згинач Родріґес"
+                DESCRIPTION="Бендер — комічний антигерой, п'яниця, лихослов і завзятий курець, шанувальник порнографії для роботів (у вигляді електричних схем), злодій-рецидивіст (вірніше, клептоман), кухар (хоча, зважаючи на відсутність відчуття смаку, його їжа в переважній більшості випадків щонайменше неїстівна, ба навіть небезпечна для життя)."
+                BRAND_ID="101"              PRODUCTTYPE_ID="1"              AVAILABILITY_ID="1"              SEO_ID="9998" FEATURED="0" AVAILABLEFROM="2010-04-08 11:15:17.451" AVAILABLETILL="2040-04-08 11:15:17.451"/>
 
-    <TSKU SKU_ID="9998"
-          PRODUCT_ID="9998"
-          CODE="BENDER-ua"
-          NAME="Бендер Згинач Родріґес"
-          DESCRIPTION="Бендер — комічний антигерой, п'яниця, лихослов і завзятий курець, шанувальник порнографії для роботів (у вигляді електричних схем), злодій-рецидивіст (вірніше, клептоман), кухар (хоча, зважаючи на відсутність відчуття смаку, його їжа в переважній більшості випадків щонайменше неїстівна, ба навіть небезпечна для життя)."
-          RANK="1" />
 
-    <TPRODUCTATTRVALUE ATTRVALUE_ID="9996" CODE="WEIGHT" VAL="1.15" PRODUCT_ID="9998"/>
+      <TSKU SKU_ID="9998"
+            PRODUCT_ID="9998"
+            CODE="BENDER-ua"
+            NAME="Бендер Згинач Родріґес"
+            DESCRIPTION="Бендер — комічний антигерой, п'яниця, лихослов і завзятий курець, шанувальник порнографії для роботів (у вигляді електричних схем), злодій-рецидивіст (вірніше, клептоман), кухар (хоча, зважаючи на відсутність відчуття смаку, його їжа в переважній більшості випадків щонайменше неїстівна, ба навіть небезпечна для життя)."
+            RANK="1" />
 
-    <TSEO SEO_ID="9999"
-          URI="bender-rodriguez"
-          TITLE="Bender Bending Rodriguez, designated Bending Unit 22"
-          METAKEYWORDS=""
-          METADESCRIPTION="Futurama" />
+      <TPRODUCTATTRVALUE ATTRVALUE_ID="9996" CODE="WEIGHT" VAL="1.15" PRODUCT_ID="9998"/>
 
-    <TSKU SKU_ID="10000"
-          PRODUCT_ID="10000"
-          CODE="SOBOT-BEER"
-          NAME="I-Sobot Beer Edition"
-          DESCRIPTION="Special I-Sobot edition, that can play poker, open beer and smoke"
-          RANK="1" />
+      <TSEO SEO_ID="9999"
+            URI="bender-rodriguez"
+            TITLE="Bender Bending Rodriguez, designated Bending Unit 22"
+            METAKEYWORDS=""
+            METADESCRIPTION="Futurama" />
 
-    <TPRODUCT PRODUCT_ID="9999"
-              CODE="BENDER"
-              NAME="Bender Bending Rodriguez"
-              DESCRIPTION="Bender Bending Rodriguez, designated Bending Unit 22, is a fictional robot character in the animated television series Futurama. He is voiced by John DiMaggio. In the series, Bender plays the role of a comic anti-hero, and is described by Leela as an alcoholic, whore-mongering, chain-smoking gambler.[1] He was built in Mexico and is said to possess a swarthy Latin charm despite not having a Mexican accent. He is also prejudiced against non-robots, often expressing an urge to kill all humans"
-              BRAND_ID="101"              PRODUCTTYPE_ID="1"              AVAILABILITY_ID="1"              SEO_ID="9999" />
+      <TSKU SKU_ID="10000"
+            PRODUCT_ID="10000"
+            CODE="SOBOT-BEER"
+            NAME="I-Sobot Beer Edition"
+            DESCRIPTION="Special I-Sobot edition, that can play poker, open beer and smoke"
+            RANK="1" />
 
-    <TSKU SKU_ID="9999"
-          PRODUCT_ID="9999"
-          CODE="BENDER"
-          NAME="Bender Bending Rodriguez"
-          DESCRIPTION=""
-          RANK="1" />
+      <TPRODUCT PRODUCT_ID="9999"
+                CODE="BENDER"
+                NAME="Bender Bending Rodriguez"
+                DESCRIPTION="Bender Bending Rodriguez, designated Bending Unit 22, is a fictional robot character in the animated television series Futurama. He is voiced by John DiMaggio. In the series, Bender plays the role of a comic anti-hero, and is described by Leela as an alcoholic, whore-mongering, chain-smoking gambler.[1] He was built in Mexico and is said to possess a swarthy Latin charm despite not having a Mexican accent. He is also prejudiced against non-robots, often expressing an urge to kill all humans"
+                BRAND_ID="101"              PRODUCTTYPE_ID="1"              AVAILABILITY_ID="1"              SEO_ID="9999" />
 
+      <TSKU SKU_ID="9999"
+            PRODUCT_ID="9999"
+            CODE="BENDER"
+            NAME="Bender Bending Rodriguez"
+            DESCRIPTION=""
+            RANK="1" />
 
 
-    <TPRODUCTATTRVALUE ATTRVALUE_ID="9997" CODE="WEIGHT" VAL="1.1" PRODUCT_ID="9999"/>
-    <TPRODUCTATTRVALUE ATTRVALUE_ID="9998" CODE="BATTERY_TYPE" VAL="Plutonium" PRODUCT_ID="9999"/>
-    <TPRODUCTATTRVALUE ATTRVALUE_ID="9999" CODE="MATERIAL" VAL="metal" PRODUCT_ID="9999"/>
 
+      <TPRODUCTATTRVALUE ATTRVALUE_ID="9997" CODE="WEIGHT" VAL="1.1" PRODUCT_ID="9999"/>
+      <TPRODUCTATTRVALUE ATTRVALUE_ID="9998" CODE="BATTERY_TYPE" VAL="Plutonium" PRODUCT_ID="9999"/>
+      <TPRODUCTATTRVALUE ATTRVALUE_ID="9999" CODE="MATERIAL" VAL="metal" PRODUCT_ID="9999"/>
 
 
-    <TSEO SEO_ID="10000"
-          URI="i-sobot"
-          TITLE="I-Sobot robot"
-          METAKEYWORDS="Sobot, Robotics, Mechanical toy, Beer"
-          METADESCRIPTION="Buy i-Sobot - the worlds smallest humanoid robot, 200 phrases, voice recognition and easy to use remote control; available at gadget.npa.com" />
 
+      <TSEO SEO_ID="10000"
+            URI="i-sobot"
+            TITLE="I-Sobot robot"
+            METAKEYWORDS="Sobot, Robotics, Mechanical toy, Beer"
+            METADESCRIPTION="Buy i-Sobot - the worlds smallest humanoid robot, 200 phrases, voice recognition and easy to use remote control; available at gadget.npa.com" />
 
-    <TPRODUCT PRODUCT_ID="10000"
-              CODE="SOBOT"
-              NAME="I-Sobot"
-              DESCRIPTION="Think small. BigSmall. Small is beautiful. Good things come in small packages. Small ones are more juicy. However you like to put it, sometimes there's a beauty and economy in reducing the scale of an object and cramming it full of cleverness. Now, the ever-so-clever chaps at Tomy have done just that with the creation of the I-Sobot. The what bot we hear you ask? The I-Sobot is the world's smallest mass produced bi-pedal humanoid robot. But don't be fooled by his size - he has a big personality all of his own. Measuring only 16cm and weighing an amazing 300 grams, he's ready to play straight from the box. Choose from 4 modes where I-Sobot can perform fun and quirky scenes from Western battles to voice command mode that includes 10 words of phrases to say to I-Sobot where he will respond. With 17 Servo motors allowing human like articulation and 200 spoken phrases, you'll never be lonesome again. I-Sobot's distinctive design and ground-breaking functionality has us rather drooling at the mouth, in an ever-so manly way. Splendid."
-              BRAND_ID="100"              PRODUCTTYPE_ID="1"              AVAILABILITY_ID="1"              SEO_ID="10000" />
 
+      <TPRODUCT PRODUCT_ID="10000"
+                CODE="SOBOT"
+                NAME="I-Sobot"
+                DESCRIPTION="Think small. BigSmall. Small is beautiful. Good things come in small packages. Small ones are more juicy. However you like to put it, sometimes there's a beauty and economy in reducing the scale of an object and cramming it full of cleverness. Now, the ever-so-clever chaps at Tomy have done just that with the creation of the I-Sobot. The what bot we hear you ask? The I-Sobot is the world's smallest mass produced bi-pedal humanoid robot. But don't be fooled by his size - he has a big personality all of his own. Measuring only 16cm and weighing an amazing 300 grams, he's ready to play straight from the box. Choose from 4 modes where I-Sobot can perform fun and quirky scenes from Western battles to voice command mode that includes 10 words of phrases to say to I-Sobot where he will respond. With 17 Servo motors allowing human like articulation and 200 spoken phrases, you'll never be lonesome again. I-Sobot's distinctive design and ground-breaking functionality has us rather drooling at the mouth, in an ever-so manly way. Splendid."
+                BRAND_ID="100"              PRODUCTTYPE_ID="1"              AVAILABILITY_ID="1"              SEO_ID="10000" />
 
-    <TPRODUCTATTRVALUE ATTRVALUE_ID="10000" CODE="MATERIAL" VAL="Plastik" PRODUCT_ID="10000"/>
-    <TPRODUCTATTRVALUE ATTRVALUE_ID="10001" CODE="BATTERY_TYPE" VAL="Plutonium" PRODUCT_ID="10000"/>
-    <TPRODUCTATTRVALUE ATTRVALUE_ID="10002" CODE="WEIGHT" VAL="1.2" PRODUCT_ID="10000"/>
-    <TPRODUCTATTRVALUE ATTRVALUE_ID="10002" CODE="WEIGHT" VAL="1.2" PRODUCT_ID="10000"/>
-    <TPRODUCTATTRVALUE ATTRVALUE_ID="10012" CODE="IMAGE0" VAL="sobot-picture.jpeg" PRODUCT_ID="10000"/>
 
-    <TSKU SKU_ID="10000"
-          PRODUCT_ID="10000"
-          CODE="SOBOT-BEER"
-          NAME="I-Sobot Beer Edition"
-          DESCRIPTION="Special I-Sobot edition, that can play poker, open beer and smoke"
-          RANK="1" />
+      <TPRODUCTATTRVALUE ATTRVALUE_ID="10000" CODE="MATERIAL" VAL="Plastik" PRODUCT_ID="10000"/>
+      <TPRODUCTATTRVALUE ATTRVALUE_ID="10001" CODE="BATTERY_TYPE" VAL="Plutonium" PRODUCT_ID="10000"/>
+      <TPRODUCTATTRVALUE ATTRVALUE_ID="10002" CODE="WEIGHT" VAL="1.2" PRODUCT_ID="10000"/>
+      <TPRODUCTATTRVALUE ATTRVALUE_ID="10002" CODE="WEIGHT" VAL="1.2" PRODUCT_ID="10000"/>
+      <TPRODUCTATTRVALUE ATTRVALUE_ID="10012" CODE="IMAGE0" VAL="sobot-picture.jpeg" PRODUCT_ID="10000"/>
 
-    <TPRODUCTSKUATTRVALUE ATTRVALUE_ID="20001" CODE="SIZE" VAL="small" SKU_ID="10000"/>
-    <TPRODUCTSKUATTRVALUE ATTRVALUE_ID="20002" CODE="SMELL" VAL="apple" SKU_ID="10000"/>
+      <TSKU SKU_ID="10000"
+            PRODUCT_ID="10000"
+            CODE="SOBOT-BEER"
+            NAME="I-Sobot Beer Edition"
+            DESCRIPTION="Special I-Sobot edition, that can play poker, open beer and smoke"
+            RANK="1" />
 
+      <TPRODUCTSKUATTRVALUE ATTRVALUE_ID="20001" CODE="SIZE" VAL="small" SKU_ID="10000"/>
+      <TPRODUCTSKUATTRVALUE ATTRVALUE_ID="20002" CODE="SMELL" VAL="apple" SKU_ID="10000"/>
 
 
-    <TSEO SEO_ID="10001"
-          URI="i-sobot=pink"
-          TITLE="I-Sobot pink robot"
-          METAKEYWORDS="Sobot, Robotics, Mechanical toy, Vibrator"
-          METADESCRIPTION="Buy i-Sobot - the worlds smallest humanoid robot, 200 phrases, built-in vibrator with voice recognition and easy to use remote control; available at gadget.npa.com" />
 
-    <TSKU SKU_ID="10001" PRODUCT_ID="10000" CODE="SOBOT-PINK" NAME="I-Sobot Girls Edition" DESCRIPTION="Special I-Sobot edition, that can play poker, open beer and smoke" RANK="2" SEO_ID="10001" />
-    <TPRODUCTSKUATTRVALUE ATTRVALUE_ID="20003" CODE="SIZE" VAL="large" SKU_ID="10001"/>
-    <TPRODUCTSKUATTRVALUE ATTRVALUE_ID="20004" CODE="SMELL" VAL="ananas" SKU_ID="10001"/>
+      <TSEO SEO_ID="10001"
+            URI="i-sobot=pink"
+            TITLE="I-Sobot pink robot"
+            METAKEYWORDS="Sobot, Robotics, Mechanical toy, Vibrator"
+            METADESCRIPTION="Buy i-Sobot - the worlds smallest humanoid robot, 200 phrases, built-in vibrator with voice recognition and easy to use remote control; available at gadget.npa.com" />
 
-    <TSKU SKU_ID="10003" PRODUCT_ID="10000"   CODE="SOBOT-LIGHT"    NAME="I-Sobot Light Edition"    DESCRIPTION="Special I-Sobot light edition, with build in lighter"  RANK="3" />
-    <TPRODUCTSKUATTRVALUE ATTRVALUE_ID="20005" CODE="SIZE" VAL="medium" SKU_ID="10003"/>
-    <TPRODUCTSKUATTRVALUE ATTRVALUE_ID="20006" CODE="SMELL" VAL="cherry" SKU_ID="10003"/>
+      <TSKU SKU_ID="10001" PRODUCT_ID="10000" CODE="SOBOT-PINK" NAME="I-Sobot Girls Edition" DESCRIPTION="Special I-Sobot edition, that can play poker, open beer and smoke" RANK="2" SEO_ID="10001" />
+      <TPRODUCTSKUATTRVALUE ATTRVALUE_ID="20003" CODE="SIZE" VAL="large" SKU_ID="10001"/>
+      <TPRODUCTSKUATTRVALUE ATTRVALUE_ID="20004" CODE="SMELL" VAL="ananas" SKU_ID="10001"/>
 
+      <TSKU SKU_ID="10003" PRODUCT_ID="10000"   CODE="SOBOT-LIGHT"    NAME="I-Sobot Light Edition"    DESCRIPTION="Special I-Sobot light edition, with build in lighter"  RANK="3" />
+      <TPRODUCTSKUATTRVALUE ATTRVALUE_ID="20005" CODE="SIZE" VAL="medium" SKU_ID="10003"/>
+      <TPRODUCTSKUATTRVALUE ATTRVALUE_ID="20006" CODE="SMELL" VAL="cherry" SKU_ID="10003"/>
 
-    <TSKU SKU_ID="10004" PRODUCT_ID="10000"   CODE="SOBOT-ORIG"   NAME="I-Sobot"   RANK="4" />
-    <TPRODUCTSKUATTRVALUE ATTRVALUE_ID="20007" CODE="SIZE" VAL="xxl" SKU_ID="10004"/>
-    <TPRODUCTSKUATTRVALUE ATTRVALUE_ID="20008" CODE="SMELL" VAL="beer" SKU_ID="10004"/>
 
+      <TSKU SKU_ID="10004" PRODUCT_ID="10000"   CODE="SOBOT-ORIG"   NAME="I-Sobot"   RANK="4" />
+      <TPRODUCTSKUATTRVALUE ATTRVALUE_ID="20007" CODE="SIZE" VAL="xxl" SKU_ID="10004"/>
+      <TPRODUCTSKUATTRVALUE ATTRVALUE_ID="20008" CODE="SMELL" VAL="beer" SKU_ID="10004"/>
 
-    <!-- product to category assign  -->
 
-    <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="10000"   PRODUCT_ID="10000"  CATEGORY_ID="101"   RANK="999"/>
-    <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="10001"   PRODUCT_ID="9999"   CATEGORY_ID="101"   RANK="999"/>
-    <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="10002"   PRODUCT_ID="9998"   CATEGORY_ID="104"   RANK="999"/>
+      <!-- product to category assign  -->
 
-    <TSKUPRICE SKUPRICE_ID="1" SKU_ID="10000" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="150.85"/>
-    <TSKUPRICE SKUPRICE_ID="2" SKU_ID="10001" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="150.85" SALE_PRICE="140.11"/>
-    <TSKUPRICE SKUPRICE_ID="3" SKU_ID="10003" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="150.00"/>
-    <TSKUPRICE SKUPRICE_ID="4" SKU_ID="10003" SHOP_ID="10" CURRENCY="EUR" QTY="2" REGULAR_PRICE="145.00"/>
-    <TSKUPRICE SKUPRICE_ID="5" SKU_ID="10004" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="150.85"  SALE_PRICE="140.22" MINIMAL_PRICE="120.25"/>
-
-
-    <TPRODUCT PRODUCT_ID="11000"   CODE="PRODUCT1"  NAME="product 1"   DESCRIPTION="product 1 for price testing"  
-              BRAND_ID="101"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
-    <TPRODUCTATTRVALUE ATTRVALUE_ID="10003" CODE="WEIGHT" VAL="2.5" PRODUCT_ID="11000"/>
-    <TPRODUCT PRODUCT_ID="11001"   CODE="PRODUCT2"  NAME="product 2"   DESCRIPTION="product 2 for price testing"  
-              BRAND_ID="102"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
-    <TPRODUCTATTRVALUE ATTRVALUE_ID="10004" CODE="WEIGHT" VAL="2.1" PRODUCT_ID="11001"/>
-    <TPRODUCT PRODUCT_ID="11002"   CODE="PRODUCT3"  NAME="product 3"   DESCRIPTION="product 3 for price testing"  
-              BRAND_ID="103"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
-    <TPRODUCTATTRVALUE ATTRVALUE_ID="10005" CODE="WEIGHT" VAL="2.2" PRODUCT_ID="11002"/>
-    <TPRODUCT PRODUCT_ID="11003"   CODE="PRODUCT4"  NAME="product 4"   DESCRIPTION="product 4 for price testing"  
-              BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
-    <TPRODUCTATTRVALUE ATTRVALUE_ID="10006" CODE="WEIGHT" VAL="2.3" PRODUCT_ID="11003"/>
-    <TPRODUCT PRODUCT_ID="11004"   CODE="PRODUCT5"  NAME="product 5"   DESCRIPTION="product 5 for price testing"  
-              BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
-    <TPRODUCTATTRVALUE ATTRVALUE_ID="10007" CODE="WEIGHT" VAL="2.35" PRODUCT_ID="11004"/>
-
-    <!--product for associate with 11004 product-->
-    <TPRODUCT PRODUCT_ID="12004"   CODE="PRODUCT5-UP"  NAME="product 5 up sell assoc"  DESCRIPTION=""  
-              BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
-    <TPRODUCT PRODUCT_ID="13004"   CODE="PRODUCT5-CROSS"  NAME="product 5 cross sell assoc"  DESCRIPTION=""  
-              BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
-    <TPRODUCT PRODUCT_ID="13005"   CODE="PRODUCT5-CROSS2"  NAME="product 5 cross sell assoc"  DESCRIPTION=""  
-              BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
-    <TPRODUCT PRODUCT_ID="14004"   CODE="PRODUCT5-ACC"  NAME="product 5 accsesories sell assoc"  DESCRIPTION=""  
-              BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
-    <TPRODUCT PRODUCT_ID="15004"   CODE="PRODUCT5-BUY"  NAME="product 5 buy with this product sell assoc"  DESCRIPTION=""  
-              BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
-
-    <TPRODUCT PRODUCT_ID="15005"   CODE="PRODUCT6"  NAME="product 6"  DESCRIPTION=""
-              BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
-
-    <TPRODUCT PRODUCT_ID="15006"   CODE="PRODUCT7"  NAME="product 7"  DESCRIPTION=""
-              BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
-
-    <TPRODUCT PRODUCT_ID="15007"   CODE="PRODUCT8"  NAME="product 8"  DESCRIPTION=""
-              BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
-
-    <TPRODUCTASSOCIATION PRODUCTASSOCIATION_ID="1" RANK="1" ASSOCIATION_ID="2" PRODUCT_ID="11004" ASSOCIATEDPRODUCT_ID="12004"/>
-    <TPRODUCTASSOCIATION PRODUCTASSOCIATION_ID="2" RANK="2" ASSOCIATION_ID="3" PRODUCT_ID="11004" ASSOCIATEDPRODUCT_ID="13004"/>
-    <TPRODUCTASSOCIATION PRODUCTASSOCIATION_ID="3" RANK="1" ASSOCIATION_ID="3" PRODUCT_ID="11004" ASSOCIATEDPRODUCT_ID="13005"/>
-    <TPRODUCTASSOCIATION PRODUCTASSOCIATION_ID="4" RANK="1" ASSOCIATION_ID="1" PRODUCT_ID="11004" ASSOCIATEDPRODUCT_ID="14004"/>
-    <TPRODUCTASSOCIATION PRODUCTASSOCIATION_ID="5" RANK="1" ASSOCIATION_ID="4" PRODUCT_ID="11004" ASSOCIATEDPRODUCT_ID="15004"/>
-
-    <TPRODUCTASSOCIATION PRODUCTASSOCIATION_ID="6" RANK="1" ASSOCIATION_ID="2" PRODUCT_ID="11003" ASSOCIATEDPRODUCT_ID="12004"/>
-    <TPRODUCTASSOCIATION PRODUCTASSOCIATION_ID="7" RANK="2" ASSOCIATION_ID="3" PRODUCT_ID="11003" ASSOCIATEDPRODUCT_ID="13004"/>
-    <TPRODUCTASSOCIATION PRODUCTASSOCIATION_ID="8" RANK="1" ASSOCIATION_ID="3" PRODUCT_ID="11003" ASSOCIATEDPRODUCT_ID="13005"/>
-    <TPRODUCTASSOCIATION PRODUCTASSOCIATION_ID="9" RANK="1" ASSOCIATION_ID="1" PRODUCT_ID="11003" ASSOCIATEDPRODUCT_ID="14004"/>
-    <TPRODUCTASSOCIATION PRODUCTASSOCIATION_ID="10" RANK="1" ASSOCIATION_ID="4" PRODUCT_ID="11003" ASSOCIATEDPRODUCT_ID="15004"/>
-
-
-    <TSKU SKU_ID="11000"  PRODUCT_ID="11000"  CODE="PRODUCT1"  NAME="test sku"     RANK="0"/>
-    <TSKU SKU_ID="11001"  PRODUCT_ID="11001"  CODE="PRODUCT2"  NAME="test sku"     RANK="0"/>
-    <TSKU SKU_ID="11002"  PRODUCT_ID="11002"  CODE="PRODUCT3"  NAME="test sku"     RANK="0"/>
-    <TSKU SKU_ID="11003"  PRODUCT_ID="11003"  CODE="PRODUCT4"  NAME="test sku"     RANK="0"/>
-    <TSKU SKU_ID="11004"  PRODUCT_ID="11004"  CODE="PRODUCT5"  NAME="test sku"     RANK="0"/>
-    <TSKU SKU_ID="11005"  PRODUCT_ID="15005"  CODE="PRODUCT6"  NAME="test sku"     RANK="0"/>
-    <TSKU SKU_ID="11006"  PRODUCT_ID="15006"  CODE="PRODUCT7"  NAME="test sku"     RANK="0"/>
-    <TSKU SKU_ID="11007"  PRODUCT_ID="15007"  CODE="PRODUCT8"  NAME="test sku"     RANK="0"/>
-
-    <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="11000"   PRODUCT_ID="11000"  CATEGORY_ID="130"   RANK="0"/>
-    <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="11001"   PRODUCT_ID="11001"  CATEGORY_ID="130"   RANK="0"/>
-    <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="11002"   PRODUCT_ID="11002"  CATEGORY_ID="131"   RANK="0"/>
-    <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="11003"   PRODUCT_ID="11003"  CATEGORY_ID="132"   RANK="0"/>
-    <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="11004"   PRODUCT_ID="11004"  CATEGORY_ID="132"   RANK="0"/>
-    <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="11005"   PRODUCT_ID="15005"  CATEGORY_ID="131"   RANK="0"/>
-    <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="11006"   PRODUCT_ID="15006"  CATEGORY_ID="131"   RANK="0"/>
-    <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="11007"   PRODUCT_ID="15007"  CATEGORY_ID="131"   RANK="0"/>
-
-    <TSKUPRICE SKUPRICE_ID="11000" SKU_ID="11000" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="15"/>
-    <TSKUPRICE SKUPRICE_ID="11001" SKU_ID="11001" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="30"/>
-    <TSKUPRICE SKUPRICE_ID="11002" SKU_ID="11002" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="250"/>
-    <TSKUPRICE SKUPRICE_ID="11003" SKU_ID="11003" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="400"/>
-    <TSKUPRICE SKUPRICE_ID="11004" SKU_ID="11004" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="420"/>
-    <TSKUPRICE SKUPRICE_ID="11005" SKU_ID="11005" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="420"/>
-    <TSKUPRICE SKUPRICE_ID="11006" SKU_ID="11006" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="420"/>
-    <TSKUPRICE SKUPRICE_ID="11007" SKU_ID="11007" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="421"/>
-
-    <TWAREHOUSE WAREHOUSE_ID="1" CODE="WAREHOUSE_1" NAME="First warehouse" DESCRIPTION="Warehouse description"/>
-    <TWAREHOUSE WAREHOUSE_ID="2" CODE="WAREHOUSE_2" NAME="Second warehouse" DESCRIPTION="Warehouse description"/>
-    <TWAREHOUSE WAREHOUSE_ID="3" CODE="WAREHOUSE_3" NAME="Third warehouse" DESCRIPTION="Warehouse description"/>
-
-    <TSHOPWAREHOUSE SHOPWAREHOUSE_ID="1" WAREHOUSE_ID="1" SHOP_ID="10"/>
-    <TSHOPWAREHOUSE SHOPWAREHOUSE_ID="2" WAREHOUSE_ID="2" SHOP_ID="10"/>
-
-    <TSKUWAREHOUSE SKUWAREHOUSE_ID="1"  WAREHOUSE_ID="1"  QUANTITY="1" RESERVED="0" SKU_ID="10000"/>
-    <TSKUWAREHOUSE SKUWAREHOUSE_ID="2"  WAREHOUSE_ID="1"  QUANTITY="2" RESERVED="0" SKU_ID="10001"/>
-    <TSKUWAREHOUSE SKUWAREHOUSE_ID="3"  WAREHOUSE_ID="1"  QUANTITY="3" RESERVED="0" SKU_ID="10003"/>
-    <TSKUWAREHOUSE SKUWAREHOUSE_ID="4"  WAREHOUSE_ID="1"  QUANTITY="4" RESERVED="0" SKU_ID="10004"/>
-
-    <TSKUWAREHOUSE SKUWAREHOUSE_ID="5"  WAREHOUSE_ID="2"  QUANTITY="5" RESERVED="0" SKU_ID="11000"/>
-    <TSKUWAREHOUSE SKUWAREHOUSE_ID="6"  WAREHOUSE_ID="2"  QUANTITY="6" RESERVED="0" SKU_ID="11001"/>
-    <TSKUWAREHOUSE SKUWAREHOUSE_ID="7"  WAREHOUSE_ID="2"  QUANTITY="7" RESERVED="0" SKU_ID="11002"/>
-    <TSKUWAREHOUSE SKUWAREHOUSE_ID="8"  WAREHOUSE_ID="2"  QUANTITY="8" RESERVED="0" SKU_ID="11003"/>
-    <TSKUWAREHOUSE SKUWAREHOUSE_ID="9"  WAREHOUSE_ID="2"  QUANTITY="9" RESERVED="0" SKU_ID="11004"/>
-
-    <!--one sku has 0 quantity on ware house-->
-    <TSKUWAREHOUSE SKUWAREHOUSE_ID="10"  WAREHOUSE_ID="2"  QUANTITY="0" RESERVED="0" SKU_ID="11005"/>
-    <!--other has not records-->
-    <!--<TSKUWAREHOUSE SKUWAREHOUSE_ID="11"  WAREHOUSE_ID="2"  QUANTITY="0" RESERVED="0" SKU_ID="11007"/>-->
-
-
-    <TSKUWAREHOUSE SKUWAREHOUSE_ID="12"  WAREHOUSE_ID="2"  QUANTITY="1" RESERVED="0" SKU_ID="9998"/>
-    <TSKUWAREHOUSE SKUWAREHOUSE_ID="13"  WAREHOUSE_ID="2"  QUANTITY="1" RESERVED="0" SKU_ID="9999"/>
-
-
-    <!-- test for featured product -->
-    <TPRODUCT PRODUCT_ID="15051"   CODE="FEATURED-PRODUCT1"  NAME="featured product 1"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="1" AVAILABLEFROM="2010-04-08 11:15:17.451" AVAILABLETILL="2040-04-08 11:15:17.451"/>
-    <TPRODUCT PRODUCT_ID="15052"   CODE="FEATURED-PRODUCT2"  NAME="featured product 2"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="0"/>
-    <TPRODUCT PRODUCT_ID="15053"   CODE="FEATURED-PRODUCT3"  NAME="featured product 3"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="1" AVAILABLEFROM="2000-04-08 11:15:17.451" AVAILABLETILL="2001-04-08 11:15:17.451"/>
-    <TPRODUCT PRODUCT_ID="15054"   CODE="FEATURED-PRODUCT4"  NAME="featured product 4"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="0"/>
-    <TPRODUCT PRODUCT_ID="15055"   CODE="FEATURED-PRODUCT5"  NAME="featured product 5"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="1" AVAILABLEFROM="2000-04-08 11:15:17.451"/>
-    <TPRODUCT PRODUCT_ID="15056"   CODE="FEATURED-PRODUCT6"  NAME="featured product 6"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="0"/>
-    <TPRODUCT PRODUCT_ID="15057"   CODE="FEATURED-PRODUCT7"  NAME="featured product 7"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="1" AVAILABLETILL="2040-04-08 11:15:17.451"/>
-    <TPRODUCT PRODUCT_ID="15058"   CODE="FEATURED-PRODUCT8"  NAME="featured product 8"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="0"/>
-    <TPRODUCT PRODUCT_ID="15059"   CODE="FEATURED-PRODUCT9"  NAME="featured product 9"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="1"/>
-
-    <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15051"   PRODUCT_ID="15051"  CATEGORY_ID="211"   RANK="0"/>
-    <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15052"   PRODUCT_ID="15052"  CATEGORY_ID="211"   RANK="50"/>
-    <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15053"   PRODUCT_ID="15053"  CATEGORY_ID="211"   RANK="100"/>
-    <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15054"   PRODUCT_ID="15054"  CATEGORY_ID="211"   RANK="150"/>
-    <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15055"   PRODUCT_ID="15055"  CATEGORY_ID="211"   RANK="200"/>
-    <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15056"   PRODUCT_ID="15056"  CATEGORY_ID="211"   RANK="250"/>
-    <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15057"   PRODUCT_ID="15057"  CATEGORY_ID="211"   RANK="300"/>
-    <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15058"   PRODUCT_ID="15058"  CATEGORY_ID="211"   RANK="350"/>
-    <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15059"   PRODUCT_ID="15059"  CATEGORY_ID="211"   RANK="400"/>
-
-
-
-    <!-- product availability test  -->
-    <TPRODUCT PRODUCT_ID="15100"   CODE="PAT_PRODUCT_ON_STOCK_ONLY_1"  NAME="product available on stockonly 1"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="0"/>
-    <TPRODUCT PRODUCT_ID="15101"   CODE="PAT_PRODUCT_ON_STOCK_ONLY_2"  NAME="product available on stockonly 2"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="1"/>
-    <TPRODUCT PRODUCT_ID="15102"   CODE="PAT_PRODUCT_ON_STOCK_ONLY_3"  NAME="product available on stockonly 3"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="0"/>
-    <TPRODUCT PRODUCT_ID="15103"   CODE="PAT_PRODUCT_PREORDER"         NAME="product available for preorder"    DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="2" FEATURED="0"/>
-    <TPRODUCT PRODUCT_ID="15104"   CODE="PAT_PRODUCT_BACKORDER"        NAME="product available for backorder"   DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="4" FEATURED="0"/>
-    <TPRODUCT PRODUCT_ID="15105"   CODE="PAT_PRODUCT_ALWAYS"           NAME="product always"                    DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="8" FEATURED="0"/>
-    <TPRODUCT PRODUCT_ID="15106"   CODE="PAT_PRODUCT_ALWAYS2"          NAME="product always 2"                  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="8" FEATURED="0"/>
-
-    <TSKU SKU_ID="15100"  PRODUCT_ID="15100"  CODE="PAT_PRODUCT_ON_STOCK_ONLY_1"  NAME="product available on stockonly 1"     RANK="0"/>
-    <TSKU SKU_ID="15101"  PRODUCT_ID="15101"  CODE="PAT_PRODUCT_ON_STOCK_ONLY_2"  NAME="product available on stockonly 2"     RANK="0"/>
-    <TSKU SKU_ID="15102"  PRODUCT_ID="15102"  CODE="PAT_PRODUCT_ON_STOCK_ONLY_3"  NAME="product available on stockonly 3"     RANK="0"/>
-    <TSKU SKU_ID="15103"  PRODUCT_ID="15103"  CODE="PAT_PRODUCT_PREORDER"         NAME="preorder"     RANK="0"/>
-    <TSKU SKU_ID="15104"  PRODUCT_ID="15104"  CODE="PAT_PRODUCT_BACKORDER"        NAME="backorder"     RANK="0"/>
-    <TSKU SKU_ID="15105"  PRODUCT_ID="15105"  CODE="PAT_PRODUCT_ALWAYS"           NAME="always"     RANK="0"/>
-    <TSKU SKU_ID="15106"  PRODUCT_ID="15106"  CODE="PAT_PRODUCT_ALWAYS2"          NAME="always"     RANK="0"/>
-
-
-    <TSKUWAREHOUSE SKUWAREHOUSE_ID="14"  WAREHOUSE_ID="2"  QUANTITY="0" RESERVED="0" SKU_ID="15100"/>
-    <TSKUWAREHOUSE SKUWAREHOUSE_ID="15"  WAREHOUSE_ID="2"  QUANTITY="1" RESERVED="0" SKU_ID="15101"/>
-    <TSKUWAREHOUSE SKUWAREHOUSE_ID="16"  WAREHOUSE_ID="2"  QUANTITY="0" RESERVED="0" SKU_ID="15102"/>
-    <TSKUWAREHOUSE SKUWAREHOUSE_ID="17"  WAREHOUSE_ID="2"  QUANTITY="0" RESERVED="0" SKU_ID="15103"/>
-    <TSKUWAREHOUSE SKUWAREHOUSE_ID="18"  WAREHOUSE_ID="2"  QUANTITY="0" RESERVED="0" SKU_ID="15104"/>
-    <TSKUWAREHOUSE SKUWAREHOUSE_ID="19"  WAREHOUSE_ID="2"  QUANTITY="1" RESERVED="0" SKU_ID="15106"/>
-
-    <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15100"   PRODUCT_ID="15100"  CATEGORY_ID="212"   RANK="400"/>
-    <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15101"   PRODUCT_ID="15101"  CATEGORY_ID="212"   RANK="400"/>
-    <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15102"   PRODUCT_ID="15102"  CATEGORY_ID="212"   RANK="400"/>
-    <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15103"   PRODUCT_ID="15103"  CATEGORY_ID="212"   RANK="400"/>
-    <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15104"   PRODUCT_ID="15104"  CATEGORY_ID="212"   RANK="400"/>
-    <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15105"   PRODUCT_ID="15105"  CATEGORY_ID="212"   RANK="400"/>
-    <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15106"   PRODUCT_ID="15106"  CATEGORY_ID="212"   RANK="400"/>
-
-    <!--shopping cart and commands test-->
-    <TPRODUCT PRODUCT_ID="15120"   CODE="CC_TEST1"  NAME="cc test 1"  DESCRIPTION="cc test 1"  BRAND_ID="105"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="0"/>
-    <TPRODUCT PRODUCT_ID="15121"   CODE="CC_TEST2"  NAME="cc test 2"  DESCRIPTION="cc test 1"  BRAND_ID="105"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="0"/>
-    <TPRODUCT PRODUCT_ID="15122"   CODE="CC_TEST3"  NAME="cc test 3"  DESCRIPTION="cc test 1"  BRAND_ID="105"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="0"/>
-    <TPRODUCT PRODUCT_ID="15123"   CODE="CC_TEST4"  NAME="cc test 4"  DESCRIPTION="cc test 1"  BRAND_ID="105"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="0"/>
-    <TPRODUCT PRODUCT_ID="15125"   CODE="CC_TEST5"  NAME="back order product with inventory"  DESCRIPTION=""  BRAND_ID="105"   PRODUCTTYPE_ID="3"   AVAILABILITY_ID="4" FEATURED="0"/>
-    <TPRODUCT PRODUCT_ID="15126"   CODE="CC_TEST6"  NAME="pre order product"  DESCRIPTION=""  BRAND_ID="105"
-              PRODUCTTYPE_ID="3"
-              AVAILABILITY_ID="2"
-              AVAILABLEFROM="2020-01-01 00:00:00.000000000"
-              FEATURED="0"/>
-    <TPRODUCT PRODUCT_ID="15127"   CODE="CC_TEST7"  NAME="Always available"  DESCRIPTION=""  BRAND_ID="105"
-              PRODUCTTYPE_ID="3"
-              AVAILABILITY_ID="8"
-              AVAILABLEFROM="2020-01-01 00:00:00.000000000"
-              FEATURED="0"/>
-
-    <TPRODUCT PRODUCT_ID="15128"   CODE="CC_TEST8"  NAME="Always available Digital but not available because of date"  DESCRIPTION=""  BRAND_ID="105"
-              PRODUCTTYPE_ID="5"
-              AVAILABILITY_ID="8"
-              AVAILABLEFROM="2020-01-01 00:00:00.000000000"
-              FEATURED="0"/>
-
-    <TPRODUCT PRODUCT_ID="15129"   CODE="CC_TEST9"  NAME="Always available Digital"  DESCRIPTION=""  BRAND_ID="105"
-              PRODUCTTYPE_ID="5"
-              AVAILABILITY_ID="8"
-              FEATURED="0"/>
-
-   <TPRODUCT PRODUCT_ID="10"   CODE="CC_TEST10"  NAME="Sku has differen code"  DESCRIPTION=""  BRAND_ID="105"
-              PRODUCTTYPE_ID="5"
-              AVAILABILITY_ID="8"
-              FEATURED="0"/>
-
-   <TPRODUCT PRODUCT_ID="15200"   CODE="CC_TEST11"  NAME="One sku product in signle exemplar"  DESCRIPTION="Standard availability"  BRAND_ID="105"
-              PRODUCTTYPE_ID="5"
-              AVAILABILITY_ID="1"
-              FEATURED="0"/>
-
-
-    <TSKU SKU_ID="15120"  PRODUCT_ID="15120"  CODE="CC_TEST1"   NAME="cc test 1"     RANK="0"/>
-    <TSKU SKU_ID="15121"  PRODUCT_ID="15121"  CODE="CC_TEST2"   NAME="cc test 2"     RANK="0"/>
-    <TSKU SKU_ID="15122"  PRODUCT_ID="15122"  CODE="CC_TEST3"   NAME="cc test 3"     RANK="0"/>
-    <TSKU SKU_ID="15123"  PRODUCT_ID="15123"  CODE="CC_TEST4"   NAME="cc test 4"     RANK="0"/>
-    <TSKU SKU_ID="15124"  PRODUCT_ID="15123"  CODE="CC_TEST4-M" NAME="cc test 4 m"     RANK="0"/>
-    <TSKU SKU_ID="15125"  PRODUCT_ID="15125"  CODE="CC_TEST5"   NAME="cc test 5"     RANK="0"/>
-    <TSKU SKU_ID="15126"  PRODUCT_ID="15126"  CODE="CC_TEST6"   NAME="cc test 6"     RANK="0"/>
-    <TSKU SKU_ID="15127"  PRODUCT_ID="15127"  CODE="CC_TEST7"   NAME="cc test 7"     RANK="0"/>
-    <TSKU SKU_ID="15128"  PRODUCT_ID="15128"  CODE="CC_TEST8"   NAME="cc test 8"     RANK="0"/>
-    <TSKU SKU_ID="15129"  PRODUCT_ID="15129"  CODE="CC_TEST9"   NAME="cc test 9"     RANK="0"/>
-    <TSKU SKU_ID="15130"  PRODUCT_ID="10"     CODE="CC_TEST10-SKU"  NAME="cc test 10"     RANK="0"/>
-    <TSKU SKU_ID="15200"  PRODUCT_ID="15200"  CODE="CC_TEST11"  NAME="cc test 11"     RANK="0"/>
-
-    <TSKUWAREHOUSE SKUWAREHOUSE_ID="30"  WAREHOUSE_ID="1"  QUANTITY="9" RESERVED="0" SKU_ID="15120"/>
-    <TSKUWAREHOUSE SKUWAREHOUSE_ID="31"  WAREHOUSE_ID="1"  QUANTITY="1" RESERVED="0" SKU_ID="15121"/>
-    <TSKUWAREHOUSE SKUWAREHOUSE_ID="32"  WAREHOUSE_ID="1"  QUANTITY="2" RESERVED="0" SKU_ID="15122"/>
-    <TSKUWAREHOUSE SKUWAREHOUSE_ID="33"  WAREHOUSE_ID="1"  QUANTITY="3" RESERVED="0" SKU_ID="15123"/>
-    <TSKUWAREHOUSE SKUWAREHOUSE_ID="34"  WAREHOUSE_ID="1"  QUANTITY="5" RESERVED="0" SKU_ID="15125"/>
-    <TSKUWAREHOUSE SKUWAREHOUSE_ID="35"  WAREHOUSE_ID="1"  QUANTITY="500" RESERVED="0" SKU_ID="15126"/>
-    <TSKUWAREHOUSE SKUWAREHOUSE_ID="36"  WAREHOUSE_ID="1"  QUANTITY="23" RESERVED="0" SKU_ID="15130"/>
-    <TSKUWAREHOUSE SKUWAREHOUSE_ID="37"  WAREHOUSE_ID="1"  QUANTITY="1"  RESERVED="0" SKU_ID="15200"/>
-
-    <!-- prices in EUR -->
-    <TSKUPRICE SKUPRICE_ID="11200" SKU_ID="15120" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="19.99"/>
-    <TSKUPRICE SKUPRICE_ID="11201" SKU_ID="15120" SHOP_ID="10" CURRENCY="EUR" QTY="3" REGULAR_PRICE="19.00"/>
-    <TSKUPRICE SKUPRICE_ID="11202" SKU_ID="15120" SHOP_ID="10" CURRENCY="EUR" QTY="5" REGULAR_PRICE="18.00"/>
-
-    <TSKUPRICE SKUPRICE_ID="11203" SKU_ID="15121" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="29.99"/>
-    <TSKUPRICE SKUPRICE_ID="11204" SKU_ID="15121" SHOP_ID="10" CURRENCY="EUR" QTY="10" REGULAR_PRICE="22.17"/>
-
-    <TSKUPRICE SKUPRICE_ID="11205" SKU_ID="15122" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="7.99"/>
-    <TSKUPRICE SKUPRICE_ID="11206" SKU_ID="15122" SHOP_ID="10" CURRENCY="EUR" QTY="3" REGULAR_PRICE="7.00"/>
-
-    <TSKUPRICE SKUPRICE_ID="11207" SKU_ID="15123" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="123.00"/>
-    <TSKUPRICE SKUPRICE_ID="11208" SKU_ID="15123" SHOP_ID="10" CURRENCY="EUR" QTY="5" REGULAR_PRICE="99.99"/>
-
-    <TSKUPRICE SKUPRICE_ID="11209" SKU_ID="15124" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="77.99"/>
-    <TSKUPRICE SKUPRICE_ID="11210" SKU_ID="15124" SHOP_ID="10" CURRENCY="EUR" QTY="4" REGULAR_PRICE="77.00"/>
-
-    <TSKUPRICE SKUPRICE_ID="11300" SKU_ID="15125" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="12.00"/>
-    <TSKUPRICE SKUPRICE_ID="11301" SKU_ID="15126" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="55.17"/>
-    <TSKUPRICE SKUPRICE_ID="11302" SKU_ID="15127" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="55.17"/>
-
-    <TSKUPRICE SKUPRICE_ID="11303" SKU_ID="15128" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="55.17"/>
-    <TSKUPRICE SKUPRICE_ID="11304" SKU_ID="15129" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="65.17"/>
-
-    <TSKUPRICE SKUPRICE_ID="11305" SKU_ID="15130" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="23.10"/>
-
-    <TSKUPRICE SKUPRICE_ID="11306" SKU_ID="15200" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="10.10"/>
-
-
-    <!-- prices in USD -->
-    <TSKUPRICE SKUPRICE_ID="11211" SKU_ID="15120" SHOP_ID="10" CURRENCY="USD" QTY="1" REGULAR_PRICE="190.99"/>
-    <TSKUPRICE SKUPRICE_ID="11212" SKU_ID="15120" SHOP_ID="10" CURRENCY="USD" QTY="3" REGULAR_PRICE="190.01"/>
-    <TSKUPRICE SKUPRICE_ID="11213" SKU_ID="15120" SHOP_ID="10" CURRENCY="USD" QTY="5" REGULAR_PRICE="180.00"/>
-
-    <TSKUPRICE SKUPRICE_ID="11214" SKU_ID="15121" SHOP_ID="10" CURRENCY="USD" QTY="1" REGULAR_PRICE="290.99"/>
-    <TSKUPRICE SKUPRICE_ID="11215" SKU_ID="15121" SHOP_ID="10" CURRENCY="USD" QTY="10" REGULAR_PRICE="220.17"/>
-
-    <TSKUPRICE SKUPRICE_ID="11216" SKU_ID="15122" SHOP_ID="10" CURRENCY="USD" QTY="1" REGULAR_PRICE="70.99"/>
-    <TSKUPRICE SKUPRICE_ID="11217" SKU_ID="15122" SHOP_ID="10" CURRENCY="USD" QTY="3" REGULAR_PRICE="70.00"/>
-
-    <TSKUPRICE SKUPRICE_ID="11218" SKU_ID="15123" SHOP_ID="10" CURRENCY="USD" QTY="1" REGULAR_PRICE="1230.00"/>
-    <TSKUPRICE SKUPRICE_ID="11219" SKU_ID="15123" SHOP_ID="10" CURRENCY="USD" QTY="5" REGULAR_PRICE="990.99"/>
-
-    <TSKUPRICE SKUPRICE_ID="11220" SKU_ID="15124" SHOP_ID="10" CURRENCY="USD" QTY="1" REGULAR_PRICE="177.99"/>
-    <TSKUPRICE SKUPRICE_ID="11221" SKU_ID="15124" SHOP_ID="10" CURRENCY="USD" QTY="4" REGULAR_PRICE="177.00"/>
-
-    <TSKUPRICE SKUPRICE_ID="11400" SKU_ID="15125" SHOP_ID="10" CURRENCY="USD" QTY="1" REGULAR_PRICE="17.00"/>
-    <TSKUPRICE SKUPRICE_ID="11401" SKU_ID="15126" SHOP_ID="10" CURRENCY="USD" QTY="1" REGULAR_PRICE="80.99"/>
-    <TSKUPRICE SKUPRICE_ID="11402" SKU_ID="15127" SHOP_ID="10" CURRENCY="USD" QTY="1" REGULAR_PRICE="80.99"/>
-
-    <TSKUPRICE SKUPRICE_ID="11403" SKU_ID="15128" SHOP_ID="10" CURRENCY="USD" QTY="1" REGULAR_PRICE="87.99"/>
-    <TSKUPRICE SKUPRICE_ID="11404" SKU_ID="15129" SHOP_ID="10" CURRENCY="USD" QTY="1" REGULAR_PRICE="88.99"/>
-
-    <TSKUPRICE SKUPRICE_ID="11405" SKU_ID="15130" SHOP_ID="10" CURRENCY="USD" QTY="1" REGULAR_PRICE="99.09"/>
-
-    <TSKUPRICE SKUPRICE_ID="11406" SKU_ID="15200" SHOP_ID="10" CURRENCY="USD" QTY="1" REGULAR_PRICE="17.15"/>
-
-
-
-
-
-  <TCOUNTRY COUNTRY_ID="1"  COUNTRY_CODE="AF" ISO_CODE="4" NAME="Afghanistan"/>
-  <TCOUNTRY COUNTRY_ID="2"  COUNTRY_CODE="AL" ISO_CODE="8" NAME="Albania"/>
-  <TCOUNTRY COUNTRY_ID="3"  COUNTRY_CODE="DZ" ISO_CODE="12" NAME="Algeria"/>
-  <TCOUNTRY COUNTRY_ID="4"  COUNTRY_CODE="AS" ISO_CODE="16" NAME="American Samoa"/>
-  <TCOUNTRY COUNTRY_ID="5"  COUNTRY_CODE="AD" ISO_CODE="20" NAME="Andorra"/>
-  <TCOUNTRY COUNTRY_ID="6"  COUNTRY_CODE="AO" ISO_CODE="24" NAME="Angola"/>
-  <TCOUNTRY COUNTRY_ID="7"  COUNTRY_CODE="AI" ISO_CODE="660" NAME="Anguilla"/>
-  <TCOUNTRY COUNTRY_ID="8"  COUNTRY_CODE="AQ" ISO_CODE="10" NAME="Antarctica"/>
-  <TCOUNTRY COUNTRY_ID="9"  COUNTRY_CODE="AG" ISO_CODE="28" NAME="Antigua And Barbuda"/>
-  <TCOUNTRY COUNTRY_ID="10"  COUNTRY_CODE="AR" ISO_CODE="32" NAME="Argentina"/>
-  <TCOUNTRY COUNTRY_ID="11"  COUNTRY_CODE="AM" ISO_CODE="51" NAME="Armenia"/>
-  <TCOUNTRY COUNTRY_ID="12"  COUNTRY_CODE="AW" ISO_CODE="533" NAME="Aruba"/>
-  <TCOUNTRY COUNTRY_ID="13"  COUNTRY_CODE="AU" ISO_CODE="36" NAME="Australia"/>
-  <TCOUNTRY COUNTRY_ID="14"  COUNTRY_CODE="AT" ISO_CODE="40" NAME="Austria"/>
-  <TCOUNTRY COUNTRY_ID="15"  COUNTRY_CODE="AZ" ISO_CODE="31" NAME="Azerbaijan"/>
-  <TCOUNTRY COUNTRY_ID="16"  COUNTRY_CODE="BS" ISO_CODE="44" NAME="Bahamas"/>
-  <TCOUNTRY COUNTRY_ID="17"  COUNTRY_CODE="BH" ISO_CODE="48" NAME="Bahrain"/>
-  <TCOUNTRY COUNTRY_ID="18"  COUNTRY_CODE="BD" ISO_CODE="50" NAME="Bangladesh"/>
-  <TCOUNTRY COUNTRY_ID="19"  COUNTRY_CODE="BB" ISO_CODE="52" NAME="Barbados"/>
-  <TCOUNTRY COUNTRY_ID="20"  COUNTRY_CODE="BY" ISO_CODE="112" NAME="Belarus"/>
-  <TCOUNTRY COUNTRY_ID="21"  COUNTRY_CODE="BE" ISO_CODE="56" NAME="Belgium"/>
-  <TCOUNTRY COUNTRY_ID="22"  COUNTRY_CODE="BZ" ISO_CODE="84" NAME="Belize"/>
-  <TCOUNTRY COUNTRY_ID="23"  COUNTRY_CODE="BJ" ISO_CODE="204" NAME="Benin"/>
-  <TCOUNTRY COUNTRY_ID="24"  COUNTRY_CODE="BM" ISO_CODE="60" NAME="Bermuda"/>
-  <TCOUNTRY COUNTRY_ID="25"  COUNTRY_CODE="BT" ISO_CODE="64" NAME="Bhutan"/>
-  <TCOUNTRY COUNTRY_ID="26"  COUNTRY_CODE="BO" ISO_CODE="68" NAME="Bolivia"/>
-  <TCOUNTRY COUNTRY_ID="27"  COUNTRY_CODE="BA" ISO_CODE="70" NAME="Bosnia And Herzegovina"/>
-  <TCOUNTRY COUNTRY_ID="28"  COUNTRY_CODE="BW" ISO_CODE="72" NAME="Botswana"/>
-  <TCOUNTRY COUNTRY_ID="29"  COUNTRY_CODE="BV" ISO_CODE="74" NAME="Bouvet Island"/>
-  <TCOUNTRY COUNTRY_ID="30"  COUNTRY_CODE="BR" ISO_CODE="76" NAME="Brazil"/>
-  <TCOUNTRY COUNTRY_ID="31"  COUNTRY_CODE="IO" ISO_CODE="86" NAME="British Indian Ocean Territory"/>
-  <TCOUNTRY COUNTRY_ID="32"  COUNTRY_CODE="BN" ISO_CODE="96" NAME="Brunei Darussalam"/>
-  <TCOUNTRY COUNTRY_ID="33"  COUNTRY_CODE="BG" ISO_CODE="100" NAME="Bulgaria"/>
-  <TCOUNTRY COUNTRY_ID="34"  COUNTRY_CODE="BF" ISO_CODE="854" NAME="Burkina Faso"/>
-  <TCOUNTRY COUNTRY_ID="35"  COUNTRY_CODE="BI" ISO_CODE="108" NAME="Burundi"/>
-  <TCOUNTRY COUNTRY_ID="36"  COUNTRY_CODE="KH" ISO_CODE="116" NAME="Cambodia"/>
-  <TCOUNTRY COUNTRY_ID="37"  COUNTRY_CODE="CM" ISO_CODE="120" NAME="Cameroon"/>
-  <TCOUNTRY COUNTRY_ID="38"  COUNTRY_CODE="CA" ISO_CODE="124" NAME="Canada"/>
-  <TCOUNTRY COUNTRY_ID="39"  COUNTRY_CODE="CV" ISO_CODE="132" NAME="Cape Verde"/>
-  <TCOUNTRY COUNTRY_ID="40"  COUNTRY_CODE="KY" ISO_CODE="136" NAME="Cayman Islands"/>
-  <TCOUNTRY COUNTRY_ID="41"  COUNTRY_CODE="CF" ISO_CODE="140" NAME="Central African Republic"/>
-  <TCOUNTRY COUNTRY_ID="42"  COUNTRY_CODE="TD" ISO_CODE="148" NAME="Chad"/>
-  <TCOUNTRY COUNTRY_ID="43"  COUNTRY_CODE="CL" ISO_CODE="152" NAME="Chile"/>
-  <TCOUNTRY COUNTRY_ID="44"  COUNTRY_CODE="CN" ISO_CODE="156" NAME="China"/>
-  <TCOUNTRY COUNTRY_ID="45"  COUNTRY_CODE="CX" ISO_CODE="162" NAME="Christmas Island"/>
-  <TCOUNTRY COUNTRY_ID="46"  COUNTRY_CODE="CC" ISO_CODE="166" NAME="Cocos (Keeling) Islands"/>
-  <TCOUNTRY COUNTRY_ID="47"  COUNTRY_CODE="CO" ISO_CODE="170" NAME="Colombia"/>
-  <TCOUNTRY COUNTRY_ID="48"  COUNTRY_CODE="KM" ISO_CODE="174" NAME="Comoros"/>
-  <TCOUNTRY COUNTRY_ID="49"  COUNTRY_CODE="CG" ISO_CODE="178" NAME="Congo"/>
-  <TCOUNTRY COUNTRY_ID="50"  COUNTRY_CODE="CK" ISO_CODE="184" NAME="Cook Islands"/>
-  <TCOUNTRY COUNTRY_ID="51"  COUNTRY_CODE="CR" ISO_CODE="188" NAME="Costa Rica"/>
-  <TCOUNTRY COUNTRY_ID="52"  COUNTRY_CODE="CI" ISO_CODE="384" NAME="Cote D'Ivoire"/>
-  <TCOUNTRY COUNTRY_ID="53"  COUNTRY_CODE="HR" ISO_CODE="191" NAME="Croatia (Local Name: Hrvatska)"/>
-  <TCOUNTRY COUNTRY_ID="54"  COUNTRY_CODE="CU" ISO_CODE="192" NAME="Cuba"/>
-  <TCOUNTRY COUNTRY_ID="55"  COUNTRY_CODE="CY" ISO_CODE="196" NAME="Cyprus"/>
-  <TCOUNTRY COUNTRY_ID="56"  COUNTRY_CODE="CZ" ISO_CODE="203" NAME="Czech Republic"/>
-  <TCOUNTRY COUNTRY_ID="57"  COUNTRY_CODE="DK" ISO_CODE="208" NAME="Denmark"/>
-  <TCOUNTRY COUNTRY_ID="58"  COUNTRY_CODE="DJ" ISO_CODE="262" NAME="Djibouti"/>
-  <TCOUNTRY COUNTRY_ID="59"  COUNTRY_CODE="DM" ISO_CODE="212" NAME="Dominica"/>
-  <TCOUNTRY COUNTRY_ID="60"  COUNTRY_CODE="DO" ISO_CODE="214" NAME="Dominican Republic"/>
-  <TCOUNTRY COUNTRY_ID="61"  COUNTRY_CODE="EC" ISO_CODE="218" NAME="Ecuador"/>
-  <TCOUNTRY COUNTRY_ID="62"  COUNTRY_CODE="EG" ISO_CODE="818" NAME="Egypt"/>
-  <TCOUNTRY COUNTRY_ID="63"  COUNTRY_CODE="SV" ISO_CODE="222" NAME="El Salvador"/>
-  <TCOUNTRY COUNTRY_ID="64"  COUNTRY_CODE="GQ" ISO_CODE="226" NAME="Equatorial Guinea"/>
-  <TCOUNTRY COUNTRY_ID="65"  COUNTRY_CODE="ER" ISO_CODE="232" NAME="Eritrea"/>
-  <TCOUNTRY COUNTRY_ID="66"  COUNTRY_CODE="EE" ISO_CODE="233" NAME="Estonia"/>
-  <TCOUNTRY COUNTRY_ID="67"  COUNTRY_CODE="ET" ISO_CODE="210" NAME="Ethiopia"/>
-  <TCOUNTRY COUNTRY_ID="68"  COUNTRY_CODE="FK" ISO_CODE="238" NAME="Falkland Islands (Malvinas)"/>
-  <TCOUNTRY COUNTRY_ID="69"  COUNTRY_CODE="FO" ISO_CODE="234" NAME="Faroe Islands"/>
-  <TCOUNTRY COUNTRY_ID="70"  COUNTRY_CODE="FJ" ISO_CODE="242" NAME="Fiji"/>
-  <TCOUNTRY COUNTRY_ID="71"  COUNTRY_CODE="FI" ISO_CODE="246" NAME="Finland"/>
-  <TCOUNTRY COUNTRY_ID="72"  COUNTRY_CODE="FR" ISO_CODE="250" NAME="France"/>
-  <TCOUNTRY COUNTRY_ID="73"  COUNTRY_CODE="FX" ISO_CODE="249" NAME="France, Metropolitan"/>
-  <TCOUNTRY COUNTRY_ID="74"  COUNTRY_CODE="GF" ISO_CODE="254" NAME="French Guiana"/>
-  <TCOUNTRY COUNTRY_ID="75"  COUNTRY_CODE="PF" ISO_CODE="258" NAME="French Polynesia"/>
-  <TCOUNTRY COUNTRY_ID="76"  COUNTRY_CODE="TF" ISO_CODE="260" NAME="French Southern Territories"/>
-  <TCOUNTRY COUNTRY_ID="77"  COUNTRY_CODE="GA" ISO_CODE="266" NAME="Gabon"/>
-  <TCOUNTRY COUNTRY_ID="78"  COUNTRY_CODE="GM" ISO_CODE="270" NAME="Gambia"/>
-  <TCOUNTRY COUNTRY_ID="79"  COUNTRY_CODE="GE" ISO_CODE="268" NAME="Georgia"/>
-  <TCOUNTRY COUNTRY_ID="80"  COUNTRY_CODE="DE" ISO_CODE="276" NAME="Germany"/>
-  <TCOUNTRY COUNTRY_ID="81"  COUNTRY_CODE="GH" ISO_CODE="288" NAME="Ghana"/>
-  <TCOUNTRY COUNTRY_ID="82"  COUNTRY_CODE="GI" ISO_CODE="292" NAME="Gibraltar"/>
-  <TCOUNTRY COUNTRY_ID="83"  COUNTRY_CODE="GR" ISO_CODE="300" NAME="Greece"/>
-  <TCOUNTRY COUNTRY_ID="84"  COUNTRY_CODE="GL" ISO_CODE="304" NAME="Greenland"/>
-  <TCOUNTRY COUNTRY_ID="85"  COUNTRY_CODE="GD" ISO_CODE="308" NAME="Grenada"/>
-  <TCOUNTRY COUNTRY_ID="86"  COUNTRY_CODE="GP" ISO_CODE="312" NAME="Guadeloupe"/>
-  <TCOUNTRY COUNTRY_ID="87"  COUNTRY_CODE="GU" ISO_CODE="316" NAME="Guam"/>
-  <TCOUNTRY COUNTRY_ID="88"  COUNTRY_CODE="GT" ISO_CODE="320" NAME="Guatemala"/>
-  <TCOUNTRY COUNTRY_ID="89"  COUNTRY_CODE="GN" ISO_CODE="324" NAME="Guinea"/>
-  <TCOUNTRY COUNTRY_ID="90"  COUNTRY_CODE="GW" ISO_CODE="624" NAME="Guinea-Bissau"/>
-  <TCOUNTRY COUNTRY_ID="91"  COUNTRY_CODE="GY" ISO_CODE="328" NAME="Guyana"/>
-  <TCOUNTRY COUNTRY_ID="92"  COUNTRY_CODE="HT" ISO_CODE="332" NAME="Haiti"/>
-  <TCOUNTRY COUNTRY_ID="93"  COUNTRY_CODE="HM" ISO_CODE="334" NAME="Heard Island &amp; Mcdonald Islands"/>
-  <TCOUNTRY COUNTRY_ID="94"  COUNTRY_CODE="HN" ISO_CODE="340" NAME="Honduras"/>
-  <TCOUNTRY COUNTRY_ID="95"  COUNTRY_CODE="HK" ISO_CODE="344" NAME="Hong Kong"/>
-  <TCOUNTRY COUNTRY_ID="96"  COUNTRY_CODE="HU" ISO_CODE="348" NAME="Hungary"/>
-  <TCOUNTRY COUNTRY_ID="97"  COUNTRY_CODE="IS" ISO_CODE="352" NAME="Iceland"/>
-  <TCOUNTRY COUNTRY_ID="98"  COUNTRY_CODE="IN" ISO_CODE="356" NAME="India"/>
-  <TCOUNTRY COUNTRY_ID="99"  COUNTRY_CODE="ID" ISO_CODE="360" NAME="Indonesia"/>
-  <TCOUNTRY COUNTRY_ID="100"  COUNTRY_CODE="IR" ISO_CODE="364" NAME="Iran, Islamic Republic Of"/>
-  <TCOUNTRY COUNTRY_ID="101"  COUNTRY_CODE="IQ" ISO_CODE="368" NAME="Iraq"/>
-  <TCOUNTRY COUNTRY_ID="102"  COUNTRY_CODE="IE" ISO_CODE="372" NAME="Ireland"/>
-  <TCOUNTRY COUNTRY_ID="103"  COUNTRY_CODE="IL" ISO_CODE="376" NAME="Israel"/>
-  <TCOUNTRY COUNTRY_ID="104"  COUNTRY_CODE="IT" ISO_CODE="380" NAME="Italy"/>
-  <TCOUNTRY COUNTRY_ID="105"  COUNTRY_CODE="JM" ISO_CODE="388" NAME="Jamaica"/>
-  <TCOUNTRY COUNTRY_ID="106"  COUNTRY_CODE="JP" ISO_CODE="392" NAME="Japan"/>
-  <TCOUNTRY COUNTRY_ID="107"  COUNTRY_CODE="JO" ISO_CODE="400" NAME="Jordan"/>
-  <TCOUNTRY COUNTRY_ID="108"  COUNTRY_CODE="KZ" ISO_CODE="398" NAME="Kazakhstan"/>
-  <TCOUNTRY COUNTRY_ID="109"  COUNTRY_CODE="KE" ISO_CODE="404" NAME="Kenya"/>
-  <TCOUNTRY COUNTRY_ID="110"  COUNTRY_CODE="KI" ISO_CODE="296" NAME="Kiribati"/>
-  <TCOUNTRY COUNTRY_ID="111"  COUNTRY_CODE="KP" ISO_CODE="408" NAME="Korea, Democratic People'S Republic Of"/>
-  <TCOUNTRY COUNTRY_ID="112"  COUNTRY_CODE="KR" ISO_CODE="410" NAME="Korea, Republic Of"/>
-  <TCOUNTRY COUNTRY_ID="113"  COUNTRY_CODE="KW" ISO_CODE="414" NAME="Kuwait"/>
-  <TCOUNTRY COUNTRY_ID="114"  COUNTRY_CODE="KG" ISO_CODE="417" NAME="Kyrgyzstan"/>
-  <TCOUNTRY COUNTRY_ID="115"  COUNTRY_CODE="LA" ISO_CODE="418" NAME="Lao People'S Democratic Republic"/>
-  <TCOUNTRY COUNTRY_ID="116"  COUNTRY_CODE="LV" ISO_CODE="428" NAME="Latvia"/>
-  <TCOUNTRY COUNTRY_ID="117"  COUNTRY_CODE="LB" ISO_CODE="422" NAME="Lebanon"/>
-  <TCOUNTRY COUNTRY_ID="118"  COUNTRY_CODE="LS" ISO_CODE="426" NAME="Lesotho"/>
-  <TCOUNTRY COUNTRY_ID="119"  COUNTRY_CODE="LR" ISO_CODE="430" NAME="Liberia"/>
-  <TCOUNTRY COUNTRY_ID="120"  COUNTRY_CODE="LY" ISO_CODE="434" NAME="Libyan Arab Jamahiriya"/>
-  <TCOUNTRY COUNTRY_ID="121"  COUNTRY_CODE="LI" ISO_CODE="438" NAME="Liechtenstein"/>
-  <TCOUNTRY COUNTRY_ID="122"  COUNTRY_CODE="LT" ISO_CODE="440" NAME="Lithuania"/>
-  <TCOUNTRY COUNTRY_ID="123"  COUNTRY_CODE="LU" ISO_CODE="442" NAME="Luxembourg"/>
-  <TCOUNTRY COUNTRY_ID="124"  COUNTRY_CODE="MO" ISO_CODE="446" NAME="Macau"/>
-  <TCOUNTRY COUNTRY_ID="125"  COUNTRY_CODE="MK" ISO_CODE="807" NAME="Macedonia, The Former Yugoslav Republic Of"/>
-  <TCOUNTRY COUNTRY_ID="126"  COUNTRY_CODE="MG" ISO_CODE="450" NAME="Madagascar"/>
-  <TCOUNTRY COUNTRY_ID="127"  COUNTRY_CODE="MW" ISO_CODE="454" NAME="Malawi"/>
-  <TCOUNTRY COUNTRY_ID="128"  COUNTRY_CODE="MY" ISO_CODE="458" NAME="Malaysia"/>
-  <TCOUNTRY COUNTRY_ID="129"  COUNTRY_CODE="MV" ISO_CODE="462" NAME="Maldives"/>
-  <TCOUNTRY COUNTRY_ID="130"  COUNTRY_CODE="ML" ISO_CODE="466" NAME="Mali"/>
-  <TCOUNTRY COUNTRY_ID="131"  COUNTRY_CODE="MT" ISO_CODE="470" NAME="Malta"/>
-  <TCOUNTRY COUNTRY_ID="132"  COUNTRY_CODE="MH" ISO_CODE="584" NAME="Marshall Islands"/>
-  <TCOUNTRY COUNTRY_ID="133"  COUNTRY_CODE="MQ" ISO_CODE="474" NAME="Martinique"/>
-  <TCOUNTRY COUNTRY_ID="134"  COUNTRY_CODE="MR" ISO_CODE="478" NAME="Mauritania"/>
-  <TCOUNTRY COUNTRY_ID="135"  COUNTRY_CODE="MU" ISO_CODE="480" NAME="Mauritius"/>
-  <TCOUNTRY COUNTRY_ID="136"  COUNTRY_CODE="YT" ISO_CODE="175" NAME="Mayotte"/>
-  <TCOUNTRY COUNTRY_ID="137"  COUNTRY_CODE="MX" ISO_CODE="484" NAME="Mexico"/>
-  <TCOUNTRY COUNTRY_ID="138"  COUNTRY_CODE="FM" ISO_CODE="583" NAME="Micronesia, Federated States Of"/>
-  <TCOUNTRY COUNTRY_ID="139"  COUNTRY_CODE="MD" ISO_CODE="498" NAME="Moldova, Republic Of"/>
-  <TCOUNTRY COUNTRY_ID="140"  COUNTRY_CODE="MC" ISO_CODE="492" NAME="Monaco"/>
-  <TCOUNTRY COUNTRY_ID="141"  COUNTRY_CODE="MN" ISO_CODE="496" NAME="Mongolia"/>
-  <TCOUNTRY COUNTRY_ID="142"  COUNTRY_CODE="MS" ISO_CODE="500" NAME="Montserrat"/>
-  <TCOUNTRY COUNTRY_ID="143"  COUNTRY_CODE="MA" ISO_CODE="504" NAME="Morocco"/>
-  <TCOUNTRY COUNTRY_ID="144"  COUNTRY_CODE="MZ" ISO_CODE="508" NAME="Mozambique"/>
-  <TCOUNTRY COUNTRY_ID="145"  COUNTRY_CODE="MM" ISO_CODE="104" NAME="Myanmar"/>
-  <TCOUNTRY COUNTRY_ID="146"  COUNTRY_CODE="NA" ISO_CODE="516" NAME="Namibia"/>
-  <TCOUNTRY COUNTRY_ID="147"  COUNTRY_CODE="NR" ISO_CODE="520" NAME="Nauru"/>
-  <TCOUNTRY COUNTRY_ID="148"  COUNTRY_CODE="NP" ISO_CODE="524" NAME="Nepal"/>
-  <TCOUNTRY COUNTRY_ID="149"  COUNTRY_CODE="NL" ISO_CODE="528" NAME="Netherlands"/>
-  <TCOUNTRY COUNTRY_ID="150"  COUNTRY_CODE="AN" ISO_CODE="530" NAME="Netherlands Antilles"/>
-  <TCOUNTRY COUNTRY_ID="151"  COUNTRY_CODE="NC" ISO_CODE="540" NAME="New Caledonia"/>
-  <TCOUNTRY COUNTRY_ID="152"  COUNTRY_CODE="NZ" ISO_CODE="554" NAME="New Zealand"/>
-  <TCOUNTRY COUNTRY_ID="153"  COUNTRY_CODE="NI" ISO_CODE="558" NAME="Nicaragua"/>
-  <TCOUNTRY COUNTRY_ID="154"  COUNTRY_CODE="NE" ISO_CODE="562" NAME="Niger"/>
-  <TCOUNTRY COUNTRY_ID="155"  COUNTRY_CODE="NG" ISO_CODE="566" NAME="Nigeria"/>
-  <TCOUNTRY COUNTRY_ID="156"  COUNTRY_CODE="NU" ISO_CODE="570" NAME="Niue"/>
-  <TCOUNTRY COUNTRY_ID="157"  COUNTRY_CODE="NF" ISO_CODE="574" NAME="Norfolk Island"/>
-  <TCOUNTRY COUNTRY_ID="158"  COUNTRY_CODE="MP" ISO_CODE="580" NAME="Northern Mariana Islands"/>
-  <TCOUNTRY COUNTRY_ID="159"  COUNTRY_CODE="NO" ISO_CODE="578" NAME="Norway"/>
-  <TCOUNTRY COUNTRY_ID="160"  COUNTRY_CODE="OM" ISO_CODE="512" NAME="Oman"/>
-  <TCOUNTRY COUNTRY_ID="161"  COUNTRY_CODE="PK" ISO_CODE="586" NAME="Pakistan"/>
-  <TCOUNTRY COUNTRY_ID="162"  COUNTRY_CODE="PW" ISO_CODE="585" NAME="Palau"/>
-  <TCOUNTRY COUNTRY_ID="163"  COUNTRY_CODE="PA" ISO_CODE="591" NAME="Panama"/>
-  <TCOUNTRY COUNTRY_ID="164"  COUNTRY_CODE="PG" ISO_CODE="598" NAME="Papua New Guinea"/>
-  <TCOUNTRY COUNTRY_ID="165"  COUNTRY_CODE="PY" ISO_CODE="600" NAME="Paraguay"/>
-  <TCOUNTRY COUNTRY_ID="166"  COUNTRY_CODE="PE" ISO_CODE="604" NAME="Peru"/>
-  <TCOUNTRY COUNTRY_ID="167"  COUNTRY_CODE="PH" ISO_CODE="608" NAME="Philippines"/>
-  <TCOUNTRY COUNTRY_ID="168"  COUNTRY_CODE="PN" ISO_CODE="612" NAME="Pitcairn"/>
-  <TCOUNTRY COUNTRY_ID="169"  COUNTRY_CODE="PL" ISO_CODE="616" NAME="Poland"/>
-  <TCOUNTRY COUNTRY_ID="170"  COUNTRY_CODE="PT" ISO_CODE="620" NAME="Portugal"/>
-  <TCOUNTRY COUNTRY_ID="171"  COUNTRY_CODE="PR" ISO_CODE="630" NAME="Puerto Rico"/>
-  <TCOUNTRY COUNTRY_ID="172"  COUNTRY_CODE="QA" ISO_CODE="634" NAME="Qatar"/>
-  <TCOUNTRY COUNTRY_ID="173"  COUNTRY_CODE="RE" ISO_CODE="638" NAME="Reunion"/>
-  <TCOUNTRY COUNTRY_ID="174"  COUNTRY_CODE="RO" ISO_CODE="642" NAME="Romania"/>
-  <TCOUNTRY COUNTRY_ID="175"  COUNTRY_CODE="RU" ISO_CODE="643" NAME="Russian Federation"/>
-  <TCOUNTRY COUNTRY_ID="176"  COUNTRY_CODE="RW" ISO_CODE="646" NAME="Rwanda"/>
-  <TCOUNTRY COUNTRY_ID="177"  COUNTRY_CODE="SH" ISO_CODE="654" NAME="Saint Helena"/>
-  <TCOUNTRY COUNTRY_ID="178"  COUNTRY_CODE="KN" ISO_CODE="659" NAME="Saint Kitts And Nevis"/>
-  <TCOUNTRY COUNTRY_ID="179"  COUNTRY_CODE="LC" ISO_CODE="662" NAME="Saint Lucia"/>
-  <TCOUNTRY COUNTRY_ID="180"  COUNTRY_CODE="PM" ISO_CODE="666" NAME="Saint Pierre And Miquelon"/>
-  <TCOUNTRY COUNTRY_ID="181"  COUNTRY_CODE="VC" ISO_CODE="670" NAME="Saint Vincent And The Grenadines"/>
-  <TCOUNTRY COUNTRY_ID="182"  COUNTRY_CODE="WS" ISO_CODE="882" NAME="Samoa"/>
-  <TCOUNTRY COUNTRY_ID="183"  COUNTRY_CODE="SM" ISO_CODE="674" NAME="San Marino"/>
-  <TCOUNTRY COUNTRY_ID="184"  COUNTRY_CODE="ST" ISO_CODE="678" NAME="Sao Tome And Principe"/>
-  <TCOUNTRY COUNTRY_ID="185"  COUNTRY_CODE="SA" ISO_CODE="682" NAME="Saudi Arabia"/>
-  <TCOUNTRY COUNTRY_ID="186"  COUNTRY_CODE="SN" ISO_CODE="686" NAME="Senegal"/>
-  <TCOUNTRY COUNTRY_ID="187"  COUNTRY_CODE="SC" ISO_CODE="690" NAME="Seychelles"/>
-  <TCOUNTRY COUNTRY_ID="188"  COUNTRY_CODE="SL" ISO_CODE="694" NAME="Sierra Leone"/>
-  <TCOUNTRY COUNTRY_ID="189"  COUNTRY_CODE="SG" ISO_CODE="702" NAME="Singapore"/>
-  <TCOUNTRY COUNTRY_ID="190"  COUNTRY_CODE="SK" ISO_CODE="703" NAME="Slovakia (Slovak Republic)"/>
-  <TCOUNTRY COUNTRY_ID="191"  COUNTRY_CODE="SI" ISO_CODE="705" NAME="Slovenia"/>
-  <TCOUNTRY COUNTRY_ID="192"  COUNTRY_CODE="SB" ISO_CODE="90" NAME="Solomon Islands"/>
-  <TCOUNTRY COUNTRY_ID="193"  COUNTRY_CODE="SO" ISO_CODE="706" NAME="Somalia"/>
-  <TCOUNTRY COUNTRY_ID="194"  COUNTRY_CODE="ZA" ISO_CODE="710" NAME="South Africa"/>
-  <TCOUNTRY COUNTRY_ID="195"  COUNTRY_CODE="ES" ISO_CODE="724" NAME="Spain"/>
-  <TCOUNTRY COUNTRY_ID="196"  COUNTRY_CODE="LK" ISO_CODE="144" NAME="Sri Lanka"/>
-  <TCOUNTRY COUNTRY_ID="197"  COUNTRY_CODE="SD" ISO_CODE="736" NAME="Sudan"/>
-  <TCOUNTRY COUNTRY_ID="198"  COUNTRY_CODE="SR" ISO_CODE="740" NAME="Suriname"/>
-  <TCOUNTRY COUNTRY_ID="199"  COUNTRY_CODE="SJ" ISO_CODE="744" NAME="Svalbard And Jan Mayen Islands"/>
-  <TCOUNTRY COUNTRY_ID="200"  COUNTRY_CODE="SZ" ISO_CODE="748" NAME="Swaziland"/>
-  <TCOUNTRY COUNTRY_ID="201"  COUNTRY_CODE="SE" ISO_CODE="752" NAME="Sweden"/>
-  <TCOUNTRY COUNTRY_ID="202"  COUNTRY_CODE="CH" ISO_CODE="756" NAME="Switzerland"/>
-  <TCOUNTRY COUNTRY_ID="203"  COUNTRY_CODE="SY" ISO_CODE="760" NAME="Syrian Arab Republic"/>
-  <TCOUNTRY COUNTRY_ID="204"  COUNTRY_CODE="TW" ISO_CODE="158" NAME="Taiwan, Province Of China"/>
-  <TCOUNTRY COUNTRY_ID="205"  COUNTRY_CODE="TJ" ISO_CODE="762" NAME="Tajikistan"/>
-  <TCOUNTRY COUNTRY_ID="206"  COUNTRY_CODE="TZ" ISO_CODE="834" NAME="Tanzania, United Republic Of"/>
-  <TCOUNTRY COUNTRY_ID="207"  COUNTRY_CODE="TH" ISO_CODE="764" NAME="Thailand"/>
-  <TCOUNTRY COUNTRY_ID="208"  COUNTRY_CODE="TG" ISO_CODE="768" NAME="Togo"/>
-  <TCOUNTRY COUNTRY_ID="209"  COUNTRY_CODE="TK" ISO_CODE="772" NAME="Tokelau"/>
-  <TCOUNTRY COUNTRY_ID="210"  COUNTRY_CODE="TO" ISO_CODE="776" NAME="Tonga"/>
-  <TCOUNTRY COUNTRY_ID="211"  COUNTRY_CODE="TT" ISO_CODE="780" NAME="Trinidad And Tobago"/>
-  <TCOUNTRY COUNTRY_ID="212"  COUNTRY_CODE="TN" ISO_CODE="788" NAME="Tunisia"/>
-  <TCOUNTRY COUNTRY_ID="213"  COUNTRY_CODE="TR" ISO_CODE="792" NAME="Turkey"/>
-  <TCOUNTRY COUNTRY_ID="214"  COUNTRY_CODE="TM" ISO_CODE="795" NAME="Turkmenistan"/>
-  <TCOUNTRY COUNTRY_ID="215"  COUNTRY_CODE="TC" ISO_CODE="796" NAME="Turks And Caicos Islands"/>
-  <TCOUNTRY COUNTRY_ID="216"  COUNTRY_CODE="TV" ISO_CODE="798" NAME="Tuvalu"/>
-  <TCOUNTRY COUNTRY_ID="217"  COUNTRY_CODE="UG" ISO_CODE="800" NAME="Uganda"/>
-  <TCOUNTRY COUNTRY_ID="218"  COUNTRY_CODE="UA" ISO_CODE="804" NAME="Ukraine"/>
-  <TCOUNTRY COUNTRY_ID="219"  COUNTRY_CODE="AE" ISO_CODE="784" NAME="United Arab Emirates"/>
-  <TCOUNTRY COUNTRY_ID="220"  COUNTRY_CODE="GB" ISO_CODE="826" NAME="United Kingdom"/>
-  <TCOUNTRY COUNTRY_ID="221"  COUNTRY_CODE="US" ISO_CODE="840" NAME="United States"/>
-  <TCOUNTRY COUNTRY_ID="222"  COUNTRY_CODE="UM" ISO_CODE="581" NAME="United States Minor Outlying Islands"/>
-  <TCOUNTRY COUNTRY_ID="223"  COUNTRY_CODE="UY" ISO_CODE="858" NAME="Uruguay"/>
-  <TCOUNTRY COUNTRY_ID="224"  COUNTRY_CODE="UZ" ISO_CODE="860" NAME="Uzbekistan"/>
-  <TCOUNTRY COUNTRY_ID="225"  COUNTRY_CODE="VU" ISO_CODE="548" NAME="Vanuatu"/>
-  <TCOUNTRY COUNTRY_ID="226"  COUNTRY_CODE="VA" ISO_CODE="336" NAME="Vatican City State (Holy See)"/>
-  <TCOUNTRY COUNTRY_ID="227"  COUNTRY_CODE="VE" ISO_CODE="862" NAME="Venezuela"/>
-  <TCOUNTRY COUNTRY_ID="228"  COUNTRY_CODE="VN" ISO_CODE="704" NAME="Viet Nam"/>
-  <TCOUNTRY COUNTRY_ID="229"  COUNTRY_CODE="VG" ISO_CODE="92" NAME="Virgin Islands (British)"/>
-  <TCOUNTRY COUNTRY_ID="230"  COUNTRY_CODE="VI" ISO_CODE="850" NAME="Virgin Islands (U.S.)"/>
-  <TCOUNTRY COUNTRY_ID="231"  COUNTRY_CODE="WF" ISO_CODE="876" NAME="Wallis And Futuna Islands"/>
-  <TCOUNTRY COUNTRY_ID="232"  COUNTRY_CODE="EH" ISO_CODE="732" NAME="Western Sahara"/>
-  <TCOUNTRY COUNTRY_ID="233"  COUNTRY_CODE="YE" ISO_CODE="887" NAME="Yemen"/>
-  <TCOUNTRY COUNTRY_ID="234"  COUNTRY_CODE="YU" ISO_CODE="891" NAME="Yugoslavia"/>
-  <TCOUNTRY COUNTRY_ID="235"  COUNTRY_CODE="ZR" ISO_CODE="180" NAME="Zaire"/>
-  <TCOUNTRY COUNTRY_ID="236"  COUNTRY_CODE="ZM" ISO_CODE="894" NAME="Zambia"/>
-  <TCOUNTRY COUNTRY_ID="237"  COUNTRY_CODE="ZW" ISO_CODE="716" NAME="Zimbabwe"/>
-
-
-  <TCARRIER CARRIER_ID="1" NAME="Test carrier 1" WORLDWIDE="1" COUNTRY="1"  STATE="1"  LOCAL="1" />
-  <TCARRIER CARRIER_ID="2" NAME="Test carrier 2" WORLDWIDE="1" COUNTRY="1"  STATE="1"  LOCAL="1" />
-
-  <TCARRIERSLA CARRIERSLA_ID="1" CARRIER_ID="1" NAME="11" CURRENCY="USD" SLA_TYPE="F" PRICE="16.77"/>
-  <TCARRIERSLA CARRIERSLA_ID="2" CARRIER_ID="1" NAME="12" CURRENCY="RUB" SLA_TYPE="F" PRICE="480.24"/>
-
-  <TCARRIERSLA CARRIERSLA_ID="3" CARRIER_ID="2" NAME="21" CURRENCY="USD" SLA_TYPE="F" PRICE="16.77"/>
+      <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="10000"   PRODUCT_ID="10000"  CATEGORY_ID="101"   RANK="999"/>
+      <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="10001"   PRODUCT_ID="9999"   CATEGORY_ID="101"   RANK="999"/>
+      <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="10002"   PRODUCT_ID="9998"   CATEGORY_ID="104"   RANK="999"/>
+
+      <TSKUPRICE SKUPRICE_ID="1" SKU_ID="10000" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="150.85"/>
+      <TSKUPRICE SKUPRICE_ID="2" SKU_ID="10001" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="150.85" SALE_PRICE="140.11"/>
+      <TSKUPRICE SKUPRICE_ID="3" SKU_ID="10003" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="150.00"/>
+      <TSKUPRICE SKUPRICE_ID="4" SKU_ID="10003" SHOP_ID="10" CURRENCY="EUR" QTY="2" REGULAR_PRICE="145.00"/>
+      <TSKUPRICE SKUPRICE_ID="5" SKU_ID="10004" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="150.85"  SALE_PRICE="140.22" MINIMAL_PRICE="120.25"/>
+
+
+      <TPRODUCT PRODUCT_ID="11000"   CODE="PRODUCT1"  NAME="product 1"   DESCRIPTION="product 1 for price testing"
+                BRAND_ID="101"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
+      <TPRODUCTATTRVALUE ATTRVALUE_ID="10003" CODE="WEIGHT" VAL="2.5" PRODUCT_ID="11000"/>
+      <TPRODUCT PRODUCT_ID="11001"   CODE="PRODUCT2"  NAME="product 2"   DESCRIPTION="product 2 for price testing"
+                BRAND_ID="102"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
+      <TPRODUCTATTRVALUE ATTRVALUE_ID="10004" CODE="WEIGHT" VAL="2.1" PRODUCT_ID="11001"/>
+      <TPRODUCT PRODUCT_ID="11002"   CODE="PRODUCT3"  NAME="product 3"   DESCRIPTION="product 3 for price testing"
+                BRAND_ID="103"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
+      <TPRODUCTATTRVALUE ATTRVALUE_ID="10005" CODE="WEIGHT" VAL="2.2" PRODUCT_ID="11002"/>
+      <TPRODUCT PRODUCT_ID="11003"   CODE="PRODUCT4"  NAME="product 4"   DESCRIPTION="product 4 for price testing"
+                BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
+      <TPRODUCTATTRVALUE ATTRVALUE_ID="10006" CODE="WEIGHT" VAL="2.3" PRODUCT_ID="11003"/>
+      <TPRODUCT PRODUCT_ID="11004"   CODE="PRODUCT5"  NAME="product 5"   DESCRIPTION="product 5 for price testing"
+                BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
+      <TPRODUCTATTRVALUE ATTRVALUE_ID="10007" CODE="WEIGHT" VAL="2.35" PRODUCT_ID="11004"/>
+
+      <!--product for associate with 11004 product-->
+      <TPRODUCT PRODUCT_ID="12004"   CODE="PRODUCT5-UP"  NAME="product 5 up sell assoc"  DESCRIPTION=""
+                BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
+      <TPRODUCT PRODUCT_ID="13004"   CODE="PRODUCT5-CROSS"  NAME="product 5 cross sell assoc"  DESCRIPTION=""
+                BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
+      <TPRODUCT PRODUCT_ID="13005"   CODE="PRODUCT5-CROSS2"  NAME="product 5 cross sell assoc"  DESCRIPTION=""
+                BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
+      <TPRODUCT PRODUCT_ID="14004"   CODE="PRODUCT5-ACC"  NAME="product 5 accsesories sell assoc"  DESCRIPTION=""
+                BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
+      <TPRODUCT PRODUCT_ID="15004"   CODE="PRODUCT5-BUY"  NAME="product 5 buy with this product sell assoc"  DESCRIPTION=""
+                BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
+
+      <TPRODUCT PRODUCT_ID="15005"   CODE="PRODUCT6"  NAME="product 6"  DESCRIPTION=""
+                BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
+
+      <TPRODUCT PRODUCT_ID="15006"   CODE="PRODUCT7"  NAME="product 7"  DESCRIPTION=""
+                BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
+
+      <TPRODUCT PRODUCT_ID="15007"   CODE="PRODUCT8"  NAME="product 8"  DESCRIPTION=""
+                BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
+
+      <TPRODUCTASSOCIATION PRODUCTASSOCIATION_ID="1" RANK="1" ASSOCIATION_ID="2" PRODUCT_ID="11004" ASSOCIATEDPRODUCT_ID="12004"/>
+      <TPRODUCTASSOCIATION PRODUCTASSOCIATION_ID="2" RANK="2" ASSOCIATION_ID="3" PRODUCT_ID="11004" ASSOCIATEDPRODUCT_ID="13004"/>
+      <TPRODUCTASSOCIATION PRODUCTASSOCIATION_ID="3" RANK="1" ASSOCIATION_ID="3" PRODUCT_ID="11004" ASSOCIATEDPRODUCT_ID="13005"/>
+      <TPRODUCTASSOCIATION PRODUCTASSOCIATION_ID="4" RANK="1" ASSOCIATION_ID="1" PRODUCT_ID="11004" ASSOCIATEDPRODUCT_ID="14004"/>
+      <TPRODUCTASSOCIATION PRODUCTASSOCIATION_ID="5" RANK="1" ASSOCIATION_ID="4" PRODUCT_ID="11004" ASSOCIATEDPRODUCT_ID="15004"/>
+
+      <TPRODUCTASSOCIATION PRODUCTASSOCIATION_ID="6" RANK="1" ASSOCIATION_ID="2" PRODUCT_ID="11003" ASSOCIATEDPRODUCT_ID="12004"/>
+      <TPRODUCTASSOCIATION PRODUCTASSOCIATION_ID="7" RANK="2" ASSOCIATION_ID="3" PRODUCT_ID="11003" ASSOCIATEDPRODUCT_ID="13004"/>
+      <TPRODUCTASSOCIATION PRODUCTASSOCIATION_ID="8" RANK="1" ASSOCIATION_ID="3" PRODUCT_ID="11003" ASSOCIATEDPRODUCT_ID="13005"/>
+      <TPRODUCTASSOCIATION PRODUCTASSOCIATION_ID="9" RANK="1" ASSOCIATION_ID="1" PRODUCT_ID="11003" ASSOCIATEDPRODUCT_ID="14004"/>
+      <TPRODUCTASSOCIATION PRODUCTASSOCIATION_ID="10" RANK="1" ASSOCIATION_ID="4" PRODUCT_ID="11003" ASSOCIATEDPRODUCT_ID="15004"/>
+
+
+      <TSKU SKU_ID="11000"  PRODUCT_ID="11000"  CODE="PRODUCT1"  NAME="test sku"     RANK="0"/>
+      <TSKU SKU_ID="11001"  PRODUCT_ID="11001"  CODE="PRODUCT2"  NAME="test sku"     RANK="0"/>
+      <TSKU SKU_ID="11002"  PRODUCT_ID="11002"  CODE="PRODUCT3"  NAME="test sku"     RANK="0"/>
+      <TSKU SKU_ID="11003"  PRODUCT_ID="11003"  CODE="PRODUCT4"  NAME="test sku"     RANK="0"/>
+      <TSKU SKU_ID="11004"  PRODUCT_ID="11004"  CODE="PRODUCT5"  NAME="test sku"     RANK="0"/>
+      <TSKU SKU_ID="11005"  PRODUCT_ID="15005"  CODE="PRODUCT6"  NAME="test sku"     RANK="0"/>
+      <TSKU SKU_ID="11006"  PRODUCT_ID="15006"  CODE="PRODUCT7"  NAME="test sku"     RANK="0"/>
+      <TSKU SKU_ID="11007"  PRODUCT_ID="15007"  CODE="PRODUCT8"  NAME="test sku"     RANK="0"/>
+
+      <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="11000"   PRODUCT_ID="11000"  CATEGORY_ID="130"   RANK="0"/>
+      <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="11001"   PRODUCT_ID="11001"  CATEGORY_ID="130"   RANK="0"/>
+      <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="11002"   PRODUCT_ID="11002"  CATEGORY_ID="131"   RANK="0"/>
+      <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="11003"   PRODUCT_ID="11003"  CATEGORY_ID="132"   RANK="0"/>
+      <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="11004"   PRODUCT_ID="11004"  CATEGORY_ID="132"   RANK="0"/>
+      <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="11005"   PRODUCT_ID="15005"  CATEGORY_ID="131"   RANK="0"/>
+      <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="11006"   PRODUCT_ID="15006"  CATEGORY_ID="131"   RANK="0"/>
+      <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="11007"   PRODUCT_ID="15007"  CATEGORY_ID="131"   RANK="0"/>
+
+      <TSKUPRICE SKUPRICE_ID="11000" SKU_ID="11000" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="15"/>
+      <TSKUPRICE SKUPRICE_ID="11001" SKU_ID="11001" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="30"/>
+      <TSKUPRICE SKUPRICE_ID="11002" SKU_ID="11002" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="250"/>
+      <TSKUPRICE SKUPRICE_ID="11003" SKU_ID="11003" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="400"/>
+      <TSKUPRICE SKUPRICE_ID="11004" SKU_ID="11004" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="420"/>
+      <TSKUPRICE SKUPRICE_ID="11005" SKU_ID="11005" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="420"/>
+      <TSKUPRICE SKUPRICE_ID="11006" SKU_ID="11006" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="420"/>
+      <TSKUPRICE SKUPRICE_ID="11007" SKU_ID="11007" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="421"/>
+
+      <TWAREHOUSE WAREHOUSE_ID="1" CODE="WAREHOUSE_1" NAME="First warehouse" DESCRIPTION="Warehouse description"/>
+      <TWAREHOUSE WAREHOUSE_ID="2" CODE="WAREHOUSE_2" NAME="Second warehouse" DESCRIPTION="Warehouse description"/>
+      <TWAREHOUSE WAREHOUSE_ID="3" CODE="WAREHOUSE_3" NAME="Third warehouse" DESCRIPTION="Warehouse description"/>
+
+      <TSHOPWAREHOUSE SHOPWAREHOUSE_ID="1" WAREHOUSE_ID="1" SHOP_ID="10"/>
+      <TSHOPWAREHOUSE SHOPWAREHOUSE_ID="2" WAREHOUSE_ID="2" SHOP_ID="10"/>
+
+      <TSKUWAREHOUSE SKUWAREHOUSE_ID="1"  WAREHOUSE_ID="1"  QUANTITY="1" RESERVED="0" SKU_ID="10000"/>
+      <TSKUWAREHOUSE SKUWAREHOUSE_ID="2"  WAREHOUSE_ID="1"  QUANTITY="2" RESERVED="0" SKU_ID="10001"/>
+      <TSKUWAREHOUSE SKUWAREHOUSE_ID="3"  WAREHOUSE_ID="1"  QUANTITY="3" RESERVED="0" SKU_ID="10003"/>
+      <TSKUWAREHOUSE SKUWAREHOUSE_ID="4"  WAREHOUSE_ID="1"  QUANTITY="4" RESERVED="0" SKU_ID="10004"/>
+
+      <TSKUWAREHOUSE SKUWAREHOUSE_ID="5"  WAREHOUSE_ID="2"  QUANTITY="5" RESERVED="0" SKU_ID="11000"/>
+      <TSKUWAREHOUSE SKUWAREHOUSE_ID="6"  WAREHOUSE_ID="2"  QUANTITY="6" RESERVED="0" SKU_ID="11001"/>
+      <TSKUWAREHOUSE SKUWAREHOUSE_ID="7"  WAREHOUSE_ID="2"  QUANTITY="7" RESERVED="0" SKU_ID="11002"/>
+      <TSKUWAREHOUSE SKUWAREHOUSE_ID="8"  WAREHOUSE_ID="2"  QUANTITY="8" RESERVED="0" SKU_ID="11003"/>
+      <TSKUWAREHOUSE SKUWAREHOUSE_ID="9"  WAREHOUSE_ID="2"  QUANTITY="9" RESERVED="0" SKU_ID="11004"/>
+
+      <!--one sku has 0 quantity on ware house-->
+      <TSKUWAREHOUSE SKUWAREHOUSE_ID="10"  WAREHOUSE_ID="2"  QUANTITY="0" RESERVED="0" SKU_ID="11005"/>
+      <!--other has not records-->
+      <!--<TSKUWAREHOUSE SKUWAREHOUSE_ID="11"  WAREHOUSE_ID="2"  QUANTITY="0" RESERVED="0" SKU_ID="11007"/>-->
+
+
+      <TSKUWAREHOUSE SKUWAREHOUSE_ID="12"  WAREHOUSE_ID="2"  QUANTITY="1" RESERVED="0" SKU_ID="9998"/>
+      <TSKUWAREHOUSE SKUWAREHOUSE_ID="13"  WAREHOUSE_ID="2"  QUANTITY="1" RESERVED="0" SKU_ID="9999"/>
+
+
+      <!-- test for featured product -->
+      <TPRODUCT PRODUCT_ID="15051"   CODE="FEATURED-PRODUCT1"  NAME="featured product 1"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="1" AVAILABLEFROM="2010-04-08 11:15:17.451" AVAILABLETILL="2040-04-08 11:15:17.451"/>
+      <TPRODUCT PRODUCT_ID="15052"   CODE="FEATURED-PRODUCT2"  NAME="featured product 2"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="0"/>
+      <TPRODUCT PRODUCT_ID="15053"   CODE="FEATURED-PRODUCT3"  NAME="featured product 3"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="1" AVAILABLEFROM="2000-04-08 11:15:17.451" AVAILABLETILL="2001-04-08 11:15:17.451"/>
+      <TPRODUCT PRODUCT_ID="15054"   CODE="FEATURED-PRODUCT4"  NAME="featured product 4"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="0"/>
+      <TPRODUCT PRODUCT_ID="15055"   CODE="FEATURED-PRODUCT5"  NAME="featured product 5"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="1" AVAILABLEFROM="2000-04-08 11:15:17.451"/>
+      <TPRODUCT PRODUCT_ID="15056"   CODE="FEATURED-PRODUCT6"  NAME="featured product 6"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="0"/>
+      <TPRODUCT PRODUCT_ID="15057"   CODE="FEATURED-PRODUCT7"  NAME="featured product 7"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="1" AVAILABLETILL="2040-04-08 11:15:17.451"/>
+      <TPRODUCT PRODUCT_ID="15058"   CODE="FEATURED-PRODUCT8"  NAME="featured product 8"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="0"/>
+      <TPRODUCT PRODUCT_ID="15059"   CODE="FEATURED-PRODUCT9"  NAME="featured product 9"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="1"/>
+
+      <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15051"   PRODUCT_ID="15051"  CATEGORY_ID="211"   RANK="0"/>
+      <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15052"   PRODUCT_ID="15052"  CATEGORY_ID="211"   RANK="50"/>
+      <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15053"   PRODUCT_ID="15053"  CATEGORY_ID="211"   RANK="100"/>
+      <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15054"   PRODUCT_ID="15054"  CATEGORY_ID="211"   RANK="150"/>
+      <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15055"   PRODUCT_ID="15055"  CATEGORY_ID="211"   RANK="200"/>
+      <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15056"   PRODUCT_ID="15056"  CATEGORY_ID="211"   RANK="250"/>
+      <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15057"   PRODUCT_ID="15057"  CATEGORY_ID="211"   RANK="300"/>
+      <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15058"   PRODUCT_ID="15058"  CATEGORY_ID="211"   RANK="350"/>
+      <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15059"   PRODUCT_ID="15059"  CATEGORY_ID="211"   RANK="400"/>
+
+
+
+      <!-- product availability test  -->
+      <TPRODUCT PRODUCT_ID="15100"   CODE="PAT_PRODUCT_ON_STOCK_ONLY_1"  NAME="product available on stockonly 1"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="0"/>
+      <TPRODUCT PRODUCT_ID="15101"   CODE="PAT_PRODUCT_ON_STOCK_ONLY_2"  NAME="product available on stockonly 2"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="1"/>
+      <TPRODUCT PRODUCT_ID="15102"   CODE="PAT_PRODUCT_ON_STOCK_ONLY_3"  NAME="product available on stockonly 3"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="0"/>
+      <TPRODUCT PRODUCT_ID="15103"   CODE="PAT_PRODUCT_PREORDER"         NAME="product available for preorder"    DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="2" FEATURED="0"/>
+      <TPRODUCT PRODUCT_ID="15104"   CODE="PAT_PRODUCT_BACKORDER"        NAME="product available for backorder"   DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="4" FEATURED="0"/>
+      <TPRODUCT PRODUCT_ID="15105"   CODE="PAT_PRODUCT_ALWAYS"           NAME="product always"                    DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="8" FEATURED="0"/>
+      <TPRODUCT PRODUCT_ID="15106"   CODE="PAT_PRODUCT_ALWAYS2"          NAME="product always 2"                  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="8" FEATURED="0"/>
+
+      <TSKU SKU_ID="15100"  PRODUCT_ID="15100"  CODE="PAT_PRODUCT_ON_STOCK_ONLY_1"  NAME="product available on stockonly 1"     RANK="0"/>
+      <TSKU SKU_ID="15101"  PRODUCT_ID="15101"  CODE="PAT_PRODUCT_ON_STOCK_ONLY_2"  NAME="product available on stockonly 2"     RANK="0"/>
+      <TSKU SKU_ID="15102"  PRODUCT_ID="15102"  CODE="PAT_PRODUCT_ON_STOCK_ONLY_3"  NAME="product available on stockonly 3"     RANK="0"/>
+      <TSKU SKU_ID="15103"  PRODUCT_ID="15103"  CODE="PAT_PRODUCT_PREORDER"         NAME="preorder"     RANK="0"/>
+      <TSKU SKU_ID="15104"  PRODUCT_ID="15104"  CODE="PAT_PRODUCT_BACKORDER"        NAME="backorder"     RANK="0"/>
+      <TSKU SKU_ID="15105"  PRODUCT_ID="15105"  CODE="PAT_PRODUCT_ALWAYS"           NAME="always"     RANK="0"/>
+      <TSKU SKU_ID="15106"  PRODUCT_ID="15106"  CODE="PAT_PRODUCT_ALWAYS2"          NAME="always"     RANK="0"/>
+
+
+      <TSKUWAREHOUSE SKUWAREHOUSE_ID="14"  WAREHOUSE_ID="2"  QUANTITY="0" RESERVED="0" SKU_ID="15100"/>
+      <TSKUWAREHOUSE SKUWAREHOUSE_ID="15"  WAREHOUSE_ID="2"  QUANTITY="1" RESERVED="0" SKU_ID="15101"/>
+      <TSKUWAREHOUSE SKUWAREHOUSE_ID="16"  WAREHOUSE_ID="2"  QUANTITY="0" RESERVED="0" SKU_ID="15102"/>
+      <TSKUWAREHOUSE SKUWAREHOUSE_ID="17"  WAREHOUSE_ID="2"  QUANTITY="0" RESERVED="0" SKU_ID="15103"/>
+      <TSKUWAREHOUSE SKUWAREHOUSE_ID="18"  WAREHOUSE_ID="2"  QUANTITY="0" RESERVED="0" SKU_ID="15104"/>
+      <TSKUWAREHOUSE SKUWAREHOUSE_ID="19"  WAREHOUSE_ID="2"  QUANTITY="1" RESERVED="0" SKU_ID="15106"/>
+
+      <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15100"   PRODUCT_ID="15100"  CATEGORY_ID="212"   RANK="400"/>
+      <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15101"   PRODUCT_ID="15101"  CATEGORY_ID="212"   RANK="400"/>
+      <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15102"   PRODUCT_ID="15102"  CATEGORY_ID="212"   RANK="400"/>
+      <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15103"   PRODUCT_ID="15103"  CATEGORY_ID="212"   RANK="400"/>
+      <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15104"   PRODUCT_ID="15104"  CATEGORY_ID="212"   RANK="400"/>
+      <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15105"   PRODUCT_ID="15105"  CATEGORY_ID="212"   RANK="400"/>
+      <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15106"   PRODUCT_ID="15106"  CATEGORY_ID="212"   RANK="400"/>
+
+      <!--shopping cart and commands test-->
+      <TPRODUCT PRODUCT_ID="15120"   CODE="CC_TEST1"  NAME="cc test 1"  DESCRIPTION="cc test 1"  BRAND_ID="105"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="0"/>
+      <TPRODUCT PRODUCT_ID="15121"   CODE="CC_TEST2"  NAME="cc test 2"  DESCRIPTION="cc test 1"  BRAND_ID="105"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="0"/>
+      <TPRODUCT PRODUCT_ID="15122"   CODE="CC_TEST3"  NAME="cc test 3"  DESCRIPTION="cc test 1"  BRAND_ID="105"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="0"/>
+      <TPRODUCT PRODUCT_ID="15123"   CODE="CC_TEST4"  NAME="cc test 4"  DESCRIPTION="cc test 1"  BRAND_ID="105"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="0"/>
+      <TPRODUCT PRODUCT_ID="15125"   CODE="CC_TEST5"  NAME="back order product with inventory"  DESCRIPTION=""  BRAND_ID="105"   PRODUCTTYPE_ID="3"   AVAILABILITY_ID="4" FEATURED="0"/>
+      <TPRODUCT PRODUCT_ID="15126"   CODE="CC_TEST6"  NAME="pre order product"  DESCRIPTION=""  BRAND_ID="105"
+                PRODUCTTYPE_ID="3"
+                AVAILABILITY_ID="2"
+                AVAILABLEFROM="2020-01-01 00:00:00.000000000"
+                FEATURED="0"/>
+      <TPRODUCT PRODUCT_ID="15127"   CODE="CC_TEST7"  NAME="Always available"  DESCRIPTION=""  BRAND_ID="105"
+                PRODUCTTYPE_ID="3"
+                AVAILABILITY_ID="8"
+                AVAILABLEFROM="2020-01-01 00:00:00.000000000"
+                FEATURED="0"/>
+
+      <TPRODUCT PRODUCT_ID="15128"   CODE="CC_TEST8"  NAME="Always available Digital but not available because of date"  DESCRIPTION=""  BRAND_ID="105"
+                PRODUCTTYPE_ID="5"
+                AVAILABILITY_ID="8"
+                AVAILABLEFROM="2020-01-01 00:00:00.000000000"
+                FEATURED="0"/>
+
+      <TPRODUCT PRODUCT_ID="15129"   CODE="CC_TEST9"  NAME="Always available Digital"  DESCRIPTION=""  BRAND_ID="105"
+                PRODUCTTYPE_ID="5"
+                AVAILABILITY_ID="8"
+                FEATURED="0"/>
+
+     <TPRODUCT PRODUCT_ID="10"   CODE="CC_TEST10"  NAME="Sku has differen code"  DESCRIPTION=""  BRAND_ID="105"
+                PRODUCTTYPE_ID="5"
+                AVAILABILITY_ID="8"
+                FEATURED="0"/>
+
+     <TPRODUCT PRODUCT_ID="15200"   CODE="CC_TEST11"  NAME="One sku product in signle exemplar"  DESCRIPTION="Standard availability"  BRAND_ID="105"
+                PRODUCTTYPE_ID="5"
+                AVAILABILITY_ID="1"
+                FEATURED="0"/>
+
+
+      <TSKU SKU_ID="15120"  PRODUCT_ID="15120"  CODE="CC_TEST1"   NAME="cc test 1"     RANK="0"/>
+      <TSKU SKU_ID="15121"  PRODUCT_ID="15121"  CODE="CC_TEST2"   NAME="cc test 2"     RANK="0"/>
+      <TSKU SKU_ID="15122"  PRODUCT_ID="15122"  CODE="CC_TEST3"   NAME="cc test 3"     RANK="0"/>
+      <TSKU SKU_ID="15123"  PRODUCT_ID="15123"  CODE="CC_TEST4"   NAME="cc test 4"     RANK="0"/>
+      <TSKU SKU_ID="15124"  PRODUCT_ID="15123"  CODE="CC_TEST4-M" NAME="cc test 4 m"     RANK="0"/>
+      <TSKU SKU_ID="15125"  PRODUCT_ID="15125"  CODE="CC_TEST5"   NAME="cc test 5"     RANK="0"/>
+      <TSKU SKU_ID="15126"  PRODUCT_ID="15126"  CODE="CC_TEST6"   NAME="cc test 6"     RANK="0"/>
+      <TSKU SKU_ID="15127"  PRODUCT_ID="15127"  CODE="CC_TEST7"   NAME="cc test 7"     RANK="0"/>
+      <TSKU SKU_ID="15128"  PRODUCT_ID="15128"  CODE="CC_TEST8"   NAME="cc test 8"     RANK="0"/>
+      <TSKU SKU_ID="15129"  PRODUCT_ID="15129"  CODE="CC_TEST9"   NAME="cc test 9"     RANK="0"/>
+      <TSKU SKU_ID="15130"  PRODUCT_ID="10"     CODE="CC_TEST10-SKU"  NAME="cc test 10"     RANK="0"/>
+      <TSKU SKU_ID="15200"  PRODUCT_ID="15200"  CODE="CC_TEST11"  NAME="cc test 11"     RANK="0"/>
+
+      <TSKUWAREHOUSE SKUWAREHOUSE_ID="30"  WAREHOUSE_ID="1"  QUANTITY="9" RESERVED="0" SKU_ID="15120"/>
+      <TSKUWAREHOUSE SKUWAREHOUSE_ID="31"  WAREHOUSE_ID="1"  QUANTITY="1" RESERVED="0" SKU_ID="15121"/>
+      <TSKUWAREHOUSE SKUWAREHOUSE_ID="32"  WAREHOUSE_ID="1"  QUANTITY="2" RESERVED="0" SKU_ID="15122"/>
+      <TSKUWAREHOUSE SKUWAREHOUSE_ID="33"  WAREHOUSE_ID="1"  QUANTITY="3" RESERVED="0" SKU_ID="15123"/>
+      <TSKUWAREHOUSE SKUWAREHOUSE_ID="34"  WAREHOUSE_ID="1"  QUANTITY="5" RESERVED="0" SKU_ID="15125"/>
+      <TSKUWAREHOUSE SKUWAREHOUSE_ID="35"  WAREHOUSE_ID="1"  QUANTITY="500" RESERVED="0" SKU_ID="15126"/>
+      <TSKUWAREHOUSE SKUWAREHOUSE_ID="36"  WAREHOUSE_ID="1"  QUANTITY="23" RESERVED="0" SKU_ID="15130"/>
+      <TSKUWAREHOUSE SKUWAREHOUSE_ID="37"  WAREHOUSE_ID="1"  QUANTITY="1"  RESERVED="0" SKU_ID="15200"/>
+
+      <!-- prices in EUR -->
+      <TSKUPRICE SKUPRICE_ID="11200" SKU_ID="15120" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="19.99"/>
+      <TSKUPRICE SKUPRICE_ID="11201" SKU_ID="15120" SHOP_ID="10" CURRENCY="EUR" QTY="3" REGULAR_PRICE="19.00"/>
+      <TSKUPRICE SKUPRICE_ID="11202" SKU_ID="15120" SHOP_ID="10" CURRENCY="EUR" QTY="5" REGULAR_PRICE="18.00"/>
+
+      <TSKUPRICE SKUPRICE_ID="11203" SKU_ID="15121" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="29.99"/>
+      <TSKUPRICE SKUPRICE_ID="11204" SKU_ID="15121" SHOP_ID="10" CURRENCY="EUR" QTY="10" REGULAR_PRICE="22.17"/>
+
+      <TSKUPRICE SKUPRICE_ID="11205" SKU_ID="15122" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="7.99"/>
+      <TSKUPRICE SKUPRICE_ID="11206" SKU_ID="15122" SHOP_ID="10" CURRENCY="EUR" QTY="3" REGULAR_PRICE="7.00"/>
+
+      <TSKUPRICE SKUPRICE_ID="11207" SKU_ID="15123" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="123.00"/>
+      <TSKUPRICE SKUPRICE_ID="11208" SKU_ID="15123" SHOP_ID="10" CURRENCY="EUR" QTY="5" REGULAR_PRICE="99.99"/>
+
+      <TSKUPRICE SKUPRICE_ID="11209" SKU_ID="15124" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="77.99"/>
+      <TSKUPRICE SKUPRICE_ID="11210" SKU_ID="15124" SHOP_ID="10" CURRENCY="EUR" QTY="4" REGULAR_PRICE="77.00"/>
+
+      <TSKUPRICE SKUPRICE_ID="11300" SKU_ID="15125" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="12.00"/>
+      <TSKUPRICE SKUPRICE_ID="11301" SKU_ID="15126" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="55.17"/>
+      <TSKUPRICE SKUPRICE_ID="11302" SKU_ID="15127" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="55.17"/>
+
+      <TSKUPRICE SKUPRICE_ID="11303" SKU_ID="15128" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="55.17"/>
+      <TSKUPRICE SKUPRICE_ID="11304" SKU_ID="15129" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="65.17"/>
+
+      <TSKUPRICE SKUPRICE_ID="11305" SKU_ID="15130" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="23.10"/>
+
+      <TSKUPRICE SKUPRICE_ID="11306" SKU_ID="15200" SHOP_ID="10" CURRENCY="EUR" QTY="1" REGULAR_PRICE="10.10"/>
+
+
+      <!-- prices in USD -->
+      <TSKUPRICE SKUPRICE_ID="11211" SKU_ID="15120" SHOP_ID="10" CURRENCY="USD" QTY="1" REGULAR_PRICE="190.99"/>
+      <TSKUPRICE SKUPRICE_ID="11212" SKU_ID="15120" SHOP_ID="10" CURRENCY="USD" QTY="3" REGULAR_PRICE="190.01"/>
+      <TSKUPRICE SKUPRICE_ID="11213" SKU_ID="15120" SHOP_ID="10" CURRENCY="USD" QTY="5" REGULAR_PRICE="180.00"/>
+
+      <TSKUPRICE SKUPRICE_ID="11214" SKU_ID="15121" SHOP_ID="10" CURRENCY="USD" QTY="1" REGULAR_PRICE="290.99"/>
+      <TSKUPRICE SKUPRICE_ID="11215" SKU_ID="15121" SHOP_ID="10" CURRENCY="USD" QTY="10" REGULAR_PRICE="220.17"/>
+
+      <TSKUPRICE SKUPRICE_ID="11216" SKU_ID="15122" SHOP_ID="10" CURRENCY="USD" QTY="1" REGULAR_PRICE="70.99"/>
+      <TSKUPRICE SKUPRICE_ID="11217" SKU_ID="15122" SHOP_ID="10" CURRENCY="USD" QTY="3" REGULAR_PRICE="70.00"/>
+
+      <TSKUPRICE SKUPRICE_ID="11218" SKU_ID="15123" SHOP_ID="10" CURRENCY="USD" QTY="1" REGULAR_PRICE="1230.00"/>
+      <TSKUPRICE SKUPRICE_ID="11219" SKU_ID="15123" SHOP_ID="10" CURRENCY="USD" QTY="5" REGULAR_PRICE="990.99"/>
+
+      <TSKUPRICE SKUPRICE_ID="11220" SKU_ID="15124" SHOP_ID="10" CURRENCY="USD" QTY="1" REGULAR_PRICE="177.99"/>
+      <TSKUPRICE SKUPRICE_ID="11221" SKU_ID="15124" SHOP_ID="10" CURRENCY="USD" QTY="4" REGULAR_PRICE="177.00"/>
+
+      <TSKUPRICE SKUPRICE_ID="11400" SKU_ID="15125" SHOP_ID="10" CURRENCY="USD" QTY="1" REGULAR_PRICE="17.00"/>
+      <TSKUPRICE SKUPRICE_ID="11401" SKU_ID="15126" SHOP_ID="10" CURRENCY="USD" QTY="1" REGULAR_PRICE="80.99"/>
+      <TSKUPRICE SKUPRICE_ID="11402" SKU_ID="15127" SHOP_ID="10" CURRENCY="USD" QTY="1" REGULAR_PRICE="80.99"/>
+
+      <TSKUPRICE SKUPRICE_ID="11403" SKU_ID="15128" SHOP_ID="10" CURRENCY="USD" QTY="1" REGULAR_PRICE="87.99"/>
+      <TSKUPRICE SKUPRICE_ID="11404" SKU_ID="15129" SHOP_ID="10" CURRENCY="USD" QTY="1" REGULAR_PRICE="88.99"/>
+
+      <TSKUPRICE SKUPRICE_ID="11405" SKU_ID="15130" SHOP_ID="10" CURRENCY="USD" QTY="1" REGULAR_PRICE="99.09"/>
+
+      <TSKUPRICE SKUPRICE_ID="11406" SKU_ID="15200" SHOP_ID="10" CURRENCY="USD" QTY="1" REGULAR_PRICE="17.15"/>
+
+
+
+
+
+    <TCOUNTRY COUNTRY_ID="1"  COUNTRY_CODE="AF" ISO_CODE="4" NAME="Afghanistan"/>
+    <TCOUNTRY COUNTRY_ID="2"  COUNTRY_CODE="AL" ISO_CODE="8" NAME="Albania"/>
+    <TCOUNTRY COUNTRY_ID="3"  COUNTRY_CODE="DZ" ISO_CODE="12" NAME="Algeria"/>
+    <TCOUNTRY COUNTRY_ID="4"  COUNTRY_CODE="AS" ISO_CODE="16" NAME="American Samoa"/>
+    <TCOUNTRY COUNTRY_ID="5"  COUNTRY_CODE="AD" ISO_CODE="20" NAME="Andorra"/>
+    <TCOUNTRY COUNTRY_ID="6"  COUNTRY_CODE="AO" ISO_CODE="24" NAME="Angola"/>
+    <TCOUNTRY COUNTRY_ID="7"  COUNTRY_CODE="AI" ISO_CODE="660" NAME="Anguilla"/>
+    <TCOUNTRY COUNTRY_ID="8"  COUNTRY_CODE="AQ" ISO_CODE="10" NAME="Antarctica"/>
+    <TCOUNTRY COUNTRY_ID="9"  COUNTRY_CODE="AG" ISO_CODE="28" NAME="Antigua And Barbuda"/>
+    <TCOUNTRY COUNTRY_ID="10"  COUNTRY_CODE="AR" ISO_CODE="32" NAME="Argentina"/>
+    <TCOUNTRY COUNTRY_ID="11"  COUNTRY_CODE="AM" ISO_CODE="51" NAME="Armenia"/>
+    <TCOUNTRY COUNTRY_ID="12"  COUNTRY_CODE="AW" ISO_CODE="533" NAME="Aruba"/>
+    <TCOUNTRY COUNTRY_ID="13"  COUNTRY_CODE="AU" ISO_CODE="36" NAME="Australia"/>
+    <TCOUNTRY COUNTRY_ID="14"  COUNTRY_CODE="AT" ISO_CODE="40" NAME="Austria"/>
+    <TCOUNTRY COUNTRY_ID="15"  COUNTRY_CODE="AZ" ISO_CODE="31" NAME="Azerbaijan"/>
+    <TCOUNTRY COUNTRY_ID="16"  COUNTRY_CODE="BS" ISO_CODE="44" NAME="Bahamas"/>
+    <TCOUNTRY COUNTRY_ID="17"  COUNTRY_CODE="BH" ISO_CODE="48" NAME="Bahrain"/>
+    <TCOUNTRY COUNTRY_ID="18"  COUNTRY_CODE="BD" ISO_CODE="50" NAME="Bangladesh"/>
+    <TCOUNTRY COUNTRY_ID="19"  COUNTRY_CODE="BB" ISO_CODE="52" NAME="Barbados"/>
+    <TCOUNTRY COUNTRY_ID="20"  COUNTRY_CODE="BY" ISO_CODE="112" NAME="Belarus"/>
+    <TCOUNTRY COUNTRY_ID="21"  COUNTRY_CODE="BE" ISO_CODE="56" NAME="Belgium"/>
+    <TCOUNTRY COUNTRY_ID="22"  COUNTRY_CODE="BZ" ISO_CODE="84" NAME="Belize"/>
+    <TCOUNTRY COUNTRY_ID="23"  COUNTRY_CODE="BJ" ISO_CODE="204" NAME="Benin"/>
+    <TCOUNTRY COUNTRY_ID="24"  COUNTRY_CODE="BM" ISO_CODE="60" NAME="Bermuda"/>
+    <TCOUNTRY COUNTRY_ID="25"  COUNTRY_CODE="BT" ISO_CODE="64" NAME="Bhutan"/>
+    <TCOUNTRY COUNTRY_ID="26"  COUNTRY_CODE="BO" ISO_CODE="68" NAME="Bolivia"/>
+    <TCOUNTRY COUNTRY_ID="27"  COUNTRY_CODE="BA" ISO_CODE="70" NAME="Bosnia And Herzegovina"/>
+    <TCOUNTRY COUNTRY_ID="28"  COUNTRY_CODE="BW" ISO_CODE="72" NAME="Botswana"/>
+    <TCOUNTRY COUNTRY_ID="29"  COUNTRY_CODE="BV" ISO_CODE="74" NAME="Bouvet Island"/>
+    <TCOUNTRY COUNTRY_ID="30"  COUNTRY_CODE="BR" ISO_CODE="76" NAME="Brazil"/>
+    <TCOUNTRY COUNTRY_ID="31"  COUNTRY_CODE="IO" ISO_CODE="86" NAME="British Indian Ocean Territory"/>
+    <TCOUNTRY COUNTRY_ID="32"  COUNTRY_CODE="BN" ISO_CODE="96" NAME="Brunei Darussalam"/>
+    <TCOUNTRY COUNTRY_ID="33"  COUNTRY_CODE="BG" ISO_CODE="100" NAME="Bulgaria"/>
+    <TCOUNTRY COUNTRY_ID="34"  COUNTRY_CODE="BF" ISO_CODE="854" NAME="Burkina Faso"/>
+    <TCOUNTRY COUNTRY_ID="35"  COUNTRY_CODE="BI" ISO_CODE="108" NAME="Burundi"/>
+    <TCOUNTRY COUNTRY_ID="36"  COUNTRY_CODE="KH" ISO_CODE="116" NAME="Cambodia"/>
+    <TCOUNTRY COUNTRY_ID="37"  COUNTRY_CODE="CM" ISO_CODE="120" NAME="Cameroon"/>
+    <TCOUNTRY COUNTRY_ID="38"  COUNTRY_CODE="CA" ISO_CODE="124" NAME="Canada"/>
+    <TCOUNTRY COUNTRY_ID="39"  COUNTRY_CODE="CV" ISO_CODE="132" NAME="Cape Verde"/>
+    <TCOUNTRY COUNTRY_ID="40"  COUNTRY_CODE="KY" ISO_CODE="136" NAME="Cayman Islands"/>
+    <TCOUNTRY COUNTRY_ID="41"  COUNTRY_CODE="CF" ISO_CODE="140" NAME="Central African Republic"/>
+    <TCOUNTRY COUNTRY_ID="42"  COUNTRY_CODE="TD" ISO_CODE="148" NAME="Chad"/>
+    <TCOUNTRY COUNTRY_ID="43"  COUNTRY_CODE="CL" ISO_CODE="152" NAME="Chile"/>
+    <TCOUNTRY COUNTRY_ID="44"  COUNTRY_CODE="CN" ISO_CODE="156" NAME="China"/>
+    <TCOUNTRY COUNTRY_ID="45"  COUNTRY_CODE="CX" ISO_CODE="162" NAME="Christmas Island"/>
+    <TCOUNTRY COUNTRY_ID="46"  COUNTRY_CODE="CC" ISO_CODE="166" NAME="Cocos (Keeling) Islands"/>
+    <TCOUNTRY COUNTRY_ID="47"  COUNTRY_CODE="CO" ISO_CODE="170" NAME="Colombia"/>
+    <TCOUNTRY COUNTRY_ID="48"  COUNTRY_CODE="KM" ISO_CODE="174" NAME="Comoros"/>
+    <TCOUNTRY COUNTRY_ID="49"  COUNTRY_CODE="CG" ISO_CODE="178" NAME="Congo"/>
+    <TCOUNTRY COUNTRY_ID="50"  COUNTRY_CODE="CK" ISO_CODE="184" NAME="Cook Islands"/>
+    <TCOUNTRY COUNTRY_ID="51"  COUNTRY_CODE="CR" ISO_CODE="188" NAME="Costa Rica"/>
+    <TCOUNTRY COUNTRY_ID="52"  COUNTRY_CODE="CI" ISO_CODE="384" NAME="Cote D'Ivoire"/>
+    <TCOUNTRY COUNTRY_ID="53"  COUNTRY_CODE="HR" ISO_CODE="191" NAME="Croatia (Local Name: Hrvatska)"/>
+    <TCOUNTRY COUNTRY_ID="54"  COUNTRY_CODE="CU" ISO_CODE="192" NAME="Cuba"/>
+    <TCOUNTRY COUNTRY_ID="55"  COUNTRY_CODE="CY" ISO_CODE="196" NAME="Cyprus"/>
+    <TCOUNTRY COUNTRY_ID="56"  COUNTRY_CODE="CZ" ISO_CODE="203" NAME="Czech Republic"/>
+    <TCOUNTRY COUNTRY_ID="57"  COUNTRY_CODE="DK" ISO_CODE="208" NAME="Denmark"/>
+    <TCOUNTRY COUNTRY_ID="58"  COUNTRY_CODE="DJ" ISO_CODE="262" NAME="Djibouti"/>
+    <TCOUNTRY COUNTRY_ID="59"  COUNTRY_CODE="DM" ISO_CODE="212" NAME="Dominica"/>
+    <TCOUNTRY COUNTRY_ID="60"  COUNTRY_CODE="DO" ISO_CODE="214" NAME="Dominican Republic"/>
+    <TCOUNTRY COUNTRY_ID="61"  COUNTRY_CODE="EC" ISO_CODE="218" NAME="Ecuador"/>
+    <TCOUNTRY COUNTRY_ID="62"  COUNTRY_CODE="EG" ISO_CODE="818" NAME="Egypt"/>
+    <TCOUNTRY COUNTRY_ID="63"  COUNTRY_CODE="SV" ISO_CODE="222" NAME="El Salvador"/>
+    <TCOUNTRY COUNTRY_ID="64"  COUNTRY_CODE="GQ" ISO_CODE="226" NAME="Equatorial Guinea"/>
+    <TCOUNTRY COUNTRY_ID="65"  COUNTRY_CODE="ER" ISO_CODE="232" NAME="Eritrea"/>
+    <TCOUNTRY COUNTRY_ID="66"  COUNTRY_CODE="EE" ISO_CODE="233" NAME="Estonia"/>
+    <TCOUNTRY COUNTRY_ID="67"  COUNTRY_CODE="ET" ISO_CODE="210" NAME="Ethiopia"/>
+    <TCOUNTRY COUNTRY_ID="68"  COUNTRY_CODE="FK" ISO_CODE="238" NAME="Falkland Islands (Malvinas)"/>
+    <TCOUNTRY COUNTRY_ID="69"  COUNTRY_CODE="FO" ISO_CODE="234" NAME="Faroe Islands"/>
+    <TCOUNTRY COUNTRY_ID="70"  COUNTRY_CODE="FJ" ISO_CODE="242" NAME="Fiji"/>
+    <TCOUNTRY COUNTRY_ID="71"  COUNTRY_CODE="FI" ISO_CODE="246" NAME="Finland"/>
+    <TCOUNTRY COUNTRY_ID="72"  COUNTRY_CODE="FR" ISO_CODE="250" NAME="France"/>
+    <TCOUNTRY COUNTRY_ID="73"  COUNTRY_CODE="FX" ISO_CODE="249" NAME="France, Metropolitan"/>
+    <TCOUNTRY COUNTRY_ID="74"  COUNTRY_CODE="GF" ISO_CODE="254" NAME="French Guiana"/>
+    <TCOUNTRY COUNTRY_ID="75"  COUNTRY_CODE="PF" ISO_CODE="258" NAME="French Polynesia"/>
+    <TCOUNTRY COUNTRY_ID="76"  COUNTRY_CODE="TF" ISO_CODE="260" NAME="French Southern Territories"/>
+    <TCOUNTRY COUNTRY_ID="77"  COUNTRY_CODE="GA" ISO_CODE="266" NAME="Gabon"/>
+    <TCOUNTRY COUNTRY_ID="78"  COUNTRY_CODE="GM" ISO_CODE="270" NAME="Gambia"/>
+    <TCOUNTRY COUNTRY_ID="79"  COUNTRY_CODE="GE" ISO_CODE="268" NAME="Georgia"/>
+    <TCOUNTRY COUNTRY_ID="80"  COUNTRY_CODE="DE" ISO_CODE="276" NAME="Germany"/>
+    <TCOUNTRY COUNTRY_ID="81"  COUNTRY_CODE="GH" ISO_CODE="288" NAME="Ghana"/>
+    <TCOUNTRY COUNTRY_ID="82"  COUNTRY_CODE="GI" ISO_CODE="292" NAME="Gibraltar"/>
+    <TCOUNTRY COUNTRY_ID="83"  COUNTRY_CODE="GR" ISO_CODE="300" NAME="Greece"/>
+    <TCOUNTRY COUNTRY_ID="84"  COUNTRY_CODE="GL" ISO_CODE="304" NAME="Greenland"/>
+    <TCOUNTRY COUNTRY_ID="85"  COUNTRY_CODE="GD" ISO_CODE="308" NAME="Grenada"/>
+    <TCOUNTRY COUNTRY_ID="86"  COUNTRY_CODE="GP" ISO_CODE="312" NAME="Guadeloupe"/>
+    <TCOUNTRY COUNTRY_ID="87"  COUNTRY_CODE="GU" ISO_CODE="316" NAME="Guam"/>
+    <TCOUNTRY COUNTRY_ID="88"  COUNTRY_CODE="GT" ISO_CODE="320" NAME="Guatemala"/>
+    <TCOUNTRY COUNTRY_ID="89"  COUNTRY_CODE="GN" ISO_CODE="324" NAME="Guinea"/>
+    <TCOUNTRY COUNTRY_ID="90"  COUNTRY_CODE="GW" ISO_CODE="624" NAME="Guinea-Bissau"/>
+    <TCOUNTRY COUNTRY_ID="91"  COUNTRY_CODE="GY" ISO_CODE="328" NAME="Guyana"/>
+    <TCOUNTRY COUNTRY_ID="92"  COUNTRY_CODE="HT" ISO_CODE="332" NAME="Haiti"/>
+    <TCOUNTRY COUNTRY_ID="93"  COUNTRY_CODE="HM" ISO_CODE="334" NAME="Heard Island &amp; Mcdonald Islands"/>
+    <TCOUNTRY COUNTRY_ID="94"  COUNTRY_CODE="HN" ISO_CODE="340" NAME="Honduras"/>
+    <TCOUNTRY COUNTRY_ID="95"  COUNTRY_CODE="HK" ISO_CODE="344" NAME="Hong Kong"/>
+    <TCOUNTRY COUNTRY_ID="96"  COUNTRY_CODE="HU" ISO_CODE="348" NAME="Hungary"/>
+    <TCOUNTRY COUNTRY_ID="97"  COUNTRY_CODE="IS" ISO_CODE="352" NAME="Iceland"/>
+    <TCOUNTRY COUNTRY_ID="98"  COUNTRY_CODE="IN" ISO_CODE="356" NAME="India"/>
+    <TCOUNTRY COUNTRY_ID="99"  COUNTRY_CODE="ID" ISO_CODE="360" NAME="Indonesia"/>
+    <TCOUNTRY COUNTRY_ID="100"  COUNTRY_CODE="IR" ISO_CODE="364" NAME="Iran, Islamic Republic Of"/>
+    <TCOUNTRY COUNTRY_ID="101"  COUNTRY_CODE="IQ" ISO_CODE="368" NAME="Iraq"/>
+    <TCOUNTRY COUNTRY_ID="102"  COUNTRY_CODE="IE" ISO_CODE="372" NAME="Ireland"/>
+    <TCOUNTRY COUNTRY_ID="103"  COUNTRY_CODE="IL" ISO_CODE="376" NAME="Israel"/>
+    <TCOUNTRY COUNTRY_ID="104"  COUNTRY_CODE="IT" ISO_CODE="380" NAME="Italy"/>
+    <TCOUNTRY COUNTRY_ID="105"  COUNTRY_CODE="JM" ISO_CODE="388" NAME="Jamaica"/>
+    <TCOUNTRY COUNTRY_ID="106"  COUNTRY_CODE="JP" ISO_CODE="392" NAME="Japan"/>
+    <TCOUNTRY COUNTRY_ID="107"  COUNTRY_CODE="JO" ISO_CODE="400" NAME="Jordan"/>
+    <TCOUNTRY COUNTRY_ID="108"  COUNTRY_CODE="KZ" ISO_CODE="398" NAME="Kazakhstan"/>
+    <TCOUNTRY COUNTRY_ID="109"  COUNTRY_CODE="KE" ISO_CODE="404" NAME="Kenya"/>
+    <TCOUNTRY COUNTRY_ID="110"  COUNTRY_CODE="KI" ISO_CODE="296" NAME="Kiribati"/>
+    <TCOUNTRY COUNTRY_ID="111"  COUNTRY_CODE="KP" ISO_CODE="408" NAME="Korea, Democratic People'S Republic Of"/>
+    <TCOUNTRY COUNTRY_ID="112"  COUNTRY_CODE="KR" ISO_CODE="410" NAME="Korea, Republic Of"/>
+    <TCOUNTRY COUNTRY_ID="113"  COUNTRY_CODE="KW" ISO_CODE="414" NAME="Kuwait"/>
+    <TCOUNTRY COUNTRY_ID="114"  COUNTRY_CODE="KG" ISO_CODE="417" NAME="Kyrgyzstan"/>
+    <TCOUNTRY COUNTRY_ID="115"  COUNTRY_CODE="LA" ISO_CODE="418" NAME="Lao People'S Democratic Republic"/>
+    <TCOUNTRY COUNTRY_ID="116"  COUNTRY_CODE="LV" ISO_CODE="428" NAME="Latvia"/>
+    <TCOUNTRY COUNTRY_ID="117"  COUNTRY_CODE="LB" ISO_CODE="422" NAME="Lebanon"/>
+    <TCOUNTRY COUNTRY_ID="118"  COUNTRY_CODE="LS" ISO_CODE="426" NAME="Lesotho"/>
+    <TCOUNTRY COUNTRY_ID="119"  COUNTRY_CODE="LR" ISO_CODE="430" NAME="Liberia"/>
+    <TCOUNTRY COUNTRY_ID="120"  COUNTRY_CODE="LY" ISO_CODE="434" NAME="Libyan Arab Jamahiriya"/>
+    <TCOUNTRY COUNTRY_ID="121"  COUNTRY_CODE="LI" ISO_CODE="438" NAME="Liechtenstein"/>
+    <TCOUNTRY COUNTRY_ID="122"  COUNTRY_CODE="LT" ISO_CODE="440" NAME="Lithuania"/>
+    <TCOUNTRY COUNTRY_ID="123"  COUNTRY_CODE="LU" ISO_CODE="442" NAME="Luxembourg"/>
+    <TCOUNTRY COUNTRY_ID="124"  COUNTRY_CODE="MO" ISO_CODE="446" NAME="Macau"/>
+    <TCOUNTRY COUNTRY_ID="125"  COUNTRY_CODE="MK" ISO_CODE="807" NAME="Macedonia, The Former Yugoslav Republic Of"/>
+    <TCOUNTRY COUNTRY_ID="126"  COUNTRY_CODE="MG" ISO_CODE="450" NAME="Madagascar"/>
+    <TCOUNTRY COUNTRY_ID="127"  COUNTRY_CODE="MW" ISO_CODE="454" NAME="Malawi"/>
+    <TCOUNTRY COUNTRY_ID="128"  COUNTRY_CODE="MY" ISO_CODE="458" NAME="Malaysia"/>
+    <TCOUNTRY COUNTRY_ID="129"  COUNTRY_CODE="MV" ISO_CODE="462" NAME="Maldives"/>
+    <TCOUNTRY COUNTRY_ID="130"  COUNTRY_CODE="ML" ISO_CODE="466" NAME="Mali"/>
+    <TCOUNTRY COUNTRY_ID="131"  COUNTRY_CODE="MT" ISO_CODE="470" NAME="Malta"/>
+    <TCOUNTRY COUNTRY_ID="132"  COUNTRY_CODE="MH" ISO_CODE="584" NAME="Marshall Islands"/>
+    <TCOUNTRY COUNTRY_ID="133"  COUNTRY_CODE="MQ" ISO_CODE="474" NAME="Martinique"/>
+    <TCOUNTRY COUNTRY_ID="134"  COUNTRY_CODE="MR" ISO_CODE="478" NAME="Mauritania"/>
+    <TCOUNTRY COUNTRY_ID="135"  COUNTRY_CODE="MU" ISO_CODE="480" NAME="Mauritius"/>
+    <TCOUNTRY COUNTRY_ID="136"  COUNTRY_CODE="YT" ISO_CODE="175" NAME="Mayotte"/>
+    <TCOUNTRY COUNTRY_ID="137"  COUNTRY_CODE="MX" ISO_CODE="484" NAME="Mexico"/>
+    <TCOUNTRY COUNTRY_ID="138"  COUNTRY_CODE="FM" ISO_CODE="583" NAME="Micronesia, Federated States Of"/>
+    <TCOUNTRY COUNTRY_ID="139"  COUNTRY_CODE="MD" ISO_CODE="498" NAME="Moldova, Republic Of"/>
+    <TCOUNTRY COUNTRY_ID="140"  COUNTRY_CODE="MC" ISO_CODE="492" NAME="Monaco"/>
+    <TCOUNTRY COUNTRY_ID="141"  COUNTRY_CODE="MN" ISO_CODE="496" NAME="Mongolia"/>
+    <TCOUNTRY COUNTRY_ID="142"  COUNTRY_CODE="MS" ISO_CODE="500" NAME="Montserrat"/>
+    <TCOUNTRY COUNTRY_ID="143"  COUNTRY_CODE="MA" ISO_CODE="504" NAME="Morocco"/>
+    <TCOUNTRY COUNTRY_ID="144"  COUNTRY_CODE="MZ" ISO_CODE="508" NAME="Mozambique"/>
+    <TCOUNTRY COUNTRY_ID="145"  COUNTRY_CODE="MM" ISO_CODE="104" NAME="Myanmar"/>
+    <TCOUNTRY COUNTRY_ID="146"  COUNTRY_CODE="NA" ISO_CODE="516" NAME="Namibia"/>
+    <TCOUNTRY COUNTRY_ID="147"  COUNTRY_CODE="NR" ISO_CODE="520" NAME="Nauru"/>
+    <TCOUNTRY COUNTRY_ID="148"  COUNTRY_CODE="NP" ISO_CODE="524" NAME="Nepal"/>
+    <TCOUNTRY COUNTRY_ID="149"  COUNTRY_CODE="NL" ISO_CODE="528" NAME="Netherlands"/>
+    <TCOUNTRY COUNTRY_ID="150"  COUNTRY_CODE="AN" ISO_CODE="530" NAME="Netherlands Antilles"/>
+    <TCOUNTRY COUNTRY_ID="151"  COUNTRY_CODE="NC" ISO_CODE="540" NAME="New Caledonia"/>
+    <TCOUNTRY COUNTRY_ID="152"  COUNTRY_CODE="NZ" ISO_CODE="554" NAME="New Zealand"/>
+    <TCOUNTRY COUNTRY_ID="153"  COUNTRY_CODE="NI" ISO_CODE="558" NAME="Nicaragua"/>
+    <TCOUNTRY COUNTRY_ID="154"  COUNTRY_CODE="NE" ISO_CODE="562" NAME="Niger"/>
+    <TCOUNTRY COUNTRY_ID="155"  COUNTRY_CODE="NG" ISO_CODE="566" NAME="Nigeria"/>
+    <TCOUNTRY COUNTRY_ID="156"  COUNTRY_CODE="NU" ISO_CODE="570" NAME="Niue"/>
+    <TCOUNTRY COUNTRY_ID="157"  COUNTRY_CODE="NF" ISO_CODE="574" NAME="Norfolk Island"/>
+    <TCOUNTRY COUNTRY_ID="158"  COUNTRY_CODE="MP" ISO_CODE="580" NAME="Northern Mariana Islands"/>
+    <TCOUNTRY COUNTRY_ID="159"  COUNTRY_CODE="NO" ISO_CODE="578" NAME="Norway"/>
+    <TCOUNTRY COUNTRY_ID="160"  COUNTRY_CODE="OM" ISO_CODE="512" NAME="Oman"/>
+    <TCOUNTRY COUNTRY_ID="161"  COUNTRY_CODE="PK" ISO_CODE="586" NAME="Pakistan"/>
+    <TCOUNTRY COUNTRY_ID="162"  COUNTRY_CODE="PW" ISO_CODE="585" NAME="Palau"/>
+    <TCOUNTRY COUNTRY_ID="163"  COUNTRY_CODE="PA" ISO_CODE="591" NAME="Panama"/>
+    <TCOUNTRY COUNTRY_ID="164"  COUNTRY_CODE="PG" ISO_CODE="598" NAME="Papua New Guinea"/>
+    <TCOUNTRY COUNTRY_ID="165"  COUNTRY_CODE="PY" ISO_CODE="600" NAME="Paraguay"/>
+    <TCOUNTRY COUNTRY_ID="166"  COUNTRY_CODE="PE" ISO_CODE="604" NAME="Peru"/>
+    <TCOUNTRY COUNTRY_ID="167"  COUNTRY_CODE="PH" ISO_CODE="608" NAME="Philippines"/>
+    <TCOUNTRY COUNTRY_ID="168"  COUNTRY_CODE="PN" ISO_CODE="612" NAME="Pitcairn"/>
+    <TCOUNTRY COUNTRY_ID="169"  COUNTRY_CODE="PL" ISO_CODE="616" NAME="Poland"/>
+    <TCOUNTRY COUNTRY_ID="170"  COUNTRY_CODE="PT" ISO_CODE="620" NAME="Portugal"/>
+    <TCOUNTRY COUNTRY_ID="171"  COUNTRY_CODE="PR" ISO_CODE="630" NAME="Puerto Rico"/>
+    <TCOUNTRY COUNTRY_ID="172"  COUNTRY_CODE="QA" ISO_CODE="634" NAME="Qatar"/>
+    <TCOUNTRY COUNTRY_ID="173"  COUNTRY_CODE="RE" ISO_CODE="638" NAME="Reunion"/>
+    <TCOUNTRY COUNTRY_ID="174"  COUNTRY_CODE="RO" ISO_CODE="642" NAME="Romania"/>
+    <TCOUNTRY COUNTRY_ID="175"  COUNTRY_CODE="RU" ISO_CODE="643" NAME="Russian Federation"/>
+    <TCOUNTRY COUNTRY_ID="176"  COUNTRY_CODE="RW" ISO_CODE="646" NAME="Rwanda"/>
+    <TCOUNTRY COUNTRY_ID="177"  COUNTRY_CODE="SH" ISO_CODE="654" NAME="Saint Helena"/>
+    <TCOUNTRY COUNTRY_ID="178"  COUNTRY_CODE="KN" ISO_CODE="659" NAME="Saint Kitts And Nevis"/>
+    <TCOUNTRY COUNTRY_ID="179"  COUNTRY_CODE="LC" ISO_CODE="662" NAME="Saint Lucia"/>
+    <TCOUNTRY COUNTRY_ID="180"  COUNTRY_CODE="PM" ISO_CODE="666" NAME="Saint Pierre And Miquelon"/>
+    <TCOUNTRY COUNTRY_ID="181"  COUNTRY_CODE="VC" ISO_CODE="670" NAME="Saint Vincent And The Grenadines"/>
+    <TCOUNTRY COUNTRY_ID="182"  COUNTRY_CODE="WS" ISO_CODE="882" NAME="Samoa"/>
+    <TCOUNTRY COUNTRY_ID="183"  COUNTRY_CODE="SM" ISO_CODE="674" NAME="San Marino"/>
+    <TCOUNTRY COUNTRY_ID="184"  COUNTRY_CODE="ST" ISO_CODE="678" NAME="Sao Tome And Principe"/>
+    <TCOUNTRY COUNTRY_ID="185"  COUNTRY_CODE="SA" ISO_CODE="682" NAME="Saudi Arabia"/>
+    <TCOUNTRY COUNTRY_ID="186"  COUNTRY_CODE="SN" ISO_CODE="686" NAME="Senegal"/>
+    <TCOUNTRY COUNTRY_ID="187"  COUNTRY_CODE="SC" ISO_CODE="690" NAME="Seychelles"/>
+    <TCOUNTRY COUNTRY_ID="188"  COUNTRY_CODE="SL" ISO_CODE="694" NAME="Sierra Leone"/>
+    <TCOUNTRY COUNTRY_ID="189"  COUNTRY_CODE="SG" ISO_CODE="702" NAME="Singapore"/>
+    <TCOUNTRY COUNTRY_ID="190"  COUNTRY_CODE="SK" ISO_CODE="703" NAME="Slovakia (Slovak Republic)"/>
+    <TCOUNTRY COUNTRY_ID="191"  COUNTRY_CODE="SI" ISO_CODE="705" NAME="Slovenia"/>
+    <TCOUNTRY COUNTRY_ID="192"  COUNTRY_CODE="SB" ISO_CODE="90" NAME="Solomon Islands"/>
+    <TCOUNTRY COUNTRY_ID="193"  COUNTRY_CODE="SO" ISO_CODE="706" NAME="Somalia"/>
+    <TCOUNTRY COUNTRY_ID="194"  COUNTRY_CODE="ZA" ISO_CODE="710" NAME="South Africa"/>
+    <TCOUNTRY COUNTRY_ID="195"  COUNTRY_CODE="ES" ISO_CODE="724" NAME="Spain"/>
+    <TCOUNTRY COUNTRY_ID="196"  COUNTRY_CODE="LK" ISO_CODE="144" NAME="Sri Lanka"/>
+    <TCOUNTRY COUNTRY_ID="197"  COUNTRY_CODE="SD" ISO_CODE="736" NAME="Sudan"/>
+    <TCOUNTRY COUNTRY_ID="198"  COUNTRY_CODE="SR" ISO_CODE="740" NAME="Suriname"/>
+    <TCOUNTRY COUNTRY_ID="199"  COUNTRY_CODE="SJ" ISO_CODE="744" NAME="Svalbard And Jan Mayen Islands"/>
+    <TCOUNTRY COUNTRY_ID="200"  COUNTRY_CODE="SZ" ISO_CODE="748" NAME="Swaziland"/>
+    <TCOUNTRY COUNTRY_ID="201"  COUNTRY_CODE="SE" ISO_CODE="752" NAME="Sweden"/>
+    <TCOUNTRY COUNTRY_ID="202"  COUNTRY_CODE="CH" ISO_CODE="756" NAME="Switzerland"/>
+    <TCOUNTRY COUNTRY_ID="203"  COUNTRY_CODE="SY" ISO_CODE="760" NAME="Syrian Arab Republic"/>
+    <TCOUNTRY COUNTRY_ID="204"  COUNTRY_CODE="TW" ISO_CODE="158" NAME="Taiwan, Province Of China"/>
+    <TCOUNTRY COUNTRY_ID="205"  COUNTRY_CODE="TJ" ISO_CODE="762" NAME="Tajikistan"/>
+    <TCOUNTRY COUNTRY_ID="206"  COUNTRY_CODE="TZ" ISO_CODE="834" NAME="Tanzania, United Republic Of"/>
+    <TCOUNTRY COUNTRY_ID="207"  COUNTRY_CODE="TH" ISO_CODE="764" NAME="Thailand"/>
+    <TCOUNTRY COUNTRY_ID="208"  COUNTRY_CODE="TG" ISO_CODE="768" NAME="Togo"/>
+    <TCOUNTRY COUNTRY_ID="209"  COUNTRY_CODE="TK" ISO_CODE="772" NAME="Tokelau"/>
+    <TCOUNTRY COUNTRY_ID="210"  COUNTRY_CODE="TO" ISO_CODE="776" NAME="Tonga"/>
+    <TCOUNTRY COUNTRY_ID="211"  COUNTRY_CODE="TT" ISO_CODE="780" NAME="Trinidad And Tobago"/>
+    <TCOUNTRY COUNTRY_ID="212"  COUNTRY_CODE="TN" ISO_CODE="788" NAME="Tunisia"/>
+    <TCOUNTRY COUNTRY_ID="213"  COUNTRY_CODE="TR" ISO_CODE="792" NAME="Turkey"/>
+    <TCOUNTRY COUNTRY_ID="214"  COUNTRY_CODE="TM" ISO_CODE="795" NAME="Turkmenistan"/>
+    <TCOUNTRY COUNTRY_ID="215"  COUNTRY_CODE="TC" ISO_CODE="796" NAME="Turks And Caicos Islands"/>
+    <TCOUNTRY COUNTRY_ID="216"  COUNTRY_CODE="TV" ISO_CODE="798" NAME="Tuvalu"/>
+    <TCOUNTRY COUNTRY_ID="217"  COUNTRY_CODE="UG" ISO_CODE="800" NAME="Uganda"/>
+    <TCOUNTRY COUNTRY_ID="218"  COUNTRY_CODE="UA" ISO_CODE="804" NAME="Ukraine"/>
+    <TCOUNTRY COUNTRY_ID="219"  COUNTRY_CODE="AE" ISO_CODE="784" NAME="United Arab Emirates"/>
+    <TCOUNTRY COUNTRY_ID="220"  COUNTRY_CODE="GB" ISO_CODE="826" NAME="United Kingdom"/>
+    <TCOUNTRY COUNTRY_ID="221"  COUNTRY_CODE="US" ISO_CODE="840" NAME="United States"/>
+    <TCOUNTRY COUNTRY_ID="222"  COUNTRY_CODE="UM" ISO_CODE="581" NAME="United States Minor Outlying Islands"/>
+    <TCOUNTRY COUNTRY_ID="223"  COUNTRY_CODE="UY" ISO_CODE="858" NAME="Uruguay"/>
+    <TCOUNTRY COUNTRY_ID="224"  COUNTRY_CODE="UZ" ISO_CODE="860" NAME="Uzbekistan"/>
+    <TCOUNTRY COUNTRY_ID="225"  COUNTRY_CODE="VU" ISO_CODE="548" NAME="Vanuatu"/>
+    <TCOUNTRY COUNTRY_ID="226"  COUNTRY_CODE="VA" ISO_CODE="336" NAME="Vatican City State (Holy See)"/>
+    <TCOUNTRY COUNTRY_ID="227"  COUNTRY_CODE="VE" ISO_CODE="862" NAME="Venezuela"/>
+    <TCOUNTRY COUNTRY_ID="228"  COUNTRY_CODE="VN" ISO_CODE="704" NAME="Viet Nam"/>
+    <TCOUNTRY COUNTRY_ID="229"  COUNTRY_CODE="VG" ISO_CODE="92" NAME="Virgin Islands (British)"/>
+    <TCOUNTRY COUNTRY_ID="230"  COUNTRY_CODE="VI" ISO_CODE="850" NAME="Virgin Islands (U.S.)"/>
+    <TCOUNTRY COUNTRY_ID="231"  COUNTRY_CODE="WF" ISO_CODE="876" NAME="Wallis And Futuna Islands"/>
+    <TCOUNTRY COUNTRY_ID="232"  COUNTRY_CODE="EH" ISO_CODE="732" NAME="Western Sahara"/>
+    <TCOUNTRY COUNTRY_ID="233"  COUNTRY_CODE="YE" ISO_CODE="887" NAME="Yemen"/>
+    <TCOUNTRY COUNTRY_ID="234"  COUNTRY_CODE="YU" ISO_CODE="891" NAME="Yugoslavia"/>
+    <TCOUNTRY COUNTRY_ID="235"  COUNTRY_CODE="ZR" ISO_CODE="180" NAME="Zaire"/>
+    <TCOUNTRY COUNTRY_ID="236"  COUNTRY_CODE="ZM" ISO_CODE="894" NAME="Zambia"/>
+    <TCOUNTRY COUNTRY_ID="237"  COUNTRY_CODE="ZW" ISO_CODE="716" NAME="Zimbabwe"/>
+
+
+    <TCARRIER CARRIER_ID="1" NAME="Test carrier 1" WORLDWIDE="1" COUNTRY="1"  STATE="1"  LOCAL="1" />
+    <TCARRIER CARRIER_ID="2" NAME="Test carrier 2" WORLDWIDE="1" COUNTRY="1"  STATE="1"  LOCAL="1" />
+
+    <TCARRIERSLA CARRIERSLA_ID="1" CARRIER_ID="1" NAME="11" CURRENCY="USD" SLA_TYPE="F" PRICE="16.77"/>
+    <TCARRIERSLA CARRIERSLA_ID="2" CARRIER_ID="1" NAME="12" CURRENCY="RUB" SLA_TYPE="F" PRICE="480.24"/>
+
+    <TCARRIERSLA CARRIERSLA_ID="3" CARRIER_ID="2" NAME="21" CURRENCY="USD" SLA_TYPE="F" PRICE="16.77"/>
 
 
 

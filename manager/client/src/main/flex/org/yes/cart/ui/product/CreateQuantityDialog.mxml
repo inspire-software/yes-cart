@@ -1,8 +1,8 @@
 <?xml version="1.0" ?>
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:npa="org.yes.cart.util.*"
                 xmlns:datetime="com.georg.datetime.*" xmlns:georg="com.georg.*" layout="absolute"
-                width="350"
-                height="160"
+                width="400"
+                height="200"
                 title="@Resource(bundle='ProductManagmentPanel',key='adjustQuantity')"
                 showCloseButton="true" close="PopUpManager.removePopUp(this)">
 

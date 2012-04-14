@@ -7,9 +7,9 @@ import org.hibernate.criterion.Example;
 import org.hibernate.search.FullTextQuery;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;
+import org.hibernate.search.util.impl.HibernateHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
@@ -26,13 +26,24 @@ import java.util.List;
  * Date: 08-May-2011
  * Time: 11:12:54
  */
-public class GenericDAOHibernateImpl<T, PK extends Serializable> extends HibernateDaoSupport
+public class GenericDAOHibernateImpl<T, PK extends Serializable>
         implements GenericDAO<T, PK> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     final private Class<T> persistentClass;
     final private EntityFactory entityFactory;
+    private   SessionFactory sessionFactory;
+
+
+    /**
+	 * Set the Hibernate SessionFactory to be used by this DAO.
+	 * Will automatically create a HibernateTemplate for the given SessionFactory.
+	 */
+	public final void setSessionFactory(final SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+
+	}
 
 
     /**
@@ -70,9 +81,9 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
     public T findById(final PK id, final boolean lock) {
         T entity;
         if (lock) {
-            entity = (T) getHibernateTemplate().get(getPersistentClass(), id, LockMode.UPGRADE);
+            entity = (T) sessionFactory.getCurrentSession().get(getPersistentClass(), id, LockMode.UPGRADE);
         } else {
-            entity = (T) getHibernateTemplate().get(getPersistentClass(), id);
+            entity = (T) sessionFactory.getCurrentSession().get(getPersistentClass(), id);
         }
         return entity;
     }
@@ -82,7 +93,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
      */
     @SuppressWarnings("unchecked")
     public List<T> findByExample(final T exampleInstance, final String[] excludeProperty) {
-        Criteria crit = getSession().createCriteria(getPersistentClass());
+        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
         Example example = Example.create(exampleInstance);
         for (String exclude : excludeProperty) {
             example.excludeProperty(exclude);
@@ -107,7 +118,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
      * {@inheritDoc}
      */
     public Object getScalarResultByNamedQuery(final String namedQueryName, final Object... parameters) {
-        Query query = getSession().getNamedQuery(namedQueryName);
+        Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
         int idx = 1;
         for (Object param : parameters) {
             query.setParameter(String.valueOf(idx), param);
@@ -120,7 +131,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
      * {@inheritDoc}
      */
     public Object findSingleByQuery(final String hsqlQuery, final Object... parameters) {
-        Query query = getSession().createQuery(hsqlQuery);
+        Query query = sessionFactory.getCurrentSession().createQuery(hsqlQuery);
         int idx = 1;
         for (Object param : parameters) {
             query.setParameter(String.valueOf(idx), param);
@@ -148,7 +159,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
      */
     @SuppressWarnings("unchecked")
     public List<T> findByNamedQuery(final String namedQueryName, final Object... parameters) {
-        Query query = getSession().getNamedQuery(namedQueryName);
+        Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
         if (parameters != null) {
             int idx = 1;
             for (Object param : parameters) {
@@ -164,7 +175,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
      */
     @SuppressWarnings("unchecked")
     public List<Object> findQueryObjectByNamedQuery(final String namedQueryName, final Object... parameters) {
-        Query query = getSession().getNamedQuery(namedQueryName);
+        Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
         int idx = 1;
         if (parameters != null) {
             for (Object param : parameters) {
@@ -180,7 +191,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
      */
     @SuppressWarnings("unchecked")
     public List<Object[]> findQueryObjectsByNamedQuery(final String namedQueryName, final Object... parameters) {
-        Query query = getSession().getNamedQuery(namedQueryName);
+        Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
         int idx = 1;
         if (parameters != null) {
             for (Object param : parameters) {
@@ -196,7 +207,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
      */
     @SuppressWarnings("unchecked")
     public List<Object[]> findQueryObjectsByNamedQueryWithList(final String namedQueryName, final List parameter) {
-        Query query = getSession().getNamedQuery(namedQueryName);
+        Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
         query.setParameterList("list", parameter);
         return query.list();
     }
@@ -208,7 +219,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
     public List<T> findQueryObjectsByNamedQueryWithList(
             final String namedQueryName, final Collection<Object> listParameter,
             final Object... parameters) {
-        Query query = getSession().getNamedQuery(namedQueryName);
+        Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
         query.setParameterList("list", listParameter);
         int idx = 1;
         if (parameters != null) {
@@ -229,7 +240,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
                                          final int firtsResult,
                                          final int maxResults,
                                          final Object... parameters) {
-        Query query = getSession().getNamedQuery(namedQueryName);
+        Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
         query.setFirstResult(firtsResult);
         query.setMaxResults(maxResults);
         int idx = 1;
@@ -255,7 +266,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
      */
     @SuppressWarnings("unchecked")
     public T saveOrUpdate(T entity) {
-        getHibernateTemplate().saveOrUpdate(entity);
+        sessionFactory.getCurrentSession().saveOrUpdate(entity);
         return entity;
     }
 
@@ -265,7 +276,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
      */
     @SuppressWarnings("unchecked")
     public T create(T entity) {
-        getHibernateTemplate().save(entity);
+        sessionFactory.getCurrentSession().save(entity);
         return entity;
     }
 
@@ -274,7 +285,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
      */
     @SuppressWarnings("unchecked")
     public T update(T entity) {
-        getHibernateTemplate().update(entity);
+        sessionFactory.getCurrentSession().update(entity);
         return entity;
     }
 
@@ -282,7 +293,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
      * {@inheritDoc}
      */
     public void delete(T entity) {
-        getHibernateTemplate().delete(entity);
+        sessionFactory.getCurrentSession().delete(entity);
     }
 
     /**
@@ -290,7 +301,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
      */
     @SuppressWarnings("unchecked")
     public List<T> findByCriteria(Criterion... criterion) {
-        Criteria crit = getSession().createCriteria(getPersistentClass());
+        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
         for (Criterion c : criterion) {
             crit.add(c);
         }
@@ -308,7 +319,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
      * {@inheritDoc}
      */
     public T findSingleByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
-        Criteria crit = getSession().createCriteria(getPersistentClass());
+        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
         for (Criterion c : criterion) {
             crit.add(c);
         }
@@ -342,15 +353,11 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
         if (null != getPersistentClass().getAnnotation(org.hibernate.search.annotations.Indexed.class)) {
             T entity = findById(primaryKey);
             if (entity != null) {
-                FullTextSession fullTextSession = Search.getFullTextSession(getSession());
-                fullTextSession.purge(getPersistentClass(), (Serializable) entity);
-                Transaction tx = fullTextSession.beginTransaction();
+                FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
                 if (isIncludeInLuceneIndex(entity)) {
-                    fullTextSession.index(entity);
-                    fullTextSession.flushToIndexes();
+                    fullTextSession.index(HibernateHelper.unproxy(entity));
                     result++;
                 }
-                tx.commit();
             }
         }
         return result;
@@ -364,12 +371,12 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
         int index = 0;
 
         if (null != getPersistentClass().getAnnotation(org.hibernate.search.annotations.Indexed.class)) {
-            FullTextSession fullTextSession = Search.getFullTextSession(getSession());
+            FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
             fullTextSession.setFlushMode(FlushMode.MANUAL);
             fullTextSession.setCacheMode(CacheMode.IGNORE);
             fullTextSession.purgeAll(getPersistentClass());
             fullTextSession.getSearchFactory().optimize(getPersistentClass());
-            Transaction tx = fullTextSession.beginTransaction();
+           // Transaction tx = fullTextSession.beginTransaction();
             ScrollableResults results = fullTextSession.createCriteria(persistentClass)
                     .setFetchSize(BATCH_SIZE)
                     .scroll(ScrollMode.FORWARD_ONLY);
@@ -390,7 +397,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
             }
             fullTextSession.flushToIndexes(); //apply changes to indexes
             fullTextSession.clear(); //clear since the queue is processed
-            tx.commit();
+            //tx.commit();
         }
 
 
@@ -403,7 +410,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
     @SuppressWarnings("unchecked")
     public List<T> fullTextSearch(final org.apache.lucene.search.Query query) {
         if (null != getPersistentClass().getAnnotation(org.hibernate.search.annotations.Indexed.class)) {
-            FullTextSession fullTextSession = Search.getFullTextSession(getSession());
+            FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
             Query fullTextQuery = fullTextSession.createFullTextQuery(query, getPersistentClass());
             List<T> list = fullTextQuery.list();
             if (list != null) {
@@ -444,7 +451,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
                                   final String sortFieldName,
                                   final boolean reverse) {
         if (null != getPersistentClass().getAnnotation(org.hibernate.search.annotations.Indexed.class)) {
-            FullTextSession fullTextSession = Search.getFullTextSession(getSession());
+            FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
             FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(query, getPersistentClass());
             if (sortFieldName != null) {
                 org.apache.lucene.search.Sort sort = new org.apache.lucene.search.Sort(
@@ -466,7 +473,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
      * {@inheritDoc}
      */
     public int getResultCount(final org.apache.lucene.search.Query query) {
-        FullTextSession fullTextSession = Search.getFullTextSession(getSession());
+        FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
         return fullTextSession.createFullTextQuery(query, getPersistentClass()).getResultSize();
     }
 
@@ -474,7 +481,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
      * {@inheritDoc}
      */
     public int executeNativeUpdate(final String nativeQuery) {
-        SQLQuery sqlQuery = getSession().createSQLQuery(nativeQuery);
+        SQLQuery sqlQuery = sessionFactory.getCurrentSession().createSQLQuery(nativeQuery);
         return sqlQuery.executeUpdate();
     }
 
@@ -482,7 +489,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
      * {@inheritDoc}
      */
     public List executeNativeQuery(final String nativeQuery) {
-        SQLQuery sqlQuery = getSession().createSQLQuery(nativeQuery);
+        SQLQuery sqlQuery = sessionFactory.getCurrentSession().createSQLQuery(nativeQuery);
         return sqlQuery.list();
     }
 
@@ -490,7 +497,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
      * {@inheritDoc}
      */
     public List executeHsqlQuery(final String hsql) {
-        Query query = getSession().createQuery(hsql);
+        Query query = sessionFactory.getCurrentSession().createQuery(hsql);
         return query.list();
     }
 
@@ -498,7 +505,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
      * {@inheritDoc}
      */
     public int executeHsqlUpdate(final String hsql) {
-        Query query = getSession().createQuery(hsql);
+        Query query = sessionFactory.getCurrentSession().createQuery(hsql);
         return query.executeUpdate();
     }
 
@@ -507,7 +514,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
      * {@inheritDoc}
      */
     public int executeNativeUpdate(final String nativeQuery, final Object... parameters) {
-        SQLQuery sqlQuery = getSession().createSQLQuery(nativeQuery);
+        SQLQuery sqlQuery = sessionFactory.getCurrentSession().createSQLQuery(nativeQuery);
         int idx = 1;
         for (Object param : parameters) {
             sqlQuery.setParameter(String.valueOf(idx), param);
@@ -521,7 +528,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
      * {@inheritDoc}
      */
     public int executeUpdate(final String namedQueryName, final Object... parameters) {
-        final Query query = getSession().getNamedQuery(namedQueryName);
+        final Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
         int idx = 1;
         if (parameters != null) {
             for (Object param : parameters) {
@@ -536,8 +543,8 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> extends Hiberna
      * {@inheritDoc}
      */
     public void flushClear() {
-        getSession().flush();
-        getSession().clear();
+        sessionFactory.getCurrentSession().flush();
+        sessionFactory.getCurrentSession().clear();
     }
 
 

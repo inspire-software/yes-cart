@@ -28,7 +28,7 @@
     </bean>
 
     <!-- Hibernate Session Factory  -->
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="mappingResources">
             <list>
@@ -47,6 +47,9 @@
 
                 <prop key="hibernate.search.worker.execution">async</prop>
                 <prop key="hibernate.search.worker.thread_pool.size">2</prop>
+                 <prop key="hibernate.search.default.exclusive_index_use">false</prop>
+                 <!--<prop key="hibernate.search.default.directory_provider">org.hibernate.search.store.RAMDirectoryProvider</prop>-->
+
                 <!--prop key="hibernate.jdbc.batch_size">0</prop-->
             </props>
         </property>
@@ -55,7 +58,7 @@
         </property>
     </bean>
 
-    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 

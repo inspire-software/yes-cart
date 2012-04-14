@@ -20,9 +20,8 @@
     </bean>
 
 
-    <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate" autowire="byName"/>
 
-    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 

@@ -3,6 +3,7 @@ package org.yes.cart.service.domain.impl;
 import org.hibernate.criterion.Restrictions;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
@@ -21,16 +22,22 @@ import java.util.List;
  */
 public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse> implements SkuWarehouseService {
 
+    private final GenericDAO<Product, Long> productDao;
+
 
     /**
      * Construct sku warehouse service.
+     *
      * @param genericDao dao to use.
      */
-    public SkuWarehouseServiceImpl(final GenericDAO<SkuWarehouse, Long> genericDao) {
+    public SkuWarehouseServiceImpl(final GenericDAO<SkuWarehouse, Long> genericDao, final GenericDAO<Product, Long> productDao) {
         super(genericDao);
+        this.productDao = productDao;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public List<SkuWarehouse> findProductSkusOnWarehouse(final long productId, final long warehouseId) {
         return getGenericDao().findByNamedQuery(
                 "SKUS.ON.WAREHOUSE",
@@ -41,14 +48,15 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
 
     /**
      * Get the sku's Quantity - Reserved quantity pair.
+     *
      * @param warehouses list of warehouses where
      * @param productSku sku
-     * @return  pair of available and reserved quantity
+     * @return pair of available and reserved quantity
      */
     public Pair<BigDecimal, BigDecimal> getQuantity(final List<Warehouse> warehouses, final ProductSku productSku) {
 
         final List<Object> warehouseIdList = new ArrayList<Object>(warehouses.size());
-        for (Warehouse wh : warehouses ) {
+        for (Warehouse wh : warehouses) {
             warehouseIdList.add(wh.getWarehouseId());
         }
 
@@ -62,7 +70,7 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
         BigDecimal reserved = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
 
         if (!rez.isEmpty()) {
-            final Object obj[] = (Object [])rez.get(0);
+            final Object obj[] = (Object[]) rez.get(0);
             if (obj.length > 0 && obj[0] != null) {
                 quantity = ((BigDecimal) obj[0]).setScale(Constants.DEFAULT_SCALE);
             }
@@ -71,10 +79,9 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
             }
         }
 
-        return new Pair<BigDecimal, BigDecimal> (quantity, reserved);
+        return new Pair<BigDecimal, BigDecimal>(quantity, reserved);
 
     }
-
 
 
     /**
@@ -82,7 +89,8 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
      * to satisfy this resuest. Example particular shop has two warehouses with 5 and 7 patricular skus,
      * but need to reserve 9 skus. In this case return value will be 4 if first warehouse to reserve was with 5 skus.
      * Second example 10 skus on warehouse and 3 reserver will allow to reserve 7 skus only
-     * @param warehouse warehouse
+     *
+     * @param warehouse  warehouse
      * @param productSku sku to reserve
      * @param reserveQty quantity to reserve
      * @return the rest to reserve or BigDecimal.ZERO if was reserved succsessful.
@@ -111,32 +119,35 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
         }
 
 
-
     }
 
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public BigDecimal voidReservation(final Warehouse warehouse, final ProductSku productSku, final BigDecimal voidQty) {
         final SkuWarehouse skuWarehouse = findByWarehouseSku(warehouse, productSku);
 
         if (skuWarehouse == null) {
             return voidQty.setScale(Constants.DEFAULT_SCALE);
-        }  else {
-            BigDecimal canVoid    = MoneyUtils.notNull(skuWarehouse.getReserved(), BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE)).min(voidQty);
+        } else {
+            BigDecimal canVoid = MoneyUtils.notNull(skuWarehouse.getReserved(), BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE)).min(voidQty);
             BigDecimal rest = MoneyUtils.notNull(skuWarehouse.getReserved(), BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE)).subtract(voidQty);
             skuWarehouse.setReserved(MoneyUtils.notNull(skuWarehouse.getReserved(), BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE)).subtract(canVoid));
             update(skuWarehouse);
             if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(rest, BigDecimal.ZERO)) {
                 return BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
             } else {
-                return rest.abs().setScale(Constants.DEFAULT_SCALE);                
+                return rest.abs().setScale(Constants.DEFAULT_SCALE);
             }
 
         }
     }
 
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public BigDecimal credit(final Warehouse warehouse, final ProductSku productSku, final BigDecimal addQty) {
         final SkuWarehouse skuWarehouse = findByWarehouseSku(warehouse, productSku);
 
@@ -156,12 +167,11 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
 
 
     /**
-     *
      * Debit (decrease) quantity of given sku on particular warehouse.
      *
-     * @param warehouse warehouse
+     * @param warehouse  warehouse
      * @param productSku sku to debit
-     * @param debitQty quantity to debit
+     * @param debitQty   quantity to debit
      * @return the rest of qty to adjust on other warehouse, that belong to the same shop.
      */
     public BigDecimal debit(final Warehouse warehouse, final ProductSku productSku, final BigDecimal debitQty) {
@@ -187,7 +197,8 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
 
     /**
      * Find product sku record on given warehouse.
-     * @param warehouse given warehouse
+     *
+     * @param warehouse  given warehouse
      * @param productSku given product sku
      * @return {@link SkuWarehouse} if founf otherwise null.
      */
@@ -198,7 +209,29 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public SkuWarehouse create(final SkuWarehouse instance) {
+        final SkuWarehouse rez = super.create(instance);
+        productDao.fullTextSearchReindex(instance.getSku().getProduct().getProductId());
+        return rez;
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+    public SkuWarehouse update(final SkuWarehouse instance) {
+        final SkuWarehouse rez = super.update(instance);
+        productDao.fullTextSearchReindex(instance.getSku().getProduct().getProductId());
+        return rez;
+    }
 
-
+    /**
+     * {@inheritDoc}
+     */
+    public void delete(final SkuWarehouse instance) {
+        super.delete(instance);
+        productDao.fullTextSearchReindex(instance.getSku().getProduct().getProductId());
+    }
 }

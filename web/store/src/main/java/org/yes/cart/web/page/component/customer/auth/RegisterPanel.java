@@ -48,6 +48,8 @@ public class RegisterPanel extends BaseComponent {
     private PassPhrazeGenerator phrazeGenerator;
 
 
+
+
     /**
      * Create register panel.
      *
@@ -210,23 +212,28 @@ public class RegisterPanel extends BaseComponent {
                         @Override
                         public void onSubmit() {
 
+                            final String password = phrazeGenerator.getNextPassPhrase();
+
                             if (getCustomerService().isCustomerExists(getEmail())) {
 
                                 error(
                                         getLocalizer().getString("customerExists", this)
                                 );
 
+                                //and sent the new password to already existing user
+
+                                Customer customer = getCustomerService().findCustomer(getEmail());
+
+                                getCustomerService().resetPassword(customer, ApplicationDirector.getCurrentShop());
+
                             } else {
 
-
-                                final String password = phrazeGenerator.getNextPassPhrase();
 
                                 Customer customer = getCustomerService().getGenericDao().getEntityFactory().getByIface(Customer.class);
                                 customer.setEmail(getEmail());
                                 customer.setFirstname(getFirstname());
                                 customer.setLastname(getLastname());
                                 customer.setPassword(password); // aspect will create hash
-
 
                                 final AttrValueCustomer attrValueCustomer = getCustomerService().getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
                                 attrValueCustomer.setCustomer(customer);
@@ -248,6 +255,8 @@ public class RegisterPanel extends BaseComponent {
                                     error(
                                             getLocalizer().getString("canNotRegister", this)
                                     );
+
+
 
                                 }
                             }

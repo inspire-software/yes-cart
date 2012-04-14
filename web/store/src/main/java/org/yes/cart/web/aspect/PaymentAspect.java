@@ -7,7 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jms.core.JmsTemplate;
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.CustomerOrderDet;
+import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.message.consumer.StandardMessageListener;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.aspect.impl.BaseNotificationAspect;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
@@ -25,13 +28,16 @@ public class PaymentAspect extends BaseNotificationAspect {
 
     private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
+    private final ProductService productService;
+
     /**
      * Construct aspect.
      *
      * @param jmsTemplate what jms use to send notification.
      */
-    public PaymentAspect(final JmsTemplate jmsTemplate) {
+    public PaymentAspect(final JmsTemplate jmsTemplate, final ProductService productService) {
         super(jmsTemplate);
+        this.productService = productService;
     }
 
 
@@ -64,6 +70,8 @@ public class PaymentAspect extends BaseNotificationAspect {
 
 
         sendNotification(map);
+
+        reindex(customerOrder);
 
         return rez;
     }
@@ -100,8 +108,16 @@ public class PaymentAspect extends BaseNotificationAspect {
 
         sendNotification(map);
 
+        reindex(customerOrder);
+
         return rez;
 
+    }
+
+    private void reindex(final CustomerOrder customerOrder) {
+        for(CustomerOrderDet det : customerOrder.getOrderDetail()) {
+            productService.reindexProduct(det.getSku().getProduct().getProductId()) ;
+        }
     }
 
     /**
