@@ -45,7 +45,7 @@ public abstract class BasePaymentModuleDBTestCase {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            sessionFactory.close();
+            //sessionFactory.close();
             session.close();
         }
     };

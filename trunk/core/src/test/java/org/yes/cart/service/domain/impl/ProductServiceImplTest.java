@@ -75,7 +75,7 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
         /* test that sobot has 10 skus on all warehouses  */
         BigDecimal qty = productService.getProductQuantity(product);
         assertNotNull(qty);
-        assertEquals(BigDecimal.TEN, qty);
+        assertEquals(BigDecimal.TEN.setScale(2), qty);
     }
 
     @Test
@@ -122,7 +122,7 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
         /* test that sobot has 10 skus on all warehouses  */
         BigDecimal qty = productService.getProductQuantity(product, shop);
         assertNotNull(qty);
-        assertEquals(BigDecimal.TEN, qty);
+        assertEquals(BigDecimal.TEN.setScale(2), qty);
     }
 
     /**
@@ -157,7 +157,7 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
         /* Ttest that 0 skus on warehouses */
         BigDecimal qty = productService.getProductQuantity(product, shop);
         assertNotNull(qty);
-        assertEquals(BigDecimal.ZERO, qty);
+        assertEquals(BigDecimal.ZERO.setScale(2), qty);
     }
 
     /**

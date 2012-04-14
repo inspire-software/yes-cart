@@ -352,6 +352,7 @@
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.SkuWarehouseServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="skuWarehouseDao"/>
+                <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="productDao"/>
             </bean>
         </property>
     </bean>

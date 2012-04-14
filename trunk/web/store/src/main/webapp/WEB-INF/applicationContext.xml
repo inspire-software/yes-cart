@@ -27,8 +27,7 @@
 
     <aop:aspectj-autoproxy/>
 
-
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
           autowire="byName">
         <property name="configLocation" value="classpath:hibernate.cfg.xml"/>
         <property name="mappingResources">
@@ -47,6 +46,7 @@
 
                 <prop key="hibernate.search.worker.execution">async</prop>
                 <prop key="hibernate.search.worker.thread_pool.size">2</prop>
+                 <prop key="hibernate.search.default.exclusive_index_use">false</prop>
 
             </props>
         </property>
@@ -400,6 +400,7 @@
     </bean>
 
 
+
     <!-- #################################### queues and jms templates end ###############################-->
 
 
@@ -413,7 +414,10 @@
 
     <bean id="paymentNotificationAspect" class="org.yes.cart.web.aspect.PaymentAspect">
         <constructor-arg index="0" ref="paymentNotificationJMSTemplate"/>
+        <constructor-arg index="1" ref="productService"/>
     </bean>
+
+
 
     <!-- #################################  aspects configurations end ######################################-->
 

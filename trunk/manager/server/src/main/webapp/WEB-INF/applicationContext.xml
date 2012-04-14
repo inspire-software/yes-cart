@@ -132,6 +132,8 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
             <bean class="org.yes.cart.service.domain.impl.MD5HashHelperImpl"/>
         </constructor-arg>
     </bean>
+
+
     <!-- #################################  aspects configurations end ######################################-->
 
 
@@ -170,7 +172,7 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
 
     <!-- #################################  message consumers end ######################################-->
 
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
           autowire="byName">
         <property name="configLocation" value="classpath:hibernate-nc.cfg.xml"/>
         <property name="mappingResources">
@@ -186,6 +188,7 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
                 <prop key="hibernate.search.default.indexBase">
                     #{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart-manager'}
                 </prop>
+                 <prop key="hibernate.search.default.exclusive_index_use">false</prop>
             </props>
         </property>
     </bean>

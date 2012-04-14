@@ -36,7 +36,12 @@ public abstract class AbstractTestDAO {
             sessionFactory = (SessionFactory) ctx().getBean("sessionFactory");
             session = sessionFactory.openSession();
             dbTester = createDatabaseTester();
-            dbTester.onSetup();
+            try {
+                dbTester.onSetup();
+            } catch (Exception e) {
+                dumpDataBase("data_init_failed", new String[]{"TATTRIBUTE"});
+                throw e;
+            }
         }
 
         @Override
@@ -46,7 +51,7 @@ public abstract class AbstractTestDAO {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            sessionFactory.close();
+            //sessionFactory.close();
             session.close();
         }
     };
@@ -83,8 +88,9 @@ public abstract class AbstractTestDAO {
 
     /**
      * Get db connection to perform verifications.
+     *
      * @return db connection
-     * @throws Exception  in case or error
+     * @throws Exception in case or error
      */
     public IDatabaseConnection getConnection() throws Exception {
         return dbTester.getConnection();

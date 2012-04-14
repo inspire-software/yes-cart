@@ -1,6 +1,6 @@
 package org.yes.cart.utils.impl;
 
-import org.hibernate.collection.AbstractPersistentCollection;
+import org.hibernate.collection.internal.AbstractPersistentCollection;
 import org.hibernate.proxy.HibernateProxy;
 import org.springframework.util.Assert;
 import org.yes.cart.domain.entity.Auditable;

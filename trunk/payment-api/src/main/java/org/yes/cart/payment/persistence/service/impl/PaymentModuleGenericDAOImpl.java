@@ -1,10 +1,7 @@
 package org.yes.cart.payment.persistence.service.impl;
 
-import org.hibernate.Criteria;
-import org.hibernate.LockMode;
-import org.hibernate.Query;
+import org.hibernate.*;
 import org.hibernate.criterion.Criterion;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.yes.cart.payment.persistence.service.PaymentModuleGenericDAO;
 
 import java.io.Serializable;
@@ -19,12 +16,26 @@ import java.util.List;
  * Date: 07-May-2011
  * Time: 10:22:53
  */
-public class PaymentModuleGenericDAOImpl<T, PK extends Serializable> extends HibernateDaoSupport
+public class PaymentModuleGenericDAOImpl<T, PK extends Serializable>
         implements PaymentModuleGenericDAO<T, PK> {
 
     private final static String UNCHECKED = "unchecked";
 
-    final private Class<T> persistentClass;
+    private final  Class<T> persistentClass;
+
+    private   SessionFactory sessionFactory;
+
+
+    /**
+	 * Set the Hibernate SessionFactory to be used by this DAO.
+	 * Will automatically create a HibernateTemplate for the given SessionFactory.
+	 */
+	public final void setSessionFactory(final SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+
+	}
+
+
 
     /**
      * Default constructor.
@@ -51,9 +62,9 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable> extends Hib
     public T findById(final PK id, final boolean lock) {
         T entity;
         if (lock) {
-            entity = (T) getHibernateTemplate().get(getPersistentClass(), id, LockMode.UPGRADE);
+            entity = (T) sessionFactory.getCurrentSession().get(getPersistentClass(), id, LockMode.UPGRADE);
         } else {
-            entity = (T) getHibernateTemplate().get(getPersistentClass(), id);
+            entity = (T) sessionFactory.getCurrentSession().get(getPersistentClass(), id);
         }
         return entity;
     }
@@ -82,7 +93,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable> extends Hib
      */
     @SuppressWarnings(UNCHECKED)
     public T saveOrUpdate(final T entity) {
-        getHibernateTemplate().saveOrUpdate(entity);
+        sessionFactory.getCurrentSession().saveOrUpdate(entity);
         return entity;
     }
 
@@ -92,7 +103,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable> extends Hib
      */
     @SuppressWarnings(UNCHECKED)
     public T create(final T entity) {
-        getHibernateTemplate().saveOrUpdate(entity);
+        sessionFactory.getCurrentSession().saveOrUpdate(entity);
         return entity;
     }
 
@@ -101,7 +112,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable> extends Hib
      */
     @SuppressWarnings(UNCHECKED)
     public T update(final T entity) {
-        getHibernateTemplate().saveOrUpdate(entity);
+        sessionFactory.getCurrentSession().saveOrUpdate(entity);
         return entity;
     }
 
@@ -109,7 +120,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable> extends Hib
      * {@inheritDoc}
      */
     public void delete(final T entity) {
-        getHibernateTemplate().delete(entity);
+        sessionFactory.getCurrentSession().delete(entity);
     }
 
 
@@ -118,7 +129,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable> extends Hib
      */
     @SuppressWarnings(UNCHECKED)
     public List<T> findByNamedQuery(final String namedQueryName, final Object... parameters) {
-        Query query = getSession().getNamedQuery(namedQueryName);
+        Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
         if (parameters != null) {
             int idx = 1;
             for (Object param : parameters) {
@@ -146,7 +157,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable> extends Hib
      */
     @SuppressWarnings(UNCHECKED)
     public List<T> findByCriteria(final Criterion... criterion) {
-        Criteria crit = getSession().createCriteria(getPersistentClass());
+        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
         for (Criterion c : criterion) {
             crit.add(c);
         }
@@ -158,7 +169,7 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable> extends Hib
      * {@inheritDoc}
      */
     public T findSingleByCriteria(final Criterion... criterion) {
-        Criteria crit = getSession().createCriteria(getPersistentClass());
+        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
         for (Criterion c : criterion) {
             crit.add(c);
         }

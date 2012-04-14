@@ -31,7 +31,7 @@
 
 
     <bean id="paySessionFactory"
-          class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="payDataSource"/>
         <property name="annotatedClasses">
             <list>
@@ -54,7 +54,7 @@
     </bean>
 
 
-    <bean id="payTransactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+    <bean id="payTransactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
         <property name="sessionFactory" ref="paySessionFactory"/>
     </bean>
 
@@ -72,7 +72,7 @@
                 <prop key="assign*">PROPAGATION_REQUIRED</prop>
                 <prop key="unassign*">PROPAGATION_REQUIRED</prop>
                 <prop key="reset*">PROPAGATION_REQUIRED</prop>
-                <prop key="*">PROPAGATION_SUPPORTS,readOnly</prop>
+                <prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
             </props>
         </property>
     </bean>

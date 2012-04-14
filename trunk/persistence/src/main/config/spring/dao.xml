@@ -7,6 +7,9 @@
         <property name="transactionManager" ref="transactionManager"/>
         <property name="transactionAttributes">
             <props>
+                <prop key="add*">PROPAGATION_REQUIRED</prop>
+                <prop key="grant*">PROPAGATION_REQUIRED</prop>
+                <prop key="revoke*">PROPAGATION_REQUIRED</prop>
                 <prop key="create*">PROPAGATION_REQUIRED</prop>
                 <prop key="update*">PROPAGATION_REQUIRED</prop>
                 <prop key="delete*">PROPAGATION_REQUIRED</prop>
@@ -22,7 +25,9 @@
                 <prop key="fireTransition">PROPAGATION_REQUIRED</prop>
                 <prop key="handle">PROPAGATION_REQUIRED</prop>
                 <prop key="reservation*">PROPAGATION_REQUIRED</prop>
-                <prop key="*">PROPAGATION_SUPPORTS,readOnly</prop>
+                <prop key="fullTextSearchReindex">PROPAGATION_REQUIRED</prop>
+                <prop key="executeNative*">PROPAGATION_REQUIRED</prop>
+                <prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
             </props>
         </property>
     </bean>

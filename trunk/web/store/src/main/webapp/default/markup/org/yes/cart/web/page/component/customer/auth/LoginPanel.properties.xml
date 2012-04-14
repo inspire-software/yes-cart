@@ -10,4 +10,5 @@
 	<entry key="login">Login</entry>
     <entry key="signIn">Sign In</entry>
     <entry key="registration">Registration</entry>
+    <entry key="tryToRestore">Try to restore password. It will be send to your email</entry>
 </properties>

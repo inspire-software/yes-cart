@@ -71,10 +71,32 @@
             <version>${spring.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-expression</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
             <version>${spring-security.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-expression</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-aop</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-context</artifactId>
+                </exclusion>
+            </exclusions>
+
         </dependency>
+
+
         <!-- ################################## spring end ######################################### -->
         <dependency>
             <groupId>commons-dbcp</groupId>
@@ -104,13 +126,13 @@
             <version>${lucene.version}</version>
         </dependency>
         <dependency>
-        <groupId>org.hibernate</groupId>
-        <artifactId>hibernate-search-analyzers</artifactId>
-        <version>3.4.1.Final</version>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-search-analyzers</artifactId>
+            <version>3.4.1.Final</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-search</artifactId>
+            <artifactId>hibernate-search-orm</artifactId>
             <version>${hibernate.search.version}</version>
             <!--scope>test</scope-->
         </dependency>
@@ -126,12 +148,13 @@
             <version>3.8.0.GA</version>
             <scope>runtime</scope>
         </dependency>
-        <dependency>
-            <groupId>hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <version>1.8.0.7</version>
-            <scope>test</scope>
-        </dependency>
+<dependency>
+	<groupId>org.hsqldb</groupId>
+	<artifactId>hsqldb</artifactId>
+	<version>2.2.8</version>
+        <scope>test</scope>
+</dependency>
+
         <dependency>
             <groupId>org.dbunit</groupId>
             <artifactId>dbunit</artifactId>
@@ -145,6 +168,9 @@
             </exclusions>
         </dependency>
     </dependencies>
+
+
+
     <build>
         <testResources>
             <testResource>
@@ -247,8 +273,6 @@
                                 match="\* UNCOMMENT(.*)"
                                 replace="\*/\1 /\*"
                                 byline="false" flags="mg"/>
-
-
 
 
                         <replaceregexp

@@ -20,14 +20,13 @@
         <module>installer</module>
     </modules>
     <properties>
-         <hibernate.core.version>3.6.9.Final</hibernate.core.version>
-        <hibernate.search.version>3.4.1.Final</hibernate.search.version> <!--  -->
-       <!-- <hibernate.annotations.vesrion>3.5.6-Final</hibernate.annotations.vesrion>-->
+        <hibernate.core.version>4.1.1.Final</hibernate.core.version>
+        <hibernate.search.version>4.1.0.Final</hibernate.search.version>
+        <lucene.version>3.5.0</lucene.version>
         <cxf.version>2.5.2</cxf.version>
-        <spring-security.version>3.0.6.RELEASE</spring-security.version>
-        <spring.version>3.0.6.RELEASE</spring.version>
+        <spring-security.version>3.1.0.RELEASE</spring-security.version>
+        <spring.version>3.1.1.RELEASE</spring.version>
         <lucene.config.index.dir>/yes-cart/lucene-index</lucene.config.index.dir>
-        <lucene.version>3.1.0</lucene.version>
         <db.config.yes.hibernate.dialect>org.hibernate.dialect.DerbyDialect</db.config.yes.hibernate.dialect>
         <db.config.yes.login>app</db.config.yes.login>
         <db.config.yes.password>app</db.config.yes.password>
@@ -309,4 +308,30 @@
             </properties>
         </profile>
     </profiles>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-core</artifactId>
+                <version>${spring-security.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-expression</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-aop</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-context</artifactId>
+                    </exclusion>
+                </exclusions>
+
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
 </project>

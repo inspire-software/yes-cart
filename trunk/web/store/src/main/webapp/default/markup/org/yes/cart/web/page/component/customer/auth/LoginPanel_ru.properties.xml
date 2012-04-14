@@ -3,11 +3,12 @@
 <properties>
     <entry key="wrongPassword">Неправильный пароль</entry>
     <entry key="customerNotExists">Email не зарегистрирован. Пройдите процедуру регистрации.</entry>
-    <entry key="existingUser">Existing shopper</entry>
-    <entry key="email">Email</entry>
-    <entry key="password">Password</entry>
-    <entry key="restorePassword">Restore password</entry>
-    <entry key="login">Login</entry>
-    <entry key="signIn">Sign In</entry>
+    <entry key="existingUser">Такой покупатель уже зарегистрирован</entry>
+    <entry key="email">Почта</entry>
+    <entry key="password">Пароль</entry>
+    <entry key="restorePassword">Восстановить пароль</entry>
+    <entry key="login">Вход</entry>
+    <entry key="signIn">Вход</entry>
     <entry key="registration">Регистрация</entry>
+    <entry key="tryToRestore">Нажми, восстановить пароль и он будет выслан тебе на почту</entry>
 </properties>
