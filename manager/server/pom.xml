@@ -14,11 +14,31 @@
     <description>Yes cart manager server</description>
     <properties>
         <backport-util-concurrent.version>3.1</backport-util-concurrent.version>
-        <blazeds.version>3.2.0.3978</blazeds.version>
+        <!-- <blazeds.version>3.2.0.3978</blazeds.version>-->
+        <blazeds.version>4.0.0.14931</blazeds.version>
+
         <junit.version>4.0</junit.version>
         <servlet-api.version>2.5</servlet-api.version>
         <mysql-connector.version>5.1.13</mysql-connector.version>
+        <spring-flex.version>1.5.2.RELEASE</spring-flex.version>
     </properties>
+    <repositories>
+        <!--repository>
+            <id>spring-release</id>
+            <url>http://maven.springframework.org/release</url>
+        </repository-->
+        <repository>
+            <id>SpringFlex</id>
+            <name>SpringFlex Source Repo</name>
+            <url>https://src.springsource.org/svn/spring-flex/tags/spring-flex-1.5.0.RELEASE/local-repo/</url>
+        </repository>
+        <repository>
+            <id>spring-maven-external</id>
+            <name>Springframework Maven External Repository</name>
+            <url>http://maven.springframework.org/external</url>
+        </repository>
+
+    </repositories>
     <dependencies>
         <dependency>
             <groupId>org.yes</groupId>
@@ -62,11 +82,11 @@
             <artifactId>blazeds-core</artifactId>
             <version>${blazeds.version}</version>
         </dependency>
-        <dependency>
+       <!-- <dependency>
             <groupId>com.adobe.blazeds</groupId>
             <artifactId>blazeds-opt</artifactId>
             <version>${blazeds.version}</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>com.adobe.blazeds</groupId>
             <artifactId>blazeds-proxy</artifactId>
@@ -109,8 +129,8 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.flex</groupId>
-            <artifactId>spring-flex</artifactId>
-            <version>1.0.3.RELEASE</version>
+            <artifactId>spring-flex-core</artifactId>
+            <version>${spring-flex.version}</version>
         </dependency>
         <dependency>
             <groupId>backport-util-concurrent</groupId>

@@ -232,6 +232,6 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
      */
     public void delete(final SkuWarehouse instance) {
         super.delete(instance);
-        productDao.fullTextSearchReindex(instance.getSku().getProduct().getProductId());
+        productDao.fullTextSearchPurge(instance.getSku().getProduct().getProductId());
     }
 }

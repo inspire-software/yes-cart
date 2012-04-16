@@ -6,9 +6,9 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:security="http://www.springframework.org/schema/security"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-http://www.springframework.org/schema/flex http://www.springframework.org/schema/flex/spring-flex-1.0.xsd
+http://www.springframework.org/schema/flex http://www.springframework.org/schema/flex/spring-flex-1.5.xsd
 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd
+http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
 http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
 ">
 
@@ -188,7 +188,8 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
                 <prop key="hibernate.search.default.indexBase">
                     #{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart-manager'}
                 </prop>
-                 <prop key="hibernate.search.default.exclusive_index_use">false</prop>
+                <prop key="hibernate.search.default.exclusive_index_use">false</prop>
+
             </props>
         </property>
     </bean>
