@@ -217,6 +217,13 @@ public interface GenericDAO<T, PK extends Serializable> {
      */
     int fullTextSearchReindex(PK primaryKey);
 
+    /**
+     * Purge given entity from lucene index.
+     *
+     * @param primaryKey to purge.
+     */
+    void fullTextSearchPurge(PK primaryKey);
+
 
     /**
      * Get the full text search result.

@@ -3,6 +3,7 @@ package org.yes.cart.service.domain.impl;
 import org.hibernate.criterion.Restrictions;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.entity.ProductCategory;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.domain.ProductSkuService;
 
@@ -38,5 +39,31 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
         return getGenericDao().findSingleByCriteria(
                 Restrictions.eq("code", skuCode)
         );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public ProductSku create(ProductSku instance) {
+        final ProductSku rez = super.create(instance);
+        productDao.fullTextSearchReindex(instance.getProduct().getProductId());
+        return rez;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public ProductSku update(ProductSku instance) {
+        final ProductSku rez = super.update(instance);
+        productDao.fullTextSearchReindex(instance.getProduct().getProductId());
+        return rez;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void delete(ProductSku instance) {
+        super.delete(instance);
+        productDao.fullTextSearchPurge(instance.getProduct().getProductId());
     }
 }

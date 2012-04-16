@@ -16,7 +16,7 @@
            http://www.springframework.org/schema/aop
            http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
            http://www.springframework.org/schema/security
-           http://www.springframework.org/schema/security/spring-security-3.0.xsd
+           http://www.springframework.org/schema/security/spring-security-3.1.xsd
            http://cxf.apache.org/jaxws
            http://cxf.apache.org/schemas/jaxws.xsd
            http://www.springframework.org/schema/lang 
@@ -46,7 +46,7 @@
 
                 <prop key="hibernate.search.worker.execution">async</prop>
                 <prop key="hibernate.search.worker.thread_pool.size">2</prop>
-                 <prop key="hibernate.search.default.exclusive_index_use">false</prop>
+                <prop key="hibernate.search.default.exclusive_index_use">false</prop>
 
             </props>
         </property>

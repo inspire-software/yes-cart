@@ -312,6 +312,7 @@
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.ProductCategoryServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="productCategoryDao"/>
+                <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="productDao"/>
             </bean>
         </property>
     </bean>

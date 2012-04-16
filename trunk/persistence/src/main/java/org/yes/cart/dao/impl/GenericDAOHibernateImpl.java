@@ -348,6 +348,19 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
+    public final void fullTextSearchPurge(final PK primaryKey) {
+       /* if (null != getPersistentClass().getAnnotation(org.hibernate.search.annotations.Indexed.class)) {
+            T entity = findById(primaryKey);
+            if (entity != null) {
+                FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
+                fullTextSession.purge(getPersistentClass(), primaryKey);
+            }
+        }    */
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public int fullTextSearchReindex(final PK primaryKey) {
         int result = 0;
         if (null != getPersistentClass().getAnnotation(org.hibernate.search.annotations.Indexed.class)) {

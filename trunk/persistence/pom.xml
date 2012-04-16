@@ -138,9 +138,9 @@
         </dependency>
         <dependency>
             <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache</artifactId>
+            <artifactId>ehcache-core</artifactId>
             <scope>runtime</scope>
-            <version>1.6.2</version>
+            <version>${ehcache.version}</version>
         </dependency>
         <dependency>
             <groupId>javassist</groupId>
