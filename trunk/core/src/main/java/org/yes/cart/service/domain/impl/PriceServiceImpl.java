@@ -113,7 +113,7 @@ public class PriceServiceImpl
             return BigDecimal.ZERO;
         } else {
             SkuPrice skuPrice = skuPrices.get(0);
-            return  MoneyUtils.max(skuPrice.getSalePrice(), skuPrice.getRegularPrice());
+            return  MoneyUtils.minPositive(skuPrice.getSalePrice(), skuPrice.getRegularPrice());
         }
     }
 

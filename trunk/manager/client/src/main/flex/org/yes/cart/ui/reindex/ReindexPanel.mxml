@@ -25,7 +25,7 @@
             reindexBtn.enabled = false;
             resultReady = false;
             reindexInProcess = true;
-            reindexService.reindexAllProducts();
+            reindexService.reindexAllProducts(ShopManagerGlobal.getInstance().password);
 
         }
 
