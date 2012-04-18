@@ -31,6 +31,25 @@ public final class MoneyUtils {
     }
 
     /**
+     * Get minimal, but greater than 0 value from given values.
+     * @param first    first given
+     * @param second   second value
+     * @return max value.
+     */
+    public static BigDecimal minPositive(final BigDecimal first, final BigDecimal second) {
+        if ( first == null || notNull(first).equals(BigDecimal.ZERO) ) {
+            return notNull(second);
+        } else if ( second == null || notNull(second).equals(BigDecimal.ZERO) ) {
+            return notNull(first);
+        } else  if (isFirstBiggerThanSecond(
+                notNull(first),
+                notNull(second))) {
+            return notNull(second);
+        }
+        return notNull(first);
+    }
+
+    /**
      *
      * @param value value to check
      * @return value if it not null, otherwise BigDecimal.ZERO

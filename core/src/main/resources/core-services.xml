@@ -784,6 +784,7 @@
 
     <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
         <property name="configLocation" value="classpath:ehcache.xml"/>
+        <property name="shared" value="true"/>
         <!--<property name="configLocation" value="ehcache.xml"/>-->
     </bean>
 

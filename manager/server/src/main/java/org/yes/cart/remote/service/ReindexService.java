@@ -9,17 +9,18 @@ public interface ReindexService {
 
     /**
      * Reindex all products
-     *
+     * @param credentials current credentials
      * @return quantity product in created index.
      */
-    int reindexAllProducts();
+    int reindexAllProducts(String credentials);
 
     /**
      * Reindex product by given sku code.
      *
      * @param pk product primary key
+     * @param credentials current credentials
      * @return quantity product in created index.
      */
-    int reindexProduct(long pk);
+    int reindexProduct(String credentials, long pk);
 
 }

@@ -5,10 +5,14 @@
 <hibernate-configuration>
 
     <session-factory>
-        <property name="cache.provider_class">net.sf.ehcache.hibernate.EhCacheProvider</property>
+        <!--<property name="cache.provider_class">net.sf.ehcache.hibernate.EhCacheProvider</property>-->
         <property name="cache.use_query_cache">true</property>
         <property name="cache.provider_configuration_file_resource_path">ehcache.xml</property>
-        <property name="hibernate.cache.region.factory_class">net.sf.ehcache.hibernate.EhCacheRegionFactory</property>
+
+        <property name="hibernate.cache.use_query_cache">true</property>
+        <property name="hibernate.cache.provider_configuration_file_resource_path">ehcache.xml</property>
+        <property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory</property>
+        <!--<property name="hibernate.cache.region.factory_class">net.sf.ehcache.hibernate.EhCacheRegionFactory</property>-->
 
         <!--<property name="hibernate.cache.use_second_level_cache">false</property>-->
         <property name="hibernate.search.default.indexBase">${lucene.config.index.dir}</property>

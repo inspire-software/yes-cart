@@ -138,4 +138,26 @@ public class MoneyUtilsTest {
     public void testIsFirstTenEqualToSecondTen() {
         assertTrue("ten is equal to ten", MoneyUtils.isFirstEqualToSecond(BigDecimal.TEN, new BigDecimal("10.0000")));
     }
+
+    @Test
+    public void testMinimalPositiveIsFirstTenMoreThanSecondOne() {
+        assertTrue("ten is equal to ten", MoneyUtils.minPositive(BigDecimal.TEN, BigDecimal.ONE).equals(BigDecimal.ONE));
+    }
+
+    @Test
+    public void testMinimalPositiveIsFirstOneLessThanSecondTen() {
+        assertTrue("ten is equal to ten", MoneyUtils.minPositive(BigDecimal.ONE, BigDecimal.TEN).equals(BigDecimal.ONE));
+    }
+
+    @Test
+    public void testMinimalPositiveIsFirstMinimalFromTenAndNull() {
+        assertTrue("ten is equal to ten", MoneyUtils.minPositive(BigDecimal.TEN, null).equals(BigDecimal.TEN));
+    }
+
+    @Test
+    public void testMinimalPositiveIsSecondMinimalFromTenAndNull() {
+        assertTrue("ten is equal to ten", MoneyUtils.minPositive(null, BigDecimal.TEN ).equals(BigDecimal.TEN));
+    }
+
+
 }
