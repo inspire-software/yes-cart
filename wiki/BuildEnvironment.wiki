@@ -65,9 +65,13 @@ PATH=D:\jdk1.6.0_29\bin;D:\wamp\bin\mysql\mysql5.1.36\bin;D:\apache-maven-3.0.3\
 == Update, Setup & Build ==
 
 ant all
+
 mvn install for derby profile
+
 or 
+
 mvn install -Pmysql for mysql support
+
 warning : some times flex mojo produce not working swf and you have to rebuild admin swf with ant from manager\client folder
 
 == Database ==
