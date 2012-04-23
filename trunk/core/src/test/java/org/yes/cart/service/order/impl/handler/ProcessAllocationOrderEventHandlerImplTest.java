@@ -38,7 +38,7 @@ public class ProcessAllocationOrderEventHandlerImplTest extends AbstractEventHan
     }
 
     @Test
-    public void testHandle() {
+    public void testHandle() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
         CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx(), customer.getEmail()), false);

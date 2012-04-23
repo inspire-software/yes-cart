@@ -164,7 +164,6 @@ public class DynaFormPanel extends BaseComponent {
         final ExtendedConversionService conversionService = new ExtendedConversionService();
 
 
-
         if ("CommaSeparatedList".equals(bType)) {
             final IModel<List<Pair<String, String>>> enumChoices = new AbstractReadOnlyModel<List<Pair<String, String>>>() {
                 public List<Pair<String, String>> getObject() {
@@ -174,11 +173,6 @@ public class DynaFormPanel extends BaseComponent {
                         TypeDescriptor.valueOf(String.class),
                         TypeDescriptor.valueOf(List.class)
                     ); //TODO need to check is it work in correct way ? in ExtendedConversionServiceTest
-
-
-                    /*return (List<Pair<String, String>>)  conversionService.executeConversion(
-                                    attrValue.getAttribute().getChoiceData(),
-                                    List.class);*/
 
                 }
             };

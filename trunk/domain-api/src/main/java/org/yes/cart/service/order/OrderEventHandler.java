@@ -14,8 +14,8 @@ public interface OrderEventHandler {
      *
      * @param orderEvent event to fire transition
      * @return true in case if transition was  successful
-     * @throws Exception case if transition failed
+     * @throws OrderException case if transition failed
      */
-    boolean handle(OrderEvent orderEvent) throws Exception;
+    boolean handle(OrderEvent orderEvent) throws OrderException;
 
 }

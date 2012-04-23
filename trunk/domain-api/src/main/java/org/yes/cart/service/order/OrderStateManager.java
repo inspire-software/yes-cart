@@ -54,14 +54,17 @@ public interface OrderStateManager {
     String EVT_SHIPMENT_COMPLETE = "evt.shipment.complete";         // lets go to capture funds and update qty
 
 
+
+
     /**
      * Fire transition. New order state not persisted after transition, hence
      * caller is responsible to persist order with new state.
      *
      * @param orderEvent event to fire transition
      * @return true in case if order state transition or one of the delivery state transition  was  successful
+     * @throws  {@link OrderException} in case if transition can not be done
      */
-    boolean fireTransition(OrderEvent orderEvent);
+    boolean fireTransition(OrderEvent orderEvent) throws OrderException;
 
 
     /**

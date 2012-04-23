@@ -8,6 +8,7 @@ import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderEvent;
+import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.service.payment.PaymentCallBackHandlerFacade;
@@ -47,7 +48,7 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
     /**
      * {@inheritDoc}
      */
-    public void handlePaymentCallback(final Map parameters, final String paymentGatewayLabel) {
+    public void handlePaymentCallback(final Map parameters, final String paymentGatewayLabel) throws OrderException {
 
         final String orderGuid = getOrderGuid(parameters, paymentGatewayLabel);
 

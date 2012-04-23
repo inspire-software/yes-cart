@@ -1,5 +1,6 @@
 package org.yes.cart.service.payment;
 
+import org.yes.cart.service.order.OrderException;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.util.Map;
@@ -20,9 +21,10 @@ public interface PaymentProcessFacade {
      * Perform order payment.
      * @param paymentParameter the payment parameters.
      * @param shoppingCart  the shopping cart.
+     * @throws OrderException in case if payment was failed
      * @return true in case of succesfull payment
      */
-    boolean pay(final ShoppingCart shoppingCart, final Map paymentParameter);
+    boolean pay(final ShoppingCart shoppingCart, final Map paymentParameter) throws OrderException;
 
 
 }
