@@ -8,6 +8,7 @@ import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
+import org.yes.cart.service.order.OrderItemAllocationException;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
@@ -36,7 +37,7 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImpl
     /**
      * {@inheritDoc}
      */
-    public boolean handle(final OrderEvent orderEvent) {
+    public boolean handle(final OrderEvent orderEvent) throws OrderItemAllocationException {
         synchronized (OrderEventHandler.syncMonitor) {
             final List<Warehouse> warehouses = getWarehouseService().findByShopId(orderEvent.getCustomerOrder().getShop().getShopId());
             final CustomerOrderDelivery orderDelivery = orderEvent.getCustomerOrderDelivery();

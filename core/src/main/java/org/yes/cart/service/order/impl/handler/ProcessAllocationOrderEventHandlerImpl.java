@@ -10,6 +10,7 @@ import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
+import org.yes.cart.service.order.OrderItemAllocationException;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 
@@ -43,15 +44,10 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
     /**
      * {@inheritDoc}
      */
-    public boolean handle(final OrderEvent orderEvent) {
+    public boolean handle(final OrderEvent orderEvent) throws OrderItemAllocationException {
         synchronized (OrderEventHandler.syncMonitor) {
-            try {
-                reserveQuantity(orderEvent.getCustomerOrderDelivery());//TOdO all
-                return true;
-            } catch (Exception e) {
-                LOG.error(e.getMessage());
-                return false;
-            }
+            reserveQuantity(orderEvent.getCustomerOrderDelivery());//TOdO all
+            return true;
         }
     }
 
@@ -61,7 +57,7 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
      * @param orderDelivery reserve for this delivery
      * @throws Exception in case if can not allocate quantity for each sku
      */
-    void reserveQuantity(final CustomerOrderDelivery orderDelivery) throws Exception {
+    void reserveQuantity(final CustomerOrderDelivery orderDelivery) throws OrderItemAllocationException {
 
 
         final Collection<CustomerOrderDeliveryDet> deliveryDetails = orderDelivery.getDetail();
@@ -82,9 +78,12 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
                 }
             }
             if (MoneyUtils.isFirstBiggerThanSecond(toAllocate, BigDecimal.ZERO)) {
-                throw new Exception("ProcessAllocationOrderEventHandlerImpl. Can not allocate total qty = " + det.getQty()
-                        + " for sku = " + productSku.getCode()
-                        + " in delivery " + orderDelivery.getDevileryNum());
+                throw new OrderItemAllocationException(
+                        productSku,
+                        toAllocate,
+                        "ProcessAllocationOrderEventHandlerImpl. Can not allocate total qty = " + det.getQty()
+                                + " for sku = " + productSku.getCode()
+                                + " in delivery " + orderDelivery.getDevileryNum());
             }
         }
         orderDelivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED);

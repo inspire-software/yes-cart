@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderEvent;
+import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.service.payment.PaymentProcessFacade;
@@ -40,12 +41,9 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     }
 
     /**
-     * Perform order payment.
-     * @param paymentParameter the payment parameters.
-     * @param shoppingCart the shopping cart.
-     * @return true in case of succesfull payment
+     * {@inheritDoc}
      */
-    public boolean pay(final ShoppingCart shoppingCart, final Map paymentParameter){
+    public boolean pay(final ShoppingCart shoppingCart, final Map paymentParameter) throws OrderException {
 
 
         final OrderEvent orderEvent = new OrderEventImpl(

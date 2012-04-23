@@ -13,6 +13,7 @@ import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
+import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.payment.PaymentProcessFacade;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
@@ -65,7 +66,7 @@ public class PaymentPage extends AbstractWebPage {
     private ShoppingCartCommandFactory shoppingCartCommandFactory;
 
 
-    private final boolean result;
+    private  boolean result;
 
 
 
@@ -77,10 +78,15 @@ public class PaymentPage extends AbstractWebPage {
 
         super(params);
 
-        result = paymentProcessFacade.pay(
-                    ApplicationDirector.getShoppingCart(),
-                    WicketUtil.getHttpServletRequest().getParameterMap()
-                );
+        try {
+            result = paymentProcessFacade.pay(
+                        ApplicationDirector.getShoppingCart(),
+                        WicketUtil.getHttpServletRequest().getParameterMap()
+                    );
+        } catch (OrderException e) {
+            result = false;
+            e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
+        }
 
         if (result) {
             shoppingCartCommandFactory.create(

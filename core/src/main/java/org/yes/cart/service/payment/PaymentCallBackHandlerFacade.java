@@ -1,5 +1,7 @@
 package org.yes.cart.service.payment;
 
+import org.yes.cart.service.order.OrderException;
+
 import java.util.Map;
 
 /**
@@ -18,6 +20,6 @@ public interface PaymentCallBackHandlerFacade {
      * @param parameters map with http parameters
      * @param paymentGatewayLabel particular payment gateway label
      */
-    void handlePaymentCallback(Map parameters, final String paymentGatewayLabel);
+    void handlePaymentCallback(Map parameters, final String paymentGatewayLabel) throws OrderException;
 
 }

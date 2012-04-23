@@ -8,9 +8,7 @@ import org.yes.cart.domain.entity.*;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
-import org.yes.cart.service.order.OrderEvent;
-import org.yes.cart.service.order.OrderEventHandler;
-import org.yes.cart.service.order.OrderStateManager;
+import org.yes.cart.service.order.*;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.service.payment.PaymentProcessorFactory;
@@ -67,7 +65,7 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
     /**
      * {@inheritDoc}
      */
-    public boolean handle(final OrderEvent orderEvent) throws Exception {
+    public boolean handle(final OrderEvent orderEvent) throws OrderException {
         synchronized (OrderEventHandler.syncMonitor) {
 
             for (CustomerOrderDelivery customerOrderDelivery : orderEvent.getCustomerOrder().getDelivery()) {
@@ -96,9 +94,9 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
      * Allocate sku quantity on warehouses, that belong to shop, where order was made.
      *
      * @param orderDelivery reserve for this delivery
-     * @throws Exception in case if can not allocate quantity for each sku
+     * @throws OrderItemAllocationException in case if can not allocate quantity for each sku
      */
-    void reserveQuantity(final CustomerOrderDelivery orderDelivery) throws Exception {
+    void reserveQuantity(final CustomerOrderDelivery orderDelivery) throws OrderItemAllocationException {
 
 
         final Collection<CustomerOrderDeliveryDet> deliveryDetails = orderDelivery.getDetail();
@@ -128,7 +126,10 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
                  * Availability.PREORDER - can order from manafacturer
                  * Availability.ALWAYS - always
                  */
-                throw new Exception("PendingOrderEventHandlerImpl. Can not allocate total qty = " + det.getQty()   //TODO need patricular type of exception
+                throw new OrderItemAllocationException(
+                        productSku,
+                        toReserve,
+                        "PendingOrderEventHandlerImpl. Can not allocate total qty = " + det.getQty()
                         + " for sku = " + productSku.getCode()
                         + " in delivery " + orderDelivery.getDevileryNum());
             }

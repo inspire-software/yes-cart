@@ -34,7 +34,7 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImplTest extends Abstrac
     }
 
     @Test
-    public void testHandle() {
+    public void testHandle() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
         CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx(), customer.getEmail()), false);

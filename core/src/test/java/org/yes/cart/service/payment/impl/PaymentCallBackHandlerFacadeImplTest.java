@@ -9,6 +9,7 @@ import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.payment.impl.TestExtFormPaymentGatewayImpl;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderAssembler;
+import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.impl.DeliveryAssemblerImpl;
 import org.yes.cart.service.payment.PaymentCallBackHandlerFacade;
 import org.yes.cart.shoppingcart.ShoppingCart;
@@ -38,7 +39,7 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testHandlePaymentCallback() {
+    public void testHandlePaymentCallback() throws OrderException {
         Customer customer = createCustomer();
         ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail());
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);

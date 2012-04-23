@@ -2,10 +2,7 @@ package org.yes.cart.service.order.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.service.order.OrderEvent;
-import org.yes.cart.service.order.OrderEventHandler;
-import org.yes.cart.service.order.OrderStateManager;
-import org.yes.cart.service.order.OrderStateTransitionListener;
+import org.yes.cart.service.order.*;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.text.MessageFormat;
@@ -48,7 +45,7 @@ public class OrderStateManagerImpl implements OrderStateManager {
     /**
      * {@inheritDoc}
      */
-    public boolean fireTransition(final OrderEvent orderEvent) {
+    public boolean fireTransition(final OrderEvent orderEvent) throws OrderException {
         final OrderEventHandler handler = handlers.get(orderEvent.getEventId());
 
         if (handler == null) {
@@ -64,7 +61,7 @@ public class OrderStateManagerImpl implements OrderStateManager {
                     fireEventListeners(afterListenersMap, orderEvent);
                 }
                 return result;
-            } catch (Exception e) {
+            } catch (OrderException e) {
                 if (LOG.isErrorEnabled()) {
                     LOG.error(
                             MessageFormat.format("Cant handle {0} event for {1} order because of {2}",
@@ -74,6 +71,7 @@ public class OrderStateManagerImpl implements OrderStateManager {
                             e
                     );
                 }
+                throw e;
             }
 
         }
