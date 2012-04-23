@@ -287,6 +287,22 @@ public interface Product extends Auditable, Attributable {
      * @return true if product multisku
      */
     boolean isMultiSkuProduct();
+
+
+    /**
+     * Get the space separated product tags. For example
+     * sale specialoffer newarrival etc.
+     * This tags should not show to shopper, just for query navigation.
+     * @return space separated product tags
+     */
+    String getTag();
+
+    /**
+     * Set space separated product tags.
+     * @param tag space separated product tags.
+     */
+    void setTag(String tag);
+
 }
 
 

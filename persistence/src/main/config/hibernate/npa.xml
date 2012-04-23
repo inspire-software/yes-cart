@@ -2063,6 +2063,15 @@ public void setRangeList(final RangeList rangeList) {
                 <column name="DESCRIPTION" length="4000"/>
             </property>
 
+            <property name="tag" type="string" length="255" not-null="true">
+                <meta attribute="field-description">UNCOMMENT @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES) </meta>
+                <column name="TAG">
+                    <comment>
+                        Set of product tags
+                    </comment>
+                </column>
+            </property>
+
             <many-to-one name="brand" class="org.yes.cart.domain.entity.Brand" foreign-key="FK_PROD_BRAND">
                 <meta attribute="field-description">UNCOMMENT @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)    @FieldBridge(impl = org.yes.cart.domain.entity.bridge.BrandBridge.class)</meta>
                 <column name="BRAND_ID" not-null="true"/>
