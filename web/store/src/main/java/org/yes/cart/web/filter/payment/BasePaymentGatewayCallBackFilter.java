@@ -2,6 +2,7 @@ package org.yes.cart.web.filter.payment;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.payment.PaymentCallBackHandlerFacade;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
@@ -62,7 +63,15 @@ public class BasePaymentGatewayCallBackFilter extends AbstractFilter implements 
 
             final String paymentGatewayLabel = getFilterConfig().getInitParameter("paymentGatewayLabel");
 
-            paymentCallBackHandlerFacade.handlePaymentCallback(parameters, paymentGatewayLabel);
+            try {
+
+                paymentCallBackHandlerFacade.handlePaymentCallback(parameters, paymentGatewayLabel);
+
+            } catch (OrderException e) {
+
+                LOG.error("Transition failed during payment call back for " + paymentGatewayLabel + " payment gateway" , e);
+
+            }
 
             ((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_OK);
 

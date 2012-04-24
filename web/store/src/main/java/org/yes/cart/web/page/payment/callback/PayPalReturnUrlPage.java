@@ -16,6 +16,7 @@ import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
+import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.payment.PaymentCallBackHandlerFacade;
 import org.yes.cart.service.payment.PaymentModulesManager;
 import org.yes.cart.service.payment.PaymentProcessor;
@@ -133,36 +134,46 @@ public class PayPalReturnUrlPage extends AbstractWebPage {
                         @Override
                         protected void onSubmit() {
 
-                            paymentCallBackHandlerFacade.handlePaymentCallback(
-                                    nvpCallResult,
-                                    ApplicationDirector.getShoppingCart().getOrderInfo().getPaymentGatewayLabel()
-                            );
-
-                            final CustomerOrder customerOrder = customerOrderService.findByGuid(ApplicationDirector.getShoppingCart().getGuid());
-
-                            if (isOk(customerOrder)) {
-
-                                addOrReplace(
-                                        new Label(
-                                                INFO_LABEL,
-                                                new StringResourceModel("paymentOk", this, null, (Object) customerOrder.getOrdernum()).getString()
-
-                                        ).setEscapeModelStrings(false)
+                            try {
+                                paymentCallBackHandlerFacade.handlePaymentCallback(
+                                        nvpCallResult,
+                                        ApplicationDirector.getShoppingCart().getOrderInfo().getPaymentGatewayLabel()
                                 );
 
-                                payLink.setVisible(false);
+                                final CustomerOrder customerOrder = customerOrderService.findByGuid(ApplicationDirector.getShoppingCart().getGuid());
 
-                                shoppingCartCommandFactory.create(
-                                        Collections.singletonMap(
-                                                CleanCartCommandImpl.CMD_KEY,
-                                                null)
-                                ).execute(ApplicationDirector.getShoppingCart());
+                                if (isOk(customerOrder)) {
 
-                            } else {
-                                //TODO lacks of information to show what the real problem
+                                    addOrReplace(
+                                            new Label(
+                                                    INFO_LABEL,
+                                                    new StringResourceModel("paymentOk", this, null, (Object) customerOrder.getOrdernum()).getString()
+
+                                            ).setEscapeModelStrings(false)
+                                    );
+
+                                    payLink.setVisible(false);
+
+                                    shoppingCartCommandFactory.create(
+                                            Collections.singletonMap(
+                                                    CleanCartCommandImpl.CMD_KEY,
+                                                    null)
+                                    ).execute(ApplicationDirector.getShoppingCart());
+
+                                } else {
+                                    //TODO lacks of information to show what the real problem
+                                    error(getLocalizer().getString("paymentFailed", this));
+
+                                }
+
+                            } catch (OrderException e) {
+
+                                LOG.error("Cant handle payment callback " , e);
+
                                 error(getLocalizer().getString("paymentFailed", this));
-
                             }
+
+
 
                             super.onSubmit();
                         }
