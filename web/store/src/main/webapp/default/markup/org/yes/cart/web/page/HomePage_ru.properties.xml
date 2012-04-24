@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <entry key="sale">Распродажа</entry>
+    <entry key="special.offer">Специальное предложение</entry>
+    <entry key="new.arrivals">Новые послупления</entry>
+    <entry key="profile">Личный кабинет</entry>
+    <entry key="faq">ЧАВО</entry>
+    <entry key="contacts">Контакты</entry>
+    <entry key="site.map">Site map</entry>
+</properties>
