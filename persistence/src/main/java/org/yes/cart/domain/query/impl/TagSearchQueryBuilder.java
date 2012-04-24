@@ -15,32 +15,43 @@ import java.util.List;
  * Date: 22-apr-12
  * Time: 6:08 PM
  */
-public class TagSearchQueryBuilder  implements ProductSearchQueryBuilder {
+public class TagSearchQueryBuilder implements ProductSearchQueryBuilder {
 
 
     /**
      * Create boolean query for search by tag value in given categories
+     *
      * @param categories given categories
-     * @param tagvalue singe tag value
+     * @param tagvalue   singe tag value
      * @return boolean query to perform search.
      */
     public BooleanQuery createQuery(final List<Long> categories, final String tagvalue) {
         BooleanQuery query = new BooleanQuery();
-        if (StringUtils.isNotBlank(tagvalue) && categories != null) {
-            for (Long category : categories) {
+        if (StringUtils.isNotBlank(tagvalue)) {
+            if (categories != null && !categories.isEmpty()) {
+                for (Long category : categories) {
+                    BooleanQuery currentQuery = new BooleanQuery();
+                    currentQuery.add(new TermQuery(new Term(PRODUCT_CATEGORY_FIELD, category.toString())),
+                            BooleanClause.Occur.MUST
+                    );
+                    currentQuery.add(new TermQuery(new Term(PRODUCT_TAG_FIELD, tagvalue)),
+                            BooleanClause.Occur.MUST
+                    );
+                    query.add(currentQuery, BooleanClause.Occur.SHOULD);
+                }
+
+            } else {
+
                 BooleanQuery currentQuery = new BooleanQuery();
-                currentQuery.add(new TermQuery( new Term(PRODUCT_CATEGORY_FIELD, category.toString())),
-                        BooleanClause.Occur.MUST
-                );
-                currentQuery.add(new TermQuery( new Term(PRODUCT_TAG_FIELD, tagvalue)),
+                currentQuery.add(new TermQuery(new Term(PRODUCT_TAG_FIELD, tagvalue)),
                         BooleanClause.Occur.MUST
                 );
                 query.add(currentQuery, BooleanClause.Occur.SHOULD);
+
             }
         }
         return query;
     }
-
 
 
 }

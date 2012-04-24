@@ -174,6 +174,8 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
                         BooleanQuery query;
                         if (ProductSearchQueryBuilder.BRAND_FIELD.equals(decodedKeyName)) {
                             query = createBrandChain(categories, val);
+                        } else if (ProductSearchQueryBuilder.PRODUCT_TAG_FIELD.equals(decodedKeyName)) {
+                            query = createTagChain(categories, val);
                         } else if (ProductSearchQueryBuilder.PRODUCT_PRICE.equals(decodedKeyName)) {
                             query = createPriceChain(shopId, categories, val);
                         } else if (ProductSearchQueryBuilder.QUERY.equals(decodedKeyName)) {
@@ -229,9 +231,27 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
         );
     }
 
+    /**
+     * Create query to search by brand name in given categories.
+     * @param categories    given categories
+     * @param val brand name
+     * @return {@link BooleanQuery}
+     */
     private BooleanQuery createBrandChain(final List<Long> categories, final Object val) {
         final BrandSearchQueryBuilder brandSearchQueryBuilder = new BrandSearchQueryBuilder();
         return brandSearchQueryBuilder.createQuery(categories, String.valueOf(val));
+    }
+
+
+    /**
+     * Create query to search by product tag in given categories.
+     * @param categories    given categories
+     * @param val given product tag
+     * @return {@link BooleanQuery}
+     */
+    private BooleanQuery createTagChain(final List<Long> categories, final Object val) {
+        final TagSearchQueryBuilder tagSearchQueryBuilder = new TagSearchQueryBuilder();
+        return tagSearchQueryBuilder.createQuery(categories, String.valueOf(val));
     }
 
 

@@ -148,6 +148,32 @@ public class ProductDAOTest extends AbstractTestDAO {
         assertEquals(3, products.size());
     }
 
+    @Test
+    public void testSearchByTagInCategoryTest() throws InterruptedException {
+        productDao.fullTextSearchReindex();
+
+        TagSearchQueryBuilder queryBuilder = new TagSearchQueryBuilder();
+        Query query = queryBuilder.createQuery(null, "newarrival");
+        List<Product> products = productDao.fullTextSearch(query);
+        assertEquals("Failed [" + query.toString() +"] expected 2 products", 2, products.size());
+
+        query = queryBuilder.createQuery(null, "sale");
+        products = productDao.fullTextSearch(query);
+        assertEquals("Failed [" + query.toString() +"] expected 2 products", 2, products.size());
+
+        query = queryBuilder.createQuery(null, "specialpromo");
+        products = productDao.fullTextSearch(query);
+        assertEquals("Failed [" + query.toString() +"] expected 2 products", 2, products.size());
+
+        query = queryBuilder.createQuery(null, "sali");
+        products = productDao.fullTextSearch(query);
+        assertTrue("Failed [" + query.toString() +"] expected 0 products", products.isEmpty());
+
+        query = queryBuilder.createQuery(Arrays.asList(104L), "sale");
+        products = productDao.fullTextSearch(query);
+         assertEquals("Failed [" + query.toString() +"] expected 2 products", 1, products.size());
+    }
+
 
     @Test
     public void testSearchByAttributeAndValueTest() throws Exception {

@@ -86,6 +86,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
         allowedAttributeNames.add(ProductSearchQueryBuilder.BRAND_FIELD);
         allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_PRICE);
         allowedAttributeNames.add(ProductSearchQueryBuilder.QUERY);
+        allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD);
         return allowedAttributeNames;
     }
 
