@@ -6,6 +6,7 @@ import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.service.domain.CustomerOrderService;
+import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 
 import java.util.Collections;
@@ -29,7 +30,7 @@ public class PaymentOkOrderEventHandlerImplTest extends AbstractEventHandlerImpl
     }
 
     @Test
-    public void testHandle() {
+    public void testHandle() throws OrderException {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
         CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx(), customer.getEmail()), false);

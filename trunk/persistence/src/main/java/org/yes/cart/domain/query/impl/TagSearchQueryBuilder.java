@@ -21,18 +21,18 @@ public class TagSearchQueryBuilder  implements ProductSearchQueryBuilder {
     /**
      * Create boolean query for search by tag value in given categories
      * @param categories given categories
-     * @param brandName brand name
+     * @param tagvalue singe tag value
      * @return boolean query to perform search.
      */
-    public BooleanQuery createQuery(final List<Long> categories, final String brandName) {
+    public BooleanQuery createQuery(final List<Long> categories, final String tagvalue) {
         BooleanQuery query = new BooleanQuery();
-        if (StringUtils.isNotBlank(brandName) && categories != null) {
+        if (StringUtils.isNotBlank(tagvalue) && categories != null) {
             for (Long category : categories) {
                 BooleanQuery currentQuery = new BooleanQuery();
                 currentQuery.add(new TermQuery( new Term(PRODUCT_CATEGORY_FIELD, category.toString())),
                         BooleanClause.Occur.MUST
                 );
-                currentQuery.add(new TermQuery( new Term(BRAND_FIELD, brandName.toLowerCase())),
+                currentQuery.add(new TermQuery( new Term(PRODUCT_TAG_FIELD, tagvalue)),
                         BooleanClause.Occur.MUST
                 );
                 query.add(currentQuery, BooleanClause.Occur.SHOULD);

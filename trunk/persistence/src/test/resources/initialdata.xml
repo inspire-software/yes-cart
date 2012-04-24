@@ -336,7 +336,8 @@
                 CODE="BENDER-ua"
                 NAME="Бендер Згинач Родріґес"
                 DESCRIPTION="Бендер — комічний антигерой, п'яниця, лихослов і завзятий курець, шанувальник порнографії для роботів (у вигляді електричних схем), злодій-рецидивіст (вірніше, клептоман), кухар (хоча, зважаючи на відсутність відчуття смаку, його їжа в переважній більшості випадків щонайменше неїстівна, ба навіть небезпечна для життя)."
-                BRAND_ID="101"              PRODUCTTYPE_ID="1"              AVAILABILITY_ID="1"              SEO_ID="9998" FEATURED="0" AVAILABLEFROM="2010-04-08 11:15:17.451" AVAILABLETILL="2040-04-08 11:15:17.451"/>
+                BRAND_ID="101"              PRODUCTTYPE_ID="1"              AVAILABILITY_ID="1"              SEO_ID="9998" FEATURED="0" AVAILABLEFROM="2010-04-08 11:15:17.451" AVAILABLETILL="2040-04-08 11:15:17.451"
+                TAG="sale newarrival specialpromo"/>
 
 
       <TSKU SKU_ID="9998"
@@ -365,7 +366,8 @@
                 CODE="BENDER"
                 NAME="Bender Bending Rodriguez"
                 DESCRIPTION="Bender Bending Rodriguez, designated Bending Unit 22, is a fictional robot character in the animated television series Futurama. He is voiced by John DiMaggio. In the series, Bender plays the role of a comic anti-hero, and is described by Leela as an alcoholic, whore-mongering, chain-smoking gambler.[1] He was built in Mexico and is said to possess a swarthy Latin charm despite not having a Mexican accent. He is also prejudiced against non-robots, often expressing an urge to kill all humans"
-                BRAND_ID="101"              PRODUCTTYPE_ID="1"              AVAILABILITY_ID="1"              SEO_ID="9999" />
+                BRAND_ID="101"              PRODUCTTYPE_ID="1"              AVAILABILITY_ID="1"              SEO_ID="9999"
+                TAG="sale"/>
 
       <TSKU SKU_ID="9999"
             PRODUCT_ID="9999"
@@ -393,7 +395,8 @@
                 CODE="SOBOT"
                 NAME="I-Sobot"
                 DESCRIPTION="Think small. BigSmall. Small is beautiful. Good things come in small packages. Small ones are more juicy. However you like to put it, sometimes there's a beauty and economy in reducing the scale of an object and cramming it full of cleverness. Now, the ever-so-clever chaps at Tomy have done just that with the creation of the I-Sobot. The what bot we hear you ask? The I-Sobot is the world's smallest mass produced bi-pedal humanoid robot. But don't be fooled by his size - he has a big personality all of his own. Measuring only 16cm and weighing an amazing 300 grams, he's ready to play straight from the box. Choose from 4 modes where I-Sobot can perform fun and quirky scenes from Western battles to voice command mode that includes 10 words of phrases to say to I-Sobot where he will respond. With 17 Servo motors allowing human like articulation and 200 spoken phrases, you'll never be lonesome again. I-Sobot's distinctive design and ground-breaking functionality has us rather drooling at the mouth, in an ever-so manly way. Splendid."
-                BRAND_ID="100"              PRODUCTTYPE_ID="1"              AVAILABILITY_ID="1"              SEO_ID="10000" />
+                BRAND_ID="100"              PRODUCTTYPE_ID="1"              AVAILABILITY_ID="1"              SEO_ID="10000"
+                TAG="newarrival"/>
 
 
       <TPRODUCTATTRVALUE ATTRVALUE_ID="10000" CODE="MATERIAL" VAL="Plastik" PRODUCT_ID="10000"/>
@@ -448,7 +451,8 @@
 
 
       <TPRODUCT PRODUCT_ID="11000"   CODE="PRODUCT1"  NAME="product 1"   DESCRIPTION="product 1 for price testing"
-                BRAND_ID="101"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
+                BRAND_ID="101"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"
+                TAG="specialpromo"/>
       <TPRODUCTATTRVALUE ATTRVALUE_ID="10003" CODE="WEIGHT" VAL="2.5" PRODUCT_ID="11000"/>
       <TPRODUCT PRODUCT_ID="11001"   CODE="PRODUCT2"  NAME="product 2"   DESCRIPTION="product 2 for price testing"
                 BRAND_ID="102"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>

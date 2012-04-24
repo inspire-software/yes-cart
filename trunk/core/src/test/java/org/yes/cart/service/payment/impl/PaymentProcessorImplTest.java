@@ -18,6 +18,7 @@ import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.order.OrderEvent;
+import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.service.payment.PaymentProcessor;
@@ -509,7 +510,11 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
             new Thread() {
                 @Override
                 public void run() {
-                    orderStateManager.fireTransition(events[j]);
+                    try {
+                        orderStateManager.fireTransition(events[j]);
+                    } catch (OrderException e) {
+                        assertTrue("" + e.getMessage(), false);
+                    }
                 }
             }.start();
         }
