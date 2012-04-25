@@ -26,6 +26,9 @@ public class ProductDTOImpl implements ProductDTO {
     @DtoField(value = "code")
     private String code;
 
+    @DtoField(value = "tag")
+    private String tag;
+
     @DtoField(value = "availablefrom")
     private Date availablefrom;
 
@@ -224,5 +227,15 @@ public class ProductDTOImpl implements ProductDTO {
     /** {@inheritDoc} */
     public void setAttribute(final Collection<AttrValueProductDTO> attribute) {
         this.attribute = attribute;
+    }
+
+    /** {@inheritDoc} */
+    public String getTag() {
+        return tag;
+    }
+
+    /** {@inheritDoc} */
+    public void setTag(final String tag) {
+        this.tag = tag;
     }
 }
