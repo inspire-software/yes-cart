@@ -28,7 +28,15 @@ public class TagSearchQueryBuilder implements ProductSearchQueryBuilder {
     public BooleanQuery createQuery(final List<Long> categories, final String tagvalue) {
         BooleanQuery query = new BooleanQuery();
         if (StringUtils.isNotBlank(tagvalue)) {
-            if (categories != null && !categories.isEmpty()) {
+            if (categories == null || (categories.size() == 1 && categories.get(0) == 0 ) ) {
+
+                BooleanQuery currentQuery = new BooleanQuery();
+                currentQuery.add(new TermQuery(new Term(PRODUCT_TAG_FIELD, tagvalue)),
+                        BooleanClause.Occur.MUST
+                );
+                query.add(currentQuery, BooleanClause.Occur.SHOULD);
+
+            } else {
                 for (Long category : categories) {
                     BooleanQuery currentQuery = new BooleanQuery();
                     currentQuery.add(new TermQuery(new Term(PRODUCT_CATEGORY_FIELD, category.toString())),
@@ -39,14 +47,6 @@ public class TagSearchQueryBuilder implements ProductSearchQueryBuilder {
                     );
                     query.add(currentQuery, BooleanClause.Occur.SHOULD);
                 }
-
-            } else {
-
-                BooleanQuery currentQuery = new BooleanQuery();
-                currentQuery.add(new TermQuery(new Term(PRODUCT_TAG_FIELD, tagvalue)),
-                        BooleanClause.Occur.MUST
-                );
-                query.add(currentQuery, BooleanClause.Occur.SHOULD);
 
             }
         }

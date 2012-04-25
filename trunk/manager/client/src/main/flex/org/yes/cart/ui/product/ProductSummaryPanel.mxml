@@ -58,6 +58,14 @@
 						 />
 
 		</mx:FormItem>
+
+
+        <mx:FormItem label="@Resource(bundle='ProductManagmentPanel',key='tag')">
+            <mx:TextInput id="tagTextInput" width="300"/>
+        </mx:FormItem>
+
+
+
         <mx:FormItem>
             <mx:Button
                 enabled="{productDTOImplChanged}"
@@ -75,6 +83,8 @@
 
     <mx:Script><![CDATA[
         import com.hexagonstar.util.debug.Debug;
+
+        import mx.controls.Alert;
 
         import org.yes.cart.impl.ProductDTOImpl;
 
@@ -120,9 +130,9 @@
 
         private function init():void {
 
-
             BindingUtils.bindProperty(codeTextInput, "text", productDTOImpl, "code");
             BindingUtils.bindProperty(nameTextInput, "text", productDTOImpl, "name");
+            BindingUtils.bindProperty(tagTextInput, "text", productDTOImpl, "tag");
             BindingUtils.bindProperty(descriptionTextInput, "text", productDTOImpl, "description");
             BindingUtils.bindProperty(productAvailableFromDateField, "selectedDate", productDTOImpl, "availablefrom");
             BindingUtils.bindProperty(productAvailableTillDateField, "selectedDate", productDTOImpl, "availabletill");
@@ -155,6 +165,7 @@
 
             BindingUtils.bindProperty(productDTOImpl, "code", codeTextInput, "text");
             BindingUtils.bindProperty(productDTOImpl, "name", nameTextInput, "text");
+            BindingUtils.bindProperty(productDTOImpl, "tag", tagTextInput, "text");
             BindingUtils.bindProperty(productDTOImpl, "description", descriptionTextInput, "text");
             BindingUtils.bindProperty(productDTOImpl, "availablefrom", productAvailableFromDateField, "selectedDate");
             BindingUtils.bindProperty(productDTOImpl, "availabletill", productAvailableTillDateField, "selectedDate");
@@ -165,6 +176,8 @@
 
 
             ChangeWatcher.watch(productDTOImpl, "code", productDTOChanged);
+
+            ChangeWatcher.watch(productDTOImpl, "tag", productDTOChanged);
             ChangeWatcher.watch(productDTOImpl, "name", productDTOChanged);
             ChangeWatcher.watch(productDTOImpl, "description", productDTOChanged);
             ChangeWatcher.watch(productDTOImpl, "availablefrom", productDTOChanged);
@@ -184,6 +197,7 @@
          * @return
          */
         private function productDTOChanged(event:PropertyChangeEvent):void {
+
             productDTOImplChanged = true;
         }
         ]]></mx:Script>

@@ -9,7 +9,9 @@ public class ProductDTOImpl {
 
     public var productId:Number;
 
-    public var code:String ;
+    public var code : String;
+
+    public var tag : String;
 
     public var availablefrom:Date ;
 
