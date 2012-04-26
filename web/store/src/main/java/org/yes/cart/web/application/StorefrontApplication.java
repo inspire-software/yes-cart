@@ -152,6 +152,20 @@ public class StorefrontApplication
 
         mount(
                 new MountedMapper(
+                        "/faq",
+                        FaqPage.class
+                )
+        );
+
+        mount(
+                new MountedMapper(
+                        "/contact",
+                        ContactPage.class
+                )
+        );
+
+        mount(
+                new MountedMapper(
                         "/login",
                         LoginPage.class
                 )

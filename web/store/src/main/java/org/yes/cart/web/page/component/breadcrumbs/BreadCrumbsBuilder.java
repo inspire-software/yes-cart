@@ -1,5 +1,6 @@
 package org.yes.cart.web.page.component.breadcrumbs;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.*;
 import org.slf4j.Logger;
@@ -160,13 +161,13 @@ public class BreadCrumbsBuilder {
      * Create filtered navigation crubm with two links:
      * <p/>
      * First - current position, that include the whole path before current.
-     * example category/17/subcategory/156/proce/100-200/currentkey/currentvalue
+     * example category/17/subcategory/156/price/100-200/currentkey/currentvalue
      * <p/>
      * Second - the whole current path without current
-     * example category/17/subcategory/156/proce/100-200/currentkey/currentvalue/nextkey/nextvalue
+     * example category/17/subcategory/156/price/100-200/currentkey/currentvalue/nextkey/nextvalue
      * ^^^^^^^^^^^^^^^^^^^^^^^ this will be removed,
      * so uri will be
-     * example category/17/subcategory/156/proce/100-200/nextkey/nextvalue
+     * example category/17/subcategory/156/price/100-200/nextkey/nextvalue
      *
      * @param base  initial parameter map, usually category and sub category navigation
      * @param key   current key
@@ -184,9 +185,13 @@ public class BreadCrumbsBuilder {
                 value
         );
 
-        final String linkName = namePrefixProvider.getLinkNamePrefix(key)
-                + "::"
-                + namePrefixProvider.getLinkName(key, value);
+        String linkName = namePrefixProvider.getLinkNamePrefix(key);
+        if (StringUtils.isNotBlank(linkName)) {
+            linkName += "::"  + namePrefixProvider.getLinkName(key, value);
+        } else {
+            linkName =  namePrefixProvider.getLinkName(key, value);
+        }
+
         base.add(key, value);
         return new Crumb(linkName, new PageParameters(base), withoutCurrent);
     }

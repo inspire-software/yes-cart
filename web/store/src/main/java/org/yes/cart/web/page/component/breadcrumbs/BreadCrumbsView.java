@@ -1,5 +1,6 @@
 package org.yes.cart.web.page.component.breadcrumbs;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -146,13 +147,17 @@ public class BreadCrumbsView extends BaseComponent implements CrumbNamePrefixPro
      * @return explanation prefix
      */
     public String getLinkNamePrefix(final String key) {
-        String name = attributeCodeName.get(key);
+        final String name;
         if (ProductSearchQueryBuilder.BRAND_FIELD.equals(key)) {
             name = getLocalizer().getString(ProductSearchQueryBuilder.BRAND_FIELD, this);
         } else if (ProductSearchQueryBuilder.PRODUCT_PRICE.equals(key)) {
             name = getLocalizer().getString(ProductSearchQueryBuilder.PRODUCT_PRICE, this);
+        } else if (ProductSearchQueryBuilder.PRODUCT_TAG_FIELD.equals(key)) {
+            name = StringUtils.EMPTY;
         } else if (WebParametersKeys.QUERY.equals(key)) {
             name = getLocalizer().getString(WebParametersKeys.QUERY, this);
+        } else {
+            name = attributeCodeName.get(key);
         }
         return name;
     }
