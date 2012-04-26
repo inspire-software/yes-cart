@@ -34,20 +34,36 @@
         </div>
     </div>
 
+    <script>
+        function getCategoryId() {
+            var urlPart = document.URL.split("/");
+            var partMum = 0;
+            var hasCategoryId = false;
+            for (partNum = 0; partNum < urlPart.length; partNum++) {
+                if(hasCategoryId) {
+                    return  "/category/" +  urlPart[partNum];
+                }
+                hasCategoryId = ('category' == urlPart[partNum]);
+            }
+            return "";
+
+        }
+    </script>
+
+
     <div class="row">
         <div class="column grid_16">
             <ul class="menu">
-                <li><a href="#"><span><wicket:message key="sale">[Sale]</wicket:message></span></a></li>
-                <li><a href="#"><span><wicket:message key="special.offer">[Special offer]</wicket:message></span></a></li>
-                <li><a href="#"><span><wicket:message key="new.arrivals">[New products]</wicket:message></span></a></li>
+                <li><a href="tag/sale" onclick="this.href = this.href + getCategoryId(); return true;"><span><wicket:message key="sale">[Sale]</wicket:message></span></a></li>
+                <li><a href="tag/specialoffer" onclick="this.href = this.href + getCategoryId(); return true;"><span><wicket:message key="special.offer">[Special offer]</wicket:message></span></a></li>
+                <li><a href="tag/newarrival" onclick="this.href = this.href + getCategoryId(); return true;"><span><wicket:message key="new.arrivals">[New products]</wicket:message></span></a></li>
                 <li>
                     <wicket:link>
                         <a href="CustomerSelfCarePage.html"><span><wicket:message key="profile">[Profile]</wicket:message></span></a>
                     </wicket:link>
                 </li>
-                <li><a href="#"><span><wicket:message key="faq">[FAQ]</wicket:message></span></a></li>
-                <li><a href="#"><span><wicket:message key="contacts">[Contacts]</wicket:message></span></a></li>
-                <li><a href="#"><span><wicket:message key="site.map">[Site map]</wicket:message></span></a></li>
+                <li><wicket:link><a href="FaqPage.html"><span><wicket:message key="faq">[FAQ]</wicket:message></span></a></wicket:link></li>
+                <li><wicket:link><a href="ContactPage.html"><span><wicket:message key="contacts">[Contacts]</wicket:message></span></a></wicket:link></li>
             </ul>
 
         </div>

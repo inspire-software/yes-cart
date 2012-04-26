@@ -54,7 +54,7 @@ public class ReindexServiceImpl implements ReindexService {
      * Bad idea, but i have no chance with new spring security, to get the credentials, because it erased from authentificated session.
      *
      * @param password
-     * @return
+     * @return {@link BackdoorService}
      */
     private BackdoorService getBackdoorService(final String password) {
 
