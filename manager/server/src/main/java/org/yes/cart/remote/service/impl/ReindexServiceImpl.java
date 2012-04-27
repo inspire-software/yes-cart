@@ -19,22 +19,20 @@ public class ReindexServiceImpl implements ReindexService {
     /**
      * Reindex all products
      *
-     * @param credentials current credentials
      * @return quantity product in created index.
      */
-    public int reindexAllProducts(String credentials) {
-        return getBackdoorService(credentials).reindexAllProducts();
+    public int reindexAllProducts() {
+        return getBackdoorService().reindexAllProducts();
     }
 
     /**
      * Reindex product by given sku code.
      *
-     * @param credentials current credentials
      * @param pk          product primary key
      * @return quantity product in created index.
      */
-    public int reindexProduct(String credentials, long pk) {
-        return getBackdoorService(credentials).reindexProduct(pk);
+    public int reindexProduct(long pk) {
+        return getBackdoorService().reindexProduct(pk);
     }
 
 
@@ -50,16 +48,11 @@ public class ReindexServiceImpl implements ReindexService {
 
     }
 
-    /**
-     * Bad idea, but i have no chance with new spring security, to get the credentials, because it erased from authentificated session.
-     *
-     * @param password
-     * @return {@link BackdoorService}
-     */
-    private BackdoorService getBackdoorService(final String password) {
+    private BackdoorService getBackdoorService() {
 
         String userName = ((UsernamePasswordAuthenticationToken) FlexContext.getUserPrincipal()).getName();
         //String password = (String) ((UsernamePasswordAuthenticationToken) FlexContext.getUserPrincipal()).getCredentials();
+        String password = (String) FlexContext.getFlexSession().getAttribute("pwd");
 
         return getBackdoorServiceClientFactory().getBackdoorService(
                 userName,

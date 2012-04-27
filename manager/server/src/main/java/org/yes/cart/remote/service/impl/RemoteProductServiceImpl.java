@@ -1,12 +1,14 @@
 package org.yes.cart.remote.service.impl;
 
 import org.yes.cart.domain.dto.AttrValueDTO;
+import org.yes.cart.domain.dto.AttrValueProductDTO;
 import org.yes.cart.domain.dto.ProductDTO;
 import org.yes.cart.domain.dto.ProductSkuDTO;
 import org.yes.cart.exception.ObjectNotFoundException;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnableToWrapObjectException;
 import org.yes.cart.exception.UnmappedInterfaceException;
+import org.yes.cart.remote.service.ReindexService;
 import org.yes.cart.remote.service.RemoteProductService;
 import org.yes.cart.service.dto.DtoProductService;
 
@@ -20,15 +22,21 @@ import java.util.List;
 public class RemoteProductServiceImpl
         extends AbstractRemoteService<ProductDTO>
         implements RemoteProductService {
+    
+    private final ReindexService reindexService;
 
 
     /**
      * Construct remote service.
      *
      * @param dtoProductService dto service.
+     * @param reindexService product reindex service
      */
-    public RemoteProductServiceImpl(final DtoProductService dtoProductService) {
+    public RemoteProductServiceImpl(
+            final DtoProductService dtoProductService,
+            final ReindexService reindexService) {
         super(dtoProductService);
+        this.reindexService = reindexService;
     }
 
     /**
@@ -79,14 +87,18 @@ public class RemoteProductServiceImpl
      * {@inheritDoc}
      */
     public AttrValueDTO updateEntityAttributeValue(final AttrValueDTO attrValueDTO) {
-        return ((DtoProductService) getGenericDTOService()).updateEntityAttributeValue(attrValueDTO);
+        AttrValueProductDTO rez = (AttrValueProductDTO) ((DtoProductService) getGenericDTOService()).updateEntityAttributeValue(attrValueDTO);
+        reindexService.reindexProduct(rez.getProductId());
+        return rez;
     }
 
     /**
      * {@inheritDoc}
      */
     public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
-        return ((DtoProductService) getGenericDTOService()).createEntityAttributeValue(attrValueDTO);
+        AttrValueProductDTO rez = (AttrValueProductDTO)  ((DtoProductService) getGenericDTOService()).createEntityAttributeValue(attrValueDTO);
+        reindexService.reindexProduct(rez.getProductId());
+        return rez;
     }
 
     /**
@@ -94,5 +106,31 @@ public class RemoteProductServiceImpl
      */
     public void deleteAttributeValue(final long attributeValuePk) {
         ((DtoProductService) getGenericDTOService()).deleteAttributeValue(attributeValuePk);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public ProductDTO create(final ProductDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        ProductDTO rez =  super.create(instance);
+        reindexService.reindexProduct(rez.getProductId());
+        return rez;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public ProductDTO update(final ProductDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        ProductDTO rez =  super.update(instance);
+        reindexService.reindexProduct(rez.getProductId());
+        return rez;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void remove(final long id) {
+        super.remove(id);
+        reindexService.reindexProduct(id);
     }
 }

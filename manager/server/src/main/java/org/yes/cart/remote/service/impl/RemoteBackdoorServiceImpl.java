@@ -61,17 +61,12 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
 
     }
 
-    /**
-     * Bad idea, but i have no chance with new spring security, to get the credentials, because it erased from authentificated session.
-     *
-     * @param password
-     * @return {@link BackdoorService}
-     */
-    private BackdoorService getBackdoorService(final String password) {
+    private BackdoorService getBackdoorService() {
 
 
         String userName =  ((UsernamePasswordAuthenticationToken) FlexContext.getUserPrincipal()).getName();
         //String password = (String) ((UsernamePasswordAuthenticationToken) FlexContext.getUserPrincipal()).getCredentials();
+        String password = (String) FlexContext.getFlexSession().getAttribute("pwd");
 
         return getBackdoorServiceClientFactory().getBackdoorService(
                 userName,

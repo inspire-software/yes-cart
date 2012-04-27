@@ -171,6 +171,7 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
 
     <bean id="remoteProductService" class="org.yes.cart.remote.service.impl.RemoteProductServiceImpl">
         <constructor-arg index="0" ref="dtoProductService"/>
+        <constructor-arg index="1" ref="reindexService"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
@@ -186,6 +187,7 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
 
     <bean id="remoteProductSkuService" class="org.yes.cart.remote.service.impl.RemoteProductSkuServiceImpl">
         <constructor-arg index="0" ref="dtoProductSkuService"/>
+        <constructor-arg index="1" ref="reindexService"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="createSkuPrice" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
@@ -315,6 +317,7 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
 
     <bean id="remoteWarehouseService" class="org.yes.cart.remote.service.impl.RemoteWarehouseServiceImpl">
         <constructor-arg index="0" ref="dtoWarehouseService"/>
+        <constructor-arg index="1" ref="reindexService"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
@@ -380,6 +383,7 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
 
     <bean id="remoteProductCategoryService" class="org.yes.cart.remote.service.impl.RemoteProductCategoryServiceImpl">
         <constructor-arg index="0" ref="dtoProductCategoryService"/>
+        <constructor-arg index="1" ref="reindexService"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
@@ -446,6 +450,10 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
         </security:intercept-methods>
     </bean>
 
+    <bean id="remoteFlexSupportService"
+          class="org.yes.cart.remote.service.impl.RemoteFlexSupportServiceImpl">
+        <flex:remoting-destination/>
+    </bean>
 
 
     <bean id="remoteBackdoorService" class="org.yes.cart.remote.service.impl.RemoteBackdoorServiceImpl">

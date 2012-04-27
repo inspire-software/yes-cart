@@ -1,10 +1,12 @@
 package org.yes.cart.remote.service.impl;
 
 import org.yes.cart.domain.dto.AttrValueDTO;
+import org.yes.cart.domain.dto.AttrValueProductSkuDTO;
 import org.yes.cart.domain.dto.ProductSkuDTO;
 import org.yes.cart.domain.dto.SkuPriceDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
+import org.yes.cart.remote.service.ReindexService;
 import org.yes.cart.remote.service.RemoteProductSkuService;
 import org.yes.cart.service.dto.DtoProductSkuService;
 
@@ -22,14 +24,20 @@ public class RemoteProductSkuServiceImpl
 
     private final DtoProductSkuService dtoProductSkuService;
 
+    private final ReindexService reindexService;
+
     /**
      * Construct remote service.
      *
      * @param dtoProductSkuService dto service.
+     * @param reindexService product reindex service
      */
-    public RemoteProductSkuServiceImpl(final DtoProductSkuService dtoProductSkuService) {
+    public RemoteProductSkuServiceImpl(
+            final DtoProductSkuService dtoProductSkuService,
+            final ReindexService reindexService) {
         super(dtoProductSkuService);
         this.dtoProductSkuService = dtoProductSkuService;
+        this.reindexService = reindexService;
     }
 
     /**
@@ -41,34 +49,6 @@ public class RemoteProductSkuServiceImpl
     }
 
 
-    /**
-     * Update attribute value.
-     *
-     * @param attrValueDTO value to update
-     * @return updated value
-     */
-    public AttrValueDTO updateEntityAttributeValue(final AttrValueDTO attrValueDTO) {
-        return dtoProductSkuService.updateEntityAttributeValue(attrValueDTO);
-    }
-
-    /**
-     * Create attribute value
-     *
-     * @param attrValueDTO value to persist
-     * @return created value
-     */
-    public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
-        return dtoProductSkuService.createEntityAttributeValue(attrValueDTO);
-    }
-
-    /**
-     * Delete attribute value by given pk value.
-     *
-     * @param attributeValuePk given pk value.
-     */
-    public void deleteAttributeValue(final long attributeValuePk) {
-        dtoProductSkuService.deleteAttributeValue(attributeValuePk);
-    }
 
     /**
      * Get all product SKUs.
@@ -82,6 +62,51 @@ public class RemoteProductSkuServiceImpl
     }
 
     /**
+     * Get product id by sku id.
+     * @param skuId   product sku
+     * @return product pk value
+     */
+    private long getProductId(final long skuId) {
+        return 0; // todo
+    }
+
+
+    /**
+     * Update attribute value.
+     *
+     * @param attrValueDTO value to update
+     * @return updated value
+     */
+    public AttrValueDTO updateEntityAttributeValue(final AttrValueDTO attrValueDTO) {
+        AttrValueProductSkuDTO rez = (AttrValueProductSkuDTO) dtoProductSkuService.updateEntityAttributeValue(attrValueDTO);
+        reindexService.reindexProduct(getProductId(rez.getSkuId()));
+        return rez;
+    }
+
+    /**
+     * Create attribute value
+     *
+     * @param attrValueDTO value to persist
+     * @return created value
+     */
+    public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
+        AttrValueProductSkuDTO rez = (AttrValueProductSkuDTO) dtoProductSkuService.createEntityAttributeValue(attrValueDTO);
+        reindexService.reindexProduct(getProductId(rez.getSkuId()));
+        return rez;
+    }
+
+    /**
+     * Delete attribute value by given pk value.
+     *
+     * @param attributeValuePk given pk value.
+     */
+    public void deleteAttributeValue(final long attributeValuePk) {
+        dtoProductSkuService.deleteAttributeValue(attributeValuePk);
+        reindexService.reindexProduct(getProductId(attributeValuePk));
+    }
+
+
+    /**
      * Create sku price.
      *
      * @param skuPriceDTO to create in database
@@ -89,7 +114,10 @@ public class RemoteProductSkuServiceImpl
      */
     public long createSkuPrice(final SkuPriceDTO skuPriceDTO) {
         setNullPrices(skuPriceDTO);
-        return dtoProductSkuService.createSkuPrice(skuPriceDTO);
+        long rez = dtoProductSkuService.createSkuPrice(skuPriceDTO);
+        reindexService.reindexProduct(getProductId(skuPriceDTO.getProductSkuId()));
+        return rez;
+
     }
 
     /**
@@ -100,7 +128,9 @@ public class RemoteProductSkuServiceImpl
      */
     public long updateSkuPrice(final SkuPriceDTO skuPriceDTO) {
         setNullPrices(skuPriceDTO);
-        return dtoProductSkuService.updateSkuPrice(skuPriceDTO);
+        long rez = dtoProductSkuService.updateSkuPrice(skuPriceDTO);
+        reindexService.reindexProduct(getProductId(skuPriceDTO.getProductSkuId()));
+        return rez;
     }
 
     /**
@@ -127,5 +157,26 @@ public class RemoteProductSkuServiceImpl
      */
     public void removeSkuPrice(final long skuPriceId) {
         dtoProductSkuService.removeSkuPrice(skuPriceId);
+    }
+
+    /** {@inheritDoc} */
+    public ProductSkuDTO create(final ProductSkuDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        ProductSkuDTO rez = super.create(instance);
+        reindexService.reindexProduct(getProductId(rez.getSkuId()));
+        return rez;
+
+    }
+
+    /** {@inheritDoc} */
+    public ProductSkuDTO update(final ProductSkuDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        ProductSkuDTO rez = super.update(instance);
+        reindexService.reindexProduct(getProductId(rez.getSkuId()));
+        return rez;
+    }
+
+    /** {@inheritDoc} */
+    public void remove(final long id) {
+        super.remove(id);
+        reindexService.reindexProduct(getProductId(id));
     }
 }
