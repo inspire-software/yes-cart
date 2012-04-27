@@ -83,6 +83,9 @@
             ShopManagerGlobal.getInstance().amfChannel = myamf;
             ShopManagerGlobal.getInstance().channelSet = channelSet;
             currentState = "userAuthenticated";
+            /*This call pass  the password to flex session, because after new spring security imposible to
+             * get user credentials using FlexContext.getUserPrincipal()).getCredentials() on java side.*/
+            remoteFlexSupportService.setSessionInfo("pwd", password.text);
 
         }
 
@@ -309,6 +312,13 @@
                    id="myamf"/>
 
     <mx:ChannelSet id="channelSet" channels="{[myamf]}"/>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteFlexSupportService"
+                     destination="remoteFlexSupportService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
 
 
     <mx:states>

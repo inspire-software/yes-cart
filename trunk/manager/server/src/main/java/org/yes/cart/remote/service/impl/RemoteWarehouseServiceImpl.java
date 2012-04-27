@@ -1,10 +1,12 @@
 package org.yes.cart.remote.service.impl;
 
+import org.yes.cart.domain.dto.ProductSkuDTO;
 import org.yes.cart.domain.dto.ShopWarehouseDTO;
 import org.yes.cart.domain.dto.SkuWarehouseDTO;
 import org.yes.cart.domain.dto.WarehouseDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
+import org.yes.cart.remote.service.ReindexService;
 import org.yes.cart.remote.service.RemoteWarehouseService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.dto.DtoWarehouseService;
@@ -22,15 +24,21 @@ public class RemoteWarehouseServiceImpl
 
     private final DtoWarehouseService dtoWarehouseService;
 
+    private final ReindexService reindexService;
+
 
     /**
      * Construct service.
      *
      * @param service dto service to use
+     * @param reindexService product reindex service
      */
-    public RemoteWarehouseServiceImpl(final DtoWarehouseService service) {
+    public RemoteWarehouseServiceImpl(
+            final DtoWarehouseService service,
+            final ReindexService reindexService) {
         super(service);
         this.dtoWarehouseService = service;
+        this.reindexService = reindexService;
     }
 
 
@@ -65,21 +73,36 @@ public class RemoteWarehouseServiceImpl
      * {@inheritDoc
      */
     public void removeSkuOnWarehouse(final long skuWarehouseId) {
+        //todo reindex product
         dtoWarehouseService.removeSkuOnWarehouse(skuWarehouseId);
     }
+
+    /**
+     * Get product id by sku id.
+     * @param skuId   product sku
+     * @return product pk value
+     */
+    private long getProductId(final long skuId) {
+        return 0; // todo
+    }
+
 
     /**
      * {@inheritDoc
      */
     public SkuWarehouseDTO createSkuOnWarehouse(final SkuWarehouseDTO skuWarehouseDTO) {
-        return dtoWarehouseService.createSkuOnWarehouse(skuWarehouseDTO);
+        SkuWarehouseDTO rez = dtoWarehouseService.createSkuOnWarehouse(skuWarehouseDTO);
+        reindexService.reindexProduct(getProductId(rez.getProductSkuId()));
+        return rez;
     }
 
     /**
      * {@inheritDoc
      */
     public SkuWarehouseDTO updateSkuOnWarehouse(final SkuWarehouseDTO skuWarehouseDTO) {
-        return dtoWarehouseService.updateSkuOnWarehouse(skuWarehouseDTO);
+        SkuWarehouseDTO rez = dtoWarehouseService.updateSkuOnWarehouse(skuWarehouseDTO);
+        reindexService.reindexProduct(getProductId(rez.getProductSkuId()));
+        return rez;
     }
 
     /**
