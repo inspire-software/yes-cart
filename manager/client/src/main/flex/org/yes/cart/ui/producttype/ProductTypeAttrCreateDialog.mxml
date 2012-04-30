@@ -15,6 +15,7 @@
                         width="200"
                         labelField="name"
                         prompt="@Resource(bundle='AttributeCreateEditDialog',key='selectAttribute')"
+                        rowCount="10"
                         />
 			</mx:FormItem>
 
@@ -40,7 +41,7 @@
 			</mx:FormItem>
 
             <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='navigationType')">
-                <mx:RadioButtonGroup id="navtype" itemClick="handleNavigationType(event);"/>
+                <mx:RadioButtonGroup id="navtype" itemClick="handleNavigationType(event);" selectedValue="S"/>
                 <mx:RadioButton id="navTypeSingle" groupName="navtype" value="S"
                                 label="@Resource(bundle='ProductTypeManagementPanel',key='singleValueNavigation')"
                                 toolTip="@Resource(bundle='ProductTypeManagementPanel',key='singleValueNavigationHint')"

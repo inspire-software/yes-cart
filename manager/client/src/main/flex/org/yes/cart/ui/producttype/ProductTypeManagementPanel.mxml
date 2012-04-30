@@ -48,6 +48,7 @@
          */
         private function editNewProductTypeAttr(event:flash.events.MouseEvent):void {
             var pta:ProductTypeAttrDTOImpl = new ProductTypeAttrDTOImpl();
+            pta.navigationType = "S";
             editProductTypeAttrInternal(pta);
             productTypeAttrCreateDialog.saveBtn.addEventListener("click", createProductTypeAttr);
         }
