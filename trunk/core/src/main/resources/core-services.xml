@@ -427,6 +427,7 @@
                 <constructor-arg index="4" ref="dtoAttributeService"/>
                 <constructor-arg index="5" ref="attrValueEntityProductDao"/>
                 <constructor-arg index="6" ref="imageService"/>
+                <constructor-arg index="7" ref="productTypeAttrService"/>
             </bean>
         </property>
     </bean>
