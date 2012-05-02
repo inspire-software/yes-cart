@@ -349,13 +349,12 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
      * {@inheritDoc}
      */
     public final void fullTextSearchPurge(final PK primaryKey) {
-       /* if (null != getPersistentClass().getAnnotation(org.hibernate.search.annotations.Indexed.class)) {
-            T entity = findById(primaryKey);
-            if (entity != null) {
-                FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
-                fullTextSession.purge(getPersistentClass(), primaryKey);
-            }
-        }    */
+        FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
+        fullTextSession.setFlushMode(FlushMode.MANUAL);
+        fullTextSession.setCacheMode(CacheMode.IGNORE);
+        fullTextSession.purge(getPersistentClass(), primaryKey);
+        fullTextSession.flushToIndexes(); //apply changes to indexes
+        fullTextSession.clear(); //clear since the queue is processed
     }
 
     /**
@@ -364,14 +363,22 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
     public int fullTextSearchReindex(final PK primaryKey) {
         int result = 0;
         if (null != getPersistentClass().getAnnotation(org.hibernate.search.annotations.Indexed.class)) {
+            sessionFactory.evict(getPersistentClass(), primaryKey);
             T entity = findById(primaryKey);
-            if (entity != null) {
-                FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
-                if (isIncludeInLuceneIndex(entity)) {
-                    fullTextSession.index(HibernateHelper.unproxy(entity));
-                    result++;
-                }
+            FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
+            fullTextSession.setFlushMode(FlushMode.MANUAL);
+            fullTextSession.setCacheMode(CacheMode.IGNORE);
+            fullTextSession.purge(getPersistentClass(), primaryKey);
+            fullTextSession.flushToIndexes(); //apply changes to indexes
+
+            if (entity != null && isIncludeInLuceneIndex(entity)) {
+                fullTextSession.index(HibernateHelper.unproxy(entity));
+                result++;
+
             }
+            fullTextSession.flushToIndexes(); //apply changes to indexes
+            fullTextSession.clear(); //clear since the queue is processed
+
         }
         return result;
     }
@@ -398,7 +405,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                 index++;
                 T entity = (T) results.get(0);
                 if (isIncludeInLuceneIndex(entity)) {
-                    fullTextSession.index(entity); //index each element
+                    fullTextSession.index(HibernateHelper.unproxy(entity)); //index each element
                     if (index % BATCH_SIZE == 0) {
                         fullTextSession.flushToIndexes(); //apply changes to indexes
                         fullTextSession.clear(); //clear since the queue is processed
