@@ -367,18 +367,29 @@ public class ProductDAOTest extends AbstractTestDAO {
         //productDao.fullTextSearchReindex();
         GlobalSearchQueryBuilderImpl queryBuilder = new GlobalSearchQueryBuilderImpl();
         Query query = queryBuilder.createQuery("sony", Arrays.asList(128L));
-
         products = productDao.fullTextSearch(query);
         assertTrue("Failed [" + query + "]", !products.isEmpty());
-        skuWareHouseDao.delete(skuWarehouse);
+
+
         productCategoryDao.delete(productCategory);
-        for (Product prod : products) {
-            productDao.delete(prod);
-        }
-        //no need to reidex, because db and lucene indexes must me consistent
+        productDao.fullTextSearchReindex(productCategory.getProduct().getProductId());
+
+        //search in particular category
         query = queryBuilder.createQuery("sony", Arrays.asList(128L));
         products = productDao.fullTextSearch(query);
-        assertTrue("Failed [" + query + "]", products.isEmpty());
+        try {
+            dumpDataBase("vvvv" , new String [] {"TPRODUCTCATEGORY" } );
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        assertTrue("Failed search in particular category [" + query + "]", products.isEmpty());
+
+
+        skuWareHouseDao.delete(skuWarehouse);
+        //on site global. must be empty, because quantity is 0
+        query = queryBuilder.createQuery("sony", (List<Long>) null);
+        products = productDao.fullTextSearch(query);
+        assertTrue("Failed global search [" + query + "]", products.isEmpty());
     }
 
     /**
