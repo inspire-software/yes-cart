@@ -1,5 +1,6 @@
 package org.yes.cart.domain.entity;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
@@ -302,6 +303,13 @@ public interface Product extends Auditable, Attributable {
      * @param tag space separated product tags.
      */
     void setTag(String tag);
+
+
+    /**
+     * Get total quantity of skus on all warehouses.
+     * @return total quantity
+     */
+    BigDecimal getQtyOnWarehouse();
 
 }
 

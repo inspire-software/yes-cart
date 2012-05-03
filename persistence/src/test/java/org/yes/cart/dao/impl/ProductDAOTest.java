@@ -310,8 +310,8 @@ public class ProductDAOTest extends AbstractTestDAO {
 
     @Test
     public void testCreateNewProductTest() throws InterruptedException {
+
         productDao.fullTextSearchReindex();
-        
 
         Product product = new ProductEntity();
         product.setAvailability(availabilityDao.findById(1L));
@@ -344,52 +344,102 @@ public class ProductDAOTest extends AbstractTestDAO {
 
         skuWareHouseDao.create(skuWarehouse);
 
-
         // assign it to category
-        ProductCategory productCategory = new ProductCategoryEntity();
-        productCategory.setProduct(product);
-        productCategory.setCategory(categoryDao.findById(128L));
-        productCategory.setRank(123);
-
-        product.getProductCategory().add(productCategory);
-
-
-        productCategory = productCategoryDao.create(productCategory);
-        //assertTrue(productCategory.getProductCategoryId() > 0);
-
-        product = productDao.update(product);
+        ProductCategory productCategory = assignToCategory(product, 128L);
 
         List<Product> products = null;
-        //product = productDao.findById(product.getProductId());
-        //productDao.fullTextSearchReindex(product.getProductId());
-
 
         //productDao.fullTextSearchReindex();
         GlobalSearchQueryBuilderImpl queryBuilder = new GlobalSearchQueryBuilderImpl();
         Query query = queryBuilder.createQuery("sony", Arrays.asList(128L));
         products = productDao.fullTextSearch(query);
-        assertTrue("Failed [" + query + "]", !products.isEmpty());
+        assertTrue("Product must be found in category with id = 128 . Failed query [" + query + "]", !products.isEmpty());
 
 
         productCategoryDao.delete(productCategory);
         productDao.fullTextSearchReindex(productCategory.getProduct().getProductId());
-
         //search in particular category
         query = queryBuilder.createQuery("sony", Arrays.asList(128L));
         products = productDao.fullTextSearch(query);
-        try {
-            dumpDataBase("vvvv" , new String [] {"TPRODUCTCATEGORY" } );
-        } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
         assertTrue("Failed search in particular category [" + query + "]", products.isEmpty());
 
 
+
+    }
+
+    @Test
+    public void testCreateNewProductTest2() throws InterruptedException {
+
+        productDao.fullTextSearchReindex();
+
+        Product product = new ProductEntity();
+        product.setAvailability(availabilityDao.findById(1L));
+        Brand brand = brandDao.findById(100L);
+        assertNotNull(brand);
+        product.setBrand(brand);
+        product.setCode("SONY_PRODUCT_CODE");
+        product.setName("product sony name");
+        product.setDescription("Description ");
+
+        ProductType productType = productTypeDao.findById(1L);
+        assertNotNull(productType);
+        product.setProducttype(productType);
+        long pk = productDao.create(product).getProductId();
+        assertTrue(pk > 0L);
+
+        // add sku
+        ProductSku productSku = new ProductSkuEntity();
+        productSku.setProduct(product);
+        productSku.setCode("SONY_PRODUCT_CODE");
+        productSku.setName("product sony name");
+        product.getSku().add(productSku);
+        productDao.saveOrUpdate(product);
+
+        // add quantity on warehoues
+        SkuWarehouse skuWarehouse = new SkuWarehouseEntity();
+        skuWarehouse.setSku(productSku);
+        skuWarehouse.setQuantity(BigDecimal.ONE);
+        skuWarehouse.setWarehouse(warehouseDao.findById(2L));
+
+        skuWareHouseDao.create(skuWarehouse);
+
+        // assign it to category
+        ProductCategory productCategory = assignToCategory(product, 128L);
+
+        List<Product> products = null;
+
+        //productDao.fullTextSearchReindex();
+        GlobalSearchQueryBuilderImpl queryBuilder = new GlobalSearchQueryBuilderImpl();
+        Query query = queryBuilder.createQuery("sony", Arrays.asList(128L));
+        products = productDao.fullTextSearch(query);
+        assertTrue("Product must be found in category with id = 128 . Failed query [" + query + "]", !products.isEmpty());
+
+
+        query = queryBuilder.createQuery("sony", (Long) null);
+        products = productDao.fullTextSearch(query);
+        assertTrue("Failed global search [" + query + "]", !products.isEmpty());
+
+
         skuWareHouseDao.delete(skuWarehouse);
+        productDao.fullTextSearchReindex(productCategory.getProduct().getProductId());
         //on site global. must be empty, because quantity is 0
         query = queryBuilder.createQuery("sony", (List<Long>) null);
         products = productDao.fullTextSearch(query);
         assertTrue("Failed global search [" + query + "]", products.isEmpty());
+
+    }
+
+    private ProductCategory assignToCategory(Product product, long categoryId) {
+        ProductCategory productCategory = new ProductCategoryEntity();
+        productCategory.setProduct(product);
+        productCategory.setCategory(categoryDao.findById(categoryId));
+        productCategory.setRank(123);
+        product.getProductCategory().add(productCategory);
+
+        productCategory = productCategoryDao.create(productCategory);
+
+        product = productDao.update(product);
+        return productCategory;
     }
 
     /**
