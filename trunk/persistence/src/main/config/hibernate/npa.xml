@@ -1942,7 +1942,7 @@ public void setRangeList(final RangeList rangeList) {
         </id>
         <discriminator type="integer" formula="1"/>
         <subclass name="org.yes.cart.domain.entity.impl.ProductEntity" discriminator-value="1">
-            <meta attribute="class-description">UNCOMMENT @Indexed (index = "luceneindex/product")</meta>
+            <meta attribute="class-description">UNCOMMENT @Indexed (index = "luceneindex/product", interceptor = org.yes.cart.domain.interceptor.ProductEntityIndexingInterceptor.class)</meta>
             <meta attribute="extra-import">org.hibernate.search.annotations.*</meta>
             <meta attribute="extra-import">org.hibernate.annotations.Parameter</meta>
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
@@ -1951,6 +1951,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="extra-import">org.yes.cart.domain.entity.AttrValue</meta>
+            <meta attribute="extra-import">org.yes.cart.domain.entity.SkuWarehouse</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -1972,6 +1973,19 @@ public void setRangeList(final RangeList rangeList) {
     public void setProductId(long productId) {
         this.productId = productId;
     }
+
+
+    @Transient
+    public BigDecimal getQtyOnWarehouse() {
+        BigDecimal rez = BigDecimal.ONE.setScale(2);
+        for(ProductSku sku : getSku()) {
+            for(SkuWarehouse swe: sku.getQuantityOnWarehouse()) {
+                rez = rez.add(swe.getQuantity());
+            }
+        }
+        return rez;
+    }
+
 
     @Transient
     public ProductSku getDefaultSku() {
@@ -2309,6 +2323,13 @@ public void setRangeList(final RangeList rangeList) {
                     <column name="SKU_ID" not-null="false"/>
                 </key>
                 <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.AttrValueProductSku" />
+            </bag>
+
+            <bag name="quantityOnWarehouse" inverse="false" lazy="false" cascade="all">
+                <key>
+                    <column name="SKU_ID" not-null="false"/>
+                </key>
+                <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.SkuWarehouse" />
             </bag>
 
             <many-to-one name="seo" class="org.yes.cart.domain.entity.Seo" lazy="false" foreign-key="FK_SKU_SEO" cascade="all">

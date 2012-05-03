@@ -167,6 +167,19 @@ public interface ProductSku extends Auditable, Attributable, Rankable {
      */
     void setBarCode(String barCode);
 
+    /**
+     * Get quantity of sku on warehouse.
+     * @return quantity of sku on warehouse.
+     */
+    Collection<SkuWarehouse> getQuantityOnWarehouse();
+
+    /**
+     * Set quantity of sku on warehouse.
+     * @param quantityOnWarehouse quantity of sku on warehouse.
+     */
+    void setQuantityOnWarehouse(Collection<SkuWarehouse> quantityOnWarehouse);
+
+
 
 }
 

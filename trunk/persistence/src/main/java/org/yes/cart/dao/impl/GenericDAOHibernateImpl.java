@@ -369,16 +369,10 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
             fullTextSession.setFlushMode(FlushMode.MANUAL);
             fullTextSession.setCacheMode(CacheMode.IGNORE);
             fullTextSession.purge(getPersistentClass(), primaryKey);
-            fullTextSession.flushToIndexes(); //apply changes to indexes
-
-            if (entity != null && isIncludeInLuceneIndex(entity)) {
-                fullTextSession.index(HibernateHelper.unproxy(entity));
-                result++;
-
-            }
+            fullTextSession.index(HibernateHelper.unproxy(entity));
+            result++;
             fullTextSession.flushToIndexes(); //apply changes to indexes
             fullTextSession.clear(); //clear since the queue is processed
-
         }
         return result;
     }
@@ -404,14 +398,12 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
             while (results.next()) {
                 index++;
                 T entity = (T) results.get(0);
-                if (isIncludeInLuceneIndex(entity)) {
-                    fullTextSession.index(HibernateHelper.unproxy(entity)); //index each element
-                    if (index % BATCH_SIZE == 0) {
-                        fullTextSession.flushToIndexes(); //apply changes to indexes
-                        fullTextSession.clear(); //clear since the queue is processed
-                        if (LOG.isInfoEnabled()) {
-                            LOG.info("Indexed " + index + " items of " + persistentClass + " class");
-                        }
+                fullTextSession.index(HibernateHelper.unproxy(entity)); //index each element
+                if (index % BATCH_SIZE == 0) {
+                    fullTextSession.flushToIndexes(); //apply changes to indexes
+                    fullTextSession.clear(); //clear since the queue is processed
+                    if (LOG.isInfoEnabled()) {
+                        LOG.info("Indexed " + index + " items of " + persistentClass + " class");
                     }
                 }
             }
