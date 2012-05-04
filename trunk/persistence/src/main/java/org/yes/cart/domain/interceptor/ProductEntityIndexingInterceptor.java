@@ -14,7 +14,7 @@ import java.math.BigDecimal;
  * Date: 5/5/12
  * Time: 3:40 PM
  */
-public class ProductEntityIndexingInterceptor implements EntityIndexingInterceptor<Product> {
+public class ProductEntityIndexingInterceptor implements EntityIndexingInterceptor<ProductEntity> {
 
 
     /**
@@ -28,38 +28,35 @@ public class ProductEntityIndexingInterceptor implements EntityIndexingIntercept
      * @param entity entity to check
      * @return true if entity need to be in lucene index.
      */
-    private boolean isIncludeInLuceneIndex(final Product entity) {
+    public boolean isIncludeInLuceneIndex(final Product entity) {
        if (Availability.STANDARD == entity.getAvailability().getAvailabilityId()) {
-            //final BigDecimal qty = (BigDecimal) findSingleByNamedQuery("SKU.QTY.BY.PRODUCT", entity);
-            //BigDecimal qty  = entity.get
-            //return MoneyUtils.isFirstBiggerThanSecond(qty, BigDecimal.ZERO);
+           return MoneyUtils.isFirstBiggerThanSecond(entity.getQtyOnWarehouse(), BigDecimal.ZERO);
        }
        return true;
     }
 
 
-
     /** {@inheritDoc} */
-    public IndexingOverride onAdd(final Product entity) {
+    public IndexingOverride onAdd(final ProductEntity entity) {
         return isIncludeInLuceneIndex(entity)
                 ?IndexingOverride.APPLY_DEFAULT
                 :IndexingOverride.SKIP;
     }
 
     /** {@inheritDoc} */
-    public IndexingOverride onUpdate(final Product entity) {
+    public IndexingOverride onUpdate(final ProductEntity entity) {
         return isIncludeInLuceneIndex(entity)
                 ?IndexingOverride.APPLY_DEFAULT
                 :IndexingOverride.REMOVE;
     }
 
     /** {@inheritDoc} */
-    public IndexingOverride onDelete(final Product entity) {
+    public IndexingOverride onDelete(final ProductEntity entity) {
         return IndexingOverride.APPLY_DEFAULT;
     }
 
     /** {@inheritDoc} */
-    public IndexingOverride onCollectionUpdate(final Product entity) {
+    public IndexingOverride onCollectionUpdate(final ProductEntity entity) {
         return isIncludeInLuceneIndex(entity)
                 ?IndexingOverride.APPLY_DEFAULT
                 :IndexingOverride.REMOVE;

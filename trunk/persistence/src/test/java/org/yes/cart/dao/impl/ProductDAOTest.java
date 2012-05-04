@@ -439,6 +439,8 @@ public class ProductDAOTest extends AbstractTestDAO {
         productCategory = productCategoryDao.create(productCategory);
 
         product = productDao.update(product);
+        productDao.fullTextSearchReindex(product.getProductId());
+
         return productCategory;
     }
 
@@ -549,6 +551,7 @@ public class ProductDAOTest extends AbstractTestDAO {
         skuWarehouse.setQuantity(BigDecimal.ONE);
         skuWarehouse.setWarehouse(warehouseDao.findById(2L));
         skuWareHouseDao.create(skuWarehouse);
+        productDao.fullTextSearchReindex(product.getProductId());
         return pk;
     }
 

@@ -1952,6 +1952,7 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">javax.persistence.Transient</meta>
             <meta attribute="extra-import">org.yes.cart.domain.entity.AttrValue</meta>
             <meta attribute="extra-import">org.yes.cart.domain.entity.SkuWarehouse</meta>
+            <meta attribute="extra-import">java.math.BigDecimal</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -1977,7 +1978,7 @@ public void setRangeList(final RangeList rangeList) {
 
     @Transient
     public BigDecimal getQtyOnWarehouse() {
-        BigDecimal rez = BigDecimal.ONE.setScale(2);
+        BigDecimal rez = BigDecimal.ZERO.setScale(2);
         for(ProductSku sku : getSku()) {
             for(SkuWarehouse swe: sku.getQuantityOnWarehouse()) {
                 rez = rez.add(swe.getQuantity());
