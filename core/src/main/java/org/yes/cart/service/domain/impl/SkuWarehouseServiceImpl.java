@@ -223,7 +223,7 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
      */
     public SkuWarehouse update(final SkuWarehouse instance) {
         final SkuWarehouse rez = super.update(instance);
-        productDao.fullTextSearchReindex(instance.getSku().getProduct().getProductId());
+       // productDao.fullTextSearchReindex(instance.getSku().getProduct().getProductId());
         return rez;
     }
 

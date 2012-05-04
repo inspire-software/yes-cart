@@ -326,7 +326,7 @@
 
     <bean id="productDao" parent="txProxyTemplate">
         <property name="target">
-            <bean class="org.yes.cart.dao.impl.ProductGenericDAOHibernateImpl">
+            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
                 <constructor-arg><value>org.yes.cart.domain.entity.impl.ProductEntity</value></constructor-arg>
                 <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
                 <property name="sessionFactory" ref="sessionFactory"/>

@@ -7,6 +7,10 @@ import org.hibernate.criterion.Example;
 import org.hibernate.search.FullTextQuery;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.indexes.interceptor.EntityIndexingInterceptor;
+import org.hibernate.search.indexes.interceptor.IndexingOverride;
+import org.hibernate.search.util.impl.ClassLoaderHelper;
 import org.hibernate.search.util.impl.HibernateHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,17 +37,18 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
 
     final private Class<T> persistentClass;
     final private EntityFactory entityFactory;
-    private   SessionFactory sessionFactory;
+    final private EntityIndexingInterceptor entityIndexingInterceptor;
+    private SessionFactory sessionFactory;
 
 
     /**
-	 * Set the Hibernate SessionFactory to be used by this DAO.
-	 * Will automatically create a HibernateTemplate for the given SessionFactory.
-	 */
-	public final void setSessionFactory(final SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
+     * Set the Hibernate SessionFactory to be used by this DAO.
+     * Will automatically create a HibernateTemplate for the given SessionFactory.
+     */
+    public final void setSessionFactory(final SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
 
-	}
+    }
 
 
     /**
@@ -58,7 +63,24 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
             final EntityFactory entityFactory) {
         this.persistentClass = type;
         this.entityFactory = entityFactory;
+        this.entityIndexingInterceptor = getInterceptor();
     }
+
+    private EntityIndexingInterceptor getInterceptor() {
+        final Indexed indexed = getPersistentClass().getAnnotation(org.hibernate.search.annotations.Indexed.class);
+        if (indexed != null) {
+            final Class<? extends EntityIndexingInterceptor> interceptorClass = indexed.interceptor();
+            if (interceptorClass != null) {
+                return ClassLoaderHelper.instanceFromClass(
+                        EntityIndexingInterceptor.class,
+                        interceptorClass,
+                        "IndexingActionInterceptor for " + getPersistentClass().getName()
+                );
+            }
+        }
+        return null;
+    }
+
 
     /**
      * {@inheritDoc}
@@ -349,13 +371,14 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
      * {@inheritDoc}
      */
     public final void fullTextSearchPurge(final PK primaryKey) {
-        FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
+        /*FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
         fullTextSession.setFlushMode(FlushMode.MANUAL);
         fullTextSession.setCacheMode(CacheMode.IGNORE);
         fullTextSession.purge(getPersistentClass(), primaryKey);
         fullTextSession.flushToIndexes(); //apply changes to indexes
-        fullTextSession.clear(); //clear since the queue is processed
+        fullTextSession.clear(); //clear since the queue is processed  */
     }
+
 
     /**
      * {@inheritDoc}
@@ -368,8 +391,15 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
             FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
             fullTextSession.setFlushMode(FlushMode.MANUAL);
             fullTextSession.setCacheMode(CacheMode.IGNORE);
-            fullTextSession.purge(getPersistentClass(), primaryKey);
-            fullTextSession.index(HibernateHelper.unproxy(entity));
+            //fullTextSession.purge(getPersistentClass(), primaryKey);
+            final T unproxed = (T) HibernateHelper.unproxy(entity);
+            if (entityIndexingInterceptor != null) {
+                if (IndexingOverride.APPLY_DEFAULT == entityIndexingInterceptor.onAdd(unproxed)) {
+                    fullTextSession.index(unproxed);
+                }
+            } else {
+                fullTextSession.index(unproxed);
+            }
             result++;
             fullTextSession.flushToIndexes(); //apply changes to indexes
             fullTextSession.clear(); //clear since the queue is processed
@@ -390,15 +420,21 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
             fullTextSession.setCacheMode(CacheMode.IGNORE);
             fullTextSession.purgeAll(getPersistentClass());
             fullTextSession.getSearchFactory().optimize(getPersistentClass());
-           // Transaction tx = fullTextSession.beginTransaction();
             ScrollableResults results = fullTextSession.createCriteria(persistentClass)
                     .setFetchSize(BATCH_SIZE)
                     .scroll(ScrollMode.FORWARD_ONLY);
 
             while (results.next()) {
                 index++;
-                T entity = (T) results.get(0);
-                fullTextSession.index(HibernateHelper.unproxy(entity)); //index each element
+                T entity = (T) HibernateHelper.unproxy(results.get(0));
+
+                if (entityIndexingInterceptor != null) {
+                    if (IndexingOverride.APPLY_DEFAULT == entityIndexingInterceptor.onAdd(entity)) {
+                        fullTextSession.index(entity);
+                    }
+                } else {
+                    fullTextSession.index(entity);
+                }
                 if (index % BATCH_SIZE == 0) {
                     fullTextSession.flushToIndexes(); //apply changes to indexes
                     fullTextSession.clear(); //clear since the queue is processed
@@ -409,10 +445,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
             }
             fullTextSession.flushToIndexes(); //apply changes to indexes
             fullTextSession.clear(); //clear since the queue is processed
-            //tx.commit();
         }
-
-
         return index;
     }
 
