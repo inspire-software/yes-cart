@@ -80,6 +80,7 @@
             <bean class="org.yes.cart.service.domain.impl.ProductSkuServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="productSkuDao"/>
                 <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="productDao"/>
+                <constructor-arg index="2" type="org.yes.cart.domain.entityindexer.ProductIndexer" ref="productReindexer"/>
             </bean>
         </property>
     </bean>
@@ -312,7 +313,7 @@
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.ProductCategoryServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="productCategoryDao"/>
-                <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="productDao"/>
+                <constructor-arg index="1" type="org.yes.cart.domain.entityindexer.ProductIndexer" ref="productReindexer"/>
             </bean>
         </property>
     </bean>
@@ -353,7 +354,7 @@
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.SkuWarehouseServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="skuWarehouseDao"/>
-                <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="productDao"/>
+                <constructor-arg index="1" type="org.yes.cart.domain.entityindexer.ProductIndexer" ref="productReindexer"/>
             </bean>
         </property>
     </bean>

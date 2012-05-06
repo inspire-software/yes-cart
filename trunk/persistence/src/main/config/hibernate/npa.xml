@@ -2326,7 +2326,7 @@ public void setRangeList(final RangeList rangeList) {
                 <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.AttrValueProductSku" />
             </bag>
 
-            <bag name="quantityOnWarehouse" inverse="false" lazy="false" cascade="all">
+            <bag name="quantityOnWarehouse" inverse="false" lazy="false" cascade="all-delete-orphan">
                 <key>
                     <column name="SKU_ID" not-null="false"/>
                 </key>

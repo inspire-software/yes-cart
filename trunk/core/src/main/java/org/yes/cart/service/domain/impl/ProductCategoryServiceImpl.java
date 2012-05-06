@@ -3,6 +3,7 @@ package org.yes.cart.service.domain.impl;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductCategory;
+import org.yes.cart.domain.entityindexer.ProductIndexer;
 import org.yes.cart.service.domain.ProductCategoryService;
 
 /**
@@ -14,15 +15,17 @@ public class ProductCategoryServiceImpl extends BaseGenericServiceImpl<ProductCa
 
     private final static int RANK_STEP = 50;
 
-    private final GenericDAO<Product, Long> productDao;
+
+    private final ProductIndexer productIndexer;
 
     /**
      * Construct product category service.
      * @param productCategoryDao product category dao to use.
+     * @param productIndexer indexer
      */
-    public ProductCategoryServiceImpl(final GenericDAO<ProductCategory, Long> productCategoryDao, final GenericDAO<Product, Long> productDao) {
+    public ProductCategoryServiceImpl(final GenericDAO<ProductCategory, Long> productCategoryDao, final ProductIndexer productIndexer) {
         super(productCategoryDao);
-        this.productDao = productDao;
+        this.productIndexer = productIndexer;
     }
 
     /** {@inheritDoc} */
@@ -46,20 +49,20 @@ public class ProductCategoryServiceImpl extends BaseGenericServiceImpl<ProductCa
     /** {@inheritDoc} */
     public ProductCategory create(ProductCategory instance) {
         final ProductCategory rez = super.create(instance);
-        productDao.fullTextSearchReindex(instance.getProduct().getProductId());
+        productIndexer.submitIndexTask(instance.getProduct().getProductId());
         return rez;
     }
 
     /** {@inheritDoc} */
     public ProductCategory update(ProductCategory instance) {
         final ProductCategory rez = super.update(instance);
-        productDao.fullTextSearchReindex(instance.getProduct().getProductId());
+        productIndexer.submitIndexTask(instance.getProduct().getProductId());
         return rez;
     }
 
     /** {@inheritDoc} */
     public void delete(ProductCategory instance) {
         super.delete(instance);
-        productDao.fullTextSearchPurge(instance.getProduct().getProductId());
+        productIndexer.submitIndexTask(instance.getProduct().getProductId());
     }
 }

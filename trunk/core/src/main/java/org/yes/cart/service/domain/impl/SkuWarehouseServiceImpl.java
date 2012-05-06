@@ -7,6 +7,7 @@ import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
+import org.yes.cart.domain.entityindexer.ProductIndexer;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.util.MoneyUtils;
@@ -22,17 +23,19 @@ import java.util.List;
  */
 public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse> implements SkuWarehouseService {
 
-    private final GenericDAO<Product, Long> productDao;
+
+    private final ProductIndexer productIndexer;
 
 
     /**
      * Construct sku warehouse service.
      *
-     * @param genericDao dao to use.
+     * @param genericDao     dao to use.
+     * @param productIndexer product indexer
      */
-    public SkuWarehouseServiceImpl(final GenericDAO<SkuWarehouse, Long> genericDao, final GenericDAO<Product, Long> productDao) {
+    public SkuWarehouseServiceImpl(final GenericDAO<SkuWarehouse, Long> genericDao, final ProductIndexer productIndexer) {
         super(genericDao);
-        this.productDao = productDao;
+        this.productIndexer = productIndexer;
     }
 
     /**
@@ -214,7 +217,7 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
      */
     public SkuWarehouse create(final SkuWarehouse instance) {
         final SkuWarehouse rez = super.create(instance);
-        productDao.fullTextSearchReindex(instance.getSku().getProduct().getProductId());
+        productIndexer.submitIndexTask(instance.getSku().getProduct().getProductId());
         return rez;
     }
 
@@ -223,7 +226,7 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
      */
     public SkuWarehouse update(final SkuWarehouse instance) {
         final SkuWarehouse rez = super.update(instance);
-       // productDao.fullTextSearchReindex(instance.getSku().getProduct().getProductId());
+        productIndexer.submitIndexTask(instance.getSku().getProduct().getProductId());
         return rez;
     }
 
@@ -232,6 +235,6 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
      */
     public void delete(final SkuWarehouse instance) {
         super.delete(instance);
-        productDao.fullTextSearchPurge(instance.getSku().getProduct().getProductId());
+        //todo productIndexer.submitIndexTask(instance.getSku().getProduct().getProductId());
     }
 }

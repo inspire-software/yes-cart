@@ -194,6 +194,8 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
         </property>
     </bean>
 
+    <bean id="productReindexer" class="org.yes.cart.domain.entityindexer.impl.EmptyProductIndexerImpl"/>
+
     <import resource="classpath*:core-config.xml"/>
 
     <import resource="classpath*:payment-api.xml"/>

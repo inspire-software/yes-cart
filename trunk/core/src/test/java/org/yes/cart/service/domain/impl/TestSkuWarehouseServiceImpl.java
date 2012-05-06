@@ -90,7 +90,6 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), rez.getSecond());
     }
 
-    // TODO fix to not depend on order or running
     @Test
     public void testUpdate() {
         SkuWarehouse skuWarehouse = skuWarehouseService.getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);
@@ -130,11 +129,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
         Pair<BigDecimal, BigDecimal> rez = skuWarehouseService.getQuantity(new ArrayList<Warehouse>() {{
             add(warehouse);
         }}, productSku);
-        try {
-            dumpDataBase("sss", new String[] {"TSKUWAREHOUSE"});
-        } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+
         assertEquals(new BigDecimal("4.00"), rez.getFirst());
         assertEquals(new BigDecimal("3.00"), rez.getSecond());
         assertEquals(new BigDecimal("10.00"), skuWarehouseService.reservation(warehouse, productSku, new BigDecimal("11.00"))); // 4 total and 4 reserved 10 to reserve
