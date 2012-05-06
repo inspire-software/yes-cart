@@ -5,6 +5,7 @@ import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductCategory;
 import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.entityindexer.ProductIndexer;
 import org.yes.cart.service.domain.ProductSkuService;
 
 import java.util.Collection;
@@ -16,12 +17,24 @@ import java.util.Collection;
  */
 public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> implements ProductSkuService {
 
+
+    private final ProductIndexer productIndexer;
+
     private final GenericDAO<Product, Long> productDao;
 
+
+    /**
+     * Construct  service.
+     * @param productSkuDao sku dao
+     * @param productDao    product dao
+     * @param productIndexer  product indexer.
+     */
     public ProductSkuServiceImpl(final GenericDAO<ProductSku, Long> productSkuDao,
-                                 final GenericDAO<Product, Long> productDao) {
+                                 final GenericDAO<Product, Long> productDao,
+                                 final ProductIndexer productIndexer) {
         super(productSkuDao);
         this.productDao = productDao;
+        this.productIndexer = productIndexer ;
     }
 
     /**
@@ -46,7 +59,7 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
      */
     public ProductSku create(ProductSku instance) {
         final ProductSku rez = super.create(instance);
-        productDao.fullTextSearchReindex(instance.getProduct().getProductId());
+        productIndexer.submitIndexTask(instance.getProduct().getProductId());
         return rez;
     }
 
@@ -55,7 +68,7 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
      */
     public ProductSku update(ProductSku instance) {
         final ProductSku rez = super.update(instance);
-        productDao.fullTextSearchReindex(instance.getProduct().getProductId());
+        productIndexer.submitIndexTask(instance.getProduct().getProductId());
         return rez;
     }
 
@@ -64,6 +77,6 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
      */
     public void delete(ProductSku instance) {
         super.delete(instance);
-        productDao.fullTextSearchPurge(instance.getProduct().getProductId());
+        productIndexer.submitIndexTask(instance.getProduct().getProductId());
     }
 }
