@@ -19,6 +19,7 @@ import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.dto.DtoWarehouseService;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -167,7 +168,10 @@ public class DtoWarehouseServiceImpl
      * @param skuWarehouseId given pk value.
      */
     public void removeSkuOnWarehouse(final long skuWarehouseId) {
-        skuWarehouseService.delete(skuWarehouseService.getById(skuWarehouseId));
+        final SkuWarehouse skuWarehouse = skuWarehouseService.getById(skuWarehouseId);
+        skuWarehouse.setQuantity(BigDecimal.ZERO);
+        skuWarehouse.setReserved(BigDecimal.ZERO);
+        skuWarehouseService.update(skuWarehouse);
     }
 
     /**

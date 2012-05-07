@@ -3,11 +3,9 @@ package org.yes.cart.service.domain.impl;
 import org.hibernate.criterion.Restrictions;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
-import org.yes.cart.domain.entityindexer.ProductIndexer;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.util.MoneyUtils;
@@ -24,18 +22,13 @@ import java.util.List;
 public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse> implements SkuWarehouseService {
 
 
-    private final ProductIndexer productIndexer;
-
-
     /**
      * Construct sku warehouse service.
      *
      * @param genericDao     dao to use.
-     * @param productIndexer product indexer
      */
-    public SkuWarehouseServiceImpl(final GenericDAO<SkuWarehouse, Long> genericDao, final ProductIndexer productIndexer) {
+    public SkuWarehouseServiceImpl(final GenericDAO<SkuWarehouse, Long> genericDao) {
         super(genericDao);
-        this.productIndexer = productIndexer;
     }
 
     /**
@@ -212,29 +205,5 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public SkuWarehouse create(final SkuWarehouse instance) {
-        final SkuWarehouse rez = super.create(instance);
-        productIndexer.submitIndexTask(instance.getSku().getProduct().getProductId());
-        return rez;
-    }
 
-    /**
-     * {@inheritDoc}
-     */
-    public SkuWarehouse update(final SkuWarehouse instance) {
-        final SkuWarehouse rez = super.update(instance);
-        productIndexer.submitIndexTask(instance.getSku().getProduct().getProductId());
-        return rez;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void delete(final SkuWarehouse instance) {
-        super.delete(instance);
-        //todo productIndexer.submitIndexTask(instance.getSku().getProduct().getProductId());
-    }
 }

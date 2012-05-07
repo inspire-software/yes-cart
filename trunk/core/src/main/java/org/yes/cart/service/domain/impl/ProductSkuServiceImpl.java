@@ -3,9 +3,7 @@ package org.yes.cart.service.domain.impl;
 import org.hibernate.criterion.Restrictions;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.ProductCategory;
 import org.yes.cart.domain.entity.ProductSku;
-import org.yes.cart.domain.entityindexer.ProductIndexer;
 import org.yes.cart.service.domain.ProductSkuService;
 
 import java.util.Collection;
@@ -18,8 +16,6 @@ import java.util.Collection;
 public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> implements ProductSkuService {
 
 
-    private final ProductIndexer productIndexer;
-
     private final GenericDAO<Product, Long> productDao;
 
 
@@ -27,14 +23,11 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
      * Construct  service.
      * @param productSkuDao sku dao
      * @param productDao    product dao
-     * @param productIndexer  product indexer.
      */
     public ProductSkuServiceImpl(final GenericDAO<ProductSku, Long> productSkuDao,
-                                 final GenericDAO<Product, Long> productDao,
-                                 final ProductIndexer productIndexer) {
+                                 final GenericDAO<Product, Long> productDao) {
         super(productSkuDao);
         this.productDao = productDao;
-        this.productIndexer = productIndexer ;
     }
 
     /**
@@ -54,29 +47,5 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public ProductSku create(ProductSku instance) {
-        final ProductSku rez = super.create(instance);
-        productIndexer.submitIndexTask(instance.getProduct().getProductId());
-        return rez;
-    }
 
-    /**
-     * {@inheritDoc}
-     */
-    public ProductSku update(ProductSku instance) {
-        final ProductSku rez = super.update(instance);
-        productIndexer.submitIndexTask(instance.getProduct().getProductId());
-        return rez;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void delete(ProductSku instance) {
-        super.delete(instance);
-        productIndexer.submitIndexTask(instance.getProduct().getProductId());
-    }
 }

@@ -25,4 +25,9 @@ public class ProductCategoryServiceImplTest extends BaseCoreDBTestCase {
         rez = productCategoryService.getNextRank(116L);
         assertEquals("Next rank must be 50 for existing -116 category without products", 50, rez);
     }
+
+
+
+
+
 }
