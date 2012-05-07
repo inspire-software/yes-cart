@@ -3,6 +3,7 @@
 = Set of tech articles =
 
 http://habrahabr.ru/post/22471/  right way to compose html email
+http://groovy.codehaus.org/Embedding+a+Groovy+Console+in+a+Java+Server+Application  groovy shell in web app
 
 = Details =
 
