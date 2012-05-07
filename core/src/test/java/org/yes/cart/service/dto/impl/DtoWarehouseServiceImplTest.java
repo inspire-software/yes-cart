@@ -7,6 +7,7 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.SkuWarehouseDTO;
 import org.yes.cart.domain.dto.WarehouseDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
+import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.service.dto.DtoWarehouseService;
 
 import java.math.BigDecimal;
@@ -131,6 +132,8 @@ public class DtoWarehouseServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testRemoveSkuOnWarehouse() {
         dtoService.removeSkuOnWarehouse(13L);
-        assertNull(dtoService.getSkuWarehouseService().getById(13L));
+        SkuWarehouse sw = dtoService.getSkuWarehouseService().getById(13L);
+        assertEquals(BigDecimal.ZERO.setScale(2), sw.getQuantity().setScale(2));
+        assertEquals(BigDecimal.ZERO.setScale(2), sw.getReserved().setScale(2));
     }
 }

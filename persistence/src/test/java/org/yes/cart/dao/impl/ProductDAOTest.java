@@ -421,7 +421,7 @@ public class ProductDAOTest extends AbstractTestDAO {
 
 
         skuWareHouseDao.delete(skuWarehouse);
-        productDao.fullTextSearchReindex(productCategory.getProduct().getProductId());
+        //------productDao.fullTextSearchReindex(productCategory.getProduct().getProductId());
         //on site global. must be empty, because quantity is 0
         query = queryBuilder.createQuery("sony", (List<Long>) null);
         products = productDao.fullTextSearch(query);
