@@ -4,6 +4,8 @@ package org.yes.cart.icecat.transform
  * Context Groovy class.
  */
 class Context  {
+    
+    String dataDirectory = "/dev/yes-cart/icecatdata";
 
     String url = "http://data.icecat.biz/export/freexml.int/";
 
@@ -11,12 +13,29 @@ class Context  {
 
     String pwd;
 
-    int langId;
+    int langId = 8;
+
+    String productDir = "RU";
 
     String categories;
 
-    long mindata;
+    long mindata = 20110101000000L;
 
     int limit = 1000;
+
+    @Override
+    public String toString() {
+        return "Context{" +
+                "dataDirectory='" + dataDirectory + '\'' +
+                ", url='" + url + '\'' +
+                ", login='" + login + '\'' +
+                ", pwd='" + pwd + '\'' +
+                ", langId=" + langId +
+                ", categories='" + categories + '\'' +
+                ", mindata=" + mindata +
+                ", limit=" + limit +
+                '}';
+    }
+
 
 }
