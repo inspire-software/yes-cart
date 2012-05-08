@@ -1,6 +1,7 @@
 package org.yes.cart.icecat.transform
 
 import org.yes.cart.icecat.transform.xml.CategoryHandler
+import org.yes.cart.icecat.transform.domain.Category
 import javax.xml.parsers.SAXParserFactory
 import org.xml.sax.InputSource
 import org.yes.cart.icecat.transform.xml.ProductPointerHandler
@@ -36,14 +37,17 @@ class CategoryWalker {
         productReadeReader.setContentHandler(productPointerHandler)
         productReadeReader.parse(new InputSource(indexis))
 
+        //download product's xml
 
-
-
-        
-        println(handler.categoryList.size());
         handler.categoryList.each {
-            println(it);
+            Category cat = it;
+            it.productPointer.each {
+                String pfile = it.path.substring(1 + it.path.lastIndexOf("/"));
+                println pfile;
+            }
         }
+
+
 
     }
 
