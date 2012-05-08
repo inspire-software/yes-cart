@@ -26,8 +26,6 @@ class Category {
 
     @Override
     public String toString() {
-        String pp = new String("--");
-        productPointer.each {pp += it.toString()};
         return "Category{" +
                 "id='" + id + '\'' +
                 ", lowPic='" + lowPic + '\'' +
@@ -39,7 +37,7 @@ class Category {
                 ", description='" + description + '\'' +
                 ", keywords='" + keywords + '\'' +
                 ", name='" + name + '\'' +
-                ", productPointer  ='" + pp + '\'' +
+                ", productPointer  ='" + productPointer.size() + '\'' +
                 '}';
     }
 
