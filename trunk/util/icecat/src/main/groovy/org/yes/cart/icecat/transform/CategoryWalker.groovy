@@ -5,6 +5,8 @@ import org.yes.cart.icecat.transform.domain.Category
 import javax.xml.parsers.SAXParserFactory
 import org.xml.sax.InputSource
 import org.yes.cart.icecat.transform.xml.ProductPointerHandler
+import org.yes.cart.icecat.transform.xml.CategoryFeaturesListHandler
+import org.yes.cart.icecat.transform.xml.ProductHandler
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -29,6 +31,18 @@ class CategoryWalker {
         def reader = SAXParserFactory.newInstance().newSAXParser().XMLReader
         reader.setContentHandler(handler)
         reader.parse(new InputSource(refs))
+        refs.close();
+
+
+        refs = new FileInputStream("$context.dataDirectory/export/freexml.int/refs.xml");
+        def categoryFeaturelistHandler = new CategoryFeaturesListHandler(
+                handler.categoryList,
+                handler.categoryIdFiler,
+                context.langId.toString())
+        reader = SAXParserFactory.newInstance().newSAXParser().XMLReader
+        reader.setContentHandler(categoryFeaturelistHandler)
+        reader.parse(new InputSource(refs))
+        refs.close();
 
 
         def indexis = new FileInputStream("$context.dataDirectory/export/freexml.int/$context.productDir/index.html");
@@ -37,16 +51,38 @@ class CategoryWalker {
         productReadeReader.setContentHandler(productPointerHandler)
         productReadeReader.parse(new InputSource(indexis))
 
-
-
         //check the cache and download product's xml if need
-        //String cacheFolderName = createCacheFolder()
-        //downloadProducts(handler.categoryList, cacheFolderName)
+        String cacheFolderName = createCacheFolder()
+        downloadProducts(handler.categoryList, cacheFolderName)
+        parseProducts(handler.categoryList, cacheFolderName)
 
 
     }
 
-    private def downloadProducts( List<Category> categoryList, String cacheFolderName) {
+
+    private def parseProducts(List<Category> categoryList, String cacheFolderName) {
+        categoryList.each {
+            Category cat = it;
+            it.productPointer.each {
+
+                if (it.Date_Added.toLong() > context.mindata) {
+                    String productFile = cacheFolderName + it.path.substring(1 + it.path.lastIndexOf("/"));
+                    def FileInputStream prodis = new FileInputStream(productFile);
+                    def handler = new ProductHandler(categoryList)
+                    def reader = SAXParserFactory.newInstance().newSAXParser().XMLReader
+                    reader.setContentHandler(handler)
+                    reader.parse(new InputSource(prodis))
+                    prodis.close();
+
+                }
+
+
+            }
+        }
+    }
+
+
+    private def downloadProducts(List<Category> categoryList, String cacheFolderName) {
         def authString = "$context.login:$context.pwd".getBytes().encodeBase64().toString()
         categoryList.each {
             Category cat = it;
@@ -71,7 +107,7 @@ class CategoryWalker {
     }
 
     private def createCacheFolder() {
-        def cacheFolderName = "$context.dataDirectory/export/freexml.int/xmlcache/";
+        def cacheFolderName = "$context.dataDirectory/export/freexml.int/xmlcache/$context.productDir/";
         File cacheFolderFile = new File(cacheFolderName);
         if (!cacheFolderFile.exists()) {
             cacheFolderFile.mkdirs();
