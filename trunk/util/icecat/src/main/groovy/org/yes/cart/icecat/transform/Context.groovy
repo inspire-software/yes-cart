@@ -7,7 +7,7 @@ class Context  {
     
     String dataDirectory = "/dev/yes-cart/icecatdata";
 
-    String url = "http://data.icecat.biz/export/freexml.int/";
+    String url = "http://data.icecat.biz/";
 
     String login;
 
@@ -19,7 +19,7 @@ class Context  {
 
     String categories;
 
-    long mindata = 20110101000000L;
+    long mindata = 20090101000000L;
 
     int limit = 1000;
 

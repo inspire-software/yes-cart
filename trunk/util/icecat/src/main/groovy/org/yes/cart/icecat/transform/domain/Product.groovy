@@ -32,5 +32,12 @@ class Product {
     String Title;
 
 
+    String ShortSummaryDescription;
+    String LongSummaryDescription;
+    List<String> productPicture = new ArrayList<String>();
+
+
+
+
 
 }
