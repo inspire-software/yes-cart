@@ -37,20 +37,47 @@ class CategoryWalker {
         productReadeReader.setContentHandler(productPointerHandler)
         productReadeReader.parse(new InputSource(indexis))
 
-        //download product's xml
 
-        handler.categoryList.each {
-            Category cat = it;
-            it.productPointer.each {
-                String pfile = it.path.substring(1 + it.path.lastIndexOf("/"));
-                println pfile;
-            }
-        }
 
+        //check the cache and download product's xml if need
+        //String cacheFolderName = createCacheFolder()
+        //downloadProducts(handler.categoryList, cacheFolderName)
 
 
     }
 
+    private def downloadProducts( List<Category> categoryList, String cacheFolderName) {
+        def authString = "$context.login:$context.pwd".getBytes().encodeBase64().toString()
+        categoryList.each {
+            Category cat = it;
+            it.productPointer.each {
+
+                if (it.Date_Added.toLong() > context.mindata) {
+                    String productFile = cacheFolderName + it.path.substring(1 + it.path.lastIndexOf("/"));
+                    if (!(new File(productFile).exists())) {
+
+                        def conn = "$context.url$it.path".toURL().openConnection();
+                        conn.setRequestProperty("Authorization", "Basic ${authString}")
+                        new File(productFile) << conn.getInputStream().text
+                        println "Downloaded $it.Model_Name"
+                    } else {
+                        println "Skipped $it.Model_Name"
+                    }
+                }
+
+
+            }
+        }
+    }
+
+    private def createCacheFolder() {
+        def cacheFolderName = "$context.dataDirectory/export/freexml.int/xmlcache/";
+        File cacheFolderFile = new File(cacheFolderName);
+        if (!cacheFolderFile.exists()) {
+            cacheFolderFile.mkdirs();
+        }
+        return cacheFolderName
+    }
 
 
 }

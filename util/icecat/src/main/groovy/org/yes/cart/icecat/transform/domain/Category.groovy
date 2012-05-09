@@ -24,6 +24,8 @@ class Category {
     List<ProductPointer> productPointer = new ArrayList<ProductPointer>();
     List<Product> product = new ArrayList<Product>();
 
+    List<CategoryFeatureGroup> categoryFeatureGroup = new ArrayList<CategoryFeatureGroup>();
+
     @Override
     public String toString() {
         return "Category{" +
