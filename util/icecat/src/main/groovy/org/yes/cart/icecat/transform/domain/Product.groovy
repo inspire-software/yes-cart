@@ -31,10 +31,18 @@ class Product {
     String ThumbPicSize;
     String Title;
 
+    String CategoryID;
+    String EANCode;
+
+    List<ProductFeature> productFeatures = new ArrayList<ProductFeature>();
+    List<Product> relatedProduct = new ArrayList<Product>();
+
 
     String ShortSummaryDescription;
     String LongSummaryDescription;
     List<String> productPicture = new ArrayList<String>();
+
+    String Supplier;
 
 
 

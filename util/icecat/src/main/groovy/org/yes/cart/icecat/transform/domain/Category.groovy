@@ -40,6 +40,7 @@ class Category {
                 ", keywords='" + keywords + '\'' +
                 ", name='" + name + '\'' +
                 ", productPointer  ='" + productPointer.size() + '\'' +
+                ", categoryFeatureGroup  ='" + categoryFeatureGroup.size() + '\'' +
                 '}';
     }
 
