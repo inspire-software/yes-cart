@@ -26,6 +26,62 @@ class Category {
 
     List<CategoryFeatureGroup> categoryFeatureGroup = new ArrayList<CategoryFeatureGroup>();
 
+    public String toProductType() { //TPRODTYPE
+        return (name == null ? id : name) + ";" + description + "\n";
+    }
+
+
+
+    public String toProductTypeAttr() {       //TPRODUCTTYPEATTR & TATTRIBUTE
+        StringBuilder builder = new StringBuilder();
+        for (CategoryFeatureGroup cfg : categoryFeatureGroup) {
+            for(Feature feature : cfg.featureList) {
+                builder.append(name == null ? id : name)
+                builder.append(";")
+                builder.append(feature.Name);
+                builder.append(";");
+                builder.append(feature.Mandatory);
+                builder.append(";");
+                builder.append(feature.Searchable);
+                builder.append(";");
+                builder.append(feature.No);
+                builder.append("\n")
+            }
+
+        }
+        return builder.toString();
+    }
+
+
+    public String toArrtViewGroup() { //TATTRVIEWGROUP
+        StringBuilder builder = new StringBuilder();
+        for (CategoryFeatureGroup cfg : categoryFeatureGroup) {
+            builder.append(cfg.Name)
+            builder.append("\n")
+
+        }
+        return builder.toString();
+        
+        
+    }
+
+    public String toProductTypeAttrViewGroup() {       //TPRODTYPEATTRVIEWGROUP
+        StringBuilder builder = new StringBuilder();
+        for (CategoryFeatureGroup cfg : categoryFeatureGroup) {
+            builder.append(cfg.Name)
+            builder.append(";")
+            for(Feature feature : cfg.featureList) {
+                builder.append(feature.Name);
+                builder.append(",");
+            }
+            builder.append("\n")
+        }
+        return builder.toString();
+        
+    }
+
+
+
     @Override
     public String toString() {
         return "Category{" +
