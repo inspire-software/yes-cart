@@ -7,6 +7,7 @@ import org.xml.sax.InputSource
 import org.yes.cart.icecat.transform.xml.ProductPointerHandler
 import org.yes.cart.icecat.transform.xml.CategoryFeaturesListHandler
 import org.yes.cart.icecat.transform.xml.ProductHandler
+import org.yes.cart.icecat.transform.domain.Product
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -55,9 +56,73 @@ class CategoryWalker {
         String cacheFolderName = createCacheFolder()
         downloadProducts(handler.categoryList, cacheFolderName)
         parseProducts(handler.categoryList, cacheFolderName)
+        
+        String pictCacheFolder = createPictureCacheFolder();
+        downloadProductPicturess(handler.categoryList,pictCacheFolder)
+
+
+        //create folder for csv
+        new File("$context.dataDirectory/export/freexml.int/csvresult/").mkdirs();
+
+
+
+        StringBuilder csv = new StringBuilder();
+
+        handler.categoryList.each { csv.append(it.toProductType())}
+        new File("$context.dataDirectory/export/freexml.int/csvresult/category.csv") << csv.toString();
+        
+        csv = new StringBuilder();
+        handler.categoryList.each { csv.append(it.toProductTypeAttr())}
+        new File("$context.dataDirectory/export/freexml.int/csvresult/producttype.csv") << csv.toString();
+
+        csv = new StringBuilder();
+        handler.categoryList.each { csv.append(it.toArrtViewGroup())}
+        new File("$context.dataDirectory/export/freexml.int/csvresult/attributeviewgroup.csv") << csv.toString();
+
+        csv = new StringBuilder();
+        handler.categoryList.each { csv.append(it.toProductTypeAttrViewGroup())}
+        new File("$context.dataDirectory/export/freexml.int/csvresult/productypeattributeviewgroup.csv") << csv.toString();
+
+        new File("$context.dataDirectory/export/freexml.int/csvresult/brand.csv") <<  dumpBrands(handler.categoryList);
+
+        new File("$context.dataDirectory/export/freexml.int/csvresult/product.csv") << dumpProducts(handler.categoryList);
+
 
 
     }
+
+
+    private def dumpProducts(List<Category> categoryList) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("name;category;producttype;brand;availability;skucode;qty;price;barcode;attributes;description\n");
+        categoryList.each {
+            Category cat = it;
+            cat.product.each {
+                builder.append(it.toString());
+            }
+        }
+        return builder.toString();
+    }
+
+    private def dumpBrands(List<Category> categoryList) {
+        Set<String> rez = new HashSet<String>();
+        categoryList.each {
+            Category cat = it;
+            cat.product.each {
+                rez.add(it.Supplier);
+            }
+        }
+        StringBuilder builder = new StringBuilder();
+        builder.append("brand;description\n");
+        rez.each {
+            builder.append(it)
+            builder.append(";")
+            builder.append(it)
+            builder.append("\n")
+        }
+        return builder.toString();
+    }
+
 
 
     private def parseProducts(List<Category> categoryList, String cacheFolderName) {
@@ -80,6 +145,65 @@ class CategoryWalker {
             }
         }
     }
+
+    private def downloadProductPicturess(List<Category> categoryList, String cacheFolderName) {
+        def authString = "$context.login:$context.pwd".getBytes().encodeBase64().toString()
+        def cacheFolder = createPictureCacheFolder();
+        categoryList.each {
+            Category cat = it;
+            it.product.each {
+                char idx = 'a';
+
+                String productName = it.Title.replace("_", "-").replace(" ", "-").replace("?", "-").replace(".", "-");
+                String skuCode = it.Prod_id;
+
+                downloadProductPicture(it.HighPic, authString, cacheFolder, idx ++, productName, skuCode );
+                it.productPicture.each {
+
+                    downloadProductPicture(it, authString, cacheFolder, idx ++, productName, skuCode);
+
+                }
+
+            }
+        }
+    }
+
+    private def downloadProductPicture(String url, String authString, String cacheFolderName, char idx, String productName, String skuCode) {
+        //preformat filename for import
+        String productFile = cacheFolderName + productName + "_" + skuCode + "_" + idx + url.substring(url.lastIndexOf("."));
+
+
+        if (!(new File(productFile).exists())) {
+            try {
+                URLConnection conn = "$url".toURL().openConnection();
+                conn.setRequestProperty("Authorization", "Basic ${authString}")
+                InputStream input = conn.getInputStream()
+                def output = new BufferedOutputStream(new FileOutputStream(productFile));
+                output <<  input
+                input.close();
+                output.close();
+                println "Downloaded $url into $productFile"
+
+            } catch (FileNotFoundException e) {
+                println "File $url not exists on remote server, skipped"
+            }
+
+
+        } else {
+            println "Skipped $url"
+        }
+    }
+
+    private def createPictureCacheFolder() {
+        def cacheFolderName = "$context.dataDirectory/export/freexml.int/pictcache/";
+        File cacheFolderFile = new File(cacheFolderName);
+        if (!cacheFolderFile.exists()) {
+            cacheFolderFile.mkdirs();
+        }
+        return cacheFolderName
+    }
+
+
 
 
     private def downloadProducts(List<Category> categoryList, String cacheFolderName) {

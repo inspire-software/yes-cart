@@ -50,7 +50,7 @@ class ProductHandler extends DefaultHandler {
             product.Pic500x500Height = attributes.getValue("Pic500x500Height");
             product.Pic500x500Size = attributes.getValue("Pic500x500Size");
             product.Pic500x500Width = attributes.getValue("Pic500x500Width");
-            product.Prod_id = attributes.getValue("Prod_id");
+            product.Prod_id = attributes.getValue("Prod_id").replace("_", "-").replace(" ", "-").replace(".", "-").replace("?", "-"); //sku code
             product.Quality = attributes.getValue("Quality");
             product.ReleaseDate = attributes.getValue("ReleaseDate");
             product.ThumbPic = attributes.getValue("ThumbPic");
@@ -158,7 +158,9 @@ class ProductHandler extends DefaultHandler {
 
         if("Product" == qName  && !inProductRelated) {
 
-            locateCategory(product.CategoryID).product.add(product);
+            Category c = locateCategory(product.CategoryID);
+            c.product.add(product);
+            product.CategoryName = (c.name == null ? c.id : c.name); //category name and product type
 
         }
 

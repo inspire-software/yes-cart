@@ -1,11 +1,11 @@
 package org.yes.cart.icecat.transform.domain
 
 /**
- * 
+ *
  * User: igora Igor Azarny
  * Date: 5/9/12
  * Time: 4:08 PM
- * 
+ *
  */
 class Product {
 
@@ -32,6 +32,8 @@ class Product {
     String Title;
 
     String CategoryID;
+    String CategoryName;
+
     String EANCode;
 
     List<ProductFeature> productFeatures = new ArrayList<ProductFeature>();
@@ -44,8 +46,33 @@ class Product {
 
     String Supplier;
 
+    public String toString() {
+        StringBuilder prodFeature = new StringBuilder();
+        for (ProductFeature pf: productFeatures) {
+            prodFeature.append(pf.feature.Name.replace(";", ","));
+            prodFeature.append("->");
+            prodFeature.append(pf.Presentation_Value.replace(";", ","));
+            prodFeature.append('|');
+        }
 
 
+
+        return (Title + ";"
+                + CategoryName + ";"   // category
+                + CategoryName + ";" // type
+                + Supplier + ";" // brand
+                + "std" + ";"
+                + Prod_id + ";" //sku code
+                + "100" + ";" //qty on warehouse
+                + new BigDecimal(500f + new Random().nextFloat() * 3000).setScale(2, BigDecimal.ROUND_HALF_UP) + ";" //price
+                + EANCode + ";"
+                + prodFeature + ";"
+                + LongSummaryDescription
+                + "\n"
+        );
+
+
+    }
 
 
 }
