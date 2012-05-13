@@ -9,7 +9,8 @@ public enum FieldTypeEnum {
 
     FIELD("field"),
     FK_FIELD("fk_field"),
-    SIMPLE_SLAVE_FIELD("simple_slave_field");
+    SIMPLE_SLAVE_FIELD("simple_slave_field"),
+    KEYVALUE_SLAVE_FIELD("keyvalue_slave_field");
 
     private final String fieldType;
 

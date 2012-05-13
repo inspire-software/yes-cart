@@ -214,6 +214,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
             fillEntityForeignKeys(line, object, importDescriptor.getImportColumns(FieldTypeEnum.FK_FIELD), masterObject, importDescriptor);
             genericDAO.saveOrUpdate(object);
             performSubImport(errorReport, line, importDescriptor, object, importDescriptor.getImportColumns(FieldTypeEnum.SIMPLE_SLAVE_FIELD));
+            performSubImport(errorReport, line, importDescriptor, object, importDescriptor.getImportColumns(FieldTypeEnum.KEYVALUE_SLAVE_FIELD));
             genericDAO.flushClear();
         } catch (Exception e) {
             String additionalInfo = null;
@@ -360,6 +361,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
                              final ImportColumn column,
                              final Object masterObject,
                              final ImportDescriptor importDescriptor) throws ClassNotFoundException {
+
         Object object = getExistingEntity(line, column, masterObject);
         if (object == null) {
             object = genericDAO.getEntityFactory().getByIface(
@@ -410,6 +412,9 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
      * @return parameters for look up query
      */
     private Object[] getQueryParameters(boolean useMasterObject, Object masterObject, Object... rowParameters) {
+        if (rowParameters != null && rowParameters.length == 1 && rowParameters[0] == null) {
+            rowParameters = new Object[0];
+        }
         if (useMasterObject) {
             Object[] params = new Object[rowParameters.length + 1];
             System.arraycopy(rowParameters, 0, params, 0, rowParameters.length);

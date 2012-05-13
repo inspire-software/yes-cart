@@ -26,6 +26,20 @@ public interface ImportColumn {
      */
     String[] getValues(String rawValue);
 
+
+    /**
+     * Is sub import field shall be treated as table. The | used for row delimiter
+     * @return  true in case if  perform import as table subimport
+     */
+    boolean isTable();
+
+    /**
+     * Set table sub import flag .
+     * @param table table sub  import flag.
+     */
+    void setTable(boolean table);
+
+
     /**
      * In case if column has reg exp.
      *

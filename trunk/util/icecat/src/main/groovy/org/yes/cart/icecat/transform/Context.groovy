@@ -19,7 +19,7 @@ class Context  {
 
     String categories;
 
-    long mindata = 20120101000000L;
+    long mindata =  20120101000000L;
 
     int limit = 1000;
 

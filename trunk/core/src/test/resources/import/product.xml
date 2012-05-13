@@ -40,32 +40,26 @@
 
         <!--Тип доступности -->
         <column-descriptor>
+            <columnIndex>-1</columnIndex>
+            <fieldType>FK_FIELD</fieldType>
+            <name>availability</name>
+            <lookupQuery>select a from AvailabilityEntity a where a.availabilityId = 1 </lookupQuery>
+        </column-descriptor>
+
+<!--
+        <column-descriptor>
             <columnIndex>4</columnIndex>
             <fieldType>FK_FIELD</fieldType>
             <name>availability</name>
-            <regExp>(.*)</regExp>
-            <lookupQuery>select a from AvailabilityEntity a where a.name = ?1</lookupQuery>
+            <regExp>(nothing)</regExp>
+            <lookupQuery>select a from AvailabilityEntity a where a.availabilityId = 1 </lookupQuery>
         </column-descriptor>
 
-        <!--Доступен с даты-->
-        <column-descriptor>
-            <columnIndex>5</columnIndex>
-            <fieldType>FIELD</fieldType>
-            <name>availablefrom</name>
-            <regExp>(.*)</regExp>
-        </column-descriptor>
-
-        <!--Доступен по дату-->
-        <column-descriptor>
-            <columnIndex>6</columnIndex>
-            <fieldType>FIELD</fieldType>
-            <name>availabletill</name>
-            <regExp>(.*)</regExp>
-        </column-descriptor>
+-->
 
         <!-- Код продукта field for lookup object -->
         <column-descriptor>
-            <columnIndex>7</columnIndex>
+            <columnIndex>5</columnIndex>
             <fieldType>FIELD</fieldType>
             <name>code</name>
             <regExp>(.*)</regExp>
@@ -73,7 +67,7 @@
         </column-descriptor>
 
         <!-- 8 вставкa материал -->
-        <column-descriptor>
+        <!--<column-descriptor>
             <columnIndex>8</columnIndex>
             <fieldType>SIMPLE_SLAVE_FIELD</fieldType>
             <name>attribute</name>
@@ -110,12 +104,12 @@
                     </column-descriptor>
                 </importColumns>
             </importDescriptor>
-        </column-descriptor>
+        </column-descriptor>-->
 
-        <!-- 8 вставкa цвет -->
-        <column-descriptor>
-            <columnIndex>8</columnIndex>
-            <fieldType>SIMPLE_SLAVE_FIELD</fieldType>
+        <!-- 9 key - value attribute  -->
+       <column-descriptor>
+            <columnIndex>9</columnIndex>
+            <fieldType>KEYVALUE_SLAVE_FIELD</fieldType>
             <name>attribute</name>
             <importDescriptor class="import-descriptor">
                 <entityIntface>org.yes.cart.domain.entity.AttrValueProduct</entityIntface>
@@ -135,11 +129,13 @@
                         <columnIndex>0</columnIndex>
                         <fieldType>FIELD</fieldType>
                         <name>val</name>
-                        <regExp>.*-.*\s{1,}((\D?\S{4,}){1,})\s{0,}.*</regExp>
-                        <forceGroupCount>1</forceGroupCount>
+                        <regExp>(.*)->(.*)</regExp>
+                        <forceGroupCount>2</forceGroupCount>
                         <useMasterObject>true</useMasterObject>
-                        <lookupQuery>select v from AttrValueEntityProduct v where v.val = ?1 and v.product = ?2 and
-                            v.attribute.code = 'Колір_вставки'
+                        <lookupQuery>select v from AttrValueEntityProduct v where
+                            v.val = ?1 and
+                            v.attribute.code = ?2 and
+                            v.product = ?3
                         </lookupQuery>
                     </column-descriptor>
                     <column-descriptor>
@@ -153,205 +149,12 @@
         </column-descriptor>
 
 
-        <!-- Матеріал -->
-        <column-descriptor>
-            <columnIndex>9</columnIndex>
-            <fieldType>SIMPLE_SLAVE_FIELD</fieldType>
-            <name>attribute</name>
-            <importDescriptor class="import-descriptor">
 
-                <entityIntface>org.yes.cart.domain.entity.AttrValueProduct</entityIntface>
-
-                <importFile class="file-descriptor">
-                    <columnDelimeter>;</columnDelimeter>
-                    <textQualifier null="true"/>
-                    <ignoreFirstLine>false</ignoreFirstLine>
-                </importFile>
-
-                <importColumns class="list">
-
-                    <column-descriptor>
-                        <columnIndex>-1</columnIndex>
-                        <fieldType>FK_FIELD</fieldType>
-                        <name>product</name>
-                        <useMasterObject>true</useMasterObject>
-                    </column-descriptor>
-
-                    <column-descriptor>
-                        <columnIndex>0</columnIndex>
-                        <fieldType>FIELD</fieldType>
-                        <name>val</name>
-                        <regExp>^(.*)\s{1,}</regExp>
-                        <useMasterObject>true</useMasterObject>
-                        <lookupQuery>select v from AttrValueEntityProduct v where v.val = ?1 and v.product = ?2 and
-                            v.attribute.code = 'Матеріал'
-                        </lookupQuery>
-                    </column-descriptor>
-
-                    <column-descriptor>
-                        <columnIndex>-1</columnIndex>
-                        <fieldType>FK_FIELD</fieldType>
-                        <name>attribute</name>
-                        <lookupQuery>select a from AttributeEntity a where a.code = 'Матеріал'</lookupQuery>
-                    </column-descriptor>
-
-                </importColumns>
-
-            </importDescriptor>
-
-        </column-descriptor>
-
-
-        <!-- Проба -->
-        <column-descriptor>
-            <columnIndex>9</columnIndex>
-            <fieldType>SIMPLE_SLAVE_FIELD</fieldType>
-            <name>attribute</name>
-            <importDescriptor class="import-descriptor">
-
-                <entityIntface>org.yes.cart.domain.entity.AttrValueProduct</entityIntface>
-
-                <importFile class="file-descriptor">
-                    <columnDelimeter>;</columnDelimeter>
-                    <textQualifier null="true"/>
-                    <ignoreFirstLine>false</ignoreFirstLine>
-                </importFile>
-
-                <importColumns class="list">
-
-                    <column-descriptor>
-                        <columnIndex>-1</columnIndex>
-                        <fieldType>FK_FIELD</fieldType>
-                        <name>product</name>
-                        <useMasterObject>true</useMasterObject>
-                    </column-descriptor>
-
-                    <column-descriptor>
-                        <columnIndex>0</columnIndex>
-                        <fieldType>FIELD</fieldType>
-                        <name>val</name>
-                        <regExp>^.*\s{1,}(.*)$</regExp>
-                        <useMasterObject>true</useMasterObject>
-                        <lookupQuery>select v from AttrValueEntityProduct v where v.val = ?1 and v.product = ?2 and
-                            v.attribute.code = 'Проба'
-                        </lookupQuery>
-                    </column-descriptor>
-
-                    <column-descriptor>
-                        <columnIndex>-1</columnIndex>
-                        <fieldType>FK_FIELD</fieldType>
-                        <name>attribute</name>
-                        <lookupQuery>select a from AttributeEntity a where a.code = 'Проба'</lookupQuery>
-                    </column-descriptor>
-
-                </importColumns>
-
-            </importDescriptor>
-
-        </column-descriptor>
-
-
-        <!-- Розмір -->
-        <column-descriptor>
-            <columnIndex>10</columnIndex>
-            <fieldType>SIMPLE_SLAVE_FIELD</fieldType>
-            <name>attribute</name>
-            <importDescriptor class="import-descriptor">
-
-                <entityIntface>org.yes.cart.domain.entity.AttrValueProduct</entityIntface>
-
-                <importFile class="file-descriptor">
-                    <columnDelimeter>;</columnDelimeter>
-                    <textQualifier null="true"/>
-                    <ignoreFirstLine>false</ignoreFirstLine>
-                </importFile>
-
-                <importColumns class="list">
-
-                    <column-descriptor>
-                        <columnIndex>-1</columnIndex>
-                        <fieldType>FK_FIELD</fieldType>
-                        <name>product</name>
-                        <useMasterObject>true</useMasterObject>
-                    </column-descriptor>
-
-                    <column-descriptor>
-                        <columnIndex>0</columnIndex>
-                        <fieldType>FIELD</fieldType>
-                        <name>val</name>
-                        <regExp>(.*)</regExp>
-                        <useMasterObject>true</useMasterObject>
-                        <lookupQuery>select v from AttrValueEntityProduct v where v.val = ?1 and v.product = ?2 and
-                            v.attribute.code = 'Розмір'
-                        </lookupQuery>
-                    </column-descriptor>
-
-                    <column-descriptor>
-                        <columnIndex>-1</columnIndex>
-                        <fieldType>FK_FIELD</fieldType>
-                        <name>attribute</name>
-                        <lookupQuery>select a from AttributeEntity a where a.code = 'Розмір'</lookupQuery>
-                    </column-descriptor>
-
-                </importColumns>
-
-            </importDescriptor>
-
-        </column-descriptor>
-
-
-        <!-- Вага -->
-        <column-descriptor>
-            <columnIndex>11</columnIndex>
-            <fieldType>SIMPLE_SLAVE_FIELD</fieldType>
-            <name>attribute</name>
-            <importDescriptor class="import-descriptor">
-
-                <entityIntface>org.yes.cart.domain.entity.AttrValueProduct</entityIntface>
-
-                <importFile class="file-descriptor">
-                    <columnDelimeter>;</columnDelimeter>
-                    <textQualifier null="true"/>
-                    <ignoreFirstLine>false</ignoreFirstLine>
-                </importFile>
-
-                <importColumns class="list">
-
-                    <column-descriptor>
-                        <columnIndex>-1</columnIndex>
-                        <fieldType>FK_FIELD</fieldType>
-                        <name>product</name>
-                        <useMasterObject>true</useMasterObject>
-                    </column-descriptor>
-
-                    <column-descriptor>
-                        <columnIndex>0</columnIndex>
-                        <fieldType>FIELD</fieldType>
-                        <name>val</name>
-                        <regExp>(.*)</regExp>
-                        <useMasterObject>true</useMasterObject>
-                        <lookupQuery>select v from AttrValueEntityProduct v where v.val = ?1 and v.product = ?2 and
-                            v.attribute.code = 'Вага'
-                        </lookupQuery>
-                    </column-descriptor>
-
-                    <column-descriptor>
-                        <columnIndex>-1</columnIndex>
-                        <fieldType>FK_FIELD</fieldType>
-                        <name>attribute</name>
-                        <lookupQuery>select a from AttributeEntity a where a.code = 'Вага'</lookupQuery>
-                    </column-descriptor>
-
-                </importColumns>
-
-            </importDescriptor>
-
-        </column-descriptor>
 
 
         <!--  описание -->
         <column-descriptor>
-            <columnIndex>15</columnIndex>
+            <columnIndex>10</columnIndex>
             <fieldType>FIELD</fieldType>
             <name>description</name>
             <regExp>(.*)</regExp>
