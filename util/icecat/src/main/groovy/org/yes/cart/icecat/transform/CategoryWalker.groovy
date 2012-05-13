@@ -56,10 +56,9 @@ class CategoryWalker {
         String cacheFolderName = createCacheFolder()
         downloadProducts(handler.categoryList, cacheFolderName)
         parseProducts(handler.categoryList, cacheFolderName)
-        
-        String pictCacheFolder = createPictureCacheFolder();
-        downloadProductPicturess(handler.categoryList,pictCacheFolder)
 
+        String pictCacheFolder = createPictureCacheFolder();
+        downloadProductPicturess(handler.categoryList, pictCacheFolder)
 
         //create folder for csv
         new File("$context.dataDirectory/export/freexml.int/csvresult/").mkdirs();
@@ -70,7 +69,7 @@ class CategoryWalker {
 
         handler.categoryList.each { csv.append(it.toProductType())}
         new File("$context.dataDirectory/export/freexml.int/csvresult/category.csv") << csv.toString();
-        
+
         csv = new StringBuilder();
         handler.categoryList.each { csv.append(it.toProductTypeAttr())}
         new File("$context.dataDirectory/export/freexml.int/csvresult/producttype.csv") << csv.toString();
@@ -83,10 +82,9 @@ class CategoryWalker {
         handler.categoryList.each { csv.append(it.toProductTypeAttrViewGroup())}
         new File("$context.dataDirectory/export/freexml.int/csvresult/productypeattributeviewgroup.csv") << csv.toString();
 
-        new File("$context.dataDirectory/export/freexml.int/csvresult/brand.csv") <<  dumpBrands(handler.categoryList);
+        new File("$context.dataDirectory/export/freexml.int/csvresult/brand.csv") << dumpBrands(handler.categoryList);
 
         new File("$context.dataDirectory/export/freexml.int/csvresult/product.csv") << dumpProducts(handler.categoryList);
-
 
 
     }
@@ -157,10 +155,10 @@ class CategoryWalker {
                 String productName = it.Title.replace("_", "-").replace(" ", "-").replace("?", "-").replace(".", "-");
                 String skuCode = it.Prod_id;
 
-                downloadProductPicture(it.HighPic, authString, cacheFolder, idx ++, productName, skuCode );
+                downloadProductPicture(it.HighPic, authString, cacheFolder, idx++, productName, skuCode);
                 it.productPicture.each {
 
-                    downloadProductPicture(it, authString, cacheFolder, idx ++, productName, skuCode);
+                    downloadProductPicture(it, authString, cacheFolder, idx++, productName, skuCode);
 
                 }
 
@@ -169,28 +167,33 @@ class CategoryWalker {
     }
 
     private def downloadProductPicture(String url, String authString, String cacheFolderName, char idx, String productName, String skuCode) {
-        //preformat filename for import
-        String productFile = cacheFolderName + productName + "_" + skuCode + "_" + idx + url.substring(url.lastIndexOf("."));
+        try {
+            //preformat filename for import
+            String productFile = cacheFolderName + productName + "_" + skuCode + "_" + idx + url.substring(url.lastIndexOf("."));
 
 
-        if (!(new File(productFile).exists())) {
-            try {
-                URLConnection conn = "$url".toURL().openConnection();
-                conn.setRequestProperty("Authorization", "Basic ${authString}")
-                InputStream input = conn.getInputStream()
-                def output = new BufferedOutputStream(new FileOutputStream(productFile));
-                output <<  input
-                input.close();
-                output.close();
-                println "Downloaded $url into $productFile"
+            if (!(new File(productFile).exists())) {
+                try {
+                    URLConnection conn = "$url".toURL().openConnection();
+                    conn.setRequestProperty("Authorization", "Basic ${authString}")
+                    InputStream input = conn.getInputStream()
+                    def output = new BufferedOutputStream(new FileOutputStream(productFile));
+                    output << input
+                    input.close();
+                    output.close();
+                    println "Downloaded $url into $productFile"
 
-            } catch (FileNotFoundException e) {
-                println "File $url not exists on remote server, skipped"
+                } catch (FileNotFoundException e) {
+                    println "File $url not exists on remote server, skipped"
+                }
+
+
+            } else {
+                println "Skipped $url"
             }
 
-
-        } else {
-            println "Skipped $url"
+        } catch (Exception e) {
+            println "cant download $url, because of $e.message"
         }
     }
 

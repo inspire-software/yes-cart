@@ -16,6 +16,8 @@ import java.util.regex.Pattern;
  */
 public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
 
+    private boolean table;
+
     private int columnIndex;
 
     private int forceGroupCount;
@@ -90,6 +92,21 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    public boolean isTable() {
+        return table;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setTable(boolean table) {
+        this.table = table;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
     public String[] getValues(final String rawValue) {
         if (getPattern() != null) {
             Matcher matcher = getPattern().matcher(rawValue);
@@ -114,7 +131,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
             if (matcher.find()) {
                 return matcher.group(1).trim();
             } else {
-                return null; //TODO may be throw an exception ?
+                return null;
             }
         }
         return rawValue;
