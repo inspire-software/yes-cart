@@ -274,6 +274,7 @@ public class CheckoutPage extends AbstractWebPage {
         final ShoppingCart shoppingCart = ApplicationDirector.getShoppingCart();
         final OrderInfo orderInfo = shoppingCart.getOrderInfo();
         final boolean showMultipleDelivery = customerOrderService.isOrderCanHasMultipleDeliveries(shoppingCart);
+        orderInfo.setPaymentGatewayLabel(null);
 
         rez
                 .add(
@@ -284,7 +285,7 @@ public class CheckoutPage extends AbstractWebPage {
                         new ShoppingCartPaymentVerificationView("orderVerificationView", shoppingCart.getShoppingContext(), getDeliveries(shoppingCart))
 
                 )
-                .add(
+                .addOrReplace(
                         new Form(PAYMENT_FRAGMENT_OPTIONS_FORM)
                                 .add(
                                         new CheckBox(PAYMENT_FRAGMENT_MD_CHECKBOX, new PropertyModel(orderInfo, "multipleDelivery")) {
