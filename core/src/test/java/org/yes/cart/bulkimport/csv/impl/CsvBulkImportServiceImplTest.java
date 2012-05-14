@@ -52,8 +52,6 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
     public void testDoProductImportWithSimpleSlaveFiled() throws Exception {
         try {
 
-            //Каблучка
-
             StringBuilder stringBuilder = new StringBuilder();
             Set<String> importedFilesSet = new HashSet<String>();
 
@@ -72,7 +70,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
             bulkImportService = getBulkImportService("src/test/resources/import/product.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
-            todo add attribute import this build is broken
+            //todo add attribute import this build is broken
 
             /*bulkImportService = getBulkImportService("src/test/resources/import/product_sku.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
