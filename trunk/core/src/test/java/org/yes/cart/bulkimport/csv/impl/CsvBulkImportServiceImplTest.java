@@ -67,6 +67,9 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             bulkImportService = getBulkImportService("src/test/resources/import/product_type.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
 
+            bulkImportService = getBulkImportService("src/test/resources/import/producttypeattr.xml");
+            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+
 
             bulkImportService = getBulkImportService("src/test/resources/import/product.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
