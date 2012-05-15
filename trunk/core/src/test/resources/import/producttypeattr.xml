@@ -1,6 +1,6 @@
 <import-descriptor>
 
-    <entityIntface>org.yes.cart.domain.entity.ProductType</entityIntface>
+    <entityIntface>org.yes.cart.domain.entity.ProductTypeAttr</entityIntface>
 
     <importFile class="file-descriptor">
         <columnDelimeter>;</columnDelimeter>
@@ -14,7 +14,7 @@
 
         <column-descriptor>
             <columnIndex>0</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <fieldType>FK_FIELD</fieldType>
             <name>producttype</name>
             <regExp>(.*)</regExp>
             <lookupQuery>select b from ProductTypeEntity b where b.name = ?1</lookupQuery>
@@ -22,17 +22,13 @@
 
         <column-descriptor>
             <columnIndex>1</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <fieldType>FK_FIELD</fieldType>
             <name>attribute</name>
             <regExp>(.*)</regExp>
-            <lookupQuery>select b from ProductTypeAttrEntity b where b.attribute.code = ?1</lookupQuery>
+            <lookupQuery>select b from AttributeEntity b where b.code = ?1</lookupQuery>
         </column-descriptor>
 
-        <column-descriptor>
-            <columnIndex>1</columnIndex>
-            <fieldType>FIELD</fieldType>
-            <name>description</name>
-        </column-descriptor>
+
 
     </importColumns>
     <importFolder>src/test/resources/import</importFolder>
