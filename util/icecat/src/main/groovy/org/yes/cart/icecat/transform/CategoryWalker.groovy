@@ -71,9 +71,9 @@ class CategoryWalker {
         new File("$context.dataDirectory/export/freexml.int/csvresult/category.csv") << csv.toString();
 
         csv = new StringBuilder();
-        csv.append("name;attrname;mandatory;searchable;no\n")
+        csv.append("name;attrname;mandatory;searchable;num\n")
         handler.categoryList.each { csv.append(it.toProductTypeAttr())}
-        new File("$context.dataDirectory/export/freexml.int/csvresult/producttype.csv") << csv.toString();
+        new File("$context.dataDirectory/export/freexml.int/csvresult/producttypeattr.csv") << csv.toString();
 
         csv = new StringBuilder();
         handler.categoryList.each { csv.append(it.toArrtViewGroup())}
