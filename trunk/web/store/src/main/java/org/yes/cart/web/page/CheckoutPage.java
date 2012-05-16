@@ -143,7 +143,7 @@ public class CheckoutPage extends AbstractWebPage {
 
         final boolean threeStepsProcess = params.get(THREE_STEPS_PROCESS).toBoolean(
                 ((AuthenticatedWebSession) getSession()).isSignedIn()
-        );
+        ) && ((AuthenticatedWebSession) getSession()).isSignedIn();
 
         final String currentStep =
                 params.get(STEP).toString(threeStepsProcess ? STEP_ADDR : STEP_LOGIN);
@@ -210,7 +210,9 @@ public class CheckoutPage extends AbstractWebPage {
      * @return markup container
      */
     private MarkupContainer getContent(final String currentStep) {
-        if (STEP_ADDR.equals(currentStep)) {
+        if (!((AuthenticatedWebSession) getSession()).isSignedIn()) {
+            return createLoginFragment();
+        } else  if (STEP_ADDR.equals(currentStep)) {
             return createAddressFragment();
         } else if (STEP_SHIPMENT.equals(currentStep)) {
             return createShippmentFragment();
