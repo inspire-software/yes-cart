@@ -280,7 +280,7 @@
                 ]]>
             </meta>
 
-            <property name="code" column="CODE" type="string" length="32" not-null="true"/>
+            <property name="code" column="CODE" type="string" length="255" not-null="true"/>
             <property name="name" type="string" length="64" not-null="true">
                 <column name="NAME" length="64" not-null="true"/>
             </property>
@@ -313,7 +313,7 @@
             </generator>
         </id>
         <discriminator type="integer" formula="1"/>
-        <property name="code" column="CODE" type="string" length="64" not-null="true"/>
+        <property name="code" column="CODE" type="string" length="255" not-null="true"/>
         <subclass name="org.yes.cart.domain.entity.impl.AttributeEntity" discriminator-value="1">
             <meta attribute="class-description">UNCOMMENT @Indexed (index = "luceneindex/attribute")</meta>
             <meta attribute="extra-import">org.hibernate.search.annotations.*</meta>
@@ -346,7 +346,7 @@
 
    private String code;
 
-   @Column(name="CODE", length=32, nullable=false)
+   @Column(name="CODE", length=255, nullable=false)
    public String getCode() {
     return this.code;
    }
@@ -1149,7 +1149,7 @@
     }
                 ]]>
             </meta>
-            <property name="code" column="CODE" type="string" length="32" not-null="true"/>
+            <property name="code" column="CODE" type="string" length="255" not-null="true"/>
             <property name="fspointer" type="string" length="4000">
                 <column name="FSPOINTER" length="4000" not-null="true">
                     <comment>Absolute path to folder with html template files and images.</comment>
@@ -1215,7 +1215,7 @@
 
                 ]]>
             </meta>
-            <property name="code" column="CODE" type="string" length="32" not-null="true"/>
+            <property name="code" column="CODE" type="string" length="255" not-null="true"/>
             <property name="name" type="string" length="64" not-null="true">
                 <column name="NAME" length="64" not-null="true"/>
             </property>
@@ -2533,7 +2533,7 @@ public void setRangeList(final RangeList rangeList) {
 
                 ]]>
             </meta>
-            <property name="code" column="CODE" type="string" length="32" not-null="true"/>
+            <property name="code" column="CODE" type="string" length="255" not-null="true"/>
             <property name="name" column="NAME" type="string" length="255" not-null="true"/>
             <property name="description" column="DESCRIPTION" type="string" length="4000"/>
 
@@ -2657,7 +2657,7 @@ public void setRangeList(final RangeList rangeList) {
     }
                 ]]>
             </meta>
-            <property name="code" column="CODE" type="string" length="32" not-null="true"/>
+            <property name="code" column="CODE" type="string" length="255" not-null="true"/>
             <property name="name" type="string" length="64" not-null="true">
                 <column name="NAME" length="64" not-null="true"/>
             </property>
@@ -2823,7 +2823,7 @@ public void setRangeList(final RangeList rangeList) {
 
                 ]]>
             </meta>
-            <property name="code" column="CODE" type="string" length="32" not-null="true" lazy="false"/>
+            <property name="code" column="CODE" type="string" length="255" not-null="true" lazy="false"/>
             <property name="name" type="string" length="64" not-null="true" lazy="false">
                 <column name="NAME" length="64" not-null="true"/>
             </property>

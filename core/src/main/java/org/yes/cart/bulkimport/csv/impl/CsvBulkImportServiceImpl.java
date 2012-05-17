@@ -208,8 +208,9 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
                   final CvsImportDescriptor importDescriptor,
                   final ImportColumn pkColumn,
                   final Object masterObject) {
+        Object object = null;
         try {
-            final Object object = getEntity(line, pkColumn, masterObject, importDescriptor);
+            object = getEntity(line, pkColumn, masterObject, importDescriptor);
             fillEntityFields(line, object, importDescriptor.getImportColumns(FieldTypeEnum.FIELD));
             fillEntityForeignKeys(line, object, importDescriptor.getImportColumns(FieldTypeEnum.FK_FIELD), masterObject, importDescriptor);
             genericDAO.saveOrUpdate(object);
@@ -220,16 +221,19 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
             String additionalInfo = null;
             if (propertyDescriptor != null) {
                 additionalInfo = MessageFormat.format(
-                        "Property name {0} type {1}",
+                        "Property name {0} type {1} object is {2}",
                         propertyDescriptor.getName(),
-                        propertyDescriptor.getPropertyType().getName());
+                        propertyDescriptor.getPropertyType().getName(),
+                        object
+                );
             }
             String message = MessageFormat.format(
-                    "\nERROR duiring import row : {0} \ndescriptor {1} \nerror {2} \nadditional info {3}",
+                    "\nERROR duiring import row : {0} \ndescriptor {1} \nerror {2} \nadditional info {3} \nobject is {4}",
                     getRowAsString(line, importDescriptor.getImportFile().getColumnDelimeter()),
                     pathToImportDescriptor,
                     e.getMessage(),
-                    additionalInfo
+                    additionalInfo,
+                    object
             );
             LOG.warn(message, e);
             e.printStackTrace();

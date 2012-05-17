@@ -44,7 +44,7 @@ class Category {
                 builder.append(";");
                 builder.append(feature.Searchable);
                 builder.append(";");
-                builder.append(feature.No);
+                builder.append(  ((name == null ? id : name) + feature.Name).hashCode() );
                 builder.append("\n")
             }
 

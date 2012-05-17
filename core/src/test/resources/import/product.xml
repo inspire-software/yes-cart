@@ -12,7 +12,17 @@
 
     <importColumns class="list">
 
-        <!--  Наименование ТМЦ -->
+        <!-- Primary key -->
+        <column-descriptor>
+            <columnIndex>5</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>code</name>
+            <regExp>(.*)</regExp>
+            <lookupQuery>select p from ProductEntity p where p.code = ?1</lookupQuery>
+        </column-descriptor>
+
+
+        <!--  Productname -->
         <column-descriptor>
             <columnIndex>0</columnIndex>
             <fieldType>FIELD</fieldType>
@@ -46,65 +56,7 @@
             <lookupQuery>select a from AvailabilityEntity a where a.availabilityId = 1 </lookupQuery>
         </column-descriptor>
 
-<!--
-        <column-descriptor>
-            <columnIndex>4</columnIndex>
-            <fieldType>FK_FIELD</fieldType>
-            <name>availability</name>
-            <regExp>(nothing)</regExp>
-            <lookupQuery>select a from AvailabilityEntity a where a.availabilityId = 1 </lookupQuery>
-        </column-descriptor>
 
--->
-
-        <!-- Код продукта field for lookup object -->
-        <column-descriptor>
-            <columnIndex>5</columnIndex>
-            <fieldType>FIELD</fieldType>
-            <name>code</name>
-            <regExp>(.*)</regExp>
-            <lookupQuery>select p from ProductEntity p where p.code = ?1</lookupQuery>
-        </column-descriptor>
-
-        <!-- 8 вставкa материал -->
-        <!--<column-descriptor>
-            <columnIndex>8</columnIndex>
-            <fieldType>SIMPLE_SLAVE_FIELD</fieldType>
-            <name>attribute</name>
-            <importDescriptor class="import-descriptor">
-                <entityIntface>org.yes.cart.domain.entity.AttrValueProduct</entityIntface>
-                <importFile class="file-descriptor">
-                    <columnDelimeter>;</columnDelimeter>
-                    <textQualifier null="true"/>
-                    <ignoreFirstLine>false</ignoreFirstLine>
-                </importFile>
-                <importColumns class="list">
-                    <column-descriptor>
-                        <columnIndex>-1</columnIndex>
-                        <fieldType>FK_FIELD</fieldType>
-                        <name>product</name>
-                        <useMasterObject>true</useMasterObject>
-                    </column-descriptor>
-                    <column-descriptor>
-                        <columnIndex>0</columnIndex>
-                        <fieldType>FIELD</fieldType>
-                        <name>val</name>
-                        <regExp>((\D?\S{4,}){1,}).*-?.*</regExp>
-                        <forceGroupCount>1</forceGroupCount>
-                        <useMasterObject>true</useMasterObject>
-                        <lookupQuery>select v from AttrValueEntityProduct v where v.val = ?1 and v.product = ?2 and
-                            v.attribute.code = 'Вставка'
-                        </lookupQuery>
-                    </column-descriptor>
-                    <column-descriptor>
-                        <columnIndex>-1</columnIndex>
-                        <fieldType>FK_FIELD</fieldType>
-                        <name>attribute</name>
-                        <lookupQuery>select a from AttributeEntity a where a.code = 'Вставка'</lookupQuery>
-                    </column-descriptor>
-                </importColumns>
-            </importDescriptor>
-        </column-descriptor>-->
 
         <!-- 9 key - value attribute  -->
        <column-descriptor>
@@ -129,21 +81,27 @@
                         <columnIndex>0</columnIndex>
                         <fieldType>FIELD</fieldType>
                         <name>val</name>
-                        <regExp>(.*)->(.*)</regExp>
-                        <forceGroupCount>2</forceGroupCount>
+                        <regExp>(.*)-></regExp>
                         <useMasterObject>true</useMasterObject>
                         <lookupQuery>select v from AttrValueEntityProduct v where
-                            v.val = ?1 and
-                            v.attribute.code = ?2 and
-                            v.product = ?3
+                            v.attribute.code = ?1 and
+                            v.product = ?2
                         </lookupQuery>
                     </column-descriptor>
                     <column-descriptor>
-                        <columnIndex>-1</columnIndex>
+                        <columnIndex>0</columnIndex>
                         <fieldType>FK_FIELD</fieldType>
+                        <regExp>(.*)-></regExp>
                         <name>attribute</name>
-                        <lookupQuery>select a from AttributeEntity a where a.code = 'Колір_вставки'</lookupQuery>
+                        <lookupQuery>select a from AttributeEntity a where a.code = ?1</lookupQuery>
                     </column-descriptor>
+                    <column-descriptor>
+                        <columnIndex>0</columnIndex>
+                        <fieldType>FIELD</fieldType>
+                        <name>val</name>
+                        <regExp>->(.*)</regExp>
+                    </column-descriptor>
+
                 </importColumns>
             </importDescriptor>
         </column-descriptor>

@@ -6,11 +6,20 @@
         <columnDelimeter>;</columnDelimeter>
         <textQualifier>&quot;</textQualifier>
         <ignoreFirstLine>true</ignoreFirstLine>
-        <fileNameMask>producttypeattr*.csv$</fileNameMask>
+        <fileNameMask>producttypeattr.csv</fileNameMask>
         <fileEncoding>UTF-8</fileEncoding>
     </importFile>
 
     <importColumns class="list">
+
+        <column-descriptor>
+            <columnIndex>4</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>guid</name>
+            <regExp>(.*)</regExp>
+            <lookupQuery>select b from ProductTypeAttr b where b.guid = ?1</lookupQuery>
+        </column-descriptor>
+
 
         <column-descriptor>
             <columnIndex>0</columnIndex>
