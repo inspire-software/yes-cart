@@ -1,4 +1,4 @@
-call mvn clean install 
+rem call mvn clean install 
 rem  -DskipTests=true 
 rem -Pmysql
 

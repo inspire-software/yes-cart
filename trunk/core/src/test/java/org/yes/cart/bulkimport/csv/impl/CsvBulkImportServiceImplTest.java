@@ -65,19 +65,21 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
             bulkImportService = getBulkImportService("src/test/resources/import/attribute.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
-            dumpDataBase("www" , new String [] {"TATTRIBUTE"});
 
-
-           /* bulkImportService = getBulkImportService("src/test/resources/import/product_type.xml");
+            bulkImportService = getBulkImportService("src/test/resources/import/product_type.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+
+
 
             bulkImportService = getBulkImportService("src/test/resources/import/producttypeattr.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
 
-
             bulkImportService = getBulkImportService("src/test/resources/import/product.xml");
-            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");       */
-            //todo add attribute import this build is broken
+            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+
+            dumpDataBase("www" , new String [] {"TATTRIBUTE", "TPRODUCTTYPE", "TPRODUCTTYPEATTR", "TPRODUCT", "TPRODUCTATTRVALUE"});
+            System.out.print(stringBuilder.toString());
+
 
             /*bulkImportService = getBulkImportService("src/test/resources/import/product_sku.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
