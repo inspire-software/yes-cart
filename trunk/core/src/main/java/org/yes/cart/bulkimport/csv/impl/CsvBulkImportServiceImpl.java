@@ -1,6 +1,7 @@
 package org.yes.cart.bulkimport.csv.impl;
 
 
+import com.google.common.collect.MapMaker;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.apache.commons.lang.StringUtils;
@@ -23,7 +24,9 @@ import java.beans.PropertyDescriptor;
 import java.io.*;
 import java.text.MessageFormat;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Pefrorm import from csv files. Import based on xml import description, that include
@@ -236,7 +239,6 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
                     object
             );
             LOG.warn(message, e);
-            e.printStackTrace();
             errorReport.append(message);
         }
     }
@@ -375,6 +377,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
         return object;
     }
 
+
     /**
      * Try to get existing entity for update. In case of sub import master object will be used in parameters if
      * {@link ImportColumn#isUseMasterObject()} set to true.
@@ -391,20 +394,24 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
                     column.getLookupQuery(), new Object[0]);    //Query with constants
 
         } else {
-            if (column.getGroupCount(line[column.getColumnIndex()]) > 1) {
-                object = genericDAO.findSingleByQuery(
-                        column.getLookupQuery(),
-                        getQueryParameters(column.isUseMasterObject(), masterObject, column.getValues(line[column.getColumnIndex()]))
-                );
-            } else {
-                object = genericDAO.findSingleByQuery(
-                        column.getLookupQuery(),
-                        getQueryParameters(column.isUseMasterObject(), masterObject, column.getValue(line[column.getColumnIndex()]))
-                );
-            }
+            final Object queryParameters = getQueryParametersValue(line[column.getColumnIndex()], column);
+            object = genericDAO.findSingleByQuery(
+                    column.getLookupQuery(),
+                    getQueryParameters(column.isUseMasterObject(), masterObject, queryParameters)
+            );
         }
         return object;
+
     }
+
+
+    private Object getQueryParametersValue(final String rawValue, final ImportColumn column) {
+        if (column.getGroupCount(rawValue) > 1) {
+            return column.getValues(rawValue);
+        }
+        return column.getValue(rawValue);
+    }
+
 
     /**
      * Get the look up query parameters, if  useMasterObject set to true  masterObject will be added
@@ -459,8 +466,6 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
     }
 
 
-
-
     protected XStream getXStream() {
         XStream xStream = new XStream(new DomDriver());
         xStream.alias("import-descriptor", CvsImportDescriptorImpl.class);
@@ -468,6 +473,4 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
         xStream.alias("column-descriptor", CsvImportColumnImpl.class);
         return xStream;
     }
-
-
 }
