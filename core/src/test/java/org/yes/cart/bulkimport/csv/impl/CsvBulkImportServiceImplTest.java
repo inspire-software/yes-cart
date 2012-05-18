@@ -8,6 +8,7 @@ import org.yes.cart.bulkimport.service.BulkImportService;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -56,29 +57,45 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             Set<String> importedFilesSet = new HashSet<String>();
 
             BulkImportService bulkImportService = null;
-
+            
+            Date dt = new Date();
             bulkImportService = getBulkImportService("src/test/resources/import/brandimport.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
-
+            System.out.println("brands " + (new Date().getTime() - dt.getTime()));
+            dt = new Date();
             bulkImportService = getBulkImportService("src/test/resources/import/availability.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+            System.out.println("availability " + (new Date().getTime() - dt.getTime()));
+            dt = new Date();
 
             bulkImportService = getBulkImportService("src/test/resources/import/attribute.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
 
+            System.out.println("attribute " + (new Date().getTime() - dt.getTime()));
+            dt = new Date();
+
             bulkImportService = getBulkImportService("src/test/resources/import/product_type.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
 
+            System.out.println("product_type.xml " + (new Date().getTime() - dt.getTime()));
+            dt = new Date();
 
 
             bulkImportService = getBulkImportService("src/test/resources/import/producttypeattr.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
 
+            System.out.println("producttypeattr.xml " + (new Date().getTime() - dt.getTime()));
+            dt = new Date();
+
+
             bulkImportService = getBulkImportService("src/test/resources/import/product.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
 
+            System.out.println("product.xml " + (new Date().getTime() - dt.getTime()));
+
+
             dumpDataBase("www" , new String [] {"TATTRIBUTE", "TPRODUCTTYPE", "TPRODUCTTYPEATTR", "TPRODUCT", "TPRODUCTATTRVALUE"});
-            System.out.print(stringBuilder.toString());
+            //System.out.print(stringBuilder.toString());
 
 
             /*bulkImportService = getBulkImportService("src/test/resources/import/product_sku.xml");
