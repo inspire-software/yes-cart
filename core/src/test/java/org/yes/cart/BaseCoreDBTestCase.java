@@ -51,6 +51,8 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         return sharedContext;
     }
 
+
+
     @After
     public void tearDown() throws Exception {
         try {

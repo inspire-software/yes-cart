@@ -3,11 +3,15 @@ package org.yes.cart.bulkimport.csv.impl;
 import org.junit.Before;
 import org.junit.After;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.bulkimport.csv.CsvFileReader;
 import org.yes.cart.bulkimport.service.BulkImportService;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -25,11 +29,24 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
     BulkImportService bulkImportService = null;
 
+    private static ApplicationContext sharedContext;
+
+    /**
+     * For bulk import to switch off lucene indexing
+     * @return
+     */
+    protected synchronized ApplicationContext createContext2() {
+        if (sharedContext == null) {
+            sharedContext = new ClassPathXmlApplicationContext("testApplicationContext2.xml", "core-aspects.xml");
+        }
+        return sharedContext;
+    }
+
     @Before
     public void setUp() throws Exception {
 
         if (bulkImportService == null) {
-            bulkImportService = (BulkImportService) createContext().getBean("bulkImportServiceImpl");
+            bulkImportService = (BulkImportService) createContext2().getBean("bulkImportServiceImpl");
         }
 
     }
@@ -49,6 +66,36 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
     }
 
+
+    @Test
+    public void csvFileReaderTest() throws Exception {
+
+        ArrayList<String> allowedValue =  new ArrayList<String>();
+        allowedValue.add("HP Pavilion g6-1330eb");
+        allowedValue.add("Lenovo ThinkPad Edge E530");
+        allowedValue.add("Fujitsu LIFEBOOK T731");
+        allowedValue.add("Samsung 3 Series 305E5A-A01");
+        allowedValue.add("Acer TravelMate 5744-484G50MNKK");
+        CsvFileReader csvFileReader = new CsvFileReaderImpl();
+
+        csvFileReader.open(
+                "src/test/resources/import/product_entity.csv",
+                ';',
+                '"',
+                "UTF-8",
+                true);
+
+        String[] line;
+        while ((line = csvFileReader.readLine()) != null) {
+            //doImport(errorReport, line, cvsImportDescriptor, pkColumn, null);
+            allowedValue.remove(line[0]) ;
+        }
+
+        assertTrue(allowedValue.isEmpty());
+
+
+    }
+
     @Test
     public void testDoProductImportWithSimpleSlaveFiled() throws Exception {
         try {
@@ -57,61 +104,76 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             Set<String> importedFilesSet = new HashSet<String>();
 
             BulkImportService bulkImportService = null;
-            
+
             Date dt = new Date();
             bulkImportService = getBulkImportService("src/test/resources/import/brandimport.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
             System.out.println("brands " + (new Date().getTime() - dt.getTime()));
+
             dt = new Date();
             bulkImportService = getBulkImportService("src/test/resources/import/availability.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
             System.out.println("availability " + (new Date().getTime() - dt.getTime()));
-            dt = new Date();
 
+            dt = new Date();
             bulkImportService = getBulkImportService("src/test/resources/import/attribute.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
-
             System.out.println("attribute " + (new Date().getTime() - dt.getTime()));
-            dt = new Date();
 
+            dt = new Date();
             bulkImportService = getBulkImportService("src/test/resources/import/product_type.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
-
             System.out.println("product_type.xml " + (new Date().getTime() - dt.getTime()));
+
             dt = new Date();
-
-
             bulkImportService = getBulkImportService("src/test/resources/import/producttypeattr.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
-
             System.out.println("producttypeattr.xml " + (new Date().getTime() - dt.getTime()));
+
+
             dt = new Date();
-
-
             bulkImportService = getBulkImportService("src/test/resources/import/product.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
-
             System.out.println("product.xml " + (new Date().getTime() - dt.getTime()));
 
-
-            dumpDataBase("www" , new String [] {"TATTRIBUTE", "TPRODUCTTYPE", "TPRODUCTTYPEATTR", "TPRODUCT", "TPRODUCTATTRVALUE"});
-            //System.out.print(stringBuilder.toString());
-
-
-            /*bulkImportService = getBulkImportService("src/test/resources/import/product_sku.xml");
+            dt = new Date();
+            bulkImportService = getBulkImportService("src/test/resources/import/product_sku.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+            System.out.println("attributeviewgroup.xml " + (new Date().getTime() - dt.getTime()));
 
+            dt = new Date();
+            bulkImportService = getBulkImportService("src/test/resources/import/attributeviewgroup.xml");
+            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+            System.out.println("attributeviewgroup.xml " + (new Date().getTime() - dt.getTime()));
+
+
+            dt = new Date();
             bulkImportService = getBulkImportService("src/test/resources/import/warehouse.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+            System.out.println("warehouse.xml " + (new Date().getTime() - dt.getTime()));
 
+
+            dt = new Date();
             bulkImportService = getBulkImportService("src/test/resources/import/skuquantity.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+            System.out.println("skuquantity.xml " + (new Date().getTime() - dt.getTime()));
 
+            dt = new Date();
             bulkImportService = getBulkImportService("src/test/resources/import/skuprice.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+            System.out.println("skuprice.xml " + (new Date().getTime() - dt.getTime()));
 
+            dt = new Date();
             bulkImportService = getBulkImportService("src/test/resources/import/product_category.xml");
-            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");       */
+            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+            System.out.println("product_category.xml " + (new Date().getTime() - dt.getTime()));
+
+
+            dumpDataBase("www", new String[]{"TATTRIBUTE", "TPRODUCTTYPE", "TPRODUCTTYPEATTR",
+                    "TPRODUCT", "TSKU", "TPRODUCTATTRVALUE",
+                    "TSKUWAREHOUSE", "TSKUPRICE", "TPRODUCTCATEGORY"
+            });
+            System.out.println(stringBuilder.toString());
 
 
             //assertTrue(stringBuilder.toString(), stringBuilder.toString().indexOf("ERROR") == -1);
