@@ -39,7 +39,6 @@ public abstract class AbstractTestDAO {
             try {
                 dbTester.onSetup();
             } catch (Exception e) {
-                dumpDataBase("data_init_failed", new String[]{"TATTRIBUTE"});
                 throw e;
             }
         }

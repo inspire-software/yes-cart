@@ -14,20 +14,20 @@
     <importColumns class="list">
 
         <column-descriptor>
-            <columnIndex>7</columnIndex>
+            <columnIndex>5</columnIndex>
             <fieldType>FIELD</fieldType>
             <regExp>(.*)</regExp>
             <lookupQuery>
                 select p from SkuPriceEntity p
                 where p.sku.code = ?1
-                and p.shop.code = 'JEWEL_SHOP'
+                and p.shop.code = 'SHOP10'
                 and p.currency = 'USD'
                 and p.quantity = 1
             </lookupQuery> <!-- at this moment i see only one price tier -->
         </column-descriptor>
 
         <column-descriptor>
-            <columnIndex>14</columnIndex>
+            <columnIndex>5</columnIndex>
             <fieldType>FK_FIELD</fieldType>
             <name>sku</name>
             <regExp>(.*)</regExp>
@@ -39,20 +39,21 @@
             <columnIndex>-1</columnIndex>
             <fieldType>FK_FIELD</fieldType>
             <name>shop</name>
-            <lookupQuery>select a from ShopEntity a where a.code = 'JEWEL_SHOP'</lookupQuery>
+            <lookupQuery>select a from ShopEntity a where a.code = 'SHOIP1'</lookupQuery>
         </column-descriptor>
 
         <column-descriptor>
-            <columnIndex>13</columnIndex>
+            <columnIndex>7</columnIndex>
             <fieldType>FIELD</fieldType>
             <name>regularPrice</name>
         </column-descriptor>
 
 
         <column-descriptor>
-            <columnIndex>12</columnIndex>
+            <columnIndex>-1</columnIndex>
             <fieldType>FIELD</fieldType>
             <name>quantity</name>
+            <constant>1</constant>
         </column-descriptor>
 
         <column-descriptor>

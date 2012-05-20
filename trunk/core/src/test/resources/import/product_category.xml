@@ -15,7 +15,7 @@
     <importColumns class="list">
 
         <column-descriptor>
-            <columnIndex>7</columnIndex>
+            <columnIndex>5</columnIndex>
             <fieldType>FIELD</fieldType>
             <regExp>(.*)</regExp>
             <lookupQuery>
@@ -36,7 +36,7 @@
 
         <!-- Код продукта -->
         <column-descriptor>
-            <columnIndex>7</columnIndex>
+            <columnIndex>5</columnIndex>
             <fieldType>FK_FIELD</fieldType>
             <name>product</name>
             <regExp>(.*)</regExp>

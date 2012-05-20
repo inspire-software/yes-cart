@@ -76,6 +76,7 @@ class CategoryWalker {
         new File("$context.dataDirectory/export/freexml.int/csvresult/producttypeattr.csv") << csv.toString();
 
         csv = new StringBuilder();
+        csv.append("name\n")
         handler.categoryList.each { csv.append(it.toArrtViewGroup())}
         new File("$context.dataDirectory/export/freexml.int/csvresult/attributeviewgroup.csv") << csv.toString();
 
@@ -85,7 +86,8 @@ class CategoryWalker {
 
         new File("$context.dataDirectory/export/freexml.int/csvresult/brand.csv") << dumpBrands(handler.categoryList);
 
-        new File("$context.dataDirectory/export/freexml.int/csvresult/product.csv") << dumpProducts(handler.categoryList);
+
+        new File("$context.dataDirectory/export/freexml.int/csvresult/product_entity.csv") << dumpProducts(handler.categoryList);
 
 
     }

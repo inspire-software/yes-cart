@@ -367,15 +367,39 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
                              final ImportColumn column,
                              final Object masterObject,
                              final ImportDescriptor importDescriptor) throws ClassNotFoundException {
+        final String key = column.getName() + getKey(line, masterObject);
 
-        Object object = getExistingEntity(line, column, masterObject);
+
+        Object object = shopCodeMailTemplateDirMap.get(key);
         if (object == null) {
-            object = genericDAO.getEntityFactory().getByIface(
-                    Class.forName(importDescriptor.getEntityIntface())
-            );
+            object = getExistingEntity(line, column, masterObject);
+            if (object == null) {
+                object = genericDAO.getEntityFactory().getByIface(
+                        Class.forName(importDescriptor.getEntityIntface())
+                );
+            }
+            if (object != null) {
+                shopCodeMailTemplateDirMap.put(key, object);
+            }
+        }   else {
+            System.out.print("\nhit wut key " + key);
         }
         return object;
     }
+
+    private String getKey(final String[] line, final Object masterObject) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(masterObject);
+        for (String l : line) {
+            stringBuilder.append(l);
+        }
+
+        return stringBuilder.toString();
+    }
+
+
+    private Map<String, Object> shopCodeMailTemplateDirMap =
+            new MapMaker().concurrencyLevel(1).expiration(3, TimeUnit.MINUTES).makeMap();
 
 
     /**
