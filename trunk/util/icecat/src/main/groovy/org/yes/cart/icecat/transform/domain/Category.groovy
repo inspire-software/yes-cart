@@ -68,6 +68,8 @@ class Category {
     public String toProductTypeAttrViewGroup() {       //TPRODTYPEATTRVIEWGROUP
         StringBuilder builder = new StringBuilder();
         for (CategoryFeatureGroup cfg : categoryFeatureGroup) {
+            builder.append((name == null ? id : name))
+            builder.append(";")
             builder.append(cfg.Name)
             builder.append(";")
             for(Feature feature : cfg.featureList) {

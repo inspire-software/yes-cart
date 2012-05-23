@@ -129,9 +129,20 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             System.out.println("attribute " + (new Date().getTime() - dt.getTime()));
 
             dt = new Date();
+            bulkImportService = getBulkImportService("src/test/resources/import/attributeviewgroup.xml");
+            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+            System.out.println("attributeviewgroup.xml " + (new Date().getTime() - dt.getTime()));
+
+            dt = new Date();
             bulkImportService = getBulkImportService("src/test/resources/import/product_type.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
             System.out.println("product_type.xml " + (new Date().getTime() - dt.getTime()));
+
+
+            dt = new Date();
+            bulkImportService = getBulkImportService("src/test/resources/import/productypeattributeviewgroup.xml");
+            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+            System.out.println("productypeattributeviewgroup.xml " + (new Date().getTime() - dt.getTime()));
 
             dt = new Date();
             bulkImportService = getBulkImportService("src/test/resources/import/producttypeattr.xml");
@@ -149,10 +160,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
             System.out.println("attributeviewgroup.xml " + (new Date().getTime() - dt.getTime()));
 
-            dt = new Date();
-            bulkImportService = getBulkImportService("src/test/resources/import/attributeviewgroup.xml");
-            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
-            System.out.println("attributeviewgroup.xml " + (new Date().getTime() - dt.getTime()));
+
 
 
             dt = new Date();
@@ -177,31 +185,24 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             System.out.println("product_category.xml " + (new Date().getTime() - dt.getTime()));
 
 
-            dumpDataBase("www", new String[]{"TATTRIBUTE", "TPRODUCTTYPE", "TPRODUCTTYPEATTR",
-                    "TPRODUCT", "TSKU", "TPRODUCTATTRVALUE",
-                    "TSKUWAREHOUSE", "TSKUPRICE", "TPRODUCTCATEGORY", "TCATEGORY", "TATTRVIEWGROUP"
-            });
-            //System.out.println(stringBuilder.toString());
-
 
             //assertTrue(stringBuilder.toString(), stringBuilder.toString().indexOf("ERROR") == -1);
 
         } catch (Exception e) {
             assertTrue(e.getMessage(), false);
         } finally {
-            dumpDataBase(
-                    "product",
-                    new String[]{"tproduct", "tsku", "tattribute",
-                            "tproductattrvalue", "tproductskuattrvalue", "tproducttype",
-                            "tbrand", "twarehouse", "tskuwarehouse",
-                            "tskuprice", "tproductcategory"}
-            );
+            dumpDataBase("www", new String[]{"TATTRIBUTE", "TPRODUCTTYPE", "TPRODUCTTYPEATTR",
+                    "TPRODUCT", "TSKU", "TPRODUCTATTRVALUE",
+                    "TSKUWAREHOUSE", "TSKUPRICE", "TPRODUCTCATEGORY", "TCATEGORY",
+                    "TATTRVIEWGROUP" ,
+                    "TPRODTYPEATTRVIEWGROUP"
+            });
         }
 
     }
 
 
-    /*@Test
+    @Test
     public void testDoImportSimple() throws Exception {
         StringBuilder stringBuilder = new StringBuilder();
         Set<String> importedFilesSet = new HashSet<String>();
@@ -237,9 +238,9 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             assertTrue(e.getMessage() + " " + stringBuilder.toString(), false);
         }
 
-    }     */
+    }
 
-    /*@Test
+    @Test
     public void testDoImportWithForeignKeys() {
         StringBuilder stringBuilder = new StringBuilder();
         Set<String> importedFilesSet = new HashSet<String>();
@@ -292,9 +293,9 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             assertTrue(e.getMessage(), false);
         }
 
-    }   */
+    }
 
-    /*@Test
+    @Test
     public void testDoImportWithSimpleSlaveFiled() {
         StringBuilder stringBuilder = new StringBuilder();
         Set<String> importedFilesSet = new HashSet<String>();
@@ -330,5 +331,5 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
         }
 
-    }  */
+    }
 }

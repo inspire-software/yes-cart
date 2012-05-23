@@ -1585,10 +1585,10 @@ public void setRangeList(final RangeList rangeList) {
     }
                 ]]>
             </meta>
-            <many-to-one name="producttype" class="org.yes.cart.domain.entity.ProductType"  insert="false" update="false">
+            <many-to-one name="producttype" class="org.yes.cart.domain.entity.ProductType"  >
                 <column name="PRODUCTTYPE_ID" not-null="true"/>
             </many-to-one>
-            <many-to-one name="attributeViewGroup" class="org.yes.cart.domain.entity.AttributeViewGroup" lazy="false" insert="false" update="false">
+            <many-to-one name="attributeViewGroup" class="org.yes.cart.domain.entity.AttributeViewGroup" lazy="false" >
                 <column name="ATTRVIEWGROUP_ID" not-null="true"/>
             </many-to-one>
             <property name="attrCodeList" length="4000" type="string">

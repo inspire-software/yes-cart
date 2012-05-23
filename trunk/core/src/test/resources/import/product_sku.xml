@@ -14,7 +14,7 @@
 
     <importColumns class="list">
 
-        <!-- promari key -->
+        <!-- primari key -->
         <column-descriptor>
             <columnIndex>5</columnIndex>
             <fieldType>FIELD</fieldType>
