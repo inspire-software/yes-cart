@@ -111,6 +111,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
                             "ERROR: import can not be started, because can not fild column to locate primary key");
                     return BulkImportResult.ERROR;
                 }
+                entityCache.clear();
                 doImport(errorReport, filesToImport, cvsImportDescriptor, importedFiles);
             }
         } catch (Exception e) {
@@ -370,7 +371,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
         final String key = column.getName() + getKey(line, masterObject);
 
 
-        Object object = shopCodeMailTemplateDirMap.get(key);
+        Object object = entityCache.get(key);
         if (object == null) {
             object = getExistingEntity(line, column, masterObject);
             if (object == null) {
@@ -379,10 +380,8 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
                 );
             }
             if (object != null) {
-                shopCodeMailTemplateDirMap.put(key, object);
+                entityCache.put(key, object);
             }
-        }   else {
-            System.out.print("\nhit wut key " + key);
         }
         return object;
     }
@@ -398,7 +397,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
     }
 
 
-    private Map<String, Object> shopCodeMailTemplateDirMap =
+    private Map<String, Object> entityCache =
             new MapMaker().concurrencyLevel(1).expiration(3, TimeUnit.MINUTES).makeMap();
 
 

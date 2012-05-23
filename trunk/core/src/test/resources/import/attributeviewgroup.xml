@@ -6,7 +6,7 @@
         <columnDelimeter>;</columnDelimeter>
         <textQualifier>&quot;</textQualifier>
         <ignoreFirstLine>true</ignoreFirstLine>
-        <fileNameMask>brand*.csv$</fileNameMask>
+        <fileNameMask>attributeviewgroup.csv</fileNameMask>
         <fileEncoding>UTF-8</fileEncoding>
     </importFile>
 

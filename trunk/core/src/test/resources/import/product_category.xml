@@ -24,7 +24,7 @@
             </lookupQuery> <!-- TODO atm we can not pass second parameter to lookup query "and p.category.name = ?2" -->
         </column-descriptor>
 
-        <!-- Категория -->
+        <!-- Category -->
         <column-descriptor>
             <columnIndex>1</columnIndex>
             <fieldType>FK_FIELD</fieldType>
@@ -34,7 +34,7 @@
         </column-descriptor>
 
 
-        <!-- Код продукта -->
+        <!-- Product -->
         <column-descriptor>
             <columnIndex>5</columnIndex>
             <fieldType>FK_FIELD</fieldType>
@@ -43,7 +43,7 @@
             <lookupQuery>select p from ProductEntity p where p.code = ?1</lookupQuery>
         </column-descriptor>
 
-        <!-- положение продукта в категории -->
+        <!-- Product rank in category -->
         <column-descriptor>
             <columnIndex>-1</columnIndex>
             <fieldType>FIELD</fieldType>

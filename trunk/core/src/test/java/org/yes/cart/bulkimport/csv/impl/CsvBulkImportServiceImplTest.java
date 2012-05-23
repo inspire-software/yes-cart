@@ -1,5 +1,8 @@
 package org.yes.cart.bulkimport.csv.impl;
 
+import org.dbunit.AbstractDatabaseTester;
+import org.dbunit.JdbcDatabaseTester;
+import org.dbunit.operation.DatabaseOperation;
 import org.junit.Before;
 import org.junit.After;
 import org.junit.Test;
@@ -35,18 +38,18 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
      * For bulk import to switch off lucene indexing
      * @return
      */
-    protected synchronized ApplicationContext createContext2() {
+    /*protected synchronized ApplicationContext createContext2() {
         if (sharedContext == null) {
             sharedContext = new ClassPathXmlApplicationContext("testApplicationContext2.xml", "core-aspects.xml");
         }
         return sharedContext;
-    }
+    } */
 
     @Before
     public void setUp() throws Exception {
 
         if (bulkImportService == null) {
-            bulkImportService = (BulkImportService) createContext2().getBean("bulkImportServiceImpl");
+            bulkImportService = (BulkImportService) createContext().getBean("bulkImportServiceImpl");
         }
 
     }
@@ -111,6 +114,11 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             System.out.println("brands " + (new Date().getTime() - dt.getTime()));
 
             dt = new Date();
+            bulkImportService = getBulkImportService("src/test/resources/import/category.xml");
+            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+            System.out.println("category " + (new Date().getTime() - dt.getTime()));
+
+            dt = new Date();
             bulkImportService = getBulkImportService("src/test/resources/import/availability.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
             System.out.println("availability " + (new Date().getTime() - dt.getTime()));
@@ -171,9 +179,9 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
             dumpDataBase("www", new String[]{"TATTRIBUTE", "TPRODUCTTYPE", "TPRODUCTTYPEATTR",
                     "TPRODUCT", "TSKU", "TPRODUCTATTRVALUE",
-                    "TSKUWAREHOUSE", "TSKUPRICE", "TPRODUCTCATEGORY"
+                    "TSKUWAREHOUSE", "TSKUPRICE", "TPRODUCTCATEGORY", "TCATEGORY", "TATTRVIEWGROUP"
             });
-            System.out.println(stringBuilder.toString());
+            //System.out.println(stringBuilder.toString());
 
 
             //assertTrue(stringBuilder.toString(), stringBuilder.toString().indexOf("ERROR") == -1);
@@ -191,6 +199,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
         }
 
     }
+
 
     /*@Test
     public void testDoImportSimple() throws Exception {
