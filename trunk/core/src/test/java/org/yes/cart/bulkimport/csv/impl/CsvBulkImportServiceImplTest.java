@@ -211,19 +211,10 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
         try {
             //check the total qty of imported rows
             PreparedStatement pst = getConnection().getConnection().prepareStatement(
-                    "select count(*) as cnt from tbrand where name like 'imported brand name%'");
+                    "select count(*) as cnt from TBRAND ");
             ResultSet rs = pst.executeQuery();
             rs.next();
-            assertEquals(stringBuilder.toString(), 7, rs.getInt("cnt"));
-            rs.close();
-            pst.close();
-
-            //check that duplicate was updated duiring impor
-            pst = getConnection().getConnection().prepareStatement(
-                    "select description from tbrand where name = 'imported brand name2'");
-            rs = pst.executeQuery();
-            rs.next();
-            assertEquals("imported brand description two", rs.getString("description"));
+            assertEquals(stringBuilder.toString(), 13, rs.getInt("cnt"));
             rs.close();
             pst.close();
 
@@ -234,6 +225,8 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
                     "brand",
                     new String[]{"tbrand"}
             );
+            
+            e.printStackTrace();
 
             assertTrue(e.getMessage() + " " + stringBuilder.toString(), false);
         }
