@@ -459,7 +459,8 @@
         <property name="target">
             <bean class="org.yes.cart.service.dto.impl.DtoShopServiceImpl">
                 <constructor-arg index="0" ref="shopService"/>
-                <constructor-arg index="1" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="1" ref="customerService"/>
+                <constructor-arg index="2" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
             </bean>
         </property>
     </bean>

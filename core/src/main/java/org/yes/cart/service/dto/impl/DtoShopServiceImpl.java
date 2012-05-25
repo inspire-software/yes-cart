@@ -4,11 +4,17 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.ShopDTOImpl;
+import org.yes.cart.domain.entity.CustomerShop;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.exception.UnableToCreateInstanceException;
+import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.dto.DtoShopService;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -19,11 +25,16 @@ public class DtoShopServiceImpl
         extends AbstractDtoServiceImpl<ShopDTO, ShopDTOImpl, Shop>
         implements DtoShopService {
 
+    private final CustomerService customerService;
+
 
     public DtoShopServiceImpl(
             final ShopService shopService,
+            final CustomerService customerService,
             final DtoFactory dtoFactory) {
         super(dtoFactory, shopService, null);
+
+        this.customerService = customerService;
 
     }
 
@@ -57,6 +68,17 @@ public class DtoShopServiceImpl
         getAssembler().assembleDto(dto, shop, getValueConverterRepository(), getDtoFactory());
         return dto;
     }
+
+    /** {@inheritDoc} */
+    public List<ShopDTO> getAssignedShop(final long customerId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        List<Shop> rez = new ArrayList<Shop>();
+        for (CustomerShop customerShop : customerService.getById(customerId).getShops()) {
+            rez.add(customerShop.getShop());
+        }
+        return getDTOs(rez);
+
+    }
+
 
     /** {@inheritDoc} */
     public Class<ShopDTO> getDtoIFace() {

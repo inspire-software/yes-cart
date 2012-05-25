@@ -1,0 +1,163 @@
+<?xml version="1.0"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+           xmlns:controls="controls.*" width="100%" height="100%"
+           creationComplete="init();">
+
+
+    <mx:Script><![CDATA[
+        import mx.controls.Alert;
+        import mx.rpc.AsyncResponder;
+        import mx.rpc.AsyncToken;
+        import mx.rpc.events.ResultEvent;
+        import org.yes.cart.impl.ShopDTOImpl;
+
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        public var customerId:Number;
+
+        public function init():void {
+            //remoteAddressService.getAddressesByCustomerId(customerId);
+            //jdbc:derby://localhost:1527/yes;create=true
+            remoteShopService.getAll().addResponder(
+                    new AsyncResponder(
+                            readCustomerShop,
+                            ShopManagerGlobal.instance.defaultFaultHandler
+                    )
+            );
+
+        }
+
+        private function readCustomerShop(event:ResultEvent, obj:Object = null):void {
+
+            availableShop = new Array();
+
+            remoteShopService.getAssignedShop(customerId).addResponder(new AsyncResponder(
+                    function (event:ResultEvent, obj:Object = null):void {
+                        
+                        assignedShop = Array(event.result);
+                        for (var shop in remoteShopService.getAll.lastResult ) {
+
+                            var found:Boolean = false;
+
+                            for (var registeredShop in assignedShop) {
+                                if (registeredShop.name == shop.name) {
+                                    found = true;
+                                    break;
+                                }
+                            }
+                            if (!found) {
+                                availableShop[availableShop.length] = shop;
+                            }
+                        }
+                    }
+                    ,
+                    ShopManagerGlobal.instance.defaultFaultHandler
+            )
+            );
+
+
+        }
+
+
+        /**
+         * Get shop name for represenatation in list.
+         * @param item
+         * @return
+         */
+        private function shopName(item:Object):String {
+
+            try  {
+
+                if (item != null) {
+                    return (item as ShopDTOImpl).name;
+
+                } else {
+                    return "" + item;
+                }
+
+            }
+            catch( error:Error )
+
+            {
+                var e2:String = "none";
+                if (item instanceof ShopDTOImpl) {
+
+                    e2 = "yessss";
+
+                }
+                var emsg:String = error.toString() + " --- " + item + "   ++++ " + e2 ;
+                Alert.show("eoorrroor", emsg);
+                
+                
+            }
+            
+            return "asdfasdf";
+
+            
+
+        }
+
+        ]]>
+    </mx:Script>
+
+
+    <mx:Array id="availableShop"></mx:Array>
+    <mx:Array id="assignedShop"></mx:Array>
+
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteShopService"
+                     destination="remoteShopService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+
+    <mx:Grid x="0" y="0" width="500" height="100%">
+        <mx:GridRow width="100%" height="50">
+            <mx:GridItem width="200" height="50" textAlign="center" verticalAlign="middle">
+                <mx:Label text="@Resource(bundle='CustomerShopPanel',key='availableShop')"/>
+            </mx:GridItem>
+            <mx:GridItem width="100%" height="50">
+            </mx:GridItem>
+            <mx:GridItem width="200" height="50" textAlign="center" verticalAlign="middle">
+                <mx:Label text="@Resource(bundle='CustomerShopPanel',key='assignedShop')"/>
+            </mx:GridItem>
+        </mx:GridRow>
+        <mx:GridRow width="100%" height="100%">
+            <mx:GridItem width="150" height="100%">
+                <mx:List id="availableShopList"
+                        width="100%"
+                        height="100%"
+                        dataProvider="{availableShop}"
+                        labelFunction="shopName"
+                        >
+                </mx:List>
+            </mx:GridItem>
+            <mx:GridItem width="100%" height="100%" verticalAlign="middle" textAlign="center">
+                <mx:VBox width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
+                    <mx:Button enabled="{availableShopList.selectedItem != null}"
+                               label="@Resource(bundle='CustomerShopPanel',key='assign')"
+                               toolTip="@Resource(bundle='CustomerShopPanel',key='assignHint')"
+                               click="Alert.show('assign')"/>
+                    <mx:Button enabled="{assignedShopList.selectedItem != null}"
+                               label="@Resource(bundle='CustomerShopPanel',key='unassign')"
+                               toolTip="@Resource(bundle='CustomerShopPanel',key='unassignHint')"
+                               click="Alert.show('unassign')"/>
+                </mx:VBox>
+            </mx:GridItem>
+            <mx:GridItem width="150" height="100%">
+                <mx:List id="assignedShopList"
+                        width="100%"
+                        height="100%"
+                        dataProvider="{assignedShop}"
+                        labelFunction="shopName"
+                        >
+
+                </mx:List>
+            </mx:GridItem>
+        </mx:GridRow>
+
+    </mx:Grid>
+
+
+</mx:Canvas>
