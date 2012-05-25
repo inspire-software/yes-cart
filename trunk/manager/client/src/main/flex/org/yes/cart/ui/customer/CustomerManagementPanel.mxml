@@ -90,6 +90,11 @@
                     break;
                 }
 
+                case TAB_SHOP_IDX: {
+                    shopTabSelected(null);
+                    break;
+                }
+
 
             }
 
@@ -124,8 +129,24 @@
 
         }
 
+
+
+
         /**
-         * Attribute values tab selected.
+         * Display tab at what shop shopper is registered..
+         * @param event event
+         * @return nothing.
+         */
+        private function shopTabSelected(event:Event):void {
+            Debug.trace("INFO Customer's shop for customer id" + selectedCustomer.customerId);
+            var panel:CustomerShopPanel = new CustomerShopPanel();
+            panel.customerId = selectedCustomer.customerId;
+            customerShops.removeAllChildren();
+            customerShops.addChild(panel);
+        }
+
+        /**
+         * Shopper address tab selected.
          * @param event event
          * @return nothing.
          */

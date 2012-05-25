@@ -1,10 +1,13 @@
 package org.yes.cart.remote.service.impl;
 
 import org.yes.cart.domain.dto.ShopDTO;
+import org.yes.cart.exception.UnableToCreateInstanceException;
+import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.remote.service.RemoteShopService;
 import org.yes.cart.service.dto.DtoShopService;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -51,4 +54,13 @@ public class RemoteShopServiceImpl
     public ShopDTO getShopDtoByDomainName(final String serverDomainName) {
         return ((DtoShopService) getGenericDTOService()).getShopDtoByDomainName(serverDomainName);
     }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<ShopDTO> getAssignedShop(final long customerId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return ((DtoShopService) getGenericDTOService()).getAssignedShop(customerId);
+    }
+
 }

@@ -203,37 +203,6 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
 
     @Test
-    public void testDoImportSimple() throws Exception {
-        StringBuilder stringBuilder = new StringBuilder();
-        Set<String> importedFilesSet = new HashSet<String>();
-        BulkImportService bulkImportService = getBulkImportService("src/test/resources/import/brandimport.xml");
-        bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
-        try {
-            //check the total qty of imported rows
-            PreparedStatement pst = getConnection().getConnection().prepareStatement(
-                    "select count(*) as cnt from TBRAND ");
-            ResultSet rs = pst.executeQuery();
-            rs.next();
-            assertEquals(stringBuilder.toString(), 13, rs.getInt("cnt"));
-            rs.close();
-            pst.close();
-
-
-        } catch (Exception e) {
-
-            dumpDataBase(
-                    "brand",
-                    new String[]{"tbrand"}
-            );
-            
-            e.printStackTrace();
-
-            assertTrue(e.getMessage() + " " + stringBuilder.toString(), false);
-        }
-
-    }
-
-    @Test
     public void testDoImportWithForeignKeys() {
         StringBuilder stringBuilder = new StringBuilder();
         Set<String> importedFilesSet = new HashSet<String>();

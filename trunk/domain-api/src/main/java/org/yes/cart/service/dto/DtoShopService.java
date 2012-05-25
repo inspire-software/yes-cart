@@ -1,8 +1,11 @@
 package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.ShopDTO;
+import org.yes.cart.exception.UnableToCreateInstanceException;
+import org.yes.cart.exception.UnmappedInterfaceException;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -43,4 +46,10 @@ public interface DtoShopService extends GenericDTOService<ShopDTO> {
     ShopDTO getShopDtoByDomainName(String serverDomainName);
 
 
+    /**
+     * Gt shope, which assigned to customer.
+     * @param customerId customer id
+     * @return list of shops
+     */
+    List<ShopDTO> getAssignedShop(long customerId) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 }
