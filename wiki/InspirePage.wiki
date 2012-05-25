@@ -10,6 +10,8 @@ http://fontello.com/ icon fonts
 
 http://www.entypo.com/  icon fonts
 
+http://blog.flexexamples.com flex examples
+
 = Details =
 
 Add your content here.  Format your content with:
