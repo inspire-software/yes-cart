@@ -1,0 +1,50 @@
+<import-descriptor>
+
+    <entityIntface>org.yes.cart.domain.entity.SkuWarehouse</entityIntface>
+
+
+    <importFile class="file-descriptor">
+        <columnDelimeter>;</columnDelimeter>
+        <textQualifier>&quot;</textQualifier>
+        <ignoreFirstLine>true</ignoreFirstLine>
+        <fileNameMask>product_entity*.csv$</fileNameMask>
+        <fileEncoding>UTF-8</fileEncoding>
+    </importFile>
+
+    <importColumns class="list">
+
+        <column-descriptor>
+            <columnIndex>5</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <!--<name>sku</name>-->
+            <regExp>(.*)</regExp>
+            <lookupQuery>select p from SkuWarehouseEntity p where p.sku.code = ?1 and p.warehouse.code = 'Main'</lookupQuery>
+        </column-descriptor>
+
+        <column-descriptor>
+            <columnIndex>5</columnIndex>
+            <fieldType>FK_FIELD</fieldType>
+            <name>sku</name>
+            <regExp>(.*)</regExp>
+            <lookupQuery>select p from ProductSkuEntity p where p.code = ?1</lookupQuery>
+        </column-descriptor>
+
+
+        <column-descriptor>
+            <columnIndex>-1</columnIndex>
+            <fieldType>FK_FIELD</fieldType>
+            <name>warehouse</name>
+            <lookupQuery>select a from WarehouseEntity a where a.code = 'Main'</lookupQuery>
+        </column-descriptor>
+
+
+        <column-descriptor>
+            <columnIndex>6</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>quantity</name>
+        </column-descriptor>
+
+
+    </importColumns>
+    <importFolder></importFolder>
+</import-descriptor>

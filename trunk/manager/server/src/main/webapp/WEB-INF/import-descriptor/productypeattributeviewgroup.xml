@@ -1,0 +1,57 @@
+<import-descriptor>
+    <!--
+    Example how related bulk import can consune the same file several times
+    -->
+    <entityIntface>org.yes.cart.domain.entity.ProdTypeAttributeViewGroup</entityIntface>
+
+    <importFile class="file-descriptor">
+        <columnDelimeter>;</columnDelimeter>
+        <textQualifier>&quot;</textQualifier>
+        <ignoreFirstLine>true</ignoreFirstLine>
+        <fileNameMask>productypeattributeviewgroup.csv</fileNameMask>
+        <fileEncoding>UTF-8</fileEncoding>
+    </importFile>
+
+    <importColumns class="list">
+
+        <!-- primary key -->
+        <column-descriptor>
+            <columnIndex>1</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>guid</name>
+            <regExp>(.*)</regExp>
+            <lookupQuery>select p from ProdTypeAttributeViewGroupEntity p where p.guid = ?1</lookupQuery>
+        </column-descriptor>
+
+
+        <!-- attr view group -->
+        <column-descriptor>
+            <columnIndex>1</columnIndex>
+            <fieldType>FK_FIELD</fieldType>
+            <name>attributeViewGroup</name>
+            <regExp>(.*)</regExp>
+            <lookupQuery>select p from AttributeViewGroupEntity p where p.name = ?1</lookupQuery>
+        </column-descriptor>
+
+        <!-- Product type -->
+        <column-descriptor>
+            <columnIndex>0</columnIndex>
+            <fieldType>FK_FIELD</fieldType>
+            <name>producttype</name>
+            <regExp>(.*)</regExp>
+            <lookupQuery>select p from ProductTypeEntity p where p.name = ?1</lookupQuery>
+        </column-descriptor>
+
+        <!-- attributes code list -->
+        <column-descriptor>
+            <columnIndex>2</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>attrCodeList</name>
+        </column-descriptor>
+
+
+
+
+    </importColumns>
+    <importFolder></importFolder>
+</import-descriptor>

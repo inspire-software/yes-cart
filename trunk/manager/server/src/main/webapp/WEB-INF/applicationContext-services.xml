@@ -474,14 +474,34 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
         <constructor-arg index="1" ref="bulkImportImageService"/>
         <constructor-arg index="2">
             <list>
-                <value>product.xml</value>
+
+                <value>brandimport.xml</value>
+                <value>category.xml</value>
+                <value>attribute.xml</value>  <!--product attributes only, sku and rest attributes import not implemented-->
+                <value>attributeviewgroup.xml</value>  <!-- group of attributes -->
+                <value>product_type.xml</value>  <!-- product types -->
+                <value>productypeattributeviewgroup.xml</value>  <!-- attributes view groups for product types -->
+                <value>producttypeattr.xml</value>  <!-- attribute  for product types -->
+                <value>product.xml</value>  <!-- products and description -->
+                <value>product_sku.xml</value>  <!-- product sku -->
+                <value>warehouse.xml</value>
+                <value>skuquantity.xml</value>  <!--sku qty on warehouse-->
+                <value>skuprice.xml</value>  <!--sku prices-->
+                <value>product_category.xml</value>  <!-- distribution products by categories -->
+
+
+
+
+
+
+                <!--<value>product.xml</value>
                 <value>productskuprice.xml</value>
                 <value>brand.xml</value>
                 <value>productcategory.xml</value>
                 <value>productskuquantity.xml</value>
                 <value>carriersla.xml</value>
                 <value>productsku.xml</value>
-                <value>producttype.xml</value>
+                <value>producttype.xml</value>-->
             </list>
         </constructor-arg>
 
