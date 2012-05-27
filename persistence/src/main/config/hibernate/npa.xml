@@ -417,11 +417,11 @@
 
             <property name="name" column="NAME" not-null="true" type="string" length="255"/>
             <property name="description" column="DESCRIPTION" type="string" length="4000"/>
-            <many-to-one name="etype" class="org.yes.cart.domain.entity.Etype" foreign-key="FK_ATTRIBUTE_ETYPE" lazy="false">
+            <many-to-one name="etype" class="org.yes.cart.domain.entity.Etype" foreign-key="FK_ATTRIBUTE_ETYPE" lazy="proxy">
                 <column name="ETYPE_ID" not-null="true"/>
             </many-to-one>
             <many-to-one name="attributeGroup" class="org.yes.cart.domain.entity.AttributeGroup"
-                         foreign-key="FK_ATTRIBUTE_ATTRIBUTEGROUP" lazy="false">
+                         foreign-key="FK_ATTRIBUTE_ATTRIBUTEGROUP" lazy="proxy">
                 <column name="ATTRIBUTEGROUP_ID" not-null="true"/>
             </many-to-one>
 
@@ -1480,14 +1480,14 @@ public void setRangeList(final RangeList rangeList) {
                 <column name="DESCRIPTION"/>
             </property>
 
-            <bag name="attributeViewGroup" inverse="false" lazy="false" cascade="all" order-by="RANK">
+            <bag name="attributeViewGroup" inverse="false" lazy="true" cascade="all" order-by="RANK">
                 <key>
                     <column name="PRODUCTTYPE_ID" not-null="true"/>
                 </key>
                 <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.ProdTypeAttributeViewGroup"/>
             </bag>
 
-            <bag name="attribute" inverse="true" lazy="false" cascade="all">
+            <bag name="attribute" inverse="true" lazy="true" cascade="all">
                 <key not-null="true" on-delete="cascade" column="PRODUCTTYPE_ID"/>
                 <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.ProductTypeAttr" />
             </bag>

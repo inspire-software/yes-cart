@@ -67,6 +67,7 @@ class CategoryWalker {
 
         StringBuilder csv = new StringBuilder();
 
+        csv.append("parent category name; category name\n");
         handler.categoryList.each { csv.append(it.toProductType())}
         new File("$context.dataDirectory/export/freexml.int/csvresult/category.csv") << csv.toString();
 

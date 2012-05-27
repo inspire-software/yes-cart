@@ -27,5 +27,5 @@
         </column-descriptor>
 
     </importColumns>
-    <importFolder>src/test/resources/import</importFolder>
+    <importFolder></importFolder>
 </import-descriptor>

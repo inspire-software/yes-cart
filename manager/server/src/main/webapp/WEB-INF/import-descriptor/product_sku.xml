@@ -1,0 +1,66 @@
+<import-descriptor>
+    <!--
+    Example how related bulk import can consune the same file several times
+    -->
+    <entityIntface>org.yes.cart.domain.entity.ProductSku</entityIntface>
+
+    <importFile class="file-descriptor">
+        <columnDelimeter>;</columnDelimeter>
+        <textQualifier>&quot;</textQualifier>
+        <ignoreFirstLine>true</ignoreFirstLine>
+        <fileNameMask>product_entity*.csv$</fileNameMask>
+        <fileEncoding>UTF-8</fileEncoding>
+    </importFile>
+
+    <importColumns class="list">
+
+        <!-- primari key -->
+        <column-descriptor>
+            <columnIndex>5</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>code</name>
+            <regExp>(.*)</regExp>
+            <lookupQuery>select p from ProductSkuEntity p where p.code = ?1</lookupQuery>
+        </column-descriptor>
+
+        <!--  sku name -->
+        <column-descriptor>
+            <columnIndex>0</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>name</name>
+            <regExp>(.*)</regExp>
+        </column-descriptor>
+
+        <!-- Product code the same as product sku code for single sku product.  field for lookup object -->
+        <column-descriptor>
+            <columnIndex>5</columnIndex>
+            <fieldType>FK_FIELD</fieldType>
+            <name>product</name>
+            <regExp>(.*)</regExp>
+            <lookupQuery>select p from ProductEntity p where p.code = ?1</lookupQuery>
+        </column-descriptor>
+
+
+
+        <!--  bar code -->
+        <column-descriptor>
+            <columnIndex>8</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>barCode</name>
+            <regExp>(.*)</regExp>
+        </column-descriptor>
+        
+        <!-- Description -->
+        <column-descriptor>
+            <columnIndex>10</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>description</name>
+            <regExp>(.*)</regExp>
+        </column-descriptor>
+
+
+
+
+    </importColumns>
+    <importFolder></importFolder>
+</import-descriptor>

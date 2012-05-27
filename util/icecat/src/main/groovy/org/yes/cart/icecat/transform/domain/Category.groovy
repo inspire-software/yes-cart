@@ -26,8 +26,9 @@ class Category {
 
     List<CategoryFeatureGroup> categoryFeatureGroup = new ArrayList<CategoryFeatureGroup>();
 
-    public String toProductType() { //TPRODTYPE
-        return (name == null ? id : name) + ";" + description + "\n";
+    public String toProductType() { //TPRODTYPE  and TCATEGORY
+        //100 default root category
+        return "100;" + (name == null ? id : name) + ";" + description + "\n";
     }
 
 
