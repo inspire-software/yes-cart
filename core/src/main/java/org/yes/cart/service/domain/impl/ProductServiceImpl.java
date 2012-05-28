@@ -188,19 +188,23 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      */
     @Cacheable(value = PROD_SERV_METHOD_CACHE)
     public List<Product> getFeaturedProducts(final Collection categories, final int limit) {
-        List<Product> list = productDao.findQueryObjectsByNamedQueryWithList(
-                "PRODUCT.FEATURED",
-                categories,
-                new Date());  //TODO v2 time machine
-        Collections.shuffle(list);
-        int toIndex = limit; //to index exclusive
-        if (list.size() < limit) {
-            toIndex = list.size();
+        if (categories == null || categories.isEmpty()) {
+            return Collections.EMPTY_LIST;
+        } else {
+            List<Product> list = productDao.findQueryObjectsByNamedQueryWithList(
+                    "PRODUCT.FEATURED",
+                    categories,
+                    new Date());  //TODO v2 time machine
+            Collections.shuffle(list);
+            int toIndex = limit; //to index exclusive
+            if (list.size() < limit) {
+                toIndex = list.size();
+            }
+            if (toIndex < 0) {
+                toIndex = 0;
+            }
+            return new ArrayList<Product>(list.subList(0, toIndex));
         }
-        if (toIndex < 0) {
-            toIndex = 0;
-        }
-        return new ArrayList<Product>(list.subList(0, toIndex));
     }
 
     /**

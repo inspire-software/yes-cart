@@ -1914,7 +1914,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="description" column="DESCRIPTION" type="string" length="4000"/>
 
 
-            <bag name="attribute" inverse="true" lazy="false" cascade="all">
+            <bag name="attribute" inverse="true" lazy="true" cascade="all">
                 <key not-null="true" on-delete="cascade" column="BRAND_ID"/>
                 <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.AttrValueBrand" />
             </bag>
