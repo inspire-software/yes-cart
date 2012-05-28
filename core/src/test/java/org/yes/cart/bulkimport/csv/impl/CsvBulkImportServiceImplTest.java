@@ -118,10 +118,10 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
             System.out.println("category " + (new Date().getTime() - dt.getTime()));
 
-           /* dt = new Date();
+           dt = new Date();
             bulkImportService = getBulkImportService("src/test/resources/import/shopcategory.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
-            System.out.println("shopcategory " + (new Date().getTime() - dt.getTime()));   */
+            System.out.println("shopcategory " + (new Date().getTime() - dt.getTime()));
 
             dt = new Date();
             bulkImportService = getBulkImportService("src/test/resources/import/availability.xml");
@@ -200,7 +200,8 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
                     "TPRODUCT", "TSKU", "TPRODUCTATTRVALUE",
                     "TSKUWAREHOUSE", "TSKUPRICE", "TPRODUCTCATEGORY", "TCATEGORY",
                     "TATTRVIEWGROUP" ,
-                    "TPRODTYPEATTRVIEWGROUP"
+                    "TPRODTYPEATTRVIEWGROUP" ,
+                    "TSHOPCATEGORY"
             });
         }
 
