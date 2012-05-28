@@ -338,6 +338,26 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
     }
 
     /**
+     * Find entities by criteria.
+     * @param criteriaTuner optional criteria tuner.
+     * @param criterion given criterias
+     * @return list of found entities.
+     */
+    @SuppressWarnings("unchecked")
+    public List<T> findByCriteria(CriteriaTuner criteriaTuner, Criterion... criterion) {
+        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
+        for (Criterion c : criterion) {
+            crit.add(c);
+        }
+        if (criteriaTuner != null) {
+            criteriaTuner.tune(crit);
+        }
+        return crit.list();
+        
+    }
+    
+
+    /**
      * {@inheritDoc}
      */
     public T findSingleByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {

@@ -1,8 +1,11 @@
 package org.yes.cart.dao.impl;
 
+import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.criterion.Restrictions;
 import org.junit.Before;
 import org.junit.Test;
+import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.constants.DaoServiceBeanKeys;
 import org.yes.cart.domain.entity.AttrValueBrand;
@@ -54,7 +57,14 @@ public class BrandDAOTest extends AbstractTestDAO {
         //BRAND_IMAGE
         entityWithAttributes.getAttribute().add(attrValueBrandEntity);
         long pk = brandDAO.create(entityWithAttributes).getBrandId();
-        List<Brand> brands = brandDAO.findByCriteria(Restrictions.eq("brandId", pk));
+        List<Brand> brands = brandDAO.findByCriteria(
+                new CriteriaTuner() {
+                    public void tune(final Criteria crit) {
+                        crit.setFetchMode("attribute", FetchMode.JOIN);
+                    }
+                },
+                Restrictions.eq("brandId", pk)
+        );
         assertEquals(1, brands.size());
         entityWithAttributes = brands.get(0);
         assertEquals(1, entityWithAttributes.getAttribute().size());
