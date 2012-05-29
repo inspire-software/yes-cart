@@ -162,9 +162,14 @@ class CategoryWalker {
                 downloadProductPicture(it.HighPic, authString, cacheFolder, idx++, productName, skuCode);
                 it.productPicture.each {
 
-                    downloadProductPicture(it, authString, cacheFolder, idx++, productName, skuCode);
+                    //limit to 3 pictures only, because of import size
+                    if (idx != 'd') {
+                        downloadProductPicture(it, authString, cacheFolder, idx++, productName, skuCode);
+                    }
 
                 }
+
+
 
             }
         }
