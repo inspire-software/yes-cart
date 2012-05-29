@@ -39,7 +39,7 @@
             <columnIndex>-1</columnIndex>
             <fieldType>FK_FIELD</fieldType>
             <name>shop</name>
-            <lookupQuery>select a from ShopEntity a where a.code = 'SHOIP1'</lookupQuery>
+            <lookupQuery>select a from ShopEntity a where a.code = 'SHOP10'</lookupQuery>
         </column-descriptor>
 
         <column-descriptor>
