@@ -63,7 +63,7 @@ package org.yes.cart.icecat.transform
              }
 
 
-             println("Input comma separated category id list");
+             println("Input comma separated category id list, for example 151,897,1561,1285,182,814");
              ctx.categories = it.readLine();
 
              println("Input product updated limit [$ctx.mindata] ");
