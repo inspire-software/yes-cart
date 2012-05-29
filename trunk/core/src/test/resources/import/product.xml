@@ -118,6 +118,13 @@
             <regExp>(.*)</regExp>
         </column-descriptor>
 
+        <!--featured-->
+        <column-descriptor>
+            <columnIndex>-1</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>featured</name>
+            <constant>false</constant>
+        </column-descriptor>
 
     </importColumns>
     <importFolder>src/test/resources/import</importFolder>

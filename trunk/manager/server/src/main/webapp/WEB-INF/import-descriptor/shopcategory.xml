@@ -1,0 +1,48 @@
+<import-descriptor>
+    <!--
+    Example how related bulk import can consune the same file several times
+    -->
+    <entityIntface>org.yes.cart.domain.entity.ShopCategory</entityIntface>
+
+    <importFile class="file-descriptor">
+        <columnDelimeter>;</columnDelimeter>
+        <textQualifier>&quot;</textQualifier>
+        <ignoreFirstLine>true</ignoreFirstLine>
+        <fileNameMask>category.csv</fileNameMask>
+        <fileEncoding>UTF-8</fileEncoding>
+    </importFile>
+
+    <importColumns class="list">
+
+        <column-descriptor>
+            <columnIndex>1</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <regExp>(.*)</regExp>
+            <lookupQuery>
+                select p from ShopCategoryEntity p
+                where p.category.name = ?1
+            </lookupQuery>
+        </column-descriptor>
+
+
+        <!-- Category -->
+        <column-descriptor>
+            <columnIndex>1</columnIndex>
+            <fieldType>FK_FIELD</fieldType>
+            <name>category</name>
+            <regExp>(.*)</regExp>
+            <lookupQuery>select c from CategoryEntity c where c.name = ?1</lookupQuery>
+        </column-descriptor>
+
+        <!-- Shop -->
+        <column-descriptor>
+            <columnIndex>-1</columnIndex>
+            <fieldType>FK_FIELD</fieldType>
+            <name>shop</name>
+            <lookupQuery>select a from ShopEntity a where a.code = 'SHOP10'</lookupQuery>
+        </column-descriptor>
+
+
+    </importColumns>
+    <importFolder></importFolder>
+</import-descriptor>
