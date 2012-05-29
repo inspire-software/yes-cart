@@ -99,3 +99,7 @@ connect 'jdbc:derby://localhost:1527/yespay;create=true';
 connect 'jdbc:derby://localhost:1527/yes;create=true';
 }}}
 Run  create-tables.sql, initdata.sql and create-npa-pay.sql, payinitdata.sql scripts
+
+
+
+maxPostSize in tomcat
