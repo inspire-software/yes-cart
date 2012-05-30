@@ -17,11 +17,11 @@ class Context  {
 
     String productDir = "RU";
 
-    String categories;
+    String categories = "151,1296,942,803,788,195,194,197,943,196,191,192";
 
     //long mindata =  20120101000000L;
 
-    long mindata =  20100101000000L;
+    long mindata =  20110101000000L;
 
     int limit = 1000;
 
