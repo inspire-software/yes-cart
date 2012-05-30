@@ -30,10 +30,16 @@ class ProductHandler extends DefaultHandler {
 
         if ("ProductRelated" == qName) {
             inProductRelated = true
+            product.relatedCategories.add(attributes.getValue("Category_ID"))
 
         }
 
-        if ("Product" == qName && product == null) {
+        if ("Product" == qName && inProductRelated) {
+            product.relatedProduct.add(attributes.getValue("ID"))
+
+        }
+
+        if ("Product" == qName && product == null && inProductRelated == false) {
             product = new Product();
             product.Code = attributes.getValue("Code");
             product.HighPic = attributes.getValue("HighPic");
@@ -94,9 +100,10 @@ class ProductHandler extends DefaultHandler {
             productFeature.feature = feature
         }
 
-        //todo related products
 
     }
+
+
 
     ProductFeature productFeature
     Feature feature

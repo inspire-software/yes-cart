@@ -37,7 +37,8 @@ class Product {
     String EANCode;
 
     List<ProductFeature> productFeatures = new ArrayList<ProductFeature>();
-    List<Product> relatedProduct = new ArrayList<Product>();
+    List<String> relatedProduct = new ArrayList<String>();
+    Set<String> relatedCategories = new HashSet<String>();
 
 
     String ShortSummaryDescription;

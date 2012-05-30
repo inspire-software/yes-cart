@@ -146,6 +146,18 @@ class CategoryWalker {
 
             }
         }
+
+        Set<String> refsCatIds = new HashSet<String>();
+        categoryList.each {
+            it.product.relatedCategories.each {
+                refsCatIds.addAll(it);
+            }
+
+        }
+
+        println "Related categories " + refsCatIds;
+
+        
     }
 
     private def downloadProductPicturess(List<Category> categoryList, String cacheFolderName) {
@@ -226,19 +238,27 @@ class CategoryWalker {
 
                 if (it.Date_Added.toLong() > context.mindata) {
                     String productFile = cacheFolderName + it.path.substring(1 + it.path.lastIndexOf("/"));
-                    if (!(new File(productFile).exists())) {
-
-                        def conn = "$context.url$it.path".toURL().openConnection();
-                        conn.setRequestProperty("Authorization", "Basic ${authString}")
-                        new File(productFile) << conn.getInputStream().text
-                        println "Downloaded $it.Model_Name"
-                    } else {
-                        println "Skipped $it.Model_Name"
-                    }
+                    downloadSingleProduct(productFile, authString, it)
+                    
+                    //download related products 
+                    
                 }
 
 
             }
+        }
+    }
+
+
+    private downloadSingleProduct(String productFile, authString, productPointer) {
+        if (!(new File(productFile).exists())) {
+
+            def conn = "$context.url$productPointer.path".toURL().openConnection();
+            conn.setRequestProperty("Authorization", "Basic ${authString}")
+            new File(productFile) << conn.getInputStream().text
+            println "Downloaded $productPointer.Model_Name"
+        //} else {
+           // println "Skipped $it.Model_Name"
         }
     }
 
