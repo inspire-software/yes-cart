@@ -3,9 +3,17 @@ package org.yes.cart.service.domain.aspect.impl;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.jms.core.JmsTemplate;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.yes.cart.service.domain.HashHelper;
 import org.yes.cart.service.domain.PassPhrazeGenerator;
+import org.yes.cart.service.mail.MailComposer;
+import org.yes.cart.util.ShopCodeContext;
+
+import java.io.Serializable;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -13,20 +21,39 @@ import org.yes.cart.service.domain.PassPhrazeGenerator;
  * Time: 14:12:54
  */
 @Aspect
-public class ManagerRegistrationAspect  extends BaseRegisteredPersonAspect {
+public class ManagerRegistrationAspect  extends BaseNotificationAspect {
+
+
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
+
+
+    private final HashHelper hashHelper;
+
+    private final PassPhrazeGenerator phrazeGenerator;
+
+    private final JavaMailSender javaMailSender;
+
+    private final MailComposer mailComposer;
+
+
 
     /**
-     * Construct manager aspect.
+     * Construct base for aspect.
      *
-     * @param phrazeGenerator {@link org.yes.cart.service.domain.PassPhrazeGenerator}
-     * @param hashHelper      {@link org.yes.cart.service.domain.HashHelper}
-     * @param jmsTemplate     {@link org.springframework.jms.core.JmsTemplate} to send message over JMS, if it null message will not send.
+     * @param phrazeGenerator {@link PassPhrazeGenerator}
+     * @param hashHelper      {@link HashHelper}
+     * @param taskExecutor     {@link JmsTemplate} to execute asyn task.
      */
-    public ManagerRegistrationAspect(
-            final JmsTemplate jmsTemplate,
-            final PassPhrazeGenerator phrazeGenerator,
-            final HashHelper hashHelper) {
-        super(jmsTemplate, hashHelper, phrazeGenerator);
+    public ManagerRegistrationAspect(final TaskExecutor taskExecutor,
+                                      final HashHelper hashHelper,
+                                      final PassPhrazeGenerator phrazeGenerator,
+                                      final JavaMailSender javaMailSender,
+                                      final MailComposer mailComposer) {
+        super(taskExecutor);
+        this.hashHelper = hashHelper;
+        this.phrazeGenerator = phrazeGenerator;
+        this.javaMailSender = javaMailSender;
+        this.mailComposer = mailComposer;
 
     }
 
@@ -38,8 +65,14 @@ public class ManagerRegistrationAspect  extends BaseRegisteredPersonAspect {
      */
     public ManagerRegistrationAspect(
             final PassPhrazeGenerator phrazeGenerator,
-            final HashHelper hashHelper) {
-        super(null, hashHelper, phrazeGenerator);
+            final HashHelper hashHelper,
+            final JavaMailSender javaMailSender,
+            final MailComposer mailComposer) {
+        super(null);
+        this.hashHelper = hashHelper;
+        this.phrazeGenerator = phrazeGenerator;
+        this.javaMailSender = javaMailSender;
+        this.mailComposer = mailComposer;
 
     }
 
@@ -66,4 +99,9 @@ public class ManagerRegistrationAspect  extends BaseRegisteredPersonAspect {
     public Object doResetPassword(final ProceedingJoinPoint pjp) throws Throwable {
         return notifyInternal(pjp, false);
     }  */
+
+    @Override
+    public Runnable getTask(Serializable serializableMessage) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

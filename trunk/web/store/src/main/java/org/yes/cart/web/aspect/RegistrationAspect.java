@@ -5,18 +5,23 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.jms.core.JmsTemplate;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.yes.cart.domain.entity.RegisteredPerson;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShopUrl;
 import org.yes.cart.domain.message.RegistrationMessage;
+import org.yes.cart.domain.message.consumer.CustomerRegistrationMessageListener;
 import org.yes.cart.domain.message.impl.RegistrationMessageImpl;
 import org.yes.cart.service.domain.HashHelper;
 import org.yes.cart.service.domain.PassPhrazeGenerator;
 import org.yes.cart.service.domain.aspect.impl.BaseNotificationAspect;
+import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -36,22 +41,31 @@ public class RegistrationAspect extends BaseNotificationAspect {
 
     private final PassPhrazeGenerator phrazeGenerator;
 
+    private final JavaMailSender javaMailSender;
+
+    private final MailComposer mailComposer;
+
 
     /**
      * Construct customer aspect.
      *
      * @param phrazeGenerator {@link org.yes.cart.service.domain.PassPhrazeGenerator}
      * @param hashHelper      {@link org.yes.cart.service.domain.HashHelper}
-     * @param jmsTemplate     {@link JmsTemplate} to send message over JMS, if it null message will not send.
+     * @param taskExecutor     {@link TaskExecutor} to execute task.
      */
     public RegistrationAspect(
-            final JmsTemplate jmsTemplate,
+            final TaskExecutor taskExecutor,
             final PassPhrazeGenerator phrazeGenerator,
-            final HashHelper hashHelper) {
-        super(jmsTemplate);
+            final HashHelper hashHelper,
+            final JavaMailSender javaMailSender,
+            final MailComposer mailComposer) {
+        super(taskExecutor);
 
         this.hashHelper = hashHelper;
         this.phrazeGenerator = phrazeGenerator;
+        this.javaMailSender = javaMailSender;
+        this.mailComposer = mailComposer;
+
 
     }
 
@@ -63,11 +77,17 @@ public class RegistrationAspect extends BaseNotificationAspect {
      */
     public RegistrationAspect(
             final PassPhrazeGenerator phrazeGenerator,
-            final HashHelper hashHelper) {
+            final HashHelper hashHelper,
+            final JavaMailSender javaMailSender,
+            final MailComposer mailComposer) {
         super(null);
 
         this.hashHelper = hashHelper;
         this.phrazeGenerator = phrazeGenerator;
+
+        this.javaMailSender = javaMailSender;
+        this.mailComposer = mailComposer;
+
 
     }
 
@@ -121,6 +141,16 @@ public class RegistrationAspect extends BaseNotificationAspect {
         return pjp.proceed();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public Runnable getTask(Serializable serializableMessage) {
+        return new CustomerRegistrationMessageListener(
+                javaMailSender,
+                mailComposer,
+                serializableMessage
+        );
+    }
 
     private Set<String> transformShopUrls(final Shop shop) {
         final Set<String> rez = new HashSet<String>();

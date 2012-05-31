@@ -7,9 +7,6 @@ import org.yes.cart.domain.message.RegistrationMessage;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.util.ShopCodeContext;
 
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.ObjectMessage;
 import javax.mail.internet.MimeMessage;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,13 +16,15 @@ import java.util.Map;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class ManagerRegistrationMessageListener implements MessageListener {
+public class ManagerRegistrationMessageListener implements Runnable {
 
     private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final JavaMailSender javaMailSender;
 
     private final MailComposer mailComposer;
+
+    private final Object objectMessage;
 
     /**
      * Contruct jms listener.
@@ -35,22 +34,24 @@ public class ManagerRegistrationMessageListener implements MessageListener {
      */
     public ManagerRegistrationMessageListener(
             final JavaMailSender javaMailSender,
-            final MailComposer mailComposer) {
+            final MailComposer mailComposer,
+            final Object objectMessage) {
         this.javaMailSender = javaMailSender;
         this.mailComposer = mailComposer;
+        this.objectMessage = objectMessage;
     }
 
 
     /**
      * {@inheritDoc}
      */
-    public void onMessage(final Message message) {
-        final ObjectMessage objectMessage = (ObjectMessage) message;
+    public void run() {
+
         try {
-            final RegistrationMessage registrationMessage = (RegistrationMessage) objectMessage.getObject();
+            final RegistrationMessage registrationMessage = (RegistrationMessage) objectMessage;
             processMessage(registrationMessage);
         } catch (Exception e) {
-            LOG.error("Cant process " + message, e);
+            LOG.error("Cant process " + objectMessage, e);
             throw new RuntimeException(e); //rollback message
         }
 

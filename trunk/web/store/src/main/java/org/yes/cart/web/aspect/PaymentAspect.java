@@ -5,16 +5,22 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.jms.core.JmsTemplate;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDet;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.message.consumer.StandardMessageListener;
+import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.aspect.impl.BaseNotificationAspect;
+import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
@@ -30,15 +36,48 @@ public class PaymentAspect extends BaseNotificationAspect {
 
     private final ProductService productService;
 
+    private final JavaMailSender javaMailSender;
+
+    private final MailComposer mailComposer;
+
+    private final CustomerService customerService;
+
+    private final ShopService shopService;
+
+
     /**
      * Construct aspect.
      *
-     * @param jmsTemplate what jms use to send notification.
      */
-    public PaymentAspect(final JmsTemplate jmsTemplate, final ProductService productService) {
-        super(jmsTemplate);
+    public PaymentAspect(final TaskExecutor taskExecutor,
+                         final ProductService productService,
+
+                         final JavaMailSender javaMailSender,
+                         final MailComposer mailComposer,
+                         final CustomerService customerService,
+                         final ShopService shopService) {
+        super(taskExecutor);
         this.productService = productService;
+
+
+        this.javaMailSender = javaMailSender;
+        this.mailComposer = mailComposer;
+        this.shopService = shopService;
+        this.customerService = customerService;
+
+
     }
+
+    public Runnable getTask(final Serializable serializableMessage) {
+        return new StandardMessageListener(
+                javaMailSender,
+                mailComposer,
+                customerService,
+                shopService,
+                serializableMessage);
+
+    }
+
 
 
     /**
@@ -113,6 +152,8 @@ public class PaymentAspect extends BaseNotificationAspect {
         return rez;
 
     }
+
+
 
     private void reindex(final CustomerOrder customerOrder) {
         for(CustomerOrderDet det : customerOrder.getOrderDetail()) {

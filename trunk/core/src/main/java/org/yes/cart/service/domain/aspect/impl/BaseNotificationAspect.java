@@ -1,5 +1,6 @@
 package org.yes.cart.service.domain.aspect.impl;
 
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 
@@ -16,16 +17,16 @@ import java.io.Serializable;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class BaseNotificationAspect {
+public abstract class BaseNotificationAspect {
 
-    private final JmsTemplate jmsTemplate;
+    private final TaskExecutor taskExecutor;
 
     /**
      * Construct base notification aspect class.
-     * @param jmsTemplate jms teplate to use
+     * @param taskExecutor to use
      */
-    public BaseNotificationAspect(final JmsTemplate jmsTemplate) {
-        this.jmsTemplate = jmsTemplate;
+    public BaseNotificationAspect(final TaskExecutor taskExecutor) {
+        this.taskExecutor = taskExecutor;
     }
 
     /**
@@ -33,15 +34,19 @@ public class BaseNotificationAspect {
      * @param serializableMessage  object to send
      */
     protected void sendNotification(final Serializable serializableMessage) {
-        if (jmsTemplate != null) {
-            jmsTemplate.send(new MessageCreator() {
-                public Message createMessage(final Session session) throws JMSException {
-                    return session.createObjectMessage(serializableMessage);
-                }
-            });
+        if (taskExecutor != null) {
+            final Runnable task = getTask(serializableMessage);
+            if (task != null) {
+                taskExecutor.execute(task);
+            }
         }
     }
 
+    /**
+     * Get task to execute.
+     * @return {@link Runnable}
+     */
+    public abstract Runnable getTask(final Serializable serializableMessage);
 
 
 }
