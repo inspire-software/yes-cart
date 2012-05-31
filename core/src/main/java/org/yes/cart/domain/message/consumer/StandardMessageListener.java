@@ -3,15 +3,11 @@ package org.yes.cart.domain.message.consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.util.ShopCodeContext;
 
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.ObjectMessage;
 import javax.mail.internet.MimeMessage;
 import java.util.Map;
 
@@ -23,7 +19,7 @@ import java.util.Map;
  * Date: 4/7/12
  * Time: 4:12 PM
  */
-public class StandardMessageListener implements MessageListener {
+public class StandardMessageListener implements Runnable {
 
     /**
      * Shop code.  Email context variable.
@@ -79,6 +75,8 @@ public class StandardMessageListener implements MessageListener {
 
     private final ShopService shopService;
 
+    private final Object objectMessage;
+
     /**
      * Contruct jms listener.
      *
@@ -91,11 +89,13 @@ public class StandardMessageListener implements MessageListener {
             final JavaMailSender javaMailSender,
             final MailComposer mailComposer,
             final CustomerService customerService,
-            final ShopService shopService) {
+            final ShopService shopService,
+            final Object objectMessage) {
         this.javaMailSender = javaMailSender;
         this.mailComposer = mailComposer;
         this.shopService = shopService;
         this.customerService = customerService;
+        this.objectMessage = objectMessage;
 
     }
 
@@ -103,12 +103,10 @@ public class StandardMessageListener implements MessageListener {
     /**
      * {@inheritDoc}
      */
-    public void onMessage(final Message message) {
-
-        final ObjectMessage objectMessage = (ObjectMessage) message;
+    public void run() {
 
         try {
-            final Map<String, Object> map = (Map<String, Object>) objectMessage.getObject();
+            final Map<String, Object> map = (Map<String, Object>) objectMessage;
             if (map.get(CUSTOMER) == null) {
                 enrichMapWithCustomer(map);
             }
@@ -124,7 +122,7 @@ public class StandardMessageListener implements MessageListener {
                     (String) map.get(SHOP_CODE),
                     (String) map.get(TEMPLATE_FOLDER),
                     (String) map.get(TEMPLATE_NAME),
-                    null,//must be from properties "todo@getfromsho.com", //((Shop)map.get(SHOP)).getAttribute()
+                    null,//todo must be from properties "todo@getfromsho.com", //((Shop)map.get(SHOP)).getAttribute()
                     (String) map.get(CUSTOMER_EMAIL),
                     null,
                     null,
@@ -134,7 +132,7 @@ public class StandardMessageListener implements MessageListener {
 
 
         } catch (Exception e) {
-            LOG.error("Cant cast object message body to expected format ", message);
+            LOG.error("Cant cast object message body to expected format map ", objectMessage);
         }
 
 
@@ -164,5 +162,6 @@ public class StandardMessageListener implements MessageListener {
 
 
     }
+
 
 }

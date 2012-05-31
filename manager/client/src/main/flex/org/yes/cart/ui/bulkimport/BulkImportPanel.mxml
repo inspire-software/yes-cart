@@ -49,9 +49,6 @@
 
 
         private function onFileProgress(evt:ProgressEvent):void {
-            progressBar.setProgress(evt.bytesLoaded, evt.bytesTotal);
-            progressBar.invalidateDisplayList();
-            progressBar.validateNow();
             invalidateDisplayList();
             validateNow();
             Debug.trace("Loaded " + evt.bytesLoaded + " from " + evt.bytesTotal);
@@ -63,8 +60,6 @@
          * @return nothing
          */
         private function onFileSelect(e:Event):void {
-            progressBar.visible = true;
-            progressBar.maximum = loadFileRef.size;
             loadFileRef.load();
             resultReady = false;
             reindexInProcess = true;
@@ -76,7 +71,6 @@
          * @return nothing
          */
         private function onFileLoadComplete(e:Event):void {
-            progressBar.visible = false;
             remoteUploadService.upload(loadFileRef.data, loadFileRef.name);
             Debug.trace("INFO current state is inProgressState");
         }
@@ -139,8 +133,6 @@
                 </mx:FormItem>
 
             </mx:Form>
-
-            <mx:ProgressBar id="progressBar" minimum="0" width="100%" visible="false"/>
 
             <mx:Label id="resultText" includeInLayout="{resultReady}" visible="{resultReady}"/>
             <mx:Label id="reintexingText" text="@Resource(bundle='BulkImportPanel',key='importInProcess')"
