@@ -3,9 +3,11 @@ package org.yes.cart.domain.message.consumer;
 import com.dumbster.smtp.SimpleSmtpServer;
 import com.dumbster.smtp.SmtpMessage;
 import org.junit.Test;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.domain.message.RegistrationMessage;
 import org.yes.cart.domain.message.impl.RegistrationMessageImpl;
+import org.yes.cart.service.mail.MailComposer;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -20,14 +22,16 @@ import static org.hamcrest.Matchers.*;
  */
 public class CustomerRegistrationMessageListenerTest extends BaseCoreDBTestCase {
 
-    // TODO fix to allow running from IDE
     @Test
     public void testOnMessage0() throws Exception {
-        CustomerRegistrationMessageListener customerRegistrationMessageListener = (CustomerRegistrationMessageListener)
-                ctx().getBean("customerRegistrationListener");
         RegistrationMessage registrationMessage = createRegistrationMessage();
         SimpleSmtpServer server = SimpleSmtpServer.start(2525);
-        customerRegistrationMessageListener.processMessage(registrationMessage);
+        new CustomerRegistrationMessageListener(
+                (JavaMailSender) ctx().getBean("mailSender"),
+                (MailComposer)ctx().getBean("mailComposer"),
+                registrationMessage
+        ).run();
+        Thread.sleep(100);
         server.stop();
         assertThat(server.getReceivedEmailSize(), is(1));
         Iterator emailIter = server.getReceivedEmail();

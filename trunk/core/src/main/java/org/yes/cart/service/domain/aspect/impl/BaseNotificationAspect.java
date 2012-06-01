@@ -1,12 +1,7 @@
 package org.yes.cart.service.domain.aspect.impl;
 
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.jms.core.JmsTemplate;
-import org.springframework.jms.core.MessageCreator;
 
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.Session;
 import java.io.Serializable;
 
 /**

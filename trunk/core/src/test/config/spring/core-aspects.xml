@@ -35,11 +35,6 @@
         </property>
     </bean>
 
-    <bean id="customerRegistrationListener" class="org.yes.cart.domain.message.consumer.CustomerRegistrationMessageListener">
-        <constructor-arg index="0" type="org.springframework.mail.javamail.JavaMailSender" ref="mailSender"/>
-        <constructor-arg index="1" type="org.yes.cart.service.mail.MailComposer" ref="mailComposer"/>
-    </bean>
-    
 
 </beans>
 

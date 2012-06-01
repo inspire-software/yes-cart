@@ -1,11 +1,9 @@
 package org.yes.cart;
 
 import org.hibernate.criterion.Restrictions;
-import org.hornetq.jms.server.impl.JMSServerManagerImpl;
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.rules.TestName;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.yes.cart.constants.AttributeNamesKeys;
@@ -13,7 +11,6 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.impl.AbstractTestDAO;
 import org.yes.cart.domain.entity.Address;
-import org.yes.cart.domain.entity.AttrValueCustomer;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.service.domain.AddressService;
 import org.yes.cart.service.domain.AttributeService;
@@ -55,15 +52,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
 
     @After
     public void tearDown() throws Exception {
-        try {
-            JMSServerManagerImpl jmsServerManager = (JMSServerManagerImpl) ctx().getBean("jmsServerManagerImpl");
-            if (jmsServerManager != null) {
-                jmsServerManager.stop();
-            }
-            sharedContext =  null;
-        } catch (NoSuchBeanDefinitionException noSuchBeanDefinitionException) {
-            //nothing
-        }
+        //sharedContext =  null;
     }
 
     protected ShoppingCart getEmptyCart(String prefix) {

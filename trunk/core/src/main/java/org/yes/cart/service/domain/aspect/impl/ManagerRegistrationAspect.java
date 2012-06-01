@@ -44,11 +44,12 @@ public class ManagerRegistrationAspect  extends BaseNotificationAspect {
      * @param hashHelper      {@link HashHelper}
      * @param taskExecutor     {@link JmsTemplate} to execute asyn task.
      */
-    public ManagerRegistrationAspect(final TaskExecutor taskExecutor,
-                                      final HashHelper hashHelper,
+    public ManagerRegistrationAspect( final TaskExecutor taskExecutor,
                                       final PassPhrazeGenerator phrazeGenerator,
+                                      final HashHelper hashHelper,
                                       final JavaMailSender javaMailSender,
-                                      final MailComposer mailComposer) {
+                                      final MailComposer mailComposer
+                                      ) {
         super(taskExecutor);
         this.hashHelper = hashHelper;
         this.phrazeGenerator = phrazeGenerator;
@@ -76,7 +77,7 @@ public class ManagerRegistrationAspect  extends BaseNotificationAspect {
 
     }
 
-    /**
+    /*
      * Handle manager creation.
      *
      * @param pjp {@link org.aspectj.lang.ProceedingJoinPoint}
@@ -86,9 +87,7 @@ public class ManagerRegistrationAspect  extends BaseNotificationAspect {
     /*@Around("execution(* org.yes.cart.service.domain.impl.ManagerServiceImpl.create(..))")
     public Object doCreateManager(final ProceedingJoinPoint pjp) throws Throwable {
         return notifyInternal(pjp, true);
-    }     */
-
-    /**
+    }
      * Handle reset password operation.
      *
      * @param pjp {@link ProceedingJoinPoint}
@@ -102,6 +101,6 @@ public class ManagerRegistrationAspect  extends BaseNotificationAspect {
 
     @Override
     public Runnable getTask(Serializable serializableMessage) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;  //Todo change body of implemented methods use File | Settings | File Templates.
     }
 }
