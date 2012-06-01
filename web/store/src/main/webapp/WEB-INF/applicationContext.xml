@@ -327,105 +327,40 @@
     </bean>
 
 
-    <!-- ########################################### HornetQ configuration begin  ################################# -->
 
-    <bean name="mbeanServer" class="java.lang.management.ManagementFactory" factory-method="getPlatformMBeanServer"/>
-    <bean name="hornetQSecurityManagerImpl" class="org.hornetq.spi.core.security.HornetQSecurityManagerImpl"/>
-    <bean name="fileConfiguration" class="org.hornetq.core.config.impl.FileConfiguration" init-method="start"
-          destroy-method="stop">
-        <property name="journalType" value="NIO"/>
-        <property name="pagingDirectory"
-                  value="#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'+systemProperties['file.separator']+'hornetq'+systemProperties['file.separator']+'storefront'+systemProperties['file.separator']+'paging'}"/>
-        <property name="bindingsDirectory"
-                  value="#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'+systemProperties['file.separator']+'hornetq'+systemProperties['file.separator']+'storefront'+systemProperties['file.separator']+'bindings'}"/>
-        <property name="largeMessagesDirectory"
-                  value="#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'+systemProperties['file.separator']+'hornetq'+systemProperties['file.separator']+'storefront'+systemProperties['file.separator']+'large-messages'}"/>
-        <property name="journalDirectory"
-                  value="#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'+systemProperties['file.separator']+'hornetq'+systemProperties['file.separator']+'storefront'+systemProperties['file.separator']+'journal'}"/>
-    </bean>
-
-    <!-- The core server -->
-    <bean name="hornetQServerImpl" class="org.hornetq.core.server.impl.HornetQServerImpl">
-        <constructor-arg ref="fileConfiguration"/>
-        <constructor-arg ref="mbeanServer"/>
-        <constructor-arg ref="hornetQSecurityManagerImpl"/>
-    </bean>
-
-    <!-- The JMS server -->
-
-    <bean name="jmsServerManagerImpl" class="org.hornetq.jms.server.impl.JMSServerManagerImpl" init-method="start"
-          destroy-method="stop">
-        <constructor-arg ref="hornetQServerImpl"/>
-    </bean>
-    <bean id="inVmConnectionFactory" class="org.hornetq.jms.client.HornetQConnectionFactory">
-        <constructor-arg value="false"/>
-        <constructor-arg ref="inVmTransportConfiguration"/>
-    </bean>
-    <bean id="inVmTransportConfiguration" class="org.hornetq.api.core.TransportConfiguration">
-        <constructor-arg index="0" value="org.hornetq.core.remoting.impl.invm.InVMConnectorFactory"/>
-    </bean>
-
-
-    <!-- ########################################### HornetQ configuration end  ################################# -->
-
-
-    <!-- #################################### queues and jms templates begin ###############################-->
-
-    <bean id="jndiTemplate" class="org.springframework.jndi.JndiTemplate">
-        <property name="environment">
-            <props>
-                <prop key="java.naming.factory.initial">org.apache.naming.java.javaURLContextFactory</prop>
-                <prop key="java.naming.factory.url.pkgs">org.apache.naming</prop>
-            </props>
-        </property>
-    </bean>
-
-    <bean id="jmsQueueConnectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean">
-        <property name="jndiTemplate" ref="jndiTemplate"/>
-        <property name="jndiName" value="HQConnectionFactory"/>
-    </bean>
-
-
-    <bean id="customerRegistrationQueue" class="org.springframework.jndi.JndiObjectFactoryBean">
-        <property name="jndiTemplate" ref="jndiTemplate"/>
-        <property name="jndiName" value="queue/CustomerRegistrationQueue"/>
-    </bean>
-    <bean id="customerRegistrationJMSTemplate" class="org.springframework.jms.core.JmsTemplate">
-        <property name="connectionFactory" ref="jmsQueueConnectionFactory"/>
-        <property name="defaultDestination" ref="customerRegistrationQueue"/>
-    </bean>
-
-
-    <bean id="paymentNotificationTopic" class="org.springframework.jndi.JndiObjectFactoryBean">
-        <property name="jndiTemplate" ref="jndiTemplate"/>
-        <property name="jndiName" value="topic/PaymentNotificationTopic"/>
-    </bean>
-    <bean id="paymentNotificationJMSTemplate" class="org.springframework.jms.core.JmsTemplate">
-        <property name="connectionFactory" ref="jmsQueueConnectionFactory"/>
-        <property name="defaultDestination" ref="paymentNotificationTopic"/>
-    </bean>
-
-
-
-    <!-- #################################### queues and jms templates end ###############################-->
 
 
     <!-- #################################  aspects configurations begin ######################################-->
 
     <bean id="customerRegistrationAspect" class="org.yes.cart.web.aspect.RegistrationAspect">
-        <constructor-arg index="0" ref="customerRegistrationJMSTemplate"/>
+        <constructor-arg index="0">
+            <bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+                <property name="corePoolSize" value="5" />
+                <property name="maxPoolSize" value="10" />
+                <property name="queueCapacity" value="25" />
+            </bean>
+        </constructor-arg>
         <constructor-arg index="1" ref="passPhraseGenerator"/>
         <constructor-arg index="2" ref="passwordHashHelper"/>
+        <constructor-arg index="3" ref="mailSender"/>
+        <constructor-arg index="4" ref="mailComposer"/>
+
     </bean>
 
     <bean id="paymentNotificationAspect" class="org.yes.cart.web.aspect.PaymentAspect">
-        <!--<constructor-arg index="0" ref="paymentNotificationJMSTemplate"/>-->
-        <constructor-arg index="0" ref="productService"/>
+        <constructor-arg index="0">
+            <bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+                <property name="corePoolSize" value="5" />
+                <property name="maxPoolSize" value="10" />
+                <property name="queueCapacity" value="50" />
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="1" ref="productService"/>
 
-        <constructor-arg index="1" type="org.springframework.mail.javamail.JavaMailSender" ref="mailSender"/>
-        <constructor-arg index="2" type="org.yes.cart.service.mail.MailComposer" ref="mailComposer"/>
-        <constructor-arg index="3" type="org.yes.cart.service.domain.CustomerService" ref="customerService"/>
-        <constructor-arg index="4" type="org.yes.cart.service.domain.ShopService" ref="shopService"/>
+        <constructor-arg index="2" type="org.springframework.mail.javamail.JavaMailSender" ref="mailSender"/>
+        <constructor-arg index="3" type="org.yes.cart.service.mail.MailComposer" ref="mailComposer"/>
+        <constructor-arg index="4" type="org.yes.cart.service.domain.CustomerService" ref="customerService"/>
+        <constructor-arg index="5" type="org.yes.cart.service.domain.ShopService" ref="shopService"/>
 
 
     </bean>
@@ -435,7 +370,6 @@
     <!-- #################################  aspects configurations end ######################################-->
 
 
-    <!-- #################################  message consumers begin ######################################-->
 
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="localhost"/>
@@ -454,36 +388,7 @@
 
 
 
-    <bean id="customerRegistrationJmsContainer"
-          class="org.springframework.jms.listener.DefaultMessageListenerContainer">
-        <property name="connectionFactory" ref="jmsQueueConnectionFactory"/>
-        <property name="destination" ref="customerRegistrationQueue"/>
-        <property name="messageListener">
-            <!-- send notification with new customer account information and password -->
-            <bean  class="org.yes.cart.domain.message.consumer.CustomerRegistrationMessageListener">
-                <constructor-arg index="0" type="org.springframework.mail.javamail.JavaMailSender" ref="mailSender"/>
-                <constructor-arg index="1" type="org.yes.cart.service.mail.MailComposer" ref="mailComposer"/>
-            </bean>
-        </property>
-        <property name="sessionTransacted" value="true"/>
-    </bean>
 
-    <bean id="paymentNotificationJmsContainer"
-          class="org.springframework.jms.listener.DefaultMessageListenerContainer">
-        <property name="connectionFactory" ref="jmsQueueConnectionFactory"/>
-        <property name="destination" ref="paymentNotificationTopic"/>
-        <property name="messageListener">
-            <!-- send notification with payment details -->
-            <bean  class="org.yes.cart.domain.message.consumer.StandardMessageListener">
-                <constructor-arg index="0" type="org.springframework.mail.javamail.JavaMailSender" ref="mailSender"/>
-                <constructor-arg index="1" type="org.yes.cart.service.mail.MailComposer" ref="mailComposer"/>
-                <constructor-arg index="2" type="org.yes.cart.service.domain.CustomerService" ref="customerService"/>
-                <constructor-arg index="3" type="org.yes.cart.service.domain.ShopService" ref="shopService"/>
-
-            </bean>
-        </property>
-        <property name="sessionTransacted" value="true"/>
-    </bean>
 
     <!-- #################################  message consumers end ######################################-->
 

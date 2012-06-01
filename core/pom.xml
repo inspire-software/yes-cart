@@ -67,7 +67,7 @@
             <scope>runtime</scope>
         </dependency>
         <!-- hornetq begin -->
-        <dependency>
+        <!-- dependency>
             <groupId>tomcat</groupId>
             <artifactId>naming-factory</artifactId>
             <version>5.5.23</version>
@@ -95,11 +95,6 @@
             <version>2.2.5.Final</version>
         </dependency>
         <dependency>
-            <groupId>net.sf.opencsv</groupId>
-            <artifactId>opencsv</artifactId>
-            <version>2.0</version>
-        </dependency>
-        <dependency>
             <groupId>org.jboss.netty</groupId>
             <artifactId>netty</artifactId>
             <version>3.2.3.Final</version>
@@ -108,8 +103,14 @@
             <groupId>org.apache.geronimo.specs</groupId>
             <artifactId>geronimo-jms_1.1_spec</artifactId>
             <version>1.0.1</version>
-        </dependency>
+        </dependency -->
         <!-- hornetq end -->
+        <dependency>
+            <groupId>net.sf.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>2.0</version>
+        </dependency>
+
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
