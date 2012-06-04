@@ -1,12 +1,9 @@
 package org.yes.cart.service.domain.aspect.impl;
 
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.jms.core.JmsTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.yes.cart.service.domain.HashHelper;
 import org.yes.cart.service.domain.PassPhrazeGenerator;
@@ -42,7 +39,7 @@ public class ManagerRegistrationAspect  extends BaseNotificationAspect {
      *
      * @param phrazeGenerator {@link PassPhrazeGenerator}
      * @param hashHelper      {@link HashHelper}
-     * @param taskExecutor     {@link JmsTemplate} to execute asyn task.
+     * @param taskExecutor     {@link TaskExecutor} to execute asyn task.
      */
     public ManagerRegistrationAspect( final TaskExecutor taskExecutor,
                                       final PassPhrazeGenerator phrazeGenerator,
