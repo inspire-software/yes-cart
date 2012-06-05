@@ -34,16 +34,6 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
     private static ApplicationContext sharedContext;
 
-    /**
-     * For bulk import to switch off lucene indexing
-     * @return
-     */
-    /*protected synchronized ApplicationContext createContext2() {
-        if (sharedContext == null) {
-            sharedContext = new ClassPathXmlApplicationContext("testApplicationContext2.xml", "core-aspects.xml");
-        }
-        return sharedContext;
-    } */
 
     @Before
     public void setUp() throws Exception {
@@ -188,7 +178,6 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             bulkImportService = getBulkImportService("src/test/resources/import/product_category.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
             System.out.println("product_category.xml " + (new Date().getTime() - dt.getTime()));
-
 
 
             //assertTrue(stringBuilder.toString(), stringBuilder.toString().indexOf("ERROR") == -1);

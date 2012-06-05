@@ -1,7 +1,6 @@
 package org.yes.cart.bulkimport.csv.impl;
 
 
-import com.google.common.collect.MapMaker;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.apache.commons.lang.StringUtils;
@@ -24,9 +23,9 @@ import java.beans.PropertyDescriptor;
 import java.io.*;
 import java.text.MessageFormat;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Pefrorm import from csv files. Import based on xml import description, that include
@@ -111,8 +110,8 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
                             "ERROR: import can not be started, because can not fild column to locate primary key");
                     return BulkImportResult.ERROR;
                 }
-                entityCache.clear();
                 doImport(errorReport, filesToImport, cvsImportDescriptor, importedFiles);
+                entityCache.clear();
             }
         } catch (Exception e) {
             LOG.error("Unexpected error during bulk import ", e);
@@ -368,10 +367,26 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
                              final ImportColumn column,
                              final Object masterObject,
                              final ImportDescriptor importDescriptor) throws ClassNotFoundException {
-        final String key = column.getName() + getKey(line, masterObject);
+
+        final StringBuilder sb = new StringBuilder();
+        final Object params = column.getColumnIndex() > -1 ? getQueryParametersValue(line[column.getColumnIndex()], column) : "" + column.getColumnIndex();
+        sb.append(column.getLookupQuery());
+        if (params instanceof Object[]) {
+            for (Object obj : (Object[]) params) {
+                sb.append(obj);
+            }
+        } else {
+            sb.append(params);
+        }
+        final String key = sb.toString();
 
 
-        Object object = entityCache.get(key);
+        Object object = null;
+
+        if (key != null) {
+            object = entityCache.get(key);
+        }
+
         if (object == null) {
             object = getExistingEntity(line, column, masterObject);
             if (object == null) {
@@ -381,24 +396,18 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
             }
             if (object != null) {
                 entityCache.put(key, object);
+                //System.out.println("Put with " + key + " " + object );
             }
+
+            //} else {
+              //System.out.println("Hit with " + key);
         }
         return object;
     }
 
-    private String getKey(final String[] line, final Object masterObject) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(masterObject);
-        for (String l : line) {
-            stringBuilder.append(l);
-        }
 
-        return stringBuilder.toString();
-    }
-
-
-    private Map<String, Object> entityCache =
-            new MapMaker().concurrencyLevel(1).expiration(3, TimeUnit.MINUTES).makeMap();
+    private Map<String, Object> entityCache = new HashMap<String, Object>();
+    //new MapMaker().concurrencyLevel(1).softKeys().softValues().expiration(3, TimeUnit.MINUTES). makeMap();
 
 
     /**
