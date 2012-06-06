@@ -90,6 +90,8 @@ class CategoryWalker {
 
         new File("$context.dataDirectory/export/freexml.int/csvresult/product_entity.csv") << dumpProducts(handler.categoryList);
 
+        new File("$context.dataDirectory/export/freexml.int/csvresult/warehouse.csv") << "Ware house code;name;description\nMain;Main warehouse;Main warehouse";
+
 
     }
 
