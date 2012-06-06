@@ -8,6 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.mail.MailComposer;
@@ -73,7 +74,7 @@ public class MailComposerImpl implements MailComposer {
     }
 
      private Map<String, String> shopCodeMailTemplateDirMap =
-             new MapMaker().concurrencyLevel(16).softValues().expiration(3, TimeUnit.MINUTES).makeMap();
+             new MapMaker().concurrencyLevel(16).softValues().expiration(Constants.DEFAULT_EXPIRATION_TIMEOUT, TimeUnit.MINUTES).makeMap();
 
     /**
      * Get mail resource directory for given shop .

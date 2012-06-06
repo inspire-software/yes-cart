@@ -369,7 +369,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
                              final ImportDescriptor importDescriptor) throws ClassNotFoundException {
 
         final StringBuilder sb = new StringBuilder();
-        final Object params = column.getColumnIndex() > -1 ? getQueryParametersValue(line[column.getColumnIndex()], column) : "" + column.getColumnIndex();
+        final Object params = column.getColumnIndex() > -1 ? getQueryParametersValue(line[column.getColumnIndex()], column) : "N/A";
         sb.append(column.getLookupQuery());
         if (params instanceof Object[]) {
             for (Object obj : (Object[]) params) {

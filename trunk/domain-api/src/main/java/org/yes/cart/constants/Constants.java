@@ -114,4 +114,9 @@ public interface Constants {
     String ARCHIVE_FOLDER = "archive";
 
 
+
+
+    long DEFAULT_EXPIRATION_TIMEOUT = 3L; //minutes
+
+
 }

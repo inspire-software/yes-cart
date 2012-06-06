@@ -4,6 +4,7 @@ import com.google.common.collect.MapMaker;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
@@ -35,7 +36,7 @@ public class ApplicationDirector implements ApplicationContextAware {
 
 
 
-    private final ConcurrentMap<String, Shop> urlShopCache = new MapMaker().concurrencyLevel(16).softValues().expiration(3, TimeUnit.MINUTES).makeMap();
+    private final ConcurrentMap<String, Shop> urlShopCache = new MapMaker().concurrencyLevel(16).softValues().expiration(Constants.DEFAULT_EXPIRATION_TIMEOUT, TimeUnit.MINUTES).makeMap();
     //private final ConcurrentMap<Long, Shop> idShopCache = new MapMaker().concurrencyLevel(16).softValues().expiration(3, TimeUnit.MINUTES).makeMap();
 
     /**

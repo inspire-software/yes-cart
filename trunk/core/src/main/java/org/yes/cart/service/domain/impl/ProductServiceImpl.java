@@ -1,11 +1,13 @@
 package org.yes.cart.service.domain.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.search.Query;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.util.CollectionUtils;
 import org.yes.cart.cache.Cacheable;
+import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entityindexer.ProductIndexer;
@@ -498,21 +500,22 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         //todo productDao.executeNativeUpdate("DELETE FROM TPRODUCTATTRVALUE WHERE VAL IS NULL OR VAL =''");
     }
 
+
     /**
      * {@inheritDoc}
      */
-
     public List<Product> getProductByConeNameBrandType(
+            final CriteriaTuner criteriaTuner,
             final String code,
             final String name,
             final Long brandId,
             final Long productTypeId) {
 
         final List<Criterion> criterionList = new ArrayList<Criterion>();
-        if (code != null) {
+        if (StringUtils.isNotBlank(code)) {
             criterionList.add(Restrictions.like("code", code, MatchMode.ANYWHERE));
         }
-        if (name != null) {
+        if (StringUtils.isNotBlank(name)) {
             criterionList.add(Restrictions.like("name", name, MatchMode.ANYWHERE));
         }
         if (brandId != null) {
@@ -523,6 +526,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         }
 
         return productDao.findByCriteria(
+                criteriaTuner,
                 criterionList.toArray(new Criterion[criterionList.size()])
         );
 
