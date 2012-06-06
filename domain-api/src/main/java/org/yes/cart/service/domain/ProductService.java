@@ -1,6 +1,7 @@
 package org.yes.cart.service.domain;
 
 import org.apache.lucene.search.Query;
+import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.queryobject.FiteredNavigationRecord;
@@ -263,19 +264,22 @@ public interface ProductService extends GenericService<Product> {
     void clearEmptyAttributes();
 
 
+
     /**
      * Find product by given optional filtering criteria.
      *
+     * @param criteriaTuner criteria tuner
      * @param code          product code.  use like %%
      * @param name          product name.  use like %%
      * @param brandId       brand id. use exact match
      * @param productTypeId product type id. use exact match
      * @return list of founded products
      */
-    List<Product> getProductByConeNameBrandType(
-            final String code,
-            final String name,
-            final Long brandId,
-            final Long productTypeId);
+    public List<Product> getProductByConeNameBrandType(
+            CriteriaTuner criteriaTuner,
+            String code,
+            String name,
+            Long brandId,
+            Long productTypeId);
 
 }

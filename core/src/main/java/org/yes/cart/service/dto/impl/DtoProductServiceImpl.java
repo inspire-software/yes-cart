@@ -2,7 +2,10 @@ package org.yes.cart.service.dto.impl;
 
 import dp.lib.dto.geda.adapter.repository.ValueConverterRepository;
 import dp.lib.dto.geda.assembler.DTOAssembler;
+import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.yes.cart.constants.AttributeGroupNames;
+import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.*;
 import org.yes.cart.domain.dto.adapter.impl.EntityFactoryToBeanFactoryAdaptor;
@@ -253,13 +256,26 @@ public class DtoProductServiceImpl
             productType = productTypeId;
         }
         final List<Product> products = ((ProductService) service).getProductByConeNameBrandType(
-                code, name, brand, productType);
+                DEFAULT_SEARCH_CRITERIA_TUNER, code, name, brand, productType);
 
         final List<ProductDTO> dtos = new ArrayList<ProductDTO>(products.size());
         fillDTOs(products, dtos);
         return dtos;
 
     }
+
+
+    /**
+     * Default criteria tuner to serrch products
+     */
+    public static CriteriaTuner DEFAULT_SEARCH_CRITERIA_TUNER = new CriteriaTuner() {
+
+        /** {@inheritDoc} */
+        public void tune(final Criteria crit) {
+            crit.setFetchMode("productCategory", FetchMode.SELECT);
+        }
+
+    };
 
     /** {@inheritDoc} */
     public List<? extends AttrValueDTO> getEntityAttributes(final long entityPk) throws UnmappedInterfaceException, UnableToCreateInstanceException {

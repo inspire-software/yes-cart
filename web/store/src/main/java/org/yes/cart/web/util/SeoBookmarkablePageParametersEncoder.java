@@ -1,5 +1,6 @@
 package org.yes.cart.web.util;
 
+import com.google.common.collect.MapMaker;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.wicket.request.Request;
@@ -7,13 +8,14 @@ import org.apache.wicket.request.Url;
 import org.apache.wicket.request.mapper.parameter.IPageParametersEncoder;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.entity.Category;
-import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.ProductSku;
-import org.yes.cart.domain.entity.Seo;
+import org.yes.cart.constants.Constants;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.support.constants.WebParametersKeys;
+
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -52,37 +54,55 @@ public class SeoBookmarkablePageParametersEncoder implements IPageParametersEnco
         }
         return url;
     }
-
+    
+    private final ConcurrentMap<String, String> encodeCache = new MapMaker().concurrencyLevel(16).softValues().expiration(Constants.DEFAULT_EXPIRATION_TIMEOUT, TimeUnit.MINUTES).makeMap();
+    
     private String encodeId(final String idName, final String idValueToEncode) {
         if (seoEnabled) {
-            if (WebParametersKeys.CATEGORY_ID.equals(idName)) {
-                final Category category = categoryService.getById(NumberUtils.toLong(idValueToEncode));
-                if (category != null) {
-                    return encodeId(
-                            idValueToEncode,
-                            category.getSeo()
-                    );
-                }
-            } else if (WebParametersKeys.PRODUCT_ID.equals(idName)) {
-                final Product product = productService.getById(NumberUtils.toLong(idValueToEncode));
-                if (product != null) {
-                    return encodeId(
-                            idValueToEncode,
-                            product.getSeo()
-                    );
-                }
+            
+            final String key = idValueToEncode + idName;
+            
+            String rez = encodeCache.get(key);
 
-            } else if (WebParametersKeys.SKU_ID.equals(idName)) {
-                final ProductSku productSku = productService.getSkuById(NumberUtils.toLong(idValueToEncode));
-                if (productSku != null) {
-                    return encodeId(
-                            idValueToEncode,
-                            productSku.getSeo()
-                    );
+            if (rez == null) {
+                if (WebParametersKeys.CATEGORY_ID.equals(idName)) {
+                    final Category category = categoryService.getById(NumberUtils.toLong(idValueToEncode));
+                    if (category != null) {
+                        rez = encodeId(
+                                idValueToEncode,
+                                category.getSeo()
+                        );
+                    }
+                } else if (WebParametersKeys.PRODUCT_ID.equals(idName)) {
+                    final Product product = productService.getById(NumberUtils.toLong(idValueToEncode));
+                    if (product != null) {
+                        rez = encodeId(
+                                idValueToEncode,
+                                product.getSeo()
+                        );
+                    }
+
+                } else if (WebParametersKeys.SKU_ID.equals(idName)) {
+                    final ProductSku productSku = productService.getSkuById(NumberUtils.toLong(idValueToEncode));
+                    if (productSku != null) {
+                        rez = encodeId(
+                                idValueToEncode,
+                                productSku.getSeo()
+                        );
+                    }
+
+                } else {
+                    rez = idValueToEncode;
+
+                }
+                if (rez != null) {
+                    encodeCache.put(key, rez);
                 }
 
             }
+            return rez;
         }
+
         return idValueToEncode;
     }
 
