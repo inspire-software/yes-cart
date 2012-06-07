@@ -5,9 +5,6 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.junit.Test;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CvsImportDescriptor;
-import org.yes.cart.bulkimport.csv.impl.CsvImportColumnImpl;
-import org.yes.cart.bulkimport.csv.impl.CsvImportFileImpl;
-import org.yes.cart.bulkimport.csv.impl.CvsImportDescriptorImpl;
 import org.yes.cart.bulkimport.model.FieldTypeEnum;
 import org.yes.cart.bulkimport.model.ImportColumn;
 
