@@ -19,6 +19,7 @@ import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.bulkimport.service.BulkImportService;
 import org.yes.cart.bulkimport.service.impl.AbstractImportService;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.domain.entity.Identifiable;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.util.misc.ExceptionUtil;
 
@@ -386,6 +387,10 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
             }
         } else {
             sb.append(params);
+        }
+
+        if (masterObject instanceof Identifiable && column.isUseMasterObject()) {
+            sb.append(((Identifiable) masterObject).getId());
         }
         final String key = sb.toString();
 
