@@ -6,6 +6,9 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.support.GenericConversionService;
 import org.yes.cart.bulkimport.csv.CsvFileReader;
@@ -39,7 +42,7 @@ import java.util.Set;
  * example - shop and shop url, in this case {@link ImportColumn} has a
  * {@link ImportDescriptor}. At this moment rows in cell splitted by comma by default.
  */
-public class CsvBulkImportServiceImpl extends AbstractImportService implements BulkImportService {
+public class CsvBulkImportServiceImpl extends AbstractImportService implements BulkImportService, ApplicationContextAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
@@ -50,6 +53,8 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
     private GenericConversionService extendedConversionService;
 
     private PropertyDescriptor propertyDescriptor;
+
+    private ApplicationContext applicationContext;
 
 
     /**
@@ -168,7 +173,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
 
             String[] line;
             while ((line = csvFileReader.readLine()) != null) {
-                doImport(errorReport, line, cvsImportDescriptor, pkColumn, null);
+                applicationContext.getBean("bulkImportServiceImpl", BulkImportService.class).doImport(errorReport, line, cvsImportDescriptor, pkColumn, null);
             }
             errorReport.append(MessageFormat.format("\nINFO total lines : {0}", csvFileReader.getRowsRead()));
 
@@ -197,8 +202,10 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
     }
 
 
+
     /**
-     * Import single line. This method can be called recursive in case of sum imports.
+     * Import single line.
+     * This method can be called recursive in case of sum imports.
      *
      * @param errorReport      error report
      * @param line             single line from csv file
@@ -206,7 +213,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
      * @param pkColumn         column to locate object.
      * @param masterObject     optional master object if found sub import
      */
-    void doImport(final StringBuilder errorReport,
+    public void doImport(final StringBuilder errorReport,
                   final String[] line,
                   final CvsImportDescriptor importDescriptor,
                   final ImportColumn pkColumn,
@@ -220,6 +227,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
             performSubImport(errorReport, line, importDescriptor, object, importDescriptor.getImportColumns(FieldTypeEnum.SIMPLE_SLAVE_FIELD));
             performSubImport(errorReport, line, importDescriptor, object, importDescriptor.getImportColumns(FieldTypeEnum.KEYVALUE_SLAVE_FIELD));
             genericDAO.flushClear();
+            //genericDAO.
         } catch (Exception e) {
             String additionalInfo = null;
             if (propertyDescriptor != null) {
@@ -231,12 +239,13 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
                 );
             }
             String message = MessageFormat.format(
-                    "\nERROR duiring import row : {0} \ndescriptor {1} \nerror {2} \nadditional info {3} \nobject is {4}",
+                    "\nERROR duiring import row : {0} \ndescriptor {1} \nerror {2} \nadditional info {3} \nobject is {4} \nmaster object is {5}",
                     getRowAsString(line, importDescriptor.getImportFile().getColumnDelimeter()),
                     pathToImportDescriptor,
                     e.getMessage(),
                     additionalInfo,
-                    object
+                    object,
+                    masterObject
             );
             LOG.warn(message, e);
             errorReport.append(message);
@@ -254,7 +263,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
             CvsImportDescriptor innerCvsImportDescriptor = (CvsImportDescriptor) slaveTable.getImportDescriptor();
             ImportColumn slavePkColumn = innerCvsImportDescriptor.getPrimaryKeyColumn();
             for (String row : rows) {
-                doImport(errorReport,
+                applicationContext.getBean("bulkImportServiceImpl", BulkImportService.class).doImport(errorReport,
                         row.split(String.valueOf(importDescriptor.getImportFile().getColumnDelimeter())),
                         innerCvsImportDescriptor,
                         slavePkColumn,
@@ -504,5 +513,10 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
         xStream.alias("file-descriptor", CsvImportFileImpl.class);
         xStream.alias("column-descriptor", CsvImportColumnImpl.class);
         return xStream;
+    }
+
+    /** {@inheritDoc} */
+    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 }

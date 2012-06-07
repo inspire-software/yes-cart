@@ -1,13 +1,9 @@
 package org.yes.cart.bulkimport.csv.impl;
 
-import org.dbunit.AbstractDatabaseTester;
-import org.dbunit.JdbcDatabaseTester;
-import org.dbunit.operation.DatabaseOperation;
 import org.junit.Before;
 import org.junit.After;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.bulkimport.csv.CsvFileReader;
 import org.yes.cart.bulkimport.service.BulkImportService;
@@ -178,6 +174,9 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             bulkImportService = getBulkImportService("src/test/resources/import/product_category.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
             System.out.println("product_category.xml " + (new Date().getTime() - dt.getTime()));
+
+            System.out.println(stringBuilder.toString());
+
 
 
             //assertTrue(stringBuilder.toString(), stringBuilder.toString().indexOf("ERROR") == -1);
