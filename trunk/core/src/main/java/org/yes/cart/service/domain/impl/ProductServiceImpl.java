@@ -130,10 +130,13 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         final List<AttrValue> attrNameValues = new ArrayList<AttrValue>(attributesNames.length);
         for (String attrName : attributesNames) {
             for (AttrValue attrValue : attrValueCollection) {
-                final String candidatCode = attrValue.getAttribute().getCode();
-                if (candidatCode.equals(attrName) || candidatCode.equals("SKU" + attrName)) {
-                    attrNameValues.add(attrValue);
+                if (attrValue != null && attrValue.getAttribute() != null) {
+                    final String candidatCode = attrValue.getAttribute().getCode();
+                    if (candidatCode.equals(attrName) || candidatCode.equals("SKU" + attrName)) {
+                        attrNameValues.add(attrValue);
+                    }
                 }
+
             }
         }
         return attrNameValues;
@@ -265,7 +268,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     }
 
 
-
     /**
      * {@inheritDoc}
      */
@@ -282,7 +284,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      */
     @Cacheable(value = PROD_SERV_METHOD_CACHE)
     public List<Product> getProductByIdList(final List idList) {
-        if (idList == null || idList.isEmpty()){
+        if (idList == null || idList.isEmpty()) {
             return Collections.EMPTY_LIST;
         }
         return productDao.findQueryObjectsByNamedQueryWithList("PRODUCTS.LIST.BY.IDS", idList, null);

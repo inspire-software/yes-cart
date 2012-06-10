@@ -51,9 +51,9 @@
         <!-- availability type -->
         <column-descriptor>
             <columnIndex>-1</columnIndex>
-            <fieldType>FK_FIELD</fieldType>
+            <fieldType>FIELD</fieldType>
             <name>availability</name>
-            <lookupQuery>select a from AvailabilityEntity a where a.availabilityId = 1 </lookupQuery>
+            <constant>1</constant>
         </column-descriptor>
 
 
@@ -65,6 +65,7 @@
             <name>attribute</name>
             <importDescriptor class="import-descriptor">
                 <entityIntface>org.yes.cart.domain.entity.AttrValueProduct</entityIntface>
+                <insertSql>fast insert hack</insertSql>
                 <importFile class="file-descriptor">
                     <columnDelimeter>;</columnDelimeter>
                     <textQualifier null="true"/>

@@ -11,24 +11,6 @@ package org.yes.cart.domain.entity;
 public interface Availability extends Auditable {
 
     /**
-     * When available on warehouse.
-     */
-    long STANDARD = 1;
-    /**
-     * For preorder.
-     */
-    long PREORDER = 2;
-
-    /**
-     * Available for backorder.
-     */
-    long BACKORDER = 4;
-    /**
-     * Always available
-     */
-    long ALWAYS = 8;
-
-    /**
      * Get the pk
      *
      * @return pk

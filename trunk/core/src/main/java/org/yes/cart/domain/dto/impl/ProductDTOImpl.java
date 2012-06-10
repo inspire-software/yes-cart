@@ -35,12 +35,8 @@ public class ProductDTOImpl implements ProductDTO {
     @DtoField(value = "availabletill")
     private Date availabletill;
 
-
-    @DtoField(value = "availability",
-            dtoBeanKey = "org.yes.cart.domain.dto.AvailabilityDTO",
-            entityBeanKeys = "org.yes.cart.domain.entity.Availability")
-    @DtoParent(value = "availabilityId", retriever = "availabilityDto2Availability")
-    private AvailabilityDTO availabilityDTO;
+    @DtoField(value = "availability")
+    private int availability;
 
     @DtoField(value = "brand",
             dtoBeanKey = "org.yes.cart.domain.dto.BrandDTO",
@@ -140,13 +136,13 @@ public class ProductDTOImpl implements ProductDTO {
     }
 
     /** {@inheritDoc} */
-    public AvailabilityDTO getAvailabilityDTO() {
-        return availabilityDTO;
+    public int getAvailability() {
+        return availability;
     }
 
     /** {@inheritDoc} */
-    public void setAvailabilityDTO(final AvailabilityDTO availabilityDTO) {
-        this.availabilityDTO = availabilityDTO;
+    public void setAvailability(final int availability) {
+        this.availability = availability;
     }
 
     /** {@inheritDoc} */

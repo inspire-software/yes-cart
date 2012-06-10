@@ -119,12 +119,12 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
 
             if ((MoneyUtils.isFirstBiggerThanSecond(toReserve, BigDecimal.ZERO))
                     &&
-                    (Availability.STANDARD == productSku.getProduct().getAvailability().getAvailabilityId())) {
+                    (Product.AVAILABILITY_STANDARD == productSku.getProduct().getAvailability())) {
 
                 /**
-                 * Availability.BACKORDER -  can get from somewere
-                 * Availability.PREORDER - can order from manafacturer
-                 * Availability.ALWAYS - always
+                 * Availability.AVAILABILITY_BACKORDER -  can get from somewere
+                 * Availability.AVAILABILITY_PREORDER - can order from manafacturer
+                 * Availability.AVAILABILITY_ALWAYS - always
                  */
                 throw new OrderItemAllocationException(
                         productSku,

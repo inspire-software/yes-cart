@@ -51,7 +51,7 @@ public class AttributeValueBridge implements FieldBridge {
 
                 }
 
-                if (StringUtils.isNotBlank(attrValue.getAttribute().getCode())) {
+                if (attrValue.getAttribute() != null && StringUtils.isNotBlank(attrValue.getAttribute().getCode())) {
                     document.add(new Field(
                             prefix + "attribute.attribute",
                             attrValue.getAttribute().getCode(),

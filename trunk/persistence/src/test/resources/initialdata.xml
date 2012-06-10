@@ -270,13 +270,6 @@
       <!-- Shop 50 -->
       <TSHOPCATEGORY SHOPCATEGORY_ID="150" RANK="5" SHOP_ID="50" CATEGORY_ID="200"/>
 
-      <!-- availablilyty  -->
-
-      <TAVAILABILITY AVAILABILITY_ID="1" NAME="In stock"   DESCRIPTION="Show id available in stock" />
-      <TAVAILABILITY AVAILABILITY_ID="2" NAME="Preorder"   DESCRIPTION="Pre order" />
-      <TAVAILABILITY AVAILABILITY_ID="4" NAME="Back order"   DESCRIPTION="Back order" />
-      <TAVAILABILITY AVAILABILITY_ID="8" NAME="Always"   DESCRIPTION="Available at any time" />
-
 
       <!-- product types -->
 
@@ -336,7 +329,7 @@
                 CODE="BENDER-ua"
                 NAME="Бендер Згинач Родріґес"
                 DESCRIPTION="Бендер — комічний антигерой, п'яниця, лихослов і завзятий курець, шанувальник порнографії для роботів (у вигляді електричних схем), злодій-рецидивіст (вірніше, клептоман), кухар (хоча, зважаючи на відсутність відчуття смаку, його їжа в переважній більшості випадків щонайменше неїстівна, ба навіть небезпечна для життя)."
-                BRAND_ID="101"              PRODUCTTYPE_ID="1"              AVAILABILITY_ID="1"              SEO_ID="9998" FEATURED="0" AVAILABLEFROM="2010-04-08 11:15:17.451" AVAILABLETILL="2040-04-08 11:15:17.451"
+                BRAND_ID="101"              PRODUCTTYPE_ID="1"              AVAILABILITY="1"              SEO_ID="9998" FEATURED="0" AVAILABLEFROM="2010-04-08 11:15:17.451" AVAILABLETILL="2040-04-08 11:15:17.451"
                 TAG="sale newarrival specialpromo"/>
 
 
@@ -366,7 +359,7 @@
                 CODE="BENDER"
                 NAME="Bender Bending Rodriguez"
                 DESCRIPTION="Bender Bending Rodriguez, designated Bending Unit 22, is a fictional robot character in the animated television series Futurama. He is voiced by John DiMaggio. In the series, Bender plays the role of a comic anti-hero, and is described by Leela as an alcoholic, whore-mongering, chain-smoking gambler.[1] He was built in Mexico and is said to possess a swarthy Latin charm despite not having a Mexican accent. He is also prejudiced against non-robots, often expressing an urge to kill all humans"
-                BRAND_ID="101"              PRODUCTTYPE_ID="1"              AVAILABILITY_ID="1"              SEO_ID="9999"
+                BRAND_ID="101"              PRODUCTTYPE_ID="1"              AVAILABILITY="1"              SEO_ID="9999"
                 TAG="sale"/>
 
       <TSKU SKU_ID="9999"
@@ -395,7 +388,7 @@
                 CODE="SOBOT"
                 NAME="I-Sobot"
                 DESCRIPTION="Think small. BigSmall. Small is beautiful. Good things come in small packages. Small ones are more juicy. However you like to put it, sometimes there's a beauty and economy in reducing the scale of an object and cramming it full of cleverness. Now, the ever-so-clever chaps at Tomy have done just that with the creation of the I-Sobot. The what bot we hear you ask? The I-Sobot is the world's smallest mass produced bi-pedal humanoid robot. But don't be fooled by his size - he has a big personality all of his own. Measuring only 16cm and weighing an amazing 300 grams, he's ready to play straight from the box. Choose from 4 modes where I-Sobot can perform fun and quirky scenes from Western battles to voice command mode that includes 10 words of phrases to say to I-Sobot where he will respond. With 17 Servo motors allowing human like articulation and 200 spoken phrases, you'll never be lonesome again. I-Sobot's distinctive design and ground-breaking functionality has us rather drooling at the mouth, in an ever-so manly way. Splendid."
-                BRAND_ID="100"              PRODUCTTYPE_ID="1"              AVAILABILITY_ID="1"              SEO_ID="10000"
+                BRAND_ID="100"              PRODUCTTYPE_ID="1"              AVAILABILITY="1"              SEO_ID="10000"
                 TAG="newarrival"/>
 
 
@@ -451,42 +444,42 @@
 
 
       <TPRODUCT PRODUCT_ID="11000"   CODE="PRODUCT1"  NAME="product 1"   DESCRIPTION="product 1 for price testing"
-                BRAND_ID="101"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"
+                BRAND_ID="101"  PRODUCTTYPE_ID="3"   AVAILABILITY="1"
                 TAG="specialpromo"/>
       <TPRODUCTATTRVALUE ATTRVALUE_ID="10003" CODE="WEIGHT" VAL="2.5" PRODUCT_ID="11000"/>
       <TPRODUCT PRODUCT_ID="11001"   CODE="PRODUCT2"  NAME="product 2"   DESCRIPTION="product 2 for price testing"
-                BRAND_ID="102"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
+                BRAND_ID="102"  PRODUCTTYPE_ID="3"   AVAILABILITY="1"/>
       <TPRODUCTATTRVALUE ATTRVALUE_ID="10004" CODE="WEIGHT" VAL="2.1" PRODUCT_ID="11001"/>
       <TPRODUCT PRODUCT_ID="11002"   CODE="PRODUCT3"  NAME="product 3"   DESCRIPTION="product 3 for price testing"
-                BRAND_ID="103"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
+                BRAND_ID="103"  PRODUCTTYPE_ID="3"   AVAILABILITY="1"/>
       <TPRODUCTATTRVALUE ATTRVALUE_ID="10005" CODE="WEIGHT" VAL="2.2" PRODUCT_ID="11002"/>
       <TPRODUCT PRODUCT_ID="11003"   CODE="PRODUCT4"  NAME="product 4"   DESCRIPTION="product 4 for price testing"
-                BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
+                BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY="1"/>
       <TPRODUCTATTRVALUE ATTRVALUE_ID="10006" CODE="WEIGHT" VAL="2.3" PRODUCT_ID="11003"/>
       <TPRODUCT PRODUCT_ID="11004"   CODE="PRODUCT5"  NAME="product 5"   DESCRIPTION="product 5 for price testing"
-                BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
+                BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY="1"/>
       <TPRODUCTATTRVALUE ATTRVALUE_ID="10007" CODE="WEIGHT" VAL="2.35" PRODUCT_ID="11004"/>
 
       <!--product for associate with 11004 product-->
       <TPRODUCT PRODUCT_ID="12004"   CODE="PRODUCT5-UP"  NAME="product 5 up sell assoc"  DESCRIPTION=""
-                BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
+                BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY="1"/>
       <TPRODUCT PRODUCT_ID="13004"   CODE="PRODUCT5-CROSS"  NAME="product 5 cross sell assoc"  DESCRIPTION=""
-                BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
+                BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY="1"/>
       <TPRODUCT PRODUCT_ID="13005"   CODE="PRODUCT5-CROSS2"  NAME="product 5 cross sell assoc"  DESCRIPTION=""
-                BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
+                BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY="1"/>
       <TPRODUCT PRODUCT_ID="14004"   CODE="PRODUCT5-ACC"  NAME="product 5 accsesories sell assoc"  DESCRIPTION=""
-                BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
+                BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY="1"/>
       <TPRODUCT PRODUCT_ID="15004"   CODE="PRODUCT5-BUY"  NAME="product 5 buy with this product sell assoc"  DESCRIPTION=""
-                BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
+                BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY="1"/>
 
       <TPRODUCT PRODUCT_ID="15005"   CODE="PRODUCT6"  NAME="product 6"  DESCRIPTION=""
-                BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
+                BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY="1"/>
 
       <TPRODUCT PRODUCT_ID="15006"   CODE="PRODUCT7"  NAME="product 7"  DESCRIPTION=""
-                BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
+                BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY="1"/>
 
       <TPRODUCT PRODUCT_ID="15007"   CODE="PRODUCT8"  NAME="product 8"  DESCRIPTION=""
-                BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1"/>
+                BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY="1"/>
 
       <TPRODUCTASSOCIATION PRODUCTASSOCIATION_ID="1" RANK="1" ASSOCIATION_ID="2" PRODUCT_ID="11004" ASSOCIATEDPRODUCT_ID="12004"/>
       <TPRODUCTASSOCIATION PRODUCTASSOCIATION_ID="2" RANK="2" ASSOCIATION_ID="3" PRODUCT_ID="11004" ASSOCIATEDPRODUCT_ID="13004"/>
@@ -557,15 +550,15 @@
 
 
       <!-- test for featured product -->
-      <TPRODUCT PRODUCT_ID="15051"   CODE="FEATURED-PRODUCT1"  NAME="featured product 1"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="1" AVAILABLEFROM="2010-04-08 11:15:17.451" AVAILABLETILL="2040-04-08 11:15:17.451"/>
-      <TPRODUCT PRODUCT_ID="15052"   CODE="FEATURED-PRODUCT2"  NAME="featured product 2"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="0"/>
-      <TPRODUCT PRODUCT_ID="15053"   CODE="FEATURED-PRODUCT3"  NAME="featured product 3"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="1" AVAILABLEFROM="2000-04-08 11:15:17.451" AVAILABLETILL="2001-04-08 11:15:17.451"/>
-      <TPRODUCT PRODUCT_ID="15054"   CODE="FEATURED-PRODUCT4"  NAME="featured product 4"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="0"/>
-      <TPRODUCT PRODUCT_ID="15055"   CODE="FEATURED-PRODUCT5"  NAME="featured product 5"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="1" AVAILABLEFROM="2000-04-08 11:15:17.451"/>
-      <TPRODUCT PRODUCT_ID="15056"   CODE="FEATURED-PRODUCT6"  NAME="featured product 6"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="0"/>
-      <TPRODUCT PRODUCT_ID="15057"   CODE="FEATURED-PRODUCT7"  NAME="featured product 7"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="1" AVAILABLETILL="2040-04-08 11:15:17.451"/>
-      <TPRODUCT PRODUCT_ID="15058"   CODE="FEATURED-PRODUCT8"  NAME="featured product 8"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="0"/>
-      <TPRODUCT PRODUCT_ID="15059"   CODE="FEATURED-PRODUCT9"  NAME="featured product 9"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="1"/>
+      <TPRODUCT PRODUCT_ID="15051"   CODE="FEATURED-PRODUCT1"  NAME="featured product 1"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY="1" FEATURED="1" AVAILABLEFROM="2010-04-08 11:15:17.451" AVAILABLETILL="2040-04-08 11:15:17.451"/>
+      <TPRODUCT PRODUCT_ID="15052"   CODE="FEATURED-PRODUCT2"  NAME="featured product 2"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY="1" FEATURED="0"/>
+      <TPRODUCT PRODUCT_ID="15053"   CODE="FEATURED-PRODUCT3"  NAME="featured product 3"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY="1" FEATURED="1" AVAILABLEFROM="2000-04-08 11:15:17.451" AVAILABLETILL="2001-04-08 11:15:17.451"/>
+      <TPRODUCT PRODUCT_ID="15054"   CODE="FEATURED-PRODUCT4"  NAME="featured product 4"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY="1" FEATURED="0"/>
+      <TPRODUCT PRODUCT_ID="15055"   CODE="FEATURED-PRODUCT5"  NAME="featured product 5"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY="1" FEATURED="1" AVAILABLEFROM="2000-04-08 11:15:17.451"/>
+      <TPRODUCT PRODUCT_ID="15056"   CODE="FEATURED-PRODUCT6"  NAME="featured product 6"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY="1" FEATURED="0"/>
+      <TPRODUCT PRODUCT_ID="15057"   CODE="FEATURED-PRODUCT7"  NAME="featured product 7"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY="1" FEATURED="1" AVAILABLETILL="2040-04-08 11:15:17.451"/>
+      <TPRODUCT PRODUCT_ID="15058"   CODE="FEATURED-PRODUCT8"  NAME="featured product 8"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY="1" FEATURED="0"/>
+      <TPRODUCT PRODUCT_ID="15059"   CODE="FEATURED-PRODUCT9"  NAME="featured product 9"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY="1" FEATURED="1"/>
 
       <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15051"   PRODUCT_ID="15051"  CATEGORY_ID="211"   RANK="0"/>
       <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15052"   PRODUCT_ID="15052"  CATEGORY_ID="211"   RANK="50"/>
@@ -580,13 +573,13 @@
 
 
       <!-- product availability test  -->
-      <TPRODUCT PRODUCT_ID="15100"   CODE="PAT_PRODUCT_ON_STOCK_ONLY_1"  NAME="product available on stockonly 1"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="0"/>
-      <TPRODUCT PRODUCT_ID="15101"   CODE="PAT_PRODUCT_ON_STOCK_ONLY_2"  NAME="product available on stockonly 2"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="1"/>
-      <TPRODUCT PRODUCT_ID="15102"   CODE="PAT_PRODUCT_ON_STOCK_ONLY_3"  NAME="product available on stockonly 3"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="0"/>
-      <TPRODUCT PRODUCT_ID="15103"   CODE="PAT_PRODUCT_PREORDER"         NAME="product available for preorder"    DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="2" FEATURED="0"/>
-      <TPRODUCT PRODUCT_ID="15104"   CODE="PAT_PRODUCT_BACKORDER"        NAME="product available for backorder"   DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="4" FEATURED="0"/>
-      <TPRODUCT PRODUCT_ID="15105"   CODE="PAT_PRODUCT_ALWAYS"           NAME="product always"                    DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="8" FEATURED="0"/>
-      <TPRODUCT PRODUCT_ID="15106"   CODE="PAT_PRODUCT_ALWAYS2"          NAME="product always 2"                  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="8" FEATURED="0"/>
+      <TPRODUCT PRODUCT_ID="15100"   CODE="PAT_PRODUCT_ON_STOCK_ONLY_1"  NAME="product available on stockonly 1"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY="1" FEATURED="0"/>
+      <TPRODUCT PRODUCT_ID="15101"   CODE="PAT_PRODUCT_ON_STOCK_ONLY_2"  NAME="product available on stockonly 2"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY="1" FEATURED="1"/>
+      <TPRODUCT PRODUCT_ID="15102"   CODE="PAT_PRODUCT_ON_STOCK_ONLY_3"  NAME="product available on stockonly 3"  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY="1" FEATURED="0"/>
+      <TPRODUCT PRODUCT_ID="15103"   CODE="PAT_PRODUCT_PREORDER"         NAME="product available for preorder"    DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY="2" FEATURED="0"/>
+      <TPRODUCT PRODUCT_ID="15104"   CODE="PAT_PRODUCT_BACKORDER"        NAME="product available for backorder"   DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY="4" FEATURED="0"/>
+      <TPRODUCT PRODUCT_ID="15105"   CODE="PAT_PRODUCT_ALWAYS"           NAME="product always"                    DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY="8" FEATURED="0"/>
+      <TPRODUCT PRODUCT_ID="15106"   CODE="PAT_PRODUCT_ALWAYS2"          NAME="product always 2"                  DESCRIPTION=""  BRAND_ID="104"  PRODUCTTYPE_ID="3"   AVAILABILITY="8" FEATURED="0"/>
 
       <TSKU SKU_ID="15100"  PRODUCT_ID="15100"  CODE="PAT_PRODUCT_ON_STOCK_ONLY_1"  NAME="product available on stockonly 1"     RANK="0"/>
       <TSKU SKU_ID="15101"  PRODUCT_ID="15101"  CODE="PAT_PRODUCT_ON_STOCK_ONLY_2"  NAME="product available on stockonly 2"     RANK="0"/>
@@ -613,41 +606,41 @@
       <TPRODUCTCATEGORY   PRODUCTCATEGORY_ID="15106"   PRODUCT_ID="15106"  CATEGORY_ID="212"   RANK="400"/>
 
       <!--shopping cart and commands test-->
-      <TPRODUCT PRODUCT_ID="15120"   CODE="CC_TEST1"  NAME="cc test 1"  DESCRIPTION="cc test 1"  BRAND_ID="105"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="0"/>
-      <TPRODUCT PRODUCT_ID="15121"   CODE="CC_TEST2"  NAME="cc test 2"  DESCRIPTION="cc test 1"  BRAND_ID="105"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="0"/>
-      <TPRODUCT PRODUCT_ID="15122"   CODE="CC_TEST3"  NAME="cc test 3"  DESCRIPTION="cc test 1"  BRAND_ID="105"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="0"/>
-      <TPRODUCT PRODUCT_ID="15123"   CODE="CC_TEST4"  NAME="cc test 4"  DESCRIPTION="cc test 1"  BRAND_ID="105"  PRODUCTTYPE_ID="3"   AVAILABILITY_ID="1" FEATURED="0"/>
-      <TPRODUCT PRODUCT_ID="15125"   CODE="CC_TEST5"  NAME="back order product with inventory"  DESCRIPTION=""  BRAND_ID="105"   PRODUCTTYPE_ID="3"   AVAILABILITY_ID="4" FEATURED="0"/>
+      <TPRODUCT PRODUCT_ID="15120"   CODE="CC_TEST1"  NAME="cc test 1"  DESCRIPTION="cc test 1"  BRAND_ID="105"  PRODUCTTYPE_ID="3"   AVAILABILITY="1" FEATURED="0"/>
+      <TPRODUCT PRODUCT_ID="15121"   CODE="CC_TEST2"  NAME="cc test 2"  DESCRIPTION="cc test 1"  BRAND_ID="105"  PRODUCTTYPE_ID="3"   AVAILABILITY="1" FEATURED="0"/>
+      <TPRODUCT PRODUCT_ID="15122"   CODE="CC_TEST3"  NAME="cc test 3"  DESCRIPTION="cc test 1"  BRAND_ID="105"  PRODUCTTYPE_ID="3"   AVAILABILITY="1" FEATURED="0"/>
+      <TPRODUCT PRODUCT_ID="15123"   CODE="CC_TEST4"  NAME="cc test 4"  DESCRIPTION="cc test 1"  BRAND_ID="105"  PRODUCTTYPE_ID="3"   AVAILABILITY="1" FEATURED="0"/>
+      <TPRODUCT PRODUCT_ID="15125"   CODE="CC_TEST5"  NAME="back order product with inventory"  DESCRIPTION=""  BRAND_ID="105"   PRODUCTTYPE_ID="3"   AVAILABILITY="4" FEATURED="0"/>
       <TPRODUCT PRODUCT_ID="15126"   CODE="CC_TEST6"  NAME="pre order product"  DESCRIPTION=""  BRAND_ID="105"
                 PRODUCTTYPE_ID="3"
-                AVAILABILITY_ID="2"
+                AVAILABILITY="2"
                 AVAILABLEFROM="2020-01-01 00:00:00.000000000"
                 FEATURED="0"/>
       <TPRODUCT PRODUCT_ID="15127"   CODE="CC_TEST7"  NAME="Always available"  DESCRIPTION=""  BRAND_ID="105"
                 PRODUCTTYPE_ID="3"
-                AVAILABILITY_ID="8"
+                AVAILABILITY="8"
                 AVAILABLEFROM="2020-01-01 00:00:00.000000000"
                 FEATURED="0"/>
 
       <TPRODUCT PRODUCT_ID="15128"   CODE="CC_TEST8"  NAME="Always available Digital but not available because of date"  DESCRIPTION=""  BRAND_ID="105"
                 PRODUCTTYPE_ID="5"
-                AVAILABILITY_ID="8"
+                AVAILABILITY="8"
                 AVAILABLEFROM="2020-01-01 00:00:00.000000000"
                 FEATURED="0"/>
 
       <TPRODUCT PRODUCT_ID="15129"   CODE="CC_TEST9"  NAME="Always available Digital"  DESCRIPTION=""  BRAND_ID="105"
                 PRODUCTTYPE_ID="5"
-                AVAILABILITY_ID="8"
+                AVAILABILITY="8"
                 FEATURED="0"/>
 
      <TPRODUCT PRODUCT_ID="10"   CODE="CC_TEST10"  NAME="Sku has differen code"  DESCRIPTION=""  BRAND_ID="105"
                 PRODUCTTYPE_ID="5"
-                AVAILABILITY_ID="8"
+                AVAILABILITY="8"
                 FEATURED="0"/>
 
      <TPRODUCT PRODUCT_ID="15200"   CODE="CC_TEST11"  NAME="One sku product in signle exemplar"  DESCRIPTION="Standard availability"  BRAND_ID="105"
                 PRODUCTTYPE_ID="5"
-                AVAILABILITY_ID="1"
+                AVAILABILITY="1"
                 FEATURED="0"/>
 
 

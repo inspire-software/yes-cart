@@ -41,13 +41,12 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
         ProductService productService = (ProductService) ctx().getBean(ServiceSpringKeys.PRODUCT_SERVICE);
         ProductTypeService productTypeService = (ProductTypeService) ctx().getBean(ServiceSpringKeys.PRODUCT_TYPE_SERVICE);
         BrandService brandService = (BrandService) ctx().getBean(ServiceSpringKeys.BRAND_SERVICE);
-        AvailabilityService availabilityService = (AvailabilityService) ctx().getBean(ServiceSpringKeys.AVAILABILITY_SERVICE);
         Product product = entityFactory.getByIface(Product.class);
         product.setCode("PROD_CODE");
         product.setName("product");
         product.setDescription("description");
         product.setProducttype(productTypeService.getById(1L));
-        product.setAvailability(availabilityService.getById(Availability.ALWAYS));
+        product.setAvailability(Product.AVAILABILITY_ALWAYS);
         product.setBrand(brandService.getById(101L));
         product = productService.create(product);
         assertTrue(product.getProductId() > 0);

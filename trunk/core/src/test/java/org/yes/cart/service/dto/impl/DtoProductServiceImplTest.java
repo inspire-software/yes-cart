@@ -10,7 +10,7 @@ import org.yes.cart.domain.dto.AttrValueProductDTO;
 import org.yes.cart.domain.dto.ProductDTO;
 import org.yes.cart.domain.dto.ProductSkuDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
-import org.yes.cart.domain.entity.Availability;
+import org.yes.cart.domain.entity.Product;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.dto.*;
@@ -29,7 +29,6 @@ public class DtoProductServiceImplTest extends BaseCoreDBTestCase {
 
     private DtoProductService dtoService;
     private DtoProductTypeService dtoProductTypeService;
-    private DtoAvailabilityService dtoAvailabilityService;
     private DtoBrandService dtoBrandService;
     private DtoAttributeService dtoAttrService;
     private DtoFactory dtoFactory;
@@ -39,7 +38,6 @@ public class DtoProductServiceImplTest extends BaseCoreDBTestCase {
         dtoService = (DtoProductService) ctx().getBean(ServiceSpringKeys.DTO_PRODUCT_SERVICE);
         dtoBrandService = (DtoBrandService) ctx().getBean(ServiceSpringKeys.DTO_BRAND_SERVICE);
         dtoProductTypeService = (DtoProductTypeService) ctx().getBean(ServiceSpringKeys.DTO_PRODUCT_TYPE_SERVICE);
-        dtoAvailabilityService = (DtoAvailabilityService) ctx().getBean(ServiceSpringKeys.DTO_AVAILABILITY_SERVICE);
         dtoAttrService = (DtoAttributeService) ctx().getBean(ServiceSpringKeys.DTO_ATTRIBUTE_SERVICE);
         dtoFactory = (DtoFactory) ctx().getBean(ServiceSpringKeys.DTO_FACTORY);
     }
@@ -72,7 +70,7 @@ public class DtoProductServiceImplTest extends BaseCoreDBTestCase {
         dto.setDescription("new desciption");
         dto.setBrandDTO(dtoBrandService.getById(102L));
         dto.setProductTypeDTO(dtoProductTypeService.getById(2L));
-        dto.setAvailabilityDTO(dtoAvailabilityService.getById(Availability.ALWAYS));
+        dto.setAvailability(Product.AVAILABILITY_ALWAYS);
         dtoService.update(dto);
         dto = dtoService.getById(pk);
         assertEquals(availableFrom, dto.getAvailablefrom());
@@ -81,7 +79,7 @@ public class DtoProductServiceImplTest extends BaseCoreDBTestCase {
         assertEquals("new desciption", dto.getDescription());
         assertEquals(102L, dto.getBrandDTO().getBrandId());
         assertEquals(2L, dto.getProductTypeDTO().getProducttypeId());
-        assertEquals(Availability.ALWAYS, dto.getAvailabilityDTO().getAvailabilityId());
+        assertEquals(Product.AVAILABILITY_ALWAYS, dto.getAvailability());
     }
 
     @Ignore("expected:<8> but was:<9>")
@@ -188,7 +186,7 @@ public class DtoProductServiceImplTest extends BaseCoreDBTestCase {
         dto.setName("test-name");
         dto.setBrandDTO(dtoBrandService.getById(101L));
         dto.setProductTypeDTO(dtoProductTypeService.getById(1L));
-        dto.setAvailabilityDTO(dtoAvailabilityService.getById(Availability.STANDARD));
+        dto.setAvailability(Product.AVAILABILITY_STANDARD);
         return dto;
     }
 }

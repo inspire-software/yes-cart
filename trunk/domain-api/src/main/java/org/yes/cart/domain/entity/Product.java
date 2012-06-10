@@ -18,6 +18,23 @@ import java.util.Set;
 public interface Product extends Auditable, Attributable {
 
     /**
+     * When available on warehouse.
+     */
+    int AVAILABILITY_STANDARD = 1;
+    /**
+     * For preorder.
+     */
+    int AVAILABILITY_PREORDER = 2;
+    /**
+     * Available for backorder.
+     */
+    int AVAILABILITY_BACKORDER = 4;
+    /**
+     * Always available
+     */
+    int AVAILABILITY_ALWAYS = 8;
+
+    /**
      * Get product pk.
      *
      * @return product pk.
@@ -77,18 +94,18 @@ public interface Product extends Auditable, Attributable {
     void setAvailabletill(Date availabletill);
 
     /**
-     * Get product {@link Availability}
+     * Get product availability
      *
-     * @return {@link Availability}
+     * @return  Availability
      */
-    Availability getAvailability();
+    int getAvailability();
 
     /**
-     * Set product {@link Availability}
+     * Set product availability
      *
-     * @param availability product {@link Availability}
+     * @param availability product
      */
-    void setAvailability(Availability availability);
+    void setAvailability(int availability);
 
 
     /**
