@@ -219,13 +219,7 @@
     </bean>
 
 
-    <bean id="availabilityService" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.service.domain.impl.AvailabilityServiceImpl">
-                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="availabilityDao"/>
-            </bean>
-        </property>
-    </bean>
+
 
 
     <bean id="brandService" parent="txProxyTemplate">
@@ -406,14 +400,7 @@
         </property>
     </bean>
 
-    <bean id="dtoAvailabilityService" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.service.dto.impl.DtoAvailabilityServiceImpl">
-                <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
-                <constructor-arg index="1" ref="availabilityService"/>
-            </bean>
-        </property>
-    </bean>
+
 
     <bean id="dtoProductService" parent="txProxyTemplate">
         <property name="target">
@@ -671,7 +658,6 @@
                 <entry key="org.yes.cart.domain.dto.ShopUrlDTO" value="org.yes.cart.domain.dto.impl.ShopUrlDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.CategoryDTO" value="org.yes.cart.domain.dto.impl.CategoryDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.SeoDTO" value="org.yes.cart.domain.dto.impl.SeoDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.AvailabilityDTO" value="org.yes.cart.domain.dto.impl.AvailabilityDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.BrandDTO" value="org.yes.cart.domain.dto.impl.BrandDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.ProductTypeDTO" value="org.yes.cart.domain.dto.impl.ProductTypeDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.ProductTypeAttrDTO" value="org.yes.cart.domain.dto.impl.ProductTypeAttrDTOImpl"/>
@@ -715,9 +701,6 @@
         <constructor-arg index="0" ref="brandDao"/>
     </bean>
 
-    <bean id="availabilityDto2Availability" class="org.yes.cart.domain.dto.adapter.impl.GenericDtoToEntityConverter">
-        <constructor-arg index="0" ref="availabilityDao"/>
-    </bean>
 
     <bean id="productTypeDTO2ProductType" class="org.yes.cart.domain.dto.adapter.impl.GenericDtoToEntityConverter">
         <constructor-arg index="0" ref="productTypeDao"/>
@@ -763,7 +746,6 @@
             <map>
                 <entry key="bigDecimalToFloat" value-ref="bigDecimalToFloat"/>
                 <entry key="brandDTO2Brand" value-ref="brandDTO2Brand"/>
-                <entry key="availabilityDto2Availability" value-ref="availabilityDto2Availability"/>
                 <entry key="productTypeDTO2ProductType" value-ref="productTypeDTO2ProductType"/>
                 <entry key="productId2Product" value-ref="productId2Product"/>
                 <entry key="skuId2Sku" value-ref="skuId2Sku"/>

@@ -121,11 +121,6 @@ public interface ServiceSpringKeys {
     String SHOP_TOP_SELLER_SERVICE = "shopTopSellerService";
 
     /**
-     * {@link org.yes.cart.service.domain.AvailabilityService} bean key.
-     */
-    String AVAILABILITY_SERVICE = "availabilityService";
-
-    /**
      * {@link org.yes.cart.service.domain.BrandService} bean key.
      */
     String BRAND_SERVICE = "brandService";
@@ -238,11 +233,6 @@ public interface ServiceSpringKeys {
      * {@link org.yes.cart.service.dto.DtoEtypeService}
      */
     String DTO_ETYPE_SERVICE = "dtoEtypeService";
-
-    /**
-     * {@link org.yes.cart.service.dto.DtoAvailabilityService}
-     */
-    String DTO_AVAILABILITY_SERVICE = "dtoAvailabilityService";
 
     /**
      * {@link org.yes.cart.service.dto.DtoBrandService}

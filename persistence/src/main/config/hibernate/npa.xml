@@ -222,12 +222,6 @@
                     <comment>Used mosty on UI. How to represent product, category, attibutes, etc</comment>
                 </column>
             </property>
-            <!--set name="attributes" inverse="false" lazy="false">
-                <key>
-                    <column name="ETYPE_ID" not-null="true"/>
-                </key>
-                <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.Attribute"/>
-            </set-->
 
             <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -703,9 +697,9 @@
             </property>
             <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
 
-            <many-to-one name="product" class="org.yes.cart.domain.entity.Product"  not-null="true" column="PRODUCT_ID"/>
+            <many-to-one name="product" class="org.yes.cart.domain.entity.Product" lazy="proxy" not-null="true" column="PRODUCT_ID"/>
 
-            <many-to-one name="attribute" class="org.yes.cart.domain.entity.Attribute" lazy="false" foreign-key="FK_P_ATTRIBUTE"
+            <many-to-one name="attribute" class="org.yes.cart.domain.entity.Attribute" lazy="proxy" foreign-key="FK_P_ATTRIBUTE"
                          property-ref="code" insert="true" update="true">
 
                 <meta attribute="field-description">UNCOMMENT @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO) @ContainedIn  @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeBridge.class)
@@ -1616,7 +1610,7 @@ public void setRangeList(final RangeList rangeList) {
     </class>    
 
 
-    <class name="org.yes.cart.domain.entity.Availability" table="TAVAILABILITY" discriminator-value="0">
+    <!--<class name="org.yes.cart.domain.entity.Availability" table="TAVAILABILITY" discriminator-value="0">
         <meta attribute="interface">true</meta>
         <comment>Product availability: always,pre/backorder,on warehouse</comment>
         <id name="availabilityId" type="long">
@@ -1675,7 +1669,7 @@ public void setRangeList(final RangeList rangeList) {
 			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
 
         </subclass>
-    </class>
+    </class>-->
 
 <class name="org.yes.cart.domain.entity.Category" table="TCATEGORY" discriminator-value="0">
         <meta attribute="interface">true</meta>
@@ -2011,7 +2005,7 @@ public void setRangeList(final RangeList rangeList) {
         final Collection<AttrValueProduct> result = new ArrayList<AttrValueProduct>();
         if (this.attribute != null) {
             for (AttrValueProduct attrValue : this.attribute) {
-                if (attrValue.getAttribute().getCode().equals(attributeCode)) {
+                if (attrValue.getAttribute() != null && attrValue.getAttribute().getCode() != null && attrValue.getAttribute().getCode().equals(attributeCode)) {
                     result.add(attrValue);
                 }
             }
@@ -2023,7 +2017,7 @@ public void setRangeList(final RangeList rangeList) {
     public AttrValueProduct getAttributeByCode(final String attributeCode) {
         if (this.attribute != null) {
             for (AttrValueProduct attrValue : this.attribute) {
-                if (attrValue.getAttribute().getCode().equals(attributeCode)) {
+                if (attrValue.getAttribute() != null && attrValue.getAttribute().getCode() != null && attrValue.getAttribute().getCode().equals(attributeCode)) {
                     return attrValue;
                 }
             }
@@ -2097,9 +2091,9 @@ public void setRangeList(final RangeList rangeList) {
                 <column name="PRODUCTTYPE_ID" not-null="true"/>
             </many-to-one>
 
-            <many-to-one name="availability" class="org.yes.cart.domain.entity.Availability" foreign-key="FK_PROD_AVAIL">
-                <column name="AVAILABILITY_ID" not-null="true"/>
-            </many-to-one>
+            <property name="availability" type="int">
+                <column name="AVAILABILITY" not-null="true" default="1"/>
+            </property>
 
             <set name="attribute" inverse="true" lazy="false" cascade="all">
 			    <meta attribute="field-description">UNCOMMENT @Field @ContainedIn @IndexedEmbedded (targetElement =  AttrValueEntityProduct.class) @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeValueBridge.class)</meta>

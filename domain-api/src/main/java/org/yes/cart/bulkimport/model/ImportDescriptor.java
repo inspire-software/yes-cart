@@ -52,5 +52,18 @@ public interface ImportDescriptor {
      */
     void setImportFolder(String importFolder);
 
+    /**
+     * Get insert sql, which used instead of hibernate object save for
+     * speed up bulk import.
+     * @return        insert sql
+     */
+    String getInsertSql();
+
+    /**
+     * Set inser sql
+     * @param insertSql insert sql
+     */
+    void setInsertSql(String insertSql);
+
 
 }

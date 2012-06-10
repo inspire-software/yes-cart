@@ -270,9 +270,9 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
 
         final Date now = new Date(); //TODO v2 time machine
 
-        final Availability availability = customerOrderDet.getSku().getProduct().getAvailability();
+        final int availability = customerOrderDet.getSku().getProduct().getAvailability();
 
-        if (availability.getAvailabilityId() == Availability.ALWAYS) {
+        if (availability == Product.AVAILABILITY_ALWAYS) {
 
             final Date availableFrom = customerOrderDet.getSku().getProduct().getAvailablefrom();
             if ((availableFrom != null)
@@ -290,7 +290,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
 
         if (MoneyUtils.isFirstBiggerThanSecond(rest, BigDecimal.ZERO)) {
             //inventory available
-            if (availability.getAvailabilityId() == Availability.PREORDER) {
+            if (availability == Product.AVAILABILITY_PREORDER) {
                 final Date availableFrom = customerOrderDet.getSku().getProduct().getAvailablefrom();
                 if ((availableFrom != null) && (now.getTime() < availableFrom.getTime())) {
                     return CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP;
@@ -302,7 +302,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
             return CustomerOrderDelivery.STANDARD_DELIVERY_GROUP;
         } else {
             //inventory NOT available
-            if (availability.getAvailabilityId() == Availability.PREORDER) {
+            if (availability == Product.AVAILABILITY_PREORDER) {
                 final Date availableFrom = customerOrderDet.getSku().getProduct().getAvailablefrom();
                 if ((availableFrom != null) && (now.getTime() < availableFrom.getTime())) {
                     return CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP;

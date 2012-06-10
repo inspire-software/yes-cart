@@ -25,6 +25,27 @@ public class CvsImportDescriptorImpl implements CvsImportDescriptor, Serializabl
 
     private String entityIntface;
 
+    private String insertSql;
+
+
+    /**
+     * Get insert sql.
+     *
+     * @return insert sql
+     */
+    public String getInsertSql() {
+        return insertSql;
+    }
+
+    /**
+     * Set inser sql
+     *
+     * @param insertSql insert sql
+     */
+    public void setInsertSql(final String insertSql) {
+        this.insertSql = insertSql;
+    }
+
 
     /**
      * Default constructor.

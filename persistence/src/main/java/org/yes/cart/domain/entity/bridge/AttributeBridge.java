@@ -14,6 +14,10 @@ public class AttributeBridge implements StringBridge {
      * {@inheritDoc}
      */
     public String objectToString(final Object attributeObject) {
-        return ((Attribute) attributeObject).getCode();
+        if (attributeObject == null) {
+            return "";
+        } else {
+            return ((Attribute) attributeObject).getCode();
+        }
     }
 }

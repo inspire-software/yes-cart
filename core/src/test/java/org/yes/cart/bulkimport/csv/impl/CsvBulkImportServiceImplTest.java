@@ -89,6 +89,8 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
     public void testDoProductImportWithSimpleSlaveFiled() throws Exception {
         try {
 
+            getConnection().getConnection().createStatement().execute("CREATE index asdsda on TPRODUCTATTRVALUE(code)") ;
+
             StringBuilder stringBuilder = new StringBuilder();
             Set<String> importedFilesSet = new HashSet<String>();
 

@@ -134,18 +134,18 @@ public interface ProductDTO extends Identifiable {
     void setAvailabletill(Date availabletill);
 
     /**
-     * Get product {@link org.yes.cart.domain.entity.Availability}
+     * Get product availability
      *
-     * @return {@link org.yes.cart.domain.entity.Availability}
+     * @return availability
      */
-    AvailabilityDTO getAvailabilityDTO();
+    int getAvailability();
 
     /**
-     * Set product {@link AvailabilityDTO}
+     * Set productavailability
      *
-     * @param availability product {@link AvailabilityDTO}
+     * @param availability product
      */
-    void setAvailabilityDTO(AvailabilityDTO availability);
+    void setAvailability(int availability);
 
 
     /**

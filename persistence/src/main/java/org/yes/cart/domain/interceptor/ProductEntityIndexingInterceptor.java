@@ -2,7 +2,6 @@ package org.yes.cart.domain.interceptor;
 
 import org.hibernate.search.indexes.interceptor.EntityIndexingInterceptor;
 import org.hibernate.search.indexes.interceptor.IndexingOverride;
-import org.yes.cart.domain.entity.Availability;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.impl.ProductEntity;
 import org.yes.cart.util.MoneyUtils;
@@ -29,7 +28,7 @@ public class ProductEntityIndexingInterceptor implements EntityIndexingIntercept
      * @return true if entity need to be in lucene index.
      */
     public boolean isIncludeInLuceneIndex(final Product entity) {
-       if (Availability.STANDARD == entity.getAvailability().getAvailabilityId()) {
+       if (Product.AVAILABILITY_STANDARD == entity.getAvailability()) {
            return MoneyUtils.isFirstBiggerThanSecond(entity.getQtyOnWarehouse(), BigDecimal.ZERO);
        }
        return true;

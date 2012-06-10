@@ -43,7 +43,7 @@
                 <prop key="hibernate.generate_statistics">false</prop>
                 <prop key="hibernate.use_sql_comments">false</prop>
                 <prop key="hibernate.connection.autocommit">true</prop>
-                <prop key="hibernate.jdbc.batch_size">0</prop>
+                <prop key="hibernate.jdbc.batch_size">100</prop>
 
                 <prop key="hibernate.search.worker.execution">async</prop>
                 <prop key="hibernate.search.worker.thread_pool.size">2</prop>

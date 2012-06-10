@@ -1,12 +1,10 @@
 package org.yes.cart.service.domain.impl;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.EntityFactory;
-import org.yes.cart.domain.entity.Availability;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.Shop;
@@ -38,14 +36,13 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
     public void testCreate() {
         ProductTypeService productTypeService = (ProductTypeService) ctx().getBean(ServiceSpringKeys.PRODUCT_TYPE_SERVICE);
         BrandService brandService = (BrandService) ctx().getBean(ServiceSpringKeys.BRAND_SERVICE);
-        AvailabilityService availabilityService = (AvailabilityService) ctx().getBean(ServiceSpringKeys.AVAILABILITY_SERVICE);
         EntityFactory entityFactory = productService.getGenericDao().getEntityFactory();
         Product product = entityFactory.getByIface(Product.class);
         product.setCode("PROD_CODE");
         product.setName("product");
         product.setDescription("description");
         product.setProducttype(productTypeService.getById(1L));
-        product.setAvailability(availabilityService.getById(Availability.ALWAYS));
+        product.setAvailability(Product.AVAILABILITY_ALWAYS);
         product.setBrand(brandService.getById(101L));
         product = productService.create(product);
         assertTrue(product.getProductId() > 0);

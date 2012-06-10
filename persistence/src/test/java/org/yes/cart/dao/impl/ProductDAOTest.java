@@ -27,7 +27,6 @@ import static org.junit.Assert.*;
 public class ProductDAOTest extends AbstractTestDAO {
 
     private GenericDAO<Product, Long> productDao;
-    private GenericDAO<Availability, Long> availabilityDao;
     private GenericDAO<Brand, Long> brandDao;
     private GenericDAO<ProductType, Long> productTypeDao;
     private GenericDAO<ProductCategory, Long> productCategoryDao;
@@ -39,7 +38,6 @@ public class ProductDAOTest extends AbstractTestDAO {
     @Before
     public void setUp() throws Exception {
         productDao = (GenericDAO<Product, Long>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_DAO);
-        availabilityDao = (GenericDAO<Availability, Long>) ctx().getBean(DaoServiceBeanKeys.AVAILABILITY_DAO);
         brandDao = (GenericDAO<Brand, Long>) ctx().getBean(DaoServiceBeanKeys.BRAND_DAO);
         productTypeDao = (GenericDAO<ProductType, Long>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_TYPE_DAO);
         productCategoryDao = (GenericDAO<ProductCategory, Long>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_CATEGORY_DAO);
@@ -52,7 +50,7 @@ public class ProductDAOTest extends AbstractTestDAO {
     @Test
     public void testCreateProduct() throws InterruptedException {
         Product product = new ProductEntity();
-        product.setAvailability(availabilityDao.findById(1L));
+        product.setAvailability(Product.AVAILABILITY_STANDARD);
         Brand brand = brandDao.findById(100L);
         assertNotNull(brand);
         product.setBrand(brand);
@@ -72,7 +70,7 @@ public class ProductDAOTest extends AbstractTestDAO {
         long pk = productDao.create(product).getProductId();
         assertTrue(pk > 0L);
         product = new ProductEntity();
-        product.setAvailability(availabilityDao.findById(1L));
+        product.setAvailability(Product.AVAILABILITY_STANDARD);
         brand = brandDao.findById(100L);
         assertNotNull(brand);
         product.setBrand(brand);
@@ -314,7 +312,7 @@ public class ProductDAOTest extends AbstractTestDAO {
         productDao.fullTextSearchReindex();
 
         Product product = new ProductEntity();
-        product.setAvailability(availabilityDao.findById(1L));
+        product.setAvailability(Product.AVAILABILITY_STANDARD);
         Brand brand = brandDao.findById(100L);
         assertNotNull(brand);
         product.setBrand(brand);
@@ -373,7 +371,7 @@ public class ProductDAOTest extends AbstractTestDAO {
         productDao.fullTextSearchReindex();
 
         Product product = new ProductEntity();
-        product.setAvailability(availabilityDao.findById(1L));
+        product.setAvailability(Product.AVAILABILITY_STANDARD);
         Brand brand = brandDao.findById(100L);
         assertNotNull(brand);
         product.setBrand(brand);
@@ -520,7 +518,7 @@ public class ProductDAOTest extends AbstractTestDAO {
 
     private long createProduct(long brandId, String productCode, String productName, long productTypeId, long productCategoryId) {
         Product product = new ProductEntity();
-        product.setAvailability(availabilityDao.findById(1L));
+        product.setAvailability(Product.AVAILABILITY_STANDARD);
         Brand brand = brandDao.findById(brandId);
         assertNotNull(brand);
         product.setBrand(brand);

@@ -4,6 +4,8 @@ package org.yes.cart.bulkimport.csv.impl;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.SessionFactory;
+import org.hibernate.internal.SessionImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -19,12 +21,14 @@ import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.bulkimport.service.BulkImportService;
 import org.yes.cart.bulkimport.service.impl.AbstractImportService;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.domain.entity.AttrValueProduct;
 import org.yes.cart.domain.entity.Identifiable;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.util.misc.ExceptionUtil;
 
 import java.beans.PropertyDescriptor;
 import java.io.*;
+import java.sql.Statement;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.HashMap;
@@ -174,7 +178,8 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
 
             String[] line;
             while ((line = csvFileReader.readLine()) != null) {
-                applicationContext.getBean("bulkImportServiceImpl", BulkImportService.class).doImport(errorReport, line, cvsImportDescriptor, pkColumn, null);
+                /*applicationContext.getBean("bulkImportServiceImpl", BulkImportService.class).*/
+                doImport(errorReport, line, cvsImportDescriptor, pkColumn, null);
             }
             errorReport.append(MessageFormat.format("\nINFO total lines : {0}", csvFileReader.getRowsRead()));
 
@@ -203,7 +208,6 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
     }
 
 
-
     /**
      * Import single line.
      * This method can be called recursive in case of sum imports.
@@ -215,20 +219,38 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
      * @param masterObject     optional master object if found sub import
      */
     public void doImport(final StringBuilder errorReport,
-                  final String[] line,
-                  final CvsImportDescriptor importDescriptor,
-                  final ImportColumn pkColumn,
-                  final Object masterObject) {
+                         final String[] line,
+                         final CvsImportDescriptor importDescriptor,
+                         final ImportColumn pkColumn,
+                         final Object masterObject) {
         Object object = null;
         try {
-            object = getEntity(line, pkColumn, masterObject, importDescriptor);
-            fillEntityFields(line, object, importDescriptor.getImportColumns(FieldTypeEnum.FIELD));
-            fillEntityForeignKeys(line, object, importDescriptor.getImportColumns(FieldTypeEnum.FK_FIELD), masterObject, importDescriptor);
-            genericDAO.saveOrUpdate(object);
-            performSubImport(errorReport, line, importDescriptor, object, importDescriptor.getImportColumns(FieldTypeEnum.SIMPLE_SLAVE_FIELD));
-            performSubImport(errorReport, line, importDescriptor, object, importDescriptor.getImportColumns(FieldTypeEnum.KEYVALUE_SLAVE_FIELD));
-            genericDAO.flushClear();
-            //genericDAO.
+
+
+            if (importDescriptor.getInsertSql() != null && masterObject != null) {
+                // this is dirty hack , because of import speed
+                AttrValueProduct attrValueProduct = (AttrValueProduct) object;
+                genericDAO.executeNativeUpdate("INSERT INTO TPRODUCTATTRVALUE (PRODUCT_ID, CODE, VAL ) VALUES ("
+                        + ((Identifiable)masterObject).getId() + ","
+                        + "'" + line[0].substring(0, line[0].indexOf("->")) + "',"
+                        + "'" + line[0].substring(line[0].indexOf("->") + 2) + "')");
+
+
+            } else {
+
+                object = getEntity(line, pkColumn, masterObject, importDescriptor);
+
+
+                fillEntityFields(line, object, importDescriptor.getImportColumns(FieldTypeEnum.FIELD));
+                fillEntityForeignKeys(line, object, importDescriptor.getImportColumns(FieldTypeEnum.FK_FIELD), masterObject, importDescriptor);
+
+                genericDAO.saveOrUpdate(object);
+                performSubImport(errorReport, line, importDescriptor, object, importDescriptor.getImportColumns(FieldTypeEnum.SIMPLE_SLAVE_FIELD));
+                performSubImport(errorReport, line, importDescriptor, object, importDescriptor.getImportColumns(FieldTypeEnum.KEYVALUE_SLAVE_FIELD));
+                genericDAO.flushClear();
+
+            }
+
         } catch (Exception e) {
             String additionalInfo = null;
             if (propertyDescriptor != null) {
@@ -264,7 +286,8 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
             CvsImportDescriptor innerCvsImportDescriptor = (CvsImportDescriptor) slaveTable.getImportDescriptor();
             ImportColumn slavePkColumn = innerCvsImportDescriptor.getPrimaryKeyColumn();
             for (String row : rows) {
-                applicationContext.getBean("bulkImportServiceImpl", BulkImportService.class).doImport(errorReport,
+                /*applicationContext.getBean("bulkImportServiceImpl", BulkImportService.class).*/
+                doImport(errorReport,
                         row.split(String.valueOf(importDescriptor.getImportFile().getColumnDelimeter())),
                         innerCvsImportDescriptor,
                         slavePkColumn,
@@ -414,7 +437,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
             }
 
             //} else {
-              //System.out.println("Hit with " + key);
+            //System.out.println("Hit with " + key);
         }
         return object;
     }
@@ -520,7 +543,9 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
         return xStream;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
