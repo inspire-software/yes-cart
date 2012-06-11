@@ -125,6 +125,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     private List<AttrValue> getProductAttributeValues(
             final Collection<AttrValue> attrValueCollection,
             final ProdTypeAttributeViewGroup viewGroup) {
+              //todo need sorted collection and fast search
 
         final String[] attributesNames = viewGroup.getAttrCodeList().split(",");
         final List<AttrValue> attrNameValues = new ArrayList<AttrValue>(attributesNames.length);
@@ -500,7 +501,8 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * {@inheritDoc}
      */
     public void clearEmptyAttributes() {
-        //todo productDao.executeNativeUpdate("DELETE FROM TPRODUCTATTRVALUE WHERE VAL IS NULL OR VAL =''");
+        //productDao.executeHsqlUpdate("delete from AttrValueEntityProduct a where a.val is null or a.val=''");
+        //NativeUpdate("DELETE FROM TPRODUCTATTRVALUE WHERE VAL IS NULL OR VAL =''");
     }
 
 

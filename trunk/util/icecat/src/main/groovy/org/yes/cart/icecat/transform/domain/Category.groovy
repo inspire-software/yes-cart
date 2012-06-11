@@ -39,7 +39,7 @@ class Category {
             for(Feature feature : cfg.featureList) {
                 builder.append(name == null ? id : name)
                 builder.append(";")
-                builder.append(feature.Name);
+                builder.append(feature.Name.replace(";", " ").replace('"', "\\\"").replace(',', " "));
                 builder.append(";");
                 builder.append(feature.Mandatory);
                 builder.append(";");

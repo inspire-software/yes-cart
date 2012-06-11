@@ -1,6 +1,7 @@
 package org.yes.cart.domain.entity;
 
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * Mark objects as attributable.
@@ -17,6 +18,13 @@ public interface Attributable {
      * @return all attr values.
      */
     Collection<AttrValue> getAllAttibutes();
+
+    /**
+     * Get all attibute values.
+     *
+     * @return all attr values.
+     */
+    Map<String, AttrValue> getAllAttibutesAsMap();
 
 
     /**
