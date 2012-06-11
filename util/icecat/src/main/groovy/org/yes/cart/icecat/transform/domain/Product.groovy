@@ -50,9 +50,9 @@ class Product {
     public String toString() {
         StringBuilder prodFeature = new StringBuilder();
         for (ProductFeature pf: productFeatures) {
-            prodFeature.append(pf.feature.Name.replace(";", ",").replace('"', "\\\"").replace(',', " "));
+            prodFeature.append(pf.feature.Name.replace(";", " ").replace('"', "\\\"").replace(',', " "));
             prodFeature.append("->");
-            prodFeature.append(pf.Presentation_Value.replace(";", ",").replace('"', "\\\"").replace(',', " ") ) ;
+            prodFeature.append(pf.Presentation_Value.replace(";", " ").replace('"', "\\\"").replace(',', " ") ) ;
             prodFeature.append(',');
         }
 

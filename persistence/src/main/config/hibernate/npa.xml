@@ -1691,6 +1691,8 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.yes.cart.domain.misc.navigation.price.impl.PriceTierTreeImpl</meta>
             <meta attribute="extra-import">org.yes.cart.domain.misc.navigation.price.impl.PriceTierNodeImpl</meta>
             <meta attribute="extra-import">org.yes.cart.domain.entity.AttrValue</meta>
+            <meta attribute="extra-import">java.util.Map</meta>
+            <meta attribute="extra-import">java.util.HashMap</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -1778,6 +1780,15 @@ public void setRangeList(final RangeList rangeList) {
             }
         }
         return null;
+    }
+
+    @Transient
+    public Map<String, AttrValue> getAllAttibutesAsMap() {
+        final Map<String, AttrValue> rez = new HashMap<String, AttrValue>();
+        for (AttrValue attrValue : getAllAttibutes()) {
+            rez.put(attrValue.getAttribute().getCode(), attrValue);
+        }
+        return rez;
     }
 
     @Transient
@@ -1947,6 +1958,8 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.yes.cart.domain.entity.AttrValue</meta>
             <meta attribute="extra-import">org.yes.cart.domain.entity.SkuWarehouse</meta>
             <meta attribute="extra-import">java.math.BigDecimal</meta>
+            <meta attribute="extra-import">java.util.Map</meta>
+            <meta attribute="extra-import">java.util.HashMap</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -2011,6 +2024,15 @@ public void setRangeList(final RangeList rangeList) {
             }
         }
         return result;
+    }
+
+    @Transient
+    public Map<String, AttrValue> getAllAttibutesAsMap() {
+        final Map<String, AttrValue> rez = new HashMap<String, AttrValue>();
+        for (AttrValue attrValue : getAllAttibutes()) {
+            rez.put(attrValue.getAttribute().getCode(), attrValue);
+        }
+        return rez;
     }
 
     @Transient
@@ -2225,6 +2247,8 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">javax.persistence.Transient</meta>
 			<meta attribute="extra-import">org.hibernate.search.annotations.*</meta>
             <meta attribute="extra-import">org.yes.cart.domain.entity.AttrValue</meta>
+            <meta attribute="extra-import">java.util.Map</meta>
+            <meta attribute="extra-import">java.util.HashMap</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -2267,6 +2291,16 @@ public void setRangeList(final RangeList rangeList) {
             }
         }
         return null;
+    }
+
+
+    @Transient
+    public Map<String, AttrValue> getAllAttibutesAsMap() {
+        final Map<String, AttrValue> rez = new HashMap<String, AttrValue>();
+        for (AttrValue attrValue : getAllAttibutes()) {
+            rez.put(attrValue.getAttribute().getCode(), attrValue);
+        }
+        return rez;
     }
 
     @Transient
