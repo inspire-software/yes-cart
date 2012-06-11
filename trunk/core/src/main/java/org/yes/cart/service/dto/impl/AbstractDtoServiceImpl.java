@@ -211,9 +211,11 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
     protected List<String> getCodes(final List<? extends AttrValueDTO> attrValues) {
         final List<String> codes = new ArrayList<String>(attrValues.size());
         for(AttrValueDTO attrValueCategoryDTO : attrValues) {
-            codes.add(
-                    attrValueCategoryDTO.getAttributeDTO().getCode()
-            );
+            if (attrValueCategoryDTO != null && attrValueCategoryDTO.getAttributeDTO() != null) {
+                codes.add(
+                        attrValueCategoryDTO.getAttributeDTO().getCode()
+                );
+            }
         }
         return codes;
     }

@@ -790,6 +790,11 @@
         <property name="cacheName" value="org.yes.cart.service.domain.impl.ProductServiceImpl.cache"/>
     </bean>
 
+    <bean id="productTypeAttrServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="cacheName" value="org.yes.cart.service.domain.impl.ProductTypeAttrServiceImpl.cache"/>
+    </bean>
+
     <bean id="imageServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
         <property name="cacheManager" ref="cacheManager"/>
         <property name="cacheName" value="org.yes.cart.service.domain.impl.ImageServiceImpl.cache"/>

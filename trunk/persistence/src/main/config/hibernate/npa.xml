@@ -4679,7 +4679,7 @@ public void setRangeList(final RangeList rangeList) {
         <![CDATA[
        select a
        from ProductEntity a, ProductCategoryEntity pc
-       where a.featured = true
+       where a.featured = ?2
        and (a.availablefrom < ?1 OR a.availablefrom IS NULL)
        and (a.availabletill > ?1 OR a.availabletill IS NULL)
        and a.productId = pc.product.productId
