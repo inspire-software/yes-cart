@@ -47,17 +47,22 @@ class CategoryHandler extends DefaultHandler {
             category.UNCATID = attributes.getValue("UNCATID");
             category.visible = attributes.getValue("Visible");
         } else if ("Description" == qName) {
-            if (langFilter == attributes.getValue("langid")) {
-                category.description = attributes.getValue("Value");
+            if ("1" == attributes.getValue("langid") || langFilter == attributes.getValue("langid")) {
+                if (org.yes.cart.icecat.transform.Util.isNotBlank(attributes.getValue("Value"))) {
+                    category.description = attributes.getValue("Value");
+                }
             }
         } else if ("Name" == qName) {
-            if (langFilter == attributes.getValue("langid")) {
-                category.name = attributes.getValue("Value");
+            if ("1" == attributes.getValue("langid") || langFilter == attributes.getValue("langid")) {
+                if (org.yes.cart.icecat.transform.Util.isNotBlank(attributes.getValue("Value"))) {
+                    category.name = attributes.getValue("Value");
+                }
             }
-
         } else if ("Keywords" == qName) {
-            if (langFilter == attributes.getValue("langid")) {
-                category.keywords = attributes.getValue("Value");
+            if ("1" == attributes.getValue("langid") || langFilter == attributes.getValue("langid")) {
+                if (org.yes.cart.icecat.transform.Util.isNotBlank(attributes.getValue("Value"))) {
+                    category.keywords = attributes.getValue("Value");
+                }
             }
         } else if ("CategoriesList" == qName) {
             allowAddToCategoryList = true;

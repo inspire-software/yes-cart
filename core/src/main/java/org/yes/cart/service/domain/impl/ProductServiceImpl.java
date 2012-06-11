@@ -199,7 +199,8 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             List<Product> list = productDao.findQueryObjectsByNamedQueryWithList(
                     "PRODUCT.FEATURED",
                     categories,
-                    new Date());  //TODO v2 time machine
+                    new Date(), //TODO v2 time machine
+                    true);
             Collections.shuffle(list);
             int toIndex = limit; //to index exclusive
             if (list.size() < limit) {
