@@ -25,10 +25,7 @@ import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoProductService;
 import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Default implementation of {@link DtoProductService}. Uses
@@ -68,7 +65,7 @@ public class DtoProductServiceImpl
      * @param productService           domain objects product service
      * @param dtoFactory               factory for creating DTO object instances
      * @param valueConverterRepository value converter repository
-     * @param imageService {@link ImageService} to manipulate  related images. 
+     * @param imageService             {@link ImageService} to manipulate  related images.
      */
     public DtoProductServiceImpl(
             final DtoFactory dtoFactory,
@@ -79,13 +76,11 @@ public class DtoProductServiceImpl
             final GenericDAO<AttrValueEntityProduct, Long> attrValueEntityProductDao,
             final ImageService imageService,
             final ProductTypeAttrService productTypeAttrService
-             ) {
+    ) {
         super(dtoFactory, productService, null);
 
-        
 
         this.imageService = imageService;
-
 
 
         this.productService = (ProductService) productService;
@@ -99,7 +94,7 @@ public class DtoProductServiceImpl
                 "productTypeDTO2ProductType");
 */
         this.seoGenericService = seoGenericService;
-        this.dtoAttributeService =  dtoAttributeService;
+        this.dtoAttributeService = dtoAttributeService;
 
 
         this.attrValueEntityProductDao = attrValueEntityProductDao;
@@ -108,11 +103,11 @@ public class DtoProductServiceImpl
         this.attrValueAssembler = DTOAssembler.newAssembler(
                 dtoFactory.getImplClass(AttrValueProductDTO.class),
                 attributeService.getGenericDao().getEntityFactory().getImplClass(AttrValueProduct.class)
-                );
+        );
         this.productSkuDTOAssembler = DTOAssembler.newAssembler(
                 dtoFactory.getImplClass(ProductSkuDTO.class),
                 ProductSku.class);
-        
+
         this.productTypeAttrService = productTypeAttrService;
 
     }
@@ -226,9 +221,8 @@ public class DtoProductServiceImpl
      * @param maxResults  quantity results to return
      * @return list of products
      * @throws UnableToCreateInstanceException
-     *          in case of reflection problem
-     * @throws UnmappedInterfaceException
-     *          in case of configuration problem
+     *                                    in case of reflection problem
+     * @throws UnmappedInterfaceException in case of configuration problem
      */
     public List<ProductDTO> getProductByCategoryWithPaging(
             final long categoryId,
@@ -240,7 +234,9 @@ public class DtoProductServiceImpl
         return dtos;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public List<ProductDTO> getProductByConeNameBrandType(
             final String code,
             final String name,
@@ -249,7 +245,7 @@ public class DtoProductServiceImpl
 
         Long brand = null;
         Long productType = null;
-        if (brandId > 0 ) {
+        if (brandId > 0) {
             brand = brandId;
         }
         if (productTypeId > 0) {
@@ -277,54 +273,89 @@ public class DtoProductServiceImpl
 
     };
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public List<? extends AttrValueDTO> getEntityAttributes(final long entityPk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<AttrValueProductDTO> result = new ArrayList<AttrValueProductDTO>();
-        final ProductDTO productDTO = getById(entityPk); 
+        final ProductDTO productDTO = getById(entityPk);
         result.addAll(productDTO.getAttribute());
 
 
         final List<ProductTypeAttr> ptaList = productTypeAttrService.getByProductTypeId(
                 productDTO.getProductTypeDTO().getProducttypeId());
 
+        Collections.sort(
+                ptaList,
+                new Comparator<ProductTypeAttr>() {
+                    public int compare(ProductTypeAttr o1, ProductTypeAttr o2) {
+                        return o1.getAttribute().getCode().compareTo(o2.getAttribute().getCode());
+                    }
+                }
+        );
+
         final List<AttributeDTO> availableAttributeDTOs = dtoAttributeService.findAvailableAttributes(
                 AttributeGroupNames.PRODUCT,
                 getCodes(result));
 
-                 
-        
-
 
         //Add which belong to product type only.
         for (AttributeDTO attributeDTO : availableAttributeDTOs) {
-            if (isBelongToProductType(attributeDTO, ptaList) || Etype.IMAGE_BUSINESS_TYPE.equals(attributeDTO.getEtypeName())  ) {
+            if (isBelongToProductType(attributeDTO, ptaList) || Etype.IMAGE_BUSINESS_TYPE.equals(attributeDTO.getEtypeName())) {
                 AttrValueProductDTO attrValueDTO = getDtoFactory().getByIface(AttrValueProductDTO.class);
                 attrValueDTO.setAttributeDTO(attributeDTO);
                 attrValueDTO.setProductId(entityPk);
-                result.add(attrValueDTO);                
+                result.add(attrValueDTO);
             }
         }
-        
+
         Collections.sort(result, new AttrValueDTOComparatorImpl());
         return result;
     }
 
     /**
-     * Check is given attribute belong to particular product type. 
+     * Check is given attribute belong to particular product type.
+     *
      * @param attributeDTO {@link AttributeDTO}
-     * @param ptaList list of attributes for particular product type
-     * @return  true in case if given attrtibute belong to product type.
+     * @param ptaList      list of attributes for particular product type
+     * @return true in case if given attrtibute belong to product type.
      */
     private boolean isBelongToProductType(AttributeDTO attributeDTO, List<ProductTypeAttr> ptaList) {
-        for (ProductTypeAttr pta : ptaList ) {
-            if (pta.getAttribute().getCode().equals(attributeDTO.getCode())) {
-                return true;
-            }
-        }
-        return false;
+        /* for (ProductTypeAttr pta : ptaList ) {
+           if (pta.getAttribute().getCode().equals(attributeDTO.getCode())) {
+               return true;
+           }
+       }
+       return false;*/
+
+
+
+
+        final int idx = Collections.binarySearch (
+                ptaList,
+                attributeDTO.getCode(),
+                new Comparator<Object>() {
+                    public int compare(final Object o1, final Object o2) {
+                        if (o1 instanceof ProductTypeAttr && o2 instanceof String) {
+                            return ((ProductTypeAttr) o1).getAttribute().getCode().compareTo((String) o2);
+                        }
+                        if (o2 instanceof ProductTypeAttr && o1 instanceof String) {
+                            return ((ProductTypeAttr) o2).getAttribute().getCode().compareTo((String) o1);
+                        }
+
+
+                        return 0;
+                    }
+                }
+        );
+
+        return idx > 0;
     }
 
-    /** {@inheritDoc} */
+
+    /**
+     * {@inheritDoc}
+     */
     public AttrValueDTO updateEntityAttributeValue(final AttrValueDTO attrValueDTO) {
         final AttrValueEntityProduct attrValue = attrValueEntityProductDao.findById(attrValueDTO.getAttrvalueId());
         attrValueAssembler.assembleEntity(attrValueDTO, attrValue, null, dtoFactory);
@@ -332,7 +363,9 @@ public class DtoProductServiceImpl
         return attrValueDTO;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
         AttrValueProduct valueEntity = getEntityFactory().getByIface(AttrValueProduct.class);
         attrValueAssembler.assembleEntity(attrValueDTO, valueEntity, null, dtoFactory);
@@ -345,7 +378,9 @@ public class DtoProductServiceImpl
 
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void deleteAttributeValue(final long attributeValuePk) {
         final AttrValueEntityProduct attrValue = attrValueEntityProductDao.findById(attributeValuePk);
         if (Etype.IMAGE_BUSINESS_TYPE.equals(attrValue.getAttribute().getEtype().getBusinesstype())) {
