@@ -5,14 +5,14 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.dto.AttrValueDTO;
-import org.yes.cart.domain.dto.AttrValueProductDTO;
-import org.yes.cart.domain.dto.ProductDTO;
-import org.yes.cart.domain.dto.ProductSkuDTO;
+import org.yes.cart.domain.dto.*;
 import org.yes.cart.domain.dto.factory.DtoFactory;
+import org.yes.cart.domain.dto.impl.AttrValueProductDTOImpl;
 import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.entity.ProductTypeAttr;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
+import org.yes.cart.service.domain.ProductTypeAttrService;
 import org.yes.cart.service.dto.*;
 
 import java.util.Date;
@@ -32,6 +32,7 @@ public class DtoProductServiceImplTest extends BaseCoreDBTestCase {
     private DtoBrandService dtoBrandService;
     private DtoAttributeService dtoAttrService;
     private DtoFactory dtoFactory;
+    private DtoProductTypeAttrService dtoProductTypeAttrService;
 
     @Before
     public void setUp() throws Exception {
@@ -40,6 +41,7 @@ public class DtoProductServiceImplTest extends BaseCoreDBTestCase {
         dtoProductTypeService = (DtoProductTypeService) ctx().getBean(ServiceSpringKeys.DTO_PRODUCT_TYPE_SERVICE);
         dtoAttrService = (DtoAttributeService) ctx().getBean(ServiceSpringKeys.DTO_ATTRIBUTE_SERVICE);
         dtoFactory = (DtoFactory) ctx().getBean(ServiceSpringKeys.DTO_FACTORY);
+        dtoProductTypeAttrService =  (DtoProductTypeAttrService) ctx().getBean(ServiceSpringKeys.DTO_PRODUCT_TYPE_ATTR_SERVICE);
     }
 
     @Test
@@ -143,8 +145,33 @@ public class DtoProductServiceImplTest extends BaseCoreDBTestCase {
         assertTrue(dto.getProductId() > 0);
         List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(dto.getProductId());
         for (AttrValueDTO attrValueDTO : list) {
-            assertNull(attrValueDTO.getVal()); // all must be empty when rpoduct is created
+            assertNull(attrValueDTO.getVal()); // all must be empty when product is just created
         }
+    }
+
+
+    @Test
+    public void testIsBelongToProductType() throws Exception {
+
+        ProductTypeAttrService productTypeAttrService = (ProductTypeAttrService)  ctx().getBean("productTypeAttrService");
+
+        ProductDTO dto = getDto("1");
+        dto = dtoService.create(dto);
+        assertTrue(dto.getProductId() > 0);
+
+        AttrValueProductDTO attrValueDTO = new AttrValueProductDTOImpl();
+        attrValueDTO.setProductId(dto.getProductId());
+        attrValueDTO.setVal("plutonium");
+        attrValueDTO.setAttributeDTO(dtoAttrService.getById(2010L));    //POWERSUPPLY
+
+        attrValueDTO = (AttrValueProductDTO) dtoService.createEntityAttributeValue(attrValueDTO);
+
+        assertTrue(attrValueDTO.getAttrvalueId() > 0);
+
+        final List<ProductTypeAttr> ptaList = productTypeAttrService.getByProductTypeId(1L);
+
+        //assertTrue( dtoService.isBelongToProductType(attrValueDTO.getAttributeDTO(), ptaList) );
+
     }
 
     @Test
@@ -184,6 +211,16 @@ public class DtoProductServiceImplTest extends BaseCoreDBTestCase {
         ProductDTO dto = dtoService.getNew();
         dto.setCode("TESTCODE");
         dto.setName("test-name");
+        dto.setBrandDTO(dtoBrandService.getById(101L));
+        dto.setProductTypeDTO(dtoProductTypeService.getById(1L));
+        dto.setAvailability(Product.AVAILABILITY_STANDARD);
+        return dto;
+    }
+
+    private ProductDTO getDto(String suffix) throws UnableToCreateInstanceException, UnmappedInterfaceException {
+        ProductDTO dto = dtoService.getNew();
+        dto.setCode("TESTCODE" + suffix);
+        dto.setName("test-name" + suffix);
         dto.setBrandDTO(dtoBrandService.getById(101L));
         dto.setProductTypeDTO(dtoProductTypeService.getById(1L));
         dto.setAvailability(Product.AVAILABILITY_STANDARD);
