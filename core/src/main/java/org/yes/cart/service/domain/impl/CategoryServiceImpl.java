@@ -256,6 +256,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
+    @Cacheable(value = CACHE_NAME)
     public boolean isCategoryHasSubcategory(final long topCategoryId, final long subCategoryId) {
         final Category start = getById(subCategoryId);
         if (start != null) {
