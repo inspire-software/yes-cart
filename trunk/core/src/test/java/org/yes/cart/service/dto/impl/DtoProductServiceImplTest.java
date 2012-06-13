@@ -41,7 +41,7 @@ public class DtoProductServiceImplTest extends BaseCoreDBTestCase {
         dtoProductTypeService = (DtoProductTypeService) ctx().getBean(ServiceSpringKeys.DTO_PRODUCT_TYPE_SERVICE);
         dtoAttrService = (DtoAttributeService) ctx().getBean(ServiceSpringKeys.DTO_ATTRIBUTE_SERVICE);
         dtoFactory = (DtoFactory) ctx().getBean(ServiceSpringKeys.DTO_FACTORY);
-        dtoProductTypeAttrService =  (DtoProductTypeAttrService) ctx().getBean(ServiceSpringKeys.DTO_PRODUCT_TYPE_ATTR_SERVICE);
+        dtoProductTypeAttrService = (DtoProductTypeAttrService) ctx().getBean(ServiceSpringKeys.DTO_PRODUCT_TYPE_ATTR_SERVICE);
     }
 
     @Test
@@ -84,7 +84,7 @@ public class DtoProductServiceImplTest extends BaseCoreDBTestCase {
         assertEquals(Product.AVAILABILITY_ALWAYS, dto.getAvailability());
     }
 
-    @Ignore("expected:<8> but was:<9>")
+
     @Test
     public void testGetProductByCategory() throws Exception {
         List<ProductDTO> list = dtoService.getProductByCategory(211L);
@@ -106,7 +106,7 @@ public class DtoProductServiceImplTest extends BaseCoreDBTestCase {
     public void testGetProductByConeNameBrandType() throws Exception {
         List<ProductDTO> list = dtoService.getProductByConeNameBrandType(null, null, 104L, 0);
         assertFalse(list.isEmpty());
-        assertTrue( 26== list.size() || 28 == list.size());             //26 products with brand samsung
+        assertTrue(26 == list.size() || 28 == list.size());             //26 products with brand samsung
     }
 
     @Test
@@ -147,17 +147,7 @@ public class DtoProductServiceImplTest extends BaseCoreDBTestCase {
         for (AttrValueDTO attrValueDTO : list) {
             assertNull(attrValueDTO.getVal()); // all must be empty when product is just created
         }
-    }
 
-
-    @Test
-    public void testIsBelongToProductType() throws Exception {
-
-        ProductTypeAttrService productTypeAttrService = (ProductTypeAttrService)  ctx().getBean("productTypeAttrService");
-
-        ProductDTO dto = getDto("1");
-        dto = dtoService.create(dto);
-        assertTrue(dto.getProductId() > 0);
 
         AttrValueProductDTO attrValueDTO = new AttrValueProductDTOImpl();
         attrValueDTO.setProductId(dto.getProductId());
@@ -166,13 +156,19 @@ public class DtoProductServiceImplTest extends BaseCoreDBTestCase {
 
         attrValueDTO = (AttrValueProductDTO) dtoService.createEntityAttributeValue(attrValueDTO);
 
-        assertTrue(attrValueDTO.getAttrvalueId() > 0);
+        list = dtoService.getEntityAttributes(dto.getProductId());
 
-        final List<ProductTypeAttr> ptaList = productTypeAttrService.getByProductTypeId(1L);
+        for (AttrValueDTO attrValueDTO2 : list) {
+            if ("POWERSUPPLY".equals(attrValueDTO2.getAttributeDTO().getCode())) {
+                assertEquals("plutonium", attrValueDTO2.getVal()); // one has value
+            } else {
+                assertNull(attrValueDTO2.getVal()); // all must be empty when product is just created
+            }
+        }
 
-        //assertTrue( dtoService.isBelongToProductType(attrValueDTO.getAttributeDTO(), ptaList) );
 
     }
+
 
     @Test
     public void testDeleteAttributeValue() throws Exception {

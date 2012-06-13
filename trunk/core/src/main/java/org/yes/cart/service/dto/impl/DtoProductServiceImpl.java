@@ -320,7 +320,7 @@ public class DtoProductServiceImpl
      * @param ptaList      list of attributes for particular product type
      * @return true in case if given attrtibute belong to product type.
      */
-    public boolean isBelongToProductType(AttributeDTO attributeDTO, List<ProductTypeAttr> ptaList) {
+    boolean isBelongToProductType(AttributeDTO attributeDTO, List<ProductTypeAttr> ptaList) {
         /* for (ProductTypeAttr pta : ptaList ) {
            if (pta.getAttribute().getCode().equals(attributeDTO.getCode())) {
                return true;
