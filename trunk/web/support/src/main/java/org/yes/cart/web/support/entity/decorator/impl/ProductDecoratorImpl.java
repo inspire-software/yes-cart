@@ -3,9 +3,7 @@ package org.yes.cart.web.support.entity.decorator.impl;
 import org.springframework.beans.BeanUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.entity.Category;
-import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.SeoImage;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.ProductEntity;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CategoryService;
@@ -14,7 +12,9 @@ import org.yes.cart.web.support.entity.decorator.ProductDecorator;
 import org.yes.cart.web.support.service.AttributableImageService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -38,6 +38,7 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
     private final String httpServletContextPath;
     private String productImageUrl;
     private final ImageService imageService;
+    private final Map<String, AttrValue> attrValueMap;
 
     /**
      * Construct entity decorator.
@@ -61,6 +62,7 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
         this.categoryService = categoryService;
         this.productImageUrl = null;
         this.imageService = imageService;
+        this.attrValueMap = getAllAttibutesAsMap();
 
     }
 
@@ -115,6 +117,13 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
         return productImageUrl;
     }
 
+    /**
+     * {@inheritDoc}
+     
+    public AttrValueProduct getAttributeByCode(final String attributeCode) {
+        return (AttrValueProduct) attrValueMap.get(attributeCode);
+    }
+*/
     /**
      * {@inheritDoc}
      */
