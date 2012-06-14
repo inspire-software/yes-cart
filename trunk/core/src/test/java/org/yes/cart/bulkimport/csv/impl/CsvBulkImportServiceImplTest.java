@@ -177,7 +177,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
             System.out.println("product_category.xml " + (new Date().getTime() - dt.getTime()));
 
-            System.out.println(stringBuilder.toString());
+            //System.out.println(stringBuilder.toString());
 
 
 

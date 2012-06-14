@@ -119,11 +119,16 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
 
     /**
      * {@inheritDoc}
-     
+     */
     public AttrValueProduct getAttributeByCode(final String attributeCode) {
         return (AttrValueProduct) attrValueMap.get(attributeCode);
     }
-*/
+
+    private String defaultImageWidth = null;
+    private String defaultImageHeight = null;
+    private String thumbnailImageWidth = null;
+    private String thumbnailImageHeight = null;
+
     /**
      * {@inheritDoc}
      */

@@ -19,7 +19,7 @@ import static org.junit.Assert.assertNotNull;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class DtoCustomerOrderServiceImplTest extends BaseCoreDBTestCase {
+public class DtoCustomerOrderServiceImplTezt extends BaseCoreDBTestCase {
 
     private DtoCustomerOrderService dtoService;
     private CustomerOrderService customerOrderService;

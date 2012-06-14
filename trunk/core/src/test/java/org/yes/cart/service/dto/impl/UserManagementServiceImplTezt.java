@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class TestUserManagementServiceImpl extends BaseCoreDBTestCase {
+public class UserManagementServiceImplTezt extends BaseCoreDBTestCase {
 
     private ManagementService managementService;
     private ManagerService managerService;

@@ -301,10 +301,22 @@
                             </goals>
                             <phase>test-compile</phase>
                             <configuration>
+                                <includes>
+                                    <include>**/*Test.java</include>
+                                </includes>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>dto-tezt</id>
+                            <goals>
+                                <goal>test</goal>
+                            </goals>
+                            <phase>test-compile</phase>
+                            <configuration>
                                 <!-- Running only isolated dirty tests -->
-                                <excludes>
-                                    <exclude>**/*Test.java</exclude>
-                                </excludes>
+                                <includes>
+                                    <include>**/*Tezt.java</include>
+                                </includes>
                             </configuration>
                         </execution>
                         <execution>
@@ -314,10 +326,9 @@
                             </goals>
                             <phase>test</phase>
                             <configuration>
-                                <!-- Exclude running of isolated dirty tests -->
-                                <excludes>
-                                    <exclude>**/Test*.java</exclude>
-                                </excludes>
+                                <includes>
+                                    <include>**/Test*.java</include>
+                                </includes>
                             </configuration>
                         </execution>
                     </executions>
