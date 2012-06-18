@@ -1,6 +1,7 @@
 package org.yes.cart.bulkimport.image.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.Hibernate;
 import org.yes.cart.bulkimport.service.BulkImportImagesService;
 import org.yes.cart.bulkimport.service.impl.AbstractImportService;
 import org.yes.cart.constants.Constants;
@@ -155,7 +156,8 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
             final String fileName,
             final String code,
             final String suffix) {
-        Product product = (Product) genericDAO.getScalarResultByNamedQuery("PRODUCT.BY.CODE", code);
+        Product product = (Product) genericDAO.getScalarResultByNamedQuery("PRODUCT.BY.CODE", true, code);
+
         if (product == null) {
             errorReport.append(MessageFormat.format("\nWARINIG product with code {0} not found.", code));
             return false;

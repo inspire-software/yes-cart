@@ -36,6 +36,8 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
     }};
 
 
+
+
     private final AttributableImageService attributableImageService;
     private final CategoryService categoryService;
     private final String httpServletContextPath;
@@ -117,37 +119,21 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
     /**
      * {@inheritDoc}
      */
-    public String getDefaultImageWidth(final Category category) {
-        return categoryService.getCategoryAttributeRecursive(category,
-                AttributeNamesKeys.Category.PRODUCT_IMAGE_WIDTH,
-                PRODUCT_DEFAULT_IMAGE_WIDTH);
+    public String [] getDefaultImageSize(final Category category) {
+        return categoryService.getCategoryAttributeRecursive(
+                category,
+                ProductDecoratorImpl.defaultSize
+        );
     }
 
     /**
      * {@inheritDoc}
      */
-    public String getDefaultImageHeight(final Category category) {
-        return categoryService.getCategoryAttributeRecursive(category,
-                AttributeNamesKeys.Category.PRODUCT_IMAGE_HEIGHT,
-                PRODUCT_DEFAULT_IMAGE_HEIGHT);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getThumbnailImageWidth(final Category category) {
-        return categoryService.getCategoryAttributeRecursive(category,
-                AttributeNamesKeys.Category.PRODUCT_IMAGE_TUMB_WIDTH,
-                PRODUCT_THUMBNAIL_IMAGE_WIDTH);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getThumbnailImageHeight(final Category category) {
-        return categoryService.getCategoryAttributeRecursive(category,
-                AttributeNamesKeys.Category.PRODUCT_IMAGE_TUMB_HEIGHT,
-                PRODUCT_THUMBNAIL_IMAGE_HEIGHT);
+    public String [] getThumbnailImageSize(final Category category) {
+        return categoryService.getCategoryAttributeRecursive(
+                category,
+                ProductDecoratorImpl.thumbnailSize
+        );
     }
 
     /**

@@ -138,6 +138,17 @@ public interface CategoryService extends GenericService<Category> {
      */
     String getCategoryAttributeRecursive(Category category, String attributeName, String defaultValue);
 
+    /**
+     * Get the values of given attributes. If value not present in given category
+     * failover to parent category will be used.  In case if attribute value for first
+     * attribute will be found, the rest values also will be collected form the same category.
+     *
+     * @param category       given category
+     * @param attributeNames set of attributes, to collect values.
+     * @return value of given attribute name or defaultValue if value not found in category hierarchy
+     */
+    String[] getCategoryAttributeRecursive(Category category, String[] attributeNames);
+
 
 
     /**

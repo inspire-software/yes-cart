@@ -1774,7 +1774,7 @@ public void setRangeList(final RangeList rangeList) {
     public AttrValueCategory getAttributeByCode(String attributeCode) {
         if (this.attribute != null) {
             for (AttrValueCategory attrValue : this.attribute) {
-                if (attrValue.getAttribute().getCode().equals(attributeCode)) {
+                if (attrValue.getAttribute() != null && attributeCode.equals(attrValue.getAttribute().getCode())) {
                     return attrValue;
                 }
             }
@@ -2117,7 +2117,7 @@ public void setRangeList(final RangeList rangeList) {
                 <column name="AVAILABILITY" not-null="true" default="1"/>
             </property>
 
-            <set name="attribute" inverse="true" lazy="false" cascade="all">
+            <set name="attribute" inverse="true" lazy="true" cascade="all">
 			    <meta attribute="field-description">UNCOMMENT @Field @ContainedIn @IndexedEmbedded (targetElement =  AttrValueEntityProduct.class) @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeValueBridge.class)</meta>
                 <key not-null="true" on-delete="cascade" column="PRODUCT_ID"/>
                 <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.AttrValueProduct" />

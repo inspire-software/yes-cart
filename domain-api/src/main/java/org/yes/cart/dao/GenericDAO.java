@@ -84,6 +84,16 @@ public interface GenericDAO<T, PK extends Serializable> {
      */
     Object getScalarResultByNamedQuery(String namedQueryName, Object... parameters);
 
+    /**
+     * Executes agregate named query, that return single scalar value.
+     *
+     * @param namedQueryName name of query
+     * @param parameters     optional parameters for named query
+     * @param forceCollectionInit force load collection if true
+     * @return single entity
+     */
+    Object getScalarResultByNamedQuery(String namedQueryName, boolean forceCollectionInit, Object... parameters);
+
 
     /**
      * Find entities within named query .

@@ -5,6 +5,7 @@ import org.yes.cart.cache.Cacheable;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShopCategory;
@@ -151,6 +152,51 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     }
 
     /**
+     * Get the values of given attributes. If value not present in given category
+     * failover to parent category will be used.  In case if attribute value for first
+     * attribute will be found, the rest values also will be collected form the same category.
+     *
+     * @param category       given category
+     * @param attributeNames set of attributes, to collect values.
+     * @return value of given attribute name or defaultValue if value not found in category hierarchy
+     */
+    @Cacheable(value = CACHE_NAME)
+    public String[] getCategoryAttributeRecursive(final Category category, final String[] attributeNames) {
+        final String[] rez;
+        if (category == null) {
+            rez = null;
+        } else {
+            final AttrValue attrValue = category.getAttributeByCode(attributeNames[0]);
+            if (attrValue == null
+                    ||
+                    StringUtils.isBlank(attrValue.getVal())) {
+                if (category.getCategoryId() == category.getParentId()) {
+                    rez = null; //root of hierarchy
+                } else {
+                    final Category parentCategory =
+                            categoryDao.findById(category.getParentId());
+                    rez = getCategoryAttributeRecursive(parentCategory, attributeNames);
+                }
+            } else {
+                rez = new String[attributeNames.length];
+                int idx = 0;
+                for (String attrName : attributeNames) {
+                    final AttrValue av = category.getAttributeByCode(attrName);
+                    if (av != null) {
+                        rez[idx] = av.getVal();
+                    } else {
+                        rez[idx] = null;
+
+                    }
+
+
+                }
+            }
+        }
+        return rez;
+    }
+
+    /**
      * Get the value of given attribute. If value not present in given category failover to parent category will be used.
      *
      * @param category      given category
@@ -162,9 +208,10 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         if (category == null || attributeName == null) {
             rez = null;
         } else {
-            if (category.getAttributeByCode(attributeName) == null
+            final AttrValue attrValue = category.getAttributeByCode(attributeName);
+            if (attrValue == null
                     ||
-                    StringUtils.isBlank(category.getAttributeByCode(attributeName).getVal())) {
+                    StringUtils.isBlank(attrValue.getVal())) {
                 if (category.getCategoryId() == category.getParentId()) {
                     rez = null; //root of hierarchy
                 } else {
@@ -173,7 +220,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
                     rez = getCategoryAttributeRecursive(parentCategory, attributeName);
                 }
             } else {
-                rez = category.getAttributeByCode(attributeName).getVal();
+                rez = attrValue.getVal();
             }
         }
         return rez;

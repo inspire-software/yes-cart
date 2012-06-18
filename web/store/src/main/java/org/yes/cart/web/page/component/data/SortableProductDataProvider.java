@@ -77,13 +77,13 @@ public class SortableProductDataProvider extends SortableDataProvider<ProductDec
         final List<ProductDecorator> rez = new ArrayList<ProductDecorator>(productsToDecorate.size());
         for (Product product : productsToDecorate) {
             rez.add(
-                    new ProductDecoratorImpl(
+                    ProductDecoratorImpl.createProductDecoratorImpl(
                             imageService,
                             attributableImageService,
                             categoryService,
                             product,
-                            WicketUtil.getHttpServletRequest().getContextPath()
-                    )
+                            WicketUtil.getHttpServletRequest().getContextPath(),
+                            false)
             );
         }
         return rez;

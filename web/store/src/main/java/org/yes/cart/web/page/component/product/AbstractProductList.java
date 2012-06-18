@@ -64,7 +64,7 @@ public abstract class AbstractProductList extends BaseComponent {
     /**
      * Construct product list to show.
      *
-     * @param id component id.
+     * @param id              component id.
      * @param nameLinkVisible true in case if need to show link with product name
      */
     public AbstractProductList(final String id, final boolean nameLinkVisible) {
@@ -104,15 +104,21 @@ public abstract class AbstractProductList extends BaseComponent {
                     protected void populateItem(ListItem<Product> listItem) {
 
                         final Product prod = listItem.getModelObject();
-                        final ProductDecorator productDecorator = new ProductDecoratorImpl(
+                        final ProductDecorator productDecorator = ProductDecoratorImpl.createProductDecoratorImpl(
                                 imageService,
                                 attributableImageService,
                                 categoryService,
                                 prod,
-                                WicketUtil.getHttpServletRequest().getContextPath());
+                                WicketUtil.getHttpServletRequest().getContextPath(),
+                                false);
                         final Category category = categoryService.getRootCategory();
-                        final String width = productDecorator.getThumbnailImageWidth(category);   //TODo size
-                        final String height = productDecorator.getThumbnailImageHeight(category);
+
+                        final String[] size = productDecorator.getThumbnailImageSize(category);
+
+                        final String width = size[0];
+                        final String height = size[1];
+
+
                         final PageParameters pageParameters = getProductPageParameters(prod);
 
 
@@ -127,7 +133,7 @@ public abstract class AbstractProductList extends BaseComponent {
                         );
                         listItem.add(
                                 new BookmarkablePageLink<HomePage>(PRODUCT_NAME_LINK, HomePage.class, pageParameters)
-                                        .add( new Label(NAME, prod.getName()).setEscapeModelStrings(false) )
+                                        .add(new Label(NAME, prod.getName()).setEscapeModelStrings(false))
                                         .setVisible(nameLinkVisible)
                         );
                     }

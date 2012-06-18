@@ -76,6 +76,15 @@ public interface ProductService extends GenericService<Product> {
     Product getProductById(Long productId);
 
     /**
+     * Get product by his primary key value
+     *
+     * @param productId product id
+     * @param withAttribute flag if need to load product with attrubute
+     * @return product if found, otherwise null
+     */
+    Product getProductById(Long productId, boolean withAttribute);
+
+    /**
      * Get the all products in category.
      *
      * @param categoryId  category id
