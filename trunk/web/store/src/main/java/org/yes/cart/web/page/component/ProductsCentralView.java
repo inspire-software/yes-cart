@@ -33,6 +33,13 @@ import java.util.List;
  */
 public class ProductsCentralView extends AbstractCentralView {
 
+    final static String[] defaultSize =
+            new String[]{
+                    AttributeNamesKeys.Category.PRODUCT_IMAGE_WIDTH,
+                    AttributeNamesKeys.Category.PRODUCT_IMAGE_HEIGHT
+            };
+
+
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     /**
      * Named place for  per page links
@@ -69,6 +76,8 @@ public class ProductsCentralView extends AbstractCentralView {
     @SpringBean(name = ServiceSpringKeys.IMAGE_SERVICE)
     protected ImageService imageService;
 
+
+
     /**
      * Construct panel.
      *
@@ -78,7 +87,9 @@ public class ProductsCentralView extends AbstractCentralView {
      */
     public ProductsCentralView(final String id, long categoryId, final BooleanQuery booleanQuery) {
         super(id, categoryId, booleanQuery);
+
     }
+
 
 
     /**
@@ -89,6 +100,12 @@ public class ProductsCentralView extends AbstractCentralView {
 
         final List<String> itemsPerPageValues =
                 getCategoryService().getItemsPerPage(getCategory());
+
+
+        final String[] widthHeight = getCategoryService().getCategoryAttributeRecursive(
+                getCategory(),
+                defaultSize
+        );
 
         final int selectedItemPerPage = WicketUtil.getSelectedItemsPerPage(
                 getPage().getPageParameters(), itemsPerPageValues);
@@ -106,7 +123,7 @@ public class ProductsCentralView extends AbstractCentralView {
 
             protected void populateItem(Item<ProductDecorator> productItem) {
                 productItem.add(
-                        new ProductInListView(PRODUCT, productItem.getModelObject(), getCategory())
+                        new ProductInListView(PRODUCT, productItem.getModelObject(), getCategory(), widthHeight)
                 );
             }
 

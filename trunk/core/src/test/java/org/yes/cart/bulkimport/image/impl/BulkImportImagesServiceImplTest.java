@@ -99,7 +99,7 @@ public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
     public void testDoImportProductImage() {
 
         ProductService productService = (ProductService) createContext().getBean("productService");
-        Product product = productService.getProductById(9998L);
+        Product product = productService.getProductById(9998L, true);
         assertNotNull(product);
         assertNull(product.getAttributeByCode("IMAGE0")); // product has not IMAGE0 attribute
 
@@ -114,7 +114,7 @@ public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
         assertFalse(errorReport.toString().indexOf("ERROR") > -1);
 
         clearCache();
-        product = productService.getProductById(9998L);
+        product = productService.getProductById(9998L, true);
         assertNotNull(product);
         assertNotNull(product.getAttributeByCode("IMAGE0")); // image was imported as IMAGE0 attribute
         assertEquals("im-image-file_BENDER-ua_a.jpeg", product.getAttributeByCode("IMAGE0").getVal());
@@ -126,7 +126,7 @@ public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
     public void testDoImportProductSkuImage() {
 
         ProductService productService = (ProductService) createContext().getBean("productService");
-        Product product = productService.getProductById(10000L); //SOBOT
+        Product product = productService.getProductById(10000L, true); //SOBOT
         assertNotNull(product);
         for (ProductSku productSku : product.getSku()) {
             if (productSku.getCode().equals("SOBOT-BEER")) {
@@ -178,7 +178,7 @@ public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
     public void testDoImport() {
 
         ProductService productService = (ProductService) createContext().getBean("productService");
-        Product product = productService.getProductById(10000L);
+        Product product = productService.getProductById(10000L, true);
         assertNotNull(product);
         assertNull(product.getAttributeByCode("IMAGE2")); // product has not IMAGE2 attribute
 
@@ -192,7 +192,7 @@ public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
         assertFalse(errorReport.toString().indexOf("ERROR") > -1);
 
         clearCache();
-        product = productService.getProductById(10000L);
+        product = productService.getProductById(10000L, true);
         assertNotNull(product);
 
 

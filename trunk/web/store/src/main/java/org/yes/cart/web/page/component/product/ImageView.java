@@ -41,7 +41,6 @@ public class ImageView extends BaseComponent {
     private final Depictable depictable;
 
 
-
     /**
      * Construct product or sku image view.
      *
@@ -67,11 +66,18 @@ public class ImageView extends BaseComponent {
             category = categoryService.getRootCategory();
         }
 
+        final String[] defSize = depictable.getDefaultImageSize(category);
 
-        final String width = depictable.getDefaultImageWidth(category);
-        final String height = depictable.getDefaultImageHeight(category);
-        final String tumbWidth = depictable.getThumbnailImageWidth(category);
-        final String tumbHeight = depictable.getThumbnailImageHeight(category);
+        final String width = defSize[0];
+        final String height = defSize[1];
+
+
+
+        final String [] size = depictable.getThumbnailImageSize(category);
+
+        final String tumbWidth = size[0];
+        final String tumbHeight = size[1];
+
         final List<Pair<String, String>> filledImageAttributes = depictable.getImageAttributeFileNames();
 
 

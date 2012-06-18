@@ -2,6 +2,7 @@ package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.search.Query;
+import org.hibernate.Hibernate;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
@@ -180,6 +181,18 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * {@inheritDoc}
      */
     @Cacheable(value = PROD_SERV_METHOD_CACHE)
+    public Product getProductById(final Long productId, final boolean withAttribute) {
+        final Product prod = productDao.findById(productId);
+        if (prod != null && withAttribute) {
+            Hibernate.initialize(prod.getAttribute());
+        }
+        return prod;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = PROD_SERV_METHOD_CACHE)
     public List<Product> getProductByQuery(
             final Query query,
             final int firtsResult,
@@ -345,7 +358,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         final List<FiteredNavigationRecord> records = new ArrayList<FiteredNavigationRecord>();
 
         for (ProductTypeAttr entry : productType.getAttribute()) {
-            if (entry.getNavigationType().equals("R")) {
+            if ("R".equals(entry.getNavigationType())) {
                 RangeList<RangeNode> rangeList = entry.getRangeList();
                 if (rangeList != null) {
                     for (RangeNode node : rangeList) {

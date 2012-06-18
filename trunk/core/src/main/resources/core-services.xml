@@ -1047,6 +1047,10 @@
         <property name="extendedConversionService" ref="extendedConversionService"/>
     </bean>
 
+
+
+
+
     <bean id="bulkImportImageService" class="org.yes.cart.bulkimport.image.impl.BulkImportImagesServiceImpl">
         <constructor-arg index="0" ref="genericDao"/>
         <constructor-arg index="1" ref="attributeDao"/>

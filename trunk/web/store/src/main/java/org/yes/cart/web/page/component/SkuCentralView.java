@@ -150,7 +150,7 @@ public class SkuCentralView extends AbstractCentralView {
             product = sku.getProduct();
         } else if (productId != null) {
             isProduct = true;
-            product = productService.getProductById(Long.valueOf(productId));
+            product = productService.getProductById(Long.valueOf(productId), true);
             sku = product.getDefaultSku();
         } else {
             throw new RuntimeException("Product or Sku id expected");
@@ -230,12 +230,13 @@ public class SkuCentralView extends AbstractCentralView {
 
     private Depictable getDepictable() {
         if (isProduct) {
-            return new ProductDecoratorImpl(
+            return ProductDecoratorImpl.createProductDecoratorImpl(
                     imageService,
                     attributableImageService,
                     categoryService,
                     product,
-                    WicketUtil.getHttpServletRequest().getContextPath());
+                    WicketUtil.getHttpServletRequest().getContextPath(),
+                    true);
         }
         return new ProductSkuDecoratorImpl(
                 imageService,

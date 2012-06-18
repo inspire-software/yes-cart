@@ -1,5 +1,6 @@
 package org.yes.cart.web.support.entity.decorator.impl;
 
+import com.google.common.collect.MapMaker;
 import org.springframework.beans.BeanUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -31,6 +34,18 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
         add(Constants.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "4");
         add(Constants.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "5");
     }};
+
+    final static  String [] defaultSize =
+            new String [] {
+                        AttributeNamesKeys.Category.PRODUCT_IMAGE_WIDTH,
+                        AttributeNamesKeys.Category.PRODUCT_IMAGE_HEIGHT
+            };
+
+    final static  String [] thumbnailSize =
+            new String [] {
+                        AttributeNamesKeys.Category.PRODUCT_IMAGE_TUMB_WIDTH,
+                        AttributeNamesKeys.Category.PRODUCT_IMAGE_TUMB_HEIGHT
+            };
 
 
     private final AttributableImageService attributableImageService;
@@ -49,12 +64,13 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
      * @param productEntity            original product to decorate.
      * @param imageService image serice to get the image seo info
      */
-    public ProductDecoratorImpl(
+    private ProductDecoratorImpl(
             final ImageService imageService,
             final AttributableImageService attributableImageService,
             final CategoryService categoryService,
             final Product productEntity,
-            final String httpServletContextPath) {
+            final String httpServletContextPath,
+            final boolean withAttributes) {
 
         BeanUtils.copyProperties(productEntity, this);
         this.httpServletContextPath = httpServletContextPath;
@@ -62,8 +78,37 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
         this.categoryService = categoryService;
         this.productImageUrl = null;
         this.imageService = imageService;
-        this.attrValueMap = getAllAttibutesAsMap();
+        if (withAttributes) {
+            this.attrValueMap = getAllAttibutesAsMap();
+        } else {
+            this.attrValueMap = Collections.emptyMap();
 
+        }
+
+    }
+
+
+    private static final ConcurrentMap<String, ProductDecoratorImpl> productDecoratorCache = new MapMaker()
+            .concurrencyLevel(16).softValues()
+            .expiration(Constants.DEFAULT_EXPIRATION_TIMEOUT, TimeUnit.MINUTES).makeMap();
+
+
+    public static ProductDecoratorImpl createProductDecoratorImpl(
+            final ImageService imageService,
+            final AttributableImageService attributableImageService,
+            final CategoryService categoryService,
+            final Product productEntity,
+            final String httpServletContextPath,
+            final boolean withAttributes) {
+
+        final String key = httpServletContextPath + productEntity.getProductId() + withAttributes;
+
+        ProductDecoratorImpl rez = productDecoratorCache.get(key);
+        if (rez == null) {
+            rez = new ProductDecoratorImpl(imageService, attributableImageService, categoryService, productEntity, httpServletContextPath, withAttributes);
+            productDecoratorCache.put(key, rez);
+        }
+        return rez;
     }
 
 
@@ -124,46 +169,30 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
         return (AttrValueProduct) attrValueMap.get(attributeCode);
     }
 
-    private String defaultImageWidth = null;
-    private String defaultImageHeight = null;
-    private String thumbnailImageWidth = null;
-    private String thumbnailImageHeight = null;
 
     /**
      * {@inheritDoc}
      */
-    public String getDefaultImageWidth(final Category category) {
-        return categoryService.getCategoryAttributeRecursive(category,
-                AttributeNamesKeys.Category.PRODUCT_IMAGE_WIDTH,
-                PRODUCT_DEFAULT_IMAGE_WIDTH);
+    public String [] getDefaultImageSize(final Category category) {
+        return categoryService.getCategoryAttributeRecursive(
+                category,
+                defaultSize
+        );
     }
+
 
     /**
      * {@inheritDoc}
      */
-    public String getDefaultImageHeight(final Category category) {
-        return categoryService.getCategoryAttributeRecursive(category,
-                AttributeNamesKeys.Category.PRODUCT_IMAGE_HEIGHT,
-                PRODUCT_DEFAULT_IMAGE_HEIGHT);
+    public String [] getThumbnailImageSize(final Category category) {
+        return categoryService.getCategoryAttributeRecursive(
+                category,
+                ProductDecoratorImpl.thumbnailSize
+        );
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public String getThumbnailImageWidth(final Category category) {
-        return categoryService.getCategoryAttributeRecursive(category,
-                AttributeNamesKeys.Category.PRODUCT_IMAGE_TUMB_WIDTH,
-                PRODUCT_THUMBNAIL_IMAGE_WIDTH);
-    }
 
-    /**
-     * {@inheritDoc}
-     */
-    public String getThumbnailImageHeight(final Category category) {
-        return categoryService.getCategoryAttributeRecursive(category,
-                AttributeNamesKeys.Category.PRODUCT_IMAGE_TUMB_HEIGHT,
-                PRODUCT_THUMBNAIL_IMAGE_HEIGHT);
-    }
+
 
     /**
      * {@inheritDoc}

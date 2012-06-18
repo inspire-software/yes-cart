@@ -25,6 +25,18 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
 
     private static final List<String> attrNames = Collections.singletonList(AttributeNamesKeys.Category.CATEGORY_IMAGE);
 
+    private final static String[] defaultSize =
+            new String[]{
+                    AttributeNamesKeys.Category.CATEGORY_IMAGE_WIDTH,
+                    AttributeNamesKeys.Category.CATEGORY_IMAGE_HEIGHT
+            };
+
+    private final static String[] thumbnailSize =
+            new String[]{
+                    AttributeNamesKeys.Category.CATEGORY_IMAGE_WIDTH,
+                    AttributeNamesKeys.Category.CATEGORY_IMAGE_HEIGHT
+            };
+
     private final AttributableImageService categoryImageService;
     private final CategoryService categoryService;
     private final String httpServletContextPath;
@@ -38,7 +50,7 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
      * @param categoryEntity         entity to decorate.
      * @param httpServletContextPath servlet context path
      * @param categoryService        category service to get the images width and height
-     * @param imageService image service to get the image seo info
+     * @param imageService           image service to get the image seo info
      */
     public CategoryDecoratorImpl(
             final ImageService imageService,
@@ -73,6 +85,7 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
         }
         return rez;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -93,17 +106,27 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
         return categoryImageUrl;
     }
 
-    public String getDefaultImageWidth(final Category category) {
-        return categoryService.getCategoryAttributeRecursive(category,
-                AttributeNamesKeys.Category.CATEGORY_IMAGE_WIDTH,
-                "80");
+    /**
+     * {@inheritDoc}
+     */
+    public String[] getDefaultImageSize(final Category category) {
+        return categoryService.getCategoryAttributeRecursive(
+                category,
+                defaultSize
+        );
     }
 
-    public String getDefaultImageHeight(final Category category) {
-        return categoryService.getCategoryAttributeRecursive(this,
-                AttributeNamesKeys.Category.CATEGORY_IMAGE_HEIGHT,
-                "80");
+
+    /**
+     * {@inheritDoc}
+     */
+    public String[] getThumbnailImageSize(final Category category) {
+        return categoryService.getCategoryAttributeRecursive(
+                category,
+                thumbnailSize
+        );
     }
+
 
     public String getThumbnailImageWidth(final Category category) {
         return categoryService.getCategoryAttributeRecursive(category,

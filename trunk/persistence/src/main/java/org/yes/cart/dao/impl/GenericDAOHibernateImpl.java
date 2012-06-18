@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.domain.entity.Product;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.io.Serializable;
@@ -148,6 +149,28 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
         }
         return query.uniqueResult();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object getScalarResultByNamedQuery(final String namedQueryName, final boolean forceCollectionInit, final Object... parameters) {
+        Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
+        int idx = 1;
+        for (Object param : parameters) {
+            query.setParameter(String.valueOf(idx), param);
+            idx++;
+        }
+        final Object obj = query.uniqueResult();
+        if (forceCollectionInit) {
+            if (obj instanceof Product) {
+                Hibernate.initialize(((Product) obj).getAttribute());
+
+            }
+        }
+        return obj;
+    }
+
+
 
     /**
      * {@inheritDoc}

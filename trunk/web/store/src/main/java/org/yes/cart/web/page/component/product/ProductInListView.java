@@ -65,6 +65,9 @@ public class ProductInListView extends BaseComponent {
     protected ImageService imageService;
 
 
+    private final String [] defImgSize;
+
+
     /**
      * Construct product view, that show product in grid.
      *
@@ -72,19 +75,21 @@ public class ProductInListView extends BaseComponent {
      * @param product  product model
      * @param category product in category, optional parameter
      */
-    public ProductInListView(final String id, final Product product, final Category category) {
+    public ProductInListView(final String id, final Product product, final Category category, final String [] defImgSize) {
         super(id);
         if (category == null) {
             this.category = categoryService.getRootCategory();
         } else {
             this.category = category;
         }
-        this.product = new ProductDecoratorImpl(
+        this.product = ProductDecoratorImpl.createProductDecoratorImpl(
                 imageService,
                 attributableImageService,
                 categoryService,
                 product,
-                WicketUtil.getHttpServletRequest().getContextPath());
+                WicketUtil.getHttpServletRequest().getContextPath(),
+                false);
+        this.defImgSize = defImgSize;
 
     }
 
@@ -97,8 +102,9 @@ public class ProductInListView extends BaseComponent {
         final PageParameters linkToProductParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters());
         linkToProductParameters.set(WebParametersKeys.PRODUCT_ID, product.getId());
 
-        final String width = product.getDefaultImageWidth(category);
-        final String height = product.getDefaultImageHeight(category);
+
+        final String width = defImgSize[0];
+        final String height = defImgSize[1];
 
         add(
                 new BookmarkablePageLink<HomePage>(PRODUCT_LINK_SKU, HomePage.class, linkToProductParameters).add(

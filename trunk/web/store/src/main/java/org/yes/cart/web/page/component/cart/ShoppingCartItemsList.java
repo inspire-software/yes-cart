@@ -155,8 +155,11 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
         );
 
 
-        final String height = productSkuDecorator.getThumbnailImageHeight(rootCategory);
-        final String width = productSkuDecorator.getThumbnailImageWidth(rootCategory);
+        final String [] size = productSkuDecorator.getThumbnailImageSize(rootCategory);
+
+        final String width = size[0];
+        final String height = size[1];
+
         final String defaultImageAttributeName = productSkuDecorator.getDefaultImageAttributeName();   //TODO new attribute plus optimaze
         final String defaultImageRelativePath = productSkuDecorator.getImage(width, height, defaultImageAttributeName);
 

@@ -28,6 +28,7 @@
                 <prop key="fullTextSearchReindex">PROPAGATION_REQUIRED</prop>
                 <prop key="fullTextSearchPurge">PROPAGATION_REQUIRED</prop>
                 <prop key="executeNative*">PROPAGATION_REQUIRED</prop>
+                <prop key="doImport*">PROPAGATION_REQUIRED</prop>
                 <prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
             </props>
         </property>

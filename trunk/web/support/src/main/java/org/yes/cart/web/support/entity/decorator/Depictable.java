@@ -57,33 +57,21 @@ public interface Depictable {
      */
     String getDefaultImage(String width, String height);
 
-    /**
-     * Get product image width in particular category.
-     * @param category optional given category
-     * @return  image width.
-     */
-    String getDefaultImageWidth(Category category);
 
     /**
-     * Get product image height in partucular category.
-     * @param category given category
-     * @return     image height.
+     * Get width and height of depictable in given category.
+     * @param category given category.
+     * @return width and height of depictable
      */
-    String getDefaultImageHeight(Category category);
+    String [] getDefaultImageSize(Category category);
 
     /**
-     * Get product image width in particular category.
-     * @param category optional given category
-     * @return  image width.
+     * Get width and height of depictable in given category.
+     * @param category given category.
+     * @return width and height of depictable
      */
-    String getThumbnailImageWidth(Category category);
+    String [] getThumbnailImageSize(Category category);
 
-    /**
-     * Get product image height in partucular category.
-     * @param category given category
-     * @return     image height.
-     */
-    String getThumbnailImageHeight(Category category);
 
 
      /** Get default image attribute name.
