@@ -1,18 +1,18 @@
 package org.yes.cart.web.util;
 
 import com.google.common.collect.MapMaker;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.mapper.parameter.IPageParametersEncoder;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.support.constants.WebParametersKeys;
+import org.yes.cart.web.support.entity.decorator.impl.DecoratorUtil;
+import org.yes.cart.web.support.entity.decorator.impl.ProductDecoratorImpl;
 
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
@@ -54,65 +54,64 @@ public class SeoBookmarkablePageParametersEncoder implements IPageParametersEnco
         }
         return url;
     }
-    
-    private final ConcurrentMap<String, String> encodeCache = new MapMaker().concurrencyLevel(16).softValues().expiration(Constants.DEFAULT_EXPIRATION_TIMEOUT, TimeUnit.MINUTES).makeMap();
-    
+
+    public static final ConcurrentMap<String, String> CATEGORY_ENCODE_CACHE = new MapMaker().concurrencyLevel(16).softValues().expiration(Constants.DEFAULT_EXPIRATION_TIMEOUT, TimeUnit.MINUTES).makeMap();
+    public static final ConcurrentMap<String, String> SKU_ENCODE_CACHE = new MapMaker().concurrencyLevel(16).softValues().expiration(Constants.DEFAULT_EXPIRATION_TIMEOUT, TimeUnit.MINUTES).makeMap();
+
+    /**
+     * TODO move appropriate endocing code to decorators.
+     * TODO create reverse cache in decorators for fast decode
+     * @param idName
+     * @param idValueToEncode
+     * @return
+     */
     private String encodeId(final String idName, final String idValueToEncode) {
         if (seoEnabled) {
-            
-            final String key = idValueToEncode + idName;
-            
-            String rez = encodeCache.get(key);
-
-            if (rez == null) {
-                if (WebParametersKeys.CATEGORY_ID.equals(idName)) {
+            final String rez;
+            if (WebParametersKeys.CATEGORY_ID.equals(idName)) {
+                String seo = CATEGORY_ENCODE_CACHE.get(idValueToEncode);
+                if (seo == null) {
                     final Category category = categoryService.getById(NumberUtils.toLong(idValueToEncode));
                     if (category != null) {
-                        rez = encodeId(
+                        seo = DecoratorUtil.encodeId(
                                 idValueToEncode,
                                 category.getSeo()
                         );
                     }
-                } else if (WebParametersKeys.PRODUCT_ID.equals(idName)) {
-                    final Product product = productService.getById(NumberUtils.toLong(idValueToEncode));
-                    if (product != null) {
-                        rez = encodeId(
-                                idValueToEncode,
-                                product.getSeo()
-                        );
+                    if (seo != null) {
+                        CATEGORY_ENCODE_CACHE.put(idValueToEncode, seo);
                     }
-
-                } else if (WebParametersKeys.SKU_ID.equals(idName)) {
+                }
+                rez = seo;
+            } else if (WebParametersKeys.PRODUCT_ID.equals(idName)) {
+                rez = ProductDecoratorImpl.getSeoUrlParameterValueProduct(idValueToEncode, productService);
+            } else if (WebParametersKeys.SKU_ID.equals(idName)) {
+                String seo = SKU_ENCODE_CACHE.get(idValueToEncode);
+                if (seo == null) {
                     final ProductSku productSku = productService.getSkuById(NumberUtils.toLong(idValueToEncode));
                     if (productSku != null) {
-                        rez = encodeId(
+                        seo = DecoratorUtil.encodeId(
                                 idValueToEncode,
                                 productSku.getSeo()
                         );
                     }
-
-                } else {
-                    rez = idValueToEncode;
-
+                    if (seo != null) {
+                        ProductDecoratorImpl.PRODUCT_ENCODE_CACHE.put(idValueToEncode, seo);
+                    }
                 }
-                if (rez != null) {
-                    encodeCache.put(key, rez);
-                }
+                rez = seo;
+
+            } else {
+                rez = idValueToEncode;
 
             }
+
             return rez;
         }
 
         return idValueToEncode;
     }
 
-    private String encodeId(final String idValueToEncode, final Seo seo) {
-        if (seo != null && StringUtils.isNotBlank(seo.getUri())) {
-            return seo.getUri();
-        } else {
-            return idValueToEncode;
-        }
-    }
 
     /**
      * {@inheritDoc}
@@ -134,6 +133,7 @@ public class SeoBookmarkablePageParametersEncoder implements IPageParametersEnco
 
     private String decodeId(final String idName, final String idValueToDecode) {
         if (seoEnabled && !NumberUtils.isDigits(idValueToDecode)) {
+            //todo use cache in decorators
             if (WebParametersKeys.CATEGORY_ID.equals(idName)) {
                 final Long id = categoryService.getCategoryIdBySeoUri(idValueToDecode);
                 if (id != null) {
