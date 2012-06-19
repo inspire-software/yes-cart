@@ -21,7 +21,7 @@
         <property name="username" value="sa"/>
         <property name="password" value=""/>
         <property name="initialSize" value="50"/>
-        <property name="maxActive" value="500"/>
+        <property name="maxActive" value="600"/>
         <property name="poolPreparedStatements" value="true"/>
         <property name="maxOpenPreparedStatements" value="500"/>
         <property name="defaultAutoCommit" value="true"/>

@@ -18,6 +18,12 @@
            eternal="false"
            timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
+    <cache name="org.yes.cart.service.domain.impl.PriceServiceImpl.cache"
+           maxElementsInMemory="1000"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
     <cache name="org.yes.cart.service.domain.impl.ProductServiceImpl.cache"
            maxElementsInMemory="5000"
            overflowToDisk="false"

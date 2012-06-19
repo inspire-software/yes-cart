@@ -1,6 +1,7 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.yes.cart.cache.Cacheable;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.ProductSku;
@@ -61,6 +62,7 @@ public class PriceServiceImpl
     /**
      * {@inheritDoc}
      */
+    @Cacheable(value = "priceServiceImplMethodCache")
     public SkuPrice getMinimalRegularPrice(
             final Collection<ProductSku> productSkus,
             final Shop shop,
@@ -131,20 +133,31 @@ public class PriceServiceImpl
      * {@inheritDoc}
      */
     public List<SkuPrice> getSkuPrices(final Collection<ProductSku> productSkus, final Shop shop, final String currencyCode) {
-        final List<SkuPrice> shopSkuPrices = getSkuPriceFilteredByShop(productSkus, shop);
-        List<SkuPrice> skuPrices = getSkuPriceFilteredByCurrency(shopSkuPrices, currencyCode);
-        if (skuPrices.isEmpty() && !currencyCode.equals(shop.getDefaultCurrency())) {
-            skuPrices = getSkuPriceFilteredByCurrency(shopSkuPrices, shop.getDefaultCurrency());
+
+        List<SkuPrice> rez = getSkuPriceFilteredByShopCurrency(productSkus, shop, currencyCode);
+        
+        if (rez.isEmpty() && !currencyCode.equals(shop.getDefaultCurrency())) {
+
+            final List<SkuPrice> shopSkuPrices = getSkuPriceFilteredByShop(productSkus, shop);
+            List<SkuPrice> skuPrices = getSkuPriceFilteredByCurrency(shopSkuPrices, shop.getDefaultCurrency());
             BigDecimal exchangeRate = exchangeRateService.getExchangeRate(shop, shop.getDefaultCurrency(), currencyCode);
             if (exchangeRate == null) {
                 skuPrices.clear();
             } else {
                 skuPrices = recalculatePrices(currencyCode, skuPrices, exchangeRate);
             }
+            rez = skuPrices;
         }
-        return skuPrices;
+        return rez;
     }
 
+    /**
+     * Recalculate prices from default currency to given.
+     * @param currencyCode given currency code
+     * @param baseSkuPrices prices in default currency
+     * @param exchangeRate exchange rate
+     * @return list of skus with recalculated prices
+     */
     private List<SkuPrice> recalculatePrices(final String currencyCode,
                                              final List<SkuPrice> baseSkuPrices,
                                              final BigDecimal exchangeRate) {
@@ -245,7 +258,7 @@ public class PriceServiceImpl
     /**
      * {@inheritDoc}
      */
-    public List<SkuPrice> getSkuPriceFilteredByCurrency(final List<SkuPrice> skuPrices, final String currencyCode) {
+   public List<SkuPrice> getSkuPriceFilteredByCurrency(final List<SkuPrice> skuPrices, final String currencyCode) {
         List<SkuPrice> skuPricesFiltered = new ArrayList<SkuPrice>();
         for (SkuPrice skuPrice : skuPrices) {
             if (skuPrice.getCurrency().equals(currencyCode)) {
@@ -258,11 +271,26 @@ public class PriceServiceImpl
     /**
      * {@inheritDoc}
      */
-    public List<SkuPrice> getSkuPriceFilteredByShop(final Collection<ProductSku> productSkus, final Shop shop) {
+   public List<SkuPrice> getSkuPriceFilteredByShop(final Collection<ProductSku> productSkus, final Shop shop) {
         List<SkuPrice> skuPrices = new ArrayList<SkuPrice>();
         for (ProductSku sku : productSkus) {
             for (SkuPrice skuPrice : sku.getSkuPrice()) {
                 if (shop.getShopId() == skuPrice.getShop().getShopId()) {
+                    skuPrices.add(skuPrice);
+                }
+            }
+        }
+        return skuPrices;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<SkuPrice> getSkuPriceFilteredByShopCurrency(final Collection<ProductSku> productSkus, final Shop shop, final String currencyCode) {
+        List<SkuPrice> skuPrices = new ArrayList<SkuPrice>();
+        for (ProductSku sku : productSkus) {
+            for (SkuPrice skuPrice : sku.getSkuPrice()) {
+                if (shop.getShopId() == skuPrice.getShop().getShopId() && skuPrice.getCurrency().equals(currencyCode)) {
                     skuPrices.add(skuPrice);
                 }
             }
