@@ -190,6 +190,15 @@ public interface GenericDAO<T, PK extends Serializable> {
     T findSingleByCriteria(CriteriaTuner criteriaTuner, Criterion... criterion);
 
     /**
+     * Find entities by criteria.
+     * @param firstResult scroll to firts result.
+     * @param criterion given criterias
+     * @return list of found entities.
+     */
+    T findUniqueByCriteria(int firstResult, Criterion... criterion);
+
+
+    /**
      * Persist the new enitity in DB.
      *
      * @param entity entity to persist

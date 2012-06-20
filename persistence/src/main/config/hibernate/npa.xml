@@ -1837,7 +1837,7 @@ public void setRangeList(final RangeList rangeList) {
                 <column name="SEO_ID" not-null="false"/>
             </many-to-one>
 
-            <set name="productCategory" inverse="false" lazy="false" cascade="all">
+            <set name="productCategory" inverse="false" lazy="true" cascade="all">
                 <key column="CATEGORY_ID" not-null="false"/>
                 <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.ProductCategory"/>
             </set>

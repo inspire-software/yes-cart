@@ -2,6 +2,7 @@ package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.search.Query;
+import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
@@ -34,15 +35,18 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     private final GenericDAO<Product, Long> productDao;
     private final GenericDAO<ProductSku, Long> productSkuDao;
     private final GenericDAO<ProductType, Long> productTypeDao;
+    private final GenericDAO<ProductCategory, Long> productCategoryDao;
     private final Random rand;
 
     public ProductServiceImpl(final GenericDAO<Product, Long> productDao,
                               final GenericDAO<ProductSku, Long> productSkuDao,
-                              final GenericDAO<ProductType, Long> productTypeDao) {
+                              final GenericDAO<ProductType, Long> productTypeDao,
+                              final GenericDAO<ProductCategory, Long> productCategoryDao) {
         super(productDao);
         this.productDao = productDao;
         this.productSkuDao = productSkuDao;
         this.productTypeDao = productTypeDao;
+        this.productCategoryDao = productCategoryDao;
         rand = new Random();
         rand.setSeed((new Date().getTime()));
     }
@@ -88,9 +92,14 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      */
     @Cacheable(value = PROD_SERV_METHOD_CACHE)
     public Product getRandomProductByCategory(final Category category) {
-        if (!category.getProductCategory().isEmpty()) {
-            int idx = rand.nextInt(category.getProductCategory().size());
-            ProductCategory productCategory = (ProductCategory) category.getProductCategory().toArray()[idx];
+        final int qty = getProductQty(category.getCategoryId());
+        final int idx = rand.nextInt(qty);
+        final ProductCategory productCategory = productCategoryDao.findUniqueByCriteria(
+                idx,
+                Restrictions.eq("category", category)
+        );
+
+        if (productCategory != null) {
             return getById(productCategory.getProduct().getProductId());
         }
         return null;
@@ -474,7 +483,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     @Cacheable(value = PROD_SERV_METHOD_CACHE)
     public int getProductQty(final long categoryId) {
         return Integer.valueOf(
-                String.valueOf(productDao.getScalarResultByNamedQuery("PRODUCTS.QTY.BY.CATEGORYID", categoryId, new Date())));
+                String.valueOf(productDao.getScalarResultByNamedQuery("PRODUCTS.QTY.BY.CATEGORYID", categoryId, new Date())));  //todo time machine
     }
 
 
