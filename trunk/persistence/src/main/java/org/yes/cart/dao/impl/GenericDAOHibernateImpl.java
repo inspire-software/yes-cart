@@ -379,6 +379,22 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
         
     }
     
+    /**
+     * Find entities by criteria.
+     * @param firstResult scroll to firts result.
+     * @param criterion given criterias
+     * @return list of found entities.
+     */
+    @SuppressWarnings("unchecked")
+    public T findUniqueByCriteria(final int firstResult, final Criterion... criterion) {
+        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
+        for (Criterion c : criterion) {
+            crit.add(c);
+        }
+        return (T)  crit.setFirstResult(firstResult).setMaxResults(1).uniqueResult();
+
+    }
+
 
     /**
      * {@inheritDoc}
