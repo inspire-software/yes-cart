@@ -24,14 +24,14 @@ public class WicketUtil {
     /**
      * Temporally fields will be removed from parameter maps
      */
-    private static List<String> cmdKeys = new ArrayList<String>();
+    private static Set<String> cmdKeys = new HashSet<String>();
 
     private static final PageParametersEncoder pageParametersEncoder = new PageParametersEncoder();
 
     private static final PageParameters emptyPageParameters = new PageParameters();
 
     public void setCmdKeys(final List<String> cmdKeys) {
-        WicketUtil.cmdKeys = cmdKeys;
+        WicketUtil.cmdKeys.addAll(cmdKeys);
     }
 
     /**
@@ -93,13 +93,28 @@ public class WicketUtil {
      * @return new filtered {@link PageParameters}
      */
     public static PageParameters getFilteredRequestParameters(final PageParameters parameters) {
-        final PageParameters rez = new PageParameters(parameters);
+
+        final PageParameters rez = new PageParameters();
+
         if (parameters != null) {
-            for (String paramName : cmdKeys) {
-                rez.remove(paramName);
+
+            for (PageParameters.NamedPair pair : parameters.getAllNamed()) {
+                final String name = pair.getKey();
+                if (!cmdKeys.contains(pair.getKey())) {
+                    rez.add(name, pair.getValue());
+                }
             }
 
+            /*if (parameters != null) {
+                for (String paramName : cmdKeys) {
+                    rez.remove(paramName);
+                }
+
+            } */
+
+            
         }
+
         return rez;
     }
 

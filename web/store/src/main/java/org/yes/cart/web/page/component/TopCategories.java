@@ -77,7 +77,7 @@ public class TopCategories extends BaseComponent {
 
                                         new AttributeModifier(
                                                 "class",
-                                                categoryService.isCategoryHasSubcategory(category.getCategoryId(), categoryId) ?
+                                                /*categoryService.isCategoryHasSubcategory(category.getCategoryId(), categoryId)*/ category.getCategoryId() == categoryId ?
                                                         "active-category":""
                                         )
 

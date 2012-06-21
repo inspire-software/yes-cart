@@ -46,7 +46,7 @@ public class AttributeProductFilter extends AbstractProductFilter {
             if (filteredNavigationByAttribute  && productType != null) {
 
                 setNavigationRecords(
-                        getFilteredNagigationRecords(
+                        getFilteredNavigationRecords(
                                 getProductService().getDistinctAttributeValues(productType.getProducttypeId())
                         )
                 );
@@ -60,7 +60,7 @@ public class AttributeProductFilter extends AbstractProductFilter {
     /**
      * {@inheritDoc}
      */
-    List<FiteredNavigationRecord> getFilteredNagigationRecords(List<FiteredNavigationRecord> allNavigationRecords) {
+    List<FiteredNavigationRecord> getFilteredNavigationRecords(List<FiteredNavigationRecord> allNavigationRecords) {
 
         final AttributiveSearchQueryBuilderImpl queryBuilder = new AttributiveSearchQueryBuilderImpl();
 

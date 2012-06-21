@@ -77,7 +77,7 @@ public class PriceProductFilter extends AbstractProductFilter {
                         shop);
 
                 setNavigationRecords(
-                        getFilteredNagigationRecords(allNavigationRecords)
+                        getFilteredNavigationRecords(allNavigationRecords)
                 );
 
 
@@ -90,7 +90,7 @@ public class PriceProductFilter extends AbstractProductFilter {
     /**
      * {@inheritDoc}
      */
-    List<FiteredNavigationRecord> getFilteredNagigationRecords(
+    List<FiteredNavigationRecord> getFilteredNavigationRecords(
             final List<FiteredNavigationRecord> allNavigationRecords) {
         final List<FiteredNavigationRecord> navigationList = new ArrayList<FiteredNavigationRecord>();
         if (!isAttributeAlreadyFiltered(ProductSearchQueryBuilder.PRODUCT_PRICE_AMOUNT)) {
