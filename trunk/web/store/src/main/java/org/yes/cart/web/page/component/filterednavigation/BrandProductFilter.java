@@ -4,7 +4,6 @@ import org.apache.lucene.search.BooleanQuery;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.query.impl.BrandSearchQueryBuilder;
 import org.yes.cart.domain.queryobject.FiteredNavigationRecord;
-import org.yes.cart.web.page.component.BaseComponent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +38,7 @@ public class BrandProductFilter extends AbstractProductFilter {
             if (filteredNavigationByBrand) {
 
                 setNavigationRecords(
-                        getFilteredNagigationRecords(
+                        getFilteredNavigationRecords(
                                 getProductService().getDistinctBrands(getCategories())
                         )
                 );
@@ -52,7 +51,7 @@ public class BrandProductFilter extends AbstractProductFilter {
     /**
      * {@inheritDoc}
      */
-    List<FiteredNavigationRecord> getFilteredNagigationRecords(
+    List<FiteredNavigationRecord> getFilteredNavigationRecords(
             final List<FiteredNavigationRecord> allNavigationRecords) {
 
         final List<FiteredNavigationRecord> navigationList = new ArrayList<FiteredNavigationRecord>();

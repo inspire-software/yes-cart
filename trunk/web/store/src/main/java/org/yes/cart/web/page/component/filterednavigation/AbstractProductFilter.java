@@ -55,7 +55,7 @@ public abstract class AbstractProductFilter extends BaseComponent {
 
     private List<FiteredNavigationRecord> navigationRecords = null;
 
-    private List<Long> categories = null;
+    private final List<Long> categories;
 
     @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
     private CategoryService categoryService;
@@ -81,7 +81,12 @@ public abstract class AbstractProductFilter extends BaseComponent {
         this.query = query;
         //categoryId = NumberUtils.toLong(HttpUtil.getSingleValue(getPage().getPageParameters().get(WebParametersKeys.CATEGORY_ID)));
         this.categoryId  = categoryId;
-        categories = getCategories();
+        if (categoryId > 0) {
+            categories = categoryService.transform(
+                    categoryService.getChildCategoriesRecursive(categoryId));
+        } else {
+            categories = Arrays.asList(categoryId);
+        }
     }
 
     /**
@@ -130,13 +135,7 @@ public abstract class AbstractProductFilter extends BaseComponent {
      * @return current subcategories sub tree as list.
      */
     protected List<Long> getCategories() {
-
-        if (categoryId > 0) {
-            return categoryService.transform(
-                    categoryService.getChildCategoriesRecursive(categoryId));
-        } else {
-            return Arrays.asList(categoryId);
-        }
+        return categories;
     }
 
     /**
@@ -149,7 +148,7 @@ public abstract class AbstractProductFilter extends BaseComponent {
      * @param allNavigationRecords all navigation records
      * @return list of navigatior records, that have product or empty list if no records selected for navigation
      */
-    abstract List<FiteredNavigationRecord> getFilteredNagigationRecords(
+    abstract List<FiteredNavigationRecord> getFilteredNavigationRecords(
             final List<FiteredNavigationRecord> allNavigationRecords);
 
 
