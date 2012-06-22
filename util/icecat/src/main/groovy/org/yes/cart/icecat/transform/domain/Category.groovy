@@ -46,11 +46,45 @@ class Category {
                 builder.append(feature.Searchable);
                 builder.append(";");
                 builder.append(  ((name == null ? id : name) + feature.Name).hashCode() );
+                builder.append(";");
+                if (feature.Name.replace(";", " ").replace('"', "\\\"").replace(',', " ")) {
+                    builder.append("R");
+                } else {
+                    builder.append("S");
+                }
+                builder.append(";");
+
                 builder.append("\n")
             }
 
         }
         return builder.toString();
+    }
+
+    /*
+    * Дисплей
+Диагональ экрана
+Разрешение экрана
+
+Вес
+
+Емкость батареи
+
+Емкость жесткого диска
+
+Оперативная память
+
+Семейство процессоров
+
+Тактовая частота процессора
+
+Тип оптического привода
+
+Цвет продукта*/
+
+    private boolean isRangeNavigation(String name) {
+        return "Вес".equals(name) ||   "Weight".equals(name)
+
     }
 
 

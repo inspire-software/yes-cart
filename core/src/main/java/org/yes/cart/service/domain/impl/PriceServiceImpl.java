@@ -331,7 +331,7 @@ public class PriceServiceImpl
             final BigDecimal exchangeRate = exchangeRateService.getExchangeRate(shop, defaultCurrency, currency);
             priceTierNodes = createPriceTierNodes(
                     priceTierTree.getPriceTierNodes(defaultCurrency),
-                    exchangeRate);
+                    MoneyUtils.notNull(exchangeRate, BigDecimal.ZERO));
         }
         return priceTierNodes;
     }
