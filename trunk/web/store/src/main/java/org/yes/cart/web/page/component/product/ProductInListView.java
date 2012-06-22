@@ -74,6 +74,7 @@ public class ProductInListView extends BaseComponent {
      * @param id       view od
      * @param product  product model
      * @param category product in category, optional parameter
+     * @param defImgSize image size in given category
      */
     public ProductInListView(final String id, final Product product, final Category category, final String [] defImgSize) {
         super(id);

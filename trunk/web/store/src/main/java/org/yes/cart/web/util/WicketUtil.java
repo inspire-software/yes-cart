@@ -104,19 +104,29 @@ public class WicketUtil {
                     rez.add(name, pair.getValue());
                 }
             }
-
-            /*if (parameters != null) {
-                for (String paramName : cmdKeys) {
-                    rez.remove(paramName);
-                }
-
-            } */
-
-            
         }
 
         return rez;
     }
+
+    /**
+     * Get the filtered request parameters, that not contains given set of request parameter names
+     *
+     * @param pageParameters original request parameters
+     * @param nameFilter     set of parameter name to remove
+     * @return new filtered {@link PageParameters}
+     */
+    public static PageParameters getFilteredRequestParameters(
+            final PageParameters pageParameters,
+            final Collection<String> nameFilter) {
+
+        final PageParameters rez = getFilteredRequestParameters(pageParameters);
+        for (String paramName : nameFilter) {
+            rez.remove(paramName);
+        }
+        return rez;
+    }
+
 
     /**
      * Get the filtered, from commands, request parameters,
@@ -142,26 +152,6 @@ public class WicketUtil {
         return rez;
     }
 
-    /**
-     * Get the filtered request parameters, that not contains given set of request parameter names
-     *
-     * @param pageParameters original request parameters
-     * @param nameFilter     set of parameter name to remove
-     * @return new filtered {@link PageParameters}
-     */
-    public static PageParameters getFilteredRequestParameters(
-            final PageParameters pageParameters,
-            final Collection<String> nameFilter) {
-
-        final PageParameters rez = new PageParameters(pageParameters);
-        for (String paramName : cmdKeys) {
-            rez.remove(paramName);
-        }
-        for (String paramName : nameFilter) {
-            rez.remove(paramName);
-        }
-        return rez;
-    }
 
     /**
      * Get the retained request parameters, that not contains given set of request parameter names
