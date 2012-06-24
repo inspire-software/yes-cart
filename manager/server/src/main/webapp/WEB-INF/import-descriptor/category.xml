@@ -32,6 +32,16 @@
             <regExp>(.*)</regExp>
         </column-descriptor>
 
+        <!-- product type -->
+        <column-descriptor>
+            <columnIndex>1</columnIndex>
+            <fieldType>FK_FIELD</fieldType>
+            <name>productType</name>
+            <regExp>(.*)</regExp>
+            <lookupQuery>select pt from ProductTypeEntity pt where pt.name = ?1</lookupQuery>
+        </column-descriptor>
+
+
         <!-- Description -->
         <column-descriptor>
             <columnIndex>1</columnIndex>

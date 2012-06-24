@@ -16,7 +16,7 @@
 
         <!-- primary key -->
         <column-descriptor>
-            <columnIndex>1</columnIndex>
+            <columnIndex>3</columnIndex>
             <fieldType>FIELD</fieldType>
             <name>guid</name>
             <regExp>(.*)</regExp>

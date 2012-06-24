@@ -10,6 +10,7 @@ import org.hibernate.search.bridge.LuceneOptions;
 import org.hibernate.search.bridge.StringBridge;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.AttrValueProductSku;
+import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 
 import java.util.Collection;
 import java.util.Map;
@@ -35,14 +36,14 @@ public class AttributeValueBridge implements FieldBridge {
 
                 if (StringUtils.isNotBlank(attrValue.getVal())) {
                     document.add(new Field(
-                            prefix + "attribute.val",
-                            attrValue.getVal(),
+                            prefix + ProductSearchQueryBuilder.ATTRIBUTE_VALUE_FIELD,
+                            (attrValue.getAttribute() == null ? "" : attrValue.getAttribute().getCode()) + attrValue.getVal(),
                             luceneOptions.getStore(),
                             Field.Index.NOT_ANALYZED,
                             luceneOptions.getTermVector()
                     ));
                     document.add(new Field(
-                            prefix + "attribute.attrvalsearch",
+                            prefix + ProductSearchQueryBuilder.ATTRIBUTE_VALUE_SEARCH_FIELD,
                             attrValue.getVal(),
                             luceneOptions.getStore(),
                             Field.Index.ANALYZED,
@@ -53,7 +54,7 @@ public class AttributeValueBridge implements FieldBridge {
 
                 if (attrValue.getAttribute() != null && StringUtils.isNotBlank(attrValue.getAttribute().getCode())) {
                     document.add(new Field(
-                            prefix + "attribute.attribute",
+                            prefix + ProductSearchQueryBuilder.ATTRIBUTE_CODE_FIELD,
                             attrValue.getAttribute().getCode(),
                             luceneOptions.getStore(),
                             Field.Index.NOT_ANALYZED,

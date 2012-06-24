@@ -236,7 +236,8 @@ public class SkuCentralView extends AbstractCentralView {
                     categoryService,
                     product,
                     WicketUtil.getHttpServletRequest().getContextPath(),
-                    true);
+                    true,
+                    productService.getDefaultImage(product.getProductId()));
         }
         return new ProductSkuDecoratorImpl(
                 imageService,

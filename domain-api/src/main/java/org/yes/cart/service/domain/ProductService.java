@@ -134,6 +134,23 @@ public interface ProductService extends GenericService<Product> {
     List<FiteredNavigationRecord> getDistinctAttributeValues(long productTypeId);
 
     /**
+     * Collect the single attribute value navigation see ProductTypeAttr#navigationType
+     *
+     * @param productTypeId product type id
+     * @return list of {@link FiteredNavigationRecord}
+     */
+    List<FiteredNavigationRecord> getSingleValueNavigationRecords(long productTypeId);
+
+
+    /**
+     * Get the navigation records for range values.
+     *
+     * @param productTypeId product type id
+     * @return list of {@link FiteredNavigationRecord}
+     */
+    List<FiteredNavigationRecord> getRangeValueNavigationRecords(long productTypeId);
+
+    /**
      * Get all distinct brands in given categories list
      *
      * @param categories categories id list
@@ -284,11 +301,19 @@ public interface ProductService extends GenericService<Product> {
      * @param productTypeId product type id. use exact match
      * @return list of founded products
      */
-    public List<Product> getProductByConeNameBrandType(
+     List<Product> getProductByConeNameBrandType(
             CriteriaTuner criteriaTuner,
             String code,
             String name,
             Long brandId,
             Long productTypeId);
+
+
+    /**
+     * Get default image file name by given product.
+     * @param productId   given id, which identify product
+     * @return image file name if found.
+     */
+     String getDefaultImage( Long productId);
 
 }

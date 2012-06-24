@@ -1,5 +1,6 @@
 package org.yes.cart.web.support.service.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Attributable;
@@ -64,8 +65,14 @@ public abstract class AbstractImageServiceImpl implements AttributableImageServi
 
     /** {@inheritDoc} */
     public String getImage(final Attributable attributable, final String httpServletContextPath,
-                           final String width, final String height, final String attrName) {
-        return getImageURI(getImageAttributeValue(attributable, attrName), width, height, httpServletContextPath, attributable);
+                           final String width, final String height, final String attrName, String attrVal) {
+
+        if (StringUtils.isBlank(attrVal)) {
+            attrVal =  getImageAttributeValue(attributable, attrName);
+        }
+
+
+        return getImageURI(attrVal, width, height, httpServletContextPath, attributable);
     }
 
 

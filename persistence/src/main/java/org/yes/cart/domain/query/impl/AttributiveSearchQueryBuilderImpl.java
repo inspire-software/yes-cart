@@ -183,11 +183,11 @@ public class AttributiveSearchQueryBuilderImpl extends ProductsInCategoryQueryBu
 
         final BooleanQuery productAttrVal = new BooleanQuery();
         productAttrVal.add(
-                new TermQuery(new Term(ATTRIBUTE_VALUE_FIELD, attributeValue)),
+                new TermQuery(new Term(ATTRIBUTE_VALUE_FIELD, attributeName + attributeValue )),
                 BooleanClause.Occur.SHOULD
         );
         productAttrVal.add(
-                new TermQuery(new Term(SKU_ATTRIBUTE_VALUE_FIELD, attributeValue)),
+                new TermQuery(new Term(SKU_ATTRIBUTE_VALUE_FIELD, attributeName + attributeValue )),
                 BooleanClause.Occur.SHOULD
         );
         query.add(productAttrVal, BooleanClause.Occur.MUST);
@@ -216,16 +216,16 @@ public class AttributiveSearchQueryBuilderImpl extends ProductsInCategoryQueryBu
         productAttrValueRange.add(
                 new TermRangeQuery(
                         ATTRIBUTE_VALUE_FIELD,
-                        attributeValueLo,
-                        attributeValueHi,
+                        attributeName + attributeValueLo,
+                        attributeName + attributeValueHi,
                         true, true), // inclusive search
                 BooleanClause.Occur.SHOULD
         );
         productAttrValueRange.add(
                 new TermRangeQuery(
                         SKU_ATTRIBUTE_VALUE_FIELD,
-                        attributeValueLo,
-                        attributeValueHi,
+                        attributeName + attributeValueLo ,
+                        attributeName + attributeValueHi ,
                         true, true), // inclusive search
                 BooleanClause.Occur.SHOULD
         );

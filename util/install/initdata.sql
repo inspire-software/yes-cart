@@ -94,7 +94,7 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, E
 
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)  VALUES (  1050,  'CUSTOMER_PHONE',  1,  NULL,  'Phone',  'Phone', 1007,  1006);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)  VALUES (  1051,  'MARKETING_MAIL_ALLOWED',  0,  NULL,  'Marketing email',  'True in case if marketing email allowed', 1007,  1008);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)  VALUES (  1051,  'MARKETING_MAIL_ALLOWED',  0,  NULL,  'Marketing email',  'True in case if marketing email allowed', 1007,  1006);
 
 
 
@@ -104,12 +104,6 @@ INSERT INTO TPRODUCTTYPE (PRODUCTTYPE_ID , NAME, DESCRIPTION, UISEARCHTEMPLATE, 
 INSERT INTO TPRODUCTTYPEATTR(PRODTYPEATTR_ID, CODE, PRODUCTTYPE_ID, RANK, VISIBLE, SIMULARITY, NAV, NAV_TYPE, RANGE_NAV)  VALUES (50000,          'WEIGHT',          500,      70 ,   1,         1,        1, 'R' ,
 '<rangeList serialization="custom"><unserializable-parents/><list><default><size>10</size></default><int>10</int><range><range><first class="string">0.10</first><second class="string">1.00</second></range></range><range><range><first class="string">1.00</first><second class="string">2.00</second></range></range><range><range><first class="string">2.00</first><second class="string">3.00</second></range></range><range><range><first class="string">3.00</first><second class="string">4.00</second></range></range><range><range><first class="string">4.00</first><second class="string">5.00</second></range></range><range><range><first class="string">5.00</first><second class="string">6.00</second></range></range><range><range><first class="string">6.00</first><second class="string">7.00</second></range></range><range><range><first class="string">7.00</first><second class="string">8.00</second></range></range><range><range><first class="string">8.00</first><second class="string">10.00</second></range></range><range><range><first class="string">10.00</first><second class="string">20.00</second></range></range></list></rangeList>'
 );
-
-INSERT INTO TAVAILABILITY ( AVAILABILITY_ID,NAME,DESCRIPTION) VALUES (1,'In stock','Show id available in stock');
-INSERT INTO TAVAILABILITY ( AVAILABILITY_ID,NAME,DESCRIPTION) VALUES (2,'Preorder','Pre order' );
-INSERT INTO TAVAILABILITY ( AVAILABILITY_ID,NAME,DESCRIPTION) VALUES (4,'Back order','Back order' );
-INSERT INTO TAVAILABILITY ( AVAILABILITY_ID,NAME,DESCRIPTION) VALUES (8,'Always','Available at any time' );
-
 
 
 INSERT INTO TNPASYSTEM (NPASYSTEM_ID, CODE, NAME, DESCRIPTION)  VALUES (100,'NPASYSTEM','Yes e-commerce platform', 'System table');

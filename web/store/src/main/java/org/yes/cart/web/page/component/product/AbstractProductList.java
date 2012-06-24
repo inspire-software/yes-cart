@@ -99,6 +99,20 @@ public abstract class AbstractProductList extends BaseComponent {
      */
     @Override
     protected void onBeforeRender() {
+        final Category category;
+        final long categ_id = WicketUtil.getCategoryId(getPage().getPageParameters());
+        if (categ_id > 0) {
+            Category ccandidate = categoryService.getById(categ_id);
+            if (ccandidate == null) {
+                category = categoryService.getRootCategory();
+            } else {
+                category = ccandidate;
+            }
+        } else {
+            category = categoryService.getRootCategory();
+        }
+
+
         add(
                 new ListView<Product>(PRODUCT_LIST, getProductListToShow()) {
                     protected void populateItem(ListItem<Product> listItem) {
@@ -110,8 +124,8 @@ public abstract class AbstractProductList extends BaseComponent {
                                 categoryService,
                                 prod,
                                 WicketUtil.getHttpServletRequest().getContextPath(),
-                                false);
-                        final Category category = categoryService.getRootCategory();
+                                false,
+                                productService.getDefaultImage(prod.getProductId()));
 
                         final String[] size = productDecorator.getThumbnailImageSize(category);
 

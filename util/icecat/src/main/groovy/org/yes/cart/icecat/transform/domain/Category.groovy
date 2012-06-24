@@ -36,10 +36,14 @@ class Category {
     public String toProductTypeAttr() {       //TPRODUCTTYPEATTR & TATTRIBUTE
         StringBuilder builder = new StringBuilder();
         for (CategoryFeatureGroup cfg : categoryFeatureGroup) {
+
             for(Feature feature : cfg.featureList) {
+
+                final String attributeName = feature.Name.replace(";", " ").replace('"', "\\\"").replace(',', " ");
+
                 builder.append(name == null ? id : name)
                 builder.append(";")
-                builder.append(feature.Name.replace(";", " ").replace('"', "\\\"").replace(',', " "));
+                builder.append(attributeName);
                 builder.append(";");
                 builder.append(feature.Mandatory);
                 builder.append(";");
@@ -47,12 +51,31 @@ class Category {
                 builder.append(";");
                 builder.append(  ((name == null ? id : name) + feature.Name).hashCode() );
                 builder.append(";");
-                if (feature.Name.replace(";", " ").replace('"', "\\\"").replace(',', " ")) {
+
+                if (isFilteredNavigation(attributeName)) {
+                    builder.append("true");
+                }   else {
+                    builder.append("false");
+                }
+                builder.append(";");
+
+
+                if (isRangeNavigation(attributeName)) {
                     builder.append("R");
                 } else {
                     builder.append("S");
                 }
                 builder.append(";");
+
+                if (isRangeNavigation(attributeName)) {
+                    builder.append(getRangeNavigationXml(attributeName));
+                }   else {
+                    builder.append("\"\"");
+
+                }
+                builder.append(";");
+
+
 
                 builder.append("\n")
             }
@@ -61,29 +84,38 @@ class Category {
         return builder.toString();
     }
 
-    /*
-    * Дисплей
-Диагональ экрана
-Разрешение экрана
+    def navigableMap = [
+            "Дисплей" : 120,
+            "Диагональ экрана" : 100,
+            "Разрешение экрана" : 110,
+            "Вес" : 200,
+            "Емкость батареи" : 250,
+            "Емкость жесткого диска" : 60,
+            "Оперативная память" : 50,
+            "Семейство процессоров" : 10,
+            "Тактовая частота процессора" : 20,
+            "Тип оптического привода" : 300,
+            "Цвет продукта" : 400
+    ];
 
-Вес
+    private boolean isFilteredNavigation(String name) {
+        return navigableMap.get(name) != null;
+    }
 
-Емкость батареи
 
-Емкость жесткого диска
-
-Оперативная память
-
-Семейство процессоров
-
-Тактовая частота процессора
-
-Тип оптического привода
-
-Цвет продукта*/
 
     private boolean isRangeNavigation(String name) {
-        return "Вес".equals(name) ||   "Weight".equals(name)
+        return  "Вес".equals(name) ||   "Weight".equals(name)
+
+    }
+
+    private String getRangeNavigationXml(String name) {
+        if ("Вес".equals(name) ) {
+            return '<rangeList serialization="custom"><unserializable-parents/><list><default><size>8</size></default><int>8</int><range><range><first class="string">1200 г</first><second class="string">1500 г</second></range></range><range><range><first class="string">1500 г</first><second class="string">1800 г</second></range></range><range><range><first class="string">1800 г</first><second class="string">2000 г</second></range></range><range><range><first class="string">2000 г</first><second class="string">2500 г</second></range></range><range><range><first class="string">2500 г</first><second class="string">3000 г</second></range></range><range><range><first class="string">3000 г</first><second class="string">3500 г</second></range></range><range><range><first class="string">3500 г</first><second class="string">4000 г</second></range></range><range><range><first class="string">4000 г</first><second class="string">5000 г</second></range></range></list></rangeList>'
+        }   else if ("Weight".equals(name)) {
+           return  ''
+        }
+        return ''
 
     }
 
@@ -111,6 +143,10 @@ class Category {
                 builder.append(feature.Name);
                 builder.append(",");
             }
+            builder.append(";")
+            builder.append((((name == null ? id : name)) + cfg.Name).hashCode())
+            builder.append(";")
+
             builder.append("\n")
         }
         return builder.toString();

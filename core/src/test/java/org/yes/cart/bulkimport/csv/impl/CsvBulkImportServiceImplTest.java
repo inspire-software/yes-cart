@@ -60,11 +60,10 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
     public void csvFileReaderTest() throws Exception {
 
         ArrayList<String> allowedValue =  new ArrayList<String>();
-        allowedValue.add("HP Pavilion g6-1330eb");
-        allowedValue.add("Lenovo ThinkPad Edge E530");
-        allowedValue.add("Fujitsu LIFEBOOK T731");
-        allowedValue.add("Samsung 3 Series 305E5A-A01");
-        allowedValue.add("Acer TravelMate 5744-484G50MNKK");
+        allowedValue.add("HP ProBook 6560b");
+        allowedValue.add("HP EliteBook Ноутбук HP EliteBook 2560p");
+        allowedValue.add("HP Pavilion dv7-6b80eb");
+        allowedValue.add("Toshiba Qosmio X770-13G");
         CsvFileReader csvFileReader = new CsvFileReaderImpl();
 
         csvFileReader.open(
@@ -101,20 +100,6 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
             System.out.println("brands " + (new Date().getTime() - dt.getTime()));
 
-            dt = new Date();
-            bulkImportService = getBulkImportService("src/test/resources/import/category.xml");
-            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
-            System.out.println("category " + (new Date().getTime() - dt.getTime()));
-
-           dt = new Date();
-            bulkImportService = getBulkImportService("src/test/resources/import/shopcategory.xml");
-            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
-            System.out.println("shopcategory " + (new Date().getTime() - dt.getTime()));
-
-            dt = new Date();
-            bulkImportService = getBulkImportService("src/test/resources/import/availability.xml");
-            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
-            System.out.println("availability " + (new Date().getTime() - dt.getTime()));
 
             dt = new Date();
             bulkImportService = getBulkImportService("src/test/resources/import/attribute.xml");
@@ -133,9 +118,43 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
 
             dt = new Date();
+            bulkImportService = getBulkImportService("src/test/resources/import/category.xml");
+            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+            System.out.println("category " + (new Date().getTime() - dt.getTime()));
+
+
+            ResultSet rs = getConnection().getConnection().createStatement().executeQuery ("select * from TPRODUCTTYPE where name = 'ноутбуки'   ");
+            rs.next();
+            long prodtype_id = rs.getLong("PRODUCTTYPE_ID");
+            rs.close();
+
+            rs = getConnection().getConnection().createStatement().executeQuery("select * from TCATEGORY where PRODUCTTYPE_ID =   " + prodtype_id)  ;
+            rs.next(); // the product type was imported
+            rs.close();
+
+           dt = new Date();
+            bulkImportService = getBulkImportService("src/test/resources/import/shopcategory.xml");
+            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+            System.out.println("shopcategory " + (new Date().getTime() - dt.getTime()));
+
+            dt = new Date();
+            bulkImportService = getBulkImportService("src/test/resources/import/availability.xml");
+            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+            System.out.println("availability " + (new Date().getTime() - dt.getTime()));
+
+            dt = new Date();
             bulkImportService = getBulkImportService("src/test/resources/import/productypeattributeviewgroup.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
             System.out.println("productypeattributeviewgroup.xml " + (new Date().getTime() - dt.getTime()));
+
+             rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TPRODTYPEATTRVIEWGROUP  ");
+            rs.next();
+            long cnt = rs.getLong(1);
+            assertEquals("181 view group configured per all types" , 182, cnt );
+            rs.close();
+
+
+
 
             dt = new Date();
             bulkImportService = getBulkImportService("src/test/resources/import/producttypeattr.xml");

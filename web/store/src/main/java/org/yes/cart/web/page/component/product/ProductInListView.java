@@ -14,6 +14,7 @@ import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.PriceService;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.HomePage;
@@ -64,6 +65,9 @@ public class ProductInListView extends BaseComponent {
     @SpringBean(name = ServiceSpringKeys.IMAGE_SERVICE)
     protected ImageService imageService;
 
+    @SpringBean(name = ServiceSpringKeys.PRODUCT_SERVICE)
+    protected ProductService productService;
+
 
     private final String [] defImgSize;
 
@@ -83,13 +87,15 @@ public class ProductInListView extends BaseComponent {
         } else {
             this.category = category;
         }
+        final String defaultImageAttributeValue = productService.getDefaultImage(product.getProductId());
         this.product = ProductDecoratorImpl.createProductDecoratorImpl(
                 imageService,
                 attributableImageService,
                 categoryService,
                 product,
                 WicketUtil.getHttpServletRequest().getContextPath(),
-                false);
+                false,
+                defaultImageAttributeValue);
         this.defImgSize = defImgSize;
 
     }
@@ -122,6 +128,8 @@ public class ProductInListView extends BaseComponent {
                         new Label(NAME_LABEL, product.getName())
                 )
         );
+
+
 
         add(
                 new BookmarkablePageLink<HomePage>(PRODUCT_LINK_IMAGE, HomePage.class, linkToProductParameters).add(

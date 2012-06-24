@@ -239,7 +239,7 @@ public class ProductDAOTest extends AbstractTestDAO {
         QueryParser qp = new QueryParser(Version.LUCENE_31, "", new AsIsAnalyzer());
         Query parsed = qp.parse("productCategory.category:101 productCategory.category:200 "
                 + "+(attribute.attribute:MATERIAL sku.attribute.attribute:MATERIAL) "
-                + "+(attribute.val:metal          sku.attribute.val:metal)");
+                + "+(attribute.val:MATERIALmetal          sku.attribute.val:MATERIALmetal)");
 
         List rez =  productDao.fullTextSearch(
                 parsed
@@ -575,7 +575,7 @@ public class ProductDAOTest extends AbstractTestDAO {
     public void testGetRankedUniqueCodeAttribvaluesTest() {
         int currentRank = Integer.MIN_VALUE;
         List<Object[]> list = productDao.findQueryObjectsByNamedQuery("PRODUCTS.ATTR.CODE.VALUES.BY.PRODUCTTYPEID",
-                1L);
+                1L, true);
         assertNotNull(list);
         assertTrue(!list.isEmpty());
         // be sure, that list is ranked

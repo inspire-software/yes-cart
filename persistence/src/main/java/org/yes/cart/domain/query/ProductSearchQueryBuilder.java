@@ -34,7 +34,8 @@ public interface ProductSearchQueryBuilder {
     public final static String PRODUCT_PRICE_CURRENCY = "sku.skuPrice.currency";
     
     //can be used in sort order
-    public final static String PRODUCT_PRICE_AMOUNT = "sku.skuPrice.regularPrice";
+    //public final static String PRODUCT_PRICE_AMOUNT = "sku.skuPrice.regularPrice";
+    public final static String PRODUCT_PRICE_AMOUNT = "sku.skuPrice";
     public final static String PRODUCT_PRICE_SHOP = "sku.skuPrice.shop";
 
     //aggregated index in SHOPID_CURRENCY_PRICE format

@@ -9,6 +9,7 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.util.CollectionUtils;
 import org.yes.cart.cache.Cacheable;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
@@ -36,17 +37,29 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     private final GenericDAO<ProductSku, Long> productSkuDao;
     private final GenericDAO<ProductType, Long> productTypeDao;
     private final GenericDAO<ProductCategory, Long> productCategoryDao;
+    private final GenericDAO<ProductTypeAttr, Long> productTypeAttrDao;
     private final Random rand;
 
+    /**
+     * Construct product service.
+     *
+     * @param productDao         product dao
+     * @param productSkuDao      product sku dao
+     * @param productTypeDao     product type dao to deal with type information
+     * @param productCategoryDao category dao to work with category nformation
+     * @param productTypeAttrDao product type attributes need to work with range navigation
+     */
     public ProductServiceImpl(final GenericDAO<Product, Long> productDao,
                               final GenericDAO<ProductSku, Long> productSkuDao,
                               final GenericDAO<ProductType, Long> productTypeDao,
-                              final GenericDAO<ProductCategory, Long> productCategoryDao) {
+                              final GenericDAO<ProductCategory, Long> productCategoryDao,
+                              final GenericDAO<ProductTypeAttr, Long> productTypeAttrDao) {
         super(productDao);
         this.productDao = productDao;
         this.productSkuDao = productSkuDao;
         this.productTypeDao = productTypeDao;
         this.productCategoryDao = productCategoryDao;
+        this.productTypeAttrDao = productTypeAttrDao;
         rand = new Random();
         rand.setSeed((new Date().getTime()));
     }
@@ -77,6 +90,28 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     @Cacheable(value = PROD_SERV_METHOD_CACHE)
     public ProductSku getSkuById(final Long skuId) {
         return productSkuDao.findById(skuId);
+    }
+
+
+    /**
+     * Get default image file name by given product.
+     *
+     * @param productId given id, which identify product
+     * @return image file name if found.
+     */
+    @Cacheable(value = PROD_SERV_METHOD_CACHE)
+    public String getDefaultImage(final Long productId) {
+        final Object obj = productDao.findQueryObjectsByNamedQuery("PRODUCT.ATTR.VALUE", productId, Constants.PRODUCT_DEFAULT_IMAGE_ATTR_NAME);
+        if (obj instanceof List) {
+            final List<Object> rez = (List<Object>) obj;
+            if (rez.isEmpty()) {
+                return null;
+            }
+            return (String) rez.get(0);
+        }
+        return (String) obj;
+
+
     }
 
 
@@ -135,7 +170,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     private List<AttrValue> getProductAttributeValues(
             final Collection<AttrValue> attrValueCollection,
             final ProdTypeAttributeViewGroup viewGroup) {
-              //todo need sorted collection and fast search
+        //todo need sorted collection and fast search
 
         final String[] attributesNames = viewGroup.getAttrCodeList().split(",");
         final List<AttrValue> attrNameValues = new ArrayList<AttrValue>(attributesNames.length);
@@ -355,34 +390,51 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     }
 
     /**
+     * Collect the single attribute value navigation see ProductTypeAttr#navigationType
+     *
+     * @param productTypeId product type id
+     * @return list of {@link FiteredNavigationRecord}
+     */
+    public List<FiteredNavigationRecord> getSingleValueNavigationRecords(final long productTypeId) {
+        List<Object[]> list = productDao.findQueryObjectsByNamedQuery(
+                "PRODUCTS.ATTR.CODE.VALUES.BY.PRODUCTTYPEID",
+                productTypeId,
+                true);
+        return constructFilteredNavigationRecords(list);
+    }
+
+
+    /**
      * Get the navigation records for range values.
      *
      * @param productTypeId product type id
      * @return list of {@link FiteredNavigationRecord}
      */
-    private List<FiteredNavigationRecord> getRangeValueNavigationRecords(final long productTypeId) {
+    public List<FiteredNavigationRecord> getRangeValueNavigationRecords(final long productTypeId) {
 
-        final ProductType productType = productTypeDao.findById(productTypeId);
+        final List<ProductTypeAttr> rangeNavigationInType = productTypeAttrDao.findByNamedQuery(
+                "PRODUCTS.RANGE.ATTR.CODE.VALUES.BY.PRODUCTTYPEID",
+                productTypeId,
+                true);
+
 
         final List<FiteredNavigationRecord> records = new ArrayList<FiteredNavigationRecord>();
 
-        for (ProductTypeAttr entry : productType.getAttribute()) {
-            if ("R".equals(entry.getNavigationType())) {
-                RangeList<RangeNode> rangeList = entry.getRangeList();
-                if (rangeList != null) {
-                    for (RangeNode node : rangeList) {
-                        records.add(
-                                new FiteredNavigationRecordImpl(
-                                        entry.getAttribute().getName(),
-                                        entry.getAttribute().getCode(),
-                                        node.getRange().getFirst() + '-' + node.getRange().getSecond(),
-                                        node.getRange().getFirst() + '-' + node.getRange().getSecond(),
-                                        0,
-                                        entry.getRank(),
-                                        "R"
-                                )
-                        );
-                    }
+        for (ProductTypeAttr entry : rangeNavigationInType) {
+            RangeList<RangeNode> rangeList = entry.getRangeList();
+            if (rangeList != null) {
+                for (RangeNode node : rangeList) {
+                    records.add(
+                            new FiteredNavigationRecordImpl(
+                                    entry.getAttribute().getName(),
+                                    entry.getAttribute().getCode(),
+                                    node.getRange().getFirst() + '-' + node.getRange().getSecond(),
+                                    node.getRange().getFirst() + '-' + node.getRange().getSecond(),
+                                    0,
+                                    entry.getRank(),
+                                    "R"
+                            )
+                    );
                 }
             }
         }
@@ -412,20 +464,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
 
         }
         return result;
-    }
-
-
-    /**
-     * Collect the single attribute value navigation see ProductTypeAttr#navigationType
-     *
-     * @param productTypeId product type id
-     * @return list of {@link FiteredNavigationRecord}
-     */
-    private List<FiteredNavigationRecord> getSingleValueNavigationRecords(final long productTypeId) {
-        List<Object[]> list = productDao.findQueryObjectsByNamedQuery(
-                "PRODUCTS.ATTR.CODE.VALUES.BY.PRODUCTTYPEID",
-                productTypeId);
-        return constructFilteredNavigationRecords(list);
     }
 
 

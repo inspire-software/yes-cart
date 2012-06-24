@@ -54,7 +54,8 @@ public class SkuAttributesView extends BaseComponent {
 
         final long productTypeId = sku.getProduct().getProducttype().getId();
 
-        List<Pair<String, List<AttrValue>>> productAttributes = productService.getProductAttributes(sku.getProduct(), productTypeId);
+        List<Pair<String, List<AttrValue>>> productAttributes = productService.getProductAttributes(
+                productService.getProductById(sku.getProduct().getProductId(), true) , productTypeId);
         if (productOnly) {
             attributesToShow = getAdaptedAttributes(productAttributes);
         } else {
