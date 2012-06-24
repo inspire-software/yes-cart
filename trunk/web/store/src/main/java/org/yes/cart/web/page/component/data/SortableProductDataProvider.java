@@ -83,7 +83,8 @@ public class SortableProductDataProvider extends SortableDataProvider<ProductDec
                             categoryService,
                             product,
                             WicketUtil.getHttpServletRequest().getContextPath(),
-                            false)
+                            false,
+                            productService.getDefaultImage(product.getProductId()))
             );
         }
         return rez;

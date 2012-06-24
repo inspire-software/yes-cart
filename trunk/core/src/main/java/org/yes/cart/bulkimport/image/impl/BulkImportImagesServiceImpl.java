@@ -2,6 +2,7 @@ package org.yes.cart.bulkimport.image.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Hibernate;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.yes.cart.bulkimport.service.BulkImportImagesService;
 import org.yes.cart.bulkimport.service.impl.AbstractImportService;
 import org.yes.cart.constants.Constants;
@@ -37,9 +38,11 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
 
     private final String filePatterntRegExp;
 
-    private  String pathToRepository;
+    private String pathToRepository;
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setPathToRepository(final String pathToRepository) {
         this.pathToRepository = pathToRepository;
     }
@@ -77,15 +80,15 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
      * {@inheritDoc}
      */
     public BulkImportResult doImport(final StringBuilder errorReport, final Set<String> importedFiles,
-                         final String fileName, final String importFolder) {
+                                     final String fileName, final String importFolder) {
         errorReport.append(MessageFormat.format(
                 "\nINFO start images import with {0} path and {1} file mask",
                 pathToImportFolder,
                 regExp));
         File[] files = getFilesToImport(
-                StringUtils.isNotBlank(importFolder)?importFolder:pathToImportFolder,
-                        filePatterntRegExp,
-                        fileName);
+                StringUtils.isNotBlank(importFolder) ? importFolder : pathToImportFolder,
+                filePatterntRegExp,
+                fileName);
         if (files != null) {
             errorReport.append(MessageFormat.format(
                     "\nINFO found {0} images to import",
@@ -179,8 +182,15 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
                 errorReport.append(MessageFormat.format("\nINFO file {0} attached as {1} to product {2}", fileName, attributeCode, product.getCode()));
             }
         }
-        genericDAO.saveOrUpdate(product);
-        return true;
+        try {
+            genericDAO.saveOrUpdate(product);
+            return true;
+
+        } catch (DataIntegrityViolationException e) {
+            errorReport.append(MessageFormat.format("\nWARINIG image {0} for product with code {1} not found.", fileName, product.getCode()));
+            return false;
+
+        }
     }
 
     /**
@@ -223,8 +233,13 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
 
             }
         }
-        genericDAO.saveOrUpdate(productSku);
-        return true;
+        try {
+            genericDAO.saveOrUpdate(productSku);
+            return true;
+        } catch (DataIntegrityViolationException e) {
+            errorReport.append(MessageFormat.format("\nWARINIG image {0} for product sku with code {1} not found.", fileName, productSku.getCode()));
+            return false;
+        }
     }
 
     private Attribute getAttribute(final String code) {

@@ -20,12 +20,14 @@ public interface AttributableImageService {
      * @param width                  image width
      * @param height                 image height.
      * @param attrName given image attribute name
+     * @param attrVal optional attrValue, if it not provided service will try to get value from attributes
      * @return default context image url.
      */
     String getImage(Attributable attributable,
                     String httpServletContextPath,
                     String width,
                     String height,
-                    String attrName);
+                    String attrName,
+                    String attrVal);
 
 }

@@ -98,7 +98,8 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
                 httpServletContextPath,
                 width,
                 height,
-                imageAttributeName);
+                imageAttributeName,
+                null);
     }
 
 
@@ -111,10 +112,12 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
                     this,
                     httpServletContextPath,
                     width,
-                    height, getDefaultImageAttributeName());
+                    height, getDefaultImageAttributeName(),
+                    null);
         }
         return productImageUrl;
     }
+
 
     /**
      * {@inheritDoc}

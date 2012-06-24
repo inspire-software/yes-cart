@@ -193,6 +193,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
                     rez[idx] = null;
 
                 }
+                idx ++;
 
 
             }
@@ -348,6 +349,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
+    @Cacheable(value = CACHE_NAME)
     public List<Long> transform(final Collection<Category> categories) {
         List<Long> result = new ArrayList<Long>(categories.size());
         for (Category category : categories) {

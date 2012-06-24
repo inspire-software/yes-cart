@@ -2,12 +2,14 @@ package org.yes.cart.service.domain.impl;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.quartz.SimpleTrigger;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.queryobject.FiteredNavigationRecord;
 import org.yes.cart.service.domain.*;
 
 import java.math.BigDecimal;
@@ -50,6 +52,15 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
         assertFalse(product.getSku().isEmpty());
         //code the same
         assertEquals(product.getCode(), product.getSku().iterator().next().getCode());
+    }
+
+    @Test
+    public void testGetRangeValueNavigationRecords() {
+
+        List<FiteredNavigationRecord> rez = productService.getRangeValueNavigationRecords(1);
+
+        assertEquals("Ten range naviration records was configured for 32 type", 10, rez.size());
+
     }
 
     @Test
@@ -239,7 +250,7 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
         List<Product> rezLimit = productService.getFeaturedProducts(shopCategoryIds, 2);
         assertNotNull(rezLimit);
         try {
-            dumpDataBase("x2x2", new String[] {"TPRODUCT"});
+            dumpDataBase("x2x2", new String[]{"TPRODUCT"});
         } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -263,4 +274,12 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
         }
         assertTrue(expectedProductCodes.isEmpty());
     }
+
+    @Test
+    public void testGetDefaultImage() {
+       assertEquals("sobot-picture.jpeg", productService.getDefaultImage(10000L));
+       assertNull("sobot-picture.jpeg", productService.getDefaultImage(9999L));
+
+    }
+
 }

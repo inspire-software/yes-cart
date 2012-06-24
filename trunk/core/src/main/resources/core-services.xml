@@ -71,6 +71,7 @@
                 <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="productSkuDao"/>
                 <constructor-arg index="2" type="org.yes.cart.dao.GenericDAO" ref="productTypeDao"/>
                 <constructor-arg index="3" type="org.yes.cart.dao.GenericDAO" ref="productCategoryDao"/>
+                <constructor-arg index="4" type="org.yes.cart.dao.GenericDAO" ref="productTypeAttrDao"/>
             </bean>
         </property>
     </bean>

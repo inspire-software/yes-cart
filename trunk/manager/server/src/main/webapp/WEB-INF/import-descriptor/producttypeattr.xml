@@ -37,6 +37,27 @@
             <lookupQuery>select b from AttributeEntity b where b.code = ?1</lookupQuery>
         </column-descriptor>
 
+        <column-descriptor>
+            <columnIndex>5</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>navigation</name>
+            <regExp>(.*)</regExp>
+        </column-descriptor>
+
+        <column-descriptor>
+            <columnIndex>6</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>navigationType</name>
+            <regExp>(.*)</regExp>
+        </column-descriptor>
+
+        <column-descriptor>
+            <columnIndex>7</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>rangeNavigation</name>
+            <regExp>(.*)</regExp>
+        </column-descriptor>
+
 
 
     </importColumns>

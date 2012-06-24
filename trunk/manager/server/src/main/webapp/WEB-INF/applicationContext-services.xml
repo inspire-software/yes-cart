@@ -465,11 +465,11 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
             <list>
 
                 <value>brandimport.xml</value>
-                <value>category.xml</value>
-                <value>shopcategory.xml</value>
                 <value>attribute.xml</value>  <!--product attributes only, sku and rest attributes import not implemented-->
                 <value>attributeviewgroup.xml</value>  <!-- group of attributes -->
                 <value>product_type.xml</value>  <!-- product types -->
+                <value>category.xml</value>
+                <value>shopcategory.xml</value>
                 <value>productypeattributeviewgroup.xml</value>  <!-- attributes view groups for product types -->
                 <value>producttypeattr.xml</value>  <!-- attribute  for product types -->
                 <value>product.xml</value>  <!-- products and description -->

@@ -1464,6 +1464,18 @@ public void setRangeList(final RangeList rangeList) {
         this.producttypeId = producttypeId;
     }
 
+    @Transient
+    public ProductTypeAttr getAttributeByCode(final String attributeCode) {
+        if (this.attribute != null) {
+            for (ProductTypeAttr attr : this.attribute) {
+                if (attr.getAttribute() != null && attr.getAttribute().getCode() != null && attr.getAttribute().getCode().equals(attributeCode)) {
+                    return attr;
+                }
+            }
+        }
+        return null;
+    }
+
                 ]]>
             </meta>
 
@@ -1786,7 +1798,9 @@ public void setRangeList(final RangeList rangeList) {
     public Map<String, AttrValue> getAllAttibutesAsMap() {
         final Map<String, AttrValue> rez = new HashMap<String, AttrValue>();
         for (AttrValue attrValue : getAllAttibutes()) {
-            rez.put(attrValue.getAttribute().getCode(), attrValue);
+            if (attrValue != null && attrValue.getAttribute() != null) {
+                rez.put(attrValue.getAttribute().getCode(), attrValue);
+            }
         }
         return rez;
     }
@@ -2030,7 +2044,9 @@ public void setRangeList(final RangeList rangeList) {
     public Map<String, AttrValue> getAllAttibutesAsMap() {
         final Map<String, AttrValue> rez = new HashMap<String, AttrValue>();
         for (AttrValue attrValue : getAllAttibutes()) {
-            rez.put(attrValue.getAttribute().getCode(), attrValue);
+            if (attrValue != null && attrValue.getAttribute() != null) {
+                rez.put(attrValue.getAttribute().getCode(), attrValue);
+            }
         }
         return rez;
     }
@@ -2298,7 +2314,9 @@ public void setRangeList(final RangeList rangeList) {
     public Map<String, AttrValue> getAllAttibutesAsMap() {
         final Map<String, AttrValue> rez = new HashMap<String, AttrValue>();
         for (AttrValue attrValue : getAllAttibutes()) {
-            rez.put(attrValue.getAttribute().getCode(), attrValue);
+            if (attrValue != null && attrValue.getAttribute() != null) {
+                rez.put(attrValue.getAttribute().getCode(), attrValue);
+            }
         }
         return rez;
     }
@@ -4592,6 +4610,15 @@ public void setRangeList(final RangeList rangeList) {
     </query>
 
 
+    <query name="PRODUCT.ATTR.VALUE">
+        <![CDATA[
+       select pav.val
+       from  AttrValueEntityProduct pav
+            where  pav.product.productId = ?1
+            and pav.attribute.code = ?2
+       ]]>
+    </query>
+
     <query name="PRODUCTS.ATTR.CODE.VALUES.BY.PRODUCTTYPEID">
         <![CDATA[
        select a.attribute.name, a.attribute.code, a.val, a.displayVal, 0, pta.rank
@@ -4601,8 +4628,20 @@ public void setRangeList(final RangeList rangeList) {
             and pta.producttype.producttypeId = ?1
             and pta.attribute.code = a.attribute.code
             and pta.navigationType = 'S'
-            group by a.attribute.name, a.attribute.code, a.val, a.displayVal, pta.rank 
+            and pta.navigation = ?2
+            group by a.attribute.name, a.attribute.code, a.val, a.displayVal, pta.rank
             order by pta.rank, a.attribute.name, a.val
+       ]]>
+    </query>
+
+      <query name="PRODUCTS.RANGE.ATTR.CODE.VALUES.BY.PRODUCTTYPEID">
+        <![CDATA[
+       select pta
+       from  ProductTypeAttrEntity pta
+            where pta.producttype.producttypeId = ?1
+            and pta.navigationType = 'R'
+            and pta.navigation = ?2
+            order by pta.rank
        ]]>
     </query>
 

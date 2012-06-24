@@ -14,10 +14,7 @@ import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.support.entity.decorator.ProductDecorator;
 import org.yes.cart.web.support.service.AttributableImageService;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
@@ -62,9 +59,10 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
     private final AttributableImageService attributableImageService;
     private final CategoryService categoryService;
     private final String httpServletContextPath;
-    private String productImageUrl;
+    private final HashMap<String, String> productImageUrl;
     private final ImageService imageService;
     private final Map<String, AttrValue> attrValueMap;
+    private final String defaultImageAttributeValue;
 
     /**
      * Construct entity decorator.
@@ -81,14 +79,16 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
             final CategoryService categoryService,
             final Product productEntity,
             final String httpServletContextPath,
-            final boolean withAttributes) {
+            final boolean withAttributes,
+            final String defaultImageAttributeValue) {
 
         BeanUtils.copyProperties(productEntity, this);
         this.httpServletContextPath = httpServletContextPath;
         this.attributableImageService = attributableImageService;
         this.categoryService = categoryService;
-        this.productImageUrl = null;
+        this.productImageUrl = new HashMap<String, String>();
         this.imageService = imageService;
+        this.defaultImageAttributeValue = defaultImageAttributeValue;
         if (withAttributes) {
             this.attrValueMap = getAllAttibutesAsMap();
         } else {
@@ -107,13 +107,24 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
             final CategoryService categoryService,
             final Product productEntity,
             final String httpServletContextPath,
-            final boolean withAttributes) {
+            final boolean withAttributes,
+            final String defaultImageAttributeValue) {
 
         final String key = httpServletContextPath + productEntity.getProductId() + withAttributes;
 
         ProductDecoratorImpl rez = productDecoratorCache.get(key);
+
         if (rez == null) {
-            rez = new ProductDecoratorImpl(imageService, attributableImageService, categoryService, productEntity, httpServletContextPath, withAttributes);
+
+            rez = new ProductDecoratorImpl(
+                    imageService,
+                    attributableImageService,
+                    categoryService,
+                    productEntity,
+                    httpServletContextPath,
+                    withAttributes,
+                    defaultImageAttributeValue);
+
             productDecoratorCache.put(key, rez);
             final String seoId = "" + rez.getProductId();
             String seo = DecoratorUtil.encodeId(
@@ -181,24 +192,31 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
                 httpServletContextPath,
                 width,
                 height,
-                imageAttributeName);
+                imageAttributeName,
+                null);
     }
+
 
 
     /**
      * {@inheritDoc}
      */
     public String getDefaultImage(final String width, final String height) {
-        if (productImageUrl == null) {
-            productImageUrl = attributableImageService.getImage(
+        final String key = width + height;
+        String val = productImageUrl.get(key);
+        if (val == null) {
+            val = attributableImageService.getImage(
                     this,
                     httpServletContextPath,
                     width,
                     height,
-                    getDefaultImageAttributeName()
+                    getDefaultImageAttributeName() ,
+                    defaultImageAttributeValue
             );
+            productImageUrl.put(key, val);
+            return val;
         }
-        return productImageUrl;
+        return val;
     }
 
     /**

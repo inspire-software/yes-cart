@@ -95,16 +95,21 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
                 httpServletContextPath,
                 width,
                 height,
-                imageAttributeName);
+                imageAttributeName,
+                null);
     }
 
 
-    public String getDefaultImage(String width, String height) {
+    /**
+     * {@inheritDoc}
+     */
+    public String getDefaultImage(final String width, final String height) {
         if (categoryImageUrl == null) {
-            categoryImageUrl = categoryImageService.getImage(this, httpServletContextPath, width, height, null);
+            categoryImageUrl = categoryImageService.getImage(this, httpServletContextPath, width, height, null, null);
         }
         return categoryImageUrl;
     }
+
 
     /**
      * {@inheritDoc}
