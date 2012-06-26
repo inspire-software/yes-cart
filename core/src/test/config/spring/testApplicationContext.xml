@@ -21,9 +21,9 @@
         <property name="username" value="sa"/>
         <property name="password" value=""/>
         <property name="initialSize" value="50"/>
-        <property name="maxActive" value="600"/>
+        <property name="maxActive" value="1000"/>
         <property name="poolPreparedStatements" value="true"/>
-        <property name="maxOpenPreparedStatements" value="500"/>
+        <property name="maxOpenPreparedStatements" value="1000"/>
         <property name="defaultAutoCommit" value="true"/>
     </bean>
 

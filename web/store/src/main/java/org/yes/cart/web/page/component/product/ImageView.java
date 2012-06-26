@@ -4,6 +4,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.image.ContextImage;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -29,8 +31,10 @@ public class ImageView extends BaseComponent {
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     protected final static String DEFAULT_IMAGE = "defaultImage";
+    protected final static String DEFAULT_IMAGE_REF = "defaultImageRef";
     protected final static String ALT_IMAGE_LIST = "altImageList";
     protected final static String ALT_IMAGE = "altImage";
+    protected final static String ALT_IMAGE_REF = "altImageRef";
     // ------------------------------------- MARKUP IDs END   ---------------------------------- //
 
 
@@ -72,8 +76,7 @@ public class ImageView extends BaseComponent {
         final String height = defSize[1];
 
 
-
-        final String [] size = depictable.getThumbnailImageSize(category);
+        final String[] size = depictable.getThumbnailImageSize(category);
 
         final String tumbWidth = size[0];
         final String tumbHeight = size[1];
@@ -85,13 +88,18 @@ public class ImageView extends BaseComponent {
 
 
         add(
-                createSeoImage(
-                        new ContextImage(DEFAULT_IMAGE, defaultImageRelativePath)
-                                .add(
-                                        new AttributeModifier(HTML_WIDTH, width),
-                                        new AttributeModifier(HTML_HEIGHT, height)
-                                ),
-                        getSeoImage(filledImageAttributes, depictable.getDefaultImageAttributeName()))
+
+                new ExternalLink(DEFAULT_IMAGE_REF, depictable.getDefaultImage("as", "is"))
+                        .add(
+                                createSeoImage(
+                                        new ContextImage(DEFAULT_IMAGE, defaultImageRelativePath)
+                                                .add(
+                                                        new AttributeModifier(HTML_WIDTH, width),
+                                                        new AttributeModifier(HTML_HEIGHT, height)
+                                                ),
+                                        getSeoImage(filledImageAttributes, depictable.getDefaultImageAttributeName()))
+
+                        )
 
         );
 
@@ -100,16 +108,22 @@ public class ImageView extends BaseComponent {
 
                     @Override
                     protected void populateItem(ListItem<Pair<String, String>> pairListItem) {
+
                         final Pair<String, String> pair = pairListItem.getModelObject();
-                        final String altImageRelativePath = depictable.getImage(tumbWidth, tumbHeight, pair.getFirst());
+
+
                         pairListItem.add(
-                                createSeoImage(
-                                        new ContextImage(ALT_IMAGE, altImageRelativePath)
-                                                .add(
-                                                        new AttributeModifier(HTML_WIDTH, tumbWidth),
-                                                        new AttributeModifier(HTML_HEIGHT, tumbHeight)
-                                                ),
-                                        getSeoImage(filledImageAttributes, pair.getFirst()))
+                                new ExternalLink(ALT_IMAGE_REF, depictable.getImage("as", "is", pair.getFirst()))
+                                        .add(
+                                                createSeoImage(
+                                                        new ContextImage(ALT_IMAGE, depictable.getImage(tumbWidth, tumbHeight, pair.getFirst()))
+                                                                .add(
+                                                                        new AttributeModifier(HTML_WIDTH, tumbWidth),
+                                                                        new AttributeModifier(HTML_HEIGHT, tumbHeight)
+                                                                ),
+                                                        getSeoImage(filledImageAttributes, pair.getFirst()))
+
+                                        )
                         );
 
                     }

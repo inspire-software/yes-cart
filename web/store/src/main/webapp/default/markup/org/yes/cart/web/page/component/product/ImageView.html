@@ -1,10 +1,19 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<wicket:head>
+    <wicket:link>
+        <link rel="stylesheet" type="text/css" href="../../../../../../../style/slimbox2.css"/>
+        <script type="text/javascript" src="../../../../../../../js/slimbox2.js"></script>
+        <script type="text/javascript" src="../../../../../../../js/autoload.js"></script>
+    </wicket:link>
+</wicket:head>
 <body>
 <wicket:panel>
     <table border="1">
         <tr>
             <td>
-                <img wicket:id="defaultImage" id="defaultImage" align="center"/>
+                <a wicket:id="defaultImageRef" rel="lightbox-main">
+                    <img wicket:id="defaultImage" id="defaultImage" align="center"/>
+                </a>
             </td>
         </tr>
         <tr>
@@ -12,7 +21,9 @@
                 <table border="1">
                     <tr>
                         <td wicket:id="altImageList">
-                            <img wicket:id="altImage" align="center"/>
+                            <a wicket:id="altImageRef" rel="lightbox">
+                                    <img wicket:id="altImage" align="center"/>
+                            </a>
                         </td>
                     </tr>
                 </table>
