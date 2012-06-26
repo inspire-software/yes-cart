@@ -2,6 +2,7 @@ package org.yes.cart.domain.message.consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.yes.cart.domain.message.RegistrationMessage;
 import org.yes.cart.service.mail.MailComposer;
@@ -86,7 +87,19 @@ public class ManagerRegistrationMessageListener implements Runnable {
                 null,
                 model);
 
-        javaMailSender.send(mimeMessage);
+        boolean send = false;
+        while (!send) {
+            try {
+                javaMailSender.send(mimeMessage);
+                send = true;
+                LOG.info("Manager mail send to " + registrationMessage.getEmail() );
+            } catch (MailSendException me) {
+                LOG.error("Cant send email to " + registrationMessage.getEmail() + " " + me.getMessage());
+                Thread.sleep(60000);
+
+            }
+        }
+
 
     }
 

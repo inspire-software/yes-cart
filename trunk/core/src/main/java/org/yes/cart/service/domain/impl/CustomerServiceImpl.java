@@ -1,6 +1,7 @@
 package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.Hibernate;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
@@ -55,7 +56,12 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      * @return {@link Customer}
      */
     public Customer findCustomer(final String email) {
-        return getGenericDao().findSingleByCriteria(Restrictions.eq("email", email));
+        Customer customer = getGenericDao().findSingleByCriteria(Restrictions.eq("email", email));
+        Hibernate.initialize(customer.getAttribute());
+        for (AttrValueCustomer attrValueCustomer :  customer.getAttribute()) {
+            Hibernate.initialize(attrValueCustomer.getAttribute().getEtype());
+        }
+        return customer;
     }
 
 

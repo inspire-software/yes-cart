@@ -2,6 +2,7 @@ package org.yes.cart.domain.message.consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
@@ -128,7 +129,19 @@ public class StandardMessageListener implements Runnable {
                     null,
                     map);
 
-            javaMailSender.send(mimeMessage);
+            boolean send = false;
+            while (!send) {
+                try {
+                    javaMailSender.send(mimeMessage);
+                    send = true;
+                    LOG.info("Mail send to " + (String) map.get(CUSTOMER_EMAIL) );
+                } catch (MailSendException me) {
+                    LOG.error("Cant send email to " + (String) map.get(CUSTOMER_EMAIL) + " " + me.getMessage());
+                    Thread.sleep(60000);
+
+                }
+            }
+
 
 
         } catch (Exception e) {
