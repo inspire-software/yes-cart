@@ -136,6 +136,12 @@ public class StandardMessageListener implements Runnable {
                     send = true;
                     LOG.info("Mail send to " + (String) map.get(CUSTOMER_EMAIL) );
                 } catch (MailSendException me) {
+                    /**
+                     * TODO
+                     * In case of failure, thread must use some persisten storage to
+                     * store email and send it latter.
+                     * Any persistem cache may be used for this purposes.
+                     */
                     LOG.error("Cant send email to " + (String) map.get(CUSTOMER_EMAIL) + " " + me.getMessage());
                     Thread.sleep(60000);
 
