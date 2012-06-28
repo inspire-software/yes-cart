@@ -36,8 +36,6 @@ public interface DaoServiceBeanKeys {
 
     final static String PRODUCT_ASSOCIATIONS_DAO = "productAssociationDao";
 
-    final static String ATTRIBUTE_VIEW_GROUP_DAO = "attributeViewGroupDao";
-
     final static String WAREHOUSE_DAO = "warehouseDao";
 
     final static String SHOP_WAREHOUSE_DAO = "shopWarehouseDao";

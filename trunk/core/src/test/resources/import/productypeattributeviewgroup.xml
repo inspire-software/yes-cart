@@ -27,10 +27,9 @@
         <!-- attr view group -->
         <column-descriptor>
             <columnIndex>1</columnIndex>
-            <fieldType>FK_FIELD</fieldType>
-            <name>attributeViewGroup</name>
+            <fieldType>FIELD</fieldType>
+            <name>name</name>
             <regExp>(.*)</regExp>
-            <lookupQuery>select p from AttributeViewGroupEntity p where p.name = ?1</lookupQuery>
         </column-descriptor>
 
         <!-- Product type -->

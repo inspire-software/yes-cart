@@ -106,10 +106,10 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
             System.out.println("attribute " + (new Date().getTime() - dt.getTime()));
 
-            dt = new Date();
+            /*dt = new Date();
             bulkImportService = getBulkImportService("src/test/resources/import/attributeviewgroup.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
-            System.out.println("attributeviewgroup.xml " + (new Date().getTime() - dt.getTime()));
+            System.out.println("attributeviewgroup.xml " + (new Date().getTime() - dt.getTime())); */
 
             dt = new Date();
             bulkImportService = getBulkImportService("src/test/resources/import/product_type.xml");
@@ -208,7 +208,6 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             dumpDataBase("www", new String[]{"TATTRIBUTE", "TPRODUCTTYPE", "TPRODUCTTYPEATTR",
                     "TPRODUCT", "TSKU", "TPRODUCTATTRVALUE",
                     "TSKUWAREHOUSE", "TSKUPRICE", "TPRODUCTCATEGORY", "TCATEGORY",
-                    "TATTRVIEWGROUP" ,
                     "TPRODTYPEATTRVIEWGROUP" ,
                     "TSHOPCATEGORY"
             });

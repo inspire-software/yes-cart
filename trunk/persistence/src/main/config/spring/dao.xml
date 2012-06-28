@@ -335,6 +335,16 @@
         </property>
     </bean>
 
+    <bean id="prodTypeAttributeViewGroupDao" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+                <constructor-arg><value>org.yes.cart.domain.entity.impl.ProdTypeAttributeViewGroupEntity</value></constructor-arg>
+                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+                <property name="sessionFactory" ref="sessionFactory"/>
+            </bean>
+        </property>
+    </bean>
+
     <bean id="productSkuDao" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
@@ -408,15 +418,7 @@
         </property>
     </bean>
 
-    <bean id="attributeViewGroupDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.AttributeViewGroupEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
-    </bean>
+
 
     <bean id="warehouseDao" parent="txProxyTemplate">
         <property name="target">
