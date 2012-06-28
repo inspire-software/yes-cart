@@ -87,8 +87,8 @@
                     new AsyncResponder(
                             productTypeAttrUpdatedResultHandler,
                             ShopManagerGlobal.instance.defaultFaultHandler
-                            )
-                    );
+                    )
+            );
 
             PopUpManager.removePopUp(productTypeAttrCreateDialog);
         }
@@ -105,8 +105,8 @@
                     new AsyncResponder(
                             productTypeAttrUpdatedResultHandler,
                             ShopManagerGlobal.instance.defaultFaultHandler
-                            )
-                    );
+                    )
+            );
             PopUpManager.removePopUp(productTypeAttrCreateDialog);
         }
 
@@ -147,8 +147,8 @@
                         new AsyncResponder(
                                 productTypeAttrUpdatedResultHandler,
                                 ShopManagerGlobal.instance.defaultFaultHandler
-                                )
-                        );
+                        )
+                );
             }
         }
 
@@ -160,6 +160,7 @@
         private function handleProductTypeSelectedClick(event:ListEvent):void {
             selectedProductTypeDTO = ProductTypeDTOImpl(event.currentTarget.selectedItem);
             remoteProductTypeAttrService.getByProductTypeId(selectedProductTypeDTO.producttypeId);
+            remoteProdTypeAttributeViewGroupService.getByProductTypeId(selectedProductTypeDTO.producttypeId);
         }
 
         /**
@@ -200,8 +201,8 @@
                                 remoteProductTypeService.getAll();
                             },
                             ShopManagerGlobal.instance.defaultFaultHandler
-                            )
-                    );
+                    )
+            );
 
             PopUpManager.removePopUp(productTypeCreateDialog);
         }
@@ -235,8 +236,8 @@
                             }
                             ,
                             ShopManagerGlobal.instance.defaultFaultHandler
-                            )
-                    );
+                    )
+            );
             PopUpManager.removePopUp(productTypeCreateDialog);
         }
 
@@ -288,6 +289,21 @@
                     resourceManager.getString('ProductTypeManagementPanel', 'productTypeNotDeleted'),
                     resourceManager.getString('ProductTypeManagementPanel', 'error'));
         }
+
+
+        /**
+         * Assign attribute to selected view group.
+         * @param event event
+         */
+         private function assignAttribute(event:MouseEvent):void {
+        }
+
+        /**
+         * Remove attribute from view group
+         * @param event event
+         */
+         private function removeAttribute(event:MouseEvent):void {
+        }
         ]]>
     </mx:Script>
 
@@ -309,6 +325,15 @@
                      result="ShopManagerGlobal.instance.defaultResultHandler(event)"
                      fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteProdTypeAttributeViewGroupService"
+                     destination="remoteProdTypeAttributeViewGroupService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+    <mx:Boolean id="addAvailableEnabled"/>
+    <mx:Boolean id="addAssignedEnabled"/>
 
     <mx:VDividedBox height="100%" width="100%">
         <mx:VBox width="100%">
@@ -391,73 +416,147 @@
 
             </mx:DataGrid>
         </mx:VBox>
-        <mx:VBox width="100%" visible="{selectedProductTypeDTO != null}">
 
-            <mx:ControlBar>
-                <mx:Button label="@Resource(bundle='ProductTypeManagementPanel',key='newAttr')"
-                           toolTip="@Resource(bundle='ProductTypeManagementPanel',key='newAttrHint')"
-                           click="editNewProductTypeAttr(event)"
-                        />
-                <mx:Button label="@Resource(bundle='ProductTypeManagementPanel',key='editAttr')"
-                           toolTip="@Resource(bundle='ProductTypeManagementPanel',key='editAttrHint')"
-                           enabled="{selectedProductTypeAttrDTO != null}"
-                           click="editProductTypeAttr(event)"
+        <mx:TabNavigator id="productTabNavigator" width="100%" height="100%"
+                         visible="{selectedProductTypeDTO != null}">
 
-                        />
-                <mx:Button label="@Resource(bundle='ProductTypeManagementPanel',key='deleteAttr')"
-                           toolTip="@Resource(bundle='ProductTypeManagementPanel',key='deleteAttrHint')"
-                           enabled="{selectedProductTypeAttrDTO != null}"
-                           click="deleteProductTypeAttrClickHandler(event)"
-                        />
-            </mx:ControlBar>
+            <mx:Canvas id="attrTab" label="@Resource(bundle='ProductTypeManagementPanel',key='attributes')" width="100%"
+                       height="100%">
 
-            <mx:DataGrid x="0" y="0" width="100%" height="99%"
-                         dataProvider="{remoteProductTypeAttrService.getByProductTypeId.lastResult}"
-                         itemClick="handleProductTypeAttrSelectedClick(event)">
+                <mx:VBox width="100%">
 
-                <mx:columns>
-                    <mx:DataGridColumn width="80" headerText="@Resource(bundle='ProductTypeManagementPanel',key='id')"
-                                       dataField="productTypeAttrId"/>
-                    <mx:DataGridColumn width="160"
-                                       headerText="@Resource(bundle='ProductTypeManagementPanel',key='code')"
-                                       dataField="attributeDTO.code"/>
-                    <mx:DataGridColumn width="160"
-                                       headerText="@Resource(bundle='ProductTypeManagementPanel',key='name')"
-                                       dataField="attributeDTO.name"/>
-                    <mx:DataGridColumn width="80" headerText="@Resource(bundle='ProductTypeManagementPanel',key='rank')"
-                                       dataField="rank"/>
-                    <mx:DataGridColumn headerText="@Resource(bundle='ProductTypeManagementPanel',key='navigation')"
-                                       dataField="navigation">
-                        <mx:itemRenderer>
-                            <mx:Component>
-                                <mx:CheckBox paddingLeft="40" enabled="false" selected="{data.navigation}"/>
-                            </mx:Component>
-                        </mx:itemRenderer>
-                    </mx:DataGridColumn>
-                    <mx:DataGridColumn headerText="@Resource(bundle='ProductTypeManagementPanel',key='navigationType')"
-                                       dataField="navigationType"/>
-                    <mx:DataGridColumn headerText="@Resource(bundle='ProductTypeManagementPanel',key='visible')"
-                                       dataField="visible" textAlign="center">
-                        <mx:itemRenderer>
-                            <mx:Component>
-                                <mx:CheckBox paddingLeft="40" enabled="false" selected="{data.visible}"/>
-                            </mx:Component>
-                        </mx:itemRenderer>
-                    </mx:DataGridColumn>
-                    <mx:DataGridColumn headerText="@Resource(bundle='ProductTypeManagementPanel',key='simulariry')"
-                                       dataField="simulariry" textAlign="center">
-                        <mx:itemRenderer>
-                            <mx:Component>
-                                <mx:CheckBox paddingLeft="40" enabled="false" selected="{data.simulariry}"/>
-                            </mx:Component>
-                        </mx:itemRenderer>
-                    </mx:DataGridColumn>
-                </mx:columns>
+                    <mx:ControlBar>
+                        <mx:Button label="@Resource(bundle='ProductTypeManagementPanel',key='newAttr')"
+                                   toolTip="@Resource(bundle='ProductTypeManagementPanel',key='newAttrHint')"
+                                   click="editNewProductTypeAttr(event)"
+                                />
+                        <mx:Button label="@Resource(bundle='ProductTypeManagementPanel',key='editAttr')"
+                                   toolTip="@Resource(bundle='ProductTypeManagementPanel',key='editAttrHint')"
+                                   enabled="{selectedProductTypeAttrDTO != null}"
+                                   click="editProductTypeAttr(event)"
+
+                                />
+                        <mx:Button label="@Resource(bundle='ProductTypeManagementPanel',key='deleteAttr')"
+                                   toolTip="@Resource(bundle='ProductTypeManagementPanel',key='deleteAttrHint')"
+                                   enabled="{selectedProductTypeAttrDTO != null}"
+                                   click="deleteProductTypeAttrClickHandler(event)"
+                                />
+                    </mx:ControlBar>
+
+                    <mx:DataGrid x="0" y="0" width="100%" height="99%"
+                                 dataProvider="{remoteProductTypeAttrService.getByProductTypeId.lastResult}"
+                                 itemClick="handleProductTypeAttrSelectedClick(event)">
+
+                        <mx:columns>
+                            <mx:DataGridColumn width="80"
+                                               headerText="@Resource(bundle='ProductTypeManagementPanel',key='id')"
+                                               dataField="productTypeAttrId"/>
+                            <mx:DataGridColumn width="160"
+                                               headerText="@Resource(bundle='ProductTypeManagementPanel',key='code')"
+                                               dataField="attributeDTO.code"/>
+                            <mx:DataGridColumn width="160"
+                                               headerText="@Resource(bundle='ProductTypeManagementPanel',key='name')"
+                                               dataField="attributeDTO.name"/>
+                            <mx:DataGridColumn width="80"
+                                               headerText="@Resource(bundle='ProductTypeManagementPanel',key='rank')"
+                                               dataField="rank"/>
+                            <mx:DataGridColumn
+                                    headerText="@Resource(bundle='ProductTypeManagementPanel',key='navigation')"
+                                    dataField="navigation">
+                                <mx:itemRenderer>
+                                    <mx:Component>
+                                        <mx:CheckBox paddingLeft="40" enabled="false" selected="{data.navigation}"/>
+                                    </mx:Component>
+                                </mx:itemRenderer>
+                            </mx:DataGridColumn>
+                            <mx:DataGridColumn
+                                    headerText="@Resource(bundle='ProductTypeManagementPanel',key='navigationType')"
+                                    dataField="navigationType"/>
+                            <mx:DataGridColumn headerText="@Resource(bundle='ProductTypeManagementPanel',key='visible')"
+                                               dataField="visible" textAlign="center">
+                                <mx:itemRenderer>
+                                    <mx:Component>
+                                        <mx:CheckBox paddingLeft="40" enabled="false" selected="{data.visible}"/>
+                                    </mx:Component>
+                                </mx:itemRenderer>
+                            </mx:DataGridColumn>
+                            <mx:DataGridColumn
+                                    headerText="@Resource(bundle='ProductTypeManagementPanel',key='simulariry')"
+                                    dataField="simulariry" textAlign="center">
+                                <mx:itemRenderer>
+                                    <mx:Component>
+                                        <mx:CheckBox paddingLeft="40" enabled="false" selected="{data.simulariry}"/>
+                                    </mx:Component>
+                                </mx:itemRenderer>
+                            </mx:DataGridColumn>
+                        </mx:columns>
 
 
-            </mx:DataGrid>
+                    </mx:DataGrid>
 
-        </mx:VBox>
+                </mx:VBox>
+
+            </mx:Canvas>
+
+            <mx:Canvas id="arrtViewroupTab"
+                       label="@Resource(bundle='ProductTypeManagementPanel',key='attributeViewGroup')" width="100%"
+                       height="100%">
+                <mx:HBox>
+
+                    <mx:VBox>
+
+                        <mx:ControlBar>
+
+                        </mx:ControlBar>
+
+                        <mx:DataGrid >
+
+                        </mx:DataGrid>
+
+                    </mx:VBox>
+
+                    <mx:VBox>
+                        <mx:Grid x="0" y="0" width="100%" height="100%" id="supportedCurrencyPanel">
+                            <mx:GridRow width="100%" height="50">
+                                <mx:GridItem width="150" height="50" textAlign="center" verticalAlign="middle">
+                                    <mx:Label
+                                            text="@Resource(bundle='ProductTypeManagementPanel',key='availableAttributes')"/>
+                                </mx:GridItem>
+                                <mx:GridItem width="100" height="50">
+                                </mx:GridItem>
+                                <mx:GridItem width="150" height="50" textAlign="center" verticalAlign="middle">
+                                    <mx:Label
+                                            text="@Resource(bundle='ProductTypeManagementPanel',key='assignedAttributes')"/>
+                                </mx:GridItem>
+                            </mx:GridRow>
+                            <mx:GridRow>
+                                <mx:GridItem width="150" height="50" textAlign="center" verticalAlign="middle">
+
+                                </mx:GridItem>
+                                <mx:VBox width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
+                                    <mx:Button enabled="{addAvailableEnabled}"
+                                               label="@Resource(bundle='StoresManagmentPanel',key='assign')"
+                                               toolTip="@Resource(bundle='StoresManagmentPanel',key='assignHint')"
+                                               click="assignAttribute(event)"/>
+                                    <mx:Button enabled="{addAssignedEnabled}"
+                                               label="@Resource(bundle='StoresManagmentPanel',key='unassign')"
+                                               toolTip="@Resource(bundle='StoresManagmentPanel',key='unassignHint')"
+                                               click="removeAttribute(event)"/>
+                                </mx:VBox>
+                                <mx:GridItem width="150" height="50" textAlign="center" verticalAlign="middle">
+
+                                </mx:GridItem>
+                            </mx:GridRow>
+                        </mx:Grid>
+                    </mx:VBox>
+
+
+                </mx:HBox>
+
+            </mx:Canvas>
+
+        </mx:TabNavigator>
+
 
     </mx:VDividedBox>
 

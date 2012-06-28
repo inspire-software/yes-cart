@@ -64,6 +64,14 @@
         </property>
     </bean>
 
+    <bean id="prodTypeAttributeViewGroupService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.ProdTypeAttributeViewGroupServiceImpl">
+                <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="prodTypeAttributeViewGroupDao"/>
+            </bean>
+        </property>
+    </bean>
+
     <bean id="productService" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.ProductServiceImpl">
@@ -93,6 +101,8 @@
             </bean>
         </property>
     </bean>
+
+
 
     <bean id="customerWishListService" parent="txProxyTemplate">
         <property name="target">
@@ -550,6 +560,8 @@
         </property>
     </bean>
 
+
+
     <bean id="dtoCarrierService" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.dto.impl.DtoCarrierServiceImpl">
@@ -565,6 +577,16 @@
             <bean class="org.yes.cart.service.dto.impl.DtoCarrierSlaServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
                 <constructor-arg index="1" ref="carrierSlaService"/>
+                <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="dtoProdTypeAttributeViewGroupService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoProdTypeAttributeViewGroupServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="1" ref="prodTypeAttributeViewGroupService"/>
                 <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
             </bean>
         </property>

@@ -65,8 +65,6 @@
     <cache name="org.yes.cart.domain.entity.AttributeGroup" maxElementsInMemory="1000" overflowToDisk="false" eternal="false"
            timeToLiveSeconds="600"/>
 
-    <cache name="org.yes.cart.domain.entity.AttributeViewGroup" maxElementsInMemory="1000" overflowToDisk="false" eternal="false"
-           timeToLiveSeconds="600"/>
 
     <cache name="org.yes.cart.domain.entity.Product" maxElementsInMemory="1000" overflowToDisk="false" eternal="false"
            timeToLiveSeconds="600"/>

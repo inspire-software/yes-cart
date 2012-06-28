@@ -1357,7 +1357,7 @@ public void setRangeList(final RangeList rangeList) {
         </subclass>
     </class>
 
-    <class name="org.yes.cart.domain.entity.AttributeViewGroup" table="TATTRVIEWGROUP" discriminator-value="0">
+    <!--<class name="org.yes.cart.domain.entity.AttributeViewGroup" table="TATTRVIEWGROUP" discriminator-value="0">
         <meta attribute="interface">true</meta>
         <comment>Attrib view group. Example: optic system, sizes, etc.</comment>
         <id name="attributeViewGroupId" type="long">
@@ -1416,6 +1416,11 @@ public void setRangeList(final RangeList rangeList) {
             <property name="description" length="4000" type="string">
                 <column name="DESCRIPTION" length="4000"/>
             </property>
+            <property name="rank" type="int" not-null="true">
+                <column name="RANK" default="500">
+                    <comment>What order of group on UI</comment>
+                </column>
+            </property>
 
 
             <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -1424,7 +1429,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
 			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
         </subclass>
-    </class>
+    </class>-->
 
 
 
@@ -1594,22 +1599,18 @@ public void setRangeList(final RangeList rangeList) {
             <many-to-one name="producttype" class="org.yes.cart.domain.entity.ProductType"  >
                 <column name="PRODUCTTYPE_ID" not-null="true"/>
             </many-to-one>
-            <many-to-one name="attributeViewGroup" class="org.yes.cart.domain.entity.AttributeViewGroup" lazy="false" >
-                <column name="ATTRVIEWGROUP_ID" not-null="true"/>
-            </many-to-one>
             <property name="attrCodeList" length="4000" type="string">
                 <column name="ATTRCODELIST" length="4000"/>
             </property>
-            <!--many-to-one name="attribute" class="org.yes.cart.domain.entity.Attribute" lazy="false"
-                         property-ref="code" insert="false" update="false">
-                <column name="CODE" not-null="true"/>
-            </many-to-one-->
             <property name="rank" type="int" not-null="false">
                 <column name="RANK">
                     <comment>
                         What the default order of attribute group for prod type ?
                     </comment>
                 </column>
+            </property>
+            <property name="name" type="string" length="64" not-null="true">
+                <column name="NAME" length="64" not-null="true"/>
             </property>
 
 

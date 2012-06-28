@@ -1,13 +1,16 @@
-package org.yes.cart.domain.entity;
+package org.yes.cart.domain.dto;
+
+import org.yes.cart.domain.entity.Identifiable;
+import org.yes.cart.domain.entity.ProductType;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
- * Date: 07-May-2011
- * Time: 11:12:54
+ * Date: 6/28/12
+ * Time: 10:12 PM
  */
-public interface ProdTypeAttributeViewGroup extends Auditable {
+public interface ProdTypeAttributeViewGroupDTO extends Identifiable {
 
-    /**
+     /**
      * Primary key.
      * @return     primary key.
      */
@@ -36,13 +39,13 @@ public interface ProdTypeAttributeViewGroup extends Auditable {
      * Product type.
      * @return      product type.
      */
-    ProductType getProducttype();
+    long getProducttypeId();
 
     /**
      * Set product type.
-     * @param producttype product type.
+     * @param producttypeId product type.
      */
-    void setProducttype(ProductType producttype);
+    void setProducttypeId(long producttypeId);
 
     /**
      * Rank .
@@ -69,4 +72,5 @@ public interface ProdTypeAttributeViewGroup extends Auditable {
      * @param name name.
      */
     void setName(String name);
+
 }

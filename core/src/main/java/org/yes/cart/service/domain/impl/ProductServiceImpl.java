@@ -159,7 +159,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             final List<AttrValue> attrNameValues = getProductAttributeValues(attrValues, viewGroup);
             attributesToShow.add(
                     new Pair<String, List<AttrValue>>(
-                            viewGroup.getAttributeViewGroup().getName(),
+                            viewGroup.getName(),
                             attrNameValues)
             );
         }
