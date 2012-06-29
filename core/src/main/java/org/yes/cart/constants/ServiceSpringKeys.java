@@ -395,7 +395,8 @@ public interface ServiceSpringKeys {
      */
     String HASH_HELPER = "passwordHashHelper";
 
-
-
-
+    /**
+     * Product type view group
+     */
+    String DTO_PRODUCT_TYPE_AV_SERVICE = "dtoProdTypeAttributeViewGroupService";
 }

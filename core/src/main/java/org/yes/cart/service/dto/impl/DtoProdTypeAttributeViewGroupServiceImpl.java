@@ -6,6 +6,7 @@ import org.yes.cart.domain.dto.ProdTypeAttributeViewGroupDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.ProdTypeAttributeViewGroupDTOImpl;
 import org.yes.cart.domain.entity.ProdTypeAttributeViewGroup;
+import org.yes.cart.domain.entity.ProductType;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.GenericService;
@@ -22,6 +23,8 @@ import java.util.List;
 public class DtoProdTypeAttributeViewGroupServiceImpl
         extends AbstractDtoServiceImpl<ProdTypeAttributeViewGroupDTO, ProdTypeAttributeViewGroupDTOImpl, ProdTypeAttributeViewGroup>
         implements DtoProdTypeAttributeViewGroupService {
+    
+    private final GenericService<ProductType> productTypeService;
 
 
     /**
@@ -33,17 +36,20 @@ public class DtoProdTypeAttributeViewGroupServiceImpl
      */
     public DtoProdTypeAttributeViewGroupServiceImpl(final DtoFactory dtoFactory,
                                                     final GenericService<ProdTypeAttributeViewGroup> prodTypeAttributeViewGroupGenericService,
-                                                    final ValueConverterRepository valueConverterRepository) {
+                                                    final ValueConverterRepository valueConverterRepository,
+                                                    final GenericService<ProductType> productTypeService) {
         super(dtoFactory, prodTypeAttributeViewGroupGenericService, valueConverterRepository);
+        this.productTypeService = productTypeService;
     }
 
     /** {@inheritDoc} */
     public List<ProdTypeAttributeViewGroupDTO> getByProductTypeId(final long productTypeId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final List<ProdTypeAttributeViewGroup> list = getService().findByCriteria(Restrictions.eq("producttype.producttypeId", productTypeId));
-        final List<ProdTypeAttributeViewGroupDTO> rez = new ArrayList<ProdTypeAttributeViewGroupDTO>(list.size());
-        fillDTOs(list, rez);
+        //final List<ProdTypeAttributeViewGroup> list = getService().findByCriteria(Restrictions.eq("producttype.producttypeId", productTypeId)); hibernate plus derby fails
+        ProductType prodType = productTypeService.getById(productTypeId);
+        final List<ProdTypeAttributeViewGroupDTO> rez = new ArrayList<ProdTypeAttributeViewGroupDTO>(prodType.getAttributeViewGroup().size());
+        fillDTOs(prodType.getAttributeViewGroup(), rez);
         return rez;
 
 

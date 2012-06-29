@@ -44,7 +44,7 @@
                 <entry key="org.yes.cart.domain.entity.Association" value="org.yes.cart.domain.entity.impl.AssociationEntity"/>
                 <entry key="org.yes.cart.domain.entity.Attribute" value="org.yes.cart.domain.entity.impl.AttributeEntity"/>
                 <entry key="org.yes.cart.domain.entity.AttributeGroup" value="org.yes.cart.domain.entity.impl.AttributeGroupEntity"/>
-                <entry key="org.yes.cart.domain.entity.AttributeViewGroup" value="org.yes.cart.domain.entity.impl.AttributeViewGroupEntity"/>
+                <!--<entry key="org.yes.cart.domain.entity.AttributeViewGroup" value="org.yes.cart.domain.entity.impl.AttributeViewGroupEntity"/>-->
 
 
                 <entry key="org.yes.cart.domain.entity.AttrValueProduct" value="org.yes.cart.domain.entity.impl.AttrValueEntityProduct"/>
