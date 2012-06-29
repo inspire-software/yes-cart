@@ -588,6 +588,7 @@
                 <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
                 <constructor-arg index="1" ref="prodTypeAttributeViewGroupService"/>
                 <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+                <constructor-arg index="3" ref="productTypeService"/>
             </bean>
         </property>
     </bean>
@@ -671,6 +672,7 @@
     <bean id="dtoInterfaceToClassFactory" class="org.yes.cart.domain.dto.factory.impl.DtoFactoryImpl">
         <constructor-arg>
             <map>
+                <entry key="org.yes.cart.domain.dto.ProdTypeAttributeViewGroupDTO" value="org.yes.cart.domain.dto.impl.ProdTypeAttributeViewGroupDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.ProductSkuDTO" value="org.yes.cart.domain.dto.impl.ProductSkuDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.SkuPriceDTO" value="org.yes.cart.domain.dto.impl.SkuPriceDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.ManagerDTO" value="org.yes.cart.domain.dto.impl.ManagerDTOImpl"/>
