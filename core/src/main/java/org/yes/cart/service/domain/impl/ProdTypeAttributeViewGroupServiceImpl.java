@@ -20,4 +20,6 @@ public class ProdTypeAttributeViewGroupServiceImpl extends BaseGenericServiceImp
     public ProdTypeAttributeViewGroupServiceImpl(final GenericDAO<ProdTypeAttributeViewGroup, Long> genericDao) {
         super(genericDao);
     }
+
+
 }
