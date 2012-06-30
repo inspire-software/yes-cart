@@ -7,9 +7,12 @@
 		<![CDATA[
         import com.hexagonstar.util.debug.Debug;
 
+        import mx.collections.ArrayList;
+
         import mx.core.FlexGlobals;
 
         import org.yes.cart.constants.AttributeGroupNames;
+        import org.yes.cart.impl.ProdTypeAttributeViewGroupDTOImpl;
         import org.yes.cart.impl.ProductTypeAttrDTOImpl;
         import org.yes.cart.impl.ProductTypeDTOImpl;
         import org.yes.cart.util.CloneUtil;
@@ -30,6 +33,9 @@
         [Bindable]
         private var selectedProductTypeAttrDTO:ProductTypeAttrDTOImpl;
 
+        [Bindable]
+        private var selectedProdTypeAttributeViewGroupDTO:ProdTypeAttributeViewGroupDTOImpl;
+
         private var productTypeCreateDialog:ProductTypeCreateDialog;
         private var productTypeAttrCreateDialog:ProductTypeAttrCreateDialog;
 
@@ -46,7 +52,7 @@
          * @param event
          * @return  nothing
          */
-        private function editNewProductTypeAttr(event:flash.events.MouseEvent):void {
+        private function newProductTypeAttr(event:flash.events.MouseEvent):void {
             var pta:ProductTypeAttrDTOImpl = new ProductTypeAttrDTOImpl();
             pta.navigationType = "S";
             editProductTypeAttrInternal(pta);
@@ -158,10 +164,8 @@
          * @param event
          * @return nothing
          */
-        private function handleProductTypeSelectedClick(event:ListEvent):void {
-            selectedProductTypeDTO = ProductTypeDTOImpl(event.currentTarget.selectedItem);
-            remoteProductTypeAttrService.getByProductTypeId(selectedProductTypeDTO.producttypeId);
-            remoteProdTypeAttributeViewGroupService.getByProductTypeId(selectedProductTypeDTO.producttypeId);
+        private function handleProductTypeAttrSelectedClick(event:ListEvent):void {
+            selectedProductTypeAttrDTO = ProductTypeAttrDTOImpl(event.currentTarget.selectedItem);
         }
 
         /**
@@ -169,18 +173,64 @@
          * @param event
          * @return nothing
          */
-        private function handleProductTypeAttrSelectedClick(event:ListEvent):void {
-            selectedProductTypeAttrDTO = ProductTypeAttrDTOImpl(event.currentTarget.selectedItem);
+        private function handleProductTypeSelectedClick(event:ListEvent):void {
+            selectedProductTypeDTO = ProductTypeDTOImpl(event.currentTarget.selectedItem);
+            remoteProductTypeAttrService.getByProductTypeId(selectedProductTypeDTO.producttypeId);
+            remoteProdTypeAttributeViewGroupService.getByProductTypeId(selectedProductTypeDTO.producttypeId);
+            availableAttributes = [];
+            assignedAttributes = [];
+            selectedProdTypeAttributeViewGroupDTO = null;
+            selectedProductTypeAttrDTO = null;
         }
 
+
         /**
-         * Product type view group selected. Need to show what is included into 
+         * Product type view group selected. Need to show what is included into
          * each view group.
          * @param event mouse event
          * @return nothing
          */
         private function handleProdTypeAttributeViewGroupClick(event:ListEvent):void {
-            Alert.show("Pruuuved !!!", "Need to implement");
+            selectedProdTypeAttributeViewGroupDTO = ProdTypeAttributeViewGroupDTOImpl(event.currentTarget.selectedItem);
+            if (selectedProdTypeAttributeViewGroupDTO.attrCodeList != null && selectedProdTypeAttributeViewGroupDTO.attrCodeList.length > 0) {
+                assignedAttributes = selectedProdTypeAttributeViewGroupDTO.attrCodeList.split(",");
+            } else {
+                assignedAttributes = [];
+
+            }
+            availableAttributes = getAvailableCodes(assignedAttributes);
+        }
+
+        /**
+         * Get available atribute codes to assign into group.
+         * @param assigned
+         * @return available attribute codes.
+         */
+        private function getAvailableCodes(assigned:Array):Array {
+            var result:ArrayList = new ArrayList();
+            for each (var pta:ProductTypeAttrDTOImpl in remoteProductTypeAttrService.getByProductTypeId.lastResult) {
+                if (assigned.indexOf(pta.attributeDTO.code) == -1) {
+                    result.addItem(pta.attributeDTO.code);
+                }
+            }
+            return result.toArray();
+        }
+
+
+        /**
+         * Get attribute code name by given code.
+         * @param code given code
+         * @return code name
+         */
+        private function getNameByCode(code:Object):String {
+            for each (var pta:ProductTypeAttrDTOImpl in remoteProductTypeAttrService.getByProductTypeId.lastResult) {
+
+                if (code === pta.attributeDTO.code) {
+                    return ">" + pta.attributeDTO.name;
+                }
+
+            }
+            return String(code);
         }
 
         /**
@@ -278,6 +328,7 @@
                                 function(event:*, obj:Object = null):void {
                                     //Delete product type service call back .
                                     selectedProductTypeDTO = null;
+                                    selectedProdTypeAttributeViewGroupDTO = null;
                                     remoteProductTypeService.getAll();
                                     Alert.show(
                                             resourceManager.getString('ProductTypeManagementPanel', 'productTypeDeletedConfirm'),
@@ -306,17 +357,127 @@
          * Assign attribute to selected view group.
          * @param event event
          */
-         private function assignAttribute(event:MouseEvent):void {
+        private function assignAttribute(event:MouseEvent):void {
         }
 
         /**
          * Remove attribute from view group
          * @param event event
          */
-         private function removeAttribute(event:MouseEvent):void {
+        private function removeAttribute(event:MouseEvent):void {
+        }
+
+
+        private function availableAttributeSelected(event:MouseEvent):void {
+            addAvailableEnabled = true;
+            //selectedAvailable = event.currentTarget.selectedItem;
+        }
+
+        private function assignedAttributeSelected(event:MouseEvent):void {
+            addAssignedEnabled = true;
+            //selectedAssigned = event.currentTarget.selectedItem;
+        }
+
+
+        var prodTypeAttributeViewGroupCreateDialog:ProdTypeAttributeViewGroupCreateDialog;
+
+        /**
+         * Call dialog to create view group.
+         * @param event mouse evt
+         */
+        private function createAttrViewGroup(event:MouseEvent):void {
+
+            prodTypeAttributeViewGroupCreateDialog = ProdTypeAttributeViewGroupCreateDialog(
+
+                    PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), ProdTypeAttributeViewGroupCreateDialog, true)
+
+            );
+
+            prodTypeAttributeViewGroupCreateDialog.productTypeAttrVG = new ProdTypeAttributeViewGroupDTOImpl();
+            prodTypeAttributeViewGroupCreateDialog.productTypeAttrVG.producttypeId = selectedProductTypeDTO.producttypeId;
+            prodTypeAttributeViewGroupCreateDialog.productTypeAttrVG.rank = 100;
+            prodTypeAttributeViewGroupCreateDialog.saveBtn.addEventListener(
+                    "click",
+                    function createProductTypeAttriViewGroup(event:Event):void {
+
+                        remoteProdTypeAttributeViewGroupService.create(
+                                prodTypeAttributeViewGroupCreateDialog.productTypeAttrVG
+                        ).addResponder(
+                                new AsyncResponder(
+                                        function(event:*, obj:Object = null):void {
+                                            //Product type view group created.
+                                            selectedProdTypeAttributeViewGroupDTO = null;
+                                            remoteProdTypeAttributeViewGroupService.getByProductTypeId(selectedProductTypeDTO.producttypeId);
+                                        }
+                                        ,
+                                        ShopManagerGlobal.instance.defaultFaultHandler
+                                )
+
+                        );
+
+                        PopUpManager.removePopUp(prodTypeAttributeViewGroupCreateDialog);
+                    }
+            );
+            PopUpManager.centerPopUp(prodTypeAttributeViewGroupCreateDialog);
+        }
+
+        /**
+         * Call dialog to create view group.
+         * @param event mouse evt
+         */
+        private function editAttrViewGroup(event:MouseEvent):void {
+
+            prodTypeAttributeViewGroupCreateDialog = ProdTypeAttributeViewGroupCreateDialog(
+
+                    PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), ProdTypeAttributeViewGroupCreateDialog, true)
+
+            );
+
+            prodTypeAttributeViewGroupCreateDialog.productTypeAttrVG = selectedProdTypeAttributeViewGroupDTO;
+            prodTypeAttributeViewGroupCreateDialog.saveBtn.addEventListener(
+                    "click",
+                    function createProductTypeAttriViewGroup(event:Event):void {
+
+                        remoteProdTypeAttributeViewGroupService.update(
+                                prodTypeAttributeViewGroupCreateDialog.productTypeAttrVG
+                        );
+
+                        PopUpManager.removePopUp(prodTypeAttributeViewGroupCreateDialog);
+                    }
+            );
+            PopUpManager.centerPopUp(prodTypeAttributeViewGroupCreateDialog);
+
+        }
+
+        /**
+         * Call dialog to create view group.
+         * @param event mouse evt
+         */
+        private function deleteAttrViewGroup(event:MouseEvent):void {
+            Alert.show(
+                    resourceManager.getString('ProductTypeManagementPanel', 'deleteProductTypeAttrViewGroupConfirm'),
+                    resourceManager.getString('ProductTypeManagementPanel', 'warning'),
+                    Alert.OK | Alert.CANCEL, this,
+                    function (event:CloseEvent):void {
+                        if (event.detail == Alert.OK) {
+                            remoteProdTypeAttributeViewGroupService.remove(selectedProdTypeAttributeViewGroupDTO.prodTypeAttributeViewGroupId);
+                            selectedProdTypeAttributeViewGroupDTO = null;
+                        }
+                    }
+                    ,
+                    null, Alert.OK);
         }
         ]]>
     </mx:Script>
+
+    <mx:Boolean id="addAvailableEnabled"/>
+    <mx:Boolean id="addAssignedEnabled"/>
+
+    <mx:Array id="availableAttributes"></mx:Array>
+    <mx:Array id="assignedAttributes"></mx:Array>
+
+    <mx:String id="selectedAvailable"></mx:String>
+    <mx:String id="selectedAssigned"></mx:String>
 
 
     <mx:RemoteObject showBusyCursor="true" id="remoteProductTypeService"
@@ -343,8 +504,6 @@
                      fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
-    <mx:Boolean id="addAvailableEnabled"/>
-    <mx:Boolean id="addAssignedEnabled"/>
 
     <mx:VDividedBox height="100%" width="100%">
         <mx:VBox width="100%">
@@ -431,15 +590,16 @@
         <mx:TabNavigator id="productTabNavigator" width="100%" height="100%"
                          visible="{selectedProductTypeDTO != null}">
 
-            <mx:Canvas id="attrTab" label="@Resource(bundle='ProductTypeManagementPanel',key='attributes')" width="100%"
+            <mx:Canvas id="attrTab" label="@Resource(bundle='ProductTypeManagementPanel',key='attributes')"
+                       width="100%"
                        height="100%">
 
-                <mx:VBox width="100%">
+                <mx:VBox width="100%" height="100%">
 
                     <mx:ControlBar>
                         <mx:Button label="@Resource(bundle='ProductTypeManagementPanel',key='newAttr')"
                                    toolTip="@Resource(bundle='ProductTypeManagementPanel',key='newAttrHint')"
-                                   click="editNewProductTypeAttr(event)"
+                                   click="newProductTypeAttr(event)"
                                 />
                         <mx:Button label="@Resource(bundle='ProductTypeManagementPanel',key='editAttr')"
                                    toolTip="@Resource(bundle='ProductTypeManagementPanel',key='editAttrHint')"
@@ -508,79 +668,112 @@
                 </mx:VBox>
 
             </mx:Canvas>
-<!--
-
-            itemClick="handleProdTypeAttributeViewGroupClick(event)"
--->
 
             <mx:Canvas id="arrtViewroupTab"
-                       label="@Resource(bundle='ProductTypeManagementPanel',key='attributeViewGroup')" width="100%"
-                       height="100%">
-                <mx:HBox>
+                       label="@Resource(bundle='ProductTypeManagementPanel',key='attributeViewGroup')"
+                       width="100%"
+                       height="100%" >
 
-                    <mx:VBox>
+                <mx:HBox width="100%" height="100%">
 
-                        <mx:ControlBar >
-                            <mx:Label x="0" y="0" text="ControlBar "/>
+
+                    <mx:VBox height="100%">
+
+                        <mx:ControlBar  height="50">
+                            <mx:Button label="@Resource(bundle='ProductTypeManagementPanel',key='createViewGroup')"
+                                       toolTip="@Resource(bundle='ProductTypeManagementPanel',key='createViewGroupHint')"
+                                       click="createAttrViewGroup(event)"/>
+
+                            <mx:Button label="@Resource(bundle='ProductTypeManagementPanel',key='editViewGroup')"
+                                       toolTip="@Resource(bundle='ProductTypeManagementPanel',key='editViewGroupHint')"
+                                       click="editAttrViewGroup(event)"
+                                       enabled="{selectedProdTypeAttributeViewGroupDTO != null}"
+                                    />
+
+                            <mx:Button label="@Resource(bundle='ProductTypeManagementPanel',key='deleteViewGroup')"
+                                       toolTip="@Resource(bundle='ProductTypeManagementPanel',key='deleteViewGroupHint')"
+                                       click="deleteAttrViewGroup(event)"
+                                       enabled="{selectedProdTypeAttributeViewGroupDTO != null}"
+                                    />
 
                         </mx:ControlBar>
 
-                        <mx:DataGrid width="100%" height="99%"
+                        <mx:DataGrid width="100%" height="100%"
                                      dataProvider="{remoteProdTypeAttributeViewGroupService.getByProductTypeId.lastResult}"
+                                     itemClick="handleProdTypeAttributeViewGroupClick(event)"
                                 >
-                            
+
                             <mx:columns>
 
-                                <mx:DataGridColumn width="200"
-                                                   headerText="@Resource(bundle='ProductTypeManagementPanel',key='id')"
+                                <mx:DataGridColumn width="300"
+                                                   headerText="@Resource(bundle='ProductTypeManagementPanel',key='name')"
                                                    dataField="name"/>
-                                <mx:DataGridColumn width="50"
-                                                   headerText="@Resource(bundle='ProductTypeManagementPanel',key='id')"
+                                <mx:DataGridColumn width="70"
+                                                   headerText="@Resource(bundle='ProductTypeManagementPanel',key='rank')"
                                                    dataField="rank"/>
 
-                                
+
                             </mx:columns>
-                            
+
                         </mx:DataGrid>
 
                     </mx:VBox>
 
-                    <mx:VBox>
+                    <mx:VBox height="100%" visible="{selectedProdTypeAttributeViewGroupDTO != null}">
 
-                        <mx:Label x="0" y="0" text="Hi there nah !!!!"/>
 
-                        <!--<mx:Grid x="0" y="0" width="100%" height="100%" id="supportedCurrencyPanel">
+                        <mx:Grid x="0" y="0" width="100%" height="100%" id="supportedCurrencyPanel">
                             <mx:GridRow width="100%" height="50">
-                                <mx:GridItem width="150" height="50" textAlign="center" verticalAlign="middle">
+                                <mx:GridItem width="150" textAlign="center" verticalAlign="middle">
                                     <mx:Label
                                             text="@Resource(bundle='ProductTypeManagementPanel',key='availableAttributes')"/>
                                 </mx:GridItem>
-                                <mx:GridItem width="100" height="50">
+                                <mx:GridItem width="100">
                                 </mx:GridItem>
-                                <mx:GridItem width="150" height="50" textAlign="center" verticalAlign="middle">
+                                <mx:GridItem width="150" textAlign="center" verticalAlign="middle">
                                     <mx:Label
                                             text="@Resource(bundle='ProductTypeManagementPanel',key='assignedAttributes')"/>
                                 </mx:GridItem>
                             </mx:GridRow>
-                            <mx:GridRow>
-                                <mx:GridItem width="150" height="50" textAlign="center" verticalAlign="middle">
+                            <mx:GridRow height="100%" >
+                                <mx:GridItem width="200" verticalAlign="middle">
+                                    <mx:List
+                                            width="100%"
+                                            height="100%"
+                                            dataProvider="{availableAttributes}"
+                                            click="availableAttributeSelected(event)"
+                                            labelFunction="getNameByCode"
+                                            >
+                                    </mx:List>
 
                                 </mx:GridItem>
-                                <mx:VBox width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
-                                    <mx:Button enabled="{addAvailableEnabled}"
-                                               label="@Resource(bundle='StoresManagmentPanel',key='assign')"
-                                               toolTip="@Resource(bundle='StoresManagmentPanel',key='assignHint')"
-                                               click="assignAttribute(event)"/>
-                                    <mx:Button enabled="{addAssignedEnabled}"
-                                               label="@Resource(bundle='StoresManagmentPanel',key='unassign')"
-                                               toolTip="@Resource(bundle='StoresManagmentPanel',key='unassignHint')"
-                                               click="removeAttribute(event)"/>
-                                </mx:VBox>
-                                <mx:GridItem width="150" height="50" textAlign="center" verticalAlign="middle">
+
+                                <mx:GridItem width="100">
+                                    <mx:VBox width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
+                                        <mx:Button enabled="{addAvailableEnabled}"
+                                                   label="@Resource(bundle='ProductTypeManagementPanel',key='assign')"
+                                                   toolTip="@Resource(bundle='ProductTypeManagementPanel',key='assignHint')"
+                                                   click="assignAttribute(event)"/>
+                                        <mx:Button enabled="{addAssignedEnabled}"
+                                                   label="@Resource(bundle='ProductTypeManagementPanel',key='unassign')"
+                                                   toolTip="@Resource(bundle='ProductTypeManagementPanel',key='unassignHint')"
+                                                   click="removeAttribute(event)"/>
+                                    </mx:VBox>
+                                </mx:GridItem>
+                                <mx:GridItem width="200" verticalAlign="middle">
+                                    <mx:List
+                                            width="100%"
+                                            height="100%"
+                                            dataProvider="{assignedAttributes}"
+                                            click="assignedAttributeSelected(event)"
+                                            labelFunction="getNameByCode"
+                                            >
+
+                                    </mx:List>
 
                                 </mx:GridItem>
                             </mx:GridRow>
-                        </mx:Grid>-->
+                        </mx:Grid>
                     </mx:VBox>
 
 
