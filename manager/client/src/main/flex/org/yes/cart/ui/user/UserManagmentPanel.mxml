@@ -218,6 +218,10 @@
     <mx:Boolean id="revokeOneEnabled">false</mx:Boolean>
     <mx:Boolean id="grantOneEnabled">false</mx:Boolean>
 
+    <mx:Panel width="100%" height="100%" title="@Resource(bundle='UserManagmentPanel',key='users')">
+
+
+
 
     <mx:VDividedBox id="userManagmentPanel" x="0" y="0" height="100%" width="100%">
         <mx:VBox height="50%" width="100%">
@@ -305,4 +309,5 @@
         </mx:Grid>
     </mx:VDividedBox>
 
+     </mx:Panel>
 </mx:Canvas>

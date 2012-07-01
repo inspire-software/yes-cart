@@ -1,79 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" creationComplete="init();">
-    <mx:VDividedBox width="100%" height="100%">
-        <mx:VBox width="100%" height="50%">
-            <mx:ControlBar x="0" y="0" width="100%">
-                <mx:Label text="@Resource(bundle='ProductManagmentPanel',key='code')"/>
-                <mx:TextInput id="codeTextInput" width="100"/>
-                <mx:Label text="@Resource(bundle='ProductManagmentPanel',key='name')"/>
-                <mx:TextInput id="nameTextInput" width="100"/>
-                <mx:Label text="@Resource(bundle='ProductManagmentPanel',key='brand')"/>
-                <mx:ComboBox id="brandComboBox" width="120"
-                             dataProvider="{remoteBrandService.getAll.lastResult}"
-                             labelField="name"
-                             data="brandId"
-                             prompt="@Resource(bundle='ProductManagmentPanel',key='selectBrandPropmt')"
-                        />
-                <mx:Label text="@Resource(bundle='ProductManagmentPanel',key='type')"/>
-                <mx:ComboBox id="typeComboBox" width="120"
-                             dataProvider="{remoteProductTypeService.getAll.lastResult}"
-                             labelField="name"
-                             data="producttypeId"
-                             prompt="@Resource(bundle='ProductManagmentPanel',key='selectTypePropmt')"
-                        />
-                <mx:Button label="@Resource(bundle='ProductManagmentPanel',key='findBtn')"
-                           toolTip="@Resource(bundle='ProductManagmentPanel',key='findBtnHint')"
-                           click="searchBtnClickHandler(event)"/>
-                <mx:Button label="@Resource(bundle='ProductManagmentPanel',key='createProduct')"
-                           toolTip="@Resource(bundle='ProductManagmentPanel',key='createProductHint')"
-                           click="createBtnClickHandler(event)"/>
-                <mx:Button label="@Resource(bundle='ProductManagmentPanel',key='deleteProduct')"
-                           toolTip="@Resource(bundle='ProductManagmentPanel',key='deleteProductHint')"
-                           click="searchBtnClickHandler(event)"
-                           enabled="{productDTOImpl!=null}"
-                        />
-            </mx:ControlBar>
-            <mx:DataGrid width="100%" height="100%"
-                         dataProvider="{remoteProductService.getProductByConeNameBrandType.lastResult}"
-                         itemClick="productSelectedClickHandler(event)"
-                    >
-                <mx:columns>
-                    <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagmentPanel',key='id')"
-                                       dataField="productId"/>
-                    <mx:DataGridColumn width="120" headerText="@Resource(bundle='ProductManagmentPanel',key='code')"
-                                       dataField="code"/>
-                    <mx:DataGridColumn headerText="@Resource(bundle='ProductManagmentPanel',key='name')"
-                                       dataField="name"/>
-                    <mx:DataGridColumn headerText="@Resource(bundle='ProductManagmentPanel',key='description')"
-                                       dataField="description"/>
-                </mx:columns>
-            </mx:DataGrid>
-        </mx:VBox>
-        <mx:TabNavigator id="productTabNavigator" change="onTabClick(event);" width="100%" height="100%"
-                         visible="{productDTOImpl != null}">
-            <mx:Canvas id="summaryTab" label="@Resource(bundle='ProductManagmentPanel',key='summaryTab')" width="100%"
-                       height="100%"/>
-            <mx:Canvas id="imageTab" label="@Resource(bundle='ProductManagmentPanel',key='imagesTab')" width="100%"
-                       height="100%"/>
-            <mx:Canvas id="attrTab" label="@Resource(bundle='ProductManagmentPanel',key='attributesTab')" width="100%"
-                       height="100%"/>
-            <mx:Canvas id="skuTab" label="@Resource(bundle='ProductManagmentPanel',key='skuTab')" width="100%"
-                       height="100%"/>
-            <mx:Canvas id="priceTab" label="@Resource(bundle='ProductManagmentPanel',key='priceTab')" width="100%"
-                       height="100%"/>
-            <mx:Canvas id="seoTab" label="@Resource(bundle='ProductManagmentPanel',key='seoTab')" width="100%"
-                       height="100%"/>
-            <mx:Canvas id="associationsTab" label="@Resource(bundle='ProductManagmentPanel',key='associationsTab')"
-                       width="100%" height="100%"/>
-            <mx:Canvas id="categoryTab" label="@Resource(bundle='ProductManagmentPanel',key='categoriesTab')"
-                       width="100%" height="100%"/>
-            <mx:Canvas id="quantityTab" label="@Resource(bundle='ProductManagmentPanel',key='quantity')" width="100%"
-                       height="100%"/>
-
-        </mx:TabNavigator>
-    </mx:VDividedBox>
+    <mx:Panel width="100%" height="100%" title="@Resource(bundle='ProductManagmentPanel',key='products')">
 
 
+        <mx:VDividedBox width="100%" height="100%">
+            <mx:VBox width="100%" height="50%">
+                <mx:ControlBar x="0" y="0" width="100%">
+                    <mx:Label text="@Resource(bundle='ProductManagmentPanel',key='code')"/>
+                    <mx:TextInput id="codeTextInput" width="100"/>
+                    <mx:Label text="@Resource(bundle='ProductManagmentPanel',key='name')"/>
+                    <mx:TextInput id="nameTextInput" width="100"/>
+                    <mx:Label text="@Resource(bundle='ProductManagmentPanel',key='brand')"/>
+                    <mx:ComboBox id="brandComboBox" width="120"
+                                 dataProvider="{remoteBrandService.getAll.lastResult}"
+                                 labelField="name"
+                                 data="brandId"
+                                 prompt="@Resource(bundle='ProductManagmentPanel',key='selectBrandPropmt')"
+                            />
+                    <mx:Label text="@Resource(bundle='ProductManagmentPanel',key='type')"/>
+                    <mx:ComboBox id="typeComboBox" width="120"
+                                 dataProvider="{remoteProductTypeService.getAll.lastResult}"
+                                 labelField="name"
+                                 data="producttypeId"
+                                 prompt="@Resource(bundle='ProductManagmentPanel',key='selectTypePropmt')"
+                            />
+                    <mx:Button label="@Resource(bundle='ProductManagmentPanel',key='findBtn')"
+                               toolTip="@Resource(bundle='ProductManagmentPanel',key='findBtnHint')"
+                               click="searchBtnClickHandler(event)"/>
+                    <mx:Button label="@Resource(bundle='ProductManagmentPanel',key='createProduct')"
+                               toolTip="@Resource(bundle='ProductManagmentPanel',key='createProductHint')"
+                               click="createBtnClickHandler(event)"/>
+                    <mx:Button label="@Resource(bundle='ProductManagmentPanel',key='deleteProduct')"
+                               toolTip="@Resource(bundle='ProductManagmentPanel',key='deleteProductHint')"
+                               click="searchBtnClickHandler(event)"
+                               enabled="{productDTOImpl!=null}"
+                            />
+                </mx:ControlBar>
+                <mx:DataGrid width="100%" height="100%"
+                             dataProvider="{remoteProductService.getProductByConeNameBrandType.lastResult}"
+                             itemClick="productSelectedClickHandler(event)"
+                        >
+                    <mx:columns>
+                        <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagmentPanel',key='id')"
+                                           dataField="productId"/>
+                        <mx:DataGridColumn width="120" headerText="@Resource(bundle='ProductManagmentPanel',key='code')"
+                                           dataField="code"/>
+                        <mx:DataGridColumn headerText="@Resource(bundle='ProductManagmentPanel',key='name')"
+                                           dataField="name"/>
+                        <mx:DataGridColumn headerText="@Resource(bundle='ProductManagmentPanel',key='description')"
+                                           dataField="description"/>
+                    </mx:columns>
+                </mx:DataGrid>
+            </mx:VBox>
+            <mx:TabNavigator id="productTabNavigator" change="onTabClick(event);" width="100%" height="100%"
+                             visible="{productDTOImpl != null}">
+                <mx:Canvas id="summaryTab" label="@Resource(bundle='ProductManagmentPanel',key='summaryTab')"
+                           width="100%"
+                           height="100%"/>
+                <mx:Canvas id="imageTab" label="@Resource(bundle='ProductManagmentPanel',key='imagesTab')" width="100%"
+                           height="100%"/>
+                <mx:Canvas id="attrTab" label="@Resource(bundle='ProductManagmentPanel',key='attributesTab')"
+                           width="100%"
+                           height="100%"/>
+                <mx:Canvas id="skuTab" label="@Resource(bundle='ProductManagmentPanel',key='skuTab')" width="100%"
+                           height="100%"/>
+                <mx:Canvas id="priceTab" label="@Resource(bundle='ProductManagmentPanel',key='priceTab')" width="100%"
+                           height="100%"/>
+                <mx:Canvas id="seoTab" label="@Resource(bundle='ProductManagmentPanel',key='seoTab')" width="100%"
+                           height="100%"/>
+                <mx:Canvas id="associationsTab" label="@Resource(bundle='ProductManagmentPanel',key='associationsTab')"
+                           width="100%" height="100%"/>
+                <mx:Canvas id="categoryTab" label="@Resource(bundle='ProductManagmentPanel',key='categoriesTab')"
+                           width="100%" height="100%"/>
+                <mx:Canvas id="quantityTab" label="@Resource(bundle='ProductManagmentPanel',key='quantity')"
+                           width="100%"
+                           height="100%"/>
+
+            </mx:TabNavigator>
+        </mx:VDividedBox>
+
+    </mx:Panel>
     <mx:RemoteObject showBusyCursor="true" id="remoteSeoService" destination="remoteSeoService"
                      result="ShopManagerGlobal.instance.defaultResultHandler(event)"
                      fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
@@ -249,40 +255,49 @@
         private function initTab(idx:int):void {
             Debug.trace("INFO selected tab idx is " + idx);
             switch (idx) {
-                case TAB_SUMMARY_IDX: {
+                case TAB_SUMMARY_IDX:
+                {
                     summaryTabSelected(null);
                     break;
                 }
-                case TAB_IMAGE_IDX: {
+                case TAB_IMAGE_IDX:
+                {
                     imageTabSelected(null);
                     break;
                 }
-                case TAB_ATTR_IDX: {
+                case TAB_ATTR_IDX:
+                {
                     attrTabSelected(null);
                     break;
                 }
-                case TAB_SKU_IDX: {
+                case TAB_SKU_IDX:
+                {
                     skuTabSelected(null);
                     break;
                 }
 
-                case TAB_PRICE_IDX: {
+                case TAB_PRICE_IDX:
+                {
                     priceTabSelected(null);
                     break;
                 }
-                case TAB_SEO_IDX: {
+                case TAB_SEO_IDX:
+                {
                     seoTabSelected(null);
                     break;
                 }
-                case TAB_ASSOCIATION_IDX: {
+                case TAB_ASSOCIATION_IDX:
+                {
                     associationsTabSelected(null);
                     break;
                 }
-                case TAB_CATEGORY_IDX: {
+                case TAB_CATEGORY_IDX:
+                {
                     categoriesTabSelected(null);
                     break;
                 }
-                case TAB_WAREHOUSE_IDX: {
+                case TAB_WAREHOUSE_IDX:
+                {
                     quantityTabSelected(null);
                     break;
                 }
@@ -342,8 +357,8 @@
                                 getEntityAttributesResultHandlerInternal(event, attrTab, rejectImageAttributes);
                             },
                             ShopManagerGlobal.instance.defaultFaultHandler
-                            )
-                    );
+                    )
+            );
         }
 
 

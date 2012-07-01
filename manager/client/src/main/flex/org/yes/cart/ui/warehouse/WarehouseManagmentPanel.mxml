@@ -226,8 +226,8 @@
                      fault="remoteWarehouseService_faultHandler(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
-
-    <mx:VBox id="roleManagmentPanel" height="100%" width="100%">
+    <mx:Panel width="100%" height="100%" title="@Resource(bundle='WarehouseManagmentPanel',key='warehouses')">
+        <mx:VBox id="roleManagmentPanel" height="100%" width="100%">
 
 
         <mx:ControlBar >
@@ -256,5 +256,7 @@
         </mx:DataGrid>
 
     </mx:VBox>
+    </mx:Panel>
+
 
 </mx:Canvas>

@@ -10,81 +10,85 @@
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
     <mx:VBox width="100%" height="100%">
-        <mx:ControlBar
-                visible="{_searchCriteriaCustomerId == 0}"
-                includeInLayout="{_searchCriteriaCustomerId == 0}"
-                >
-            <mx:VBox width="100%">
-                <mx:HBox width="100%">
-                    <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='firstNameFilter')"/>
-                    <mx:TextInput id="firstNameFilterValue" width="150"/>
-                    <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='lastNameFilter')"/>
-                    <mx:TextInput id="lastNameFilterValue" width="150"/>
-                    <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='emailNameFilter')"/>
-                    <mx:TextInput id="emailNameFilterValue" width="150"/>
-                </mx:HBox>
-                <mx:HBox width="100%">
-                    <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderStatusFilter')"/>
-                    <mx:ComboBox id="statusComboBox" width="120"
-                                 prompt="@Resource(bundle='CustomerOrderPanel',key='selectStatusPropmt')"
-                                 dataProvider="{statuses}"
-                                 data="code" labelField="name"
-                            />
-                    <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderFromDateFilter')"/>
-                    <georg:DateTimeField id="orderFromDateField" width="130"/>
-                    <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderTillDateFilter')"/>
-                    <georg:DateTimeField id="orderTillDateField" width="130"/>
-                    <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderNumberFilter')"/>
-                    <mx:TextInput id="orderNumberFilterValue" width="150"/>
-                </mx:HBox>
-            </mx:VBox>
-            <mx:Button height="100%" label="@Resource(bundle='CustomerOrderPanel',key='applyFilter')"
-                       toolTip="@Resource(bundle='CustomerOrderPanel',key='applyFilterToolTip')"
-                       click="filter_clickHandler(event)"
-                    />
-            <mx:Button height="100%" label="@Resource(bundle='CustomerOrderPanel',key='clearFilter')"
-                       toolTip="@Resource(bundle='CustomerOrderPanel',key='clearFilterToolTip')"
-                       click="cleanFilter_clickHandler(event)"
-                    />
-        </mx:ControlBar>
-        <mx:DataGrid x="0" y="0" width="100%" height="99%"
-                     dataTipFunction="orderToolTip"
-                     dataProvider="{remoteCustomerOrderService.findCustomerOrdersByCriterias.lastResult}"
-                >
+        <mx:Panel width="100%" height="100%" title="@Resource(bundle='CustomerOrderPanel',key='orders')">
+            <mx:ControlBar
+                    visible="{_searchCriteriaCustomerId == 0}"
+                    includeInLayout="{_searchCriteriaCustomerId == 0}"
+                    >
+                <mx:VBox width="100%">
+                    <mx:HBox width="100%">
+                        <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='firstNameFilter')"/>
+                        <mx:TextInput id="firstNameFilterValue" width="150"/>
+                        <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='lastNameFilter')"/>
+                        <mx:TextInput id="lastNameFilterValue" width="150"/>
+                        <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='emailNameFilter')"/>
+                        <mx:TextInput id="emailNameFilterValue" width="150"/>
+                    </mx:HBox>
+                    <mx:HBox width="100%">
+                        <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderStatusFilter')"/>
+                        <mx:ComboBox id="statusComboBox" width="120"
+                                     prompt="@Resource(bundle='CustomerOrderPanel',key='selectStatusPropmt')"
+                                     dataProvider="{statuses}"
+                                     data="code" labelField="name"
+                                />
+                        <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderFromDateFilter')"/>
+                        <georg:DateTimeField id="orderFromDateField" width="130"/>
+                        <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderTillDateFilter')"/>
+                        <georg:DateTimeField id="orderTillDateField" width="130"/>
+                        <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderNumberFilter')"/>
+                        <mx:TextInput id="orderNumberFilterValue" width="150"/>
+                    </mx:HBox>
+                </mx:VBox>
+                <mx:Button height="100%" label="@Resource(bundle='CustomerOrderPanel',key='applyFilter')"
+                           toolTip="@Resource(bundle='CustomerOrderPanel',key='applyFilterToolTip')"
+                           click="filter_clickHandler(event)"
+                        />
+                <mx:Button height="100%" label="@Resource(bundle='CustomerOrderPanel',key='clearFilter')"
+                           toolTip="@Resource(bundle='CustomerOrderPanel',key='clearFilterToolTip')"
+                           click="cleanFilter_clickHandler(event)"
+                        />
+            </mx:ControlBar>
+            <mx:DataGrid x="0" y="0" width="100%" height="99%"
+                         dataTipFunction="orderToolTip"
+                         dataProvider="{remoteCustomerOrderService.findCustomerOrdersByCriterias.lastResult}"
+                    >
 
-            <mx:columns>
-                <mx:DataGridColumn showDataTips="true" width="50" headerText="@Resource(bundle='CustomerOrderPanel',key='id')"
-                                   dataField="customerorderId"/>
-                <mx:DataGridColumn  width="70" headerText="@Resource(bundle='CustomerOrderPanel',key='orderNum')"
-                                   dataField="ordernum"/>
-                <mx:DataGridColumn width="120" headerText="@Resource(bundle='CustomerOrderPanel',key='shopper')"
-                                   sortable="false" >
-                    <mx:itemRenderer>
-                        <mx:Component>
-                            <mx:HBox>
-                                <mx:Label text="{data.lastname}"/>
-                                <mx:Label text="{data.firstname}"/>
-                                <mx:Label text="{data.email}"/>
-                            </mx:HBox>
-                        </mx:Component>
-                    </mx:itemRenderer>
-                </mx:DataGridColumn>
+                <mx:columns>
+                    <mx:DataGridColumn showDataTips="true" width="50"
+                                       headerText="@Resource(bundle='CustomerOrderPanel',key='id')"
+                                       dataField="customerorderId"/>
+                    <mx:DataGridColumn width="70" headerText="@Resource(bundle='CustomerOrderPanel',key='orderNum')"
+                                       dataField="ordernum"/>
+                    <mx:DataGridColumn width="120" headerText="@Resource(bundle='CustomerOrderPanel',key='shopper')"
+                                       sortable="false">
+                        <mx:itemRenderer>
+                            <mx:Component>
+                                <mx:HBox>
+                                    <mx:Label text="{data.lastname}"/>
+                                    <mx:Label text="{data.firstname}"/>
+                                    <mx:Label text="{data.email}"/>
+                                </mx:HBox>
+                            </mx:Component>
+                        </mx:itemRenderer>
+                    </mx:DataGridColumn>
 
-                <mx:DataGridColumn width="50" headerText="@Resource(bundle='CustomerOrderPanel',key='amount')"
-                                   dataField="amount"/>
-                <mx:DataGridColumn width="50" headerText="@Resource(bundle='CustomerOrderPanel',key='currency')"
-                                   dataField="currency"/>
-                <mx:DataGridColumn  width="50"
-                                   headerText="@Resource(bundle='CustomerOrderPanel',key='status')"
-                                   labelFunction="statusLabelFunction"/>
-                <mx:DataGridColumn  width="50" headerText="@Resource(bundle='CustomerOrderPanel',key='date')"
-                                   dataField="orderTimestamp"/>
-
-
-            </mx:columns>
+                    <mx:DataGridColumn width="50" headerText="@Resource(bundle='CustomerOrderPanel',key='amount')"
+                                       dataField="amount"/>
+                    <mx:DataGridColumn width="50" headerText="@Resource(bundle='CustomerOrderPanel',key='currency')"
+                                       dataField="currency"/>
+                    <mx:DataGridColumn width="50"
+                                       headerText="@Resource(bundle='CustomerOrderPanel',key='status')"
+                                       labelFunction="statusLabelFunction"/>
+                    <mx:DataGridColumn width="50" headerText="@Resource(bundle='CustomerOrderPanel',key='date')"
+                                       dataField="orderTimestamp"/>
 
 
-        </mx:DataGrid>
+                </mx:columns>
+
+
+            </mx:DataGrid>
+        </mx:Panel>
+
     </mx:VBox>
     <mx:ArrayCollection id="statuses"/>
 
@@ -194,7 +198,7 @@
                     _searchCriteriarOrderDateFrom,
                     _searchCriteriarOrderDateTill,
                     _searchCriteriarOrderNum
-                    );
+            );
 
         }
 

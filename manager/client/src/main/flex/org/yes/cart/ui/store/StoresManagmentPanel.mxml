@@ -143,8 +143,8 @@
                      fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
-
-    <mx:VBox x="0" y="0" width="100%" height="100%" id="shopManagmenlPanel">
+    <mx:Panel width="100%" height="100%" title="@Resource(bundle='StoresManagmentPanel',key='store')">
+              <mx:VBox x="0" y="0" width="100%" height="100%" id="shopManagmenlPanel">
         <mx:ControlBar width="100%">
             <mx:Text text="@Resource(bundle='StoresManagmentPanel',key='store')"/>
             <mx:ComboBox id="storesComboBox"
@@ -170,4 +170,8 @@
             <mx:Canvas enabled="false" label="@Resource(bundle='StoresManagmentPanel',key='taxes')" width="100%" height="100%"/>
         </mx:TabNavigator>
     </mx:VBox>
+
+    </mx:Panel>
+
+
 </mx:Canvas>
