@@ -116,27 +116,32 @@
             Debug.trace("categoryTabNavigator.selectedIndex is :" + tabIdx);
             switch (tabIdx) {
 
-                case TAB_SUMMARY_IDX: {
+                case TAB_SUMMARY_IDX:
+                {
                     summaryTabSelected();
                     break;
                 }
 
-                case TAB_PRODUCTS_IDX: {
+                case TAB_PRODUCTS_IDX:
+                {
                     assignedProductsTabSelected(null);
                     break;
                 }
 
-                case TAB_SEO_IDX: {
+                case TAB_SEO_IDX:
+                {
                     seoTabSelected(null);
                     break;
                 }
 
-                case TAB_IMAGE_IDX: {
+                case TAB_IMAGE_IDX:
+                {
                     imagesTabSelected(null);
                     break;
                 }
 
-                case TAB_ATTRIB_IDX: {
+                case TAB_ATTRIB_IDX:
+                {
                     attrValuesTabSelected(null);
                     break;
                 }
@@ -309,7 +314,7 @@
                                 Alert.show(
                                         resourceManager.getString('CategoryManagmentPanel', 'cannotSave', [CategoryDTOImpl(obj) , event]),
                                         resourceManager.getString('CategoryManagmentPanel', 'error')
-                                        );
+                                );
                             },
                             dto));
 
@@ -329,15 +334,15 @@
                 var acyncToken:AsyncToken = remoteCategoryService.remove(selectedCategoryDTOImpl.categoryId);
                 acyncToken.addResponder(
                         new AsyncResponder(
-                            //result handler
+                                //result handler
                                 function (event:ResultEvent, obj:Object = null):void {
                                     selectedCategoryDTOImpl = null;
                                     remoteCategoryService.getAll().addResponder(
                                             new AsyncResponder(
                                                     getAllResultHandler,
                                                     ShopManagerGlobal.instance.defaultFaultHandler
-                                                    )
-                                            );
+                                            )
+                                    );
                                     categoryInfoPanelVisible = false;
                                     Alert.show(
                                             resourceManager.getString('CategoryManagmentPanel', 'categoryDeleted'),
@@ -345,7 +350,7 @@
 
                                 }
                                 ,
-                            //faulr handler
+                                //faulr handler
                                 function (event:FaultEvent, obj:Object):void {
                                     Alert.show(
                                             resourceManager.getString('CategoryManagmentPanel', 'categoryCanNotBeDeleted'),
@@ -353,8 +358,8 @@
 
                                 }
 
-                                )
-                        );
+                        )
+                );
             }
         }
 
@@ -401,14 +406,14 @@
             Debug.trace("INFO Category Images tab selected for category id" + selectedCategoryDTOImpl.categoryId);
             remoteCategoryService.getEntityAttributes(selectedCategoryDTOImpl.categoryId).addResponder(
                     new AsyncResponder(
-                        //Service call back with category image values.
+                            //Service call back with category image values.
                             function (event:ResultEvent, objh:Object = null):void {
                                 getEntityAttributesResultHandlerInternal(event, imagesTabPanel, acceptImageAttributes);
                             }
                             ,
                             ShopManagerGlobal.instance.defaultFaultHandler
-                            )
-                    );
+                    )
+            );
         }
 
 
@@ -421,14 +426,14 @@
             Debug.trace("INFO Category attribute values tab selected for category id" + selectedCategoryDTOImpl.categoryId);
             remoteCategoryService.getEntityAttributes(selectedCategoryDTOImpl.categoryId).addResponder(
                     new AsyncResponder(
-                        //Service call back with category attribute values.
+                            //Service call back with category attribute values.
                             function (event:ResultEvent, obj:Object = null):void {
                                 getEntityAttributesResultHandlerInternal(event, attrValuesTabPanel, rejectImageAttributes);
                             }
                             ,
                             ShopManagerGlobal.instance.defaultFaultHandler
-                            )
-                    );
+                    )
+            );
         }
 
 
@@ -518,8 +523,8 @@
                     new AsyncResponder(
                             categoryAttributeUpdatedResultHandler,
                             ShopManagerGlobal.instance.defaultFaultHandler, updateTarget
-                            )
-                    );
+                    )
+            );
         }
 
         /**
@@ -567,15 +572,15 @@
             selectedCategoryDTOImpl.seoId = Number.NaN;
             remoteCategoryService.update(selectedCategoryDTOImpl).addResponder(
                     new AsyncResponder(
-                        //Seo removed from category, so need to eliminate it from table
+                            //Seo removed from category, so need to eliminate it from table
                             function (event:ResultEvent, removedSeoId:Number):void {
                                 Debug.trace("INFO CategoryManagmentPanel category updated, seo " + removedSeoId + " will be removed");
                                 remoteSeoService.remove(removedSeoId);
                             }
                             ,
                             ShopManagerGlobal.instance.defaultFaultHandler, removedSeoId
-                            )
-                    );
+                    )
+            );
         }
 
 
@@ -658,8 +663,8 @@
                     new AsyncResponder(
                             productAssignedResultHandler,
                             productAssignedFaultHandler
-                            )
-                    );
+                    )
+            );
         }
 
         /**
@@ -810,212 +815,214 @@
     <mx:Boolean id="categoryInfoPanelVisible">false</mx:Boolean>
     <mx:Boolean id="unlinkProductVisible">false</mx:Boolean>
 
-
-    <mx:VDividedBox x="0" y="0" width="100%" height="100%" id="mainPanel">
-        <mx:VBox width="100%" height="100%">
-            <mx:ControlBar width="100%">
-                <mx:Label text="@Resource(bundle='CategoryManagmentPanel',key='categories')"/>
-
-                <mx:Button enabled="{categoryInfoPanelVisible}"
-                           label="@Resource(bundle='CategoryManagmentPanel',key='addCategory')"
-                           toolTip="@Resource(bundle='CategoryManagmentPanel',key='addCategoryHint')"
-                           click="createNewCategoryClickHandler(event)"
-                        />
-                <mx:Button enabled="{categoryInfoPanelVisible}"
-                           label="@Resource(bundle='CategoryManagmentPanel',key='deleteCategory')"
-                           toolTip="@Resource(bundle='CategoryManagmentPanel',key='deleteCategoryHint')"
-                           click="deleteSelectedCategoryClickHandler(event)"
-                        />
-            </mx:ControlBar>
-            <mx:HDividedBox x="0" y="0" width="100%" height="100%">
-                <mx:Tree id="categoryTree" height="100%" width="208"
-                         labelField="name"
-                         dataProvider="{remoteCategoryService.getAll.lastResult}"
-                         change="categorySelectedEvent(event);"
-                         itemRenderer="org.yes.cart.ui.category.CategoryTreeItemRenderer"
-                        >
-
-                </mx:Tree>
-                <!--TODO http://blog.flexexamples.com/2007/11/15/creating-a-custom-icon-function-on-a-flex-tree-control/-->
+    <mx:Panel width="100%" height="100%" title="@Resource(bundle='CategoryManagmentPanel',key='categories')">
 
 
-                <mx:TabNavigator id="categoryTabNavigator" change="onTabClick(event);" width="100%"
-                                 height="100%"
-                                 visible="{categoryInfoPanelVisible}">
+        <mx:VDividedBox x="0" y="0" width="100%" height="100%" id="mainPanel">
+            <mx:VBox width="100%" height="100%">
+                <mx:ControlBar width="100%">
+                    <mx:Label text="@Resource(bundle='CategoryManagmentPanel',key='categories')"/>
+
+                    <mx:Button enabled="{categoryInfoPanelVisible}"
+                               label="@Resource(bundle='CategoryManagmentPanel',key='addCategory')"
+                               toolTip="@Resource(bundle='CategoryManagmentPanel',key='addCategoryHint')"
+                               click="createNewCategoryClickHandler(event)"
+                            />
+                    <mx:Button enabled="{categoryInfoPanelVisible}"
+                               label="@Resource(bundle='CategoryManagmentPanel',key='deleteCategory')"
+                               toolTip="@Resource(bundle='CategoryManagmentPanel',key='deleteCategoryHint')"
+                               click="deleteSelectedCategoryClickHandler(event)"
+                            />
+                </mx:ControlBar>
+                <mx:HDividedBox x="0" y="0" width="100%" height="100%">
+                    <mx:Tree id="categoryTree" height="100%" width="208"
+                             labelField="name"
+                             dataProvider="{remoteCategoryService.getAll.lastResult}"
+                             change="categorySelectedEvent(event);"
+                             itemRenderer="org.yes.cart.ui.category.CategoryTreeItemRenderer"
+                            >
+
+                    </mx:Tree>
+                    <!--TODO http://blog.flexexamples.com/2007/11/15/creating-a-custom-icon-function-on-a-flex-tree-control/-->
 
 
-                    <mx:Canvas label="@Resource(bundle='CategoryManagmentPanel',key='summary')" x="0"
-                               y="0" width="100%" height="100%" id="categoryInfoPanel">
-                        <mx:VBox width="100%" height="100%">
-                            <mx:Form>
-                                <mx:FormItem width="100%"
-                                             label="@Resource(bundle='CategoryManagmentPanel',key='name')">
-                                    <mx:TextInput id="categoryNameTextInput" width="227"/>
-                                </mx:FormItem>
-                                <mx:FormItem width="100%"
-                                             label="@Resource(bundle='CategoryManagmentPanel',key='description')">
-                                    <mx:TextInput id="categoryDescriptionTextInput" height="54"
-                                                  width="227"/>
-                                </mx:FormItem>
-                                <mx:FormItem width="100%"
-                                             label="@Resource(bundle='CategoryManagmentPanel',key='templateVariation')">
-                                    <mx:TextInput id="categoryTemplateTextInput" width="227"/>
-                                </mx:FormItem>
-                                <mx:FormItem width="100%"
-                                             label="@Resource(bundle='CategoryManagmentPanel',key='availableFrom')">
-                                    <mx:HBox>
-                                        <mx:DateField id="categoryAvailableFromDateField" width="125"/>
+                    <mx:TabNavigator id="categoryTabNavigator" change="onTabClick(event);" width="100%"
+                                     height="100%"
+                                     visible="{categoryInfoPanelVisible}">
+
+
+                        <mx:Canvas label="@Resource(bundle='CategoryManagmentPanel',key='summary')" x="0"
+                                   y="0" width="100%" height="100%" id="categoryInfoPanel">
+                            <mx:VBox width="100%" height="100%">
+                                <mx:Form>
+                                    <mx:FormItem width="100%"
+                                                 label="@Resource(bundle='CategoryManagmentPanel',key='name')">
+                                        <mx:TextInput id="categoryNameTextInput" width="227"/>
+                                    </mx:FormItem>
+                                    <mx:FormItem width="100%"
+                                                 label="@Resource(bundle='CategoryManagmentPanel',key='description')">
+                                        <mx:TextInput id="categoryDescriptionTextInput" height="54"
+                                                      width="227"/>
+                                    </mx:FormItem>
+                                    <mx:FormItem width="100%"
+                                                 label="@Resource(bundle='CategoryManagmentPanel',key='templateVariation')">
+                                        <mx:TextInput id="categoryTemplateTextInput" width="227"/>
+                                    </mx:FormItem>
+                                    <mx:FormItem width="100%"
+                                                 label="@Resource(bundle='CategoryManagmentPanel',key='availableFrom')">
+                                        <mx:HBox>
+                                            <mx:DateField id="categoryAvailableFromDateField" width="125"/>
+                                            <mx:Button
+                                                    visible="{categoryAvailableFromDateField.selectedDate != null}"
+                                                    label="@Resource(bundle='CategoryManagmentPanel',key='clearDate')"
+                                                    toolTip="@Resource(bundle='CategoryManagmentPanel',key='clearFromDate')"
+                                                    click="categoryAvailableFromDateField.selectedDate = null;"/>
+                                        </mx:HBox>
+                                    </mx:FormItem>
+                                    <mx:FormItem width="100%"
+                                                 label="@Resource(bundle='CategoryManagmentPanel',key='availableTill')">
+                                        <mx:HBox>
+                                            <mx:DateField id="categoryAvailableTillDateField" width="125"/>
+                                            <mx:Button
+                                                    visible="{categoryAvailableTillDateField.selectedDate != null}"
+                                                    label="@Resource(bundle='CategoryManagmentPanel',key='clearDate')"
+                                                    toolTip="@Resource(bundle='CategoryManagmentPanel',key='clearTillDate')"
+                                                    click="categoryAvailableTillDateField.selectedDate = null;"/>
+                                        </mx:HBox>
+                                    </mx:FormItem>
+                                    <mx:FormItem width="100%"
+                                                 label="@Resource(bundle='CategoryManagmentPanel',key='rank')">
+                                        <mx:TextInput id="categoryRankTextInput" width="227"/>
+                                    </mx:FormItem>
+                                    <mx:FormItem width="100%"
+                                                 label="@Resource(bundle='CategoryManagmentPanel',key='filteredNavigation')">
+                                        <mx:VBox width="100%" height="100%">
+                                            <mx:CheckBox id="categoryFNByAttributesCheckBox"
+                                                         label="@Resource(bundle='CategoryManagmentPanel',key='byAttr')"
+                                                         toolTip="@Resource(bundle='CategoryManagmentPanel',key='byAttrHint')"/>
+                                            <mx:CheckBox id="categoryFNByBrandsCheckBox"
+                                                         label="@Resource(bundle='CategoryManagmentPanel',key='byBrands')"
+                                                         toolTip="@Resource(bundle='CategoryManagmentPanel',key='byBrandsHint')"/>
+                                            <mx:CheckBox id="categoryFNByPriceCheckBox"
+                                                         label="@Resource(bundle='CategoryManagmentPanel',key='byPrice')"
+                                                         toolTip="@Resource(bundle='CategoryManagmentPanel',key='byPriceHint')"/>
+                                        </mx:VBox>
+
+                                    </mx:FormItem>
+                                    <mx:FormItem width="100%"
+                                                 label="@Resource(bundle='CategoryManagmentPanel',key='priceTiers')"
+                                                 enabled="{categoryFNByPriceCheckBox.selected}">
                                         <mx:Button
-                                                visible="{categoryAvailableFromDateField.selectedDate != null}"
-                                                label="@Resource(bundle='CategoryManagmentPanel',key='clearDate')"
-                                                toolTip="@Resource(bundle='CategoryManagmentPanel',key='clearFromDate')"
-                                                click="categoryAvailableFromDateField.selectedDate = null;"/>
-                                    </mx:HBox>
-                                </mx:FormItem>
-                                <mx:FormItem width="100%"
-                                             label="@Resource(bundle='CategoryManagmentPanel',key='availableTill')">
-                                    <mx:HBox>
-                                        <mx:DateField id="categoryAvailableTillDateField" width="125"/>
-                                        <mx:Button
-                                                visible="{categoryAvailableTillDateField.selectedDate != null}"
-                                                label="@Resource(bundle='CategoryManagmentPanel',key='clearDate')"
-                                                toolTip="@Resource(bundle='CategoryManagmentPanel',key='clearTillDate')"
-                                                click="categoryAvailableTillDateField.selectedDate = null;"/>
-                                    </mx:HBox>
-                                </mx:FormItem>
-                                <mx:FormItem width="100%"
-                                             label="@Resource(bundle='CategoryManagmentPanel',key='rank')">
-                                    <mx:TextInput id="categoryRankTextInput" width="227"/>
-                                </mx:FormItem>
-                                <mx:FormItem width="100%"
-                                             label="@Resource(bundle='CategoryManagmentPanel',key='filteredNavigation')">
-                                    <mx:VBox width="100%" height="100%">
-                                        <mx:CheckBox id="categoryFNByAttributesCheckBox"
-                                                     label="@Resource(bundle='CategoryManagmentPanel',key='byAttr')"
-                                                     toolTip="@Resource(bundle='CategoryManagmentPanel',key='byAttrHint')"/>
-                                        <mx:CheckBox id="categoryFNByBrandsCheckBox"
-                                                     label="@Resource(bundle='CategoryManagmentPanel',key='byBrands')"
-                                                     toolTip="@Resource(bundle='CategoryManagmentPanel',key='byBrandsHint')"/>
-                                        <mx:CheckBox id="categoryFNByPriceCheckBox"
-                                                     label="@Resource(bundle='CategoryManagmentPanel',key='byPrice')"
-                                                     toolTip="@Resource(bundle='CategoryManagmentPanel',key='byPriceHint')"/>
-                                    </mx:VBox>
+                                                label="@Resource(bundle='CategoryManagmentPanel',key='priceTiersEdit')"
+                                                toolTip="@Resource(bundle='CategoryManagmentPanel',key='priceTiersEditHint')"
+                                                click="openPriceNavigation(event);"
 
-                                </mx:FormItem>
-                                <mx:FormItem width="100%"
-                                             label="@Resource(bundle='CategoryManagmentPanel',key='priceTiers')"
-                                             enabled="{categoryFNByPriceCheckBox.selected}">
+                                                />
+                                    </mx:FormItem>
+                                    <mx:FormItem width="100%"
+                                                 label="@Resource(bundle='CategoryManagmentPanel',key='productType')">
+                                        <mx:HBox>
+                                            <mx:ComboBox id="categoryProductTypeComboBox" width="227"
+                                                         dataProvider="{remoteProductTypeService.getAll.lastResult}"
+                                                         labelField="name"
+                                                         data="producttypeId"
+                                                         prompt="@Resource(bundle='CategoryManagmentPanel',key='selectTypePropmt')"
+                                                         change="productTypeChanged(event)"
+                                                    />
+                                            <mx:Button
+                                                    visible="{categoryProductTypeComboBox.selectedIndex != -1}"
+                                                    label="@Resource(bundle='CategoryManagmentPanel',key='clearType')"
+                                                    toolTip="@Resource(bundle='CategoryManagmentPanel',key='clearTypeHint')"
+                                                    click="categoryProductTypeComboBox.selectedIndex = -1; selectedProductTypeDTOImpl = null; selectedCategoryDTOImpl.productTypeId = 0;"
+                                                    />
+                                        </mx:HBox>
+
+                                    </mx:FormItem>
+                                </mx:Form>
+                                <mx:ControlBar horizontalAlign="right">
+                                    <mx:Button id="saveBtn"
+                                               enabled="{selectedCategoryDTOImpl != null &amp;&amp; selectedCategoryDTOImpl.changed}"
+                                               click="saveChangesToCategoriesClickHandler(event)"
+                                               label="@Resource(bundle='CategoryManagmentPanel',key='save')"
+                                               toolTip="@Resource(bundle='CategoryManagmentPanel',key='saveHint')"/>
+                                </mx:ControlBar>
+                            </mx:VBox>
+                        </mx:Canvas>
+
+                        <mx:Canvas id="assignedProductsPanel"
+                                   label="@Resource(bundle='CategoryManagmentPanel',key='products')"
+                                   width="100%" height="100%">
+
+                            <mx:VBox width="100%" height="233">
+                                <mx:ControlBar width="100%">
                                     <mx:Button
-                                            label="@Resource(bundle='CategoryManagmentPanel',key='priceTiersEdit')"
-                                            toolTip="@Resource(bundle='CategoryManagmentPanel',key='priceTiersEditHint')"
-                                            click="openPriceNavigation(event);"
-
+                                            label="@Resource(bundle='CategoryManagmentPanel',key='addProduct')"
+                                            toolTip="@Resource(bundle='CategoryManagmentPanel',key='addProductHint')"
+                                            click="assignProductToCategoryClickHandler(event)"
                                             />
-                                </mx:FormItem>
-                                <mx:FormItem width="100%"
-                                             label="@Resource(bundle='CategoryManagmentPanel',key='productType')">
-                                    <mx:HBox>
-                                        <mx:ComboBox id="categoryProductTypeComboBox" width="227"
-                                                     dataProvider="{remoteProductTypeService.getAll.lastResult}"
-                                                     labelField="name"
-                                                     data="producttypeId"
-                                                     prompt="@Resource(bundle='CategoryManagmentPanel',key='selectTypePropmt')"
-                                                     change="productTypeChanged(event)"
-                                                />
-                                        <mx:Button
-                                                visible="{categoryProductTypeComboBox.selectedIndex != -1}"
-                                                label="@Resource(bundle='CategoryManagmentPanel',key='clearType')"
-                                                toolTip="@Resource(bundle='CategoryManagmentPanel',key='clearTypeHint')"
-                                                click="categoryProductTypeComboBox.selectedIndex = -1; selectedProductTypeDTOImpl = null; selectedCategoryDTOImpl.productTypeId = 0;"
-                                                />
-                                    </mx:HBox>
+                                    <mx:Button
+                                            label="@Resource(bundle='CategoryManagmentPanel',key='removeProduct')"
+                                            toolTip="@Resource(bundle='CategoryManagmentPanel',key='removeProductHint')"
+                                            enabled="{unlinkProductVisible}"
+                                            click="removeProductFromCategoryClickHandler(event)"
+                                            />
+                                </mx:ControlBar>
+                                <mx:DataGrid id="assignedProductsGrid"
+                                             editable="true"
+                                             width="100%" height="100%"
+                                             dataProvider="{remoteProductService.getProductByCategory.lastResult}"
+                                             itemClick="productSelectedClickHandler(event)"
+                                             itemEditEnd="rankEditEnd(event);"
+                                        >
+                                    <mx:columns>
+                                        <mx:DataGridColumn editable="false"
+                                                           width="50"
+                                                           headerText="@Resource(bundle='CategoryManagmentPanel',key='productId')"
+                                                           dataField="productId"/>
+                                        <mx:DataGridColumn editable="false"
+                                                           width="120"
+                                                           headerText="@Resource(bundle='CategoryManagmentPanel',key='code')"
+                                                           dataField="code"/>
+                                        <mx:DataGridColumn editable="true"
+                                                           width="65"
+                                                           headerText="@Resource(bundle='CategoryManagmentPanel',key='rank')"
+                                                           labelFunction="rankLabelFunction"
+                                                           sortCompareFunction="rankCompareFunction"/>
+                                        <mx:DataGridColumn
+                                                editable="false"
+                                                headerText="@Resource(bundle='CategoryManagmentPanel',key='name')"
+                                                dataField="name"/>
+                                        <!--
+                                                                                            <mx:DataGridColumn headerText="@Resource(bundle='CategoryManagmentPanel',key='availablefrom')" dataField="availablefrom"/>
+                                                                                            <mx:DataGridColumn headerText="@Resource(bundle='CategoryManagmentPanel',key='availabletill')" dataField="availabletill"/>
+                                        -->
+                                    </mx:columns>
+                                </mx:DataGrid>
 
-                                </mx:FormItem>
-                            </mx:Form>
-                            <mx:ControlBar horizontalAlign="right">
-                                <mx:Button id="saveBtn"
-                                           enabled="{selectedCategoryDTOImpl != null &amp;&amp; selectedCategoryDTOImpl.changed}"
-                                           click="saveChangesToCategoriesClickHandler(event)"
-                                           label="@Resource(bundle='CategoryManagmentPanel',key='save')"
-                                           toolTip="@Resource(bundle='CategoryManagmentPanel',key='saveHint')"/>
-                            </mx:ControlBar>
-                        </mx:VBox>
-                    </mx:Canvas>
+                            </mx:VBox>
 
-                    <mx:Canvas id="assignedProductsPanel"
-                               label="@Resource(bundle='CategoryManagmentPanel',key='products')"
-                               width="100%" height="100%">
+                        </mx:Canvas>
+                        <mx:Canvas id="seoTabPanel"
+                                   label="@Resource(bundle='CategoryManagmentPanel',key='seo')" width="100%"
+                                   height="100%">
+                        </mx:Canvas>
+                        <mx:Canvas id="imagesTabPanel"
+                                   label="@Resource(bundle='CategoryManagmentPanel',key='image')"
+                                   width="100%"
+                                   height="100%">
+                        </mx:Canvas>
+                        <mx:Canvas id="attrValuesTabPanel"
+                                   label="@Resource(bundle='CategoryManagmentPanel',key='attr.values')"
+                                   width="100%"
+                                   height="100%">
+                        </mx:Canvas>
+                    </mx:TabNavigator>
 
-                        <mx:VBox width="100%" height="233">
-                            <mx:ControlBar width="100%">
-                                <mx:Button
-                                        label="@Resource(bundle='CategoryManagmentPanel',key='addProduct')"
-                                        toolTip="@Resource(bundle='CategoryManagmentPanel',key='addProductHint')"
-                                        click="assignProductToCategoryClickHandler(event)"
-                                        />
-                                <mx:Button
-                                        label="@Resource(bundle='CategoryManagmentPanel',key='removeProduct')"
-                                        toolTip="@Resource(bundle='CategoryManagmentPanel',key='removeProductHint')"
-                                        enabled="{unlinkProductVisible}"
-                                        click="removeProductFromCategoryClickHandler(event)"
-                                        />
-                            </mx:ControlBar>
-                            <mx:DataGrid id="assignedProductsGrid"
-                                         editable="true"
-                                         width="100%" height="100%"
-                                         dataProvider="{remoteProductService.getProductByCategory.lastResult}"
-                                         itemClick="productSelectedClickHandler(event)"
-                                         itemEditEnd="rankEditEnd(event);"
-                                    >
-                                <mx:columns>
-                                    <mx:DataGridColumn editable="false"
-                                                       width="50"
-                                                       headerText="@Resource(bundle='CategoryManagmentPanel',key='productId')"
-                                                       dataField="productId"/>
-                                    <mx:DataGridColumn editable="false"
-                                                       width="120"
-                                                       headerText="@Resource(bundle='CategoryManagmentPanel',key='code')"
-                                                       dataField="code"/>
-                                    <mx:DataGridColumn editable="true"
-                                                       width="65"
-                                                       headerText="@Resource(bundle='CategoryManagmentPanel',key='rank')"
-                                                       labelFunction="rankLabelFunction"
-                                                       sortCompareFunction="rankCompareFunction"/>
-                                    <mx:DataGridColumn
-                                            editable="false"
-                                            headerText="@Resource(bundle='CategoryManagmentPanel',key='name')"
-                                            dataField="name"/>
-                                    <!--
-                                                                                        <mx:DataGridColumn headerText="@Resource(bundle='CategoryManagmentPanel',key='availablefrom')" dataField="availablefrom"/>
-                                                                                        <mx:DataGridColumn headerText="@Resource(bundle='CategoryManagmentPanel',key='availabletill')" dataField="availabletill"/>
-                                    -->
-                                </mx:columns>
-                            </mx:DataGrid>
-
-                        </mx:VBox>
-
-                    </mx:Canvas>
-                    <mx:Canvas id="seoTabPanel"
-                               label="@Resource(bundle='CategoryManagmentPanel',key='seo')" width="100%"
-                               height="100%">
-                    </mx:Canvas>
-                    <mx:Canvas id="imagesTabPanel"
-                               label="@Resource(bundle='CategoryManagmentPanel',key='image')"
-                               width="100%"
-                               height="100%">
-                    </mx:Canvas>
-                    <mx:Canvas id="attrValuesTabPanel"
-                               label="@Resource(bundle='CategoryManagmentPanel',key='attr.values')"
-                               width="100%"
-                               height="100%">
-                    </mx:Canvas>
-                </mx:TabNavigator>
-
-            </mx:HDividedBox>
-        </mx:VBox>
+                </mx:HDividedBox>
+            </mx:VBox>
 
 
-    </mx:VDividedBox>
+        </mx:VDividedBox>
 
-
+    </mx:Panel>
 </mx:Canvas>
