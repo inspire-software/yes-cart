@@ -3,10 +3,15 @@
            creationComplete="init();">
     <mx:Script>
 		<![CDATA[
+        import mx.rpc.AsyncResponder;
+
+        import com.hexagonstar.util.debug.Debug;
+
         import org.yes.cart.impl.ShopDTOImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
 
         import mx.events.IndexChangedEvent;
+        import mx.events.ListEvent;
 
         private var TAB_URL_IDX:int = 1;
         private var TAB_CURRENCY_IDX:int = 2;
@@ -17,7 +22,22 @@
         public var shopDTOImpl:ShopDTOImpl;
 
         private function init():void {
-            remoteShopService.getAll();
+            remoteShopService.getAll().addResponder(
+                    new AsyncResponder(
+                            function(event:*, obj:Object = null):void {
+                                Debug.trace("Get all shops data is done ");
+                                if (storesComboBox.dataProvider.length == 1) {
+                                    storesComboBox.selectedIndex = 1;
+                                    storesComboBox.dispatchEvent(new ListEvent("change"));
+
+
+                                    //shopDTOImpl = event.currentTarget.selectedItem;
+
+                                }
+                            },
+                            ShopManagerGlobal.instance.defaultFaultHandler
+                    )
+            );
         }
 
 
@@ -113,19 +133,23 @@
 
         private function initTab(idx:int):void {
             switch (idx) {
-                case TAB_URL_IDX: {
+                case TAB_URL_IDX:
+                {
                     urlsTabSelected(null);
                     break;
                 }
-                case TAB_CURRENCY_IDX: {
+                case TAB_CURRENCY_IDX:
+                {
                     currencyTabSelected(null);
                     break;
                 }
-                case TAB_CATEGORY_IDX: {
+                case TAB_CATEGORY_IDX:
+                {
                     categoryTabSelected(null);
                     break;
                 }
-                case TAB_WAREHOUSE_IDX: {
+                case TAB_WAREHOUSE_IDX:
+                {
                     warehouseTabSelected(null);
                     break;
                 }
@@ -137,39 +161,48 @@
     </mx:Script>
 
 
-    <mx:RemoteObject showBusyCursor="true"  id="remoteShopService"
+    <mx:RemoteObject showBusyCursor="true" id="remoteShopService"
                      destination="remoteShopService"
                      result="ShopManagerGlobal.instance.defaultResultHandler(event)"
                      fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
     <mx:Panel width="100%" height="100%" title="@Resource(bundle='StoresManagmentPanel',key='store')">
-              <mx:VBox x="0" y="0" width="100%" height="100%" id="shopManagmenlPanel">
-        <mx:ControlBar width="100%">
-            <mx:Text text="@Resource(bundle='StoresManagmentPanel',key='store')"/>
-            <mx:ComboBox id="storesComboBox"
-                         labelField="name"
-                         data="shopId"
-                         dataProvider="{remoteShopService.getAll.lastResult}"
-                         change="shopChanged(event)"
-                         prompt="@Resource(bundle='StoresManagmentPanel',key='selectStorePropmt')">
-            </mx:ComboBox>
-            <mx:Button label="@Resource(bundle='StoresManagmentPanel',key='createStore')" id="createStoreBtn"
-                       click="createStoreBtnHandler(event)"/>
-            <mx:Button label="@Resource(bundle='StoresManagmentPanel',key='deleteStore')" id="deleteBtn"/>
-        </mx:ControlBar>
-        <mx:TabNavigator width="100%" height="100%" id="shopTabNavigator" change="onTabClick(event);">
-            <mx:Canvas label="@Resource(bundle='StoresManagmentPanel',key='summary')" width="100%" height="100%"    id="summaryTab"/>
-            <mx:Canvas label="@Resource(bundle='StoresManagmentPanel',key='urls')" width="100%" height="100%"   id="urlTab"/>
-            <mx:Canvas label="@Resource(bundle='StoresManagmentPanel',key='currency')" width="100%" height="100%" id="currencyTab"/>
-            <mx:Canvas label="@Resource(bundle='StoresManagmentPanel',key='catalog')" width="100%" height="100%"  id="categoryTab"/>
-            <mx:Canvas id="warehouseTab" label="@Resource(bundle='StoresManagmentPanel',key='warehouses')" width="100%" height="100%"/>
-            <mx:Canvas enabled="false" label="@Resource(bundle='StoresManagmentPanel',key='payments')" width="100%" height="100%"/>
-            <mx:Canvas enabled="false" label="@Resource(bundle='StoresManagmentPanel',key='customers')" width="100%" height="100%"/>
-            <mx:Canvas enabled="false" label="@Resource(bundle='StoresManagmentPanel',key='marketing')" width="100%" height="100%"/>
-            <mx:Canvas enabled="false" label="@Resource(bundle='StoresManagmentPanel',key='taxes')" width="100%" height="100%"/>
-        </mx:TabNavigator>
-    </mx:VBox>
+        <mx:VBox x="0" y="0" width="100%" height="100%" id="shopManagmenlPanel">
+            <mx:ControlBar width="100%">
+                <mx:Text text="@Resource(bundle='StoresManagmentPanel',key='store')"/>
+                <mx:ComboBox id="storesComboBox"
+                             labelField="name"
+                             data="shopId"
+                             dataProvider="{remoteShopService.getAll.lastResult}"
+                             change="shopChanged(event)"
+                             prompt="@Resource(bundle='StoresManagmentPanel',key='selectStorePropmt')">
+                </mx:ComboBox>
+                <mx:Button label="@Resource(bundle='StoresManagmentPanel',key='createStore')" id="createStoreBtn"
+                           click="createStoreBtnHandler(event)"/>
+                <mx:Button label="@Resource(bundle='StoresManagmentPanel',key='deleteStore')" id="deleteBtn"/>
+            </mx:ControlBar>
+            <mx:TabNavigator width="100%" height="100%" id="shopTabNavigator" change="onTabClick(event);">
+                <mx:Canvas label="@Resource(bundle='StoresManagmentPanel',key='summary')" width="100%" height="100%"
+                           id="summaryTab"/>
+                <mx:Canvas label="@Resource(bundle='StoresManagmentPanel',key='urls')" width="100%" height="100%"
+                           id="urlTab"/>
+                <mx:Canvas label="@Resource(bundle='StoresManagmentPanel',key='currency')" width="100%" height="100%"
+                           id="currencyTab"/>
+                <mx:Canvas label="@Resource(bundle='StoresManagmentPanel',key='catalog')" width="100%" height="100%"
+                           id="categoryTab"/>
+                <mx:Canvas id="warehouseTab" label="@Resource(bundle='StoresManagmentPanel',key='warehouses')"
+                           width="100%" height="100%"/>
+                <mx:Canvas enabled="false" label="@Resource(bundle='StoresManagmentPanel',key='payments')" width="100%"
+                           height="100%"/>
+                <mx:Canvas enabled="false" label="@Resource(bundle='StoresManagmentPanel',key='customers')" width="100%"
+                           height="100%"/>
+                <mx:Canvas enabled="false" label="@Resource(bundle='StoresManagmentPanel',key='marketing')" width="100%"
+                           height="100%"/>
+                <mx:Canvas enabled="false" label="@Resource(bundle='StoresManagmentPanel',key='taxes')" width="100%"
+                           height="100%"/>
+            </mx:TabNavigator>
+        </mx:VBox>
 
     </mx:Panel>
 
