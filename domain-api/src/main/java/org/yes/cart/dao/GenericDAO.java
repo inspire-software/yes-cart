@@ -66,6 +66,15 @@ public interface GenericDAO<T, PK extends Serializable> {
     <T> T findSingleByNamedQuery(String namedQueryName, Object... parameters);
 
     /**
+     * Find by hsql query.
+     * @param hsqlQuery query
+     * @param parameters parameters
+     * @return list of objects.
+     */
+    /*List<T> ???*/List<Object> findByQuery(String hsqlQuery,Object... parameters);
+
+
+    /**
      * Find single entity, that returned by named query.
      *
      * @param hsqlQuery  HSQL query string
