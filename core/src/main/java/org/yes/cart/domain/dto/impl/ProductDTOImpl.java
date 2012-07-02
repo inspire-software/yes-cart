@@ -1,9 +1,9 @@
 package org.yes.cart.domain.dto.impl;
 
-import dp.lib.dto.geda.annotations.Dto;
-import dp.lib.dto.geda.annotations.DtoCollection;
-import dp.lib.dto.geda.annotations.DtoField;
-import dp.lib.dto.geda.annotations.DtoParent;
+import com.inspiresoftware.lib.dto.geda.annotations.Dto;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoCollection;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoParent;
 import org.yes.cart.domain.dto.*;
 import org.yes.cart.domain.entity.ProductCategory;
 import org.yes.cart.domain.entity.impl.AttrValueEntityProduct;

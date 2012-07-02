@@ -9,7 +9,7 @@
     <artifactId>core</artifactId>
     <name>Yes cart core</name>
     <properties>
-        <dp.lib-dto.GeDA.version>1.1.2</dp.lib-dto.GeDA.version>
+        <GeDA.version>2.0.1</GeDA.version>
     </properties>
     <dependencies>
         <dependency>
@@ -210,10 +210,22 @@
             <version>${spring-security.version}</version>
         </dependency>
         <dependency>
-            <groupId>dp.lib</groupId>
-            <artifactId>dp.lib-dto.GeDA</artifactId>
-            <version>${dp.lib-dto.GeDA.version}</version>
+            <groupId>com.inspire-software.lib.dto.geda</groupId>
+            <artifactId>geda.core</artifactId>
+            <version>${GeDA.version}</version>
             <exclusions>
+                <exclusion>
+                    <groupId>servletapi</groupId>
+                    <artifactId>servletapi</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-jcl</artifactId>
+                </exclusion>
                 <exclusion>
                     <groupId>javassist</groupId>
                     <artifactId>javassist</artifactId>
@@ -223,12 +235,8 @@
                     <artifactId>bcel</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-jcl</artifactId>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>

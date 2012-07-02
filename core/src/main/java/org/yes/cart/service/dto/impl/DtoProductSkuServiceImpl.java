@@ -1,7 +1,7 @@
 package org.yes.cart.service.dto.impl;
 
-import dp.lib.dto.geda.adapter.repository.ValueConverterRepository;
-import dp.lib.dto.geda.assembler.DTOAssembler;
+import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
+import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.*;
@@ -64,7 +64,7 @@ public class DtoProductSkuServiceImpl
      * @param productSkuGenericService     generic product service
      * @param dtoAttributeService          attr service to determinate allowed duplicates for attribute values.
      * @param attrValueEntityProductSkuDao sku attributes dao
-     * @param valueConverterRepository     value converter
+     * @param AdaptersRepository     value converter
      * @param imageService {@link ImageService} to manipulate  related images. 
      */
     public DtoProductSkuServiceImpl(
@@ -72,11 +72,11 @@ public class DtoProductSkuServiceImpl
             final GenericService<ProductSku> productSkuGenericService,
             final DtoAttributeService dtoAttributeService,
             final GenericDAO<AttrValueEntityProductSku, Long> attrValueEntityProductSkuDao,
-            final ValueConverterRepository valueConverterRepository,
+            final AdaptersRepository AdaptersRepository,
             final PriceService priceService,
             final GenericService<Seo> seoGenericService,
             final ImageService imageService) {
-        super(dtoFactory, productSkuGenericService, valueConverterRepository);
+        super(dtoFactory, productSkuGenericService, AdaptersRepository);
 
         this.imageService = imageService;
 
@@ -104,11 +104,11 @@ public class DtoProductSkuServiceImpl
         assembler.assembleEntity(
                 instance,
                 productSku,
-                getValueConverterRepository(),
+                getAdaptersRepository(),
                 new EntityFactoryToBeanFactoryAdaptor(service.getGenericDao().getEntityFactory()));
         bindDictionaryData(instance, productSku);
         productSku = service.create(productSku);
-        return getById(productSku.getSkuId(), getValueConverterRepository());
+        return getById(productSku.getSkuId(), getAdaptersRepository());
     }
 
 
@@ -118,7 +118,7 @@ public class DtoProductSkuServiceImpl
     public long updateSkuPrice(final SkuPriceDTO skuPriceDTO) {
         final SkuPrice skuPrice = priceService.getById(skuPriceDTO.getSkuPriceId());
         skuPriceAssembler.assembleEntity(skuPriceDTO, skuPrice,
-                getValueConverterRepository(),
+                getAdaptersRepository(),
                 new EntityFactoryToBeanFactoryAdaptor(service.getGenericDao().getEntityFactory()));
         priceService.update(skuPrice);
         return skuPrice.getSkuPriceId();
@@ -141,7 +141,7 @@ public class DtoProductSkuServiceImpl
     public long createSkuPrice(final SkuPriceDTO skuPriceDTO) {
         SkuPrice skuPrice = getService().getGenericDao().getEntityFactory().getByIface(SkuPrice.class);
         skuPriceAssembler.assembleEntity(skuPriceDTO, skuPrice,
-                getValueConverterRepository(),
+                getAdaptersRepository(),
                 new EntityFactoryToBeanFactoryAdaptor(service.getGenericDao().getEntityFactory()));
         skuPrice = priceService.create(skuPrice);
         return skuPrice.getSkuPriceId();
@@ -157,11 +157,11 @@ public class DtoProductSkuServiceImpl
         assembler.assembleEntity(
                 instance,
                 productSku,
-                getValueConverterRepository(),
+                getAdaptersRepository(),
                 new EntityFactoryToBeanFactoryAdaptor(service.getGenericDao().getEntityFactory()));
         bindDictionaryData(instance, productSku);
         productSku = service.update(productSku);
-        return getById(productSku.getSkuId(), getValueConverterRepository());
+        return getById(productSku.getSkuId(), getAdaptersRepository());
     }
 
     private void bindDictionaryData(final ProductSkuDTO instance, final ProductSku productSku) {
@@ -178,7 +178,7 @@ public class DtoProductSkuServiceImpl
      */
     /*@Override
     public ProductSkuDTO getById(final long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return super.getById(id, valueConverterRepository);
+        return super.getById(id, AdaptersRepository);
     } */
 
     /**

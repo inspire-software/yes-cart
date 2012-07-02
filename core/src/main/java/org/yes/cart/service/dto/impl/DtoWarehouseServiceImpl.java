@@ -1,7 +1,7 @@
 package org.yes.cart.service.dto.impl;
 
-import dp.lib.dto.geda.adapter.repository.ValueConverterRepository;
-import dp.lib.dto.geda.assembler.DTOAssembler;
+import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
+import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.yes.cart.domain.dto.ShopWarehouseDTO;
 import org.yes.cart.domain.dto.SkuWarehouseDTO;
 import org.yes.cart.domain.dto.WarehouseDTO;
@@ -43,14 +43,14 @@ public class DtoWarehouseServiceImpl
      *
      * @param dtoFactory    {@link org.yes.cart.domain.dto.factory.DtoFactory}
      * @param warehouseGenericService       {@link org.yes.cart.service.domain.GenericService}
-     * @param valueConverterRepository     value converter
+     * @param AdaptersRepository     value converter
      * @param skuWarehouseService service to manage sku qty on warehouses
      */
     public DtoWarehouseServiceImpl(final GenericService<Warehouse> warehouseGenericService,
                                    final DtoFactory dtoFactory,
-                                   final ValueConverterRepository valueConverterRepository,
+                                   final AdaptersRepository AdaptersRepository,
                                    final SkuWarehouseService skuWarehouseService) {
-        super(dtoFactory, warehouseGenericService, valueConverterRepository);
+        super(dtoFactory, warehouseGenericService, AdaptersRepository);
         this.skuWarehouseService = skuWarehouseService;
         dtoSkuWarehouseAssembler = DTOAssembler.newAssembler(
                 dtoFactory.getImplClass(SkuWarehouseDTO.class),
@@ -130,7 +130,7 @@ public class DtoWarehouseServiceImpl
         dtoSkuWarehouseAssembler.assembleEntity(
                 skuWarehouseDTO,
                 skuWarehouse,
-                getValueConverterRepository(),
+                getAdaptersRepository(),
                 new EntityFactoryToBeanFactoryAdaptor(service.getGenericDao().getEntityFactory()));
         skuWarehouse = skuWarehouseService.create(skuWarehouse);
         return assembleSkuWarehouseDTO(skuWarehouse);
@@ -146,7 +146,7 @@ public class DtoWarehouseServiceImpl
         dtoSkuWarehouseAssembler.assembleEntity(
                 skuWarehouseDTO,
                 skuWarehouse,
-                getValueConverterRepository(),
+                getAdaptersRepository(),
                 new EntityFactoryToBeanFactoryAdaptor(service.getGenericDao().getEntityFactory()));
         skuWarehouse = skuWarehouseService.update(skuWarehouse);
         return assembleSkuWarehouseDTO(skuWarehouse);
@@ -158,7 +158,7 @@ public class DtoWarehouseServiceImpl
         dtoSkuWarehouseAssembler.assembleDto(
                 result,
                 skuWarehouse,
-                getValueConverterRepository(),
+                getAdaptersRepository(),
                 getDtoFactory());
         return result;
     }

@@ -1,7 +1,7 @@
 package org.yes.cart.service.dto.impl;
 
-import dp.lib.dto.geda.adapter.repository.ValueConverterRepository;
-import dp.lib.dto.geda.assembler.DTOAssembler;
+import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
+import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.AttrValueCustomerDTO;
@@ -51,7 +51,7 @@ public class DtoCustomerServiceImpl
      *
      * @param dtoFactory               {@link org.yes.cart.domain.dto.factory.DtoFactory}
      * @param customerGenericService   {@link org.yes.cart.service.domain.GenericService}
-     * @param valueConverterRepository {@link dp.lib.dto.geda.adapter.repository.ValueConverterRepository}
+     * @param AdaptersRepository {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
      * @param dtoAttributeService      {@link DtoAttributeService}
      * @param attrValueEntityCustomerDao       link to customer attribute values dao
      * @param shopDao shop dao
@@ -59,12 +59,12 @@ public class DtoCustomerServiceImpl
     public DtoCustomerServiceImpl(
             final DtoFactory dtoFactory,
             final GenericService<Customer> customerGenericService,
-            final ValueConverterRepository valueConverterRepository,
+            final AdaptersRepository AdaptersRepository,
             final DtoAttributeService dtoAttributeService,
             final GenericDAO<AttrValueEntityCustomer, Long> attrValueEntityCustomerDao,
             final GenericDAO<Shop, Long> shopDao) {
 
-        super(dtoFactory, customerGenericService, valueConverterRepository);
+        super(dtoFactory, customerGenericService, AdaptersRepository);
 
         this.dtoAttributeService = dtoAttributeService;
 

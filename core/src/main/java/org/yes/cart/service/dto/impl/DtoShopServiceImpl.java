@@ -65,7 +65,7 @@ public class DtoShopServiceImpl
     public ShopDTO getShopDtoByDomainName(final String serverDomainName) {
         final Shop shop =((ShopService)service).getShopByDomainName(serverDomainName);
         final ShopDTO dto = (ShopDTO) dtoFactory.getByIface(getDtoIFace());
-        getAssembler().assembleDto(dto, shop, getValueConverterRepository(), getDtoFactory());
+        getAssembler().assembleDto(dto, shop, getAdaptersRepository(), getDtoFactory());
         return dto;
     }
 

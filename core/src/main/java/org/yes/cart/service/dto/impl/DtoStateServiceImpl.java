@@ -1,6 +1,6 @@
 package org.yes.cart.service.dto.impl;
 
-import dp.lib.dto.geda.adapter.repository.ValueConverterRepository;
+import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import org.yes.cart.domain.dto.StateDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.StateDTOImpl;
@@ -26,12 +26,12 @@ public class DtoStateServiceImpl extends AbstractDtoServiceImpl<StateDTO, StateD
      * Construct state dto service.
      * @param dtoFactory    {@link org.yes.cart.domain.dto.factory.DtoFactory}
      * @param stateGenericService generic serivce
-     * @param valueConverterRepository     value converter
+     * @param AdaptersRepository     value converter
      */
     public DtoStateServiceImpl(final DtoFactory dtoFactory,
                                final GenericService<State> stateGenericService,
-                               final ValueConverterRepository valueConverterRepository) {
-        super(dtoFactory, stateGenericService, valueConverterRepository);
+                               final AdaptersRepository AdaptersRepository) {
+        super(dtoFactory, stateGenericService, AdaptersRepository);
     }
 
 

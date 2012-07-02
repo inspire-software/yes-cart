@@ -9,7 +9,7 @@ import org.yes.cart.dao.EntityFactory;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class EntityFactoryToBeanFactoryAdaptor implements dp.lib.dto.geda.adapter.BeanFactory {
+public class EntityFactoryToBeanFactoryAdaptor implements com.inspiresoftware.lib.dto.geda.adapter.BeanFactory {
 
     private final EntityFactory entityFactory;
 

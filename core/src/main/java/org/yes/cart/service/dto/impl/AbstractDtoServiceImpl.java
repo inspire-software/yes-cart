@@ -1,7 +1,7 @@
 package org.yes.cart.service.dto.impl;
 
-import dp.lib.dto.geda.adapter.repository.ValueConverterRepository;
-import dp.lib.dto.geda.assembler.DTOAssembler;
+import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
+import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.domain.dto.AttrValueDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
@@ -30,7 +30,7 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
 
     protected GenericService<IFACE> service;
 
-    private final Map<String, Object> valueConverterRepository;
+    private final Map<String, Object> AdaptersRepository;
 
     /** {@inheritDoc}*/
     public GenericService<IFACE> getService() {
@@ -47,7 +47,7 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
 
     /** {@inheritDoc} */
     public DTOIFACE getById(final long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return getById(id, valueConverterRepository);
+        return getById(id, AdaptersRepository);
     }
 
     /** {@inheritDoc} */
@@ -100,7 +100,7 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         for (IFACE entity : entities) {
             DTOIFACE dto = (DTOIFACE) dtoFactory.getByIface(getDtoIFace());
-            assembler.assembleDto(dto, entity, valueConverterRepository, dtoFactory);
+            assembler.assembleDto(dto, entity, AdaptersRepository, dtoFactory);
             dtos.add(dto);
         }
     }
@@ -109,18 +109,18 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
      * Construct base remote service.
      * @param dtoFactory {@link DtoFactory}
      * @param service {@link org.yes.cart.service.domain.GenericService}
-     * @param valueConverterRepository {@link dp.lib.dto.geda.adapter.repository.ValueConverterRepository}
+     * @param AdaptersRepository {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
      */
     public AbstractDtoServiceImpl(final DtoFactory dtoFactory,
                                   final GenericService<IFACE> service,
-                                  final ValueConverterRepository valueConverterRepository) {
+                                  final AdaptersRepository AdaptersRepository) {
         this.dtoFactory = dtoFactory;
         this.service = service;
         this.assembler = DTOAssembler.newAssembler(getDtoImpl(), getEntityIFace());
-        if (valueConverterRepository == null) {
-            this.valueConverterRepository = null;
+        if (AdaptersRepository == null) {
+            this.AdaptersRepository = null;
         } else {
-            this.valueConverterRepository = valueConverterRepository.getAll();
+            this.AdaptersRepository = AdaptersRepository.getAll();
         }
     }
 
@@ -128,8 +128,8 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
      * Get the converters repository.
      * @return converters repository.
      */
-    public Map<String, Object> getValueConverterRepository() {
-        return valueConverterRepository;
+    public Map<String, Object> getAdaptersRepository() {
+        return AdaptersRepository;
     }
 
     /**
@@ -160,7 +160,7 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
     public DTOIFACE create(final DTOIFACE instance)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         IFACE iface = (IFACE) getEntityFactory().getByIface(getEntityIFace());
-        assembler.assembleEntity(instance, iface, getValueConverterRepository(), getDtoFactory());
+        assembler.assembleEntity(instance, iface, getAdaptersRepository(), getDtoFactory());
         iface = service.create(iface);
         return getById(iface.getId());
     }
@@ -171,7 +171,7 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
     public DTOIFACE update(final DTOIFACE instance)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         IFACE iface = service.getById(instance.getId());
-        assembler.assembleEntity(instance, iface, getValueConverterRepository(), dtoFactory);
+        assembler.assembleEntity(instance, iface, getAdaptersRepository(), dtoFactory);
         iface = service.update(iface);
         return getById(iface.getId());
     }

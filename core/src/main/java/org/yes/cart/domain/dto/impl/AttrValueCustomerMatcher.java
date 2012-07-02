@@ -1,6 +1,6 @@
 package org.yes.cart.domain.dto.impl;
 
-import dp.lib.dto.geda.adapter.DtoToEntityMatcher;
+import com.inspiresoftware.lib.dto.geda.adapter.DtoToEntityMatcher;
 import org.yes.cart.domain.dto.AttrValueCustomerDTO;
 import org.yes.cart.domain.entity.AttrValueCustomer;
 

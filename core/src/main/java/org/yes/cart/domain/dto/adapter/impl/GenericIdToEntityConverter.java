@@ -1,7 +1,7 @@
 package org.yes.cart.domain.dto.adapter.impl;
 
-import dp.lib.dto.geda.adapter.BeanFactory;
-import dp.lib.dto.geda.adapter.ValueConverter;
+import com.inspiresoftware.lib.dto.geda.adapter.BeanFactory;
+import com.inspiresoftware.lib.dto.geda.adapter.ValueConverter;
 import org.yes.cart.dao.GenericDAO;
 
 /**

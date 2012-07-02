@@ -1,6 +1,6 @@
 package org.yes.cart.domain.dto.adapter.impl;
 
-import dp.lib.dto.geda.adapter.BeanFactory;
+import com.inspiresoftware.lib.dto.geda.adapter.BeanFactory;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Product;
 

@@ -1,7 +1,7 @@
 package org.yes.cart.domain.dto.impl;
 
-import dp.lib.dto.geda.annotations.Dto;
-import dp.lib.dto.geda.annotations.DtoField;
+import com.inspiresoftware.lib.dto.geda.annotations.Dto;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.CarrierSlaDTO;
 
 import java.math.BigDecimal;

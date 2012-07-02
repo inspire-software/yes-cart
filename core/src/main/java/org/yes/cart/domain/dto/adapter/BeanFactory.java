@@ -9,7 +9,7 @@ import org.yes.cart.dao.EntityFactory;
  * @author dogma
  * @since 1.0.0
  */
-public interface BeanFactory extends EntityFactory, dp.lib.dto.geda.adapter.BeanFactory {
+public interface BeanFactory extends EntityFactory, com.inspiresoftware.lib.dto.geda.adapter.BeanFactory {
 
 
 }

@@ -1,6 +1,6 @@
 package org.yes.cart.domain.dto.adapter.impl;
 
-import dp.lib.dto.geda.adapter.EntityRetriever;
+import com.inspiresoftware.lib.dto.geda.adapter.EntityRetriever;
 import org.yes.cart.dao.GenericDAO;
 
 import java.text.MessageFormat;
