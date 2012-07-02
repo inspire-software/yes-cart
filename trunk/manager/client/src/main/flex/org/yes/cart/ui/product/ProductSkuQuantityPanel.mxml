@@ -134,6 +134,14 @@
                                             //Fresh product selected from service.
                                             product = ProductDTOImpl(event.result);
                                             productCodeName.text = product.code + ' ' + product.name;
+                                            if (warehouseComboBox.dataProvider.length == 1) {
+                                                warehouseComboBox.selectedIndex = 1;
+                                                warehouseComboBox.dispatchEvent(new ListEvent("change"));
+
+
+                                                //shopDTOImpl = event.currentTarget.selectedItem;
+
+                                            }
 
                                         },
                                         ShopManagerGlobal.instance.defaultFaultHandler));
