@@ -62,7 +62,7 @@
         import mx.managers.PopUpManager;
 
         public var xmlString:String;
-        var xml:XML;
+        private var xml:XML;
         private var currArray:Array = new Array();
         private var fromXmlTab:Boolean = false;
 

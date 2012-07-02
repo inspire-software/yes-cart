@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" creationComplete="init();">
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" creationComplete="init();">
 
     <mx:Script>
 		<![CDATA[
@@ -260,130 +260,124 @@
     <mx:Boolean id="canDelete">false</mx:Boolean>
     <mx:Boolean id="canAdd">false</mx:Boolean>
 
+    <mx:HBox width="100%">
+        <mx:Button
+                label="@Resource(bundle='AttributesManagmentPanel',key='addAttribute')"
+                toolTip="@Resource(bundle='AttributesManagmentPanel',key='addAttributeHint')"
+                enabled="{canAdd}" visible="{canAdd}" includeInLayout="{canAdd}"
+                click="addAttributeValue(event)"
+                />
+        <mx:Button
+                label="@Resource(bundle='AttributesManagmentPanel',key='removeAttributeValue')"
+                toolTip="@Resource(bundle='AttributesManagmentPanel',key='removeAttributeValueHint')"
+                enabled="{canDelete}"
+                click="removeAttributeValueClickHandler(event)"
+                />
+    </mx:HBox>
+    <mx:DataGrid id="valueDataGrid" width="100%" height="100%" editable="true"
+                 dataProvider="{attrValue}"
+                 itemClick="handle_attributeSelectedClick(event)"
+                 itemEditEnd="valueEditEnd(event);"
+            >
 
-    <mx:VBox width="100%" height="100%">
-        <mx:ControlBar width="100%">
-            <mx:Button
-                    label="@Resource(bundle='AttributesManagmentPanel',key='addAttribute')"
-                    toolTip="@Resource(bundle='AttributesManagmentPanel',key='addAttributeHint')"
-                    enabled="{canAdd}" visible="{canAdd}" includeInLayout="{canAdd}"
-                    click="addAttributeValue(event)"
+        <mx:columns>
+            <mx:DataGridColumn id="attrvalueIdColumn"
+                               headerText="@Resource(bundle='AttributesManagmentPanel',key='attribute_id')"
+                               dataField="attrvalueId" width="40" editable="false"
+                               labelFunction="idLabelFunction"
                     />
-            <mx:Button
-                    label="@Resource(bundle='AttributesManagmentPanel',key='removeAttributeValue')"
-                    toolTip="@Resource(bundle='AttributesManagmentPanel',key='removeAttributeValueHint')"
-                    enabled="{canDelete}"
-                    click="removeAttributeValueClickHandler(event)"
+            <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagmentPanel',key='code')"
+                               dataField="attributeDTO.code" width="180" editable="false"
                     />
-        </mx:ControlBar>
-        <mx:DataGrid id="valueDataGrid" x="0" y="0" width="100%" height="90%" editable="true"
-                     dataProvider="{attrValue}"
-                     itemClick="handle_attributeSelectedClick(event)"
-                     itemEditEnd="valueEditEnd(event);"
-                >
-            <!---->
+            <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagmentPanel',key='name')"
+                               dataField="attributeDTO.name" width="200" editable="false"
+                    />
+            <mx:DataGridColumn id="valueDataGridColumn"
+                               headerText="@Resource(bundle='AttributesManagmentPanel',key='value')"
+                               editable="false"
+                    >
+                <mx:itemRenderer>
+                    <mx:Component>
+                        <mx:HBox>
+                            <mx:Script>
+                            <![CDATA[
+                                import com.hexagonstar.util.debug.Debug;
+
+                                import mx.core.FlexGlobals;
+
+                                import org.yes.cart.ui.attributes.valuedialog.ImageDialog;
+                                import org.yes.cart.ui.attributes.valuedialog.SimpleTextDialog;
+
+                                import org.yes.cart.ui.attributes.valuedialog.ValueDialog;
+
+                                import mx.core.Application;
+                                import mx.core.IFlexDisplayObject;
+                                import mx.events.DataGridEvent;
+                                import mx.events.DataGridEventReason;
+                                import mx.managers.PopUpManager;
+                                import mx.controls.DataGrid;
 
 
-            <mx:columns>
-                <mx:DataGridColumn id="attrvalueIdColumn"
-                                   headerText="@Resource(bundle='AttributesManagmentPanel',key='attribute_id')"
-                                   dataField="attrvalueId" width="40" editable="false"
-                                   labelFunction="idLabelFunction"
-                        />
-                <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagmentPanel',key='code')"
-                                   dataField="attributeDTO.code" width="180" editable="false"
-                        />
-                <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagmentPanel',key='name')"
-                                   dataField="attributeDTO.name" width="200" editable="false"
-                        />
-                <mx:DataGridColumn id="valueDataGridColumn"
-                                   headerText="@Resource(bundle='AttributesManagmentPanel',key='value')"
-                                   editable="false"
-                        >
-                    <mx:itemRenderer>
-                        <mx:Component>
-                            <mx:HBox>
-                                <mx:Script>
-                                <![CDATA[
-                                    import com.hexagonstar.util.debug.Debug;
+                                //Define a property for returning the new value to the cell.
+                                //[Bindable]
+                                //public var returnListPrice:String;
+                                private var popUp:ValueDialog = null;
 
-                                    import mx.core.FlexGlobals;
+                                private function openPopup():void {
+                                    var clz:Class = getPopUpClassName();
 
-                                    import org.yes.cart.ui.attributes.valuedialog.ImageDialog;
-                                    import org.yes.cart.ui.attributes.valuedialog.SimpleTextDialog;
+                                    popUp = ValueDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), clz, true));
+                                    popUp.value = data.val;
+                                    popUp.windowTitle = data.attributeDTO.name;
+                                    popUp.code = outerDocument.entityCode;
+                                    popUp.attributeGroup = outerDocument.attributeGroup;
+                                    var btnSave:Button = popUp.getButtonSave();
+                                    btnSave.addEventListener("click", saveBtnclickHandler);
+                                    PopUpManager.centerPopUp(IFlexDisplayObject(popUp));
 
-                                    import org.yes.cart.ui.attributes.valuedialog.ValueDialog;
+                                }
 
-                                    import mx.core.Application;
-                                    import mx.core.IFlexDisplayObject;
-                                    import mx.events.DataGridEvent;
-                                    import mx.events.DataGridEventReason;
-                                    import mx.managers.PopUpManager;
-                                    import mx.controls.DataGrid;
+                                private function saveBtnclickHandler(event:MouseEvent):void {
+                                    data.val = popUp.value;
+                                    var dg:DataGrid = DataGrid(this.owner);
+                                    dg.dataProvider.itemUpdated(data);
 
+                                    var dataGridEvent:DataGridEvent =
+                                            new DataGridEvent(DataGridEvent.ITEM_EDIT_END, false, true);
+                                    dataGridEvent.columnIndex = /*editedItemPosition.columnIndex*/3;
+                                    dataGridEvent.dataField = "val"/*_columns[editedItemPosition.columnIndex].dataField*/;
+                                    dataGridEvent.rowIndex = dg.selectedIndex;
+                                    dataGridEvent.itemRenderer = /*editedItemRenderer*/ null;
+                                    dataGridEvent.reason == DataGridEventReason.OTHER;
+                                    dg.dispatchEvent(dataGridEvent);
 
-                                    //Define a property for returning the new value to the cell.
-                                    //[Bindable]
-                                    //public var returnListPrice:String;
-                                    private var popUp:ValueDialog = null;
+                                    PopUpManager.removePopUp(IFlexDisplayObject(popUp));
+                                }
 
-                                    private function openPopup():void {
-                                        var clz:Class = getPopUpClassName();
+                                /**
+                                 * Factory method to create particula dialog.
+                                 * @return dialog to edit value.
+                                 */
+                                private function getPopUpClassName():Class {
 
-                                        popUp = ValueDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), clz, true));
-                                        popUp.value = data.val;
-                                        popUp.windowTitle = data.attributeDTO.name;
-                                        popUp.code = outerDocument.entityCode;
-                                        popUp.attributeGroup = outerDocument.attributeGroup;
-                                        var btnSave:Button = popUp.getButtonSave();
-                                        btnSave.addEventListener("click", saveBtnclickHandler);
-                                        PopUpManager.centerPopUp(IFlexDisplayObject(popUp));
-
+                                    if (data.attributeDTO.etypeName.indexOf("Image") > -1) {
+                                        return ImageDialog;
                                     }
 
-                                    private function saveBtnclickHandler(event:MouseEvent):void {
-                                        data.val = popUp.value;
-                                        var dg:DataGrid = DataGrid(this.owner);
-                                        dg.dataProvider.itemUpdated(data);
 
-                                        var dataGridEvent:DataGridEvent =
-                                                new DataGridEvent(DataGridEvent.ITEM_EDIT_END, false, true);
-                                        dataGridEvent.columnIndex = /*editedItemPosition.columnIndex*/3;
-                                        dataGridEvent.dataField = "val"/*_columns[editedItemPosition.columnIndex].dataField*/;
-                                        dataGridEvent.rowIndex = dg.selectedIndex;
-                                        dataGridEvent.itemRenderer = /*editedItemRenderer*/ null;
-                                        dataGridEvent.reason == DataGridEventReason.OTHER;
-                                        dg.dispatchEvent(dataGridEvent);
+                                    return SimpleTextDialog;
+                                }
+                                ]]>
+                            </mx:Script>
+                            <mx:TextInput id="valueTextInput" editable="false" width="100%" text="{data.val}"/>
+                            <mx:Button id="editBtn" width="30"
+                                       label="..."
+                                       click="callLater(openPopup)"/>
+                        </mx:HBox>
+                    </mx:Component>
+                </mx:itemRenderer>
+            </mx:DataGridColumn>
+        </mx:columns>
+    </mx:DataGrid>
 
-                                        PopUpManager.removePopUp(IFlexDisplayObject(popUp));
-                                    }
-
-                                    /**
-                                     * Factory method to create particula dialog.
-                                     * @return dialog to edit value.
-                                     */
-                                    private function getPopUpClassName():Class {
-
-                                        if (data.attributeDTO.etypeName.indexOf("Image") > -1) {
-                                            return ImageDialog;
-                                        }
-
-
-                                        return SimpleTextDialog;
-                                    }
-                                    ]]>
-                                </mx:Script>
-                                <mx:TextInput id="valueTextInput" editable="false" width="100%" text="{data.val}"/>
-                                <mx:Button id="editBtn" width="30"
-                                           label="..." 
-                                           click="callLater(openPopup)"/>
-                            </mx:HBox>
-                        </mx:Component>
-                    </mx:itemRenderer>
-                </mx:DataGridColumn>
-            </mx:columns>
-        </mx:DataGrid>
-
-    </mx:VBox>
-
-</mx:Canvas>
+</mx:VBox>

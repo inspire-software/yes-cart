@@ -58,8 +58,8 @@
 
         public var xmlString:String;
 
-        var xml:XML;
-        var gridXml:XML;
+        private var xml:XML;
+        private var gridXml:XML;
 
 
         private var currArray:Array = new Array();
