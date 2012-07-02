@@ -1,6 +1,6 @@
 package org.yes.cart.service.dto.impl;
 
-import dp.lib.dto.geda.adapter.repository.ValueConverterRepository;
+import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import org.yes.cart.domain.dto.CustomerOrderDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.CustomerOrderDTOImpl;
@@ -30,13 +30,13 @@ public class DtoCustomerOrderServiceImpl
      *
      * @param dtoFactory                  {@link org.yes.cart.domain.dto.factory.DtoFactory}
      * @param customerOrderGenericService generic serivce
-     * @param valueConverterRepository    value converter
+     * @param AdaptersRepository    value converter
      */
     public DtoCustomerOrderServiceImpl(
             final DtoFactory dtoFactory,
             final GenericService<CustomerOrder> customerOrderGenericService,
-            final ValueConverterRepository valueConverterRepository) {
-        super(dtoFactory, customerOrderGenericService, valueConverterRepository);
+            final AdaptersRepository AdaptersRepository) {
+        super(dtoFactory, customerOrderGenericService, AdaptersRepository);
     }
 
     /**
@@ -98,7 +98,7 @@ public class DtoCustomerOrderServiceImpl
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         for (CustomerOrder entity : entities) {
             CustomerOrderDTO dto = (CustomerOrderDTO) dtoFactory.getByIface(getDtoIFace());
-            assembler.assembleDto(dto, entity, getValueConverterRepository(), dtoFactory);
+            assembler.assembleDto(dto, entity, getAdaptersRepository(), dtoFactory);
             dto.setAmount(((CustomerOrderService) service).getOrderAmount(entity.getOrdernum()));
             dtos.add(dto);
         }

@@ -1,6 +1,6 @@
 package org.yes.cart.service.dto.impl;
 
-import dp.lib.dto.geda.adapter.repository.ValueConverterRepository;
+import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.dto.SeoImageDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
@@ -30,12 +30,12 @@ public class DtoImageServiceImpl
      *
      * @param dtoFactory               {@link org.yes.cart.domain.dto.factory.DtoFactory}
      * @param seoImageGenericService                  {@link org.yes.cart.service.domain.GenericService}
-     * @param valueConverterRepository {@link dp.lib.dto.geda.adapter.repository.ValueConverterRepository}
+     * @param AdaptersRepository {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
      */
     public DtoImageServiceImpl(final DtoFactory dtoFactory,
                                final GenericService<SeoImage> seoImageGenericService,
-                               final ValueConverterRepository valueConverterRepository) {
-        super(dtoFactory, seoImageGenericService, valueConverterRepository);
+                               final AdaptersRepository AdaptersRepository) {
+        super(dtoFactory, seoImageGenericService, AdaptersRepository);
         imageService = (ImageService) seoImageGenericService;
     }
 

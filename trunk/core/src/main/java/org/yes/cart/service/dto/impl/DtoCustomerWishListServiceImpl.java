@@ -1,6 +1,6 @@
 package org.yes.cart.service.dto.impl;
 
-import dp.lib.dto.geda.adapter.repository.ValueConverterRepository;
+import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import org.yes.cart.domain.dto.CustomerWishListDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.CustomerWishListDTOImpl;
@@ -26,12 +26,12 @@ public class DtoCustomerWishListServiceImpl
      * construct service.
      * @param dtoFactory               {@link org.yes.cart.domain.dto.factory.DtoFactory}
      * @param customerWishListGenericService    {@link org.yes.cart.service.domain.GenericService}
-     * @param valueConverterRepository {@link dp.lib.dto.geda.adapter.repository.ValueConverterRepository}
+     * @param AdaptersRepository {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
      */
     public DtoCustomerWishListServiceImpl(final DtoFactory dtoFactory,
                                           final GenericService<CustomerWishList> customerWishListGenericService,
-                                          final ValueConverterRepository valueConverterRepository) {
-        super(dtoFactory, customerWishListGenericService, valueConverterRepository);
+                                          final AdaptersRepository AdaptersRepository) {
+        super(dtoFactory, customerWishListGenericService, AdaptersRepository);
     }
 
 

@@ -1,6 +1,6 @@
 package org.yes.cart.service.dto.impl;
 
-import dp.lib.dto.geda.adapter.repository.ValueConverterRepository;
+import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import org.yes.cart.domain.dto.ProductTypeAttrDTO;
 import org.yes.cart.domain.dto.adapter.impl.EntityFactoryToBeanFactoryAdaptor;
 import org.yes.cart.domain.dto.factory.DtoFactory;
@@ -28,13 +28,13 @@ public class DtoProductTypeAttrServiceImpl
      *
      * @param dtoFactory               {@link org.yes.cart.domain.dto.factory.DtoFactory}
      * @param productTypeAttrGenericService                  {@link org.yes.cart.service.domain.GenericService}
-     * @param valueConverterRepository {@link dp.lib.dto.geda.adapter.repository.ValueConverterRepository}
+     * @param AdaptersRepository {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
      */
     public DtoProductTypeAttrServiceImpl(
             final DtoFactory dtoFactory,
             final GenericService<ProductTypeAttr> productTypeAttrGenericService,
-            final ValueConverterRepository valueConverterRepository) {
-        super(dtoFactory, productTypeAttrGenericService, valueConverterRepository);
+            final AdaptersRepository AdaptersRepository) {
+        super(dtoFactory, productTypeAttrGenericService, AdaptersRepository);
     }
 
 
@@ -43,7 +43,7 @@ public class DtoProductTypeAttrServiceImpl
      */
     public ProductTypeAttrDTO create(final ProductTypeAttrDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         ProductTypeAttr productTypeAttr = getEntityFactory().getByIface(ProductTypeAttr.class);
-        assembler.assembleEntity(instance, productTypeAttr, getValueConverterRepository(),
+        assembler.assembleEntity(instance, productTypeAttr, getAdaptersRepository(),
                 new EntityFactoryToBeanFactoryAdaptor(getEntityFactory()));
         productTypeAttr = service.create(productTypeAttr);
         return getById(productTypeAttr.getProductTypeAttrId());
@@ -54,7 +54,7 @@ public class DtoProductTypeAttrServiceImpl
      */
     public ProductTypeAttrDTO update(final ProductTypeAttrDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         ProductTypeAttr productTypeAttr = service.getById(instance.getProductTypeAttrId());
-        assembler.assembleEntity(instance, productTypeAttr, getValueConverterRepository(),
+        assembler.assembleEntity(instance, productTypeAttr, getAdaptersRepository(),
                 new EntityFactoryToBeanFactoryAdaptor(getEntityFactory()));
         productTypeAttr = service.update(productTypeAttr);
         return getById(productTypeAttr.getProductTypeAttrId());

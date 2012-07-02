@@ -1,6 +1,6 @@
 package org.yes.cart.service.dto.impl;
 
-import dp.lib.dto.geda.adapter.repository.ValueConverterRepository;
+import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import org.yes.cart.domain.dto.ProductAssociationDTO;
 import org.yes.cart.domain.dto.adapter.impl.EntityFactoryToBeanFactoryAdaptor;
 import org.yes.cart.domain.dto.factory.DtoFactory;
@@ -31,13 +31,13 @@ public class DtoProductAssociationServiceImpl
      *
      * @param dtoFactory               {@link org.yes.cart.domain.dto.factory.DtoFactory}
      * @param productAssociationGenericService                  {@link org.yes.cart.service.domain.GenericService}
-     * @param valueConverterRepository {@link dp.lib.dto.geda.adapter.repository.ValueConverterRepository}
+     * @param AdaptersRepository {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
      */
     public DtoProductAssociationServiceImpl(
             final DtoFactory dtoFactory,
             final GenericService<ProductAssociation> productAssociationGenericService,
-            final ValueConverterRepository valueConverterRepository) {
-        super(dtoFactory, productAssociationGenericService, valueConverterRepository);
+            final AdaptersRepository AdaptersRepository) {
+        super(dtoFactory, productAssociationGenericService, AdaptersRepository);
         productAssociationService = (ProductAssociationService) productAssociationGenericService;
     }
 
@@ -46,7 +46,7 @@ public class DtoProductAssociationServiceImpl
      */
     public ProductAssociationDTO create(final ProductAssociationDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         ProductAssociation productAssociation = getEntityFactory().getByIface(ProductAssociation.class);
-        assembler.assembleEntity(instance, productAssociation,  getValueConverterRepository(),
+        assembler.assembleEntity(instance, productAssociation,  getAdaptersRepository(),
                 new EntityFactoryToBeanFactoryAdaptor(getEntityFactory()));
         productAssociation = getService().create(productAssociation);
         return getById(productAssociation.getProductassociationId());
@@ -57,7 +57,7 @@ public class DtoProductAssociationServiceImpl
      */
     public ProductAssociationDTO update(final ProductAssociationDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         ProductAssociation productAssociation = service.getById(instance.getProductassociationId());
-        assembler.assembleEntity(instance, productAssociation,  getValueConverterRepository(), new EntityFactoryToBeanFactoryAdaptor(getEntityFactory()));
+        assembler.assembleEntity(instance, productAssociation,  getAdaptersRepository(), new EntityFactoryToBeanFactoryAdaptor(getEntityFactory()));
         productAssociation = getService().update(productAssociation);
         return getById(productAssociation.getProductassociationId());
 

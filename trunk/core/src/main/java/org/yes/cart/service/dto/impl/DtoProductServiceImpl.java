@@ -1,7 +1,7 @@
 package org.yes.cart.service.dto.impl;
 
-import dp.lib.dto.geda.adapter.repository.ValueConverterRepository;
-import dp.lib.dto.geda.assembler.DTOAssembler;
+import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
+import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.yes.cart.constants.AttributeGroupNames;
@@ -30,7 +30,7 @@ import java.util.*;
 /**
  * Default implementation of {@link DtoProductService}. Uses
  * {@link org.yes.cart.service.domain.ProductService} to retrieve data and
- * {@link dp.lib.dto.geda.assembler.DTOAssembler} to perform deep
+ * {@link com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler} to perform deep
  * conversion of domain objects into DTO.
  * <p/>
  * User: dogma
@@ -43,7 +43,7 @@ public class DtoProductServiceImpl
 
     private final ProductService productService;
     private final DtoFactory dtoFactory;
-    private final Map<String, Object> valueConverterRepository;
+    private final Map<String, Object> AdaptersRepository;
     private final GenericService<Seo> seoGenericService;
 
     private final DtoAttributeService dtoAttributeService;
@@ -64,13 +64,13 @@ public class DtoProductServiceImpl
      *
      * @param productService           domain objects product service
      * @param dtoFactory               factory for creating DTO object instances
-     * @param valueConverterRepository value converter repository
+     * @param AdaptersRepository value converter repository
      * @param imageService             {@link ImageService} to manipulate  related images.
      */
     public DtoProductServiceImpl(
             final DtoFactory dtoFactory,
             final GenericService<Product> productService,
-            final ValueConverterRepository valueConverterRepository,
+            final AdaptersRepository AdaptersRepository,
             final GenericService<Seo> seoGenericService,
             final DtoAttributeService dtoAttributeService,
             final GenericDAO<AttrValueEntityProduct, Long> attrValueEntityProductDao,
@@ -85,9 +85,9 @@ public class DtoProductServiceImpl
 
         this.productService = (ProductService) productService;
         this.dtoFactory = dtoFactory;
-        this.valueConverterRepository = valueConverterRepository.getAll();
+        this.AdaptersRepository = AdaptersRepository.getAll();
 /*
-        this.valueConverterRepository = valueConverterRepository.getByKeysAsMap(
+        this.AdaptersRepository = AdaptersRepository.getByKeysAsMap(
                 "bigDecimalToFloat",
                 "brandDTO2Brand",
                 "availabilityDto2Availability",
@@ -126,7 +126,7 @@ public class DtoProductServiceImpl
         }
         try {
             final ProductSkuDTO dtoSku = dtoFactory.getByIface(ProductSkuDTO.class);
-            productSkuDTOAssembler.assembleDto(dtoSku, domainSku, valueConverterRepository, dtoFactory);
+            productSkuDTOAssembler.assembleDto(dtoSku, domainSku, AdaptersRepository, dtoFactory);
             return dtoSku;
         } catch (Exception exp) {
             throw new UnableToWrapObjectException(ProductSku.class, ProductSkuDTO.class, exp);
@@ -140,7 +140,7 @@ public class DtoProductServiceImpl
      */
     public ProductDTO create(final ProductDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         Product product = getEntityFactory().getByIface(Product.class);
-        assembler.assembleEntity(instance, product, valueConverterRepository,
+        assembler.assembleEntity(instance, product, AdaptersRepository,
                 new EntityFactoryToBeanFactoryAdaptor(productService.getGenericDao().getEntityFactory()));
         bindDictionaryData(instance, product);
         product = service.create(product);
@@ -155,7 +155,7 @@ public class DtoProductServiceImpl
         assembler.assembleEntity(
                 instance,
                 product,
-                valueConverterRepository,
+                AdaptersRepository,
                 new EntityFactoryToBeanFactoryAdaptor(service.getGenericDao().getEntityFactory()));
         bindDictionaryData(instance, product);
         product = service.update(product);

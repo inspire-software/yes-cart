@@ -1,6 +1,6 @@
 package org.yes.cart.service.dto.impl;
 
-import dp.lib.dto.geda.adapter.repository.ValueConverterRepository;
+import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import org.yes.cart.domain.dto.AddressDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.AddressDTOImpl;
@@ -26,13 +26,13 @@ public class DtoAddressServiceImpl
      *
      * @param dtoFactory               {@link org.yes.cart.domain.dto.factory.DtoFactory}
      * @param addressGenericService    {@link org.yes.cart.service.domain.GenericService}
-     * @param valueConverterRepository {@link dp.lib.dto.geda.adapter.repository.ValueConverterRepository}
+     * @param AdaptersRepository {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
      */
     public DtoAddressServiceImpl(
             final DtoFactory dtoFactory,
             final GenericService<Address> addressGenericService,
-            final ValueConverterRepository valueConverterRepository) {
-        super(dtoFactory, addressGenericService, valueConverterRepository);
+            final AdaptersRepository AdaptersRepository) {
+        super(dtoFactory, addressGenericService, AdaptersRepository);
     }
 
 

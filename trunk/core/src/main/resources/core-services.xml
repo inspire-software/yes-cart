@@ -767,7 +767,7 @@
     <bean id="bigDecimalToFloat" class="org.yes.cart.domain.dto.adapter.impl.BigDecimalToFloatValueConverter"/>
 
     <bean id="dtoValueConvertersRepository"
-          class="dp.lib.dto.geda.adapter.repository.impl.ValueConverterRepositoryImpl">
+          class="com.inspiresoftware.lib.dto.geda.adapter.repository.impl.AdaptersRepositoryImpl">
         <constructor-arg>
             <map>
                 <entry key="bigDecimalToFloat" value-ref="bigDecimalToFloat"/>

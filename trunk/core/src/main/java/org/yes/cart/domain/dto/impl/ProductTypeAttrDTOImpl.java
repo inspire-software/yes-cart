@@ -1,8 +1,8 @@
 package org.yes.cart.domain.dto.impl;
 
-import dp.lib.dto.geda.annotations.Dto;
-import dp.lib.dto.geda.annotations.DtoField;
-import dp.lib.dto.geda.annotations.DtoParent;
+import com.inspiresoftware.lib.dto.geda.annotations.Dto;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoParent;
 import org.yes.cart.domain.dto.AttributeDTO;
 import org.yes.cart.domain.dto.ProductTypeAttrDTO;
 
