@@ -1,12 +1,4 @@
 
-
-SET character_set_client=utf8;
-SET character_set_connection=utf8;
-
-CREATE DATABASE npapay CHARACTER SET utf8 COLLATE utf8_general_ci;
-GRANT ALL ON npapay.* TO root@localhost;
-
-
 CREATE TABLE TCUSTOMERORDERPAYMENT (
   CUSTOMERORDERPAYMENT_ID bigint NOT NULL AUTO_INCREMENT,
   CARD_EXPIRY_MONTH varchar(2) DEFAULT NULL,

@@ -2,8 +2,8 @@
 -- Initial data.
 --
 
---SET character_set_client=utf8;
---SET character_set_connection=utf8;
+-- SET character_set_client=utf8;
+-- SET character_set_connection=utf8;
 
 
 INSERT INTO TASSOCIATION(ASSOCIATION_ID, CODE, NAME, DESCRIPTION)  VALUES (1, 'accessories' , 'Accessories' , 'Product accessories');
@@ -140,7 +140,7 @@ INSERT INTO TROLE (ROLE_ID, CODE, DESCRIPTION) VALUES (1, 'ROLE_SMADMIN', 'Admin
 -- default admin password 1234567
 INSERT INTO TMANAGER (MANAGER_ID, EMAIL, FIRSTNAME, LASTNAME, PASSWORD) VALUES (1, 'admin@yes-cart.com', 'Yes', 'Admin', 'fcea920f7412b5da7be0cf42b8c93759');
 
---INSERT INTO TMANAGERROLE (EMAIL, CODE) VALUES ('admin@yes-cart.com', 'WICKETSHOP_ADMIN');
+-- INSERT INTO TMANAGERROLE (EMAIL, CODE) VALUES ('admin@yes-cart.com', 'WICKETSHOP_ADMIN');
 INSERT INTO TMANAGERROLE (MANAGERROLE_ID, EMAIL, CODE) VALUES (1, 'admin@yes-cart.com', 'ROLE_SMADMIN');
 
 

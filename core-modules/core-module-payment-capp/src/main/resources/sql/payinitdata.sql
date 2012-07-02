@@ -395,18 +395,18 @@ VALUES (172, 'payPalNvpPaymentGateway',
 'AlH.6ZOY.CsakUGCdfdTg4JxaG4tA71FLEoZ5abQPArA5wL.poNPPQcB'
 , 'Signature', 'Signature');
 
---INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
---VALUES (173, 'payPalNvpPaymentGateway',
---'KEY_PATH',
---'/npa/resources/paymentgateway/paypal/some.p12'
---, 'Path to key', 'Path to key');
+-- INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+-- VALUES (173, 'payPalNvpPaymentGateway',
+-- 'KEY_PATH',
+-- '/npa/resources/paymentgateway/paypal/some.p12'
+-- , 'Path to key', 'Path to key');
 
 
---INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
---VALUES (174, 'payPalNvpPaymentGateway',
---'KEY_PASSWORD',
---'passwd for key'
---, 'Key password', 'Key password');
+-- INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+-- VALUES (174, 'payPalNvpPaymentGateway',
+-- 'KEY_PASSWORD',
+-- 'passwd for key'
+-- , 'Key password', 'Key password');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (175, 'payPalNvpPaymentGateway',
@@ -491,11 +491,11 @@ VALUES (203, 'authorizeNetSimPaymentGateway',
 'bender'
 , 'MD5 hash key', 'MD5 hash key. SIM only');
 
---INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
---VALUES (204, 'authorizeNetSimPaymentGateway',
---'MERCHANT_HOST',
---'----'
---, 'Host', 'Host. SIM only');
+-- INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+-- VALUES (204, 'authorizeNetSimPaymentGateway',
+-- 'MERCHANT_HOST',
+-- '----'
+-- , 'Host', 'Host. SIM only');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (205, 'authorizeNetSimPaymentGateway',
