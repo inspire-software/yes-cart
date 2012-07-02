@@ -111,6 +111,12 @@
             <version>2.0</version>
         </dependency>
 
+<dependency> 
+  <groupId>org.apache.xmlgraphics</groupId> 
+  <artifactId>fop</artifactId> 
+  <version>1.0</version> 
+</dependency> 
+
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
