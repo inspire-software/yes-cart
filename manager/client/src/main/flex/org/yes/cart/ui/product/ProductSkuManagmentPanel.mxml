@@ -61,7 +61,18 @@
          * @return nothing
          */
         public function init():void {
-            remoteProductSkuService.getAllProductSkus(product.productId);
+            remoteProductSkuService.getAllProductSkus(product.productId).addResponder(
+                    new AsyncResponder(
+                            function(event:*, obj:Object = null):void {
+                                Debug.trace("Get all skus 0 is done ");
+                                if (skusComboBox.dataProvider.length == 1) {
+                                    skusComboBox.selectedIndex = 1;
+                                    skusComboBox.dispatchEvent(new ListEvent("change"));
+                                }
+                            },
+                            ShopManagerGlobal.instance.defaultFaultHandler
+                    )
+            );
         }
 
 
@@ -92,22 +103,26 @@
             Debug.trace("INFO ProductSkuManagmentPanel selected sku is " + selectedSku);
             switch (idx) {
 
-                case TAB_SUMMARY_IDX: {
+                case TAB_SUMMARY_IDX:
+                {
                     skuSummaryTabSelect();
                     break;
                 }
 
-                case TAB_IMAGE_IDX: {
+                case TAB_IMAGE_IDX:
+                {
                     imageTabSelected(null);
                     break;
                 }
 
-                case TAB_ATTR_IDX: {
+                case TAB_ATTR_IDX:
+                {
                     attrTabSelected(null);
                     break;
                 }
 
-                case TAB_SEO_IDX: {
+                case TAB_SEO_IDX:
+                {
                     seoTabSelected(null);
                     break;
                 }
@@ -153,8 +168,8 @@
                                 getEntityAttributesResultHandlerInternal(event, skuImagesTab, acceptImageAttributes);
                             },
                             ShopManagerGlobal.instance.defaultFaultHandler
-                            )
-                    );
+                    )
+            );
         }
 
 
@@ -255,8 +270,8 @@
                     new AsyncResponder(
                             productAttributeUpdatedResultHandler,
                             ShopManagerGlobal.instance.defaultFaultHandler, updateTarget
-                            )
-                    );
+                    )
+            );
         }
 
 
@@ -321,8 +336,8 @@
                                 remoteSeoService.remove(removedSeo.seoId);
                             },
                             ShopManagerGlobal.instance.defaultFaultHandler, removedSeo
-                            )
-                    );
+                    )
+            );
         }
 
 
@@ -367,7 +382,18 @@
                     new AsyncResponder(
                             function (event:ResultEvent, obj:Object = null):void {
                                 //The product sku was created.
-                                remoteProductSkuService.getAllProductSkus(product.productId);
+                                remoteProductSkuService.getAllProductSkus(product.productId).addResponder(
+                                        new AsyncResponder(
+                                                function(event:*, obj:Object = null):void {
+                                                    Debug.trace("Get all skus 1 is done ");
+                                                    if (skusComboBox.dataProvider.length == 1) {
+                                                        skusComboBox.selectedIndex = 1;
+                                                        skusComboBox.dispatchEvent(new ListEvent("change"));
+                                                    }
+                                                },
+                                                ShopManagerGlobal.instance.defaultFaultHandler
+                                        )
+                                );
                             },
                             ShopManagerGlobal.instance.defaultFaultHandler));
 
@@ -402,8 +428,8 @@
                         new AsyncResponder(
                                 skuDeletedResultHandler,
                                 skuDeleteFaultHandler
-                                )
-                        );
+                        )
+                );
 
             }
         }
@@ -432,7 +458,18 @@
          */
         private function skuDeletedResultHandler(event:ResultEvent, token:AsyncToken):void {
             selectedSku = null;
-            remoteProductSkuService.getAllProductSkus(product.productId);
+            remoteProductSkuService.getAllProductSkus(product.productId).addResponder(
+                    new AsyncResponder(
+                            function(event:*, obj:Object = null):void {
+                                Debug.trace("Get all skus 2 is done ");
+                                if (skusComboBox.dataProvider.length == 1) {
+                                    skusComboBox.selectedIndex = 1;
+                                    skusComboBox.dispatchEvent(new ListEvent("change"));
+                                }
+                            },
+                            ShopManagerGlobal.instance.defaultFaultHandler
+                    )
+            );
 
 
             skuSummaryTab.removeAllChildren();

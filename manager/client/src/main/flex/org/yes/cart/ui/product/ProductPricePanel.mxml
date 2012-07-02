@@ -257,6 +257,12 @@
                                 //Fresh product selected from service.
                                 product = ProductDTOImpl(event.result);
                                 productCodeName.text = product.code + ' ' + product.name;
+
+                                if (storesComboBox.dataProvider.length == 1) {
+                                    storesComboBox.selectedIndex = 1;
+                                    storesComboBox.dispatchEvent(new ListEvent("change"));
+                                }
+
                             },
                             ShopManagerGlobal.instance.defaultFaultHandler
                             )
