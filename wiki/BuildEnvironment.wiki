@@ -103,3 +103,5 @@ Run  create-tables.sql, initdata.sql and create-npa-pay.sql, payinitdata.sql scr
 
 
 maxPostSize in tomcat
+
+unofficial fo xsd http://svn.apache.org/viewvc/xmlgraphics/fop/trunk/src/foschema/fop.xsd?view=co
