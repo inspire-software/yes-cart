@@ -40,6 +40,12 @@ public class ReportObjectStreamFactory {
 
         xStream.alias("shop", ShopEntity.class);
 
+        xStream.alias("shopurl", ShopUrlEntity.class);
+
+        xStream.alias("exchangerates", ShopExchangeRateEntity.class);
+
+
+
         return xStream;
 
     }
