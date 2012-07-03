@@ -43,6 +43,8 @@ public class ReportObjectStreamFactoryTest extends BaseCoreDBTestCase {
         assertTrue(sw.toString(), sw.toString().contains("<yes-report>"));
         assertTrue(sw.toString(), sw.toString().contains("</yes-report>"));
         assertTrue(sw.toString(), sw.toString().contains("<customerId>0</customerId>"));
+        
+        System.out.print(sw.toString());
 
 
     }
