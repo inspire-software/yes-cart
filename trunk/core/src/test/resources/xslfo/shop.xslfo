@@ -17,13 +17,11 @@
 
             <fo:page-sequence master-reference="A4-portrait">
 
-<!--
                 <fo:static-content flow-name="xsl-region-before">
                     <fo:block text-align="left">
-                        <fo:external-graphic src="file:yes-logo.png"/>
+                        <fo:external-graphic src="src/test/resources/xslfo/yes-logo.png" width="30mm"/>   Open source shopping cart
                     </fo:block>
                 </fo:static-content>
--->
 
                 <fo:static-content flow-name="xsl-region-after">
                     <fo:block text-align="right">
@@ -84,6 +82,24 @@
                                                 </fo:table-cell>
                                             </fo:table-row>
                                         </xsl:for-each>
+                                        <fo:table-row>
+                                            <fo:table-cell border="solid 1px black">
+                                                <fo:block>
+                                                    -
+                                                </fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell border="solid 1px black">
+                                                <fo:block>
+                                                    just test of suu
+                                                </fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell border="solid 1px black"  text-align="right">
+                                                <fo:block>
+                                                    <xsl:value-of select="format-number(sum(exchangerates/bag/exchangerates/rate), '##0.00')"/>
+                                                </fo:block>
+                                            </fo:table-cell>
+                                        </fo:table-row>
+
                                     </fo:table-body>
                                 </fo:table>
 
