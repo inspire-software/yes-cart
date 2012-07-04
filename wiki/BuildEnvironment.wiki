@@ -3,7 +3,7 @@
 
 = Create build environment =
 
-At this moment build procedure support Linux and Windows only. 
+At this moment build procedure is supported for Linux and Windows only. 
 
 == Mandatory items ==
 
@@ -21,58 +21,55 @@ Ant-contrib 1.0b: http://ant-contrib.sourceforge.net
 
 Tomcat 5.5.28 or above: http://tomcat.apache.org
 
-SVN or Tortoise. svnwcrev with applied http://dl.dropbox.com/u/26657232/svnwcrev-2011-05-15.diff patch for linux users. The windows user use SubWCRev from Tortoise  
+SVN client or Tortoise for Windows users. 
+svnwcrev with applied http://dl.dropbox.com/u/26657232/svnwcrev-2011-05-15.diff patch for linux users. 
+Windows user will use SubWCRev from Tortoise  
 
 
 == Nice to have ==
 
 Jetbrains Idea IDE or Eclipse IDE
 
-WAMP or LAMP or use Derby 
+MySQL 5+ or use Derby (supplied with code) 
+Potentially can use Oracle XE or MSSQL
 
-Http server shall be configured with ajp 1.3 support.
+Http server configurable for ajp 1.3.
 
 Hexagon Alcon
 
-TOAD for mysql or some db tool for target rdbms
+If you plan to use mysql then GUI client would help. We recommend TOAD or MySQL query browser.
 
 Visual paradigm community edition
 
 Local email SMTP/POP3 server
 
-Oracle XE or MySQL(see WAMP/LAMP in nice to have section) or MSSQL
 
-
-== OS enviroment variables shall be like following ==
+== Required OS environment variables ==
 
 ANT_OPTS=-Xms256m -Xmx1024m -XX:MaxPermSize=256m
-
-CATALINA_OPTS=-Dfile.encoding=UTF-8
-
-JAVA_HOME=d:\jdk1.6.0_17
-
-JAVA_OPTS=-Xms256m -Xmx1024m -XX:MaxPermSize=256m
-
-JBOSS_HOME=D:\dev\jboss-4.2.3.GA
-
+MAVEN_OPTS=-Xms256m -Xmx1024m -XX:MaxPermSize=256m
 M2_HOME=D:\apache-maven-3.0.3
 
-MAVEN_OPTS=-Xms256m -Xmx1024m -XX:MaxPermSize=256m
+CATALINA_OPTS=-Dfile.encoding=UTF-8 (for Tomcat)
+JBOSS_HOME=D:\dev\jboss-4.2.3.GA (for JBoss)
+
+JAVA_HOME=d:\jdk1.6.0_17
+JAVA_OPTS=-Xms256m -Xmx1024m -XX:MaxPermSize=256m
 
 PATH=D:\jdk1.6.0_29\bin;D:\wamp\bin\mysql\mysql5.1.36\bin;D:\apache-maven-3.0.3\bin;D:\apache-ant-1.8.1\bin;D:\flex_sdk_4\bin
-
+(all executables for ant, mvn, mysql and java should be on system path)
 
 == Update, Setup & Build ==
 
-ant all
+> ant all
 
-mvn install for derby profile
+# for derby
+> mvn install
+or
+# for mysql 
+> mvn install -Pmysql
 
-or 
-
-mvn install -Pmysql for mysql support
-
-warning : some times flex mojo produce not working swf and you have to rebuild admin swf with ant from manager\client folder
+warning : some times flex mojo produce corrupted swf in which case you have to rebuild admin swf with ant from manager\client folder
 
 == Database ==
 MySQL usage for development.
