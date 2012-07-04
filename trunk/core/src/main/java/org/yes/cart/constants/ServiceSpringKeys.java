@@ -92,7 +92,7 @@ public interface ServiceSpringKeys {
 
 
 
-    String USER_MANAGMENT_SERVICE = "userManagmentService";
+    String USER_MANAGMENT_SERVICE = "userManagementService";
 
     /**
      * {@link org.yes.cart.service.domain.AttributeGroupService} bean key.
