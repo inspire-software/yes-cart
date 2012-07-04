@@ -637,7 +637,7 @@
     </bean>
 
 
-    <bean id="userManagmentService" parent="txProxyTemplate">
+    <bean id="userManagementService" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.dto.impl.ManagementServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.service.domain.ManagerService" ref="managerService"/>

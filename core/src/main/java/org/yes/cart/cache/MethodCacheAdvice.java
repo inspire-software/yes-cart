@@ -54,7 +54,11 @@ public class MethodCacheAdvice implements ApplicationContextAware {
     @Around("@annotation(Cacheable)")
     public Object doCache(final ProceedingJoinPoint pjp) throws Throwable {
 
-        Cache cache = getCache(getAnnotation(pjp, Cacheable.class).value());
+        final Cacheable cacheable = getAnnotation(pjp, Cacheable.class);
+        if (cacheable == null) {
+            return pjp.proceed();
+        }
+        Cache cache = getCache(cacheable.value());
 
         String key = getCacheKey(pjp.getSignature().toLongString(), pjp.getArgs());
         Element element = cache.get(key);
