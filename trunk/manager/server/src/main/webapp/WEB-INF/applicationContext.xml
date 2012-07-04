@@ -94,6 +94,7 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
 
     <!-- #################################  message consumers end ######################################-->
 
+
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
           autowire="byName">
         <property name="configLocation" value="classpath:hibernate-nc.cfg.xml"/>
@@ -118,9 +119,12 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
 
     <bean id="productReindexer" class="org.yes.cart.domain.entityindexer.impl.EmptyProductIndexerImpl"/>
 
+
+
     <import resource="classpath*:core-config.xml"/>
 
     <import resource="classpath*:payment-api.xml"/>
 
+    <import resource="report.xml"/>
 
 </beans>
