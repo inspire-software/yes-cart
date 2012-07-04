@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:flex="http://www.springframework.org/schema/flex"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/flex http://www.springframework.org/schema/flex/spring-flex-1.5.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+">
+
+    <!-- #################################  reporting configuration ######################################-->
+
+
+    <bean id="reportShopInformation" class="org.yes.cart.report.impl.ReportDescriptor">
+        <property name="reportId" value="reportShopInformation"/>
+        <property name="hsqlQuery" value="select s from ShopEntity s"/>
+        <property name="langLabel">
+            <list>
+                <bean class="org.yes.cart.domain.misc.Pair">
+                    <constructor-arg index="0" value="en"/>
+                    <constructor-arg index="1" value="Common shop information"/>
+                </bean>
+                <bean class="org.yes.cart.domain.misc.Pair">
+                    <constructor-arg index="0" value="ru"/>
+                    <constructor-arg index="1" value="ru common info "/>
+                </bean>
+            </list>
+        </property>
+        <property name="langXslfo">
+            <list>
+                <bean class="org.yes.cart.domain.misc.Pair">
+                    <constructor-arg index="0" value="en"/>
+                    <constructor-arg index="1" value="shop_en.xslfo"/>
+                </bean>
+                <bean class="org.yes.cart.domain.misc.Pair">
+                    <constructor-arg index="0" value="ru"/>
+                    <constructor-arg index="1" value="shop_ru.xslfo"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+
+    <bean id="reportService" class="org.yes.cart.report.impl.ReportServiceImpl">
+        <constructor-arg ref="genericDao"/>
+        <constructor-arg>
+            <list>
+                <ref bean="reportShopInformation"/>
+            </list>
+        </constructor-arg>
+        <constructor-arg value="report"/>
+    </bean>
+
+</beans>

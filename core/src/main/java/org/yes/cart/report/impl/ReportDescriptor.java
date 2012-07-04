@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class ReportDescriptor {
 
-    private String name;
+    private String reportId;
 
     private List<Pair<String, String>> langLabel = new ArrayList<Pair<String, String>>();
     
@@ -23,23 +23,25 @@ public class ReportDescriptor {
 
     private List<ReportParameter> parameters =  new ArrayList<ReportParameter>();
 
-    private String xslfo;
+    private List<Pair<String, String>> langXslfo = new ArrayList<Pair<String, String>>();
+
 
     /**
-     * Get name.
-     * @return
+     * Get reportId.
+     * @return reportId
      */
-    public String getName() {
-        return name;
+    public String getReportId() {
+        return reportId;
     }
 
     /**
      * Set report name.
-     * @param name name of report
+     * @param reportId name of report
      */
-    public void setName(final String name) {
-        this.name = name;
+    public void setReportId(final String reportId) {
+        this.reportId = reportId;
     }
+
 
     /**
      * Gett ist of lang - name pair.
@@ -92,16 +94,31 @@ public class ReportDescriptor {
      * Get xsl fo file name for this reports.
      * @return xsl fo file name for this reports.
      */
-    public String getXslfo() {
-        return xslfo;
+    public List<Pair<String, String>> getLangXslfo() {
+        return langXslfo;
+    }
+
+    /**
+     * Get xsl fo file name for this reports.
+     * @param lang lang
+     * @return xsl fo file name for this reports.
+     */
+    public String getLangXslfo(final String lang) {
+        for (Pair<String, String> langFo : langXslfo) {
+            if (lang.equalsIgnoreCase(langFo.getFirst())) {
+                return  langFo.getSecond();
+            }
+        }
+        return langXslfo.get(0).getFirst();
     }
 
     /**
      * Set xsl fo file name for this reports.
-     * @param xslfo xsl fo file name for this reports.
+     * @param langXslfo xsl fo file name for this reports.
      */
-    public void setXslfo(final String xslfo) {
-        this.xslfo = xslfo;
+    public void setLangXslfo(List<Pair<String, String>> langXslfo) {
+        this.langXslfo = langXslfo;
     }
+
 
 }

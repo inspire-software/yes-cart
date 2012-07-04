@@ -1,9 +1,14 @@
 package org.yes.cart.report.impl;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Predicate;
+import org.apache.commons.lang.StringUtils;
 import org.apache.fop.apps.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.report.ReportService;
 
 import javax.xml.transform.*;
@@ -32,22 +37,65 @@ public class ReportServiceImpl implements ReportService {
 
     private final GenericDAO<Object, Long> genericDAO;
 
+    private final List<ReportDescriptor> reportDescriptors;
+    
+    private final String reportFolder;
+
 
     /**
      * Consstruct report service.
      * @param genericDAO report service
+     * @param reportDescriptors
      */
-    public ReportServiceImpl(GenericDAO<Object, Long> genericDAO) {
+    public ReportServiceImpl(GenericDAO<Object, Long> genericDAO, final List<ReportDescriptor> reportDescriptors, final String reportFolder) {
         this.genericDAO = genericDAO;
+        this.reportDescriptors = reportDescriptors;
+
+        if (StringUtils.isNotBlank(reportFolder)) {
+            this.reportFolder = "WEB-INF" + File.separator + reportFolder + File.separator;
+        } else {
+            this.reportFolder = StringUtils.EMPTY;
+        }
+
     }
 
     /**
-     * Run report by his descriptor.
-     * @param reportDescriptor report descriptor.
-     * @param fileName report filename
-     * @param params report parameters to pass it into hsql query.
+     * Get the list of report descriptors.
+     * @return
      */
-    public boolean getReport(final ReportDescriptor reportDescriptor, final String fileName, final Object ... params) throws Exception {
+    public List<ReportDescriptor> getReportDescriptors() {
+        return reportDescriptors;
+    }
+
+    ReportDescriptor getReportDescriptorbyId(final String reportId) {
+
+        Assert.notNull(reportId, "ReportId must be not null");
+
+        return (ReportDescriptor) CollectionUtils.find(reportDescriptors, new Predicate() {
+            public boolean evaluate(final Object o) {
+                return reportId.equalsIgnoreCase(((ReportDescriptor) o).getReportId());
+            }
+        });
+
+    }
+    
+    
+
+    
+
+    /**
+     * 
+     * Run report by his id.
+     * 
+     * @param reportId report descriptor.
+     * @param fileName report filename
+     * @param params report parameter values to pass it into hsql query.   Consequence of parameter must correspond to parameters in repoport description.
+     * @param lang given lang to roduce report.
+     * @return true in case if report was generated successfuly.
+     */
+    public boolean getReport(final String lang,final String reportId , final String fileName, final Object ... params) throws Exception {
+        
+        final ReportDescriptor reportDescriptor = getReportDescriptorbyId(reportId);
 
         final List<Object> rez = getQueryResult(reportDescriptor.getHsqlQuery(),  params);
 
@@ -57,14 +105,14 @@ public class ReportServiceImpl implements ReportService {
 
             final File xmlfile = new File(xmlFilename);
 
-            final File xsltfile = new File(reportDescriptor.getXslfo());
+            final File xsltfile = new File(reportFolder + reportDescriptor.getLangXslfo(lang));
 
-            File pdffile = new File(fileName);
+            final File pdffile = new File(fileName);
 
             // configure fopFactory as desired
-            FopFactory fopFactory = FopFactory.newInstance();
+            final FopFactory fopFactory = FopFactory.newInstance();
 
-            FOUserAgent foUserAgent = fopFactory.newFOUserAgent();
+            final FOUserAgent foUserAgent = fopFactory.newFOUserAgent();
             // configure foUserAgent as desired
 
             // Setup output
@@ -74,20 +122,20 @@ public class ReportServiceImpl implements ReportService {
 
             try {
                 // Construct fop with desired output format
-                Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, foUserAgent, out);
+                final Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, foUserAgent, out);
 
                 // Setup XSLT
-                TransformerFactory factory = TransformerFactory.newInstance();
-                Transformer transformer = factory.newTransformer(new StreamSource(xsltfile));
+                final TransformerFactory factory = TransformerFactory.newInstance();
+                final Transformer transformer = factory.newTransformer(new StreamSource(xsltfile));
 
                 // Set the value of a <param> in the stylesheet
                 transformer.setParameter("versionParam", "2.0");
 
                 // Setup input for XSLT transformation
-                Source src = new StreamSource(xmlfile);
+                final Source src = new StreamSource(xmlfile);
 
                 // Resulting SAX events (the generated FO) must be piped through to FOP
-                Result res = new SAXResult(fop.getDefaultHandler());
+                final Result res = new SAXResult(fop.getDefaultHandler());
 
                 // Start XSLT transformation and FOP processing
                 transformer.transform(src, res);
@@ -95,11 +143,13 @@ public class ReportServiceImpl implements ReportService {
             } catch (Exception ex) {
 
                 LOG.error("Cannot create pdf", ex);
+
                 return false;
                 
             } finally {
                 
                 out.close();
+
                 xmlfile.delete();
                 
             }

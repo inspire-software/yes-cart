@@ -5,6 +5,9 @@ import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.domain.misc.Pair;
+
+import java.util.Collections;
 
 import static org.junit.Assert.assertTrue;
 
@@ -30,15 +33,14 @@ public class ReportServiceImplTest   extends BaseCoreDBTestCase {
     @Test
     public void testGetReport() throws Exception {
 
-        ReportDescriptor reportDescriptor = new ReportDescriptor();
-
+        final ReportDescriptor reportDescriptor = new ReportDescriptor();
         reportDescriptor.setHsqlQuery("select s from ShopEntity s");
+        reportDescriptor.getLangXslfo().add(new Pair<String, String>("en", "src/test/resources/xslfo/shop.xslfo"));
+        reportDescriptor.setReportId("testReport");
 
-        reportDescriptor.setXslfo("src/test/resources/xslfo/shop.xslfo");
+        ReportServiceImpl reportService = new ReportServiceImpl(genericDAO, Collections.singletonList(reportDescriptor), null);
 
-        ReportServiceImpl reportService = new ReportServiceImpl(genericDAO);
-
-        assertTrue(reportService.getReport(reportDescriptor, "shop.pdf"));
+        assertTrue(reportService.getReport("en", "testReport", "shop.pdf"));
 
     }
 
