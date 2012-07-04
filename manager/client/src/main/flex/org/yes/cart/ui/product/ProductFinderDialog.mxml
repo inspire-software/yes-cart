@@ -1,5 +1,5 @@
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="780" height="500"
-                title="@Resource(bundle='ProductManagmentPanel',key='find')"
+                title="@Resource(bundle='ProductManagementPanel',key='find')"
                 showCloseButton="true"
                 close="PopUpManager.removePopUp(this)"
                 creationComplete="init();"
@@ -94,25 +94,25 @@
 
     <mx:VBox x="0" y="0" width="100%" height="100%">
         <mx:ControlBar x="0" y="0" width="100%">
-            <mx:Label text="@Resource(bundle='ProductManagmentPanel',key='code')"/>
+            <mx:Label text="@Resource(bundle='ProductManagementPanel',key='code')"/>
             <mx:TextInput id="codeTextInput" width="100"/>
-            <mx:Label text="@Resource(bundle='ProductManagmentPanel',key='name')"/>
+            <mx:Label text="@Resource(bundle='ProductManagementPanel',key='name')"/>
             <mx:TextInput id="nameTextInput" width="100"/>
-            <mx:Label text="@Resource(bundle='ProductManagmentPanel',key='brand')"/>
+            <mx:Label text="@Resource(bundle='ProductManagementPanel',key='brand')"/>
             <mx:ComboBox id="brandComboBox" width="120"
                          dataProvider="{remoteBrandService.getAll.lastResult}"
                          labelField="name"
                          data="brandId"
-                         prompt="@Resource(bundle='ProductManagmentPanel',key='selectBrandPropmt')"
+                         prompt="@Resource(bundle='ProductManagementPanel',key='selectBrandPropmt')"
                     />
-            <mx:Label text="@Resource(bundle='ProductManagmentPanel',key='type')"/>
+            <mx:Label text="@Resource(bundle='ProductManagementPanel',key='type')"/>
             <mx:ComboBox id="typeComboBox" width="120"
                          dataProvider="{remoteProductTypeService.getAll.lastResult}"
                          labelField="name"
                          data="producttypeId"
-                         prompt="@Resource(bundle='ProductManagmentPanel',key='selectTypePropmt')"
+                         prompt="@Resource(bundle='ProductManagementPanel',key='selectTypePropmt')"
                     />
-            <mx:Button label="@Resource(bundle='ProductManagmentPanel',key='findBtn')"
+            <mx:Button label="@Resource(bundle='ProductManagementPanel',key='findBtn')"
                        click="searchBtnClickHandler(event)"/>
         </mx:ControlBar>
         <mx:DataGrid width="100%" height="100%"
@@ -120,17 +120,17 @@
                      itemClick="productSelectedClickHandler(event)"
                 >
             <mx:columns>
-                <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagmentPanel',key='id')"
+                <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagementPanel',key='id')"
                                    dataField="productId"/>
-                <mx:DataGridColumn width="120" headerText="@Resource(bundle='ProductManagmentPanel',key='code')"
+                <mx:DataGridColumn width="120" headerText="@Resource(bundle='ProductManagementPanel',key='code')"
                                    dataField="code"/>
-                <mx:DataGridColumn headerText="@Resource(bundle='ProductManagmentPanel',key='name')" dataField="name"/>
+                <mx:DataGridColumn headerText="@Resource(bundle='ProductManagementPanel',key='name')" dataField="name"/>
             </mx:columns>
         </mx:DataGrid>
         <mx:ControlBar x="0" y="0" width="100%" horizontalAlign="right">
-            <mx:Button label="@Resource(bundle='CategoryCreateDialog',key='close')"
+            <mx:Button label="@Resource(bundle='ShopManagerApplication',key='close')"
                        click="PopUpManager.removePopUp(this)"/>
-            <mx:Button id="selectProductButton" label="@Resource(bundle='ProductManagmentPanel',key='select')"
+            <mx:Button id="selectProductButton" label="@Resource(bundle='ProductManagementPanel',key='select')"
                        enabled="{productDTOImpl != null}"/>
         </mx:ControlBar>
     </mx:VBox>

@@ -103,8 +103,8 @@
 
             Debug.trace("warehouse panel create fault handler:" + event.toString());
             Alert.show(
-                    resourceManager.getString('WarehouseManagmentPanel', 'warehouseNotCreated'),
-                    resourceManager.getString('WarehouseManagmentPanel', 'error'));
+                    resourceManager.getString('WarehouseManagementPanel', 'warehouseNotCreated'),
+                    resourceManager.getString('WarehouseManagementPanel', 'error'));
             selectedWarehouse = null;
             remoteWarehouseService.getAll();
         }
@@ -156,8 +156,8 @@
         private function warehouseUpdateFaultHandler(event:FaultEvent, token:AsyncToken):void {
             Debug.trace("warehouse panel update fault handler:" + event.toString());
             Alert.show(
-                    resourceManager.getString('WarehouseManagmentPanel', 'warehouseNotUpdated'),
-                    resourceManager.getString('WarehouseManagmentPanel', 'error'));
+                    resourceManager.getString('WarehouseManagementPanel', 'warehouseNotUpdated'),
+                    resourceManager.getString('WarehouseManagementPanel', 'error'));
             selectedWarehouse = null;
             remoteWarehouseService.getAll();
         }
@@ -170,8 +170,8 @@
          */
         private function deleteWarehouseClickHandler(event:flash.events.MouseEvent):void {
             Alert.show(
-                    resourceManager.getString('WarehouseManagmentPanel', 'deleteWarehouseConfirm'),
-                    resourceManager.getString('WarehouseManagmentPanel', 'warning'),
+                    resourceManager.getString('WarehouseManagementPanel', 'deleteWarehouseConfirm'),
+                    resourceManager.getString('WarehouseManagementPanel', 'warning'),
                     Alert.OK | Alert.CANCEL, this, deleteWarehouse, null, Alert.OK);
         }
 
@@ -199,8 +199,8 @@
         private function warehouseDeletedResultHandler(event:ResultEvent, token:AsyncToken):void {
             Debug.trace("warehouse panel delete fault handler:" + event.toString());
             Alert.show(
-                    resourceManager.getString('WarehouseManagmentPanel', 'warehouseDeletedConfirm'),
-                    resourceManager.getString('WarehouseManagmentPanel', 'info'));
+                    resourceManager.getString('WarehouseManagementPanel', 'warehouseDeletedConfirm'),
+                    resourceManager.getString('WarehouseManagementPanel', 'info'));
             selectedWarehouse = null;
             remoteWarehouseService.getAll();
         }
@@ -213,8 +213,8 @@
          */
         private function warehouseDeleteFaultHandler(event:FaultEvent, token:AsyncToken):void {
             Alert.show(
-                    resourceManager.getString('WarehouseManagmentPanel', 'warehouseNotDeleted'),
-                    resourceManager.getString('WarehouseManagmentPanel', 'error'));
+                    resourceManager.getString('WarehouseManagementPanel', 'warehouseNotDeleted'),
+                    resourceManager.getString('WarehouseManagementPanel', 'error'));
         }
         ]]>
     </mx:Script>
@@ -226,20 +226,20 @@
                      fault="remoteWarehouseService_faultHandler(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
-    <mx:Panel width="100%" height="100%" title="@Resource(bundle='WarehouseManagmentPanel',key='warehouses')">
-        <mx:VBox id="roleManagmentPanel" height="100%" width="100%">
+    <mx:Panel width="100%" height="100%" title="@Resource(bundle='WarehouseManagementPanel',key='warehouses')">
+        <mx:VBox id="roleManagementPanel" height="100%" width="100%">
 
 
         <mx:ControlBar >
-            <mx:Button label="@Resource(bundle='WarehouseManagmentPanel',key='newWarehouse')"
-                       toolTip="@Resource(bundle='WarehouseManagmentPanel',key='newWarehouseHint')"
+            <mx:Button label="@Resource(bundle='WarehouseManagementPanel',key='newWarehouse')"
+                       toolTip="@Resource(bundle='WarehouseManagementPanel',key='newWarehouseHint')"
                        click="newWarehouseclickHandler(event)"/>
-            <mx:Button label="@Resource(bundle='WarehouseManagmentPanel',key='editWarehouse')"
-                       toolTip="@Resource(bundle='WarehouseManagmentPanel',key='editWarehouseHint')"
+            <mx:Button label="@Resource(bundle='WarehouseManagementPanel',key='editWarehouse')"
+                       toolTip="@Resource(bundle='WarehouseManagementPanel',key='editWarehouseHint')"
                        enabled="{selectedWarehouse != null}"
                        click="editWarehouseclickHandler(event)"/>
-            <mx:Button label="@Resource(bundle='WarehouseManagmentPanel',key='deleteWarehouse')"
-                       toolTip="@Resource(bundle='WarehouseManagmentPanel',key='deleteWarehouseHint')"
+            <mx:Button label="@Resource(bundle='WarehouseManagementPanel',key='deleteWarehouse')"
+                       toolTip="@Resource(bundle='WarehouseManagementPanel',key='deleteWarehouseHint')"
                        enabled="{selectedWarehouse != null}"
                        click="deleteWarehouseClickHandler(event)"/>
 
@@ -249,9 +249,9 @@
                      dataProvider="{remoteWarehouseService.getAll.lastResult}"
                      itemClick="handle_warehouseSelectedClick(event)">
             <mx:columns>
-                <mx:DataGridColumn width="80" headerText="@Resource(bundle='WarehouseManagmentPanel',key='code')" dataField="code"/>
-                <mx:DataGridColumn width="300" headerText="@Resource(bundle='WarehouseManagmentPanel',key='name')" dataField="name"/>
-                <mx:DataGridColumn headerText="@Resource(bundle='WarehouseManagmentPanel',key='description')" dataField="description"/>
+                <mx:DataGridColumn width="80" headerText="@Resource(bundle='WarehouseManagementPanel',key='code')" dataField="code"/>
+                <mx:DataGridColumn width="300" headerText="@Resource(bundle='WarehouseManagementPanel',key='name')" dataField="name"/>
+                <mx:DataGridColumn headerText="@Resource(bundle='WarehouseManagementPanel',key='description')" dataField="description"/>
             </mx:columns>
         </mx:DataGrid>
 

@@ -3,41 +3,41 @@
                 layout="absolute"
                 width="380"
                 height="280"
-				title="@Resource(bundle='ProductManagmentPanel',key='createProduct')"
+				title="@Resource(bundle='ProductManagementPanel',key='createProduct')"
                 showCloseButton="true" close="PopUpManager.removePopUp(this)" >
 
 	<mx:VBox x="0" y="0" width="100%" height="100%">
 		<mx:Form x="0" y="0">
-			<mx:FormItem label="@Resource(bundle='ProductManagmentPanel',key='productCode')">
+			<mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='productCode')">
 				<mx:TextInput id="codeTextInput" width="200"/>
 			</mx:FormItem>
-			<mx:FormItem label="@Resource(bundle='ProductManagmentPanel',key='productName')">
+			<mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='productName')">
 				<mx:TextInput id="nameTextImput" width="200"/>
 			</mx:FormItem>
-			<mx:FormItem label="@Resource(bundle='ProductManagmentPanel',key='productBrand')">
+			<mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='productBrand')">
 				<mx:ComboBox id="brandComboBox" width="200"
                              labelField="name"
-                             prompt="@Resource(bundle='ProductManagmentPanel',key='selectBrandPropmt')"
+                             prompt="@Resource(bundle='ProductManagementPanel',key='selectBrandPropmt')"
                         />
 			</mx:FormItem>
-			<mx:FormItem label="@Resource(bundle='ProductManagmentPanel',key='productType')">
+			<mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='productType')">
 				<mx:ComboBox id="productTypeComboBox" width="200"
                              labelField="name"
-                             prompt="@Resource(bundle='ProductManagmentPanel',key='selectProductType')"
+                             prompt="@Resource(bundle='ProductManagementPanel',key='selectProductType')"
                         />
 			</mx:FormItem>
-			<mx:FormItem label="@Resource(bundle='ProductManagmentPanel',key='productAvailability')">
+			<mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='productAvailability')">
 				<mx:ComboBox id="availablilityComboBox" width="200"
                              labelField="name"
-                             prompt="@Resource(bundle='ProductManagmentPanel',key='selectAvailability')"
+                             prompt="@Resource(bundle='ProductManagementPanel',key='selectAvailability')"
                         />
 			</mx:FormItem>
 		</mx:Form>
 		
 		<mx:ControlBar width="100%" horizontalAlign="right">
-            <mx:Button label="@Resource(bundle='ProductManagmentPanel',key='close')" width="100" click="PopUpManager.removePopUp(this);"/>
-			<mx:Button id="saveBtn" label="@Resource(bundle='ProductManagmentPanel',key='createProduct')"
-                       toolTip="@Resource(bundle='ProductManagmentPanel',key='createProductHint')"
+            <mx:Button label="@Resource(bundle='ShopManagerApplication',key='close')" width="100" click="PopUpManager.removePopUp(this);"/>
+			<mx:Button id="saveBtn" label="@Resource(bundle='ProductManagementPanel',key='createProduct')"
+                       toolTip="@Resource(bundle='ProductManagementPanel',key='createProductHint')"
                        width="100"/>
 
 		</mx:ControlBar>

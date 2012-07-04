@@ -1,66 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" creationComplete="init();">
 	<mx:Form x="0" y="0">
-		<mx:FormItem label="@Resource(bundle='ProductManagmentPanel',key='code')">
+		<mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='code')">
 			<mx:TextInput id="codeTextInput" width="300" enabled="{ !(isNaN(productDTOImpl.productId) || productDTOImpl.productId ==0) }"/>
 		</mx:FormItem>
-		<mx:FormItem label="@Resource(bundle='ProductManagmentPanel',key='name')">
+		<mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='name')">
 			<mx:TextInput id="nameTextInput" width="300"/>
 		</mx:FormItem>
-		<mx:FormItem label="@Resource(bundle='ProductManagmentPanel',key='description')">
+		<mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='description')">
 			<mx:TextArea id="descriptionTextInput" width="300"/>
 		</mx:FormItem>
 		<mx:FormItem width="100%"
-					 label="@Resource(bundle='ProductManagmentPanel',key='availableFrom')">
+					 label="@Resource(bundle='ProductManagementPanel',key='availableFrom')">
 			<mx:HBox>
 				<mx:DateField id="productAvailableFromDateField" width="125"/>
 				<mx:Button
 					visible="{productAvailableFromDateField.selectedDate != null}"
-					label="@Resource(bundle='ProductManagmentPanel',key='clearDate')"
-					toolTip="@Resource(bundle='ProductManagmentPanel',key='clearFromDate')"
+					label="@Resource(bundle='ProductManagementPanel',key='clearDate')"
+					toolTip="@Resource(bundle='ProductManagementPanel',key='clearFromDate')"
 					click="productAvailableFromDateField.selectedDate = null;"/>
 			</mx:HBox>
 		</mx:FormItem>
 		<mx:FormItem width="100%"
-					 label="@Resource(bundle='ProductManagmentPanel',key='availableTill')">
+					 label="@Resource(bundle='ProductManagementPanel',key='availableTill')">
 			<mx:HBox>
 				<mx:DateField id="productAvailableTillDateField" width="125"/>
 				<mx:Button
 					visible="{productAvailableTillDateField.selectedDate != null}"
-					label="@Resource(bundle='ProductManagmentPanel',key='clearDate')"
-					toolTip="@Resource(bundle='ProductManagmentPanel',key='clearTillDate')"
+					label="@Resource(bundle='ProductManagementPanel',key='clearDate')"
+					toolTip="@Resource(bundle='ProductManagementPanel',key='clearTillDate')"
 					click="productAvailableTillDateField.selectedDate = null;"/>
 			</mx:HBox>
 		</mx:FormItem>
-		<mx:FormItem label="@Resource(bundle='ProductManagmentPanel',key='featured')">
+		<mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='featured')">
 			<mx:CheckBox id="featuredCheckBox"/>
 		</mx:FormItem>
-		<mx:FormItem label="@Resource(bundle='ProductManagmentPanel',key='brand')">
+		<mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='brand')">
 			<mx:ComboBox id="brandComboBox" width="300"
 						 dataProvider="{brands}"
 						 labelField="name"
-						 prompt="@Resource(bundle='ProductManagmentPanel',key='selectBrandPropmt')"
+						 prompt="@Resource(bundle='ProductManagementPanel',key='selectBrandPropmt')"
 						 />
 		</mx:FormItem>
-		<mx:FormItem label="@Resource(bundle='ProductManagmentPanel',key='type')">
+		<mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='type')">
 			<mx:ComboBox id="typeComboBox" width="300"
 						 dataProvider="{productTypes}"
 						 labelField="name"
-						 prompt="@Resource(bundle='ProductManagmentPanel',key='selectTypePropmt')"
+						 prompt="@Resource(bundle='ProductManagementPanel',key='selectTypePropmt')"
 						 />
 
 		</mx:FormItem>
-		<mx:FormItem label="@Resource(bundle='ProductManagmentPanel',key='available')">
+		<mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='available')">
 			<mx:ComboBox id="availableComboBox" width="300"
                          dataProvider="{availability}"
 						 labelField="name"
-						 prompt="@Resource(bundle='ProductManagmentPanel',key='selectAvailability')"
+						 prompt="@Resource(bundle='ProductManagementPanel',key='selectAvailability')"
 						 />
 
 		</mx:FormItem>
 
 
-        <mx:FormItem label="@Resource(bundle='ProductManagmentPanel',key='tag')">
+        <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='tag')">
             <mx:TextInput id="tagTextInput" width="300"/>
         </mx:FormItem>
 
@@ -69,8 +69,8 @@
         <mx:FormItem>
             <mx:Button
                 enabled="{productDTOImplChanged}"
-                label="@Resource(bundle='ProductManagmentPanel',key='save')"
-                toolTip="@Resource(bundle='ProductManagmentPanel',key='saveHint')"
+                label="@Resource(bundle='ProductManagementPanel',key='save')"
+                toolTip="@Resource(bundle='ProductManagementPanel',key='saveHint')"
                 click="saveProductChanges(event)"/>
 
         </mx:FormItem>

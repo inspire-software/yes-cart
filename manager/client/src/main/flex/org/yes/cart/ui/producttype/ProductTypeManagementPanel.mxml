@@ -449,7 +449,7 @@
         }
 
 
-        var prodTypeAttributeViewGroupCreateDialog:ProdTypeAttributeViewGroupCreateDialog;
+        private var prodTypeAttributeViewGroupCreateDialog:ProdTypeAttributeViewGroupCreateDialog;
 
         /**
          * Call dialog to create view group.

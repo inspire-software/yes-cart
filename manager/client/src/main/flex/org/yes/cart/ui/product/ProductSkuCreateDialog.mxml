@@ -3,35 +3,35 @@
                 layout="absolute"
                 width="480"
                 height="280"
-                title="@Resource(bundle='ProductSkuManagmentPanel',key='createProductSku')"
+                title="@Resource(bundle='ProductSkuManagementPanel',key='createProductSku')"
                 showCloseButton="true" close="PopUpManager.removePopUp(this)"
                 creationComplete="init();"
         >
 
     <mx:VBox x="0" y="0" width="100%" height="100%">
         <mx:Form x="0" y="0">
-            <mx:FormItem label="@Resource(bundle='ProductSkuManagmentPanel',key='code')">
+            <mx:FormItem label="@Resource(bundle='ProductSkuManagementPanel',key='code')">
                 <mx:TextInput id="codeTextInput" width="300"/>
             </mx:FormItem>
-            <mx:FormItem label="@Resource(bundle='ProductSkuManagmentPanel',key='name')">
+            <mx:FormItem label="@Resource(bundle='ProductSkuManagementPanel',key='name')">
                 <mx:TextInput id="nameTextInput" width="300"/>
             </mx:FormItem>
-            <mx:FormItem label="@Resource(bundle='ProductSkuManagmentPanel',key='barCode')">
+            <mx:FormItem label="@Resource(bundle='ProductSkuManagementPanel',key='barCode')">
                 <mx:TextInput id="barCodeTextInput" width="300"/>
             </mx:FormItem>
-            <mx:FormItem label="@Resource(bundle='ProductSkuManagmentPanel',key='rank')">
+            <mx:FormItem label="@Resource(bundle='ProductSkuManagementPanel',key='rank')">
                 <mx:TextInput id="rankTextInput" width="300"/>
             </mx:FormItem>
-            <mx:FormItem label="@Resource(bundle='ProductSkuManagmentPanel',key='description')">
+            <mx:FormItem label="@Resource(bundle='ProductSkuManagementPanel',key='description')">
                 <mx:TextArea id="descriptionTextInput" width="300"/>
             </mx:FormItem>
         </mx:Form>
 
         <mx:ControlBar width="100%" horizontalAlign="right">
-            <mx:Button label="@Resource(bundle='ProductSkuManagmentPanel',key='close')" width="100"
+            <mx:Button label="@Resource(bundle='ShopManagerApplication',key='close')" width="100"
                        click="PopUpManager.removePopUp(this);"/>
-            <mx:Button id="saveBtn" label="@Resource(bundle='ProductSkuManagmentPanel',key='createProductSkuBtn')"
-                       toolTip="@Resource(bundle='ProductSkuManagmentPanel',key='createProductSkuHint')"
+            <mx:Button id="saveBtn" label="@Resource(bundle='ProductSkuManagementPanel',key='createProductSkuBtn')"
+                       toolTip="@Resource(bundle='ProductSkuManagementPanel',key='createProductSkuHint')"
                        width="100"
                        enabled="{productSkuChangedFlag}"
                     />
@@ -62,8 +62,8 @@
     <mx:NumberValidator id="rankValidator"
         source="{rankTextInput}" property="text"
         minValue="0" maxValue="99999" domain="int"
-        invalidCharError="@Resource(bundle='ProductSkuManagmentPanel',key='rankInvalidCharError')"
-        integerError="@Resource(bundle='ProductSkuManagmentPanel',key='rankInvalidCharError')"
+        invalidCharError="@Resource(bundle='ProductSkuManagementPanel',key='rankInvalidCharError')"
+        integerError="@Resource(bundle='ProductSkuManagementPanel',key='rankInvalidCharError')"
             />
 
 

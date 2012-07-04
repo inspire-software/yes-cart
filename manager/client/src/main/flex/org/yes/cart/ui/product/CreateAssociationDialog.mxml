@@ -3,46 +3,46 @@
                 xmlns:datetime="com.georg.datetime.*" xmlns:georg="com.georg.*" layout="absolute"
                 width="500"
                 height="250"
-                title="@Resource(bundle='ProductManagmentPanel',key='createAssociation')"
+                title="@Resource(bundle='ProductManagementPanel',key='createAssociation')"
                 showCloseButton="true" close="PopUpManager.removePopUp(this)"
                 creationComplete="init();"
         >
     <mx:Form>
-        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagmentPanel',key='associationType')">
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='associationType')">
             <mx:ComboBox id="associationComboBox" width="300"
                          labelField="name"
                          dataProvider="{remoteAssociationService.getAll.lastResult}"
                          change="associationChanged(event)"
-                         prompt="@Resource(bundle='ProductManagmentPanel',key='associationPropmt')">
+                         prompt="@Resource(bundle='ProductManagementPanel',key='associationPropmt')">
             </mx:ComboBox>
         </mx:FormItem>
-        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagmentPanel',key='selectProduct')">
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='selectProduct')">
             <mx:HBox>
                 <mx:Label id="productLabel" width="262"/>
                 <mx:Button id="selectProductBtn" width="30"
                            label="..."
-                           toolTip="@Resource(bundle='ProductManagmentPanel',key='selectProductHint')"
+                           toolTip="@Resource(bundle='ProductManagementPanel',key='selectProductHint')"
                            click="selectProductClick(event);"
                         />
             </mx:HBox>
         </mx:FormItem>
-        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagmentPanel',key='rank')">
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='rank')">
             <mx:TextInput id="rankTextInput" width="300"/>
         </mx:FormItem>
-        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagmentPanel',key='reverseAssociation')">
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='reverseAssociation')">
             <mx:CheckBox id="reverseCheckBox" selected="true"
-                         toolTip="@Resource(bundle='ProductManagmentPanel',key='reverseAssociationHint')"
+                         toolTip="@Resource(bundle='ProductManagementPanel',key='reverseAssociationHint')"
                     />
         </mx:FormItem>
     </mx:Form>
 
     <mx:ControlBar horizontalAlign="right">
-        <mx:Button id="closeBtn" label="@Resource(bundle='ProductManagmentPanel',key='close')"
+        <mx:Button id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
                    click="PopUpManager.removePopUp(this)"
                    width="94"/>
         <mx:Button id="saveBtn"
-                   label="@Resource(bundle='ProductManagmentPanel',key='saveAssociation')"
-                   toolTip="@Resource(bundle='ProductManagmentPanel',key='saveAssociationHint')"
+                   label="@Resource(bundle='ProductManagementPanel',key='saveAssociation')"
+                   toolTip="@Resource(bundle='ProductManagementPanel',key='saveAssociationHint')"
                    width="94"
                    enabled="{selecteAssociationDTOImpl != null &amp;&amp; selectedProductDTOImpl != null}"
                 />
@@ -52,8 +52,8 @@
     <mx:NumberValidator id="rankValidator"
         source="{rankTextInput}" property="text"
         minValue="0" maxValue="99999" domain="int"
-        invalidCharError="@Resource(bundle='ProductManagmentPanel',key='rankInvalidCharError')"
-        integerError="@Resource(bundle='ProductManagmentPanel',key='rankInvalidCharError')"
+        invalidCharError="@Resource(bundle='ProductManagementPanel',key='rankInvalidCharError')"
+        integerError="@Resource(bundle='ProductManagementPanel',key='rankInvalidCharError')"
     />
 
     <mx:RemoteObject showBusyCursor="true" id="remoteAssociationService" destination="remoteAssociationService"
@@ -64,6 +64,8 @@
 
     <mx:Script>
         <![CDATA[
+        import mx.core.FlexGlobals;
+
         import org.yes.cart.impl.AssociationDTOImpl;
         import org.yes.cart.impl.ProductDTOImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
@@ -104,7 +106,7 @@
          * @return
          */
         private function selectProductClick(event:MouseEvent):void {
-            productFinderPopUp = ProductFinderDialog(PopUpManager.createPopUp(DisplayObject(Application.application), ProductFinderDialog, true));
+            productFinderPopUp = ProductFinderDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), ProductFinderDialog, true));
             productFinderPopUp.selectProductButton.addEventListener("click", productSelected);
             PopUpManager.centerPopUp(productFinderPopUp);
 

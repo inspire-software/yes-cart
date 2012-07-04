@@ -116,8 +116,8 @@
          */
         private function deleteAttrGroup_clickHandler(event:MouseEvent):void {
             Alert.show(
-                    resourceManager.getString('AttributesManagmentPanel', 'deleteAttrGroupConfirm'),
-                    resourceManager.getString('AttributesManagmentPanel', 'warning'),
+                    resourceManager.getString('AttributesManagementPanel', 'deleteAttrGroupConfirm'),
+                    resourceManager.getString('AttributesManagementPanel', 'warning'),
                     Alert.OK | Alert.CANCEL, this, deleteAttrGroup, null, Alert.OK);
         }
 
@@ -133,8 +133,8 @@
                 remoteAttributeGroupService.remove(selectedGroup.code);
 
                 Alert.show(
-                        resourceManager.getString('AttributesManagmentPanel', 'attrGroupDeletedConfirm'),
-                        resourceManager.getString('AttributesManagmentPanel', 'info'));
+                        resourceManager.getString('AttributesManagementPanel', 'attrGroupDeletedConfirm'),
+                        resourceManager.getString('AttributesManagementPanel', 'info'));
             }
             remoteAttributeGroupService.getAll();
             selectedGroup = null;
@@ -210,8 +210,8 @@
          */
         private function deleteAttr_clickHandler(event:MouseEvent):void {
             Alert.show(
-                    resourceManager.getString('AttributesManagmentPanel', 'deleteAttrConfirm'),
-                    resourceManager.getString('AttributesManagmentPanel', 'warning'),
+                    resourceManager.getString('AttributesManagementPanel', 'deleteAttrConfirm'),
+                    resourceManager.getString('AttributesManagementPanel', 'warning'),
                     Alert.OK | Alert.CANCEL, this, deleteGroup, null, Alert.OK);
         }
 
@@ -227,8 +227,8 @@
                 remoteAttributeService.remove(selectedAttribute.attributeId);
 
                 Alert.show(
-                        resourceManager.getString('AttributesManagmentPanel', 'attrDeletedConfirm'),
-                        resourceManager.getString('AttributesManagmentPanel', 'info'));
+                        resourceManager.getString('AttributesManagementPanel', 'attrDeletedConfirm'),
+                        resourceManager.getString('AttributesManagementPanel', 'info'));
             }
             remoteAttributeService.findByAttributeGroupCode(selectedGroup.code);
             selectedAttribute = null;
@@ -260,25 +260,25 @@
                      fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
-     <mx:Panel width="100%" height="100%" title="@Resource(bundle='AttributesManagmentPanel',key='attributes')">
+     <mx:Panel width="100%" height="100%" title="@Resource(bundle='AttributesManagementPanel',key='attributes')">
 
 
 
-    <mx:VDividedBox id="attributesManagmentPanel" width="100%"
+    <mx:VDividedBox id="attributesManagementPanel" width="100%"
                     height="100%">
         <mx:VBox width="100%" height="50%">
             <mx:HBox paddingLeft="5" paddingTop="5" width="100%">
-                <mx:Button label="@Resource(bundle='AttributesManagmentPanel',key='addNewGroup')"
-                           toolTip="@Resource(bundle='AttributesManagmentPanel',key='addNewGroupHint')"
+                <mx:Button label="@Resource(bundle='AttributesManagementPanel',key='addNewGroup')"
+                           toolTip="@Resource(bundle='AttributesManagementPanel',key='addNewGroupHint')"
                            click="newAttrGroup_clickHandler(event)"
                         />
-                <mx:Button label="@Resource(bundle='AttributesManagmentPanel',key='editGroup')"
-                           toolTip="@Resource(bundle='AttributesManagmentPanel',key='editGroupHint')"
+                <mx:Button label="@Resource(bundle='AttributesManagementPanel',key='editGroup')"
+                           toolTip="@Resource(bundle='AttributesManagementPanel',key='editGroupHint')"
                            enabled="{attributesPanelVisible}"
                            click="editAttrGroup_clickHandler(event)"
                         />
-                <mx:Button label="@Resource(bundle='AttributesManagmentPanel',key='deleteGroup')"
-                           toolTip="@Resource(bundle='AttributesManagmentPanel',key='deleteGroupHint')"
+                <mx:Button label="@Resource(bundle='AttributesManagementPanel',key='deleteGroup')"
+                           toolTip="@Resource(bundle='AttributesManagementPanel',key='deleteGroupHint')"
                            enabled="{attributesPanelVisible}"
                            click="deleteAttrGroup_clickHandler(event)"
                         />
@@ -287,28 +287,28 @@
                          dataProvider="{remoteAttributeGroupService.getAll.lastResult}"
                          itemClick="handle_attributeGroupSelectedClick(event)">
                 <mx:columns>
-                    <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagmentPanel',key='code')"
+                    <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='code')"
                                        dataField="code"/>
-                    <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagmentPanel',key='name')"
+                    <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='name')"
                                        dataField="name"/>
-                    <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagmentPanel',key='description')"
+                    <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='description')"
                                        dataField="description"/>
                 </mx:columns>
             </mx:DataGrid>
         </mx:VBox>
         <mx:VBox width="100%" height="50%" visible="{attributesPanelVisible}">
             <mx:HBox paddingLeft="5" paddingTop="5" width="100%">
-                <mx:Button label="@Resource(bundle='AttributesManagmentPanel',key='addNew')"
-                           toolTip="@Resource(bundle='AttributesManagmentPanel',key='addNewHint')"
+                <mx:Button label="@Resource(bundle='AttributesManagementPanel',key='addNew')"
+                           toolTip="@Resource(bundle='AttributesManagementPanel',key='addNewHint')"
                            click="createAttribute_clickHandler(event)"
                         />
-                <mx:Button label="@Resource(bundle='AttributesManagmentPanel',key='edit')"
-                           toolTip="@Resource(bundle='AttributesManagmentPanel',key='editHint')"
+                <mx:Button label="@Resource(bundle='AttributesManagementPanel',key='edit')"
+                           toolTip="@Resource(bundle='AttributesManagementPanel',key='editHint')"
                            enabled="{attributesEditDeleteEnabled}"
                            click="updateAttribute_clickHandler(event)"
                         />
-                <mx:Button label="@Resource(bundle='AttributesManagmentPanel',key='delete')"
-                           toolTip="@Resource(bundle='AttributesManagmentPanel',key='deleteHint')"
+                <mx:Button label="@Resource(bundle='AttributesManagementPanel',key='delete')"
+                           toolTip="@Resource(bundle='AttributesManagementPanel',key='deleteHint')"
                            enabled="{attributesEditDeleteEnabled}"
                            click="deleteAttr_clickHandler(event)"
 
@@ -318,17 +318,17 @@
                          dataProvider="{remoteAttributeService.findByAttributeGroupCode.lastResult}"
                          itemClick="handle_attributeSelectedClick(event)">
                 <mx:columns>
-                    <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagmentPanel',key='attribute_id')"
+                    <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='attribute_id')"
                                        dataField="attributeId" width="30"
                             />
-                    <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagmentPanel',key='code')"
+                    <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='code')"
                                        dataField="code" width="100"
                             />
-                    <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagmentPanel',key='name')"
+                    <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='name')"
                                        dataField="name"/>
-                    <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagmentPanel',key='etype')"
+                    <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='etype')"
                                        dataField="etypeName"/>
-                    <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagmentPanel',key='mandatory')"
+                    <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='mandatory')"
                                        dataField="mandatory" width="100" textAlign="center">
                         <mx:itemRenderer>
                             <mx:Component>
@@ -336,9 +336,9 @@
                             </mx:Component>
                         </mx:itemRenderer>
                     </mx:DataGridColumn>
-                    <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagmentPanel',key='value')"
+                    <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='value')"
                                        dataField="val"/>
-                    <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagmentPanel',key='description')"
+                    <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='description')"
                                        dataField="description"/>
                 </mx:columns>
             </mx:DataGrid>

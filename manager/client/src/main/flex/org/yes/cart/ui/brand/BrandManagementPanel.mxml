@@ -14,7 +14,7 @@
         import org.yes.cart.impl.BrandDTOImpl;
         import org.yes.cart.util.UpdateTarget;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
-        import org.yes.cart.ui.attributes.EntityAttributeValuesManagmentPanel;
+        import org.yes.cart.ui.attributes.EntityAttributeValuesManagementPanel;
 
         import flash.events.MouseEvent;
 
@@ -39,7 +39,7 @@
 
         private var newPopUp:BrandCreateDialog;
 
-        private var attrValuePanel:EntityAttributeValuesManagmentPanel;
+        private var attrValuePanel:EntityAttributeValuesManagementPanel;
 
         public function init():void {
             remoteBrandService.getAll();
@@ -85,7 +85,7 @@
          */
         private function getEntityAttributesResultHandlerInternal(event:ResultEvent, canvas:Canvas, filterFunk:Function):void {
             Debug.trace("TRACE BrandManagementPanel getEntityAttributesResultHandlerInternal");
-            attrValuePanel = new EntityAttributeValuesManagmentPanel();
+            attrValuePanel = new EntityAttributeValuesManagementPanel();
             attrValuePanel.attrValue = ArrayCollection(event.result);
 
 
@@ -239,7 +239,7 @@
                             }
                             ,
                             //Warehouse creation fauld handler
-                            function(event:FaultEvent, obj:Object = null):void {
+                            function (event:FaultEvent, obj:Object = null):void {
                                 Alert.show(
                                         resourceManager.getString('BrandManagementPanel', 'brandNotCreated') + "\n" + event.message,
                                         resourceManager.getString('BrandManagementPanel', 'error'));

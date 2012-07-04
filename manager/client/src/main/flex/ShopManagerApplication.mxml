@@ -16,34 +16,31 @@
 		<![CDATA[
         import com.hexagonstar.util.debug.Debug;
 
-        import org.yes.cart.ui.attributes.AttributesManagmentPanel;
+        import mx.controls.Alert;
+        import mx.controls.Text;
+        import mx.messaging.channels.AMFChannel;
+        import mx.rpc.AsyncResponder;
+        import mx.rpc.AsyncToken;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+        import org.yes.cart.ui.attributes.AttributesManagementPanel;
         import org.yes.cart.ui.brand.BrandManagementPanel;
         import org.yes.cart.ui.bulkimport.BulkImportPanel;
         import org.yes.cart.ui.carrier.CarrierManagementPanel;
-        import org.yes.cart.ui.order.CustomerOrderPanel;
-        import org.yes.cart.ui.category.CategoryManagmentPanel;
+        import org.yes.cart.ui.category.CategoryManagementPanel;
         import org.yes.cart.ui.customer.CustomerManagementPanel;
         import org.yes.cart.ui.location.LocationManagementPanel;
-        import org.yes.cart.ui.product.ProductManagmentPanel;
+        import org.yes.cart.ui.order.CustomerOrderPanel;
+        import org.yes.cart.ui.product.ProductManagementPanel;
         import org.yes.cart.ui.producttype.ProductTypeManagementPanel;
         import org.yes.cart.ui.reindex.ReindexPanel;
-
-        import org.yes.cart.ui.role.RoleManagmentPanel;
-        import org.yes.cart.ui.store.StoresManagmentPanel;
+        import org.yes.cart.ui.role.RoleManagementPanel;
+        import org.yes.cart.ui.store.StoresManagementPanel;
         import org.yes.cart.ui.tools.QueryPanel;
-        import org.yes.cart.ui.user.UserManagmentPanel;
-
-        import org.yes.cart.ui.warehouse.WarehouseManagmentPanel;
-
-
-        import mx.rpc.events.ResultEvent;
-        import mx.rpc.events.FaultEvent;
-        import mx.rpc.AsyncToken;
-        import mx.rpc.AsyncResponder;
-        import mx.controls.Alert;
-        import mx.messaging.channels.AMFChannel;
-
-        import org.yes.cart.shopmanager.ShopManagerGlobal;
+        import org.yes.cart.ui.user.UserManagementPanel;
+        import org.yes.cart.ui.warehouse.WarehouseManagementPanel;
 
         private var shopManagerGlobal:ShopManagerGlobal;
 
@@ -51,6 +48,7 @@
         public function init():void {
             currentState = "loginState";
             var url:String = "http://{server.name}:{server.port}/yes-manager/spring/amf";
+            // var url:String = "http://localhost:8080/yes-manager/spring/amf";
 
             ShopManagerGlobal.getInstance().url = url;
 
@@ -108,7 +106,8 @@
          * @param event mouse event
          */
         protected function reindex_clickHandler(event:MouseEvent):void {
-
+            setFontWeight(reindexBtn);
+            mainPanel.removeAllChildren();
             mainPanel.addChild(new ReindexPanel());
         }
 
@@ -131,7 +130,8 @@
          * @param event mouse event
          */
         protected function import_clickHandler(event:MouseEvent):void {
-
+            setFontWeight(importBtn);
+            mainPanel.removeAllChildren();
             mainPanel.addChild(new BulkImportPanel());
         }
 
@@ -140,7 +140,8 @@
          * @param event mouse event
          */
         protected function location_clickHandler(event:MouseEvent):void {
-
+            setFontWeight(locationsBtn);
+            mainPanel.removeAllChildren();
             mainPanel.addChild(new LocationManagementPanel());
         }
 
@@ -149,7 +150,8 @@
          * @param event mouse event
          */
         protected function carrier_clickHandler(event:MouseEvent):void {
-
+            setFontWeight(carriersBtn);
+            mainPanel.removeAllChildren();
             mainPanel.addChild(new CarrierManagementPanel());
         }
 
@@ -158,8 +160,9 @@
          * @param event mouse event
          */
         protected function attributes_clickHandler(event:MouseEvent):void {
-
-            mainPanel.addChild(new AttributesManagmentPanel());
+            setFontWeight(attributesBtn);
+            mainPanel.removeAllChildren();
+            mainPanel.addChild(new AttributesManagementPanel());
         }
 
         /**
@@ -167,9 +170,10 @@
          * @param event mouse event
 
          */
-        protected function userManagment_clickHandler(event:MouseEvent):void {
-
-            mainPanel.addChild(new UserManagmentPanel());
+        protected function userManagement_clickHandler(event:MouseEvent):void {
+            setFontWeight(userBtn);
+            mainPanel.removeAllChildren();
+            mainPanel.addChild(new UserManagementPanel());
         }
 
         /**
@@ -177,27 +181,30 @@
          * @param event
 
          */
-        protected function roleManagment_clickHandler(event:MouseEvent):void {
-
-            mainPanel.addChild(new RoleManagmentPanel());
+        protected function roleManagement_clickHandler(event:MouseEvent):void {
+            setFontWeight(rolesBtn);
+            mainPanel.removeAllChildren();
+            mainPanel.addChild(new RoleManagementPanel());
         }
 
         /**
          * Roles managment.
          * @param event
          */
-        protected function storesManagment_clickHandler(event:MouseEvent):void {
-
-            mainPanel.addChild(new StoresManagmentPanel());
+        protected function storesManagement_clickHandler(event:MouseEvent):void {
+            setFontWeight(storesBtn);
+            mainPanel.removeAllChildren();
+            mainPanel.addChild(new StoresManagementPanel());
         }
 
         /**
          * Roles managment.
          * @param event
          */
-        protected function warehouseManagment_clickHandler(event:MouseEvent):void {
-
-            mainPanel.addChild(new WarehouseManagmentPanel());
+        protected function warehouseManagement_clickHandler(event:MouseEvent):void {
+            setFontWeight(warehouseBtn);
+            mainPanel.removeAllChildren();
+            mainPanel.addChild(new WarehouseManagementPanel());
         }
 
         /**
@@ -205,9 +212,10 @@
          * @param event mouse event
          * @return nothing
          */
-        private function categoryManagment_clickHandlre(event:flash.events.MouseEvent):void {
-
-            mainPanel.addChild(new CategoryManagmentPanel());
+        private function categoryManagement_clickHandler(event:MouseEvent):void {
+            setFontWeight(categoryBtn);
+            mainPanel.removeAllChildren();
+            mainPanel.addChild(new CategoryManagementPanel());
         }
 
         /**
@@ -215,16 +223,16 @@
          * @param event mouse event
          * @return nothing
          */
-        private function brandManagment_clickHandlre(event:flash.events.MouseEvent):void {
-
+        private function brandManagement_clickHandler(event:MouseEvent):void {
+            setFontWeight(brandBtn);
+            mainPanel.removeAllChildren();
             mainPanel.addChild(new BrandManagementPanel());
         }
 
 
-        private function queryData_clickHandlre(event:flash.events.MouseEvent):void {
-
+        private function queryData_clickHandler(event:MouseEvent):void {
+            setFontWeight(sqlBtn);
             mainPanel.removeAllChildren();
-
             mainPanel.addChild(new QueryPanel());
 
         }
@@ -234,8 +242,9 @@
          * @param event mouse event
          * @return nothing
          */
-        private function productTypesManagment_clickHandlre(event:flash.events.MouseEvent):void {
-
+        private function productTypesManagement_clickHandler(event:MouseEvent):void {
+            setFontWeight(productTypesBtn);
+            mainPanel.removeAllChildren();
             mainPanel.addChild(new ProductTypeManagementPanel());
         }
 
@@ -244,9 +253,10 @@
          * @param event mouse event
          * @return nothing
          */
-        private function productManagment_clickHandlre(event:flash.events.MouseEvent):void {
-
-            mainPanel.addChild(new ProductManagmentPanel());
+        private function productManagement_clickHandler(event:MouseEvent):void {
+            setFontWeight(productsBtn);
+            mainPanel.removeAllChildren();
+            mainPanel.addChild(new ProductManagementPanel());
         }
 
         /**
@@ -254,8 +264,9 @@
          * @param event mouse event
          * @return nothing
          */
-        private function customerManagment_clickHandlre(event:flash.events.MouseEvent):void {
-
+        private function customerManagement_clickHandler(event:MouseEvent):void {
+            setFontWeight(customersBtn);
+            mainPanel.removeAllChildren();
             mainPanel.addChild(new CustomerManagementPanel());
         }
 
@@ -264,20 +275,20 @@
          * @param event mouse event
          * @return nothing
          */
-        private function orderManagment_clickHandlre(event:flash.events.MouseEvent):void {
-
+        private function orderManagement_clickHandler(event:MouseEvent):void {
+            setFontWeight(ordersBtn);
+            mainPanel.removeAllChildren();
             mainPanel.addChild(new CustomerOrderPanel());
         }
 
 
-        private function userNameOrPasswordChanged(event:flash.events.Event):void {
+        private function userNameOrPasswordChanged(event:Event):void {
             loginButtonEnabled = (username.text != null && username.text.length > 5)
                     && (password.text != null && password.text.length > 6);
         }
 
 
         private function setFontWeight(src:LinkButton):void {
-            mainPanel.removeAllChildren();
 
             for each (var child:Object in  mainAccourdion.getChildren()) {
                 if (child is Canvas) {
@@ -299,8 +310,30 @@
             src.setStyle("fontSize", "14");
             src.setStyle("fontWeight", "bold");
 
-            currentPageLabel.text = src.label;
+        }
 
+        private function fulfillment_clickHandler(event:MouseEvent):void {
+            setFontWeight(fulfillmentBtn);
+            mainPanel.removeAllChildren();
+            var label:Text = new Text();
+            label.text = "TODO: this is not yet implemented";
+            mainPanel.addChild(label);
+        }
+
+        private function prodQty_clickHandler(event:MouseEvent):void {
+            setFontWeight(prodQtyBtn);
+            mainPanel.removeAllChildren();
+            var label:Text = new Text();
+            label.text = "TODO: this is not yet implemented";
+            mainPanel.addChild(label);
+        }
+
+        private function payments_clickHandler(event:MouseEvent):void {
+            setFontWeight(paymentsBtn);
+            mainPanel.removeAllChildren();
+            var label:Text = new Text();
+            label.text = "TODO: this is not yet implemented";
+            mainPanel.addChild(label);
         }
         ]]>
 	</mx:Script>
@@ -375,13 +408,7 @@
             <mx:AddChild>
                 <mx:target>
                     <!-- The main frame -->
-                    <mx:VBox id="mainFrame" x="0" y="0" height="95%" width="100%">
-                        <mx:ApplicationControlBar width="100%">
-                            <mx:HBox width="100%">
-                                <mx:Label id="currentPageLabel" fontWeight="bold" fontSize="16"
-                                          text="@Resource(bundle='ShopManagerApplication',key='Welcome')"/>
-                            </mx:HBox>
-                        </mx:ApplicationControlBar>
+                    <mx:VBox id="mainFrame" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2" height="100%" width="100%">
                         <mx:HDividedBox width="100%" height="100%">
                             <mx:Accordion id="mainAccourdion" width="230" height="100%">
                                 <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='customerService')"
@@ -391,38 +418,38 @@
                                         <mx:LinkButton width="100%" id="ordersBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='orders')"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='ordersHint')"
-                                                       click="setFontWeight(ordersBtn); orderManagment_clickHandlre(event);"
+                                                       click="orderManagement_clickHandler(event);"
                                                 />
                                         <mx:LinkButton width="100%" id="customersBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='customers')"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='customersHint')"
-                                                       click="setFontWeight(customersBtn); customerManagment_clickHandlre(event);"
+                                                       click="customerManagement_clickHandler(event);"
                                                 />
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton width="100%" id="fulfillmentBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='fulfillment')"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='fulfillmentHint')"
-                                                       click="setFontWeight(fulfillmentBtn); Alert.show('TODO');"
+                                                       click="fulfillment_clickHandler(event)"
                                                 />
                                     </mx:VBox>
                                 </mx:Canvas>
-                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='catalogManagment')"
-                                           toolTip="@Resource(bundle='ShopManagerApplication',key='catalogManagment')"
+                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='catalogManagement')"
+                                           toolTip="@Resource(bundle='ShopManagerApplication',key='catalogManagement')"
                                            width="100%" height="100%">
                                     <mx:VBox x="0" y="0" height="100%" width="100%">
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton width="100%" id="productsBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='products')"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='productsHint')"
-                                                       click="setFontWeight(productsBtn); productManagment_clickHandlre(event)"
+                                                       click="productManagement_clickHandler(event)"
                                                 />
                                         <mx:LinkButton width="100%" id="categoryBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='categories')"
-                                                       click="setFontWeight(categoryBtn); categoryManagment_clickHandlre(event)"
+                                                       click="categoryManagement_clickHandler(event)"
                                                 />
                                         <mx:LinkButton width="100%" id="brandBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='brands')"
-                                                       click="setFontWeight(brandBtn); brandManagment_clickHandlre(event)"
+                                                       click="brandManagement_clickHandler(event)"
                                                 />
 
                                     </mx:VBox>
@@ -433,12 +460,12 @@
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton width="100%" id="warehouseBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='warehouses')"
-                                                       click="setFontWeight(warehouseBtn); warehouseManagment_clickHandler(event)"
+                                                       click="warehouseManagement_clickHandler(event)"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='warehousesHint')"
                                                 />
                                         <mx:LinkButton width="100%" enabled="false" id="prodQtyBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='prodQty')"
-                                                       click="setFontWeight(prodQtyBtn); Alert.show('TODO')"
+                                                       click="prodQty_clickHandler(event)"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='prodQtyHint')"
                                                 />
                                     </mx:VBox>
@@ -486,7 +513,7 @@
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton width="100%" id="paymentsBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='payment')"
-                                                       click="setFontWeight(paymentsBtn); Alert.show('TODO');"
+                                                       click="payments_clickHandler(event)"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='paymentHint')"
                                                 />
                                     </mx:VBox>
@@ -538,7 +565,7 @@
 
                                         <mx:LinkButton width="100%" id="storesBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='stores')"
-                                                       click="setFontWeight(storesBtn); storesManagment_clickHandler(event)"
+                                                       click="storesManagement_clickHandler(event)"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='storesHint')"
                                                 />
 
@@ -553,13 +580,13 @@
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton width="100%" id="carriersBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='carrier')"
-                                                       click="setFontWeight(carriersBtn); carrier_clickHandler(event)"
+                                                       click="carrier_clickHandler(event)"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='carrierHint')"
                                                 />
 
                                         <mx:LinkButton width="100%" id="locationsBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='location')"
-                                                       click="setFontWeight(locationsBtn); location_clickHandler(event)"
+                                                       click="location_clickHandler(event)"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='locationHint')"
                                                 />
                                     </mx:VBox>
@@ -571,11 +598,11 @@
                                            width="100%" height="100%">
                                     <mx:VBox x="0" y="0" height="100%" width="100%">
                                         <mx:LinkButton width="100%" id="userBtn"
-                                                       label="@Resource(bundle='ShopManagerApplication',key='userManagment')"
-                                                       click="setFontWeight(userBtn); userManagment_clickHandler(event)"/>
+                                                       label="@Resource(bundle='ShopManagerApplication',key='userManagement')"
+                                                       click="userManagement_clickHandler(event)"/>
                                         <mx:LinkButton width="100%" id="rolesBtn"
-                                                       label="@Resource(bundle='ShopManagerApplication',key='roleManagment')"
-                                                       click="setFontWeight(rolesBtn); roleManagment_clickHandler(event)"/>
+                                                       label="@Resource(bundle='ShopManagerApplication',key='roleManagement')"
+                                                       click="roleManagement_clickHandler(event)"/>
                                     </mx:VBox>
                                 </mx:Canvas>
 
@@ -585,28 +612,28 @@
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton width="100%" id="productTypesBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='productTypes')"
-                                                       click="setFontWeight(productTypesBtn); productTypesManagment_clickHandlre(event)"
+                                                       click="productTypesManagement_clickHandler(event)"
                                                 />
                                         <mx:LinkButton width="100%" id="attributesBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='attributes')"
-                                                       click="setFontWeight(attributesBtn); attributes_clickHandler(event)"
+                                                       click="attributes_clickHandler(event)"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='attributesHint')"
                                                 />
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton width="100%" id="importBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='import')"
-                                                       click="setFontWeight(importBtn); import_clickHandler(event)"
+                                                       click="import_clickHandler(event)"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='importHint')"
                                                 />
                                         <mx:LinkButton width="100%" id="reindexBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='reindex')"
-                                                       click="setFontWeight(reindexBtn); reindex_clickHandler(event)"
+                                                       click="reindex_clickHandler(event)"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='reindexHint')"
                                                 />
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton id="sqlBtn" width="100%"
                                                        label="@Resource(bundle='ShopManagerApplication',key='query')"
-                                                       click="setFontWeight(sqlBtn); queryData_clickHandlre(event)"/>
+                                                       click="queryData_clickHandler(event)"/>
 
                                     </mx:VBox>
                                 </mx:Canvas>
@@ -624,8 +651,7 @@
                                 </mx:Canvas>
 
                             </mx:Accordion>
-                            <mx:Canvas id="mainPanel" width="100%" height="100%">
-                            </mx:Canvas>
+                            <mx:Canvas id="mainPanel" width="100%" height="100%"/>
                         </mx:HDividedBox>
                     </mx:VBox>
                 </mx:target>

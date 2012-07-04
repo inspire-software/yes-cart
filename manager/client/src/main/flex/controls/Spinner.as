@@ -18,7 +18,7 @@ package controls {
 		private static var STYLE_TICK_COLOR:String = "tickColor";
 		private var tickColorChanged:Boolean;
 
-        private static var classConstructed:Boolean = classConstruct();
+        private static var classConstructed:Boolean = false;
 
          // Make sure we create the ticks the first time updateDisplayList is called
         private var creation:Boolean = true;
@@ -44,7 +44,9 @@ package controls {
 
 		public function Spinner() {
 			super();
-
+            if (!classConstructed) {
+                classConstructed = classConstruct();
+            }
 			addEventListener(FlexEvent.CREATION_COMPLETE, handleCreationComplete);
 		}
 
@@ -120,13 +122,13 @@ package controls {
 		}
 
 
-		private static function classConstruct():Boolean {
-			if (!StyleManager.getStyleDeclaration("Spinner")) {
+		private function classConstruct():Boolean {
+			if (!styleManager.getStyleDeclaration("Spinner")) {
 				// If there is no CSS definition for StyledRectangle,
 				// then create one and set the default value.
 				var newStyleDeclaration:CSSStyleDeclaration = new CSSStyleDeclaration();
 				newStyleDeclaration.setStyle(STYLE_TICK_COLOR, 0x000000);
-				StyleManager.setStyleDeclaration("Spinner", newStyleDeclaration, true);
+                styleManager.setStyleDeclaration("Spinner", newStyleDeclaration, true);
 			}
 			return true;
 		}

@@ -13,13 +13,13 @@
                    borderStyle="solid"/>
 
         <mx:Form x="0" y="0" width="100%">
-            <mx:FormItem label="@Resource(bundle='AttributesManagmentPanel',key='value')">
+            <mx:FormItem label="@Resource(bundle='AttributesManagementPanel',key='value')">
                 <mx:TextInput width="310" id="valueTextInput"/>
             </mx:FormItem>
-            <mx:FormItem label="@Resource(bundle='AttributesManagmentPanel',key='altText')">
+            <mx:FormItem label="@Resource(bundle='AttributesManagementPanel',key='altText')">
                 <mx:TextInput width="310" id="altTextInput"/>
             </mx:FormItem>
-            <mx:FormItem label="@Resource(bundle='AttributesManagmentPanel',key='title')">
+            <mx:FormItem label="@Resource(bundle='AttributesManagementPanel',key='title')">
                 <mx:TextInput width="310" id="titleTextInput"/>
             </mx:FormItem>
 
@@ -27,15 +27,15 @@
         <mx:ControlBar width="100%" horizontalAlign="right">
             <mx:Button id="btnCancel"
                        width="94"
-                       label="@Resource(bundle='AttributesManagmentPanel',key='cancel')"
+                       label="@Resource(bundle='AttributesManagementPanel',key='cancel')"
                        click="PopUpManager.removePopUp(this)"
                     />
             <mx:Button id="btnLoad" width="94"
-                       label="@Resource(bundle='AttributesManagmentPanel',key='loadImage')"
-                       toolTip="@Resource(bundle='AttributesManagmentPanel',key='loadImageHint')"
+                       label="@Resource(bundle='AttributesManagementPanel',key='loadImage')"
+                       toolTip="@Resource(bundle='AttributesManagementPanel',key='loadImageHint')"
                        click="loadImage()"/>
             <mx:Button id="btnSave" width="94"
-                       label="@Resource(bundle='AttributesManagmentPanel',key='save')" click="saveImage()"/>
+                       label="@Resource(bundle='AttributesManagementPanel',key='save')" click="saveImage()"/>
 
         </mx:ControlBar>
 

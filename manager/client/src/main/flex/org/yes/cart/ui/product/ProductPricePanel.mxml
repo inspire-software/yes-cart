@@ -3,39 +3,39 @@
 
     <mx:VBox width="100%" height="100%">
         <mx:Form x="0" y="0">
-            <mx:FormItem label="@Resource(bundle='ProductManagmentPanel',key='product')">
+            <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='product')">
                 <mx:Label id="productCodeName"/>
             </mx:FormItem>
-            <mx:FormItem label="@Resource(bundle='ProductManagmentPanel',key='shop')">
+            <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='shop')">
                 <mx:HBox>
                     <mx:ComboBox id="storesComboBox"
                                  labelField="name"
                                  data="shopId"
                                  dataProvider="{remoteShopService.getAll.lastResult}"
                                  change="shopChanged(event)"
-                                 prompt="@Resource(bundle='ProductManagmentPanel',key='selectStorePropmt')">
+                                 prompt="@Resource(bundle='ProductManagementPanel',key='selectStorePropmt')">
                     </mx:ComboBox>
-                    <mx:Label text="@Resource(bundle='ProductManagmentPanel',key='defaultCurrency')"/>
+                    <mx:Label text="@Resource(bundle='ProductManagementPanel',key='defaultCurrency')"/>
                     <mx:Label id="defaultCurrencyLabel"/>
                 </mx:HBox>
             </mx:FormItem>
-            <mx:FormItem label="@Resource(bundle='ProductManagmentPanel',key='price')">
+            <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='price')">
                 <mx:HBox>
                     <mx:Button id="addPriceBtn"
-                               label="@Resource(bundle='ProductManagmentPanel',key='addPrice')"
-                               toolTip="@Resource(bundle='ProductManagmentPanel',key='addPriceHint')"
+                               label="@Resource(bundle='ProductManagementPanel',key='addPrice')"
+                               toolTip="@Resource(bundle='ProductManagementPanel',key='addPriceHint')"
                                enabled="false"
                                click="addPrice(event);"
                             />
                     <mx:Button id="editPriceBtn"
-                               label="@Resource(bundle='ProductManagmentPanel',key='editPrice')"
-                               toolTip="@Resource(bundle='ProductManagmentPanel',key='editPriceHint')"
+                               label="@Resource(bundle='ProductManagementPanel',key='editPrice')"
+                               toolTip="@Resource(bundle='ProductManagementPanel',key='editPriceHint')"
                                enabled="false"
                                click="editPrice(event);"
                             />
                     <mx:Button id="deletePriceBtn"
-                               label="@Resource(bundle='ProductManagmentPanel',key='deletePrice')"
-                               toolTip="@Resource(bundle='ProductManagmentPanel',key='deletePriceHint')"
+                               label="@Resource(bundle='ProductManagementPanel',key='deletePrice')"
+                               toolTip="@Resource(bundle='ProductManagementPanel',key='deletePriceHint')"
                                enabled="false"
                                click="deletePrice(event);"
                             />
@@ -51,15 +51,15 @@
                 itemEditEnd="valueEditEnd(event);"
                 >
             <mx:columns>
-                <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagmentPanel',key='id')"
+                <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagementPanel',key='id')"
                                    dataField="skuPriceId" editable="false"/>
-                <mx:DataGridColumn width="120" headerText="@Resource(bundle='ProductManagmentPanel',key='skuCode')"
+                <mx:DataGridColumn width="120" headerText="@Resource(bundle='ProductManagementPanel',key='skuCode')"
                                    dataField="code" editable="false"/>
-                <mx:DataGridColumn headerText="@Resource(bundle='ProductManagmentPanel',key='skuName')"
+                <mx:DataGridColumn headerText="@Resource(bundle='ProductManagementPanel',key='skuName')"
                                    dataField="skuName" editable="false"/>
-                <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagmentPanel',key='quantity')"
+                <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagementPanel',key='quantity')"
                                    dataField="quantity" editable="true"/>
-                <mx:DataGridColumn headerText="@Resource(bundle='ProductManagmentPanel',key='listPrice')"
+                <mx:DataGridColumn headerText="@Resource(bundle='ProductManagementPanel',key='listPrice')"
                                    editorDataField="returnListPrice"
                                    rendererIsEditor="false"
                                    dataField="regularPrice"
@@ -93,7 +93,7 @@
                         </mx:Component>
                     </mx:itemRenderer>
                 </mx:DataGridColumn>
-                <mx:DataGridColumn headerText="@Resource(bundle='ProductManagmentPanel',key='salePrice')"
+                <mx:DataGridColumn headerText="@Resource(bundle='ProductManagementPanel',key='salePrice')"
                                    editorDataField="returnSalePrice"
                                    rendererIsEditor="false"
                                    dataField="salePrice"
@@ -133,19 +133,19 @@
                         </mx:Component>
                     </mx:itemRenderer>
                 </mx:DataGridColumn>
-                <mx:DataGridColumn headerText="@Resource(bundle='ProductManagmentPanel',key='saleFrom')"
+                <mx:DataGridColumn headerText="@Resource(bundle='ProductManagementPanel',key='saleFrom')"
                                    dataField="salefrom"
                                    itemEditor="mx.controls.DateField"
                                    rendererIsEditor="false"
                                    editorDataField="selectedDate"
                         />
-                <mx:DataGridColumn headerText="@Resource(bundle='ProductManagmentPanel',key='saleTill')"
+                <mx:DataGridColumn headerText="@Resource(bundle='ProductManagementPanel',key='saleTill')"
                                    dataField="saletill"
                                    itemEditor="mx.controls.DateField"
                                    rendererIsEditor="false"
                                    editorDataField="selectedDate"
                         />
-                <mx:DataGridColumn headerText="@Resource(bundle='ProductManagmentPanel',key='minimalPrice')"
+                <mx:DataGridColumn headerText="@Resource(bundle='ProductManagementPanel',key='minimalPrice')"
                                    editorDataField="returnMinimalPrice"
                                    rendererIsEditor="false"
                                    dataField="minimalPrice"
@@ -287,7 +287,7 @@
                                 deletePriceBtn.enabled = false;
                                 editPriceBtn.enabled = false;
                                 if (assignedCurrencyStr == null || assignedCurrencyStr == "null") {
-                                    defaultCurrencyLabel.text = resourceManager.getString("ProductManagmentPanel", "currencyNotConfigured");
+                                    defaultCurrencyLabel.text = resourceManager.getString("ProductManagementPanel", "currencyNotConfigured");
                                     addPriceBtn.enabled = false;
                                 } else {
                                     defaultCurrencyLabel.text = assignedCurrencyStr.split(",")[0];
@@ -391,8 +391,8 @@
          */
         private function deletePrice(event:MouseEvent):void {
             Alert.show(
-                    resourceManager.getString('ProductManagmentPanel', 'deletePriceConfirm'),
-                    resourceManager.getString('ProductManagmentPanel', 'warning'),
+                    resourceManager.getString('ProductManagementPanel', 'deletePriceConfirm'),
+                    resourceManager.getString('ProductManagementPanel', 'warning'),
                     Alert.OK | Alert.CANCEL, this, deletePriceServiceCall, null, Alert.OK);
 
 

@@ -6,7 +6,7 @@
 
 	<mx:TextInput x="139" y="39" width="160" id="categoryName"/>
 
-	<mx:Button x="205" y="84" id="closeBtn" label="@Resource(bundle='CategoryCreateDialog',key='close')"
+	<mx:Button x="205" y="84" id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
 			   click="PopUpManager.removePopUp(this)" width="94"/>
 	<mx:Button x="103" y="84" id="saveBtn" label="@Resource(bundle='CategoryCreateDialog',key='create')"
 			   width="94"/>

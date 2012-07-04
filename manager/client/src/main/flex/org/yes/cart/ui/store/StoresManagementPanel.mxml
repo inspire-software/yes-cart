@@ -167,39 +167,39 @@
                      fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
-    <mx:Panel width="100%" height="100%" title="@Resource(bundle='StoresManagmentPanel',key='store')">
+    <mx:Panel width="100%" height="100%" title="@Resource(bundle='StoresManagementPanel',key='store')">
         <mx:VBox x="0" y="0" width="100%" height="100%" id="shopManagmenlPanel">
             <mx:ControlBar width="100%">
-                <mx:Text text="@Resource(bundle='StoresManagmentPanel',key='store')"/>
+                <mx:Text text="@Resource(bundle='StoresManagementPanel',key='store')"/>
                 <mx:ComboBox id="storesComboBox"
                              labelField="name"
                              data="shopId"
                              dataProvider="{remoteShopService.getAll.lastResult}"
                              change="shopChanged(event)"
-                             prompt="@Resource(bundle='StoresManagmentPanel',key='selectStorePropmt')">
+                             prompt="@Resource(bundle='StoresManagementPanel',key='selectStorePropmt')">
                 </mx:ComboBox>
-                <mx:Button label="@Resource(bundle='StoresManagmentPanel',key='createStore')" id="createStoreBtn"
+                <mx:Button label="@Resource(bundle='StoresManagementPanel',key='createStore')" id="createStoreBtn"
                            click="createStoreBtnHandler(event)"/>
-                <mx:Button label="@Resource(bundle='StoresManagmentPanel',key='deleteStore')" id="deleteBtn"/>
+                <mx:Button label="@Resource(bundle='StoresManagementPanel',key='deleteStore')" id="deleteBtn"/>
             </mx:ControlBar>
             <mx:TabNavigator width="100%" height="100%" id="shopTabNavigator" change="onTabClick(event);">
-                <mx:Canvas label="@Resource(bundle='StoresManagmentPanel',key='summary')" width="100%" height="100%"
+                <mx:Canvas label="@Resource(bundle='StoresManagementPanel',key='summary')" width="100%" height="100%"
                            id="summaryTab"/>
-                <mx:Canvas label="@Resource(bundle='StoresManagmentPanel',key='urls')" width="100%" height="100%"
+                <mx:Canvas label="@Resource(bundle='StoresManagementPanel',key='urls')" width="100%" height="100%"
                            id="urlTab"/>
-                <mx:Canvas label="@Resource(bundle='StoresManagmentPanel',key='currency')" width="100%" height="100%"
+                <mx:Canvas label="@Resource(bundle='StoresManagementPanel',key='currency')" width="100%" height="100%"
                            id="currencyTab"/>
-                <mx:Canvas label="@Resource(bundle='StoresManagmentPanel',key='catalog')" width="100%" height="100%"
+                <mx:Canvas label="@Resource(bundle='StoresManagementPanel',key='catalog')" width="100%" height="100%"
                            id="categoryTab"/>
-                <mx:Canvas id="warehouseTab" label="@Resource(bundle='StoresManagmentPanel',key='warehouses')"
+                <mx:Canvas id="warehouseTab" label="@Resource(bundle='StoresManagementPanel',key='warehouses')"
                            width="100%" height="100%"/>
-                <mx:Canvas enabled="false" label="@Resource(bundle='StoresManagmentPanel',key='payments')" width="100%"
+                <mx:Canvas enabled="false" label="@Resource(bundle='StoresManagementPanel',key='payments')" width="100%"
                            height="100%"/>
-                <mx:Canvas enabled="false" label="@Resource(bundle='StoresManagmentPanel',key='customers')" width="100%"
+                <mx:Canvas enabled="false" label="@Resource(bundle='StoresManagementPanel',key='customers')" width="100%"
                            height="100%"/>
-                <mx:Canvas enabled="false" label="@Resource(bundle='StoresManagmentPanel',key='marketing')" width="100%"
+                <mx:Canvas enabled="false" label="@Resource(bundle='StoresManagementPanel',key='marketing')" width="100%"
                            height="100%"/>
-                <mx:Canvas enabled="false" label="@Resource(bundle='StoresManagmentPanel',key='taxes')" width="100%"
+                <mx:Canvas enabled="false" label="@Resource(bundle='StoresManagementPanel',key='taxes')" width="100%"
                            height="100%"/>
             </mx:TabNavigator>
         </mx:VBox>
