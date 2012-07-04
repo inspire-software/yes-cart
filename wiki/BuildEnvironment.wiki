@@ -47,13 +47,17 @@ Local email SMTP/POP3 server
 == Required OS environment variables ==
 
 ANT_OPTS=-Xms256m -Xmx1024m -XX:MaxPermSize=256m
+
 MAVEN_OPTS=-Xms256m -Xmx1024m -XX:MaxPermSize=256m
+
 M2_HOME=D:\apache-maven-3.0.3
 
 CATALINA_OPTS=-Dfile.encoding=UTF-8 (for Tomcat)
+
 JBOSS_HOME=D:\dev\jboss-4.2.3.GA (for JBoss)
 
 JAVA_HOME=d:\jdk1.6.0_17
+
 JAVA_OPTS=-Xms256m -Xmx1024m -XX:MaxPermSize=256m
 
 PATH=D:\jdk1.6.0_29\bin;D:\wamp\bin\mysql\mysql5.1.36\bin;D:\apache-maven-3.0.3\bin;D:\apache-ant-1.8.1\bin;D:\flex_sdk_4\bin
