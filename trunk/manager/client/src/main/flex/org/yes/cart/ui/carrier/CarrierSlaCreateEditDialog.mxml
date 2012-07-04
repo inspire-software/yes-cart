@@ -2,7 +2,7 @@
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
                 creationComplete="init()"
                 creationCompleteEffect="Zoom"
-                title="Create carrier sla"
+                title="@Resource(bundle='CarrierManagementPanel',key='newCarrierSlaDialogTitle')"
                 showCloseButton="true"
                 close="PopUpManager.removePopUp(this)">
 
@@ -11,7 +11,12 @@
                      destination="remoteShopService"
                      result="ShopManagerGlobal.instance.defaultResultHandler(event)"
                      fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
-                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getAllSupportedCurrenciesByShops" name="getAllSupportedCurrenciesByShops"
+                   result="onGetAllSupportedCurrenciesByShopsResult(event)"/>
+
+    </mx:RemoteObject>
 
 
     <mx:Form>
@@ -29,8 +34,7 @@
             <mx:ComboBox id="currencyComboBox"
                          change="currencyChangeEvt(event)"
                          prompt="@Resource(bundle='CarrierManagementPanel',key='selectCurrency')"
-                         width="180"
-                         dataProvider="{remoteShopService.getAllSupportedCurrenciesByShops.lastResult}"/>
+                         width="180"/>
         </mx:FormItem>
 
         <mx:FormItem width="100%" label="@Resource(bundle='CarrierManagementPanel',key='slaType')">
@@ -79,23 +83,22 @@
         </mx:FormItem>
 
     </mx:Form>
-    <mx:ControlBar horizontalAlign="right">
-        <mx:Button id="saveBtn" label="@Resource(bundle='ShopManagerApplication',key='save')" width="94" click="updateModel(event)"/>
+    <mx:ControlBar horizontalAlign="right" width="100%">
+        <mx:Button id="saveBtn" label="@Resource(bundle='ShopManagerApplication',key='save')"/>
         <mx:Button id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
-                   click="PopUpManager.removePopUp(this)" width="94"/>
+                   click="PopUpManager.removePopUp(this)"/>
     </mx:ControlBar>
 
 
     <mx:Script><![CDATA[
+        import mx.rpc.events.ResultEvent;
+
         import org.yes.cart.impl.CarrierSlaDTOImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
-
-        import flash.events.MouseEvent;
 
         import mx.binding.utils.BindingUtils;
         import mx.controls.Alert;
         import mx.managers.PopUpManager;
-        import mx.rpc.AsyncResponder;
         import mx.utils.StringUtil;
 
         public var newCarrierSlaFlag:Boolean;
@@ -120,16 +123,7 @@
             slaTypes[3] = new SlaType("R", resourceManager.getString('CarrierManagementPanel', 'slaTypeFree'));
             slaTypes[4] = new SlaType("E", resourceManager.getString('CarrierManagementPanel', 'slaTypeExternal'));
 
-            remoteShopService.getAllSupportedCurrenciesByShops().addResponder(
-                    new AsyncResponder(
-                            function(event:*, obj:Object = null):void {
-                                currencyComboBox.selectedItem = _carrierSlaDTOImpl.currency;
-                            }
-                            ,
-                            ShopManagerGlobal.instance.defaultFaultHandler
-                            )
-
-                    );
+            remoteShopService.getAllSupportedCurrenciesByShops();
 
 
             if (newCarrierSlaFlag) {
@@ -180,10 +174,9 @@
 
         /**
          * Update model.
-         * @param event save click event
          * @return nothing
          */
-        private function updateModel(event:MouseEvent):void {
+        public function updateModel():void {
 
 
             if ("F" == _carrierSlaDTOImpl.slaType) { // fixed
@@ -303,6 +296,12 @@
                     resourceManager.getString('CarrierManagementPanel', 'warning')
                     ); //TODO
 
+        }
+
+        private function onGetAllSupportedCurrenciesByShopsResult(event:ResultEvent):void {
+            var curr:String = _carrierSlaDTOImpl.currency;
+            currencyComboBox.dataProvider = event.result;
+            currencyComboBox.selectedItem = curr;
         }
         ]]>
     </mx:Script>
