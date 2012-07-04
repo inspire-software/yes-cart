@@ -25,8 +25,8 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
 
     <!--    ROLE_SMADMIN    ROLE_SMSHOPADMIN    ROLE_SMWAREHOUSEADMIN    ROLE_SMCALLCENTER    -->
 
-    <bean id="remoteUserManagmentService" class="org.yes.cart.remote.service.impl.RemoteManagementServiceImpl">
-        <constructor-arg index="0" ref="userManagmentService"/>
+    <bean id="remoteUserManagementService" class="org.yes.cart.remote.service.impl.RemoteManagementServiceImpl">
+        <constructor-arg index="0" ref="userManagementService"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="addUser" access="ROLE_SMADMIN"/>
