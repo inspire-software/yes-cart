@@ -2,7 +2,7 @@
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
                 creationComplete="init()"
                 creationCompleteEffect="Zoom"
-				title="Create state"  showCloseButton="true"
+				title="@Resource(bundle='LocationManagementPanel',key='newStateHint')"  showCloseButton="true"
                 close="PopUpManager.removePopUp(this)" >
 
     <mx:Boolean id="newStateFlag">false</mx:Boolean>
@@ -16,11 +16,10 @@
             <mx:TextInput   width="160" id="lname"/>
         </mx:FormItem>
     </mx:Form>
-    <mx:ControlBar horizontalAlign="right">
-        <mx:Button  id="saveBtn" label="@Resource(bundle='ShopManagerApplication',key='save')"
-                   width="94"/>
+    <mx:ControlBar horizontalAlign="right" width="100%">
+        <mx:Button  id="saveBtn" label="@Resource(bundle='ShopManagerApplication',key='save')"/>
         <mx:Button id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
-                   click="PopUpManager.removePopUp(this)" width="94"/>
+                   click="PopUpManager.removePopUp(this)"/>
     </mx:ControlBar>
 
 
