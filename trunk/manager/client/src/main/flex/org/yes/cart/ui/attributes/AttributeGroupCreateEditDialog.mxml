@@ -9,9 +9,9 @@
 	<mx:TextInput x="139" y="24" width="160" id="code" enabled="{newGroupFlag}"/>
 	<mx:TextInput x="139" y="54" width="160" id="attrname"/>
 	<mx:TextInput x="139" y="84" width="160" id="description"/>
-	<mx:Button x="205" y="114" id="closeBtn" label="@Resource(bundle='AttributeGroupCreateEditDialog',key='close')"
+	<mx:Button x="205" y="114" id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
                click="PopUpManager.removePopUp(this)" width="94"/>
-	<mx:Button x="103" y="114" id="saveBtn" label="Save"
+	<mx:Button x="103" y="114" id="saveBtn" label="@Resource(bundle='ShopManagerApplication',key='save')"
                width="94"/>
 
     <mx:Boolean id="newGroupFlag">false</mx:Boolean>

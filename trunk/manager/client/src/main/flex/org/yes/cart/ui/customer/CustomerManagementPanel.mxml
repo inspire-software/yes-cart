@@ -14,7 +14,7 @@
         import org.yes.cart.impl.CustomerDTOImpl;
         import org.yes.cart.util.UpdateTarget;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
-        import org.yes.cart.ui.attributes.EntityAttributeValuesManagmentPanel;
+        import org.yes.cart.ui.attributes.EntityAttributeValuesManagementPanel;
 
         import org.yes.cart.ui.order.CustomerOrderPanel;
 
@@ -177,7 +177,7 @@
 
 
         private function default_faultHandler(event:FaultEvent):void {
-            Alert.show(event.toString(), resourceManager.getString('CustomerManagmentPanel', 'communicationError'));
+            Alert.show(event.toString(), resourceManager.getString('CustomerManagementPanel', 'communicationError'));
         }
 
 
@@ -212,7 +212,7 @@
 
 
         private function getEntityAttributesResultHandlerInternal(event:ResultEvent, canvas:Canvas, filterFunk:Function):void {
-            var attrValuePanel:EntityAttributeValuesManagmentPanel = new EntityAttributeValuesManagmentPanel();
+            var attrValuePanel:EntityAttributeValuesManagementPanel = new EntityAttributeValuesManagementPanel();
             attrValuePanel.attrValue = ArrayCollection(event.result);
 
             attrValuePanel.attributeGroup = AttributeGroupNames.CUSTOMER;
@@ -299,7 +299,7 @@
                 obj = remoteCustomerService.updateEntityAttributeValue.lastResult;
             }
 
-            EntityAttributeValuesManagmentPanel(
+            EntityAttributeValuesManagementPanel(
                     customerSummary.getChildAt(0)).attrValue.setItemAt(obj, updateTarget.idx);
 
             Debug.trace("INFO obj is " + obj);

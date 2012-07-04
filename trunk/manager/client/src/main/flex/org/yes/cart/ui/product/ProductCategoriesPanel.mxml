@@ -5,14 +5,14 @@
             <mx:FormItem>
                 <mx:HBox>
                     <mx:Button id="addProductCategoryBtn"
-                               label="@Resource(bundle='ProductManagmentPanel',key='addProductCategory')"
-                               toolTip="@Resource(bundle='ProductManagmentPanel',key='addProductCategoryHint')"
+                               label="@Resource(bundle='ProductManagementPanel',key='addProductCategory')"
+                               toolTip="@Resource(bundle='ProductManagementPanel',key='addProductCategoryHint')"
                                enabled="true"
                                click="addProductCategory(event);"
                             />
                     <mx:Button id="deleteProductCategoryBtn"
-                               label="@Resource(bundle='ProductManagmentPanel',key='deleteProductCategory')"
-                               toolTip="@Resource(bundle='ProductManagmentPanel',key='deleteProductCategoryHint')"
+                               label="@Resource(bundle='ProductManagementPanel',key='deleteProductCategory')"
+                               toolTip="@Resource(bundle='ProductManagementPanel',key='deleteProductCategoryHint')"
                                enabled="{selectedCategoryDTO != null}"
                                click="deleteProductCategory(event);"
                             />
@@ -26,11 +26,11 @@
                 itemClick="productCategorySelectedClick(event);"
                 >
             <mx:columns>
-                <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagmentPanel',key='id')"
+                <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagementPanel',key='id')"
                                    dataField="categoryId"/>
-                <mx:DataGridColumn width="200" headerText="@Resource(bundle='ProductManagmentPanel',key='category')"
+                <mx:DataGridColumn width="200" headerText="@Resource(bundle='ProductManagementPanel',key='category')"
                                    dataField="name"/>
-                <mx:DataGridColumn headerText="@Resource(bundle='ProductManagmentPanel',key='description')"
+                <mx:DataGridColumn headerText="@Resource(bundle='ProductManagementPanel',key='description')"
                                    dataField="description"/>
             </mx:columns>
         </mx:DataGrid>
@@ -94,8 +94,8 @@
 
         private function deleteProductCategory(event:MouseEvent):void {
             Alert.show(
-                    resourceManager.getString('ProductManagmentPanel', 'deleteProductFromCategoryConfirm'),
-                    resourceManager.getString('ProductManagmentPanel', 'warning'),
+                    resourceManager.getString('ProductManagementPanel', 'deleteProductFromCategoryConfirm'),
+                    resourceManager.getString('ProductManagementPanel', 'warning'),
                     Alert.OK | Alert.CANCEL, this, deleteProductCategoryServiceCall, null, Alert.OK);
 
         }

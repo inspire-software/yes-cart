@@ -34,12 +34,12 @@
             remoteShopService.getAssignedShop(customerId).addResponder(new AsyncResponder(
                     function (event:ResultEvent, obj:Object = null):void {
                         
-                        assignedShop = Array(event.result);
-                        for (var shop in remoteShopService.getAll.lastResult ) {
+                        assignedShop = new Array(event.result);
+                        for (var shop:Object in remoteShopService.getAll.lastResult ) {
 
                             var found:Boolean = false;
 
-                            for (var registeredShop in assignedShop) {
+                            for (var registeredShop:Object in assignedShop) {
                                 if (registeredShop.name == shop.name) {
                                     found = true;
                                     break;
@@ -80,7 +80,7 @@
 
             {
                 var e2:String = "none";
-                if (item instanceof ShopDTOImpl) {
+                if (item is ShopDTOImpl) {
 
                     e2 = "yessss";
 

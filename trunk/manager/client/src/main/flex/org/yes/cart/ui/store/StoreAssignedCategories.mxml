@@ -134,7 +134,7 @@
 
     <mx:VBox x="0" y="0" width="100%" height="100%">
 
-        <mx:Label text="@Resource(bundle='StoresManagmentPanel',key='assigedCategories')"/>
+        <mx:Label text="@Resource(bundle='StoresManagementPanel',key='assigedCategories')"/>
         <mx:HBox x="0" y="0" width="100%" height="100%" id="mainPanel">
             <mx:Tree height="100%" width="205" id="categoryTree"
                      labelField="name"
@@ -144,15 +144,15 @@
                      change="categorySelectedEvent(event);"
                     />
             <mx:VBox width="80" height="100%" verticalAlign="middle" horizontalAlign="center">
-                <mx:Button label="@Resource(bundle='StoresManagmentPanel',key='assign')"
-                           toolTip="@Resource(bundle='StoresManagmentPanel',key='assignHint')"
+                <mx:Button label="@Resource(bundle='StoresManagementPanel',key='assign')"
+                           toolTip="@Resource(bundle='StoresManagementPanel',key='assignHint')"
                            width="70" id="assignCategoryBtn"
                            enabled="{selectedToAssignCategoryDTOImpl != null}"
                            click="assignCategoryClickHandler(event);"
                         />
                 <mx:Button
-                        label="@Resource(bundle='StoresManagmentPanel',key='unassign')"
-                        toolTip="@Resource(bundle='StoresManagmentPanel',key='unassignHint')"
+                        label="@Resource(bundle='StoresManagementPanel',key='unassign')"
+                        toolTip="@Resource(bundle='StoresManagementPanel',key='unassignHint')"
                         width="70" id="unassignCategoryBtn"
                         enabled="{selectedToUnassignCategoryDTOImpl != null}"
                         click="unassignCategoryClickHandler(event);"

@@ -80,6 +80,8 @@
     <mx:Script>
 
         <![CDATA[
+        import mx.core.FlexGlobals;
+
         import org.yes.cart.impl.AttributeDTOImpl;
         import org.yes.cart.impl.ProductTypeAttrDTOImpl;
 
@@ -133,7 +135,7 @@
 
         private function editRangeNavigationXml(event:flash.events.MouseEvent):void {
             rangeNavigationDialog = RangeNavigationDialog(PopUpManager.createPopUp(
-                    DisplayObject(Application.application), RangeNavigationDialog, true));
+                    DisplayObject(FlexGlobals.topLevelApplication), RangeNavigationDialog, true));
             rangeNavigationDialog.xmlString = productTypeAttr.rangeNavigation;
             rangeNavigationDialog.saveBtn.addEventListener("click", saveRangeNavigation);
             PopUpManager.centerPopUp(rangeNavigationDialog);

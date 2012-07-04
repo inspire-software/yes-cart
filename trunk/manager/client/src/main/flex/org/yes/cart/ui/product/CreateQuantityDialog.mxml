@@ -3,18 +3,18 @@
                 xmlns:datetime="com.georg.datetime.*" xmlns:georg="com.georg.*" layout="absolute"
                 width="400"
                 height="200"
-                title="@Resource(bundle='ProductManagmentPanel',key='adjustQuantity')"
+                title="@Resource(bundle='ProductManagementPanel',key='adjustQuantity')"
                 showCloseButton="true" close="PopUpManager.removePopUp(this)">
 
     <mx:Form>
-        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagmentPanel',key='sku')">
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='sku')">
             <mx:ComboBox id="skuComboBox"
                          change="skuSelected(event)"
                          width="260"
                          labelFunction="skuLabelFunction"
-                         prompt="@Resource(bundle='ProductManagmentPanel',key='selectSku')"/>
+                         prompt="@Resource(bundle='ProductManagementPanel',key='selectSku')"/>
         </mx:FormItem>
-        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagmentPanel',key='quantity')">
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='quantity')">
             <mx:TextInput id="quantityTextInput" width="160" change="quantityFormChanged(null);"
                           enabled="{selectedSku != null}"/>
         </mx:FormItem>
@@ -26,12 +26,12 @@
                         minValue="0" allowNegative="false" domain="int"/>
 
     <mx:ControlBar horizontalAlign="right">
-        <mx:Button id="closeBtn" label="@Resource(bundle='ProductManagmentPanel',key='close')"
+        <mx:Button id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
                    click="PopUpManager.removePopUp(this)"
                    width="94"/>
         <mx:Button id="saveBtn"
-                   label="@Resource(bundle='ProductManagmentPanel',key='saveQuantity')"
-                   toolTip="@Resource(bundle='ProductManagmentPanel',key='saveQuantityHint')"
+                   label="@Resource(bundle='ProductManagementPanel',key='saveQuantity')"
+                   toolTip="@Resource(bundle='ProductManagementPanel',key='saveQuantityHint')"
                    width="94"
                    enabled="false"
                 />

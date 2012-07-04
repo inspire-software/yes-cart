@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="375" height="500"
-                title="@Resource(bundle='CategoryManagmentPanel',key='find')"
+                title="@Resource(bundle='CategoryManagementPanel',key='find')"
                 showCloseButton="true"
                 close="PopUpManager.removePopUp(this)"
                 creationComplete="init();"
@@ -16,9 +16,9 @@
                 />
 
         <mx:ControlBar  width="100%" horizontalAlign="right">
-            <mx:Button label="@Resource(bundle='CategoryCreateDialog',key='close')"
+            <mx:Button label="@Resource(bundle='ShopManagerApplication',key='close')"
                        click="PopUpManager.removePopUp(this)"/>
-            <mx:Button id="selectProductButton" label="@Resource(bundle='ProductManagmentPanel',key='select')"
+            <mx:Button id="selectProductButton" label="@Resource(bundle='ProductManagementPanel',key='select')"
                        enabled="{selectedCategoryDTOImpl != null}"/>
         </mx:ControlBar>
     </mx:VBox>

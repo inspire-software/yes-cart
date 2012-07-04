@@ -56,8 +56,8 @@
             } else {
 
                 Alert.show(
-                        resourceManager.getString('AttributesManagmentPanel', 'emptyAttributeGroup'),
-                        resourceManager.getString('AttributesManagmentPanel', 'communicationError')
+                        resourceManager.getString('AttributesManagementPanel', 'emptyAttributeGroup'),
+                        resourceManager.getString('AttributesManagementPanel', 'communicationError')
                         );
             }
         }
@@ -225,8 +225,8 @@
         private function removeAttributeValueClickHandler(event:flash.events.MouseEvent):void {
             if (attrValueDeleteCallBack != null) {
                 Alert.show(
-                        resourceManager.getString('AttributesManagmentPanel', 'deleteAttributeValueConfirm'),
-                        resourceManager.getString('AttributesManagmentPanel', 'warning'),
+                        resourceManager.getString('AttributesManagementPanel', 'deleteAttributeValueConfirm'),
+                        resourceManager.getString('AttributesManagementPanel', 'warning'),
                         Alert.OK | Alert.CANCEL, this, removeAttributeValue, null, Alert.OK);
             }
         }
@@ -262,14 +262,14 @@
 
     <mx:HBox width="100%">
         <mx:Button
-                label="@Resource(bundle='AttributesManagmentPanel',key='addAttribute')"
-                toolTip="@Resource(bundle='AttributesManagmentPanel',key='addAttributeHint')"
+                label="@Resource(bundle='AttributesManagementPanel',key='addAttribute')"
+                toolTip="@Resource(bundle='AttributesManagementPanel',key='addAttributeHint')"
                 enabled="{canAdd}" visible="{canAdd}" includeInLayout="{canAdd}"
                 click="addAttributeValue(event)"
                 />
         <mx:Button
-                label="@Resource(bundle='AttributesManagmentPanel',key='removeAttributeValue')"
-                toolTip="@Resource(bundle='AttributesManagmentPanel',key='removeAttributeValueHint')"
+                label="@Resource(bundle='AttributesManagementPanel',key='removeAttributeValue')"
+                toolTip="@Resource(bundle='AttributesManagementPanel',key='removeAttributeValueHint')"
                 enabled="{canDelete}"
                 click="removeAttributeValueClickHandler(event)"
                 />
@@ -282,18 +282,18 @@
 
         <mx:columns>
             <mx:DataGridColumn id="attrvalueIdColumn"
-                               headerText="@Resource(bundle='AttributesManagmentPanel',key='attribute_id')"
+                               headerText="@Resource(bundle='AttributesManagementPanel',key='attribute_id')"
                                dataField="attrvalueId" width="40" editable="false"
                                labelFunction="idLabelFunction"
                     />
-            <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagmentPanel',key='code')"
+            <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='code')"
                                dataField="attributeDTO.code" width="180" editable="false"
                     />
-            <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagmentPanel',key='name')"
+            <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='name')"
                                dataField="attributeDTO.name" width="200" editable="false"
                     />
             <mx:DataGridColumn id="valueDataGridColumn"
-                               headerText="@Resource(bundle='AttributesManagmentPanel',key='value')"
+                               headerText="@Resource(bundle='AttributesManagementPanel',key='value')"
                                editable="false"
                     >
                 <mx:itemRenderer>

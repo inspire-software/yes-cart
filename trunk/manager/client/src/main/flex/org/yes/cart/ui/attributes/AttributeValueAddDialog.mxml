@@ -11,7 +11,7 @@
                  prompt="@Resource(bundle='AttributeCreateEditDialog',key='selectAttribute')"
             />
 
-	<mx:Button x="217" y="56" id="closeBtn" label="@Resource(bundle='AttributeCreateEditDialog',key='close')"
+	<mx:Button x="217" y="56" id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
 			   click="PopUpManager.removePopUp(this)" width="94"/>
 
 	<mx:Button x="115" y="56" id="okBtn" label="@Resource(bundle='AttributeCreateEditDialog',key='ok')"

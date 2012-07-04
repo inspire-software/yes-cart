@@ -17,9 +17,9 @@
         </mx:FormItem>
     </mx:Form>
     <mx:ControlBar horizontalAlign="right">
-        <mx:Button  id="saveBtn" label="Save"
+        <mx:Button  id="saveBtn" label="@Resource(bundle='ShopManagerApplication',key='save')"
                    width="94"/>
-        <mx:Button id="closeBtn" label="@Resource(bundle='LocationManagementPanel',key='close')"
+        <mx:Button id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
                    click="PopUpManager.removePopUp(this)" width="94"/>
     </mx:ControlBar>
 

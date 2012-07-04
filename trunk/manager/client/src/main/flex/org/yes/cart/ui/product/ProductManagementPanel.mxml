@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" creationComplete="init();">
-    <mx:Panel width="100%" height="100%" title="@Resource(bundle='ProductManagmentPanel',key='products')">
+    <mx:Panel width="100%" height="100%" title="@Resource(bundle='ProductManagementPanel',key='products')">
 
 
         <mx:VDividedBox width="100%" height="100%">
             <mx:VBox width="100%" height="50%">
                 <mx:ControlBar x="0" y="0" width="100%">
-                    <mx:Label text="@Resource(bundle='ProductManagmentPanel',key='code')"/>
+                    <mx:Label text="@Resource(bundle='ProductManagementPanel',key='code')"/>
                     <mx:TextInput id="codeTextInput" width="100"/>
-                    <mx:Label text="@Resource(bundle='ProductManagmentPanel',key='name')"/>
+                    <mx:Label text="@Resource(bundle='ProductManagementPanel',key='name')"/>
                     <mx:TextInput id="nameTextInput" width="100"/>
-                    <mx:Label text="@Resource(bundle='ProductManagmentPanel',key='brand')"/>
+                    <mx:Label text="@Resource(bundle='ProductManagementPanel',key='brand')"/>
                     <mx:ComboBox id="brandComboBox" width="120"
                                  dataProvider="{remoteBrandService.getAll.lastResult}"
                                  labelField="name"
                                  data="brandId"
-                                 prompt="@Resource(bundle='ProductManagmentPanel',key='selectBrandPropmt')"
+                                 prompt="@Resource(bundle='ProductManagementPanel',key='selectBrandPropmt')"
                             />
-                    <mx:Label text="@Resource(bundle='ProductManagmentPanel',key='type')"/>
+                    <mx:Label text="@Resource(bundle='ProductManagementPanel',key='type')"/>
                     <mx:ComboBox id="typeComboBox" width="120"
                                  dataProvider="{remoteProductTypeService.getAll.lastResult}"
                                  labelField="name"
                                  data="producttypeId"
-                                 prompt="@Resource(bundle='ProductManagmentPanel',key='selectTypePropmt')"
+                                 prompt="@Resource(bundle='ProductManagementPanel',key='selectTypePropmt')"
                             />
-                    <mx:Button label="@Resource(bundle='ProductManagmentPanel',key='findBtn')"
-                               toolTip="@Resource(bundle='ProductManagmentPanel',key='findBtnHint')"
+                    <mx:Button label="@Resource(bundle='ProductManagementPanel',key='findBtn')"
+                               toolTip="@Resource(bundle='ProductManagementPanel',key='findBtnHint')"
                                click="searchBtnClickHandler(event)"/>
-                    <mx:Button label="@Resource(bundle='ProductManagmentPanel',key='createProduct')"
-                               toolTip="@Resource(bundle='ProductManagmentPanel',key='createProductHint')"
+                    <mx:Button label="@Resource(bundle='ProductManagementPanel',key='createProduct')"
+                               toolTip="@Resource(bundle='ProductManagementPanel',key='createProductHint')"
                                click="createBtnClickHandler(event)"/>
-                    <mx:Button label="@Resource(bundle='ProductManagmentPanel',key='deleteProduct')"
-                               toolTip="@Resource(bundle='ProductManagmentPanel',key='deleteProductHint')"
+                    <mx:Button label="@Resource(bundle='ProductManagementPanel',key='deleteProduct')"
+                               toolTip="@Resource(bundle='ProductManagementPanel',key='deleteProductHint')"
                                click="searchBtnClickHandler(event)"
                                enabled="{productDTOImpl!=null}"
                             />
@@ -41,38 +41,38 @@
                              itemClick="productSelectedClickHandler(event)"
                         >
                     <mx:columns>
-                        <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagmentPanel',key='id')"
+                        <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagementPanel',key='id')"
                                            dataField="productId"/>
-                        <mx:DataGridColumn width="120" headerText="@Resource(bundle='ProductManagmentPanel',key='code')"
+                        <mx:DataGridColumn width="120" headerText="@Resource(bundle='ProductManagementPanel',key='code')"
                                            dataField="code"/>
-                        <mx:DataGridColumn headerText="@Resource(bundle='ProductManagmentPanel',key='name')"
+                        <mx:DataGridColumn headerText="@Resource(bundle='ProductManagementPanel',key='name')"
                                            dataField="name"/>
-                        <mx:DataGridColumn headerText="@Resource(bundle='ProductManagmentPanel',key='description')"
+                        <mx:DataGridColumn headerText="@Resource(bundle='ProductManagementPanel',key='description')"
                                            dataField="description"/>
                     </mx:columns>
                 </mx:DataGrid>
             </mx:VBox>
             <mx:TabNavigator id="productTabNavigator" change="onTabClick(event);" width="100%" height="100%"
                              visible="{productDTOImpl != null}">
-                <mx:Canvas id="summaryTab" label="@Resource(bundle='ProductManagmentPanel',key='summaryTab')"
+                <mx:Canvas id="summaryTab" label="@Resource(bundle='ProductManagementPanel',key='summaryTab')"
                            width="100%"
                            height="100%"/>
-                <mx:Canvas id="imageTab" label="@Resource(bundle='ProductManagmentPanel',key='imagesTab')" width="100%"
+                <mx:Canvas id="imageTab" label="@Resource(bundle='ProductManagementPanel',key='imagesTab')" width="100%"
                            height="100%"/>
-                <mx:Canvas id="attrTab" label="@Resource(bundle='ProductManagmentPanel',key='attributesTab')"
+                <mx:Canvas id="attrTab" label="@Resource(bundle='ProductManagementPanel',key='attributesTab')"
                            width="100%"
                            height="100%"/>
-                <mx:Canvas id="skuTab" label="@Resource(bundle='ProductManagmentPanel',key='skuTab')" width="100%"
+                <mx:Canvas id="skuTab" label="@Resource(bundle='ProductManagementPanel',key='skuTab')" width="100%"
                            height="100%"/>
-                <mx:Canvas id="priceTab" label="@Resource(bundle='ProductManagmentPanel',key='priceTab')" width="100%"
+                <mx:Canvas id="priceTab" label="@Resource(bundle='ProductManagementPanel',key='priceTab')" width="100%"
                            height="100%"/>
-                <mx:Canvas id="seoTab" label="@Resource(bundle='ProductManagmentPanel',key='seoTab')" width="100%"
+                <mx:Canvas id="seoTab" label="@Resource(bundle='ProductManagementPanel',key='seoTab')" width="100%"
                            height="100%"/>
-                <mx:Canvas id="associationsTab" label="@Resource(bundle='ProductManagmentPanel',key='associationsTab')"
+                <mx:Canvas id="associationsTab" label="@Resource(bundle='ProductManagementPanel',key='associationsTab')"
                            width="100%" height="100%"/>
-                <mx:Canvas id="categoryTab" label="@Resource(bundle='ProductManagmentPanel',key='categoriesTab')"
+                <mx:Canvas id="categoryTab" label="@Resource(bundle='ProductManagementPanel',key='categoriesTab')"
                            width="100%" height="100%"/>
-                <mx:Canvas id="quantityTab" label="@Resource(bundle='ProductManagmentPanel',key='quantity')"
+                <mx:Canvas id="quantityTab" label="@Resource(bundle='ProductManagementPanel',key='quantity')"
                            width="100%"
                            height="100%"/>
 
@@ -124,7 +124,7 @@
         import org.yes.cart.util.CloneUtil;
         import org.yes.cart.util.UpdateTarget;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
-        import org.yes.cart.ui.attributes.EntityAttributeValuesManagmentPanel;
+        import org.yes.cart.ui.attributes.EntityAttributeValuesManagementPanel;
         import org.yes.cart.ui.seo.SeoPanel;
 
         import flash.events.MouseEvent;
@@ -151,7 +151,7 @@
         [Bindable]
         public var productDTOImpl:ProductDTOImpl;
 
-        private var attrValuePanel:EntityAttributeValuesManagmentPanel;
+        private var attrValuePanel:EntityAttributeValuesManagementPanel;
 
 
         /**
@@ -370,7 +370,7 @@
          */
         private function getEntityAttributesResultHandlerInternal(event:ResultEvent, canvas:Canvas, filterFunk:Function):void {
             Debug.trace("TRACE getEntityAttributesResultHandlerInternal");
-            attrValuePanel = new EntityAttributeValuesManagmentPanel();
+            attrValuePanel = new EntityAttributeValuesManagementPanel();
             attrValuePanel.attrValue = ArrayCollection(event.result);
 
             attrValuePanel.entityCode = productDTOImpl.code;
@@ -397,9 +397,9 @@
         private function skuTabSelected(event:MouseEvent):void {
             Debug.trace("INFO skuTabSelected, selected product is " + productDTOImpl);
             skuTab.removeAllChildren();
-            var productSkuManagmentPanel:ProductSkuManagmentPanel = new ProductSkuManagmentPanel();
-            productSkuManagmentPanel.product = productDTOImpl;
-            skuTab.addChild(productSkuManagmentPanel);
+            var productSkuManagementPanel:ProductSkuManagementPanel = new ProductSkuManagementPanel();
+            productSkuManagementPanel.product = productDTOImpl;
+            skuTab.addChild(productSkuManagementPanel);
         }
 
 
@@ -576,7 +576,7 @@
          */
         public function seoRemovedCallBack():void {
 
-            Debug.trace("INFO ProductManagmentPanel seo id set to null for " + productDTOImpl);
+            Debug.trace("INFO ProductManagementPanel seo id set to null for " + productDTOImpl);
             var removedSeo:SeoDTOImpl = productDTOImpl.seoDTO;
             productDTOImpl.seoDTO = null;
             var asyncToken:AsyncToken = remoteProductService.update(productDTOImpl);
@@ -590,7 +590,7 @@
          * @return nothing
          */
         private function seoRemoved(event:ResultEvent, removedSeo:SeoDTOImpl):void {
-            Debug.trace("INFO ProductManagmentPanel product updated, seo " + removedSeo + " will be removed");
+            Debug.trace("INFO ProductManagementPanel product updated, seo " + removedSeo + " will be removed");
             remoteSeoService.remove(removedSeo.seoId);
 
         }
@@ -602,7 +602,7 @@
          * @return nothing
          */
         public function seoCreatedCallBack(seoDTOImpl:SeoDTOImpl):void {
-            Debug.trace("INFO ProductManagmentPanel seo " + seoDTOImpl + " for " + productDTOImpl + " created call back ");
+            Debug.trace("INFO ProductManagementPanel seo " + seoDTOImpl + " for " + productDTOImpl + " created call back ");
             if (productDTOImpl.seoDTO == null || isNaN(productDTOImpl.seoDTO.seoId) || productDTOImpl.seoDTO.seoId == 0) {
                 Debug.trace("INFO gonna to update product");
                 productDTOImpl.seoDTO = seoDTOImpl;
@@ -616,10 +616,10 @@
          */
         private function productChangedCallBack(product:ProductDTOImpl):void {
             if (isNaN(product.productId) || product.productId == 0) {
-                Debug.trace("INFO ProductManagmentPanel product will be created " + product);
+                Debug.trace("INFO ProductManagementPanel product will be created " + product);
                 remoteProductService.create(product);
             } else {
-                Debug.trace("INFO ProductManagmentPanel product will be updated " + product);
+                Debug.trace("INFO ProductManagementPanel product will be updated " + product);
                 remoteProductService.update(product);
                 var idx:int = 0;
                 for each (var prod:ProductDTOImpl in remoteProductService.getProductByConeNameBrandType.lastResult) {

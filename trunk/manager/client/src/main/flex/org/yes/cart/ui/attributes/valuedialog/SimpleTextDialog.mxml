@@ -8,19 +8,19 @@
 
     <mx:VBox>
         <mx:Form x="0" y="0" width="100%">
-            <mx:FormItem label="@Resource(bundle='AttributesManagmentPanel',key='value')">
+            <mx:FormItem label="@Resource(bundle='AttributesManagementPanel',key='value')">
                 <mx:TextInput width="220" id="valueTextInput"/>
             </mx:FormItem>
         </mx:Form>
         <mx:ControlBar width="100%" horizontalAlign="right">
             <mx:Button id="btnCancel"
                        width="94"
-                       label="@Resource(bundle='AttributesManagmentPanel',key='cancel')"
+                       label="@Resource(bundle='AttributesManagementPanel',key='cancel')"
                        click="PopUpManager.removePopUp(this)"
                     />
             <mx:Button id="btnSave"
                        width="94"
-                       label="@Resource(bundle='AttributesManagmentPanel',key='save')"/>
+                       label="@Resource(bundle='AttributesManagementPanel',key='save')"/>
 
         </mx:ControlBar>
 

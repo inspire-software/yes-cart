@@ -19,44 +19,44 @@
 
 
     <mx:Form>
-        <mx:FormItem  width="100%" label="@Resource(bundle='WarehouseManagmentPanel',key='code')">
+        <mx:FormItem  width="100%" label="@Resource(bundle='WarehouseManagementPanel',key='code')">
             <mx:TextInput   width="160" id="code" enabled="{newWarehouseFlag}"/>
         </mx:FormItem>
-        <mx:FormItem  width="100%" label="@Resource(bundle='WarehouseManagmentPanel',key='name')">
+        <mx:FormItem  width="100%" label="@Resource(bundle='WarehouseManagementPanel',key='name')">
             <mx:TextInput   width="160" id="wName"/>
         </mx:FormItem>
-        <mx:FormItem  width="100%" label="@Resource(bundle='WarehouseManagmentPanel',key='description')">
+        <mx:FormItem  width="100%" label="@Resource(bundle='WarehouseManagementPanel',key='description')">
             <mx:TextArea   width="160" id="description"/>
         </mx:FormItem>
-        <mx:FormItem  width="100%" label="@Resource(bundle='WarehouseManagmentPanel',key='country')">
+        <mx:FormItem  width="100%" label="@Resource(bundle='WarehouseManagementPanel',key='country')">
             <mx:ComboBox id="countryComboBox"
                          change="countryChangeEvt(event)"
                          width="160"
                          labelField="name" data="countryCode" dataProvider="{remoteCountryService.getAll.lastResult}"
-                         prompt="@Resource(bundle='WarehouseManagmentPanel',key='selectCountry')"
+                         prompt="@Resource(bundle='WarehouseManagementPanel',key='selectCountry')"
                     />
         </mx:FormItem>
-        <mx:FormItem  width="100%" label="@Resource(bundle='WarehouseManagmentPanel',key='state')">
+        <mx:FormItem  width="100%" label="@Resource(bundle='WarehouseManagementPanel',key='state')">
             <mx:ComboBox id="stateComboBox"
                          change="stateChangeEvt(event)"
                          width="160"
                          labelField="name" data="stateCode"  dataProvider="{remoteStateService.findByCountry.lastResult}"
-                         prompt="@Resource(bundle='WarehouseManagmentPanel',key='selectState')"
+                         prompt="@Resource(bundle='WarehouseManagementPanel',key='selectState')"
 
                     />
         </mx:FormItem>
-        <mx:FormItem  width="100%" label="@Resource(bundle='WarehouseManagmentPanel',key='city')">
+        <mx:FormItem  width="100%" label="@Resource(bundle='WarehouseManagementPanel',key='city')">
             <mx:TextArea   width="160" id="city"/>
         </mx:FormItem>
-        <mx:FormItem  width="100%" label="@Resource(bundle='WarehouseManagmentPanel',key='postcode')">
+        <mx:FormItem  width="100%" label="@Resource(bundle='WarehouseManagementPanel',key='postcode')">
             <mx:TextArea   width="160" id="postcode"/>
         </mx:FormItem>
 
     </mx:Form>
     <mx:ControlBar horizontalAlign="right">
-        <mx:Button  id="saveBtn" label="Save"
+        <mx:Button  id="saveBtn" label="@Resource(bundle='ShopManagerApplication',key='save')"
                    width="94"/>
-        <mx:Button id="closeBtn" label="@Resource(bundle='WarehouseManagmentPanel',key='close')"
+        <mx:Button id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
                    click="PopUpManager.removePopUp(this)" width="94"/>
     </mx:ControlBar>
 
@@ -96,11 +96,11 @@
 
         private function init():void {
             if (newWarehouseFlag) {
-                this.title = resourceManager.getString('WarehouseManagmentPanel', 'newWarehouseDialog');
-                saveBtn.label = resourceManager.getString('WarehouseManagmentPanel', 'create');
+                this.title = resourceManager.getString('WarehouseManagementPanel', 'newWarehouseDialog');
+                saveBtn.label = resourceManager.getString('WarehouseManagementPanel', 'create');
             } else {
-                this.title = resourceManager.getString('WarehouseManagmentPanel', 'editWarehouse');
-                saveBtn.label = resourceManager.getString('WarehouseManagmentPanel', 'update');
+                this.title = resourceManager.getString('WarehouseManagementPanel', 'editWarehouse');
+                saveBtn.label = resourceManager.getString('WarehouseManagementPanel', 'update');
             }
 
             BindingUtils.bindProperty(code, "text", _warehouseDTOImpl, "code");

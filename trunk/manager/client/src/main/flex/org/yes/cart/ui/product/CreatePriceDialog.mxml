@@ -3,41 +3,41 @@
                 xmlns:datetime="com.georg.datetime.*" xmlns:georg="com.georg.*" layout="absolute"
                 width="300"
                 height="330"
-                title="@Resource(bundle='ProductManagmentPanel',key='createPriceTier')"
+                title="@Resource(bundle='ProductManagementPanel',key='createPriceTier')"
                 showCloseButton="true" close="PopUpManager.removePopUp(this)"
                 creationComplete="init();"
         >
 
     <mx:Form>
-        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagmentPanel',key='sku')">
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='sku')">
             <mx:ComboBox id="skuComboBox"
                          change="skuSelected(event)"
                          width="160"
                          labelField="name"
-                         prompt="@Resource(bundle='ProductManagmentPanel',key='selectSku')"
+                         prompt="@Resource(bundle='ProductManagementPanel',key='selectSku')"
                     />
         </mx:FormItem>
-        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagmentPanel',key='quantity')">
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='quantity')">
             <mx:TextInput id="quantityTextInput" width="160" change="priceFormChanged(null);"
                           enabled="{selectedSku != null}"/>
         </mx:FormItem>
-        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagmentPanel',key='listPrice')">
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='listPrice')">
             <mx:TextInput id="listPriceTextInput" width="160" change="priceFormChanged(null);"
                           enabled="{selectedSku != null}"/>
         </mx:FormItem>
 
-        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagmentPanel',key='salePrice')">
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='salePrice')">
             <mx:TextInput id="salePriceTextInput" width="160" change="priceFormChanged(null);"
                           enabled="{selectedSku != null}"/>
         </mx:FormItem>
-        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagmentPanel',key='saleFrom')">
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='saleFrom')">
             <georg:DateTimeField id="saleFromDateField" width="160" enabled="{selectedSku != null}" change="priceFormChanged(event);"/>
         </mx:FormItem>
-        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagmentPanel',key='saleTill')">
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='saleTill')">
             <georg:DateTimeField id="saleTillDateField" width="160" enabled="{selectedSku != null}" change="priceFormChanged(event);"/>
         </mx:FormItem>
 
-        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagmentPanel',key='minimalPrice')">
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='minimalPrice')">
             <mx:TextInput id="minimalPriceTextInput" width="160" change="priceFormChanged(null);"
                           enabled="{selectedSku != null}"/>
         </mx:FormItem>
@@ -47,7 +47,7 @@
     </mx:Form>
     <npa:NotInValidator
             id="quantityValidator"
-            errorMessage="@Resource(bundle='ProductManagmentPanel',key='quantityNotAllowed')"
+            errorMessage="@Resource(bundle='ProductManagementPanel',key='quantityNotAllowed')"
             source="{quantityTextInput}"
             property="text"
             />
@@ -65,12 +65,12 @@
                         allowNegative="false" decimalSeparator="." required="false"/>
 
     <mx:ControlBar horizontalAlign="right">
-        <mx:Button id="closeBtn" label="@Resource(bundle='ProductManagmentPanel',key='close')"
+        <mx:Button id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
                    click="PopUpManager.removePopUp(this)"
                    width="94"/>
         <mx:Button id="saveBtn"
-                   label="@Resource(bundle='ProductManagmentPanel',key='savePrice')"
-                   toolTip="@Resource(bundle='ProductManagmentPanel',key='savePriceHint')"
+                   label="@Resource(bundle='ProductManagementPanel',key='savePrice')"
+                   toolTip="@Resource(bundle='ProductManagementPanel',key='savePriceHint')"
                    width="94"
                    enabled="false"
                 />
@@ -123,7 +123,7 @@
 
         public function editPrice(value:SkuPriceDTOImpl):void {
             skuPrice = value;
-            this.title = resourceManager.getString('ProductManagmentPanel', 'editPriceTier');
+            this.title = resourceManager.getString('ProductManagementPanel', 'editPriceTier');
 
             BindingUtils.bindProperty(quantityTextInput, "text", _skuPrice, "quantity");
             BindingUtils.bindProperty(listPriceTextInput, "text", _skuPrice, "regularPrice");

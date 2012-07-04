@@ -4,26 +4,26 @@
            creationComplete="init();">
 
     <mx:Form x="0" y="0">
-        <mx:FormItem label="@Resource(bundle='ProductSkuManagmentPanel',key='code')">
+        <mx:FormItem label="@Resource(bundle='ProductSkuManagementPanel',key='code')">
             <mx:TextInput id="codeTextInput" width="300" enabled="{false}"/>
         </mx:FormItem>
-        <mx:FormItem label="@Resource(bundle='ProductSkuManagmentPanel',key='name')">
+        <mx:FormItem label="@Resource(bundle='ProductSkuManagementPanel',key='name')">
             <mx:TextInput id="nameTextInput" width="300" />
         </mx:FormItem>
-        <mx:FormItem label="@Resource(bundle='ProductSkuManagmentPanel',key='barCode')">
+        <mx:FormItem label="@Resource(bundle='ProductSkuManagementPanel',key='barCode')">
             <mx:TextInput id="barCodeTextInput" width="300"/>
         </mx:FormItem>
-        <mx:FormItem label="@Resource(bundle='ProductSkuManagmentPanel',key='rank')">
+        <mx:FormItem label="@Resource(bundle='ProductSkuManagementPanel',key='rank')">
             <mx:TextInput id="rankTextInput" width="300"/>
         </mx:FormItem>
-        <mx:FormItem label="@Resource(bundle='ProductSkuManagmentPanel',key='description')">
+        <mx:FormItem label="@Resource(bundle='ProductSkuManagementPanel',key='description')">
             <mx:TextArea id="descriptionTextInput" width="300"/>
         </mx:FormItem>
         <mx:FormItem>
             <mx:Button
                 enabled="{productSkuChangedFlag}"
-                label="@Resource(bundle='ProductSkuManagmentPanel',key='save')"
-                toolTip="@Resource(bundle='ProductSkuManagmentPanel',key='saveHint')"
+                label="@Resource(bundle='ProductSkuManagementPanel',key='save')"
+                toolTip="@Resource(bundle='ProductSkuManagementPanel',key='saveHint')"
                 click="saveProductsKU(event)"/>
         </mx:FormItem>
     </mx:Form>
@@ -32,8 +32,8 @@
     <mx:NumberValidator id="rankValidator"
         source="{rankTextInput}" property="text"
         minValue="0" maxValue="99999" domain="int"
-        invalidCharError="@Resource(bundle='ProductSkuManagmentPanel',key='rankInvalidCharError')"
-        integerError="@Resource(bundle='ProductSkuManagmentPanel',key='rankInvalidCharError')"
+        invalidCharError="@Resource(bundle='ProductSkuManagementPanel',key='rankInvalidCharError')"
+        integerError="@Resource(bundle='ProductSkuManagementPanel',key='rankInvalidCharError')"
             />
 
     <mx:StringValidator  id="skuNameValidator"
