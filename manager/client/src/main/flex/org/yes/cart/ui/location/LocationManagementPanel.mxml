@@ -2,23 +2,22 @@
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
            width="100%"
            height="100%"
-           creationComplete="init();">
+           creationComplete="init();"
+           paddingLeft="2" paddingRight="2" paddingBottom="5">
     <mx:Script>
 		<![CDATA[
-        import mx.core.FlexGlobals;
-
-        import org.yes.cart.impl.CountryDTOImpl;
-        import org.yes.cart.impl.StateDTOImpl;
-        import org.yes.cart.util.CloneUtil;
-
-        import org.yes.cart.shopmanager.ShopManagerGlobal;
-
         import mx.controls.Alert;
+        import mx.core.FlexGlobals;
         import mx.events.CloseEvent;
         import mx.events.ListEvent;
         import mx.managers.PopUpManager;
         import mx.rpc.AsyncResponder;
         import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.impl.CountryDTOImpl;
+        import org.yes.cart.impl.StateDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+        import org.yes.cart.util.CloneUtil;
 
         private var countryCreateEditDialog:CountryCreateEditDialog;
 
@@ -33,19 +32,12 @@
          * @param event
          * @return nothing
          */
-        private function handleCoutrySelectedClick(event:ListEvent):void {
+        private function handleCountrySelectedClick(event:ListEvent):void {
             this.countrySelected = this.countryGrid.selectedItem != null;
             if (this.countrySelected) {
                 countrySelectedAndHasNoStates = false;
                 stateSelected = false;
-                remoteStateService.findByCountry(this.countryGrid.selectedItem.countryCode).addResponder(
-                        new AsyncResponder(
-                                function (event:*, obj:Object = null):void {
-                                    countrySelectedAndHasNoStates = remoteStateService.findByCountry.lastResult.length == 0;
-                                },
-                                ShopManagerGlobal.instance.defaultFaultHandler
-                        )
-                );
+                remoteStateService.findByCountry(this.countryGrid.selectedItem.countryCode);
             }
         }
 
@@ -55,12 +47,12 @@
          * @param event event
          * @return nothing
          */
-        private function deleteCountryClickHandler(event:flash.events.MouseEvent):void {
+        private function deleteCountryClickHandler(event:MouseEvent):void {
             if (this.countrySelected && this.countryGrid.selectedItem != null) {
                 Alert.show(
                         resourceManager.getString('LocationManagementPanel', 'deleteCountryConfirm', [ this.countryGrid.selectedItem.countryCode ]),
                         resourceManager.getString('LocationManagementPanel', 'warning'),
-                        Alert.OK | Alert.CANCEL, this, deleteCountry, null, Alert.OK);
+                        Alert.OK | Alert.CANCEL, this, onDeleteCountryConfirm, null, Alert.OK);
             }
         }
 
@@ -69,21 +61,11 @@
          * @param event close event
          * @return nothing
          */
-        private function deleteCountry(event:CloseEvent):void {
+        private function onDeleteCountryConfirm(event:CloseEvent):void {
             if (event.detail == Alert.OK) {
                 if (this.countrySelected && this.countryGrid.selectedItem != null) {
                     var countryId:Object = this.countryGrid.selectedItem.countryId;
-                    remoteCountryService.remove(countryId).addResponder(
-                            new AsyncResponder(
-                                    function (event:*, obj:Object = null):void {
-                                        countrySelected = false;
-                                        countrySelectedAndHasNoStates = false;
-                                        stateSelected = false;
-                                        remoteCountryService.getAll();
-                                    },
-                                    ShopManagerGlobal.instance.defaultFaultHandler
-                            )
-                    );
+                    remoteCountryService.remove(countryId);
                 }
                 this.countrySelected = false;
                 this.countrySelectedAndHasNoStates = false;
@@ -97,13 +79,13 @@
          * @param event event
          * @return nothing
          */
-        private function editCountryClickHandler(event:flash.events.MouseEvent):void {
+        private function editCountryClickHandler(event:Event):void {
             if (this.countrySelected && this.countryGrid.selectedItem != null) {
                 countryCreateEditDialog = CountryCreateEditDialog(
                         PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CountryCreateEditDialog, true));
                 countryCreateEditDialog.newCountryFlag = false;
                 countryCreateEditDialog.countryDTOImpl = CountryDTOImpl(CloneUtil.clone(this.countryGrid.selectedItem));
-                countryCreateEditDialog.saveBtn.addEventListener("click", updateCountry);
+                countryCreateEditDialog.saveBtn.addEventListener("click", onUpdateCountryClick);
                 PopUpManager.centerPopUp(countryCreateEditDialog);
             }
         }
@@ -114,27 +96,8 @@
          * @param event event
          * @return nothing
          */
-        private function updateCountry(event:Event):void {
-            remoteCountryService.update(countryCreateEditDialog.countryDTOImpl).addResponder(
-                    new AsyncResponder(
-                            function (event:*, obj:Object = null):void {
-                                remoteCountryService.getAll().addResponder(
-                                        new AsyncResponder(
-                                                function (event2:*, obj2:Object = null):void {
-                                                    countrySelected = false;
-                                                    countrySelectedAndHasNoStates = false;
-                                                    stateSelected = false;
-                                                }
-                                                ,
-                                                ShopManagerGlobal.instance.defaultFaultHandler
-                                        )
-                                );
-
-                            },
-                            ShopManagerGlobal.instance.defaultFaultHandler)
-            );
-            PopUpManager.removePopUp(countryCreateEditDialog);
-            countryCreateEditDialog = null;
+        private function onUpdateCountryClick(event:Event):void {
+            remoteCountryService.update(countryCreateEditDialog.countryDTOImpl);
         }
 
 
@@ -143,12 +106,12 @@
          * @param event event
          * @return nothing
          */
-        private function newCountryClickHandler(event:flash.events.MouseEvent):void {
+        private function newCountryClickHandler(event:MouseEvent):void {
             countryCreateEditDialog = CountryCreateEditDialog(
                     PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CountryCreateEditDialog, true));
             countryCreateEditDialog.newCountryFlag = true;
             countryCreateEditDialog.countryDTOImpl = new CountryDTOImpl();
-            countryCreateEditDialog.saveBtn.addEventListener("click", saveCountry);
+            countryCreateEditDialog.saveBtn.addEventListener("click", onSaveCountryClick);
             PopUpManager.centerPopUp(countryCreateEditDialog);
         }
 
@@ -157,19 +120,8 @@
          * @param event event
          * @return nothing
          */
-        private function saveCountry(event:Event):void {
-            remoteCountryService.create(countryCreateEditDialog.countryDTOImpl).addResponder(
-                    new AsyncResponder(
-                            function (event:*, obj:Object = null):void {
-                                countrySelected = false;
-                                countrySelectedAndHasNoStates = false;
-                                stateSelected = false;
-                                remoteCountryService.getAll();
-                            },
-                            ShopManagerGlobal.instance.defaultFaultHandler)
-            );
-            PopUpManager.removePopUp(countryCreateEditDialog);
-            countryCreateEditDialog = null;
+        private function onSaveCountryClick(event:Event):void {
+            remoteCountryService.create(countryCreateEditDialog.countryDTOImpl);
         }
 
 
@@ -178,26 +130,18 @@
          * @param event event
          * @return nothing
          */
-        private function newStateClickHandler(event:flash.events.MouseEvent):void {
+        private function newStateClickHandler(event:MouseEvent):void {
             if (this.countrySelected && this.countryGrid.selectedItem != null) {
-                var parent:DisplayObject = this;
-                remoteStateService.getNew().addResponder(
-                        new AsyncResponder(
-                                function (event:ResultEvent, obj:Object = null):void {
 
-                                    var countryCode:String = countryGrid.selectedItem.countryCode;
+                var state:StateDTOImpl = new StateDTOImpl();
+                var countryCode:String = countryGrid.selectedItem.countryCode;
+                state.countryCode = countryCode;
+                stateCreateEditDialog = StateCreateEditDialog(PopUpManager.createPopUp(parent, StateCreateEditDialog, true));
+                stateCreateEditDialog.newStateFlag = true;
 
-                                    stateCreateEditDialog = StateCreateEditDialog(PopUpManager.createPopUp(parent, StateCreateEditDialog, true));
-                                    stateCreateEditDialog.newStateFlag = true;
-
-                                    stateCreateEditDialog.stateDTOImpl = StateDTOImpl(event.result);
-                                    stateCreateEditDialog.stateDTOImpl.countryCode = countryCode;
-                                    stateCreateEditDialog.saveBtn.addEventListener("click", saveState);
-                                    PopUpManager.centerPopUp(stateCreateEditDialog);
-                                }
-                                ,
-                                ShopManagerGlobal.instance.defaultFaultHandler)
-                );
+                stateCreateEditDialog.stateDTOImpl = state;
+                stateCreateEditDialog.saveBtn.addEventListener("click", onSaveStateClick);
+                PopUpManager.centerPopUp(stateCreateEditDialog);
             }
         }
 
@@ -207,13 +151,13 @@
          * @param event event
          * @return nothing
          */
-        private function editStateClickHandler(event:flash.events.MouseEvent):void {
+        private function editStateClickHandler(event:Event):void {
             if (this.stateSelected && this.stateGrid.selectedItem != null) {
                 stateCreateEditDialog = StateCreateEditDialog(
                         PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), StateCreateEditDialog, true));
                 stateCreateEditDialog.newStateFlag = false;
                 stateCreateEditDialog.stateDTOImpl = StateDTOImpl(CloneUtil.clone(this.stateGrid.selectedItem));
-                stateCreateEditDialog.saveBtn.addEventListener("click", updateState);
+                stateCreateEditDialog.saveBtn.addEventListener("click", onUpdateStateClick);
                 PopUpManager.centerPopUp(stateCreateEditDialog);
             }
         }
@@ -224,25 +168,9 @@
          * @param event event
          * @return nothing
          */
-        private function saveState(event:Event):void {
+        private function onSaveStateClick(event:Event):void {
             var stateDTOImpl:StateDTOImpl = stateCreateEditDialog.stateDTOImpl;
-            remoteStateService.create(stateDTOImpl).addResponder(
-                    new AsyncResponder(
-                            function (event:*, obj:Object = null):void {
-                                stateSelected = false;
-                                remoteStateService.findByCountry(stateDTOImpl.countryCode).addResponder(
-                                        new AsyncResponder(
-                                                function (event:*, obj:Object = null):void {
-                                                    countrySelectedAndHasNoStates = remoteStateService.findByCountry.lastResult.length == 0;
-                                                },
-                                                ShopManagerGlobal.instance.defaultFaultHandler
-                                        )
-                                );
-                            },
-                            ShopManagerGlobal.instance.defaultFaultHandler)
-            );
-            PopUpManager.removePopUp(stateCreateEditDialog);
-            stateCreateEditDialog = null;
+            remoteStateService.create(stateDTOImpl);
         }
 
 
@@ -251,26 +179,9 @@
          * @param event event
          * @return nothing
          */
-        private function updateState(event:Event):void {
+        private function onUpdateStateClick(event:Event):void {
             var stateDTOImpl:StateDTOImpl = stateCreateEditDialog.stateDTOImpl;
-            remoteStateService.update(stateDTOImpl).addResponder(
-                    new AsyncResponder(
-                            function (event:*, obj:Object = null):void {
-                                remoteStateService.findByCountry(stateDTOImpl.countryCode).addResponder(
-                                        new AsyncResponder(
-                                                function (event:*, obj:Object = null):void {
-                                                    stateSelected = false;
-                                                },
-                                                ShopManagerGlobal.instance.defaultFaultHandler
-                                        )
-                                );
-
-                            },
-                            ShopManagerGlobal.instance.defaultFaultHandler
-                    )
-            );
-            PopUpManager.removePopUp(stateCreateEditDialog);
-            stateCreateEditDialog = null;
+            remoteStateService.update(stateDTOImpl);
         }
 
 
@@ -279,11 +190,13 @@
          * @param event event
          * @return nothing
          */
-        private function deleteStateClickHandler(event:flash.events.MouseEvent):void {
-            Alert.show(
-                    resourceManager.getString('LocationManagementPanel', 'deleteStateConfirm'),
-                    resourceManager.getString('LocationManagementPanel', 'warning'),
-                    Alert.OK | Alert.CANCEL, this, deleteState, null, Alert.OK);
+        private function deleteStateClickHandler(event:MouseEvent):void {
+            if (this.stateSelected && this.stateGrid.selectedItem != null) {
+                Alert.show(
+                        resourceManager.getString('LocationManagementPanel', 'deleteStateConfirm', [ this.stateGrid.selectedItem.stateCode ]),
+                        resourceManager.getString('LocationManagementPanel', 'warning'),
+                        Alert.OK | Alert.CANCEL, this, onDeleteStateConfirm, null, Alert.OK);
+            }
         }
 
         /**
@@ -291,25 +204,10 @@
          * @param event close event
          * @return nothing
          */
-        private function deleteState(event:CloseEvent):void {
+        private function onDeleteStateConfirm(event:CloseEvent):void {
             if (event.detail == Alert.OK) {
                 if (this.stateSelected && this.stateGrid.selectedItem != null) {
-                    remoteStateService.remove(this.stateGrid.selectedItem.stateId).addResponder(
-                            new AsyncResponder(
-                                    function (event:*, obj:Object = null):void {
-                                        stateSelected = false;
-                                        remoteStateService.findByCountry(stateGrid.selectedItem.countryCode).addResponder(
-                                                new AsyncResponder(
-                                                        function (event:*, obj:Object = null):void {
-                                                            stateSelected = false;
-                                                        },
-                                                        ShopManagerGlobal.instance.defaultFaultHandler
-                                                )
-                                        );
-                                    },
-                                    ShopManagerGlobal.instance.defaultFaultHandler
-                            )
-                    );
+                    remoteStateService.remove(this.stateGrid.selectedItem.stateId);
                 }
                 stateSelected = false;
             }
@@ -324,6 +222,87 @@
         private function handleStateSelectedClick(event:ListEvent):void {
             this.stateSelected = this.stateGrid.selectedItem != null;
         }
+
+        private function onGetAllCountriesResult(event:ResultEvent):void {
+            countrySelected = false;
+            countrySelectedAndHasNoStates = false;
+            stateSelected = false;
+            this.countryGrid.dataProvider = event.result;
+        }
+
+        private function onFindByCountryResult(event:ResultEvent):void {
+            this.stateGrid.dataProvider = event.result;
+            stateSelected = false;
+            countrySelectedAndHasNoStates = countrySelected && this.stateGrid.dataProvider.length == 0;
+        }
+
+        private function onRemoveCountryResult(event:ResultEvent):void {
+            countrySelected = false;
+            countrySelectedAndHasNoStates = false;
+            stateSelected = false;
+            remoteCountryService.getAll();
+        }
+
+        private function onUpdateCountryResult(event:ResultEvent):void {
+
+            if (countryCreateEditDialog != null) {
+                PopUpManager.removePopUp(countryCreateEditDialog);
+            }
+            countryCreateEditDialog = null;
+            countrySelected = false;
+            countrySelectedAndHasNoStates = false;
+            stateSelected = false;
+            remoteCountryService.getAll();
+        }
+
+        private function onCreateCountryResult(event:ResultEvent):void {
+
+            if (countryCreateEditDialog != null) {
+                PopUpManager.removePopUp(countryCreateEditDialog);
+            }
+            countryCreateEditDialog = null;
+            countrySelected = false;
+            countrySelectedAndHasNoStates = false;
+            stateSelected = false;
+            remoteCountryService.getAll();
+
+        }
+
+        private function onUpdateStateResult(event:ResultEvent):void {
+
+            if (stateCreateEditDialog != null) {
+                PopUpManager.removePopUp(stateCreateEditDialog);
+            }
+            stateCreateEditDialog = null;
+            stateSelected = false;
+            if (countrySelected && this.countryGrid.selectedItem != null) {
+                remoteStateService.findByCountry(this.countryGrid.selectedItem.countryCode);
+            }
+
+        }
+
+        private function onCreateStateResult(event:ResultEvent):void {
+
+            if (stateCreateEditDialog != null) {
+                PopUpManager.removePopUp(stateCreateEditDialog);
+            }
+            stateCreateEditDialog = null;
+            stateSelected = false;
+            if (countrySelected && this.countryGrid.selectedItem != null) {
+                remoteStateService.findByCountry(this.countryGrid.selectedItem.countryCode);
+            }
+
+        }
+
+        private function onRemoveStateResult(event:ResultEvent):void {
+
+            stateCreateEditDialog = null;
+            stateSelected = false;
+            if (countrySelected && this.countryGrid.selectedItem != null) {
+                remoteStateService.findByCountry(this.countryGrid.selectedItem.countryCode);
+            }
+
+        }
         ]]>
     </mx:Script>
 
@@ -331,13 +310,35 @@
                      destination="remoteCountryService"
                      result="ShopManagerGlobal.instance.defaultResultHandler(event)"
                      fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
-                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+    
+        <mx:method id="getAllCountries" name="getAll"
+                   result="onGetAllCountriesResult(event)"/>
+        <mx:method id="removeCountry" name="remove"
+                   result="onRemoveCountryResult(event)"/>
+        <mx:method id="updateCountry" name="update"
+                   result="onUpdateCountryResult(event)"/>
+        <mx:method id="createCountry" name="create"
+                   result="onCreateCountryResult(event)"/>
+        
+    </mx:RemoteObject>
 
     <mx:RemoteObject showBusyCursor="true" id="remoteStateService"
                      destination="remoteStateService"
                      result="ShopManagerGlobal.instance.defaultResultHandler(event)"
                      fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
-                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+            
+        <mx:method id="findByCountry" name="findByCountry"
+                   result="onFindByCountryResult(event)"/>
+        <mx:method id="removeState" name="remove"
+                   result="onRemoveStateResult(event)"/>
+        <mx:method id="updateState" name="update"
+                   result="onUpdateStateResult(event)"/>
+        <mx:method id="createState" name="create"
+                   result="onCreateStateResult(event)"/>
+
+    </mx:RemoteObject>
 
     <mx:Boolean id="countrySelected">false</mx:Boolean>
     <mx:Boolean id="countrySelectedAndHasNoStates">false</mx:Boolean>
@@ -364,8 +365,9 @@
 
             </mx:HBox>
             <mx:DataGrid id="countryGrid"
-                         dataProvider="{remoteCountryService.getAll.lastResult}"
-                         itemClick="handleCoutrySelectedClick(event)"
+                         doubleClickEnabled="true"
+                         itemDoubleClick="editCountryClickHandler(event)"
+                         itemClick="handleCountrySelectedClick(event)"
                          width="100%" height="100%">
                 <mx:columns>
                     <mx:DataGridColumn width="80"
@@ -407,7 +409,8 @@
 
             </mx:HBox>
             <mx:DataGrid id="stateGrid"
-                         dataProvider="{remoteStateService.findByCountry.lastResult}"
+                         doubleClickEnabled="true"
+                         itemDoubleClick="editStateClickHandler(event)"
                          itemClick="handleStateSelectedClick(event)"
                          width="100%" height="100%">
                 <mx:columns>
