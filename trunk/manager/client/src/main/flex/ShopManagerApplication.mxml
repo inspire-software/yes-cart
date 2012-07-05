@@ -16,13 +16,18 @@
 		<![CDATA[
         import com.hexagonstar.util.debug.Debug;
 
+        import mx.collections.ArrayCollection;
+
         import mx.controls.Alert;
         import mx.controls.Text;
+        import mx.events.IndexChangedEvent;
         import mx.messaging.channels.AMFChannel;
         import mx.rpc.AsyncResponder;
         import mx.rpc.AsyncToken;
         import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.impl.ShopDTOImpl;
 
         import org.yes.cart.shopmanager.ShopManagerGlobal;
         import org.yes.cart.ui.attributes.AttributesManagementPanel;
@@ -44,6 +49,7 @@
 
         private var shopManagerGlobal:ShopManagerGlobal;
 
+        private var shops:Object;
 
         public function init():void {
             currentState = "loginState";
@@ -81,7 +87,7 @@
             ShopManagerGlobal.getInstance().amfChannel = myamf;
             ShopManagerGlobal.getInstance().channelSet = channelSet;
             currentState = "userAuthenticated";
-            /*This call pass  the password to flex session, because after new spring security imposible to
+            /*This call pass  the password to flex session, because after new spring security impossible to
              * get user credentials using FlexContext.getUserPrincipal()).getCredentials() on java side.*/
             remoteFlexSupportService.setSessionInfo("pwd", password.text);
 
@@ -188,17 +194,34 @@
         }
 
         /**
-         * Roles managment.
+         * Roles management.
          * @param event
          */
         protected function storesManagement_clickHandler(event:MouseEvent):void {
-            setFontWeight(storesBtn);
+            setFontWeight(event.target as LinkButton);
             mainPanel.removeAllChildren();
-            mainPanel.addChild(new StoresManagementPanel());
+            var panel:StoresManagementPanel = new StoresManagementPanel();
+            var shop:ShopDTOImpl = this.shops[(event.target as LinkButton).id];
+            panel.shopDTOImpl = shop;
+            panel.title = shop.name;
+            mainPanel.addChild(panel);
         }
 
         /**
-         * Roles managment.
+         * Roles management.
+         * @param event
+         */
+        protected function storesManagement_clickNewHandler(event:MouseEvent):void {
+            setFontWeight(event.target as LinkButton);
+            mainPanel.removeAllChildren();
+            var newShop:ShopDTOImpl = new ShopDTOImpl();
+            var panel:StoresManagementPanel = new StoresManagementPanel();
+            panel.shopDTOImpl =  newShop;
+            mainPanel.addChild(panel);
+        }
+
+        /**
+         * Roles management.
          * @param event
          */
         protected function warehouseManagement_clickHandler(event:MouseEvent):void {
@@ -335,6 +358,54 @@
             label.text = "TODO: this is not yet implemented";
             mainPanel.addChild(label);
         }
+
+        private function onFaultHandler(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultFaultHandler(event);
+        }
+
+        private function onGetAllShopsResult(event:ResultEvent):void {
+
+            this.shops = {};
+            for each (var shop:ShopDTOImpl in event.result) {
+                this.shops['shop_' + shop.shopId] = shop;
+            }
+
+            this.onInitStoresButtons();
+
+        }
+
+        private function onInitStoresButtons():void {
+            var tempArray:ArrayCollection = new ArrayCollection(storesButtons.getChildren());
+            for each (var oldShopButton:Object in tempArray) {
+                if (oldShopButton is LinkButton) {
+                    var oldButton:LinkButton = oldShopButton as LinkButton;
+                    if (oldButton.id == 'storesBtn') {
+                        continue; // do not remove the create button
+                    }
+                    oldButton.removeEventListener(MouseEvent.CLICK, storesManagement_clickHandler);
+                    storesButtons.removeChild(oldButton);
+                }
+            }
+
+            for (var shopId:String in this.shops) {
+                var shop:ShopDTOImpl = this.shops[shopId];
+                var shopButton:LinkButton = new LinkButton();
+                shopButton.label = shop.name + ' (' + shop.code + ')';
+                shopButton.id = shopId;
+                shopButton.addEventListener(MouseEvent.CLICK, storesManagement_clickHandler);
+                shopButton.percentWidth = 100;
+                storesButtons.addChild(shopButton);
+            }
+
+        }
+
+        private function onMainAccordionChange(event:IndexChangedEvent):void {
+            const storeMenu:int = 4;
+            if (event.newIndex == storeMenu) {
+                remoteShopService.getAll(); // reload buttons
+            }
+        }
+
         ]]>
 	</mx:Script>
 
@@ -351,6 +422,17 @@
                      result="ShopManagerGlobal.instance.defaultResultHandler(event)"
                      fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteShopService"
+                     destination="remoteShopService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getAllShops" name="getAll"
+                   result="onGetAllShopsResult(event)"
+                   fault="onFaultHandler(event)"/>
+
+
+    </mx:RemoteObject>
 
 
     <mx:states>
@@ -410,7 +492,7 @@
                     <!-- The main frame -->
                     <mx:VBox id="mainFrame" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2" height="100%" width="100%">
                         <mx:HDividedBox width="100%" height="100%">
-                            <mx:Accordion id="mainAccourdion" width="230" height="100%">
+                            <mx:Accordion id="mainAccourdion" width="230" height="100%" change="onMainAccordionChange(event)">
                                 <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='customerService')"
                                            width="100%" height="100%">
                                     <mx:VBox x="0" y="0" height="100%" width="100%">
@@ -561,11 +643,11 @@
 
                                 <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='stores')" width="100%"
                                            height="100%">
-                                    <mx:VBox x="0" y="0" height="100%" width="100%">
-
+                                    <mx:VBox x="0" y="0" height="100%" width="100%" id="storesButtons">
+                                        <mx:Spacer height="10"/>
                                         <mx:LinkButton width="100%" id="storesBtn"
-                                                       label="@Resource(bundle='ShopManagerApplication',key='stores')"
-                                                       click="storesManagement_clickHandler(event)"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='newStore')"
+                                                       click="storesManagement_clickNewHandler(event)"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='storesHint')"
                                                 />
 
