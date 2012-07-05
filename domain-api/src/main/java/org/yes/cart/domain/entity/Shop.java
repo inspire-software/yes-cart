@@ -261,7 +261,7 @@ public interface Shop extends Auditable {
      * Set supported currency
      * @param currencies comma separated list of supported currencies.
      */
-    //void setSupportedCurrencies(String currencies);
+    //void updateSupportedCurrencies(String currencies);
 
     /**
      * Get all supported currencies. First in list is default.

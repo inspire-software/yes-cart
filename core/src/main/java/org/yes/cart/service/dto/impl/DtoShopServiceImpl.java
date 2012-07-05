@@ -54,7 +54,7 @@ public class DtoShopServiceImpl
      * @param shopId shop id
      * @param currencies comma separated list of supported currency codes. Example USD,EUR
      */
-    public void setSupportedCurrencies(final long shopId, final String currencies) {
+    public void updateSupportedCurrencies(final long shopId, final String currencies) {
         ((ShopService) service).updateAttributeValue(
                 shopId,
                 AttributeNamesKeys.SUPPORTED_CURRENCIES,

@@ -44,8 +44,8 @@ public class RemoteShopServiceImpl
     /**
      * {@inheritDoc}
      */
-    public void setSupportedCurrencies(final long shopId, final String currencies) {
-        ((DtoShopService) getGenericDTOService()).setSupportedCurrencies(shopId, currencies);
+    public void updateSupportedCurrencies(final long shopId, final String currencies) {
+        ((DtoShopService) getGenericDTOService()).updateSupportedCurrencies(shopId, currencies);
     }
 
     /**
