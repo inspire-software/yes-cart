@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%"
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%"
+           title="@Resource(bundle='StoresManagementPanel',key='store')"
+           paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2"
            creationComplete="init();">
     <mx:Script>
 		<![CDATA[
@@ -167,8 +169,6 @@
                      fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
-    <mx:Panel width="100%" height="100%" title="@Resource(bundle='StoresManagementPanel',key='store')">
-        <mx:VBox x="0" y="0" width="100%" height="100%" id="shopManagmenlPanel">
             <mx:ControlBar width="100%">
                 <mx:Text text="@Resource(bundle='StoresManagementPanel',key='store')"/>
                 <mx:ComboBox id="storesComboBox"
@@ -202,9 +202,6 @@
                 <mx:Canvas enabled="false" label="@Resource(bundle='StoresManagementPanel',key='taxes')" width="100%"
                            height="100%"/>
             </mx:TabNavigator>
-        </mx:VBox>
-
-    </mx:Panel>
 
 
-</mx:Canvas>
+</mx:Panel>

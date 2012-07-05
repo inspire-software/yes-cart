@@ -1,29 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" creationComplete="init();">
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+         width="100%" height="100%"
+         creationComplete="init();"
+         paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2">
     <mx:Script>
 
 <![CDATA[
-        import org.yes.cart.impl.ShopDTOImpl;
-        import org.yes.cart.impl.ShopUrlDTOImpl;
-        import org.yes.cart.util.DomainNameValidator;
-        import org.yes.cart.shopmanager.ShopManagerGlobal;
-
-        import mx.binding.utils.ChangeWatcher;
         import mx.controls.Alert;
         import mx.events.CloseEvent;
+        import mx.events.DataGridEvent;
         import mx.events.ListEvent;
-        import mx.events.PropertyChangeEvent;
-
-        import mx.rpc.AsyncResponder;
-        import mx.rpc.AsyncToken;
         import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
 
+        import org.yes.cart.impl.ShopDTOImpl;
+        import org.yes.cart.impl.ShopUrlDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+        import org.yes.cart.util.DomainNameValidator;
 
         private var shopDTOImpl:ShopDTOImpl;
-        private var selectedShopUrlDTOImpl:ShopUrlDTOImpl;
-        private var changeWatcher:ChangeWatcher;
-
 
         private function init():void {
             remoteShopUrlService.getAllByShopId(shopDTOImpl.shopId);
@@ -35,78 +30,39 @@
         }
 
 
-        private function addNewUrlClick(event:flash.events.MouseEvent):void {
+        private function addNewUrlClick(event:MouseEvent):void {
 
             var newShopUrl:ShopUrlDTOImpl = new ShopUrlDTOImpl();
             newShopUrl.shopId = shopDTOImpl.shopId;
             newShopUrl.url = resourceManager.getString('StoreSupportedUrlsPanel', 'pressHereToEditNewURL');
-            remoteShopUrlService.create(newShopUrl).addResponder(
-                    new AsyncResponder(urlCreatedHandler, null));
-        }
-
-        private function urlCreatedHandler(event:ResultEvent, token:AsyncToken):void {
-            remoteShopUrlService.getAllByShopId(shopDTOImpl.shopId);
-
-        }
-
-
-        private function setSelectedUrl(event:mx.events.ListEvent):void {
-            selectedShopUrlDTOImpl = event.currentTarget.selectedItem;
-            canDeleteUrl = true;
-            if (!controllBarVisible) {
-                changeWatcher = ChangeWatcher.watch(this.selectedShopUrlDTOImpl, "url", dtoUrlChanged);
-            }
-        }
-
-        public function dtoUrlChanged(event:PropertyChangeEvent):void {
-            if (changeWatcher != null) {
-                changeWatcher.unwatch();
-            }
-            controllBarVisible = true;
-            changeWatcher = null;
-
+            this.urlGrid.dataProvider.addItem(newShopUrl);
         }
 
         private function validateUrlsBeforeSave():Boolean {
-            for each (var urlDto:ShopUrlDTOImpl in remoteShopUrlService.getAllByShopId.lastResult) {
+            for each (var urlDto:ShopUrlDTOImpl in this.urlGrid.dataProvider) {
                 if (!DomainNameValidator.validate(urlDto.url)) {
-                    Alert.show(
-                            resourceManager.getString('StoreSupportedUrlsPanel', 'invalidUrl') + urlDto.url,
-                            resourceManager.getString('StoreSupportedUrlsPanel', 'errorUrl')
-                            );
+                    this.urlGrid.errorString = resourceManager.getString('StoreSupportedUrlsPanel', 'invalidUrl', [ urlDto.url ]);
                     return false;
                 }
             }
+            this.urlGrid.errorString = '';
             return true;
         }
 
-        private function saveChanges(event:flash.events.MouseEvent):void {
+        private function saveChanges(event:MouseEvent):void {
             if (validateUrlsBeforeSave()) {
 
-                for each (var urlDto:ShopUrlDTOImpl in remoteShopUrlService.getAllByShopId.lastResult) {
-                    var asyncToken:AsyncToken = remoteShopUrlService.update(urlDto);
-                    asyncToken.addResponder(
-                            new AsyncResponder(
-                                    urlUpdatedHandler,
-                                    urlUpdateFaultHandler)
-                            );
+                urlsChanged = false;
+                for each (var urlDto:ShopUrlDTOImpl in this.urlGrid.dataProvider) {
+
+                    if (isNaN(urlDto.storeUrlId) || urlDto.storeUrlId == 0) {
+                        remoteShopUrlService.create(urlDto);
+                    } else {
+                        remoteShopUrlService.update(urlDto);
+                    }
                 }
-                controllBarVisible = false;
+
             }
-        }
-
-        private function urlUpdatedHandler(event:ResultEvent, token:AsyncToken):void {
-            //remoteShopUrlService.getAllByShopId(shopDTOImpl.shopId);
-
-        }
-
-        private function urlUpdateFaultHandler(event:FaultEvent):void {
-
-            Alert.show(
-                    resourceManager.getString('StoreSupportedUrlsPanel', 'cannotSaveURL') + event.toString(),
-                    resourceManager.getString('StoreSupportedUrlsPanel', 'communicationError')
-                    );
-            controllBarVisible = true;
         }
 
 
@@ -117,11 +73,14 @@
          * @param event miuse event
          * @return nothing
          */
-        private function deleteUrlClickHandler(event:flash.events.MouseEvent):void {
-            Alert.show(
-                    resourceManager.getString('StoreSupportedUrlsPanel', 'deleteUrlConfirm'),
-                    resourceManager.getString('StoreSupportedUrlsPanel', 'warning'),
-                    Alert.OK | Alert.CANCEL, this, deleteUrl, null, Alert.OK);
+        private function deleteUrlClickHandler(event:MouseEvent):void {
+
+            if (this.allowDeleteUrl && this.urlGrid.selectedItem != null) {
+                Alert.show(
+                        resourceManager.getString('StoreSupportedUrlsPanel', 'deleteUrlConfirm', [ this.urlGrid.selectedItem.url ]),
+                        resourceManager.getString('StoreSupportedUrlsPanel', 'warning'),
+                        Alert.OK | Alert.CANCEL, this, onDeleteUrlConfirm, null, Alert.OK);
+            }
         }
 
         /**
@@ -130,16 +89,65 @@
          * @param event event
          * @return nothing
          */
-        private function deleteUrl(event:CloseEvent):void {
+        private function onDeleteUrlConfirm(event:CloseEvent):void {
             if (event.detail == Alert.OK) {
-                remoteShopUrlService.remove(selectedShopUrlDTOImpl.storeUrlId);
-                Alert.show(
-                        resourceManager.getString('StoreSupportedUrlsPanel', 'urlDeletedConfirm'),
-                        resourceManager.getString('StoreSupportedUrlsPanel', 'info'));
+                if (this.allowDeleteUrl && this.urlGrid.selectedItem != null) {
+
+                    if (isNaN(this.urlGrid.selectedItem.storeUrlId) || this.urlGrid.selectedItem.storeUrlId == 0) {
+                        this.urlGrid.dataProvider.removeItemAt(this.urlGrid.selectedIndex);
+                        this.allowDeleteUrl = false;
+                        validateUrlsBeforeSave();
+                    } else {
+                        remoteShopUrlService.remove(this.urlGrid.selectedItem.storeUrlId);
+                    }
+                }
             }
+        }
+
+        private function onGetAllByShopIdResult(event:ResultEvent):void {
+
+            urlsChanged = false;
+            allowDeleteUrl = false;
+            this.urlGrid.dataProvider = event.result;
+            // default sort asc by URL
+            var columnIndex:int = 0;
+            this.urlGrid.dispatchEvent(new DataGridEvent(DataGridEvent.HEADER_RELEASE, false, true, columnIndex, null, 0, null, null, 0));
+
+        }
+
+        private function onUrlItemEditEnd(event:DataGridEvent):void {
+
+            validateUrlsBeforeSave();
+            this.urlsChanged = true;
+
+        }
+
+        private function onSaveResult(event:ResultEvent):void {
+            // do nothing for now
+        }
+
+        private function onSaveFault(event:FaultEvent):void {
+
+            Alert.show(
+                    resourceManager.getString('StoreSupportedUrlsPanel', 'cannotSaveURL', [ event.toString() ]),
+                    resourceManager.getString('StoreSupportedUrlsPanel', 'communicationError')
+            );
+            urlsChanged = true;
+        }
+
+        private function onRemoveResult(event:ResultEvent):void {
+
             remoteShopUrlService.getAllByShopId(shopDTOImpl.shopId);
-            controllBarVisible = false;
-            canDeleteUrl = false;
+
+            Alert.show(
+                    resourceManager.getString('StoreSupportedUrlsPanel', 'urlDeletedConfirm'),
+                    resourceManager.getString('StoreSupportedUrlsPanel', 'info'));
+        }
+
+        private function onItemClick(event:ListEvent):void {
+
+            this.allowDeleteUrl = this.urlGrid.selectedItem != null;
+
         }
         ]]>
 </mx:Script>
@@ -148,32 +156,47 @@
                      destination="remoteShopUrlService"
                      result="ShopManagerGlobal.instance.defaultResultHandler(event)"
                      fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
-                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
 
-    <mx:Boolean id="controllBarVisible">false</mx:Boolean>
-    <mx:Boolean id="canDeleteUrl">false</mx:Boolean>
+        <mx:method id="getAllByShopId" name="getAllByShopId"
+                   result="onGetAllByShopIdResult(event)"/>
+        <mx:method id="create" name="create"
+                   result="onSaveResult(event)"
+                   fault="onSaveFault(event)"/>
+        <mx:method id="remove" name="remove"
+                   result="onRemoveResult(event)"/>
 
-	<mx:VBox x="0" y="0" width="100%" height="100%" id="supportedUrlsPanel">
-		<mx:ControlBar width="100%">
-			<mx:Label text="@Resource(bundle='StoreSupportedUrlsPanel',key='supportedUrl')"/>
-			<mx:Button
-                    id="addBtn"
-                    enabled="{!controllBarVisible}"
-                    label="@Resource(bundle='StoreSupportedUrlsPanel',key='addUrl')"
-                    click="addNewUrlClick(event)"/>
-			<mx:Button
-                    id="deleteBtn"
-                    enabled="{canDeleteUrl &amp;&amp;  !controllBarVisible}"
-                    label="@Resource(bundle='StoreSupportedUrlsPanel',key='deleteUrl')"
-                    click="deleteUrlClickHandler(event)"/>
-		</mx:ControlBar>
-		<mx:DataGrid editable="true" itemClick="setSelectedUrl(event)" width="100%" height="100%" dataProvider="{remoteShopUrlService.getAllByShopId.lastResult}">
-			<mx:columns>
-				<mx:DataGridColumn  headerText="@Resource(bundle='StoreSupportedUrlsPanel',key='url')" dataField="url"/>
-			</mx:columns>
-		</mx:DataGrid>
-		<mx:ControlBar width="100%" horizontalAlign="right" id="controllBar" visible="{controllBarVisible}">
-			<mx:Button label="@Resource(bundle='StoreSupportedUrlsPanel',key='saveUrl')" id="saveBtn" click="saveChanges(event)"/>
-		</mx:ControlBar>
-	</mx:VBox>
-</mx:Canvas>
+    </mx:RemoteObject>
+
+    <mx:Boolean id="urlsChanged">false</mx:Boolean>
+    <mx:Boolean id="allowDeleteUrl">false</mx:Boolean>
+
+    <mx:ControlBar width="100%">
+        <mx:Label text="@Resource(bundle='StoreSupportedUrlsPanel',key='supportedUrl')"/>
+        <mx:Button
+                id="addBtn"
+                enabled="{!urlsChanged}"
+                label="@Resource(bundle='StoreSupportedUrlsPanel',key='addUrl')"
+                click="addNewUrlClick(event)"/>
+        <mx:Button
+                id="deleteBtn"
+                enabled="{allowDeleteUrl}"
+                label="@Resource(bundle='StoreSupportedUrlsPanel',key='deleteUrl')"
+                click="deleteUrlClickHandler(event)"/>
+        <mx:Button
+                id="saveBtn"
+                visible="{urlsChanged}"
+                label="@Resource(bundle='StoreSupportedUrlsPanel',key='saveUrl')"
+                click="saveChanges(event)"/>
+
+    </mx:ControlBar>
+    <mx:DataGrid id="urlGrid"
+                 editable="true"
+                 itemClick="onItemClick(event)"
+                 itemEditEnd="onUrlItemEditEnd(event)"
+                 width="100%" height="100%">
+        <mx:columns>
+            <mx:DataGridColumn headerText="@Resource(bundle='StoreSupportedUrlsPanel',key='url')" dataField="url"/>
+        </mx:columns>
+    </mx:DataGrid>
+</mx:VBox>

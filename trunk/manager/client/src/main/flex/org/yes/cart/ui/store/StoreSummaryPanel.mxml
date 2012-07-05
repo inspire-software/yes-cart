@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init();">
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init();"
+         width="100%" height="100%" paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2">
     <mx:Script>
             <![CDATA[
         import org.yes.cart.impl.ShopDTOImpl;
@@ -102,32 +103,26 @@
     <mx:Boolean id="dtoChangedFlag">false</mx:Boolean>
     <mx:Boolean id="newStoreFlag">false</mx:Boolean>
 
-    <mx:VBox x="10" y="10">
-        <mx:ControlBar width="100%">
-            <mx:Label text="@Resource(bundle='StoreSummaryPanel',key='summary')"/>
-        </mx:ControlBar>
-        <mx:Form>
-            <mx:FormItem label="@Resource(bundle='StoreSummaryPanel',key='code')">
-                    <mx:TextInput id="codeTextInput" width="245"/>
-            </mx:FormItem>
-            <mx:FormItem label="@Resource(bundle='StoreSummaryPanel',key='name')">
-                    <mx:TextInput id="nameTextInput" width="245"/>
-            </mx:FormItem>
-            <mx:FormItem label="@Resource(bundle='StoreSummaryPanel',key='description')">
-                    <mx:TextArea id="descriptionTextInput" height="100" width="245"/>
-            </mx:FormItem>
-            <mx:FormItem label="@Resource(bundle='StoreSummaryPanel',key='themeLocation')">
-                    <mx:TextInput id="fspointerTextInput" width="245"/>
-            </mx:FormItem>
-        </mx:Form>
-        <mx:ControlBar  width="100%" horizontalAlign="right">
-            <mx:Button id="saveBtn"
-                       click="saveBtnClickHandler(event)"
-                       label="@Resource(bundle='StoreSummaryPanel',key='save')"
-                       enabled="{dtoChangedFlag}"
-                       />
-        </mx:ControlBar>
+    <mx:Form>
+        <mx:FormItem label="@Resource(bundle='StoreSummaryPanel',key='code')">
+                <mx:TextInput id="codeTextInput" width="245"/>
+        </mx:FormItem>
+        <mx:FormItem label="@Resource(bundle='StoreSummaryPanel',key='name')">
+                <mx:TextInput id="nameTextInput" width="245"/>
+        </mx:FormItem>
+        <mx:FormItem label="@Resource(bundle='StoreSummaryPanel',key='description')">
+                <mx:TextArea id="descriptionTextInput" height="100" width="245"/>
+        </mx:FormItem>
+        <mx:FormItem label="@Resource(bundle='StoreSummaryPanel',key='themeLocation')">
+                <mx:TextInput id="fspointerTextInput" width="245"/>
+        </mx:FormItem>
+    </mx:Form>
+    <mx:ControlBar horizontalAlign="left">
+        <mx:Button id="saveBtn"
+                   click="saveBtnClickHandler(event)"
+                   label="@Resource(bundle='StoreSummaryPanel',key='save')"
+                   enabled="{dtoChangedFlag}"
+                   />
+    </mx:ControlBar>
 
-    </mx:VBox>
-
-</mx:Canvas>
+</mx:VBox>
