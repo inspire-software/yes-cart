@@ -2766,8 +2766,8 @@ public void setRangeList(final RangeList rangeList) {
     }
 
     @Transient
-    public String getSupportedCurrensies() {
-        final AttrValueShop attrValueShop = getAttributeByCode(AttributeNamesKeys.SUPPORTED_CURRENSIES);
+    public String getSupportedCurrencies() {
+        final AttrValueShop attrValueShop = getAttributeByCode(AttributeNamesKeys.SUPPORTED_CURRENCIES);
         if (attrValueShop != null) {
             return attrValueShop.getVal();
         }
@@ -2776,18 +2776,18 @@ public void setRangeList(final RangeList rangeList) {
 
     @Transient
     public String getDefaultCurrency() {
-        String currensies = getSupportedCurrensies();
-        if (currensies != null) {
-            return currensies.split(",")[0];
+        String currencies = getSupportedCurrencies();
+        if (currencies != null) {
+            return currencies.split(",")[0];
         }
         return null;
     }
 
     @Transient
-    public List<String> getSupportedCurrensiesAsList() {
-        final String currensies = getSupportedCurrensies();
-        if (currensies != null) {
-            return Arrays.asList(currensies.split(","));
+    public List<String> getSupportedCurrenciesAsList() {
+        final String currencies = getSupportedCurrencies();
+        if (currencies != null) {
+            return Arrays.asList(currencies.split(","));
         }
         return null;
     }
