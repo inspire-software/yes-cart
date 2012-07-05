@@ -1,28 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init();"
-         width="100%" height="100%" paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2">
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+         creationComplete="init();"
+         width="100%" height="100%"
+         paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2">
     <mx:Script>
             <![CDATA[
         import org.yes.cart.impl.ShopDTOImpl;
 
         import mx.binding.utils.BindingUtils;
         import mx.collections.ArrayList;
-        import mx.controls.Alert;
         import mx.binding.utils.ChangeWatcher;
         import mx.events.PropertyChangeEvent;
 
-        import mx.rpc.AsyncResponder;
-        import mx.rpc.AsyncToken;
         import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
-        import mx.rpc.remoting.mxml.RemoteObject;
 
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
 
         private var _shopDTOImpl:ShopDTOImpl;
 
         private var changeWatchers:ArrayList = new ArrayList();
-
-        private var remoteShopService:RemoteObject;
 
         /**
          * Bind values and start looking for changes.
@@ -34,13 +31,15 @@
             BindingUtils.bindProperty(nameTextInput, "text", this._shopDTOImpl, "name");
             BindingUtils.bindProperty(descriptionTextInput, "text", this._shopDTOImpl, "description");
             BindingUtils.bindProperty(fspointerTextInput, "text", this._shopDTOImpl, "fspointer");
+            BindingUtils.bindProperty(imgpointerTextInput, "text", this._shopDTOImpl, "imageVaultFolder");
 
             BindingUtils.bindProperty(this._shopDTOImpl, "code", codeTextInput, "text");
             BindingUtils.bindProperty(this._shopDTOImpl, "name", nameTextInput, "text");
             BindingUtils.bindProperty(this._shopDTOImpl, "description", descriptionTextInput, "text");
             BindingUtils.bindProperty(this._shopDTOImpl, "fspointer", fspointerTextInput, "text");
+            BindingUtils.bindProperty(this._shopDTOImpl, "imageVaultFolder", imgpointerTextInput, "text");
 
-            newStoreFlag = (this._shopDTOImpl.shopId == 0);
+            newStoreFlag = isNaN(this._shopDTOImpl.shopId) || (this._shopDTOImpl.shopId == 0);
             codeTextInput.enabled = newStoreFlag;
 
             initWatchers();
@@ -48,17 +47,20 @@
         }
 
         private function initWatchers():void {
+            if (changeWatchers != null) {
+                for each (var cw:ChangeWatcher in changeWatchers) {
+                    cw.unwatch();
+                }
+                changeWatchers.removeAll();
+            }
             changeWatchers.addItem(ChangeWatcher.watch(this._shopDTOImpl, "code", dtoChanged));
             changeWatchers.addItem(ChangeWatcher.watch(this._shopDTOImpl, "name", dtoChanged));
             changeWatchers.addItem(ChangeWatcher.watch(this._shopDTOImpl, "description", dtoChanged));
             changeWatchers.addItem(ChangeWatcher.watch(this._shopDTOImpl, "fspointer", dtoChanged));
+            changeWatchers.addItem(ChangeWatcher.watch(this._shopDTOImpl, "imageVaultFolder", dtoChanged));
         }
 
         public function dtoChanged(event:PropertyChangeEvent):void {
-            for each (var cw:ChangeWatcher in changeWatchers) {
-                cw.unwatch();
-            }
-            changeWatchers.removeAll();
             dtoChangedFlag = true;
         }
 
@@ -67,41 +69,47 @@
             _shopDTOImpl = value;
         }
 
-        public function setRemoteShopService(remoteShopService:RemoteObject):void {
-            this.remoteShopService = remoteShopService;
-        }
-
         private function saveBtnClickHandler(event:flash.events.MouseEvent):void {
 
-            var asyncToken:AsyncToken;
             if (newStoreFlag) {
-                asyncToken = remoteShopService.create(_shopDTOImpl);
+                remoteShopService.create(_shopDTOImpl);
             } else {
-                asyncToken = remoteShopService.update(_shopDTOImpl);
+                remoteShopService.update(_shopDTOImpl);
             }
-            asyncToken.addResponder(
-                    new AsyncResponder(
-                            shop_savedHandler,
-                            general_faultHandler)
-                    );
         }
 
-        private function shop_savedHandler(event:ResultEvent, token:AsyncToken):void {
-            this._shopDTOImpl = ShopDTOImpl(event.result);
+        private function onFaultHandler(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultFaultHandler(event);
+        }
+
+        private function onCreateResult(event:ResultEvent):void {
+            this._shopDTOImpl = event.result as ShopDTOImpl;
             init();
             dtoChangedFlag = false;
-            remoteShopService.getAll();
-
         }
 
-        private function general_faultHandler(event:FaultEvent):void {
-
-            Alert.show(event.toString(), resourceManager.getString('StoreSummaryPanel', 'communicationError'));
+        private function onUpdateResult(event:ResultEvent):void {
+            this._shopDTOImpl = event.result as ShopDTOImpl;
+            init();
+            dtoChangedFlag = false;
         }
         ]]>
     </mx:Script>
     <mx:Boolean id="dtoChangedFlag">false</mx:Boolean>
     <mx:Boolean id="newStoreFlag">false</mx:Boolean>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteShopService"
+                     destination="remoteShopService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="create" name="create"
+                   result="onCreateResult(event)"
+                   fault="onFaultHandler(event)"/>
+        <mx:method id="update" name="update"
+                   result="onUpdateResult(event)"
+                   fault="onFaultHandler(event)"/>
+
+    </mx:RemoteObject>
 
     <mx:Form>
         <mx:FormItem label="@Resource(bundle='StoreSummaryPanel',key='code')">
@@ -115,6 +123,9 @@
         </mx:FormItem>
         <mx:FormItem label="@Resource(bundle='StoreSummaryPanel',key='themeLocation')">
                 <mx:TextInput id="fspointerTextInput" width="245"/>
+        </mx:FormItem>
+        <mx:FormItem label="@Resource(bundle='StoreSummaryPanel',key='imagesLocation')">
+                <mx:TextInput id="imgpointerTextInput" width="245"/>
         </mx:FormItem>
     </mx:Form>
     <mx:ControlBar horizontalAlign="left">
