@@ -97,7 +97,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
         final Set<String> currencies = new TreeSet<String>();
 
         for(Shop shop : shops) {
-            final String shopCurrencies = shop.getSupportedCurrensies();
+            final String shopCurrencies = shop.getSupportedCurrencies();
             if (StringUtils.isNotBlank(shopCurrencies)) {
                 currencies.addAll(Arrays.asList(shopCurrencies.split(",")));
             }

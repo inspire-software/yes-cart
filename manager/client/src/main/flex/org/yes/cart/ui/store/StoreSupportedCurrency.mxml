@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" creationComplete="init();">
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+         width="100%" height="100%" creationComplete="init();"
+         paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2">
     <mx:Script>
 <![CDATA[
         import com.hexagonstar.util.debug.Debug;
+
+        import mx.collections.ArrayCollection;
+        import mx.rpc.events.FaultEvent;
 
         import org.yes.cart.impl.ShopDTOImpl;
         import org.yes.cart.util.CurrencyProvider;
@@ -22,8 +27,7 @@
          */
         private function init():void {
 
-            var syncToken:AsyncToken = remoteShopService.getSupportedCurrencies(_shopDTOImpl.shopId);
-            syncToken.addResponder(new AsyncResponder(currencyReadyHandler, ShopManagerGlobal.instance.defaultFaultHandler));
+            remoteShopService.getSupportedCurrencies(_shopDTOImpl.shopId);
 
         }
 
@@ -32,56 +36,31 @@
             _shopDTOImpl = value;
         }
 
-        private function currencyReadyHandler(event:ResultEvent, token:AsyncToken):void {
-
-            var assignedCurrencyStr:String = String(event.result);
-            if (assignedCurrencyStr == null || assignedCurrencyStr == "null") {
-                assignedCurrency = [];
-            } else {
-                assignedCurrency = assignedCurrencyStr.split(",");
-            }
-            availableCurrency = CurrencyProvider.getAvailableCurrencyCodes(assignedCurrency);
-            addAssignedEnabled = false;
-            addAvailableEnabled = false;
-
-        }
-
-
         private function availableCurrencySelected(event:MouseEvent):void {
-            addAvailableEnabled = true;
-            selectedAvailable = event.currentTarget.selectedItem;
+            addAvailableEnabled = this.availableCurrencyList.selectedItem != null;
         }
 
         private function assignedCurrencySelected(event:MouseEvent):void {
-            addAssignedEnabled = true;
-            selectedAssigned = event.currentTarget.selectedItem;
+            addAssignedEnabled = this.assignedCurrencyList.selectedItem != null;
         }
 
-        private function assignCurrency(event:MouseEvent):void {
-            var curr:String = constructStringList(true);
-            addAvailableEnabled = false;
-            selectedAvailable = null;
-            setSupportedCurrency(curr);
+        private function assignCurrency(event:Event):void {
+            if (this.addAvailableEnabled && this.availableCurrencyList.selectedItem != null) {
+                var curr:String = constructStringList(true, this.availableCurrencyList.selectedItem as String);
+                addAvailableEnabled = false;
+                remoteShopService.setSupportedCurrencies(_shopDTOImpl.shopId, curr);
+            }
         }
 
-        private function unassignCurrency(event:MouseEvent):void {
-            var curr:String = constructStringList(false);
-            addAssignedEnabled = false;
-            selectedAssigned = null;
-            setSupportedCurrency(curr);
+        private function unassignCurrency(event:Event):void {
+            if (this.addAssignedEnabled && this.assignedCurrencyList.selectedItem != null) {
+                var curr:String = constructStringList(false, this.assignedCurrencyList.selectedItem as String);
+                addAssignedEnabled = false;
+                remoteShopService.setSupportedCurrencies(_shopDTOImpl.shopId, curr);
+            }
         }
 
-        private function setSupportedCurrency(currenyList:String):void {
-            var syncToken:AsyncToken = remoteShopService.setSupportedCurrencies(_shopDTOImpl.shopId, currenyList);
-            syncToken.addResponder(new AsyncResponder(reReadCurrency, ShopManagerGlobal.instance.defaultFaultHandler));
-        }
-
-        private function reReadCurrency(event:ResultEvent, token:AsyncToken):void {
-            var syncToken:AsyncToken = remoteShopService.getSupportedCurrencies(_shopDTOImpl.shopId);
-            syncToken.addResponder(new AsyncResponder(currencyReadyHandler, ShopManagerGlobal.instance.defaultFaultHandler));
-        }
-
-        private function constructStringList(addFlag:Boolean):String {
+        private function constructStringList(addFlag:Boolean, item:String):String {
             var result:String = "";
             if (addFlag) {
                 if (assignedCurrency != null) {
@@ -89,11 +68,11 @@
                         result = result + assignedCurrency[i] + ",";
                     }
                 }
-                result = result + selectedAvailable + ",";
+                result = result + item + ",";
             } else {
                 if (assignedCurrency != null) {
                     for (var j:int = 0; j < assignedCurrency.length; j++) {
-                        if (assignedCurrency[j] != selectedAssigned) {
+                        if (assignedCurrency[j] != item) {
                             result = result + assignedCurrency[j] + ",";
                         }
                     }
@@ -105,47 +84,78 @@
             Debug.trace("result -> " + result);
             return result;
         }
+
+        private function onGetSupportedCurrenciesResult(event:ResultEvent):void {
+
+            var assignedCurrencyStr:String = String(event.result);
+            if (assignedCurrencyStr == null || assignedCurrencyStr == "null") {
+                assignedCurrency.removeAll();
+            } else {
+                assignedCurrency = new ArrayCollection(assignedCurrencyStr.split(","));
+            }
+            availableCurrency = CurrencyProvider.getAvailableCurrencyCodes(assignedCurrency);
+            addAssignedEnabled = false;
+            addAvailableEnabled = false;
+
+        }
+
+        private function onSetSupportedCurrenciesResult(event:ResultEvent):void {
+
+            remoteShopService.getSupportedCurrencies(_shopDTOImpl.shopId);
+
+        }
+
+        private function onFaultHandler(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultFaultHandler(event);
+        }
         ]]>
     </mx:Script>
 
     <mx:RemoteObject showBusyCursor="true" id="remoteShopService"
                      destination="remoteShopService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
-                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
 
-    <mx:Array id="availableCurrency"></mx:Array>
-    <mx:Array id="assignedCurrency"></mx:Array>
+        <mx:method id="getSupportedCurrencies" name="getSupportedCurrencies"
+                   result="onGetSupportedCurrenciesResult(event)"
+                   fault="onFaultHandler(event)"/>
+
+        <mx:method id="setSupportedCurrencies" name="setSupportedCurrencies"
+                   result="onSetSupportedCurrenciesResult(event)"
+                   fault="onFaultHandler(event)"/>
+
+    </mx:RemoteObject>
+
+    <mx:ArrayCollection id="availableCurrency"/>
+    <mx:ArrayCollection id="assignedCurrency"/>
 
     <mx:Boolean id="addAvailableEnabled">false</mx:Boolean>
     <mx:Boolean id="addAssignedEnabled">false</mx:Boolean>
 
-    <mx:String id="selectedAvailable"></mx:String>
-    <mx:String id="selectedAssigned"></mx:String>
-
-
     <mx:Grid x="0" y="0" width="100%" height="100%" id="supportedCurrencyPanel">
         <mx:GridRow width="100%" height="50">
-            <mx:GridItem width="150" height="50" textAlign="center" verticalAlign="middle">
+            <mx:GridItem width="45%" height="50" textAlign="center" verticalAlign="middle">
                 <mx:Label text="@Resource(bundle='StoresManagementPanel',key='availableCurrency')"/>
             </mx:GridItem>
-            <mx:GridItem width="100%" height="50">
+            <mx:GridItem width="10%" height="50">
             </mx:GridItem>
-            <mx:GridItem width="150" height="50" textAlign="center" verticalAlign="middle">
+            <mx:GridItem width="45%" height="50" textAlign="center" verticalAlign="middle">
                 <mx:Label text="@Resource(bundle='StoresManagementPanel',key='supportedCurrency')"/>
             </mx:GridItem>
         </mx:GridRow>
         <mx:GridRow width="100%" height="100%">
-            <mx:GridItem width="150" height="100%">
+            <mx:GridItem width="45%" height="100%">
                 <mx:List
+                        id="availableCurrencyList"
                         width="100%"
                         height="100%"
                         dataProvider="{availableCurrency}"
+                        doubleClickEnabled="true"
+                        itemDoubleClick="assignCurrency(event)"
                         click="availableCurrencySelected(event)"
                         >
                 </mx:List>
             </mx:GridItem>
-            <mx:GridItem width="100%" height="100%" verticalAlign="middle" textAlign="center">
+            <mx:GridItem width="10%" height="100%" verticalAlign="middle" textAlign="center">
                 <mx:VBox width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
                     <mx:Button enabled="{addAvailableEnabled}"
                                label="@Resource(bundle='StoresManagementPanel',key='assign')"
@@ -157,11 +167,14 @@
                                click="unassignCurrency(event)"/>
                 </mx:VBox>
             </mx:GridItem>
-            <mx:GridItem width="150" height="100%">
+            <mx:GridItem width="45%" height="100%">
                 <mx:List
+                        id="assignedCurrencyList"
                         width="100%"
                         height="100%"
                         dataProvider="{assignedCurrency}"
+                        doubleClickEnabled="true"
+                        itemDoubleClick="unassignCurrency(event)"
                         click="assignedCurrencySelected(event)"
                         >
 
@@ -170,4 +183,4 @@
         </mx:GridRow>
 
     </mx:Grid>
-</mx:Canvas>
+</mx:VBox>

@@ -41,7 +41,7 @@ public class DtoShopServiceImpl
 
     /** {@inheritDoc} */
     public String getSupportedCurrencies(final long shopId) {
-        return service.getById(shopId).getSupportedCurrensies();        
+        return service.getById(shopId).getSupportedCurrencies();
     }
 
     /** {@inheritDoc} */
@@ -52,13 +52,13 @@ public class DtoShopServiceImpl
     /**
      * Set supported currencies by given shop.
      * @param shopId shop id
-     * @param currensies comma separated list of supported currency codes. Example USD,EUR
+     * @param currencies comma separated list of supported currency codes. Example USD,EUR
      */
-    public void setSupportedCurrencies(final long shopId, final String currensies) {
+    public void setSupportedCurrencies(final long shopId, final String currencies) {
         ((ShopService) service).updateAttributeValue(
                 shopId,
-                AttributeNamesKeys.SUPPORTED_CURRENSIES,
-                currensies);
+                AttributeNamesKeys.SUPPORTED_CURRENCIES,
+                currencies);
     }
 
     /** {@inheritDoc} */

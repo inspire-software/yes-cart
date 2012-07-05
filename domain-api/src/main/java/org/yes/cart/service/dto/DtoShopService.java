@@ -33,9 +33,9 @@ public interface DtoShopService extends GenericDTOService<ShopDTO> {
      * Set supported currencies by given shop.
      *
      * @param shopId     shop id
-     * @param currensies comma separated list of supported currency codes. Example USD,EUR
+     * @param currencies comma separated list of supported currency codes. Example USD,EUR
      */
-    void setSupportedCurrencies(long shopId, String currensies);
+    void setSupportedCurrencies(long shopId, String currencies);
 
 
     /**

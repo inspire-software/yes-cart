@@ -62,7 +62,7 @@ public class Currency extends BaseComponent {
 
         if (isVisible()) {
 
-            final List<String> supportedCurrencies = ApplicationDirector.getCurrentShop().getSupportedCurrensiesAsList();
+            final List<String> supportedCurrencies = ApplicationDirector.getCurrentShop().getSupportedCurrenciesAsList();
 
             final PageParameters basePageParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters());
 
