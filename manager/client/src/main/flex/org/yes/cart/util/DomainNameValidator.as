@@ -15,6 +15,9 @@ public class DomainNameValidator {
 ,"tt","tv","tw","tz","ua","ug","uk","us","uy","uz","va","vc","ve","vg","vi","vn","vu","wf","ws","ye","yt","za","zm","zw"];
 
     public static function validate(url:String):Boolean {
+        if (url == 'localhost') {
+            return true;
+        }
         return (url.length > 5) && (validateDomain(url) || validateIp(url));
     }
 

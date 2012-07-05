@@ -5,7 +5,7 @@ public class ShopUrlDTOImpl {
 
     public var  url:String;
 
-    public var  storeUrlId:Number ;
+    public var  storeUrlId:Number;
 
     public var  shopId:Number;
 
