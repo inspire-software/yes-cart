@@ -309,6 +309,11 @@ public interface ServiceSpringKeys {
      */
     String DTO_CUSTOMER_ORDER_SERVICE = "dtoCustomerOrderService";
 
+    /**
+     * {@link org.yes.cart.service.dto.DtoShopService} bean key.
+     */
+    String DTO_SHOP_SERVICE = "dtoShopService";
+
 
 
 
