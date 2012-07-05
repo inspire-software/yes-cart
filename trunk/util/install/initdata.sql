@@ -58,7 +58,7 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, E
 
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
-  VALUES (  999,  'CURRENCY',  0,  NULL,  'Currensies',  'Supported currensies by shop. First one is default',  1004, 1001);
+  VALUES (  999,  'CURRENCY',  0,  NULL,  'Currensies',  'Supported currencies by shop. First one is default',  1004, 1001);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  1040,  'SHOP_B2B',  1,  NULL,  'Is B2B profile for this shop',  'Is B2B profile for this shop',  1000, 1001);

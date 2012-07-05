@@ -109,9 +109,9 @@ public interface AttributeNamesKeys {
     String SEARCH_ITEMS_PER_PAGE = "SEARCH_ITEMS_PER_PAGE";
 
     /**
-     * Supported by shop currensies.
+     * Supported by shop currencies.
      */
-    String SUPPORTED_CURRENSIES = "CURRENCY";
+    String SUPPORTED_CURRENCIES = "CURRENCY";
 
 
     String BRAND_IMAGE = "BRAND_IMAGE";

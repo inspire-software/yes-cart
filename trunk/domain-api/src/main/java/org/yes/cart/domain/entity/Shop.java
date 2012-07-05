@@ -251,24 +251,24 @@ public interface Shop extends Auditable {
     String getDefaultCurrency();
 
     /**
-     * Get all supported currensies. First in list is default.
+     * Get all supported currencies. First in list is default.
      *
      * @return separated by comma all supported currencies by shop or null if not set.
      */
-    String getSupportedCurrensies();
+    String getSupportedCurrencies();
 
     /**
      * Set supported currency
-     * @param currensies comma separated list of supported currencies.
+     * @param currencies comma separated list of supported currencies.
      */
-    //void setSupportedCurrensies(String currensies);
+    //void setSupportedCurrencies(String currencies);
 
     /**
-     * Get all supported currensies. First in list is default.
+     * Get all supported currencies. First in list is default.
      *
      * @return list of currency codes.
      */
-    List<String> getSupportedCurrensiesAsList();
+    List<String> getSupportedCurrenciesAsList();
 
 
 }

@@ -65,11 +65,11 @@ public class TestShopServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testAssignCurrency() {
         Shop shop = shopService.getShopByDomainName("long.live.robots");
-        shopService.updateAttributeValue(shop.getShopId(), AttributeNamesKeys.SUPPORTED_CURRENSIES, "QWE,ASD,ZXC");
+        shopService.updateAttributeValue(shop.getShopId(), AttributeNamesKeys.SUPPORTED_CURRENCIES, "QWE,ASD,ZXC");
         shop = shopService.getShopByDomainName("long.live.robots");
         assertEquals("Supported currency is incorrect",
                 "QWE,ASD,ZXC",
-                shop.getAttributeByCode(AttributeNamesKeys.SUPPORTED_CURRENSIES).getVal());
+                shop.getAttributeByCode(AttributeNamesKeys.SUPPORTED_CURRENCIES).getVal());
     }
 
     /**
@@ -78,11 +78,11 @@ public class TestShopServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testAssignCurrencys() {
         Shop shop = shopService.getShopByDomainName("long.live.robots");
-        shopService.updateAttributeValue(shop.getShopId(), AttributeNamesKeys.SUPPORTED_CURRENSIES, "QWE,ZXC");
+        shopService.updateAttributeValue(shop.getShopId(), AttributeNamesKeys.SUPPORTED_CURRENCIES, "QWE,ZXC");
         shop = shopService.getShopByDomainName("eddie.lives.somewhere.in.time");
-        shopService.updateAttributeValue(shop.getShopId(), AttributeNamesKeys.SUPPORTED_CURRENSIES, "ASD,USD,QWE,UAH");
+        shopService.updateAttributeValue(shop.getShopId(), AttributeNamesKeys.SUPPORTED_CURRENCIES, "ASD,USD,QWE,UAH");
         shop = shopService.getShopByDomainName("gadget.npa.com");
-        shopService.updateAttributeValue(shop.getShopId(), AttributeNamesKeys.SUPPORTED_CURRENSIES, "");
+        shopService.updateAttributeValue(shop.getShopId(), AttributeNamesKeys.SUPPORTED_CURRENCIES, "");
         Collection<String> currencies = shopService.getAllSupportedCurrenciesByShops();
         assertEquals(5, currencies.size());
         Iterator<String> iter = currencies.iterator();
