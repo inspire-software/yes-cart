@@ -56,7 +56,7 @@
             var url:String = "http://{server.name}:{server.port}/yes-manager/spring/amf";
             // var url:String = "http://localhost:8080/yes-manager/spring/amf";
 
-            ShopManagerGlobal.getInstance().url = url;
+            ShopManagerGlobal.instance.url = url;
 
             channelSet.removeChannel(myamf);
             myamf = new AMFChannel("myamf", url);
@@ -73,9 +73,9 @@
         private function login():void {
 
             currentState = "inProgressState";
-            ShopManagerGlobal.getInstance().username = username.text;
+            ShopManagerGlobal.instance.username = username.text;
 
-            ShopManagerGlobal.getInstance().password = password.text;
+            ShopManagerGlobal.instance.password = password.text;
 
             var token:AsyncToken = channelSet.login(
                     username.text,
@@ -84,8 +84,8 @@
         }
 
         private function loginResult(event:ResultEvent, token:AsyncToken):void {
-            ShopManagerGlobal.getInstance().amfChannel = myamf;
-            ShopManagerGlobal.getInstance().channelSet = channelSet;
+            ShopManagerGlobal.instance.amfChannel = myamf;
+            ShopManagerGlobal.instance.channelSet = channelSet;
             currentState = "userAuthenticated";
             /*This call pass  the password to flex session, because after new spring security impossible to
              * get user credentials using FlexContext.getUserPrincipal()).getCredentials() on java side.*/
@@ -96,14 +96,11 @@
         private function loginFault(event:FaultEvent, token:AsyncToken):void {
             invalidLogin = true;
             currentState = "loginState";
-            var msg:String = "ERROR Can not perform logon to url ["
-                    + ShopManagerGlobal.getInstance().url
-                    + "] with name ["
-                    + ShopManagerGlobal.getInstance().username
-                    + "] and  password [* * * * * * ]. Fault event is: "
-                    + event.fault.message;
+            var msg:String = resourceManager.getString('ShopManagerApplication', 'loginFailedMsg',
+                    [ ShopManagerGlobal.instance.url, ShopManagerGlobal.instance.username, event.fault.message ]);
+            var title:String = resourceManager.getString('ShopManagerApplication', 'loginFailedTitle');
             Debug.trace(msg);
-            Alert.show(msg, "Login failed");
+            Alert.show(msg, title);
 
         }
 

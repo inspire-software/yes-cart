@@ -5,6 +5,8 @@ import com.hexagonstar.util.debug.Debug;
 import mx.controls.Alert;
 import mx.messaging.ChannelSet;
 import mx.messaging.channels.AMFChannel;
+import mx.resources.IResourceManager;
+import mx.resources.ResourceManager;
 import mx.rpc.events.FaultEvent;
 import mx.rpc.events.ResultEvent;
 
@@ -13,7 +15,9 @@ public class ShopManagerGlobal {
     
     private static var _instance:ShopManagerGlobal = null;
 
-    private var _duplicateErrorToMsgBox:Boolean = false;
+    // leave this 'on' for now
+    // TODO: global switch for errors?
+    private var _duplicateErrorToMsgBox:Boolean = true;
 
     private var _username:String;
 
@@ -25,17 +29,11 @@ public class ShopManagerGlobal {
 
     private var _amfChannel:AMFChannel;
 
+    private static var _resourceManager:IResourceManager = ResourceManager.getInstance();
+
     public function ShopManagerGlobal() {
         //throw new Error("Use getInstance() method instead");
     }
-
-    public static function getInstance():ShopManagerGlobal {
-        if (_instance == null) {
-            _instance = new ShopManagerGlobal();
-        }
-        return _instance;
-    }
-
     
     public static function get instance():ShopManagerGlobal {
         if (_instance == null) {
@@ -104,7 +102,7 @@ public class ShopManagerGlobal {
         var errorMsg:String = "Fault handler:" + event.toString() + " token is " + obj;
         Debug.trace(errorMsg);
         if (duplicateErrorToMsgBox) {
-            Alert.show(errorMsg, "Error");
+            Alert.show(errorMsg, _resourceManager.getString('ShopManagerApplication', 'error'));
         }
         
     }
