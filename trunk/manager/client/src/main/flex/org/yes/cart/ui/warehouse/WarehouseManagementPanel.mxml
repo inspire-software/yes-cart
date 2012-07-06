@@ -1,33 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml"
+          title="@Resource(bundle='WarehouseManagementPanel',key='warehouses')"
            width="100%"
            height="100%"
-           creationComplete="init();">
+           creationComplete="init();"
+           paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
     <mx:Script>
 		<![CDATA[
         import com.hexagonstar.util.debug.Debug;
 
-        import mx.core.FlexGlobals;
-
-        import org.yes.cart.impl.WarehouseDTOImpl;
-        import org.yes.cart.util.CloneUtil;
-        import org.yes.cart.shopmanager.ShopManagerGlobal;
-
-        import flash.events.MouseEvent;
-
         import mx.controls.Alert;
+        import mx.core.FlexGlobals;
         import mx.events.CloseEvent;
         import mx.events.ListEvent;
-
         import mx.managers.PopUpManager;
         import mx.rpc.AsyncResponder;
         import mx.rpc.AsyncToken;
         import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
 
-
-        [Bindable]
-        private var selectedWarehouse:WarehouseDTOImpl;
+        import org.yes.cart.impl.WarehouseDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+        import org.yes.cart.util.CloneUtil;
 
         private var newPopUp:WarehouseCreateEditDialog;
 
@@ -40,20 +34,13 @@
             remoteWarehouseService.getAll();
         }
 
-
-        private function remoteWarehouseService_faultHandler(event:FaultEvent):void {
-            Debug.trace("remoteWarehouseService is failed, reason:" + event.toString());
-            selectedWarehouse = null;
-        }
-
-
         /**
          * Handle the warehouse selection in data grid.
          * @param event event
          * @return nothing
          */
         private function handle_warehouseSelectedClick(event:ListEvent):void {
-            selectedWarehouse = WarehouseDTOImpl(event.currentTarget.selectedItem);
+            this.warehouseSelected = this.warehouseGrid.selectedItem != null;
         }
 
         /**
@@ -65,7 +52,7 @@
             Debug.trace("warehouse panel newWarehouseclickHandler");
             newPopUp = WarehouseCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), WarehouseCreateEditDialog, true));
             newPopUp.saveBtn.addEventListener("click", createNewWarehouse);
-            newPopUp.createEditWarehouse(new WarehouseDTOImpl(), true);
+            newPopUp.createEditWarehouse(new WarehouseDTOImpl());
             PopUpManager.centerPopUp(newPopUp);
         }
 
@@ -75,52 +62,22 @@
          * @return nothing
          */
         private function createNewWarehouse(event:Event):void {
-
-            var asyncToken:AsyncToken = remoteWarehouseService.create(newPopUp.warehouseDTOImpl);
-            asyncToken.addResponder(new AsyncResponder(warehouseCreatedResultHandler, warehouseCreateFaultHandler));
-            PopUpManager.removePopUp(newPopUp);
+            remoteWarehouseService.create(newPopUp.warehouseDTOImpl);
         }
-
-        /**
-         * Warehouse created service call back .
-         * @param event event
-         * @param token async token
-         * @return nothing
-         */
-        private function warehouseCreatedResultHandler(event:ResultEvent, token:AsyncToken):void {
-
-            selectedWarehouse = null;
-            remoteWarehouseService.getAll();
-        }
-
-        /**
-         * Warehouse creation fauld handler
-         * @param event event
-         * @param token async token
-         * @return
-         */
-        private function warehouseCreateFaultHandler(event:FaultEvent, token:AsyncToken):void {
-
-            Debug.trace("warehouse panel create fault handler:" + event.toString());
-            Alert.show(
-                    resourceManager.getString('WarehouseManagementPanel', 'warehouseNotCreated'),
-                    resourceManager.getString('WarehouseManagementPanel', 'error'));
-            selectedWarehouse = null;
-            remoteWarehouseService.getAll();
-        }
-
 
         /**
          * Edit existing warehouse click handler.
          * @param event event
          * @return nothing
          */
-        private function editWarehouseclickHandler(event:MouseEvent):void {
-            Debug.trace("warehouse panel editWarehouseclickHandler");
-            newPopUp = WarehouseCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), WarehouseCreateEditDialog, true));
-            newPopUp.saveBtn.addEventListener("click", updateExistingWarehouse);
-            newPopUp.createEditWarehouse(WarehouseDTOImpl(CloneUtil.clone(selectedWarehouse)), false);
-            PopUpManager.centerPopUp(newPopUp);
+        private function editWarehouseclickHandler(event:Event):void {
+            if (this.warehouseSelected && this.warehouseGrid.selectedItem != null) {
+                Debug.trace("warehouse panel editWarehouseclickHandler");
+                newPopUp = WarehouseCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), WarehouseCreateEditDialog, true));
+                newPopUp.saveBtn.addEventListener("click", updateExistingWarehouse);
+                newPopUp.createEditWarehouse(WarehouseDTOImpl(CloneUtil.clone(this.warehouseGrid.selectedItem)));
+                PopUpManager.centerPopUp(newPopUp);
+            }
         }
 
         /**
@@ -130,49 +87,22 @@
          */
         private function updateExistingWarehouse(event:Event):void {
 
-            var asyncToken:AsyncToken = remoteWarehouseService.update(newPopUp.warehouseDTOImpl);
-            asyncToken.addResponder(new AsyncResponder(warehouseUpdatedResultHandler, warehouseUpdateFaultHandler));
-            PopUpManager.removePopUp(newPopUp);
+            remoteWarehouseService.update(newPopUp.warehouseDTOImpl);
+
         }
-
-
-        /**
-         * Warehouse updated service call back .
-         * @param event event
-         * @param token async token
-         * @return nothing
-         */
-        private function warehouseUpdatedResultHandler(event:ResultEvent, token:AsyncToken):void {
-            selectedWarehouse = null;
-            remoteWarehouseService.getAll();
-        }
-
-        /**
-         * Warehouse update fault handler
-         * @param event event
-         * @param token async token
-         * @return
-         */
-        private function warehouseUpdateFaultHandler(event:FaultEvent, token:AsyncToken):void {
-            Debug.trace("warehouse panel update fault handler:" + event.toString());
-            Alert.show(
-                    resourceManager.getString('WarehouseManagementPanel', 'warehouseNotUpdated'),
-                    resourceManager.getString('WarehouseManagementPanel', 'error'));
-            selectedWarehouse = null;
-            remoteWarehouseService.getAll();
-        }
-
 
         /**
          * Delete warehouse click handler.
          * @param event event
          * @return nothing
          */
-        private function deleteWarehouseClickHandler(event:flash.events.MouseEvent):void {
-            Alert.show(
-                    resourceManager.getString('WarehouseManagementPanel', 'deleteWarehouseConfirm'),
-                    resourceManager.getString('WarehouseManagementPanel', 'warning'),
-                    Alert.OK | Alert.CANCEL, this, deleteWarehouse, null, Alert.OK);
+        private function deleteWarehouseClickHandler(event:MouseEvent):void {
+            if (this.warehouseSelected && this.warehouseGrid.selectedItem != null) {
+                Alert.show(
+                        resourceManager.getString('WarehouseManagementPanel', 'deleteWarehouseConfirm', [ this.warehouseGrid.selectedItem.name ]),
+                        resourceManager.getString('WarehouseManagementPanel', 'warning'),
+                        Alert.OK | Alert.CANCEL, this, onDeleteWarehouseConfirm, null, Alert.OK);
+            }
         }
 
         /**
@@ -180,41 +110,54 @@
          * @param event close event
          * @return nothing
          */
-        private function deleteWarehouse(event:CloseEvent):void {
+        private function onDeleteWarehouseConfirm(event:CloseEvent):void {
             if (event.detail == Alert.OK) {
 
-                Debug.trace("warehouse panel deleteWarehouse with id " + selectedWarehouse.warehouseId);
-                var asyncToken:AsyncToken = remoteWarehouseService.remove(selectedWarehouse.warehouseId);
-                asyncToken.addResponder(new AsyncResponder(warehouseDeletedResultHandler, warehouseDeleteFaultHandler));
+                if (this.warehouseSelected && this.warehouseGrid.selectedItem != null) {
+
+                    Debug.trace("warehouse panel deleteWarehouse with id " + this.warehouseGrid.selectedItem.warehouseId);
+                    remoteWarehouseService.remove(this.warehouseGrid.selectedItem.warehouseId);
+
+                }
             }
+            this.warehouseSelected = false;
         }
 
+        private function onFaultHandler(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultFaultHandler(event);
+        }
 
-        /**
-         * Delete warehouse service call back .
-         * @param event event
-         * @param token async token
-         * @return nothing
-         */
-        private function warehouseDeletedResultHandler(event:ResultEvent, token:AsyncToken):void {
+        private function onGetAllResult(event:ResultEvent):void {
+            this.warehouseSelected = false;
+            this.warehouseGrid.dataProvider = event.result;
+        }
+
+        private function onCreateResult(event:ResultEvent):void {
+            if (newPopUp != null) {
+                newPopUp.saveBtn.removeEventListener(MouseEvent.CLICK, newWarehouseclickHandler);
+                PopUpManager.removePopUp(newPopUp);
+            }
+            newPopUp = null;
+            remoteWarehouseService.getAll();
+        }
+
+        private function onUpdateResult(event:ResultEvent):void {
+            if (newPopUp != null) {
+                newPopUp.saveBtn.removeEventListener(MouseEvent.CLICK, updateExistingWarehouse);
+                PopUpManager.removePopUp(newPopUp);
+            }
+            newPopUp = null;
+            remoteWarehouseService.getAll();
+
+        }
+
+        private function onRemoveResult(event:ResultEvent):void {
             Debug.trace("warehouse panel delete fault handler:" + event.toString());
             Alert.show(
                     resourceManager.getString('WarehouseManagementPanel', 'warehouseDeletedConfirm'),
                     resourceManager.getString('WarehouseManagementPanel', 'info'));
-            selectedWarehouse = null;
             remoteWarehouseService.getAll();
-        }
 
-        /**
-         * Delete warehouse fauld handler
-         * @param event
-         * @param token
-         * @return
-         */
-        private function warehouseDeleteFaultHandler(event:FaultEvent, token:AsyncToken):void {
-            Alert.show(
-                    resourceManager.getString('WarehouseManagementPanel', 'warehouseNotDeleted'),
-                    resourceManager.getString('WarehouseManagementPanel', 'error'));
         }
         ]]>
     </mx:Script>
@@ -222,13 +165,26 @@
 
     <mx:RemoteObject showBusyCursor="true"  id="remoteWarehouseService"
                      destination="remoteWarehouseService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="remoteWarehouseService_faultHandler(event)"
-                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
 
-    <mx:Panel width="100%" height="100%" title="@Resource(bundle='WarehouseManagementPanel',key='warehouses')">
-        <mx:VBox id="roleManagementPanel" height="100%" width="100%">
+        <mx:method id="getAll" name="getAll"
+                   result="onGetAllResult(event)"
+                   fault="onFaultHandler(event)"/>
+        <mx:method id="create" name="create"
+                   result="onCreateResult(event)"
+                   fault="onFaultHandler(event)"/>
+        <mx:method id="update" name="update"
+                   result="onUpdateResult(event)"
+                   fault="onFaultHandler(event)"/>
+        <mx:method id="remove" name="remove"
+                   result="onRemoveResult(event)"
+                   fault="onFaultHandler(event)"/>
 
+    </mx:RemoteObject>
+
+    <mx:Boolean id="warehouseSelected">false</mx:Boolean>
+
+    <mx:VBox height="100%" width="100%">
 
         <mx:ControlBar >
             <mx:Button label="@Resource(bundle='WarehouseManagementPanel',key='newWarehouse')"
@@ -236,17 +192,19 @@
                        click="newWarehouseclickHandler(event)"/>
             <mx:Button label="@Resource(bundle='WarehouseManagementPanel',key='editWarehouse')"
                        toolTip="@Resource(bundle='WarehouseManagementPanel',key='editWarehouseHint')"
-                       enabled="{selectedWarehouse != null}"
+                       enabled="{warehouseSelected}"
                        click="editWarehouseclickHandler(event)"/>
             <mx:Button label="@Resource(bundle='WarehouseManagementPanel',key='deleteWarehouse')"
                        toolTip="@Resource(bundle='WarehouseManagementPanel',key='deleteWarehouseHint')"
-                       enabled="{selectedWarehouse != null}"
+                       enabled="{warehouseSelected}"
                        click="deleteWarehouseClickHandler(event)"/>
 
         </mx:ControlBar>
 
-        <mx:DataGrid x="0" y="0" width="100%" height="99%"
-                     dataProvider="{remoteWarehouseService.getAll.lastResult}"
+        <mx:DataGrid id="warehouseGrid"
+                     width="100%" height="100%"
+                     doubleClickEnabled="true"
+                     doubleClick="editWarehouseclickHandler(event)"
                      itemClick="handle_warehouseSelectedClick(event)">
             <mx:columns>
                 <mx:DataGridColumn width="80" headerText="@Resource(bundle='WarehouseManagementPanel',key='code')" dataField="code"/>
@@ -256,7 +214,6 @@
         </mx:DataGrid>
 
     </mx:VBox>
-    </mx:Panel>
 
 
-</mx:Canvas>
+</mx:Panel>
