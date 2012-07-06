@@ -1,20 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
-				title="Create warehouse"  showCloseButton="true" close="PopUpManager.removePopUp(this)" >
+				title="@Resource(bundle='WarehouseManagementPanel',key='editWarehouseDialog')"
+                showCloseButton="true" close="PopUpManager.removePopUp(this)"
+                creationComplete="init()">
 
     <mx:Boolean id="newWarehouseFlag">false</mx:Boolean>
 
     <mx:RemoteObject showBusyCursor="true"  id="remoteCountryService"
                      destination="remoteCountryService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
-                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getAllCountries" name="getAll"
+                   result="onGetAllCountriesResult(event)"
+                   fault="onFaultHandler(event)"/>
+
+
+    </mx:RemoteObject>
 
     <mx:RemoteObject showBusyCursor="true"  id="remoteStateService"
                      destination="remoteStateService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
-                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="findByCountry" name="findByCountry"
+                   result="onFindByCountryResult(event)"
+                   fault="onFaultHandler(event)"/>
+
+    </mx:RemoteObject>
 
 
 
@@ -32,7 +43,7 @@
             <mx:ComboBox id="countryComboBox"
                          change="countryChangeEvt(event)"
                          width="160"
-                         labelField="name" data="countryCode" dataProvider="{remoteCountryService.getAll.lastResult}"
+                         labelField="name"
                          prompt="@Resource(bundle='WarehouseManagementPanel',key='selectCountry')"
                     />
         </mx:FormItem>
@@ -40,7 +51,7 @@
             <mx:ComboBox id="stateComboBox"
                          change="stateChangeEvt(event)"
                          width="160"
-                         labelField="name" data="stateCode"  dataProvider="{remoteStateService.findByCountry.lastResult}"
+                         labelField="name"
                          prompt="@Resource(bundle='WarehouseManagementPanel',key='selectState')"
 
                     />
@@ -63,6 +74,12 @@
 
     <mx:Script>
        <![CDATA[
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.impl.CountryDTOImpl;
+        import org.yes.cart.impl.StateDTOImpl;
+
         import org.yes.cart.impl.WarehouseDTOImpl;
 
         import org.yes.cart.shopmanager.ShopManagerGlobal;
@@ -112,21 +129,6 @@
 
             stateComboBox.selectedIndex = -1;
             countryComboBox.selectedIndex = -1;
-            for each (var state:Object in stateComboBox.dataProvider) {
-                if (state.stateCode == _warehouseDTOImpl.stateCode) {
-                    stateComboBox.selectedItem = state;
-                    break;
-                }
-            }
-
-
-            for each (var country:Object in countryComboBox.dataProvider) {
-                if (country.countryCode == _warehouseDTOImpl.countryCode) {
-                    countryComboBox.selectedItem = country;
-                    break;
-                }
-            }
-
 
             BindingUtils.bindProperty(_warehouseDTOImpl, "code", code, "text");
             BindingUtils.bindProperty(_warehouseDTOImpl, "name", wName, "text");
@@ -137,32 +139,51 @@
 
         }
 
-        public function statesLoaded(result:Object, token:Object = null):void {
-            init();
-        }
-
-        /**
-         * Load state/area in case of warehouse edit
-         * @param countryCode to load country states.
-         * @return nothing
-         */
-        private function loadStates(result:Object, countryCode:String):void {
-            remoteStateService.findByCountry(countryCode).addResponder(
-                    new AsyncResponder(statesLoaded, null));
-        }
-
-
         /**
          * Create or edit warehouse.
          * @param warehouse
          * @return
          */
-        public function createEditWarehouse(warehouse:WarehouseDTOImpl, newFlag:Boolean):void {
+        public function createEditWarehouse(warehouse:WarehouseDTOImpl):void {
             this.warehouseDTOImpl = warehouse;
-            this.newWarehouseFlag = newFlag;
-            remoteCountryService.getAll().addResponder(
-                    new AsyncResponder(loadStates, null, this.warehouseDTOImpl.countryCode));
+            this.newWarehouseFlag = isNaN(warehouse.warehouseId) || warehouse.warehouseId == 0;
+            remoteCountryService.getAll();
         }
+
+        private function onFaultHandler(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultFaultHandler(event);
+        }
+
+        private function onGetAllCountriesResult(event:ResultEvent):void {
+
+            var oldValue:Object = this.warehouseDTOImpl.countryCode;
+            this.countryComboBox.dataProvider = event.result;
+            if (oldValue != null) {
+                for each (var country:CountryDTOImpl in this.countryComboBox.dataProvider) {
+                    if (country.countryCode == this.warehouseDTOImpl.countryCode) {
+                        this.countryComboBox.selectedItem = country;
+                        remoteStateService.findByCountry(this.warehouseDTOImpl.countryCode);
+                        break;
+                    }
+                }
+            }
+
+        }
+
+        private function onFindByCountryResult(event:ResultEvent):void {
+            var oldValue:Object = this.warehouseDTOImpl.stateCode;
+            this.stateComboBox.dataProvider = event.result;
+            if (oldValue != null) {
+                for each (var state:StateDTOImpl in this.stateComboBox.dataProvider) {
+                    if (state.stateCode == this.warehouseDTOImpl.stateCode) {
+                        this.stateComboBox.selectedItem = state;
+                        break;
+                    }
+                }
+            }
+
+        }
+
         ]]>
 
         </mx:Script>
