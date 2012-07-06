@@ -41,6 +41,7 @@
         import org.yes.cart.ui.product.ProductManagementPanel;
         import org.yes.cart.ui.producttype.ProductTypeManagementPanel;
         import org.yes.cart.ui.reindex.ReindexPanel;
+        import org.yes.cart.ui.report.ReportPanel;
         import org.yes.cart.ui.role.RoleManagementPanel;
         import org.yes.cart.ui.store.StoresManagementPanel;
         import org.yes.cart.ui.tools.QueryPanel;
@@ -112,6 +113,16 @@
             setFontWeight(reindexBtn);
             mainPanel.removeAllChildren();
             mainPanel.addChild(new ReindexPanel());
+        }
+
+        /**
+         * product reindexing.
+         * @param event mouse event
+         */
+        protected function reportBtn_clickHandler(event:MouseEvent):void {
+            setFontWeight(reportBtn);
+            mainPanel.removeAllChildren();
+            mainPanel.addChild(new ReportPanel());
         }
 
         /**
@@ -709,6 +720,14 @@
                                                        click="reindex_clickHandler(event)"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='reindexHint')"
                                                 />
+                                        <mx:Spacer height="10"/>
+
+                                        <mx:LinkButton id="reportBtn" width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='reports')"
+                                                       click="reportBtn_clickHandler(event)"/>
+
+
+
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton id="sqlBtn" width="100%"
                                                        label="@Resource(bundle='ShopManagerApplication',key='query')"

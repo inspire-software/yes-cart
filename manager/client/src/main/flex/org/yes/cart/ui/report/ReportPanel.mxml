@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%"
+          title="@Resource(bundle='ReportPanel',key='reports')"
+          paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2"
+          creationComplete="init();">
+
+    <mx:Script>
+        <![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import mx.controls.Alert;
+        import mx.managers.SystemManager;
+        import mx.resources.Locale;
+        import mx.rpc.AsyncResponder;
+        import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+
+        /**
+         * Get report display name, which depends from current locale.
+         * @param item report descriptor.
+         * @return report display name.
+         */
+        private function getReportLabel(item:Object):String {
+            
+            var rez:String = item.reportId;
+            var where:String = " 0 ";
+            try {
+                Debug.trace("Item is " + item);
+                where = " 1 ";
+                for (var langLabel:Object in item) {
+                    where = " 2 ";
+                    Debug.trace("langLabel is " + langLabel);
+
+                    where = " 3 ";
+                    if (langLabel.first == localeFilter) {
+                        where = " 4 ";
+                        rez = langLabel.seconds;
+                        break;
+                    }
+                }
+
+            } catch (errObject:Error) {
+                rez = rez + where + errObject.message;
+
+            }
+
+
+            return rez;
+        }
+
+
+        private function init():void {
+
+            localeFilter = resourceManager.getString('ReportPanel', 'localeFilter');
+
+            remoteReportService.getReportDescriptors();
+
+            /*.addResponder(
+             new AsyncResponder(
+             function (event:ResultEvent, obj:Object = null):void {
+
+             }
+             ,
+             ShopManagerGlobal.instance.defaultFaultHandler
+             )
+             )*/
+
+        }
+        ]]>
+    </mx:Script>
+
+    <mx:String id="localeFilter"/>
+
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteReportService"
+                     destination="remoteReportService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+    <mx:Canvas width="100%" height="100%">
+        <mx:VBox x="0" y="0" width="100%" height="100%" id="shopManagmenlPanel">
+            <mx:ControlBar width="100%">
+                <mx:Text text="@Resource(bundle='ReportPanel',key='report')"/>
+                <mx:ComboBox id="storesComboBox"
+                             labelFunction="getReportLabel"
+                             data="reportId"
+                             dataProvider="{remoteReportService.getReportDescriptors.lastResult}"
+                             change="Alert.show('Hi', 'There')"
+                             prompt="@Resource(bundle='ReportPanel',key='selectReportPropmt')">
+                </mx:ComboBox>
+            </mx:ControlBar>
+        </mx:VBox>
+    </mx:Canvas>
+
+
+</mx:Panel>

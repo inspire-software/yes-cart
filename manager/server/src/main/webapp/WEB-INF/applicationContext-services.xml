@@ -508,5 +508,28 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
     </bean>
 
 
+    <import resource="report.xml"/>
+
+
+    <bean id="remoteReportService" class="org.yes.cart.report.impl.ReportServiceImpl">
+        <constructor-arg ref="genericDao"/>
+        <constructor-arg>
+            <list>
+                <ref bean="reportShopInformation"/>
+            </list>
+        </constructor-arg>
+        <constructor-arg value="report"/>
+
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="downloadReport" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
+            <security:protect method="downloadReport" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
+        </security:intercept-methods>
+
+
+    </bean>
+
+
+
 </beans>
         

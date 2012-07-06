@@ -45,14 +45,5 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
     </bean>
 
 
-    <bean id="reportService" class="org.yes.cart.report.impl.ReportServiceImpl">
-        <constructor-arg ref="genericDao"/>
-        <constructor-arg>
-            <list>
-                <ref bean="reportShopInformation"/>
-            </list>
-        </constructor-arg>
-        <constructor-arg value="report"/>
-    </bean>
 
 </beans>
