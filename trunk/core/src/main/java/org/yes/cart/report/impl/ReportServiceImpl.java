@@ -2,6 +2,7 @@ package org.yes.cart.report.impl;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.fop.apps.*;
 import org.slf4j.Logger;
@@ -45,7 +46,8 @@ public class ReportServiceImpl implements ReportService {
     /**
      * Consstruct report service.
      * @param genericDAO report service
-     * @param reportDescriptors
+     * @param reportDescriptors list of configured reports.
+     * @param reportFolder report folder
      */
     public ReportServiceImpl(GenericDAO<Object, Long> genericDAO, final List<ReportDescriptor> reportDescriptors, final String reportFolder) {
         this.genericDAO = genericDAO;
@@ -78,10 +80,29 @@ public class ReportServiceImpl implements ReportService {
         });
 
     }
-    
-    
 
-    
+
+
+    /**
+     *
+     * Download report.
+     *
+     * @param reportId report descriptor.
+     * @param params report parameter values to pass it into hsql query.   Consequence of parameter must correspond to parameters in repoport description.
+     * @param lang given lang to roduce report.
+     * @return true in case if report was generated successfuly.
+     * @
+     */
+    public byte[] downloadReport(String lang, String reportId, Object... params) throws Exception {
+        final File tmpFile = File.createTempFile("yescartreport", "pdf");
+        if (createReport(lang, reportId, tmpFile.getAbsolutePath(), params)) {
+            return FileUtils.readFileToByteArray(tmpFile);
+        } else {
+            throw new Exception("Report can not be created , see server logs for more details. Sorry");
+        }
+    }
+
+
 
     /**
      * 
@@ -93,7 +114,7 @@ public class ReportServiceImpl implements ReportService {
      * @param lang given lang to roduce report.
      * @return true in case if report was generated successfuly.
      */
-    public boolean getReport(final String lang,final String reportId , final String fileName, final Object ... params) throws Exception {
+    public boolean createReport(final String lang, final String reportId, final String fileName, final Object... params) throws Exception {
         
         final ReportDescriptor reportDescriptor = getReportDescriptorbyId(reportId);
 

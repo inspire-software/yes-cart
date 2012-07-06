@@ -3,7 +3,6 @@ package org.yes.cart.report.impl;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
-import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.misc.Pair;
 
@@ -40,7 +39,7 @@ public class ReportServiceImplTest   extends BaseCoreDBTestCase {
 
         ReportServiceImpl reportService = new ReportServiceImpl(genericDAO, Collections.singletonList(reportDescriptor), null);
 
-        assertTrue(reportService.getReport("en", "testReport", "shop.pdf"));
+        assertTrue(reportService.createReport("en", "testReport", "shop.pdf"));
 
     }
 
