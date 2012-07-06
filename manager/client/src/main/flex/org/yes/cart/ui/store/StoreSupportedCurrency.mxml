@@ -48,7 +48,7 @@
             if (this.addAvailableEnabled && this.availableCurrencyList.selectedItem != null) {
                 var curr:String = constructStringList(true, this.availableCurrencyList.selectedItem as String);
                 addAvailableEnabled = false;
-                remoteShopService.setSupportedCurrencies(_shopDTOImpl.shopId, curr);
+                remoteShopService.updateSupportedCurrencies(_shopDTOImpl.shopId, curr);
             }
         }
 
@@ -56,7 +56,7 @@
             if (this.addAssignedEnabled && this.assignedCurrencyList.selectedItem != null) {
                 var curr:String = constructStringList(false, this.assignedCurrencyList.selectedItem as String);
                 addAssignedEnabled = false;
-                remoteShopService.setSupportedCurrencies(_shopDTOImpl.shopId, curr);
+                remoteShopService.updateSupportedCurrencies(_shopDTOImpl.shopId, curr);
             }
         }
 
@@ -99,7 +99,7 @@
 
         }
 
-        private function onSetSupportedCurrenciesResult(event:ResultEvent):void {
+        private function onUpdateSupportedCurrenciesResult(event:ResultEvent):void {
 
             remoteShopService.getSupportedCurrencies(_shopDTOImpl.shopId);
 
@@ -119,8 +119,8 @@
                    result="onGetSupportedCurrenciesResult(event)"
                    fault="onFaultHandler(event)"/>
 
-        <mx:method id="setSupportedCurrencies" name="setSupportedCurrencies"
-                   result="onSetSupportedCurrenciesResult(event)"
+        <mx:method id="updateSupportedCurrencies" name="updateSupportedCurrencies"
+                   result="onUpdateSupportedCurrenciesResult(event)"
                    fault="onFaultHandler(event)"/>
 
     </mx:RemoteObject>
