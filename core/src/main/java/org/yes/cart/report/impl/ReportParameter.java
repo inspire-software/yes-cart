@@ -1,7 +1,5 @@
 package org.yes.cart.report.impl;
 
-import org.yes.cart.domain.misc.Pair;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +15,7 @@ public class ReportParameter {
     
     private String name;
 
-    private List<Pair<String, String>> langLabel = new ArrayList<Pair<String, String>>();
+    private List<ReportPair> langLabel = new ArrayList<ReportPair>();
 
     private String businesstype;
 
@@ -43,7 +41,7 @@ public class ReportParameter {
      * Get list of parameter name localization pair: lang - name
      * @return list of lang - name pair
      */
-    public List<Pair<String, String>> getLangLabel() {
+    public List<ReportPair> getLangLabel() {
         return langLabel;
     }
 
@@ -51,7 +49,7 @@ public class ReportParameter {
      * Set ist of lang - name pair.
      * @param langLabel ist of lang - name pair
      */
-    public void setLangLabel(final List<Pair<String, String>> langLabel) {
+    public void setLangLabel(final List<ReportPair> langLabel) {
         this.langLabel = langLabel;
     }
 

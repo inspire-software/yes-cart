@@ -14,6 +14,10 @@
         import mx.rpc.AsyncResponder;
         import mx.rpc.events.ResultEvent;
 
+        import org.yes.cart.report.impl.ReportPair;
+
+        import org.yes.cart.report.impl.ReportDescriptor;
+
         import org.yes.cart.shopmanager.ShopManagerGlobal;
 
 
@@ -22,28 +26,24 @@
          * @param item report descriptor.
          * @return report display name.
          */
-        private function getReportLabel(item:Object):String {
-            
-            var rez:String = item.reportId;
-            var where:String = " 0 ";
+        private function getReportLabel(itm:Object):String {
+            var reportDesriptor:ReportDescriptor = itm as ReportDescriptor;
+            var rez:String = reportDesriptor.reportId;
             try {
-                Debug.trace("Item is " + item);
-                where = " 1 ";
-                for (var langLabel:Object in item) {
-                    where = " 2 ";
-                    Debug.trace("langLabel is " + langLabel);
+                for (var i:int = 0 ; i < reportDesriptor.langLabel.length; i++ ) {
+                    var langLabel:ReportPair = ReportPair(reportDesriptor.langLabel.getItemAt(i));
+                    if (langLabel != null) {
+                        Debug.trace(langLabel);
+                        if (langLabel.lang == localeFilter) {
+                            rez = langLabel.value;
+                            break;
+                        }
 
-                    where = " 3 ";
-                    if (langLabel.first == localeFilter) {
-                        where = " 4 ";
-                        rez = langLabel.seconds;
-                        break;
                     }
                 }
 
             } catch (errObject:Error) {
-                rez = rez + where + errObject.message;
-
+                rez = rez + errObject.message;
             }
 
 
@@ -78,7 +78,9 @@
                      destination="remoteReportService"
                      result="ShopManagerGlobal.instance.defaultResultHandler(event)"
                      fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
-                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+          <mx:makeObjectsBindable>true</mx:makeObjectsBindable>
+                     </mx:RemoteObject>
 
     <mx:Canvas width="100%" height="100%">
         <mx:VBox x="0" y="0" width="100%" height="100%" id="shopManagmenlPanel">
