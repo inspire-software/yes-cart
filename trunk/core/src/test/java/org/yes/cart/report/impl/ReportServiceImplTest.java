@@ -34,7 +34,7 @@ public class ReportServiceImplTest   extends BaseCoreDBTestCase {
 
         final ReportDescriptor reportDescriptor = new ReportDescriptor();
         reportDescriptor.setHsqlQuery("select s from ShopEntity s");
-        reportDescriptor.getLangXslfo().add(new Pair<String, String>("en", "src/test/resources/xslfo/shop.xslfo"));
+        reportDescriptor.getLangXslfo().add(new ReportPair("en", "src/test/resources/xslfo/shop.xslfo"));
         reportDescriptor.setReportId("testReport");
 
         ReportServiceImpl reportService = new ReportServiceImpl(genericDAO, Collections.singletonList(reportDescriptor), null);

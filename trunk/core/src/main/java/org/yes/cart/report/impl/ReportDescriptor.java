@@ -1,6 +1,5 @@
 package org.yes.cart.report.impl;
 
-import org.yes.cart.domain.misc.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,13 +16,13 @@ public class ReportDescriptor {
 
     private String reportId;
 
-    private List<Pair<String, String>> langLabel = new ArrayList<Pair<String, String>>();
+    private List<ReportPair> langLabel = new ArrayList<ReportPair>();
     
     private String hsqlQuery;
 
     private List<ReportParameter> parameters =  new ArrayList<ReportParameter>();
 
-    private List<Pair<String, String>> langXslfo = new ArrayList<Pair<String, String>>();
+    private List<ReportPair> langXslfo = new ArrayList<ReportPair>();
 
 
     /**
@@ -46,7 +45,7 @@ public class ReportDescriptor {
     /**
      * Gett ist of lang - name pair.
      */
-    public List<Pair<String, String>> getLangLabel() {
+    public List<ReportPair> getLangLabel() {
         return langLabel;
     }
 
@@ -54,7 +53,7 @@ public class ReportDescriptor {
      * Set ist of lang - name pair.
      * @param langLabel ist of lang - name pair
      */
-    public void setLangLabel(final List<Pair<String, String>> langLabel) {
+    public void setLangLabel(final List<ReportPair> langLabel) {
         this.langLabel = langLabel;
     }
 
@@ -94,7 +93,7 @@ public class ReportDescriptor {
      * Get xsl fo file name for this reports.
      * @return xsl fo file name for this reports.
      */
-    public List<Pair<String, String>> getLangXslfo() {
+    public List<ReportPair> getLangXslfo() {
         return langXslfo;
     }
 
@@ -104,19 +103,19 @@ public class ReportDescriptor {
      * @return xsl fo file name for this reports.
      */
     public String getLangXslfo(final String lang) {
-        for (Pair<String, String> langFo : langXslfo) {
-            if (lang.equalsIgnoreCase(langFo.getFirst())) {
-                return  langFo.getSecond();
+        for (ReportPair langFo : langXslfo) {
+            if (lang.equalsIgnoreCase(langFo.getLang())) {
+                return  langFo.getValue();
             }
         }
-        return langXslfo.get(0).getFirst();
+        return langXslfo.get(0).getValue();
     }
 
     /**
      * Set xsl fo file name for this reports.
      * @param langXslfo xsl fo file name for this reports.
      */
-    public void setLangXslfo(List<Pair<String, String>> langXslfo) {
+    public void setLangXslfo(List<ReportPair> langXslfo) {
         this.langXslfo = langXslfo;
     }
 
