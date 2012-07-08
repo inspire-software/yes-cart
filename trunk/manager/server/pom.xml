@@ -82,7 +82,7 @@
             <artifactId>blazeds-core</artifactId>
             <version>${blazeds.version}</version>
         </dependency>
-       <!-- <dependency>
+        <!-- <dependency>
             <groupId>com.adobe.blazeds</groupId>
             <artifactId>blazeds-opt</artifactId>
             <version>${blazeds.version}</version>
@@ -177,9 +177,12 @@
         <finalName>yes-manager</finalName>
         <pluginManagement>
             <plugins>
+
                 <plugin>
                     <artifactId>maven-war-plugin</artifactId>
+
                     <configuration>
+                        <!--<resourceEncoding>${project.build.sourceEncoding}</resourceEncoding>-->
                         <webResources>
                             <resource>
                                 <filtering>true</filtering>

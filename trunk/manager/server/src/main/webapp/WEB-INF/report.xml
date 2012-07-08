@@ -26,7 +26,7 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
                 </bean>
                 <bean class="org.yes.cart.report.impl.ReportPair">
                     <constructor-arg index="0" value="ru"/>
-                    <constructor-arg index="1" value="ru common info "/>
+                    <constructor-arg index="1" value="Common shop information"/>
                 </bean>
             </list>
         </property>

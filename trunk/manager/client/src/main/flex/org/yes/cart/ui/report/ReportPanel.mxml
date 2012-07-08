@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%"
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:core="mx.core.*" width="100%" height="100%"
           title="@Resource(bundle='ReportPanel',key='reports')"
           paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2"
           creationComplete="init();">
@@ -9,16 +9,25 @@
         import com.hexagonstar.util.debug.Debug;
 
         import mx.controls.Alert;
-        import mx.managers.SystemManager;
-        import mx.resources.Locale;
+        import mx.controls.DateField;
         import mx.rpc.AsyncResponder;
         import mx.rpc.events.ResultEvent;
 
-        import org.yes.cart.report.impl.ReportPair;
-
         import org.yes.cart.report.impl.ReportDescriptor;
-
+        import org.yes.cart.report.impl.ReportPair;
+        import org.yes.cart.report.impl.ReportParameter;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        [Bindable]
+        private var pdf:ByteArray;
+
+        private var reportName:String;
+
+        private function init():void {
+            localeFilter = resourceManager.getString('ReportPanel', 'localeFilter');
+            remoteReportService.getReportDescriptors();
+
+        }
 
 
         /**
@@ -30,7 +39,7 @@
             var reportDesriptor:ReportDescriptor = itm as ReportDescriptor;
             var rez:String = reportDesriptor.reportId;
             try {
-                for (var i:int = 0 ; i < reportDesriptor.langLabel.length; i++ ) {
+                for (var i:int = 0; i < reportDesriptor.langLabel.length; i++) {
                     var langLabel:ReportPair = ReportPair(reportDesriptor.langLabel.getItemAt(i));
                     if (langLabel != null) {
                         Debug.trace(langLabel);
@@ -50,22 +59,79 @@
             return rez;
         }
 
+        /**
+         * Fill parameter form with new parameters to get user input for selected report.
+         * @param event
+         */
+        private function fillParameterForm(event:Event):void {
 
-        private function init():void {
+            var reportDescriptor:ReportDescriptor = ReportDescriptor(reportComboBox.selectedItem);
 
-            localeFilter = resourceManager.getString('ReportPanel', 'localeFilter');
+            parameterForm.removeAllChildren();
 
-            remoteReportService.getReportDescriptors();
+            for (var i:int = 0; i < reportDescriptor.parameters.length; i++) {
 
-            /*.addResponder(
-             new AsyncResponder(
-             function (event:ResultEvent, obj:Object = null):void {
+                var repoParam:ReportParameter = ReportParameter(reportDescriptor.parameters.getItemAt(i));
+                for (var j:int = 0; i < repoParam.langLabel.length; j++) {
 
-             }
-             ,
-             ShopManagerGlobal.instance.defaultFaultHandler
-             )
-             )*/
+                    var localizedParamName:ReportPair = ReportPair(repoParam.langLabel.getItemAt(j));
+                    if (localizedParamName.lang == localeFilter) {
+
+                        var formItem:FormItem = new FormItem();
+                        formItem.label = localizedParamName.value;
+
+                        var textInput:TextInput = new TextInput();
+                        formItem.addChild(textInput);
+
+                        parameterForm.addChild(
+                                formItem);
+
+                    }
+                }
+            }
+
+            okBtnCrtlBar.width = parameterForm.width;
+        }
+
+        private function downloadReport(event:MouseEvent):void {
+            //http://forums.adobe.com/message/3614898
+            var fileReference:FileReference = new FileReference();
+
+            fileReference.save(
+                    pdf,
+                    reportName
+            );
+
+        }
+
+
+        private function createReport(event:MouseEvent):void {
+
+            pdf = null;
+            reportName = getReportLabel(reportComboBox.selectedItem) + "_" + DateField.dateToString(new Date(), "DD-MM-YYYY") + ".pdf";
+
+            for (var obj:Object in parameterForm.getChildren()) {
+                Debug.traceObj(obj, 10);
+            }
+
+            var reportDescriptor:ReportDescriptor = ReportDescriptor(reportComboBox.selectedItem);
+
+            remoteReportService.downloadReport(
+                    localeFilter,
+                    reportDescriptor.reportId,
+                    null
+            ).addResponder(
+                    new AsyncResponder(
+                            function (event:ResultEvent, obj:Object = null):void {
+                                pdf = ByteArray(event.result);
+                                Alert.show(
+                                        resourceManager.getString("ReportPanel", "reportReadyToSave"),
+                                        resourceManager.getString("ReportPanel", "info"));
+                            }
+                            ,
+                            ShopManagerGlobal.instance.defaultFaultHandler
+                    )
+            );
 
         }
         ]]>
@@ -79,21 +145,44 @@
                      result="ShopManagerGlobal.instance.defaultResultHandler(event)"
                      fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}">
-          <mx:makeObjectsBindable>true</mx:makeObjectsBindable>
-                     </mx:RemoteObject>
+        <mx:makeObjectsBindable>true</mx:makeObjectsBindable>
+    </mx:RemoteObject>
 
     <mx:Canvas width="100%" height="100%">
         <mx:VBox x="0" y="0" width="100%" height="100%" id="shopManagmenlPanel">
             <mx:ControlBar width="100%">
                 <mx:Text text="@Resource(bundle='ReportPanel',key='report')"/>
-                <mx:ComboBox id="storesComboBox"
+                <mx:ComboBox id="reportComboBox"
                              labelFunction="getReportLabel"
                              data="reportId"
                              dataProvider="{remoteReportService.getReportDescriptors.lastResult}"
-                             change="Alert.show('Hi', 'There')"
+                             change="fillParameterForm(event)"
                              prompt="@Resource(bundle='ReportPanel',key='selectReportPropmt')">
                 </mx:ComboBox>
             </mx:ControlBar>
+
+            <mx:Form id="parameterForm" visible="{reportComboBox.selectedItem != null}" x="0" y="0">
+                <mx:FormItem label="@Resource(bundle='BrandManagementPanel',key='name')">
+                    <mx:TextInput id="nameTextImput" width="200"/>
+                </mx:FormItem>
+                <mx:FormItem label="@Resource(bundle='BrandManagementPanel',key='description')">
+                    <mx:TextArea id="descriptionTextInput" width="200"/>
+                </mx:FormItem>
+
+
+            </mx:Form>
+
+            <mx:ControlBar id="okBtnCrtlBar"
+                           width="100%" horizontalAlign="right" visible="{reportComboBox.selectedItem != null}">
+                <mx:Button visible="{reportComboBox.selectedItem != null}" click="createReport(event)"
+                           id="okBtn" label="@Resource(bundle='ReportPanel',key='ok')"/>
+
+                <mx:Button visible="{pdf != null}" click="downloadReport(event)"
+                           id="saveBtn" label="@Resource(bundle='ReportPanel',key='save')"/>
+
+            </mx:ControlBar>
+
+
         </mx:VBox>
     </mx:Canvas>
 
