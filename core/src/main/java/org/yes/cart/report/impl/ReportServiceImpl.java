@@ -8,10 +8,12 @@ import org.apache.fop.apps.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
+import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.report.ReportService;
 
+import javax.servlet.ServletContext;
 import javax.xml.transform.*;
 import javax.xml.transform.sax.SAXResult;
 import java.io.*;
@@ -31,7 +33,7 @@ import org.apache.fop.apps.FopFactory;
  * Date: 7/2/12
  * Time: 2:46 PM
  */
-public class ReportServiceImpl implements ReportService {
+public class ReportServiceImpl implements ReportService, ServletContextAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(ReportServiceImpl.class);
 
@@ -39,15 +41,18 @@ public class ReportServiceImpl implements ReportService {
     private final GenericDAO<Object, Long> genericDAO;
 
     private final List<ReportDescriptor> reportDescriptors;
-    
+
     private final String reportFolder;
+
+    private ServletContext servletContext;
 
 
     /**
      * Consstruct report service.
-     * @param genericDAO report service
+     *
+     * @param genericDAO        report service
      * @param reportDescriptors list of configured reports.
-     * @param reportFolder report folder
+     * @param reportFolder      report folder
      */
     public ReportServiceImpl(GenericDAO<Object, Long> genericDAO, final List<ReportDescriptor> reportDescriptors, final String reportFolder) {
         this.genericDAO = genericDAO;
@@ -63,6 +68,7 @@ public class ReportServiceImpl implements ReportService {
 
     /**
      * Get the list of report descriptors.
+     *
      * @return
      */
     public List<ReportDescriptor> getReportDescriptors() {
@@ -82,14 +88,12 @@ public class ReportServiceImpl implements ReportService {
     }
 
 
-
     /**
-     *
      * Download report.
      *
      * @param reportId report descriptor.
-     * @param params report parameter values to pass it into hsql query.   Consequence of parameter must correspond to parameters in repoport description.
-     * @param lang given lang to roduce report.
+     * @param params   report parameter values to pass it into hsql query.   Consequence of parameter must correspond to parameters in repoport description.
+     * @param lang     given lang to roduce report.
      * @return true in case if report was generated successfuly.
      * @
      */
@@ -103,22 +107,20 @@ public class ReportServiceImpl implements ReportService {
     }
 
 
-
     /**
-     * 
      * Run report by his id.
-     * 
+     *
      * @param reportId report descriptor.
      * @param fileName report filename
-     * @param params report parameter values to pass it into hsql query.   Consequence of parameter must correspond to parameters in repoport description.
-     * @param lang given lang to roduce report.
+     * @param params   report parameter values to pass it into hsql query.   Consequence of parameter must correspond to parameters in repoport description.
+     * @param lang     given lang to roduce report.
      * @return true in case if report was generated successfuly.
      */
     public boolean createReport(final String lang, final String reportId, final String fileName, final Object... params) throws Exception {
-        
+
         final ReportDescriptor reportDescriptor = getReportDescriptorbyId(reportId);
 
-        final List<Object> rez = getQueryResult(reportDescriptor.getHsqlQuery(),  params);
+        final List<Object> rez = getQueryResult(reportDescriptor.getHsqlQuery(), params);
 
         final String xmlFilename = getXml(rez);
 
@@ -126,7 +128,16 @@ public class ReportServiceImpl implements ReportService {
 
             final File xmlfile = new File(xmlFilename);
 
-            final File xsltfile = new File(reportFolder + reportDescriptor.getLangXslfo(lang));
+            final File xsltfile;
+            if (servletContext == null) {
+                xsltfile = new File(reportFolder + reportDescriptor.getLangXslfo(lang));
+
+            } else {
+
+                xsltfile = new File(servletContext.getRealPath(reportFolder + reportDescriptor.getLangXslfo(lang)));
+
+            }
+
 
             final File pdffile = new File(fileName);
 
@@ -151,6 +162,7 @@ public class ReportServiceImpl implements ReportService {
 
                 // Set the value of a <param> in the stylesheet
                 transformer.setParameter("versionParam", "2.0");
+                transformer.setOutputProperty("encoding", "UTF-8");
 
                 // Setup input for XSLT transformation
                 final Source src = new StreamSource(xmlfile);
@@ -166,18 +178,18 @@ public class ReportServiceImpl implements ReportService {
                 LOG.error("Cannot create pdf", ex);
 
                 return false;
-                
+
             } finally {
-                
+
                 out.close();
 
                 xmlfile.delete();
-                
+
             }
 
 
             return true;
-            
+
         }
 
         return false;
@@ -186,13 +198,14 @@ public class ReportServiceImpl implements ReportService {
 
     /**
      * Write into given file name xml rezult.
+     *
      * @param rez list of objects.
-     * @return  tmp xml file name
+     * @return tmp xml file name
      */
     String getXml(final List<Object> rez) {
-        
+
         String fileName;
-        
+
         ObjectOutputStream os = null;
 
         try {
@@ -207,32 +220,32 @@ public class ReportServiceImpl implements ReportService {
             }
 
 
-
         } catch (Exception e) {
             fileName = null;
-            LOG.error("Cannot create xml " , e);
+            LOG.error("Cannot create xml ", e);
 
         } finally {
             if (os != null) {
                 try {
                     os.close();
                 } catch (IOException e) {
-                    LOG.error("Cannot close file" , e);
+                    LOG.error("Cannot close file", e);
                 }
             }
 
         }
-        
+
         return fileName;
     }
 
     /**
      * Get query result as object list.
-     * @param query hsql query
+     *
+     * @param query  hsql query
      * @param params parameters.
      * @return list of objects.
      */
-    List<Object> getQueryResult(final String query, final Object ... params) {
+    List<Object> getQueryResult(final String query, final Object... params) {
 
         return genericDAO.findByQuery(
                 query,
@@ -240,5 +253,11 @@ public class ReportServiceImpl implements ReportService {
         );
 
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setServletContext(final ServletContext servletContext) {
+        this.servletContext = servletContext;
+    }
 }

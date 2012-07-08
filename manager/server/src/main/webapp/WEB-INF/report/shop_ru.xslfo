@@ -19,7 +19,7 @@
 
                 <fo:static-content flow-name="xsl-region-before">
                     <fo:block text-align="left">
-                        <fo:external-graphic src="src/test/resources/xslfo/yes-logo.png" width="30mm"/>   Open source shopping cart
+                        <fo:external-graphic src="src/test/resources/xslfo/yes-logo.png" width="30mm"/>   Открытая платформа электронной торговли
                     </fo:block>
                 </fo:static-content>
 
@@ -35,15 +35,15 @@
                     <xsl:for-each select="./yes-report/shop">
 
                         <fo:block border-width="1mm" padding-before="2cm" padding-after="1cm">
-                            Shop
-                            <xsl:value-of select="name"/> with code
+                            Магазин
+                            <xsl:value-of select="name"/> с кодом
                             <xsl:value-of select="code"/>
                         </fo:block>
 
 
                         <xsl:if test="count(exchangerates/bag/exchangerates) > 0">
                             <fo:block border-width="1mm">
-                                Currency exchange rates
+                                Курсы обмена валют
                             </fo:block>
                             <fo:block border-width="1mm">
 
@@ -51,13 +51,13 @@
                                     <fo:table-header>
                                         <fo:table-row>
                                             <fo:table-cell border="solid 1px black">
-                                                <fo:block font-weight="bold">From currency</fo:block>
+                                                <fo:block font-weight="bold">Из валюты</fo:block>
                                             </fo:table-cell>
                                             <fo:table-cell border="solid 1px black">
-                                                <fo:block font-weight="bold">To currency</fo:block>
+                                                <fo:block font-weight="bold">В валюту</fo:block>
                                             </fo:table-cell>
                                             <fo:table-cell border="solid 1px black">
-                                                <fo:block font-weight="bold">Rate</fo:block>
+                                                <fo:block font-weight="bold">Курс</fo:block>
                                             </fo:table-cell>
                                         </fo:table-row>
                                     </fo:table-header>
@@ -82,23 +82,7 @@
                                                 </fo:table-cell>
                                             </fo:table-row>
                                         </xsl:for-each>
-                                        <fo:table-row>
-                                            <fo:table-cell border="solid 1px black">
-                                                <fo:block>
-                                                    -
-                                                </fo:block>
-                                            </fo:table-cell>
-                                            <fo:table-cell border="solid 1px black">
-                                                <fo:block>
-                                                    just test of suu
-                                                </fo:block>
-                                            </fo:table-cell>
-                                            <fo:table-cell border="solid 1px black"  text-align="right">
-                                                <fo:block>
-                                                    <xsl:value-of select="format-number(sum(exchangerates/bag/exchangerates/rate), '##0.00')"/>
-                                                </fo:block>
-                                            </fo:table-cell>
-                                        </fo:table-row>
+
 
                                     </fo:table-body>
                                 </fo:table>
@@ -108,7 +92,7 @@
 
                         <xsl:if test="count(shopUrl/set/shopurl) > 0">
                             <fo:block border-width="1mm">
-                                Will respond to following http urls
+                                Обслуживает следующие адреса
                             </fo:block>
                             <fo:block border-width="1mm">
                                 <fo:table>

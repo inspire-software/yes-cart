@@ -176,9 +176,11 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
     public List<Object> findByQuery(final String hsqlQuery, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().createQuery(hsqlQuery);
         int idx = 1;
-        for (Object param : parameters) {
-            query.setParameter(String.valueOf(idx), param);
-            idx++;
+        if (parameters != null) {
+            for (Object param : parameters) {
+                query.setParameter(String.valueOf(idx), param);
+                idx++;
+            }
         }
         return query.list();
     }

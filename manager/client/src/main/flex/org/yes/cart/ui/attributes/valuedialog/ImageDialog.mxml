@@ -240,7 +240,6 @@
          * @return
          */
         private function imageBodyResultHandler(event:ResultEvent, token:AsyncToken):void {
-            var obj:Object = event.result;
             var ba:ByteArray = ByteArray(event.result);
             var loader:Loader = new Loader();
             loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onDataLoadComplete);
