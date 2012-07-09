@@ -1,0 +1,8 @@
+<configuration>
+    <fonts>
+        <font metrics-file="arialuni.xml" embed-file="ARIALUNI.TTF" kerning="yes">
+            <font-triplet name="arialuni" style="normal" weight="normal"/>
+            <font-triplet name="arialuni" style="italic" weight="normal"/>
+        </font>
+    </fonts>
+</configuration>

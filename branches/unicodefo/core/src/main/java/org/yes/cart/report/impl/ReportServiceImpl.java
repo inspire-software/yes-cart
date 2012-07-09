@@ -17,6 +17,7 @@ import javax.servlet.ServletContext;
 import javax.xml.transform.*;
 import javax.xml.transform.sax.SAXResult;
 import java.io.*;
+import java.net.URL;
 import java.util.List;
 
 //JAXP
@@ -146,6 +147,26 @@ public class ReportServiceImpl implements ReportService, ServletContextAware {
 
             final FOUserAgent foUserAgent = fopFactory.newFOUserAgent();
             // configure foUserAgent as desired
+
+
+            final URL configFileUrl =
+                    this.getClass().getClassLoader().getResource("fop-userconfig.xml");
+            if (configFileUrl == null) {
+                LOG.error("FOP config file not  found, " +
+                        "please put the fop-userconfig.xml file into the classpath of the  server, UTF - 8characters won't be displayed correctly");
+            } else {
+                File userConfigXml = new
+                        File(configFileUrl.getFile());
+                fopFactory.setUserConfig(userConfigXml);
+            }
+
+            /*Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF,
+                    foUserAgent, outputStream);
+
+            // Send data to FOP
+            readInputAsSAX(context, INPUT_DATA,
+                    fop.getDefaultHandler());      */
+
 
             // Setup output
             OutputStream out = new java.io.FileOutputStream(pdffile);
