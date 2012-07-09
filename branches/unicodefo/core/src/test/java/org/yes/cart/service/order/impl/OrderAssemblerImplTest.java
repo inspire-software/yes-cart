@@ -1,0 +1,56 @@
+package org.yes.cart.service.order.impl;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.constants.ServiceSpringKeys;
+import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.service.order.OrderAssembler;
+import org.yes.cart.shoppingcart.ShoppingCart;
+
+import static org.junit.Assert.*;
+
+/**
+ * User: Igor Azarny iazarny@yahoo.com
+ * Date: 09-May-2011
+ * Time: 14:12:54
+ */
+public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
+
+    private OrderAssembler orderAssembler;
+    private GenericDAO<CustomerOrder, Long> customerOrderDao;
+
+    @Before
+    public void setUp() throws Exception {
+        orderAssembler = (OrderAssembler) ctx().getBean(ServiceSpringKeys.ORDER_ASSEMBLER);
+        customerOrderDao = (GenericDAO<CustomerOrder, Long>) ctx().getBean("customerOrderDao");
+    }
+
+    @Test
+    public void testAssembleCustomerOrder() {
+        Customer customer = createCustomer();
+        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail());
+        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
+        assertNotNull(customerOrder);
+        customerOrder = customerOrderDao.create(customerOrder);
+        assertNotNull(customerOrder);
+        assertNotNull(customerOrder.getBillingAddress());
+        assertEquals("By default billing and shipping addresses the same",
+                customerOrder.getBillingAddress(),
+                customerOrder.getShippingAddress());
+        assertTrue("By Default billind address is shipping address ",
+                customerOrder.getBillingAddress().contains("shipping addr"));
+        assertEquals("Order must be in ORDER_STATUS_NONE state",
+                CustomerOrder.ORDER_STATUS_NONE,
+                customerOrder.getOrderStatus());
+        assertNotNull("Order num must be set", customerOrder.getOrdernum());
+        assertTrue("Order in pending state must not have delivery", customerOrder.getDelivery().isEmpty());
+        assertEquals("Shopping cart guid and order guid are equals",
+                shoppingCart.getGuid(),
+                customerOrder.getGuid());
+        assertEquals(8, customerOrder.getOrderDetail().size());
+        assertFalse(customerOrder.isMultipleShipmentOption());
+    }
+}

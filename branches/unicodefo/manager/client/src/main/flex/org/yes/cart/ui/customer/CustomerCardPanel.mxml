@@ -1,0 +1,47 @@
+<?xml version="1.0" ?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+           xmlns:controls="controls.*" width="100%" height="100%"
+           creationComplete="init();">
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteCustomerCardService"
+                     destination="remoteCustomerCardService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+    <mx:DataGrid x="0" y="0" width="100%" height="99%"
+                 dataProvider="{remoteCustomerCardService.getByCustomerId.lastResult}">
+        <mx:columns>
+            <mx:DataGridColumn width="80" headerText="@Resource(bundle='CustomerManagementPanel',key='id')"
+                               dataField="customerCardId"/>
+            <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='holderName')"
+                               dataField="holderName"/>
+            <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='cardMaskedNumber')"
+                               dataField="cardMaskedNumber"/>
+            <mx:DataGridColumn width="80" headerText="@Resource(bundle='CustomerManagementPanel',key='cardType')"
+                               dataField="cardType"/>
+            <mx:DataGridColumn width="60" headerText="@Resource(bundle='CustomerManagementPanel',key='startMonth')"
+                               dataField="startMonth"/>
+            <mx:DataGridColumn width="60" headerText="@Resource(bundle='CustomerManagementPanel',key='startYear')"
+                               dataField="startYear"/>
+            <mx:DataGridColumn width="60" headerText="@Resource(bundle='CustomerManagementPanel',key='expirationMonth')"
+                               dataField="expirationMonth"/>
+            <mx:DataGridColumn width="60" headerText="@Resource(bundle='CustomerManagementPanel',key='expirationYear')"
+                               dataField="expirationYear"/>
+
+
+        </mx:columns>
+    </mx:DataGrid>
+
+
+    <mx:Script>
+            <![CDATA[
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        public var customerId:Number;
+
+        public function init():void {
+            remoteCustomerCardService.getByCustomerId(customerId);
+        }
+        ]]></mx:Script>
+</mx:Canvas>

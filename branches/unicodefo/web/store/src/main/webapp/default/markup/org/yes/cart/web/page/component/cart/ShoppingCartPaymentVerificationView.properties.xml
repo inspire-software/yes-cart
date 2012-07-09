@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+
+    <entry key="productName">Product</entry>
+    <entry key="price">Price</entry>
+    <entry key="qty">Quantity</entry>
+    <entry key="amount">Amount</entry>	
+	
+	<entry key="deliveryNum">Delivery number</entry>
+
+	<entry key="deliverySubTotal">Delivery sub total</entry>
+	<entry key="deliverySubTotalTax">Delivery tax</entry>
+	<entry key="deliverySubTotalAmount">Delivery amount</entry>
+	
+	<entry key="deliveryCost">Delivery cost</entry>
+	<entry key="deliveryCostTax">tax</entry>
+	<entry key="deliveryCostAmount">Amount</entry>
+	
+	<entry key="grandTotal">Grand</entry>
+	<entry key="grandTotalTax">tax</entry>
+	<entry key="grandTotalAmount">Amount</entry>
+	
+
+	
+
+</properties>

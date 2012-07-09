@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+           xmlns:controls="controls.*" width="100%" height="100%"
+           creationComplete="init();">
+
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteCustomerWishListService"
+                     destination="remoteCustomerWishListService"
+                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
+                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+    <mx:DataGrid x="0" y="0" width="100%" height="99%"
+                 dataProvider="{remoteCustomerWishListService.getByCustomerId.lastResult}">
+        <mx:columns>
+            <mx:DataGridColumn width="80" headerText="@Resource(bundle='CustomerManagementPanel',key='id')"
+                               dataField="customerwishlistId"/>
+            <mx:DataGridColumn width="80" headerText="@Resource(bundle='CustomerManagementPanel',key='skuCode')"
+                               dataField="skuCode"/>
+            <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='skuName')"
+                               dataField="skuName"/>
+            <mx:DataGridColumn width="80" headerText="@Resource(bundle='CustomerManagementPanel',key='wlType')"
+                               dataField="wlType"/>
+        </mx:columns>
+    </mx:DataGrid>
+
+
+    <mx:Script>
+            <![CDATA[
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        public var customerId:Number;
+
+        public function init():void {
+            remoteCustomerWishListService.getByCustomerId(customerId);
+        }
+        ]]></mx:Script>
+</mx:Canvas>

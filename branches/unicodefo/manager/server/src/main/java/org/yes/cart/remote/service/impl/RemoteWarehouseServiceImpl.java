@@ -1,0 +1,123 @@
+package org.yes.cart.remote.service.impl;
+
+import org.yes.cart.domain.dto.ProductSkuDTO;
+import org.yes.cart.domain.dto.ShopWarehouseDTO;
+import org.yes.cart.domain.dto.SkuWarehouseDTO;
+import org.yes.cart.domain.dto.WarehouseDTO;
+import org.yes.cart.exception.UnableToCreateInstanceException;
+import org.yes.cart.exception.UnmappedInterfaceException;
+import org.yes.cart.remote.service.ReindexService;
+import org.yes.cart.remote.service.RemoteWarehouseService;
+import org.yes.cart.service.domain.SkuWarehouseService;
+import org.yes.cart.service.dto.DtoWarehouseService;
+
+import java.util.List;
+
+/**
+ * User: Igor Azarny iazarny@yahoo.com
+ * Date: 15-May-2011
+ * Time: 17:22:15
+ */
+public class RemoteWarehouseServiceImpl
+        extends AbstractRemoteService<WarehouseDTO>
+        implements RemoteWarehouseService {
+
+    private final DtoWarehouseService dtoWarehouseService;
+
+    private final ReindexService reindexService;
+
+
+    /**
+     * Construct service.
+     *
+     * @param service dto service to use
+     * @param reindexService product reindex service
+     */
+    public RemoteWarehouseServiceImpl(
+            final DtoWarehouseService service,
+            final ReindexService reindexService) {
+        super(service);
+        this.dtoWarehouseService = service;
+        this.reindexService = reindexService;
+    }
+
+
+    /**
+     * {@inheritDoc
+     */
+    public List<WarehouseDTO> findByShopId(final long shopId)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return dtoWarehouseService.findByShopId(shopId);
+    }
+
+    public void setShopWarehouseRank(long shopWarehouseId, int newRank) {
+        dtoWarehouseService.setShopWarehouseRank(shopWarehouseId, newRank);
+    }
+
+    /**
+     * {@inheritDoc
+     */
+    public ShopWarehouseDTO assignWarehouse(final long warehouseId, final long shopId)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return dtoWarehouseService.assignWarehouse(warehouseId, shopId);
+    }
+
+    /**
+     * {@inheritDoc
+     */
+    public void unassignWarehouse(final long warehouseId, final long shopId) {
+        dtoWarehouseService.unassignWarehouse(warehouseId, shopId);
+    }
+
+    /**
+     * {@inheritDoc
+     */
+    public void removeSkuOnWarehouse(final long skuWarehouseId) {
+        //todo reindex product
+        dtoWarehouseService.removeSkuOnWarehouse(skuWarehouseId);
+    }
+
+    /**
+     * Get product id by sku id.
+     * @param skuId   product sku
+     * @return product pk value
+     */
+    private long getProductId(final long skuId) {
+        return 0; // todo
+    }
+
+
+    /**
+     * {@inheritDoc
+     */
+    public SkuWarehouseDTO createSkuOnWarehouse(final SkuWarehouseDTO skuWarehouseDTO) {
+        SkuWarehouseDTO rez = dtoWarehouseService.createSkuOnWarehouse(skuWarehouseDTO);
+        reindexService.reindexProduct(getProductId(rez.getProductSkuId()));
+        return rez;
+    }
+
+    /**
+     * {@inheritDoc
+     */
+    public SkuWarehouseDTO updateSkuOnWarehouse(final SkuWarehouseDTO skuWarehouseDTO) {
+        SkuWarehouseDTO rez = dtoWarehouseService.updateSkuOnWarehouse(skuWarehouseDTO);
+        reindexService.reindexProduct(getProductId(rez.getProductSkuId()));
+        return rez;
+    }
+
+    /**
+     * {@inheritDoc
+     */
+    public List<SkuWarehouseDTO> findProductSkusOnWarehouse(final long productId, final long warehouseId) {
+        return dtoWarehouseService.findProductSkusOnWarehouse(productId, warehouseId);
+    }
+
+
+    /**
+     * {@inheritDoc
+     */
+    public SkuWarehouseService getSkuWarehouseService() {
+        return dtoWarehouseService.getSkuWarehouseService();
+    }
+
+}

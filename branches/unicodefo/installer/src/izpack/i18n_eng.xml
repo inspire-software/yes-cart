@@ -1,0 +1,23 @@
+<!DOCTYPE langpack PUBLIC "izpack-langpack"
+                          "http://svn.codehaus.org/izpack-svn/izpack-src/branches/4.3/src/dtd/langpack.dtd">
+<langpack>
+
+    <str id="JDKPathPanel.intro" txt=""/>
+    <str id="JDKPathPanel.info" txt="Select path to JDK 1.6 or never"/>
+
+    <str id="WebServerConfigurationPanel.title" txt="Web Server configuration"/>
+    <str id="WebServerConfigurationPanel.http.port" txt="HTTP port"/>
+    <str id="WebServerConfigurationPanel.http.port.validation.error" txt="HTTP port must be specified"/>
+    <str id="WebServerConfigurationPanel.https.port" txt="HTTPS port"/>
+    <str id="WebServerConfigurationPanel.port.validation.error" txt="Port should be a number in range of (0..65535)"/>
+    <str id="WebServerConfigurationPanel.ssl.keystore.file" txt="SSL keystore to import:"/>
+    <str id="WebServerConfigurationPanel.ssl.keystore.password" txt="SSL keystore password:"/>
+    <str id="WebServerConfigurationPanel.ssl.keystore.password.validation.error" txt="Passwords do not match."/>
+    <str id="WebServerConfigurationPanel.ssl.keystore.file.password.validation.error"
+         txt="Keystore password validation failed."/>
+    <str id="WebServerConfigurationPanelValidator.validation.failed" txt="Following validation(s) failed:"/>
+    <str id="WebServerConfigurationPanelValidator.http.port.unavailable" txt="HTTP port is unavailable."/>
+    <str id="WebServerConfigurationPanelValidator.https.port.unavailable" txt="HTTPS port is unavailable."/>
+    <str id="WebServerConfigurationPanelValidator.validation.confirmation" txt="Do you want to proceed?"/>
+
+</langpack>

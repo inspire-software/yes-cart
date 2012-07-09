@@ -1,0 +1,30 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<body>
+<wicket:panel>
+
+        <script type="text/javascript">
+            function search() {
+                var aInput = document.getElementById("searchPhraze");
+                if (!isBlank(aInput.value)) {
+                    if ((window.location.href.lastIndexOf("/") == window.location.href.length - 1)) {
+                        window.location.href = window.location.href + 'query/' + aInput.value;
+                    } else {
+                        window.location.href = window.location.href + '/query/' + aInput.value;
+                    }
+                }
+            }
+            function isBlank(str) {
+                return (!str || /^\s*$/.test(str));
+            }
+        </script>
+
+        <input id="searchPhraze" type="text" class="searchInput"
+                           onkeydown="if(event.keyCode == 13 ) {search();}"/>
+
+        <input id="searchButton" type="button" wicket:message="value:search"
+               onclick="search();"
+               src="images/layout/nav/search/nav-search-butt.jpg"/>
+
+</wicket:panel>
+</body>
+</html>

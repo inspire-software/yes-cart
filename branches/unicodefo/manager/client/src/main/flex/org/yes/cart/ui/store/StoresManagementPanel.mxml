@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%"
+           title="@Resource(bundle='StoresManagementPanel',key='store')"
+           paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2"
+           creationComplete="init();">
+    <mx:Script>
+		<![CDATA[
+        import mx.events.IndexChangedEvent;
+
+        import org.yes.cart.impl.ShopDTOImpl;
+
+        private var TAB_URL_IDX:int = 1;
+        private var TAB_CURRENCY_IDX:int = 2;
+        private var TAB_CATEGORY_IDX:int = 3;
+        private var TAB_WAREHOUSE_IDX:int = 4;
+
+
+        private var _shopDTOImpl:ShopDTOImpl;
+
+        private function init():void {
+            editShop();
+        }
+
+
+        public function set shopDTOImpl(value:ShopDTOImpl):void {
+            _shopDTOImpl = value;
+        }
+
+        /**
+         * Edit created or existing shop.
+         * @return nothing
+         */
+        private function editShop():void {
+            summaryTab.removeAllChildren();
+            var storeSummaryPanel:StoreSummaryPanel = new StoreSummaryPanel();
+            storeSummaryPanel.shopDTOImpl = _shopDTOImpl;
+            summaryTab.addChild(storeSummaryPanel);
+            initTab(shopTabNavigator.selectedIndex);
+        }
+
+        /**
+         * Url supprted by shop tab selected
+         * @param event event
+         * @return nothing
+         */
+        private function urlsTabSelected(event:MouseEvent):void {
+            urlTab.removeAllChildren();
+            var storeSupportedUrlsPanel:StoreSupportedUrlsPanel = new StoreSupportedUrlsPanel();
+            storeSupportedUrlsPanel.setShopDTOImpl(_shopDTOImpl);
+            urlTab.addChild(storeSupportedUrlsPanel);
+        }
+
+        /**
+         * Url supprted by shop tab selected
+         * @param event event
+         * @return nothing
+         */
+        private function currencyTabSelected(event:MouseEvent):void {
+            currencyTab.removeAllChildren();
+            var storeSupportedCurrencyPanel:StoreSupportedCurrency = new StoreSupportedCurrency();
+            storeSupportedCurrencyPanel.shopDTOImpl = _shopDTOImpl;
+            currencyTab.addChild(storeSupportedCurrencyPanel);
+        }
+
+        /**
+         * Assigned categories
+         * @param event event
+         * @return nothing
+         */
+        private function categoryTabSelected(event:MouseEvent):void {
+            categoryTab.removeAllChildren();
+            var panel:StoreAssignedCategories = new StoreAssignedCategories();
+            panel.shopDto = _shopDTOImpl;
+            categoryTab.addChild(panel);
+        }
+
+        /**
+         * Shop warehouses tab selected
+         * @param event event
+         * @return nothing
+         */
+        private function warehouseTabSelected(event:MouseEvent):void {
+            warehouseTab.removeAllChildren();
+            var panel:StoreSupportedWarehouses = new StoreSupportedWarehouses();
+            panel.shopDTOImpl = _shopDTOImpl;
+            warehouseTab.addChild(panel);
+        }
+
+        /**
+         * Tab clicked handler
+         * @param event event
+         * @return nothing
+         */
+        private function onTabClick(event:IndexChangedEvent):void {
+            initTab(event.newIndex);
+        }
+
+        private function initTab(idx:int):void {
+            switch (idx) {
+                case TAB_URL_IDX:
+                {
+                    urlsTabSelected(null);
+                    break;
+                }
+                case TAB_CURRENCY_IDX:
+                {
+                    currencyTabSelected(null);
+                    break;
+                }
+                case TAB_CATEGORY_IDX:
+                {
+                    categoryTabSelected(null);
+                    break;
+                }
+                case TAB_WAREHOUSE_IDX:
+                {
+                    warehouseTabSelected(null);
+                    break;
+                }
+
+            }
+
+        }
+        ]]>
+    </mx:Script>
+
+    <mx:TabNavigator width="100%" height="100%" id="shopTabNavigator" change="onTabClick(event);">
+        <mx:Canvas label="@Resource(bundle='StoresManagementPanel',key='summary')" width="100%" height="100%"
+                   id="summaryTab"/>
+        <mx:Canvas label="@Resource(bundle='StoresManagementPanel',key='urls')" width="100%" height="100%"
+                   id="urlTab"/>
+        <mx:Canvas label="@Resource(bundle='StoresManagementPanel',key='currency')" width="100%" height="100%"
+                   id="currencyTab"/>
+        <mx:Canvas label="@Resource(bundle='StoresManagementPanel',key='catalog')" width="100%" height="100%"
+                   id="categoryTab"/>
+        <mx:Canvas id="warehouseTab" label="@Resource(bundle='StoresManagementPanel',key='warehouses')"
+                   width="100%" height="100%"/>
+        <mx:Canvas enabled="false" label="@Resource(bundle='StoresManagementPanel',key='payments')" width="100%"
+                   height="100%"/>
+        <mx:Canvas enabled="false" label="@Resource(bundle='StoresManagementPanel',key='customers')" width="100%"
+                   height="100%"/>
+        <mx:Canvas enabled="false" label="@Resource(bundle='StoresManagementPanel',key='marketing')" width="100%"
+                   height="100%"/>
+        <mx:Canvas enabled="false" label="@Resource(bundle='StoresManagementPanel',key='taxes')" width="100%"
+                   height="100%"/>
+    </mx:TabNavigator>
+
+
+</mx:Panel>

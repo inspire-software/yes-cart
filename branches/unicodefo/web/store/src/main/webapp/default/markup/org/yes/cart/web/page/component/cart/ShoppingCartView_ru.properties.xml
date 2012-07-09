@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+
+    <entry key="product">Изделие</entry>
+    <entry key="price">Цена</entry>
+    <entry key="qty">Количество</entry>
+
+    <entry key="amountMsg">Всего</entry>
+
+
+    <entry key="addOneLink">+1</entry>
+    <entry key="removeOneLink">-1</entry>
+    <entry key="removeAllLink">X</entry>
+	
+    <entry key="addOneLinkHint">Добавить один</entry>
+    <entry key="removeOneLinkHint">Удалить один</entry>
+    <entry key="removeAllLinkHint">Удалить все</entry>
+
+    <entry key="nonzerodigits">Введи положительное целое количество</entry>
+
+
+
+
+    <entry key="checkout">Оформить заказ</entry>
+    <entry key="skuNumber">Номер</entry>
+    <entry key="productsInCart">Товары в корзине</entry>
+
+
+</properties>

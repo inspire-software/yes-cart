@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="sort">Сортировать</entry>
+	<entry key="by.name">по имени</entry>
+	<entry key="by.price">по цене</entry>
+</properties>

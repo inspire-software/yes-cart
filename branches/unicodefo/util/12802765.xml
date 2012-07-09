@@ -1,0 +1,253 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ICECAT-interface SYSTEM "http://data.icecat.biz/dtd/ICECAT-interface_response.dtd">
+	<!-- source: Icecat.biz 2012 -->
+	<ICECAT-interface xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://data.icecat.biz/xsd/ICECAT-interface_response.xsd">
+<Product Code="1" HighPic="http://images.icecat.biz/img/norm/high/12802765-4437.jpg" HighPicHeight="250" HighPicSize="25025" HighPicWidth="350" ID="12802765" LowPic="http://images.icecat.biz/img/norm/low/12802765-4437.jpg" LowPicHeight="143" LowPicSize="10689" LowPicWidth="200" Name="146GB 2.5&quot; 6G SAS 15K" Pic500x500="" Pic500x500Height="0" Pic500x500Size="0" Pic500x500Width="0" Prod_id="SP.32711.007" Quality="ICECAT" ReleaseDate="2012-02-06" ThumbPic="http://images.icecat.biz/thumbs/12802765.jpg" ThumbPicSize="2529" Title="Acer  146GB 2.5&quot; 6G SAS 15K">
+    <Category ID="219">
+    <Name ID="530415" Value="жесткие диски" langid="8"/>
+    </Category>
+   <CategoryFeatureGroup ID="337" No="-1">
+     <FeatureGroup ID="0">
+       <Name ID="537535" Value="Технические характеристики" langid="8"/>
+     </FeatureGroup>
+    </CategoryFeatureGroup>
+    <CategoryFeatureGroup ID="5876" No="0">
+     <FeatureGroup ID="1">
+       <Name ID="537508" Value="Процессор" langid="8"/>
+     </FeatureGroup>
+    </CategoryFeatureGroup>
+    <CategoryFeatureGroup ID="67" No="60">
+     <FeatureGroup ID="2">
+       <Name ID="537509" Value="Диск" langid="8"/>
+     </FeatureGroup>
+    </CategoryFeatureGroup>
+    <CategoryFeatureGroup ID="3577" No="0">
+     <FeatureGroup ID="3">
+       <Name ID="537510" Value="Память" langid="8"/>
+     </FeatureGroup>
+    </CategoryFeatureGroup>
+    <CategoryFeatureGroup ID="2845" No="11">
+     <FeatureGroup ID="5">
+       <Name ID="537512" Value="Экран" langid="8"/>
+     </FeatureGroup>
+    </CategoryFeatureGroup>
+    <CategoryFeatureGroup ID="1710" No="30">
+     <FeatureGroup ID="8">
+       <Name ID="537515" Value="Системные требования" langid="8"/>
+     </FeatureGroup>
+    </CategoryFeatureGroup>
+    <CategoryFeatureGroup ID="66" No="0">
+     <FeatureGroup ID="12">
+       <Name ID="537518" Value="Соединения" langid="8"/>
+     </FeatureGroup>
+    </CategoryFeatureGroup>
+    <CategoryFeatureGroup ID="65" No="51">
+     <FeatureGroup ID="14">
+       <Name ID="537520" Value="Вес и размеры" langid="8"/>
+     </FeatureGroup>
+    </CategoryFeatureGroup>
+    <CategoryFeatureGroup ID="2842" No="0">
+     <FeatureGroup ID="19">
+       <Name ID="537525" Value="Форматы носителей" langid="8"/>
+     </FeatureGroup>
+    </CategoryFeatureGroup>
+    <CategoryFeatureGroup ID="1594" No="52">
+     <FeatureGroup ID="27">
+       <Name ID="537532" Value="Энергопитание" langid="8"/>
+     </FeatureGroup>
+    </CategoryFeatureGroup>
+    <CategoryFeatureGroup ID="1595" No="38">
+     <FeatureGroup ID="28">
+       <Name ID="537533" Value="Внешние условия" langid="8"/>
+     </FeatureGroup>
+    </CategoryFeatureGroup>
+    <CategoryFeatureGroup ID="2846" No="40">
+     <FeatureGroup ID="32">
+       <Name ID="537537" Value="Прочность" langid="8"/>
+     </FeatureGroup>
+    </CategoryFeatureGroup>
+    <CategoryFeatureGroup ID="2847" No="0">
+     <FeatureGroup ID="35">
+       <Name ID="537540" Value="Сеть" langid="8"/>
+     </FeatureGroup>
+    </CategoryFeatureGroup>
+    <CategoryFeatureGroup ID="2475" No="54">
+     <FeatureGroup ID="36">
+       <Name ID="537541" Value="Цвет" langid="8"/>
+     </FeatureGroup>
+    </CategoryFeatureGroup>
+    <CategoryFeatureGroup ID="2841" No="25">
+     <FeatureGroup ID="38">
+       <Name ID="537543" Value="Уровень шума" langid="8"/>
+     </FeatureGroup>
+    </CategoryFeatureGroup>
+    <CategoryFeatureGroup ID="2844" No="-4">
+     <FeatureGroup ID="47">
+       <Name ID="537552" Value="Носители хранения данных" langid="8"/>
+     </FeatureGroup>
+    </CategoryFeatureGroup>
+    <CategoryFeatureGroup ID="2476" No="58">
+     <FeatureGroup ID="62">
+       <Name ID="537564" Value="Передача данных" langid="8"/>
+     </FeatureGroup>
+    </CategoryFeatureGroup>
+    <CategoryFeatureGroup ID="2474" No="36">
+     <FeatureGroup ID="67">
+       <Name ID="537569" Value="Данные об упаковке" langid="8"/>
+     </FeatureGroup>
+    </CategoryFeatureGroup>
+    <CategoryFeatureGroup ID="2918" No="0">
+     <FeatureGroup ID="75">
+       <Name ID="537577" Value="Безопасность" langid="8"/>
+     </FeatureGroup>
+    </CategoryFeatureGroup>
+    <CategoryFeatureGroup ID="2843" No="15">
+     <FeatureGroup ID="76">
+       <Name ID="537578" Value="Сертификаты" langid="8"/>
+     </FeatureGroup>
+    </CategoryFeatureGroup>
+    <CategoryFeatureGroup ID="3592" No="0">
+     <FeatureGroup ID="79">
+       <Name ID="876868" Value="Индикация/сигналы" langid="8"/>
+     </FeatureGroup>
+    </CategoryFeatureGroup>
+    <CategoryFeatureGroup ID="3608" No="32">
+     <FeatureGroup ID="90">
+       <Name ID="537590" Value="Операционная система" langid="8"/>
+     </FeatureGroup>
+    </CategoryFeatureGroup>
+    <CategoryFeatureGroup ID="3606" No="-2">
+     <FeatureGroup ID="114">
+       <Name ID="537613" Value="Внутренняя картонная упаковка" langid="8"/>
+     </FeatureGroup>
+    </CategoryFeatureGroup>
+    <CategoryFeatureGroup ID="3607" No="-3">
+     <FeatureGroup ID="115">
+       <Name ID="537614" Value="Внешняя картонная упаковка" langid="8"/>
+     </FeatureGroup>
+    </CategoryFeatureGroup>
+    <CategoryFeatureGroup ID="3609" No="0">
+     <FeatureGroup ID="116">
+       <Name ID="537615" Value="Содержимое упаковки" langid="8"/>
+     </FeatureGroup>
+    </CategoryFeatureGroup>
+     <EANCode EAN="4712196036751"/>
+   <ReasonsToBuy/>
+   <ProductBundled/>
+   <ProductDescription/>
+    <ProductFamily ID="1">
+    <Name/>
+    </ProductFamily>
+   
+	<ProductFeature Localized="0" ID="118456365" Local_ID="0" Value="146" CategoryFeature_ID="3684" CategoryFeatureGroup_ID="67" No="10100100" Presentation_Value="146 ГБ" Translated="0" Mandatory="1" Searchable="1">
+	  <Feature ID="7">
+	    <Measure ID="20" Sign="">
+	      <Signs><Sign ID="7944" langid="8"><![CDATA[ГБ]]></Sign></Signs>
+	    </Measure>
+	    <Name ID="535619" langid="8" Value="Емкость жесткого диска"/>
+	  </Feature>
+	</ProductFeature>
+
+	<ProductFeature Localized="0" ID="118456366" Local_ID="0" Value="2.5" CategoryFeature_ID="18866" CategoryFeatureGroup_ID="67" No="10100098" Presentation_Value="63.5 мм (2.5 &quot;)" Translated="0" Mandatory="1" Searchable="1">
+	  <Feature ID="1926">
+	    <Measure ID="16" Sign="&quot;">
+	      <Signs><Sign ID="7940" langid="8"><![CDATA["]]></Sign></Signs>
+	    </Measure>
+	    <Name ID="535985" langid="8" Value="Размер жесткого диска"/>
+	  </Feature>
+	</ProductFeature>
+
+	<ProductFeature Localized="0" ID="118456367" Local_ID="0" Value="15000" CategoryFeature_ID="15510" CategoryFeatureGroup_ID="67" No="10100001" Presentation_Value="15000 об/мин" Translated="0" Mandatory="1" Searchable="1">
+	  <Feature ID="430">
+	    <Measure ID="28" Sign="">
+	      <Signs><Sign ID="10938" langid="8"><![CDATA[об/мин]]></Sign></Signs>
+	    </Measure>
+	    <Name ID="535661" langid="8" Value="Скорость вращения шпинделя"/>
+	  </Feature>
+	</ProductFeature>
+
+	<ProductFeature Localized="0" ID="118456368" Local_ID="0" Value="Serial Attached SCSI (SAS)" CategoryFeature_ID="11666" CategoryFeatureGroup_ID="67" No="100104" Presentation_Value="Serial Attached SCSI (SAS)" Translated="0" Mandatory="1" Searchable="0">
+	  <Feature ID="982">
+	    <Measure ID="29" Sign="">
+	      <Signs/>
+	    </Measure>
+	    <Name ID="535777" langid="8" Value="Интерфейс жесткого диска"/>
+	  </Feature>
+	</ProductFeature>
+
+	<ProductFeature Localized="0" ID="118456369" Local_ID="0" Value="-" CategoryFeature_ID="13" CategoryFeatureGroup_ID="67" No="100097" Presentation_Value="-" Translated="0" Mandatory="1" Searchable="0">
+	  <Feature ID="27">
+	    <Measure ID="19" Sign="">
+	      <Signs><Sign ID="7943" langid="8"><![CDATA[МБ]]></Sign></Signs>
+	    </Measure>
+	    <Name ID="535625" langid="8" Value="Объём буфера"/>
+	  </Feature>
+	</ProductFeature>
+
+	<ProductFeature Localized="0" ID="118456370" Local_ID="0" Value="6" CategoryFeature_ID="6889" CategoryFeatureGroup_ID="2476" No="100000" Presentation_Value="6 Гбит/с" Translated="0" Mandatory="0" Searchable="0">
+	  <Feature ID="1551">
+	    <Measure ID="68" Sign="">
+	      <Signs><Sign ID="7988" langid="8"><![CDATA[Гбит/с]]></Sign></Signs>
+	    </Measure>
+	    <Name ID="535936" langid="8" Value="Скорость передачи данных"/>
+	  </Feature>
+	</ProductFeature>
+
+	<ProductFeature Localized="0" ID="118456371" Local_ID="0" Value="Y" CategoryFeature_ID="48253" CategoryFeatureGroup_ID="3608" No="100080" Presentation_Value="Да" Translated="1" Mandatory="0" Searchable="0">
+	  <Feature ID="7986">
+	    <Measure ID="29" Sign="">
+	      <Signs/>
+	    </Measure>
+	    <Name ID="845499" langid="8" Value="Поддерживаемые операционные системы Windows"/>
+	  </Feature>
+	</ProductFeature>
+
+	<ProductFeature Localized="0" ID="118456372" Local_ID="0" Value="Y" CategoryFeature_ID="48255" CategoryFeatureGroup_ID="3608" No="100060" Presentation_Value="Да" Translated="1" Mandatory="0" Searchable="0">
+	  <Feature ID="7988">
+	    <Measure ID="29" Sign="">
+	      <Signs/>
+	    </Measure>
+	    <Name ID="845497" langid="8" Value="Поддерживаемые операционные системы Linux"/>
+	  </Feature>
+	</ProductFeature>
+
+	<ProductFeature Localized="0" ID="118456373" Local_ID="0" Value="Y" CategoryFeature_ID="16" CategoryFeatureGroup_ID="337" No="100000" Presentation_Value="Да" Translated="1" Mandatory="0" Searchable="0">
+	  <Feature ID="22">
+	    <Measure ID="29" Sign="">
+	      <Signs/>
+	    </Measure>
+	    <Name ID="533686" langid="8" Value="Внутренний"/>
+	  </Feature>
+	</ProductFeature>
+
+	<ProductFeature Localized="0" ID="118456374" Local_ID="0" Value="Y" CategoryFeature_ID="44195" CategoryFeatureGroup_ID="337" No="100000" Presentation_Value="Да" Translated="1" Mandatory="0" Searchable="0">
+	  <Feature ID="5576">
+	    <Measure ID="26" Sign="">
+	      <Signs/>
+	    </Measure>
+	    <Name ID="846337" langid="8" Value="Функция &quot;горячей&quot; замены"/>
+	  </Feature>
+	</ProductFeature>
+
+	<ProductFeature Localized="0" ID="118456358" Local_ID="0" Value="Icecat.biz" CategoryFeature_ID="33609" CategoryFeatureGroup_ID="337" No="0" Presentation_Value="Icecat.biz" Translated="0" Mandatory="0" Searchable="0">
+	  <Feature ID="6617">
+	    <Measure ID="29" Sign="">
+	      <Signs/>
+	    </Measure>
+	    <Name ID="845007" langid="8" Value="Исходные данные листов"/>
+	  </Feature>
+	</ProductFeature>
+
+   <ProductGallery/>
+   <ProductMultimediaObject/>
+   <ProductRelated/>
+   
+	  <SummaryDescription>
+	    <ShortSummaryDescription langid="8">Acer 146GB 2.5&quot; 6G SAS 15K, 146 ГБ, 63.5 мм (2.5 &quot;), 15000 об/мин, Serial Attached SCSI (SAS), 6 Гбит/с</ShortSummaryDescription>
+	    <LongSummaryDescription langid="8">Acer 146GB 2.5&quot; 6G SAS 15K. Диск: 146 ГБ, 63.5 мм (2.5 &quot;), 15000 об/мин, Serial Attached SCSI (SAS). Передача данных: 6 Гбит/с</LongSummaryDescription>
+	  </SummaryDescription>
+
+    <Supplier ID="7" Name="Acer"/>
+   </Product>
+</ICECAT-interface>

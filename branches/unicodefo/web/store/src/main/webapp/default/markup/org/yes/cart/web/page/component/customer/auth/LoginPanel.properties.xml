@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="wrongPassword">Wrong password</entry>
+	<entry key="customerNotExists">Unknown user. Register please</entry>
+	<entry key="existingUser">Existing shopper</entry>
+	<entry key="email">Email</entry>
+	<entry key="password">Password</entry>
+	<entry key="restorePassword">Restore password</entry>
+	<entry key="login">Login</entry>
+    <entry key="signIn">Sign In</entry>
+    <entry key="registration">Registration</entry>
+    <entry key="tryToRestore">Try to restore password. It will be send to your email</entry>
+</properties>

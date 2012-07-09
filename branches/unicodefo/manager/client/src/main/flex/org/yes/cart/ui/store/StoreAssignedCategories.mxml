@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml"
+           xmlns:controls="controls.*"
+           width="100%" height="100%"
+           creationComplete="init();"
+           paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2">
+
+
+    <mx:Script>
+
+<![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import mx.collections.ArrayCollection;
+
+        import mx.events.ListEvent;
+        import mx.rpc.AsyncResponder;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.impl.CategoryDTOImpl;
+
+        import org.yes.cart.impl.ShopDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+        import org.yes.cart.ui.CategoryTreeDescriptor;
+
+        public var shopDto:ShopDTOImpl;
+
+
+        /**
+         * Init categories panel.
+         * @return nothing
+         */
+        private function init():void {
+            remoteCategoryService.getAll();
+        }
+
+        private function isCategoryAlreadyAssigned(cat:Object):Boolean {
+            var selectedId:Object = cat.categoryId;
+            for each (var assignedCat:CategoryDTOImpl in this.assignedCategoriesList.dataProvider) {
+                if (assignedCat.categoryId == selectedId) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /**
+         * Category to assign selection handler
+         * @param event selection event
+         * @return nothing
+         */
+        private function categorySelectedEvent(event:ListEvent):void {
+            this.availableSelected = this.categoryTree.selectedItem != null && !isCategoryAlreadyAssigned(this.categoryTree.selectedItem);
+            Debug.trace("Selected to assing category dto id is :" + this.categoryTree.selectedItem);
+        }
+
+        /**
+         * Category to unassign selection handler
+         * @param event selection event
+         * @return nothing
+         */
+        private function categoryToUnassignSelectedEvent(event:ListEvent):void {
+            this.assignedSelected = this.assignedCategoriesList.selectedItem != null;
+            Debug.trace("Selected to unassing category dto id is :" + this.assignedCategoriesList.selectedItem);
+
+        }
+
+        /**
+         * Assign selected category as one of top level categories into selected shop.
+         * @param event event
+         * @return nothing.
+         */
+        private function assignCategoryClickHandler(event:Event):void {
+            if (this.availableSelected && this.categoryTree.selectedItem != null) {
+                var selectedId:Object = this.categoryTree.selectedItem.categoryId;
+                for each (var cat:CategoryDTOImpl in this.assignedCategoriesList.dataProvider) {
+                    if (cat.categoryId == selectedId) {
+                        return; // no duplicates
+                    }
+                }
+                remoteCategoryService.assignToShop(selectedId, shopDto.shopId);
+                this.availableSelected = false;
+            }
+        }
+
+        /**
+         * Remove selected category from selected shop.
+         * @param event event
+         * @return nothing.
+         */
+        private function unassignCategoryClickHandler(event:Event):void {
+            if (this.assignedSelected && this.assignedCategoriesList.selectedItem != null) {
+                remoteCategoryService.unassignFromShop(this.assignedCategoriesList.selectedItem.categoryId, shopDto.shopId);
+            }
+        }
+
+        private function onGetAllResult(event:ResultEvent):void {
+
+            categoryTree.dataProvider = event.result;
+            categoryTree.dataDescriptor = new CategoryTreeDescriptor(assignedCategoriesList);
+            remoteCategoryService.getAllByShopId(shopDto.shopId);
+            if (categoryTree.dataProvider.length > 0) {
+                categoryTree.expandItem(categoryTree.dataProvider.getItemAt(0), true, true);
+                categoryTree.validateNow();
+            }
+
+        }
+
+        private function onGetAllByShopIdResult(event:ResultEvent):void {
+
+            categoryTree.selectedItem = null;
+            assignedCategoriesList.dataProvider = event.result;
+            categoryTree.expandItem(this.categoryTree.dataProvider.getItemAt(0), false);
+            categoryTree.expandItem(this.categoryTree.dataProvider.getItemAt(0), true);
+            categoryTree.validateNow();
+
+        }
+
+        private function onFaultHandler(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultFaultHandler(event);
+        }
+
+        private function onAssignToShopResult(event:ResultEvent):void {
+            this.availableSelected = false;
+            remoteCategoryService.getAllByShopId(shopDto.shopId);
+        }
+
+        private function onUnAssignFromShopResult(event:ResultEvent):void {
+            this.assignedSelected = false;
+            remoteCategoryService.getAllByShopId(shopDto.shopId);
+        }
+        ]]>
+
+   </mx:Script>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteCategoryService"
+                     destination="remoteCategoryService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getAll" name="getAll"
+                   result="onGetAllResult(event)"
+                   fault="onFaultHandler(event)"/>
+        <mx:method id="getAllByShopId" name="getAllByShopId"
+                   result="onGetAllByShopIdResult(event)"
+                   fault="onFaultHandler(event)"/>
+        <mx:method id="assignToShop" name="assignToShop"
+                   result="onAssignToShopResult(event)"
+                   fault="onFaultHandler(event)"/>
+        <mx:method id="unassignFromShop" name="unassignFromShop"
+                   result="onUnAssignFromShopResult(event)"
+                   fault="onFaultHandler(event)"/>
+
+    </mx:RemoteObject>
+
+    <mx:Boolean id="availableSelected">false</mx:Boolean>
+    <mx:Boolean id="assignedSelected">false</mx:Boolean>
+
+
+    <mx:VBox height="100%" width="45%">
+        <mx:Label text="@Resource(bundle='StoresManagementPanel',key='availableCategories')"/>
+        <mx:Tree height="100%" width="100%" id="categoryTree"
+                 labelField="name"
+                 doubleClickEnabled="true"
+                 itemDoubleClick="assignCategoryClickHandler(event)"
+                 itemClick="categorySelectedEvent(event)"
+                />
+    </mx:VBox>
+    <mx:VBox width="10%" height="100%" verticalAlign="middle" horizontalAlign="center">
+        <mx:Button label="@Resource(bundle='StoresManagementPanel',key='assign')"
+                   toolTip="@Resource(bundle='StoresManagementPanel',key='assignHint')"
+                   width="70" id="assignCategoryBtn"
+                   enabled="{availableSelected}"
+                   click="assignCategoryClickHandler(event);"
+                />
+        <mx:Button
+                label="@Resource(bundle='StoresManagementPanel',key='unassign')"
+                toolTip="@Resource(bundle='StoresManagementPanel',key='unassignHint')"
+                width="70" id="unassignCategoryBtn"
+                enabled="{assignedSelected}"
+                click="unassignCategoryClickHandler(event);"
+                />
+    </mx:VBox>
+    <mx:VBox width="45%" height="100%">
+        <mx:Label text="@Resource(bundle='StoresManagementPanel',key='assignedCategories')"/>
+        <mx:List height="100%" width="100%" id="assignedCategoriesList"
+                 labelField="name"
+                 doubleClickEnabled="true"
+                 itemDoubleClick="unassignCategoryClickHandler(event)"
+                 itemClick="categoryToUnassignSelectedEvent(event);"
+                />
+    </mx:VBox>
+</mx:HBox>

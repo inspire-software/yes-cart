@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services-config>
+    <services>
+
+        <default-channels>
+            <channel ref="my-amf"/>
+        </default-channels>
+
+        <!--<service-include file-path="remoting-config.xml" />-->
+        <!--<service-include file-path="messaging-config.xml" />
+          <service-include file-path="proxy-config.xml" />
+      -->
+
+    </services>
+
+    <channels>
+        <channel-definition id="my-amf"
+                            class="mx.messaging.channels.AMFChannel">
+            <!--
+                        <endpoint
+                            uri="http://{server.name}:{server.port}/{context.root}/messagebroker/amf"
+                            class="flex.messaging.endpoints.AMFEndpoint" />
+            -->
+            <endpoint
+                    uri="http://localhost:8080/yes-manager/spring/amf"
+                    class="flex.messaging.endpoints.AMFEndpoint"/>
+
+
+        </channel-definition>
+
+    </channels>
+
+    <logging>
+        <target class="flex.messaging.log.ConsoleTarget" level="Debug">
+            <properties>
+                <prefix>[BlazeDS]</prefix>
+                <includeDate>true</includeDate>
+                <includeTime>true</includeTime>
+                <includeLevel>true</includeLevel>
+                <includeCategory>true</includeCategory>
+            </properties>
+        </target>
+    </logging>
+
+</services-config>
