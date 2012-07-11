@@ -175,6 +175,21 @@
     </dependencies>
     <build>
         <finalName>yes-manager</finalName>
+        <testResources>
+            <testResource>
+                <directory>src/test/resource</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </testResource>
+            <testResource>
+                <directory>src/main/webapp/WEB-INF/classes</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </testResource>
+        </testResources>
+
         <pluginManagement>
             <plugins>
 

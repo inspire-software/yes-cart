@@ -4,18 +4,18 @@
                 xmlns:fo="http://www.w3.org/1999/XSL/Format">
     <xsl:output method="xml" indent="yes"/>
     <xsl:template match="/">
-        <fo:root>
+        <fo:root font-size="20pt" font-family="Arial">
 
             <fo:layout-master-set>
                 <fo:simple-page-master master-name="A4-portrait"
-                                       page-height="29.7cm" page-width="21.0cm" margin="2cm">
+                                       page-height="29.7cm" page-width="21.0cm" margin="2cm" >
                     <fo:region-body/>
                     <fo:region-before extent="1cm"/>
                     <fo:region-after extent="1cm"/>
                 </fo:simple-page-master>
             </fo:layout-master-set>
 
-            <fo:page-sequence master-reference="A4-portrait">
+            <fo:page-sequence  master-reference="A4-portrait">
 
                 <fo:static-content flow-name="xsl-region-before">
                     <fo:block text-align="left">
@@ -34,7 +34,7 @@
 
                     <xsl:for-each select="./yes-report/shop">
 
-                        <fo:block border-width="1mm" padding-before="2cm" padding-after="1cm">
+                        <fo:block border-width="1mm" padding-before="2cm" padding-after="1cm" >
                             Shop
                             <xsl:value-of select="name"/> with code
                             <xsl:value-of select="code"/>

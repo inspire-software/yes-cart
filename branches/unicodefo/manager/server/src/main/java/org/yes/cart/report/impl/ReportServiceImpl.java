@@ -185,8 +185,10 @@ public class ReportServiceImpl implements ReportService, ServletContextAware {
                 transformer.setParameter("versionParam", "2.0");
                 transformer.setOutputProperty("encoding", "UTF-8");
 
+
                 // Setup input for XSLT transformation
-                final Source src = new StreamSource(xmlfile);
+                final Source src = new StreamSource(
+                        new InputStreamReader(new FileInputStream(xmlFilename), "UTF8"));
 
                 // Resulting SAX events (the generated FO) must be piped through to FOP
                 final Result res = new SAXResult(fop.getDefaultHandler());

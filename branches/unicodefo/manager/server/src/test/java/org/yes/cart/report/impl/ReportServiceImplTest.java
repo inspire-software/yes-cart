@@ -71,10 +71,10 @@ public class ReportServiceImplTest  {
     }
 
 
-    String xmldata =  "<yes-report>\n" +
+    String xmldata =  "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><yes-report>\n" +
             "  <shop>\n" +
             "    <code>SHOIP1</code>\n" +
-            "    <name>Gadget universe</name>\n" +
+            "    <name>Gadget universe кирилица</name>\n" +
             "    <description>Gadget universe shop</description>\n" +
             "    <fspointer>gadget</fspointer>\n" +
             "    <imageVaultFolder>gadget/imagevault</imageVaultFolder>\n" +
