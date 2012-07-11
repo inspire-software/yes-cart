@@ -1,11 +1,8 @@
 package org.yes.cart.report.impl;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.yes.cart.BaseCoreDBTestCase;
-import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.report.impl.ReportObjectStreamFactory;
+import org.yes.cart.domain.entity.impl.CustomerEntity;
 
 import java.io.ObjectOutputStream;
 import java.io.StringWriter;
@@ -17,14 +14,8 @@ import static org.junit.Assert.assertTrue;
  * Date: 7/1/12
  * Time: 11:59 AM
  */
-public class ReportObjectStreamFactoryTest extends BaseCoreDBTestCase {
+public class ReportObjectStreamFactoryTest {
 
-    private EntityFactory entityFactory;
-
-    @Before
-    public void setUp() throws Exception {
-        entityFactory = (EntityFactory) ctx().getBean("internalEntityFactory");
-    }
 
 
     @Test
@@ -50,7 +41,7 @@ public class ReportObjectStreamFactoryTest extends BaseCoreDBTestCase {
     }
 
     private Customer getCustomer(String prefix) {
-        Customer customer = entityFactory.getByIface(Customer.class);
+        Customer customer = new CustomerEntity();
         customer.setEmail(prefix + "customer@shopdomain.com");
         customer.setFirstname(prefix + "Firsname");
         customer.setLastname(prefix + "Lastname");
