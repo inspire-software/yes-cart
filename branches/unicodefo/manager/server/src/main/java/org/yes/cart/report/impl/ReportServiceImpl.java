@@ -127,18 +127,9 @@ public class ReportServiceImpl implements ReportService, ServletContextAware {
 
         if (xmlFilename != null) {
 
-            final File xmlfile = new File(xmlFilename);
-
             final File xsltfile;
-            if (servletContext == null) {
-                xsltfile = new File(reportFolder + reportDescriptor.getLangXslfo(lang));
 
-            } else {
-
-                xsltfile = new File(servletContext.getRealPath(reportFolder + reportDescriptor.getLangXslfo(lang)));
-
-            }
-
+            final File xmlfile = new File(xmlFilename);
 
             final File pdffile = new File(fileName);
 
@@ -160,12 +151,13 @@ public class ReportServiceImpl implements ReportService, ServletContextAware {
                 fopFactory.setUserConfig(userConfigXml);
             }
 
-            /*Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF,
-                    foUserAgent, outputStream);
 
-            // Send data to FOP
-            readInputAsSAX(context, INPUT_DATA,
-                    fop.getDefaultHandler());      */
+            if (servletContext == null) {
+                xsltfile = new File(reportFolder + reportDescriptor.getLangXslfo(lang));
+            } else {
+                xsltfile = new File(servletContext.getRealPath(reportFolder + reportDescriptor.getLangXslfo(lang)));
+                fopFactory.getFontManager().setFontBaseURL(servletContext.getRealPath("WEB-INF"));
+            }
 
 
             // Setup output
