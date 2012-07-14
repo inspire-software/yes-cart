@@ -55,15 +55,15 @@
     </mx:VBox>
 
     <mx:RemoteObject showBusyCursor="true" id="remoteAssociationService" destination="remoteAssociationService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
 
     <mx:RemoteObject showBusyCursor="true" id="remoteProductAssociationService"
                      destination="remoteProductAssociationService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
 
@@ -127,7 +127,7 @@
 
         private function addAssociationClick(event:MouseEvent):void {
             createAssociationDialog = CreateAssociationDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CreateAssociationDialog, true));
-            createAssociationDialog.saveBtn.addEventListener("click", productSelected);
+            createAssociationDialog.saveBtn.addEventListener(MouseEvent.CLICK, productSelected);
             PopUpManager.centerPopUp(createAssociationDialog);
         }
 
@@ -142,9 +142,9 @@
             remoteProductAssociationService.create(productAssociationDTOImpl).addResponder(
                     new AsyncResponder(
                             associationsChanged,
-                            ShopManagerGlobal.instance.defaultFaultHandler
-                            )
-                    );
+                            ShopManagerGlobal.instance.defaultOnRpcMethodFault
+                    )
+            );
 
             if (createAssociationDialog.reverseCheckBox.selected) {
                 var reverseAssociation:ProductAssociationDTOImpl = getProductAssociationDTOImpl(createAssociationDialog.selectedProductDTOImpl.productId, productId);
@@ -181,7 +181,7 @@
         private function deleteAccosiationClick(event:MouseEvent):void {
             Alert.show(
                     resourceManager.getString('ProductManagementPanel', 'deleteAssociationConfirm'),
-                    resourceManager.getString('ProductManagementPanel', 'warning'),
+                    resourceManager.getString('ShopManagerApplication', 'warning'),
                     Alert.OK | Alert.CANCEL, this, deleteAssociationServiceCall, null, Alert.OK);
 
 
@@ -198,9 +198,9 @@
                 remoteProductAssociationService.remove(selecteProductAssociationDTOImpl.productassociationId).addResponder(
                         new AsyncResponder(
                                 associationsChanged,
-                                ShopManagerGlobal.instance.defaultFaultHandler
-                                )
-                        );
+                                ShopManagerGlobal.instance.defaultOnRpcMethodFault
+                        )
+                );
                 selecteProductAssociationDTOImpl = null;
             }
         }

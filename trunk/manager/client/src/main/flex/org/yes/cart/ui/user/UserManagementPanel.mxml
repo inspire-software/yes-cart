@@ -7,20 +7,15 @@
           paddingLeft="2" paddingRight="2" paddingBottom="5">
     <mx:Script>
 		<![CDATA[
+        import mx.controls.Alert;
         import mx.core.FlexGlobals;
+        import mx.events.CloseEvent;
+        import mx.events.ListEvent;
+        import mx.managers.PopUpManager;
+        import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
 
         import org.yes.cart.shopmanager.ShopManagerGlobal;
-
-        import flash.events.MouseEvent;
-
-        import mx.controls.Alert;
-        import mx.events.CloseEvent;
-        import mx.events.ListEvent;
-
-        import mx.managers.PopUpManager;
-        import mx.rpc.AsyncResponder;
-        import mx.rpc.events.FaultEvent;
 
         private var newPopUp:UserCreateEditDialog;
 
@@ -32,19 +27,12 @@
 
         }
 
-
-        private function remoteUserManagementService_faultHandler(event:FaultEvent):void {
-            Alert.show(event.toString(), resourceManager.getString('UserManagementPanel', 'communicationError'));
-            userSelected = false;
-
-        }
-
         /**
          * Call the remote method to get filtered list of managers.
          * @param event event
          * @return nothing
          */
-        private function filter_clickHandler(event:MouseEvent):void {
+        private function onApplyFilterClick(event:MouseEvent):void {
 
             userSelected = false;
             revokeOneEnabled = false;
@@ -56,7 +44,7 @@
                     lastNameFilterValue.text);
         }
 
-        private function handle_userSelectedClick(event:ListEvent):void {
+        private function onSelectUserClick(event:ListEvent):void {
 
             userSelected = this.usersDataGrid.selectedItem != null;
             if (userSelected) {
@@ -70,12 +58,6 @@
             remoteUserManagementService.getAssignedManagerRoles(email);
             remoteUserManagementService.getAvailableManagerRoles(email);
         }
-
-        private function setActionButtonsAvailability(enabled:Boolean):void {
-
-
-        }
-
 
         private function handle_availableRolesItemClick(event:ListEvent):void {
             grantOneEnabled = this.availableRolesList.selectedItem != null;
@@ -103,18 +85,18 @@
         }
 
 
-        private function newUser_clickHandler(event:MouseEvent):void {
+        private function onNewUserClick(event:MouseEvent):void {
             newPopUp = UserCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), UserCreateEditDialog, true));
-            newPopUp.saveBtn.addEventListener("click", createNewUser);
+            newPopUp.saveBtn.addEventListener(MouseEvent.CLICK, onCreateUserClick);
             newPopUp.createNewUser();
             PopUpManager.centerPopUp(newPopUp);
         }
 
-        private function editUser_clickHandler(event:Event):void {
+        private function onEditUserClick(event:Event):void {
             var selectedUser:Object = this.usersDataGrid.selectedItem;
             if (this.userSelected && selectedUser != null) {
                 newPopUp = UserCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), UserCreateEditDialog, true));
-                newPopUp.saveBtn.addEventListener("click", onUpdateUserClick);
+                newPopUp.saveBtn.addEventListener(MouseEvent.CLICK, onUpdateUserClick);
                 newPopUp.editUser(selectedUser.email, selectedUser.firstName, selectedUser.lastName);
                 PopUpManager.centerPopUp(newPopUp);
             } else {
@@ -128,7 +110,7 @@
          * @param event event to handle
          * @return nothing
          */
-        private function createNewUser(event:Event):void {
+        private function onCreateUserClick(event:Event):void {
             remoteUserManagementService.addUser(
                     newPopUp.email.text,
                     newPopUp.firstName.text,
@@ -156,16 +138,16 @@
          * @return nothing
          */
         private function loadUsers(result:Object, obj:Object = null):void {
-            filter_clickHandler(null);
+            onApplyFilterClick(null);
             PopUpManager.removePopUp(newPopUp);
         }
 
-        private function resetPasswordClickHandler(event:flash.events.MouseEvent):void {
+        private function onResetPasswordClick(event:MouseEvent):void {
             var selectedUser:Object = this.usersDataGrid.selectedItem;
             if (this.userSelected && selectedUser != null) {
                 Alert.show(
                         resourceManager.getString('UserManagementPanel', 'resetPasswordConfirm', [ selectedUser.email ]),
-                        resourceManager.getString('UserManagementPanel', 'warning'),
+                        resourceManager.getString('ShopManagerApplication', 'warning'),
                         Alert.OK | Alert.CANCEL, this, onResetPasswordConfirm, null, Alert.OK);
             }
         }
@@ -182,13 +164,13 @@
             }
         }
 
-        private function deleteUserClickHandler(event:flash.events.MouseEvent):void {
+        private function onDeleteUserClick(event:MouseEvent):void {
             var selectedUser:Object = this.usersDataGrid.selectedItem;
             if (this.userSelected && selectedUser != null) {
 
                 Alert.show(
                         resourceManager.getString('UserManagementPanel', 'deleteUserConfirm', [ selectedUser.email ]),
-                        resourceManager.getString('UserManagementPanel', 'warning'),
+                        resourceManager.getString('ShopManagerApplication', 'warning'),
                         Alert.OK | Alert.CANCEL, this, onDeleteUserConfirm, null, Alert.OK);
             }
         }
@@ -219,30 +201,32 @@
         private function onDeleteUserResult(event:ResultEvent):void {
             Alert.show(
                     resourceManager.getString('UserManagementPanel', 'userDeletedConfirm'),
-                    resourceManager.getString('UserManagementPanel', 'info'));
+                    resourceManager.getString('ShopManagerApplication', 'info'));
 
-            filter_clickHandler(null);
+            onApplyFilterClick(null);
         }
 
         private function onResetPasswordResult(event:ResultEvent):void {
 
             Alert.show(
                     resourceManager.getString('UserManagementPanel', 'passwordResetedConfirm'),
-                    resourceManager.getString('UserManagementPanel', 'info'));
+                    resourceManager.getString('ShopManagerApplication', 'info'));
 
         }
 
         private function onUpdateUserResult(event:ResultEvent):void {
-            filter_clickHandler(null);
+            onApplyFilterClick(null);
             if (newPopUp != null) {
+                newPopUp.saveBtn.removeEventListener(MouseEvent.CLICK, onUpdateUserClick);
                 PopUpManager.removePopUp(newPopUp);
                 newPopUp = null;
             }
         }
 
         private function onAddUserResult(event:ResultEvent):void {
-            filter_clickHandler(null);
+            onApplyFilterClick(null);
             if (newPopUp != null) {
+                newPopUp.saveBtn.removeEventListener(MouseEvent.CLICK, onCreateUserClick);
                 PopUpManager.removePopUp(newPopUp);
                 newPopUp = null;
             }
@@ -280,33 +264,43 @@
 
         }
 
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
         ]]>
     </mx:Script>
 
     <mx:RemoteObject showBusyCursor="true"  id="remoteUserManagementService"
                      destination="remoteUserManagementService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="remoteUserManagementService_faultHandler(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}">
 
         <mx:method id="getManagers" name="getManagers"
-                   result="onGetManagersResult(event)"/>
+                   result="onGetManagersResult(event)"
+                   fault="onRpcMethodFault(event)"/>
         <mx:method id="getAssignedManagerRoles" name="getAssignedManagerRoles"
-                   result="onGetAssignedManagerRolesResult(event)"/>
+                   result="onGetAssignedManagerRolesResult(event)"
+                   fault="onRpcMethodFault(event)"/>
         <mx:method id="getAvailableManagerRoles" name="getAvailableManagerRoles"
-                   result="onGetAvailableManagerRolesResult(event)"/>
+                   result="onGetAvailableManagerRolesResult(event)"
+                   fault="onRpcMethodFault(event)"/>
         <mx:method id="grantRole" name="grantRole"
-                   result="onGrantRoleResult(event)"/>
+                   result="onGrantRoleResult(event)"
+                   fault="onRpcMethodFault(event)"/>
         <mx:method id="revokeRole" name="revokeRole"
-                   result="onRevokeRoleResult(event)"/>
+                   result="onRevokeRoleResult(event)"
+                   fault="onRpcMethodFault(event)"/>
         <mx:method id="addUser" name="addUser"
-                   result="onAddUserResult(event)"/>
+                   result="onAddUserResult(event)"
+                   fault="onRpcMethodFault(event)"/>
         <mx:method id="updateUser" name="updateUser"
-                   result="onUpdateUserResult(event)"/>
+                   result="onUpdateUserResult(event)"
+                   fault="onRpcMethodFault(event)"/>
         <mx:method id="resetPassword" name="resetPassword"
-                   result="onResetPasswordResult(event)"/>
+                   result="onResetPasswordResult(event)"
+                   fault="onRpcMethodFault(event)"/>
         <mx:method id="deleteUser" name="deleteUser"
-                   result="onDeleteUserResult(event)"/>
+                   result="onDeleteUserResult(event)"
+                   fault="onRpcMethodFault(event)"/>
 
     </mx:RemoteObject>
 
@@ -331,34 +325,34 @@
 
 				<mx:Button label="@Resource(bundle='UserManagementPanel',key='applyFilter')"
                            toolTip="@Resource(bundle='UserManagementPanel',key='applyFilterToolTip')"
-                           click="filter_clickHandler(event)"
+                           click="onApplyFilterClick(event)"
                         />
                 <mx:Button label="@Resource(bundle='UserManagementPanel',key='newUser')"
                            toolTip="@Resource(bundle='UserManagementPanel',key='newUserToolTip')"
-                           click="newUser_clickHandler(event)"/>
+                           click="onNewUserClick(event)"/>
 
                 <mx:Button label="@Resource(bundle='UserManagementPanel',key='resetPassword')"
                            toolTip="@Resource(bundle='UserManagementPanel',key='resetPasswordToolTip')"
                            enabled="{userSelected}"
-                           click='resetPasswordClickHandler(event)'
+                           click='onResetPasswordClick(event)'
                         />
                 <mx:Button label="@Resource(bundle='UserManagementPanel',key='editUser')"
                            toolTip="@Resource(bundle='UserManagementPanel',key='editUserToolTip')"
                            enabled="{userSelected}"
-                           click="editUser_clickHandler(event)"
+                           click="onEditUserClick(event)"
                         />
                 <mx:Button label="@Resource(bundle='UserManagementPanel',key='deleteUser')"
                            toolTip="@Resource(bundle='UserManagementPanel',key='deleteUserToolTip')"
                            enabled="{userSelected}"
-                           click="deleteUserClickHandler(event)"
+                           click="onDeleteUserClick(event)"
                         />
 			</mx:HBox>
 
 			<mx:DataGrid id="usersDataGrid"
                          width="100%" height="90%"
                          doubleClickEnabled="true"
-                         itemDoubleClick="editUser_clickHandler(event)"
-                         itemClick="handle_userSelectedClick(event)">
+                         itemDoubleClick="onEditUserClick(event)"
+                         itemClick="onSelectUserClick(event)">
 				<mx:columns>
 					<mx:DataGridColumn headerText="@Resource(bundle='UserManagementPanel',key='email')" dataField="email"/>
 					<mx:DataGridColumn headerText="@Resource(bundle='UserManagementPanel',key='firstName')" dataField="firstName"/>

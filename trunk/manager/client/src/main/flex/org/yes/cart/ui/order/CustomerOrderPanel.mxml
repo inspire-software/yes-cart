@@ -5,8 +5,8 @@
 
     <mx:RemoteObject showBusyCursor="true" id="remoteCustomerOrderService"
                      destination="remoteCustomerOrderService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
     <mx:VBox width="100%" height="100%">
@@ -41,11 +41,11 @@
                 </mx:VBox>
                 <mx:Button height="100%" label="@Resource(bundle='CustomerOrderPanel',key='applyFilter')"
                            toolTip="@Resource(bundle='CustomerOrderPanel',key='applyFilterToolTip')"
-                           click="filter_clickHandler(event)"
+                           click="onApplyFilterClick(event)"
                         />
                 <mx:Button height="100%" label="@Resource(bundle='CustomerOrderPanel',key='clearFilter')"
                            toolTip="@Resource(bundle='CustomerOrderPanel',key='clearFilterToolTip')"
-                           click="cleanFilter_clickHandler(event)"
+                           click="onCleanFilterClick(event)"
                         />
             </mx:ControlBar>
             <mx:DataGrid x="0" y="0" width="100%" height="99%"
@@ -167,7 +167,7 @@
          * @param event event
          * @return nothing
          */
-        private function filter_clickHandler(event:MouseEvent):void {
+        private function onApplyFilterClick(event:MouseEvent):void {
 
             _searchCriteriaCustomerFirstName = firstNameFilterValue.text;
             _searchCriteriaCustomerLastName = lastNameFilterValue.text;
@@ -207,7 +207,7 @@
          * @param event event
          * @return nothing
          */
-        private function cleanFilter_clickHandler(event:MouseEvent):void {
+        private function onCleanFilterClick(event:MouseEvent):void {
 
             _searchCriteriaCustomerFirstName = null;
             _searchCriteriaCustomerLastName = null;

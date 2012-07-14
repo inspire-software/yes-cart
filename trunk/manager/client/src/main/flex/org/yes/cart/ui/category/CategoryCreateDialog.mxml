@@ -2,14 +2,16 @@
 				title="@Resource(bundle='CategoryCreateDialog',key='createCategory')"  showCloseButton="true" close="PopUpManager.removePopUp(this)" >
 
 
-	<mx:Label x="29" y="41" text="@Resource(bundle='CategoryCreateDialog',key='name')"/>
-
-	<mx:TextInput x="139" y="39" width="160" id="categoryName"/>
-
-	<mx:Button x="205" y="84" id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
-			   click="PopUpManager.removePopUp(this)" width="94"/>
-	<mx:Button x="103" y="84" id="saveBtn" label="@Resource(bundle='CategoryCreateDialog',key='create')"
-			   width="94"/>
+    <mx:Form>
+        <mx:FormItem label="@Resource(bundle='CategoryCreateDialog',key='name')">
+            <mx:TextInput width="160" id="categoryName"/>
+        </mx:FormItem>
+    </mx:Form>
+    <mx:ControlBar horizontalAlign="right" width="100%">
+        <mx:Button id="saveBtn" label="@Resource(bundle='CategoryCreateDialog',key='create')"/>
+        <mx:Button id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
+                   click="PopUpManager.removePopUp(this)"/>
+    </mx:ControlBar>
 
 
 	<mx:Script>

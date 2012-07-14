@@ -11,6 +11,7 @@
         import mx.controls.Alert;
         import mx.controls.DateField;
         import mx.rpc.AsyncResponder;
+        import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
 
         import org.yes.cart.report.impl.ReportDescriptor;
@@ -93,7 +94,7 @@
             okBtnCrtlBar.width = parameterForm.width;
         }
 
-        private function downloadReport(event:MouseEvent):void {
+        private function onDownloadReportClick(event:MouseEvent):void {
             //http://forums.adobe.com/message/3614898
             var fileReference:FileReference = new FileReference();
 
@@ -120,20 +121,21 @@
                     localeFilter,
                     reportDescriptor.reportId,
                     null
-            ).addResponder(
-                    new AsyncResponder(
-                            function (event:ResultEvent, obj:Object = null):void {
-                                pdf = ByteArray(event.result);
-                                Alert.show(
-                                        resourceManager.getString("ReportPanel", "reportReadyToSave"),
-                                        resourceManager.getString("ReportPanel", "info"));
-                            }
-                            ,
-                            ShopManagerGlobal.instance.defaultFaultHandler
-                    )
             );
 
         }
+
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        private function onDownloadReportResult(event:ResultEvent):void {
+            pdf = ByteArray(event.result);
+            Alert.show(
+                    resourceManager.getString("ReportPanel", "reportReadyToSave"),
+                    resourceManager.getString("ReportPanel", "info"));
+        }
+
         ]]>
     </mx:Script>
 
@@ -142,10 +144,13 @@
 
     <mx:RemoteObject showBusyCursor="true" id="remoteReportService"
                      destination="remoteReportService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}">
         <mx:makeObjectsBindable>true</mx:makeObjectsBindable>
+
+        <mx:method id="downloadReport" name="downloadReport"
+                   result="onDownloadReportResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
     </mx:RemoteObject>
 
     <mx:Canvas width="100%" height="100%">
@@ -177,7 +182,7 @@
                 <mx:Button visible="{reportComboBox.selectedItem != null}" click="createReport(event)"
                            id="okBtn" label="@Resource(bundle='ReportPanel',key='ok')"/>
 
-                <mx:Button visible="{pdf != null}" click="downloadReport(event)"
+                <mx:Button visible="{pdf != null}" click="onDownloadReportClick(event)"
                            id="saveBtn" label="@Resource(bundle='ReportPanel',key='save')"/>
 
             </mx:ControlBar>

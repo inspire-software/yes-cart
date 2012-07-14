@@ -1,4 +1,4 @@
-package org.yes.cart.util {
+package org.yes.cart.validation {
 public class DomainNameValidator {
 
     private static var topLevelDomainNames:Array =

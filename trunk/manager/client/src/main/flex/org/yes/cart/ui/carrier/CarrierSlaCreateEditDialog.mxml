@@ -9,8 +9,8 @@
 
     <mx:RemoteObject showBusyCursor="true" id="remoteShopService"
                      destination="remoteShopService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}">
 
         <mx:method id="getAllSupportedCurrenciesByShops" name="getAllSupportedCurrenciesByShops"
@@ -293,7 +293,7 @@
         private function editPriceMatrix(event:MouseEvent):void {
             Alert.show(
                     resourceManager.getString('CarrierManagementPanel', 'notImplemented'),
-                    resourceManager.getString('CarrierManagementPanel', 'warning')
+                    resourceManager.getString('ShopManagerApplication', 'warning')
                     ); //TODO
 
         }

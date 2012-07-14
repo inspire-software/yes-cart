@@ -90,6 +90,8 @@
         import mx.events.ItemClickEvent;
         import mx.managers.PopUpManager;
 
+        import org.yes.cart.util.DomainUtils;
+
 
         [Bindable]
         public var productTypeAttr:ProductTypeAttrDTOImpl;
@@ -108,8 +110,8 @@
             BindingUtils.bindProperty(productTypeAttr, "simulariry", simulariryCheckBox, "selected");
             BindingUtils.bindProperty(productTypeAttr, "navigation", navigationCheckBox, "selected");
 
-            if (!(isNaN(productTypeAttr.productTypeAttrId) || productTypeAttr.productTypeAttrId == 0)) {
-                //edit so set the comboboxes and radio buttons
+            if (DomainUtils.isPersistentPK(productTypeAttr.productTypeAttrId)) {
+                //edit so set the combo boxes and radio buttons
                 navTypeSingle.selected = (productTypeAttr.navigationType == "S");
                 navigationTypeRangeEditEnabled = navTypeRange.selected = (productTypeAttr.navigationType == "R");
 
@@ -137,7 +139,7 @@
             rangeNavigationDialog = RangeNavigationDialog(PopUpManager.createPopUp(
                     DisplayObject(FlexGlobals.topLevelApplication), RangeNavigationDialog, true));
             rangeNavigationDialog.xmlString = productTypeAttr.rangeNavigation;
-            rangeNavigationDialog.saveBtn.addEventListener("click", saveRangeNavigation);
+            rangeNavigationDialog.saveBtn.addEventListener(MouseEvent.CLICK, saveRangeNavigation);
             PopUpManager.centerPopUp(rangeNavigationDialog);
         }
 

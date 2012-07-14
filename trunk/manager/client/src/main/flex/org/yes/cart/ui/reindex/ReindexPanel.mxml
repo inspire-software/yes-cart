@@ -20,7 +20,7 @@
         }
 
 
-        protected function button1_clickHandler(event:MouseEvent):void {
+        protected function onReindexBtnClick(event:MouseEvent):void {
 
             reindexBtn.enabled = false;
             resultReady = false;
@@ -29,31 +29,33 @@
 
         }
 
-        protected function reindexService_resultHandler(event:ResultEvent):void {
-            reindexBtn.enabled = true;
-            resultText.text = resourceManager.getString("ReindexPanel", "reindexResultOk") + event.result;
-            resultReady = true;
-            reindexInProcess = false;
-
-        }
-
-
-        protected function reindexService_faultHandler(event:FaultEvent):void {
+        private function onReindexAllProductsFault(event:FaultEvent):void {
             resultText.text = resourceManager.getString("ReindexPanel", "reindexFailedOk") + event.fault;
             reindexBtn.enabled = true;
             resultReady = true;
             reindexInProcess = false;
-
         }
+
+        private function onReindexAllProductsResult(event:ResultEvent):void {
+            reindexBtn.enabled = true;
+            resultText.text = resourceManager.getString("ReindexPanel", "reindexResultOk") + event.result;
+            resultReady = true;
+            reindexInProcess = false;
+        }
+
         ]]>
 	</mx:Script>
 
 
 	<mx:RemoteObject showBusyCursor="true"  id="reindexService"
 					 destination="reindexService"
-					 result="reindexService_resultHandler(event)"
-					 fault="reindexService_faultHandler(event)"
-					 channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+					 channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="reindexAllProducts" name="reindexAllProducts"
+                   result="onReindexAllProductsResult(event)"
+                   fault="onReindexAllProductsFault(event)"/>
+
+    </mx:RemoteObject>
 
     <mx:Boolean id="resultReady">false</mx:Boolean>
     <mx:Boolean id="reindexInProcess">false</mx:Boolean>
@@ -66,7 +68,7 @@
 
 		<mx:HBox height="64" width="100%">
 			<mx:Label text="@Resource(bundle='ReindexPanel',key='startMessage')"/>
-			<mx:Button id="reindexBtn" label="@Resource(bundle='ReindexPanel',key='start')" click="button1_clickHandler(event)"/>
+			<mx:Button id="reindexBtn" label="@Resource(bundle='ReindexPanel',key='start')" click="onReindexBtnClick(event)"/>
 		</mx:HBox>
 
         <mx:Label id="resultText"

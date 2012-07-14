@@ -10,7 +10,7 @@
         import mx.rpc.events.FaultEvent;
 
         import org.yes.cart.impl.ShopDTOImpl;
-        import org.yes.cart.util.CurrencyProvider;
+        import org.yes.cart.model.CurrencyModel;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
 
         import flash.events.MouseEvent;
@@ -93,7 +93,7 @@
             } else {
                 assignedCurrency = new ArrayCollection(assignedCurrencyStr.split(","));
             }
-            availableCurrency = CurrencyProvider.getAvailableCurrencyCodes(assignedCurrency);
+            availableCurrency = CurrencyModel.getAvailableCurrencyCodes(assignedCurrency);
             addAssignedEnabled = false;
             addAvailableEnabled = false;
 
@@ -105,8 +105,8 @@
 
         }
 
-        private function onFaultHandler(event:FaultEvent):void {
-            ShopManagerGlobal.instance.defaultFaultHandler(event);
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
         }
         ]]>
     </mx:Script>
@@ -117,11 +117,11 @@
 
         <mx:method id="getSupportedCurrencies" name="getSupportedCurrencies"
                    result="onGetSupportedCurrenciesResult(event)"
-                   fault="onFaultHandler(event)"/>
+                   fault="onRpcMethodFault(event)"/>
 
         <mx:method id="updateSupportedCurrencies" name="updateSupportedCurrencies"
                    result="onUpdateSupportedCurrenciesResult(event)"
-                   fault="onFaultHandler(event)"/>
+                   fault="onRpcMethodFault(event)"/>
 
     </mx:RemoteObject>
 

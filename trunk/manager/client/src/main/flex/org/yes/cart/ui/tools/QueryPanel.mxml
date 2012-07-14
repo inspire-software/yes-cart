@@ -18,7 +18,7 @@
          * Add new tab to edit query and execute it.
          * @param event maouse event
          */
-        private function addTabHandler(event:MouseEvent):void {
+        private function onAddTabClick(event:MouseEvent):void {
 
             //queryTabNavigator.add
             var divBox:VDividedBox = new VDividedBox();
@@ -49,11 +49,11 @@
         }
 
 
-        private function deleteTabHandler(event:MouseEvent):void {
+        private function onDeleteTabClick(event:MouseEvent):void {
             queryTabNavigator.removeChildAt(queryTabNavigator.selectedIndex);
         }
 
-        private function executeQueryHandler(event:MouseEvent):void {
+        private function onExecuteQueryClick(event:MouseEvent):void {
 
             var sql:String = ((queryTabNavigator.selectedChild as VDividedBox).getChildAt(0) as TextArea).text;
 
@@ -69,7 +69,7 @@
                                     dataGrid.dataProvider = event.result;
 
                                 },
-                                ShopManagerGlobal.instance.defaultFaultHandler)
+                                ShopManagerGlobal.instance.defaultOnRpcMethodFault)
 
                 );
 
@@ -83,7 +83,7 @@
                                     dataGrid.dataProvider = event.result;
 
                                 },
-                                ShopManagerGlobal.instance.defaultFaultHandler)
+                                ShopManagerGlobal.instance.defaultOnRpcMethodFault)
 
                 );
 
@@ -97,7 +97,7 @@
                                     dataGrid.dataProvider = event.result;
 
                                 },
-                                ShopManagerGlobal.instance.defaultFaultHandler)
+                                ShopManagerGlobal.instance.defaultOnRpcMethodFault)
 
                 );
 
@@ -108,8 +108,8 @@
 </mx:Script>
 
     <mx:RemoteObject showBusyCursor="true" id="remoteBackdoorService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
                      destination="remoteBackdoorService"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
@@ -129,11 +129,11 @@
 
 
                 <mx:Button id="executeSqlBtn" toolTip="@Resource(bundle='QueryPanel',key='executeHint')"
-                           label="@Resource(bundle='QueryPanel',key='execute')" click="executeQueryHandler(event)"/>
+                           label="@Resource(bundle='QueryPanel',key='execute')" click="onExecuteQueryClick(event)"/>
                 <mx:Button id="addTabBtn" toolTip="@Resource(bundle='QueryPanel',key='newTabHint')"
-                           label="@Resource(bundle='QueryPanel',key='newTab')" click="addTabHandler(event)"/>
+                           label="@Resource(bundle='QueryPanel',key='newTab')" click="onAddTabClick(event)"/>
                 <mx:Button id="deleteTabBtn" toolTip="@Resource(bundle='QueryPanel',key='deleteTabHint')"
-                           label="@Resource(bundle='QueryPanel',key='deleteTab')" click="deleteTabHandler(event)"/>
+                           label="@Resource(bundle='QueryPanel',key='deleteTab')" click="onDeleteTabClick(event)"/>
 
             </mx:ControlBar>
 

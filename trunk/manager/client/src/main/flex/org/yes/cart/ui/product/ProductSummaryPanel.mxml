@@ -2,7 +2,7 @@
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" creationComplete="init();">
 	<mx:Form x="0" y="0">
 		<mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='code')">
-			<mx:TextInput id="codeTextInput" width="300" enabled="{ !(isNaN(productDTOImpl.productId) || productDTOImpl.productId ==0) }"/>
+			<mx:TextInput id="codeTextInput" width="300" enabled="{ DomainUtils.isPersistentPK(productDTOImpl.productId) }"/>
 		</mx:FormItem>
 		<mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='name')">
 			<mx:TextInput id="nameTextInput" width="300"/>
@@ -91,6 +91,8 @@
         import mx.binding.utils.BindingUtils;
         import mx.binding.utils.ChangeWatcher;
         import mx.events.PropertyChangeEvent;
+
+        import org.yes.cart.util.DomainUtils;
 
         private var _changedFunction:Function;
 

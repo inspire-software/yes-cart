@@ -1,4 +1,4 @@
-package org.yes.cart.util {
+package org.yes.cart.validation {
 import com.hexagonstar.util.debug.Debug;
 
 import mx.validators.ValidationResult;

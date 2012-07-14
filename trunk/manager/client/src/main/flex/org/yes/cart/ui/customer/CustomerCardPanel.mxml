@@ -5,8 +5,8 @@
 
     <mx:RemoteObject showBusyCursor="true" id="remoteCustomerCardService"
                      destination="remoteCustomerCardService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
     <mx:DataGrid x="0" y="0" width="100%" height="99%"

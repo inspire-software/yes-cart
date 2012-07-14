@@ -12,7 +12,7 @@
         import mx.events.CloseEvent;
         import mx.events.ListEvent;
         import mx.managers.PopUpManager;
-        import mx.rpc.AsyncResponder;
+        import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
 
         import org.yes.cart.impl.CarrierDTOImpl;
@@ -62,7 +62,7 @@
          * @param event event to handle
          * @return nothing
          */
-        private function handleCarrierSelectedClick(event:ListEvent):void {
+        private function onCarrierSelected(event:ListEvent):void {
             carrierSelected = this.carrierGrid.selectedItem != null;
             this.carrierSelectedAndHasNoSla = false;
             if (carrierSelected) {
@@ -87,12 +87,12 @@
          * @return nothing
          */
 
-        private function createNewCarrierClickHandler(event:MouseEvent):void {
+        private function onCreateNewCarrierClick(event:MouseEvent):void {
 
             carrierCreateEditDialog = CarrierCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CarrierCreateEditDialog, true));
             carrierCreateEditDialog.newCarrierFlag = true;
             carrierCreateEditDialog.carrierDTOImpl = new CarrierDTOImpl();
-            carrierCreateEditDialog.saveBtn.addEventListener("click", onCreateNewCarrierClick);
+            carrierCreateEditDialog.saveBtn.addEventListener(MouseEvent.CLICK, onCreateNewCarrierSaveClick);
             PopUpManager.centerPopUp(carrierCreateEditDialog);
 
         }
@@ -101,8 +101,12 @@
          * Perform carrier creation.
          * @return nothing
          */
-        private function onCreateNewCarrierClick(event:Event):void {
-            remoteCarrierService.create(carrierCreateEditDialog.carrierDTOImpl);
+        private function onCreateNewCarrierSaveClick(event:Event):void {
+            if (carrierCreateEditDialog != null) {
+                remoteCarrierService.create(carrierCreateEditDialog.carrierDTOImpl);
+                carrierCreateEditDialog.saveBtn.removeEventListener(MouseEvent.CLICK, onCreateNewCarrierSaveClick);
+                carrierCreateEditDialog = null;
+            }
         }
 
 
@@ -112,13 +116,13 @@
          * @return nothing
          */
 
-        private function editCarrierClickHandler(event:Event):void {
+        private function onEditCarrierClick(event:Event):void {
 
             if (carrierSelected && this.carrierGrid.selectedItem != null) {
                 carrierCreateEditDialog = CarrierCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CarrierCreateEditDialog, true));
                 carrierCreateEditDialog.newCarrierFlag = false;
                 carrierCreateEditDialog.carrierDTOImpl = CarrierDTOImpl(CloneUtil.clone(this.carrierGrid.selectedItem));
-                carrierCreateEditDialog.saveBtn.addEventListener("click", onUpdateCarrierClick);
+                carrierCreateEditDialog.saveBtn.addEventListener(MouseEvent.CLICK, onUpdateCarrierClick);
                 PopUpManager.centerPopUp(carrierCreateEditDialog);
             }
         }
@@ -138,13 +142,13 @@
          * @return nothing
          */
 
-        private function deleteCarrierClickHandler(event:MouseEvent):void {
+        private function onDeleteCarrierClick(event:MouseEvent):void {
 
             if (this.carrierSelected && this.carrierGrid.selectedItem != null) {
 
                 Alert.show(
                         resourceManager.getString('CarrierManagementPanel', 'deleteCarrierConfirm', [ this.carrierGrid.selectedItem.name ]),
-                        resourceManager.getString('CarrierManagementPanel', 'warning'),
+                        resourceManager.getString('ShopManagerApplication', 'warning'),
                         Alert.OK | Alert.CANCEL, this, onDeleteCarrierConfirm, null, Alert.OK);
             }
         }
@@ -170,7 +174,7 @@
          * @return nothing
          */
 
-        private function createNewCarrierSlaClickHandler(event:MouseEvent):void {
+        private function onCreateNewCarrierSlaClick(event:MouseEvent):void {
 
             if (carrierSelected && carrierGrid.selectedItem != null) {
                 var sla:CarrierSlaDTOImpl = new CarrierSlaDTOImpl();
@@ -179,7 +183,7 @@
                 carrierSlaCreateEditDialog = CarrierSlaCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CarrierSlaCreateEditDialog, true));
                 carrierSlaCreateEditDialog.newCarrierSlaFlag = true;
                 carrierSlaCreateEditDialog.carrierSlaDTOImpl = sla;
-                carrierSlaCreateEditDialog.saveBtn.addEventListener("click", onCreateNewCarrierSlaClick);
+                carrierSlaCreateEditDialog.saveBtn.addEventListener(MouseEvent.CLICK, onCreateNewCarrierSlaSaveClick);
                 PopUpManager.centerPopUp(carrierSlaCreateEditDialog);
             }
 
@@ -189,9 +193,13 @@
          * Perform carrier SLA creation.
          * @return nothing
          */
-        private function onCreateNewCarrierSlaClick(event:Event):void {
-            carrierSlaCreateEditDialog.updateModel();
-            remoteCarrierSlaService.create(carrierSlaCreateEditDialog.carrierSlaDTOImpl);
+        private function onCreateNewCarrierSlaSaveClick(event:Event):void {
+            if (carrierSlaCreateEditDialog != null) {
+                carrierSlaCreateEditDialog.updateModel();
+                remoteCarrierSlaService.create(carrierSlaCreateEditDialog.carrierSlaDTOImpl);
+                carrierSlaCreateEditDialog.saveBtn.removeEventListener(MouseEvent.CLICK, onCreateNewCarrierSlaSaveClick);
+                carrierSlaCreateEditDialog = null;
+            }
         }
 
 
@@ -201,13 +209,13 @@
          * @return nothing
          */
 
-        private function editCarrierSlaClickHandler(event:Event):void {
+        private function onEditCarrierSlaClick(event:Event):void {
 
             if (carrierSlaSelected && carrierSlaGrid.selectedItem != null) {
                 carrierSlaCreateEditDialog = CarrierSlaCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CarrierSlaCreateEditDialog, true));
                 carrierSlaCreateEditDialog.newCarrierSlaFlag = false;
                 carrierSlaCreateEditDialog.carrierSlaDTOImpl = CarrierSlaDTOImpl(CloneUtil.clone(carrierSlaGrid.selectedItem));
-                carrierSlaCreateEditDialog.saveBtn.addEventListener("click", onUpdateCarrierSlaClick);
+                carrierSlaCreateEditDialog.saveBtn.addEventListener(MouseEvent.CLICK, onUpdateCarrierSlaClick);
                 PopUpManager.centerPopUp(carrierSlaCreateEditDialog);
             }
         }
@@ -219,13 +227,13 @@
          * @return nothing
          */
 
-        private function deleteCarrierSlaClickHandler(event:MouseEvent):void {
+        private function onDeleteCarrierSlaClick(event:MouseEvent):void {
 
             if (this.carrierSlaSelected && this.carrierSlaGrid.selectedItem != null) {
 
                 Alert.show(
                         resourceManager.getString('CarrierManagementPanel', 'deleteCarrierSlaConfirm', [ this.carrierSlaGrid.selectedItem.name ]),
-                        resourceManager.getString('CarrierManagementPanel', 'warning'),
+                        resourceManager.getString('ShopManagerApplication', 'warning'),
                         Alert.OK | Alert.CANCEL, this, onDeleteCarrierSlaConfirm, null, Alert.OK);
             }
         }
@@ -243,7 +251,6 @@
                 }
             }
         }
-
 
 
         /**
@@ -267,9 +274,10 @@
         private function onCreateCarrierResult(event:ResultEvent):void {
 
             if (carrierCreateEditDialog != null) {
+                carrierCreateEditDialog.saveBtn.removeEventListener(MouseEvent.CLICK, onCreateNewCarrierClick);
                 PopUpManager.removePopUp(carrierCreateEditDialog);
+                carrierCreateEditDialog = null;
             }
-            carrierCreateEditDialog = null;
             this.carrierSelected = false;
             this.carrierSelectedAndHasNoSla = false;
             this.carrierSlaSelected = false;
@@ -285,9 +293,10 @@
 
         private function onUpdateCarrierResult(event:ResultEvent):void {
             if (carrierCreateEditDialog != null) {
+                carrierCreateEditDialog.saveBtn.removeEventListener(MouseEvent.CLICK, onUpdateCarrierClick);
                 PopUpManager.removePopUp(carrierCreateEditDialog);
+                carrierCreateEditDialog = null;
             }
-            carrierCreateEditDialog = null;
             this.carrierSelected = false;
             this.carrierSelectedAndHasNoSla = false;
             this.carrierSlaSelected = false;
@@ -303,9 +312,10 @@
 
         private function onCreateSlaResult(event:ResultEvent):void {
             if (carrierSlaCreateEditDialog != null) {
+                carrierSlaCreateEditDialog.saveBtn.removeEventListener(MouseEvent.CLICK, onCreateNewCarrierSlaClick);
                 PopUpManager.removePopUp(carrierSlaCreateEditDialog);
+                carrierSlaCreateEditDialog = null;
             }
-            carrierSlaCreateEditDialog = null;
 
             if (this.carrierSelected && carrierGrid.selectedItem != null) {
                 this.carrierSlaSelected = false;
@@ -315,9 +325,10 @@
 
         private function onUpdateSlaResult(event:ResultEvent):void {
             if (carrierSlaCreateEditDialog != null) {
+                carrierSlaCreateEditDialog.saveBtn.removeEventListener(MouseEvent.CLICK, onUpdateCarrierSlaClick);
                 PopUpManager.removePopUp(carrierSlaCreateEditDialog);
+                carrierSlaCreateEditDialog = null;
             }
-            carrierSlaCreateEditDialog = null;
 
             if (this.carrierSelected && carrierGrid.selectedItem != null) {
                 this.carrierSlaSelected = false;
@@ -333,30 +344,35 @@
 
         }
 
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
         ]]></mx:Script>
 
 
     <mx:RemoteObject showBusyCursor="true" id="remoteCarrierService"
                      destination="remoteCarrierService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}">
 
         <mx:method id="getAllCarriers" name="getAll"
-                   result="onGetAllCarriersResult(event)"/>
+                   result="onGetAllCarriersResult(event)"
+                   fault="onRpcMethodFault(event)"/>
         <mx:method id="createCarrier" name="create"
-                   result="onCreateCarrierResult(event)"/>
+                   result="onCreateCarrierResult(event)"
+                   fault="onRpcMethodFault(event)"/>
         <mx:method id="updateCarrier" name="update"
-                   result="onUpdateCarrierResult(event)"/>
+                   result="onUpdateCarrierResult(event)"
+                   fault="onRpcMethodFault(event)"/>
         <mx:method id="removeCarrier" name="remove"
-                   result="onRemoveCarrierResult(event)"/>
+                   result="onRemoveCarrierResult(event)"
+                   fault="onRpcMethodFault(event)"/>
 
     </mx:RemoteObject>
 
     <mx:RemoteObject showBusyCursor="true" id="remoteCarrierSlaService"
                      destination="remoteCarrierSlaService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}">
 
         <mx:method id="findByCarrier" name="findByCarrier"
@@ -381,25 +397,25 @@
             <mx:ControlBar>
                 <mx:Button label="@Resource(bundle='CarrierManagementPanel',key='newCarrier')"
                            toolTip="@Resource(bundle='CarrierManagementPanel',key='newCarrierHint')"
-                           click="createNewCarrierClickHandler(event)"
+                           click="onCreateNewCarrierClick(event)"
 
                         />
                 <mx:Button label="@Resource(bundle='CarrierManagementPanel',key='editCarrier')"
                            toolTip="@Resource(bundle='CarrierManagementPanel',key='editCarrierHint')"
                            enabled="{carrierSelected}"
-                           click="editCarrierClickHandler(event)"
+                           click="onEditCarrierClick(event)"
                         />
                 <mx:Button label="@Resource(bundle='CarrierManagementPanel',key='deleteCarrier')"
                            toolTip="@Resource(bundle='CarrierManagementPanel',key='deleteCarrierHint')"
                            enabled="{carrierSelectedAndHasNoSla}"
-                           click="deleteCarrierClickHandler(event)"
+                           click="onDeleteCarrierClick(event)"
 
                         />
             </mx:ControlBar>
             <mx:DataGrid id="carrierGrid"
                          doubleClickEnabled="true"
-                         itemDoubleClick="editCarrierClickHandler(event)"
-                         itemClick="handleCarrierSelectedClick(event)"
+                         itemDoubleClick="onEditCarrierClick(event)"
+                         itemClick="onCarrierSelected(event)"
                          width="100%" height="100%">
                 <mx:columns>
                     <mx:DataGridColumn width="80"
@@ -461,22 +477,22 @@
                 <mx:Button label="@Resource(bundle='CarrierManagementPanel',key='newCarrierSla')"
                            toolTip="@Resource(bundle='CarrierManagementPanel',key='newCarrierSlaHint')"
                            enabled="{carrierSelected}"
-                           click="createNewCarrierSlaClickHandler(event)"
+                           click="onCreateNewCarrierSlaClick(event)"
                         />
                 <mx:Button label="@Resource(bundle='CarrierManagementPanel',key='editCarrierSla')"
                            toolTip="@Resource(bundle='CarrierManagementPanel',key='editCarrierSlaHint')"
                            enabled="{carrierSlaSelected}"
-                           click="editCarrierSlaClickHandler(event)"
+                           click="onEditCarrierSlaClick(event)"
                         />
                 <mx:Button label="@Resource(bundle='CarrierManagementPanel',key='deleteCarrierSla')"
                            toolTip="@Resource(bundle='CarrierManagementPanel',key='deleteCarrierSlaHint')"
                            enabled="{carrierSlaSelected}"
-                           click="deleteCarrierSlaClickHandler(event)"
+                           click="onDeleteCarrierSlaClick(event)"
                         />
             </mx:ControlBar>
             <mx:DataGrid id="carrierSlaGrid"
                          doubleClickEnabled="true"
-                         itemDoubleClick="editCarrierSlaClickHandler(event)"
+                         itemDoubleClick="onEditCarrierSlaClick(event)"
                          itemClick="handleCarrierSlaSelectedClick(event)"
                          width="100%" height="100%">
                 <mx:columns>

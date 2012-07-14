@@ -12,7 +12,7 @@
 
         <mx:method id="getAllCountries" name="getAll"
                    result="onGetAllCountriesResult(event)"
-                   fault="onFaultHandler(event)"/>
+                   fault="onRpcMethodFault(event)"/>
 
 
     </mx:RemoteObject>
@@ -23,7 +23,7 @@
 
         <mx:method id="findByCountry" name="findByCountry"
                    result="onFindByCountryResult(event)"
-                   fault="onFaultHandler(event)"/>
+                   fault="onRpcMethodFault(event)"/>
 
     </mx:RemoteObject>
 
@@ -88,6 +88,8 @@
         import mx.managers.PopUpManager;
         import mx.rpc.AsyncResponder;
 
+        import org.yes.cart.util.DomainUtils;
+
         [Bindable]
         private var _warehouseDTOImpl:WarehouseDTOImpl;
 
@@ -146,12 +148,12 @@
          */
         public function createEditWarehouse(warehouse:WarehouseDTOImpl):void {
             this.warehouseDTOImpl = warehouse;
-            this.newWarehouseFlag = isNaN(warehouse.warehouseId) || warehouse.warehouseId == 0;
+            this.newWarehouseFlag = DomainUtils.isNewPK(warehouse.warehouseId);
             remoteCountryService.getAll();
         }
 
-        private function onFaultHandler(event:FaultEvent):void {
-            ShopManagerGlobal.instance.defaultFaultHandler(event);
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
         }
 
         private function onGetAllCountriesResult(event:ResultEvent):void {
@@ -183,7 +185,6 @@
             }
 
         }
-
         ]]>
 
         </mx:Script>

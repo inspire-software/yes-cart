@@ -11,7 +11,7 @@
         import mx.events.CloseEvent;
         import mx.events.ListEvent;
         import mx.managers.PopUpManager;
-        import mx.rpc.AsyncResponder;
+        import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
 
         import org.yes.cart.impl.CountryDTOImpl;
@@ -32,7 +32,7 @@
          * @param event
          * @return nothing
          */
-        private function handleCountrySelectedClick(event:ListEvent):void {
+        private function onCountrySelected(event:ListEvent):void {
             this.countrySelected = this.countryGrid.selectedItem != null;
             if (this.countrySelected) {
                 countrySelectedAndHasNoStates = false;
@@ -47,11 +47,11 @@
          * @param event event
          * @return nothing
          */
-        private function deleteCountryClickHandler(event:MouseEvent):void {
+        private function onDeleteCountryClick(event:MouseEvent):void {
             if (this.countrySelected && this.countryGrid.selectedItem != null) {
                 Alert.show(
                         resourceManager.getString('LocationManagementPanel', 'deleteCountryConfirm', [ this.countryGrid.selectedItem.countryCode ]),
-                        resourceManager.getString('LocationManagementPanel', 'warning'),
+                        resourceManager.getString('ShopManagerApplication', 'warning'),
                         Alert.OK | Alert.CANCEL, this, onDeleteCountryConfirm, null, Alert.OK);
             }
         }
@@ -79,13 +79,13 @@
          * @param event event
          * @return nothing
          */
-        private function editCountryClickHandler(event:Event):void {
+        private function onEditCountryClick(event:Event):void {
             if (this.countrySelected && this.countryGrid.selectedItem != null) {
                 countryCreateEditDialog = CountryCreateEditDialog(
                         PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CountryCreateEditDialog, true));
                 countryCreateEditDialog.newCountryFlag = false;
                 countryCreateEditDialog.countryDTOImpl = CountryDTOImpl(CloneUtil.clone(this.countryGrid.selectedItem));
-                countryCreateEditDialog.saveBtn.addEventListener("click", onUpdateCountryClick);
+                countryCreateEditDialog.saveBtn.addEventListener(MouseEvent.CLICK, onUpdateCountryClick);
                 PopUpManager.centerPopUp(countryCreateEditDialog);
             }
         }
@@ -106,12 +106,12 @@
          * @param event event
          * @return nothing
          */
-        private function newCountryClickHandler(event:MouseEvent):void {
+        private function onNewCountryClick(event:MouseEvent):void {
             countryCreateEditDialog = CountryCreateEditDialog(
                     PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CountryCreateEditDialog, true));
             countryCreateEditDialog.newCountryFlag = true;
             countryCreateEditDialog.countryDTOImpl = new CountryDTOImpl();
-            countryCreateEditDialog.saveBtn.addEventListener("click", onSaveCountryClick);
+            countryCreateEditDialog.saveBtn.addEventListener(MouseEvent.CLICK, onSaveCountryClick);
             PopUpManager.centerPopUp(countryCreateEditDialog);
         }
 
@@ -130,7 +130,7 @@
          * @param event event
          * @return nothing
          */
-        private function newStateClickHandler(event:MouseEvent):void {
+        private function onNewStateClick(event:MouseEvent):void {
             if (this.countrySelected && this.countryGrid.selectedItem != null) {
 
                 var state:StateDTOImpl = new StateDTOImpl();
@@ -140,7 +140,7 @@
                 stateCreateEditDialog.newStateFlag = true;
 
                 stateCreateEditDialog.stateDTOImpl = state;
-                stateCreateEditDialog.saveBtn.addEventListener("click", onSaveStateClick);
+                stateCreateEditDialog.saveBtn.addEventListener(MouseEvent.CLICK, onSaveStateClick);
                 PopUpManager.centerPopUp(stateCreateEditDialog);
             }
         }
@@ -151,13 +151,13 @@
          * @param event event
          * @return nothing
          */
-        private function editStateClickHandler(event:Event):void {
+        private function onEditStateClick(event:Event):void {
             if (this.stateSelected && this.stateGrid.selectedItem != null) {
                 stateCreateEditDialog = StateCreateEditDialog(
                         PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), StateCreateEditDialog, true));
                 stateCreateEditDialog.newStateFlag = false;
                 stateCreateEditDialog.stateDTOImpl = StateDTOImpl(CloneUtil.clone(this.stateGrid.selectedItem));
-                stateCreateEditDialog.saveBtn.addEventListener("click", onUpdateStateClick);
+                stateCreateEditDialog.saveBtn.addEventListener(MouseEvent.CLICK, onUpdateStateClick);
                 PopUpManager.centerPopUp(stateCreateEditDialog);
             }
         }
@@ -190,11 +190,11 @@
          * @param event event
          * @return nothing
          */
-        private function deleteStateClickHandler(event:MouseEvent):void {
+        private function onDeleteStateClick(event:MouseEvent):void {
             if (this.stateSelected && this.stateGrid.selectedItem != null) {
                 Alert.show(
                         resourceManager.getString('LocationManagementPanel', 'deleteStateConfirm', [ this.stateGrid.selectedItem.stateCode ]),
-                        resourceManager.getString('LocationManagementPanel', 'warning'),
+                        resourceManager.getString('ShopManagerApplication', 'warning'),
                         Alert.OK | Alert.CANCEL, this, onDeleteStateConfirm, null, Alert.OK);
             }
         }
@@ -219,7 +219,7 @@
          * @param event
          * @return nothing
          */
-        private function handleStateSelectedClick(event:ListEvent):void {
+        private function onStateSelected(event:ListEvent):void {
             this.stateSelected = this.stateGrid.selectedItem != null;
         }
 
@@ -246,9 +246,10 @@
         private function onUpdateCountryResult(event:ResultEvent):void {
 
             if (countryCreateEditDialog != null) {
+                countryCreateEditDialog.saveBtn.removeEventListener(MouseEvent.CLICK, onUpdateCountryClick);
                 PopUpManager.removePopUp(countryCreateEditDialog);
+                countryCreateEditDialog = null;
             }
-            countryCreateEditDialog = null;
             countrySelected = false;
             countrySelectedAndHasNoStates = false;
             stateSelected = false;
@@ -258,9 +259,10 @@
         private function onCreateCountryResult(event:ResultEvent):void {
 
             if (countryCreateEditDialog != null) {
+                countryCreateEditDialog.saveBtn.removeEventListener(MouseEvent.CLICK, onSaveCountryClick);
                 PopUpManager.removePopUp(countryCreateEditDialog);
+                countryCreateEditDialog = null;
             }
-            countryCreateEditDialog = null;
             countrySelected = false;
             countrySelectedAndHasNoStates = false;
             stateSelected = false;
@@ -271,9 +273,10 @@
         private function onUpdateStateResult(event:ResultEvent):void {
 
             if (stateCreateEditDialog != null) {
+                stateCreateEditDialog.saveBtn.removeEventListener(MouseEvent.CLICK, onUpdateStateClick);
                 PopUpManager.removePopUp(stateCreateEditDialog);
+                stateCreateEditDialog = null;
             }
-            stateCreateEditDialog = null;
             stateSelected = false;
             if (countrySelected && this.countryGrid.selectedItem != null) {
                 remoteStateService.findByCountry(this.countryGrid.selectedItem.countryCode);
@@ -284,9 +287,10 @@
         private function onCreateStateResult(event:ResultEvent):void {
 
             if (stateCreateEditDialog != null) {
+                stateCreateEditDialog.saveBtn.removeEventListener(MouseEvent.CLICK, onSaveStateClick);
                 PopUpManager.removePopUp(stateCreateEditDialog);
+                stateCreateEditDialog = null;
             }
-            stateCreateEditDialog = null;
             stateSelected = false;
             if (countrySelected && this.countryGrid.selectedItem != null) {
                 remoteStateService.findByCountry(this.countryGrid.selectedItem.countryCode);
@@ -303,30 +307,36 @@
             }
 
         }
+
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
         ]]>
     </mx:Script>
 
     <mx:RemoteObject showBusyCursor="true" id="remoteCountryService"
                      destination="remoteCountryService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}">
     
         <mx:method id="getAllCountries" name="getAll"
-                   result="onGetAllCountriesResult(event)"/>
+                   result="onGetAllCountriesResult(event)"
+                   fault="onRpcMethodFault(event)"/>
         <mx:method id="removeCountry" name="remove"
-                   result="onRemoveCountryResult(event)"/>
+                   result="onRemoveCountryResult(event)"
+                   fault="onRpcMethodFault(event)"/>
         <mx:method id="updateCountry" name="update"
-                   result="onUpdateCountryResult(event)"/>
+                   result="onUpdateCountryResult(event)"
+                   fault="onRpcMethodFault(event)"/>
         <mx:method id="createCountry" name="create"
-                   result="onCreateCountryResult(event)"/>
+                   result="onCreateCountryResult(event)"
+                   fault="onRpcMethodFault(event)"/>
         
     </mx:RemoteObject>
 
     <mx:RemoteObject showBusyCursor="true" id="remoteStateService"
                      destination="remoteStateService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}">
             
         <mx:method id="findByCountry" name="findByCountry"
@@ -350,24 +360,24 @@
             <mx:HBox paddingTop="5" width="100%">
                 <mx:Button label="@Resource(bundle='LocationManagementPanel',key='newCountry')"
                            toolTip="@Resource(bundle='LocationManagementPanel',key='newCountryHint')"
-                           click="newCountryClickHandler(event)"
+                           click="onNewCountryClick(event)"
                         />
                 <mx:Button label="@Resource(bundle='LocationManagementPanel',key='editCountry')"
                            toolTip="@Resource(bundle='LocationManagementPanel',key='editCountryHint')"
                            enabled="{countrySelected}"
-                           click="editCountryClickHandler(event)"
+                           click="onEditCountryClick(event)"
                         />
                 <mx:Button label="@Resource(bundle='LocationManagementPanel',key='deleteCountry')"
                            toolTip="@Resource(bundle='LocationManagementPanel',key='deleteCountryHint')"
                            enabled="{countrySelectedAndHasNoStates}"
-                           click="deleteCountryClickHandler(event)"
+                           click="onDeleteCountryClick(event)"
                         />
 
             </mx:HBox>
             <mx:DataGrid id="countryGrid"
                          doubleClickEnabled="true"
-                         itemDoubleClick="editCountryClickHandler(event)"
-                         itemClick="handleCountrySelectedClick(event)"
+                         itemDoubleClick="onEditCountryClick(event)"
+                         itemClick="onCountrySelected(event)"
                          width="100%" height="100%">
                 <mx:columns>
                     <mx:DataGridColumn width="80"
@@ -394,24 +404,24 @@
                 <mx:Button label="@Resource(bundle='LocationManagementPanel',key='newState')"
                            toolTip="@Resource(bundle='LocationManagementPanel',key='newStateHint')"
                            enabled="{countrySelected}"
-                           click="newStateClickHandler(event)"
+                           click="onNewStateClick(event)"
                         />
                 <mx:Button label="@Resource(bundle='LocationManagementPanel',key='editState')"
                            toolTip="@Resource(bundle='LocationManagementPanel',key='editStateHint')"
                            enabled="{stateSelected}"
-                           click="editStateClickHandler(event)"
+                           click="onEditStateClick(event)"
                         />
                 <mx:Button label="@Resource(bundle='LocationManagementPanel',key='deleteState')"
                            toolTip="@Resource(bundle='LocationManagementPanel',key='deleteStateHint')"
                            enabled="{stateSelected}"
-                           click="deleteStateClickHandler(event)"
+                           click="onDeleteStateClick(event)"
                         />
 
             </mx:HBox>
             <mx:DataGrid id="stateGrid"
                          doubleClickEnabled="true"
-                         itemDoubleClick="editStateClickHandler(event)"
-                         itemClick="handleStateSelectedClick(event)"
+                         itemDoubleClick="onEditStateClick(event)"
+                         itemClick="onStateSelected(event)"
                          width="100%" height="100%">
                 <mx:columns>
                     <mx:DataGridColumn width="80"

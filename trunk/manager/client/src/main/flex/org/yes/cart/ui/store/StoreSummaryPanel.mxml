@@ -16,6 +16,7 @@
         import mx.rpc.events.ResultEvent;
 
         import org.yes.cart.shopmanager.ShopManagerGlobal;
+        import org.yes.cart.util.DomainUtils;
 
         private var _shopDTOImpl:ShopDTOImpl;
 
@@ -39,7 +40,7 @@
             BindingUtils.bindProperty(this._shopDTOImpl, "fspointer", fspointerTextInput, "text");
             BindingUtils.bindProperty(this._shopDTOImpl, "imageVaultFolder", imgpointerTextInput, "text");
 
-            newStoreFlag = isNaN(this._shopDTOImpl.shopId) || (this._shopDTOImpl.shopId == 0);
+            newStoreFlag = DomainUtils.isNewPK(this._shopDTOImpl.shopId);
             codeTextInput.enabled = newStoreFlag;
 
             initWatchers();
@@ -69,7 +70,7 @@
             _shopDTOImpl = value;
         }
 
-        private function saveBtnClickHandler(event:flash.events.MouseEvent):void {
+        private function onSaveBtnClick(event:flash.events.MouseEvent):void {
 
             if (newStoreFlag) {
                 remoteShopService.create(_shopDTOImpl);
@@ -78,8 +79,8 @@
             }
         }
 
-        private function onFaultHandler(event:FaultEvent):void {
-            ShopManagerGlobal.instance.defaultFaultHandler(event);
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
         }
 
         private function onCreateResult(event:ResultEvent):void {
@@ -104,10 +105,10 @@
 
         <mx:method id="create" name="create"
                    result="onCreateResult(event)"
-                   fault="onFaultHandler(event)"/>
+                   fault="onRpcMethodFault(event)"/>
         <mx:method id="update" name="update"
                    result="onUpdateResult(event)"
-                   fault="onFaultHandler(event)"/>
+                   fault="onRpcMethodFault(event)"/>
 
     </mx:RemoteObject>
 
@@ -130,7 +131,7 @@
     </mx:Form>
     <mx:ControlBar horizontalAlign="left">
         <mx:Button id="saveBtn"
-                   click="saveBtnClickHandler(event)"
+                   click="onSaveBtnClick(event)"
                    label="@Resource(bundle='StoreSummaryPanel',key='save')"
                    enabled="{dtoChangedFlag}"
                    />

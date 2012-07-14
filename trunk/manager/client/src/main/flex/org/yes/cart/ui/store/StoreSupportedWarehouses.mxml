@@ -22,7 +22,7 @@
             remoteWarehouseService.getAll();
         }
 
-        private function assignWarehouseHandler(event:Event):void {
+        private function onAssignWarehouseClick(event:Event):void {
 
             if (this.addAvailableEnabled && this.availableWarehousesList.selectedItem != null) {
                 remoteWarehouseService.assignWarehouse(
@@ -32,7 +32,7 @@
 
         }
 
-        private function unassignWarehouseHandler(event:Event):void {
+        private function onUnassignWarehouseClick(event:Event):void {
 
             if (this.addAssignedEnabled && this.assignedWarehousesList.selectedItem != null) {
                 remoteWarehouseService.unassignWarehouse(
@@ -40,17 +40,17 @@
             }
         }
 
-        private function availableWarehousesSelected(event:Event):void {
+        private function onAvailableWarehouseSelected(event:Event):void {
             addAvailableEnabled = this.availableWarehousesList.selectedItem != null;
         }
 
-        private function assignedWarehouseSelected(event:Event):void {
+        private function onAssignedWarehouseSelected(event:Event):void {
             addAssignedEnabled = this.assignedWarehousesList.selectedItem != null;
         }
 
 
-        private function onFaultHandler(event:FaultEvent):void {
-            ShopManagerGlobal.instance.defaultFaultHandler(event);
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
         }
 
 
@@ -97,7 +97,6 @@
         private function onAssignWarehouseResult(event:ResultEvent):void {
             remoteWarehouseService.getAll();
         }
-
         ]]>
     </mx:Script>
 
@@ -107,19 +106,19 @@
 
         <mx:method id="getAll" name="getAll"
                    result="onGetAllResult(event)"
-                   fault="onFaultHandler(event)"/>
+                   fault="onRpcMethodFault(event)"/>
 
         <mx:method id="findByShopId" name="findByShopId"
                    result="onFindByShopIdResult(event)"
-                   fault="onFaultHandler(event)"/>
+                   fault="onRpcMethodFault(event)"/>
 
         <mx:method id="unassignWarehouse" name="unassignWarehouse"
                    result="onUnassignWarehouseResult(event)"
-                   fault="onFaultHandler(event)"/>
+                   fault="onRpcMethodFault(event)"/>
 
         <mx:method id="assignWarehouse" name="assignWarehouse"
                    result="onAssignWarehouseResult(event)"
-                   fault="onFaultHandler(event)"/>
+                   fault="onRpcMethodFault(event)"/>
 
     </mx:RemoteObject>
 
@@ -151,8 +150,8 @@
                         dataProvider="{availableWarehouses}"
                         labelField="name"
                         doubleClickEnabled="true"
-                        doubleClick="assignWarehouseHandler(event)"
-                        itemClick="availableWarehousesSelected(event)"
+                        doubleClick="onAssignWarehouseClick(event)"
+                        itemClick="onAvailableWarehouseSelected(event)"
                         >
                 </mx:List>
             </mx:GridItem>
@@ -161,11 +160,11 @@
                     <mx:Button enabled="{addAvailableEnabled}"
                                label="@Resource(bundle='StoresManagementPanel',key='assign')"
                                toolTip="@Resource(bundle='StoresManagementPanel',key='assignHint')"
-                               click="assignWarehouseHandler(event)"/>
+                               click="onAssignWarehouseClick(event)"/>
                     <mx:Button enabled="{addAssignedEnabled}"
                                label="@Resource(bundle='StoresManagementPanel',key='unassign')"
                                toolTip="@Resource(bundle='StoresManagementPanel',key='unassignHint')"
-                               click="unassignWarehouseHandler(event)"/>
+                               click="onUnassignWarehouseClick(event)"/>
                 </mx:VBox>
             </mx:GridItem>
             <mx:GridItem width="45%" height="100%">
@@ -176,8 +175,8 @@
                         dataProvider="{assignedWarehouses}"
                         labelField="name"
                         doubleClickEnabled="true"
-                        itemDoubleClick="unassignWarehouseHandler(event)"
-                        itemClick="assignedWarehouseSelected(event)"
+                        itemDoubleClick="onUnassignWarehouseClick(event)"
+                        itemClick="onAssignedWarehouseSelected(event)"
                         >
 
                 </mx:List>

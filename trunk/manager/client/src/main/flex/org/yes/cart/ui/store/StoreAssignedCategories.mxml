@@ -23,6 +23,7 @@
         import org.yes.cart.impl.ShopDTOImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
         import org.yes.cart.ui.CategoryTreeDescriptor;
+        import org.yes.cart.util.DomainUtils;
 
         public var shopDto:ShopDTOImpl;
 
@@ -50,8 +51,10 @@
          * @param event selection event
          * @return nothing
          */
-        private function categorySelectedEvent(event:ListEvent):void {
-            this.availableSelected = this.categoryTree.selectedItem != null && !isCategoryAlreadyAssigned(this.categoryTree.selectedItem);
+        private function onCategorySelected(event:ListEvent):void {
+            this.availableSelected = this.categoryTree.selectedItem != null &&
+                    !DomainUtils.isRootCategory(this.categoryTree.selectedItem) &&
+                    !isCategoryAlreadyAssigned(this.categoryTree.selectedItem);
             Debug.trace("Selected to assing category dto id is :" + this.categoryTree.selectedItem);
         }
 
@@ -60,7 +63,7 @@
          * @param event selection event
          * @return nothing
          */
-        private function categoryToUnassignSelectedEvent(event:ListEvent):void {
+        private function onCategoryToUnassignSelected(event:ListEvent):void {
             this.assignedSelected = this.assignedCategoriesList.selectedItem != null;
             Debug.trace("Selected to unassing category dto id is :" + this.assignedCategoriesList.selectedItem);
 
@@ -71,7 +74,7 @@
          * @param event event
          * @return nothing.
          */
-        private function assignCategoryClickHandler(event:Event):void {
+        private function onAssignCategoryClick(event:Event):void {
             if (this.availableSelected && this.categoryTree.selectedItem != null) {
                 var selectedId:Object = this.categoryTree.selectedItem.categoryId;
                 for each (var cat:CategoryDTOImpl in this.assignedCategoriesList.dataProvider) {
@@ -89,7 +92,7 @@
          * @param event event
          * @return nothing.
          */
-        private function unassignCategoryClickHandler(event:Event):void {
+        private function onUnassignCategoryClick(event:Event):void {
             if (this.assignedSelected && this.assignedCategoriesList.selectedItem != null) {
                 remoteCategoryService.unassignFromShop(this.assignedCategoriesList.selectedItem.categoryId, shopDto.shopId);
             }
@@ -101,7 +104,8 @@
             categoryTree.dataDescriptor = new CategoryTreeDescriptor(assignedCategoriesList);
             remoteCategoryService.getAllByShopId(shopDto.shopId);
             if (categoryTree.dataProvider.length > 0) {
-                categoryTree.expandItem(categoryTree.dataProvider.getItemAt(0), true, true);
+                categoryTree.openItems = [ categoryTree.dataProvider.getItemAt(0) ];
+                categoryTree.expandItem(categoryTree.dataProvider.getItemAt(0), true);
                 categoryTree.validateNow();
             }
 
@@ -117,8 +121,8 @@
 
         }
 
-        private function onFaultHandler(event:FaultEvent):void {
-            ShopManagerGlobal.instance.defaultFaultHandler(event);
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
         }
 
         private function onAssignToShopResult(event:ResultEvent):void {
@@ -140,16 +144,16 @@
 
         <mx:method id="getAll" name="getAll"
                    result="onGetAllResult(event)"
-                   fault="onFaultHandler(event)"/>
+                   fault="onRpcMethodFault(event)"/>
         <mx:method id="getAllByShopId" name="getAllByShopId"
                    result="onGetAllByShopIdResult(event)"
-                   fault="onFaultHandler(event)"/>
+                   fault="onRpcMethodFault(event)"/>
         <mx:method id="assignToShop" name="assignToShop"
                    result="onAssignToShopResult(event)"
-                   fault="onFaultHandler(event)"/>
+                   fault="onRpcMethodFault(event)"/>
         <mx:method id="unassignFromShop" name="unassignFromShop"
                    result="onUnAssignFromShopResult(event)"
-                   fault="onFaultHandler(event)"/>
+                   fault="onRpcMethodFault(event)"/>
 
     </mx:RemoteObject>
 
@@ -162,8 +166,8 @@
         <mx:Tree height="100%" width="100%" id="categoryTree"
                  labelField="name"
                  doubleClickEnabled="true"
-                 itemDoubleClick="assignCategoryClickHandler(event)"
-                 itemClick="categorySelectedEvent(event)"
+                 itemDoubleClick="onAssignCategoryClick(event)"
+                 itemClick="onCategorySelected(event)"
                 />
     </mx:VBox>
     <mx:VBox width="10%" height="100%" verticalAlign="middle" horizontalAlign="center">
@@ -171,14 +175,14 @@
                    toolTip="@Resource(bundle='StoresManagementPanel',key='assignHint')"
                    width="70" id="assignCategoryBtn"
                    enabled="{availableSelected}"
-                   click="assignCategoryClickHandler(event);"
+                   click="onAssignCategoryClick(event);"
                 />
         <mx:Button
                 label="@Resource(bundle='StoresManagementPanel',key='unassign')"
                 toolTip="@Resource(bundle='StoresManagementPanel',key='unassignHint')"
                 width="70" id="unassignCategoryBtn"
                 enabled="{assignedSelected}"
-                click="unassignCategoryClickHandler(event);"
+                click="onUnassignCategoryClick(event);"
                 />
     </mx:VBox>
     <mx:VBox width="45%" height="100%">
@@ -186,8 +190,8 @@
         <mx:List height="100%" width="100%" id="assignedCategoriesList"
                  labelField="name"
                  doubleClickEnabled="true"
-                 itemDoubleClick="unassignCategoryClickHandler(event)"
-                 itemClick="categoryToUnassignSelectedEvent(event);"
+                 itemDoubleClick="onUnassignCategoryClick(event)"
+                 itemClick="onCategoryToUnassignSelected(event);"
                 />
     </mx:VBox>
 </mx:HBox>
