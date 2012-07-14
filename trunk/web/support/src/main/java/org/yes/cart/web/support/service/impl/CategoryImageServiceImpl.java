@@ -54,7 +54,7 @@ public class CategoryImageServiceImpl extends AbstractImageServiceImpl implement
      * particular strategy.
      * @param attributable given attributable.
      * @param attrName  attribute name
-     * @return attibute value if found, otherwise default strategy label.
+     * @return attribute value if found, otherwise default strategy label.
      */
     public String getImageAttributeValue(final Attributable attributable, final String attrName) {
         final AttrValue attrValue = attributable.getAttributeByCode(attrName);

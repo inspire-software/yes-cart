@@ -51,7 +51,7 @@ public abstract class AbstractImageServiceImpl implements AttributableImageServi
      * Get attribute value.
      * @param attributable given attributable.
      * @param attrName  attribute name
-     * @return attibute value if found, otherwise noimage will be returned.
+     * @return attribute value if found, otherwise noimage will be returned.
      */
     public String getImageAttributeValue(final Attributable attributable, final String attrName) {
         final AttrValue attrValue = attributable.getAttributeByCode(attrName);
