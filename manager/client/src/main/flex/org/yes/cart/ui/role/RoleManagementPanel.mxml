@@ -7,49 +7,45 @@
           paddingLeft="2" paddingRight="2" paddingBottom="5">
     <mx:Script>
 		<![CDATA[
+        import mx.controls.Alert;
         import mx.core.FlexGlobals;
+        import mx.events.CloseEvent;
         import mx.events.ListEvent;
+        import mx.managers.PopUpManager;
+        import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
 
         import org.yes.cart.shopmanager.ShopManagerGlobal;
-
-        import flash.events.MouseEvent;
-
-        import mx.controls.Alert;
-        import mx.events.CloseEvent;
-        import mx.events.ListEvent;
-
-        import mx.managers.PopUpManager;
 
         public function init():void {
             remoteUserManagementService.getRolesList();
         }
 
-        private function handle_roleSelectedClick(event:ListEvent):void {
+        private function onRoleSelected(event:ListEvent):void {
             roleSelected = this.roleDataGrid.selectedItem != null;
         }
 
 
         private var newPopUp:RoleCreateEditDialog;
 
-        private function newRole_clickHandler(event:MouseEvent):void {
+        private function onNewRoleClick(event:MouseEvent):void {
             newPopUp = RoleCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), RoleCreateEditDialog, true));
-            newPopUp.saveBtn.addEventListener("click", createNewRole);
+            newPopUp.saveBtn.addEventListener(MouseEvent.CLICK, onCreateRoleClick);
             newPopUp.createNewRole();
             PopUpManager.centerPopUp(newPopUp);
         }
 
-        private function editRole_clickHandler(event:Event):void {
+        private function onEditRoleClick(event:Event):void {
             var selectedRole:Object = this.roleDataGrid.selectedItem;
             if (selectedRole != null) {
                 newPopUp = RoleCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), RoleCreateEditDialog, true));
-                newPopUp.saveBtn.addEventListener("click", onUpdateRoleClick);
+                newPopUp.saveBtn.addEventListener(MouseEvent.CLICK, onUpdateRoleClick);
                 newPopUp.editRole(selectedRole.code, selectedRole.description);
                 PopUpManager.centerPopUp(newPopUp);
             }
         }
 
-        private function createNewRole(event:Event):void {
+        private function onCreateRoleClick(event:Event):void {
 
             remoteUserManagementService.addRole(
                     newPopUp.role.text,
@@ -68,11 +64,11 @@
         }
 
 
-        private function deleteRoleClickHandler(event:flash.events.MouseEvent):void {
+        private function onDeleteRoleClick(event:MouseEvent):void {
             if (this.roleSelected) {
                 Alert.show(
                         resourceManager.getString('RoleManagementPanel', 'deleteRoleConfirm', [ this.roleDataGrid.selectedItem.code ]),
-                        resourceManager.getString('RoleManagementPanel', 'warning'),
+                        resourceManager.getString('ShopManagerApplication', 'warning'),
                         Alert.OK | Alert.CANCEL, this, onDeleteRoleConfirm, null, Alert.OK);
             }
         }
@@ -92,13 +88,21 @@
         }
 
         private function onAddRoleResult(event:ResultEvent):void {
-            PopUpManager.removePopUp(newPopUp);
+            if (newPopUp != null) {
+                newPopUp.saveBtn.removeEventListener(MouseEvent.CLICK, onCreateRoleClick);
+                PopUpManager.removePopUp(newPopUp);
+                newPopUp = null;
+            }
             remoteUserManagementService.getRolesList();
             roleSelected = false;
         }
 
         private function onUpdateRoleResult(event:ResultEvent):void {
-            PopUpManager.removePopUp(newPopUp);
+            if (newPopUp != null) {
+                newPopUp.saveBtn.removeEventListener(MouseEvent.CLICK, onUpdateRoleClick);
+                PopUpManager.removePopUp(newPopUp);
+                newPopUp = null;
+            }
             remoteUserManagementService.getRolesList();
             roleSelected = false;
         }
@@ -106,30 +110,36 @@
         private function onDeleteRoleResult(event:ResultEvent):void {
             Alert.show(
                     resourceManager.getString('RoleManagementPanel', 'roleDeletedConfirm'),
-                    resourceManager.getString('RoleManagementPanel', 'info'));
+                    resourceManager.getString('ShopManagerApplication', 'info'));
             remoteUserManagementService.getRolesList();
             roleSelected = false;
+        }
+
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
         }
         ]]>
     </mx:Script>
 
     <mx:RemoteObject showBusyCursor="true"  id="remoteUserManagementService"
                      destination="remoteUserManagementService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}">
 
         <mx:method id="getRolesList" name="getRolesList"
-                   result="onGetRolesListResult(event)"/>
+                   result="onGetRolesListResult(event)"
+                   fault="onRpcMethodFault(event)"/>
 
         <mx:method id="addRole" name="addRole"
-                   result="onAddRoleResult(event)"/>
+                   result="onAddRoleResult(event)"
+                   fault="onRpcMethodFault(event)"/>
 
         <mx:method id="updateRole" name="updateRole"
-                   result="onUpdateRoleResult(event)"/>
+                   result="onUpdateRoleResult(event)"
+                   fault="onRpcMethodFault(event)"/>
 
         <mx:method id="deleteRole" name="deleteRole"
-                   result="onDeleteRoleResult(event)"/>
+                   result="onDeleteRoleResult(event)"
+                   fault="onRpcMethodFault(event)"/>
 
     </mx:RemoteObject>
 
@@ -141,21 +151,21 @@
 
         <mx:Button label="@Resource(bundle='RoleManagementPanel',key='newRole')"
                    toolTip="@Resource(bundle='RoleManagementPanel',key='newRoleToolTip')"
-                   click="newRole_clickHandler(event)"/>
+                   click="onNewRoleClick(event)"/>
         <mx:Button label="@Resource(bundle='RoleManagementPanel',key='editRole')"
                    toolTip="@Resource(bundle='RoleManagementPanel',key='editRoleToolTip')"
                    enabled="{roleSelected}"
-                   click="editRole_clickHandler(event)"/>
+                   click="onEditRoleClick(event)"/>
         <mx:Button label="@Resource(bundle='RoleManagementPanel',key='deleteRole')"
                    toolTip="@Resource(bundle='RoleManagementPanel',key='deleteRoleToolTip')"
                    enabled="{roleSelected}"
-                   click="deleteRoleClickHandler(event)"/>
+                   click="onDeleteRoleClick(event)"/>
     </mx:HBox>
     <mx:DataGrid id="roleDataGrid"
                  width="100%" height="100%"
                  doubleClickEnabled="true"
-                 itemDoubleClick="editRole_clickHandler(event)"
-                 itemClick="handle_roleSelectedClick(event)">
+                 itemDoubleClick="onEditRoleClick(event)"
+                 itemClick="onRoleSelected(event)">
         <mx:columns>
             <mx:DataGridColumn headerText="@Resource(bundle='RoleManagementPanel',key='role')" dataField="code"/>
             <mx:DataGridColumn headerText="@Resource(bundle='RoleManagementPanel',key='description')" dataField="description"/>

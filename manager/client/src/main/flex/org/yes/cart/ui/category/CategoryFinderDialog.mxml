@@ -24,8 +24,8 @@
     </mx:VBox>
 
     <mx:RemoteObject showBusyCursor="true" id="remoteCategoryService" destination="remoteCategoryService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
 

@@ -9,6 +9,7 @@
         import mx.rpc.AsyncResponder;
         import mx.rpc.AsyncToken;
         import mx.rpc.events.ResultEvent;
+
         import org.yes.cart.impl.ShopDTOImpl;
 
         import org.yes.cart.shopmanager.ShopManagerGlobal;
@@ -21,7 +22,7 @@
             remoteShopService.getAll().addResponder(
                     new AsyncResponder(
                             readCustomerShop,
-                            ShopManagerGlobal.instance.defaultFaultHandler
+                            ShopManagerGlobal.instance.defaultOnRpcMethodFault
                     )
             );
 
@@ -33,9 +34,9 @@
 
             remoteShopService.getAssignedShop(customerId).addResponder(new AsyncResponder(
                     function (event:ResultEvent, obj:Object = null):void {
-                        
+
                         assignedShop = new Array(event.result);
-                        for (var shop:Object in remoteShopService.getAll.lastResult ) {
+                        for (var shop:Object in remoteShopService.getAll.lastResult) {
 
                             var found:Boolean = false;
 
@@ -51,7 +52,7 @@
                         }
                     }
                     ,
-                    ShopManagerGlobal.instance.defaultFaultHandler
+                    ShopManagerGlobal.instance.defaultOnRpcMethodFault
             )
             );
 
@@ -66,7 +67,7 @@
          */
         private function shopName(item:Object):String {
 
-            try  {
+            try {
 
                 if (item != null) {
                     return (item as ShopDTOImpl).name;
@@ -76,27 +77,23 @@
                 }
 
             }
-            catch( error:Error )
-
-            {
+            catch (error:Error) {
                 var e2:String = "none";
                 if (item is ShopDTOImpl) {
 
                     e2 = "yessss";
 
                 }
-                var emsg:String = error.toString() + " --- " + item + "   ++++ " + e2 ;
+                var emsg:String = error.toString() + " --- " + item + "   ++++ " + e2;
                 Alert.show("eoorrroor", emsg);
-                
-                
+
+
             }
-            
+
             return "asdfasdf";
 
-            
 
         }
-
         ]]>
     </mx:Script>
 
@@ -107,8 +104,8 @@
 
     <mx:RemoteObject showBusyCursor="true" id="remoteShopService"
                      destination="remoteShopService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
 

@@ -9,8 +9,6 @@ import mx.collections.*;
 [Bindable]
 public class CategoryTreeItemRenderer  extends TreeItemRenderer {
 
-    private var categoryDto:CategoryDTOImpl;
-
     public function CategoryTreeItemRenderer() {
         super();
     }
@@ -18,7 +16,7 @@ public class CategoryTreeItemRenderer  extends TreeItemRenderer {
     override public function set data(value:Object):void {
         if (value != null) {
             super.data = value;
-            categoryDto = CategoryDTOImpl(value);
+            var categoryDto:CategoryDTOImpl = value as CategoryDTOImpl;
             if (categoryDto.changed) {
                 setStyle("color", 0x660000);
                 setStyle("fontWeight", 'bold');

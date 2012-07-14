@@ -69,25 +69,23 @@
             />
 
     <mx:RemoteObject showBusyCursor="true" id="remoteWarehouseService" destination="remoteWarehouseService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
     <!--<mx:RemoteObject showBusyCursor="true" id="remoteBackdoorService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
                      destination="remoteBackdoorService"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>-->
 
     <mx:RemoteObject showBusyCursor="true" id="remoteProductService" destination="remoteProductService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
     <mx:RemoteObject showBusyCursor="true" id="remoteProductSkuService"
                      destination="remoteProductSkuService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
 
@@ -144,9 +142,9 @@
                                             }
 
                                         },
-                                        ShopManagerGlobal.instance.defaultFaultHandler));
+                                        ShopManagerGlobal.instance.defaultOnRpcMethodFault));
                             },
-                            ShopManagerGlobal.instance.defaultFaultHandler
+                            ShopManagerGlobal.instance.defaultOnRpcMethodFault
                     )
             );
 
@@ -170,7 +168,7 @@
         private function deleteQuantity(event:MouseEvent):void {
             Alert.show(
                     resourceManager.getString('ProductManagementPanel', 'deleteQuantityConfirm'),
-                    resourceManager.getString('ProductManagementPanel', 'warning'),
+                    resourceManager.getString('ShopManagerApplication', 'warning'),
                     Alert.OK | Alert.CANCEL, this, deleteQuantityServiceCall, null, Alert.OK);
         }
 
@@ -180,7 +178,7 @@
                 remoteWarehouseService.removeSkuOnWarehouse(selectedSkuWarehouse.skuWarehouseId).addResponder(
                         new AsyncResponder(
                                 skusOnWarehouseChanged,
-                                ShopManagerGlobal.instance.defaultFaultHandler));
+                                ShopManagerGlobal.instance.defaultOnRpcMethodFault));
                 selectedSkuWarehouse = null;
             }
         }
@@ -206,7 +204,7 @@
         private function editQuantity(event:MouseEvent):void {
             createQuantityDialog = CreateQuantityDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CreateQuantityDialog, true));
             createQuantityDialog.skuComboBox.dataProvider = remoteProductSkuService.getAllProductSkus.lastResult;
-            createQuantityDialog.saveBtn.addEventListener("click", updateSkuWarehouseServiceCall);
+            createQuantityDialog.saveBtn.addEventListener(MouseEvent.CLICK, updateSkuWarehouseServiceCall);
             createQuantityDialog.editSkuQuantity(selectedSkuWarehouse);
             PopUpManager.centerPopUp(createQuantityDialog);
 
@@ -221,7 +219,7 @@
         private function addQuantity(event:MouseEvent):void {
             createQuantityDialog = CreateQuantityDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CreateQuantityDialog, true));
             createQuantityDialog.skuComboBox.dataProvider = remoteProductSkuService.getAllProductSkus.lastResult;
-            createQuantityDialog.saveBtn.addEventListener("click", createSkuWarehouseServiceCall);
+            createQuantityDialog.saveBtn.addEventListener(MouseEvent.CLICK, createSkuWarehouseServiceCall);
             createQuantityDialog.createSkuQuantity();
             PopUpManager.centerPopUp(createQuantityDialog);
         }
@@ -241,7 +239,7 @@
             remoteWarehouseService.createSkuOnWarehouse(swh).addResponder(
                     new AsyncResponder(
                             skusOnWarehouseChanged,
-                            ShopManagerGlobal.instance.defaultFaultHandler
+                            ShopManagerGlobal.instance.defaultOnRpcMethodFault
                     )
             );
             PopUpManager.removePopUp(createQuantityDialog);
@@ -259,7 +257,7 @@
             remoteWarehouseService.updateSkuOnWarehouse(swh).addResponder(
                     new AsyncResponder(
                             skusOnWarehouseChanged,
-                            ShopManagerGlobal.instance.defaultFaultHandler));
+                            ShopManagerGlobal.instance.defaultOnRpcMethodFault));
             PopUpManager.removePopUp(createQuantityDialog);
             createQuantityDialog = null;
 

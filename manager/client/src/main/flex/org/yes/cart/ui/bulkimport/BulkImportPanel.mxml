@@ -27,7 +27,7 @@
          * @param event event.
          * @return nothing
          */
-        protected function importClickHandler(event:MouseEvent):void {
+        protected function onImportClick(event:MouseEvent):void {
 
         }
 
@@ -36,7 +36,7 @@
          * @param event event.
          * @return nothing
          */
-        protected function selectFileClickHandler(event:MouseEvent):void {
+        protected function onSelectFileClick(event:MouseEvent):void {
 
             loadFileRef = new FileReference();
             loadFileRef.addEventListener(Event.SELECT, onFileSelect);
@@ -76,7 +76,7 @@
         }
 
 
-        protected function import_resultHandler(event:ResultEvent):void {
+        protected function onImportResult(event:ResultEvent):void {
             Debug.trace("INFO Bulk import result is " + bulkImportService.doImport.lastResult);
             resultText.text = resourceManager.getString("BulkImportPanel", "importResult");
             resultDetails.text = bulkImportService.doImport.lastResult;
@@ -87,7 +87,7 @@
         }
 
 
-        protected function import_faultHandler(event:FaultEvent):void {
+        protected function onImportFault(event:FaultEvent):void {
             Debug.trace("FAULT Bulk import fault");
             Debug.traceObj(event);
             resultText.text = resourceManager.getString("BulkImportPanel", "importFailed");
@@ -97,7 +97,7 @@
             Debug.trace("INFO current state is readyToImport");
         }
 
-        protected function uploadToServer_resultHandler(event:ResultEvent):void {
+        protected function onUploadToServerResult(event:ResultEvent):void {
             Debug.trace("INFO uploaded file on server " + remoteUploadService.upload.lastResult);
             bulkImportService.doImport(remoteUploadService.upload.lastResult);
         }
@@ -107,15 +107,15 @@
 
     <mx:RemoteObject showBusyCursor="true" id="bulkImportService"
                      destination="bulkImportService"
-                     result="import_resultHandler(event)"
-                     fault="import_faultHandler(event)"
+                     result="onImportResult(event)"
+                     fault="onImportFault(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
 
     <mx:RemoteObject showBusyCursor="true" id="remoteUploadService"
                      destination="remoteUploadService"
-                     result="uploadToServer_resultHandler(event)"
-                     fault="import_faultHandler(event)"
+                     result="onUploadToServerResult(event)"
+                     fault="onImportFault(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
     <mx:Boolean id="resultReady">false</mx:Boolean>
@@ -129,7 +129,7 @@
                 <mx:FormHeading label="@Resource(bundle='BulkImportPanel',key='importMessage')"/>
                 <mx:FormItem label="@Resource(bundle='BulkImportPanel',key='selectFile')">
                     <mx:Button id="selectFileBtn" label="@Resource(bundle='BulkImportPanel',key='open')"
-                               click="selectFileClickHandler(event)"/>
+                               click="onSelectFileClick(event)"/>
                 </mx:FormItem>
 
             </mx:Form>

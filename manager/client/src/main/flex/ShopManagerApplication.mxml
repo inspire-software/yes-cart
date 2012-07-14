@@ -6,11 +6,7 @@
                 minWidth="800"
                 minHeight="600"
                 creationComplete="init();"
-                creationCompleteEffect="Zoom"
-                xmlns:component="com.*"
-
-
-        >
+                creationCompleteEffect="Zoom">
 
     <mx:Script>
 		<![CDATA[
@@ -54,8 +50,8 @@
 
         public function init():void {
             currentState = "loginState";
-            var url:String = "http://{server.name}:{server.port}/yes-manager/spring/amf";
-            // var url:String = "http://localhost:8080/yes-manager/spring/amf";
+            //var url:String = "http://{server.name}:{server.port}/yes-manager/spring/amf";
+            var url:String = "http://localhost:8080/yes-manager/spring/amf";
 
             ShopManagerGlobal.instance.url = url;
 
@@ -105,31 +101,19 @@
 
         }
 
-        /**
-         * product reindexing.
-         * @param event mouse event
-         */
-        protected function reindex_clickHandler(event:MouseEvent):void {
+        private function onReindexClick(event:MouseEvent):void {
             setFontWeight(reindexBtn);
             mainPanel.removeAllChildren();
             mainPanel.addChild(new ReindexPanel());
         }
 
-        /**
-         * product reindexing.
-         * @param event mouse event
-         */
-        protected function reportBtn_clickHandler(event:MouseEvent):void {
+        private function onReportClick(event:MouseEvent):void {
             setFontWeight(reportBtn);
             mainPanel.removeAllChildren();
             mainPanel.addChild(new ReportPanel());
         }
 
-        /**
-         * product reindexing.
-         * @param event mouse event
-         */
-        protected function help_clickHandler(event:MouseEvent):void {
+        private function onHelpClick(event:MouseEvent):void {
             Alert.show(
                     resourceManager.getString('ShopManagerApplication', 'revLabel') + resourceManager.getString('ShopManagerApplication', 'rev') + "\n" +
                             resourceManager.getString('ShopManagerApplication', 'revDateLabel') + resourceManager.getString('ShopManagerApplication', 'revDate') + "\n" +
@@ -138,74 +122,43 @@
             );
         }
 
-
-        /**
-         * product reindexing.
-         * @param event mouse event
-         */
-        protected function import_clickHandler(event:MouseEvent):void {
+        private function onImportClick(event:MouseEvent):void {
             setFontWeight(importBtn);
             mainPanel.removeAllChildren();
             mainPanel.addChild(new BulkImportPanel());
         }
 
-        /**
-         * Manage locations.
-         * @param event mouse event
-         */
-        protected function location_clickHandler(event:MouseEvent):void {
+        private function onLocationManagementClick(event:MouseEvent):void {
             setFontWeight(locationsBtn);
             mainPanel.removeAllChildren();
             mainPanel.addChild(new LocationManagementPanel());
         }
 
-        /**
-         * Manage carriers, carrier SLA & etc.
-         * @param event mouse event
-         */
-        protected function carrier_clickHandler(event:MouseEvent):void {
+        private function onCarriersManagementClick(event:MouseEvent):void {
             setFontWeight(carriersBtn);
             mainPanel.removeAllChildren();
             mainPanel.addChild(new CarrierManagementPanel());
         }
 
-        /**
-         * Open attibute managment panel
-         * @param event mouse event
-         */
-        protected function attributes_clickHandler(event:MouseEvent):void {
+        private function onAttributesManagementClick(event:MouseEvent):void {
             setFontWeight(attributesBtn);
             mainPanel.removeAllChildren();
             mainPanel.addChild(new AttributesManagementPanel());
         }
 
-        /**
-         * Users managment.
-         * @param event mouse event
-
-         */
-        protected function userManagement_clickHandler(event:MouseEvent):void {
+        private function onUserManagementClick(event:MouseEvent):void {
             setFontWeight(userBtn);
             mainPanel.removeAllChildren();
             mainPanel.addChild(new UserManagementPanel());
         }
 
-        /**
-         * Roles managment.
-         * @param event
-
-         */
-        protected function roleManagement_clickHandler(event:MouseEvent):void {
+        private function onRoleManagementClick(event:MouseEvent):void {
             setFontWeight(rolesBtn);
             mainPanel.removeAllChildren();
             mainPanel.addChild(new RoleManagementPanel());
         }
 
-        /**
-         * Roles management.
-         * @param event
-         */
-        protected function storesManagement_clickHandler(event:MouseEvent):void {
+        private function onStoreManagementClick(event:MouseEvent):void {
             setFontWeight(event.target as LinkButton);
             mainPanel.removeAllChildren();
             var panel:StoresManagementPanel = new StoresManagementPanel();
@@ -215,109 +168,68 @@
             mainPanel.addChild(panel);
         }
 
-        /**
-         * Roles management.
-         * @param event
-         */
-        protected function storesManagement_clickNewHandler(event:MouseEvent):void {
+        private function onNewStoreClick(event:MouseEvent):void {
             setFontWeight(event.target as LinkButton);
             mainPanel.removeAllChildren();
             var newShop:ShopDTOImpl = new ShopDTOImpl();
             var panel:StoresManagementPanel = new StoresManagementPanel();
-            panel.shopDTOImpl =  newShop;
+            panel.shopDTOImpl = newShop;
             mainPanel.addChild(panel);
         }
 
-        /**
-         * Roles management.
-         * @param event
-         */
-        protected function warehouseManagement_clickHandler(event:MouseEvent):void {
+        private function onWarehouseManagementClick(event:MouseEvent):void {
             setFontWeight(warehouseBtn);
             mainPanel.removeAllChildren();
             mainPanel.addChild(new WarehouseManagementPanel());
         }
 
-        /**
-         * Manage categories
-         * @param event mouse event
-         * @return nothing
-         */
-        private function categoryManagement_clickHandler(event:MouseEvent):void {
+        private function onCategoryManagementClick(event:MouseEvent):void {
             setFontWeight(categoryBtn);
             mainPanel.removeAllChildren();
             mainPanel.addChild(new CategoryManagementPanel());
         }
 
-        /**
-         * Manage brands
-         * @param event mouse event
-         * @return nothing
-         */
-        private function brandManagement_clickHandler(event:MouseEvent):void {
+        private function onBrandManagementClick(event:MouseEvent):void {
             setFontWeight(brandBtn);
             mainPanel.removeAllChildren();
             mainPanel.addChild(new BrandManagementPanel());
         }
 
-
-        private function queryData_clickHandler(event:MouseEvent):void {
+        private function onQueryDataClick(event:MouseEvent):void {
             setFontWeight(sqlBtn);
             mainPanel.removeAllChildren();
             mainPanel.addChild(new QueryPanel());
 
         }
 
-        /**
-         * Manage product types and attributes.
-         * @param event mouse event
-         * @return nothing
-         */
-        private function productTypesManagement_clickHandler(event:MouseEvent):void {
+        private function onProductTypesManagementClick(event:MouseEvent):void {
             setFontWeight(productTypesBtn);
             mainPanel.removeAllChildren();
             mainPanel.addChild(new ProductTypeManagementPanel());
         }
 
-        /**
-         * Manage products and skus
-         * @param event mouse event
-         * @return nothing
-         */
-        private function productManagement_clickHandler(event:MouseEvent):void {
+        private function onProductManagementClick(event:MouseEvent):void {
             setFontWeight(productsBtn);
             mainPanel.removeAllChildren();
             mainPanel.addChild(new ProductManagementPanel());
         }
 
-        /**
-         * Manage products and skus
-         * @param event mouse event
-         * @return nothing
-         */
-        private function customerManagement_clickHandler(event:MouseEvent):void {
+        private function onCustomerManagementClick(event:MouseEvent):void {
             setFontWeight(customersBtn);
             mainPanel.removeAllChildren();
             mainPanel.addChild(new CustomerManagementPanel());
         }
 
-        /**
-         * Manage products and skus
-         * @param event mouse event
-         * @return nothing
-         */
-        private function orderManagement_clickHandler(event:MouseEvent):void {
+        private function onOrderManagementClick(event:MouseEvent):void {
             setFontWeight(ordersBtn);
             mainPanel.removeAllChildren();
             mainPanel.addChild(new CustomerOrderPanel());
         }
 
-
         private function userNameOrPasswordChanged(event:Event):void {
             loginButtonEnabled = (username.text != null && username.text.length > 5)
                     && (password.text != null && password.text.length > 6);
         }
-
 
         private function setFontWeight(src:LinkButton):void {
 
@@ -343,7 +255,7 @@
 
         }
 
-        private function fulfillment_clickHandler(event:MouseEvent):void {
+        private function onFulfillmentClick(event:MouseEvent):void {
             setFontWeight(fulfillmentBtn);
             mainPanel.removeAllChildren();
             var label:Text = new Text();
@@ -351,15 +263,15 @@
             mainPanel.addChild(label);
         }
 
-        private function prodQty_clickHandler(event:MouseEvent):void {
-            setFontWeight(prodQtyBtn);
+        private function onInventoryManagementClick(event:MouseEvent):void {
+            setFontWeight(inventoryBtn);
             mainPanel.removeAllChildren();
             var label:Text = new Text();
             label.text = "TODO: this is not yet implemented";
             mainPanel.addChild(label);
         }
 
-        private function payments_clickHandler(event:MouseEvent):void {
+        private function onPaymentsManagementClick(event:MouseEvent):void {
             setFontWeight(paymentsBtn);
             mainPanel.removeAllChildren();
             var label:Text = new Text();
@@ -367,8 +279,8 @@
             mainPanel.addChild(label);
         }
 
-        private function onFaultHandler(event:FaultEvent):void {
-            ShopManagerGlobal.instance.defaultFaultHandler(event);
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
         }
 
         private function onGetAllShopsResult(event:ResultEvent):void {
@@ -390,7 +302,7 @@
                     if (oldButton.id == 'storesBtn') {
                         continue; // do not remove the create button
                     }
-                    oldButton.removeEventListener(MouseEvent.CLICK, storesManagement_clickHandler);
+                    oldButton.removeEventListener(MouseEvent.CLICK, onStoreManagementClick);
                     storesButtons.removeChild(oldButton);
                 }
             }
@@ -400,7 +312,7 @@
                 var shopButton:LinkButton = new LinkButton();
                 shopButton.label = shop.name + ' (' + shop.code + ')';
                 shopButton.id = shopId;
-                shopButton.addEventListener(MouseEvent.CLICK, storesManagement_clickHandler);
+                shopButton.addEventListener(MouseEvent.CLICK, onStoreManagementClick);
                 shopButton.percentWidth = 100;
                 storesButtons.addChild(shopButton);
             }
@@ -413,7 +325,6 @@
                 remoteShopService.getAll(); // reload buttons
             }
         }
-
         ]]>
 	</mx:Script>
 
@@ -427,8 +338,8 @@
 
     <mx:RemoteObject showBusyCursor="true" id="remoteFlexSupportService"
                      destination="remoteFlexSupportService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
     <mx:RemoteObject showBusyCursor="true" id="remoteShopService"
@@ -437,7 +348,7 @@
 
         <mx:method id="getAllShops" name="getAll"
                    result="onGetAllShopsResult(event)"
-                   fault="onFaultHandler(event)"/>
+                   fault="onRpcMethodFault(event)"/>
 
 
     </mx:RemoteObject>
@@ -508,18 +419,18 @@
                                         <mx:LinkButton width="100%" id="ordersBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='orders')"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='ordersHint')"
-                                                       click="orderManagement_clickHandler(event);"
+                                                       click="onOrderManagementClick(event);"
                                                 />
                                         <mx:LinkButton width="100%" id="customersBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='customers')"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='customersHint')"
-                                                       click="customerManagement_clickHandler(event);"
+                                                       click="onCustomerManagementClick(event);"
                                                 />
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton width="100%" id="fulfillmentBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='fulfillment')"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='fulfillmentHint')"
-                                                       click="fulfillment_clickHandler(event)"
+                                                       click="onFulfillmentClick(event)"
                                                 />
                                     </mx:VBox>
                                 </mx:Canvas>
@@ -531,15 +442,15 @@
                                         <mx:LinkButton width="100%" id="productsBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='products')"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='productsHint')"
-                                                       click="productManagement_clickHandler(event)"
+                                                       click="onProductManagementClick(event)"
                                                 />
                                         <mx:LinkButton width="100%" id="categoryBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='categories')"
-                                                       click="categoryManagement_clickHandler(event)"
+                                                       click="onCategoryManagementClick(event)"
                                                 />
                                         <mx:LinkButton width="100%" id="brandBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='brands')"
-                                                       click="brandManagement_clickHandler(event)"
+                                                       click="onBrandManagementClick(event)"
                                                 />
 
                                     </mx:VBox>
@@ -550,13 +461,13 @@
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton width="100%" id="warehouseBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='warehouses')"
-                                                       click="warehouseManagement_clickHandler(event)"
+                                                       click="onWarehouseManagementClick(event)"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='warehousesHint')"
                                                 />
-                                        <mx:LinkButton width="100%" enabled="false" id="prodQtyBtn"
-                                                       label="@Resource(bundle='ShopManagerApplication',key='prodQty')"
-                                                       click="prodQty_clickHandler(event)"
-                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='prodQtyHint')"
+                                        <mx:LinkButton width="100%" id="inventoryBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='inventory')"
+                                                       click="onInventoryManagementClick(event)"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='inventoryHint')"
                                                 />
                                     </mx:VBox>
 
@@ -603,7 +514,7 @@
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton width="100%" id="paymentsBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='payment')"
-                                                       click="payments_clickHandler(event)"
+                                                       click="onPaymentsManagementClick(event)"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='paymentHint')"
                                                 />
                                     </mx:VBox>
@@ -655,7 +566,7 @@
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton width="100%" id="storesBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='newStore')"
-                                                       click="storesManagement_clickNewHandler(event)"
+                                                       click="onNewStoreClick(event)"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='storesHint')"
                                                 />
 
@@ -670,13 +581,13 @@
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton width="100%" id="carriersBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='carrier')"
-                                                       click="carrier_clickHandler(event)"
+                                                       click="onCarriersManagementClick(event)"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='carrierHint')"
                                                 />
 
                                         <mx:LinkButton width="100%" id="locationsBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='location')"
-                                                       click="location_clickHandler(event)"
+                                                       click="onLocationManagementClick(event)"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='locationHint')"
                                                 />
                                     </mx:VBox>
@@ -689,10 +600,10 @@
                                     <mx:VBox x="0" y="0" height="100%" width="100%">
                                         <mx:LinkButton width="100%" id="userBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='userManagement')"
-                                                       click="userManagement_clickHandler(event)"/>
+                                                       click="onUserManagementClick(event)"/>
                                         <mx:LinkButton width="100%" id="rolesBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='roleManagement')"
-                                                       click="roleManagement_clickHandler(event)"/>
+                                                       click="onRoleManagementClick(event)"/>
                                     </mx:VBox>
                                 </mx:Canvas>
 
@@ -702,36 +613,36 @@
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton width="100%" id="productTypesBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='productTypes')"
-                                                       click="productTypesManagement_clickHandler(event)"
+                                                       click="onProductTypesManagementClick(event)"
                                                 />
                                         <mx:LinkButton width="100%" id="attributesBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='attributes')"
-                                                       click="attributes_clickHandler(event)"
+                                                       click="onAttributesManagementClick(event)"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='attributesHint')"
                                                 />
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton width="100%" id="importBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='import')"
-                                                       click="import_clickHandler(event)"
+                                                       click="onImportClick(event)"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='importHint')"
                                                 />
                                         <mx:LinkButton width="100%" id="reindexBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='reindex')"
-                                                       click="reindex_clickHandler(event)"
+                                                       click="onReindexClick(event)"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='reindexHint')"
                                                 />
                                         <mx:Spacer height="10"/>
 
                                         <mx:LinkButton id="reportBtn" width="100%"
                                                        label="@Resource(bundle='ShopManagerApplication',key='reports')"
-                                                       click="reportBtn_clickHandler(event)"/>
+                                                       click="onReportClick(event)"/>
 
 
 
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton id="sqlBtn" width="100%"
                                                        label="@Resource(bundle='ShopManagerApplication',key='query')"
-                                                       click="queryData_clickHandler(event)"/>
+                                                       click="onQueryDataClick(event)"/>
 
                                     </mx:VBox>
                                 </mx:Canvas>
@@ -743,7 +654,7 @@
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton width="100%"
                                                        label="@Resource(bundle='ShopManagerApplication',key='about')"
-                                                       click="help_clickHandler(event)"
+                                                       click="onHelpClick(event)"
                                                 />
                                     </mx:VBox>
                                 </mx:Canvas>

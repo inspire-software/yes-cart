@@ -14,8 +14,6 @@
         import mx.events.CloseEvent;
         import mx.events.ListEvent;
         import mx.managers.PopUpManager;
-        import mx.rpc.AsyncResponder;
-        import mx.rpc.AsyncToken;
         import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
 
@@ -48,10 +46,10 @@
          * @param event event
          * @return nothing
          */
-        private function newWarehouseclickHandler(event:MouseEvent):void {
-            Debug.trace("warehouse panel newWarehouseclickHandler");
+        private function onNewWarehouseClick(event:MouseEvent):void {
+            Debug.trace("warehouse panel onNewWarehouseClick");
             newPopUp = WarehouseCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), WarehouseCreateEditDialog, true));
-            newPopUp.saveBtn.addEventListener("click", createNewWarehouse);
+            newPopUp.saveBtn.addEventListener(MouseEvent.CLICK, createNewWarehouse);
             newPopUp.createEditWarehouse(new WarehouseDTOImpl());
             PopUpManager.centerPopUp(newPopUp);
         }
@@ -70,11 +68,11 @@
          * @param event event
          * @return nothing
          */
-        private function editWarehouseclickHandler(event:Event):void {
+        private function onEditWarehouseClick(event:Event):void {
             if (this.warehouseSelected && this.warehouseGrid.selectedItem != null) {
-                Debug.trace("warehouse panel editWarehouseclickHandler");
+                Debug.trace("warehouse panel onEditWarehouseClick");
                 newPopUp = WarehouseCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), WarehouseCreateEditDialog, true));
-                newPopUp.saveBtn.addEventListener("click", updateExistingWarehouse);
+                newPopUp.saveBtn.addEventListener(MouseEvent.CLICK, updateExistingWarehouse);
                 newPopUp.createEditWarehouse(WarehouseDTOImpl(CloneUtil.clone(this.warehouseGrid.selectedItem)));
                 PopUpManager.centerPopUp(newPopUp);
             }
@@ -96,11 +94,11 @@
          * @param event event
          * @return nothing
          */
-        private function deleteWarehouseClickHandler(event:MouseEvent):void {
+        private function onDeleteWarehouseClick(event:MouseEvent):void {
             if (this.warehouseSelected && this.warehouseGrid.selectedItem != null) {
                 Alert.show(
                         resourceManager.getString('WarehouseManagementPanel', 'deleteWarehouseConfirm', [ this.warehouseGrid.selectedItem.name ]),
-                        resourceManager.getString('WarehouseManagementPanel', 'warning'),
+                        resourceManager.getString('ShopManagerApplication', 'warning'),
                         Alert.OK | Alert.CANCEL, this, onDeleteWarehouseConfirm, null, Alert.OK);
             }
         }
@@ -123,8 +121,8 @@
             this.warehouseSelected = false;
         }
 
-        private function onFaultHandler(event:FaultEvent):void {
-            ShopManagerGlobal.instance.defaultFaultHandler(event);
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
         }
 
         private function onGetAllResult(event:ResultEvent):void {
@@ -134,7 +132,7 @@
 
         private function onCreateResult(event:ResultEvent):void {
             if (newPopUp != null) {
-                newPopUp.saveBtn.removeEventListener(MouseEvent.CLICK, newWarehouseclickHandler);
+                newPopUp.saveBtn.removeEventListener(MouseEvent.CLICK, onNewWarehouseClick);
                 PopUpManager.removePopUp(newPopUp);
             }
             newPopUp = null;
@@ -155,7 +153,7 @@
             Debug.trace("warehouse panel delete fault handler:" + event.toString());
             Alert.show(
                     resourceManager.getString('WarehouseManagementPanel', 'warehouseDeletedConfirm'),
-                    resourceManager.getString('WarehouseManagementPanel', 'info'));
+                    resourceManager.getString('ShopManagerApplication', 'info'));
             remoteWarehouseService.getAll();
 
         }
@@ -169,16 +167,16 @@
 
         <mx:method id="getAll" name="getAll"
                    result="onGetAllResult(event)"
-                   fault="onFaultHandler(event)"/>
+                   fault="onRpcMethodFault(event)"/>
         <mx:method id="create" name="create"
                    result="onCreateResult(event)"
-                   fault="onFaultHandler(event)"/>
+                   fault="onRpcMethodFault(event)"/>
         <mx:method id="update" name="update"
                    result="onUpdateResult(event)"
-                   fault="onFaultHandler(event)"/>
+                   fault="onRpcMethodFault(event)"/>
         <mx:method id="remove" name="remove"
                    result="onRemoveResult(event)"
-                   fault="onFaultHandler(event)"/>
+                   fault="onRpcMethodFault(event)"/>
 
     </mx:RemoteObject>
 
@@ -189,22 +187,22 @@
         <mx:ControlBar >
             <mx:Button label="@Resource(bundle='WarehouseManagementPanel',key='newWarehouse')"
                        toolTip="@Resource(bundle='WarehouseManagementPanel',key='newWarehouseHint')"
-                       click="newWarehouseclickHandler(event)"/>
+                       click="onNewWarehouseClick(event)"/>
             <mx:Button label="@Resource(bundle='WarehouseManagementPanel',key='editWarehouse')"
                        toolTip="@Resource(bundle='WarehouseManagementPanel',key='editWarehouseHint')"
                        enabled="{warehouseSelected}"
-                       click="editWarehouseclickHandler(event)"/>
+                       click="onEditWarehouseClick(event)"/>
             <mx:Button label="@Resource(bundle='WarehouseManagementPanel',key='deleteWarehouse')"
                        toolTip="@Resource(bundle='WarehouseManagementPanel',key='deleteWarehouseHint')"
                        enabled="{warehouseSelected}"
-                       click="deleteWarehouseClickHandler(event)"/>
+                       click="onDeleteWarehouseClick(event)"/>
 
         </mx:ControlBar>
 
         <mx:DataGrid id="warehouseGrid"
                      width="100%" height="100%"
                      doubleClickEnabled="true"
-                     doubleClick="editWarehouseclickHandler(event)"
+                     doubleClick="onEditWarehouseClick(event)"
                      itemClick="handle_warehouseSelectedClick(event)">
             <mx:columns>
                 <mx:DataGridColumn width="80" headerText="@Resource(bundle='WarehouseManagementPanel',key='code')" dataField="code"/>

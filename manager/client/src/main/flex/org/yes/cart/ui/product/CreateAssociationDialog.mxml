@@ -22,7 +22,7 @@
                 <mx:Button id="selectProductBtn" width="30"
                            label="..."
                            toolTip="@Resource(bundle='ProductManagementPanel',key='selectProductHint')"
-                           click="selectProductClick(event);"
+                           click="onProductSelectedClick(event);"
                         />
             </mx:HBox>
         </mx:FormItem>
@@ -57,8 +57,8 @@
     />
 
     <mx:RemoteObject showBusyCursor="true" id="remoteAssociationService" destination="remoteAssociationService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
 
@@ -105,9 +105,9 @@
          * @param event
          * @return
          */
-        private function selectProductClick(event:MouseEvent):void {
+        private function onProductSelectedClick(event:MouseEvent):void {
             productFinderPopUp = ProductFinderDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), ProductFinderDialog, true));
-            productFinderPopUp.selectProductButton.addEventListener("click", productSelected);
+            productFinderPopUp.selectProductButton.addEventListener(MouseEvent.CLICK, onProductSelectedConfirm);
             PopUpManager.centerPopUp(productFinderPopUp);
 
         }
@@ -117,11 +117,18 @@
          * @param event event
          * @return nothing
          */
-        private function productSelected(event:Event):void {
-            selectedProductDTOImpl = productFinderPopUp.productDTOImpl;
-            productLabel.text = selectedProductDTOImpl.code + " " + selectedProductDTOImpl.name;
-            productLabel.toolTip = selectedProductDTOImpl.description;
-            PopUpManager.removePopUp(productFinderPopUp);
+        private function onProductSelectedConfirm(event:Event):void {
+            if (productFinderPopUp != null) {
+                var selected:Array = productFinderPopUp.productSelection;
+                if (selected != null && selected.length > 0) {
+                    selectedProductDTOImpl = selected[0];
+                    productLabel.text = selectedProductDTOImpl.code + " " + selectedProductDTOImpl.name;
+                    productLabel.toolTip = selectedProductDTOImpl.description;
+                    productFinderPopUp.selectProductButton.removeEventListener(MouseEvent.CLICK, onProductSelectedConfirm);
+                    PopUpManager.removePopUp(productFinderPopUp);
+                    productFinderPopUp = null;
+                }
+            }
         }
         ]]>
     </mx:Script>

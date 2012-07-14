@@ -39,15 +39,15 @@
     <mx:RemoteObject showBusyCursor="true" makeObjectsBindable="true"
                      id="remoteCategoryService"
                      destination="remoteCategoryService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
     <mx:RemoteObject showBusyCursor="true" makeObjectsBindable="true"
                      id="remoteProductCategoryService"
                      destination="remoteProductCategoryService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
 
@@ -95,7 +95,7 @@
         private function deleteProductCategory(event:MouseEvent):void {
             Alert.show(
                     resourceManager.getString('ProductManagementPanel', 'deleteProductFromCategoryConfirm'),
-                    resourceManager.getString('ProductManagementPanel', 'warning'),
+                    resourceManager.getString('ShopManagerApplication', 'warning'),
                     Alert.OK | Alert.CANCEL, this, deleteProductCategoryServiceCall, null, Alert.OK);
 
         }
@@ -106,16 +106,16 @@
                         selectedCategoryDTO.categoryId, productId).addResponder(
                         new AsyncResponder(
                                 readCategories,
-                                ShopManagerGlobal.instance.defaultFaultHandler
-                                )
-                        );
+                                ShopManagerGlobal.instance.defaultOnRpcMethodFault
+                        )
+                );
                 selectedCategoryDTO = null;
             }
         }
 
         private function addProductCategory(event:MouseEvent):void {
             categoryFinderPopUp = CategoryFinderDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CategoryFinderDialog, true));
-            categoryFinderPopUp.selectProductButton.addEventListener("click", assignSelectedProduct);
+            categoryFinderPopUp.selectProductButton.addEventListener(MouseEvent.CLICK, assignSelectedProduct);
             PopUpManager.centerPopUp(categoryFinderPopUp);
 
         }
@@ -134,7 +134,7 @@
             remoteProductCategoryService.create(productCategoryDTOImpl).addResponder(
                     new AsyncResponder(
                             readCategories,
-                            ShopManagerGlobal.instance.defaultFaultHandler));
+                            ShopManagerGlobal.instance.defaultOnRpcMethodFault));
 
             PopUpManager.removePopUp(categoryFinderPopUp);
 

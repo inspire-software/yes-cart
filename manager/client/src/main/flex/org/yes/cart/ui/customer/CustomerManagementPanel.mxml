@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+<mx:VDividedBox xmlns:mx="http://www.adobe.com/2006/mxml"
            width="100%"
            height="100%"
            creationComplete="init();">
@@ -12,6 +12,7 @@
         import org.yes.cart.impl.AttrValueCustomerDTOImpl;
         import org.yes.cart.impl.AttributeDTOImpl;
         import org.yes.cart.impl.CustomerDTOImpl;
+        import org.yes.cart.util.DomainUtils;
         import org.yes.cart.util.UpdateTarget;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
         import org.yes.cart.ui.attributes.EntityAttributeValuesManagementPanel;
@@ -60,7 +61,8 @@
          * @param event event
          * @return nothing
          */
-        private function handleCustomerSelectedClick(event:ListEvent):void {
+        private function onCustomerSelected(event:ListEvent):void {
+            customerSelected = this.customerGrid.selectedItem != null;
             selectedCustomer = CustomerDTOImpl(event.currentTarget.selectedItem);
             initTabs(customerTabNavigator.selectedIndex);
         }
@@ -213,15 +215,15 @@
 
         private function getEntityAttributesResultHandlerInternal(event:ResultEvent, canvas:Canvas, filterFunk:Function):void {
             var attrValuePanel:EntityAttributeValuesManagementPanel = new EntityAttributeValuesManagementPanel();
-            attrValuePanel.attrValue = ArrayCollection(event.result);
+            attrValuePanel.attrValues = ArrayCollection(event.result);
 
-            attrValuePanel.attributeGroup = AttributeGroupNames.CUSTOMER;
-            attrValuePanel.attrValue.filterFunction = filterFunk;
-            attrValuePanel.attrValue.refresh();
+//            attrValuePanel.attributeGroup = AttributeGroupNames.CUSTOMER;
+            attrValuePanel.attrValues.filterFunction = filterFunk;
+            attrValuePanel.attrValues.refresh();
 
-            attrValuePanel.attrValueChangedCallBack = attrValueChanged;
-            attrValuePanel.attrValueAddedCallBack = attrValueAdded;
-            attrValuePanel.attrValueDeleteCallBack = attrValueDelete;
+            //attrValuePanel.attrValueChangedCallBack = attrValueChanged;
+            //attrValuePanel.attrValueAddedCallBack = attrValueAdded;
+            //attrValuePanel.attrValueDeleteCallBack = attrValueDelete;
 
             canvas.removeAllChildren();
             canvas.addChild(attrValuePanel);
@@ -267,7 +269,7 @@
             attrValue.val = newValue;
             var asyncToken:AsyncToken;
             var updateTarget:UpdateTarget;
-            if (isNaN(attrValue.attrvalueId) || attrValue.attrvalueId == 0) {
+            if (DomainUtils.isNew(attrValue, 'attrvalueId')) {
                 // insert new attribute
                 Debug.trace("INFO create new attr value " + newValue + " for customer " + selectedCustomer);
                 asyncToken = remoteCustomerService.createEntityAttributeValue(attrValue);
@@ -300,7 +302,7 @@
             }
 
             EntityAttributeValuesManagementPanel(
-                    customerSummary.getChildAt(0)).attrValue.setItemAt(obj, updateTarget.idx);
+                    customerSummary.getChildAt(0)).attrValues.setItemAt(obj, updateTarget.idx);
 
             Debug.trace("INFO obj is " + obj);
 
@@ -312,7 +314,7 @@
          * @param event event
          * @return nothing
          */
-        private function filter_clickHandler(event:MouseEvent):void {
+        private function onApplyFilterClick(event:MouseEvent):void {
 
             selectedCustomer = null;
 
@@ -331,72 +333,74 @@
         private function onTabClick(event:IndexChangedEvent):void {
             initTabs(event.newIndex);
         }
+
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
         ]]>
 
     </mx:Script>
 
+    <mx:Boolean id="customerSelected">false</mx:Boolean>
+
     <mx:RemoteObject showBusyCursor="true" id="remoteCustomerService"
                      destination="remoteCustomerService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
-                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
 
-    <mx:VDividedBox height="100%" width="100%">
-        <mx:Panel width="100%" height="100%" title="@Resource(bundle='CustomerManagementPanel',key='customers')">
-            <mx:VBox width="100%">
-                <mx:ControlBar>
-                    <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='filters')"/>
-                    <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='emailFilter')"/>
-                    <mx:TextInput id="emailFilterValue" width="150"/>
-                    <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='lastNameFilter')"/>
-                    <mx:TextInput id="lastNameFilterValue" width="150"/>
-                    <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='firstNameFilter')"/>
-                    <mx:TextInput id="firstNameFilterValue" width="150"/>
-                    <mx:Button label="@Resource(bundle='CustomerManagementPanel',key='applyFilter')"
-                               toolTip="@Resource(bundle='CustomerManagementPanel',key='applyFilterToolTip')"
-                               click="filter_clickHandler(event)"
-                            />
-                </mx:ControlBar>
-                <mx:DataGrid x="0" y="0" width="100%" height="99%"
-                             dataProvider="{remoteCustomerService.findCustomer.lastResult}"
-                             itemClick="handleCustomerSelectedClick(event)">
-                    <mx:columns>
-                        <mx:DataGridColumn width="80" headerText="@Resource(bundle='CustomerManagementPanel',key='id')"
-                                           dataField="customerId"/>
-                        <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='email')"
-                                           dataField="email"/>
-                        <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='lastname')"
-                                           dataField="lastname"/>
-                        <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='firstname')"
-                                           dataField="firstname"/>
-                        <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='middlename')"
-                                           dataField="middlename"/>
-                    </mx:columns>
-                </mx:DataGrid>
+    </mx:RemoteObject>
 
-            </mx:VBox>
-            <mx:TabNavigator id="customerTabNavigator" change="onTabClick(event);" width="100%" height="100%"
-                             visible="{selectedCustomer != null}">
+    <mx:Panel width="100%" height="100%" title="@Resource(bundle='CustomerManagementPanel',key='customers')">
+        <mx:VBox width="100%">
+            <mx:ControlBar>
+                <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='filters')"/>
+                <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='emailFilter')"/>
+                <mx:TextInput id="emailFilterValue" width="150"/>
+                <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='lastNameFilter')"/>
+                <mx:TextInput id="lastNameFilterValue" width="150"/>
+                <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='firstNameFilter')"/>
+                <mx:TextInput id="firstNameFilterValue" width="150"/>
+                <mx:Button label="@Resource(bundle='CustomerManagementPanel',key='applyFilter')"
+                           toolTip="@Resource(bundle='CustomerManagementPanel',key='applyFilterToolTip')"
+                           click="onApplyFilterClick(event)"
+                        />
+            </mx:ControlBar>
+            <mx:DataGrid id="customerGrid" width="100%" height="100%"
+                         itemClick="onCustomerSelected(event)">
+                <mx:columns>
+                    <mx:DataGridColumn width="80" headerText="@Resource(bundle='CustomerManagementPanel',key='id')"
+                                       dataField="customerId"/>
+                    <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='email')"
+                                       dataField="email"/>
+                    <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='lastname')"
+                                       dataField="lastname"/>
+                    <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='firstname')"
+                                       dataField="firstname"/>
+                    <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='middlename')"
+                                       dataField="middlename"/>
+                </mx:columns>
+            </mx:DataGrid>
 
-                <mx:Canvas id="customerSummary"
-                           label="@Resource(bundle='CustomerManagementPanel',key='customerSummary')"
-                           width="100%" height="100%"/>
-                <mx:Canvas id="customerOrders" label="@Resource(bundle='CustomerManagementPanel',key='customerOrders')"
-                           width="100%" height="100%"/>
-                <mx:Canvas id="customerWishlist"
-                           label="@Resource(bundle='CustomerManagementPanel',key='customerWishlist')"
-                           width="100%" height="100%"/>
-                <mx:Canvas id="customerAddresses"
-                           label="@Resource(bundle='CustomerManagementPanel',key='customerAddresses')"
-                           width="100%" height="100%"/>
-                <mx:Canvas id="customerShops" label="@Resource(bundle='CustomerManagementPanel',key='customerShops')"
-                           width="100%" height="100%"/>
+        </mx:VBox>
+        <mx:TabNavigator id="customerTabNavigator" change="onTabClick(event);" width="100%" height="100%"
+                         visible="{customerSelected}">
+
+            <mx:Canvas id="customerSummary"
+                       label="@Resource(bundle='CustomerManagementPanel',key='customerSummary')"
+                       width="100%" height="100%"/>
+            <mx:Canvas id="customerOrders" label="@Resource(bundle='CustomerManagementPanel',key='customerOrders')"
+                       width="100%" height="100%"/>
+            <mx:Canvas id="customerWishlist"
+                       label="@Resource(bundle='CustomerManagementPanel',key='customerWishlist')"
+                       width="100%" height="100%"/>
+            <mx:Canvas id="customerAddresses"
+                       label="@Resource(bundle='CustomerManagementPanel',key='customerAddresses')"
+                       width="100%" height="100%"/>
+            <mx:Canvas id="customerShops" label="@Resource(bundle='CustomerManagementPanel',key='customerShops')"
+                       width="100%" height="100%"/>
 
 
-            </mx:TabNavigator>
+        </mx:TabNavigator>
 
-        </mx:Panel>
+    </mx:Panel>
 
-    </mx:VDividedBox>
-
-</mx:Canvas>
+</mx:VDividedBox>

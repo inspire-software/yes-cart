@@ -1,10 +1,11 @@
-package org.yes.cart.util {
+package org.yes.cart.model {
 import mx.collections.ArrayCollection;
-import mx.collections.ArrayCollection;
-import mx.collections.ArrayList;
 
+/**
+ * Currency provider is a hardcoded currencies object since those are standardised.
+ */
 [Bindable]
-public class CurrencyProvider {
+public class CurrencyModel {
 
     /**
      * See spring configuration at web shop. Be sure, that array is syncronized with
@@ -50,7 +51,7 @@ public class CurrencyProvider {
         return providedCurrencySymbols.contains(candidate);
     }
 
-    public function CurrencyProvider() {
+    public function CurrencyModel() {
 
     }
 }

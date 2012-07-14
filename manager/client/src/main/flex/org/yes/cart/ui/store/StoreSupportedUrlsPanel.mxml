@@ -16,7 +16,8 @@
         import org.yes.cart.impl.ShopDTOImpl;
         import org.yes.cart.impl.ShopUrlDTOImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
-        import org.yes.cart.util.DomainNameValidator;
+        import org.yes.cart.validation.DomainNameValidator;
+        import org.yes.cart.util.DomainUtils;
 
         private var shopDTOImpl:ShopDTOImpl;
 
@@ -30,7 +31,7 @@
         }
 
 
-        private function addNewUrlClick(event:MouseEvent):void {
+        private function onAddNewUrlClick(event:MouseEvent):void {
 
             var newShopUrl:ShopUrlDTOImpl = new ShopUrlDTOImpl();
             newShopUrl.shopId = shopDTOImpl.shopId;
@@ -49,13 +50,13 @@
             return true;
         }
 
-        private function saveChanges(event:MouseEvent):void {
+        private function onSaveUrlClick(event:MouseEvent):void {
             if (validateUrlsBeforeSave()) {
 
                 urlsChanged = false;
                 for each (var urlDto:ShopUrlDTOImpl in this.urlGrid.dataProvider) {
 
-                    if (isNaN(urlDto.storeUrlId) || urlDto.storeUrlId == 0) {
+                    if (DomainUtils.isNewPK(urlDto.storeUrlId)) {
                         remoteShopUrlService.create(urlDto);
                     } else {
                         remoteShopUrlService.update(urlDto);
@@ -73,12 +74,12 @@
          * @param event miuse event
          * @return nothing
          */
-        private function deleteUrlClickHandler(event:MouseEvent):void {
+        private function onDeleteUrlClick(event:MouseEvent):void {
 
             if (this.allowDeleteUrl && this.urlGrid.selectedItem != null) {
                 Alert.show(
                         resourceManager.getString('StoreSupportedUrlsPanel', 'deleteUrlConfirm', [ this.urlGrid.selectedItem.url ]),
-                        resourceManager.getString('StoreSupportedUrlsPanel', 'warning'),
+                        resourceManager.getString('ShopManagerApplication', 'warning'),
                         Alert.OK | Alert.CANCEL, this, onDeleteUrlConfirm, null, Alert.OK);
             }
         }
@@ -93,7 +94,7 @@
             if (event.detail == Alert.OK) {
                 if (this.allowDeleteUrl && this.urlGrid.selectedItem != null) {
 
-                    if (isNaN(this.urlGrid.selectedItem.storeUrlId) || this.urlGrid.selectedItem.storeUrlId == 0) {
+                    if (DomainUtils.isNew(this.urlGrid.selectedItem, 'storeUrlId')) {
                         this.urlGrid.dataProvider.removeItemAt(this.urlGrid.selectedIndex);
                         this.allowDeleteUrl = false;
                         validateUrlsBeforeSave();
@@ -141,7 +142,7 @@
 
             Alert.show(
                     resourceManager.getString('StoreSupportedUrlsPanel', 'urlDeletedConfirm'),
-                    resourceManager.getString('StoreSupportedUrlsPanel', 'info'));
+                    resourceManager.getString('ShopManagerApplication', 'info'));
         }
 
         private function onItemClick(event:ListEvent):void {
@@ -154,8 +155,8 @@
 
     <mx:RemoteObject showBusyCursor="true"  id="remoteShopUrlService"
                      destination="remoteShopUrlService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}">
 
         <mx:method id="getAllByShopId" name="getAllByShopId"
@@ -177,17 +178,17 @@
                 id="addBtn"
                 enabled="{!urlsChanged}"
                 label="@Resource(bundle='StoreSupportedUrlsPanel',key='addUrl')"
-                click="addNewUrlClick(event)"/>
+                click="onAddNewUrlClick(event)"/>
         <mx:Button
                 id="deleteBtn"
                 enabled="{allowDeleteUrl}"
                 label="@Resource(bundle='StoreSupportedUrlsPanel',key='deleteUrl')"
-                click="deleteUrlClickHandler(event)"/>
+                click="onDeleteUrlClick(event)"/>
         <mx:Button
                 id="saveBtn"
                 visible="{urlsChanged}"
                 label="@Resource(bundle='StoreSupportedUrlsPanel',key='saveUrl')"
-                click="saveChanges(event)"/>
+                click="onSaveUrlClick(event)"/>
 
     </mx:ControlBar>
     <mx:DataGrid id="urlGrid"

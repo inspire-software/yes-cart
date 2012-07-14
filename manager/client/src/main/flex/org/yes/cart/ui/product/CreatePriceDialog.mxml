@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:npa="org.yes.cart.util.*"
-                xmlns:datetime="com.georg.datetime.*" xmlns:georg="com.georg.*" layout="absolute"
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:datetime="com.georg.datetime.*"
+                xmlns:georg="com.georg.*"
+                xmlns:validation="org.yes.cart.validation.*" layout="absolute"
                 width="300"
                 height="330"
                 title="@Resource(bundle='ProductManagementPanel',key='createPriceTier')"
@@ -31,10 +32,12 @@
                           enabled="{selectedSku != null}"/>
         </mx:FormItem>
         <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='saleFrom')">
-            <georg:DateTimeField id="saleFromDateField" width="160" enabled="{selectedSku != null}" change="priceFormChanged(event);"/>
+            <georg:DateTimeField id="saleFromDateField" width="160" enabled="{selectedSku != null}"
+                                 change="priceFormChanged(event);"/>
         </mx:FormItem>
         <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='saleTill')">
-            <georg:DateTimeField id="saleTillDateField" width="160" enabled="{selectedSku != null}" change="priceFormChanged(event);"/>
+            <georg:DateTimeField id="saleTillDateField" width="160" enabled="{selectedSku != null}"
+                                 change="priceFormChanged(event);"/>
         </mx:FormItem>
 
         <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='minimalPrice')">
@@ -43,9 +46,8 @@
         </mx:FormItem>
 
 
-
     </mx:Form>
-    <npa:NotInValidator
+    <validation:NotInValidator
             id="quantityValidator"
             errorMessage="@Resource(bundle='ProductManagementPanel',key='quantityNotAllowed')"
             source="{quantityTextInput}"

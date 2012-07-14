@@ -39,8 +39,6 @@
     <mx:Script><![CDATA[
         import com.hexagonstar.util.debug.Debug;
 
-        import org.yes.cart.util.PriceRangeList;
-
         import mx.containers.Canvas;
         import mx.controls.DataGrid;
         import mx.controls.Label;
@@ -52,6 +50,8 @@
         import mx.events.ItemClickEvent;
         import mx.events.ListEvent;
         import mx.managers.PopUpManager;
+
+        import org.yes.cart.model.PriceRangeModel;
 
         [Bindable]
         private var xmlNode:XML;
@@ -75,7 +75,7 @@
          * @param event event
          * @return nothing
          */
-        private function currencySelected(event:mx.events.ItemClickEvent):void {
+        private function currencySelected(event:ItemClickEvent):void {
             xmlNode = null; // disable to delete
             addRowEnabled = !(event.label == "XML");
             if (event.label == "XML") {
@@ -100,7 +100,7 @@
             }
         }
 
-        private function deleteSelectedPriceRangeRow(event:flash.events.MouseEvent):void {
+        private function deleteSelectedPriceRangeRow(event:MouseEvent):void {
 
             delete xml.list.range.range.(first == xmlNode.first.text() && second == xmlNode.second.text())[0];
             for each (var node:XML in xml.list.range) {
@@ -144,7 +144,7 @@
          */
         public function getXmlString():String {
             var idx:int = currencyTabBar.selectedIndex;
-            if (PriceRangeList(currArray[idx]).currency == "XML") {
+            if (PriceRangeModel(currArray[idx]).currency == "XML") {
                 return TextArea(Canvas(currencyViewStack.getChildAt(idx)).getChildAt(0)).text;
             }
             return getGridXml();
@@ -163,8 +163,8 @@
                 gridXml = new XML("<root>" + xml.list.range.toXMLString() + "</root>");
                 currArray = new Array();
 
-                currArray.push(new PriceRangeList("Ranges", gridXml, 0));
-                currArray.push(new PriceRangeList("XML", xml, 1));
+                currArray.push(new PriceRangeModel("Ranges", gridXml, 0));
+                currArray.push(new PriceRangeModel("XML", xml, 1));
                 addTabs(currArray);
 
             } catch (e:Error) {
@@ -180,7 +180,7 @@
          * @param curr
          */
         private function addTabs(currArray:Array):void {
-            for each (var curr:PriceRangeList in currArray) {
+            for each (var curr:PriceRangeModel in currArray) {
                 addTab(curr);
             }
         }
@@ -189,7 +189,7 @@
          * Add new tab to tab bar
          * @param priceRangeList
          */
-        private function addTab(priceRangeList:PriceRangeList):void {
+        private function addTab(priceRangeList:PriceRangeModel):void {
 
             var canvas:Canvas = new Canvas();
             canvas.label = priceRangeList.currency;
@@ -199,7 +199,7 @@
         }
 
 
-        private function getEditComponent(priceRangeList:PriceRangeList):UIComponent {
+        private function getEditComponent(priceRangeList:PriceRangeModel):UIComponent {
 
             var result:UIComponent;
             if (priceRangeList.tag == 0) {
@@ -211,8 +211,8 @@
 
                 dataGrid.dataProvider = priceRangeList.entry.range.range;
 
-                dataGrid.addEventListener(DataGridEvent.ITEM_EDIT_END, itemEditEndHandler);
-                dataGrid.addEventListener(ListEvent.ITEM_CLICK, xmlNodeSelectedClickHandler);
+                dataGrid.addEventListener(DataGridEvent.ITEM_EDIT_END, onItemEditEnd);
+                dataGrid.addEventListener(ListEvent.ITEM_CLICK, onXmlNodeSelected);
 
 
                 result = dataGrid;
@@ -232,16 +232,11 @@
 
         }
 
-        /**
-         * Handle item selection.
-         * @param event event
-         * @return nothing
-         */
-        private function xmlNodeSelectedClickHandler(event:mx.events.ListEvent):void {
+        private function onXmlNodeSelected(event:ListEvent):void {
             xmlNode = event.currentTarget.selectedItem;
         }
 
-        protected function itemEditEndHandler(event:DataGridEvent):void {
+        protected function onItemEditEnd(event:DataGridEvent):void {
             if (event.reason == DataGridEventReason.CANCELLED) {
                 return; // Do not update cell.
             }
@@ -266,13 +261,13 @@
          * @param event
          * @return nothing
          */
-        private function addNewPriceRangeRow(event:flash.events.MouseEvent):void {
+        private function addNewPriceRangeRow(event:MouseEvent):void {
             var x:XMLList = xml.list;
             x.appendChild(
                     new XML(
                             "<range><range><first class=\"string\"></first><second class=\"string\"></second></range></range>"
-                            )
-                    );
+                    )
+            );
             recreateTabs(xml.toXMLString());
 
             currencyTabBar.selectedIndex = 0;

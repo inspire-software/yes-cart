@@ -191,20 +191,20 @@
 
 
     <mx:RemoteObject showBusyCursor="true" id="remoteProductService" destination="remoteProductService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
     <mx:RemoteObject showBusyCursor="true" id="remoteShopService"
                      destination="remoteShopService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
     <mx:RemoteObject showBusyCursor="true" id="remoteProductSkuService"
                      destination="remoteProductSkuService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
 
@@ -264,9 +264,9 @@
                                 }
 
                             },
-                            ShopManagerGlobal.instance.defaultFaultHandler
-                            )
-                    );
+                            ShopManagerGlobal.instance.defaultOnRpcMethodFault
+                    )
+            );
 
         }
 
@@ -295,15 +295,15 @@
                                     token.addResponder(
                                             new AsyncResponder(
                                                     skusReady,
-                                                    ShopManagerGlobal.instance.defaultFaultHandler
-                                                    )
-                                            );
+                                                    ShopManagerGlobal.instance.defaultOnRpcMethodFault
+                                            )
+                                    );
                                     addPriceBtn.enabled = true;
                                 }
                             },
-                            ShopManagerGlobal.instance.defaultFaultHandler
-                            )
-                    );
+                            ShopManagerGlobal.instance.defaultOnRpcMethodFault
+                    )
+            );
         }
 
         /**
@@ -392,7 +392,7 @@
         private function deletePrice(event:MouseEvent):void {
             Alert.show(
                     resourceManager.getString('ProductManagementPanel', 'deletePriceConfirm'),
-                    resourceManager.getString('ProductManagementPanel', 'warning'),
+                    resourceManager.getString('ShopManagerApplication', 'warning'),
                     Alert.OK | Alert.CANCEL, this, deletePriceServiceCall, null, Alert.OK);
 
 
@@ -404,9 +404,9 @@
                 remoteProductSkuService.removeSkuPrice(selectedSkuPrice.skuPriceId).addResponder(
                         new AsyncResponder(
                                 priceCreated,
-                                ShopManagerGlobal.instance.defaultFaultHandler
-                                )
-                        );
+                                ShopManagerGlobal.instance.defaultOnRpcMethodFault
+                        )
+                );
             }
         }
 
@@ -431,7 +431,7 @@
 
             createPriceDialog.currency = defaultCurrencyLabel.text;
             createPriceDialog.shopId = shopDTOImpl.shopId;
-            createPriceDialog.saveBtn.addEventListener("click", updatePriceServiceCall);
+            createPriceDialog.saveBtn.addEventListener(MouseEvent.CLICK, updatePriceServiceCall);
             createPriceDialog.editPrice(selectedSkuPrice);
             PopUpManager.centerPopUp(createPriceDialog);
 
@@ -448,7 +448,7 @@
             createPriceDialog.skuComboBox.dataProvider = remoteProductSkuService.getAllProductSkus.lastResult;
             createPriceDialog.currency = defaultCurrencyLabel.text;
             createPriceDialog.shopId = shopDTOImpl.shopId;
-            createPriceDialog.saveBtn.addEventListener("click", addPriceServiceCall);
+            createPriceDialog.saveBtn.addEventListener(MouseEvent.CLICK, addPriceServiceCall);
             createPriceDialog.createPrice();
             PopUpManager.centerPopUp(createPriceDialog);
         }
@@ -466,9 +466,9 @@
             remoteProductSkuService.updateSkuPrice(price).addResponder(
                     new AsyncResponder(
                             priceCreated,
-                            ShopManagerGlobal.instance.defaultFaultHandler
-                            )
-                    );
+                            ShopManagerGlobal.instance.defaultOnRpcMethodFault
+                    )
+            );
             PopUpManager.removePopUp(createPriceDialog);
             createPriceDialog = null;
 
@@ -487,9 +487,9 @@
             remoteProductSkuService.createSkuPrice(price).addResponder(
                     new AsyncResponder(
                             priceCreated,
-                            ShopManagerGlobal.instance.defaultFaultHandler
-                            )
-                    );
+                            ShopManagerGlobal.instance.defaultOnRpcMethodFault
+                    )
+            );
             PopUpManager.removePopUp(createPriceDialog);
             createPriceDialog = null;
         }
@@ -504,7 +504,7 @@
             remoteProductSkuService.getAllProductSkus(product.productId).addResponder(
                     new AsyncResponder(
                             skusReady,
-                            ShopManagerGlobal.instance.defaultFaultHandler));
+                            ShopManagerGlobal.instance.defaultOnRpcMethodFault));
         }
         ]]>
    </mx:Script>

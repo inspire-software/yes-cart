@@ -92,12 +92,12 @@ public class ShopManagerGlobal {
         _duplicateErrorToMsgBox = value;
     }
 
-    public function defaultResultHandler(event:ResultEvent, obj:Object = null): void {
+    public function defaultOnRpcMethodResult(event:ResultEvent, obj:Object = null): void {
         Debug.trace("Result handler:" + event.toString());
     }
 
 
-    public function defaultFaultHandler(event:FaultEvent, obj:Object = null): void {
+    public function defaultOnRpcMethodFault(event:FaultEvent, obj:Object = null): void {
         /*[I] remoteWarehouseService is failed, reason:[FaultEvent fault=[RPC Fault faultString="An Authentication object was not found in the SecurityContext" faultCode="Client.Authentication" faultDetail="null"] messageId="F8BFFAB2-6F1D-E716-3A94-BC50F759F99F" type="fault" bubbles=false cancelable=true eventPhase=2]*/
         var errorMsg:String = "Fault handler:" + event.toString() + " token is " + obj;
         Debug.trace(errorMsg);

@@ -1,6 +1,10 @@
-package org.yes.cart.util {
+package org.yes.cart.model {
+
+/**
+ * Data model for porting price navigation XML object to DataGrid rows.
+ */
 [Bindable]
-public class PriceRangeList {
+public class PriceRangeModel {
 
     private var _currency:String;
 
@@ -34,7 +38,7 @@ public class PriceRangeList {
     }
 
 
-    public function PriceRangeList(currency:String, entry:XML, tag:Object) {
+    public function PriceRangeModel(currency:String, entry:XML, tag:Object) {
         _currency = currency;
         _entry = entry;
         _tag = tag;

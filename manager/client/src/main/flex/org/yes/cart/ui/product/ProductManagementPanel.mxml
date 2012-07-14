@@ -37,7 +37,7 @@
                             />
                 </mx:ControlBar>
                 <mx:DataGrid width="100%" height="100%"
-                             dataProvider="{remoteProductService.getProductByConeNameBrandType.lastResult}"
+                             dataProvider="{remoteProductService.getProductByCodeNameBrandType.lastResult}"
                              itemClick="productSelectedClickHandler(event)"
                         >
                     <mx:columns>
@@ -81,30 +81,30 @@
 
     </mx:Panel>
     <mx:RemoteObject showBusyCursor="true" id="remoteSeoService" destination="remoteSeoService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
 
     <mx:RemoteObject showBusyCursor="true" id="remoteBrandService" destination="remoteBrandService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
     <mx:RemoteObject showBusyCursor="true" id="remoteProductTypeService" destination="remoteProductTypeService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
 
     <mx:RemoteObject showBusyCursor="true" id="remoteProductService" destination="remoteProductService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
     <mx:RemoteObject showBusyCursor="true" id="remoteAvailabilityService" destination="remoteAvailabilityService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}"/>
 
 
@@ -122,6 +122,7 @@
         import org.yes.cart.impl.ProductTypeDTOImpl;
         import org.yes.cart.impl.SeoDTOImpl;
         import org.yes.cart.util.CloneUtil;
+        import org.yes.cart.util.DomainUtils;
         import org.yes.cart.util.UpdateTarget;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
         import org.yes.cart.ui.attributes.EntityAttributeValuesManagementPanel;
@@ -188,7 +189,7 @@
             productCreateDialog.brandComboBox.dataProvider = remoteBrandService.getAll.lastResult;
             productCreateDialog.productTypeComboBox.dataProvider = remoteProductTypeService.getAll.lastResult;
             productCreateDialog.availablilityComboBox.dataProvider = remoteAvailabilityService.getAll.lastResult;
-            productCreateDialog.saveBtn.addEventListener("click", createNewProduct);
+            productCreateDialog.saveBtn.addEventListener(MouseEvent.CLICK, createNewProduct);
             PopUpManager.centerPopUp(productCreateDialog);
         }
 
@@ -233,7 +234,7 @@
 
             productDTOImpl = null;
 
-            remoteProductService.getProductByConeNameBrandType(
+            remoteProductService.getProductByCodeNameBrandType(
                     codeTextInput.text,
                     nameTextInput.text,
                     selectedBrandId,
@@ -338,7 +339,7 @@
                                 //Service call back with category attribute values.
                                 getEntityAttributesResultHandlerInternal(event, imageTab, acceptImageAttributes);
                             },
-                            ShopManagerGlobal.instance.defaultFaultHandler));
+                            ShopManagerGlobal.instance.defaultOnRpcMethodFault));
         }
 
 
@@ -356,7 +357,7 @@
                                 //Service call back with category attribute values.
                                 getEntityAttributesResultHandlerInternal(event, attrTab, rejectImageAttributes);
                             },
-                            ShopManagerGlobal.instance.defaultFaultHandler
+                            ShopManagerGlobal.instance.defaultOnRpcMethodFault
                     )
             );
         }
@@ -371,16 +372,16 @@
         private function getEntityAttributesResultHandlerInternal(event:ResultEvent, canvas:Canvas, filterFunk:Function):void {
             Debug.trace("TRACE getEntityAttributesResultHandlerInternal");
             attrValuePanel = new EntityAttributeValuesManagementPanel();
-            attrValuePanel.attrValue = ArrayCollection(event.result);
+            attrValuePanel.attrValues = ArrayCollection(event.result);
 
             attrValuePanel.entityCode = productDTOImpl.code;
-            attrValuePanel.attributeGroup = AttributeGroupNames.PRODUCT;
-            attrValuePanel.attrValue.filterFunction = filterFunk;
-            attrValuePanel.attrValue.refresh();
+//            attrValuePanel.attributeGroup = AttributeGroupNames.PRODUCT;
+            attrValuePanel.attrValues.filterFunction = filterFunk;
+            attrValuePanel.attrValues.refresh();
 
-            attrValuePanel.attrValueChangedCallBack = attrValueChanged;
-            attrValuePanel.attrValueAddedCallBack = attrValueAdded;
-            attrValuePanel.attrValueDeleteCallBack = attrValueDelete;
+            //attrValuePanel.attrValueChangedCallBack = attrValueChanged;
+            //attrValuePanel.attrValueAddedCallBack = attrValueAdded;
+            //attrValuePanel.attrValueDeleteCallBack = attrValueDelete;
 
             canvas.removeAllChildren();
             canvas.addChild(attrValuePanel);
@@ -459,7 +460,7 @@
             attrValue.val = newValue;
             var asyncToken:AsyncToken;
             var updateTarget:UpdateTarget;
-            if (isNaN(attrValue.attrvalueId) || attrValue.attrvalueId == 0) {
+            if (DomainUtils.isNew(attrValue, 'attrvalueId')) {
                 // insert new attribute
                 Debug.trace("INFO create new attr value " + newValue + " for product " + productDTOImpl);
                 asyncToken = remoteProductService.createEntityAttributeValue(attrValue);
@@ -472,7 +473,7 @@
             }
             asyncToken.addResponder(new AsyncResponder(
                     productAttributeUpdatedResultHandler,
-                    ShopManagerGlobal.instance.defaultFaultHandler,
+                    ShopManagerGlobal.instance.defaultOnRpcMethodFault,
                     updateTarget));
         }
 
@@ -493,7 +494,7 @@
                 obj = remoteProductService.updateEntityAttributeValue.lastResult;
             }
             Debug.trace("INFO obj is " + obj);
-            attrValuePanel.attrValue.setItemAt(obj, updateTarget.idx);
+            attrValuePanel.attrValues.setItemAt(obj, updateTarget.idx);
 
         }
 
@@ -561,9 +562,9 @@
             Debug.trace("INFO seoTabSelected, selected product is " + productDTOImpl);
             seoTab.removeAllChildren();
             var seoPanel:SeoPanel = new SeoPanel();
-            seoPanel.seoCreatedCallBack = seoCreatedCallBack;
-            seoPanel.seoRemovedCallBack = seoRemovedCallBack;
-            if (productDTOImpl.seoDTO != null && !isNaN(productDTOImpl.seoDTO.seoId)) {
+            //seoPanel.seoCreatedCallBack = seoCreatedCallBack;
+            //seoPanel.seoRemovedCallBack = seoRemovedCallBack;
+            if (productDTOImpl.seoDTO != null && DomainUtils.isPersistentPK(productDTOImpl.seoDTO.seoId)) {
                 seoPanel.seoId = productDTOImpl.seoDTO.seoId;
             }
             seoTab.addChild(seoPanel);
@@ -580,7 +581,7 @@
             var removedSeo:SeoDTOImpl = productDTOImpl.seoDTO;
             productDTOImpl.seoDTO = null;
             var asyncToken:AsyncToken = remoteProductService.update(productDTOImpl);
-            asyncToken.addResponder(new AsyncResponder(seoRemoved, ShopManagerGlobal.instance.defaultFaultHandler, removedSeo));
+            asyncToken.addResponder(new AsyncResponder(seoRemoved, ShopManagerGlobal.instance.defaultOnRpcMethodFault, removedSeo));
         }
 
         /**
@@ -603,7 +604,7 @@
          */
         public function seoCreatedCallBack(seoDTOImpl:SeoDTOImpl):void {
             Debug.trace("INFO ProductManagementPanel seo " + seoDTOImpl + " for " + productDTOImpl + " created call back ");
-            if (productDTOImpl.seoDTO == null || isNaN(productDTOImpl.seoDTO.seoId) || productDTOImpl.seoDTO.seoId == 0) {
+            if (productDTOImpl.seoDTO == null || DomainUtils.isNewPK(productDTOImpl.seoDTO.seoId)) {
                 Debug.trace("INFO gonna to update product");
                 productDTOImpl.seoDTO = seoDTOImpl;
                 productChangedCallBack(productDTOImpl);
@@ -615,16 +616,16 @@
          * @param product
          */
         private function productChangedCallBack(product:ProductDTOImpl):void {
-            if (isNaN(product.productId) || product.productId == 0) {
+            if (DomainUtils.isNewPK(product.productId)) {
                 Debug.trace("INFO ProductManagementPanel product will be created " + product);
                 remoteProductService.create(product);
             } else {
                 Debug.trace("INFO ProductManagementPanel product will be updated " + product);
                 remoteProductService.update(product);
                 var idx:int = 0;
-                for each (var prod:ProductDTOImpl in remoteProductService.getProductByConeNameBrandType.lastResult) {
+                for each (var prod:ProductDTOImpl in remoteProductService.getProductByCodeNameBrandType.lastResult) {
                     if (prod.productId == product.productId) {
-                        remoteProductService.getProductByConeNameBrandType.lastResult.setItemAt(product, idx);
+                        remoteProductService.getProductByCodeNameBrandType.lastResult.setItemAt(product, idx);
                     }
                     idx++;
                 }

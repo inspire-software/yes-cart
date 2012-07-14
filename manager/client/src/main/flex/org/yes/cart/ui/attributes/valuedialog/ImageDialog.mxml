@@ -25,30 +25,52 @@
 
         </mx:Form>
         <mx:ControlBar width="100%" horizontalAlign="right">
+            <mx:Button id="btnLoad" width="94"
+                       label="@Resource(bundle='AttributesManagementPanel',key='loadImage')"
+                       toolTip="@Resource(bundle='AttributesManagementPanel',key='loadImageHint')"
+                       click="onLoadImageDialogButtonClick()"/>
+            <mx:Button id="btnSave" width="94"
+                       label="@Resource(bundle='AttributesManagementPanel',key='save')" click="onSaveImageClick()"/>
             <mx:Button id="btnCancel"
                        width="94"
                        label="@Resource(bundle='AttributesManagementPanel',key='cancel')"
                        click="PopUpManager.removePopUp(this)"
                     />
-            <mx:Button id="btnLoad" width="94"
-                       label="@Resource(bundle='AttributesManagementPanel',key='loadImage')"
-                       toolTip="@Resource(bundle='AttributesManagementPanel',key='loadImageHint')"
-                       click="loadImage()"/>
-            <mx:Button id="btnSave" width="94"
-                       label="@Resource(bundle='AttributesManagementPanel',key='save')" click="saveImage()"/>
-
         </mx:ControlBar>
 
     </mx:VBox>
     <mx:RemoteObject showBusyCursor="true" id="remoteImageService"
                      destination="remoteImageService"
-                     result="ShopManagerGlobal.instance.defaultResultHandler(event)"
-                     fault="ShopManagerGlobal.instance.defaultFaultHandler(event)"
-                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
 
+        <mx:method id="getImageAsByteArray" name="getImageAsByteArray"
+                   result="onGetImageAsByteArrayResult(event)"
+                   fault="onGetImageAsByteArrayFault(event)"/>
+
+        <mx:method id="getSeoImage" name="getSeoImage"
+                   result="onGetSeoImageResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="addImageToRepository" name="addImageToRepository"
+                   result="onAddImageToRepositoryResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="create" name="create"
+                   result="onCreateResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="update" name="update"
+                   result="onUpdateResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
 
     <mx:Script><![CDATA[
         import com.hexagonstar.util.debug.Debug;
+
+        import mx.controls.Alert;
+
+        import mx.controls.Text;
 
         import org.yes.cart.constants.AttributeGroupNames;
         import org.yes.cart.constants.Constants;
@@ -62,6 +84,8 @@
         import mx.rpc.AsyncToken;
         import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.util.DomainUtils;
 
         private static const THUMB_WIDTH:uint = 480;
         private static const THUMB_HEIGHT:uint = 480;
@@ -81,73 +105,19 @@
         private var imageBodyHasChanges:Boolean = false;
 
         private function init():void {
-            BindingUtils.bindProperty(valueTextInput, "text", this, "value");
-            BindingUtils.bindProperty(this, "value", valueTextInput, "text");
             this.title = windowTitle;
 
-
-            if (value != null && value.length > 0) {
-                //get the existing image and image seo information
-                remoteImageService.getImageAsByteArray(value, code, resolveImageStorage(attributeGroup)).addResponder(
-                        new AsyncResponder(
-                                imageBodyResultHandler,
-                                imageBodyFaultHandler)
-                );
-
-
-            } else {
-                //nothing to do this is a new image
-                seoImage = new SeoImageDTOImpl();
-
-            }
-
         }
 
-
-        /**
-         * Seo image result handler. If Seo null the new seo object will be created.
-         * @param event event
-         * @param token token
-         * @return nothing
-         */
-        private function seoImageFaultHandler(event:FaultEvent, token:AsyncToken):void {
-            seoImage = new SeoImageDTOImpl();
-
-        }
-
-
-        /**
-         * Seo image result handler. If Seo null the new seo object will be created.
-         * @param event event
-         * @param token token
-         * @return nothing
-         */
-        private function seoImageResultHandler(event:ResultEvent, token:AsyncToken):void {
-            if (event.result == null) {
-                seoImage = new SeoImageDTOImpl();
-            } else {
-                seoImage = SeoImageDTOImpl(event.result);
-            }
-            titleTextInput.text = seoImage.title;
-            altTextInput.text = seoImage.alt;
-        }
-
-
-        private function saveImage():void {
+        private function onSaveImageClick():void {
 
             if (imageBodyHasChanges) {
                 //Save image when it really changed.
                 var encoder:JPEGEncoder = new JPEGEncoder(); //TODO resolve the encoder by file extension
                 var rawBytes:ByteArray = encoder.encode(bitmapData);
-                remoteImageService.addImageToRepository(value, code, rawBytes, resolveImageStorage(attributeGroup))
-                        .addResponder(
-                            new AsyncResponder(
-                                    imageUploadedResultHandler,
-                                    ShopManagerGlobal.instance.defaultFaultHandler
-                            )
-                        );
+                remoteImageService.addImageToRepository(value, code, rawBytes, resolveImageStorage(attributeGroup));
             } else {
-                imageUploadedResultHandler(null, null);
+                updateImageSeoData();
             }
         }
 
@@ -169,12 +139,11 @@
         }
 
 
-        private function imageUploadedResultHandler(event:ResultEvent, token:AsyncToken):void {
+        private function updateImageSeoData():void {
             seoImage.imageName = value;
             seoImage.alt = altTextInput.text;
             seoImage.title = titleTextInput.text;
-            if (isNaN(seoImage.seoImageId) || seoImage.seoImageId == 0) {
-                // new image seo
+            if (DomainUtils.isNewPK(seoImage.seoImageId)) {
                 remoteImageService.create(seoImage);
             } else {
                 remoteImageService.update(seoImage);
@@ -187,9 +156,9 @@
          * Load file from local disk and show in {@link imageView}.
          * @return nothing
          */
-        private function loadImage():void {
+        private function onLoadImageDialogButtonClick():void {
             loadFileRef = new FileReference();
-            loadFileRef.addEventListener(Event.SELECT, onFileSelect);
+            loadFileRef.addEventListener(Event.SELECT, onImageDialogFileSelect);
             loadFileRef.browse();
         }
 
@@ -198,16 +167,11 @@
          * @param e event
          * @return nothing
          */
-        private function onFileSelect(e:Event):void {
+        private function onImageDialogFileSelect(e:Event):void {
 
-            loadFileRef.addEventListener(Event.COMPLETE, onFileLoadComplete);
+            loadFileRef.removeEventListener(Event.SELECT, onImageDialogFileSelect);
+            loadFileRef.addEventListener(Event.COMPLETE, onImageFileDialogLoadComplete);
             loadFileRef.load();
-        }
-
-
-        private function imageBodyFaultHandler(event:FaultEvent, token:AsyncToken):void {
-            Debug.trace("ERROR cant load image body from remote image service: " + event.message);
-
         }
 
 
@@ -216,7 +180,9 @@
          * @param e event
          * @return nothing
          */
-        private function onFileLoadComplete(e:Event):void {
+        private function onImageFileDialogLoadComplete(e:Event):void {
+            loadFileRef.removeEventListener(Event.COMPLETE, onImageFileDialogLoadComplete);
+
             var loader:Loader = new Loader();
             loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onDataLoadComplete);
             loader.loadBytes(loadFileRef.data);
@@ -227,31 +193,11 @@
              } */
 
             valueTextInput.text = modifiedName;
-            value = modifiedName;
+            _value = modifiedName; // update directly, since getter will try to reload the data from server
             loadFileRef = null;
             imageBodyHasChanges = true;
 
         }
-
-        /**
-         * Image body loaded from remote service.
-         * @param event
-         * @param token
-         * @return
-         */
-        private function imageBodyResultHandler(event:ResultEvent, token:AsyncToken):void {
-            var ba:ByteArray = ByteArray(event.result);
-            var loader:Loader = new Loader();
-            loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onDataLoadComplete);
-            loader.loadBytes(ba);
-            remoteImageService.getSeoImage(value).addResponder(
-                    new AsyncResponder(
-                            seoImageResultHandler,
-                            seoImageFaultHandler
-                    )
-            );
-        }
-
 
         /**
          * Image loading complete, so we can show it.
@@ -269,6 +215,7 @@
             matrix.scale(scale, scale);
             matrix.translate(xOffset, yOffset);
 
+            imageView.removeAllChildren();
             imageView.graphics.clear();
             imageView.graphics.beginBitmapFill(bitmapData, matrix, false);
             imageView.graphics.drawRect(xOffset, yOffset, THUMB_WIDTH - 2 * xOffset, THUMB_HEIGHT - 2 * yOffset);
@@ -282,7 +229,27 @@
         }
 
         public function set value(value:String):void {
+            if (attributeGroup == null) {
+                Alert.show(
+                        resourceManager.getString('AttributesManagementPanel', 'emptyAttributeGroup'),
+                        resourceManager.getString('AttributesManagementPanel', 'communicationError')
+                );
+            }
+            imageBodyHasChanges = false;
             _value = value;
+            valueTextInput.text = value;
+
+            if (value != null && value.length > 0) {
+                //get the existing image and image seo information
+                remoteImageService.getImageAsByteArray(value, code, resolveImageStorage(attributeGroup));
+
+            } else {
+                //nothing to do this is a new image
+                seoImage = new SeoImageDTOImpl();
+
+            }
+
+
         }
 
         public function get oldValue():String {
@@ -319,6 +286,57 @@
 
         public function set attributeGroup(value:String):void {
             _attributeGroup = value;
+        }
+
+        protected function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        private function onGetImageAsByteArrayResult(event:ResultEvent):void {
+
+            var ba:ByteArray = ByteArray(event.result);
+            var loader:Loader = new Loader();
+            loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onDataLoadComplete);
+            loader.loadBytes(ba);
+            remoteImageService.getSeoImage(value);
+
+
+        }
+
+        private function onGetImageAsByteArrayFault(event:FaultEvent):void {
+
+            imageView.graphics.clear();
+            imageView.removeAllChildren();
+            var text:Text = new Text();
+            text.text = resourceManager.getString('AttributesManagementPanel', 'loadImageFailed');
+            imageView.addChild(text);
+
+        }
+
+        private function onGetSeoImageResult(event:ResultEvent):void {
+
+            if (event.result == null) {
+                seoImage = new SeoImageDTOImpl();
+            } else {
+                seoImage = SeoImageDTOImpl(event.result);
+            }
+            titleTextInput.text = seoImage.title;
+            altTextInput.text = seoImage.alt;
+
+        }
+
+        private function onAddImageToRepositoryResult(event:ResultEvent):void {
+
+            updateImageSeoData();
+
+        }
+
+        private function onCreateResult(event:ResultEvent):void {
+            // do nothing
+        }
+
+        private function onUpdateResult(event:ResultEvent):void {
+            // do nothing
         }
         ]]>
 </mx:Script>
