@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
-           xmlns:attr="org.yes.cart.ui.attributes.*"
            xmlns:cat="org.yes.cart.ui.category.*"
            xmlns:seo="org.yes.cart.ui.seo.*"
            width="100%" height="100%"
@@ -23,29 +22,21 @@
         import mx.events.ListEvent;
         import mx.events.PropertyChangeEvent;
         import mx.managers.PopUpManager;
-        import mx.rpc.AsyncResponder;
-        import mx.rpc.AsyncToken;
         import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
         import mx.utils.ObjectUtil;
 
-        import org.yes.cart.constants.AttributeGroupNames;
         import org.yes.cart.event.DtoEvent;
-        import org.yes.cart.impl.AttrValueCategoryDTOImpl;
-        import org.yes.cart.impl.AttributeDTOImpl;
         import org.yes.cart.impl.CategoryDTOImpl;
         import org.yes.cart.impl.ProductCategoryDTOImpl;
         import org.yes.cart.impl.ProductDTOImpl;
-        import org.yes.cart.impl.ProductTypeDTOImpl;
         import org.yes.cart.impl.SeoDTOImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
         import org.yes.cart.ui.CategoryTreeDescriptor;
         import org.yes.cart.ui.attributes.EntityAttributeValuesManagementPanel;
         import org.yes.cart.ui.product.ProductFinderDialog;
-        import org.yes.cart.ui.seo.SeoPanel;
         import org.yes.cart.util.DataModelUtils;
         import org.yes.cart.util.DomainUtils;
-        import org.yes.cart.util.UpdateTarget;
 
         private var TAB_SUMMARY_IDX:int = 0;
         private var TAB_PRODUCTS_IDX:int = 1;
@@ -382,20 +373,8 @@
         }
 
         private function initSeoListeners():void {
-            seoTabPanel.addEventListener(DtoEvent.REMOVE, onSeoRemoved);
             seoTabPanel.addEventListener(DtoEvent.UPDATE, onSeoCreated);
         }
-
-        /**
-         * Call back function to handle SEO removed event
-         * @return nothing
-         */
-        private function onSeoRemoved(event:DtoEvent):void {
-            Debug.trace("INFO CategoryManagementPanel seo id set to null for " + selectedCategoryDTOImpl);
-            selectedCategoryDTOImpl.seoId = Number.NaN;
-            remoteCategoryService.update(selectedCategoryDTOImpl);
-        }
-
 
         /**
          * Call back function to handle SEO created event

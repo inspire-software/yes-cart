@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" creationComplete="init();">
-	<mx:Form x="0" y="0">
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%">
+	<mx:Form width="100%">
 		<mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='code')">
-			<mx:TextInput id="codeTextInput" width="300" enabled="{ DomainUtils.isPersistentPK(productDTOImpl.productId) }"/>
+			<mx:TextInput id="codeTextInput" width="300" enabled="{allowChangeCode}"/>
 		</mx:FormItem>
 		<mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='name')">
 			<mx:TextInput id="nameTextInput" width="300"/>
@@ -51,157 +51,121 @@
 
 		</mx:FormItem>
 		<mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='available')">
-			<mx:ComboBox id="availableComboBox" width="300"
-                         dataProvider="{availability}"
-						 labelField="name"
-						 prompt="@Resource(bundle='ProductManagementPanel',key='selectAvailability')"
-						 />
-
+			<mx:Label text="TODO: add inventory management"/>
 		</mx:FormItem>
 
 
         <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='tag')">
             <mx:TextInput id="tagTextInput" width="300"/>
         </mx:FormItem>
+	</mx:Form>
 
-
-
-        <mx:FormItem>
-            <mx:Button
+    <mx:ControlBar horizontalAlign="right" width="100%">
+        <mx:Button
                 enabled="{productDTOImplChanged}"
                 label="@Resource(bundle='ProductManagementPanel',key='save')"
                 toolTip="@Resource(bundle='ProductManagementPanel',key='saveHint')"
                 click="saveProductChanges(event)"/>
+    </mx:ControlBar>
 
-        </mx:FormItem>
-	</mx:Form>
+    <mx:ArrayCollection id="propertyWatchers"/>
 
     <mx:ArrayCollection id="productTypes"/>
     <mx:ArrayCollection id="brands"/>
-    <mx:ArrayCollection id="availability"/>
+
+    <mx:Boolean id="allowChangeCode">false</mx:Boolean>
     <mx:Boolean id="productDTOImplChanged">false</mx:Boolean>
 
     <mx:Script><![CDATA[
         import com.hexagonstar.util.debug.Debug;
 
-        import mx.controls.Alert;
-
-        import org.yes.cart.impl.ProductDTOImpl;
-
         import mx.binding.utils.BindingUtils;
         import mx.binding.utils.ChangeWatcher;
         import mx.events.PropertyChangeEvent;
 
+        import org.yes.cart.event.DtoEvent;
+
+        import org.yes.cart.impl.ProductDTOImpl;
+        import org.yes.cart.util.DataModelUtils;
         import org.yes.cart.util.DomainUtils;
 
-        private var _changedFunction:Function;
-
-
-        /**
-         * Get product changed call back function
-         * @return call back function
-         */
-        public function get changedFunction():Function {
-            return _changedFunction;
-        }
-
-        /**
-         * Set product changed call back function
-         * @param value
-         * @return
-         */
-        public function set changedFunction(value:Function):void {
-            _changedFunction = value;
-        }
-
         [Bindable]
-        public var productDTOImpl:ProductDTOImpl;
+        private var _productDTOImpl:ProductDTOImpl;
+
+        public function get productDTOImpl():ProductDTOImpl {
+            return _productDTOImpl;
+        }
+
+        public function set productDTOImpl(value:ProductDTOImpl):void {
+            unbindProperties();
+            _productDTOImpl = value;
+            allowChangeCode = DomainUtils.isPersistentPK(_productDTOImpl.productId);
+            bindProperties();
+        }
 
         /**
          * Handle save product changes click
          * @param event event
          * @return nothing
          */
-        private function saveProductChanges(event:flash.events.MouseEvent):void {
-            Debug.trace("saveProductChanges is " + saveProductChanges);
-            if (changedFunction != null) {
-                changedFunction(productDTOImpl);
-            }
+        private function saveProductChanges(event:MouseEvent):void {
+            dispatchEvent(new DtoEvent(DtoEvent.UPDATE, _productDTOImpl));
             productDTOImplChanged = false;
         }
 
-        private function init():void {
-
-            BindingUtils.bindProperty(codeTextInput, "text", productDTOImpl, "code");
-            BindingUtils.bindProperty(nameTextInput, "text", productDTOImpl, "name");
-            BindingUtils.bindProperty(tagTextInput, "text", productDTOImpl, "tag");
-            BindingUtils.bindProperty(descriptionTextInput, "text", productDTOImpl, "description");
-            BindingUtils.bindProperty(productAvailableFromDateField, "selectedDate", productDTOImpl, "availablefrom");
-            BindingUtils.bindProperty(productAvailableTillDateField, "selectedDate", productDTOImpl, "availabletill");
-            BindingUtils.bindProperty(featuredCheckBox, "selected", productDTOImpl, "featured");
-            BindingUtils.bindProperty(brandComboBox, "selectedItem", productDTOImpl, "brandDTO");
-            BindingUtils.bindProperty(typeComboBox, "selectedItem", productDTOImpl, "productTypeDTO");
-            BindingUtils.bindProperty(availableComboBox, "selectedItem", productDTOImpl, "availabilityDTO");
-
-            for each (var brand:Object in brandComboBox.dataProvider) {
-                if (brand.brandId == productDTOImpl.brandDTO.brandId) {
-                    brandComboBox.selectedItem = brand;
-                    break;
-                }
+        private function unbindProperties():void {
+            for each (var watcher:ChangeWatcher in propertyWatchers) {
+                watcher.unwatch();
             }
+            propertyWatchers.removeAll();
+        }
 
-            for each (var type:Object in typeComboBox.dataProvider) {
-                if (type.producttypeId == productDTOImpl.productTypeDTO.producttypeId) {
-                    typeComboBox.selectedItem = type;
-                    break;
-                }
-            }
+        private function bindProperties():void {
 
-            for each (var available:Object in availableComboBox.dataProvider) {
-                if (available.availabilityId == productDTOImpl.availabilityDTO.availabilityId) {
-                    availableComboBox.selectedItem = available;
-                    break;
-                }
-            }
+            propertyWatchers.addItem(BindingUtils.bindProperty(codeTextInput, "text", _productDTOImpl, "code"));
+            propertyWatchers.addItem(BindingUtils.bindProperty(nameTextInput, "text", _productDTOImpl, "name"));
+            propertyWatchers.addItem(BindingUtils.bindProperty(tagTextInput, "text", _productDTOImpl, "tag"));
+            propertyWatchers.addItem(BindingUtils.bindProperty(descriptionTextInput, "text", _productDTOImpl, "description"));
+            propertyWatchers.addItem(BindingUtils.bindProperty(productAvailableFromDateField, "selectedDate", _productDTOImpl, "availablefrom"));
+            propertyWatchers.addItem(BindingUtils.bindProperty(productAvailableTillDateField, "selectedDate", _productDTOImpl, "availabletill"));
+            propertyWatchers.addItem(BindingUtils.bindProperty(featuredCheckBox, "selected", _productDTOImpl, "featured"));
+            propertyWatchers.addItem(BindingUtils.bindProperty(brandComboBox, "selectedItem", _productDTOImpl, "brandDTO"));
+            propertyWatchers.addItem(BindingUtils.bindProperty(typeComboBox, "selectedItem", _productDTOImpl, "productTypeDTO"));
+            //BindingUtils.bindProperty(availableComboBox, "selectedItem", _productDTOImpl, "availabilityDTO");
+
+            DataModelUtils.selectCombo(brandComboBox, _productDTOImpl.brandDTO, 'brandId');
+            DataModelUtils.selectCombo(typeComboBox, _productDTOImpl.productTypeDTO, 'producttypeId');
+
+            propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "code", codeTextInput, "text"));
+            propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "name", nameTextInput, "text"));
+            propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "tag", tagTextInput, "text"));
+            propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "description", descriptionTextInput, "text"));
+            propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "availablefrom", productAvailableFromDateField, "selectedDate"));
+            propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "availabletill", productAvailableTillDateField, "selectedDate"));
+            propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "featured", featuredCheckBox, "selected"));
+            propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "brandDTO", brandComboBox, "selectedItem"));
+            propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "productTypeDTO", typeComboBox, "selectedItem"));
+            //BindingUtils.bindProperty(_productDTOImpl, "availabilityDTO", availableComboBox, "selectedItem");
 
 
-            BindingUtils.bindProperty(productDTOImpl, "code", codeTextInput, "text");
-            BindingUtils.bindProperty(productDTOImpl, "name", nameTextInput, "text");
-            BindingUtils.bindProperty(productDTOImpl, "tag", tagTextInput, "text");
-            BindingUtils.bindProperty(productDTOImpl, "description", descriptionTextInput, "text");
-            BindingUtils.bindProperty(productDTOImpl, "availablefrom", productAvailableFromDateField, "selectedDate");
-            BindingUtils.bindProperty(productDTOImpl, "availabletill", productAvailableTillDateField, "selectedDate");
-            BindingUtils.bindProperty(productDTOImpl, "featured", featuredCheckBox, "selected");
-            BindingUtils.bindProperty(productDTOImpl, "brandDTO", brandComboBox, "selectedItem");
-            BindingUtils.bindProperty(productDTOImpl, "productTypeDTO", typeComboBox, "selectedItem");
-            BindingUtils.bindProperty(productDTOImpl, "availabilityDTO", availableComboBox, "selectedItem");
+            propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "code", onProductDTOChanged));
 
-
-            ChangeWatcher.watch(productDTOImpl, "code", productDTOChanged);
-
-            ChangeWatcher.watch(productDTOImpl, "tag", productDTOChanged);
-            ChangeWatcher.watch(productDTOImpl, "name", productDTOChanged);
-            ChangeWatcher.watch(productDTOImpl, "description", productDTOChanged);
-            ChangeWatcher.watch(productDTOImpl, "availablefrom", productDTOChanged);
-            ChangeWatcher.watch(productDTOImpl, "availabletill", productDTOChanged);
-            ChangeWatcher.watch(productDTOImpl, "featured", productDTOChanged);
-            ChangeWatcher.watch(productDTOImpl, "brandDTO", productDTOChanged);
-            ChangeWatcher.watch(productDTOImpl, "productTypeDTO", productDTOChanged);
-            ChangeWatcher.watch(productDTOImpl, "availabilityDTO", productDTOChanged);
+            propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "tag", onProductDTOChanged));
+            propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "name", onProductDTOChanged));
+            propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "description", onProductDTOChanged));
+            propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "availablefrom", onProductDTOChanged));
+            propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "availabletill", onProductDTOChanged));
+            propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "featured", onProductDTOChanged));
+            propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "brandDTO", onProductDTOChanged));
+            propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "productTypeDTO", onProductDTOChanged));
+            propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "availabilityDTO", onProductDTOChanged));
 
 
         }
 
-
-        /**
-         * Product changed watch function.
-         * @param event
-         * @return
-         */
-        private function productDTOChanged(event:PropertyChangeEvent):void {
-
+        private function onProductDTOChanged(event:PropertyChangeEvent):void {
             productDTOImplChanged = true;
         }
         ]]></mx:Script>
 
-</mx:Canvas>
+</mx:VBox>

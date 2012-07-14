@@ -30,10 +30,10 @@
 
         public function set seoId(value:Number):void {
             _seoId = value;
-            init();
+            onSeoIdChanged();
         }
 
-        public function init():void {
+        public function onSeoIdChanged():void {
             if (DomainUtils.isNewPK(seoId)) {
                 this.seoDTOImpl = new SeoDTOImpl();
                 bind();
@@ -125,6 +125,7 @@
         private function onRpcMethodFault(event:FaultEvent):void {
             ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
         }
+
         ]]>
     </mx:Script>
 
