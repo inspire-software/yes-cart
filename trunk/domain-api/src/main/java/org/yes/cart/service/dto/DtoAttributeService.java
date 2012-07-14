@@ -42,10 +42,10 @@ public interface DtoAttributeService extends GenericDTOService<AttributeDTO> {
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
-     * Find all attibute DTOs in given group , that allow to have several attributes
+     * Find all attribute DTOs in given group , that allow to have several attributes
      *
      * @param attributeGroupCode group of attributes
-     * @return list of attibute DTOs with allowed multiple values or null if no such attributes found
+     * @return list of attribute DTOs with allowed multiple values or null if no such attributes found
      * @throws org.yes.cart.exception.UnableToCreateInstanceException
      *          in case of reflection problem
      * @throws org.yes.cart.exception.UnmappedInterfaceException

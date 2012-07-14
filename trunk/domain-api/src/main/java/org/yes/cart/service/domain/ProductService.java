@@ -301,7 +301,7 @@ public interface ProductService extends GenericService<Product> {
      * @param productTypeId product type id. use exact match
      * @return list of founded products
      */
-     List<Product> getProductByConeNameBrandType(
+     List<Product> getProductByCodeNameBrandType(
             CriteriaTuner criteriaTuner,
             String code,
             String name,

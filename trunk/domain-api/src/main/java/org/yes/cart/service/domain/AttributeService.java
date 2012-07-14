@@ -58,10 +58,10 @@ public interface AttributeService extends GenericService<Attribute> {
 
 
     /**
-     * Find all attibutes in given group , that allow to have several attributes
+     * Find all attributes in given group , that allow to have several attributes
      *
      * @param attributeGroupCode group of attributes
-     * @return list of attibutes with allowed multiple values or null if no such attributes found
+     * @return list of attributes with allowed multiple values or null if no such attributes found
      */
     List<Attribute> findAttributesWithMultipleValues(String attributeGroupCode);
 

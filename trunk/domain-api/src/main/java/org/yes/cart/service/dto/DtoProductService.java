@@ -73,7 +73,7 @@ public interface DtoProductService extends GenericDTOService<ProductDTO>, Generi
      * @throws org.yes.cart.exception.UnmappedInterfaceException
      *          in case of configuration problem
      */
-    List<ProductDTO> getProductByConeNameBrandType(
+    List<ProductDTO> getProductByCodeNameBrandType(
             final String code,
             final String name,
             final long brandId,
