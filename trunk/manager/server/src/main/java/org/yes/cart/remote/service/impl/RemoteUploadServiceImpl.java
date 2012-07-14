@@ -23,35 +23,34 @@ public class RemoteUploadServiceImpl implements RemoteUploadService {
      */
     public String upload(final byte[] bytes, final String fileName) throws IOException {
 
-        final String folder = System.getProperty("java.io.tmpdir")
+        final String folderPath = System.getProperty("java.io.tmpdir")
                 + File.separator
                 + "yes-cart"
                 + File.separator
                 + Constants.IMPORT_FOLDER;
 
-        final String fullFileName = FilenameUtils.normalize(
-                folder
-                        + File.separator
-                        + fileName
-        );
+        final File folder = new File(folderPath);
+        if (folder.mkdirs()) {
 
-        new File(folder).mkdirs();
-
-        File file = new File(fullFileName);
-
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(file);
-            fos.write(bytes);
-            return fullFileName;
-        } catch (IOException e) {
-            e.printStackTrace();  //Todo log
-        } finally {
-            fos.close();
+            FileOutputStream fos = null;
+            try {
+                File file = File.createTempFile(fileName, null, folder);
+                fos = new FileOutputStream(file);
+                fos.write(bytes);
+                return file.getAbsolutePath();
+            } catch (IOException e) {
+                e.printStackTrace();  //Todo log
+                if (fos != null) {
+                    fos.close();
+                }
+                throw e;
+            } finally {
+                if (fos != null) {
+                    fos.close();
+                }
+            }
         }
-
-
-        return null;
+        throw new IOException("Unable to create directory: " + folderPath);
     }
 
 }
