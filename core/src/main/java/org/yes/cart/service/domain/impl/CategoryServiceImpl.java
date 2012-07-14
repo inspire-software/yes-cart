@@ -207,7 +207,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      *
      * @param category      given category
      * @param attributeName attribute name
-     * @return value of given attibute name or null if value not found in category hierarchy
+     * @return value of given attribute name or null if value not found in category hierarchy
      */
     private String getCategoryAttributeRecursive(final Category category, final String attributeName) {
         final String rez;

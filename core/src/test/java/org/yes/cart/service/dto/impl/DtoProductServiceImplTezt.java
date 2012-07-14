@@ -104,7 +104,7 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
 
     @Test
     public void testGetProductByConeNameBrandType() throws Exception {
-        List<ProductDTO> list = dtoService.getProductByConeNameBrandType(null, null, 104L, 0);
+        List<ProductDTO> list = dtoService.getProductByCodeNameBrandType(null, null, 104L, 0);
         assertFalse(list.isEmpty());
         assertTrue(26 == list.size() || 28 == list.size());             //26 products with brand samsung
     }

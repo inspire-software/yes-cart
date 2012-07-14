@@ -75,7 +75,7 @@ public class TestAttributeServiceImpl extends BaseCoreDBTestCase {
         List<Attribute> list = attributeService.findAttributesWithMultipleValues(AttributeGroupNames.PRODUCT);
         assertNotNull(list);
         assertEquals(5, list.size());
-        //shop has not attibutes with multiple values
+        //shop has not attributes with multiple values
         list = attributeService.findAttributesWithMultipleValues(AttributeGroupNames.SHOP);
         assertNull(list);
     }

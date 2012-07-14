@@ -569,7 +569,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    public List<Product> getProductByConeNameBrandType(
+    public List<Product> getProductByCodeNameBrandType(
             final CriteriaTuner criteriaTuner,
             final String code,
             final String name,
