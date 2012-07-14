@@ -25,7 +25,7 @@ public interface AttrValue extends Auditable {
     void setAttrvalueId(long attrvalueId);
 
     /**
-     * Get the string representation of attibute value.
+     * Get the string representation of attribute value.
      *
      * @return attribute value.
      */

@@ -25,7 +25,7 @@ public interface AttrValueDTO extends Identifiable {
     void setAttrvalueId(long attrvalueId);
 
     /**
-     * Get the string representation of attibute value.
+     * Get the string representation of attribute value.
      *
      * @return attribute value.
      */

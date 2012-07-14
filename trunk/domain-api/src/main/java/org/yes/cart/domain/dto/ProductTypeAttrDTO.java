@@ -72,7 +72,7 @@ public interface ProductTypeAttrDTO extends Identifiable {
     void setRank(int rank);
 
     /**
-     * Is this attibute visible on storefront ?
+     * Is this attribute visible on storefront ?
      *
      * @return true if attribute is vesible.
      */
