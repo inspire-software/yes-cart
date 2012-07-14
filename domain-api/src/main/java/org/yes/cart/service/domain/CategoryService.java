@@ -134,7 +134,7 @@ public interface CategoryService extends GenericService<Category> {
      * @param category      given category
      * @param attributeName attribute name
      * @param defaultValue  default value will be returned if value not found in hierarcht
-     * @return value of given attibute name or defaultValue if value not found in category hierarchy
+     * @return value of given attribute name or defaultValue if value not found in category hierarchy
      */
     String getCategoryAttributeRecursive(Category category, String attributeName, String defaultValue);
 
