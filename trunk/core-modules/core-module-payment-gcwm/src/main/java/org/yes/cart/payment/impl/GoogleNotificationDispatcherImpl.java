@@ -315,7 +315,7 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
 
 
     /**
-     * Get attibute service from application context.
+     * Get attribute service from application context.
      *
      * @return {@link AttributeService}
      */
