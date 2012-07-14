@@ -237,7 +237,7 @@ public class DtoProductServiceImpl
     /**
      * {@inheritDoc}
      */
-    public List<ProductDTO> getProductByConeNameBrandType(
+    public List<ProductDTO> getProductByCodeNameBrandType(
             final String code,
             final String name,
             final long brandId,
@@ -251,7 +251,7 @@ public class DtoProductServiceImpl
         if (productTypeId > 0) {
             productType = productTypeId;
         }
-        final List<Product> products = ((ProductService) service).getProductByConeNameBrandType(
+        final List<Product> products = ((ProductService) service).getProductByCodeNameBrandType(
                 DEFAULT_SEARCH_CRITERIA_TUNER, code, name, brand, productType);
 
         final List<ProductDTO> dtos = new ArrayList<ProductDTO>(products.size());

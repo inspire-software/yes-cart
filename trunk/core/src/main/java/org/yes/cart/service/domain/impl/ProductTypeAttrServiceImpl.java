@@ -18,7 +18,7 @@ public class ProductTypeAttrServiceImpl extends BaseGenericServiceImpl<ProductTy
 
     /**
      * Construct service.
-     * @param genericDao product type attibute dao to use.
+     * @param genericDao product type attribute dao to use.
      */
     public ProductTypeAttrServiceImpl(final GenericDAO<ProductTypeAttr, Long> genericDao) {
         super(genericDao);
