@@ -193,7 +193,7 @@ public interface ProductDTO extends Identifiable {
 
 
     /**
-     * Get attibutes.
+     * Get attributes.
      *
      * @return list of attributes
      */

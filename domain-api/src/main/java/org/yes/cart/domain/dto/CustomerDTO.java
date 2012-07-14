@@ -85,7 +85,7 @@ public interface CustomerDTO extends Identifiable {
     void setCustomerId(long customerId);
 
     /**
-     * Get attibutes.
+     * Get attributes.
      *
      * @return list of attributes
      */

@@ -13,14 +13,14 @@ import java.util.Map;
 public interface Attributable {
 
     /**
-     * Get all attibute values.
+     * Get all attribute values.
      *
      * @return all attr values.
      */
     Collection<AttrValue> getAllAttibutes();
 
     /**
-     * Get all attibute values.
+     * Get all attribute values.
      *
      * @return all attr values.
      */
