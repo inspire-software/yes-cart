@@ -1,60 +1,68 @@
 <?xml version="1.0" ?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" creationComplete="init();">
-    <mx:VBox width="100%" height="100%">
-        <mx:Form x="0" y="0">
-            <mx:FormItem>
-                <mx:HBox>
-                    <mx:Button id="addProductCategoryBtn"
-                               label="@Resource(bundle='ProductManagementPanel',key='addProductCategory')"
-                               toolTip="@Resource(bundle='ProductManagementPanel',key='addProductCategoryHint')"
-                               enabled="true"
-                               click="addProductCategory(event);"
-                            />
-                    <mx:Button id="deleteProductCategoryBtn"
-                               label="@Resource(bundle='ProductManagementPanel',key='deleteProductCategory')"
-                               toolTip="@Resource(bundle='ProductManagementPanel',key='deleteProductCategoryHint')"
-                               enabled="{selectedCategoryDTO != null}"
-                               click="deleteProductCategory(event);"
-                            />
-                </mx:HBox>
-            </mx:FormItem>
-        </mx:Form>
-        <mx:DataGrid
-                id="ProductCategoriesGrid"
-                x="0" y="0" width="100%" height="100%" editable="false"
-                dataProvider="{remoteCategoryService.getByProductId.lastResult}"
-                itemClick="productCategorySelectedClick(event);"
-                >
-            <mx:columns>
-                <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagementPanel',key='id')"
-                                   dataField="categoryId"/>
-                <mx:DataGridColumn width="200" headerText="@Resource(bundle='ProductManagementPanel',key='category')"
-                                   dataField="name"/>
-                <mx:DataGridColumn headerText="@Resource(bundle='ProductManagementPanel',key='description')"
-                                   dataField="description"/>
-            </mx:columns>
-        </mx:DataGrid>
-    </mx:VBox>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%"
+         paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
+    <mx:ControlBar>
+        <mx:Button id="addProductCategoryBtn"
+                   label="@Resource(bundle='ProductManagementPanel',key='addProductCategory')"
+                   toolTip="@Resource(bundle='ProductManagementPanel',key='addProductCategoryHint')"
+                   enabled="true"
+                   click="onAddProductCategoryClick(event)"
+                />
+        <mx:Button id="deleteProductCategoryBtn"
+                   label="@Resource(bundle='ProductManagementPanel',key='deleteProductCategory')"
+                   toolTip="@Resource(bundle='ProductManagementPanel',key='deleteProductCategoryHint')"
+                   enabled="{categorySelected}"
+                   click="onDeleteProductCategoryClick(event);"
+                />
+    </mx:ControlBar>
+    <mx:DataGrid
+            id="productCategoriesGrid"
+            width="100%" height="100%" editable="false"
+            itemClick="onProductCategorySelected(event)">
+        <mx:columns>
+            <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagementPanel',key='id')"
+                               dataField="categoryId"/>
+            <mx:DataGridColumn width="200" headerText="@Resource(bundle='ProductManagementPanel',key='category')"
+                               dataField="name"/>
+            <mx:DataGridColumn headerText="@Resource(bundle='ProductManagementPanel',key='description')"
+                               dataField="description"/>
+        </mx:columns>
+    </mx:DataGrid>
+
+    <mx:Boolean id="categorySelected">false</mx:Boolean>
 
     <mx:RemoteObject showBusyCursor="true" makeObjectsBindable="true"
-                     id="remoteCategoryService"
-                     destination="remoteCategoryService"
-                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
-                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
-                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+                     id="remoteCategoryService" destination="remoteCategoryService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getByProductId" name="getByProductId"
+                   result="onGetByProductIdResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
 
     <mx:RemoteObject showBusyCursor="true" makeObjectsBindable="true"
                      id="remoteProductCategoryService"
                      destination="remoteProductCategoryService"
                      result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
                      fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
-                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="create" name="create"
+                   result="onCreateResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="removeByCategoryProductIds" name="removeByCategoryProductIds"
+                   result="onRemoveByCategoryProductIdsResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
 
 
     <mx:Script><![CDATA[
         import mx.core.FlexGlobals;
+        import mx.rpc.events.FaultEvent;
 
-        import org.yes.cart.impl.CategoryDTOImpl;
         import org.yes.cart.impl.ProductCategoryDTOImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
         import org.yes.cart.ui.category.CategoryFinderDialog;
@@ -63,81 +71,85 @@
         import mx.events.CloseEvent;
         import mx.events.ListEvent;
         import mx.managers.PopUpManager;
-        import mx.rpc.AsyncResponder;
         import mx.rpc.events.ResultEvent;
 
-        public var productId:Number;
-
         [Bindable]
-        private var selectedCategoryDTO:CategoryDTOImpl;
+        private var _productId:Number;
 
         private var categoryFinderPopUp:CategoryFinderDialog;
 
+        public function get productId():Number {
+            return _productId;
+        }
 
-        private function init():void {
-            readCategories(null, null);
+        public function set productId(value:Number):void {
+            _productId = value;
+            remoteCategoryService.getByProductId(_productId);
         }
 
         private function readCategories(event:ResultEvent, ojb:Object = null):void {
             remoteCategoryService.getByProductId(productId);
         }
 
-        /**
-         * Product category item selected in grid.
-         * @param event event
-         * @return nothing
-         */
-        private function productCategorySelectedClick(event:ListEvent):void {
-            selectedCategoryDTO = event.currentTarget.selectedItem;
+        private function onProductCategorySelected(event:ListEvent):void {
+            categorySelected = productCategoriesGrid.selectedItem != null;
         }
 
 
-        private function deleteProductCategory(event:MouseEvent):void {
-            Alert.show(
-                    resourceManager.getString('ProductManagementPanel', 'deleteProductFromCategoryConfirm'),
-                    resourceManager.getString('ShopManagerApplication', 'warning'),
-                    Alert.OK | Alert.CANCEL, this, deleteProductCategoryServiceCall, null, Alert.OK);
-
-        }
-
-        private function deleteProductCategoryServiceCall(event:CloseEvent):void {
-            if (event.detail == Alert.OK) {
-                remoteProductCategoryService.removeByCategoryProductIds(
-                        selectedCategoryDTO.categoryId, productId).addResponder(
-                        new AsyncResponder(
-                                readCategories,
-                                ShopManagerGlobal.instance.defaultOnRpcMethodFault
-                        )
-                );
-                selectedCategoryDTO = null;
+        private function onDeleteProductCategoryClick(event:MouseEvent):void {
+            if (categorySelected && productCategoriesGrid.selectedItem != null) {
+                Alert.show(
+                        resourceManager.getString('ProductManagementPanel', 'deleteProductFromCategoryConfirm', [ productCategoriesGrid.selectedItem.name ]),
+                        resourceManager.getString('ShopManagerApplication', 'warning'),
+                        Alert.OK | Alert.CANCEL, this, onDeleteProductCategoryConfirm, null, Alert.OK);
             }
         }
 
-        private function addProductCategory(event:MouseEvent):void {
+        private function onDeleteProductCategoryConfirm(event:CloseEvent):void {
+            if (event.detail == Alert.OK) {
+                if (categorySelected && productCategoriesGrid.selectedItem != null) {
+                    remoteProductCategoryService.removeByCategoryProductIds(
+                            productCategoriesGrid.selectedItem.categoryId, productId);
+                }
+                categorySelected = false;
+            }
+        }
+
+        private function onAddProductCategoryClick(event:MouseEvent):void {
             categoryFinderPopUp = CategoryFinderDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CategoryFinderDialog, true));
-            categoryFinderPopUp.selectProductButton.addEventListener(MouseEvent.CLICK, assignSelectedProduct);
+            categoryFinderPopUp.selectProductButton.addEventListener(MouseEvent.CLICK, onAssignSelectedProductCategorySaveClick);
             PopUpManager.centerPopUp(categoryFinderPopUp);
 
         }
 
-        /**
-         * Handle selected category from finder dialog and assign current product to selected category.
-         * @param event event
-         * @return nothing
-         */
-        private function assignSelectedProduct(event:Event):void {
-            var productCategoryDTOImpl:ProductCategoryDTOImpl = new ProductCategoryDTOImpl();
-            productCategoryDTOImpl.productId = productId;
-            productCategoryDTOImpl.categoryId = categoryFinderPopUp.selectedCategoryDTOImpl.categoryId;
-            productCategoryDTOImpl.rank = 0;
+        private function onAssignSelectedProductCategorySaveClick(event:Event):void {
+            if (categoryFinderPopUp != null) {
+                var productCategoryDTOImpl:ProductCategoryDTOImpl = new ProductCategoryDTOImpl();
+                productCategoryDTOImpl.productId = productId;
+                productCategoryDTOImpl.categoryId = categoryFinderPopUp.selectedCategoryDTOImpl.categoryId;
+                productCategoryDTOImpl.rank = 0;
 
-            remoteProductCategoryService.create(productCategoryDTOImpl).addResponder(
-                    new AsyncResponder(
-                            readCategories,
-                            ShopManagerGlobal.instance.defaultOnRpcMethodFault));
+                remoteProductCategoryService.create(productCategoryDTOImpl);
+                categoryFinderPopUp.selectProductButton.removeEventListener(MouseEvent.CLICK, onAssignSelectedProductCategorySaveClick);
+                PopUpManager.removePopUp(categoryFinderPopUp);
+                categoryFinderPopUp = null;
+            }
+        }
 
-            PopUpManager.removePopUp(categoryFinderPopUp);
+        protected function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
 
+        private function onGetByProductIdResult(event:ResultEvent):void {
+            productCategoriesGrid.dataProvider = event.result;
+        }
+
+        private function onCreateResult(event:ResultEvent):void {
+            remoteCategoryService.getByProductId(productId);
+        }
+
+        private function onRemoveByCategoryProductIdsResult(event:ResultEvent):void {
+            remoteCategoryService.getByProductId(productId);
         }
         ]]></mx:Script>
-</mx:Canvas>
+</mx:VBox>

@@ -25,14 +25,13 @@
 
         </mx:Form>
         <mx:ControlBar width="100%" horizontalAlign="right">
-            <mx:Button id="btnLoad" width="94"
+            <mx:Button id="btnLoad"
                        label="@Resource(bundle='AttributesManagementPanel',key='loadImage')"
                        toolTip="@Resource(bundle='AttributesManagementPanel',key='loadImageHint')"
                        click="onLoadImageDialogButtonClick()"/>
-            <mx:Button id="btnSave" width="94"
+            <mx:Button id="btnSave"
                        label="@Resource(bundle='AttributesManagementPanel',key='save')" click="onSaveImageClick()"/>
             <mx:Button id="btnCancel"
-                       width="94"
                        label="@Resource(bundle='AttributesManagementPanel',key='cancel')"
                        click="PopUpManager.removePopUp(this)"
                     />
