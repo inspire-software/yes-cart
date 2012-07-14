@@ -35,9 +35,9 @@ import java.util.Map;
 
 /**
  * Dynamic form to work with different attribute values. Form fields and field editors
- * depends from attibutes, that desribed for customers.
+ * depends from attributes, that desribed for customers.
  * Panel can be refactored, in case if some dynamic behaviour will be need for other entities, that
- * has attibutes. Just add callback to store particular entity when, attributes will be submited.
+ * has attributes. Just add callback to store particular entity when, attributes will be submited.
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 10/23/11
@@ -152,7 +152,7 @@ public class DynaFormPanel extends BaseComponent {
 
 
     /**
-     * Get the particular editor for given attribute value. Type of editor depends from type of attibute value.
+     * Get the particular editor for given attribute value. Type of editor depends from type of attribute value.
      *
      * @param attrValue give {@link org.yes.cart.domain.entity.AttrValue}
      * @return editor;

@@ -84,7 +84,7 @@ public class BaseFilterView extends BaseComponent {
     }
 
     /**
-     * Can be used if product has only one attrubute value per attibute.
+     * Can be used if product has only one attrubute value per attribute.
      *
      * @return false if all group has only one link with one potential result;
      */

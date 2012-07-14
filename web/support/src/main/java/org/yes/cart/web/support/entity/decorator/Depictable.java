@@ -75,7 +75,7 @@ public interface Depictable {
 
 
      /** Get default image attribute name.
-      * @return default image attibute name
+      * @return default image attribute name
       * */
     String getDefaultImageAttributeName();
 
