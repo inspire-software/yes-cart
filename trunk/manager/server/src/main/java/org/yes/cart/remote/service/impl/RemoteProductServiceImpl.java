@@ -67,12 +67,12 @@ public class RemoteProductServiceImpl
     /**
      * {@inheritDoc}
      */
-    public List<ProductDTO> getProductByConeNameBrandType(
+    public List<ProductDTO> getProductByCodeNameBrandType(
             final String code,
             final String name,
             final long brandId,
             final long productTypeId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return ((DtoProductService) getGenericDTOService()).getProductByConeNameBrandType(code, name, brandId, productTypeId);
+        return ((DtoProductService) getGenericDTOService()).getProductByCodeNameBrandType(code, name, brandId, productTypeId);
     }
 
     /**

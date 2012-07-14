@@ -219,7 +219,7 @@
             </property>
             <property name="businesstype" type="string" not-null="false">
                 <column name="BUSINESSTYPE" length="255" not-null="false">
-                    <comment>Used mosty on UI. How to represent product, category, attibutes, etc</comment>
+                    <comment>Used mosty on UI. How to represent product, category, attributes, etc</comment>
                 </column>
             </property>
 
@@ -382,7 +382,7 @@
             </property>
             <property name="val" type="string" length="4000">
                 <column name="VAL" length="4000">
-                    <comment>Default value , shall be force inserted for new attributes, if attibute is mandaroty
+                    <comment>Default value , shall be force inserted for new attributes, if attribute is mandaroty
                     </comment>
                 </column>
             </property>
