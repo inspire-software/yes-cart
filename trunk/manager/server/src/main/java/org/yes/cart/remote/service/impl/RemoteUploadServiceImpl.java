@@ -30,7 +30,9 @@ public class RemoteUploadServiceImpl implements RemoteUploadService {
                 + Constants.IMPORT_FOLDER;
 
         final File folder = new File(folderPath);
-        if (folder.mkdirs()) {
+        folder.mkdirs();
+
+        if (folder.exists()) {
 
             FileOutputStream fos = null;
             try {
