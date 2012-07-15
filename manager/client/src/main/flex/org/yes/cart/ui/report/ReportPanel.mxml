@@ -24,8 +24,13 @@
         <![CDATA[
         import com.hexagonstar.util.debug.Debug;
 
+        import mx.collections.ArrayList;
+        import mx.containers.FormItem;
+
         import mx.controls.Alert;
         import mx.controls.DateField;
+        import mx.controls.TextInput;
+        import mx.core.UIComponent;
         import mx.rpc.AsyncResponder;
         import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
@@ -82,9 +87,13 @@
          */
         private function fillParameterForm(event:Event):void {
 
+
+
             var reportDescriptor:ReportDescriptor = ReportDescriptor(reportComboBox.selectedItem);
 
             parameterForm.removeAllChildren();
+
+            pdf = null;
 
             for (var i:int = 0; i < reportDescriptor.parameters.length; i++) {
 
@@ -97,17 +106,59 @@
                         var formItem:FormItem = new FormItem();
                         formItem.label = localizedParamName.value;
 
-                        var textInput:TextInput = new TextInput();
-                        formItem.addChild(textInput);
+                        if (repoParam.allowedValuesQuery != null && repoParam.allowedValuesQuery.length > 0) {
+                            var cbmBox:ComboBox = new ComboBox();
+                            cbmBox.prompt = resourceManager.getString('ReportPanel', 'selectDataPrompt');
+                            cbmBox.labelField = "value";
+                            remoteReportService.getParameterValues(repoParam.allowedValuesQuery).addResponder(
+                                    new AsyncResponder(
+                                            function (event:ResultEvent, obj:Object = null):void {
+                                                cbmBox.dataProvider = event.result;
+                                            }
+                                            ,
+                                            function (event:FaultEvent):void {
+                                                ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+                                            }
+                                    )
+                            );
+                            formItem.addChild(cbmBox); //todo data
+                        } else {
+                            formItem.addChild(new TextInput());
+                        }
 
-                        parameterForm.addChild(
-                                formItem);
+                        parameterForm.addChild(formItem);
 
                     }
                 }
             }
 
             okBtnCrtlBar.width = parameterForm.width;
+        }
+
+
+        /**
+         * Collect report parameters from form.
+         * @returnarray list , which contains report parameters
+         */
+        private function collectReportParameters():ArrayList {
+            var rez:ArrayList = new ArrayList();
+            for (var i:int = 0; i < parameterForm.getChildren().length; i++) {
+                var item:Object = parameterForm.getChildAt(i);
+                if (item is FormItem) {
+                    var formItem:FormItem = item as FormItem;
+                    var uiComponent:UIComponent = UIComponent(formItem.getChildAt(0));
+                    if (uiComponent is ComboBox) {
+                        rez.addItem(ComboBox(uiComponent).selectedItem.lang);
+                    } else if (uiComponent is TextInput) {
+                        rez.addItem(TextInput(uiComponent).text);
+                    } else {
+                        Debug.trace(" Cant determinate ui type for  " + formItem + " value extracted as null and will be passed as report parameter");
+                        rez.addItem(null);
+                    }
+                }
+            }
+            return rez;
+
         }
 
         private function onDownloadReportClick(event:MouseEvent):void {
@@ -121,7 +172,11 @@
 
         }
 
-
+        /**
+         * Create report on server side. Donload as byte array and prompt user to save it on disk.
+         *
+         * @param event mouse event
+         */
         private function createReport(event:MouseEvent):void {
 
             pdf = null;
@@ -136,7 +191,7 @@
             remoteReportService.downloadReport(
                     localeFilter,
                     reportDescriptor.reportId,
-                    null
+                    collectReportParameters()
             );
 
         }
@@ -182,7 +237,8 @@
                 </mx:ComboBox>
             </mx:ControlBar>
 
-            <mx:Form id="parameterForm" visible="{reportComboBox.selectedItem != null}" x="0" y="0">
+            <mx:Form id="parameterForm" visible="{reportComboBox.selectedItem != null}" x="0" y="0" borderStyle="solid"
+                     borderVisible="true">
                 <mx:FormItem label="@Resource(bundle='BrandManagementPanel',key='name')">
                     <mx:TextInput id="nameTextImput" width="200"/>
                 </mx:FormItem>
@@ -194,12 +250,14 @@
             </mx:Form>
 
             <mx:ControlBar id="okBtnCrtlBar"
-                           width="100%" horizontalAlign="right" visible="{reportComboBox.selectedItem != null}">
-                <mx:Button visible="{reportComboBox.selectedItem != null}" click="createReport(event)"
-                           id="okBtn" label="@Resource(bundle='ReportPanel',key='ok')"/>
+                           width="100%"  visible="{reportComboBox.selectedItem != null}">
+
 
                 <mx:Button visible="{pdf != null}" click="onDownloadReportClick(event)"
                            id="saveBtn" label="@Resource(bundle='ReportPanel',key='save')"/>
+
+                <mx:Button visible="{reportComboBox.selectedItem != null}" click="createReport(event)"
+                           id="okBtn" label="@Resource(bundle='ReportPanel',key='ok')"/>
 
             </mx:ControlBar>
 

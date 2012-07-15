@@ -17,15 +17,7 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:aop="http://www.springframework.org/schema/aop"
-       xmlns:flex="http://www.springframework.org/schema/flex"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:security="http://www.springframework.org/schema/security"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-http://www.springframework.org/schema/flex http://www.springframework.org/schema/flex/spring-flex-1.5.xsd
-http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
-http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
 ">
 
     <!-- #################################  reporting configuration ######################################-->
@@ -60,6 +52,59 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
         </property>
     </bean>
 
+
+    <bean id="warehouseRemainsGoods" class="org.yes.cart.report.impl.ReportDescriptor">
+        <property name="reportId" value="warehouseRemainsGoods"/>
+        <property name="hsqlQuery" value="select  o.sku.code,  o.sku.name, o.sku.barCode, coalesce(o.reserved, 0.0), o.quantity  from SkuWarehouseEntity o
+                                          where o.warehouse.code = ?1
+                                          order by o.sku.code"/>
+        <property name="parameters">
+            <list>
+                <bean class="org.yes.cart.report.impl.ReportParameter">
+                    <constructor-arg index="0" value="warehouse"/>
+                    <constructor-arg index="1">
+                        <list>
+                            <bean class="org.yes.cart.report.impl.ReportPair">
+                                <constructor-arg index="0" value="ru"/>
+                                <constructor-arg index="1" value="Склад"/>
+                            </bean>
+                            <bean class="org.yes.cart.report.impl.ReportPair">
+                                <constructor-arg index="0" value="en"/>
+                                <constructor-arg index="1" value="Warehouse"/>
+                            </bean>
+                        </list>
+                    </constructor-arg>
+                    <constructor-arg index="2" value="String"/>
+                    <constructor-arg index="3" value="true"/>
+                    <constructor-arg index="4" value="select w.code, w.name from WarehouseEntity w"/>
+                </bean>
+            </list>
+        </property>
+        <property name="langLabel">
+            <list>
+                <bean class="org.yes.cart.report.impl.ReportPair">
+                    <constructor-arg index="0" value="en"/>
+                    <constructor-arg index="1" value="Remains goods"/>
+                </bean>
+                <bean class="org.yes.cart.report.impl.ReportPair">
+                    <constructor-arg index="0" value="ru"/>
+                    <constructor-arg index="1" value="Remain goods"/>
+                </bean>
+            </list>
+        </property>
+        <property name="langXslfo">
+            <list>
+                <bean class="org.yes.cart.report.impl.ReportPair">
+                    <constructor-arg index="0" value="en"/>
+                    <constructor-arg index="1" value="wh-remains-goods_en.xslfo"/>
+                </bean>
+                <bean class="org.yes.cart.report.impl.ReportPair">
+                    <constructor-arg index="0" value="ru"/>
+                    <constructor-arg index="1" value="wh-remains-goods_ru.xslfo"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
 
 
 </beans>
