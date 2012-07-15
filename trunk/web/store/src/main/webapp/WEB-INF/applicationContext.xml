@@ -452,4 +452,8 @@
     </bean>
 
 
+    <bean id="methodCacheAdvice" class="org.yes.cart.cache.MethodCacheAdvice"/>
+
+
+
 </beans>

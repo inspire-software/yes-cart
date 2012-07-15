@@ -141,4 +141,12 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
 
     <import resource="classpath*:payment-api.xml"/>
 
+
+
+    <bean id="methodCacheAdvice" class="org.yes.cart.cache.MethodCacheAdvice">
+        <property name="cacheEnabled" value="false"/>
+    </bean>
+
+
+
 </beans>
