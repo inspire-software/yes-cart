@@ -47,9 +47,11 @@ import java.util.Map;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-@Component
+//@Component ("methodCacheAdvice")
 @Aspect
 public class MethodCacheAdvice implements ApplicationContextAware {
+
+    private boolean cacheEnabled = true;
 
     private Map<String, Cache> cacheMap;
 
@@ -70,20 +72,28 @@ public class MethodCacheAdvice implements ApplicationContextAware {
     @Around("@annotation(Cacheable)")
     public Object doCache(final ProceedingJoinPoint pjp) throws Throwable {
 
-        final Cacheable cacheable = getAnnotation(pjp, Cacheable.class);
-        if (cacheable == null) {
+        if (cacheEnabled) {
+
+            final Cacheable cacheable = getAnnotation(pjp, Cacheable.class);
+            if (cacheable == null) {
+                return pjp.proceed();
+            }
+            final Cache cache = getCache(cacheable.value());
+
+            final String key = getCacheKey(pjp.getSignature().toLongString(), pjp.getArgs());
+            Element element = cache.get(key);
+            if (element == null) {
+                element = new Element(key, pjp.proceed());
+                cache.put(element);
+            }
+
+            return element.getValue();
+
+        } else {
+
             return pjp.proceed();
-        }
-        Cache cache = getCache(cacheable.value());
 
-        String key = getCacheKey(pjp.getSignature().toLongString(), pjp.getArgs());
-        Element element = cache.get(key);
-        if (element == null) {
-            element = new Element(key, pjp.proceed());
-            cache.put(element);
         }
-
-        return element.getValue();
     }
 
     /**
@@ -94,8 +104,10 @@ public class MethodCacheAdvice implements ApplicationContextAware {
      */
     @After("@annotation(CacheFlush)")
     public void doCacheFlush(final JoinPoint joinPoint) throws Throwable {
-        final Cache cache = getCache(getAnnotation(joinPoint, CacheFlush.class).value());
-        cache.flush();
+        if (cacheEnabled) {
+            final Cache cache = getCache(getAnnotation(joinPoint, CacheFlush.class).value());
+            cache.flush();
+        }
     }
 
     private Cache getCache(final String cacheName) throws NoSuchMethodException {
@@ -184,4 +196,19 @@ public class MethodCacheAdvice implements ApplicationContextAware {
         return cacheMap;
     }
 
+    /**
+     * @return in case if cache enable.
+     */
+    public boolean isCacheEnabled() {
+        return cacheEnabled;
+    }
+
+    /**
+     * Set cache enable flag.
+     *
+     * @param cacheEnabled true if cache enabled
+     */
+    public void setCacheEnabled(boolean cacheEnabled) {
+        this.cacheEnabled = cacheEnabled;
+    }
 }

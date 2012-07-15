@@ -33,7 +33,7 @@ public class ProductDTOImpl {
 
     public var availabletill:Date ;
 
-    public var availabilityDTO:AvailabilityDTOImpl;
+    public var availability:Number;
 
     public var brandDTO:BrandDTOImpl;
 
@@ -93,7 +93,7 @@ public class ProductDTOImpl {
                 + ",code=" + String(code)
                 + ",availablefrom=" + String(availablefrom)
                 + ",availabletill=" + String(availabletill)
-                + ",availabilityDTO=" + String(availabilityDTO)
+                + ",availability=" + String(availability)
                 + ",brandDTO=" + String(brandDTO)
                 + ",productTypeDTO=" + String(productTypeDTO)
                 + ",productCategoryDTOs=" + String(productCategoryDTOs)
