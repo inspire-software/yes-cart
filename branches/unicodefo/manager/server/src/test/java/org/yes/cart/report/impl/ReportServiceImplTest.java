@@ -1,5 +1,6 @@
 package org.yes.cart.report.impl;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.BufferedWriter;
@@ -8,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertTrue;
 
@@ -18,17 +20,37 @@ import static org.junit.Assert.assertTrue;
  */
 public class ReportServiceImplTest  {
 
+    final List<ReportDescriptor> allReportToTestCreation = new ArrayList<ReportDescriptor>();
+
+    @Before
+    public void setUp() {
+
+
+        ReportDescriptor reportDescriptor = new ReportDescriptor();
+        reportDescriptor.setHsqlQuery("select s from ShopEntity s");
+        reportDescriptor.getLangXslfo().add(new ReportPair("en", "src/test/resources/xslfo/shop.xslfo"));
+        reportDescriptor.setReportId("shopTestReport");
+
+        allReportToTestCreation.add(reportDescriptor);
+
+        reportDescriptor = new ReportDescriptor();
+        reportDescriptor.setHsqlQuery("select  o.sku.code,  o.sku.name, o.sku.barCode, o.reserved, o.quantity  from SkuWarehouseEntity o\n" +
+                "                                          where o.warehouse.code = ?1\n" +
+                "                                          order by o.sku.code");
+        reportDescriptor.getLangXslfo().add(new ReportPair("en", "src/test/resources/xslfo/wh-remains-goods.xslfo"));
+        reportDescriptor.setReportId("warehouseRemainsGoods");
+
+        allReportToTestCreation.add(reportDescriptor);
+    }
+
 
 
     @Test
-    public void testGetReport() throws Exception {
+    public void testGetReportShop() throws Exception {
 
-        final ReportDescriptor reportDescriptor = new ReportDescriptor();
-        reportDescriptor.setHsqlQuery("select s from ShopEntity s");
-        reportDescriptor.getLangXslfo().add(new ReportPair("en", "src/test/resources/xslfo/shop.xslfo"));
-        reportDescriptor.setReportId("testReport");
 
-        ReportServiceImpl reportService = new ReportServiceImpl(null, Collections.singletonList(reportDescriptor), null) {
+
+        ReportServiceImpl reportService = new ReportServiceImpl(null, allReportToTestCreation, null) {
 
             /**
              * {@inheritDoc}
@@ -52,7 +74,7 @@ public class ReportServiceImplTest  {
                 try {
                     String fileName = File.createTempFile("testyes", "cart").getAbsolutePath();
                     BufferedWriter out = new BufferedWriter(new FileWriter(fileName));
-                    out.write(xmldata);
+                    out.write(getXmlDataString() );
                     out.close();
                     return fileName;
                 } catch (IOException e) {
@@ -66,12 +88,57 @@ public class ReportServiceImplTest  {
 
         };
 
-        assertTrue(reportService.createReport("en", "testReport", "shop.pdf"));
+        reportId =  "shopTestReport";
+
+        assertTrue(reportService.createReport("en", reportId, "shopTestReport.pdf"));
+
+        reportId =  "warehouseRemainsGoods";
+
+        assertTrue(reportService.createReport("en", reportId, "warehouseRemainsGoods.pdf"));
 
     }
 
+    String reportId;
 
-    String xmldata =  "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><yes-report>\n" +
+    String getXmlDataString() {
+
+        if ("shopTestReport".equals(reportId))  {
+            return shopData;
+        } else if ("warehouseRemainsGoods".equals(reportId))  {
+            return whRemainsGoodsData;
+        }
+
+        return null;
+
+    }
+
+    String whRemainsGoodsData ="<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+            "<yes-report>\n" +
+            "  <object-array>\n" +
+            "    <string>LG656ET#UUG</string>\n" +
+            "    <string>HP ProBook 6560b</string>\n" +
+            "    <string>0112312334</string>\n" +
+            "    <big-decimal>0.00</big-decimal>\n" +
+            "    <big-decimal>4.00</big-decimal>\n" +
+            "  </object-array>\n" +
+            "  <object-array>\n" +
+            "    <string>LH339EA#UUG</string>\n" +
+            "    <string>HP ProBook 4730d</string>\n" +
+            "    <string></string>\n" +
+            "    <big-decimal>0.00</big-decimal>\n" +
+            "    <big-decimal>5.00</big-decimal>\n" +
+            "  </object-array>\n" +
+            "  <object-array>\n" +
+            "    <string>LG656ET</string>\n" +
+            "    <string>HP ProBook 6560b</string>    \n" +
+            "    <string>0123456789012</string>\n" +
+            "    <big-decimal>5.00</big-decimal>\n" +
+            "    <big-decimal>100.00</big-decimal>\n" +
+            "  </object-array>\n" +
+            "</yes-report>";
+
+
+    String shopData =  "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><yes-report>\n" +
             "  <shop>\n" +
             "    <code>SHOIP1</code>\n" +
             "    <name>Gadget universe кирилица</name>\n" +

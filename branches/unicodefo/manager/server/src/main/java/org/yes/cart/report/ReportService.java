@@ -1,6 +1,7 @@
 package org.yes.cart.report;
 
 import org.yes.cart.report.impl.ReportDescriptor;
+import org.yes.cart.report.impl.ReportPair;
 
 import java.util.List;
 
@@ -12,6 +13,13 @@ import java.util.List;
  * Time: 2:46 PM
  */
 public interface ReportService {
+
+    /**
+     * Get list of value - name to represent on UI;
+     * @param hsql hsql to extract allowed values
+     * @return list of pair
+     */
+    List<ReportPair> getParameterValues(String hsql);
 
 
     /**

@@ -18,6 +18,8 @@ import javax.xml.transform.*;
 import javax.xml.transform.sax.SAXResult;
 import java.io.*;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 //JAXP
@@ -63,6 +65,26 @@ public class ReportServiceImpl implements ReportService, ServletContextAware {
             this.reportFolder = "WEB-INF" + File.separator + reportFolder + File.separator;
         } else {
             this.reportFolder = StringUtils.EMPTY;
+        }
+
+    }
+
+
+    /**{@inheritDoc} */
+    public List<ReportPair> getParameterValues(final  String hsql) {
+        List<Object> queryRez  = genericDAO.executeHsqlQuery(hsql);
+        if (queryRez != null && !queryRez.isEmpty()) {
+            final List<ReportPair>  rez = new ArrayList<ReportPair>(queryRez.size());
+            for (Object obj : queryRez) {
+                Object[] data = (Object[]) obj;
+                rez.add(new ReportPair(
+                        (String)data[0],
+                        (String)data[1])
+                );
+            }
+            return rez;
+        } else {
+            return Collections.emptyList();
         }
 
     }
@@ -157,6 +179,7 @@ public class ReportServiceImpl implements ReportService, ServletContextAware {
             } else {
                 xsltfile = new File(servletContext.getRealPath(reportFolder + reportDescriptor.getLangXslfo(lang)));
                 fopFactory.getFontManager().setFontBaseURL(servletContext.getRealPath("WEB-INF"));
+                foUserAgent.setBaseURL("file:///" + servletContext.getRealPath("WEB-INF/report/"));
             }
 
 

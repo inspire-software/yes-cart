@@ -21,6 +21,56 @@ public class ReportParameter {
 
     private boolean mandatory;
 
+    private String allowedValuesQuery;
+
+    /**
+     * Construct report parmeter.
+     * @param name name
+     * @param langLabel representation of name in different languages
+     * @param businesstype type
+     * @param mandatory is this parameret must be filled from UI
+     * @param allowedValuesQuery optional hsql query to retreive
+     */
+    public ReportParameter(final String name, final List<ReportPair> langLabel, final String businesstype, final boolean mandatory, final String allowedValuesQuery) {
+        this.name = name;
+        this.langLabel = langLabel;
+        this.businesstype = businesstype;
+        this.mandatory = mandatory;
+        this.allowedValuesQuery = allowedValuesQuery;
+    }
+
+
+    /**
+     * Construct report parmeter.
+     * @param name name
+     * @param langLabel representation of name in different languages
+     * @param businesstype type
+     * @param mandatory is this parameret must be filled from UI
+     */
+    public ReportParameter(final String name, final List<ReportPair>  langLabel, final String businesstype, final boolean mandatory) {
+        this.name = name;
+        this.langLabel = langLabel;
+        this.businesstype = businesstype;
+        this.mandatory = mandatory;
+    }
+
+    /**
+     * Get allowed values query. Which will be respesented on UI.
+     * TODO this just draft solution and shuld be reviewd for more complex cases. Something like ref to value provideres or ...
+     * @return   hsql query to get value-representation pairs
+     */
+    public String getAllowedValuesQuery() {
+        return allowedValuesQuery;
+    }
+
+    /**
+     * Set allowed value hsql query.
+     * @param allowedValuesQuery    hsql query
+     */
+    public void setAllowedValuesQuery(final String allowedValuesQuery) {
+        this.allowedValuesQuery = allowedValuesQuery;
+    }
+
     /**
      * Get parameter name.
      * @return parameter name.

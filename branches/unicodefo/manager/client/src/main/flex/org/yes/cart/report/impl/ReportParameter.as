@@ -22,6 +22,8 @@ public class ReportParameter {
 
     public var mandatory:Boolean;
 
+    public var allowedValuesQuery:String;
+
 
     public function ReportParameter() {
     }
