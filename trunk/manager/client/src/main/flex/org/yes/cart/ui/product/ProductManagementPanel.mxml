@@ -76,11 +76,12 @@
                 </mx:DataGrid>
             </mx:VBox>
             <mx:TabNavigator id="productTabNavigator" change="onTabClick(event);" width="100%" height="100%"
-                             visible="{productDTOImpl != null}">
+                             visible="{productSelected}">
                 <mx:Canvas label="@Resource(bundle='ProductManagementPanel',key='summaryTab')"
                            width="100%"
                            height="100%">
-                    <prod:ProductSummaryPanel id="summaryPanel" brands="{brandsList}" productTypes="{productTypesList}"/>
+                    <prod:ProductSummaryPanel id="summaryPanel" brands="{brandsList}" productTypes="{productTypesList}"
+                                              creationComplete="initSummaryPanelListeners()"/>
                 </mx:Canvas>
                 <prod:ProductImageAttributesPanel id="imageTab"/>
                 <prod:ProductNonImageAttributesPanel id="attrTab"/>
@@ -92,8 +93,10 @@
                 </mx:Canvas>
                 <seo:SeoPanel id="seoTabPanel"
                               label="@Resource(bundle='ProductManagementPanel',key='seoTab')" creationComplete="initSeoListeners()"/>
-                <mx:Canvas id="associationsTab" label="@Resource(bundle='ProductManagementPanel',key='associationsTab')"
-                           width="100%" height="100%"/>
+                <mx:Canvas label="@Resource(bundle='ProductManagementPanel',key='associationsTab')"
+                           width="100%" height="100%">
+                    <prod:ProductAssociationsPanel id="productAssociationsPanel"/>
+                </mx:Canvas>
                 <mx:Canvas id="categoryTab" label="@Resource(bundle='ProductManagementPanel',key='categoriesTab')"
                            width="100%" height="100%"/>
                 <mx:Canvas label="@Resource(bundle='ProductManagementPanel',key='inventory')"
@@ -366,33 +369,9 @@
             skuTab.addChild(productSkuManagementPanel);
         }
 
-        /**
-         * Service call back with product attribute value.
-         * @param event event
-         * @param updateTarget update target object
-         * @return nothing
-         */
-        private function productAttributeUpdatedResultHandler(event:ResultEvent, updateTarget:UpdateTarget):void {
-            Debug.trace("INFO Product attribute value updated result call back " + updateTarget.toString());
-            Debug.traceObj(updateTarget);
-            Debug.trace("INFO updateTarget.action " + updateTarget.action);
-            var obj:Object;
-            if (updateTarget.action == UpdateTarget.NEW) {
-                obj = remoteProductService.createEntityAttributeValue.lastResult;
-            } else {
-                obj = remoteProductService.updateEntityAttributeValue.lastResult;
-            }
-            Debug.trace("INFO obj is " + obj);
-            attrValuePanel.attrValues.setItemAt(obj, updateTarget.idx);
-
-        }
-
         private function associationsTabSelected():void {
             Debug.trace("INFO associationsTabSelected, selected product is " + productDTOImpl);
-            associationsTab.removeAllChildren();
-            var panel:ProductAssociationsPanel = new ProductAssociationsPanel();
-            panel.productId = productDTOImpl.productId;
-            associationsTab.addChild(panel);
+            productAssociationsPanel.productId = productDTOImpl.productId;
         }
 
         private function categoriesTabSelected():void {
@@ -417,6 +396,8 @@
         private function seoTabSelected():void {
             if (productSelected && productDTOImpl != null) {
                 seoTabPanel.seoId = productDTOImpl.seoDTO != null ? productDTOImpl.seoDTO.seoId : Number.NaN;
+            } else {
+                seoTabPanel.seoId = Number.NaN;
             }
         }
 
@@ -496,6 +477,21 @@
                 (event.target as Button).label = resourceManager.getString('ProductManagementPanel', 'findBtnToggleOff');
             } else {
                 (event.target as Button).label = resourceManager.getString('ProductManagementPanel', 'findBtnToggleOn');
+            }
+        }
+
+        private function initSummaryPanelListeners():void {
+            summaryPanel.addEventListener(DtoEvent.UPDATE, onSummaryUpdateClick);
+        }
+
+        private function onSummaryUpdateClick(event:DtoEvent):void {
+            productDTOImpl = event.dto as ProductDTOImpl;
+            if (DomainUtils.isNewPK(productDTOImpl.productId)) {
+                Debug.trace("INFO ProductManagementPanel product will be created " + productDTOImpl);
+                remoteProductService.create(productDTOImpl);
+            } else {
+                Debug.trace("INFO ProductManagementPanel product will be updated " + productDTOImpl);
+                remoteProductService.update(productDTOImpl);
             }
         }
 

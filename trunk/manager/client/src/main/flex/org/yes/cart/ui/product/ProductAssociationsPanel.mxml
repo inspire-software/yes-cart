@@ -16,29 +16,29 @@
   -->
 
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" creationComplete="init();">
-    <mx:VBox width="100%" height="100%">
-        <mx:Form x="0" y="0">
+    <mx:VBox width="100%" height="100%" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
+        <mx:Form width="100%">
             <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='associationSearch')">
                 <mx:ComboBox id="associationComboBox"
                              labelField="name"
-                             dataProvider="{remoteAssociationService.getAll.lastResult}"
-                             change="associationChanged(event)"
+                             change="onAssociationChanged(event)"
                              prompt="@Resource(bundle='ProductManagementPanel',key='associationPropmt')">
                 </mx:ComboBox>
             </mx:FormItem>
 
             <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='association')">
                 <mx:HBox>
-                    <mx:Button id="addAccosiationBtn"
+                    <mx:Button id="addAssociationBtn"
                                label="@Resource(bundle='ProductManagementPanel',key='addAssociation')"
                                toolTip="@Resource(bundle='ProductManagementPanel',key='addAssociationHint')"
-                               click="addAssociationClick(event);"
+                               enabled="{allowAdd}"
+                               click="onAddAssociationClick(event);"
                             />
-                    <mx:Button id="deleteAccosiationBtn"
+                    <mx:Button id="deleteAssociationBtn"
                                label="@Resource(bundle='ProductManagementPanel',key='deleteAssociation')"
                                toolTip="@Resource(bundle='ProductManagementPanel',key='deleteAssociationHint')"
-                               enabled="{selecteProductAssociationDTOImpl != null}"
-                               click="deleteAccosiationClick(event);"
+                               enabled="{allowRemove}"
+                               click="onDeleteAssociationClick(event);"
 
                             />
 
@@ -49,9 +49,8 @@
         </mx:Form>
         <mx:DataGrid
                 id="associationGrid"
-                x="0" y="0" width="100%" height="100%" editable="false"
-                dataProvider="{remoteProductAssociationService.getProductAssociationsByProductAssociationType.lastResult}"
-                itemClick="productAssociationSelectedClick(event);"
+                width="100%" height="100%" editable="false"
+                itemClick="onProductAssociationSelected(event)"
                 >
             <mx:columns>
                 <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagementPanel',key='id')"
@@ -64,110 +63,125 @@
                 <mx:DataGridColumn width="200"
                                    headerText="@Resource(bundle='ProductManagementPanel',key='associatedName')"
                                    dataField="associatedName"/>
-                <mx:DataGridColumn headerText="@Resource(bundle='ProductManagementPanel',key='associatedDescrition')"
-                                   dataField="associatedDescrition"/>
+                <mx:DataGridColumn headerText="@Resource(bundle='ProductManagementPanel',key='associatedDescription')"
+                                   dataField="associatedDescription"/>
             </mx:columns>
         </mx:DataGrid>
     </mx:VBox>
 
     <mx:RemoteObject showBusyCursor="true" id="remoteAssociationService" destination="remoteAssociationService"
-                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
-                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
-                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
 
+        <mx:method id="getAllAssociations" name="getAll"
+                   result="onGetAllAssociationsResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
 
     <mx:RemoteObject showBusyCursor="true" id="remoteProductAssociationService"
                      destination="remoteProductAssociationService"
                      result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
                      fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
-                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
 
+        <mx:method id="getProductAssociationsByProductAssociationType" name="getProductAssociationsByProductAssociationType"
+                   result="onGetProductAssociationsByProductAssociationTypeResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="create" name="create"
+                   result="onCreateResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="remove" name="remove"
+                   result="onRemoveResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+    <mx:Boolean id="allowAdd">false</mx:Boolean>
+    <mx:Boolean id="allowRemove">false</mx:Boolean>
 
     <mx:Script>
         <![CDATA[
+        import mx.collections.ArrayCollection;
         import mx.core.FlexGlobals;
+        import mx.rpc.events.FaultEvent;
 
-        import org.yes.cart.impl.AssociationDTOImpl;
         import org.yes.cart.impl.ProductAssociationDTOImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
-
-        import flash.events.MouseEvent;
 
         import mx.controls.Alert;
         import mx.events.CloseEvent;
         import mx.events.ListEvent;
         import mx.managers.PopUpManager;
-        import mx.rpc.AsyncResponder;
-        import mx.rpc.AsyncToken;
         import mx.rpc.events.ResultEvent;
 
-        public var productId:Number;
+        private var _productId:Number;
 
-        [Bindable]
-        private var selecteAssociationDTOImpl:AssociationDTOImpl;
+        public function set productId(value:Number):void {
+            if (_productId == value) {
+                return;
+            }
+            _productId = value;
+            if (this.associationComboBox.selectedItem != null) {
+                searchExistingAssociation();
+            } else {
+                this.associationGrid.dataProvider = null;
+            }
 
-        [Bindable]
-        private var selecteProductAssociationDTOImpl:ProductAssociationDTOImpl;
+        }
 
         public function init():void {
             remoteAssociationService.getAll();
         }
 
-
-        /**
-         * Product association selected in grid.
-         * @param event
-         * @return nothing.
-         */
-        private function productAssociationSelectedClick(event:ListEvent):void {
-            selecteProductAssociationDTOImpl = event.currentTarget.selectedItem;
+        private function onProductAssociationSelected(event:ListEvent):void {
+            allowRemove = this.associationGrid.selectedItem != null;
         }
 
-        /**
-         * Type of accosiaction is changed, so need to reread.
-         * @param event
-         * @return nothing
-         */
-        private function associationChanged(event:Event):void {
-            selecteAssociationDTOImpl = event.currentTarget.selectedItem;
-            searchExistingAssociation();
+        private function onAssociationChanged(event:Event):void {
+            this.allowRemove = this.associationComboBox.selectedItem != null;
+            if (allowRemove) {
+                searchExistingAssociation();
+            } else {
+                this.associationGrid.dataProvider = null;
+            }
         }
 
         private function searchExistingAssociation():void {
-            remoteProductAssociationService.getProductAssociationsByProductAssociationType(
-                    productId,
-                    selecteAssociationDTOImpl.code);
+            if (this.associationComboBox.selectedItem != null) {
+                remoteProductAssociationService.getProductAssociationsByProductAssociationType(
+                        _productId,
+                        this.associationComboBox.selectedItem.code);
+            }
         }
 
         private var createAssociationDialog:CreateAssociationDialog;
 
-        private function addAssociationClick(event:MouseEvent):void {
-            createAssociationDialog = CreateAssociationDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CreateAssociationDialog, true));
-            createAssociationDialog.saveBtn.addEventListener(MouseEvent.CLICK, productSelected);
-            PopUpManager.centerPopUp(createAssociationDialog);
+        private function onAddAssociationClick(event:MouseEvent):void {
+            if (allowAdd) {
+                createAssociationDialog = CreateAssociationDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CreateAssociationDialog, true));
+                createAssociationDialog.associationTypes = this.associationComboBox.dataProvider as ArrayCollection;
+                createAssociationDialog.saveBtn.addEventListener(MouseEvent.CLICK, onAddAssociationSaveClick);
+                PopUpManager.centerPopUp(createAssociationDialog);
+            }
         }
 
-        /**
-         * Call service to create product association.
-         * @param event event
-         * @return nothing
-         */
-        private function productSelected(event:Event):void {
-            var productAssociationDTOImpl:ProductAssociationDTOImpl = getProductAssociationDTOImpl(productId, createAssociationDialog.selectedProductDTOImpl.productId);
+        private function onAddAssociationSaveClick(event:Event):void {
+            if (createAssociationDialog != null && allowAdd) {
+                var productAssociationDTOImpl:ProductAssociationDTOImpl = getProductAssociationDTOImpl(_productId, createAssociationDialog.selectedProductDTOImpl.productId);
 
-            remoteProductAssociationService.create(productAssociationDTOImpl).addResponder(
-                    new AsyncResponder(
-                            associationsChanged,
-                            ShopManagerGlobal.instance.defaultOnRpcMethodFault
-                    )
-            );
+                remoteProductAssociationService.create(productAssociationDTOImpl);
 
-            if (createAssociationDialog.reverseCheckBox.selected) {
-                var reverseAssociation:ProductAssociationDTOImpl = getProductAssociationDTOImpl(createAssociationDialog.selectedProductDTOImpl.productId, productId);
-                remoteProductAssociationService.create(reverseAssociation);
+                if (createAssociationDialog.reverseCheckBox.selected) {
+                    var reverseAssociation:ProductAssociationDTOImpl = getProductAssociationDTOImpl(createAssociationDialog.selectedProductDTOImpl.productId, _productId);
+                    remoteProductAssociationService.create(reverseAssociation);
+                }
+
+                createAssociationDialog.saveBtn.removeEventListener(MouseEvent.CLICK, onAddAssociationSaveClick);
+                PopUpManager.removePopUp(createAssociationDialog);
+                createAssociationDialog = null;
             }
-
-            PopUpManager.removePopUp(createAssociationDialog);
         }
 
         private function getProductAssociationDTOImpl(mainProductId:Number, destinationProductId:Number):ProductAssociationDTOImpl {
@@ -177,48 +191,51 @@
             productAssociationDTOImpl.productId = mainProductId;
             productAssociationDTOImpl.associatedProductId = destinationProductId;
 
-            productAssociationDTOImpl.associationId = createAssociationDialog.selecteAssociationDTOImpl.associationId;
+            productAssociationDTOImpl.associationId = createAssociationDialog.selectedAssociationDTOImpl.associationId;
             return productAssociationDTOImpl;
 
         }
 
-        /**
-         * Product association created.
-         * @param event
-         * @param token
-         * @return nothing.
-         */
-        private function associationsChanged(event:ResultEvent, token:AsyncToken):void {
-            if (selecteAssociationDTOImpl != null) {
-                searchExistingAssociation();
+        private function onDeleteAssociationClick(event:MouseEvent):void {
+            if (allowRemove && this.associationGrid.selectedItem != null) {
+                Alert.show(
+                        resourceManager.getString('ProductManagementPanel', 'deleteAssociationConfirm',
+                                [ this.associationGrid.selectedItem.associatedCode ]),
+                        resourceManager.getString('ShopManagerApplication', 'warning'),
+                        Alert.OK | Alert.CANCEL, this, onDeleteAssociationConfirmClick, null, Alert.OK);
             }
-        }
-
-        private function deleteAccosiationClick(event:MouseEvent):void {
-            Alert.show(
-                    resourceManager.getString('ProductManagementPanel', 'deleteAssociationConfirm'),
-                    resourceManager.getString('ShopManagerApplication', 'warning'),
-                    Alert.OK | Alert.CANCEL, this, deleteAssociationServiceCall, null, Alert.OK);
-
 
         }
 
-        /**
-         * Call service to delete association group.
-         * Delete operation will be failed if group contains at least one attribute .
-         * @param event event
-         * @return nothing
-         */
-        private function deleteAssociationServiceCall(event:CloseEvent):void {
+        private function onDeleteAssociationConfirmClick(event:CloseEvent):void {
             if (event.detail == Alert.OK) {
-                remoteProductAssociationService.remove(selecteProductAssociationDTOImpl.productassociationId).addResponder(
-                        new AsyncResponder(
-                                associationsChanged,
-                                ShopManagerGlobal.instance.defaultOnRpcMethodFault
-                        )
-                );
-                selecteProductAssociationDTOImpl = null;
+                if (allowRemove && associationGrid.selectedItem != null) {
+                    remoteProductAssociationService.remove(associationGrid.selectedItem.productassociationId);
+                }
             }
+        }
+
+
+        protected function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        private function onGetAllAssociationsResult(event:ResultEvent):void {
+            this.associationComboBox.dataProvider = event.result;
+            allowAdd = this.associationComboBox.dataProvider.length > 0;
+        }
+
+        private function onGetProductAssociationsByProductAssociationTypeResult(event:ResultEvent):void {
+            associationGrid.dataProvider = event.result;
+            allowRemove = false;
+        }
+
+        private function onCreateResult(event:ResultEvent):void {
+            searchExistingAssociation();
+        }
+
+        private function onRemoveResult(event:ResultEvent):void {
+            searchExistingAssociation();
         }
         ]]>
     </mx:Script>

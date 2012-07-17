@@ -15,8 +15,7 @@
   -    limitations under the License.
   -->
 
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:npa="org.yes.cart.util.*"
-                xmlns:datetime="com.georg.datetime.*" xmlns:georg="com.georg.*" layout="absolute"
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"
                 width="500"
                 height="250"
                 title="@Resource(bundle='ProductManagementPanel',key='createAssociation')"
@@ -27,8 +26,8 @@
         <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='associationType')">
             <mx:ComboBox id="associationComboBox" width="300"
                          labelField="name"
-                         dataProvider="{remoteAssociationService.getAll.lastResult}"
-                         change="associationChanged(event)"
+                         dataProvider="{associationTypes}"
+                         change="onAssociationTypeChanged(event)"
                          prompt="@Resource(bundle='ProductManagementPanel',key='associationPropmt')">
             </mx:ComboBox>
         </mx:FormItem>
@@ -52,16 +51,14 @@
         </mx:FormItem>
     </mx:Form>
 
-    <mx:ControlBar horizontalAlign="right">
-        <mx:Button id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
-                   click="PopUpManager.removePopUp(this)"
-                   width="94"/>
+    <mx:ControlBar horizontalAlign="right" width="100%">
         <mx:Button id="saveBtn"
                    label="@Resource(bundle='ProductManagementPanel',key='saveAssociation')"
                    toolTip="@Resource(bundle='ProductManagementPanel',key='saveAssociationHint')"
-                   width="94"
-                   enabled="{selecteAssociationDTOImpl != null &amp;&amp; selectedProductDTOImpl != null}"
+                   enabled="{selectedAssociationDTOImpl != null &amp;&amp; selectedProductDTOImpl != null}"
                 />
+        <mx:Button id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
+                   click="PopUpManager.removePopUp(this)"/>
     </mx:ControlBar>
 
     
@@ -72,11 +69,7 @@
         integerError="@Resource(bundle='ProductManagementPanel',key='rankInvalidCharError')"
     />
 
-    <mx:RemoteObject showBusyCursor="true" id="remoteAssociationService" destination="remoteAssociationService"
-                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
-                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
-                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
-
+    <mx:ArrayCollection id="associationTypes"/>
 
     <mx:Script>
         <![CDATA[
@@ -92,8 +85,7 @@
         import mx.managers.PopUpManager;
 
         [Bindable]
-        public var selecteAssociationDTOImpl:AssociationDTOImpl;
-
+        public var selectedAssociationDTOImpl:AssociationDTOImpl;
         [Bindable]
         public var selectedProductDTOImpl:ProductDTOImpl;
 
@@ -102,25 +94,18 @@
 
 
         public function init():void {
-            remoteAssociationService.getAll();
+
         }
 
 
-        /**
-         * Type of accosiaction is changed, so need to reread.
-         * @param event
-         * @return nothing
-         */
-        private function associationChanged(event:Event):void {
-            selecteAssociationDTOImpl = event.currentTarget.selectedItem;
+        private function onAssociationTypeChanged(event:Event):void {
+            if (associationComboBox.selectedItem != null) {
+                selectedAssociationDTOImpl = associationComboBox.selectedItem as AssociationDTOImpl;
+            } else {
+                selectedAssociationDTOImpl = null;
+            }
         }
 
-
-        /**
-         * Select product click handler. Create dialog and select product.
-         * @param event
-         * @return
-         */
         private function onProductSelectedClick(event:MouseEvent):void {
             productFinderPopUp = ProductFinderDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), ProductFinderDialog, true));
             productFinderPopUp.selectProductButton.addEventListener(MouseEvent.CLICK, onProductSelectedConfirm);
@@ -128,17 +113,12 @@
 
         }
 
-        /**
-         * Handle selected product from finder dialog.
-         * @param event event
-         * @return nothing
-         */
         private function onProductSelectedConfirm(event:Event):void {
             if (productFinderPopUp != null) {
                 var selected:Array = productFinderPopUp.productSelection;
                 if (selected != null && selected.length > 0) {
                     selectedProductDTOImpl = selected[0];
-                    productLabel.text = selectedProductDTOImpl.code + " " + selectedProductDTOImpl.name;
+                    productLabel.text = selectedProductDTOImpl.name  + ' (' + selectedProductDTOImpl.code + ')';
                     productLabel.toolTip = selectedProductDTOImpl.description;
                     productFinderPopUp.selectProductButton.removeEventListener(MouseEvent.CLICK, onProductSelectedConfirm);
                     PopUpManager.removePopUp(productFinderPopUp);

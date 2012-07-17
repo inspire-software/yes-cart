@@ -75,12 +75,6 @@
             remoteCategoryService.getAll();
         }
 
-
-        /**
-         * Category selection handler
-         * @param event selection event
-         * @return nothing
-         */
         private function onCategorySelected(event:ListEvent):void {
             // category only selected when we have tree selection and parent which is not itself (root case)
             categorySelected = this.categoryTree.selectedItem != null && !DomainUtils.isRootCategory(this.categoryTree.selectedItem);
@@ -116,11 +110,6 @@
         }
 
 
-        /**
-         * Select tab handler.
-         * @param event event
-         * @return nothing
-         */
         private function onTabClick(event:IndexChangedEvent):void {
             initTabs(event.newIndex);
         }
@@ -164,11 +153,6 @@
 
         }
 
-
-        /**
-         * Unbing selected category from UI controls.
-         * @return nothing
-         */
         private function unbindAll():void {
             for (var i:int = 0; i < categoryPropertyChangeWatchers.length; i++) {
                 var cw:ChangeWatcher = ChangeWatcher(categoryPropertyChangeWatchers.getItemAt(i));
@@ -180,10 +164,6 @@
 
         }
 
-        /**
-         * Bind category to controls.
-         * @return nothing
-         */
         private function bingCategoryData():void {
 
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryNameTextInput, "text", this.selectedCategoryDTOImpl, "name"));
@@ -223,11 +203,6 @@
 
         }
 
-        /**
-         * Enable save button in case if category date is changed
-         * @param event change event
-         * @return nothing
-         */
         public function categoryDtoChanged(event:PropertyChangeEvent):void {
             if (!selectedCategoryDTOImpl.changed) {
                 selectedCategoryDTOImpl.changed = true;
@@ -236,9 +211,6 @@
             }
         }
 
-        /**
-         * Repaint category tree control.
-         */
         private function invalidateCategoryTree():void {
             //categoryTree.dispatchEvent(new ListEvent(ListEvent.CHANGE, false, false, 0, categoryTree.selectedIndex));
             categoryTree.expandItem(categoryTree.dataProvider.getItemAt(0), false);
@@ -377,14 +349,11 @@
             }
         }
 
-        /**
-         * Tab withi Seo information selected.
-         * @param event event
-         * @return nothing
-         */
         private function seoTabSelected():void {
             if (categorySelected && selectedCategoryDTOImpl != null) {
                 seoTabPanel.seoId = selectedCategoryDTOImpl.seoId;
+            } else {
+                seoTabPanel.seoId = Number.NaN;
             }
         }
 
@@ -392,11 +361,6 @@
             seoTabPanel.addEventListener(DtoEvent.UPDATE, onSeoCreated);
         }
 
-        /**
-         * Call back function to handle SEO created event
-         * @param seoDTOImpl created SeoDTOImpl
-         * @return nothing
-         */
         private function onSeoCreated(event:DtoEvent):void {
             if (DomainUtils.isNewPK(selectedCategoryDTOImpl.seoId)) {
                 selectedCategoryDTOImpl.seoId = (event.dto as SeoDTOImpl).seoId;
@@ -404,11 +368,6 @@
             }
         }
 
-        /**
-         * Tab wit assigned products opened.
-         * @param event event
-         * @return nothing
-         */
         private function assignedProductsTabSelected():void {
             remoteProductService.getProductByCategory(selectedCategoryDTOImpl.categoryId);
         }
@@ -416,12 +375,6 @@
 
         private var priceNavigationDialog:PriceNavigationDialog;
 
-
-        /**
-         * Open price navigation xml to edit in dialog
-         * @param event
-         * @return nothing
-         */
         private function openPriceNavigation(event:MouseEvent):void {
             priceNavigationDialog = PriceNavigationDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), PriceNavigationDialog, true));
             priceNavigationDialog.xmlString = selectedCategoryDTOImpl.navigationByPriceTiers;
@@ -430,11 +383,6 @@
 
         }
 
-        /**
-         * Update price navigation xml.
-         * @param event
-         * @return nothign
-         */
         private function updateCategoryPriceNavigation(event:Event):void {
             selectedCategoryDTOImpl.navigationByPriceTiers = priceNavigationDialog.xmlString;
             selectedCategoryDTOImpl.changed = true;
@@ -443,23 +391,12 @@
             PopUpManager.removePopUp(priceNavigationDialog);
         }
 
-
-        /**
-         * Oped product finder dialog
-         * @param event
-         * @return
-         */
         private function onAssignProductToCategoryClick(event:MouseEvent):void {
             productFinderPopUp = ProductFinderDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), ProductFinderDialog, true));
             productFinderPopUp.selectProductButton.addEventListener(MouseEvent.CLICK, onAssignSelectedProductsConfirm);
             PopUpManager.centerPopUp(productFinderPopUp);
         }
 
-        /**
-         * Handle selected product from finder dialog and assign it to category.
-         * @param event event
-         * @return nothing
-         */
         private function onAssignSelectedProductsConfirm(event:Event):void {
             if (productFinderPopUp != null) {
                 var products:Array = productFinderPopUp.productSelection;
@@ -478,42 +415,20 @@
             }
         }
 
-        /**
-         * Product assigned call back.
-         * @param event
-         * @param token
-         * @return
-         */
         private function productAssignedResultHandler(event:ResultEvent, obj:Object = null):void {
             assignedProductsTabSelected();
         }
 
-        /**
-         * Product assigned call back.
-         * @param event
-         * @param token
-         * @return
-         */
         private function productAssignedFaultHandler(event:FaultEvent, obj:Object = null):void {
             Alert.show(
                     event.toString(),
                     resourceManager.getString('ShopManagerApplication', 'warning'));
         }
 
-        /**
-         * Handle item selection to allow edit/remove.
-         * @param event event
-         * @return nothing
-         */
         private function onAssignedProductSelected(event:ListEvent):void {
             productSelected = assignedProductsGrid.selectedItem != null;
         }
 
-        /**
-         *
-         * @param event
-         * @return
-         */
         private function onRemoveProductFromCategoryClick(event:MouseEvent):void {
             if (productSelected && assignedProductsGrid.selectedItem != null) {
                 Alert.show(
@@ -523,11 +438,6 @@
             }
         }
 
-        /**
-         * Unlink product from current category.
-         * @param event event
-         * @return nothing
-         */
         private function removeSelectedProductFromCategory(event:CloseEvent):void {
             if (event.detail == Alert.OK) {
                 if (productSelected && assignedProductsGrid.selectedItem != null) {
@@ -539,23 +449,11 @@
             }
         }
 
-        /**
-         * Product rank in category label function
-         * @param item product dto
-         * @param column column
-         * @return string representation of rank
-         */
         private function rankLabelFunction(item:Object, column:DataGridColumn):String {
             var productDTO:ProductDTOImpl = ProductDTOImpl(item);
             return productDTO.getRank(selectedCategoryDTOImpl.categoryId).toString();
         }
 
-        /**
-         * Rank sort function
-         * @param itemA product dto
-         * @param itemB product dto
-         * @return @see ObjectUtil # numericCompare
-         */
         private function rankCompareFunction(itemA:Object, itemB:Object):int {
 
             var productDTO_1:ProductDTOImpl = ProductDTOImpl(itemA);
@@ -566,11 +464,6 @@
                     productDTO_2.getRank(selectedCategoryDTOImpl.categoryId));
         }
 
-        /**
-         * Assigned product to category edited.
-         * @param event grid event.
-         * @return nothing
-         */
         private function rankEditEnd(event:DataGridEvent):void {
             if (event.reason == DataGridEventReason.CANCELLED) {
                 return; // Do not update cell.

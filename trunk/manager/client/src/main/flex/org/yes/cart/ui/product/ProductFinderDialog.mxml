@@ -167,10 +167,10 @@
             </mx:columns>
         </mx:DataGrid>
         <mx:ControlBar width="100%" horizontalAlign="right">
-            <mx:Button label="@Resource(bundle='ShopManagerApplication',key='close')"
-                       click="PopUpManager.removePopUp(this)"/>
             <mx:Button id="selectProductButton" label="@Resource(bundle='ProductManagementPanel',key='select')"
                        enabled="{hasSelection}"/>
+            <mx:Button label="@Resource(bundle='ShopManagerApplication',key='close')"
+                       click="PopUpManager.removePopUp(this)"/>
         </mx:ControlBar>
     </mx:VBox>
 
