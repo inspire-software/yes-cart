@@ -127,17 +127,17 @@ public interface ProductAssociationDTO extends Identifiable {
     void setAssociatedName(String associatedName);
 
     /**
-     * Get the product descrition.
+     * Get the product description.
      *
-     * @return product descrition.
+     * @return product description.
      */
-    String getAssociatedDescrition();
+    String getAssociatedDescription();
 
     /**
-     * Product descrition.
+     * Product description.
      *
-     * @param associatedDescrition
+     * @param associatedDescription description
      */
-    void setAssociatedDescrition(String associatedDescrition);
+    void setAssociatedDescription(String associatedDescription);
 
 }

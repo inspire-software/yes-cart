@@ -66,7 +66,7 @@ public class ProductAssociationDTOImpl implements ProductAssociationDTO {
     private String associatedName;
 
     @DtoField(value = "productAssociated.description", readOnly = true)
-    private String associatedDescrition;
+    private String associatedDescription;
 
     /** {@inheritDoc} */
     public long getProductassociationId() {
@@ -146,12 +146,12 @@ public class ProductAssociationDTOImpl implements ProductAssociationDTO {
     }
 
     /** {@inheritDoc} */
-    public String getAssociatedDescrition() {
-        return associatedDescrition;
+    public String getAssociatedDescription() {
+        return associatedDescription;
     }
 
     /** {@inheritDoc} */
-    public void setAssociatedDescrition(final String associatedDescrition) {
-        this.associatedDescrition = associatedDescrition;
+    public void setAssociatedDescription(final String associatedDescription) {
+        this.associatedDescription = associatedDescription;
     }
 }

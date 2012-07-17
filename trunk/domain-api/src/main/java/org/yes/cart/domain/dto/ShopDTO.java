@@ -70,7 +70,7 @@ public interface ShopDTO extends Identifiable {
     void setName(String name);
 
     /**
-     * Get shop descrition.
+     * Get shop description.
      *
      * @return description.
      */

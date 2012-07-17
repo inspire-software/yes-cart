@@ -85,8 +85,8 @@ public class RoleDTOImpl implements RoleDTO {
     /**
      * {@inheritDoc}
      */
-    public void setDescription(final String descrition) {
-        this.description = descrition;
+    public void setDescription(final String description) {
+        this.description = description;
     }
 
     /**

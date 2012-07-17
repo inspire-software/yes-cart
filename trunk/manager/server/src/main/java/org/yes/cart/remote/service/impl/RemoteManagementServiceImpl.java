@@ -119,8 +119,8 @@ public class RemoteManagementServiceImpl implements RemoteManagementService {
     /**
      * {@inheritDoc}
      */
-    public void updateRole(String role, String decription) {
-        managementService.updateRole(role, decription);
+    public void updateRole(String role, String description) {
+        managementService.updateRole(role, description);
     }
 
     /**

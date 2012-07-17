@@ -141,9 +141,9 @@ public interface ManagementService {
      * Update role description.
      *
      * @param role       given role
-     * @param decription descrition
+     * @param description description
      */
-    void updateRole(String role, String decription);
+    void updateRole(String role, String description);
 
     /**
      * Delete role. All {@link org.yes.cart.domain.entity.ManagerRole} related to this role will be deleted.

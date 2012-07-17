@@ -34,7 +34,7 @@ public class ProductAssociationDTOImpl {
 
     public var    associatedName:String;
 
-    public var    associatedDescrition:String;
+    public var    associatedDescription:String;
 
 
     public function ProductAssociationDTOImpl() {

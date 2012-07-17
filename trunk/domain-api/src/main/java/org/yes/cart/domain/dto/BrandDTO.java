@@ -58,7 +58,7 @@ public interface BrandDTO extends Identifiable {
     void setName(String name);
 
     /**
-     * Get descrition.
+     * Get description.
      *
      * @return description.
      */
