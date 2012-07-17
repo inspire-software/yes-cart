@@ -246,10 +246,10 @@ public class ManagementServiceImpl implements ManagementService {
     /**
      * {@inheritDoc}
      */
-    public void updateRole(final String role, final String decription) {
+    public void updateRole(final String role, final String description) {
         final Role roleEntity = roleDao.findSingleByCriteria(Restrictions.eq(CODE, role));
         if (roleEntity != null) {
-            roleEntity.setDescription(decription);
+            roleEntity.setDescription(description);
             roleDao.update(roleEntity);
         }
     }

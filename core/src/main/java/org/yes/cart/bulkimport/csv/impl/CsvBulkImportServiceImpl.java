@@ -52,8 +52,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Pefrorm import from csv files. Import based on xml import description, that include
- * import file mask and column descrition. Csv import support following
+ * Perform import from csv files. Import based on xml import description, that include
+ * import file mask and column description. Csv import support following
  * import types:
  * <p/>
  * simple - when csv row can be present in table without any modification
@@ -61,7 +61,7 @@ import java.util.Set;
  * example carrier and carries sla, carrier sla need to get Carrier object as foreign key.
  * with sub import - one of the column has a underlaying table values in csv
  * example - shop and shop url, in this case {@link ImportColumn} has a
- * {@link ImportDescriptor}. At this moment rows in cell splitted by comma by default.
+ * {@link ImportDescriptor}. At this moment rows in cell are split by comma by default.
  */
 public class CsvBulkImportServiceImpl extends AbstractImportService implements BulkImportService, ApplicationContextAware {
 

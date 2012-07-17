@@ -55,7 +55,7 @@ public interface Brand extends Auditable {
     void setName(String name);
 
     /**
-     * Get descrition.
+     * Get description.
      *
      * @return description.
      */

@@ -64,7 +64,7 @@ public interface RoleDTO extends Identifiable {
     /**
      * Set role description
      *
-     * @param description descrition
+     * @param description description
      */
     void setDescription(String description);
 
