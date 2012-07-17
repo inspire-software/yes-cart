@@ -410,7 +410,7 @@
     <mx:VDividedBox height="100%" width="100%">
         <mx:Panel width="100%" title="@Resource(bundle='CarrierManagementPanel',key='carriers')"
                   paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2">
-            <mx:ControlBar>
+            <mx:HBox paddingTop="5" width="100%">
                 <mx:Button label="@Resource(bundle='CarrierManagementPanel',key='newCarrier')"
                            toolTip="@Resource(bundle='CarrierManagementPanel',key='newCarrierHint')"
                            click="onCreateNewCarrierClick(event)"
@@ -427,7 +427,7 @@
                            click="onDeleteCarrierClick(event)"
 
                         />
-            </mx:ControlBar>
+            </mx:HBox>
             <mx:DataGrid id="carrierGrid"
                          doubleClickEnabled="true"
                          itemDoubleClick="onEditCarrierClick(event)"
@@ -489,12 +489,12 @@
         <mx:Panel width="100%" title="@Resource(bundle='CarrierManagementPanel',key='carrierSLA')"
                   paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2"
                   visible="{carrierSelected}">
-            <mx:ControlBar>
+            <mx:HBox paddingTop="5" width="100%">
                 <mx:Button label="@Resource(bundle='CarrierManagementPanel',key='newCarrierSla')"
-                           toolTip="@Resource(bundle='CarrierManagementPanel',key='newCarrierSlaHint')"
-                           enabled="{carrierSelected}"
-                           click="onCreateNewCarrierSlaClick(event)"
-                        />
+                               toolTip="@Resource(bundle='CarrierManagementPanel',key='newCarrierSlaHint')"
+                               enabled="{carrierSelected}"
+                               click="onCreateNewCarrierSlaClick(event)"
+                            />
                 <mx:Button label="@Resource(bundle='CarrierManagementPanel',key='editCarrierSla')"
                            toolTip="@Resource(bundle='CarrierManagementPanel',key='editCarrierSlaHint')"
                            enabled="{carrierSlaSelected}"
@@ -505,7 +505,7 @@
                            enabled="{carrierSlaSelected}"
                            click="onDeleteCarrierSlaClick(event)"
                         />
-            </mx:ControlBar>
+            </mx:HBox>
             <mx:DataGrid id="carrierSlaGrid"
                          doubleClickEnabled="true"
                          itemDoubleClick="onEditCarrierSlaClick(event)"

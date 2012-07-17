@@ -367,7 +367,7 @@
 
     <mx:Panel width="100%" height="100%" title="@Resource(bundle='CustomerManagementPanel',key='customers')">
         <mx:VBox width="100%">
-            <mx:ControlBar>
+            <mx:HBox paddingTop="5" width="100%">
                 <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='filters')"/>
                 <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='emailFilter')"/>
                 <mx:TextInput id="emailFilterValue" width="150"/>
@@ -379,7 +379,7 @@
                            toolTip="@Resource(bundle='CustomerManagementPanel',key='applyFilterToolTip')"
                            click="onApplyFilterClick(event)"
                         />
-            </mx:ControlBar>
+            </mx:HBox>
             <mx:DataGrid id="customerGrid" width="100%" height="100%"
                          itemClick="onCustomerSelected(event)">
                 <mx:columns>

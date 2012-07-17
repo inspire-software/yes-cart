@@ -729,7 +729,7 @@
 
         <mx:VDividedBox width="100%" height="100%" id="mainPanel">
             <mx:VBox width="100%" height="100%">
-                <mx:ControlBar width="100%">
+                <mx:HBox paddingTop="5" width="100%">
                     <mx:Label text="@Resource(bundle='CategoryManagementPanel',key='categories')"/>
 
                     <mx:Button enabled="{categoryOrRootSelected}"
@@ -742,7 +742,7 @@
                                toolTip="@Resource(bundle='CategoryManagementPanel',key='deleteCategoryHint')"
                                click="onDeleteCategoryClick(event)"
                             />
-                </mx:ControlBar>
+                </mx:HBox>
                 <mx:HDividedBox width="100%" height="100%">
                     <mx:Tree id="categoryTree" height="100%" width="208"
                              labelField="name"
@@ -857,7 +857,7 @@
                                    width="100%" height="100%">
 
                             <mx:VBox width="100%" height="100%" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
-                                <mx:ControlBar width="100%">
+                                <mx:HBox paddingTop="5"  width="100%">
                                     <mx:Button
                                             label="@Resource(bundle='CategoryManagementPanel',key='addProduct')"
                                             toolTip="@Resource(bundle='CategoryManagementPanel',key='addProductHint')"
@@ -869,7 +869,7 @@
                                             enabled="{productSelected}"
                                             click="onRemoveProductFromCategoryClick(event)"
                                             />
-                                </mx:ControlBar>
+                                </mx:HBox>
                                 <mx:DataGrid id="assignedProductsGrid"
                                              editable="true"
                                              width="100%" height="100%"

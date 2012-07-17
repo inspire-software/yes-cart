@@ -135,7 +135,7 @@
 
     <mx:VBox width="100%" height="100%"
             paddingLeft="2" paddingRight="2" paddingBottom="2" paddingTop="2">
-        <mx:ControlBar width="100%">
+        <mx:HBox paddingTop="5" width="100%">
             <mx:Label text="@Resource(bundle='ProductManagementPanel',key='code')"/>
             <mx:TextInput id="codeTextInput" width="100"/>
             <mx:Label text="@Resource(bundle='ProductManagementPanel',key='name')"/>
@@ -154,7 +154,7 @@
                     />
             <mx:Button label="@Resource(bundle='ProductManagementPanel',key='findBtn')"
                        click="onSearchBtnClick(event)"/>
-        </mx:ControlBar>
+        </mx:HBox>
         <mx:DataGrid id="productGrid" width="100%" height="100%"
                      allowMultipleSelection="true"
                      itemClick="onProductSelected(event)">

@@ -41,6 +41,9 @@
         }
 
         public function set category(value:CategoryDTOImpl):void {
+            if (_category.categoryId == value.categoryId) {
+                return;
+            }
             _category = value;
 
             this.attrValues.removeAll();

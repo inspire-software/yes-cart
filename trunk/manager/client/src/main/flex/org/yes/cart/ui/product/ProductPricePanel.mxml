@@ -15,10 +15,10 @@
   -    limitations under the License.
   -->
 
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" creationComplete="init();">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" creationComplete="onPanelInit()">
 
-    <mx:VBox width="100%" height="100%">
-        <mx:Form x="0" y="0">
+    <mx:VBox width="100%" height="100%" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
+        <mx:Form>
             <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='product')">
                 <mx:Label id="productCodeName"/>
             </mx:FormItem>
@@ -27,8 +27,7 @@
                     <mx:ComboBox id="storesComboBox"
                                  labelField="name"
                                  data="shopId"
-                                 dataProvider="{remoteShopService.getAll.lastResult}"
-                                 change="shopChanged(event)"
+                                 change="onShopSelectionChanged(event)"
                                  prompt="@Resource(bundle='ProductManagementPanel',key='selectStorePropmt')">
                     </mx:ComboBox>
                     <mx:Label text="@Resource(bundle='ProductManagementPanel',key='defaultCurrency')"/>
@@ -40,20 +39,20 @@
                     <mx:Button id="addPriceBtn"
                                label="@Resource(bundle='ProductManagementPanel',key='addPrice')"
                                toolTip="@Resource(bundle='ProductManagementPanel',key='addPriceHint')"
-                               enabled="false"
-                               click="addPrice(event);"
+                               enabled="{allowAddPrice}"
+                               click="onAddPriceClick(event);"
                             />
                     <mx:Button id="editPriceBtn"
                                label="@Resource(bundle='ProductManagementPanel',key='editPrice')"
                                toolTip="@Resource(bundle='ProductManagementPanel',key='editPriceHint')"
-                               enabled="false"
-                               click="editPrice(event);"
+                               enabled="{allowEditPrice}"
+                               click="onEditPriceClick(event);"
                             />
                     <mx:Button id="deletePriceBtn"
                                label="@Resource(bundle='ProductManagementPanel',key='deletePrice')"
                                toolTip="@Resource(bundle='ProductManagementPanel',key='deletePriceHint')"
-                               enabled="false"
-                               click="deletePrice(event);"
+                               enabled="{allowDeletePrice}"
+                               click="onDeletePriceClick(event);"
                             />
                 </mx:HBox>
             </mx:FormItem>
@@ -63,8 +62,8 @@
                 id="priceDataGrid"
                 x="0" y="0" width="100%" height="100%" editable="false"
                 dataProvider="{prices}"
-                itemClick="priceSelected(event)"
-                itemEditEnd="valueEditEnd(event);"
+                itemClick="onPriceSelected(event)"
+                itemEditEnd="onPriceValueEditEnd(event);"
                 >
             <mx:columns>
                 <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagementPanel',key='id')"
@@ -205,26 +204,49 @@
         </mx:DataGrid>
     </mx:VBox>
 
+    <mx:Boolean id="allowAddPrice">false</mx:Boolean>
+    <mx:Boolean id="allowEditPrice">false</mx:Boolean>
+    <mx:Boolean id="allowDeletePrice">false</mx:Boolean>
 
-    <mx:RemoteObject showBusyCursor="true" id="remoteProductService" destination="remoteProductService"
-                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
-                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
-                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+    <mx:ArrayCollection id="prices"/>
+    <mx:ArrayCollection id="allProductSkus"/>
 
-    <mx:RemoteObject showBusyCursor="true" id="remoteShopService"
-                     destination="remoteShopService"
-                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
-                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
-                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteShopService" destination="remoteShopService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getAllShops" name="getAll"
+                   result="onGetAllShopsResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="getSupportedCurrencies" name="getSupportedCurrencies"
+                   result="onGetSupportedCurrenciesResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
 
     <mx:RemoteObject showBusyCursor="true" id="remoteProductSkuService"
                      destination="remoteProductSkuService"
-                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
-                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
-                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
 
+        <mx:method id="getAllProductSkus" name="getAllProductSkus"
+                   result="onGetAllProductSkusResult(event)"
+                   fault="onRpcMethodFault(event)"/>
 
-    <mx:ArrayCollection id="prices"/>
+        <mx:method id="updateSkuPrice" name="updateSkuPrice"
+                   result="onUpdateSkuPriceResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="removeSkuPrice" name="removeSkuPrice"
+                   result="onRemoveSkuPriceResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="createSkuPrice" name="createSkuPrice"
+                   result="onCreateSkuPriceResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
 
 
     <mx:Script>
@@ -232,14 +254,13 @@
         import com.hexagonstar.util.debug.Debug;
 
         import mx.core.FlexGlobals;
+        import mx.rpc.events.FaultEvent;
 
         import org.yes.cart.impl.ProductDTOImpl;
         import org.yes.cart.impl.ProductSkuDTOImpl;
         import org.yes.cart.impl.ShopDTOImpl;
         import org.yes.cart.impl.SkuPriceDTOImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
-
-        import flash.events.MouseEvent;
 
         import mx.collections.Sort;
         import mx.collections.SortField;
@@ -249,94 +270,49 @@
         import mx.events.DataGridEventReason;
         import mx.events.ListEvent;
         import mx.managers.PopUpManager;
-        import mx.rpc.AsyncResponder;
-        import mx.rpc.AsyncToken;
         import mx.rpc.events.ResultEvent;
 
-        public var productId:Number;
-
-        [Bindable]
-        public var product:ProductDTOImpl;
-        [Bindable]
-        public var shopDTOImpl:ShopDTOImpl;
-
-        private var selectedSkuPrice:SkuPriceDTOImpl;
+        private var _productId:Number;
 
         private var createPriceDialog:CreatePriceDialog;
 
-        public function init():void {
-
-            remoteShopService.getAll();
-            remoteProductService.getById(productId).addResponder(
-                    new AsyncResponder(
-                            function (event:ResultEvent, obj:Object):void {
-                                //Fresh product selected from service.
-                                product = ProductDTOImpl(event.result);
-                                productCodeName.text = product.code + ' ' + product.name;
-
-                                if (storesComboBox.dataProvider.length == 1) {
-                                    storesComboBox.selectedIndex = 1;
-                                    storesComboBox.dispatchEvent(new ListEvent("change"));
-                                }
-
-                            },
-                            ShopManagerGlobal.instance.defaultOnRpcMethodFault
-                    )
-            );
-
+        public function get productId():Number {
+            return _productId;
         }
 
-
-        /**
-         * Handle shop changed event.
-         * @param event event
-         * @return nothing
-         */
-        private function shopChanged(event:Event):void {
-
-            shopDTOImpl = event.currentTarget.selectedItem;
-            remoteShopService.getSupportedCurrencies(shopDTOImpl.shopId).addResponder(
-                    new AsyncResponder(
-                            function (event:ResultEvent, obj:Object = null):void {
-                                // Shop currencies are ready.
-                                var assignedCurrencyStr:String = String(event.result);
-                                deletePriceBtn.enabled = false;
-                                editPriceBtn.enabled = false;
-                                if (assignedCurrencyStr == null || assignedCurrencyStr == "null") {
-                                    defaultCurrencyLabel.text = resourceManager.getString("ProductManagementPanel", "currencyNotConfigured");
-                                    addPriceBtn.enabled = false;
-                                } else {
-                                    defaultCurrencyLabel.text = assignedCurrencyStr.split(",")[0];
-                                    var token:AsyncToken = remoteProductSkuService.getAllProductSkus(product.productId);
-                                    token.addResponder(
-                                            new AsyncResponder(
-                                                    skusReady,
-                                                    ShopManagerGlobal.instance.defaultOnRpcMethodFault
-                                            )
-                                    );
-                                    addPriceBtn.enabled = true;
-                                }
-                            },
-                            ShopManagerGlobal.instance.defaultOnRpcMethodFault
-                    )
-            );
+        public function set product(value:ProductDTOImpl):void {
+            if (_productId == value.productId) {
+                return;
+            }
+            _productId = value.productId;
+            productCodeName.text = value.name + ' (' + value.code + ')';
+            remoteProductSkuService.getAllProductSkus(productId);
         }
 
-        /**
-         * The product skus ready to use.
-         * @param event event
-         * @param token
-         * @return nothing
-         */
-        private function skusReady(event:ResultEvent, token:AsyncToken):void {
+        private function onShopSelectionChanged(event:Event):void {
+
+            if (storesComboBox.selectedItem != null) {
+                prices = null; // remove previous results
+                var shopDTOImpl:ShopDTOImpl = event.currentTarget.selectedItem;
+                remoteShopService.getSupportedCurrencies(shopDTOImpl.shopId);
+            }
+        }
+
+        private function refreshSkuPrices():void {
             prices = new ArrayCollection();
-            for each (var sku:ProductSkuDTOImpl in remoteProductSkuService.getAllProductSkus.lastResult) {
-                Debug.trace("DEBUG ProductPricePanel sku is:" + sku);
-                for each (var priceCandidate:SkuPriceDTOImpl in sku.price) {
-                    Debug.trace("DEBUG ProductPricePanel priceCandidate is:" + priceCandidate);
-                    if (shopDTOImpl.shopId == priceCandidate.shopId
-                            && defaultCurrencyLabel.text == priceCandidate.currency) {
-                        prices.addItem(priceCandidate);
+            if (storesComboBox.selectedItem == null) {
+                return;
+            }
+            var shopDTOImpl:ShopDTOImpl = storesComboBox.selectedItem as ShopDTOImpl;
+            if (shopDTOImpl != null) {
+                for each (var sku:ProductSkuDTOImpl in allProductSkus) {
+                    Debug.trace("DEBUG ProductPricePanel sku is:" + sku);
+                    for each (var priceCandidate:SkuPriceDTOImpl in sku.price) {
+                        Debug.trace("DEBUG ProductPricePanel priceCandidate is:" + priceCandidate);
+                        if (shopDTOImpl.shopId == priceCandidate.shopId
+                                && defaultCurrencyLabel.text == priceCandidate.currency) {
+                            prices.addItem(priceCandidate);
+                        }
                     }
                 }
             }
@@ -354,173 +330,163 @@
             prices.refresh();
 
             Debug.trace("DEBUG ProductPricePanel skusReady end");
-            deletePriceBtn.enabled = false;
-            editPriceBtn.enabled = false;
+            allowEditPrice = false;
+            allowDeletePrice = false;
 
 
         }
 
 
-        private function priceSelected(event:ListEvent):void {
-            selectedSkuPrice = event.currentTarget.selectedItem;
-            deletePriceBtn.enabled = true;
-            editPriceBtn.enabled = true;
+        private function onPriceSelected(event:ListEvent):void {
+            if (priceDataGrid.selectedItem != null) {
+                allowEditPrice = true;
+                allowDeletePrice = true;
+            }
         }
 
-        /**
-         * Price value edit end. Just mark that sku has unsaved changes.
-         * @param event grid event.
-         * @return nothing
-         */
-        private function valueEditEnd(event:DataGridEvent):void {
+        private function onPriceValueEditEnd(event:DataGridEvent):void {
             if (event.reason == DataGridEventReason.CANCELLED) {
                 return; // Do not update cell.
             }
 
-            Debug.trace("TRACE PdiuctPricePanel valueEditEnd ");
+            Debug.trace("TRACE ProductPricePanel valueEditEnd ");
 
             var skuPriceDto:SkuPriceDTOImpl = DataGrid(event.target).dataProvider[event.rowIndex];
-            Debug.trace("TRACE PdiuctPricePanel valueEditEnd skuPriceDto = " + skuPriceDto);
+            Debug.trace("TRACE ProductPricePanel valueEditEnd skuPriceDto = " + skuPriceDto);
             remoteProductSkuService.updateSkuPrice(skuPriceDto);
 
-            Debug.trace("TRACE PdiuctPricePanel update call performaed ");
-
-            /*event.preventDefault(); // Disable copying data back to the control.
-
-             var textInput:TextInput = TextInput(DataGrid(event.target).itemEditorInstance);
-
-
-             Debug.trace("New value  " + textInput.text);
-             Debug.traceObj(attrValue);
-
-
-
-             DataGrid(event.target).destroyItemEditor(); // Close the cell editor.
-             DataGrid(event.target).dataProvider.itemUpdated(event.itemRenderer.data); // Notify the list control to update its display.
-             */
-        }
-
-        /**
-         * Create new price dialog.
-         * @param event event
-         * @return nothing
-         */
-        private function deletePrice(event:MouseEvent):void {
-            Alert.show(
-                    resourceManager.getString('ProductManagementPanel', 'deletePriceConfirm'),
-                    resourceManager.getString('ShopManagerApplication', 'warning'),
-                    Alert.OK | Alert.CANCEL, this, deletePriceServiceCall, null, Alert.OK);
-
+            Debug.trace("TRACE ProductPricePanel update call performed ");
 
         }
 
-        private function deletePriceServiceCall(event:CloseEvent):void {
+        private function onDeletePriceClick(event:MouseEvent):void {
+            if (allowDeletePrice && priceDataGrid.selectedItem != null) {
+                Alert.show(
+                        resourceManager.getString('ProductManagementPanel', 'deletePriceConfirm',
+                                [ priceDataGrid.selectedItem.regularPrice, priceDataGrid.selectedItem.quantity ]),
+                        resourceManager.getString('ShopManagerApplication', 'warning'),
+                        Alert.OK | Alert.CANCEL, this, onDeletePriceClickConfirm, null, Alert.OK);
+            }
+        }
+
+        private function onDeletePriceClickConfirm(event:CloseEvent):void {
             if (event.detail == Alert.OK) {
 
-                remoteProductSkuService.removeSkuPrice(selectedSkuPrice.skuPriceId).addResponder(
-                        new AsyncResponder(
-                                priceCreated,
-                                ShopManagerGlobal.instance.defaultOnRpcMethodFault
-                        )
-                );
-            }
-        }
-
-
-        /**
-         * Edit selected price.
-         * @param event event
-         * @return nothing
-         */
-        private function editPrice(event:MouseEvent):void {
-            createPriceDialog = CreatePriceDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CreatePriceDialog, true));
-            createPriceDialog.skuComboBox.dataProvider = remoteProductSkuService.getAllProductSkus.lastResult;
-            for (var i:int = 0; i < remoteProductSkuService.getAllProductSkus.lastResult.length; i++) {
-                var skuCandidate:ProductSkuDTOImpl = ProductSkuDTOImpl(remoteProductSkuService.getAllProductSkus.lastResult[i]);
-                if (skuCandidate.skuId == selectedSkuPrice.productSkuId) {
-                    createPriceDialog.skuComboBox.selectedIndex = i;
-                    createPriceDialog.selectedSku = skuCandidate;
-                    createPriceDialog.skuComboBox.enabled = false;
-                    break;
+                if (allowDeletePrice && priceDataGrid.selectedItem != null) {
+                    remoteProductSkuService.removeSkuPrice(priceDataGrid.selectedItem.skuPriceId);
                 }
             }
+        }
 
-            createPriceDialog.currency = defaultCurrencyLabel.text;
-            createPriceDialog.shopId = shopDTOImpl.shopId;
-            createPriceDialog.saveBtn.addEventListener(MouseEvent.CLICK, updatePriceServiceCall);
-            createPriceDialog.editPrice(selectedSkuPrice);
-            PopUpManager.centerPopUp(createPriceDialog);
+        private function onEditPriceClick(event:MouseEvent):void {
+            if (allowEditPrice && priceDataGrid.selectedItem != null && storesComboBox.selectedItem != null) {
+                createPriceDialog = CreatePriceDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CreatePriceDialog, true));
+                createPriceDialog.skuComboBox.dataProvider = allProductSkus;
+                for (var i:int = 0, il:int = allProductSkus.length; i < il; i++) {
+                    var skuCandidate:ProductSkuDTOImpl = allProductSkus.getItemAt(i) as ProductSkuDTOImpl;
+                    if (skuCandidate.skuId == priceDataGrid.selectedItem.productSkuId) {
+                        createPriceDialog.skuComboBox.selectedIndex = i;
+                        createPriceDialog.selectedSku = skuCandidate;
+                        createPriceDialog.skuComboBox.enabled = false;
+                        break;
+                    }
+                }
+
+                createPriceDialog.currency = defaultCurrencyLabel.text;
+                createPriceDialog.shopId = storesComboBox.selectedItem.shopId;
+                createPriceDialog.saveBtn.addEventListener(MouseEvent.CLICK, onUpdatePriceSaveClick);
+                createPriceDialog.skuPrice = priceDataGrid.selectedItem as SkuPriceDTOImpl;
+                PopUpManager.centerPopUp(createPriceDialog);
+            }
+        }
+
+        private function onUpdatePriceSaveClick(event:Event):void {
+
+            if (createPriceDialog != null) {
+                var price:SkuPriceDTOImpl = createPriceDialog.skuPrice;
+                Debug.trace("INFO sku price to update is " + price);
+                remoteProductSkuService.updateSkuPrice(price);
+                createPriceDialog.saveBtn.removeEventListener(MouseEvent.CLICK, onUpdatePriceSaveClick);
+                PopUpManager.removePopUp(createPriceDialog);
+                createPriceDialog = null;
+            }
+        }
+
+        private function onAddPriceClick(event:MouseEvent):void {
+            if (allowAddPrice && storesComboBox.selectedItem != null) {
+                createPriceDialog = CreatePriceDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CreatePriceDialog, true));
+                createPriceDialog.skuComboBox.dataProvider = remoteProductSkuService.getAllProductSkus.lastResult;
+                createPriceDialog.currency = defaultCurrencyLabel.text;
+                createPriceDialog.shopId = storesComboBox.selectedItem.shopId;
+                createPriceDialog.saveBtn.addEventListener(MouseEvent.CLICK, onAddPriceSaveClick);
+                createPriceDialog.skuPriceCreate();
+                PopUpManager.centerPopUp(createPriceDialog);
+            }
+        }
+
+        private function onAddPriceSaveClick(event:Event):void {
+
+            if (allowAddPrice && storesComboBox.selectedItem != null) {
+                var price:SkuPriceDTOImpl = createPriceDialog.skuPrice;
+                price.shopId = storesComboBox.selectedItem.shopId;
+                price.currency = defaultCurrencyLabel.text;
+                remoteProductSkuService.createSkuPrice(price);
+                createPriceDialog.saveBtn.removeEventListener(MouseEvent.CLICK, onAddPriceSaveClick);
+                PopUpManager.removePopUp(createPriceDialog);
+                createPriceDialog = null;
+            }
+        }
+
+        protected function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        private function onPanelInit():void {
+            remoteShopService.getAll();
+        }
+
+        private function onGetAllShopsResult(event:ResultEvent):void {
+            storesComboBox.dataProvider = event.result;
+            if (storesComboBox.dataProvider != null && storesComboBox.dataProvider.length > 0) {
+                // preselect first one
+                storesComboBox.selectedIndex = 0;
+                storesComboBox.selectedItem = storesComboBox.dataProvider.getItemAt(0);
+                storesComboBox.dispatchEvent(new ListEvent(Event.CHANGE));
+            }
+        }
+
+        private function onGetSupportedCurrenciesResult(event:ResultEvent):void {
+            var assignedCurrencyStr:String = String(event.result);
+            allowDeletePrice = false;
+            allowEditPrice = false;
+            if (assignedCurrencyStr == null || assignedCurrencyStr == "null") {
+                defaultCurrencyLabel.text = resourceManager.getString("ProductManagementPanel", "currencyNotConfigured");
+                allowAddPrice = false;
+            } else {
+                defaultCurrencyLabel.text = assignedCurrencyStr.split(",")[0];
+                refreshSkuPrices();
+                allowAddPrice = true;
+            }
 
         }
 
-
-        /**
-         * Create new price dialog.
-         * @param event event
-         * @return nothing
-         */
-        private function addPrice(event:MouseEvent):void {
-            createPriceDialog = CreatePriceDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CreatePriceDialog, true));
-            createPriceDialog.skuComboBox.dataProvider = remoteProductSkuService.getAllProductSkus.lastResult;
-            createPriceDialog.currency = defaultCurrencyLabel.text;
-            createPriceDialog.shopId = shopDTOImpl.shopId;
-            createPriceDialog.saveBtn.addEventListener(MouseEvent.CLICK, addPriceServiceCall);
-            createPriceDialog.createPrice();
-            PopUpManager.centerPopUp(createPriceDialog);
+        private function onGetAllProductSkusResult(event:ResultEvent):void {
+            allProductSkus = event.result as ArrayCollection;
+            if (storesComboBox.selectedItem != null) {
+                refreshSkuPrices();
+            }
         }
 
-
-        /**
-         * Call service to update the sku price
-         * @param event
-         * @return
-         */
-        private function updatePriceServiceCall(event:Event):void {
-
-            var price:SkuPriceDTOImpl = createPriceDialog.skuPrice;
-            Debug.trace("INFO sku price to update is " + price);
-            remoteProductSkuService.updateSkuPrice(price).addResponder(
-                    new AsyncResponder(
-                            priceCreated,
-                            ShopManagerGlobal.instance.defaultOnRpcMethodFault
-                    )
-            );
-            PopUpManager.removePopUp(createPriceDialog);
-            createPriceDialog = null;
-
+        private function onUpdateSkuPriceResult(event:ResultEvent):void {
+            remoteProductSkuService.getAllProductSkus(productId);
         }
 
-        /**
-         * Perform price creation.
-         * @param event event
-         * @return nothing
-         */
-        private function addPriceServiceCall(event:Event):void {
-
-            var price:SkuPriceDTOImpl = createPriceDialog.skuPrice;
-            price.shopId = shopDTOImpl.shopId;
-            price.currency = defaultCurrencyLabel.text;
-            remoteProductSkuService.createSkuPrice(price).addResponder(
-                    new AsyncResponder(
-                            priceCreated,
-                            ShopManagerGlobal.instance.defaultOnRpcMethodFault
-                    )
-            );
-            PopUpManager.removePopUp(createPriceDialog);
-            createPriceDialog = null;
+        private function onRemoveSkuPriceResult(event:ResultEvent):void {
+            remoteProductSkuService.getAllProductSkus(productId);
         }
 
-        /**
-         * Price create succsessfuly.
-         * @param event
-         * @param atoken
-         * @return
-         */
-        private function priceCreated(event:ResultEvent, atoken:AsyncToken):void {
-            remoteProductSkuService.getAllProductSkus(product.productId).addResponder(
-                    new AsyncResponder(
-                            skusReady,
-                            ShopManagerGlobal.instance.defaultOnRpcMethodFault));
+        private function onCreateSkuPriceResult(event:ResultEvent):void {
+            remoteProductSkuService.getAllProductSkus(productId);
         }
         ]]>
    </mx:Script>

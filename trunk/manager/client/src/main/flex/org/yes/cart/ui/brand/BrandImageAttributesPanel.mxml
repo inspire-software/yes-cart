@@ -41,6 +41,9 @@
         }
 
         public function set brand(value:BrandDTOImpl):void {
+            if (_brand.brandId == value.brandId) {
+                return;
+            }
             _brand = value;
 
             this.attrValues.removeAll();

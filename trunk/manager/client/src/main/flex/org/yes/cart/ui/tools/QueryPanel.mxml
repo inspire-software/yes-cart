@@ -132,7 +132,7 @@
     <mx:Panel width="100%" height="100%" title="@Resource(bundle='QueryPanel',key='query')">
         <mx:VBox width="100%" height="100%">
 
-            <mx:ControlBar>
+            <mx:HBox paddingTop="5" width="100%">
 
                 <mx:RadioButtonGroup id="queryType"/>
 
@@ -151,7 +151,7 @@
                 <mx:Button id="deleteTabBtn" toolTip="@Resource(bundle='QueryPanel',key='deleteTabHint')"
                            label="@Resource(bundle='QueryPanel',key='deleteTab')" click="onDeleteTabClick(event)"/>
 
-            </mx:ControlBar>
+            </mx:HBox>
 
             <mx:TabNavigator id="queryTabNavigator" width="100%" height="100%">
                 <mx:VDividedBox width="100%"
