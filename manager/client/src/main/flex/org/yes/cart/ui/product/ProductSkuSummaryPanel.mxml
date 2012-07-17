@@ -17,7 +17,7 @@
 
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
            xmlns:controls="controls.*" width="100%" height="100%"
-           creationComplete="init();">
+           creationComplete="onInitPanel()">
 
     <mx:Form x="0" y="0">
         <mx:FormItem label="@Resource(bundle='ProductSkuManagementPanel',key='code')">
@@ -66,107 +66,87 @@
 
     <mx:Boolean id="productSkuChangedFlag">false</mx:Boolean>
 
+    <mx:ArrayCollection id="propertyWatchers"/>
 
     <mx:Script>
         <![CDATA[
         import com.hexagonstar.util.debug.Debug;
 
-        import org.yes.cart.impl.ProductSkuDTOImpl;
+        import org.yes.cart.event.DtoEvent;
 
-        import flash.events.MouseEvent;
+        import org.yes.cart.impl.ProductSkuDTOImpl;
 
         import mx.binding.utils.BindingUtils;
         import mx.binding.utils.ChangeWatcher;
-        import mx.controls.Alert;
         import mx.events.PropertyChangeEvent;
-        import mx.events.ValidationResultEvent;
         import mx.validators.Validator;
 
         [Bindable]
-        public var productSku:ProductSkuDTOImpl;
+        private var _productSku:ProductSkuDTOImpl;
 
-        private var _skuChangedFunction:Function;
+        public function get productSku():ProductSkuDTOImpl {
+            return _productSku;
+        }
 
-        [Bindable]
+        public function set productSku(value:ProductSkuDTOImpl):void {
+            if (_productSku != null && value != null && _productSku.skuId == value.skuId) {
+                return;
+            }
+            unbindProperties();
+            _productSku = value;
+            bindProperties();
+        }
+
         private var validatorArr:Array;
 
-        /**
-         * Get product sku changed call back function
-         * @return call back function
-         */
-        public function get skuChangedFunction():Function {
-            return _skuChangedFunction;
+        private function onInitPanel():void {
+            validatorArr = [ rankValidator, skuNameValidator, barCodeValidator ];
         }
 
-        /**
-         * Set product sku changed call back function
-         * @param value
-         * @return
-         */
-        public function set skuChangedFunction(value:Function):void {
-            _skuChangedFunction = value;
+        private function unbindProperties():void {
+            for each (var watcher:ChangeWatcher in propertyWatchers) {
+                watcher.unwatch();
+            }
+            propertyWatchers.removeAll();
         }
 
+        private function bindProperties():void {
 
-        private function init():void {
-            validatorArr = new Array();
-            validatorArr.push(rankValidator);
-            validatorArr.push(skuNameValidator);
-            validatorArr.push(barCodeValidator);
-            rebind();
-        }
-
-
-        public function rebind():void {
-
-            if (productSku != null) {
+            if (_productSku != null) {
                 Debug.trace("INFO ProductSkuSummaryPanel rebind begin");
 
-                BindingUtils.bindProperty(codeTextInput, "text", productSku, "code");
-                BindingUtils.bindProperty(nameTextInput, "text", productSku, "name");
-                BindingUtils.bindProperty(barCodeTextInput, "text", productSku, "barCode");
-                BindingUtils.bindProperty(rankTextInput, "text", productSku, "rank");
-                BindingUtils.bindProperty(descriptionTextInput, "text", productSku, "description");
+                propertyWatchers.addItem(BindingUtils.bindProperty(codeTextInput, "text", _productSku, "code"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(nameTextInput, "text", _productSku, "name"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(barCodeTextInput, "text", _productSku, "barCode"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(rankTextInput, "text", _productSku, "rank"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(descriptionTextInput, "text", _productSku, "description"));
 
-                BindingUtils.bindProperty(productSku, "code", codeTextInput, "text");
-                BindingUtils.bindProperty(productSku, "name", nameTextInput, "text");
-                BindingUtils.bindProperty(productSku, "barCode", barCodeTextInput, "text");
-                BindingUtils.bindProperty(productSku, "rank", rankTextInput, "text");
-                BindingUtils.bindProperty(productSku, "description", descriptionTextInput, "text");
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "code", codeTextInput, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "name", nameTextInput, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "barCode", barCodeTextInput, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "rank", rankTextInput, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "description", descriptionTextInput, "text"));
 
-                ChangeWatcher.watch(productSku, "code", productSkuChanged);
-                ChangeWatcher.watch(productSku, "name", productSkuChanged);
-                ChangeWatcher.watch(productSku, "barCode", productSkuChanged);
-                ChangeWatcher.watch(productSku, "rank", productSkuChanged);
-                ChangeWatcher.watch(productSku, "description", productSkuChanged);
+                propertyWatchers.addItem(ChangeWatcher.watch(_productSku, "code", productSkuChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productSku, "name", productSkuChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productSku, "barCode", productSkuChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productSku, "rank", productSkuChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productSku, "description", productSkuChanged));
 
                 Debug.trace("INFO ProductSkuSummaryPanel rebind end");
 
             }
 
-
         }
 
-        /**
-         * Product sku changed watch function.
-         * @param event
-         * @return
-         */
         private function productSkuChanged(event:PropertyChangeEvent):void {
             var validatorErrorArray:Array = Validator.validateAll(validatorArr);
             productSkuChangedFlag = (validatorErrorArray.length == 0);
         }
 
-        /**
-         * Save the sku changes
-         * @param event event
-         * @return nothing
-         */
         private function saveProductsKU(event:MouseEvent):void {
-            if (skuChangedFunction != null) {
-                skuChangedFunction(productSku);
-                productSkuChangedFlag = false;
-            }
+            dispatchEvent(new DtoEvent(DtoEvent.UPDATE, _productSku));
+            productSkuChangedFlag = false;
         }
         ]]>
 </mx:Script>

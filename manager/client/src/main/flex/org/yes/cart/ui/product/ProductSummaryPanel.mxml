@@ -93,7 +93,6 @@
     <mx:Boolean id="productDTOImplChanged">false</mx:Boolean>
 
     <mx:Script><![CDATA[
-        import com.hexagonstar.util.debug.Debug;
 
         import mx.binding.utils.BindingUtils;
         import mx.binding.utils.ChangeWatcher;
@@ -119,11 +118,6 @@
             bindProperties();
         }
 
-        /**
-         * Handle save product changes click
-         * @param event event
-         * @return nothing
-         */
         private function saveProductChanges(event:MouseEvent):void {
             dispatchEvent(new DtoEvent(DtoEvent.UPDATE, _productDTOImpl));
             productDTOImplChanged = false;

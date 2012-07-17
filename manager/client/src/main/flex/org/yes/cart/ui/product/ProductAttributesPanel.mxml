@@ -16,7 +16,6 @@
   -->
 
 <attr:EntityAttributeValuesManagementPanel
-           label="@Resource(bundle='CategoryManagementPanel',key='image')"
            xmlns:mx="http://www.adobe.com/2006/mxml"
            xmlns:attr="org.yes.cart.ui.attributes.*"
            width="100%"
@@ -41,11 +40,11 @@
         }
 
         public function set product(value:ProductDTOImpl):void {
-            if (_product.productId == value.productId) {
+            if (_product != null && value != null && _product.productId == value.productId) {
                 return;
             }
             _product = value;
-            entityCode = value.code;
+            entityCode = value != null ? value.code : null;
 
             this.attrValues.removeAll();
             onEntitySet(AttributeGroupNames.PRODUCT);

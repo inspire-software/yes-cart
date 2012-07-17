@@ -28,53 +28,54 @@
         import mx.rpc.events.ResultEvent;
 
         import org.yes.cart.constants.AttributeGroupNames;
-        import org.yes.cart.impl.AttrValueCategoryDTOImpl;
+        import org.yes.cart.impl.AttrValueProductSkuDTOImpl;
         import org.yes.cart.impl.AttributeDTOImpl;
-        import org.yes.cart.impl.CategoryDTOImpl;
+        import org.yes.cart.impl.ProductSkuDTOImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
         import org.yes.cart.util.DomainUtils;
 
-        private var _category:CategoryDTOImpl;
+        private var _productSku:ProductSkuDTOImpl;
 
-        public function get category():CategoryDTOImpl {
-            return _category;
+        public function get productSku():ProductSkuDTOImpl {
+            return _productSku;
         }
 
-        public function set category(value:CategoryDTOImpl):void {
-            if (_category != null && value != null && _category.categoryId == value.categoryId) {
+        public function set productSku(value:ProductSkuDTOImpl):void {
+            if (_productSku != null && value != null && _productSku.skuId == value.skuId) {
                 return;
             }
-            _category = value;
+            _productSku = value;
+            entityCode = value != null ? value.code : null;
 
             this.attrValues.removeAll();
-            onEntitySet(AttributeGroupNames.CATEGORY);
+            onEntitySet(AttributeGroupNames.SKU);
 
-            if (_category != null) {
-                remoteCategoryService.getEntityAttributes(_category.categoryId);
+            if (_productSku != null) {
+                remoteProductSkuService.getEntityAttributes(_productSku.skuId);
             }
         }
 
         override protected function onValueAdded(selectedAttributeDTO:AttributeDTOImpl):void {
-            var catAttr:AttrValueCategoryDTOImpl = new AttrValueCategoryDTOImpl();
-            catAttr.attributeDTO = selectedAttributeDTO;
-            catAttr.categoryId = this._category.categoryId;
-            remoteCategoryService.createEntityAttributeValue(catAttr);
+            var prodAttr:AttrValueProductSkuDTOImpl = new AttrValueProductSkuDTOImpl();
+            prodAttr.attributeDTO = selectedAttributeDTO;
+            prodAttr.skuId = this._productSku.skuId;
+            remoteProductSkuService.createEntityAttributeValue(prodAttr);
         }
 
 
         override protected function onValueChanged(event:DataGridEvent, attrValue:Object, newValue:Object):void {
-            var catAttr:AttrValueCategoryDTOImpl = attrValue as AttrValueCategoryDTOImpl;
+            var catAttr:AttrValueProductSkuDTOImpl = attrValue as AttrValueProductSkuDTOImpl;
             catAttr.val = String(newValue);
             if (DomainUtils.isNewPK(catAttr.attrvalueId)) {
-                remoteCategoryService.createEntityAttributeValue(catAttr);
+                remoteProductSkuService.createEntityAttributeValue(catAttr);
             } else {
-                remoteCategoryService.updateEntityAttributeValue(catAttr);
+                remoteProductSkuService.updateEntityAttributeValue(catAttr);
             }
         }
 
         override protected function onValueDelete(selectedItem:Object):void {
             this.attrValues.removeItemAt(this.attrValues.getItemIndex(selectedItem));
-            remoteCategoryService.deleteAttributeValue(selectedItem.attrvalueId);
+            remoteProductSkuService.deleteAttributeValue(selectedItem.attrvalueId);
         }
 
         /**
@@ -84,14 +85,14 @@
          * @param attr currently loaded (into this panel) attribute
          * @return true to allow this attribute to be managed through this pannel
          */
-        protected function allowManageAttribute(attr:AttrValueCategoryDTOImpl):Boolean {
+        protected function allowManageAttribute(attr:AttrValueProductSkuDTOImpl):Boolean {
             return true; // manage all available attributes by default
         }
 
         private function onGetEntityAttributesResult(event:ResultEvent):void {
             var attrs:ArrayCollection = event.result as ArrayCollection;
             if (attrs != null) {
-                for each (var attr:AttrValueCategoryDTOImpl in attrs) {
+                for each (var attr:AttrValueProductSkuDTOImpl in attrs) {
                     if (allowManageAttribute(attr)) {
                         this.attrValues.addItem(attr);
                     }
@@ -100,34 +101,34 @@
         }
 
         private function onCreateEntityAttributeValueResult(event:ResultEvent):void {
-            var catAttr:AttrValueCategoryDTOImpl = event.result as AttrValueCategoryDTOImpl;
+            var prodAttr:AttrValueProductSkuDTOImpl = event.result as AttrValueProductSkuDTOImpl;
             var index:int = -1;
-            for each (var old:AttrValueCategoryDTOImpl in this.attrValues) {
+            for each (var old:AttrValueProductSkuDTOImpl in this.attrValues) {
                 index++;
-                if (old.attributeDTO.attributeId == catAttr.attributeDTO.attributeId) {
+                if (old.attributeDTO.attributeId == prodAttr.attributeDTO.attributeId) {
                     break;
                 }
             }
             if (index != -1) {
                 this.attrValues.removeItemAt(index);
-                this.attrValues.addItemAt(catAttr, index);
+                this.attrValues.addItemAt(prodAttr, index);
             } else {
-                this.attrValues.addItem(catAttr);
+                this.attrValues.addItem(prodAttr);
             }
         }
 
         private function onUpdateEntityAttributeValueResult(event:ResultEvent):void {
-            var catAttr:AttrValueCategoryDTOImpl = event.result as AttrValueCategoryDTOImpl;
+            var prodAttr:AttrValueProductSkuDTOImpl = event.result as AttrValueProductSkuDTOImpl;
             var index:int = -1;
-            for each (var old:AttrValueCategoryDTOImpl in this.attrValues) {
+            for each (var old:AttrValueProductSkuDTOImpl in this.attrValues) {
                 index++;
-                if (old.attrvalueId == catAttr.attrvalueId) {
+                if (old.attrvalueId == prodAttr.attrvalueId) {
                     break;
                 }
             }
             if (index != -1) {
                 this.attrValues.removeItemAt(index);
-                this.attrValues.addItemAt(catAttr, index);
+                this.attrValues.addItemAt(prodAttr, index);
             }
         }
 
@@ -137,8 +138,8 @@
         ]]></mx:Script>
 
 
-    <mx:RemoteObject showBusyCursor="true" id="remoteCategoryService"
-                     destination="remoteCategoryService"
+    <mx:RemoteObject showBusyCursor="true" id="remoteProductSkuService"
+                     destination="remoteProductSkuService"
                      channelSet="{ShopManagerGlobal.instance.channelSet}">
 
         <mx:method id="getEntityAttributes" name="getEntityAttributes"

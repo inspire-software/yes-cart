@@ -15,7 +15,8 @@
   -    limitations under the License.
   -->
 
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" creationComplete="init();">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:prod="org.yes.cart.ui.product.*"
+           xmlns:seo="org.yes.cart.ui.seo.*" width="100%" height="100%">
 
     <mx:Script>
 		<![CDATA[
@@ -24,6 +25,7 @@
         import mx.core.FlexGlobals;
 
         import org.yes.cart.constants.AttributeGroupNames;
+        import org.yes.cart.event.DtoEvent;
         import org.yes.cart.impl.AttrValueProductSkuDTOImpl;
         import org.yes.cart.impl.AttributeDTOImpl;
         import org.yes.cart.impl.ProductDTOImpl;
@@ -62,59 +64,37 @@
 
         private var productSkuCreateDialog:ProductSkuCreateDialog;
 
-        private var attrValuePanel:EntityAttributeValuesManagementPanel;
-
         public function get product():ProductDTOImpl {
             return _product;
         }
 
         public function set product(value:ProductDTOImpl):void {
+            if (_product != null && value != null && _product.productId == value.productId) {
+                return;
+            }
             _product = value;
+            if (_product != null) {
+                remoteProductSkuService.getAllProductSkus(_product.productId);
+            }
         }
 
-
-        /**
-         * Init product sku manamegent panel.
-         * @return nothing
-         */
-        public function init():void {
-            remoteProductSkuService.getAllProductSkus(product.productId).addResponder(
-                    new AsyncResponder(
-                            function (event:*, obj:Object = null):void {
-                                Debug.trace("Get all skus 0 is done ");
-                                if (skusComboBox.dataProvider.length == 1) {
-                                    skusComboBox.selectedIndex = 1;
-                                    skusComboBox.dispatchEvent(new ListEvent("change"));
-                                }
-                            },
-                            ShopManagerGlobal.instance.defaultOnRpcMethodFault
-                    )
-            );
-        }
-
-
-        /**
-         * Sku selected event handler.
-         * @param event event
-         * @return nothing
-         */
         private function onSkuSelected(event:ListEvent):void {
-            selectedSku = ProductSkuDTOImpl(skusComboBox.selectedItem);
-            initTab(skuTabNavigator.selectedIndex);
+            if (skusComboBox.selectedItem != null) {
+                skuSelected = true;
+                selectedSku = skusComboBox.selectedItem as ProductSkuDTOImpl;
+                initTab(skuTabNavigator.selectedIndex);
+            } else {
+                skuSelected = false;
+            }
         }
 
-        /**
-         * Sku tab selected event.
-         * @param event event
-         * @return nothing
-         */
         private function onTabClick(event:IndexChangedEvent):void {
             initTab(event.newIndex);
         }
 
         private function initTab(idx:int):void {
             Debug.trace("INFO ProductSkuManagementPanel selected tab idx is " + idx);
-            if (selectedSku == null) {
+            if (!skuSelected) {
                 return;
             }
             Debug.trace("INFO ProductSkuManagementPanel selected sku is " + selectedSku);
@@ -128,391 +108,150 @@
 
                 case TAB_IMAGE_IDX:
                 {
-                    imageTabSelected(null);
+                    imageTabSelected();
                     break;
                 }
 
                 case TAB_ATTR_IDX:
                 {
-                    attrTabSelected(null);
+                    attrTabSelected();
                     break;
                 }
 
                 case TAB_SEO_IDX:
                 {
-                    seoTabSelected(null);
+                    seoTabSelected();
                     break;
                 }
 
-                /*case TAB_PRICE_IDX: {
-                 break;
-                 }
-
-
-                 case TAB_WAREHOUSE_IDX: {
-                 break;
-                 } */
-
             }
 
         }
 
-        /**
-         * SKU attributes tab selected.
-         * @param event event
-         * @return nothing
-         */
-        private function attrTabSelected(event:MouseEvent):void {
-            remoteProductSkuService.getEntityAttributes(selectedSku.skuId).addResponder(
-                    new AsyncResponder(
-                            function (event:ResultEvent, obj:Object = null):void {
-                                getEntityAttributesResultHandlerInternal(event, skuAttributesTab, rejectImageAttributes);
-                            },
-                            ShopManagerGlobal.instance.defaultOnRpcMethodFault));
-        }
-
-
-        /**
-         * SKU images tab selected.
-         * @param event event
-         * @return nothing
-         */
-        private function imageTabSelected(event:MouseEvent):void {
-            remoteProductSkuService.getEntityAttributes(selectedSku.skuId).addResponder(
-                    new AsyncResponder(
-                            function (event:ResultEvent, obj:Object = null):void {
-                                //Service call back with category attribute values.
-                                getEntityAttributesResultHandlerInternal(event, skuImagesTab, acceptImageAttributes);
-                            },
-                            ShopManagerGlobal.instance.defaultOnRpcMethodFault
-                    )
-            );
-        }
-
-
-        /**
-         * Service call back with category attribute values.
-         * @param event event
-         * @param canvas target tab
-         * @return nothing
-         */
-        private function getEntityAttributesResultHandlerInternal(event:ResultEvent, canvas:Canvas, filterFunk:Function):void {
-            Debug.trace("TRACE getEntityAttributesResultHandlerInternal");
-            attrValuePanel = new EntityAttributeValuesManagementPanel();
-            attrValuePanel.attrValues = ArrayCollection(event.result);
-
-            attrValuePanel.entityCode = selectedSku.code;
-//            attrValuePanel.attributeGroup = AttributeGroupNames.SKU;
-            attrValuePanel.attrValues.filterFunction = filterFunk;
-            attrValuePanel.attrValues.refresh();
-
-            //attrValuePanel.attrValueChangedCallBack = attrValueChanged;
-            //attrValuePanel.attrValueAddedCallBack = attrValueAdded;
-            //attrValuePanel.attrValueDeleteCallBack = attrValueDelete;
-
-            canvas.removeAllChildren();
-            canvas.addChild(attrValuePanel);
-
-
-        }
-
-        /**
-         * Do not show the image attributes.
-         * @param item item to filter
-         * @return true if need to show item.
-         */
-        private function rejectImageAttributes(item:Object):Boolean {
-            return !acceptImageAttributes(item);
-        }
-
-        /**
-         * Accept only images
-         * @param item item to filter
-         * @return true if need to show item.
-         */
-        private function acceptImageAttributes(item:Object):Boolean {
-            return (item.attributeDTO.etypeName.indexOf("Image") > -1);
-        }
-
-
-        /**
-         * Delete attribute value.
-         * @param attrValueId attribute value id.
-         */
-        private function attrValueDelete(attrValueId:Number):void {
-
-            Debug.trace("INFO delete product attribute with id = " + attrValueId);
-            remoteProductSkuService.deleteAttributeValue(attrValueId);
-        }
-
-        /**
-         * Added attribute, that allowe multiple value call back function.
-         * @param attr attribute
-         * @return instane of {@link AttrValueCategoryDTOImpl}
-         */
-        private function attrValueAdded(attr:AttributeDTOImpl):AttrValueProductSkuDTOImpl {
-            var attrValue:AttrValueProductSkuDTOImpl = new AttrValueProductSkuDTOImpl();
-            attrValue.attributeDTO = attr;
-            attrValue.skuId = selectedSku.skuId;
-            Debug.trace("INFO added new attribute value  " + attrValue);
-            return attrValue;
-
-        }
-
-        /**
-         * Value changed callback function.
-         * @param attrValue  attribute value object.
-         * @param newValue new value
-         * @return nothing
-         */
-        private function attrValueChanged(attrValue:Object, newValue:String, rowIdx:int):void {
-
-            Debug.trace("INFO Product attribute value changed call back");
-            //var categoryAttrValue:AttrValueProductDTOImpl = AttrValueProductDTOImpl(attrValue);
-            attrValue.val = newValue;
-            var asyncToken:AsyncToken;
-            var updateTarget:UpdateTarget;
-            if (DomainUtils.isNew(attrValue, 'attrvalueId')) {
-                // insert new attribute
-                Debug.trace("INFO create new attr value " + newValue + " for sku " + selectedSku);
-                asyncToken = remoteProductSkuService.createEntityAttributeValue(attrValue);
-                updateTarget = new UpdateTarget(UpdateTarget.NEW, rowIdx);
+        private function attrTabSelected():void {
+            Debug.trace("INFO attrs tab selected, selected productSku is " + selectedSku);
+            if (skuSelected && this.selectedSku != null) {
+                skuAttributesTab.productSku = this.selectedSku;
             } else {
-                //update
-                Debug.trace("INFO update attr value " + newValue + " for sku " + selectedSku);
-                asyncToken = remoteProductSkuService.updateEntityAttributeValue(attrValue);
-                updateTarget = new UpdateTarget(UpdateTarget.UPDATE, rowIdx);
+                skuAttributesTab.productSku = null;
             }
-            asyncToken.addResponder(
-                    new AsyncResponder(
-                            productAttributeUpdatedResultHandler,
-                            ShopManagerGlobal.instance.defaultOnRpcMethodFault, updateTarget
-                    )
-            );
         }
 
-
-        /**
-         * Service call back with sku attribute value.
-         * @param event event
-         * @param updateTarget async token
-         * @return nothing
-         */
-        private function productAttributeUpdatedResultHandler(event:ResultEvent, updateTarget:UpdateTarget):void {
-            var obj:Object;
-            if (updateTarget.action == UpdateTarget.NEW) {
-                obj = remoteProductSkuService.createEntityAttributeValue.lastResult;
+        private function imageTabSelected():void {
+            Debug.trace("INFO image tab selected, selected productSku is " + selectedSku);
+            if (skuSelected && this.selectedSku != null) {
+                skuImagesTab.productSku = this.selectedSku;
             } else {
-                obj = remoteProductSkuService.updateEntityAttributeValue.lastResult;
-            }
-            Debug.trace("INFO obj is " + obj);
-            attrValuePanel.attrValues.setItemAt(obj, updateTarget.idx);
-
-        }
-
-        /**
-         * Product SEO information tab.
-         * @param event event
-         * @return nothing
-         */
-        private function seoTabSelected(event:MouseEvent):void {
-            skuSeoTab.removeAllChildren();
-            var seoPanel:SeoPanel = new SeoPanel();
-            //seoPanel.seoCreatedCallBack = seoCreatedCallBack;
-            //seoPanel.seoRemovedCallBack = seoRemovedCallBack;
-            if (selectedSku.seoDTO != null && DomainUtils.isPersistentPK(selectedSku.seoDTO.seoId)) {
-                seoPanel.seoId = selectedSku.seoDTO.seoId;
-            }
-            skuSeoTab.addChild(seoPanel);
-        }
-
-        /**
-         * Call back function to handle SEO created event
-         * @param seoDTOImpl created SeoDTOImpl
-         * @return nothing
-         */
-        public function seoCreatedCallBack(seoDTOImpl:SeoDTOImpl):void {
-            if (selectedSku.seoDTO == null || DomainUtils.isNewPK(selectedSku.seoDTO.seoId)) {
-                selectedSku.seoDTO = seoDTOImpl;
-                skuChangedFunction(selectedSku);
+                skuImagesTab.productSku = null;
             }
         }
 
-        /**
-         * Call back function to handle SEO removed event
-         * @param seoDTOImpl created SeoDTOImpl
-         * @return nothing
-         */
-        public function seoRemovedCallBack():void {
-            var removedSeo:SeoDTOImpl = selectedSku.seoDTO;
-            selectedSku.seoDTO = null;
-            remoteProductSkuService.update(selectedSku).addResponder(
-                    new AsyncResponder(
-                            function (event:ResultEvent, removedSeo:SeoDTOImpl):void {
-                                //Seo removed from product , so need to eliminate it from table
-                                remoteSeoService.remove(removedSeo.seoId);
-                            },
-                            ShopManagerGlobal.instance.defaultOnRpcMethodFault, removedSeo
-                    )
-            );
+        private function seoTabSelected():void {
+            if (skuSelected && selectedSku != null) {
+                skuSeoPanel.seoId = selectedSku.seoDTO != null ? selectedSku.seoDTO.seoId : Number.NaN;
+            } else {
+                skuSeoPanel.seoId = Number.NaN;
+            }
         }
 
-
-        /**
-         * Summary tab selected.
-         * @return nothing
-         */
         private function skuSummaryTabSelect():void {
-            if (selectedSku != null) {
-                skuSummaryTab.removeAllChildren();
-                var productSkuSummary:ProductSkuSummaryPanel = new ProductSkuSummaryPanel();
-                productSkuSummary.productSku = selectedSku;
-                productSkuSummary.skuChangedFunction = skuChangedFunction;
-                skuSummaryTab.addChild(productSkuSummary);
-            }
-
+            skuSummaryPanel.productSku = selectedSku;
         }
 
-
-        /**
-         * Create sku event handler.
-         * @param event event.
-         * @return
-         */
-        protected function onCreateSkuClick(event:MouseEvent):void {
+        private function onCreateSkuClick(event:MouseEvent):void {
             productSkuCreateDialog = ProductSkuCreateDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), ProductSkuCreateDialog, true));
-            productSkuCreateDialog.saveBtn.addEventListener(MouseEvent.CLICK, createNewProductSku);
+            productSkuCreateDialog.saveBtn.addEventListener(MouseEvent.CLICK, onCreateNewProductSkuSaveClick);
             PopUpManager.centerPopUp(productSkuCreateDialog);
         }
 
-        /**
-         * Handle prouct creation.
-         * @param event event.
-         */
-        private function createNewProductSku(event:Event):void {
-
-            var sku:ProductSkuDTOImpl = productSkuCreateDialog.productSku;
-            sku.productId = product.productId;
-            //TODO add validation
-
-            remoteProductSkuService.create(sku).addResponder(
-                    new AsyncResponder(
-                            function (event:ResultEvent, obj:Object = null):void {
-                                //The product sku was created.
-                                remoteProductSkuService.getAllProductSkus(product.productId).addResponder(
-                                        new AsyncResponder(
-                                                function (event:*, obj:Object = null):void {
-                                                    Debug.trace("Get all skus 1 is done ");
-                                                    if (skusComboBox.dataProvider.length == 1) {
-                                                        skusComboBox.selectedIndex = 1;
-                                                        skusComboBox.dispatchEvent(new ListEvent("change"));
-                                                    }
-                                                },
-                                                ShopManagerGlobal.instance.defaultOnRpcMethodFault
-                                        )
-                                );
-                            },
-                            ShopManagerGlobal.instance.defaultOnRpcMethodFault));
-
-
-            PopUpManager.removePopUp(productSkuCreateDialog);
-
-        }
-
-
-        /**
-         * Delete sku event handler.
-         * @param event event handler.
-         * @return nothing
-         */
-        protected function onDeleteSkuClick(event:MouseEvent):void {
-            Alert.show(
-                    resourceManager.getString('ProductSkuManagementPanel', 'deleteSkuConfirm'),
-                    resourceManager.getString('ShopManagerApplication', 'warning'),
-                    Alert.OK | Alert.CANCEL, this, deleteSku, null, Alert.OK);
-
-        }
-
-
-        /**
-         * Perform delete warehouse operation.
-         * @param event close event
-         * @return nothing
-         */
-        private function deleteSku(event:CloseEvent):void {
-            if (event.detail == Alert.OK) {
-                remoteProductSkuService.remove(selectedSku.skuId).addResponder(
-                        new AsyncResponder(
-                                skuDeletedResultHandler,
-                                skuDeleteFaultHandler
-                        )
-                );
-
+        private function onCreateNewProductSkuSaveClick(event:Event):void {
+            if (productSkuCreateDialog != null) {
+                var sku:ProductSkuDTOImpl = productSkuCreateDialog.productSku;
+                sku.productId = _product.productId;
+                //TODO add validation
+                remoteProductSkuService.create(sku);
+                productSkuCreateDialog.saveBtn.removeEventListener(MouseEvent.CLICK, onCreateNewProductSkuSaveClick);
+                PopUpManager.removePopUp(productSkuCreateDialog);
+                productSkuCreateDialog = null;
             }
         }
 
-
-        /**
-         * The product sku was deleted.
-         * @param event event
-         * @param token
-         * @return nothing
-         */
-        private function skuDeleteFaultHandler(event:FaultEvent, token:AsyncToken):void {
-
-            Alert.show(
-                    resourceManager.getString('ProductSkuManagementPanel', 'skuCanNotBeDeleted'),
-                    resourceManager.getString('ShopManagerApplication', 'error'));
-
+        private function onDeleteSkuClick(event:MouseEvent):void {
+            if (skuSelected && selectedSku != null) {
+                Alert.show(
+                        resourceManager.getString('ProductSkuManagementPanel', 'deleteSkuConfirm', [ selectedSku.code ]),
+                        resourceManager.getString('ShopManagerApplication', 'warning'),
+                        Alert.OK | Alert.CANCEL, this, onDeleteSkuConfirmClick, null, Alert.OK);
+            }
         }
 
-
-        /**
-         * The product sku was deleted.
-         * @param event event
-         * @param token
-         * @return nothing
-         */
-        private function skuDeletedResultHandler(event:ResultEvent, token:AsyncToken):void {
-            selectedSku = null;
-            remoteProductSkuService.getAllProductSkus(product.productId).addResponder(
-                    new AsyncResponder(
-                            function (event:*, obj:Object = null):void {
-                                Debug.trace("Get all skus 2 is done ");
-                                if (skusComboBox.dataProvider.length == 1) {
-                                    skusComboBox.selectedIndex = 1;
-                                    skusComboBox.dispatchEvent(new ListEvent("change"));
-                                }
-                            },
-                            ShopManagerGlobal.instance.defaultOnRpcMethodFault
-                    )
-            );
-
-
-            skuSummaryTab.removeAllChildren();
-            skuImagesTab.removeAllChildren();
-            skuAttributesTab.removeAllChildren();
-            skuSeoTab.removeAllChildren();
-
-            Alert.show(
-                    resourceManager.getString('ProductSkuManagementPanel', 'skuDeleted'),
-                    resourceManager.getString('ShopManagerApplication', 'info'));
-
+        private function onDeleteSkuConfirmClick(event:CloseEvent):void {
+            if (event.detail == Alert.OK) {
+                if (skuSelected && selectedSku != null) {
+                    remoteProductSkuService.remove(selectedSku.skuId);
+                }
+            }
         }
 
-
-        /**
-         * Update sku.
-         * @param sku sku to update
-         * @return noting
-         */
-        public function skuChangedFunction(sku:ProductSkuDTOImpl):void {
+        public function onSkuChanged(sku:ProductSkuDTOImpl):void {
             if (DomainUtils.isNewPK(sku.skuId)) {
                 remoteProductSkuService.create(sku);
             } else {
                 remoteProductSkuService.update(sku);
             }
         }
+
+        protected function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        private function onGetAllProductSkusResult(event:ResultEvent):void {
+            skusComboBox.dataProvider = event.result;
+            if (skusComboBox.dataProvider != null && skusComboBox.dataProvider.length == 1) {
+                skusComboBox.selectedIndex = 1;
+                skusComboBox.dispatchEvent(new ListEvent("change"));
+            }
+        }
+
+        private function initSeoListeners():void {
+            skuSeoPanel.addEventListener(DtoEvent.UPDATE, onSeoCreated);
+        }
+
+        private function onSeoCreated(event:DtoEvent):void {
+            Debug.trace("INFO ProductManagementPanel seo " + event.dto + " for " + selectedSku + " created call back ");
+            if (selectedSku.seoDTO == null || DomainUtils.isNewPK(selectedSku.seoDTO.seoId)) {
+                Debug.trace("INFO gonna to update product");
+                selectedSku.seoDTO = event.dto as SeoDTOImpl;
+                onSkuChanged(selectedSku);
+            }
+        }
+
+        private function onCreateUpdateResult(event:ResultEvent):void {
+            remoteProductSkuService.getAllProductSkus(_product.productId);
+        }
+
+        private function initSummaryPanelListeners():void {
+            skuSummaryPanel.addEventListener(DtoEvent.UPDATE, onSummaryUpdateClick);
+        }
+
+        private function onSummaryUpdateClick(event:DtoEvent):void {
+            selectedSku = event.dto as ProductSkuDTOImpl;
+            onSkuChanged(selectedSku);
+        }
+
+        private function onRemoveResult(event:ResultEvent):void {
+            Alert.show(
+                    resourceManager.getString('ProductSkuManagementPanel', 'skuDeleted'),
+                    resourceManager.getString('ShopManagerApplication', 'info'));
+            remoteProductSkuService.getAllProductSkus(_product.productId);
+        }
+
+        private function onRemoveFault(event:FaultEvent):void {
+            Alert.show(
+                    resourceManager.getString('ProductSkuManagementPanel', 'skuCanNotBeDeleted'),
+                    resourceManager.getString('ShopManagerApplication', 'info'));
+        }
+
         ]]>
 	</mx:Script>
 
@@ -521,17 +260,31 @@
                      destination="remoteProductSkuService"
                      result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
                      fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
-                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
 
-    <mx:RemoteObject showBusyCursor="true" id="remoteSeoService"
-                     destination="remoteSeoService"
-                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
-                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
-                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+        <mx:method id="getAllProductSkus" name="getAllProductSkus"
+                   result="onGetAllProductSkusResult(event)"
+                   fault="onRpcMethodFault(event)"/>
 
+        <mx:method id="create" name="create"
+                   result="onCreateUpdateResult(event)"
+                   fault="onRpcMethodFault(event)"/>
 
-    <mx:VBox x="0" y="0" width="100%" height="100%" id="productSkuManagmenlPanel">
-        <mx:ControlBar width="100%">
+        <mx:method id="update" name="update"
+                   result="onCreateUpdateResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="remove" name="remove"
+                   result="onRemoveResult(event)"
+                   fault="onRemoveFault(event)"/>
+
+    </mx:RemoteObject>
+
+    <mx:Boolean id="skuSelected">false</mx:Boolean>
+
+    <mx:VBox width="100%" height="100%" id="productSkuManagmenlPanel"
+             paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
+        <mx:HBox paddingTop="5" width="100%">
             <mx:Text text="@Resource(bundle='ProductSkuManagementPanel',key='productSku')"/>
             <mx:ComboBox id="skusComboBox"
                          labelField="name"
@@ -549,23 +302,17 @@
                        toolTip="@Resource(bundle='ProductSkuManagementPanel',key='deleteSkuHint')"
                        id="deleteSkuBtn"
                        click="onDeleteSkuClick(event)"/>
-        </mx:ControlBar>
+        </mx:HBox>
         <mx:TabNavigator width="100%" height="100%" id="skuTabNavigator"
                          change="onTabClick(event);">
-            <mx:Canvas label="@Resource(bundle='ProductSkuManagementPanel',key='summary')" width="100%" height="100%"
-                       id="skuSummaryTab"/>
-            <mx:Canvas label="@Resource(bundle='ProductSkuManagementPanel',key='images')" width="100%" height="100%"
-                       id="skuImagesTab"/>
-            <mx:Canvas label="@Resource(bundle='ProductSkuManagementPanel',key='attributes')" width="100%" height="100%"
-                       id="skuAttributesTab"/>
-            <mx:Canvas label="@Resource(bundle='ProductSkuManagementPanel',key='seo')" width="100%" height="100%"
-                       id="skuSeoTab"/>
-            <!--
-                        <mx:Canvas label="@Resource(bundle='ProductSkuManagementPanel',key='price')" width="100%" height="100%"
-                                   id="skuPriceTab"/>
-                        <mx:Canvas label="@Resource(bundle='ProductSkuManagementPanel',key='quantity')" width="100%" height="100%"
-                                   id="skuQuantityTab"/>
-            -->
+            <mx:Canvas label="@Resource(bundle='ProductSkuManagementPanel',key='summary')" width="100%" height="100%">
+                <prod:ProductSkuSummaryPanel id="skuSummaryPanel"
+                                             creationComplete="initSummaryPanelListeners()"/>
+            </mx:Canvas>
+            <prod:ProductSkuImageAttributesPanel id="skuImagesTab"/>
+            <prod:ProductSkuNonImageAttributesPanel id="skuAttributesTab"/>
+            <seo:SeoPanel id="skuSeoPanel"
+                          label="@Resource(bundle='ProductSkuManagementPanel',key='seo')" creationComplete="initSeoListeners()"/>
         </mx:TabNavigator>
     </mx:VBox>
 
