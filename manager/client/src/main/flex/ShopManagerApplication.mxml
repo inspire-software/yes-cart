@@ -583,8 +583,9 @@
                                         <mx:LinkButton width="100%" id="storesBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='newStore')"
                                                        click="onNewStoreClick(event)"
-                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='storesHint')"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='newStoresHint')"
                                                 />
+                                        <mx:Spacer height="10"/>
 
                                     </mx:VBox>
                                 </mx:Canvas>
@@ -614,6 +615,7 @@
                                 <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='employees')"
                                            width="100%" height="100%">
                                     <mx:VBox x="0" y="0" height="100%" width="100%">
+                                        <mx:Spacer height="10"/>
                                         <mx:LinkButton width="100%" id="userBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='userManagement')"
                                                        click="onUserManagementClick(event)"/>

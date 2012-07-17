@@ -28,36 +28,34 @@
     <mx:Form>
         <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='sku')">
             <mx:ComboBox id="skuComboBox"
-                         change="skuSelected(event)"
+                         change="onSkuSelected(event)"
                          width="160"
                          labelField="name"
                          prompt="@Resource(bundle='ProductManagementPanel',key='selectSku')"
                     />
         </mx:FormItem>
         <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='quantity')">
-            <mx:TextInput id="quantityTextInput" width="160" change="priceFormChanged(null);"
+            <mx:TextInput id="quantityTextInput" width="160"
                           enabled="{selectedSku != null}"/>
         </mx:FormItem>
         <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='listPrice')">
-            <mx:TextInput id="listPriceTextInput" width="160" change="priceFormChanged(null);"
+            <mx:TextInput id="listPriceTextInput" width="160"
                           enabled="{selectedSku != null}"/>
         </mx:FormItem>
 
         <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='salePrice')">
-            <mx:TextInput id="salePriceTextInput" width="160" change="priceFormChanged(null);"
+            <mx:TextInput id="salePriceTextInput" width="160"
                           enabled="{selectedSku != null}"/>
         </mx:FormItem>
         <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='saleFrom')">
-            <georg:DateTimeField id="saleFromDateField" width="160" enabled="{selectedSku != null}"
-                                 change="priceFormChanged(event);"/>
+            <georg:DateTimeField id="saleFromDateField" width="160" enabled="{selectedSku != null}"/>
         </mx:FormItem>
         <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='saleTill')">
-            <georg:DateTimeField id="saleTillDateField" width="160" enabled="{selectedSku != null}"
-                                 change="priceFormChanged(event);"/>
+            <georg:DateTimeField id="saleTillDateField" width="160" enabled="{selectedSku != null}"/>
         </mx:FormItem>
 
         <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='minimalPrice')">
-            <mx:TextInput id="minimalPriceTextInput" width="160" change="priceFormChanged(null);"
+            <mx:TextInput id="minimalPriceTextInput" width="160"
                           enabled="{selectedSku != null}"/>
         </mx:FormItem>
 
@@ -82,16 +80,14 @@
     <mx:NumberValidator id="minimalPriceValidator" source="{minimalPriceTextInput}" property="text"
                         allowNegative="false" decimalSeparator="." required="false"/>
 
-    <mx:ControlBar horizontalAlign="right">
-        <mx:Button id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
-                   click="PopUpManager.removePopUp(this)"
-                   width="94"/>
+    <mx:ControlBar horizontalAlign="right" width="100%">
         <mx:Button id="saveBtn"
                    label="@Resource(bundle='ProductManagementPanel',key='savePrice')"
                    toolTip="@Resource(bundle='ProductManagementPanel',key='savePriceHint')"
-                   width="94"
                    enabled="false"
                 />
+        <mx:Button id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
+                   click="PopUpManager.removePopUp(this)"/>
     </mx:ControlBar>
 
 
@@ -109,6 +105,8 @@
         import mx.managers.PopUpManager;
         import mx.validators.Validator;
 
+        import org.yes.cart.util.DomainUtils;
+
         [Bindable]
         private var validatorArr:Array;
 
@@ -119,7 +117,7 @@
         public var currency:String;
 
         [Bindable]
-        private var _skuPrice:SkuPriceDTOImpl = new SkuPriceDTOImpl();
+        private var _skuPrice:SkuPriceDTOImpl;
 
         /**
          * Get the filled product sku price
@@ -134,14 +132,25 @@
          * @param value
          * @return nothing
          */
-
         public function set skuPrice(value:SkuPriceDTOImpl):void {
             _skuPrice = value;
+            if (DomainUtils.isPersistentPK(value.skuPriceId)) {
+                this.title = resourceManager.getString('ProductManagementPanel', 'editPriceTier');
+            }
+            init();
         }
 
-        public function editPrice(value:SkuPriceDTOImpl):void {
-            skuPrice = value;
-            this.title = resourceManager.getString('ProductManagementPanel', 'editPriceTier');
+        public function skuPriceCreate():void {
+            var newPrice:SkuPriceDTOImpl = new SkuPriceDTOImpl();
+            newPrice.quantity = 0;
+            newPrice.regularPrice = 0.00;
+            newPrice.salePrice = 0.00;
+            newPrice.minimalPrice = 0.00;
+            skuPrice = newPrice;
+        }
+
+
+        private function init():void {
 
             BindingUtils.bindProperty(quantityTextInput, "text", _skuPrice, "quantity");
             BindingUtils.bindProperty(listPriceTextInput, "text", _skuPrice, "regularPrice");
@@ -149,24 +158,6 @@
             BindingUtils.bindProperty(saleFromDateField, "selectedDate", _skuPrice, "salefrom");
             BindingUtils.bindProperty(saleTillDateField, "selectedDate", _skuPrice, "saletill");
             BindingUtils.bindProperty(minimalPriceTextInput, "text", _skuPrice, "minimalPrice");
-
-            init();
-
-        }
-
-        public function createPrice():void {
-            init();
-            quantityTextInput.text = "";
-            listPriceTextInput.text = "";
-            salePriceTextInput.text = "";
-            minimalPriceTextInput.text = "";
-
-
-        }
-
-        //TODO create complex form validation as described here http://aralbalkan.com/1125
-        private function init():void {
-
 
             BindingUtils.bindProperty(_skuPrice, "quantity", quantityTextInput, "text");
             BindingUtils.bindProperty(_skuPrice, "regularPrice", listPriceTextInput, "text");
@@ -192,7 +183,7 @@
 
         }
 
-        private function skuSelected(event:Event):void {
+        private function onSkuSelected(event:Event):void {
 
             selectedSku = event.currentTarget.selectedItem;
             _skuPrice.productSkuId = selectedSku.skuId;

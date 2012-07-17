@@ -17,7 +17,7 @@
 
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%"
          paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
-    <mx:ControlBar>
+    <mx:HBox paddingTop="5" width="100%">
         <mx:Button id="addProductCategoryBtn"
                    label="@Resource(bundle='ProductManagementPanel',key='addProductCategory')"
                    toolTip="@Resource(bundle='ProductManagementPanel',key='addProductCategoryHint')"
@@ -30,7 +30,7 @@
                    enabled="{categorySelected}"
                    click="onDeleteProductCategoryClick(event);"
                 />
-    </mx:ControlBar>
+    </mx:HBox>
     <mx:DataGrid
             id="productCategoriesGrid"
             width="100%" height="100%" editable="false"
@@ -76,6 +76,7 @@
 
 
     <mx:Script><![CDATA[
+        import mx.collections.ArrayCollection;
         import mx.core.FlexGlobals;
         import mx.rpc.events.FaultEvent;
 
@@ -133,6 +134,10 @@
 
         private function onAddProductCategoryClick(event:MouseEvent):void {
             categoryFinderPopUp = CategoryFinderDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CategoryFinderDialog, true));
+
+            categoryFinderPopUp.assignedCategories = /* has to be new(toArray) since we want a clone */
+                    new ArrayCollection((productCategoriesGrid.dataProvider as ArrayCollection).toArray());
+
             categoryFinderPopUp.selectProductButton.addEventListener(MouseEvent.CLICK, onAssignSelectedProductCategorySaveClick);
             PopUpManager.centerPopUp(categoryFinderPopUp);
 
@@ -146,6 +151,7 @@
                 productCategoryDTOImpl.rank = 0;
 
                 remoteProductCategoryService.create(productCategoryDTOImpl);
+                categoryFinderPopUp.assignedCategories = null;
                 categoryFinderPopUp.selectProductButton.removeEventListener(MouseEvent.CLICK, onAssignSelectedProductCategorySaveClick);
                 PopUpManager.removePopUp(categoryFinderPopUp);
                 categoryFinderPopUp = null;

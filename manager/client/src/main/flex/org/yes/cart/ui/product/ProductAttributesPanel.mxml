@@ -41,6 +41,9 @@
         }
 
         public function set product(value:ProductDTOImpl):void {
+            if (_product.productId == value.productId) {
+                return;
+            }
             _product = value;
             entityCode = value.code;
 

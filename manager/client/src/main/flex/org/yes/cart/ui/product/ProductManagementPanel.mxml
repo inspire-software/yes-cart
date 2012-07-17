@@ -25,7 +25,19 @@
 
         <mx:VDividedBox width="100%" height="100%">
             <mx:VBox width="100%" height="50%">
-                <mx:ControlBar width="100%">
+                <mx:HBox paddingTop="5" width="100%">
+                    <mx:Button label="@Resource(bundle='ProductManagementPanel',key='createProduct')"
+                               toolTip="@Resource(bundle='ProductManagementPanel',key='createProductHint')"
+                               click="onCreateBtnClick(event)"/>
+                    <mx:Button label="@Resource(bundle='ProductManagementPanel',key='deleteProduct')"
+                               toolTip="@Resource(bundle='ProductManagementPanel',key='deleteProductHint')"
+                               click="onRemoveBtnClick(event)"
+                               enabled="{productSelected}"
+                            />
+                    <mx:Button label="@Resource(bundle='ProductManagementPanel',key='findBtnToggleOn')"
+                               click="onSearchShowBtnClick(event)"/>
+                </mx:HBox>
+                <mx:HBox paddingTop="5" width="100%" id="filterPanel" visible="false" includeInLayout="false">
                     <mx:Label text="@Resource(bundle='ProductManagementPanel',key='code')"/>
                     <mx:TextInput id="codeTextInput" width="100"/>
                     <mx:Label text="@Resource(bundle='ProductManagementPanel',key='name')"/>
@@ -47,15 +59,7 @@
                     <mx:Button label="@Resource(bundle='ProductManagementPanel',key='findBtn')"
                                toolTip="@Resource(bundle='ProductManagementPanel',key='findBtnHint')"
                                click="onSearchBtnClick(event)"/>
-                    <mx:Button label="@Resource(bundle='ProductManagementPanel',key='createProduct')"
-                               toolTip="@Resource(bundle='ProductManagementPanel',key='createProductHint')"
-                               click="onCreateBtnClick(event)"/>
-                    <mx:Button label="@Resource(bundle='ProductManagementPanel',key='deleteProduct')"
-                               toolTip="@Resource(bundle='ProductManagementPanel',key='deleteProductHint')"
-                               click="onRemoveBtnClick(event)"
-                               enabled="{productSelected}"
-                            />
-                </mx:ControlBar>
+                </mx:HBox>
                 <mx:DataGrid id="productGrid" width="100%" height="100%"
                              itemClick="onProductSelected(event)"
                         >
@@ -73,7 +77,7 @@
             </mx:VBox>
             <mx:TabNavigator id="productTabNavigator" change="onTabClick(event);" width="100%" height="100%"
                              visible="{productDTOImpl != null}">
-                <mx:Canvas id="summaryTab" label="@Resource(bundle='ProductManagementPanel',key='summaryTab')"
+                <mx:Canvas label="@Resource(bundle='ProductManagementPanel',key='summaryTab')"
                            width="100%"
                            height="100%">
                     <prod:ProductSummaryPanel id="summaryPanel" brands="{brandsList}" productTypes="{productTypesList}"/>
@@ -82,17 +86,21 @@
                 <prod:ProductNonImageAttributesPanel id="attrTab"/>
                 <mx:Canvas id="skuTab" label="@Resource(bundle='ProductManagementPanel',key='skuTab')" width="100%"
                            height="100%"/>
-                <mx:Canvas id="priceTab" label="@Resource(bundle='ProductManagementPanel',key='priceTab')" width="100%"
-                           height="100%"/>
+                <mx:Canvas label="@Resource(bundle='ProductManagementPanel',key='priceTab')" width="100%"
+                           height="100%">
+                    <prod:ProductPricePanel id="pricePanel"/>
+                </mx:Canvas>
                 <seo:SeoPanel id="seoTabPanel"
                               label="@Resource(bundle='ProductManagementPanel',key='seoTab')" creationComplete="initSeoListeners()"/>
                 <mx:Canvas id="associationsTab" label="@Resource(bundle='ProductManagementPanel',key='associationsTab')"
                            width="100%" height="100%"/>
                 <mx:Canvas id="categoryTab" label="@Resource(bundle='ProductManagementPanel',key='categoriesTab')"
                            width="100%" height="100%"/>
-                <mx:Canvas id="quantityTab" label="@Resource(bundle='ProductManagementPanel',key='quantity')"
+                <mx:Canvas label="@Resource(bundle='ProductManagementPanel',key='inventory')"
                            width="100%"
-                           height="100%"/>
+                           height="100%">
+                    <prod:ProductSkuQuantityPanel id="productSkuQuantityPanel"/>
+                </mx:Canvas>
 
             </mx:TabNavigator>
         </mx:VDividedBox>
@@ -398,17 +406,11 @@
 
         private function priceTabSelected():void {
             Debug.trace("INFO priceTabSelected, selected product is " + productDTOImpl);
-            priceTab.removeAllChildren();
-            var productPricePanel:ProductPricePanel = new ProductPricePanel();
-            productPricePanel.productId = productDTOImpl.productId;
-            priceTab.addChild(productPricePanel);
+            pricePanel.product = productDTOImpl;
         }
 
         private function quantityTabSelected():void {
-            quantityTab.removeAllChildren();
-            var productSkuQuantityPanel:ProductSkuQuantityPanel = new ProductSkuQuantityPanel();
-            productSkuQuantityPanel.productId = productDTOImpl.productId;
-            quantityTab.addChild(productSkuQuantityPanel);
+            productSkuQuantityPanel.product = productDTOImpl;
 
         }
 
@@ -485,6 +487,16 @@
 
         private function onRemoveProductResult(event:ResultEvent):void {
             applyFilter();
+        }
+
+        private function onSearchShowBtnClick(event:MouseEvent):void {
+            filterPanel.visible = !filterPanel.visible;
+            filterPanel.includeInLayout = filterPanel.visible;
+            if (filterPanel.visible) {
+                (event.target as Button).label = resourceManager.getString('ProductManagementPanel', 'findBtnToggleOff');
+            } else {
+                (event.target as Button).label = resourceManager.getString('ProductManagementPanel', 'findBtnToggleOn');
+            }
         }
 
         ]]></mx:Script>

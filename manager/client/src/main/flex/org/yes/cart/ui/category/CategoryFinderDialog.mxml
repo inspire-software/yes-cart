@@ -41,6 +41,7 @@
 
     </mx:RemoteObject>
 
+    <mx:ArrayCollection id="assignedCategories"/>
     <mx:Boolean id="categorySelected">false</mx:Boolean>
 
     <mx:Script>
@@ -80,7 +81,9 @@
 
         private function onGetAllResult(event:ResultEvent):void {
             categoryTree.dataProvider = event.result;
-            categoryTree.dataDescriptor = new CategoryTreeDescriptor(null);
+            categoryTree.dataDescriptor = new CategoryTreeDescriptor({
+                dataProvider: assignedCategories
+            });
             if (categoryTree.dataProvider.length > 0) {
                 categoryTree.openItems = [ categoryTree.dataProvider.getItemAt(0) ];
                 categoryTree.expandItem(categoryTree.dataProvider.getItemAt(0), true);

@@ -188,7 +188,7 @@
     <mx:Boolean id="urlsChanged">false</mx:Boolean>
     <mx:Boolean id="allowDeleteUrl">false</mx:Boolean>
 
-    <mx:ControlBar width="100%">
+    <mx:HBox paddingTop="5" width="100%">
         <mx:Label text="@Resource(bundle='StoreSupportedUrlsPanel',key='supportedUrl')"/>
         <mx:Button
                 id="addBtn"
@@ -206,7 +206,7 @@
                 label="@Resource(bundle='StoreSupportedUrlsPanel',key='saveUrl')"
                 click="onSaveUrlClick(event)"/>
 
-    </mx:ControlBar>
+    </mx:HBox>
     <mx:DataGrid id="urlGrid"
                  editable="true"
                  itemClick="onItemClick(event)"

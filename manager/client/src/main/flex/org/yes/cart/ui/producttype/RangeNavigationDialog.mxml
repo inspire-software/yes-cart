@@ -26,7 +26,7 @@
         <mx:VBox>
             <mx:TabBar id="currencyTabBar" itemClick="currencySelected(event);"
                        dataProvider="{currencyViewStack}"/>
-            <mx:ControlBar>
+            <mx:HBox paddingTop="5" width="100%">
                 <mx:Button label="@Resource(bundle='ProductTypeManagementPanel',key='priceNavigationAddRow')"
                            toolTip="@Resource(bundle='ProductTypeManagementPanel',key='priceNavigationAddRowHint')"
                            enabled="{addRowEnabled}"
@@ -37,7 +37,7 @@
                            enabled="{xmlNode != null}"
                            click="deleteSelectedPriceRangeRow(event)"
                         />
-            </mx:ControlBar>
+            </mx:HBox>
         </mx:VBox>
         <mx:ViewStack id="currencyViewStack" width="100%" height="230" backgroundColor="#777777"/>
         <mx:ControlBar horizontalAlign="right">
