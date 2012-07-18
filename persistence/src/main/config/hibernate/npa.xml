@@ -1342,9 +1342,9 @@ public void setRangeList(final RangeList rangeList) {
                     <comment>Is attribute visible on storefront</comment>
                 </column>
             </property>
-            <property name="simulariry" type="boolean">
-                <column name="SIMULARITY">
-                    <comment>Is attribute will be used for calculate products simularity</comment>
+            <property name="similarity" type="boolean">
+                <column name="SIMILARITY">
+                    <comment>Is attribute will be used for calculate products similarity</comment>
                 </column>
             </property>
 
@@ -2655,7 +2655,7 @@ public void setRangeList(final RangeList rangeList) {
                 <column name="RANK">
                     <comment>
                         RANK can have different meaning, depending from association type
-                        for example simularity always will be less, that 1000000 (MAX simularity)
+                        for example similarity always will be less, that 1000000 (MAX similarity)
                         who buy , counter of who buy the one product also buy other product
                     </comment>
                 </column>

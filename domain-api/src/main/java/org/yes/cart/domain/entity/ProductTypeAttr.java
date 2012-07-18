@@ -100,18 +100,18 @@ public interface ProductTypeAttr extends Auditable, Rankable {
     void setVisible(boolean visible);
 
     /**
-     * Is this attribute will be taken to count product simularity.
+     * Is this attribute will be taken to count product similarity.
      *
-     * @return true if this attribute will be taken to count product simularity.
+     * @return true if this attribute will be taken to count product similarity.
      */
-    boolean isSimulariry();
+    boolean isSimilarity();
 
     /**
-     * Set flag to count simularity on this product.
+     * Set flag to use similarity on this product.
      *
-     * @param simulariry count simularity on this product.
+     * @param similarity use similarity on this product.
      */
-    void setSimulariry(boolean simulariry);
+    void setSimilarity(boolean similarity);
 
     /**
      * Use for attribute navigation.

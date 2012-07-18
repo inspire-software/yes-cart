@@ -30,7 +30,7 @@ public class ProductTypeAttrDTOImpl {
 
     public var visible:Boolean;
 
-    public var simulariry:Boolean;
+    public var similarity:Boolean;
 
     public var navigation:Boolean;
 
@@ -49,7 +49,7 @@ public class ProductTypeAttrDTOImpl {
                ",producttypeId=" + String(producttypeId) +
                ",rank=" + String(rank) +
                ",visible=" + String(visible) +
-               ",simulariry=" + String(simulariry) +
+               ",similarity=" + String(similarity) +
                ",navigation=" + String(navigation) +
                ",navigationType=" + String(navigationType) + "}";
     }
