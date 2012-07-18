@@ -445,7 +445,7 @@
                             dataField="worldwide">
                         <mx:itemRenderer>
                             <mx:Component>
-                                <mx:CheckBox paddingLeft="40" enabled="false" selected="{data.worldwide}"/>
+                                <mx:HBox horizontalAlign="center"><mx:CheckBox enabled="false" selected="{data.worldwide}"/></mx:HBox>
                             </mx:Component>
                         </mx:itemRenderer>
                     </mx:DataGridColumn>
@@ -454,7 +454,7 @@
                             dataField="country">
                         <mx:itemRenderer>
                             <mx:Component>
-                                <mx:CheckBox paddingLeft="40" enabled="false" selected="{data.country}"/>
+                                <mx:HBox horizontalAlign="center"><mx:CheckBox enabled="false" selected="{data.country}"/></mx:HBox>
                             </mx:Component>
                         </mx:itemRenderer>
                     </mx:DataGridColumn>
@@ -464,7 +464,7 @@
                             dataField="state">
                         <mx:itemRenderer>
                             <mx:Component>
-                                <mx:CheckBox paddingLeft="40" enabled="false" selected="{data.state}"/>
+                                <mx:HBox horizontalAlign="center"><mx:CheckBox enabled="false" selected="{data.state}"/></mx:HBox>
                             </mx:Component>
                         </mx:itemRenderer>
                     </mx:DataGridColumn>
@@ -474,7 +474,7 @@
                             dataField="local">
                         <mx:itemRenderer>
                             <mx:Component>
-                                <mx:CheckBox paddingLeft="40" enabled="false" selected="{data.local}"/>
+                                <mx:HBox horizontalAlign="center"><mx:CheckBox enabled="false" selected="{data.local}"/></mx:HBox>
                             </mx:Component>
                         </mx:itemRenderer>
                     </mx:DataGridColumn>

@@ -633,7 +633,7 @@
                                            dataField="ensemble" textAlign="center">
                             <mx:itemRenderer>
                                 <mx:Component>
-                                    <mx:CheckBox paddingLeft="40" enabled="false" selected="{data.ensemble}"/>
+                                    <mx:HBox horizontalAlign="center"><mx:CheckBox enabled="false" selected="{data.ensemble}"/></mx:HBox>
                                 </mx:Component>
                             </mx:itemRenderer>
                         </mx:DataGridColumn>
@@ -641,7 +641,7 @@
                                            dataField="shipable" textAlign="center">
                             <mx:itemRenderer>
                                 <mx:Component>
-                                    <mx:CheckBox paddingLeft="40" enabled="false" selected="{data.shipable}"/>
+                                    <mx:HBox horizontalAlign="center"><mx:CheckBox enabled="false" selected="{data.shipable}"/></mx:HBox>
                                 </mx:Component>
                             </mx:itemRenderer>
                         </mx:DataGridColumn>
@@ -649,7 +649,7 @@
                                            dataField="service" textAlign="center">
                             <mx:itemRenderer>
                                 <mx:Component>
-                                    <mx:CheckBox paddingLeft="40" enabled="false" selected="{data.service}"/>
+                                    <mx:HBox horizontalAlign="center"><mx:CheckBox enabled="false" selected="{data.service}"/></mx:HBox>
                                 </mx:Component>
                             </mx:itemRenderer>
                         </mx:DataGridColumn>
@@ -657,7 +657,7 @@
                                            dataField="digital" textAlign="center">
                             <mx:itemRenderer>
                                 <mx:Component>
-                                    <mx:CheckBox paddingLeft="40" enabled="false" selected="{data.digital}"/>
+                                    <mx:HBox horizontalAlign="center"><mx:CheckBox enabled="false" selected="{data.digital}"/></mx:HBox>
                                 </mx:Component>
                             </mx:itemRenderer>
                         </mx:DataGridColumn>
@@ -666,7 +666,7 @@
                                 dataField="downloadable" textAlign="center">
                             <mx:itemRenderer>
                                 <mx:Component>
-                                    <mx:CheckBox paddingLeft="40" enabled="false" selected="{data.downloadable}"/>
+                                    <mx:HBox horizontalAlign="center"><mx:CheckBox enabled="false" selected="{data.downloadable}"/></mx:HBox>
                                 </mx:Component>
                             </mx:itemRenderer>
                         </mx:DataGridColumn>
@@ -726,7 +726,7 @@
                                         dataField="navigation">
                                     <mx:itemRenderer>
                                         <mx:Component>
-                                            <mx:CheckBox paddingLeft="40" enabled="false" selected="{data.navigation}"/>
+                                            <mx:HBox horizontalAlign="center"><mx:CheckBox enabled="false" selected="{data.navigation}"/></mx:HBox>
                                         </mx:Component>
                                     </mx:itemRenderer>
                                 </mx:DataGridColumn>
@@ -738,16 +738,16 @@
                                         dataField="visible" textAlign="center">
                                     <mx:itemRenderer>
                                         <mx:Component>
-                                            <mx:CheckBox paddingLeft="40" enabled="false" selected="{data.visible}"/>
+                                            <mx:HBox horizontalAlign="center"><mx:CheckBox enabled="false" selected="{data.visible}"/></mx:HBox>
                                         </mx:Component>
                                     </mx:itemRenderer>
                                 </mx:DataGridColumn>
                                 <mx:DataGridColumn
-                                        headerText="@Resource(bundle='ProductTypeManagementPanel',key='simulariry')"
-                                        dataField="simulariry" textAlign="center">
+                                        headerText="@Resource(bundle='ProductTypeManagementPanel',key='similarity')"
+                                        dataField="similarity" textAlign="center">
                                     <mx:itemRenderer>
                                         <mx:Component>
-                                            <mx:CheckBox paddingLeft="40" enabled="false" selected="{data.simulariry}"/>
+                                            <mx:HBox horizontalAlign="center"><mx:CheckBox enabled="false" selected="{data.similarity}"/></mx:HBox>
                                         </mx:Component>
                                     </mx:itemRenderer>
                                 </mx:DataGridColumn>
