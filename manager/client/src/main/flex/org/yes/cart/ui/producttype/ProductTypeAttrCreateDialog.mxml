@@ -44,9 +44,9 @@
                              toolTip="@Resource(bundle='ProductTypeManagementPanel',key='visibleHint')"/>
             </mx:FormItem>
 
-            <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='simulariry')">
-                <mx:CheckBox id="simulariryCheckBox"
-                             toolTip="@Resource(bundle='ProductTypeManagementPanel',key='simulariryHint')"
+            <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='similarity')">
+                <mx:CheckBox id="similarityCheckBox"
+                             toolTip="@Resource(bundle='ProductTypeManagementPanel',key='similarityHint')"
                         />
             </mx:FormItem>
 
@@ -118,12 +118,12 @@
 
             BindingUtils.bindProperty(rankTextInput, "text", productTypeAttr, "rank");
             BindingUtils.bindProperty(visibleCheckBox, "selected", productTypeAttr, "visible");
-            BindingUtils.bindProperty(simulariryCheckBox, "selected", productTypeAttr, "simulariry");
+            BindingUtils.bindProperty(similarityCheckBox, "selected", productTypeAttr, "similarity");
             BindingUtils.bindProperty(navigationCheckBox, "selected", productTypeAttr, "navigation");
 
             BindingUtils.bindProperty(productTypeAttr, "rank", rankTextInput, "text");
             BindingUtils.bindProperty(productTypeAttr, "visible", visibleCheckBox, "selected");
-            BindingUtils.bindProperty(productTypeAttr, "simulariry", simulariryCheckBox, "selected");
+            BindingUtils.bindProperty(productTypeAttr, "similarity", similarityCheckBox, "selected");
             BindingUtils.bindProperty(productTypeAttr, "navigation", navigationCheckBox, "selected");
 
             if (DomainUtils.isPersistentPK(productTypeAttr.productTypeAttrId)) {

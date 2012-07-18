@@ -348,7 +348,7 @@
                                        dataField="mandatory" width="100" textAlign="center">
                         <mx:itemRenderer>
                             <mx:Component>
-                                <mx:CheckBox paddingLeft="40" enabled="false" selected="{data.mandatory}"/>
+                                <mx:HBox horizontalAlign="center"><mx:CheckBox enabled="false" selected="{data.mandatory}"/></mx:HBox>
                             </mx:Component>
                         </mx:itemRenderer>
                     </mx:DataGridColumn>
