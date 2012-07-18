@@ -67,11 +67,11 @@ public class DtoProductTypeAttrServiceImplTezt extends BaseCoreDBTestCase {
         dtoProductTypeAttr.setNavigationType("R");
         dtoProductTypeAttr.setProducttypeId(1L);
         dtoProductTypeAttr.setRangeNavigation(RANGE_NAV);
-        dtoProductTypeAttr.setSimulariry(true);
+        dtoProductTypeAttr.setSimilarity(true);
         dtoProductTypeAttr.setVisible(true);
         dtoProductTypeAttr = dtoService.update(dtoProductTypeAttr);
         assertTrue(dtoProductTypeAttr.isNavigation());
-        assertTrue(dtoProductTypeAttr.isSimulariry());
+        assertTrue(dtoProductTypeAttr.isSimilarity());
         assertTrue(dtoProductTypeAttr.isVisible());
         assertEquals("R", dtoProductTypeAttr.getNavigationType());
         assertEquals(1, dtoProductTypeAttr.getProducttypeId());
@@ -86,7 +86,7 @@ public class DtoProductTypeAttrServiceImplTezt extends BaseCoreDBTestCase {
         ProductTypeDTO productTypeDTO = dtoProductTypeService.getById(1L);
         dtoProductTypeAttr.setProducttypeId(productTypeDTO.getProducttypeId());
         dtoProductTypeAttr.setRangeNavigation(null);
-        dtoProductTypeAttr.setSimulariry(false);
+        dtoProductTypeAttr.setSimilarity(false);
         dtoProductTypeAttr.setVisible(false);
         return dtoProductTypeAttr;
     }

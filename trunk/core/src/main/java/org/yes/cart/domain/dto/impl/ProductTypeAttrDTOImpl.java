@@ -56,8 +56,8 @@ public class ProductTypeAttrDTOImpl implements ProductTypeAttrDTO {
     @DtoField(value = "visible")
     private boolean visible;
 
-    @DtoField(value = "simulariry")
-    private boolean simulariry;
+    @DtoField(value = "similarity")
+    private boolean similarity;
 
     @DtoField(value = "navigation")
     private boolean navigation;
@@ -127,13 +127,13 @@ public class ProductTypeAttrDTOImpl implements ProductTypeAttrDTO {
     }
 
     /** {@inheritDoc} */
-    public boolean isSimulariry() {
-        return simulariry;
+    public boolean isSimilarity() {
+        return similarity;
     }
 
     /** {@inheritDoc} */
-    public void setSimulariry(final boolean simulariry) {
-        this.simulariry = simulariry;
+    public void setSimilarity(final boolean similarity) {
+        this.similarity = similarity;
     }
 
     /** {@inheritDoc} */

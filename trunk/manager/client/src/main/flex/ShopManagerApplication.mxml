@@ -249,7 +249,7 @@
 
         private function setFontWeight(src:LinkButton):void {
 
-            for each (var child:Object in  mainAccourdion.getChildren()) {
+            for each (var child:Object in  mainAccordion.getChildren()) {
                 if (child is Canvas) {
                     var cnv:Canvas = child as Canvas;
                     Debug.trace("len 2 =" + cnv.getChildren().length);
@@ -323,6 +323,7 @@
                 }
             }
 
+            var storeButtonIndex:int = 1; // 0th is the spacer
             for (var shopId:String in this.shops) {
                 var shop:ShopDTOImpl = this.shops[shopId];
                 var shopButton:LinkButton = new LinkButton();
@@ -330,13 +331,13 @@
                 shopButton.id = shopId;
                 shopButton.addEventListener(MouseEvent.CLICK, onStoreManagementClick);
                 shopButton.percentWidth = 100;
-                storesButtons.addChild(shopButton);
+                storesButtons.addChildAt(shopButton, storeButtonIndex++);
             }
 
         }
 
         private function onMainAccordionChange(event:IndexChangedEvent):void {
-            const storeMenu:int = 4;
+            const storeMenu:int = 5;
             if (event.newIndex == storeMenu) {
                 remoteShopService.getAll(); // reload buttons
             }
@@ -427,7 +428,7 @@
                     <!-- The main frame -->
                     <mx:VBox id="mainFrame" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2" height="100%" width="100%">
                         <mx:HDividedBox width="100%" height="100%">
-                            <mx:Accordion id="mainAccourdion" width="230" height="100%" change="onMainAccordionChange(event)">
+                            <mx:Accordion id="mainAccordion" width="230" height="100%" change="onMainAccordionChange(event)">
                                 <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='customerService')"
                                            width="100%" height="100%">
                                     <mx:VBox x="0" y="0" height="100%" width="100%">
@@ -437,16 +438,22 @@
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='ordersHint')"
                                                        click="onOrderManagementClick(event);"
                                                 />
-                                        <mx:LinkButton width="100%" id="customersBtn"
-                                                       label="@Resource(bundle='ShopManagerApplication',key='customers')"
-                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='customersHint')"
-                                                       click="onCustomerManagementClick(event);"
+                                        <mx:LinkButton width="100%" id="paymentsBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='payment')"
+                                                       click="onPaymentsManagementClick(event)"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='paymentHint')"
                                                 />
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton width="100%" id="fulfillmentBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='fulfillment')"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='fulfillmentHint')"
                                                        click="onFulfillmentClick(event)"
+                                                />
+                                        <mx:Spacer height="10"/>
+                                        <mx:LinkButton width="100%" id="customersBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='customers')"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='customersHint')"
+                                                       click="onCustomerManagementClick(event);"
                                                 />
                                     </mx:VBox>
                                 </mx:Canvas>
@@ -470,24 +477,6 @@
                                                 />
 
                                     </mx:VBox>
-                                </mx:Canvas>
-                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='warehouse')"
-                                           width="100%" height="100%">
-                                    <mx:VBox x="0" y="0" height="100%" width="100%">
-                                        <mx:Spacer height="10"/>
-                                        <mx:LinkButton width="100%" id="warehouseBtn"
-                                                       label="@Resource(bundle='ShopManagerApplication',key='warehouses')"
-                                                       click="onWarehouseManagementClick(event)"
-                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='warehousesHint')"
-                                                />
-                                        <mx:LinkButton width="100%" id="inventoryBtn"
-                                                       label="@Resource(bundle='ShopManagerApplication',key='inventory')"
-                                                       click="onInventoryManagementClick(event)"
-                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='inventoryHint')"
-                                                />
-                                    </mx:VBox>
-
-
                                 </mx:Canvas>
 
                                 <!--<mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='marketing')"
@@ -524,72 +513,73 @@
                                 </mx:Canvas>-->
 
 
-                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='payment')"
+                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='inventoryManagement')"
                                            width="100%" height="100%">
                                     <mx:VBox x="0" y="0" height="100%" width="100%">
                                         <mx:Spacer height="10"/>
-                                        <mx:LinkButton width="100%" id="paymentsBtn"
-                                                       label="@Resource(bundle='ShopManagerApplication',key='payment')"
-                                                       click="onPaymentsManagementClick(event)"
-                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='paymentHint')"
+                                        <mx:LinkButton width="100%" id="warehouseBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='warehouses')"
+                                                       click="onWarehouseManagementClick(event)"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='warehousesHint')"
+                                                />
+                                        <mx:LinkButton width="100%" id="inventoryBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='inventory')"
+                                                       click="onInventoryManagementClick(event)"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='inventoryHint')"
                                                 />
                                     </mx:VBox>
+
+
                                 </mx:Canvas>
-                                <!--<mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='reporting')"
+
+                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='reporting')"
                                            width="100%" height="100%">
                                     <mx:VBox x="0" y="0" height="100%" width="100%">
                                         <mx:Spacer height="10"/>
-                                        <mx:LinkButton width="100%" id="repoSalesBtn"
-                                                       label="@Resource(bundle='ShopManagerApplication',key='repoSales')"
-                                                       click="setFontWeight(repoSalesBtn); Alert.show('TODO');"/>
-                                        <mx:LinkButton width="100%" id="repoTaxBtn"
-                                                       label="@Resource(bundle='ShopManagerApplication',key='repoTax')"
-                                                       click="setFontWeight(repoTaxBtn); Alert.show('TODO');"/>
-                                        <mx:LinkButton width="100%" id="repoAbandonedCartBtn"
-                                                       label="@Resource(bundle='ShopManagerApplication',key='repoAbandonedCart')"
-                                                       click="setFontWeight(repoAbandonedCartBtn); Alert.show('TODO');"/>
-                                        <mx:LinkButton width="100%" id="repoBestViewvedPRodBtn"
-                                                       label="@Resource(bundle='ShopManagerApplication',key='repoBestViewvedPRod')"
-                                                       click="setFontWeight(repoBestViewvedPRodBtn); Alert.show('TODO');"/>
-                                        <mx:LinkButton width="100%" id="repoBestPurchasedBtn"
-                                                       label="@Resource(bundle='ShopManagerApplication',key='repoBestPurchased')"
-                                                       click="setFontWeight(repoBestPurchasedBtn); Alert.show('TODO');"/>
-                                        <mx:LinkButton width="100%" id="repoLowStockBtn"
-                                                       label="@Resource(bundle='ShopManagerApplication',key='repoLowStock')"
-                                                       click="setFontWeight(repoLowStockBtn); Alert.show('TODO');"/>
-                                        <mx:LinkButton width="100%" id="repoSerachTermsBtn"
-                                                       label="@Resource(bundle='ShopManagerApplication',key='repoSerachTerms')"
-                                                       click="setFontWeight(repoSerachTermsBtn); Alert.show('TODO');"/>
-                                        <mx:LinkButton width="100%" id="repoProdReviewBtn"
-                                                       label="@Resource(bundle='ShopManagerApplication',key='repoProdReview')"
-                                                       click="setFontWeight(repoProdReviewBtn); Alert.show('TODO');"/>
-                                        <mx:LinkButton width="100%" id="repoCouponBtn"
-                                                       label="@Resource(bundle='ShopManagerApplication',key='repoCoupon')"
-                                                       click="setFontWeight(repoCouponBtn); Alert.show('TODO');"/>
-                                        <mx:LinkButton width="100%" id="repoSalesRefundedBtn"
-                                                       label="@Resource(bundle='ShopManagerApplication',key='repoSalesRefunded')"
-                                                       click="setFontWeight(repoSalesRefundedBtn); Alert.show('TODO');"/>
-                                        <mx:LinkButton width="100%" id="repoBestCustomerBtn"
-                                                       label="@Resource(bundle='ShopManagerApplication',key='repoBestCustomer')"
-                                                       click="setFontWeight(repoBestCustomerBtn); Alert.show('TODO');"/>
+
+                                        <mx:LinkButton id="reportBtn" width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='reports')"
+                                                       click="onReportClick(event)"/>
+
+
+                                        <!--
+                         <mx:LinkButton width="100%" id="repoSalesBtn"
+                                        label="@Resource(bundle='ShopManagerApplication',key='repoSales')"
+                                        click="setFontWeight(repoSalesBtn); Alert.show('TODO');"/>
+                         <mx:LinkButton width="100%" id="repoTaxBtn"
+                                        label="@Resource(bundle='ShopManagerApplication',key='repoTax')"
+                                        click="setFontWeight(repoTaxBtn); Alert.show('TODO');"/>
+                         <mx:LinkButton width="100%" id="repoAbandonedCartBtn"
+                                        label="@Resource(bundle='ShopManagerApplication',key='repoAbandonedCart')"
+                                        click="setFontWeight(repoAbandonedCartBtn); Alert.show('TODO');"/>
+                         <mx:LinkButton width="100%" id="repoBestViewvedPRodBtn"
+                                        label="@Resource(bundle='ShopManagerApplication',key='repoBestViewvedPRod')"
+                                        click="setFontWeight(repoBestViewvedPRodBtn); Alert.show('TODO');"/>
+                         <mx:LinkButton width="100%" id="repoBestPurchasedBtn"
+                                        label="@Resource(bundle='ShopManagerApplication',key='repoBestPurchased')"
+                                        click="setFontWeight(repoBestPurchasedBtn); Alert.show('TODO');"/>
+                         <mx:LinkButton width="100%" id="repoLowStockBtn"
+                                        label="@Resource(bundle='ShopManagerApplication',key='repoLowStock')"
+                                        click="setFontWeight(repoLowStockBtn); Alert.show('TODO');"/>
+                         <mx:LinkButton width="100%" id="repoSerachTermsBtn"
+                                        label="@Resource(bundle='ShopManagerApplication',key='repoSerachTerms')"
+                                        click="setFontWeight(repoSerachTermsBtn); Alert.show('TODO');"/>
+                         <mx:LinkButton width="100%" id="repoProdReviewBtn"
+                                        label="@Resource(bundle='ShopManagerApplication',key='repoProdReview')"
+                                        click="setFontWeight(repoProdReviewBtn); Alert.show('TODO');"/>
+                         <mx:LinkButton width="100%" id="repoCouponBtn"
+                                        label="@Resource(bundle='ShopManagerApplication',key='repoCoupon')"
+                                        click="setFontWeight(repoCouponBtn); Alert.show('TODO');"/>
+                         <mx:LinkButton width="100%" id="repoSalesRefundedBtn"
+                                        label="@Resource(bundle='ShopManagerApplication',key='repoSalesRefunded')"
+                                        click="setFontWeight(repoSalesRefundedBtn); Alert.show('TODO');"/>
+                         <mx:LinkButton width="100%" id="repoBestCustomerBtn"
+                                        label="@Resource(bundle='ShopManagerApplication',key='repoBestCustomer')"
+                                        click="setFontWeight(repoBestCustomerBtn); Alert.show('TODO');"/>
+                                        -->
                                     </mx:VBox>
 
-                                </mx:Canvas>-->
-
-                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='stores')" width="100%"
-                                           height="100%">
-                                    <mx:VBox x="0" y="0" height="100%" width="100%" id="storesButtons">
-                                        <mx:Spacer height="10"/>
-                                        <mx:LinkButton width="100%" id="storesBtn"
-                                                       label="@Resource(bundle='ShopManagerApplication',key='newStore')"
-                                                       click="onNewStoreClick(event)"
-                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='newStoresHint')"
-                                                />
-                                        <mx:Spacer height="10"/>
-
-                                    </mx:VBox>
                                 </mx:Canvas>
-
 
                                 <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='shipping')"
                                            width="100%" height="100%">
@@ -610,6 +600,20 @@
                                     </mx:VBox>
 
 
+                                </mx:Canvas>
+
+                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='stores')" width="100%"
+                                           height="100%">
+                                    <mx:VBox x="0" y="0" height="100%" width="100%" id="storesButtons">
+                                        <mx:Spacer height="10"/>
+
+                                        <mx:Spacer height="10"/>
+                                        <mx:LinkButton width="100%" id="storesBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='newStore')"
+                                                       click="onNewStoreClick(event)"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='newStoresHint')"
+                                                />
+                                    </mx:VBox>
                                 </mx:Canvas>
 
                                 <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='employees')"
@@ -649,13 +653,6 @@
                                                        click="onReindexClick(event)"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='reindexHint')"
                                                 />
-                                        <mx:Spacer height="10"/>
-
-                                        <mx:LinkButton id="reportBtn" width="100%"
-                                                       label="@Resource(bundle='ShopManagerApplication',key='reports')"
-                                                       click="onReportClick(event)"/>
-
-
 
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton id="sqlBtn" width="100%"
