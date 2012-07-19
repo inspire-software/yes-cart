@@ -2164,7 +2164,7 @@ public void setRangeList(final RangeList rangeList) {
                 <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.ProductCategory"/>
             </set>
 
-            <bag name="sku" inverse="false" lazy="false" cascade="all" order-by="RANK">
+            <bag name="sku" inverse="false" lazy="false" cascade="all-delete-orphan" order-by="RANK">
 			    <meta attribute="field-description">UNCOMMENT @Field  @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductSkuBridge.class)</meta>
                 <key>
                     <column name="PRODUCT_ID" not-null="false"/>
@@ -2372,7 +2372,7 @@ public void setRangeList(final RangeList rangeList) {
             </property>
 
 
-            <bag name="skuPrice" inverse="false" lazy="false" cascade="all" order-by="qty">
+            <bag name="skuPrice" inverse="false" lazy="false" cascade="all-delete-orphan" order-by="qty">
                 <!--<meta attribute="field-description">UNCOMMENT @Field(index=Index.UN_TOKENIZED) @ContainedIn @IndexedEmbedded (targetElement =  SkuPriceEntity.class) @FieldBridge(impl = org.yes.cart.domain.entity.bridge.SkuPriceBridge.class)</meta>-->
                 <key>
                     <column name="SKU_ID" not-null="true"/>
@@ -2381,7 +2381,7 @@ public void setRangeList(final RangeList rangeList) {
             </bag>
 
 
-            <bag name="attribute" inverse="false" lazy="false" cascade="all">
+            <bag name="attribute" inverse="false" lazy="false" cascade="all-delete-orphan">
                 <!--<meta attribute="field-description">UNCOMMENT @Field @ContainedIn @IndexedEmbedded (targetElement =  AttrValueEntityProductSku.class) @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeValueBridge.class)</meta>-->
                 <key>
                     <column name="SKU_ID" not-null="false"/>
@@ -4949,6 +4949,18 @@ public void setRangeList(final RangeList rangeList) {
     <query name="TOP.SELLER.SHOP.CLEAN">
         <![CDATA[
             delete from ShopTopSellerEntity  st   where st.shop    = ?1
+        ]]>
+    </query>
+
+    <query name="REMOVE.ALL.SKU.PRICES">
+        <![CDATA[
+            delete from SkuPriceEntity  sp   where sp.sku  = ?1
+        ]]>
+    </query>
+
+    <query name="REMOVE.ALL.SKU.ITEMS">
+        <![CDATA[
+            delete from SkuWarehouseEntity  sw   where sw.sku  = ?1
         ]]>
     </query>
 
