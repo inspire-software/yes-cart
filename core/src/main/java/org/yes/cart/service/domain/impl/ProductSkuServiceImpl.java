@@ -20,9 +20,11 @@ import org.hibernate.criterion.Restrictions;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.service.domain.ProductSkuService;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -33,6 +35,7 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
 
 
     private final GenericDAO<Product, Long> productDao;
+    private final GenericDAO<SkuPrice, Long> skuPriceDao;
 
 
     /**
@@ -41,9 +44,11 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
      * @param productDao    product dao
      */
     public ProductSkuServiceImpl(final GenericDAO<ProductSku, Long> productSkuDao,
-                                 final GenericDAO<Product, Long> productDao) {
+                                 final GenericDAO<Product, Long> productDao,
+                                 final GenericDAO<SkuPrice, Long> skuPriceDao) {
         super(productSkuDao);
         this.productDao = productDao;
+        this.skuPriceDao = skuPriceDao;
     }
 
     /**
@@ -63,5 +68,49 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void removeAllPrices(final long productId) {
+        final List<ProductSku> skus = getGenericDao().findByCriteria(Restrictions.eq("product.productId" , productId));
+        for (ProductSku sku : skus) {
+            removeAllPrices( sku);
+        }
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+     public void removeAllPrices(final ProductSku sku) {
+         getGenericDao().executeUpdate("REMOVE.ALL.SKU.PRICES", sku);
+
+     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void removeAllItems(final long productId) {
+        final List<ProductSku> skus = getGenericDao().findByCriteria(Restrictions.eq("product.productId" , productId));
+        for (ProductSku sku : skus) {
+            removeAllItems(sku);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void removeAllItems(final ProductSku sku) {
+            getGenericDao().executeUpdate("REMOVE.ALL.SKU.ITEMS", sku);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    /*public void delete(ProductSku instance) {
+        getGenericDao().executeUpdate("REMOVE.ALL.SKU.PRICES", instance);
+        getGenericDao().executeUpdate("REMOVE.ALL.SKU.ITEMS", instance);
+        getGenericDao().evict(instance.getProduct());
+        super.delete(instance);
+        instance.getProduct().getSku().remove(instance);
+    }*/
 }

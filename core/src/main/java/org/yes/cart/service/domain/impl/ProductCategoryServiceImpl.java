@@ -47,6 +47,19 @@ public class ProductCategoryServiceImpl extends BaseGenericServiceImpl<ProductCa
         //todo submit reindex task
     }
 
+    /**
+     * Unlink product from all categories.
+     *
+     * @param productId  given product id
+     */
+    public void removeByProductIds(final long productId) {
+        getGenericDao().executeNativeUpdate(
+                "delete from tproductcategory where  product_id = :1",
+                productId);
+        //todo submit reindex task
+
+    }
+
     /** {@inheritDoc} */
     public int getNextRank(final long categoryId) {
         Integer maxRank = (Integer)getGenericDao().getScalarResultByNamedQuery("GET.MAX.RANK", categoryId);

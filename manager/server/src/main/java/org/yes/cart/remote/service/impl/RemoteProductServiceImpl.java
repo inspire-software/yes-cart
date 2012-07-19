@@ -142,11 +142,5 @@ public class RemoteProductServiceImpl
         return rez;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void remove(final long id) {
-        super.remove(id);
-        reindexService.reindexProduct(id);
-    }
+
 }

@@ -117,6 +117,12 @@ public class DtoProductCategoryServiceImpl
         ((ProductCategoryService)service).removeByCategoryProductIds(categoryId, productId);
     }
 
+    /** {@inheritDoc} */
+    public void removeByProductIds(final long productId) {
+        ((ProductCategoryService)service).removeByProductIds(productId);
+
+    }
+
     /** {@inheritDoc}*/
     public int getNextRank(final long categoryId) {
         return ((ProductCategoryService)service).getNextRank(categoryId);

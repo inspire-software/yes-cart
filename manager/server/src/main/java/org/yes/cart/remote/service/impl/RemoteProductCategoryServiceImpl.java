@@ -60,6 +60,13 @@ public class RemoteProductCategoryServiceImpl
     /**
      * {@inheritDoc}
      */
+    public void removeByProductIds(final long productId) {
+        ((DtoProductCategoryService) getGenericDTOService()).removeByProductIds(productId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public int getNextRank(final long categoryId) {
         return ((DtoProductCategoryService) getGenericDTOService()).getNextRank(categoryId);
     }

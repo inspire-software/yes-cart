@@ -252,7 +252,14 @@ public interface GenericDAO<T, PK extends Serializable> {
      *
      * @param entity to delete
      */
-    void delete(T entity);
+    void delete(Object entity);
+
+    /**
+     * Evict given entity from the first and second level cache.
+     *
+     * @param entity to evict
+     */
+    void evict(Object entity);
 
     /**
      * Force reindex the all entities.

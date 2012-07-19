@@ -44,5 +44,29 @@ public interface ProductSkuService extends GenericService<ProductSku> {
      */
     ProductSku getProductSkuBySkuCode(String skuCode);
 
+    /**
+     * Remove all sku prices from all shops.
+     * @param productId product pk value
+     */
+    void removeAllPrices(long productId);
+
+    /**
+     * Remove from all warehouses.
+     * @param productId product pk value
+     */
+    void removeAllItems(long productId);
+
+    /**
+     * Remove all prices for given sku.
+     * @param sku  given sku.
+     */
+    void removeAllPrices(final ProductSku sku);
+
+    /**
+     * Remove all items for warehouse for given sku
+     * @param sku  given sku.
+     */
+    void removeAllItems(final ProductSku sku);
+
 
 }

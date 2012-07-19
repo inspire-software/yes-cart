@@ -96,4 +96,6 @@ public interface DtoProductService extends GenericDTOService<ProductDTO>, Generi
             final long productTypeId) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
+
+
 }

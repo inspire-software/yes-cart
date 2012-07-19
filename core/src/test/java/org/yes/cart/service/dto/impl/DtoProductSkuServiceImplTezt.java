@@ -153,6 +153,12 @@ public class DtoProductSkuServiceImplTezt extends BaseCoreDBTestCase {
         assertTrue((new BigDecimal("2.34")).equals(skuPriceDTO.getRegularPrice()));
         assertTrue((new BigDecimal("2.33")).equals(skuPriceDTO.getSalePrice()));
         assertTrue((new BigDecimal("2.32")).equals(skuPriceDTO.getMinimalPrice()));
+
+
+        dtoService.remove(pk);
+        dto = dtoService.getById(pk);
+        assertNull(dto);
+
     }
 
     @Test
