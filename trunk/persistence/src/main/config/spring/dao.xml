@@ -91,7 +91,7 @@
                 <entry key="org.yes.cart.domain.entity.Etype" value="org.yes.cart.domain.entity.impl.EtypeEntity"/>
                 <entry key="org.yes.cart.domain.entity.Mailtemplate" value="org.yes.cart.domain.entity.impl.MailtemplateEntity"/>
                 <entry key="org.yes.cart.domain.entity.Mailtemplategroup" value="org.yes.cart.domain.entity.impl.MailtemplategroupEntity"/>
-                <entry key="org.yes.cart.domain.entity.NpaSystem" value="org.yes.cart.domain.entity.impl.NpaSystemEntity"/>
+                <entry key="org.yes.cart.domain.entity.System" value="org.yes.cart.domain.entity.impl.SystemEntity"/>
                 <entry key="org.yes.cart.domain.entity.ProdTypeAttributeViewGroup" value="org.yes.cart.domain.entity.impl.ProdTypeAttributeViewGroupEntity"/>
                 <entry key="org.yes.cart.domain.entity.Product" value="org.yes.cart.domain.entity.impl.ProductEntity"/>
                 <entry key="org.yes.cart.domain.entity.ProductAssociation" value="org.yes.cart.domain.entity.impl.ProductAssociationEntity"/>
@@ -314,7 +314,7 @@
     <bean id="systemDao" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.NpaSystemEntity</value></constructor-arg>
+                <constructor-arg><value>org.yes.cart.domain.entity.impl.SystemEntity</value></constructor-arg>
                 <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
                 <property name="sessionFactory" ref="sessionFactory"/>
             </bean>

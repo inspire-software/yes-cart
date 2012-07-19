@@ -1187,16 +1187,16 @@
 
     <!-- ########################################## #############################################################-->
 
-    <class name="org.yes.cart.domain.entity.NpaSystem" table="TNPASYSTEM" discriminator-value="0">
+    <class name="org.yes.cart.domain.entity.System" table="TSYSTEM" discriminator-value="0">
         <meta attribute="interface">true</meta>
-        <id name="npaSystemId" column="NPASYSTEM_ID" type="long">
+        <id name="systemId" column="SYSTEM_ID" type="long">
             <generator class="native">
                 <param name="table">HIBERNATE_UNIQUE_KEYS</param>
                 <param name="column">value</param>
             </generator>
         </id>
         <discriminator type="integer" formula="1"/>
-        <subclass name="org.yes.cart.domain.entity.impl.NpaSystemEntity" discriminator-value="1">
+        <subclass name="org.yes.cart.domain.entity.impl.SystemEntity" discriminator-value="1">
             <meta attribute="extra-import">org.hibernate.annotations.Parameter</meta>
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
@@ -1205,22 +1205,22 @@
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
-     private long npaSystemId;
+     private long systemId;
 
      //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
 
      @Id @GeneratedValue /*(generator="generator")*/ 
-    @Column(name="NPASYSTEM_ID", nullable=false)
-    public long getNpaSystemId() {
-        return this.npaSystemId;
+    @Column(name="SYSTEM_ID", nullable=false)
+    public long getSystemId() {
+        return this.systemId;
     }
 
      @Transient public long getId() {
-        return this.npaSystemId;
+        return this.systemId;
     }
 
-    public void setNpaSystemId(long npaSystemId) {
-        this.npaSystemId = npaSystemId;
+    public void setSystemId(long systemId) {
+        this.systemId = systemId;
     }
 
                 ]]>
@@ -1234,7 +1234,7 @@
             </property>
 
             <map name="attribute" inverse="false" lazy="false" cascade="all">
-                <key column="NPASYSTEM_ID" not-null="true" foreign-key="FK_ATTR_SYS"/>
+                <key column="SYSTEM_ID" not-null="true" foreign-key="FK_ATTR_SYS"/>
                 <map-key type="string" column="CODE"/>
                 <one-to-many not-found="ignore" entity-name="SystemAttrValueEntity"/>
             </map>
@@ -2164,7 +2164,7 @@ public void setRangeList(final RangeList rangeList) {
                 <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.ProductCategory"/>
             </set>
 
-            <bag name="sku" inverse="false" lazy="false" cascade="all-delete-orphan" order-by="RANK">
+            <bag name="sku" inverse="false" lazy="false" cascade="all" order-by="RANK">
 			    <meta attribute="field-description">UNCOMMENT @Field  @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductSkuBridge.class)</meta>
                 <key>
                     <column name="PRODUCT_ID" not-null="false"/>
@@ -2372,7 +2372,7 @@ public void setRangeList(final RangeList rangeList) {
             </property>
 
 
-            <bag name="skuPrice" inverse="false" lazy="false" cascade="all-delete-orphan" order-by="qty">
+            <bag name="skuPrice" inverse="false" lazy="false" cascade="all" order-by="qty">
                 <!--<meta attribute="field-description">UNCOMMENT @Field(index=Index.UN_TOKENIZED) @ContainedIn @IndexedEmbedded (targetElement =  SkuPriceEntity.class) @FieldBridge(impl = org.yes.cart.domain.entity.bridge.SkuPriceBridge.class)</meta>-->
                 <key>
                     <column name="SKU_ID" not-null="true"/>
@@ -2381,7 +2381,7 @@ public void setRangeList(final RangeList rangeList) {
             </bag>
 
 
-            <bag name="attribute" inverse="false" lazy="false" cascade="all-delete-orphan">
+            <bag name="attribute" inverse="false" lazy="false" cascade="all">
                 <!--<meta attribute="field-description">UNCOMMENT @Field @ContainedIn @IndexedEmbedded (targetElement =  AttrValueEntityProductSku.class) @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeValueBridge.class)</meta>-->
                 <key>
                     <column name="SKU_ID" not-null="false"/>
@@ -4949,18 +4949,6 @@ public void setRangeList(final RangeList rangeList) {
     <query name="TOP.SELLER.SHOP.CLEAN">
         <![CDATA[
             delete from ShopTopSellerEntity  st   where st.shop    = ?1
-        ]]>
-    </query>
-
-    <query name="REMOVE.ALL.SKU.PRICES">
-        <![CDATA[
-            delete from SkuPriceEntity  sp   where sp.sku  = ?1
-        ]]>
-    </query>
-
-    <query name="REMOVE.ALL.SKU.ITEMS">
-        <![CDATA[
-            delete from SkuWarehouseEntity  sw   where sw.sku  = ?1
         ]]>
     </query>
 

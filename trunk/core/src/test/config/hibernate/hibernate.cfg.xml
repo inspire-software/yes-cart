@@ -21,6 +21,6 @@
 <hibernate-configuration>
     <session-factory>
 
-        <mapping resource="../../../../../../../../persistence/main/config/hibernate/npa.xml"/>
+        <mapping resource="../../../../../../../../persistence/main/config/hibernate/yc.xml"/>
     </session-factory>
 </hibernate-configuration>
