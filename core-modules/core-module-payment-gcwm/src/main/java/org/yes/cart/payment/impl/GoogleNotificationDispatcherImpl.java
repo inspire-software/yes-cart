@@ -292,7 +292,7 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
             getCustomerService().addAttribute(customer, AttributeNamesKeys.CUSTOMER_PHONE, gAddress.getPhone());
 
             if (notification.getBuyerMarketingPreferences() != null) {
-                getCustomerService().addAttribute(customer, AttributeNamesKeys.MARKETING_MAIL_ALLOWED, Boolean.toString(notification.getBuyerMarketingPreferences().isEmailAllowed()));
+                getCustomerService().addAttribute(customer, AttributeNamesKeys.MARKETING_OPT_IN, Boolean.toString(notification.getBuyerMarketingPreferences().isEmailAllowed()));
             }
 
 

@@ -89,7 +89,7 @@ public interface AttributeNamesKeys {
          * ATTRIBUTE
          * RANDOM_PRODUCT
          */
-        String CATEGORY_IMAGE_RETREIVE_STRATEGY = "CATEGORY_IMAGE_RETREIVE_STRATEGY";
+        String CATEGORY_IMAGE_RETRIEVE_STRATEGY = "CATEGORY_IMAGE_RETRIEVE_STRATEGY";
 
         /**
          * Default strategy
@@ -145,9 +145,9 @@ public interface AttributeNamesKeys {
     String CUSTOMER_PHONE = "CUSTOMER_PHONE";
 
     /**
-     * Customer phone.
+     * Customer has opted in for marketing contact.
      */
-    String MARKETING_MAIL_ALLOWED = "MARKETING_MAIL_ALLOWED";
+    String MARKETING_OPT_IN = "MARKETING_OPT_IN";
 
     /**
      * Shop mail from.

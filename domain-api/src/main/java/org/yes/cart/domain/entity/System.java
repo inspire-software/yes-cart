@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * TODO kill this interface.
  */
-public interface NpaSystem extends Auditable {
+public interface System extends Auditable {
 
     String getCode();
 
@@ -39,7 +39,7 @@ public interface NpaSystem extends Auditable {
 
     void setAttribute(Map<String, AttrValue> attribute);
 
-    long getNpaSystemId();
+    long getSystemId();
 
-    void setNpaSystemId(long npaSystemId);
+    void setSystemId(long npaSystemId);
 }

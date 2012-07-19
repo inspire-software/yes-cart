@@ -48,7 +48,7 @@
         <property name="dataSource" ref="dataSource"/>
         <property name="mappingResources">
             <list>
-                <value>npa.xml</value>
+                <value>yc.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">

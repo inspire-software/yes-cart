@@ -18,7 +18,7 @@ package org.yes.cart.service.domain.impl;
 
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.entity.NpaSystem;
+import org.yes.cart.domain.entity.System;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.util.DomainApiUtil;
 
@@ -31,11 +31,11 @@ import java.io.File;
  */
 public class SystemServiceImpl implements SystemService {
 
-    private NpaSystem system;
+    private org.yes.cart.domain.entity.System system;
 
-    private final GenericDAO<NpaSystem, Long> systemDao;
+    private final GenericDAO<System, Long> systemDao;
 
-    public SystemServiceImpl(final GenericDAO<NpaSystem, Long> systemDao) {
+    public SystemServiceImpl(final GenericDAO<System, Long> systemDao) {
         this.systemDao = systemDao;
     }
 
@@ -125,7 +125,7 @@ public class SystemServiceImpl implements SystemService {
     }
 
 
-    private NpaSystem getSystem() {
+    private System getSystem() {
         if (system == null) {
             system = systemDao.findAll().get(0);
         }

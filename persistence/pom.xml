@@ -227,7 +227,7 @@
                 <!-- this should pull in your hibernate template (.hbm.xml) files -->
                 <directory>src/main/config/hibernate</directory>
                 <includes>
-                    <include>npa.xml</include>
+                    <include>yc.xml</include>
                 </includes>
                 <filtering>false</filtering>
             </resource>
