@@ -116,7 +116,7 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
         <property name="configLocation" value="classpath:hibernate-nc.cfg.xml"/>
         <property name="mappingResources">
             <list>
-                <value>npa.xml</value>
+                <value>yc.xml</value>
             </list>
         </property>
         <property name="entityInterceptor">
