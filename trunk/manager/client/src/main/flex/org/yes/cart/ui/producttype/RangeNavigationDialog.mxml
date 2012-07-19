@@ -22,34 +22,48 @@
                 creationComplete="init();">
 
 
-    <mx:VBox>
-        <mx:VBox>
-            <mx:TabBar id="currencyTabBar" itemClick="currencySelected(event);"
-                       dataProvider="{currencyViewStack}"/>
-            <mx:HBox paddingTop="5" width="100%">
-                <mx:Button label="@Resource(bundle='ProductTypeManagementPanel',key='priceNavigationAddRow')"
-                           toolTip="@Resource(bundle='ProductTypeManagementPanel',key='priceNavigationAddRowHint')"
-                           enabled="{addRowEnabled}"
-                           click="addNewPriceRangeRow(event)"
-                        />
-                <mx:Button label="@Resource(bundle='ProductTypeManagementPanel',key='priceNavigationDeleteRow')"
-                           toolTip="@Resource(bundle='ProductTypeManagementPanel',key='priceNavigationDeleteRowHint')"
-                           enabled="{xmlNode != null}"
-                           click="deleteSelectedPriceRangeRow(event)"
-                        />
-            </mx:HBox>
-        </mx:VBox>
-        <mx:ViewStack id="currencyViewStack" width="100%" height="230" backgroundColor="#777777"/>
-        <mx:ControlBar horizontalAlign="right">
-            <mx:Button id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
-                       click="PopUpManager.removePopUp(this)" width="94"/>
-            <mx:Button id="saveBtn" label="@Resource(bundle='ProductTypeManagementPanel',key='save')"
-                       width="94"/>
-        </mx:ControlBar>
+    <mx:VBox width="100%" height="100%" paddingLeft="2" paddingRight="2" paddingBottom="2" paddingTop="2">
+        <mx:TabBar id="currencyTabBar" itemClick="currencySelected(event)"
+                   dataProvider="{currencyViewStack}"/>
+        <mx:ViewStack id="currencyViewStack" width="100%" height="100%" creationPolicy="all">
+            <mx:VBox label="@Resource(bundle='ProductTypeManagementPanel',key='ranges')" width="100%" height="100%"
+                     paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
+                <mx:HBox paddingTop="5" width="100%">
+                    <mx:Button label="@Resource(bundle='ProductTypeManagementPanel',key='priceNavigationAddRow')"
+                               toolTip="@Resource(bundle='ProductTypeManagementPanel',key='priceNavigationAddRowHint')"
+                               enabled="{addRowEnabled}"
+                               click="onAddNewPriceRangeRowClick(event)"
+                            />
+                    <mx:Button label="@Resource(bundle='ProductTypeManagementPanel',key='priceNavigationDeleteRow')"
+                               toolTip="@Resource(bundle='ProductTypeManagementPanel',key='priceNavigationDeleteRowHint')"
+                               enabled="{xmlNode != null}"
+                               click="deleteSelectedPriceRangeRow(event)"
+                            />
+                </mx:HBox>
+                <mx:DataGrid id="rangesGrid" itemEditEnd="onItemEditEnd(event)" itemClick="onXmlNodeSelected(event)"
+                             editable="true"
+                             width="100%" height="100%">
+                    <mx:columns>
+                        <mx:DataGridColumn dataField="range.first" headerText="@Resource(bundle='ProductTypeManagementPanel',key='valueFrom')"/>
+                        <mx:DataGridColumn dataField="range.second" headerText="@Resource(bundle='ProductTypeManagementPanel',key='valueTo')"/>
+                    </mx:columns>
+                </mx:DataGrid>
+            </mx:VBox>
+            <mx:VBox label="XML" width="100%" height="100%" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
+                <mx:TextArea id="rawXML" x="0" y="0" width="100%" height="100%"/>
+            </mx:VBox>
+        </mx:ViewStack>
     </mx:VBox>
+    <mx:ControlBar horizontalAlign="right" width="100%">
+        <mx:Button id="saveBtn" label="@Resource(bundle='ProductTypeManagementPanel',key='save')"/>
+        <mx:Button id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
+                   click="PopUpManager.removePopUp(this)"/>
+    </mx:ControlBar>
 
     <mx:Boolean id="addCurrencyEnabled">true</mx:Boolean>
     <mx:Boolean id="addRowEnabled">true</mx:Boolean>
+
+    <mx:ArrayCollection id="rangesList"/>
 
 
     <mx:Script><![CDATA[
@@ -75,41 +89,33 @@
         public var xmlString:String;
 
         private var xml:XML;
-        private var gridXml:XML;
-
-
-        private var currArray:Array = new Array();
+        private var gridXml:XMLList;
 
         public function init():void {
             internalInit();
             currencyTabBar.selectedIndex = 0;
         }
 
-
-        /**
-         * Tab selected event handler.
-         * @param event event
-         * @return nothing
-         */
         private function currencySelected(event:ItemClickEvent):void {
             xmlNode = null; // disable to delete
-            addRowEnabled = !(event.label == "XML");
+            addRowEnabled = (event.label != "XML");
             if (event.label == "XML") {
-                xml = new XML(getGridXml());
-                TextArea(Canvas(currencyViewStack.getChildAt(event.index)).getChildAt(0)).text = xml.toXMLString();
+                xml = getGridXml();
+                if (rawXML != null) {
+                    rawXML.text = xml.toXMLString();
+                }
             } else {
-                var newXmlString:String = TextArea(Canvas(currencyViewStack.getChildAt(currencyViewStack.numChildren - 1)).getChildAt(0)).text; // get the edited xml back
-                recreateTabs(newXmlString);
-                currencyTabBar.selectedIndex = event.index;
-                currencyViewStack.selectedIndex = event.index;
+                try {
+                    xml = new XML(rawXML.text);
+                    gridXml = xml.list.range.copy();
+                    rangesGrid.dataProvider = gridXml;
+                } catch (e:Error) {
+
+                    Debug.trace("ERROR RangeNavigationDialog can not convert string to xml " + e.message); //TODO alert
+                }
             }
         }
 
-        /**
-         * TODO move to utils
-         * @param node
-         * @return
-         */
         public function deleteNode(node:XML):void {
             if (node != null && node.parent() != null) {
                 delete node.parent().children()[node.childIndex()];
@@ -118,39 +124,26 @@
 
         private function deleteSelectedPriceRangeRow(event:MouseEvent):void {
 
-            delete xml.list.range.range.(first == xmlNode.first.text() && second == xmlNode.second.text())[0];
-            for each (var node:XML in xml.list.range) {
-                if ("" == node.toString()) {
-                    deleteNode(node);
-                    break;
-                }
+            var xmlRowIndex:int = rangesGrid.selectedIndex;
+            if (xmlRowIndex > -1) {
+                delete gridXml.children()[xmlRowIndex];
+                xmlNode = null;
+                xml.list.range = gridXml.copy();
+                rangesGrid.dataProvider = gridXml;
+                currencyTabBar.selectedIndex = 0;
+                currencyViewStack.selectedIndex = 0;
             }
-            xmlNode = null;
-            recreateTabs(xml.toXMLString());
-            currencyTabBar.selectedIndex = 0;
-            currencyViewStack.selectedIndex = 0;
         }
 
-        /**
-         * Recreate currency and xml tabs
-         * @return nothing
-         */
-        private function recreateTabs(newXmlString:String):void {
-            xmlString = newXmlString;
-            currencyViewStack.removeAllChildren();
-            currencyTabBar.removeAllChildren();
-            internalInit();
+        private function getGridXml():XML {
+            var newXml:XML = xml;
 
-        }
+            if (gridXml != null) {
+                newXml.list.default.size = gridXml.children().length();
+                newXml.list.int = gridXml.children().length();
+                newXml.list.range = gridXml;
+            }
 
-        private function getGridXml():String {
-            var newXml:String = "<rangeList serialization=\"custom\"><unserializable-parents/><list><default><size>" +
-                    gridXml.children().length() +
-                    "</size></default><int>" +
-                    gridXml.children().length() +
-                    "</int>";
-            newXml += gridXml.toXMLString().replace(new RegExp("<root>", "g"), "").replace(new RegExp("</root>", "g"), "");
-            newXml += "</list></rangeList>";
             return newXml;
         }
 
@@ -160,91 +153,42 @@
          */
         public function getXmlString():String {
             var idx:int = currencyTabBar.selectedIndex;
-            if (PriceRangeModel(currArray[idx]).currency == "XML") {
-                return TextArea(Canvas(currencyViewStack.getChildAt(idx)).getChildAt(0)).text;
+            if (idx == 1) {
+                return rawXML.text;
             }
-            return getGridXml();
+            return getGridXml().toXMLString();
         }
 
-
-        /**
-         * Create tab and datagrids to edit xml price navigation model.
-         * @return nothing
-         */
         private function internalInit():void {
 
             try {
+                if (xmlString == null || xmlString.length == 0) {
+                    xml = <rangeList serialization="custom">
+                        <unserializable-parents/>
+                        <list>
+                            <default>
+                                <size>1</size>
+                            </default>
+                            <int>1</int>
+                            <range>
+                                <range>
+                                    <first class="string">from</first>
+                                    <second class="string">to</second>
+                                </range>
+                            </range>
+                        </list>
+                    </rangeList>;
+                } else {
+                    xml = new XML(xmlString);
+                }
+                gridXml = xml.list.range;
 
-                xml = new XML(xmlString);
-                gridXml = new XML("<root>" + xml.list.range.toXMLString() + "</root>");
-                currArray = new Array();
-
-                currArray.push(new PriceRangeModel("Ranges", gridXml, 0));
-                currArray.push(new PriceRangeModel("XML", xml, 1));
-                addTabs(currArray);
+                rangesGrid.dataProvider = gridXml;
 
             } catch (e:Error) {
 
-                Debug.trace("ERROR RangeNavigationDialog can not convert string to xml " + e.message); //TODO alert
+                Debug.trace("ERROR RangeNavigationDialog can not convert string to xml " + e.message);
             }
-
-        }
-
-
-        /**
-         * Add tabs to tab bar
-         * @param curr
-         */
-        private function addTabs(currArray:Array):void {
-            for each (var curr:PriceRangeModel in currArray) {
-                addTab(curr);
-            }
-        }
-
-        /**
-         * Add new tab to tab bar
-         * @param priceRangeList
-         */
-        private function addTab(priceRangeList:PriceRangeModel):void {
-
-            var canvas:Canvas = new Canvas();
-            canvas.label = priceRangeList.currency;
-            currencyViewStack.addChild(canvas);
-            var editComponent:UIComponent = getEditComponent(priceRangeList);
-            canvas.addChild(editComponent);
-        }
-
-
-        private function getEditComponent(priceRangeList:PriceRangeModel):UIComponent {
-
-            var result:UIComponent;
-            if (priceRangeList.tag == 0) {
-                var dataGrid:DataGrid = new DataGrid();
-                dataGrid.editable = true;
-
-                addDataGridColumn(dataGrid, "first", resourceManager.getString('ProductTypeManagementPanel', 'valueFrom'));
-                addDataGridColumn(dataGrid, "second", resourceManager.getString('ProductTypeManagementPanel', 'valueTill'));
-
-                dataGrid.dataProvider = priceRangeList.entry.range.range;
-
-                dataGrid.addEventListener(DataGridEvent.ITEM_EDIT_END, onItemEditEnd);
-                dataGrid.addEventListener(ListEvent.ITEM_CLICK, onXmlNodeSelected);
-
-
-                result = dataGrid;
-            } else if (priceRangeList.tag == 1) {
-                var textArea:TextArea = new TextArea();
-                textArea.text = priceRangeList.entry.toXMLString();
-                result = textArea;
-            } else {
-                result = new Label();
-            }
-
-            result.width = this.width - 2;
-            result.height = currencyViewStack.height;
-
-            return result;
-
 
         }
 
@@ -259,35 +203,18 @@
             var obj:Object = DataGrid(event.target).dataProvider[event.rowIndex];
         }
 
-
-        private function addDataGridColumn(dataGrid:DataGrid, dataField:String, headerText:String):void {
-            var dgc:DataGridColumn = new DataGridColumn(dataField);
-            dgc.editable = true;
-            dgc.sortable = false;
-            dgc.headerText = headerText;
-
-            var cols:Array = dataGrid.columns;
-            cols.push(dgc);
-            dataGrid.columns = cols;
-        }
-
-
-        /**
-         * Add new empty price navigation row.
-         * @param event
-         * @return nothing
-         */
-        private function addNewPriceRangeRow(event:MouseEvent):void {
-            var x:XMLList = xml.list;
-            x.appendChild(
-                    new XML(
-                            "<range><range><first class=\"string\"></first><second class=\"string\"></second></range></range>"
-                    )
-            );
-            recreateTabs(xml.toXMLString());
-
-            currencyTabBar.selectedIndex = 0;
-            currencyViewStack.selectedIndex = 0;
+        private function onAddNewPriceRangeRowClick(event:MouseEvent):void {
+            var xml:XML = <root/>;
+            xml.appendChild(gridXml.copy());
+            xml.appendChild(
+                    <range>
+                        <range>
+                            <first class="string">from</first>
+                            <second class="string">to</second>
+                        </range>
+                    </range>);
+            gridXml = new XMLList(xml.range);
+            rangesGrid.dataProvider = gridXml;
 
         }
         ]]>
