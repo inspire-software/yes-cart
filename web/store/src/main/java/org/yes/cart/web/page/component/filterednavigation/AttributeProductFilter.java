@@ -21,7 +21,7 @@ import org.yes.cart.domain.entity.ProductType;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.query.impl.AttributiveSearchQueryBuilderImpl;
-import org.yes.cart.domain.queryobject.FiteredNavigationRecord;
+import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -76,13 +76,13 @@ public class AttributeProductFilter extends AbstractProductFilter {
     /**
      * {@inheritDoc}
      */
-    List<FiteredNavigationRecord> getFilteredNavigationRecords(List<FiteredNavigationRecord> allNavigationRecords) {
+    List<FilteredNavigationRecord> getFilteredNavigationRecords(List<FilteredNavigationRecord> allNavigationRecords) {
 
         final AttributiveSearchQueryBuilderImpl queryBuilder = new AttributiveSearchQueryBuilderImpl();
 
-        final List<FiteredNavigationRecord> navigationList = new ArrayList<FiteredNavigationRecord>();
+        final List<FilteredNavigationRecord> navigationList = new ArrayList<FilteredNavigationRecord>();
 
-        for (FiteredNavigationRecord record : allNavigationRecords) {
+        for (FilteredNavigationRecord record : allNavigationRecords) {
 
             if (!isAttributeAlreadyFiltered(ProductSearchQueryBuilder.ATTRIBUTE_CODE_FIELD + ":" + record.getCode())) {
 
@@ -104,7 +104,7 @@ public class AttributeProductFilter extends AbstractProductFilter {
     }
 
 
-    private BooleanQuery getQueryCandidate(final AttributiveSearchQueryBuilderImpl queryBuilder, final FiteredNavigationRecord record) {
+    private BooleanQuery getQueryCandidate(final AttributiveSearchQueryBuilderImpl queryBuilder, final FilteredNavigationRecord record) {
 
         final Map map;
         final BooleanQuery booleanQuery;

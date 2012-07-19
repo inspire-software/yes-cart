@@ -17,7 +17,6 @@
 package org.yes.cart.service.domain.impl;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -28,7 +27,7 @@ import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
-import org.yes.cart.domain.queryobject.FiteredNavigationRecord;
+import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
@@ -75,7 +74,7 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
         assertNotNull(priceTierTree);
-        List<FiteredNavigationRecord> navigationRecords = priceService.getPriceNavigationRecords(priceTierTree, "EUR", shop);
+        List<FilteredNavigationRecord> navigationRecords = priceService.getPriceNavigationRecords(priceTierTree, "EUR", shop);
         assertNotNull(navigationRecords);
         assertEquals(3, navigationRecords.size());
         assertEquals("EUR-0-100", navigationRecords.get(0).getValue());

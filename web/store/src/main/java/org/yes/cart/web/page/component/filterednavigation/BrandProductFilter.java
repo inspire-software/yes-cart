@@ -19,7 +19,7 @@ package org.yes.cart.web.page.component.filterednavigation;
 import org.apache.lucene.search.BooleanQuery;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.query.impl.BrandSearchQueryBuilder;
-import org.yes.cart.domain.queryobject.FiteredNavigationRecord;
+import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,16 +67,16 @@ public class BrandProductFilter extends AbstractProductFilter {
     /**
      * {@inheritDoc}
      */
-    List<FiteredNavigationRecord> getFilteredNavigationRecords(
-            final List<FiteredNavigationRecord> allNavigationRecords) {
+    List<FilteredNavigationRecord> getFilteredNavigationRecords(
+            final List<FilteredNavigationRecord> allNavigationRecords) {
 
-        final List<FiteredNavigationRecord> navigationList = new ArrayList<FiteredNavigationRecord>();
+        final List<FilteredNavigationRecord> navigationList = new ArrayList<FilteredNavigationRecord>();
 
         if (!isAttributeAlreadyFiltered(ProductSearchQueryBuilder.BRAND_FIELD)) {
 
             final BrandSearchQueryBuilder queryBuilder = new BrandSearchQueryBuilder();
 
-            for (FiteredNavigationRecord record : allNavigationRecords) {
+            for (FilteredNavigationRecord record : allNavigationRecords) {
                 BooleanQuery candidateQuery = getLuceneQueryFactory().getSnowBallQuery(
                         getQuery(),
                         queryBuilder.createQuery(getCategories(), record.getValue())

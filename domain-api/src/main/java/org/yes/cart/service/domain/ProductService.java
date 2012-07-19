@@ -20,7 +20,7 @@ import org.apache.lucene.search.Query;
 import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.queryobject.FiteredNavigationRecord;
+import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -147,24 +147,24 @@ public interface ProductService extends GenericService<Product> {
      * @param productTypeId product type id
      * @return list of distinct attib values
      */
-    List<FiteredNavigationRecord> getDistinctAttributeValues(long productTypeId);
+    List<FilteredNavigationRecord> getDistinctAttributeValues(long productTypeId);
 
     /**
      * Collect the single attribute value navigation see ProductTypeAttr#navigationType
      *
      * @param productTypeId product type id
-     * @return list of {@link FiteredNavigationRecord}
+     * @return list of {@link org.yes.cart.domain.queryobject.FilteredNavigationRecord}
      */
-    List<FiteredNavigationRecord> getSingleValueNavigationRecords(long productTypeId);
+    List<FilteredNavigationRecord> getSingleValueNavigationRecords(long productTypeId);
 
 
     /**
      * Get the navigation records for range values.
      *
      * @param productTypeId product type id
-     * @return list of {@link FiteredNavigationRecord}
+     * @return list of {@link org.yes.cart.domain.queryobject.FilteredNavigationRecord}
      */
-    List<FiteredNavigationRecord> getRangeValueNavigationRecords(long productTypeId);
+    List<FilteredNavigationRecord> getRangeValueNavigationRecords(long productTypeId);
 
     /**
      * Get all distinct brands in given categories list
@@ -172,7 +172,7 @@ public interface ProductService extends GenericService<Product> {
      * @param categories categories id list
      * @return list of distinct brands
      */
-    List<FiteredNavigationRecord> getDistinctBrands(List categories);
+    List<FilteredNavigationRecord> getDistinctBrands(List categories);
 
 
     /**

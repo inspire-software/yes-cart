@@ -25,7 +25,7 @@ import org.yes.cart.domain.entity.Rankable;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface FiteredNavigationRecord extends Rankable {
+public interface FilteredNavigationRecord extends Rankable {
 
     /**
      * Get attribute code.
