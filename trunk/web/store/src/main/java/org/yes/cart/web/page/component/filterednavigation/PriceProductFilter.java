@@ -25,7 +25,7 @@ import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
 import org.yes.cart.domain.query.PriceNavigation;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.query.impl.PriceSearchQueryBuilderImpl;
-import org.yes.cart.domain.queryobject.FiteredNavigationRecord;
+import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
@@ -87,7 +87,7 @@ public class PriceProductFilter extends AbstractProductFilter {
 
                 shop = ApplicationDirector.getCurrentShop();
 
-                final List<FiteredNavigationRecord> allNavigationRecords = priceService.getPriceNavigationRecords(
+                final List<FilteredNavigationRecord> allNavigationRecords = priceService.getPriceNavigationRecords(
                         priceTierTree,
                         currency,
                         shop);
@@ -106,13 +106,13 @@ public class PriceProductFilter extends AbstractProductFilter {
     /**
      * {@inheritDoc}
      */
-    List<FiteredNavigationRecord> getFilteredNavigationRecords(
-            final List<FiteredNavigationRecord> allNavigationRecords) {
-        final List<FiteredNavigationRecord> navigationList = new ArrayList<FiteredNavigationRecord>();
+    List<FilteredNavigationRecord> getFilteredNavigationRecords(
+            final List<FilteredNavigationRecord> allNavigationRecords) {
+        final List<FilteredNavigationRecord> navigationList = new ArrayList<FilteredNavigationRecord>();
         if (!isAttributeAlreadyFiltered(ProductSearchQueryBuilder.PRODUCT_PRICE_AMOUNT)) {
             PriceSearchQueryBuilderImpl queryBuilder = new PriceSearchQueryBuilderImpl();
 
-            for (FiteredNavigationRecord record : allNavigationRecords) {
+            for (FilteredNavigationRecord record : allNavigationRecords) {
                 Pair<String, Pair<BigDecimal, BigDecimal>> priceNavigationRecord = priceNavigation.decomposePriceRequestParams(record.getValue());
                 BooleanQuery candidateQuery = getLuceneQueryFactory().getSnowBallQuery(
                         getQuery(),

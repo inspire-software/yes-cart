@@ -17,7 +17,6 @@
 package org.yes.cart.web.page.component.filterednavigation;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.math.NumberUtils;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -27,13 +26,11 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.LuceneQueryFactory;
-import org.yes.cart.domain.queryobject.FiteredNavigationRecord;
+import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.WebParametersKeys;
-import org.yes.cart.web.support.util.HttpUtil;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.util.*;
@@ -69,7 +66,7 @@ public abstract class AbstractProductFilter extends BaseComponent {
     private final long categoryId;
     private Category category;
 
-    private List<FiteredNavigationRecord> navigationRecords = null;
+    private List<FilteredNavigationRecord> navigationRecords = null;
 
     private final List<Long> categories;
 
@@ -164,8 +161,8 @@ public abstract class AbstractProductFilter extends BaseComponent {
      * @param allNavigationRecords all navigation records
      * @return list of navigatior records, that have product or empty list if no records selected for navigation
      */
-    abstract List<FiteredNavigationRecord> getFilteredNavigationRecords(
-            final List<FiteredNavigationRecord> allNavigationRecords);
+    abstract List<FilteredNavigationRecord> getFilteredNavigationRecords(
+            final List<FilteredNavigationRecord> allNavigationRecords);
 
 
     /**
@@ -184,19 +181,19 @@ public abstract class AbstractProductFilter extends BaseComponent {
     }
 
     /**
-     * Adapt list of  {@link FiteredNavigationRecord} into ugly   list of attribute name - list of attributes values pair .
+     * Adapt list of  {@link org.yes.cart.domain.queryobject.FilteredNavigationRecord} into ugly   list of attribute name - list of attributes values pair .
      * @param records
      * @return
      */
     protected List<Pair<String, List<Pair<Pair<String, Integer>, PageParameters>>>>
-                        adaptNagigationRecords(final List<FiteredNavigationRecord> records) {
+                        adaptNagigationRecords(final List<FilteredNavigationRecord> records) {
         String head = StringUtils.EMPTY;
         Pair<String, List<Pair<Pair<String, Integer>, PageParameters>>> currentPair = null;
 
         final List<Pair<String, List<Pair<Pair<String, Integer>, PageParameters>>>> headValueList =
                 new ArrayList<Pair<String, List<Pair<Pair<String, Integer>, PageParameters>>>>();
 
-        for (FiteredNavigationRecord navigationRecord : records) {
+        for (FilteredNavigationRecord navigationRecord : records) {
             if (!navigationRecord.getName().equalsIgnoreCase(head)) {
                 currentPair = new Pair<String, List<Pair<Pair<String, Integer>, PageParameters>>>(
                         navigationRecord.getName(),
@@ -292,7 +289,7 @@ public abstract class AbstractProductFilter extends BaseComponent {
      * Set particular navigation record to use.
      * @param navigationRecords navigation records.
      */
-    public void setNavigationRecords(final List<FiteredNavigationRecord> navigationRecords) {
+    public void setNavigationRecords(final List<FilteredNavigationRecord> navigationRecords) {
         this.navigationRecords = navigationRecords;
     }
 
@@ -300,7 +297,7 @@ public abstract class AbstractProductFilter extends BaseComponent {
      * Get navigation records.
      * @return   list of navigation records.
      */
-    public List<FiteredNavigationRecord> getNavigationRecords() {
+    public List<FilteredNavigationRecord> getNavigationRecords() {
         return navigationRecords;
     }
 

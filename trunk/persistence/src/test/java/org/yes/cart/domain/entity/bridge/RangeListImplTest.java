@@ -23,6 +23,7 @@ import org.yes.cart.domain.misc.navigation.range.RangeList;
 import org.yes.cart.domain.misc.navigation.range.impl.RangeListImpl;
 import org.yes.cart.domain.misc.navigation.range.impl.RangeNodeImpl;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 /**
@@ -84,5 +85,7 @@ public class RangeListImplTest {
         String result = getXStream().toXML(rangeList);
         assertNotNull(result);
         rangeList = (RangeList) getXStream().fromXML(result);
+        assertNotNull(rangeList);
+        assertEquals(8, rangeList.size());
     }
 }

@@ -20,7 +20,7 @@ import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
-import org.yes.cart.domain.queryobject.FiteredNavigationRecord;
+import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -156,7 +156,7 @@ public interface PriceService extends GenericService<SkuPrice> {
      * @param shop          currenct shop
      * @return list of navigation records for given price tree and currecny
      */
-    List<FiteredNavigationRecord> getPriceNavigationRecords(
+    List<FilteredNavigationRecord> getPriceNavigationRecords(
             PriceTierTree priceTierTree,
             String currency,
             Shop shop);

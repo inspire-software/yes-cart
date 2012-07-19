@@ -28,8 +28,8 @@ import org.yes.cart.domain.misc.navigation.price.PriceTierNode;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
 import org.yes.cart.domain.query.PriceNavigation;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
-import org.yes.cart.domain.queryobject.FiteredNavigationRecord;
-import org.yes.cart.domain.queryobject.impl.FiteredNavigationRecordImpl;
+import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
+import org.yes.cart.domain.queryobject.impl.FilteredNavigationRecordImpl;
 import org.yes.cart.service.domain.ExchangeRateService;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.util.MoneyUtils;
@@ -317,15 +317,15 @@ public class PriceServiceImpl
     /**
      * {@inheritDoc}
      */
-    public List<FiteredNavigationRecord> getPriceNavigationRecords(
+    public List<FilteredNavigationRecord> getPriceNavigationRecords(
             final PriceTierTree priceTierTree,
             final String currency,
             final Shop shop) {
         final List<PriceTierNode> priceTierNodes = getPriceTierNodes(priceTierTree, currency, shop);
-        final List<FiteredNavigationRecord> result = new ArrayList<FiteredNavigationRecord>(priceTierNodes.size());
+        final List<FilteredNavigationRecord> result = new ArrayList<FilteredNavigationRecord>(priceTierNodes.size());
         for (PriceTierNode priceTierNode : priceTierNodes) {
             result.add(
-                    new FiteredNavigationRecordImpl(
+                    new FilteredNavigationRecordImpl(
                             ProductSearchQueryBuilder.PRODUCT_PRICE,
                             ProductSearchQueryBuilder.PRODUCT_PRICE,
                             priceNavigation.composePriceRequestParams(

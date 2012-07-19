@@ -18,14 +18,13 @@ package org.yes.cart.service.domain.impl;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.quartz.SimpleTrigger;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.domain.queryobject.FiteredNavigationRecord;
+import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.service.domain.*;
 
 import java.math.BigDecimal;
@@ -73,7 +72,7 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testGetRangeValueNavigationRecords() {
 
-        List<FiteredNavigationRecord> rez = productService.getRangeValueNavigationRecords(1);
+        List<FilteredNavigationRecord> rez = productService.getRangeValueNavigationRecords(1);
 
         assertEquals("Ten range naviration records was configured for 32 type", 10, rez.size());
 
