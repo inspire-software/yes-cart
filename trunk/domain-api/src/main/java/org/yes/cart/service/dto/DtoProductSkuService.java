@@ -63,4 +63,16 @@ public interface DtoProductSkuService extends GenericDTOService<ProductSkuDTO>, 
      */
     void removeSkuPrice(long skuPriceId);
 
+     /**
+     * Remove all sku prices from all shops.
+     * @param productId product pk value
+     */
+    void removeAllPrices(long productId);
+
+    /**
+     * Remove from all warehouses.
+     * @param productId product pk value
+     */
+    void removeAllItems(long productId);
+
 }

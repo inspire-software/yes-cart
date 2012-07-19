@@ -33,6 +33,13 @@ public interface DtoProductCategoryService extends GenericDTOService<ProductCate
      */
     void removeByCategoryProductIds(long categoryId, long productId);
 
+    /**
+     * Unlink product from all categories.
+     *
+     * @param productId  given product id
+     */
+    void removeByProductIds(long productId);
+
 
     /**
      * Get the next rank for product during product assignment.

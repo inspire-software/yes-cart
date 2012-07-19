@@ -49,6 +49,8 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
     private DtoAttributeService dtoAttrService;
     private DtoFactory dtoFactory;
     private DtoProductTypeAttrService dtoProductTypeAttrService;
+    private DtoProductCategoryService dtoProductCategoryService;
+    //private DtoCategoryService dtoCategoryService;
 
     @Before
     public void setUp() throws Exception {
@@ -58,6 +60,9 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
         dtoAttrService = (DtoAttributeService) ctx().getBean(ServiceSpringKeys.DTO_ATTRIBUTE_SERVICE);
         dtoFactory = (DtoFactory) ctx().getBean(ServiceSpringKeys.DTO_FACTORY);
         dtoProductTypeAttrService = (DtoProductTypeAttrService) ctx().getBean(ServiceSpringKeys.DTO_PRODUCT_TYPE_ATTR_SERVICE);
+        dtoProductCategoryService = (DtoProductCategoryService) ctx().getBean(/*ServiceSpringKeys.DTO_PRODUCT_CATEGORY_SERVICE*/ "dtoProductCategoryService");
+        //dtoCategoryService = (DtoCategoryService) ctx().getBean(ServiceSpringKeys.DTO_CATEGORY_SERVICE);
+
     }
 
     @Test
@@ -112,11 +117,7 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
         assertTrue(list.isEmpty());
     }
 
-    @Ignore("pending")
-    @Test
-    public void testGetProductByCategoryWithPaging() {
-        assertTrue(true);
-    }
+
 
     @Test
     public void testGetProductByConeNameBrandType() throws Exception {
@@ -211,12 +212,41 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
 
     @Test
     public void testRemove() throws Exception {
-        ProductDTO dto = getDto();
+       /* ProductDTO dto = getDto();
         dto = dtoService.create(dto);
         assertTrue(dto.getProductId() > 0);
         dtoService.remove(dto.getProductId());
         dto = dtoService.getById(dto.getProductId());
         assertNull(dto);
+
+
+        dto = getDto();
+        dto = dtoService.create(dto);
+        assertTrue(dto.getProductId() > 0);
+
+
+        AttrValueProductDTO attrValueProductDTO = dtoFactory.getByIface(AttrValueProductDTO.class);
+        attrValueProductDTO.setAttributeDTO(dtoAttrService.getById(2010L)); //POWERSUPPLY
+        attrValueProductDTO.setProductId(dto.getProductId());
+        attrValueProductDTO.setVal("Дрова"); //Firewood
+        attrValueProductDTO = (AttrValueProductDTO) dtoService.createEntityAttributeValue(attrValueProductDTO);
+
+        ProductCategoryDTO productCategoryDTO =  dtoProductCategoryService.getNew();
+        productCategoryDTO.setProductId(dto.getProductId());
+        productCategoryDTO.setCategoryId(117L);
+
+        productCategoryDTO = dtoProductCategoryService.create(productCategoryDTO);
+
+
+        dtoService.remove(dto.getProductId());
+        dto = dtoService.getById(dto.getProductId());
+        assertNull(dto);         */
+
+
+        dtoService.remove(15300L); //remove_me
+        ProductDTO dto = dtoService.getById(15300L);
+        assertNull(dto);
+
     }
 
     private ProductDTO getDto() throws UnableToCreateInstanceException, UnmappedInterfaceException {

@@ -92,7 +92,7 @@
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.ProductServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="productDao"/>
-                <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="productSkuDao"/>
+                <constructor-arg index="1" type="org.yes.cart.service.domain.ProductSkuService" ref="productSkuService"/>
                 <constructor-arg index="2" type="org.yes.cart.dao.GenericDAO" ref="productTypeDao"/>
                 <constructor-arg index="3" type="org.yes.cart.dao.GenericDAO" ref="productCategoryDao"/>
                 <constructor-arg index="4" type="org.yes.cart.dao.GenericDAO" ref="productTypeAttrDao"/>
@@ -106,6 +106,7 @@
             <bean class="org.yes.cart.service.domain.impl.ProductSkuServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="productSkuDao"/>
                 <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="productDao"/>
+                <constructor-arg index="2" type="org.yes.cart.dao.GenericDAO" ref="skuPriceDao"/>
             </bean>
         </property>
     </bean>
@@ -441,6 +442,8 @@
                 <constructor-arg index="5" ref="attrValueEntityProductDao"/>
                 <constructor-arg index="6" ref="imageService"/>
                 <constructor-arg index="7" ref="productTypeAttrService"/>
+                <constructor-arg index="8" ref="dtoProductCategoryService"/>
+                <constructor-arg index="9" ref="dtoProductSkuService"/>
             </bean>
         </property>
     </bean>
@@ -456,6 +459,7 @@
                 <constructor-arg index="5" ref="priceService"/>
                 <constructor-arg index="6" ref="seoService"/>
                 <constructor-arg index="7" ref="imageService"/>
+                <constructor-arg index="8" ref="productService"/>
             </bean>
         </property>
     </bean>

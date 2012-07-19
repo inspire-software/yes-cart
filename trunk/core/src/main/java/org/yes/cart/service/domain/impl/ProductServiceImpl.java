@@ -34,6 +34,7 @@ import org.yes.cart.domain.misc.navigation.range.RangeNode;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.domain.queryobject.impl.FilteredNavigationRecordImpl;
 import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.service.domain.ProductSkuService;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -48,7 +49,8 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     private final static String PROD_SERV_METHOD_CACHE = "productServiceImplMethodCache";
 
     private final GenericDAO<Product, Long> productDao;
-    private final GenericDAO<ProductSku, Long> productSkuDao;
+    //private final GenericDAO<ProductSku, Long> productSkuDao;
+    private final ProductSkuService productSkuService;
     private final GenericDAO<ProductType, Long> productTypeDao;
     private final GenericDAO<ProductCategory, Long> productCategoryDao;
     private final GenericDAO<ProductTypeAttr, Long> productTypeAttrDao;
@@ -58,19 +60,19 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * Construct product service.
      *
      * @param productDao         product dao
-     * @param productSkuDao      product sku dao
+     * @param productSkuService      product service
      * @param productTypeDao     product type dao to deal with type information
      * @param productCategoryDao category dao to work with category nformation
      * @param productTypeAttrDao product type attributes need to work with range navigation
      */
     public ProductServiceImpl(final GenericDAO<Product, Long> productDao,
-                              final GenericDAO<ProductSku, Long> productSkuDao,
+                              final ProductSkuService productSkuService,
                               final GenericDAO<ProductType, Long> productTypeDao,
                               final GenericDAO<ProductCategory, Long> productCategoryDao,
                               final GenericDAO<ProductTypeAttr, Long> productTypeAttrDao) {
         super(productDao);
         this.productDao = productDao;
-        this.productSkuDao = productSkuDao;
+        this.productSkuService = productSkuService;
         this.productTypeDao = productTypeDao;
         this.productCategoryDao = productCategoryDao;
         this.productTypeAttrDao = productTypeAttrDao;
@@ -103,7 +105,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
 
     @Cacheable(value = PROD_SERV_METHOD_CACHE)
     public ProductSku getSkuById(final Long skuId) {
-        return productSkuDao.findById(skuId);
+        return (ProductSku) productSkuService.getGenericDao().findById(skuId);
     }
 
 
@@ -207,7 +209,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      */
     @Cacheable(value = PROD_SERV_METHOD_CACHE)
     public ProductSku getProductSkuByCode(final String skuCode) {
-        final List<ProductSku> skus = productSkuDao.findByNamedQuery("PRODUCT.SKU.BY.CODE", skuCode);
+        final List<ProductSku> skus = productSkuService.getGenericDao().findByNamedQuery("PRODUCT.SKU.BY.CODE", skuCode);
         if (CollectionUtils.isEmpty(skus)) {
             return null;
             //throw new ObjectNotFoundException(ProductSku.class, "skuCode", skuCode);
@@ -521,7 +523,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      */
     @Cacheable(value = PROD_SERV_METHOD_CACHE)
     public Long getProductSkuIdBySeoUri(final String seoUri) {
-        List<ProductSku> list = productSkuDao.findByNamedQuery("SKU.BY.SEO.URI", seoUri);
+        List<ProductSku> list = productSkuService.getGenericDao().findByNamedQuery("SKU.BY.SEO.URI", seoUri);
         if (list != null && !list.isEmpty()) {
             return list.get(0).getSkuId();
         }
@@ -610,6 +612,5 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         );
 
     }
-
 
 }

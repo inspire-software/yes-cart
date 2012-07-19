@@ -38,7 +38,9 @@ import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ProductTypeAttrService;
 import org.yes.cart.service.dto.DtoAttributeService;
+import org.yes.cart.service.dto.DtoProductCategoryService;
 import org.yes.cart.service.dto.DtoProductService;
+import org.yes.cart.service.dto.DtoProductSkuService;
 import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
 
 import java.util.*;
@@ -63,6 +65,8 @@ public class DtoProductServiceImpl
     private final GenericService<Seo> seoGenericService;
 
     private final DtoAttributeService dtoAttributeService;
+    private final DtoProductCategoryService dtoProductCategoryService;
+    private final DtoProductSkuService dtoProductSkuService;
     private final GenericService<Attribute> attributeService;
 
     private final GenericDAO<AttrValueEntityProduct, Long> attrValueEntityProductDao;
@@ -91,9 +95,12 @@ public class DtoProductServiceImpl
             final DtoAttributeService dtoAttributeService,
             final GenericDAO<AttrValueEntityProduct, Long> attrValueEntityProductDao,
             final ImageService imageService,
-            final ProductTypeAttrService productTypeAttrService
-    ) {
+            final ProductTypeAttrService productTypeAttrService,
+            final DtoProductCategoryService dtoProductCategoryService,
+            final DtoProductSkuService dtoProductSkuService) {
         super(dtoFactory, productService, null);
+
+        this.dtoProductSkuService = dtoProductSkuService;
 
 
         this.imageService = imageService;
@@ -102,6 +109,7 @@ public class DtoProductServiceImpl
         this.productService = (ProductService) productService;
         this.dtoFactory = dtoFactory;
         this.AdaptersRepository = AdaptersRepository.getAll();
+        this.dtoProductCategoryService = dtoProductCategoryService;
 /*
         this.AdaptersRepository = AdaptersRepository.getByKeysAsMap(
                 "bigDecimalToFloat",
@@ -393,6 +401,19 @@ public class DtoProductServiceImpl
         return attrValueDTO;
 
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void remove(long id) {
+        dtoProductCategoryService.removeByProductIds(id);
+        dtoProductSkuService.removeAllItems(id);
+        dtoProductSkuService.removeAllPrices(id);
+        final Object obj = getService().getById(id);
+        getService().getGenericDao().evict(obj);
+        super.remove(id);
+    }
+
 
     /**
      * {@inheritDoc}

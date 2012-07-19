@@ -176,6 +176,16 @@ public class RemoteProductSkuServiceImpl
     }
 
     /** {@inheritDoc} */
+    public void removeAllPrices(long productId) {
+        dtoProductSkuService.removeAllPrices(productId);
+    }
+
+    /** {@inheritDoc} */
+    public void removeAllItems(long productId) {
+        dtoProductSkuService.removeAllItems(productId);
+    }
+
+    /** {@inheritDoc} */
     public ProductSkuDTO create(final ProductSkuDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         ProductSkuDTO rez = super.create(instance);
         reindexService.reindexProduct(getProductId(rez.getSkuId()));

@@ -367,8 +367,16 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
-    public void delete(T entity) {
+    public void delete(Object entity) {
         sessionFactory.getCurrentSession().delete(entity);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void evict(Object entity) {
+        sessionFactory.getCurrentSession().evict(entity);
+
     }
 
     /**

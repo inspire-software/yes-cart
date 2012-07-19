@@ -28,10 +28,7 @@ import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.AttrValueEntityProductSku;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
-import org.yes.cart.service.domain.GenericService;
-import org.yes.cart.service.domain.ImageService;
-import org.yes.cart.service.domain.PriceService;
-import org.yes.cart.service.domain.ProductSkuService;
+import org.yes.cart.service.domain.*;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoProductSkuService;
 import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
@@ -51,7 +48,7 @@ public class DtoProductSkuServiceImpl
         implements DtoProductSkuService {
 
 
-
+    private final ProductService productService;
     private final DtoAttributeService dtoAttributeService;
     private final GenericDAO<AttrValueEntityProductSku, Long> attrValueEntityProductSkuDao;
     private final DTOAssembler attrValueAssembler;
@@ -80,18 +77,19 @@ public class DtoProductSkuServiceImpl
      * @param productSkuGenericService     generic product service
      * @param dtoAttributeService          attr service to determinate allowed duplicates for attribute values.
      * @param attrValueEntityProductSkuDao sku attributes dao
-     * @param AdaptersRepository     value converter
-     * @param imageService {@link ImageService} to manipulate  related images. 
+     * @param AdaptersRepository           value converter
+     * @param imageService                 {@link ImageService} to manipulate  related images.
      */
     public DtoProductSkuServiceImpl(
             final DtoFactory dtoFactory,
-            final GenericService<ProductSku> productSkuGenericService,
+            final ProductSkuService productSkuGenericService,
             final DtoAttributeService dtoAttributeService,
             final GenericDAO<AttrValueEntityProductSku, Long> attrValueEntityProductSkuDao,
             final AdaptersRepository AdaptersRepository,
             final PriceService priceService,
             final GenericService<Seo> seoGenericService,
-            final ImageService imageService) {
+            final ImageService imageService,
+            final ProductService productService) {
         super(dtoFactory, productSkuGenericService, AdaptersRepository);
 
         this.imageService = imageService;
@@ -109,6 +107,7 @@ public class DtoProductSkuServiceImpl
                 productSkuGenericService.getGenericDao().getEntityFactory().getImplClass(SkuPrice.class)
         );
         this.seoGenericService = seoGenericService;
+        this.productService = productService;
     }
 
     /**
@@ -140,6 +139,22 @@ public class DtoProductSkuServiceImpl
         return skuPrice.getSkuPriceId();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void remove(long id) {
+        ProductSku sku =  getService().getById(id);
+        ((ProductSkuService)getService()).removeAllItems(sku);
+        ((ProductSkuService)getService()).removeAllPrices(sku);
+        getService().getGenericDao().evict(sku);
+
+        sku =  getService().getById(id);
+        final Product prod = sku.getProduct();
+        prod.getSku().remove(sku);
+        sku.setProduct(null);
+        getService().getGenericDao().evict(prod);
+        getService().getGenericDao().delete(sku);
+    }
 
 
     /**
@@ -150,6 +165,27 @@ public class DtoProductSkuServiceImpl
                 priceService.getById(skuPriceId)
         );
     }
+
+    /**
+     * Remove all sku prices from all shops.
+     *
+     * @param productId product pk value
+     */
+    public void removeAllPrices(final long productId) {
+        ((ProductSkuService) getService()).removeAllPrices(productId);
+
+    }
+
+    /**
+     * Remove from all warehouses.
+     *
+     * @param productId product pk value
+     */
+    public void removeAllItems(final long productId) {
+        ((ProductSkuService) getService()).removeAllItems(productId);
+
+    }
+
 
     /**
      * {@inheritDoc}
@@ -188,14 +224,6 @@ public class DtoProductSkuServiceImpl
         }
     }
 
-
-    /**
-     * {@inheritDoc}
-     */
-    /*@Override
-    public ProductSkuDTO getById(final long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return super.getById(id, AdaptersRepository);
-    } */
 
     /**
      * {@inheritDoc}

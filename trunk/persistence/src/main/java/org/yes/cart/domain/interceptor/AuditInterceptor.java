@@ -59,6 +59,7 @@ public class AuditInterceptor extends EmptyInterceptor implements ApplicationCon
     /**
      * Get product id from entities in product object graph, obtained product id will be used for
      * product reindex.
+     *
      * @param entity intyty to check.
      * @return zero in case not need to perform product reindex.
      */
@@ -70,7 +71,10 @@ public class AuditInterceptor extends EmptyInterceptor implements ApplicationCon
 
         } else if (entity instanceof ProductSku) {
 
-            return ((ProductSku) entity).getProduct().getId();
+            if (((ProductSku) entity).getProduct() != null) {
+
+                return ((ProductSku) entity).getProduct().getId();
+            }
 
         } else if (entity instanceof SkuWarehouse) {
 
@@ -83,7 +87,7 @@ public class AuditInterceptor extends EmptyInterceptor implements ApplicationCon
 
     private void submitProductReindex(final long productId) {
 
-        if(productId > 0) {
+        if (productId > 0) {
 
             getProductIndexer().submitIndexTask(productId);
 
@@ -210,7 +214,9 @@ public class AuditInterceptor extends EmptyInterceptor implements ApplicationCon
     }
 
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }

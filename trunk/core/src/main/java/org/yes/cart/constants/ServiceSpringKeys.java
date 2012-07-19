@@ -291,6 +291,11 @@ public interface ServiceSpringKeys {
     String DTO_PRODUCT_TYPE_ATTR_SERVICE = "dtoProductTypeAttrService";
 
     /**
+     * {@link org.yes.cart.service.dto.DtoProductCategoryService}
+     * /
+    String DTO_PRODUCT_CATEGORY_SERVICE = "dtoProductCategoryService";
+
+    /**
      * {@link org.yes.cart.service.dto.DtoImageService}
      */
     String DTO_IMAGE_SERVICE = "dtoImageService";

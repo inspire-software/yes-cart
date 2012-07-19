@@ -24,6 +24,7 @@ import org.yes.cart.service.domain.ProductSkuService;
 
 import java.util.Collection;
 
+import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -40,5 +41,45 @@ public class ProductSkuServiceImplTest extends BaseCoreDBTestCase {
         Collection<ProductSku> skus = productSkuService.getAllProductSkus(10000L); //SOBOT
         assertNotNull(skus);
         assertEquals(4, skus.size());
+    }
+
+    @Test
+    public void testRemoveAllPrices() {
+
+        ProductSkuService productSkuService = (ProductSkuService) ctx().getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE);
+        Collection<ProductSku> skus = productSkuService.getAllProductSkus(15300L); //REMOVEME sku code
+        assertEquals(2, skus.size());
+
+        for (ProductSku sku : skus) {
+            assertEquals(2, sku.getSkuPrice().size()); // each sku has two prices in USD and EUR
+        }
+
+        productSkuService.removeAllPrices(15300L);
+
+        skus = productSkuService.getAllProductSkus(15300L);
+        for (ProductSku sku : skus) {
+            assertTrue("Prices must be removed for sku " + sku.getCode(), sku.getSkuPrice().isEmpty());
+        }
+
+    }
+
+    @Test
+    public void testRemoveAllItems() {
+
+        ProductSkuService productSkuService = (ProductSkuService) ctx().getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE);
+        Collection<ProductSku> skus = productSkuService.getAllProductSkus(15300L); //REMOVEME sku code
+        assertEquals(2, skus.size());
+
+        for (ProductSku sku : skus) {
+            assertEquals(1, sku.getQuantityOnWarehouse().size()); // each sku has two prices in USD and EUR
+        }
+
+        productSkuService.removeAllItems(15300L);
+
+        skus = productSkuService.getAllProductSkus(15300L); //REMOVEME sku code
+        for (ProductSku sku : skus) {
+            assertTrue("All items must be removed for sku " + sku.getCode(), sku.getQuantityOnWarehouse().isEmpty());
+        }
+
     }
 }
