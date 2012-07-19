@@ -1,5 +1,7 @@
 #!/bin/sh
 
+YC_HOME=`pwd`
+
 show_env() {
     echo "================================================";
     echo " Environment variables                          ";
@@ -23,6 +25,9 @@ show_help() {
     echo "              maven                             ";
     echo "  cpclient  - copy swf (from target) to webapps ";
     echo "  dbimysql  - initialise db for mysql           ";
+    echo "  dbiderby  - initialise db for derby           ";
+    echo "  derbygo   - start derby server                ";
+    echo "  derbycon  - connect to derby with ij          ";
     echo "================================================";
 }
 
@@ -83,28 +88,75 @@ cp_client_to_webapp() {
 init_db_mysql() {
 
     echo "================================================";
-    echo " Initialise database                            ";
+    echo " Initialise MySQL database                      ";
     echo "================================================";
 
-    echo "Creating yes";
-    mysql -uroot -p -e "CREATE DATABASE yes CHARACTER SET utf8 COLLATE utf8_general_ci;"
-    echo "Loading yes tables";
-    mysql -uroot -p yes < persistence/sql/resources/mysql/create-tables.sql
-    echo "Loading yes initial data";
-    mysql -uroot -p yes < util/install/initdata.sql
+    DBINITSCRIPT=$YC_HOME/util/install/dbinit/mysql/dbinit.sql
+    echo "Running init script as root user $DBINITSCRIPT"
+    mysql -uroot -p < $DBINITSCRIPT
 
-    echo "Creating yespay";
-    mysql -uroot -p -e "CREATE DATABASE yespay CHARACTER SET utf8 COLLATE utf8_general_ci;"
-    echo "Loading yespay tables";
-    mysql -uroot -p yespay < core-modules/core-module-payment-base/src/main/resources/sql/mysql/create-npa-pay.sql
-    echo "Loading yespay.base initial data";
-    mysql -uroot -p yespay < core-modules/core-module-payment-base/src/main/resources/sql/payinitdata.sql
-    echo "Loading yespay.capp initial data";
-    mysql -uroot -p yespay < core-modules/core-module-payment-capp/src/main/resources/sql/payinitdata.sql
-    echo "Loading yespay.gcwm initial data";
-    mysql -uroot -p yespay < core-modules/core-module-payment-gcwm/src/main/resources/sql/payinitdata.sql
+    echo "Initialisation complete."
 
 }
+
+db_derby_go() {
+
+    echo "================================================";
+    echo " Starting Derby database                        ";
+    echo "================================================";
+
+    export DERBY_INSTALL=`pwd`/util/derby-10.8.1.2
+    export CLASSPATH=$DERBY_INSTALL/lib/derby.jar:$DERBY_INSTALL/lib/derbytools.jar:$DERBY_INSTALL/lib/derbyclient.jar:$DERBY_INSTALL/lib/derbynet.jar:.
+    cd $DERBY_INSTALL/lib
+
+    java -jar derbyrun.jar server start
+
+}
+
+init_db_derby() {
+
+    echo "================================================";
+    echo " Initialise Derby database                      ";
+    echo "================================================";
+    
+    echo "Setting Derby environment variables";
+    export DERBY_INSTALL=`pwd`/util/derby-10.8.1.2
+    export CLASSPATH=$DERBY_INSTALL/lib/derby.jar:$DERBY_INSTALL/lib/derbytools.jar:$DERBY_INSTALL/lib/derbyclient.jar:$DERBY_INSTALL/lib/derbynet.jar:.
+    cd $DERBY_INSTALL/lib
+
+    #java org.apache.derby.tools.sysinfo
+    DBINITSCRIPT=$YC_HOME/util/install/dbinit/derby/dbinit.sql
+    echo "Running init script $DBINITSCRIPT"
+    java -Dderby.system.home=$YC_HOME -Dij.outfile=$YC_HOME/derbyinit.log org.apache.derby.tools.ij $DBINITSCRIPT
+#    java -Dderby.system.home=$YC_HOME org.apache.derby.tools.ij $DBINITSCRIPT
+    
+    cd $YC_HOME;
+    echo "Initialisation complete. See log: $YC_HOME/derbyinit.log"
+
+}
+
+db_derby_connect() {
+
+    echo "================================================";
+    echo " Starting Derby client                          ";
+    echo "================================================";
+
+    export DERBY_INSTALL=`pwd`/util/derby-10.8.1.2
+    export CLASSPATH=$DERBY_INSTALL/lib/derby.jar:$DERBY_INSTALL/lib/derbytools.jar:$DERBY_INSTALL/lib/derbyclient.jar:$DERBY_INSTALL/lib/derbynet.jar:.
+    cd $DERBY_INSTALL/lib
+
+    echo "Working directory is"
+    pwd
+    
+    echo "Use:"
+    echo "  connect 'jdbc:derby://localhost:1527/yes'; - to connect to main db";
+    echo "  connect 'jdbc:derby://localhost:1527/yespay'; - to connect to payment gateway db";
+    echo "  disconnect; - to quit";
+    
+    java org.apache.derby.tools.ij
+
+}
+
 
 if [ $1 ];
 then
@@ -123,6 +175,18 @@ then
     elif [ $1 = "dbimysql" ];
     then
         init_db_mysql;
+        exit 0;
+    elif [ $1 = "dbiderby" ];
+    then
+        init_db_derby;
+        exit 0;
+    elif [ $1 = "derbygo" ];
+    then
+        db_derby_go;
+        exit 0;
+    elif [ $1 = "derbycon" ];
+    then
+        db_derby_connect;
         exit 0;
     elif [ $1 = "env" ];
     then
