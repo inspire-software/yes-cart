@@ -29,7 +29,7 @@
     <importColumns class="list">
 
         <column-descriptor>
-            <columnIndex>0</columnIndex>
+            <columnIndex>1</columnIndex>
             <fieldType>FIELD</fieldType>
             <name>name</name>
             <regExp>(.*)</regExp>

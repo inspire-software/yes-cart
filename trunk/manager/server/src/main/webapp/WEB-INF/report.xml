@@ -23,8 +23,8 @@
     <!-- #################################  reporting configuration ######################################-->
 
 
-    <bean id="reportShopInformation" class="org.yes.cart.report.impl.ReportDescriptor">
-        <property name="reportId" value="reportShopInformation"/>
+    <bean id="reportShopSummaryInfo" class="org.yes.cart.report.impl.ReportDescriptor">
+        <property name="reportId" value="reportShopSummaryInfo"/>
         <property name="hsqlQuery" value="select s from ShopEntity s"/>
         <property name="langLabel">
             <list>
@@ -53,8 +53,8 @@
     </bean>
 
 
-    <bean id="warehouseRemainsGoods" class="org.yes.cart.report.impl.ReportDescriptor">
-        <property name="reportId" value="warehouseRemainsGoods"/>
+    <bean id="reportAvailableStock" class="org.yes.cart.report.impl.ReportDescriptor">
+        <property name="reportId" value="reportAvailableStock"/>
         <property name="hsqlQuery" value="select  o.sku.code,  o.sku.name, o.sku.barCode, coalesce(o.reserved, 0.0), o.quantity  from SkuWarehouseEntity o
                                           where o.warehouse.code = ?1
                                           order by o.sku.code"/>
@@ -96,11 +96,11 @@
             <list>
                 <bean class="org.yes.cart.report.impl.ReportPair">
                     <constructor-arg index="0" value="en"/>
-                    <constructor-arg index="1" value="wh-remains-goods_en.xslfo"/>
+                    <constructor-arg index="1" value="available-stock_en.xslfo"/>
                 </bean>
                 <bean class="org.yes.cart.report.impl.ReportPair">
                     <constructor-arg index="0" value="ru"/>
-                    <constructor-arg index="1" value="wh-remains-goods_ru.xslfo"/>
+                    <constructor-arg index="1" value="available-stock_ru.xslfo"/>
                 </bean>
             </list>
         </property>

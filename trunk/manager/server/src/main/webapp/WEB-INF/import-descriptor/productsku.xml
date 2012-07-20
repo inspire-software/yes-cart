@@ -24,13 +24,22 @@
         <columnDelimeter>;</columnDelimeter>
         <textQualifier>&quot;</textQualifier>
         <ignoreFirstLine>true</ignoreFirstLine>
-        <fileNameMask>product_entity(.*).csv(.*)</fileNameMask>
+        <fileNameMask>productentity(.*).csv(.*)</fileNameMask>
         <fileEncoding>UTF-8</fileEncoding>
     </importFile>
 
     <importColumns class="list">
 
-        <!--  Name -->
+        <!-- primary key -->
+        <column-descriptor>
+            <columnIndex>5</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>code</name>
+            <regExp>(.*)</regExp>
+            <lookupQuery>select p from ProductSkuEntity p where p.code = ?1</lookupQuery>
+        </column-descriptor>
+
+        <!--  sku name -->
         <column-descriptor>
             <columnIndex>0</columnIndex>
             <fieldType>FIELD</fieldType>
@@ -38,35 +47,28 @@
             <regExp>(.*)</regExp>
         </column-descriptor>
 
-        <!-- Product code filed for lookup object -->
+        <!-- Product code the same as product sku code for single sku product.  field for lookup object -->
         <column-descriptor>
-            <columnIndex>7</columnIndex>
+            <columnIndex>5</columnIndex>
             <fieldType>FK_FIELD</fieldType>
             <name>product</name>
             <regExp>(.*)</regExp>
             <lookupQuery>select p from ProductEntity p where p.code = ?1</lookupQuery>
         </column-descriptor>
 
-        <!-- product sku code-->
-        <column-descriptor>
-            <columnIndex>14</columnIndex>
-            <fieldType>FIELD</fieldType>
-            <name>code</name>
-            <regExp>(.*)</regExp>
-            <lookupQuery>select p from ProductSkuEntity p where p.code = ?1</lookupQuery>
-        </column-descriptor>
+
 
         <!--  bar code -->
         <column-descriptor>
-            <columnIndex>14</columnIndex>
+            <columnIndex>8</columnIndex>
             <fieldType>FIELD</fieldType>
             <name>barCode</name>
             <regExp>(.*)</regExp>
         </column-descriptor>
 
-        <!--  description  -->
+        <!-- Description -->
         <column-descriptor>
-            <columnIndex>15</columnIndex>
+            <columnIndex>10</columnIndex>
             <fieldType>FIELD</fieldType>
             <name>description</name>
             <regExp>(.*)</regExp>
@@ -74,6 +76,7 @@
 
 
 
+
     </importColumns>
-    <importFolder>/npa/import</importFolder>
+    <importFolder></importFolder>
 </import-descriptor>
