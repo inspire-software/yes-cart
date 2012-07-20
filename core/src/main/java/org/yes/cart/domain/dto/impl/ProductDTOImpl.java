@@ -21,6 +21,8 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoCollection;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoParent;
 import org.yes.cart.domain.dto.*;
+import org.yes.cart.domain.dto.matcher.impl.AttrValueProductMatcher;
+import org.yes.cart.domain.dto.matcher.impl.ProductCategoryMatcher;
 import org.yes.cart.domain.entity.ProductCategory;
 import org.yes.cart.domain.entity.impl.AttrValueEntityProduct;
 
@@ -249,5 +251,25 @@ public class ProductDTOImpl implements ProductDTO {
     /** {@inheritDoc} */
     public void setTag(final String tag) {
         this.tag = tag;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductDTOImpl{" +
+                "productId=" + productId +
+                ", code='" + code + '\'' +
+                ", tag='" + tag + '\'' +
+                ", availablefrom=" + availablefrom +
+                ", availabletill=" + availabletill +
+                ", availability=" + availability +
+                ", brandDTO=" + brandDTO +
+                ", productTypeDTO=" + productTypeDTO +
+                ", productCategoryDTOs=" + productCategoryDTOs +
+                ", seoDTO=" + seoDTO +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", featured=" + featured +
+                ", attribute=" + attribute +
+                '}';
     }
 }

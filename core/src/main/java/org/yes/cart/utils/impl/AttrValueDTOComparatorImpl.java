@@ -34,6 +34,11 @@ public class AttrValueDTOComparatorImpl implements Comparator<AttrValueDTO> {
      * {@inheritDoc}
      */
     public int compare(final AttrValueDTO attrValueDTO1, final AttrValueDTO attrValueDTO2) {
-        return attrValueDTO1.getAttributeDTO().getName().compareTo(attrValueDTO2.getAttributeDTO().getName());
+        try {
+            return attrValueDTO1.getAttributeDTO().getName().compareTo(attrValueDTO2.getAttributeDTO().getName());
+        } catch (NullPointerException npe) {
+            // TODO: fix this
+            return -1;
+        }
     }
 }

@@ -91,4 +91,14 @@ public class AttrValueCategoryDTOImpl implements AttrValueCategoryDTO {
     public void setCategoryId(final long categoryId) {
         this.categoryId = categoryId;
     }
+
+    @Override
+    public String toString() {
+        return "AttrValueCategoryDTOImpl{" +
+                "attrvalueId=" + attrvalueId +
+                ", val='" + val + '\'' +
+                ", attributeDTO=" + attributeDTO +
+                ", categoryId=" + categoryId +
+                '}';
+    }
 }

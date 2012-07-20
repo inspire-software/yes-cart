@@ -140,4 +140,18 @@ public class WarehouseDTOImpl implements WarehouseDTO {
     public void setPostcode(final String postcode) {
         this.postcode = postcode;
     }
+
+    @Override
+    public String toString() {
+        return "WarehouseDTOImpl{" +
+                "warehouseId=" + warehouseId +
+                ", code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", countryCode='" + countryCode + '\'' +
+                ", stateCode='" + stateCode + '\'' +
+                ", city='" + city + '\'' +
+                ", postcode='" + postcode + '\'' +
+                '}';
+    }
 }

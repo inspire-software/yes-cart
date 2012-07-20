@@ -166,4 +166,20 @@ public class ProductTypeDTOImpl implements ProductTypeDTO {
     public void setShipable(final boolean shipable) {
         this.shipable = shipable;
     }
+
+    @Override
+    public String toString() {
+        return "ProductTypeDTOImpl{" +
+                "producttypeId=" + producttypeId +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", uitemplate='" + uitemplate + '\'' +
+                ", uisearchtemplate='" + uisearchtemplate + '\'' +
+                ", service=" + service +
+                ", ensemble=" + ensemble +
+                ", shipable=" + shipable +
+                ", downloadable=" + downloadable +
+                ", digital=" + digital +
+                '}';
+    }
 }

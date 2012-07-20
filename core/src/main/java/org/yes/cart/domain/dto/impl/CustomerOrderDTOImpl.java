@@ -363,4 +363,29 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
      */ public void setCode(final String code) {
         this.code = code;
     }
+
+    @Override
+    public String toString() {
+        return "CustomerOrderDTOImpl{" +
+                "customerorderId=" + customerorderId +
+                ", ordernum='" + ordernum + '\'' +
+                ", pgLabel='" + pgLabel + '\'' +
+                ", billingAddress='" + billingAddress + '\'' +
+                ", shippingAddress='" + shippingAddress + '\'' +
+                ", cartGuid='" + cartGuid + '\'' +
+                ", currency='" + currency + '\'' +
+                ", orderMessage='" + orderMessage + '\'' +
+                ", orderStatus='" + orderStatus + '\'' +
+                ", multipleShipmentOption=" + multipleShipmentOption +
+                ", orderTimestamp=" + orderTimestamp +
+                ", email='" + email + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", middlename='" + middlename + '\'' +
+                ", customerId=" + customerId +
+                ", shopId=" + shopId +
+                ", code='" + code + '\'' +
+                ", amount=" + amount +
+                '}';
+    }
 }

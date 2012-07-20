@@ -148,4 +148,18 @@ public class SkuWarehouseDTOImpl implements SkuWarehouseDTO {
     public void setQuantity(final BigDecimal quantity) {
         this.quantity = quantity;
     }
+
+    @Override
+    public String toString() {
+        return "SkuWarehouseDTOImpl{" +
+                "skuWarehouseId=" + skuWarehouseId +
+                ", productSkuId=" + productSkuId +
+                ", skuCode='" + skuCode + '\'' +
+                ", skuName='" + skuName + '\'' +
+                ", warehouseId=" + warehouseId +
+                ", warehouseCode='" + warehouseCode + '\'' +
+                ", warehouseName='" + warehouseName + '\'' +
+                ", quantity=" + quantity +
+                '}';
+    }
 }

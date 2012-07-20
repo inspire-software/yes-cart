@@ -102,4 +102,14 @@ public class StateDTOImpl implements StateDTO {
     public void setName(final String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "StateDTOImpl{" +
+                "stateId=" + stateId +
+                ", countryCode='" + countryCode + '\'' +
+                ", stateCode='" + stateCode + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

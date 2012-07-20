@@ -164,7 +164,7 @@ public class CvsImportDescriptorImplTest {
         cvsImportDescriptor.getImportFile().setFileNameMask("*.csv");
         cvsImportDescriptor.getImportFile().setIgnoreFirstLine(true);
         cvsImportDescriptor.getImportFile().setTextQualifier('"');
-        cvsImportDescriptor.setImportFolder("/npa/import");
+        cvsImportDescriptor.setImportFolder("/yescart/import");
 
         CsvImportColumn csvImportColumn = new CsvImportColumnImpl(1, FieldTypeEnum.FIELD, "code", null, null);
         csvImportColumn.setLookupQuery("select a from table a");

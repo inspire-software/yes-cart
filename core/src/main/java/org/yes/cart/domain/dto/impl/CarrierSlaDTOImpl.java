@@ -261,4 +261,23 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     public void setCarrierId(final long carrierId) {
         this.carrierId = carrierId;
     }
+
+    @Override
+    public String toString() {
+        return "CarrierSlaDTOImpl{" +
+                "carrierslaId=" + carrierslaId +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", currency='" + currency + '\'' +
+                ", maxDays=" + maxDays +
+                ", slaType='" + slaType + '\'' +
+                ", price=" + price +
+                ", percent=" + percent +
+                ", script='" + script + '\'' +
+                ", priceNotLess=" + priceNotLess +
+                ", percentNotLess=" + percentNotLess +
+                ", costNotLess=" + costNotLess +
+                ", carrierId=" + carrierId +
+                '}';
+    }
 }

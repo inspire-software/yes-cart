@@ -102,4 +102,15 @@ public class ProductCategoryDTOImpl implements ProductCategoryDTO {
     public void setRank(final int rank) {
         this.rank = rank;
     }
+
+    @Override
+    public String toString() {
+        return "ProductCategoryDTOImpl{" +
+                "productCategoryId=" + productCategoryId +
+                ", productId=" + productId +
+                ", categoryId=" + categoryId +
+                ", categoryName='" + categoryName + '\'' +
+                ", rank=" + rank +
+                '}';
+    }
 }

@@ -165,4 +165,19 @@ public class ProductTypeAttrDTOImpl implements ProductTypeAttrDTO {
     public void setRangeNavigation(final String rangeNavigation) {
         this.rangeNavigation = rangeNavigation;
     }
+
+    @Override
+    public String toString() {
+        return "ProductTypeAttrDTOImpl{" +
+                "productTypeAttrId=" + productTypeAttrId +
+                ", attributeDTO=" + attributeDTO +
+                ", producttypeId=" + producttypeId +
+                ", rank=" + rank +
+                ", visible=" + visible +
+                ", similarity=" + similarity +
+                ", navigation=" + navigation +
+                ", navigationType='" + navigationType + '\'' +
+                ", rangeNavigation='" + rangeNavigation + '\'' +
+                '}';
+    }
 }

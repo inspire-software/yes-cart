@@ -109,19 +109,7 @@ public class DtoCategoryServiceImplTezt extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testAssignToShop() throws Exception {
-        CategoryDTO dto = getDto();
-        dto = dtoService.create(dto);
-        assertTrue(dto.getCategoryId() > 0);
-        dtoService.assignToShop(dto.getCategoryId(), 50L);
-        List<CategoryDTO> list = dtoService.getAllByShopId(50L);
-        assertEquals(2, list.size());
-        dtoService.unassignFromShop(dto.getCategoryId(), 50L);
-        dtoService.remove(dto.getCategoryId());
-    }
-
-    @Test
-    public void testUnassignFromShop() throws Exception {
+    public void testAssignAndUnassignToShop() throws Exception {
         CategoryDTO dto = getDto();
         dto = dtoService.create(dto);
         assertTrue(dto.getCategoryId() > 0);
@@ -131,6 +119,7 @@ public class DtoCategoryServiceImplTezt extends BaseCoreDBTestCase {
         dtoService.unassignFromShop(dto.getCategoryId(), 50L);
         list = dtoService.getAllByShopId(50L);
         assertEquals(1, list.size());
+        dtoService.remove(dto.getCategoryId());
     }
 
     @Test

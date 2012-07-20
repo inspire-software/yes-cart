@@ -86,4 +86,14 @@ public class ShopCategoryDTOImpl  implements ShopCategoryDTO {
     public void setCategoryId(final long categoryId) {
         this.categoryId = categoryId;
     }
+
+    @Override
+    public String toString() {
+        return "ShopCategoryDTOImpl{" +
+                "shopCategoryId=" + shopCategoryId +
+                ", rank=" + rank +
+                ", shopId=" + shopId +
+                ", categoryId=" + categoryId +
+                '}';
+    }
 }

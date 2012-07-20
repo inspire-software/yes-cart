@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.domain.dto.impl;
+package org.yes.cart.domain.dto.matcher.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.DtoToEntityMatcher;
 import org.yes.cart.domain.dto.SkuPriceDTO;

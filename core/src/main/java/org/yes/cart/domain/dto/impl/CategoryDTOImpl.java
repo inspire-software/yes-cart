@@ -21,6 +21,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoCollection;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.AttrValueCategoryDTO;
 import org.yes.cart.domain.dto.CategoryDTO;
+import org.yes.cart.domain.dto.matcher.impl.AttrValueCategoryMatcher;
 import org.yes.cart.domain.entity.impl.AttrValueEntityCategory;
 
 import java.util.Date;
@@ -273,5 +274,28 @@ public class CategoryDTOImpl implements CategoryDTO  {
     /** {@inheritDoc}*/
     public void setAttribute(final Set<AttrValueCategoryDTO> attribute) {
         this.attribute = attribute;
+    }
+
+    @Override
+    public String toString() {
+        return "CategoryDTOImpl{" +
+                "categoryId=" + categoryId +
+                ", parentId=" + parentId +
+                ", rank=" + rank +
+                ", productTypeId=" + productTypeId +
+                ", productTypeName='" + productTypeName + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", uitemplate='" + uitemplate + '\'' +
+                ", availablefrom=" + availablefrom +
+                ", availabletill=" + availabletill +
+                ", seoId=" + seoId +
+                ", navigationByAttributes=" + navigationByAttributes +
+                ", navigationByBrand=" + navigationByBrand +
+                ", navigationByPrice=" + navigationByPrice +
+                ", navigationByPriceTiers='" + navigationByPriceTiers + '\'' +
+                ", attribute=" + attribute +
+                ", children=" + children +
+                '}';
     }
 }

@@ -90,4 +90,14 @@ public class AttrValueProductDTOImpl implements AttrValueProductDTO {
     public void setProductId(final long productId) {
         this.productId = productId;
     }
+
+    @Override
+    public String toString() {
+        return "AttrValueProductDTOImpl{" +
+                "attrvalueId=" + attrvalueId +
+                ", val='" + val + '\'' +
+                ", attributeDTO=" + attributeDTO +
+                ", productId=" + productId +
+                '}';
+    }
 }

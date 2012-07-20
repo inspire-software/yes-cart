@@ -125,4 +125,17 @@ public class CarrierDTOImpl implements CarrierDTO {
     public void setLocal(final boolean local) {
         this.local = local;
     }
+
+    @Override
+    public String toString() {
+        return "CarrierDTOImpl{" +
+                "carrierId=" + carrierId +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", worldwide=" + worldwide +
+                ", country=" + country +
+                ", state=" + state +
+                ", local=" + local +
+                '}';
+    }
 }

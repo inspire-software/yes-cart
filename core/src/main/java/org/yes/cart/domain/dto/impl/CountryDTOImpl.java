@@ -105,4 +105,14 @@ public class CountryDTOImpl implements CountryDTO {
     public void setName(final String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "CountryDTOImpl{" +
+                "countryId=" + countryId +
+                ", countryCode='" + countryCode + '\'' +
+                ", isoCode='" + isoCode + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

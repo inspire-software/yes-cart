@@ -86,4 +86,14 @@ public class SeoImageDTOImpl implements SeoImageDTO {
     public void setTitle(final String title) {
         this.title = title;
     }
+
+    @Override
+    public String toString() {
+        return "SeoImageDTOImpl{" +
+                "seoImageId=" + seoImageId +
+                ", imageName='" + imageName + '\'' +
+                ", alt='" + alt + '\'' +
+                ", title='" + title + '\'' +
+                '}';
+    }
 }

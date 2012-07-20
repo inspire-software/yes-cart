@@ -90,4 +90,14 @@ public class AttrValueBrandDTOImpl implements AttrValueBrandDTO {
     public void setBrandId(final long brandId) {
         this.brandId = brandId;
     }
+
+    @Override
+    public String toString() {
+        return "AttrValueBrandDTOImpl{" +
+                "attrvalueId=" + attrvalueId +
+                ", val='" + val + '\'' +
+                ", attributeDTO=" + attributeDTO +
+                ", brandId=" + brandId +
+                '}';
+    }
 }
