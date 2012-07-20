@@ -41,5 +41,5 @@ public interface System extends Auditable {
 
     long getSystemId();
 
-    void setSystemId(long npaSystemId);
+    void setSystemId(long systemId);
 }
