@@ -58,7 +58,7 @@ public class CategoryDAOTest extends AbstractTestDAO {
      * and thea are ranked.
      */
     public void resovleCategoriesbyShop() {
-        Shop shop = shopDao.findSingleByNamedQuery("SHOP.BY.URL", "gadget.npa.com");
+        Shop shop = shopDao.findSingleByNamedQuery("SHOP.BY.URL", "gadget.yescart.org");
         assertNotNull("Shop must be resolved by URL", shop);
         List<Category> assignedCategories =
                 categoryDao.findByNamedQuery("TOPCATEGORIES.BY.SHOPID", shop.getShopId(), new Date());
@@ -86,10 +86,10 @@ public class CategoryDAOTest extends AbstractTestDAO {
     }
 
     /**
-     * Test, that available from and available to work correctrly
+     * Test, that available from and available to work correctly
      */
     public void availableCriteriaTest() {
-        Shop shop = shopDao.findSingleByNamedQuery("SHOP.BY.URL", "gadget.npa.com");
+        Shop shop = shopDao.findSingleByNamedQuery("SHOP.BY.URL", "gadget.yescart.org");
         assertNotNull("Shop must be resolved by URL", shop);
         List<Category> assignedCategories =
                 categoryDao.findByNamedQuery("TOPCATEGORIES.BY.SHOPID", shop.getShopId(), new Date());

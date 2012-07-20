@@ -86,7 +86,7 @@
     <TATTRIBUTE ATTRIBUTE_ID="1006" CODE="CURRENCY" MANDATORY="0" NAME="Currency" ETYPE_ID="1004"
                 ATTRIBUTEGROUP_ID="1001" ALLOWDUPLICATE="0"/>
     <TATTRIBUTE ATTRIBUTE_ID="1005" CODE="CATEGORY_IMAGE_RETRIEVE_STRATEGY"
-                MANDATORY="0" NAME="Category image retreive strategy [ATTRIBUTE RANDOM_PRODUCT]" ETYPE_ID="1000"
+                MANDATORY="0" NAME="Category image retrieve strategy [ATTRIBUTE RANDOM_PRODUCT]" ETYPE_ID="1000"
                 ATTRIBUTEGROUP_ID="1002" ALLOWDUPLICATE="0"/>
 
     <TATTRIBUTE ATTRIBUTE_ID="1021" CODE="SYSTEM_IMPORT_DESCRIPTORS" MANDATORY="1" NAME="Path to import descriptors"
@@ -158,27 +158,27 @@
                 ATTRIBUTEGROUP_ID="1001" ALLOWDUPLICATE="0"/>
 
 
-    <TNPASYSTEM NPASYSTEM_ID="100"
-                CODE="NPASYSTEM"
-                NAME="Npa ecommerce system"
+    <TSYSTEM SYSTEM_ID="100"
+                CODE="SYSTEM"
+                NAME="YesCart e-commerce system"
                 DESCRIPTION="System table"/>
 
-    <TSYSTEMATTRVALUE ATTRVALUE_ID="1000" CODE="SYSTEM_DEFAULT_SHOP" VAL="http://www.gadget.npa.com:8080/webshopwicket"
-                      NPASYSTEM_ID="100"/>
-    <TSYSTEMATTRVALUE ATTRVALUE_ID="1001" CODE="SYSTEM_DEFAULT_FSPOINTER" VAL="/npa/default" NPASYSTEM_ID="100"/>
-    <TSYSTEMATTRVALUE ATTRVALUE_ID="1003" CODE="SYSTEM_IMAGE_VAULT" VAL="target/test/imgvault" NPASYSTEM_ID="100"/>
+    <TSYSTEMATTRVALUE ATTRVALUE_ID="1000" CODE="SYSTEM_DEFAULT_SHOP" VAL="http://www.gadget.yescart.org:8080/yes-shop"
+                      SYSTEM_ID="100"/>
+    <TSYSTEMATTRVALUE ATTRVALUE_ID="1001" CODE="SYSTEM_DEFAULT_FSPOINTER" VAL="/yescart/default" SYSTEM_ID="100"/>
+    <TSYSTEMATTRVALUE ATTRVALUE_ID="1003" CODE="SYSTEM_IMAGE_VAULT" VAL="target/test/imgvault" SYSTEM_ID="100"/>
     <TSYSTEMATTRVALUE ATTRVALUE_ID="1004" CODE="SYSTEM_IMPORT_DESCRIPTORS" VAL="src/import/descriptors"
-                      NPASYSTEM_ID="100"/>
-    <TSYSTEMATTRVALUE ATTRVALUE_ID="1005" CODE="SYSTEM_IMPORT_ARCHIVE" VAL="src/import/archive" NPASYSTEM_ID="100"/>
-    <TSYSTEMATTRVALUE ATTRVALUE_ID="1006" CODE="SYSTEM_IMPORT" VAL="src/import" NPASYSTEM_ID="100"/>
+                      SYSTEM_ID="100"/>
+    <TSYSTEMATTRVALUE ATTRVALUE_ID="1005" CODE="SYSTEM_IMPORT_ARCHIVE" VAL="src/import/archive" SYSTEM_ID="100"/>
+    <TSYSTEMATTRVALUE ATTRVALUE_ID="1006" CODE="SYSTEM_IMPORT" VAL="src/import" SYSTEM_ID="100"/>
     <TSYSTEMATTRVALUE ATTRVALUE_ID="1009" CODE="SYSTEM_MAILTEMPLATES_FSPOINTER" VAL="src/test/resources/mailtemplates/"
-                      NPASYSTEM_ID="100"/>
-    <!--<TSYSTEMATTRVALUE ATTRVALUE_ID="1011" CODE="SYSTEM_PAYMENT_MODULES_URLS"           VAL="basePaymentModule,cappPaymentModule"       NPASYSTEM_ID="100" />-->
+                      SYSTEM_ID="100"/>
+    <!--<TSYSTEMATTRVALUE ATTRVALUE_ID="1011" CODE="SYSTEM_PAYMENT_MODULES_URLS"           VAL="basePaymentModule,cappPaymentModule"       SYSTEM_ID="100" />-->
     <TSYSTEMATTRVALUE ATTRVALUE_ID="1011" CODE="SYSTEM_PAYMENT_MODULES_URLS" VAL="basePaymentModule"
-                      NPASYSTEM_ID="100"/>
+                      SYSTEM_ID="100"/>
     <TSYSTEMATTRVALUE ATTRVALUE_ID="1012" CODE="SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS"
                       VAL="testPaymentGateway,courierPaymentGateway,cyberSourcePaymentGateway,authorizeNetAimPaymentGateway,payflowPaymentGateway,payPalNvpPaymentGateway"
-                      NPASYSTEM_ID="100"/>
+                      SYSTEM_ID="100"/>
 
 
     <TSHOP SHOP_ID="10" CODE="SHOIP1" NAME="Gadget universe" DESCRIPTION="Gadget universe shop" FSPOINTER="gadget"
@@ -205,14 +205,14 @@
     <TSTOREEXCHANGERATE SHOPEXCHANGERATE_ID="2" FROMCURRENCY="EUR" TOCURRENCY="RUB" SHOP_ID="10" RATE="42.56"/>
 
 
-    <TSHOPURL STOREURL_ID="10" SHOP_ID="10" URL="gadget.npa.com"/>
-    <TSHOPURL STOREURL_ID="11" SHOP_ID="10" URL="www.gadget.npa.com"/>
+    <TSHOPURL STOREURL_ID="10" SHOP_ID="10" URL="gadget.yescart.org"/>
+    <TSHOPURL STOREURL_ID="11" SHOP_ID="10" URL="www.gadget.yescart.org"/>
 
-    <TSHOPURL STOREURL_ID="20" SHOP_ID="20" URL="mobile.npa.com"/>
-    <TSHOPURL STOREURL_ID="21" SHOP_ID="20" URL="www.mobile.npa.com"/>
+    <TSHOPURL STOREURL_ID="20" SHOP_ID="20" URL="mobile.yescart.org"/>
+    <TSHOPURL STOREURL_ID="21" SHOP_ID="20" URL="www.mobile.yescart.org"/>
 
-    <TSHOPURL STOREURL_ID="30" SHOP_ID="30" URL="game.npa.com"/>
-    <TSHOPURL STOREURL_ID="31" SHOP_ID="30" URL="www.game.npa.com"/>
+    <TSHOPURL STOREURL_ID="30" SHOP_ID="30" URL="game.yescart.org"/>
+    <TSHOPURL STOREURL_ID="31" SHOP_ID="30" URL="www.game.yescart.org"/>
 
     <TSHOPURL STOREURL_ID="32" SHOP_ID="40" URL="eddie.lives.somewhere.in.time"/>
     <TSHOPURL STOREURL_ID="33" SHOP_ID="50" URL="long.live.robots"/>
@@ -227,7 +227,7 @@
             />
     <!-- failover settings-->
     <TCATEGORYATTRVALUE ATTRVALUE_ID="20" CODE="CATEGORY_ITEMS_PER_PAGE" VAL="6,12,24" CATEGORY_ID="100"/>
-    <TCATEGORYATTRVALUE ATTRVALUE_ID="21" CODE="CATEGORY_IMAGE_RETREIVE_STRATEGY" VAL="RANDOM_PRODUCT"
+    <TCATEGORYATTRVALUE ATTRVALUE_ID="21" CODE="CATEGORY_IMAGE_RETRIEVE_STRATEGY" VAL="RANDOM_PRODUCT"
                         CATEGORY_ID="100"/>
 
     <TCATEGORY CATEGORY_ID="101" PARENT_ID="100" RANK="10" NAME="Big Boys Gadgets" DESCRIPTION="Big Boys Gadgets"
@@ -460,7 +460,7 @@
           URI="i-sobot"
           TITLE="I-Sobot robot"
           METAKEYWORDS="Sobot, Robotics, Mechanical toy, Beer"
-          METADESCRIPTION="Buy i-Sobot - the worlds smallest humanoid robot, 200 phrases, voice recognition and easy to use remote control; available at gadget.npa.com"/>
+          METADESCRIPTION="Buy i-Sobot - the worlds smallest humanoid robot, 200 phrases, voice recognition and easy to use remote control; available at gadget.yescart.org"/>
 
 
     <TPRODUCT PRODUCT_ID="10000"
@@ -492,7 +492,7 @@
           URI="i-sobot=pink"
           TITLE="I-Sobot pink robot"
           METAKEYWORDS="Sobot, Robotics, Mechanical toy, Vibrator"
-          METADESCRIPTION="Buy i-Sobot - the worlds smallest humanoid robot, 200 phrases, built-in vibrator with voice recognition and easy to use remote control; available at gadget.npa.com"/>
+          METADESCRIPTION="Buy i-Sobot - the worlds smallest humanoid robot, 200 phrases, built-in vibrator with voice recognition and easy to use remote control; available at gadget.yescart.org"/>
 
     <TSKU SKU_ID="10001" PRODUCT_ID="10000" CODE="SOBOT-PINK" NAME="I-Sobot Girls Edition"
           DESCRIPTION="Special I-Sobot edition, that can play poker, open beer and smoke" RANK="2" SEO_ID="10001"/>

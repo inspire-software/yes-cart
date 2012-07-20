@@ -41,8 +41,8 @@ public class ShopDAOTest extends AbstractTestDAO {
 
     private GenericDAO<Shop, Long> shopDao;
     private Set<Long> cleanupPks = new HashSet<Long>();
-    private static final String URL1 = "www.shop1.npa.com";
-    private static final String URL2 = "shop1.npa.com";
+    private static final String URL1 = "www.shop1.yescart.org";
+    private static final String URL2 = "shop1.yescart.org";
 
     @Before
     public void setUp() throws Exception {
@@ -63,8 +63,8 @@ public class ShopDAOTest extends AbstractTestDAO {
         shop.setCode("TESTSHOP");
         shop.setName("test shop");
         shop.setDescription("test shop description");
-        shop.setFspointer("/npa/data");
-        shop.setImageVaultFolder("/npa/data/imgvault");
+        shop.setFspointer("/yescart/data");
+        shop.setImageVaultFolder("/yescart/data/imgvault");
         ShopUrl url;
         url = new ShopUrlEntity();
         url.setUrl(URL1);
@@ -99,7 +99,7 @@ public class ShopDAOTest extends AbstractTestDAO {
      */
     public void resolveShopByURL() {
         List<Shop> shopList0 = shopDao.findAll();
-        List<Shop> shopList = shopDao.findByNamedQuery("SHOP.BY.URL", "gadget.npa.com");
+        List<Shop> shopList = shopDao.findByNamedQuery("SHOP.BY.URL", "gadget.yescart.org");
         assertEquals(1, shopList.size());
         shopList = shopDao.findByNamedQuery("SHOP.BY.URL", URL2);
         assertEquals(1, shopList.size());

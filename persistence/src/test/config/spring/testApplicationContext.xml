@@ -23,7 +23,7 @@
     <!-- HSQLDB Data Source -->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
         <property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
-        <property name="url" value="jdbc:hsqldb:mem:testnpadb"/>
+        <property name="url" value="jdbc:hsqldb:mem:testyesdb"/>
         <property name="username" value="sa"/>
         <property name="password" value=""/>
         <property name="initialSize" value="5"/>
