@@ -61,8 +61,6 @@
             <load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
             <source-path path-element="${FLEX_HOME}/frameworks"/>
             <locale>ru_RU</locale>
-<!--            <include-sources dir="resources/com/npa/org.yes.cart.shopmanager" includes="ShopManagerGlobal.as"/>-->
-<!--            <compiler.source-path path-element="scr/main/resources/com/npa/org.yes.cart.shopmanager"/>-->
         </mxmlc>
         <copy file="src/main/flex/ShopManagerApplication.swf" tofile="target/ru_RU/ShopManagerApplication.swf"/>
         <delete file="src/main/flex/ShopManagerApplication.swf"/>
