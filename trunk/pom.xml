@@ -30,8 +30,8 @@
         <module>persistence</module>
         <module>core-modules</module>
         <module>core</module>
-        <module>manager</module>
         <module>web</module>
+        <module>manager</module>
         <module>installer</module>
     </modules>
     <properties>
