@@ -42,6 +42,9 @@
         <spring-security.version>3.1.0.RELEASE</spring-security.version>
         <spring.version>3.1.1.RELEASE</spring.version>
         <lucene.config.index.dir>/yes-cart/lucene-index</lucene.config.index.dir>
+        <ehcache.version>2.5.1</ehcache.version>
+        <!--<ehcache.version>1.6.2</ehcache.version>-->
+
         <db.config.yes.hibernate.dialect>org.hibernate.dialect.DerbyDialect</db.config.yes.hibernate.dialect>
         <db.config.yes.login>app</db.config.yes.login>
         <db.config.yes.password>app</db.config.yes.password>
@@ -52,13 +55,13 @@
         <db.config.yespay.password>app</db.config.yespay.password>
         <db.config.yespay.driver>org.apache.derby.jdbc.ClientDriver</db.config.yespay.driver>
         <db.config.yespay.url>jdbc:derby://localhost:1527/yespay;create=true</db.config.yespay.url>
+
         <maven.compiler.source>1.5</maven.compiler.source>
         <maven.compiler.target>1.5</maven.compiler.target>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
-        <ehcache.version>2.5.1</ehcache.version>
-        <!--<ehcache.version>1.6.2</ehcache.version>-->
     </properties>
     <repositories>
 
@@ -194,17 +197,6 @@
                     <version>2.2.1</version>
                 </plugin>
                 <plugin>
-                    <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>2.7</version>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.yes</groupId>
-                            <artifactId>build-tools</artifactId>
-                            <version>1.0.0-SNAPSHOT</version>
-                        </dependency>
-                    </dependencies>
-                </plugin>
-                <plugin>
                     <artifactId>maven-clean-plugin</artifactId>
                     <version>2.4.1</version>
                 </plugin>
@@ -227,17 +219,6 @@
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>2.3.2</version>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-pmd-plugin</artifactId>
-                    <version>2.5</version>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.yes</groupId>
-                            <artifactId>build-tools</artifactId>
-                            <version>1.0.0-SNAPSHOT</version>
-                        </dependency>
-                    </dependencies>
                 </plugin>
                 <plugin>
                     <artifactId>maven-release-plugin</artifactId>
@@ -289,15 +270,15 @@
             <id>mysql</id>
             <properties>
                 <db.config.yes.hibernate.dialect>org.hibernate.dialect.MySQL5Dialect</db.config.yes.hibernate.dialect>
-                <db.config.yes.login>root</db.config.yes.login>
-                <db.config.yes.password></db.config.yes.password>
+                <db.config.yes.login>yes</db.config.yes.login>
+                <db.config.yes.password>y3$PaSs</db.config.yes.password>
                 <db.config.yes.driver>com.mysql.jdbc.Driver</db.config.yes.driver>
                 <db.config.yes.url>
                     <![CDATA[jdbc:mysql://localhost/yes?AutoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8]]></db.config.yes.url>
                 <db.config.yespay.hibernate.dialect>org.hibernate.dialect.MySQL5Dialect
                 </db.config.yespay.hibernate.dialect>
-                <db.config.yespay.login>root</db.config.yespay.login>
-                <db.config.yespay.password></db.config.yespay.password>
+                <db.config.yespay.login>yespay</db.config.yespay.login>
+                <db.config.yespay.password>y3$PaSs</db.config.yespay.password>
                 <db.config.yespay.driver>com.mysql.jdbc.Driver</db.config.yespay.driver>
                 <db.config.yespay.url>
                     <![CDATA[jdbc:mysql://localhost/yespay?AutoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8]]></db.config.yespay.url>
@@ -311,8 +292,7 @@
                 <db.config.yes.password>app</db.config.yes.password>
                 <db.config.yes.driver>org.apache.derby.jdbc.ClientDriver</db.config.yes.driver>
                 <db.config.yes.url>jdbc:derby://localhost:1527/yes;create=true</db.config.yes.url>
-                <db.config.yespay.hibernate.dialect>org.hibernate.dialect.DerbyDialect
-                </db.config.yespay.hibernate.dialect>
+                <db.config.yespay.hibernate.dialect>org.hibernate.dialect.DerbyDialect</db.config.yespay.hibernate.dialect>
                 <db.config.yespay.login>app</db.config.yespay.login>
                 <db.config.yespay.password>app</db.config.yespay.password>
                 <db.config.yespay.driver>org.apache.derby.jdbc.ClientDriver</db.config.yespay.driver>
