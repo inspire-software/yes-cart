@@ -18,12 +18,7 @@
 
 
 
-package com.npa.cnetxml
-/**
- * User: Gordon.Freeman (A) gordon-minus-freeman@ukr.net
- * Date: 9 серп 2010
- * Time: 16:51:30
- */
+package org.yes.cart.cnetxml
 
 public class Category {
 

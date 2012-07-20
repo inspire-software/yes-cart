@@ -18,16 +18,11 @@
 
 
 
-package com.npa.cnetxml;
+package org.yes.cart.cnetxml;
 
 import java.io.File
 import org.xml.sax.SAXParseException;
 
-/**
- * User: Gordon.Freeman (A) gordon-minus-freeman@ukr.net
- * Date: 9 серп 2010
- * Time: 17:03:44
- */
 public class DirectoryWalker {
 
 

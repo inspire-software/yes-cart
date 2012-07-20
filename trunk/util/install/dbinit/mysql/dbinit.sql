@@ -16,7 +16,7 @@ GRANT ALL ON yespay.* TO yespay@localhost IDENTIFIED BY 'y3$PaSs';
 USE yespay;
 
 SET foreign_key_checks = 0;
-SOURCE core-modules/core-module-payment-base/src/main/resources/sql/mysql/create-npa-pay.sql;
+SOURCE core-modules/core-module-payment-base/src/main/resources/sql/mysql/create-tables.sql;
 SOURCE core-modules/core-module-payment-base/src/main/resources/sql/payinitdata.sql;
 SOURCE core-modules/core-module-payment-capp/src/main/resources/sql/payinitdata.sql;
 SOURCE core-modules/core-module-payment-gcwm/src/main/resources/sql/payinitdata.sql;
