@@ -14,7 +14,7 @@
   ~    limitations under the License.
   -->
 
-<Context path="/webshopwicket" docBase="/npa/jewelry" crossContext="true" >
+<Context path="/yes-shop" crossContext="true" >
 
 <!--
     <Resource name="mail/Session"

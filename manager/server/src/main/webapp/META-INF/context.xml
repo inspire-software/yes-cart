@@ -14,7 +14,7 @@
   ~    limitations under the License.
   -->
 
-<Context path="/webshopwicket" docBase="/npa/jewelry" crossContext="true">
+<Context path="/yes-manager" crossContext="true">
 
 <!--    <Resource auth="Container" name="mail/Session" type="javax.mail.Session"/>-->
 
