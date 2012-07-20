@@ -1,14 +1,5 @@
-#summary One-sentence summary of this page.
+#summary Example storefront image.
 
-= Introduction =
+= Sample view of storefront =
 
-Add your content here.
 [http://yes-cart.googlecode.com/files/screen1.jpeg http://yes-cart.googlecode.com/files/screen1_tumb.jpeg]
-
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
