@@ -24,20 +24,20 @@
         <columnDelimeter>;</columnDelimeter>
         <textQualifier>&quot;</textQualifier>
         <ignoreFirstLine>true</ignoreFirstLine>
-        <fileNameMask>product_entity(.*).csv(.*)</fileNameMask>
+        <fileNameMask>productentity(.*).csv(.*)</fileNameMask>
         <fileEncoding>UTF-8</fileEncoding>
     </importFile>
 
     <importColumns class="list">
 
         <column-descriptor>
-            <columnIndex>7</columnIndex>
+            <columnIndex>5</columnIndex>
             <fieldType>FIELD</fieldType>
             <regExp>(.*)</regExp>
             <lookupQuery>
                 select p from ProductCategoryEntity p
                 where p.product.code = ?1
-            </lookupQuery>
+            </lookupQuery> <!-- TODO atm we can not pass second parameter to lookup query "and p.category.name = ?2" -->
         </column-descriptor>
 
         <!-- Category -->
@@ -50,16 +50,16 @@
         </column-descriptor>
 
 
-        <!-- Product sku code -->
+        <!-- Product -->
         <column-descriptor>
-            <columnIndex>7</columnIndex>
+            <columnIndex>5</columnIndex>
             <fieldType>FK_FIELD</fieldType>
             <name>product</name>
             <regExp>(.*)</regExp>
             <lookupQuery>select p from ProductEntity p where p.code = ?1</lookupQuery>
         </column-descriptor>
 
-        <!-- Producr rank in category -->
+        <!-- Product rank in category -->
         <column-descriptor>
             <columnIndex>-1</columnIndex>
             <fieldType>FIELD</fieldType>

@@ -23,7 +23,7 @@
         <columnDelimeter>;</columnDelimeter>
         <textQualifier>&quot;</textQualifier>
         <ignoreFirstLine>true</ignoreFirstLine>
-        <fileNameMask>product_entity(.*).csv(.*)</fileNameMask>
+        <fileNameMask>productentity(.*).csv(.*)</fileNameMask>
         <fileEncoding>UTF-8</fileEncoding>
     </importFile>
 
@@ -81,5 +81,5 @@
 
 
     </importColumns>
-    <importFolder>/npa/import</importFolder>
+    <importFolder>/yescart/import</importFolder>
 </import-descriptor>

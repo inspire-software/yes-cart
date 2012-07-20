@@ -1,6 +1,7 @@
 package org.yes.cart.report.impl;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.BufferedWriter;
@@ -37,8 +38,8 @@ public class ReportServiceImplTest  {
         reportDescriptor.setHsqlQuery("select  o.sku.code,  o.sku.name, o.sku.barCode, o.reserved, o.quantity  from SkuWarehouseEntity o\n" +
                 "                                          where o.warehouse.code = ?1\n" +
                 "                                          order by o.sku.code");
-        reportDescriptor.getLangXslfo().add(new ReportPair("en", "src/test/resources/xslfo/wh-remains-goods.xslfo"));
-        reportDescriptor.setReportId("warehouseRemainsGoods");
+        reportDescriptor.getLangXslfo().add(new ReportPair("en", "src/test/resources/xslfo/available-stock.xslfo"));
+        reportDescriptor.setReportId("reportAvailableStock");
 
         allReportToTestCreation.add(reportDescriptor);
     }
@@ -92,9 +93,9 @@ public class ReportServiceImplTest  {
 
         assertTrue(reportService.createReport("en", reportId, "shopTestReport.pdf"));
 
-        reportId =  "warehouseRemainsGoods";
+        reportId =  "reportAvailableStock";
 
-        assertTrue(reportService.createReport("en", reportId, "warehouseRemainsGoods.pdf"));
+        assertTrue(reportService.createReport("en", reportId, "reportAvailableStock.pdf"));
 
     }
 
@@ -104,15 +105,15 @@ public class ReportServiceImplTest  {
 
         if ("shopTestReport".equals(reportId))  {
             return shopData;
-        } else if ("warehouseRemainsGoods".equals(reportId))  {
-            return whRemainsGoodsData;
+        } else if ("reportAvailableStock".equals(reportId))  {
+            return availableStockData;
         }
 
         return null;
 
     }
 
-    String whRemainsGoodsData ="<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+    String availableStockData ="<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
             "<yes-report>\n" +
             "  <object-array>\n" +
             "    <string>LG656ET#UUG</string>\n" +
@@ -148,12 +149,12 @@ public class ReportServiceImplTest  {
             "    <shopUrl class=\"org.hibernate.collection.internal.PersistentSet\">\n" +
             "      <set>\n" +
             "        <shopurl>\n" +
-            "          <url>gadget.npa.com</url>\n" +
+            "          <url>gadget.yescart.org</url>\n" +
             "          <shop class=\"shop\" reference=\"../../../..\"/>\n" +
             "          <storeUrlId>10</storeUrlId>\n" +
             "        </shopurl>\n" +
             "        <shopurl>\n" +
-            "          <url>www.gadget.npa.com</url>\n" +
+            "          <url>www.gadget.yescart.org</url>\n" +
             "          <shop class=\"shop\" reference=\"../../../..\"/>\n" +
             "          <storeUrlId>11</storeUrlId>\n" +
             "        </shopurl>\n" +
@@ -546,12 +547,12 @@ public class ReportServiceImplTest  {
             "    <shopUrl class=\"org.hibernate.collection.internal.PersistentSet\">\n" +
             "      <set>\n" +
             "        <shopurl>\n" +
-            "          <url>www.mobile.npa.com</url>\n" +
+            "          <url>www.mobile.yescart.org</url>\n" +
             "          <shop class=\"shop\" reference=\"../../../..\"/>\n" +
             "          <storeUrlId>21</storeUrlId>\n" +
             "        </shopurl>\n" +
             "        <shopurl>\n" +
-            "          <url>mobile.npa.com</url>\n" +
+            "          <url>mobile.yescart.org</url>\n" +
             "          <shop class=\"shop\" reference=\"../../../..\"/>\n" +
             "          <storeUrlId>20</storeUrlId>\n" +
             "        </shopurl>\n" +
@@ -634,12 +635,12 @@ public class ReportServiceImplTest  {
             "    <shopUrl class=\"org.hibernate.collection.internal.PersistentSet\">\n" +
             "      <set>\n" +
             "        <shopurl>\n" +
-            "          <url>www.game.npa.com</url>\n" +
+            "          <url>www.game.yescart.org</url>\n" +
             "          <shop class=\"shop\" reference=\"../../../..\"/>\n" +
             "          <storeUrlId>31</storeUrlId>\n" +
             "        </shopurl>\n" +
             "        <shopurl>\n" +
-            "          <url>game.npa.com</url>\n" +
+            "          <url>game.yescart.org</url>\n" +
             "          <shop class=\"shop\" reference=\"../../../..\"/>\n" +
             "          <storeUrlId>30</storeUrlId>\n" +
             "        </shopurl>\n" +

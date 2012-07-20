@@ -22,7 +22,7 @@
        xmlns:flex="http://www.springframework.org/schema/flex"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:security="http://www.springframework.org/schema/security"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 http://www.springframework.org/schema/flex http://www.springframework.org/schema/flex/spring-flex-1.5.xsd
 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
@@ -494,17 +494,17 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
                 <value>brandimport.xml</value>
                 <value>attribute.xml</value>  <!--product attributes only, sku and rest attributes import not implemented-->
                 <value>attributeviewgroup.xml</value>  <!-- group of attributes -->
-                <value>product_type.xml</value>  <!-- product types -->
+                <value>producttype.xml</value>  <!-- product types -->
                 <value>category.xml</value>
                 <value>shopcategory.xml</value>
                 <value>productypeattributeviewgroup.xml</value>  <!-- attributes view groups for product types -->
                 <value>producttypeattr.xml</value>  <!-- attribute  for product types -->
                 <value>product.xml</value>  <!-- products and description -->
-                <value>product_sku.xml</value>  <!-- product sku -->
+                <value>productsku.xml</value>  <!-- product sku -->
                 <value>warehouse.xml</value>
                 <value>skuquantity.xml</value>  <!--sku qty on warehouse-->
                 <value>skuprice.xml</value>  <!--sku prices-->
-                <value>product_category.xml</value>  <!-- distribution products by categories -->
+                <value>productcategory.xml</value>  <!-- distribution products by categories -->
 
             </list>
         </constructor-arg>
@@ -528,14 +528,14 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
 
 
     <bean id="remoteReportService" class="org.yes.cart.report.impl.ReportServiceImpl">
-        <constructor-arg ref="genericDao"/>
-        <constructor-arg>
+        <constructor-arg ref="genericDao" index="0"/>
+        <constructor-arg index="1">
             <list>
-                <ref bean="reportShopInformation"/>
-                <ref bean="warehouseRemainsGoods"/>
+                <ref bean="reportShopSummaryInfo"/>
+                <ref bean="reportAvailableStock"/>
             </list>
         </constructor-arg>
-        <constructor-arg value="report"/>
+        <constructor-arg value="report" index="2"/>
 
         <flex:remoting-destination/>
         <security:intercept-methods>
