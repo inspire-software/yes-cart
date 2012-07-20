@@ -1,8 +1,8 @@
-#summary Just set of links, that has useful information.
+#summary Couple of links that have useful information.
 
 = Set of tech articles =
 
-http://habrahabr.ru/post/22471/  right way to compose html email
+http://habrahabr.ru/post/22471/  the right way to compose html email
 http://groovy.codehaus.org/Embedding+a+Groovy+Console+in+a+Java+Server+Application  groovy shell in web app
 http://code.google.com/p/groovy-flex-console/ groovyh flex console 
 
