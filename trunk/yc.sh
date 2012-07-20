@@ -38,11 +38,7 @@ add_mvn_extra_dep() {
     echo "================================================";
     echo "Adding extra dependencies...";
 
-    cd ./util/lib3rdparty/authozize.net
-    $M2_HOME/bin/mvn install:install-file -DgroupId=net.authorize -DartifactId=authorize-client -Dversion=1.4.2 -Dpackaging=jar -Dfile=anet-java-sdk-1.4.2.jar
-    cd ../../../
-
-    cd ./util/lib3rdparty/authozize.net
+    cd ./util/lib3rdparty/authorize.net
     $M2_HOME/bin/mvn install:install-file -DgroupId=net.authorize -DartifactId=authorize-client -Dversion=1.4.2 -Dpackaging=jar -Dfile=anet-java-sdk-1.4.2.jar
     cd ../../../
 

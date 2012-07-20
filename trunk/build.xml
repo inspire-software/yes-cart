@@ -76,7 +76,7 @@
     </target>
 
     <target name="setup" depends="init" description="'Setup development environment'">
-        <exec-mvn dir="./util/lib3rdparty/authozize.net"
+        <exec-mvn dir="./util/lib3rdparty/authorize.net"
                   arg="install:install-file -DgroupId=net.authorize -DartifactId=authorize-client -Dversion=1.4.2 -Dpackaging=jar -Dfile=anet-java-sdk-1.4.2.jar"/>
         <exec-mvn dir="./util/lib3rdparty/cybersource"
                   arg="install:install-file -DgroupId=com.cybersource -DartifactId=cybersource-security -Dversion=1.5 -Dpackaging=jar -Dfile=cybssecurity.jar"/>
