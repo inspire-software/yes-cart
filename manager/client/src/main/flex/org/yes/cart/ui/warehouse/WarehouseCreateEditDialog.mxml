@@ -16,13 +16,13 @@
   -->
 
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
-				title="@Resource(bundle='WarehouseManagementPanel',key='editWarehouseDialog')"
+                title="@Resource(bundle='WarehouseManagementPanel',key='editWarehouseDialog')"
                 showCloseButton="true" close="PopUpManager.removePopUp(this)"
                 creationComplete="init()">
 
     <mx:Boolean id="newWarehouseFlag">false</mx:Boolean>
 
-    <mx:RemoteObject showBusyCursor="true"  id="remoteCountryService"
+    <mx:RemoteObject showBusyCursor="true" id="remoteCountryService"
                      destination="remoteCountryService"
                      channelSet="{ShopManagerGlobal.instance.channelSet}">
 
@@ -33,7 +33,7 @@
 
     </mx:RemoteObject>
 
-    <mx:RemoteObject showBusyCursor="true"  id="remoteStateService"
+    <mx:RemoteObject showBusyCursor="true" id="remoteStateService"
                      destination="remoteStateService"
                      channelSet="{ShopManagerGlobal.instance.channelSet}">
 
@@ -44,18 +44,17 @@
     </mx:RemoteObject>
 
 
-
     <mx:Form>
-        <mx:FormItem  width="100%" label="@Resource(bundle='WarehouseManagementPanel',key='code')">
-            <mx:TextInput   width="160" id="code" enabled="{newWarehouseFlag}"/>
+        <mx:FormItem width="100%" label="@Resource(bundle='WarehouseManagementPanel',key='code')">
+            <mx:TextInput width="160" id="code" enabled="{newWarehouseFlag}" change="onFocusLost(event);"/>
         </mx:FormItem>
-        <mx:FormItem  width="100%" label="@Resource(bundle='WarehouseManagementPanel',key='name')">
-            <mx:TextInput   width="160" id="wName"/>
+        <mx:FormItem width="100%" label="@Resource(bundle='WarehouseManagementPanel',key='name')">
+            <mx:TextInput width="160" id="wName" change="onFocusLost(event);"/>
         </mx:FormItem>
-        <mx:FormItem  width="100%" label="@Resource(bundle='WarehouseManagementPanel',key='description')">
-            <mx:TextArea   width="160" id="description"/>
+        <mx:FormItem width="100%" label="@Resource(bundle='WarehouseManagementPanel',key='description')">
+            <mx:TextArea width="160" id="description" change="onFocusLost(event);"/>
         </mx:FormItem>
-        <mx:FormItem  width="100%" label="@Resource(bundle='WarehouseManagementPanel',key='country')">
+        <mx:FormItem width="100%" label="@Resource(bundle='WarehouseManagementPanel',key='country')">
             <mx:ComboBox id="countryComboBox"
                          change="countryChangeEvt(event)"
                          width="160"
@@ -63,7 +62,7 @@
                          prompt="@Resource(bundle='WarehouseManagementPanel',key='selectCountry')"
                     />
         </mx:FormItem>
-        <mx:FormItem  width="100%" label="@Resource(bundle='WarehouseManagementPanel',key='state')">
+        <mx:FormItem width="100%" label="@Resource(bundle='WarehouseManagementPanel',key='state')">
             <mx:ComboBox id="stateComboBox"
                          change="stateChangeEvt(event)"
                          width="160"
@@ -72,26 +71,65 @@
 
                     />
         </mx:FormItem>
-        <mx:FormItem  width="100%" label="@Resource(bundle='WarehouseManagementPanel',key='city')">
-            <mx:TextArea   width="160" id="city"/>
+        <mx:FormItem width="100%" label="@Resource(bundle='WarehouseManagementPanel',key='city')">
+            <mx:TextArea width="160" id="city" change="onFocusLost(event);"/>
         </mx:FormItem>
-        <mx:FormItem  width="100%" label="@Resource(bundle='WarehouseManagementPanel',key='postcode')">
-            <mx:TextArea   width="160" id="postcode"/>
+        <mx:FormItem width="100%" label="@Resource(bundle='WarehouseManagementPanel',key='postcode')">
+            <mx:TextArea width="160" id="postcode" change="onFocusLost(event);"/>
         </mx:FormItem>
 
     </mx:Form>
     <mx:ControlBar horizontalAlign="right">
-        <mx:Button  id="saveBtn" label="@Resource(bundle='ShopManagerApplication',key='save')"
+        <mx:Button id="saveBtn" label="@Resource(bundle='ShopManagerApplication',key='save')"
                    width="94"/>
         <mx:Button id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
                    click="PopUpManager.removePopUp(this)" width="94"/>
     </mx:ControlBar>
 
+    <mx:Array id="validatorArr">
+
+        <mx:StringValidator id="codeValidator"
+                            source="{code}" property="text"
+                            minLength="3" maxLength="255"
+                            required="true"
+                            requiredFieldError="@Resource(bundle='WarehouseManagementPanel',key='inputWarehouseCode')"
+                            trigger="{code}" triggerEvent="focusOut"
+                />
+
+        <mx:StringValidator id="nameValidator"
+                            source="{wName}" property="text"
+                            minLength="3" maxLength="64"
+                            required="true"
+                            requiredFieldError="@Resource(bundle='WarehouseManagementPanel',key='inputWarehouseName')"
+                            trigger="{wName}" triggerEvent="focusOut"
+                />
+
+        <mx:NumberValidator id="stateComboBoxValidator"
+                            source="{stateComboBox}" property="selectedIndex"
+                            minValue="0"
+                            required="true"
+                            lowerThanMinError="@Resource(bundle='WarehouseManagementPanel',key='selectState')"
+                />
+
+        <mx:NumberValidator id="countryComboBoxValidator"
+                            source="{countryComboBox}" property="selectedIndex"
+                            minValue="0"
+                            required="true"
+                            lowerThanMinError="@Resource(bundle='WarehouseManagementPanel',key='selectCountry')"
+                />
+    </mx:Array>
+
 
     <mx:Script>
        <![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import mx.controls.Alert;
+        import mx.events.ValidationResultEvent;
+        import mx.rpc.events.AbstractEvent;
         import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
+        import mx.validators.Validator;
 
         import org.yes.cart.impl.CountryDTOImpl;
         import org.yes.cart.impl.StateDTOImpl;
@@ -118,14 +156,26 @@
         }
 
         private function countryChangeEvt(event:Event):void {
+
             _warehouseDTOImpl.countryCode = event.currentTarget.selectedItem.countryCode;
             _warehouseDTOImpl.stateCode = null;
             stateComboBox.selectedIndex = -1;
             remoteStateService.findByCountry(_warehouseDTOImpl.countryCode);
+            onFocusLost(null);
         }
 
         private function stateChangeEvt(event:Event):void {
             _warehouseDTOImpl.stateCode = event.currentTarget.selectedItem.stateCode;
+            onFocusLost(null);
+        }
+
+
+        /**
+         * Validate warehouse create form.
+         * @param evt
+         */
+        private function onFocusLost(evt:Event):void {
+            saveBtn.enabled = Validator.validateAll(validatorArr).length == 0;
         }
 
 
@@ -133,10 +183,12 @@
             if (newWarehouseFlag) {
                 this.title = resourceManager.getString('WarehouseManagementPanel', 'newWarehouseDialog');
                 saveBtn.label = resourceManager.getString('WarehouseManagementPanel', 'create');
+                saveBtn.enabled = false;
             } else {
                 this.title = resourceManager.getString('WarehouseManagementPanel', 'editWarehouse');
                 saveBtn.label = resourceManager.getString('WarehouseManagementPanel', 'update');
             }
+
 
             BindingUtils.bindProperty(code, "text", _warehouseDTOImpl, "code");
             BindingUtils.bindProperty(wName, "text", _warehouseDTOImpl, "name");
@@ -156,6 +208,7 @@
 
 
         }
+
 
         /**
          * Create or edit warehouse.
