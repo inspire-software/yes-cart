@@ -97,7 +97,7 @@ public class TestShopServiceImpl extends BaseCoreDBTestCase {
         shopService.updateAttributeValue(shop.getShopId(), AttributeNamesKeys.SUPPORTED_CURRENCIES, "QWE,ZXC");
         shop = shopService.getShopByDomainName("eddie.lives.somewhere.in.time");
         shopService.updateAttributeValue(shop.getShopId(), AttributeNamesKeys.SUPPORTED_CURRENCIES, "ASD,USD,QWE,UAH");
-        shop = shopService.getShopByDomainName("gadget.npa.com");
+        shop = shopService.getShopByDomainName("gadget.yescart.org");
         shopService.updateAttributeValue(shop.getShopId(), AttributeNamesKeys.SUPPORTED_CURRENCIES, "");
         Collection<String> currencies = shopService.getAllSupportedCurrenciesByShops();
         assertEquals(5, currencies.size());

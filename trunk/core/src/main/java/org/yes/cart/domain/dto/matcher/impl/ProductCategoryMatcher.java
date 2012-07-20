@@ -14,24 +14,25 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.domain.dto.impl;
+package org.yes.cart.domain.dto.matcher.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.DtoToEntityMatcher;
-import org.yes.cart.domain.dto.AttrValueProductDTO;
-import org.yes.cart.domain.entity.AttrValueProduct;
+import org.yes.cart.domain.dto.ProductCategoryDTO;
+import org.yes.cart.domain.entity.ProductCategory;
 
 /**
- * User: Igor Azarny iazarny@yahoo.com
+* User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class AttrValueProductMatcher implements DtoToEntityMatcher<AttrValueProductDTO, AttrValueProduct> {
+public class ProductCategoryMatcher  implements DtoToEntityMatcher<ProductCategoryDTO, ProductCategory> {
+
 
     /** {@inheritDoc} */
-    public boolean match(final AttrValueProductDTO attrValueProductDTO, final AttrValueProduct attrValueProduct) {
-        return attrValueProductDTO != null
-                &&
-                attrValueProduct != null
-                && attrValueProduct.getAttrvalueId() == attrValueProductDTO.getAttrvalueId();
+    public boolean match(final ProductCategoryDTO productCategoryDTO, final ProductCategory productCategory) {
+        return (productCategoryDTO != null)
+                && (productCategory != null)
+                && (productCategory.getProductCategoryId() == productCategoryDTO.getProductCategoryId());
     }
+    
 }

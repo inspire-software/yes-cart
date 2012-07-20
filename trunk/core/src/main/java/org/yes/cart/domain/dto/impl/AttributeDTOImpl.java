@@ -233,4 +233,25 @@ public class AttributeDTOImpl  implements AttributeDTO {
     public void setRegexp(final String regexp) {
         this.regexp = regexp;
     }
+
+    @Override
+    public String toString() {
+        return "AttributeDTOImpl{" +
+                "attributeId=" + attributeId +
+                ", code='" + code + '\'' +
+                ", mandatory=" + mandatory +
+                ", val='" + val + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", etypeId=" + etypeId +
+                ", etypeName='" + etypeName + '\'' +
+                ", attributegroupId=" + attributegroupId +
+                ", allowduplicate=" + allowduplicate +
+                ", allowfailover=" + allowfailover +
+                ", regexp='" + regexp + '\'' +
+                ", validationFailedMessage='" + validationFailedMessage + '\'' +
+                ", rank=" + rank +
+                ", choiceData='" + choiceData + '\'' +
+                '}';
+    }
 }

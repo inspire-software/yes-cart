@@ -23,6 +23,8 @@ import org.yes.cart.domain.dto.AttrValueProductSkuDTO;
 import org.yes.cart.domain.dto.ProductSkuDTO;
 import org.yes.cart.domain.dto.SeoDTO;
 import org.yes.cart.domain.dto.SkuPriceDTO;
+import org.yes.cart.domain.dto.matcher.impl.AttrValueProductSkuMatcher;
+import org.yes.cart.domain.dto.matcher.impl.SkuPriceMatcher;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.entity.impl.AttrValueEntityProductSku;
 
@@ -268,5 +270,21 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
         result = 31 * result + rank;
         result = 31 * result + (barCode != null ? barCode.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductSkuDTOImpl{" +
+                "skuId=" + skuId +
+                ", code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", productId=" + productId +
+                ", rank=" + rank +
+                ", barCode='" + barCode + '\'' +
+                ", attribute=" + attribute +
+                ", seoDTO=" + seoDTO +
+                ", price=" + price +
+                '}';
     }
 }

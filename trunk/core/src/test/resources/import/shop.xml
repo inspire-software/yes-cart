@@ -22,7 +22,7 @@
         <columnDelimeter>;</columnDelimeter>
         <textQualifier>&quot;</textQualifier>
         <ignoreFirstLine>true</ignoreFirstLine>
-        <fileNameMask>shop.csv$</fileNameMask>
+        <fileNameMask>shop.csv</fileNameMask>
         <fileEncoding>UTF-8</fileEncoding>
     </importFile>
 

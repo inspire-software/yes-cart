@@ -63,7 +63,7 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetPriceNavigationRecords() {
-        Shop shop = shopService.getShopByDomainName("www.gadget.npa.com");
+        Shop shop = shopService.getShopByDomainName("www.gadget.yescart.org");
         GenericDAO<Category, Long> categoryDAO = (GenericDAO<Category, Long>) ctx().getBean(DaoServiceBeanKeys.CATEGORY_DAO);
         Category cat = categoryDAO.findById(129L); // this category hold navigation by price tiers
         assertNotNull(cat);
@@ -95,7 +95,7 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
     //@Ignore("java.lang.AssertionError")
     @Test
     public void getMinimalRegularPriceTest() {
-        Shop shop = shopService.getShopByDomainName("www.gadget.npa.com");
+        Shop shop = shopService.getShopByDomainName("www.gadget.yescart.org");
         Product product = productService.getProductById(10000L);
         assertNotNull(product);
         assertEquals(4, product.getSku().size());
@@ -121,7 +121,7 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetSkuPricesFilteredByQuantity() {
-        Shop shop = shopService.getShopByDomainName("www.gadget.npa.com");
+        Shop shop = shopService.getShopByDomainName("www.gadget.yescart.org");
         Product product = productService.getProductById(10000L);
         List<SkuPrice> skus = priceService.getSkuPriceFilteredByShop(product.getSku(), shop);
         skus = priceService.getSkuPriceFilteredByCurrency(
@@ -141,7 +141,7 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
      */
     @Test
     public void testGetMinimalRegularPriceForNosupportedCurrencyTest() {
-        Shop shop = shopService.getShopByDomainName("www.gadget.npa.com");
+        Shop shop = shopService.getShopByDomainName("www.gadget.yescart.org");
         Product product = productService.getProductById(10000L);
         assertNotNull(product);
         assertEquals(4, product.getSku().size());
@@ -153,7 +153,7 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testGetMinimalRegularPriceForsupportedCurrencyTest() {
         Product product = productService.getProductById(10000L);
-        Shop shop = shopService.getShopByDomainName("www.gadget.npa.com");
+        Shop shop = shopService.getShopByDomainName("www.gadget.yescart.org");
         assertNotNull(product);
         assertEquals(4, product.getSku().size());
         SkuPrice skuPrice = priceService.getMinimalRegularPrice(product.getSku(), shop, "UAH", BigDecimal.ONE);

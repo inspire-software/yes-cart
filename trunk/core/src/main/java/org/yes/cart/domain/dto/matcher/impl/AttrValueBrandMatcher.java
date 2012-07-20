@@ -14,24 +14,25 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.domain.dto.impl;
+package org.yes.cart.domain.dto.matcher.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.DtoToEntityMatcher;
-import org.yes.cart.domain.dto.AttrValueCustomerDTO;
-import org.yes.cart.domain.entity.AttrValueCustomer;
+import org.yes.cart.domain.dto.AttrValueBrandDTO;
+import org.yes.cart.domain.entity.AttrValueBrand;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class AttrValueCustomerMatcher implements DtoToEntityMatcher<AttrValueCustomerDTO, AttrValueCustomer> {
+public class AttrValueBrandMatcher implements DtoToEntityMatcher<AttrValueBrandDTO, AttrValueBrand> {
 
-
-    /** {@inheritDoc} */
-    public boolean match(final AttrValueCustomerDTO attrValueCustomerDTO, final AttrValueCustomer attrValueCustomer) {
-        return attrValueCustomerDTO != null
-                && attrValueCustomer != null
-                && (attrValueCustomer.getAttrvalueId() == attrValueCustomerDTO.getAttrvalueId());
+    /** {@inheritDoc}*/
+    public boolean match(final AttrValueBrandDTO attrValueBrandDTO, final AttrValueBrand attrValueBrand) {
+        return attrValueBrandDTO != null
+                &&
+               attrValueBrand != null
+                &&
+               attrValueBrandDTO.getAttrvalueId() == attrValueBrand.getAttrvalueId();
     }
 }

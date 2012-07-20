@@ -21,6 +21,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoCollection;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.AttrValueCustomerDTO;
 import org.yes.cart.domain.dto.CustomerDTO;
+import org.yes.cart.domain.dto.matcher.impl.AttrValueCustomerMatcher;
 import org.yes.cart.domain.entity.impl.AttrValueEntityCustomer;
 
 import java.util.HashSet;
@@ -126,5 +127,17 @@ public class CustomerDTOImpl implements CustomerDTO {
     /** {@inheritDoc} */
     public void setAttribute(final Set<AttrValueCustomerDTO> attribute) {
         this.attribute = attribute;
+    }
+
+    @Override
+    public String toString() {
+        return "CustomerDTOImpl{" +
+                "customerId=" + customerId +
+                ", email='" + email + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", middlename='" + middlename + '\'' +
+                ", attribute=" + attribute +
+                '}';
     }
 }

@@ -20,6 +20,7 @@ import org.junit.Before;
 import org.junit.After;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.Resource;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.bulkimport.csv.CsvFileReader;
 import org.yes.cart.bulkimport.service.BulkImportService;
@@ -44,8 +45,6 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
     BulkImportService bulkImportService = null;
 
-    private static ApplicationContext sharedContext;
-
 
     @Before
     public void setUp() throws Exception {
@@ -53,6 +52,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
         if (bulkImportService == null) {
             bulkImportService = (BulkImportService) createContext().getBean("bulkImportServiceImpl");
         }
+
 
     }
 
@@ -83,7 +83,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
         CsvFileReader csvFileReader = new CsvFileReaderImpl();
 
         csvFileReader.open(
-                "src/test/resources/import/product_entity.csv",
+                "src/test/resources/import/productentity.csv",
                 ';',
                 '"',
                 "UTF-8",
@@ -111,32 +111,32 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
             BulkImportService bulkImportService = null;
 
-            Date dt = new Date();
+            long dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/brandimport.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
-            System.out.println("brands " + (new Date().getTime() - dt.getTime()));
+            System.out.println("brands in " + (System.currentTimeMillis() - dt) + "millis");
 
 
-            dt = new Date();
+            dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/attribute.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
-            System.out.println("attribute " + (new Date().getTime() - dt.getTime()));
+            System.out.println("attribute  in " + (System.currentTimeMillis() - dt) + "millis");
 
             /*dt = new Date();
             bulkImportService = getBulkImportService("src/test/resources/import/attributeviewgroup.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
             System.out.println("attributeviewgroup.xml " + (new Date().getTime() - dt.getTime())); */
 
-            dt = new Date();
-            bulkImportService = getBulkImportService("src/test/resources/import/product_type.xml");
+            dt = System.currentTimeMillis();
+            bulkImportService = getBulkImportService("src/test/resources/import/producttype.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
-            System.out.println("product_type.xml " + (new Date().getTime() - dt.getTime()));
+            System.out.println("producttype in " + (System.currentTimeMillis() - dt) + "millis");
 
 
-            dt = new Date();
+            dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/category.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
-            System.out.println("category " + (new Date().getTime() - dt.getTime()));
+            System.out.println("category in " + (System.currentTimeMillis() - dt) + "millis");
 
 
             ResultSet rs = getConnection().getConnection().createStatement().executeQuery ("select * from TPRODUCTTYPE where name = 'ноутбуки'   ");
@@ -148,20 +148,20 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.next(); // the product type was imported
             rs.close();
 
-           dt = new Date();
+           dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/shopcategory.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
-            System.out.println("shopcategory " + (new Date().getTime() - dt.getTime()));
+            System.out.println("shopcategory in " + (System.currentTimeMillis() - dt) + "millis");
 
-            dt = new Date();
+            dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/availability.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
-            System.out.println("availability " + (new Date().getTime() - dt.getTime()));
+            System.out.println("availability in " + (System.currentTimeMillis() - dt) + "millis");
 
-            dt = new Date();
+            dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/productypeattributeviewgroup.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
-            System.out.println("productypeattributeviewgroup.xml " + (new Date().getTime() - dt.getTime()));
+            System.out.println("productypeattributeviewgroup in " + (System.currentTimeMillis() - dt) + "millis");
 
              rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TPRODTYPEATTRVIEWGROUP  ");
             rs.next();
@@ -172,45 +172,45 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
 
 
-            dt = new Date();
+            dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/producttypeattr.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
-            System.out.println("producttypeattr.xml " + (new Date().getTime() - dt.getTime()));
+            System.out.println("producttypeattr in " + (System.currentTimeMillis() - dt) + "millis");
 
 
-            dt = new Date();
+            dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/product.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
-            System.out.println("product.xml " + (new Date().getTime() - dt.getTime()));
+            System.out.println("product in " + (System.currentTimeMillis() - dt) + "millis");
 
-            dt = new Date();
-            bulkImportService = getBulkImportService("src/test/resources/import/product_sku.xml");
+            dt = System.currentTimeMillis();
+            bulkImportService = getBulkImportService("src/test/resources/import/productsku.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
-            System.out.println("attributeviewgroup.xml " + (new Date().getTime() - dt.getTime()));
+            System.out.println("attributeviewgroup in " + (System.currentTimeMillis() - dt) + "millis");
 
 
 
 
-            dt = new Date();
+            dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/warehouse.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
-            System.out.println("warehouse.xml " + (new Date().getTime() - dt.getTime()));
+            System.out.println("warehouse in " + (System.currentTimeMillis() - dt) + "millis");
 
 
-            dt = new Date();
+            dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/skuquantity.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
-            System.out.println("skuquantity.xml " + (new Date().getTime() - dt.getTime()));
+            System.out.println("skuquantity in " + (System.currentTimeMillis() - dt) + "millis");
 
-            dt = new Date();
+            dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/skuprice.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
-            System.out.println("skuprice.xml " + (new Date().getTime() - dt.getTime()));
+            System.out.println("skuprice in " + (System.currentTimeMillis() - dt) + "millis");
 
-            dt = new Date();
-            bulkImportService = getBulkImportService("src/test/resources/import/product_category.xml");
+            dt = System.currentTimeMillis();
+            bulkImportService = getBulkImportService("src/test/resources/import/productcategory.xml");
             bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
-            System.out.println("product_category.xml " + (new Date().getTime() - dt.getTime()));
+            System.out.println("productcategory in in " + (System.currentTimeMillis() - dt) + "millis");
 
             //System.out.println(stringBuilder.toString());
 

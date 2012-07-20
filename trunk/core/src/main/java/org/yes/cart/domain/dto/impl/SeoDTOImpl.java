@@ -99,4 +99,15 @@ public class SeoDTOImpl implements SeoDTO {
     public void setMetadescription(final String metadescription) {
         this.metadescription = metadescription;
     }
+
+    @Override
+    public String toString() {
+        return "SeoDTOImpl{" +
+                "seoId=" + seoId +
+                ", uri='" + uri + '\'' +
+                ", title='" + title + '\'' +
+                ", metakeywords='" + metakeywords + '\'' +
+                ", metadescription='" + metadescription + '\'' +
+                '}';
+    }
 }

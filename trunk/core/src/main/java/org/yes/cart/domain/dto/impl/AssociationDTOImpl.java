@@ -84,4 +84,14 @@ public class AssociationDTOImpl implements AssociationDTO {
     public void setDescription(final String description) {
         this.description = description;
     }
+
+    @Override
+    public String toString() {
+        return "AssociationDTOImpl{" +
+                "associationId=" + associationId +
+                ", code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

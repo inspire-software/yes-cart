@@ -106,4 +106,15 @@ public class ProdTypeAttributeViewGroupDTOImpl  implements ProdTypeAttributeView
     public void setName(final String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "ProdTypeAttributeViewGroupDTOImpl{" +
+                "prodTypeAttributeViewGroupId=" + prodTypeAttributeViewGroupId +
+                ", producttypeId=" + producttypeId +
+                ", attrCodeList='" + attrCodeList + '\'' +
+                ", rank=" + rank +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

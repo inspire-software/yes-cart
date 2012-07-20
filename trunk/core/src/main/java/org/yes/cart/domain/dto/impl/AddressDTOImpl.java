@@ -219,4 +219,24 @@ public class AddressDTOImpl implements AddressDTO {
     public void setMiddlename(final String middlename) {
         this.middlename = middlename;
     }
+
+    @Override
+    public String toString() {
+        return "AddressDTOImpl{" +
+                "addressId=" + addressId +
+                ", city='" + city + '\'' +
+                ", postcode='" + postcode + '\'' +
+                ", addrline1='" + addrline1 + '\'' +
+                ", addrline2='" + addrline2 + '\'' +
+                ", addressType='" + addressType + '\'' +
+                ", countryCode='" + countryCode + '\'' +
+                ", stateCode='" + stateCode + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", middlename='" + middlename + '\'' +
+                ", defaultAddress=" + defaultAddress +
+                ", phoneList='" + phoneList + '\'' +
+                ", customerId=" + customerId +
+                '}';
+    }
 }

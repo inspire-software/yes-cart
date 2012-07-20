@@ -90,4 +90,14 @@ public class AttrValueProductSkuDTOImpl implements AttrValueProductSkuDTO {
     public void setSkuId(final long skuId) {
         this.skuId = skuId;
     }
+
+    @Override
+    public String toString() {
+        return "AttrValueProductSkuDTOImpl{" +
+                "attrvalueId=" + attrvalueId +
+                ", val='" + val + '\'' +
+                ", attributeDTO=" + attributeDTO +
+                ", skuId=" + skuId +
+                '}';
+    }
 }

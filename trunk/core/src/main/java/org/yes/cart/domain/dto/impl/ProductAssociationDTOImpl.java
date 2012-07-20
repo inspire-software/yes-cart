@@ -154,4 +154,18 @@ public class ProductAssociationDTOImpl implements ProductAssociationDTO {
     public void setAssociatedDescription(final String associatedDescription) {
         this.associatedDescription = associatedDescription;
     }
+
+    @Override
+    public String toString() {
+        return "ProductAssociationDTOImpl{" +
+                "productassociationId=" + productassociationId +
+                ", rank=" + rank +
+                ", associationId=" + associationId +
+                ", productId=" + productId +
+                ", associatedProductId=" + associatedProductId +
+                ", associatedCode='" + associatedCode + '\'' +
+                ", associatedName='" + associatedName + '\'' +
+                ", associatedDescription='" + associatedDescription + '\'' +
+                '}';
+    }
 }

@@ -112,4 +112,16 @@ public class CustomerWishListDTOImpl implements CustomerWishListDTO {
     public void setCustomerId(final long customerId) {
         this.customerId = customerId;
     }
+
+    @Override
+    public String toString() {
+        return "CustomerWishListDTOImpl{" +
+                "customerwishlistId=" + customerwishlistId +
+                ", skuId=" + skuId +
+                ", skuCode='" + skuCode + '\'' +
+                ", skuName='" + skuName + '\'' +
+                ", wlType='" + wlType + '\'' +
+                ", customerId=" + customerId +
+                '}';
+    }
 }

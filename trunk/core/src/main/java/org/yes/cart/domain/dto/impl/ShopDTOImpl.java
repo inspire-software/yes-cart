@@ -110,4 +110,16 @@ public class ShopDTOImpl implements ShopDTO  {
     public void setImageVaultFolder(final String imageVaultFolder) {
         this.imageVaultFolder = imageVaultFolder;
     }
+
+    @Override
+    public String toString() {
+        return "ShopDTOImpl{" +
+                "code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", fspointer='" + fspointer + '\'' +
+                ", imageVaultFolder='" + imageVaultFolder + '\'' +
+                ", shopId=" + shopId +
+                '}';
+    }
 }

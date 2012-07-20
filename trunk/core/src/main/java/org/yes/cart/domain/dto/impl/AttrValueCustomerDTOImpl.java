@@ -91,5 +91,15 @@ public class AttrValueCustomerDTOImpl implements AttrValueCustomerDTO {
     public void setCustomerId(final long customerId) {
         this.customerId = customerId;
     }
+
+    @Override
+    public String toString() {
+        return "AttrValueCustomerDTOImpl{" +
+                "attrvalueId=" + attrvalueId +
+                ", val='" + val + '\'' +
+                ", attributeDTO=" + attributeDTO +
+                ", customerId=" + customerId +
+                '}';
+    }
 }
 

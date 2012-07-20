@@ -99,4 +99,15 @@ public class ShopWarehouseDTOImpl implements ShopWarehouseDTO {
     public void setRank(final int rank) {
         this.rank = rank;
     }
+
+    @Override
+    public String toString() {
+        return "ShopWarehouseDTOImpl{" +
+                "shopWarehouseId=" + shopWarehouseId +
+                ", shopId=" + shopId +
+                ", warehouseId=" + warehouseId +
+                ", warehouseName='" + warehouseName + '\'' +
+                ", rank=" + rank +
+                '}';
+    }
 }

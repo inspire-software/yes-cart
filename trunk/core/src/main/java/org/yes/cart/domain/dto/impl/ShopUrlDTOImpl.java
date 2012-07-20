@@ -72,4 +72,13 @@ public class ShopUrlDTOImpl implements ShopUrlDTO {
     public void setShopId(final long shopId) {
         this.shopId = shopId;
     }
+
+    @Override
+    public String toString() {
+        return "ShopUrlDTOImpl{" +
+                "url='" + url + '\'' +
+                ", storeUrlId=" + storeUrlId +
+                ", shopId=" + shopId +
+                '}';
+    }
 }
