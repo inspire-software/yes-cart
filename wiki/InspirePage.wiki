@@ -3,7 +3,9 @@
 = Set of tech articles =
 
 http://habrahabr.ru/post/22471/  the right way to compose html email
+
 http://groovy.codehaus.org/Embedding+a+Groovy+Console+in+a+Java+Server+Application  groovy shell in web app
+
 http://code.google.com/p/groovy-flex-console/ groovyh flex console 
 
 http://fontello.com/ icon fonts
