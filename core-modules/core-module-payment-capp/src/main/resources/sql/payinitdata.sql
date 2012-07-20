@@ -8,7 +8,7 @@ VALUES (100, 'cyberSourcePaymentGateway',
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (101, 'cyberSourcePaymentGateway',
 'keysDirectory',
-'/npa/resources/paymentgateway/cskeys'
+'/yescart/resources/paymentgateway/cskeys'
 , 'Directory with keys', 'Directory with keys');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
@@ -38,7 +38,7 @@ VALUES (105, 'cyberSourcePaymentGateway',
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (106, 'cyberSourcePaymentGateway',
 'logDirectory',
-'/npa/log'
+'/yescart/log'
 , 'Log directory', 'Log directory');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
@@ -236,7 +236,7 @@ VALUES (142, 'payflowPaymentGateway',
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (143, 'payflowPaymentGateway',
 'LOG_FILENAME',
-'/npa/log/payflow.log'
+'/yescart/log/payflow.log'
 , 'Log filename', 'Log filename');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
@@ -398,7 +398,7 @@ VALUES (172, 'payPalNvpPaymentGateway',
 -- INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 -- VALUES (173, 'payPalNvpPaymentGateway',
 -- 'KEY_PATH',
--- '/npa/resources/paymentgateway/paypal/some.p12'
+-- '/yescart/resources/paymentgateway/paypal/some.p12'
 -- , 'Path to key', 'Path to key');
 
 

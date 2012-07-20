@@ -34,7 +34,7 @@
 
     <bean id="payDataSource" class="org.apache.commons.dbcp.BasicDataSource">
         <property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
-        <property name="url" value="jdbc:hsqldb:mem:testnpapaydb"/>
+        <property name="url" value="jdbc:hsqldb:mem:testyespaydb"/>
         <property name="username" value="sa"/>
         <property name="password" value=""/>
         <property name="initialSize" value="5"/>

@@ -75,7 +75,7 @@ public abstract class BasePaymentModuleDBTestCase {
     }
 
     protected AbstractDatabaseTester createDatabaseTester() throws Exception {
-        AbstractDatabaseTester dbTester = new JdbcDatabaseTester("org.hsqldb.jdbcDriver", "jdbc:hsqldb:mem:testnpapaydb", "sa", "");
+        AbstractDatabaseTester dbTester = new JdbcDatabaseTester("org.hsqldb.jdbcDriver", "jdbc:hsqldb:mem:testyespaydb", "sa", "");
         dbTester.setSetUpOperation(DatabaseOperation.REFRESH);
         dbTester.setTearDownOperation(DatabaseOperation.NONE);
         dbTester.setDataSet(createDataSet());
