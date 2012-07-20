@@ -25,7 +25,6 @@
     <name>Yes Cart</name>
     <url>http://code.google.com/p/yes-cart/</url>
     <modules>
-        <module>build-tools</module>
         <module>payment-api</module>
         <module>domain-api</module>
         <module>persistence</module>
@@ -285,30 +284,6 @@
             </plugins>
         </pluginManagement>
     </build>
-    <reporting>
-        <plugins>
-            <plugin>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>2.5</version>
-                <configuration>
-                    <sourceEncoding>utf-8</sourceEncoding>
-                    <minimumTokens>100</minimumTokens>
-                    <targetJdk>${maven.compiler.target}</targetJdk>
-                    <rulesets>
-                        <ruleset>pmd/pmd.xml</ruleset>
-                    </rulesets>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>2.7</version>
-                <configuration>
-                    <enableRulesSummary>true</enableRulesSummary>
-                    <configLocation>checkstyle/checkstyle.xml</configLocation>
-                </configuration>
-            </plugin>
-        </plugins>
-    </reporting>
     <profiles>
         <profile>
             <id>mysql</id>

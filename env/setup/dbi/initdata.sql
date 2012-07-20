@@ -65,7 +65,7 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, E
 
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
-  VALUES (  999,  'CURRENCY',  0,  NULL,  'Currensies',  'Supported currencies by shop. First one is default',  1004, 1001);
+  VALUES (  999,  'CURRENCY',  0,  NULL,  'Currencies',  'Supported currencies by shop. First one is default',  1004, 1001);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  2000,  'PRODUCT_IMAGE_WIDTH',  0,  NULL,  'Product image width in category',   'Product image width in category',  1006, 1002);

@@ -19,11 +19,7 @@
 
     <property environment="env"/>
 
-    <taskdef resource="/net/sf/antcontrib/cpptasks/antlib.xml">
-        <classpath>
-            <pathelement location="/development/projects/java/yc/util/lib3rdparty/ant/cpptasks-1.0b5.jar"/>
-        </classpath>
-    </taskdef>
+    <taskdef resource="net/sf/antcontrib/cpptasks/antlib.xml" classpath="${basedir}/env/setup/lib3rdparty/ant/cpptasks-1.0b5.jar"/>
 
     <macrodef name="exec-mvn">
         <attribute name="dir" default="."/>
@@ -76,19 +72,19 @@
     </target>
 
     <target name="setup" depends="init" description="'Setup development environment'">
-        <exec-mvn dir="./util/lib3rdparty/authorize.net"
+        <exec-mvn dir="{basedir}/env/setup/lib3rdparty/authorize.net"
                   arg="install:install-file -DgroupId=net.authorize -DartifactId=authorize-client -Dversion=1.4.2 -Dpackaging=jar -Dfile=anet-java-sdk-1.4.2.jar"/>
-        <exec-mvn dir="./util/lib3rdparty/cybersource"
+        <exec-mvn dir="{basedir}/env/setup/lib3rdparty/cybersource"
                   arg="install:install-file -DgroupId=com.cybersource -DartifactId=cybersource-security -Dversion=1.5 -Dpackaging=jar -Dfile=cybssecurity.jar"/>
-        <exec-mvn dir="./util/lib3rdparty/cybersource"
+        <exec-mvn dir="{basedir}/env/setup/lib3rdparty/cybersource"
                   arg="install:install-file -DgroupId=com.cybersource -DartifactId=cybersource-client -Dversion=1.5 -Dpackaging=jar -Dfile=cybsclients15.jar"/>
-        <exec-mvn dir="./util/lib3rdparty/payflow"
+        <exec-mvn dir="{basedir}/env/setup/lib3rdparty/payflow"
                   arg="install:install-file -DgroupId=paypal.payflow -DartifactId=payflow-client -Dversion=4.31 -Dpackaging=jar -Dfile=payflow.jar"/>
-        <exec-mvn dir="./util/lib3rdparty/paypal"
+        <exec-mvn dir="{basedir}/env/setup/lib3rdparty/paypal"
                   arg="install:install-file -DgroupId=com.paypal -DartifactId=paypal-client -Dversion=5.1.1 -Dpackaging=jar -Dfile=paypal_base.jar"/>
-        <exec-mvn dir="./util/lib3rdparty/google.checkout"
+        <exec-mvn dir="{basedir}/env/setup/lib3rdparty/google.checkout"
                   arg="install:install-file -DgroupId=com.google.checkout -DartifactId=checkout-sdk -Dversion=2.5.1 -Dpackaging=jar -Dfile=checkout-sdk-2.5.1.jar"/>
-        <exec-mvn dir="./util/lib3rdparty/jai"
+        <exec-mvn dir="{basedir}/env/setup/lib3rdparty/jai"
                   arg="install:install-file -DgroupId=com.sun.media -DartifactId=mlibwrapper_jai -Dversion=1.1.3 -Dpackaging=jar -Dfile=mlibwrapper_jai.jar"/>
 
     </target>
