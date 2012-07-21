@@ -18,6 +18,8 @@ package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Predicate;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.yes.cart.constants.AttributeGroupNames;
@@ -82,10 +84,10 @@ public class DtoProductServiceImpl
     /**
      * IoC constructor.
      *
-     * @param productService           domain objects product service
-     * @param dtoFactory               factory for creating DTO object instances
+     * @param productService     domain objects product service
+     * @param dtoFactory         factory for creating DTO object instances
      * @param AdaptersRepository value converter repository
-     * @param imageService             {@link ImageService} to manipulate  related images.
+     * @param imageService       {@link ImageService} to manipulate  related images.
      */
     public DtoProductServiceImpl(
             final DtoFactory dtoFactory,
@@ -333,6 +335,15 @@ public class DtoProductServiceImpl
             }
         }
 
+        CollectionUtils.filter(
+                result,
+                new Predicate() {
+                    public boolean evaluate(final Object object) {
+                        return ((AttrValueDTO) object).getAttributeDTO() != null;
+                    }
+                }
+        );
+
         Collections.sort(result, new AttrValueDTOComparatorImpl());
         return result;
     }
@@ -345,17 +356,8 @@ public class DtoProductServiceImpl
      * @return true in case if given attrtibute belong to product type.
      */
     boolean isBelongToProductType(AttributeDTO attributeDTO, List<ProductTypeAttr> ptaList) {
-        /* for (ProductTypeAttr pta : ptaList ) {
-           if (pta.getAttribute().getCode().equals(attributeDTO.getCode())) {
-               return true;
-           }
-       }
-       return false;*/
 
-
-
-
-        final int idx = Collections.binarySearch (
+        final int idx = Collections.binarySearch(
                 ptaList,
                 attributeDTO.getCode(),
                 new Comparator<Object>() {

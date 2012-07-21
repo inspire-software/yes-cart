@@ -16,6 +16,7 @@
 
 package org.yes.cart.utils.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.dto.AttrValueDTO;
 
 import java.util.Comparator;
@@ -34,11 +35,23 @@ public class AttrValueDTOComparatorImpl implements Comparator<AttrValueDTO> {
      * {@inheritDoc}
      */
     public int compare(final AttrValueDTO attrValueDTO1, final AttrValueDTO attrValueDTO2) {
-        try {
-            return attrValueDTO1.getAttributeDTO().getName().compareTo(attrValueDTO2.getAttributeDTO().getName());
-        } catch (NullPointerException npe) {
-            // TODO: fix this
-            return -1;
+
+        final String name1;
+        final String name2;
+
+        if (attrValueDTO1.getAttributeDTO() == null) {
+            name1 = StringUtils.EMPTY;
+        } else {
+            name1 = attrValueDTO1.getAttributeDTO().getName();
         }
+
+        if (attrValueDTO2.getAttributeDTO() == null) {
+            name2 = StringUtils.EMPTY;
+        } else {
+            name2 = attrValueDTO2.getAttributeDTO().getName();
+        }
+
+
+        return name1.compareTo(name2);
     }
 }
