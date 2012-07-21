@@ -272,6 +272,8 @@
                             <mx:HBox paddingLeft="2" paddingRight="1">
                                 <mx:Script>
                                 <![CDATA[
+                                    import com.hexagonstar.util.debug.Debug;
+
                                     import mx.controls.DataGrid;
                                     import mx.core.FlexGlobals;
                                     import mx.core.IFlexDisplayObject;
@@ -293,9 +295,9 @@
 
                                         popUp = ValueDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), clz, true));
                                         popUp.attributeGroup = outerDocument.attributeGroup;
-                                        popUp.value = data.val;
                                         popUp.windowTitle = data.attributeDTO.name;
                                         popUp.code = outerDocument.entityCode;
+                                        popUp.value = data.val;
                                         var btnSave:Button = popUp.getButtonSave();
                                         btnSave.addEventListener(MouseEvent.CLICK, onSaveBtnclick);
                                         PopUpManager.centerPopUp(IFlexDisplayObject(popUp));

@@ -159,6 +159,10 @@ public class DtoProductSkuServiceImplTezt extends BaseCoreDBTestCase {
         dto = dtoService.getById(pk);
         assertNull(dto);
 
+        dtoService.remove(15301);
+        dto = dtoService.getById(pk);
+        assertNull(dto);
+
     }
 
     @Test
