@@ -85,6 +85,7 @@
          */
         protected function onValueChanged(event:DataGridEvent, attrValue:Object, newValue:Object):void {
             // Overwrite in sub class
+
         }
 
 
@@ -145,7 +146,7 @@
         private function onAddAttrSaveClick(event:Event):void {
             if (newAttrPopUp != null) {
                 Debug.traceObj(newAttrPopUp.selectedAttributeDTO);
-                onValueAdded(newAttrPopUp.selectedAttributeDTO)
+                onValueAdded(newAttrPopUp.selectedAttributeDTO);
                 newAttrPopUp.okBtn.removeEventListener(MouseEvent.CLICK, onAddAttrSaveClick);
                 PopUpManager.removePopUp(newAttrPopUp);
                 newAttrPopUp = null;
@@ -299,7 +300,14 @@
                                         popUp.code = outerDocument.entityCode;
                                         popUp.value = data.val;
                                         var btnSave:Button = popUp.getButtonSave();
-                                        btnSave.addEventListener(MouseEvent.CLICK, onSaveBtnclick);
+                                        if (popUp is ImageDialog) {
+
+                                            (popUp as ImageDialog).dataReadyCallbackFunction =  onSaveBtnclick;
+
+                                        } else {
+                                            btnSave.addEventListener(MouseEvent.CLICK, onSaveBtnclick);
+                                        }
+
                                         PopUpManager.centerPopUp(IFlexDisplayObject(popUp));
 
                                     }

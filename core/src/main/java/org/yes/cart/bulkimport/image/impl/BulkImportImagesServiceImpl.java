@@ -138,14 +138,12 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
             importRezult |= doImportProductSkuImage(errorReport, fileName, code, suffix);
             if (importRezult) {
                 try {
-                    if (imageService.addImageToRepository(file.getAbsolutePath(), code, pathToRepository)) {
-                        errorReport.append(MessageFormat.format(
-                                "\nINFO image {0} added to image repository", file.getAbsolutePath()));
+
+                    String newFileName = imageService.addImageToRepository(file.getAbsolutePath(), code, pathToRepository);
+                    errorReport.append(MessageFormat.format(
+                                "\nINFO image {0} {1} added to image repository", file.getAbsolutePath(), newFileName));
                         importedFiles.add(file.getAbsolutePath());
-                    } else {
-                        errorReport.append(MessageFormat.format(
-                                "\nWARNING image {0} not added to image repository. Try to add it manually.", file.getAbsolutePath()));
-                    }
+
                 } catch (IOException e) {
                     String message = MessageFormat.format(
                             "\nERROR can not add {0} to image repository. Try to add it manually. Error is {1}", file.getAbsolutePath(), e.getMessage());

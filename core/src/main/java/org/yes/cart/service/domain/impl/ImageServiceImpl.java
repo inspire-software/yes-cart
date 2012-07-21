@@ -21,6 +21,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.util.Assert;
 import org.yes.cart.cache.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.SeoImage;
@@ -246,31 +247,72 @@ public class ImageServiceImpl
      * @param code         product or sku code.
      * @return true if file was added successfully
      */
-    public boolean addImageToRepository(final String fullFileName,
+    public String addImageToRepository(final String fullFileName,
                                         final String code,
                                         final String pathToRepository) throws IOException {
         File file = new File(fullFileName);
         String pathInRepository = pathToRepository + getImageNameStrategy(StringUtils.EMPTY).getFullFileNamePath(file.getName(), code);
-        File destinationFile = new File(pathInRepository);
+        File destinationFile = new File(createRepositoryUniqueName(pathInRepository));
         FileUtils.copyFile(file, destinationFile);
-        return destinationFile.exists();
+        return destinationFile.getName();
     }
 
     /** {@inheritDoc} */
-    public boolean addImageToRepository(final String fullFileName, final String code,
+    public String addImageToRepository(final String fullFileName, final String code,
                                         final byte[] imgBody, final String storagePrefix) throws IOException {
         return addImageToRepository(fullFileName, code, imgBody, storagePrefix, StringUtils.EMPTY);
     }
 
     /** {@inheritDoc} */
-    public boolean addImageToRepository(final String fullFileName, final String code,
+    public String addImageToRepository(final String fullFileName, final String code,
                                         final byte[] imgBody, final String storagePrefix,
                                         final String pathToRepository) throws IOException {
         File file = new File(fullFileName);
         String pathInRepository = pathToRepository + getImageNameStrategy(storagePrefix).getFullFileNamePath(file.getName(), code);
-        File destinationFile = new File(pathInRepository);
+        File destinationFile = new File(createRepositoryUniqueName(pathInRepository));
         FileUtils.writeByteArrayToFile(destinationFile, imgBody);
-        return destinationFile.exists();
+        return destinationFile.getName();
+    }
+
+
+    /**
+     * Check is given file name present on disk and create new if necessary.
+     * @param fileName given file name
+     * @return sequental file name.
+     */
+    String createRepositoryUniqueName(final String fileName) {
+        File destinationFile = new File(fileName);
+        while(destinationFile.exists()) {
+            final String newFileName = createRollingFileName(fileName);
+            return createRepositoryUniqueName(newFileName);
+        }
+        return fileName;
+    }
+
+    /**
+     * Create new sequental file name, which will have _seqnumber before file extension.
+     * Example /tmp/file.txt -> /tmp/file_1.txt
+     *  /tmp/file_1.txt -> /tmp/file_2.txt
+     * @param fileName given file name
+     * @return sequental file name.
+     */
+    String createRollingFileName(final String fileName) {
+        Assert.notNull(fileName, "file name must be not null");
+        int idx = fileName.lastIndexOf(".");
+        final String [] fileParts;
+        if (idx == -1) {
+            fileParts =  new String [] {fileName};
+        } else {
+            fileParts =  new String [2];
+            fileParts[0] = fileName.substring(0, idx);
+            fileParts[1] = fileName.substring(idx + 1);
+        }
+        final String [] numberSequence = fileParts[0].split("_");
+        int seq = 1;
+        if (NumberUtils.isDigits(numberSequence[numberSequence.length-1])) {
+            seq = NumberUtils.toInt(numberSequence[numberSequence.length-1]) + 1 ;
+        }
+        return numberSequence[0] + "_" + seq + ( fileParts.length>1? "." +  fileParts[fileParts.length-1] : "");
     }
 
     /** {@inheritDoc} */

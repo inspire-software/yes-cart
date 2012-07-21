@@ -73,7 +73,7 @@ public interface ImageService extends GenericService<SeoImage> {
      *
      * @throws IOException in case of io errors.
      */
-    boolean addImageToRepository(String fullFileName, String code, final String pathToRepository) throws IOException;
+    String addImageToRepository(String fullFileName, String code, final String pathToRepository) throws IOException;
 
     /**
      * Add the given file to image repository.
@@ -84,10 +84,10 @@ public interface ImageService extends GenericService<SeoImage> {
      * @param imgBody       image as byte array.
      * @param storagePrefix optional storage prefix {@see Constants.CATEGOTY_IMAGE_REPOSITORY_URL_PATTERN}
      *                      or {@see Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN}. If parameter not provider the product image storage will be used.
-     * @return true if file was added successfully
+     * @return file name in image vault. may be different from original
      * @throws IOException in case of any I/O errors
      */
-    boolean addImageToRepository(String fullFileName, String code, byte[] imgBody, String storagePrefix) throws IOException;
+    String addImageToRepository(String fullFileName, String code, byte[] imgBody, String storagePrefix) throws IOException;
 
     /**
      * Add the given file to image repository.
@@ -99,10 +99,10 @@ public interface ImageService extends GenericService<SeoImage> {
      * @param storagePrefix optional storage prefix {@see Constants.CATEGOTY_IMAGE_REPOSITORY_URL_PATTERN}
      *                      or {@see Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN}. If parameter not provider the product image storage will be used.
      * @param pathToRepository path to repository
-     * @return true if file was added successfully
+     * @return file name in image vault. may be different from original
      * @throws IOException in case of any I/O errors
      */
-    boolean addImageToRepository(String fullFileName, String code, byte[] imgBody, String storagePrefix, String pathToRepository) throws IOException;
+    String addImageToRepository(String fullFileName, String code, byte[] imgBody, String storagePrefix, String pathToRepository) throws IOException;
 
     /**
      * Read product or sku image into byte array.

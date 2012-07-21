@@ -46,7 +46,7 @@
                        toolTip="@Resource(bundle='AttributesManagementPanel',key='loadImageHint')"
                        click="onLoadImageDialogButtonClick()"/>
             <mx:Button id="btnSave"
-                       label="@Resource(bundle='AttributesManagementPanel',key='save')" click="onSaveImageClick()"/>
+                       label="@Resource(bundle='AttributesManagementPanel',key='save')" click="onSaveImageClick(event)"/>
             <mx:Button id="btnCancel"
                        label="@Resource(bundle='AttributesManagementPanel',key='cancel')"
                        click="PopUpManager.removePopUp(this)"
@@ -118,23 +118,69 @@
 
         private var seoImage:SeoImageDTOImpl;
         private var imageBodyHasChanges:Boolean = false;
+         private var _dataReadyCallbackFunction:Function;
 
         private function init():void {
             this.title = windowTitle;
 
         }
 
-        private function onSaveImageClick():void {
 
+
+
+
+        public function get dataReadyCallbackFunction():Function {
+            return _dataReadyCallbackFunction;
+        }
+
+        public function set dataReadyCallbackFunction(value:Function):void {
+            _dataReadyCallbackFunction = value;
+        }
+
+        private function onSaveImageClick(evt:MouseEvent):void {
             if (imageBodyHasChanges) {
                 //Save image when it really changed.
                 var encoder:JPEGEncoder = new JPEGEncoder(); //TODO resolve the encoder by file extension
                 var rawBytes:ByteArray = encoder.encode(bitmapData);
                 remoteImageService.addImageToRepository(value, code, rawBytes, resolveImageStorage(attributeGroup));
+
+
             } else {
                 updateImageSeoData();
             }
         }
+
+
+        /**
+         * Update image seo data.
+         */
+        private function updateImageSeoData():void {
+            seoImage.imageName = value;
+            seoImage.alt = altTextInput.text;
+            seoImage.title = titleTextInput.text;
+            if (DomainUtils.isNewPK(seoImage.seoImageId)) {
+                remoteImageService.create(seoImage);
+            } else {
+                remoteImageService.update(seoImage);
+            }
+
+            
+
+        }
+
+        private function onAddImageToRepositoryResult(event:ResultEvent):void {
+
+            Debug.trace("INFO ImageDialog new attribute values is " + event.result);
+
+            value = String(event.result);
+
+            updateImageSeoData();
+
+            dataReadyCallbackFunction(null);
+
+
+        }
+
 
         /**
          * Get image storage label. For sku and products the null will be returned.
@@ -150,19 +196,6 @@
             } else if (AttributeGroupNames.PRODUCT == attrGroupName) {
             }
             return null;
-
-        }
-
-
-        private function updateImageSeoData():void {
-            seoImage.imageName = value;
-            seoImage.alt = altTextInput.text;
-            seoImage.title = titleTextInput.text;
-            if (DomainUtils.isNewPK(seoImage.seoImageId)) {
-                remoteImageService.create(seoImage);
-            } else {
-                remoteImageService.update(seoImage);
-            }
 
         }
 
@@ -340,11 +373,6 @@
 
         }
 
-        private function onAddImageToRepositoryResult(event:ResultEvent):void {
-
-            updateImageSeoData();
-
-        }
 
         private function onCreateResult(event:ResultEvent):void {
             // do nothing

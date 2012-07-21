@@ -34,6 +34,7 @@ import org.yes.cart.service.image.impl.ProductImageNameStrategyImpl;
 
 import java.io.File;
 
+import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.*;
 
 /**
@@ -54,6 +55,28 @@ public class ImageServiceTest {
     private SystemService systemService = mockery.mock(SystemService.class);
     private GenericDAO<SeoImage, Long> seoImageDao = mockery.mock(GenericDAO.class);
     private ProductImageNameStrategyImpl productImageNameStrategy = new ProductImageNameStrategyImpl(null, null);
+
+    @Test
+    public void testCreateRollingFileName() throws Exception {
+        assertEquals("/tmp/file_1", imageService.createRollingFileName("/tmp/file"));
+        assertEquals("/tmp/file_1.txt", imageService.createRollingFileName("/tmp/file.txt"));
+        assertEquals("/tmp/file_1.txt", imageService.createRollingFileName("/tmp/file_0.txt"));
+        assertEquals("/tmp/file_2.txt", imageService.createRollingFileName("/tmp/file_1.txt"));
+        assertEquals("/tmp/file_3456.txt", imageService.createRollingFileName("/tmp/file_3455.txt"));
+        assertEquals("D:\\dev\\apache-tomcat-7.0.23\\webapps\\yes-manager\\..\\yes-shop\\default\\imagevault\\L\\L2700A#B19\\example_1.jpeg",
+                imageService.createRollingFileName("D:\\dev\\apache-tomcat-7.0.23\\webapps\\yes-manager\\..\\yes-shop\\default\\imagevault\\L\\L2700A#B19\\example.jpeg"));
+        assertEquals("_1", imageService.createRollingFileName(""));
+    }
+
+    @Test
+    public void testCreateRepositoryUniqueName() throws Exception {
+
+        File temp = File.createTempFile("pattern", ".suffix");
+        String newFileName = imageService.createRepositoryUniqueName(temp.getAbsolutePath());
+        assertTrue (!temp.getAbsolutePath().equals(newFileName));
+        assertTrue (newFileName, newFileName.contains("_1.suffix"));
+    }
+
 
     @Before
     @SuppressWarnings("unchecked")
@@ -100,7 +123,7 @@ public class ImageServiceTest {
     @Test
     public void testAddImageToRepository() throws Exception {
         String tmpFileName = "target/test/resources/some-seo-image-name_PRODUCT1.jpeg";
-        byte [] image = Base64.decode(BASE64_ENCODED_JPEG_0);
+        byte[] image = Base64.decode(BASE64_ENCODED_JPEG_0);
         imageService.addImageToRepository(tmpFileName, "PRODUCT1", image, StringUtils.EMPTY);
         File destination = new File("P/PRODUCT1/some-seo-image-name_PRODUCT1.jpeg");
         assertTrue(destination.exists());
@@ -112,7 +135,7 @@ public class ImageServiceTest {
     @Test
     public void testDeleteImage() throws Exception {
         String tmpFileName = "target/test/resources/some-seo-image-name_PRODUCT2.jpeg";
-        byte [] image = Base64.decode(BASE64_ENCODED_JPEG_0);
+        byte[] image = Base64.decode(BASE64_ENCODED_JPEG_0);
         imageService.addImageToRepository(tmpFileName, "PRODUCT2", image, StringUtils.EMPTY);
         File destination = new File("P/PRODUCT2/some-seo-image-name_PRODUCT2.jpeg");
         assertTrue(destination.exists());
