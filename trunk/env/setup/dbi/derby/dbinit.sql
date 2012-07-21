@@ -1,3 +1,7 @@
+/*
+Initialisation SQL for YesCart
+@author Denys Pavlov
+ */
 connect 'jdbc:derby://localhost:1527/yes;create=true';
 run '../../../persistence/sql/resources/derby/create-tables.sql';
 run '../../../env/setup/dbi/initdata.sql';
