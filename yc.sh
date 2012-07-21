@@ -206,6 +206,11 @@ prepare_demo_pkg() {
     echo " created a full maven build with derby profile. ";
     echo "                                                ";
 
+    echo " Cleaning Derby bundle $YC_HOME/demo/yes-db/*   ";
+    rm -rf $YC_HOME/demo/yes-db/*
+    echo " Copying Derby package                          ";
+    cp $YC_HOME/env/derby/lib/*.jar $YC_HOME/demo/yes-db
+
     YESDB_OLD=$YC_HOME/demo/yes-db/yes
     YESDB_NEW=$YC_HOME/env/derby/lib/yes
     echo " Removing old db: $YESDB_OLD                    ";
@@ -251,6 +256,9 @@ prepare_demo_pkg() {
     cp $YESMANAGERWAR_NEW $YESWEBAPPS
     echo " done...                                        ";
 
+    echo " Creating zip package...                        ";
+    zip -r $YC_HOME/yescart.zip $YC_HOME/demo
+    echo " done...                                        ";
     echo "                                                ";
     echo "================================================";
     echo " Demo package created                           ";
