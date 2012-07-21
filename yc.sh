@@ -1,5 +1,11 @@
 #!/bin/sh
 
+#
+# YesCart development script
+#
+# @author Denys Pavlov
+
+
 YC_HOME=`pwd`
 
 show_env() {
@@ -31,8 +37,11 @@ show_help() {
     echo "                                                ";
     echo "  dbiderby  - initialise db for derby           ";
     echo "  derbygo   - start derby server                ";
+    echo "  derbygob  - start derby server (in back mode) ";
+    echo "  derbyend  - stop derby server                 ";
     echo "  derbycon  - connect to derby with ij          ";
     echo "                                                ";
+    echo "  pkgdemo   - prepare demo package              ";
     echo "================================================";
 }
 
@@ -111,6 +120,38 @@ db_derby_go() {
 
 }
 
+db_derby_gob() {
+
+    echo "================================================";
+    echo " Starting Derby database (background mode)      ";
+    echo "================================================";
+
+    export DERBY_INSTALL=$YC_HOME/env/derby
+    export CLASSPATH=$DERBY_INSTALL/lib/derby.jar:$DERBY_INSTALL/lib/derbytools.jar:$DERBY_INSTALL/lib/derbyclient.jar:$DERBY_INSTALL/lib/derbynet.jar:.
+    cd $DERBY_INSTALL/lib
+
+    java -jar derbyrun.jar server start &
+
+    echo " Derby server started on port 1527...           ";
+
+}
+
+db_derby_end() {
+
+    echo "================================================";
+    echo " Stopping Derby database                        ";
+    echo "================================================";
+
+    export DERBY_INSTALL=$YC_HOME/env/derby
+    export CLASSPATH=$DERBY_INSTALL/lib/derby.jar:$DERBY_INSTALL/lib/derbytools.jar:$DERBY_INSTALL/lib/derbyclient.jar:$DERBY_INSTALL/lib/derbynet.jar:.
+    cd $DERBY_INSTALL/lib
+
+    java -jar derbyrun.jar server shutdown
+
+    echo " Derby server stopped...                        ";
+
+}
+
 init_db_derby() {
 
     echo "================================================";
@@ -155,6 +196,68 @@ db_derby_connect() {
 
 }
 
+prepare_demo_pkg() {
+
+    echo "================================================";
+    echo " Preparing DEMO package                         ";
+    echo "================================================";
+    echo "                                                ";
+    echo " Make sure that you have prepared derby dbs and ";
+    echo " created a full maven build with derby profile. ";
+    echo "                                                ";
+
+    YESDB_OLD=$YC_HOME/demo/yes-db/yes
+    YESDB_NEW=$YC_HOME/env/derby/lib/yes
+    echo " Removing old db: $YESDB_OLD                    ";
+    rm -rf $YESDB_OLD
+    echo " done...                                        ";
+    echo " Copying new db: $YESDB_NEW                     ";
+    cp -r $YESDB_NEW $YESDB_OLD
+    echo " done...                                        ";
+
+    YESPAYDB_OLD=$YC_HOME/demo/yes-db/yespay
+    YESPAYDB_NEW=$YC_HOME/env/derby/lib/yespay
+    echo " Removing old db: $YESPAYDB_OLD                 ";
+    rm -rf $YESPAYDB_OLD
+    echo " done...                                        ";
+    echo " Copying new db: $YESPAYDB_NEW                  ";
+    cp -r $YESPAYDB_NEW $YESPAYDB_OLD
+    echo " done...                                        ";
+
+    YESWEBAPPS=$YC_HOME/demo/yes-server/webapps
+
+    YESSHOP_OLD=$YESWEBAPPS/yes-shop
+    YESSHOPWAR_OLD=$YESWEBAPPS/yes-shop.war
+    YESMANAGER_OLD=$YESWEBAPPS/yes-manager
+    YESMANAGERWAR_OLD=$YESWEBAPPS/yes-manager.war
+
+    echo " Removing old wars:                             ";
+    echo " $YESSHOP_OLD                                   ";
+    rm -rf $YESSHOP_OLD
+    echo " $YESSHOPWAR_OLD                                ";
+    rm -f $YESSHOPWAR_OLD
+    echo " $YESMANAGER_OLD                                ";
+    rm -rf $YESMANAGER_OLD
+    echo " $YESMANAGERWAR_OLD                             ";
+    rm -f $YESMANAGERWAR_OLD
+    echo " done...                                        ";
+
+    YESSHOPWAR_NEW=$YC_HOME/web/store/target/yes-shop.war
+    YESMANAGERWAR_NEW=$YC_HOME/manager/server/target/yes-manager.war
+    echo " Copying new wars:                              ";
+    echo " $YESSHOPWAR_NEW                                ";
+    echo " $YESMANAGERWAR_NEW                             ";
+    cp $YESSHOPWAR_NEW $YESWEBAPPS
+    cp $YESMANAGERWAR_NEW $YESWEBAPPS
+    echo " done...                                        ";
+
+    echo "                                                ";
+    echo "================================================";
+    echo " Demo package created                           ";
+    echo "================================================";
+
+}
+
 
 if [ $1 ];
 then
@@ -182,6 +285,14 @@ then
     then
         db_derby_go;
         exit 0;
+    elif [ $1 = "derbygob" ];
+    then
+        db_derby_gob;
+        exit 0;
+    elif [ $1 = "derbyend" ];
+    then
+        db_derby_end;
+        exit 0;
     elif [ $1 = "derbycon" ];
     then
         db_derby_connect;
@@ -189,6 +300,10 @@ then
     elif [ $1 = "env" ];
     then
         show_env;
+        exit 0;
+    elif [ $1 = "pkgdemo" ];
+    then
+        prepare_demo_pkg;
         exit 0;
     else
         echo "Provide command..."; show_help; exit 100;

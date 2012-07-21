@@ -1,1 +1,1 @@
-Place to store 3rd party libs, that can not be accessed with maven.
+3rd party libraries inaccessible through maven central repository
