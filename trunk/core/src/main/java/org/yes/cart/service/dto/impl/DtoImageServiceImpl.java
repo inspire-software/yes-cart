@@ -58,7 +58,7 @@ public class DtoImageServiceImpl
     /**
      * {@inheritDoc}
      */
-    public boolean addImageToRepository(final String fullFileName,
+    public String addImageToRepository(final String fullFileName,
                                         final String code,
                                         final byte[] imgBody,
                                         final String storagePrefix) throws IOException {
@@ -78,7 +78,7 @@ public class DtoImageServiceImpl
      * @return true if file was added successfully
      * @throws java.io.IOException in case of any I/O errors
      */
-    public boolean addImageToRepository(final String fullFileName,
+    public String addImageToRepository(final String fullFileName,
                                         final String code,
                                         final byte[] imgBody,
                                         final String storagePrefix,

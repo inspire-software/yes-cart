@@ -57,7 +57,7 @@ public class RemoteImageServiceImpl extends AbstractRemoteService<SeoImageDTO> i
     /**
      * {@inheritDoc}
      */
-    public boolean addImageToRepository(
+    public String addImageToRepository(
             final String fullFileName,
             final String code,
             final byte[] imgBody,
@@ -69,7 +69,7 @@ public class RemoteImageServiceImpl extends AbstractRemoteService<SeoImageDTO> i
     /**
      * {@inheritDoc}
      */
-    public boolean addImageToRepository(
+    public String addImageToRepository(
             final String fullFileName,
             final String code,
             final byte[] imgBody,

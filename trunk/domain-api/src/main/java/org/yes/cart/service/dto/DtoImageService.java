@@ -42,10 +42,10 @@ public interface DtoImageService extends GenericDTOService<SeoImageDTO> {
      *                      or {@see Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN}. If parameter not provider the product
      *                      image storage will be used.
      * @param pathToRepository path to repository.
-     * @return true if file was added successfully
+     * @return file name in image vault. may be different from original
      * @throws java.io.IOException in case of any I/O errors
      */
-    boolean addImageToRepository(String fullFileName,
+    String addImageToRepository(String fullFileName,
                                  String code,
                                  byte[] imgBody,
                                  String storagePrefix,
@@ -61,10 +61,10 @@ public interface DtoImageService extends GenericDTOService<SeoImageDTO> {
      * @param storagePrefix optional storage prefix {@see Constants.CATEGOTY_IMAGE_REPOSITORY_URL_PATTERN}
      *                      or {@see Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN}. If parameter not provider the product
      *                      image storage will be used.
-     * @return true if file was added successfully
+     * @return file name in image vault. may be different from original
      * @throws java.io.IOException in case of any I/O errors
      */
-    boolean addImageToRepository(String fullFileName,
+    String addImageToRepository(String fullFileName,
                                  String code,
                                  byte[] imgBody,
                                  String storagePrefix) throws IOException;
