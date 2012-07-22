@@ -35,7 +35,7 @@ import java.util.Set;
  * Time: 14:12:54
  */
 @Dto
-public class CategoryDTOImpl implements CategoryDTO  {
+public class CategoryDTOImpl implements CategoryDTO {
 
     private static final long serialVersionUID = 20100717L;
 
@@ -69,8 +69,17 @@ public class CategoryDTOImpl implements CategoryDTO  {
     @DtoField(value = "availabletill")
     private Date availabletill;
 
-    @DtoField(value = "seo.seoId", readOnly = true)
-    private Long seoId;
+    @DtoField(value = "seo.uri", entityBeanKeys = "org.yes.cart.domain.entity.Seo")
+    private String uri;
+
+    @DtoField(value = "seo.title", entityBeanKeys = "org.yes.cart.domain.entity.Seo")
+    private String title;
+
+    @DtoField(value = "seo.metakeywords", entityBeanKeys = "org.yes.cart.domain.entity.Seo")
+    private String metakeywords;
+
+    @DtoField(value = "seo.metadescription", entityBeanKeys = "org.yes.cart.domain.entity.Seo")
+    private String metadescription;
 
     @DtoField(value = "navigationByAttributes")
     private Boolean navigationByAttributes;
@@ -86,40 +95,50 @@ public class CategoryDTOImpl implements CategoryDTO  {
 
 
     @DtoCollection(
-            value="attribute",
-            dtoBeanKey="org.yes.cart.domain.dto.AttrValueCategoryDTO",
+            value = "attribute",
+            dtoBeanKey = "org.yes.cart.domain.dto.AttrValueCategoryDTO",
             entityGenericType = AttrValueEntityCategory.class,
             entityCollectionClass = HashSet.class,
             dtoCollectionClass = HashSet.class,
             dtoToEntityMatcher = AttrValueCategoryMatcher.class,
             readOnly = true
-            )
+    )
     private Set<AttrValueCategoryDTO> attribute;
 
 
     private List<CategoryDTO> children;
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public String getProductTypeName() {
         return productTypeName;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public void setProductTypeName(final String productTypeName) {
         this.productTypeName = productTypeName;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public List<CategoryDTO> getChildren() {
         return children;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public void setChildren(final List<CategoryDTO> children) {
         this.children = children;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public long getCategoryId() {
         return categoryId;
     }
@@ -131,149 +150,251 @@ public class CategoryDTOImpl implements CategoryDTO  {
         return categoryId;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public void setCategoryId(final long categoryId) {
         this.categoryId = categoryId;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public long getParentId() {
         return parentId;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public void setParentId(final long parentId) {
         this.parentId = parentId;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public int getRank() {
         return rank;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public void setRank(final int rank) {
         this.rank = rank;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public Long getProductTypeId() {
         return productTypeId;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public void setProductTypeId(final Long productTypeId) {
         this.productTypeId = productTypeId;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public String getName() {
         return name;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public void setName(final String name) {
         this.name = name;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public String getDescription() {
         return description;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public void setDescription(final String description) {
         this.description = description;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public String getUitemplate() {
         return uitemplate;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public void setUitemplate(final String uitemplate) {
         this.uitemplate = uitemplate;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public Date getAvailablefrom() {
         return availablefrom;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public void setAvailablefrom(final Date availablefrom) {
         this.availablefrom = availablefrom;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public Date getAvailabletill() {
         return availabletill;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public void setAvailabletill(final Date availabletill) {
         this.availabletill = availabletill;
     }
 
-    /** {@inheritDoc}*/
-    public Long getSeoId() {
-        return seoId;
-    }
 
-    /** {@inheritDoc}*/
-    public void setSeoId(final Long seoId) {
-        this.seoId = seoId;
-    }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public Boolean getNavigationByAttributes() {
         return navigationByAttributes;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public void setNavigationByAttributes(final Boolean navigationByAttributes) {
         this.navigationByAttributes = navigationByAttributes;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public Boolean getNavigationByBrand() {
         return navigationByBrand;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public void setNavigationByBrand(final Boolean navigationByBrand) {
         this.navigationByBrand = navigationByBrand;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public Boolean getNavigationByPrice() {
         return navigationByPrice;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public void setNavigationByPrice(final Boolean navigationByPrice) {
         this.navigationByPrice = navigationByPrice;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public String getNavigationByPriceTiers() {
         return navigationByPriceTiers;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public void setNavigationByPriceTiers(final String navigationByPriceTiers) {
         this.navigationByPriceTiers = navigationByPriceTiers;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public Set<AttrValueCategoryDTO> getAttribute() {
         return attribute;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public void setAttribute(final Set<AttrValueCategoryDTO> attribute) {
         this.attribute = attribute;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getUri() {
+        return uri;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setUri(final String uri) {
+        this.uri = uri;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setTitle(final String title) {
+        this.title = title;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getMetakeywords() {
+        return metakeywords;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setMetakeywords(final String metakeywords) {
+        this.metakeywords = metakeywords;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getMetadescription() {
+        return metadescription;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setMetadescription(final String metadescription) {
+        this.metadescription = metadescription;
     }
 
     @Override
@@ -289,7 +410,6 @@ public class CategoryDTOImpl implements CategoryDTO  {
                 ", uitemplate='" + uitemplate + '\'' +
                 ", availablefrom=" + availablefrom +
                 ", availabletill=" + availabletill +
-                ", seoId=" + seoId +
                 ", navigationByAttributes=" + navigationByAttributes +
                 ", navigationByBrand=" + navigationByBrand +
                 ", navigationByPrice=" + navigationByPrice +

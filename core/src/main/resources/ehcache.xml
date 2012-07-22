@@ -117,8 +117,7 @@
     <cache name="org.yes.cart.domain.entity.impl.ProductTypeEntity.attribute" maxElementsInMemory="1000"
            overflowToDisk="false" eternal="false" timeToLiveSeconds="600"/>
 
-    <cache name="org.yes.cart.domain.entity.Seo" maxElementsInMemory="1000" overflowToDisk="false" eternal="false"
-           timeToLiveSeconds="600"/>
+
 
     <cache name="org.hibernate.cache.StandardQueryCache"
            maxElementsInMemory="1000" eternal="false" timeToLiveSeconds="600"

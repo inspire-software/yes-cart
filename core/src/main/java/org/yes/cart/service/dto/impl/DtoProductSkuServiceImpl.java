@@ -121,7 +121,6 @@ public class DtoProductSkuServiceImpl
                 productSku,
                 getAdaptersRepository(),
                 new EntityFactoryToBeanFactoryAdaptor(service.getGenericDao().getEntityFactory()));
-        bindDictionaryData(instance, productSku);
         productSku = service.create(productSku);
         return getById(productSku.getSkuId(), getAdaptersRepository());
     }
@@ -211,18 +210,10 @@ public class DtoProductSkuServiceImpl
                 productSku,
                 getAdaptersRepository(),
                 new EntityFactoryToBeanFactoryAdaptor(service.getGenericDao().getEntityFactory()));
-        bindDictionaryData(instance, productSku);
         productSku = service.update(productSku);
         return getById(productSku.getSkuId(), getAdaptersRepository());
     }
 
-    private void bindDictionaryData(final ProductSkuDTO instance, final ProductSku productSku) {
-        if (instance.getSeoDTO() != null && instance.getSeoDTO().getSeoId() > 0) {
-            productSku.setSeo(seoGenericService.getById(instance.getSeoDTO().getSeoId()));
-        } else {
-            productSku.setSeo(null);
-        }
-    }
 
 
     /**

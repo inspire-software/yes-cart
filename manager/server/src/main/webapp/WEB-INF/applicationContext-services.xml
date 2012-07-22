@@ -171,19 +171,6 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
     </bean>
 
 
-    <bean id="remoteSeoService" class="org.yes.cart.remote.service.impl.RemoteSeoServiceImpl">
-        <constructor-arg index="0" ref="dtoSeoService"/>
-        <flex:remoting-destination/>
-        <security:intercept-methods>
-            <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
-            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
-            <security:protect method="remove" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
-            <security:protect method="getNew" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
-            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
-            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
-        </security:intercept-methods>
-    </bean>
-
 
     <bean id="remoteProductService" class="org.yes.cart.remote.service.impl.RemoteProductServiceImpl">
         <constructor-arg index="0" ref="dtoProductService"/>

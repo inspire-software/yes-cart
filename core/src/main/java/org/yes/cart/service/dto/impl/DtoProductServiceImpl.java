@@ -168,7 +168,6 @@ public class DtoProductServiceImpl
         Product product = getEntityFactory().getByIface(Product.class);
         assembler.assembleEntity(instance, product, AdaptersRepository,
                 new EntityFactoryToBeanFactoryAdaptor(productService.getGenericDao().getEntityFactory()));
-        bindDictionaryData(instance, product);
         product = service.create(product);
         return getById(product.getProductId());
     }
@@ -183,19 +182,11 @@ public class DtoProductServiceImpl
                 product,
                 AdaptersRepository,
                 new EntityFactoryToBeanFactoryAdaptor(service.getGenericDao().getEntityFactory()));
-        bindDictionaryData(instance, product);
         product = service.update(product);
         return getById(product.getProductId());
 
     }
 
-    private void bindDictionaryData(final ProductDTO instance, final Product product) {
-        if (instance.getSeoDTO() != null && instance.getSeoDTO().getSeoId() > 0) {
-            product.setSeo(seoGenericService.getById(instance.getSeoDTO().getSeoId()));
-        } else {
-            product.setSeo(null);
-        }
-    }
 
     /**
      * Get the dto interface.

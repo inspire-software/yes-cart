@@ -29,7 +29,7 @@ import java.util.Set;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface Category extends Auditable, Attributable {
+public interface Category extends Auditable, Attributable, Seoable  {
 
     /**
      * Price navigation in category.
@@ -183,19 +183,6 @@ public interface Category extends Auditable, Attributable {
      */
     void setAttribute(Collection<AttrValueCategory> attribute);
 
-    /**
-     * Get category seo information.
-     *
-     * @return {@link Seo}
-     */
-    Seo getSeo();
-
-    /**
-     * Set Seo information.
-     *
-     * @param seo {@link Seo}
-     */
-    void setSeo(Seo seo);
 
     /**
      * Get all product assigned to category.

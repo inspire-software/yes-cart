@@ -64,25 +64,23 @@ public class ProductDTOImpl implements ProductDTO {
 
 
     @DtoField(value = "producttype",
-            dtoBeanKey =  "org.yes.cart.domain.dto.ProductTypeDTO",
+            dtoBeanKey = "org.yes.cart.domain.dto.ProductTypeDTO",
             entityBeanKeys = "org.yes.cart.domain.entity.ProductType")
     @DtoParent(value = "producttypeId", retriever = "productTypeDTO2ProductType")
     private ProductTypeDTO productTypeDTO;
 
     @DtoCollection(
-            value="productCategory",
-            dtoBeanKey="org.yes.cart.domain.dto.ProductCategoryDTO",
+            value = "productCategory",
+            dtoBeanKey = "org.yes.cart.domain.dto.ProductCategoryDTO",
             entityGenericType = ProductCategory.class,
             entityCollectionClass = HashSet.class,
-            dtoCollectionClass = HashSet.class, 
+            dtoCollectionClass = HashSet.class,
             dtoToEntityMatcher = ProductCategoryMatcher.class,
-            readOnly = true            
-            )
+            readOnly = true
+    )
     private Set<ProductCategoryDTO> productCategoryDTOs;
 
 
-    @DtoField(value = "seo", dtoBeanKey = "org.yes.cart.domain.dto.SeoDTO", readOnly = true)
-    private SeoDTO seoDTO;
 
     @DtoField(value = "name")
     private String name;
@@ -93,20 +91,35 @@ public class ProductDTOImpl implements ProductDTO {
     @DtoField(value = "featured")
     private Boolean featured;
 
+    @DtoField(value = "seo.uri", entityBeanKeys = "org.yes.cart.domain.entity.Seo")
+    private String uri;
+
+    @DtoField(value = "seo.title", entityBeanKeys = "org.yes.cart.domain.entity.Seo")
+    private String title;
+
+    @DtoField(value = "seo.metakeywords", entityBeanKeys = "org.yes.cart.domain.entity.Seo")
+    private String metakeywords;
+
+    @DtoField(value = "seo.metadescription", entityBeanKeys = "org.yes.cart.domain.entity.Seo")
+    private String metadescription;
+
+
 
 
     @DtoCollection(
-            value="attribute",
-            dtoBeanKey="org.yes.cart.domain.dto.AttrValueProductDTO",
+            value = "attribute",
+            dtoBeanKey = "org.yes.cart.domain.dto.AttrValueProductDTO",
             entityGenericType = AttrValueEntityProduct.class,
             entityCollectionClass = ArrayList.class,
             dtoCollectionClass = ArrayList.class,
             dtoToEntityMatcher = AttrValueProductMatcher.class,
             readOnly = true
-            )
+    )
     private Collection<AttrValueProductDTO> attribute;
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public long getProductId() {
         return productId;
     }
@@ -118,139 +131,236 @@ public class ProductDTOImpl implements ProductDTO {
         return productId;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setProductId(final long productId) {
         this.productId = productId;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public String getCode() {
         return code;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setCode(final String code) {
         this.code = code;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Date getAvailablefrom() {
         return availablefrom;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setAvailablefrom(final Date availablefrom) {
         this.availablefrom = availablefrom;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Date getAvailabletill() {
         return availabletill;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setAvailabletill(final Date availabletill) {
         this.availabletill = availabletill;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public int getAvailability() {
         return availability;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setAvailability(final int availability) {
         this.availability = availability;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public BrandDTO getBrandDTO() {
         return brandDTO;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setBrandDTO(final BrandDTO brandDTO) {
         this.brandDTO = brandDTO;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public ProductTypeDTO getProductTypeDTO() {
         return productTypeDTO;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setProductTypeDTO(final ProductTypeDTO productTypeDTO) {
         this.productTypeDTO = productTypeDTO;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Set<ProductCategoryDTO> getProductCategoryDTOs() {
         return productCategoryDTOs;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setProductCategoryDTOs(final Set<ProductCategoryDTO> productCategoryDTOs) {
         this.productCategoryDTOs = productCategoryDTOs;
     }
 
-    /** {@inheritDoc} */
-    public SeoDTO getSeoDTO() {
-        return seoDTO;
-    }
 
-    /** {@inheritDoc} */
-    public void setSeoDTO(final SeoDTO seoDTO) {
-        this.seoDTO = seoDTO;
-    }
-
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public String getName() {
         return name;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setName(final String name) {
         this.name = name;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public String getDescription() {
         return description;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setDescription(final String description) {
         this.description = description;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Boolean getFeatured() {
         return featured;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setFeatured(final Boolean featured) {
         this.featured = featured;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Collection<AttrValueProductDTO> getAttribute() {
         return attribute;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setAttribute(final Collection<AttrValueProductDTO> attribute) {
         this.attribute = attribute;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public String getTag() {
         return tag;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setTag(final String tag) {
         this.tag = tag;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getUri() {
+        return uri;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setUri(final String uri) {
+        this.uri = uri;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setTitle(final String title) {
+        this.title = title;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getMetakeywords() {
+        return metakeywords;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setMetakeywords(final String metakeywords) {
+        this.metakeywords = metakeywords;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getMetadescription() {
+        return metadescription;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setMetadescription(final String metadescription) {
+        this.metadescription = metadescription;
     }
 
     @Override
@@ -265,7 +375,6 @@ public class ProductDTOImpl implements ProductDTO {
                 ", brandDTO=" + brandDTO +
                 ", productTypeDTO=" + productTypeDTO +
                 ", productCategoryDTOs=" + productCategoryDTOs +
-                ", seoDTO=" + seoDTO +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", featured=" + featured +

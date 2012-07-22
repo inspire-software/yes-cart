@@ -1,3 +1,5 @@
+package org.yes.cart.domain.entity;
+
 /*
  * Copyright 2009 Igor Azarnyi, Denys Pavlov
  *
@@ -14,15 +16,25 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.service.dto;
-
-import org.yes.cart.domain.dto.SeoDTO;
-
 /**
  * User: Igor Azarny iazarny@yahoo.com
- * Date: 07-May-2011
- * Time: 11:13:01
+ * Date: 7/21/12
+ * Time: 11:08 PM
  */
-public interface DtoSeoService extends GenericDTOService<SeoDTO> {
+public interface Seoable {
+
+    /**
+     * Get seo.
+     *
+     * @return product {@link Seo} information or null if seo not set.
+     */
+    Seo getSeo();
+
+    /**
+     * Set  seo information.
+     *
+     * @param seo seo.
+     */
+    void setSeo(Seo seo);
 
 }

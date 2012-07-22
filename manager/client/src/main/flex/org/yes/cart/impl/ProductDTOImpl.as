@@ -41,7 +41,13 @@ public class ProductDTOImpl {
 
     public var productCategoryDTOs:ArrayCollection; //of ProductCategoryDTOImpl
 
-    public var seoDTO:SeoDTOImpl;
+    public var   uri:String;
+
+    public var  title:String;
+
+    public var  metakeywords:String;
+
+    public var  metadescription:String;
 
     public var name:String;
 
@@ -97,7 +103,6 @@ public class ProductDTOImpl {
                 + ",brandDTO=" + String(brandDTO)
                 + ",productTypeDTO=" + String(productTypeDTO)
                 + ",productCategoryDTOs=" + String(productCategoryDTOs)
-                + ",seoDTO=" + String(seoDTO)
                 + ",name=" + String(name)
                 + ",description=" + String(description)
                 + ",featured=" + String(featured) + "}";

@@ -56,9 +56,8 @@
 
         private var TAB_SUMMARY_IDX:int = 0;
         private var TAB_PRODUCTS_IDX:int = 1;
-        private var TAB_SEO_IDX:int = 2;
-        private var TAB_IMAGE_IDX:int = 3;
-        private var TAB_ATTRIB_IDX:int = 4;
+        private var TAB_IMAGE_IDX:int = 2;
+        private var TAB_ATTRIB_IDX:int = 3;
 
 
         [Bindable]
@@ -131,11 +130,6 @@
                     break;
                 }
 
-                case TAB_SEO_IDX:
-                {
-                    seoTabSelected();
-                    break;
-                }
 
                 case TAB_IMAGE_IDX:
                 {
@@ -167,6 +161,10 @@
         private function bingCategoryData():void {
 
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryNameTextInput, "text", this.selectedCategoryDTOImpl, "name"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(uriNameTextInput, "text", this.selectedCategoryDTOImpl, "uri"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(titleNameTextInput, "text", this.selectedCategoryDTOImpl, "title"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(metakeywordsNameTextInput, "text", this.selectedCategoryDTOImpl, "metakeywords"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(metadescriptionNameTextInput, "text", this.selectedCategoryDTOImpl, "metadescription"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryDescriptionTextInput, "text", this.selectedCategoryDTOImpl, "description"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryTemplateTextInput, "text", this.selectedCategoryDTOImpl, "uitemplate"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryRankTextInput, "text", this.selectedCategoryDTOImpl, "rank"));
@@ -177,6 +175,10 @@
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryFNByPriceCheckBox, "selected", this.selectedCategoryDTOImpl, "navigationByPrice"));
 
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "name", categoryNameTextInput, "text"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "uri", uriNameTextInput, "text"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "title", titleNameTextInput, "text"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "metakeywords", metakeywordsNameTextInput, "text"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "metadescription", metadescriptionNameTextInput, "text"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "description", categoryDescriptionTextInput, "text"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "uitemplate", categoryTemplateTextInput, "text"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "rank", categoryRankTextInput, "text"));
@@ -190,6 +192,10 @@
 
             // if (!saveBtnVisible) {
             categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "name", categoryDtoChanged));
+            categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "uri", categoryDtoChanged));
+            categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "title", categoryDtoChanged));
+            categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "metakeywords", categoryDtoChanged));
+            categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "metadescription", categoryDtoChanged));
             categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "description", categoryDtoChanged));
             categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "uitemplate", categoryDtoChanged));
             categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "rank", categoryDtoChanged));
@@ -349,24 +355,6 @@
             }
         }
 
-        private function seoTabSelected():void {
-            if (categorySelected && selectedCategoryDTOImpl != null) {
-                seoTabPanel.seoId = selectedCategoryDTOImpl.seoId;
-            } else {
-                seoTabPanel.seoId = Number.NaN;
-            }
-        }
-
-        private function initSeoListeners():void {
-            seoTabPanel.addEventListener(DtoEvent.UPDATE, onSeoCreated);
-        }
-
-        private function onSeoCreated(event:DtoEvent):void {
-            if (DomainUtils.isNewPK(selectedCategoryDTOImpl.seoId)) {
-                selectedCategoryDTOImpl.seoId = (event.dto as SeoDTOImpl).seoId;
-                saveChangedCategory(selectedCategoryDTOImpl);
-            }
-        }
 
         private function assignedProductsTabSelected():void {
             remoteProductService.getProductByCategory(selectedCategoryDTOImpl.categoryId);
@@ -654,16 +642,16 @@
                                 <mx:Form>
                                     <mx:FormItem width="100%"
                                                  label="@Resource(bundle='CategoryManagementPanel',key='name')">
-                                        <mx:TextInput id="categoryNameTextInput" width="227"/>
+                                        <mx:TextInput id="categoryNameTextInput" width="300"/>
                                     </mx:FormItem>
                                     <mx:FormItem width="100%"
                                                  label="@Resource(bundle='CategoryManagementPanel',key='description')">
                                         <mx:TextInput id="categoryDescriptionTextInput" height="54"
-                                                      width="227"/>
+                                                      width="300"/>
                                     </mx:FormItem>
                                     <mx:FormItem width="100%"
                                                  label="@Resource(bundle='CategoryManagementPanel',key='templateVariation')">
-                                        <mx:TextInput id="categoryTemplateTextInput" width="227"/>
+                                        <mx:TextInput id="categoryTemplateTextInput" width="300"/>
                                     </mx:FormItem>
                                     <mx:FormItem width="100%"
                                                  label="@Resource(bundle='CategoryManagementPanel',key='availableFrom')">
@@ -689,7 +677,7 @@
                                     </mx:FormItem>
                                     <mx:FormItem width="100%"
                                                  label="@Resource(bundle='CategoryManagementPanel',key='rank')">
-                                        <mx:TextInput id="categoryRankTextInput" width="227"/>
+                                        <mx:TextInput id="categoryRankTextInput" width="300"/>
                                     </mx:FormItem>
                                     <mx:FormItem width="100%"
                                                  label="@Resource(bundle='CategoryManagementPanel',key='filteredNavigation')">
@@ -719,7 +707,7 @@
                                     <mx:FormItem width="100%"
                                                  label="@Resource(bundle='CategoryManagementPanel',key='productType')">
                                         <mx:HBox>
-                                            <mx:ComboBox id="categoryProductTypeComboBox" width="227"
+                                            <mx:ComboBox id="categoryProductTypeComboBox" width="300"
                                                          dataProvider="{categoryProductTypeList}"
                                                          labelField="name"
                                                          data="producttypeId"
@@ -732,8 +720,26 @@
                                                     click="onCategoryProductTypeClear(event)"
                                                     />
                                         </mx:HBox>
-
                                     </mx:FormItem>
+
+                                    <mx:FormItem width="100%"
+                                                 label="@Resource(bundle='CategoryManagementPanel',key='uri')">
+                                        <mx:TextInput id="uriNameTextInput" width="300"/>
+                                    </mx:FormItem>
+                                    <mx:FormItem width="100%"
+                                                 label="@Resource(bundle='CategoryManagementPanel',key='title')">
+                                        <mx:TextInput id="titleNameTextInput" width="300"/>
+                                    </mx:FormItem>
+                                    <mx:FormItem width="100%"
+                                                 label="@Resource(bundle='CategoryManagementPanel',key='metakeywords')">
+                                        <mx:TextInput id="metakeywordsNameTextInput" width="300"/>
+                                    </mx:FormItem>
+                                    <mx:FormItem width="100%"
+                                                 label="@Resource(bundle='CategoryManagementPanel',key='metadescription')">
+                                        <mx:TextInput id="metadescriptionNameTextInput" width="300"/>
+                                    </mx:FormItem>
+
+
                                 </mx:Form>
                                 <mx:ControlBar horizontalAlign="right">
                                     <mx:Button id="saveBtn"
@@ -797,8 +803,6 @@
                             </mx:VBox>
 
                         </mx:Canvas>
-                        <seo:SeoPanel id="seoTabPanel"
-                                      label="@Resource(bundle='CategoryManagementPanel',key='seo')" creationComplete="initSeoListeners()"/>
                         <cat:CategoryImageAttributesPanel id="catImagesPanel"/>
                         <cat:CategoryNonImageAttributesPanel id="attrValuesTabPanel"/>
                     </mx:TabNavigator>
