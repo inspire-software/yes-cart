@@ -43,14 +43,14 @@
                     <mx:Label text="@Resource(bundle='ProductManagementPanel',key='name')"/>
                     <mx:TextInput id="nameTextInput" width="100"/>
                     <mx:Label text="@Resource(bundle='ProductManagementPanel',key='brand')"/>
-                    <mx:ComboBox id="brandComboBox" width="120"
+                    <mx:ComboBox id="brandComboBox" width="200"
                                  dataProvider="{brandsList}"
                                  labelField="name"
                                  data="brandId"
                                  prompt="@Resource(bundle='ProductManagementPanel',key='selectBrandPropmt')"
                             />
                     <mx:Label text="@Resource(bundle='ProductManagementPanel',key='type')"/>
-                    <mx:ComboBox id="typeComboBox" width="120"
+                    <mx:ComboBox id="typeComboBox" width="200"
                                  dataProvider="{productTypesList}"
                                  labelField="name"
                                  data="producttypeId"
@@ -91,8 +91,7 @@
                            height="100%">
                     <prod:ProductPricePanel id="pricePanel"/>
                 </mx:Canvas>
-                <seo:SeoPanel id="seoTabPanel"
-                              label="@Resource(bundle='ProductManagementPanel',key='seoTab')" creationComplete="initSeoListeners()"/>
+
                 <mx:Canvas label="@Resource(bundle='ProductManagementPanel',key='associationsTab')"
                            width="100%" height="100%">
                     <prod:ProductAssociationsPanel id="productAssociationsPanel"/>
@@ -190,10 +189,9 @@
         private var TAB_ATTR_IDX:int = 2;
         private var TAB_SKU_IDX:int = 3;
         private var TAB_PRICE_IDX:int = 4;
-        private var TAB_SEO_IDX:int = 5;
-        private var TAB_ASSOCIATION_IDX:int = 6;
-        private var TAB_CATEGORY_IDX:int = 7;
-        private var TAB_WAREHOUSE_IDX:int = 8;
+        private var TAB_ASSOCIATION_IDX:int = 5;
+        private var TAB_CATEGORY_IDX:int = 6;
+        private var TAB_WAREHOUSE_IDX:int = 7;
 
 
         [Bindable]
@@ -313,11 +311,6 @@
                     priceTabSelected();
                     break;
                 }
-                case TAB_SEO_IDX:
-                {
-                    seoTabSelected();
-                    break;
-                }
                 case TAB_ASSOCIATION_IDX:
                 {
                     associationsTabSelected();
@@ -393,32 +386,6 @@
 
         }
 
-        private function seoTabSelected():void {
-            if (productSelected && productDTOImpl != null) {
-                seoTabPanel.seoId = productDTOImpl.seoDTO != null ? productDTOImpl.seoDTO.seoId : Number.NaN;
-            } else {
-                seoTabPanel.seoId = Number.NaN;
-            }
-        }
-
-        private function initSeoListeners():void {
-            seoTabPanel.addEventListener(DtoEvent.UPDATE, onSeoCreated);
-        }
-
-        public function onSeoCreated(event:DtoEvent):void {
-            Debug.trace("INFO ProductManagementPanel seo " + event.dto + " for " + productDTOImpl + " created call back ");
-            if (productDTOImpl.seoDTO == null || DomainUtils.isNewPK(productDTOImpl.seoDTO.seoId)) {
-                Debug.trace("INFO gonna to update product");
-                productDTOImpl.seoDTO = event.dto as SeoDTOImpl;
-                if (DomainUtils.isNewPK(productDTOImpl.productId)) {
-                    Debug.trace("INFO ProductManagementPanel product will be created " + productDTOImpl);
-                    remoteProductService.create(productDTOImpl);
-                } else {
-                    Debug.trace("INFO ProductManagementPanel product will be updated " + productDTOImpl);
-                    remoteProductService.update(productDTOImpl);
-                }
-            }
-        }
 
         protected function onRpcMethodFault(event:FaultEvent):void {
             ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);

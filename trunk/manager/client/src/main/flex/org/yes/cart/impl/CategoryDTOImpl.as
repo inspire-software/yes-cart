@@ -41,7 +41,14 @@ public class CategoryDTOImpl {
 
     public var availabletill:Date ;
 
-    public var seoId:Number;
+    public var   uri:String;
+
+    public var  title:String;
+
+    public var  metakeywords:String;
+
+    public var  metadescription:String;
+
 
     public var navigationByAttributes:Boolean ;
 
@@ -81,7 +88,6 @@ public class CategoryDTOImpl {
                 + ",uitemplate=" + String(uitemplate)
                 + ",availablefrom=" + String(availablefrom)
                 + ",availabletill=" + String(availabletill)
-                + ",seoId=" + String(seoId)
                 + ",navigationByAttributes=" + String(navigationByAttributes)
                 + ",navigationByBrand=" + String(navigationByBrand)
                 + ",navigationByPrice=" + String(navigationByPrice)

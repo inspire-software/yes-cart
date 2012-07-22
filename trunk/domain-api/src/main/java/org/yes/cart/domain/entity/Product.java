@@ -31,7 +31,7 @@ import java.util.Set;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface Product extends Auditable, Attributable {
+public interface Product extends Auditable, Attributable, Seoable {
 
     /**
      * When available on warehouse.
@@ -241,19 +241,7 @@ public interface Product extends Auditable, Attributable {
      */
     void setProductAssociations(Set<ProductAssociation> productAssociations);
 
-    /**
-     * Product seo.
-     *
-     * @return product {@link Seo} information or null if seo not set.
-     */
-    Seo getSeo();
 
-    /**
-     * Set product seo information.
-     *
-     * @param seo product seo.
-     */
-    void setSeo(Seo seo);
 
     /**
      * Get product name.

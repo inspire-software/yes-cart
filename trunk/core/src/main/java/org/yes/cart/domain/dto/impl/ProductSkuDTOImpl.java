@@ -21,7 +21,6 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoCollection;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.AttrValueProductSkuDTO;
 import org.yes.cart.domain.dto.ProductSkuDTO;
-import org.yes.cart.domain.dto.SeoDTO;
 import org.yes.cart.domain.dto.SkuPriceDTO;
 import org.yes.cart.domain.dto.matcher.impl.AttrValueProductSkuMatcher;
 import org.yes.cart.domain.dto.matcher.impl.SkuPriceMatcher;
@@ -42,7 +41,7 @@ import java.util.Collection;
 @Dto
 public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
 
-    private static final long serialVersionUID = 20100602L;    
+    private static final long serialVersionUID = 20100602L;
 
 
     @DtoField(value = "skuId")
@@ -70,20 +69,32 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     @DtoField(value = "barCode")
     private String barCode;
 
+    @DtoField(value = "seo.uri", entityBeanKeys = "org.yes.cart.domain.entity.Seo")
+    private String uri;
+
+    @DtoField(value = "seo.title", entityBeanKeys = "org.yes.cart.domain.entity.Seo")
+    private String title;
+
+    @DtoField(value = "seo.metakeywords", entityBeanKeys = "org.yes.cart.domain.entity.Seo")
+    private String metakeywords;
+
+    @DtoField(value = "seo.metadescription", entityBeanKeys = "org.yes.cart.domain.entity.Seo")
+    private String metadescription;
+
+
+
 
     @DtoCollection(
-            value="attribute",
-            dtoBeanKey="org.yes.cart.domain.dto.AttrValueProductSkuDTO",
+            value = "attribute",
+            dtoBeanKey = "org.yes.cart.domain.dto.AttrValueProductSkuDTO",
             entityGenericType = AttrValueEntityProductSku.class,
             entityCollectionClass = ArrayList.class,
             dtoCollectionClass = ArrayList.class,
             dtoToEntityMatcher = AttrValueProductSkuMatcher.class,
             readOnly = true
-            )
+    )
     private Collection<AttrValueProductSkuDTO> attribute;
 
-    @DtoField(value = "seo", dtoBeanKey = "org.yes.cart.domain.dto.SeoDTO", readOnly = true)
-    private SeoDTO seoDTO;
 
 
     @DtoCollection(
@@ -101,7 +112,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
         return skuId;
     }
 
-     /**
+    /**
      * {@inheritDoc}
      */
     public long getId() {
@@ -192,39 +203,96 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
         return barCode;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public void setBarCode(final String barCode) {
         this.barCode = barCode;
     }
 
-    /** {@inheritDoc}*/
-    public SeoDTO getSeoDTO() {
-        return seoDTO;
-    }
 
-    /** {@inheritDoc}*/
-    public void setSeoDTO(final SeoDTO seoDTO) {
-        this.seoDTO = seoDTO;
-    }
-
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public Collection<SkuPriceDTO> getPrice() {
         return price;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public void setPrice(final Collection<SkuPriceDTO> price) {
         this.price = price;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public Collection<AttrValueProductSkuDTO> getAttribute() {
         return attribute;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public void setAttribute(final Collection<AttrValueProductSkuDTO> attribute) {
         this.attribute = attribute;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getUri() {
+        return uri;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setUri(final String uri) {
+        this.uri = uri;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setTitle(final String title) {
+        this.title = title;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getMetakeywords() {
+        return metakeywords;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setMetakeywords(final String metakeywords) {
+        this.metakeywords = metakeywords;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getMetadescription() {
+        return metadescription;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setMetadescription(final String metadescription) {
+        this.metadescription = metadescription;
     }
 
     @Override
@@ -283,7 +351,6 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
                 ", rank=" + rank +
                 ", barCode='" + barCode + '\'' +
                 ", attribute=" + attribute +
-                ", seoDTO=" + seoDTO +
                 ", price=" + price +
                 '}';
     }

@@ -53,9 +53,6 @@
         private var TAB_SUMMARY_IDX:int = 0;
         private var TAB_IMAGE_IDX:int = 1;
         private var TAB_ATTR_IDX:int = 2;
-        private var TAB_SEO_IDX:int = 3;
-        //private var TAB_PRICE_IDX:int = 4;
-        //private var TAB_WAREHOUSE_IDX:int = 5;
 
 
         private var _product:ProductDTOImpl;
@@ -118,11 +115,6 @@
                     break;
                 }
 
-                case TAB_SEO_IDX:
-                {
-                    seoTabSelected();
-                    break;
-                }
 
             }
 
@@ -146,13 +138,7 @@
             }
         }
 
-        private function seoTabSelected():void {
-            if (skuSelected && selectedSku != null) {
-                skuSeoPanel.seoId = selectedSku.seoDTO != null ? selectedSku.seoDTO.seoId : Number.NaN;
-            } else {
-                skuSeoPanel.seoId = Number.NaN;
-            }
-        }
+
 
         private function skuSummaryTabSelect():void {
             skuSummaryPanel.productSku = selectedSku;
@@ -213,18 +199,7 @@
             }
         }
 
-        private function initSeoListeners():void {
-            skuSeoPanel.addEventListener(DtoEvent.UPDATE, onSeoCreated);
-        }
 
-        private function onSeoCreated(event:DtoEvent):void {
-            Debug.trace("INFO ProductManagementPanel seo " + event.dto + " for " + selectedSku + " created call back ");
-            if (selectedSku.seoDTO == null || DomainUtils.isNewPK(selectedSku.seoDTO.seoId)) {
-                Debug.trace("INFO gonna to update product");
-                selectedSku.seoDTO = event.dto as SeoDTOImpl;
-                onSkuChanged(selectedSku);
-            }
-        }
 
         private function onCreateUpdateResult(event:ResultEvent):void {
             remoteProductSkuService.getAllProductSkus(_product.productId);
@@ -311,8 +286,6 @@
             </mx:Canvas>
             <prod:ProductSkuImageAttributesPanel id="skuImagesTab"/>
             <prod:ProductSkuNonImageAttributesPanel id="skuAttributesTab"/>
-            <seo:SeoPanel id="skuSeoPanel"
-                          label="@Resource(bundle='ProductSkuManagementPanel',key='seo')" creationComplete="initSeoListeners()"/>
         </mx:TabNavigator>
     </mx:VBox>
 

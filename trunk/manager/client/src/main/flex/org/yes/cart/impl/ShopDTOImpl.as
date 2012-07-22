@@ -31,6 +31,15 @@ public class ShopDTOImpl {
     public var imageVaultFolder:String;
 
     public var shopId:Number;
+
+    public var   uri:String;
+
+    public var  title:String;
+
+    public var  metakeywords:String;
+
+    public var  metadescription:String;
+
     
     
     public function ShopDTOImpl() {

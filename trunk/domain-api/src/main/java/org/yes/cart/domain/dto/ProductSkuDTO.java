@@ -127,18 +127,54 @@ public interface ProductSkuDTO extends Identifiable {
     void setBarCode(final String barCode);
 
     /**
-     * Set seo
-     *
-     * @return seo.
+     * Get seo uri.
+     * @return uri
      */
-    SeoDTO getSeoDTO();
+    String getUri();
 
     /**
-     * Set seo
-     *
-     * @param seoDTO seo
+     * Set seo uri;
+     * @param uri  seo uri to  use
      */
-    void setSeoDTO(final SeoDTO seoDTO);
+    void setUri(String uri);
+
+    /**
+     * Get title.
+     * @return  title
+     */
+
+    String getTitle();
+
+    /**
+     * Set seo title
+     * @param title seo title to use
+     */
+    void setTitle(String title);
+
+    /**
+     * Get meta key words.
+     * @return meta key words
+     */
+
+    String getMetakeywords();
+
+    /**
+     * Set meta key words to use.
+      * @param metakeywords      key words
+     */
+    void setMetakeywords(String metakeywords);
+
+    /**
+     * Get seo description
+     * @return seo description.
+     */
+    String getMetadescription();
+
+    /**
+     * Set seo description.
+     * @param metadescription description to use
+     */
+    void setMetadescription(String metadescription);
 
     /**
      * @return price for this sku

@@ -399,17 +399,16 @@
 
     <!-- products -->
 
-    <TSEO SEO_ID="9998"
-          URI="Бендер-Згинач-Родріґес"
-          TITLE="Бендер Згинач Родріґес"
-          METAKEYWORDS=""
-          METADESCRIPTION="Futurama"/>
-
     <TPRODUCT PRODUCT_ID="9998"
               CODE="BENDER-ua"
               NAME="Бендер Згинач Родріґес"
               DESCRIPTION="Бендер — комічний антигерой, п'яниця, лихослов і завзятий курець, шанувальник порнографії для роботів (у вигляді електричних схем), злодій-рецидивіст (вірніше, клептоман), кухар (хоча, зважаючи на відсутність відчуття смаку, його їжа в переважній більшості випадків щонайменше неїстівна, ба навіть небезпечна для життя)."
-              BRAND_ID="101" PRODUCTTYPE_ID="1" AVAILABILITY="1" SEO_ID="9998" FEATURED="0"
+              BRAND_ID="101" PRODUCTTYPE_ID="1" AVAILABILITY="1"
+              URI="Бендер-Згинач-Родріґес"
+              TITLE="Бендер Згинач Родріґес"
+              METAKEYWORDS=""
+              METADESCRIPTION="Futurama"
+              FEATURED="0"
               AVAILABLEFROM="2010-04-08 11:15:17.451" AVAILABLETILL="2040-04-08 11:15:17.451"
               TAG="sale newarrival specialpromo"/>
 
@@ -423,11 +422,6 @@
 
     <TPRODUCTATTRVALUE ATTRVALUE_ID="9996" CODE="WEIGHT" VAL="1.15" PRODUCT_ID="9998"/>
 
-    <TSEO SEO_ID="9999"
-          URI="bender-rodriguez"
-          TITLE="Bender Bending Rodriguez, designated Bending Unit 22"
-          METAKEYWORDS=""
-          METADESCRIPTION="Futurama"/>
 
     <TSKU SKU_ID="10000"
           PRODUCT_ID="10000"
@@ -440,7 +434,11 @@
               CODE="BENDER"
               NAME="Bender Bending Rodriguez"
               DESCRIPTION="Bender Bending Rodriguez, designated Bending Unit 22, is a fictional robot character in the animated television series Futurama. He is voiced by John DiMaggio. In the series, Bender plays the role of a comic anti-hero, and is described by Leela as an alcoholic, whore-mongering, chain-smoking gambler.[1] He was built in Mexico and is said to possess a swarthy Latin charm despite not having a Mexican accent. He is also prejudiced against non-robots, often expressing an urge to kill all humans"
-              BRAND_ID="101" PRODUCTTYPE_ID="1" AVAILABILITY="1" SEO_ID="9999"
+              BRAND_ID="101" PRODUCTTYPE_ID="1" AVAILABILITY="1"
+              URI="bender-rodriguez"
+              TITLE="Bender Bending Rodriguez, designated Bending Unit 22"
+              METAKEYWORDS=""
+              METADESCRIPTION="Futurama"
               TAG="sale"/>
 
     <TSKU SKU_ID="9999"
@@ -456,18 +454,17 @@
     <TPRODUCTATTRVALUE ATTRVALUE_ID="9999" CODE="MATERIAL" VAL="metal" PRODUCT_ID="9999"/>
 
 
-    <TSEO SEO_ID="10000"
-          URI="i-sobot"
-          TITLE="I-Sobot robot"
-          METAKEYWORDS="Sobot, Robotics, Mechanical toy, Beer"
-          METADESCRIPTION="Buy i-Sobot - the worlds smallest humanoid robot, 200 phrases, voice recognition and easy to use remote control; available at gadget.yescart.org"/>
 
 
     <TPRODUCT PRODUCT_ID="10000"
               CODE="SOBOT"
               NAME="I-Sobot"
               DESCRIPTION="Think small. BigSmall. Small is beautiful. Good things come in small packages. Small ones are more juicy. However you like to put it, sometimes there's a beauty and economy in reducing the scale of an object and cramming it full of cleverness. Now, the ever-so-clever chaps at Tomy have done just that with the creation of the I-Sobot. The what bot we hear you ask? The I-Sobot is the world's smallest mass produced bi-pedal humanoid robot. But don't be fooled by his size - he has a big personality all of his own. Measuring only 16cm and weighing an amazing 300 grams, he's ready to play straight from the box. Choose from 4 modes where I-Sobot can perform fun and quirky scenes from Western battles to voice command mode that includes 10 words of phrases to say to I-Sobot where he will respond. With 17 Servo motors allowing human like articulation and 200 spoken phrases, you'll never be lonesome again. I-Sobot's distinctive design and ground-breaking functionality has us rather drooling at the mouth, in an ever-so manly way. Splendid."
-              BRAND_ID="100" PRODUCTTYPE_ID="1" AVAILABILITY="1" SEO_ID="10000"
+              BRAND_ID="100" PRODUCTTYPE_ID="1" AVAILABILITY="1"
+              URI="i-sobot"
+              TITLE="I-Sobot robot"
+              METAKEYWORDS="Sobot, Robotics, Mechanical toy, Beer"
+              METADESCRIPTION="Buy i-Sobot - the worlds smallest humanoid robot, 200 phrases, voice recognition and easy to use remote control; available at gadget.yescart.org"
               TAG="newarrival"/>
 
 
@@ -488,14 +485,13 @@
     <TPRODUCTSKUATTRVALUE ATTRVALUE_ID="20002" CODE="SMELL" VAL="apple" SKU_ID="10000"/>
 
 
-    <TSEO SEO_ID="10001"
-          URI="i-sobot=pink"
+    <TSKU SKU_ID="10001" PRODUCT_ID="10000" CODE="SOBOT-PINK" NAME="I-Sobot Girls Edition"
+          DESCRIPTION="Special I-Sobot edition, that can play poker, open beer and smoke" RANK="2"
+                      URI="i-sobot=pink"
           TITLE="I-Sobot pink robot"
           METAKEYWORDS="Sobot, Robotics, Mechanical toy, Vibrator"
           METADESCRIPTION="Buy i-Sobot - the worlds smallest humanoid robot, 200 phrases, built-in vibrator with voice recognition and easy to use remote control; available at gadget.yescart.org"/>
 
-    <TSKU SKU_ID="10001" PRODUCT_ID="10000" CODE="SOBOT-PINK" NAME="I-Sobot Girls Edition"
-          DESCRIPTION="Special I-Sobot edition, that can play poker, open beer and smoke" RANK="2" SEO_ID="10001"/>
     <TPRODUCTSKUATTRVALUE ATTRVALUE_ID="20003" CODE="SIZE" VAL="large" SKU_ID="10001"/>
     <TPRODUCTSKUATTRVALUE ATTRVALUE_ID="20004" CODE="SMELL" VAL="ananas" SKU_ID="10001"/>
 

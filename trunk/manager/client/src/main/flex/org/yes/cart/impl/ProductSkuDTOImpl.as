@@ -38,7 +38,14 @@ public class ProductSkuDTOImpl {
 
     public var attribute:ArrayCollection;
 
-    public var  seoDTO:SeoDTOImpl;
+    public var   uri:String;
+
+    public var  title:String;
+
+    public var  metakeywords:String;
+
+    public var  metadescription:String;
+
 
     public var price:ArrayCollection;
     
@@ -56,7 +63,6 @@ public class ProductSkuDTOImpl {
                 + ",rank=" + String(rank)
                 + ",barCode=" + String(barCode)
                 + ",attribute=" + String(attribute)
-                + ",seoDTO=" + String(seoDTO)
                 + ",price=" + String(price) + "}";
     }
 }

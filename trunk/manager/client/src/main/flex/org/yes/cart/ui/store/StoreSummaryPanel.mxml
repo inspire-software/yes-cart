@@ -45,12 +45,21 @@
         private function init():void {
 
             BindingUtils.bindProperty(codeTextInput, "text", this._shopDTOImpl, "code");
+            BindingUtils.bindProperty(titleNameTextInput, "text", this._shopDTOImpl, "title");
+            BindingUtils.bindProperty(metakeywordsNameTextInput, "text", this._shopDTOImpl, "metakeywords");
+            BindingUtils.bindProperty(metadescriptionNameTextInput, "text", this._shopDTOImpl, "metadescription");
+
             BindingUtils.bindProperty(nameTextInput, "text", this._shopDTOImpl, "name");
+
             BindingUtils.bindProperty(descriptionTextInput, "text", this._shopDTOImpl, "description");
             BindingUtils.bindProperty(fspointerTextInput, "text", this._shopDTOImpl, "fspointer");
             BindingUtils.bindProperty(imgpointerTextInput, "text", this._shopDTOImpl, "imageVaultFolder");
 
             BindingUtils.bindProperty(this._shopDTOImpl, "code", codeTextInput, "text");
+            BindingUtils.bindProperty(this._shopDTOImpl, "title", titleNameTextInput, "text");
+            BindingUtils.bindProperty(this._shopDTOImpl, "metakeywords", metakeywordsNameTextInput, "text");
+            BindingUtils.bindProperty(this._shopDTOImpl, "metadescription", metadescriptionNameTextInput, "text");
+
             BindingUtils.bindProperty(this._shopDTOImpl, "name", nameTextInput, "text");
             BindingUtils.bindProperty(this._shopDTOImpl, "description", descriptionTextInput, "text");
             BindingUtils.bindProperty(this._shopDTOImpl, "fspointer", fspointerTextInput, "text");
@@ -71,6 +80,9 @@
                 changeWatchers.removeAll();
             }
             changeWatchers.addItem(ChangeWatcher.watch(this._shopDTOImpl, "code", dtoChanged));
+            changeWatchers.addItem(ChangeWatcher.watch(this._shopDTOImpl, "title", dtoChanged));
+            changeWatchers.addItem(ChangeWatcher.watch(this._shopDTOImpl, "metakeywords", dtoChanged));
+            changeWatchers.addItem(ChangeWatcher.watch(this._shopDTOImpl, "metadescription", dtoChanged));
             changeWatchers.addItem(ChangeWatcher.watch(this._shopDTOImpl, "name", dtoChanged));
             changeWatchers.addItem(ChangeWatcher.watch(this._shopDTOImpl, "description", dtoChanged));
             changeWatchers.addItem(ChangeWatcher.watch(this._shopDTOImpl, "fspointer", dtoChanged));
@@ -130,27 +142,42 @@
 
     <mx:Form>
         <mx:FormItem label="@Resource(bundle='StoreSummaryPanel',key='code')">
-                <mx:TextInput id="codeTextInput" width="245"/>
+            <mx:TextInput id="codeTextInput" width="300"/>
         </mx:FormItem>
         <mx:FormItem label="@Resource(bundle='StoreSummaryPanel',key='name')">
-                <mx:TextInput id="nameTextInput" width="245"/>
+            <mx:TextInput id="nameTextInput" width="300"/>
         </mx:FormItem>
         <mx:FormItem label="@Resource(bundle='StoreSummaryPanel',key='description')">
-                <mx:TextArea id="descriptionTextInput" height="100" width="245"/>
+            <mx:TextArea id="descriptionTextInput" height="100" width="300"/>
         </mx:FormItem>
         <mx:FormItem label="@Resource(bundle='StoreSummaryPanel',key='themeLocation')">
-                <mx:TextInput id="fspointerTextInput" width="245"/>
+            <mx:TextInput id="fspointerTextInput" width="300"/>
         </mx:FormItem>
         <mx:FormItem label="@Resource(bundle='StoreSummaryPanel',key='imagesLocation')">
-                <mx:TextInput id="imgpointerTextInput" width="245"/>
+            <mx:TextInput id="imgpointerTextInput" width="300"/>
         </mx:FormItem>
+
+
+        <mx:FormItem width="100%"
+                     label="@Resource(bundle='ProductManagementPanel',key='title')">
+            <mx:TextInput id="titleNameTextInput" width="300"/>
+        </mx:FormItem>
+        <mx:FormItem width="100%"
+                     label="@Resource(bundle='ProductManagementPanel',key='metakeywords')">
+            <mx:TextInput id="metakeywordsNameTextInput" width="300"/>
+        </mx:FormItem>
+        <mx:FormItem width="100%"
+                     label="@Resource(bundle='ProductManagementPanel',key='metadescription')">
+            <mx:TextInput id="metadescriptionNameTextInput" width="300"/>
+        </mx:FormItem>
+
     </mx:Form>
     <mx:ControlBar horizontalAlign="left">
         <mx:Button id="saveBtn"
                    click="onSaveBtnClick(event)"
                    label="@Resource(bundle='StoreSummaryPanel',key='save')"
                    enabled="{dtoChangedFlag}"
-                   />
+                />
     </mx:ControlBar>
 
 </mx:VBox>

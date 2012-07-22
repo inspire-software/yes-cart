@@ -29,7 +29,7 @@ import java.util.Set;
  * Time: 11:12:54
  */
 
-public interface Shop extends Auditable {
+public interface Shop extends Auditable, Seoable {
 
     /**
      * Get shop code.
@@ -231,19 +231,6 @@ public interface Shop extends Auditable {
     void setAttribute(Collection<AttrValueShop> attribute);
 
 
-    /**
-     * Get seo information about shop.
-     *
-     * @return seo info.
-     */
-    Seo getSeo();
-
-    /**
-     * Set shop seo information.
-     *
-     * @param seo seo information.
-     */
-    void setSeo(Seo seo);
 
     /**
      * Get categories, that assigned to shop.

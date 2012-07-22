@@ -17,6 +17,8 @@
 package org.yes.cart.dao.impl;
 
 import org.yes.cart.dao.EntityFactory;
+import org.yes.cart.domain.entity.Seo;
+import org.yes.cart.domain.entity.Seoable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,11 +53,16 @@ public class EntityFactoryImpl implements EntityFactory {
     }
 
     /** {@inheritDoc} */
+    @SuppressWarnings("unchecked")
     public <T> T getByKey(final String ifaceName) {
         final String className = classNamesMap.get(ifaceName);
         if (className != null) {
             try {
-                return (T) Class.forName(className).newInstance();
+                T entity = (T) Class.forName(className).newInstance();
+                if (entity instanceof Seoable) {
+                    ((Seoable)entity).setSeo((Seo) Class.forName(classNamesMap.get(Seo.class.getName())).newInstance());
+                }
+                return entity;
             } catch (Exception e) {
                 throw new InstantiationError("Cant create instance of " + className + " reason " + e.getMessage());
             }
@@ -65,6 +72,7 @@ public class EntityFactoryImpl implements EntityFactory {
     }
 
     /** {@inheritDoc} */
+    @SuppressWarnings("unchecked")
     public <T> T getByIface(final Class interfaceClass) {
         return (T) getByKey(interfaceClass.getName());
     }

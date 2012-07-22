@@ -35,6 +35,22 @@
         <mx:FormItem label="@Resource(bundle='ProductSkuManagementPanel',key='description')">
             <mx:TextArea id="descriptionTextInput" width="300"/>
         </mx:FormItem>
+        <mx:FormItem width="100%"
+                     label="@Resource(bundle='ProductManagementPanel',key='uri')">
+            <mx:TextInput id="uriNameTextInput" width="300"/>
+        </mx:FormItem>
+        <mx:FormItem width="100%"
+                     label="@Resource(bundle='ProductManagementPanel',key='title')">
+            <mx:TextInput id="titleNameTextInput" width="300"/>
+        </mx:FormItem>
+        <mx:FormItem width="100%"
+                     label="@Resource(bundle='ProductManagementPanel',key='metakeywords')">
+            <mx:TextInput id="metakeywordsNameTextInput" width="300"/>
+        </mx:FormItem>
+        <mx:FormItem width="100%"
+                     label="@Resource(bundle='ProductManagementPanel',key='metadescription')">
+            <mx:TextInput id="metadescriptionNameTextInput" width="300"/>
+        </mx:FormItem>
         <mx:FormItem>
             <mx:Button
                 enabled="{productSkuChangedFlag}"
@@ -116,18 +132,34 @@
                 Debug.trace("INFO ProductSkuSummaryPanel rebind begin");
 
                 propertyWatchers.addItem(BindingUtils.bindProperty(codeTextInput, "text", _productSku, "code"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(uriNameTextInput, "text", _productSku, "uri"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(titleNameTextInput, "text", _productSku, "title"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(metakeywordsNameTextInput, "text", _productSku, "metakeywords"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(metadescriptionNameTextInput, "text", _productSku, "metadescription"));
+
                 propertyWatchers.addItem(BindingUtils.bindProperty(nameTextInput, "text", _productSku, "name"));
+
                 propertyWatchers.addItem(BindingUtils.bindProperty(barCodeTextInput, "text", _productSku, "barCode"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(rankTextInput, "text", _productSku, "rank"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(descriptionTextInput, "text", _productSku, "description"));
 
                 propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "code", codeTextInput, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "uri", uriNameTextInput, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "title", titleNameTextInput, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "metakeywords", metakeywordsNameTextInput, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "metadescription", metadescriptionNameTextInput, "text"));
+
                 propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "name", nameTextInput, "text"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "barCode", barCodeTextInput, "text"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "rank", rankTextInput, "text"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "description", descriptionTextInput, "text"));
 
                 propertyWatchers.addItem(ChangeWatcher.watch(_productSku, "code", productSkuChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productSku, "uri", productSkuChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productSku, "title", productSkuChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productSku, "metakeywords", productSkuChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productSku, "metadescription", productSkuChanged));
+
                 propertyWatchers.addItem(ChangeWatcher.watch(_productSku, "name", productSkuChanged));
                 propertyWatchers.addItem(ChangeWatcher.watch(_productSku, "barCode", productSkuChanged));
                 propertyWatchers.addItem(ChangeWatcher.watch(_productSku, "rank", productSkuChanged));

@@ -410,12 +410,11 @@
             <bean class="org.yes.cart.service.dto.impl.DtoCategoryServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
                 <constructor-arg index="1" ref="categoryService"/>
-                <constructor-arg index="2" ref="seoService"/>
-                <constructor-arg index="3" ref="shopCategoryService"/>
-                <constructor-arg index="4" ref="productTypeService"/>
-                <constructor-arg index="5" ref="dtoAttributeService"/>
-                <constructor-arg index="6" ref="attrValueEntityCategoryDao"/>
-                <constructor-arg index="7" ref="imageService"/>
+                <constructor-arg index="2" ref="shopCategoryService"/>
+                <constructor-arg index="3" ref="productTypeService"/>
+                <constructor-arg index="4" ref="dtoAttributeService"/>
+                <constructor-arg index="5" ref="attrValueEntityCategoryDao"/>
+                <constructor-arg index="6" ref="imageService"/>
             </bean>
         </property>
     </bean>
@@ -465,14 +464,6 @@
     </bean>
 
 
-    <bean id="dtoSeoService" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.service.dto.impl.DtoSeoServiceImpl">
-                <constructor-arg index="0" ref="seoService"/>
-                <constructor-arg index="1" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
-            </bean>
-        </property>
-    </bean>
 
     <bean id="dtoShopService" parent="txProxyTemplate">
         <property name="target">
@@ -703,7 +694,6 @@
                 <entry key="org.yes.cart.domain.dto.ShopDTO" value="org.yes.cart.domain.dto.impl.ShopDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.ShopUrlDTO" value="org.yes.cart.domain.dto.impl.ShopUrlDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.CategoryDTO" value="org.yes.cart.domain.dto.impl.CategoryDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.SeoDTO" value="org.yes.cart.domain.dto.impl.SeoDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.BrandDTO" value="org.yes.cart.domain.dto.impl.BrandDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.ProductTypeDTO" value="org.yes.cart.domain.dto.impl.ProductTypeDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.ProductTypeAttrDTO" value="org.yes.cart.domain.dto.impl.ProductTypeAttrDTOImpl"/>
@@ -737,6 +727,8 @@
 
 
                 <entry key="org.yes.cart.domain.dto.CustomerOrderDTO"  value="org.yes.cart.domain.dto.impl.CustomerOrderDTOImpl"/>
+
+                <entry key="org.yes.cart.domain.entity.Seo"  value="org.yes.cart.domain.entity.impl.SeoEntity"/>
 
             </map>
         </constructor-arg>

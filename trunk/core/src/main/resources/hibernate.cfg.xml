@@ -55,8 +55,6 @@
         <collection-cache collection="org.yes.cart.domain.entity.impl.ProductEntity.ensebleOption" usage="read-only"/>
         <collection-cache collection="org.yes.cart.domain.entity.impl.ProductEntity.attribute" usage="read-only"/>
 
-        <class-cache class="org.yes.cart.domain.entity.Seo" usage="read-only"/>
-
         <class-cache class="org.yes.cart.domain.entity.Etype" usage="read-only"/>
         <!--<collection-cache collection="org.yes.cart.domain.entity.impl.EtypeEntity.attributes" usage="read-only"/>-->
 

@@ -109,4 +109,54 @@ public interface ShopDTO extends Identifiable {
      */
     void setImageVaultFolder(String imageVaultFolder);
 
+    /**
+     * Get seo uri.
+     * @return uri
+     */
+    String getUri();
+
+    /**
+     * Set seo uri;
+     * @param uri  seo uri to  use
+     */
+    void setUri(String uri);
+
+    /**
+     * Get title.
+     * @return  title
+     */
+
+    String getTitle();
+
+    /**
+     * Set seo title
+     * @param title seo title to use
+     */
+    void setTitle(String title);
+
+    /**
+     * Get meta key words.
+     * @return meta key words
+     */
+
+    String getMetakeywords();
+
+    /**
+     * Set meta key words to use.
+      * @param metakeywords      key words
+     */
+    void setMetakeywords(String metakeywords);
+
+    /**
+     * Get seo description
+     * @return seo description.
+     */
+    String getMetadescription();
+
+    /**
+     * Set seo description.
+     * @param metadescription description to use
+     */
+    void setMetadescription(String metadescription);
+
 }

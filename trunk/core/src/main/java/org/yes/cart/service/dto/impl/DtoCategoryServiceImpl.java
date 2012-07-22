@@ -47,7 +47,6 @@ public class DtoCategoryServiceImpl
         extends AbstractDtoServiceImpl<CategoryDTO, CategoryDTOImpl, Category>
         implements DtoCategoryService {
 
-    private final GenericService<Seo> seoGenericService;
     private final GenericService<ShopCategory> shopCategoryGenericService;
     private final GenericService<ProductType> productTypeService;
 
@@ -65,12 +64,10 @@ public class DtoCategoryServiceImpl
      *
      * @param dtoFactory             {@link org.yes.cart.domain.dto.factory.DtoFactory}
      * @param categoryGenericService category     {@link org.yes.cart.service.domain.GenericService}
-     * @param seoGenericService      seo {@link org.yes.cart.service.domain.GenericService}
-     * @param imageService {@link ImageService} to manipulate  related images. 
+     * @param imageService {@link ImageService} to manipulate  related images.
      */
     public DtoCategoryServiceImpl(final DtoFactory dtoFactory,
                                   final GenericService<Category> categoryGenericService,
-                                  final GenericService<Seo> seoGenericService,
                                   final GenericService<ShopCategory> shopCategoryGenericService,
                                   final GenericService<ProductType> productTypeService,
                                   final DtoAttributeService dtoAttributeService,
@@ -79,8 +76,6 @@ public class DtoCategoryServiceImpl
         super(dtoFactory, categoryGenericService, null);
 
 
-        this.seoGenericService = seoGenericService;
-        //this.shopGenericService = shopGenericService;
         this.shopCategoryGenericService = shopCategoryGenericService;
         this.productTypeService = productTypeService;
         this.attrValueEntityCategoryDao = attrValueEntityCategoryDao;
@@ -173,11 +168,11 @@ public class DtoCategoryServiceImpl
      * @param category category to set dictionary data to.
      */
     private void bindDictionaryData(final CategoryDTO instance, final Category category) {
-        if (instance.getSeoId() != null && instance.getSeoId() > 0) {
+        /*if (instance.getSeoId() != null && instance.getSeoId() > 0) {
             category.setSeo(seoGenericService.getById(instance.getSeoId()));
         } else {
             category.setSeo(null);
-        }
+        }      */
         if (instance.getProductTypeId() != null && instance.getProductTypeId() > 0) {
             category.setProductType(productTypeService.getById(instance.getProductTypeId()));
         } else {

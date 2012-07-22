@@ -24,21 +24,7 @@ package org.yes.cart.domain.entity;
  * Time: 11:12:54
  */
 
-public interface Seo extends Auditable {
-
-    /**
-     * Get seo pk value.
-     *
-     * @return seo pk value.
-     */
-    long getSeoId();
-
-    /**
-     * Set seo pk value.
-     *
-     * @param seoId pk value.
-     */
-    void setSeoId(long seoId);
+public interface Seo {
 
     /**
      * Get uri

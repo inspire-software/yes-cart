@@ -26,7 +26,7 @@ import org.yes.cart.domain.dto.ShopDTO;
  * Time: 14:12:54
  */
 @Dto
-public class ShopDTOImpl implements ShopDTO  {
+public class ShopDTOImpl implements ShopDTO {
 
     private static final long serialVersionUID = 20100528L;
 
@@ -48,28 +48,52 @@ public class ShopDTOImpl implements ShopDTO  {
     @DtoField(value = "shopId", readOnly = true)
     private long shopId;
 
-    /** {@inheritDoc}*/
+    @DtoField(value = "seo.uri", entityBeanKeys = "org.yes.cart.domain.entity.Seo")
+    private String uri;
+
+    @DtoField(value = "seo.title", entityBeanKeys = "org.yes.cart.domain.entity.Seo")
+    private String title;
+
+    @DtoField(value = "seo.metakeywords", entityBeanKeys = "org.yes.cart.domain.entity.Seo")
+    private String metakeywords;
+
+    @DtoField(value = "seo.metadescription", entityBeanKeys = "org.yes.cart.domain.entity.Seo")
+    private String metadescription;
+
+
+
+    /**
+     * {@inheritDoc}
+     */
     public long getId() {
         return shopId;
     }
 
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public String getCode() {
         return code;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setCode(final String code) {
         this.code = code;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public String getName() {
         return name;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setName(final String name) {
         this.name = name;
     }
@@ -78,7 +102,9 @@ public class ShopDTOImpl implements ShopDTO  {
         return description;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setDescription(final String description) {
         this.description = description;
     }
@@ -87,7 +113,9 @@ public class ShopDTOImpl implements ShopDTO  {
         return fspointer;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setFspointer(final String fspointer) {
         this.fspointer = fspointer;
     }
@@ -96,19 +124,82 @@ public class ShopDTOImpl implements ShopDTO  {
         return shopId;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setShopId(final long shopId) {
         this.shopId = shopId;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public String getImageVaultFolder() {
         return imageVaultFolder;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setImageVaultFolder(final String imageVaultFolder) {
         this.imageVaultFolder = imageVaultFolder;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getUri() {
+        return uri;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setUri(final String uri) {
+        this.uri = uri;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setTitle(final String title) {
+        this.title = title;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getMetakeywords() {
+        return metakeywords;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setMetakeywords(final String metakeywords) {
+        this.metakeywords = metakeywords;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getMetadescription() {
+        return metadescription;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setMetadescription(final String metadescription) {
+        this.metadescription = metadescription;
     }
 
     @Override

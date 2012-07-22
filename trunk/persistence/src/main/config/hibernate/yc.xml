@@ -1711,6 +1711,7 @@ public void setRangeList(final RangeList rangeList) {
         </id>
         <discriminator type="integer" formula="1"/>
         <subclass name="org.yes.cart.domain.entity.impl.CategoryEntity" discriminator-value="1">
+            <meta attribute="extra-import">org.yes.cart.domain.entity.Seo</meta>
             <meta attribute="extra-import">org.hibernate.annotations.Parameter</meta>
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.*</meta>
@@ -1827,6 +1828,10 @@ public void setRangeList(final RangeList rangeList) {
         return new ArrayList<AttrValue>(attribute);
     }
 
+    /** {@inheritDoc} */
+    public void setSeo(final Seo seo) {
+        this.seo = (SeoEntity) seo;
+    }
 
 
                 ]]>
@@ -1864,9 +1869,19 @@ public void setRangeList(final RangeList rangeList) {
                 <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.AttrValueCategory" />
             </bag>
 
-            <many-to-one name="seo" class="org.yes.cart.domain.entity.Seo" lazy="false" foreign-key="FK_CAT_SEO" cascade="all">
-                <column name="SEO_ID" not-null="false"/>
-            </many-to-one>
+            <component name="seo" class="org.yes.cart.domain.entity.impl.SeoEntity">
+                <meta attribute="implements">org.yes.cart.domain.entity.Seo</meta>
+                <meta attribute="class-code">
+                <![CDATA[
+                        //this is mistical fix to prevent copy class code from
+                        //owner class by  hibernate tool during code generation ! black magic !
+                ]]>
+                </meta>
+                <property name="uri" type="string" column="URI" length="255" not-null="false"/>
+                <property name="title" type="string" column="TITLE" length="255" not-null="false"/>
+                <property name="metakeywords" type="string" column="METAKEYWORDS" length="255" not-null="false"/>
+                <property name="metadescription" type="string" column="METADESCRIPTION" length="255" not-null="false"/>
+            </component>
 
             <set name="productCategory" inverse="false" lazy="true" cascade="all">
                 <key column="CATEGORY_ID" not-null="false"/>
@@ -1979,6 +1994,7 @@ public void setRangeList(final RangeList rangeList) {
         <discriminator type="integer" formula="1"/>
         <subclass name="org.yes.cart.domain.entity.impl.ProductEntity" discriminator-value="1">
             <meta attribute="class-description">UNCOMMENT @Indexed (index = "luceneindex/product", interceptor = org.yes.cart.domain.interceptor.ProductEntityIndexingInterceptor.class)</meta>
+            <meta attribute="extra-import">org.yes.cart.domain.entity.Seo</meta>
             <meta attribute="extra-import">org.hibernate.search.annotations.*</meta>
             <meta attribute="extra-import">org.hibernate.annotations.Parameter</meta>
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
@@ -2099,6 +2115,12 @@ public void setRangeList(final RangeList rangeList) {
     public String toString() {
         return this.getClass().getName() + this.getProductId();
     }
+
+    /** {@inheritDoc} */
+    public void setSeo(final Seo seo) {
+        this.seo = (SeoEntity) seo;
+    }
+
                 ]]>
             </meta>
             <property name="code" type="string" length="255" not-null="true">
@@ -2195,9 +2217,13 @@ public void setRangeList(final RangeList rangeList) {
 
 
 
-            <many-to-one name="seo" class="org.yes.cart.domain.entity.Seo" lazy="false" foreign-key="FK_PROD_SEO" cascade="all">
-                <column name="SEO_ID" not-null="false"/>
-            </many-to-one>
+            <component name="seo" class="org.yes.cart.domain.entity.impl.SeoEntity">
+                <meta attribute="implements">org.yes.cart.domain.entity.Seo</meta>
+                <property name="uri" type="string" column="URI" length="255" not-null="false"/>
+                <property name="title" type="string" column="TITLE" length="255" not-null="false"/>
+                <property name="metakeywords" type="string" column="METAKEYWORDS" length="255" not-null="false"/>
+                <property name="metadescription" type="string" column="METADESCRIPTION" length="255" not-null="false"/>
+            </component>
 
             <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -2273,6 +2299,7 @@ public void setRangeList(final RangeList rangeList) {
         <discriminator type="integer" formula="1"/>
         <subclass name="org.yes.cart.domain.entity.impl.ProductSkuEntity" discriminator-value="1">
             <meta attribute="class-description">UNCOMMENT @Indexed (index = "luceneindex/productsku")</meta>
+            <meta attribute="extra-import">org.yes.cart.domain.entity.Seo</meta>
             <meta attribute="extra-import">org.hibernate.annotations.Parameter</meta>
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.Id</meta>
@@ -2342,6 +2369,12 @@ public void setRangeList(final RangeList rangeList) {
     public Collection<AttrValue> getAllAttibutes() {
         return new ArrayList<AttrValue>(attribute);
     }
+
+    /** {@inheritDoc} */
+    public void setSeo(final Seo seo) {
+        this.seo = (SeoEntity) seo;
+    }
+
     ]]>
 
             </meta>
@@ -2396,9 +2429,13 @@ public void setRangeList(final RangeList rangeList) {
                 <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.SkuWarehouse" />
             </bag>
 
-            <many-to-one name="seo" class="org.yes.cart.domain.entity.Seo" lazy="false" foreign-key="FK_SKU_SEO" cascade="all">
-                <column name="SEO_ID" not-null="false"/>
-            </many-to-one>
+            <component name="seo" class="org.yes.cart.domain.entity.impl.SeoEntity">
+                <meta attribute="implements">org.yes.cart.domain.entity.Seo</meta>
+                <property name="uri" type="string" column="URI" length="255" not-null="false"/>
+                <property name="title" type="string" column="TITLE" length="255" not-null="false"/>
+                <property name="metakeywords" type="string" column="METAKEYWORDS" length="255" not-null="false"/>
+                <property name="metadescription" type="string" column="METADESCRIPTION" length="255" not-null="false"/>
+            </component>
 
             <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -2755,6 +2792,7 @@ public void setRangeList(final RangeList rangeList) {
         </id>
         <discriminator type="integer" formula="1"/>
         <subclass name="org.yes.cart.domain.entity.impl.ShopEntity" discriminator-value="1">
+            <meta attribute="extra-import">org.yes.cart.domain.entity.Seo</meta>
             <meta attribute="extra-import">org.hibernate.annotations.Parameter</meta>
             <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
             <meta attribute="extra-import">javax.persistence.*</meta>
@@ -2884,6 +2922,12 @@ public void setRangeList(final RangeList rangeList) {
         return "";
     }
 
+    /** {@inheritDoc} */
+    public void setSeo(final Seo seo) {
+        this.seo = (SeoEntity) seo;
+    }
+
+
                 ]]>
             </meta>
             <property name="code" column="CODE" type="string" length="255" not-null="true" lazy="false"/>
@@ -2937,10 +2981,13 @@ public void setRangeList(final RangeList rangeList) {
                 <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.AttrValueShop"/>
             </bag>
 
-
-            <many-to-one name="seo" class="org.yes.cart.domain.entity.Seo" lazy="false" foreign-key="FK_SHOP_SEO" cascade="all">
-                <column name="SEO_ID" not-null="false"/>
-            </many-to-one>
+            <component name="seo" class="org.yes.cart.domain.entity.impl.SeoEntity">
+                <meta attribute="implements">org.yes.cart.domain.entity.Seo</meta>
+                <property name="uri" type="string" column="URI" length="255" not-null="false"/>
+                <property name="title" type="string" column="TITLE" length="255" not-null="false"/>
+                <property name="metakeywords" type="string" column="METAKEYWORDS" length="255" not-null="false"/>
+                <property name="metadescription" type="string" column="METADESCRIPTION" length="255" not-null="false"/>
+            </component>
 
 
             <bag name="shopCategory" inverse="false" lazy="false" cascade="all" order-by="RANK">
@@ -4412,74 +4459,6 @@ public void setRangeList(final RangeList rangeList) {
     </class>
 
 
-    <class name="org.yes.cart.domain.entity.Seo" table="TSEO" discriminator-value="0">
-        <meta attribute="interface">true</meta>
-        <comment>Search optimizations. See SEO chectsheet for details</comment>
-        <id name="seoId" type="long" column="SEO_ID">
-            <generator class="native">
-                <param name="table">HIBERNATE_UNIQUE_KEYS</param>
-                <param name="column">value</param>
-            </generator>
-        </id>
-        <discriminator type="integer" formula="1"/>
-        <subclass name="org.yes.cart.domain.entity.impl.SeoEntity" discriminator-value="1">
-            <meta attribute="extra-import">org.hibernate.annotations.Parameter</meta>
-            <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
-            <meta attribute="extra-import">javax.persistence.Id</meta>
-            <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
-            <meta attribute="extra-import">javax.persistence.Transient</meta>
-            <meta attribute="interface">false</meta>
-            <meta attribute="class-code">
-                <![CDATA[
-     private long seoId;
-
-     //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-     @Id @GeneratedValue /*(generator="generator")*/ 
-
-    @Column(name="SEO_ID", nullable=false)
-    public long getSeoId() {
-        return this.seoId;
-    }
-
-
-    @Transient public long getId() {
-        return this.seoId;
-    }
-
-    public void setSeoId(long seoId) {
-        this.seoId = seoId;
-    }
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        SeoEntity seoEntity = (SeoEntity) o;
-
-        if (seoId != seoEntity.seoId) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return (int) (seoId ^ (seoId >>> 32));
-    }
-    
-                ]]>
-            </meta>
-            <property name="uri" type="string" column="URI" length="255" not-null="false"/>
-            <property name="title" type="string" column="TITLE" length="255" not-null="false"/>
-            <property name="metakeywords" type="string" column="METAKEYWORDS" length="255" not-null="false"/>
-            <property name="metadescription" type="string" column="METADESCRIPTION" length="255" not-null="false"/>
-            <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-            <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
-            <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
-            <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
-            
-        </subclass>
-    </class>
 
     <query name="SHOP.BY.URL">
         <![CDATA[

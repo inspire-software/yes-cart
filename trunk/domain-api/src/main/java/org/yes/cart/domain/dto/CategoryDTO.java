@@ -175,19 +175,6 @@ public interface CategoryDTO extends Identifiable {
      */
     void setAvailabletill(Date availabletill);
 
-    /**
-     * Get seo id fk value.
-     *
-     * @return seo id fk value
-     */
-    Long getSeoId();
-
-    /**
-     * Set seo id fk value.
-     *
-     * @param seoId
-     */
-    void setSeoId(Long seoId);
 
     /**
      * @return true if filtered navigation by attributes allowed
@@ -267,5 +254,56 @@ public interface CategoryDTO extends Identifiable {
      * @param attribute list of attributes
      */
     void setAttribute(Set<AttrValueCategoryDTO> attribute);
+
+
+    /**
+     * Get seo uri.
+     * @return uri
+     */
+    String getUri();
+
+    /**
+     * Set seo uri;
+     * @param uri  seo uri to  use
+     */
+    void setUri(String uri);
+
+    /**
+     * Get title.
+     * @return  title
+     */
+
+    String getTitle();
+
+    /**
+     * Set seo title
+     * @param title seo title to use
+     */
+    void setTitle(String title);
+
+    /**
+     * Get meta key words.
+     * @return meta key words
+     */
+
+    String getMetakeywords();
+
+    /**
+     * Set meta key words to use.
+      * @param metakeywords      key words
+     */
+    void setMetakeywords(String metakeywords);
+
+    /**
+     * Get seo description
+     * @return seo description.
+     */
+    String getMetadescription();
+
+    /**
+     * Set seo description.
+     * @param metadescription description to use
+     */
+    void setMetadescription(String metadescription);
 
 }
