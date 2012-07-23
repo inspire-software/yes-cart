@@ -161,13 +161,11 @@ public class ReportServiceImpl implements ReportService, ServletContextAware {
 
         final List<Object> rez = getQueryResult(reportDescriptor.getHsqlQuery(), params);
 
-        final String xmlFilename = getXml(rez);
+        final File xmlfile = getXml(rez);
 
-        if (xmlFilename != null) {
+        if (xmlfile != null) {
 
             final File xsltfile;
-
-            final File xmlfile = new File(xmlFilename);
 
             final File pdffile = new File(fileName);
 
@@ -201,6 +199,7 @@ public class ReportServiceImpl implements ReportService, ServletContextAware {
 
             // Setup output
             OutputStream out = new java.io.FileOutputStream(pdffile);
+            System.out.println(pdffile.getAbsolutePath());
 
             out = new java.io.BufferedOutputStream(out);
 
@@ -219,7 +218,7 @@ public class ReportServiceImpl implements ReportService, ServletContextAware {
 
                 // Setup input for XSLT transformation
                 final Source src = new StreamSource(
-                        new InputStreamReader(new FileInputStream(xmlFilename), "UTF8"));
+                        new InputStreamReader(new FileInputStream(xmlfile), "UTF8"));
 
                 // Resulting SAX events (the generated FO) must be piped through to FOP
                 final Result res = new SAXResult(fop.getDefaultHandler());
@@ -229,7 +228,9 @@ public class ReportServiceImpl implements ReportService, ServletContextAware {
 
             } catch (Exception ex) {
 
-                LOG.error("Cannot create pdf", ex);
+                LOG.error("Cannot create pdf " + ex.getMessage(), ex);
+                System.out.println("Cannot create pdf " + ex.getMessage());
+                ex.printStackTrace();
 
                 return false;
 
@@ -256,26 +257,24 @@ public class ReportServiceImpl implements ReportService, ServletContextAware {
      * @param rez list of objects.
      * @return tmp xml file name
      */
-    String getXml(final List<Object> rez) {
-
-        String fileName;
+    File getXml(final List<Object> rez) {
 
         ObjectOutputStream os = null;
 
         try {
 
 
-            fileName = File.createTempFile("yes", "cart").getAbsolutePath();
+            final File xmlReport = File.createTempFile("yes", "cart");
 
-            os = ReportObjectStreamFactory.getObjectOutputStream(fileName);
+            os = ReportObjectStreamFactory.getObjectOutputStream(new FileWriter(xmlReport));
 
             for (Object obj : rez) {
                 os.writeObject(obj);
             }
 
+            return xmlReport;
 
         } catch (Exception e) {
-            fileName = null;
             LOG.error("Cannot create xml ", e);
 
         } finally {
@@ -289,7 +288,7 @@ public class ReportServiceImpl implements ReportService, ServletContextAware {
 
         }
 
-        return fileName;
+        return null;
     }
 
     /**
