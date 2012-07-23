@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<!--
+  fop-userconfig.xml
+  ==================
+
+  Copy this file to your language subdirectory and edit it.
+  Consult "Using non-Western fonts" for detailed instructions.
+  See http://www.firebirdsql.org/manual (or /pdfmanual).
+
+  Copypasted :(
+-->
+
+<fop version="1.0">
+
+    <!-- Base for resolving relative font URLs -->
+    <font-base>src/test/resources/</font-base>
+    <!-- font-base>./src/test/resources/</font-base -->
+
+    <!-- Information for specific renderers -->
+    <!-- Uses renderer mime type for renderers -->
+    <renderers>
+
+        <renderer mime="application/pdf">
+
+            <fonts>
+                <!-- embedded fonts -->
+                <!--
+                  This information must exactly match the font specified
+                  in the fo file. Otherwise it will use a default font.
+                -->
+
+                <font metrics-url="fonts/times.xml" kerning="yes"
+                      embed-url="fonts/times.ttf">
+                    <font-triplet name="Times" style="normal" weight="normal"/>
+                </font>
+                <font metrics-url="fonts/timesbd.xml" kerning="yes"
+                      embed-url="fonts/timesbd.ttf">
+                    <font-triplet name="Times" style="normal" weight="bold"/>
+                </font>
+                <font metrics-url="fonts/timesbi.xml" kerning="yes"
+                      embed-url="fonts/timesbi.ttf">
+                    <font-triplet name="Times" style="italic" weight="bold"/>
+                </font>
+                <font metrics-url="fonts/timesi.xml" kerning="yes"
+                      embed-url="fonts/timesi.ttf">
+                    <font-triplet name="Times" style="italic" weight="normal"/>
+                </font>
+
+
+            </fonts>
+
+        </renderer>
+
+    </renderers>
+
+</fop>

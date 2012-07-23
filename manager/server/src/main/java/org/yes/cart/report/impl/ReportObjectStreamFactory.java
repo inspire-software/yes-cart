@@ -78,15 +78,4 @@ public class ReportObjectStreamFactory {
         
     }
 
-    /**
-     * Get configured object output stream.
-     * @param fileName given file name to write xml
-     * @return {@link ObjectOutputStream}
-     */
-    public static ObjectOutputStream getObjectOutputStream(final String fileName) throws IOException {
-
-        return getXStream().createObjectOutputStream(new FileWriter(fileName), ROOT_NODE);
-        
-    }
-
 }
