@@ -5,7 +5,15 @@
 #
 # @author Denys Pavlov
 
-YC_HOME=`pwd`
+RUNDIR=`pwd`
+
+YC_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+cd $YC_HOME
+
+echo "================================================";
+echo " Starting YesCart from HOME: $YC_HOME           ";
+echo "================================================";
 
 echo "================================================";
 echo " Starting Derby database (background mode)      ";
@@ -25,9 +33,10 @@ echo "================================================";
 echo " Starting Tomcat Server                         ";
 echo "================================================";
 
+export JAVA_OPTS="-Xmx512m -Xms512m -XX:MaxPermSize=256m"
 ./startup.sh
 
-cd $YC_HOME
+cd $RUNDIR
 
 
 echo "================================================";

@@ -6,8 +6,15 @@
 # @author Denys Pavlov
 
 
-YC_HOME=`pwd`
+RUNDIR=`pwd`
 
+YC_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+cd $YC_HOME
+
+echo "================================================";
+echo " Stopping YesCart from HOME: $YC_HOME           ";
+echo "================================================";
 
 echo "================================================";
 echo " Stopping Tomcat Server                         ";
@@ -29,7 +36,7 @@ java -jar derbyrun.jar server shutdown
 
 echo " Derby server stopped...                        ";
 
-cd $YC_HOME
+cd $RUNDIR
 
 echo "================================================";
 echo " YesCart has been shutdown successfully         ";
