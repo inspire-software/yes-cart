@@ -18,23 +18,25 @@
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="342" height="140"
 				title="@Resource(bundle='AttributeCreateEditDialog',key='selectAttribute')"  showCloseButton="true" close="PopUpManager.removePopUp(this)" >
 
-	<mx:Label x="10" y="26" text="@Resource(bundle='AttributeCreateEditDialog',key='attribute')"/>
+    <mx:Form width="100%">
+        <mx:FormItem label="@Resource(bundle='AttributeCreateEditDialog',key='attribute')">
+            <mx:ComboBox id="attributeComboBox"
+                         change="attributeChangeEvt(event)"
+                         x="152" y="24" width="160"
+                         labelField="name"
+                         prompt="@Resource(bundle='AttributeCreateEditDialog',key='selectAttribute')"
+                    />
+        </mx:FormItem>
+    </mx:Form>
 
-    <mx:ComboBox id="attributeComboBox"
-                 change="attributeChangeEvt(event)"
-                 x="152" y="24" width="160"
-                 labelField="name"
-                 prompt="@Resource(bundle='AttributeCreateEditDialog',key='selectAttribute')"
-            />
+    <mx:ControlBar horizontalAlign="right" width="100%">
+        <mx:Button id="okBtn" label="@Resource(bundle='AttributeCreateEditDialog',key='ok')"
+                   enabled="{okEnabled}"
+                />
+        <mx:Button id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
+                   click="PopUpManager.removePopUp(this)"/>
 
-	<mx:Button x="217" y="56" id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
-			   click="PopUpManager.removePopUp(this)" width="94"/>
-
-	<mx:Button x="115" y="56" id="okBtn" label="@Resource(bundle='AttributeCreateEditDialog',key='ok')"
-			   width="94"
-               enabled="{okEnabled}"
-            />
-
+    </mx:ControlBar>
 
 	<mx:Script>
 		<![CDATA[

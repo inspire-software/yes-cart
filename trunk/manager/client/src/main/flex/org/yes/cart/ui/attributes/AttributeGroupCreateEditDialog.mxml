@@ -19,16 +19,23 @@
 				title="Create user"  showCloseButton="true" close="PopUpManager.removePopUp(this)" >
 
 
-	<mx:Label x="30" y="26" text="@Resource(bundle='AttributeGroupCreateEditDialog',key='code')"/>
-	<mx:Label x="30" y="56" text="@Resource(bundle='AttributeGroupCreateEditDialog',key='name')"/>
-	<mx:Label x="30" y="86" text="@Resource(bundle='AttributeGroupCreateEditDialog',key='description')"/>
-	<mx:TextInput x="139" y="24" width="160" id="code" enabled="{newGroupFlag}"/>
-	<mx:TextInput x="139" y="54" width="160" id="attrname"/>
-	<mx:TextInput x="139" y="84" width="160" id="description"/>
-	<mx:Button x="205" y="114" id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
-               click="PopUpManager.removePopUp(this)" width="94"/>
-	<mx:Button x="103" y="114" id="saveBtn" label="@Resource(bundle='ShopManagerApplication',key='save')"
-               width="94"/>
+    <mx:Form width="100%">
+        <mx:FormItem label="@Resource(bundle='AttributeGroupCreateEditDialog',key='code')">
+            <mx:TextInput width="160" id="code" enabled="{newGroupFlag}"/>
+        </mx:FormItem>
+        <mx:FormItem label="@Resource(bundle='AttributeGroupCreateEditDialog',key='name')">
+            <mx:TextInput width="160" id="attrname"/>
+        </mx:FormItem>
+        <mx:FormItem label="@Resource(bundle='AttributeGroupCreateEditDialog',key='description')">
+            <mx:TextInput width="160" id="description"/>
+        </mx:FormItem>
+
+    </mx:Form>
+    <mx:ControlBar horizontalAlign="right" width="100%">
+        <mx:Button id="saveBtn" label="@Resource(bundle='ShopManagerApplication',key='save')"/>
+        <mx:Button id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
+                   click="PopUpManager.removePopUp(this)"/>
+    </mx:ControlBar>
 
     <mx:Boolean id="newGroupFlag">false</mx:Boolean>
 
