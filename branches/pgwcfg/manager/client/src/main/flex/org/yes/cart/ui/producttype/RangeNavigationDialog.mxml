@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  - Copyright 2009 Igor Azarnyi, Denys Pavlov
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="500" height="400"
+                title="@Resource(bundle='ProductTypeManagementPanel',key='productTypeAttr')"
+                showCloseButton="true"
+                close="PopUpManager.removePopUp(this)"
+                creationComplete="init();">
+
+
+    <mx:VBox width="100%" height="100%" paddingLeft="2" paddingRight="2" paddingBottom="2" paddingTop="2">
+        <mx:TabBar id="currencyTabBar" itemClick="currencySelected(event)"
+                   dataProvider="{currencyViewStack}"/>
+        <mx:ViewStack id="currencyViewStack" width="100%" height="100%" creationPolicy="all">
+            <mx:VBox label="@Resource(bundle='ProductTypeManagementPanel',key='ranges')" width="100%" height="100%"
+                     paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
+                <mx:HBox paddingTop="5" width="100%">
+                    <mx:Button label="@Resource(bundle='ProductTypeManagementPanel',key='priceNavigationAddRow')"
+                               toolTip="@Resource(bundle='ProductTypeManagementPanel',key='priceNavigationAddRowHint')"
+                               enabled="{addRowEnabled}"
+                               click="onAddNewPriceRangeRowClick(event)"
+                            />
+                    <mx:Button label="@Resource(bundle='ProductTypeManagementPanel',key='priceNavigationDeleteRow')"
+                               toolTip="@Resource(bundle='ProductTypeManagementPanel',key='priceNavigationDeleteRowHint')"
+                               enabled="{xmlNode != null}"
+                               click="deleteSelectedPriceRangeRow(event)"
+                            />
+                </mx:HBox>
+                <mx:DataGrid id="rangesGrid" itemEditEnd="onItemEditEnd(event)" itemClick="onXmlNodeSelected(event)"
+                             editable="true"
+                             width="100%" height="100%">
+                    <mx:columns>
+                        <mx:DataGridColumn dataField="range.first" headerText="@Resource(bundle='ProductTypeManagementPanel',key='valueFrom')"/>
+                        <mx:DataGridColumn dataField="range.second" headerText="@Resource(bundle='ProductTypeManagementPanel',key='valueTo')"/>
+                    </mx:columns>
+                </mx:DataGrid>
+            </mx:VBox>
+            <mx:VBox label="XML" width="100%" height="100%" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
+                <mx:TextArea id="rawXML" x="0" y="0" width="100%" height="100%"/>
+            </mx:VBox>
+        </mx:ViewStack>
+    </mx:VBox>
+    <mx:ControlBar horizontalAlign="right" width="100%">
+        <mx:Button id="saveBtn" label="@Resource(bundle='ProductTypeManagementPanel',key='save')"/>
+        <mx:Button id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
+                   click="PopUpManager.removePopUp(this)"/>
+    </mx:ControlBar>
+
+    <mx:Boolean id="addCurrencyEnabled">true</mx:Boolean>
+    <mx:Boolean id="addRowEnabled">true</mx:Boolean>
+
+    <mx:ArrayCollection id="rangesList"/>
+
+
+    <mx:Script><![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import mx.containers.Canvas;
+        import mx.controls.DataGrid;
+        import mx.controls.Label;
+        import mx.controls.TextArea;
+        import mx.controls.dataGridClasses.DataGridColumn;
+        import mx.core.UIComponent;
+        import mx.events.DataGridEvent;
+        import mx.events.DataGridEventReason;
+        import mx.events.ItemClickEvent;
+        import mx.events.ListEvent;
+        import mx.managers.PopUpManager;
+
+        import org.yes.cart.model.PriceRangeModel;
+
+        [Bindable]
+        private var xmlNode:XML;
+
+        public var xmlString:String;
+
+        private var xml:XML;
+        private var gridXml:XMLList;
+
+        public function init():void {
+            internalInit();
+            currencyTabBar.selectedIndex = 0;
+        }
+
+        private function currencySelected(event:ItemClickEvent):void {
+            xmlNode = null; // disable to delete
+            addRowEnabled = (event.label != "XML");
+            if (event.label == "XML") {
+                xml = getGridXml();
+                if (rawXML != null) {
+                    rawXML.text = xml.toXMLString();
+                }
+            } else {
+                try {
+                    xml = new XML(rawXML.text);
+                    gridXml = xml.list.range.copy();
+                    rangesGrid.dataProvider = gridXml;
+                } catch (e:Error) {
+
+                    Debug.trace("ERROR RangeNavigationDialog can not convert string to xml " + e.message); //TODO alert
+                }
+            }
+        }
+
+        public function deleteNode(node:XML):void {
+            if (node != null && node.parent() != null) {
+                delete node.parent().children()[node.childIndex()];
+            }
+        }
+
+        private function deleteSelectedPriceRangeRow(event:MouseEvent):void {
+
+            var xmlRowIndex:int = rangesGrid.selectedIndex;
+            if (xmlRowIndex > -1) {
+                delete gridXml.children()[xmlRowIndex];
+                xmlNode = null;
+                xml.list.range = gridXml.copy();
+                rangesGrid.dataProvider = gridXml;
+                currencyTabBar.selectedIndex = 0;
+                currencyViewStack.selectedIndex = 0;
+            }
+        }
+
+        private function getGridXml():XML {
+            var newXml:XML = xml;
+
+            if (gridXml != null) {
+                newXml.list.default.size = gridXml.children().length();
+                newXml.list.int = gridXml.children().length();
+                newXml.list.range = gridXml;
+            }
+
+            return newXml;
+        }
+
+        /**
+         * Get the price navigation xml string.
+         * @return price navigation xml string
+         */
+        public function getXmlString():String {
+            var idx:int = currencyTabBar.selectedIndex;
+            if (idx == 1) {
+                return rawXML.text;
+            }
+            return getGridXml().toXMLString();
+        }
+
+        private function internalInit():void {
+
+            try {
+                if (xmlString == null || xmlString.length == 0) {
+                    xml = <rangeList serialization="custom">
+                        <unserializable-parents/>
+                        <list>
+                            <default>
+                                <size>1</size>
+                            </default>
+                            <int>1</int>
+                            <range>
+                                <range>
+                                    <first class="string">from</first>
+                                    <second class="string">to</second>
+                                </range>
+                            </range>
+                        </list>
+                    </rangeList>;
+                } else {
+                    xml = new XML(xmlString);
+                }
+                gridXml = xml.list.range;
+
+                rangesGrid.dataProvider = gridXml;
+
+            } catch (e:Error) {
+
+                Debug.trace("ERROR RangeNavigationDialog can not convert string to xml " + e.message);
+            }
+
+        }
+
+        private function onXmlNodeSelected(event:ListEvent):void {
+            xmlNode = event.currentTarget.selectedItem;
+        }
+
+        protected function onItemEditEnd(event:DataGridEvent):void {
+            if (event.reason == DataGridEventReason.CANCELLED) {
+                return; // Do not update cell.
+            }
+            var obj:Object = DataGrid(event.target).dataProvider[event.rowIndex];
+        }
+
+        private function onAddNewPriceRangeRowClick(event:MouseEvent):void {
+            var xml:XML = <root/>;
+            xml.appendChild(gridXml.copy());
+            xml.appendChild(
+                    <range>
+                        <range>
+                            <first class="string">from</first>
+                            <second class="string">to</second>
+                        </range>
+                    </range>);
+            gridXml = new XMLList(xml.range);
+            rangesGrid.dataProvider = gridXml;
+
+        }
+        ]]>
+    </mx:Script>
+
+</mx:TitleWindow>
