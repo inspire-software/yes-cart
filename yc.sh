@@ -6,7 +6,9 @@
 # @author Denys Pavlov
 
 
-YC_HOME=`pwd`
+RUNDIR=`pwd`
+
+YC_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 show_env() {
     echo "================================================";
@@ -14,6 +16,8 @@ show_env() {
     echo "================================================";
     echo " user.name     : $HOME";
     echo " user.home     : $HOME";
+    echo " YC_HOME       : $YC_HOME";
+    echo " RUNNIG_HOME   : $RUNDIR";
     echo " ANT_HOME  : $ANT_HOME";
     echo " FLEX_HOME : $FLEX_HOME";
     echo " JAVA_HOME : $JAVA_HOME";
@@ -42,6 +46,7 @@ show_help() {
     echo "  derbycon  - connect to derby with ij          ";
     echo "                                                ";
     echo "  pkgdemo   - prepare demo package              ";
+    echo "  clndemo   - clean demo package                ";
     echo "================================================";
 }
 
@@ -196,38 +201,36 @@ db_derby_connect() {
 
 }
 
-prepare_demo_pkg() {
+prepare_demo_clean() {
 
     echo "================================================";
-    echo " Preparing DEMO package                         ";
+    echo " Cleaning DEMO package                          ";
     echo "================================================";
     echo "                                                ";
-    echo " Make sure that you have prepared derby dbs and ";
-    echo " created a full maven build with derby profile. ";
-    echo "                                                ";
+
+    echo " Cleaning Tomcat Logs                           ";
+    rm -f $YC_HOME/demo/yes-server/logs/*.log
+    rm -f $YC_HOME/demo/yes-server/logs/catalina.out
+    echo " done...                                        ";
+
+    echo " Cleaning Tomcat Temp                           ";
+    rm -rf $YC_HOME/demo/yes-server/work/*
+    echo " done...                                        ";
 
     echo " Cleaning Derby bundle $YC_HOME/demo/yes-db/*   ";
     rm -rf $YC_HOME/demo/yes-db/*
-    echo " Copying Derby package                          ";
-    cp $YC_HOME/env/derby/lib/*.jar $YC_HOME/demo/yes-db
-
-    YESDB_OLD=$YC_HOME/demo/yes-db/yes
-    YESDB_NEW=$YC_HOME/env/derby/lib/yes
-    echo " Removing old db: $YESDB_OLD                    ";
-    rm -rf $YESDB_OLD
-    echo " done...                                        ";
-    echo " Copying new db: $YESDB_NEW                     ";
-    cp -r $YESDB_NEW $YESDB_OLD
     echo " done...                                        ";
 
-    YESPAYDB_OLD=$YC_HOME/demo/yes-db/yespay
-    YESPAYDB_NEW=$YC_HOME/env/derby/lib/yespay
-    echo " Removing old db: $YESPAYDB_OLD                 ";
-    rm -rf $YESPAYDB_OLD
-    echo " done...                                        ";
-    echo " Copying new db: $YESPAYDB_NEW                  ";
-    cp -r $YESPAYDB_NEW $YESPAYDB_OLD
-    echo " done...                                        ";
+    YESCONF=$YC_HOME/demo/yes-server/conf/Catalina/localhost
+
+    YESCONFSHOP=$YESCONF/yes-shop.xml
+    YESCONFMANAGER=$YESCONF/yes-manager.xml
+
+    echo " Removing old context.xml:                      ";
+    echo " $YESCONFSHOP                                   ";
+    rm -f $YESCONFSHOP
+    echo " $YESCONFMANAGER                                ";
+    rm -f $YESCONFMANAGER
 
     YESWEBAPPS=$YC_HOME/demo/yes-server/webapps
 
@@ -247,6 +250,38 @@ prepare_demo_pkg() {
     rm -f $YESMANAGERWAR_OLD
     echo " done...                                        ";
 
+
+}
+
+prepare_demo_pkg() {
+
+    echo "================================================";
+    echo " Preparing DEMO package                         ";
+    echo "================================================";
+    echo "                                                ";
+    echo " Make sure that you have prepared derby dbs and ";
+    echo " created a full maven build with derby profile. ";
+    echo "                                                ";
+
+    echo " Copying Derby package                          ";
+    cp $YC_HOME/env/derby/lib/*.jar $YC_HOME/demo/yes-db
+    echo " done...                                        ";
+
+    YESDB_OLD=$YC_HOME/demo/yes-db/yes
+    YESDB_NEW=$YC_HOME/env/derby/lib/yes
+    echo " Copying new db: $YESDB_NEW                     ";
+    cp -r $YESDB_NEW $YESDB_OLD
+    echo " done...                                        ";
+
+    YESPAYDB_OLD=$YC_HOME/demo/yes-db/yespay
+    YESPAYDB_NEW=$YC_HOME/env/derby/lib/yespay
+    echo " Copying new db: $YESPAYDB_NEW                  ";
+    cp -r $YESPAYDB_NEW $YESPAYDB_OLD
+    echo " done...                                        ";
+
+    YESWEBAPPS=$YC_HOME/demo/yes-server/webapps
+
+
     YESSHOPWAR_NEW=$YC_HOME/web/store/target/yes-shop.war
     YESMANAGERWAR_NEW=$YC_HOME/manager/server/target/yes-manager.war
     echo " Copying new wars:                              ";
@@ -257,7 +292,8 @@ prepare_demo_pkg() {
     echo " done...                                        ";
 
     echo " Creating zip package...                        ";
-    zip -r $YC_HOME/yescart.zip $YC_HOME/demo
+    rm -f $YC_HOME/yescart.zip
+    zip -r --exclude=*.svn* $YC_HOME/yescart.zip $YC_HOME/demo
     echo " done...                                        ";
     echo "                                                ";
     echo "================================================";
@@ -275,43 +311,70 @@ then
         exit 0;
     elif [ $1 = "i3rd" ];
     then
+        cd $YC_HOME
         add_mvn_extra_dep;
+        cd $RUNDIR
         exit 0;
     elif [ $1 = "cpclient" ];
     then
+        cd $YC_HOME
         cp_client_to_webapp;
+        cd $RUNDIR
         exit 0;
     elif [ $1 = "dbimysql" ];
     then
+        cd $YC_HOME
         init_db_mysql;
+        cd $RUNDIR
         exit 0;
     elif [ $1 = "dbiderby" ];
     then
+        cd $YC_HOME
         init_db_derby;
+        cd $RUNDIR
         exit 0;
     elif [ $1 = "derbygo" ];
     then
+        cd $YC_HOME
         db_derby_go;
+        cd $RUNDIR
         exit 0;
     elif [ $1 = "derbygob" ];
     then
+        cd $YC_HOME
         db_derby_gob;
+        cd $RUNDIR
         exit 0;
     elif [ $1 = "derbyend" ];
     then
+        cd $YC_HOME
         db_derby_end;
+        cd $RUNDIR
         exit 0;
     elif [ $1 = "derbycon" ];
     then
+        cd $YC_HOME
         db_derby_connect;
+        cd $RUNDIR
         exit 0;
     elif [ $1 = "env" ];
     then
+        cd $YC_HOME
         show_env;
+        cd $RUNDIR
+        exit 0;
+    elif [ $1 = "clndemo" ];
+    then
+        cd $YC_HOME
+        prepare_demo_clean;
+        cd $RUNDIR
         exit 0;
     elif [ $1 = "pkgdemo" ];
     then
+        cd $YC_HOME
+        prepare_demo_clean;
         prepare_demo_pkg;
+        cd $RUNDIR
         exit 0;
     else
         echo "Provide command..."; show_help; exit 100;
