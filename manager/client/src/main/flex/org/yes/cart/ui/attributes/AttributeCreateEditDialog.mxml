@@ -63,11 +63,11 @@
         </mx:FormItem>
 
     </mx:Form>
-    <mx:ControlBar horizontalAlign="right">
+
+    <mx:ControlBar horizontalAlign="right" width="100%">
+        <mx:Button  id="saveBtn" label="@Resource(bundle='ShopManagerApplication',key='save')"/>
         <mx:Button id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
-                   click="PopUpManager.removePopUp(this)" width="94"/>
-        <mx:Button  id="saveBtn" label="@Resource(bundle='ShopManagerApplication',key='save')"
-                   width="94"/>
+                   click="PopUpManager.removePopUp(this)"/>
     </mx:ControlBar>
 
 	<mx:Script>
@@ -76,14 +76,15 @@
 
         import mx.binding.utils.BindingUtils;
         import mx.managers.PopUpManager;
+
         import com.hexagonstar.util.debug.Debug;
 
 
-        private var attrbuteDTO:AttributeDTOImpl;
+        private var _attrbuteDTO:AttributeDTOImpl;
 
 
         private function etypeChangeEvt(event:Event):void {
-            attrbuteDTO.etypeId = event.currentTarget.selectedItem.etypeId;
+            _attrbuteDTO.etypeId = event.currentTarget.selectedItem.etypeId;
         }
 
 
@@ -95,23 +96,23 @@
                 this.title = resourceManager.getString('AttributeCreateEditDialog', 'editAttribute');
                 saveBtn.label = resourceManager.getString('AttributeCreateEditDialog', 'update');
             }
-            BindingUtils.bindProperty(attrbuteDTO, "code", code, "text");
-            BindingUtils.bindProperty(attrbuteDTO, "name", attrName, "text");
-            BindingUtils.bindProperty(attrbuteDTO, "description", description, "text");
-            BindingUtils.bindProperty(attrbuteDTO, "val", val, "text");
-            BindingUtils.bindProperty(attrbuteDTO, "mandatory", mandatory, "selected");
-            BindingUtils.bindProperty(attrbuteDTO, "allowduplicate", multiple, "selected");
-            BindingUtils.bindProperty(attrbuteDTO, "allowfailover", failover, "selected");
-            BindingUtils.bindProperty(attrbuteDTO, "regexp", regexp, "text");
-            BindingUtils.bindProperty(attrbuteDTO, "validationFailedMessage", validationFailedMessage, "text");
-            BindingUtils.bindProperty(attrbuteDTO, "choiceData", choiceData, "text");
-            BindingUtils.bindProperty(attrbuteDTO, "rank", rank, "text");
+            BindingUtils.bindProperty(_attrbuteDTO, "code", code, "text");
+            BindingUtils.bindProperty(_attrbuteDTO, "name", attrName, "text");
+            BindingUtils.bindProperty(_attrbuteDTO, "description", description, "text");
+            BindingUtils.bindProperty(_attrbuteDTO, "val", val, "text");
+            BindingUtils.bindProperty(_attrbuteDTO, "mandatory", mandatory, "selected");
+            BindingUtils.bindProperty(_attrbuteDTO, "allowduplicate", multiple, "selected");
+            BindingUtils.bindProperty(_attrbuteDTO, "allowfailover", failover, "selected");
+            BindingUtils.bindProperty(_attrbuteDTO, "regexp", regexp, "text");
+            BindingUtils.bindProperty(_attrbuteDTO, "validationFailedMessage", validationFailedMessage, "text");
+            BindingUtils.bindProperty(_attrbuteDTO, "choiceData", choiceData, "text");
+            BindingUtils.bindProperty(_attrbuteDTO, "rank", rank, "text");
             //BindingUtils.bindProperty(attrbuteDTO, "etypeId", type, "selectedItem.etypeId");
         }
 
         public function editAttr(attrbuteDTO:AttributeDTOImpl):void {
             newAttributeFlag = false;
-            this.attrbuteDTO = attrbuteDTO;
+            this._attrbuteDTO = attrbuteDTO;
             this.code.text = attrbuteDTO.code;
             this.attrName.text = attrbuteDTO.name;
             this.description.text = attrbuteDTO.description;
@@ -136,8 +137,12 @@
 
         public function createNewAttr(attrbuteDTO:AttributeDTOImpl):void {
             newAttributeFlag = true;
-            this.attrbuteDTO = attrbuteDTO;
+            this._attrbuteDTO = attrbuteDTO;
             init();
+        }
+
+        public function get attrbuteDTO():AttributeDTOImpl {
+            return _attrbuteDTO;
         }
         ]]>
 	</mx:Script>
