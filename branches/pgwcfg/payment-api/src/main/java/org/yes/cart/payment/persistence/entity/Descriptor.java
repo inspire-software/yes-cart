@@ -33,25 +33,22 @@ public interface Descriptor extends Serializable {
     String getName();
 
     /**
-     * Get description.
-     *
-     * @return description.
+     * @param name name
      */
-    String getDescription();
+    void setName(String name);
 
 
     /**
-     * Get label.
+     * Get label, unique id of payment gateway.
      *
      * @return label.
      */
     String getLabel();
 
-
     /**
-     * @param name name
+     * @param label label
      */
-    void setName(String name);
+    void setLabel(String label);
 
     /**
      * @param description description
@@ -59,9 +56,11 @@ public interface Descriptor extends Serializable {
     void setDescription(String description);
 
     /**
-     * @param label label
+     * Get description.
+     *
+     * @return description.
      */
-    void setLabel(String label);
+    String getDescription();
 
 
 }

@@ -63,8 +63,9 @@ public interface RemotePaymentModulesManagementService {
      * @param gatewayLabel payment gateway label.
      * @param paramaterLabel parameter label, unique identification.
      * @param parameterValue parameter value.
+     * @return  true in case if update was ok
      */
-    void updateConfigurationParameter(String gatewayLabel, String paramaterLabel, String parameterValue);
+    boolean updateConfigurationParameter(String gatewayLabel, String paramaterLabel, String parameterValue);
 
     /**
      * Put available payment gateway into allowed.

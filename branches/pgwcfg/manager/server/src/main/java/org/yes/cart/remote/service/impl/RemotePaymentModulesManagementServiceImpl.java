@@ -45,7 +45,7 @@ public class RemotePaymentModulesManagementServiceImpl implements RemotePaymentM
     /** {@inheritDoc}*/
     public List<Pair<String, String>> getAllowedPaymentGateways(final String lang) {
         
-        final List<PaymentGatewayDescriptor> descriptors = paymentModulesManager.getPaymentGatewaysDescriptors(true);
+        final List<PaymentGatewayDescriptor> descriptors = paymentModulesManager.getPaymentGatewaysDescriptors(false);
         final List<Pair<String, String>> rez = new ArrayList<Pair<String, String>>(descriptors.size());
         for (PaymentGatewayDescriptor descr :  descriptors) {
             final PaymentGateway paymentGateway = paymentModulesManager.getPaymentGateway(descr.getLabel());
@@ -62,52 +62,51 @@ public class RemotePaymentModulesManagementServiceImpl implements RemotePaymentM
     public List<Pair<String, String>> getAvailablePaymentGateways(final String lang) {
 
         final List<Pair<String, String>> allowed = getAllowedPaymentGateways(lang);
-        final List<PaymentGatewayDescriptor> descriptors = paymentModulesManager.getPaymentGatewaysDescriptors(false);
+        final List<PaymentGatewayDescriptor> descriptors = paymentModulesManager.getPaymentGatewaysDescriptors(true);
+        final List<Pair<String, String>> rez = new ArrayList<Pair<String, String>>(descriptors.size());
 
-        
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        for (PaymentGatewayDescriptor descr :  descriptors) {
+            final PaymentGateway paymentGateway = paymentModulesManager.getPaymentGateway(descr.getLabel());
+            final Pair<String, String> pairCandidate = new Pair<String, String>(
+                    paymentGateway.getLabel(),
+                    descr.getName()
+            );
+            if (!allowed.contains(pairCandidate) ) {
+                rez.add(pairCandidate);
+            }
+
+        }
+
+        return rez;
     }
 
-    public Collection<PaymentGatewayParameter> getPaymentGatewayParameters(String gatewayLabel, String lang) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    /** {@inheritDoc}*/
+    public Collection<PaymentGatewayParameter> getPaymentGatewayParameters(final String gatewayLabel, final String lang) {
+        return paymentModulesManager.getPaymentGateway(gatewayLabel).getPaymentGatewayParameters();
     }
 
-    public void updateConfigurationParameter(String gatewayLabel, String paramaterLabel, String parameterValue) {
+    /** {@inheritDoc}*/
+    public boolean updateConfigurationParameter(final String gatewayLabel, final String paramaterLabel, final String parameterValue) {
+        final Collection<PaymentGatewayParameter> params = paymentModulesManager.getPaymentGateway(gatewayLabel).getPaymentGatewayParameters();
+        for (PaymentGatewayParameter param : params ) {
+            if (param.getLabel().equals(paramaterLabel)) {
+                param.setValue(parameterValue);
+                paymentModulesManager.getPaymentGateway(gatewayLabel).updateParameter(param);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** {@inheritDoc}*/
+    public void allowPaymentGateway(final String label) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void allowPaymentGateway(String label) {
+    /** {@inheritDoc}*/
+    public void disallowPaymentGateway(final String label) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void disallowPaymentGateway(String label) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
 
-    /* 
-
-  public List<PaymentGateway> getAllowedPaymentGateways() {
-      final List<PaymentGatewayDescriptor> descriptors = paymentModulesManager.getPaymentGatewaysDescriptors(true);
-      final List<PaymentGateway> rez = new ArrayList<PaymentGateway>(descriptors.size());
-      for (PaymentGatewayDescriptor descr :  descriptors) {
-          //rez.add();
-      }
-      return rez;
-  }
-
-  public List<PaymentGateway> getAvailablePaymentGateways() {
-      return null;  //To change body of implemented methods use File | Settings | File Templates.
-  }
-
-  public void updateConfigurationParameter(String gatewayLabel, String paramaterLabel, String parameterValue) {
-      //To change body of implemented methods use File | Settings | File Templates.
-  }
-
-  public void allowPaymentGateway(String label) {
-      //To change body of implemented methods use File | Settings | File Templates.
-  }
-
-  public void disallowPaymentGateway(String label) {
-      //To change body of implemented methods use File | Settings | File Templates.
-  }  */
 }
