@@ -50,6 +50,7 @@
         import org.yes.cart.ui.customer.CustomerManagementPanel;
         import org.yes.cart.ui.location.LocationManagementPanel;
         import org.yes.cart.ui.order.CustomerOrderPanel;
+        import org.yes.cart.ui.payment.PaymentGateConfigManagementPanel;
         import org.yes.cart.ui.product.ProductManagementPanel;
         import org.yes.cart.ui.producttype.ProductTypeManagementPanel;
         import org.yes.cart.ui.reindex.ReindexPanel;
@@ -121,6 +122,12 @@
             setFontWeight(reindexBtn);
             mainPanel.removeAllChildren();
             mainPanel.addChild(new ReindexPanel());
+        }
+
+        private function onConfigurePaymentGatewayClick(event:MouseEvent):void {
+            setFontWeight(paymengwBtn);
+            mainPanel.removeAllChildren();
+            mainPanel.addChild(new PaymentGateConfigManagementPanel());
         }
 
         private function onReportClick(event:MouseEvent):void {
@@ -652,6 +659,12 @@
                                                        label="@Resource(bundle='ShopManagerApplication',key='reindex')"
                                                        click="onReindexClick(event)"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='reindexHint')"
+                                                />
+                                        <mx:Spacer height="10"/>
+                                        <mx:LinkButton width="100%" id="paymengwBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='paymetgwCfg')"
+                                                       click="onConfigurePaymentGatewayClick(event)"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='paymetgwCfgHint')"
                                                 />
 
                                         <mx:Spacer height="10"/>
