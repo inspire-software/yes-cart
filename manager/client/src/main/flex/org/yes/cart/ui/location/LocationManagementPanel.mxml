@@ -43,11 +43,6 @@
             remoteCountryService.getAll();
         }
 
-        /**
-         * Country selected event handler.
-         * @param event
-         * @return nothing
-         */
         private function onCountrySelected(event:ListEvent):void {
             this.countrySelected = this.countryGrid.selectedItem != null;
             if (this.countrySelected) {
@@ -57,12 +52,6 @@
             }
         }
 
-
-        /**
-         * Delete country click handler.
-         * @param event event
-         * @return nothing
-         */
         private function onDeleteCountryClick(event:MouseEvent):void {
             if (this.countrySelected && this.countryGrid.selectedItem != null) {
                 Alert.show(
@@ -72,11 +61,6 @@
             }
         }
 
-        /**
-         * Perform country delete operation.
-         * @param event close event
-         * @return nothing
-         */
         private function onDeleteCountryConfirm(event:CloseEvent):void {
             if (event.detail == Alert.OK) {
                 if (this.countrySelected && this.countryGrid.selectedItem != null) {
@@ -89,12 +73,6 @@
             }
         }
 
-
-        /**
-         * Edit country click handler.
-         * @param event event
-         * @return nothing
-         */
         private function onEditCountryClick(event:Event):void {
             if (this.countrySelected && this.countryGrid.selectedItem != null) {
                 countryCreateEditDialog = CountryCreateEditDialog(
@@ -106,22 +84,11 @@
             }
         }
 
-
-        /**
-         * Perform update country action
-         * @param event event
-         * @return nothing
-         */
         private function onUpdateCountryClick(event:Event):void {
             remoteCountryService.update(countryCreateEditDialog.countryDTOImpl);
         }
 
 
-        /**
-         * New country click handler.
-         * @param event event
-         * @return nothing
-         */
         private function onNewCountryClick(event:MouseEvent):void {
             countryCreateEditDialog = CountryCreateEditDialog(
                     PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CountryCreateEditDialog, true));
@@ -131,21 +98,11 @@
             PopUpManager.centerPopUp(countryCreateEditDialog);
         }
 
-        /**
-         * Perform create new country action
-         * @param event event
-         * @return nothing
-         */
         private function onSaveCountryClick(event:Event):void {
             remoteCountryService.create(countryCreateEditDialog.countryDTOImpl);
         }
 
 
-        /**
-         * New state click handler.
-         * @param event event
-         * @return nothing
-         */
         private function onNewStateClick(event:MouseEvent):void {
             if (this.countrySelected && this.countryGrid.selectedItem != null) {
 
@@ -161,12 +118,6 @@
             }
         }
 
-
-        /**
-         * New state click handler.
-         * @param event event
-         * @return nothing
-         */
         private function onEditStateClick(event:Event):void {
             if (this.stateSelected && this.stateGrid.selectedItem != null) {
                 stateCreateEditDialog = StateCreateEditDialog(
@@ -178,34 +129,16 @@
             }
         }
 
-
-        /**
-         * Perform create new state or area or county or province action
-         * @param event event
-         * @return nothing
-         */
         private function onSaveStateClick(event:Event):void {
             var stateDTOImpl:StateDTOImpl = stateCreateEditDialog.stateDTOImpl;
             remoteStateService.create(stateDTOImpl);
         }
 
-
-        /**
-         * Perform create new state or area or county or province action
-         * @param event event
-         * @return nothing
-         */
         private function onUpdateStateClick(event:Event):void {
             var stateDTOImpl:StateDTOImpl = stateCreateEditDialog.stateDTOImpl;
             remoteStateService.update(stateDTOImpl);
         }
 
-
-        /**
-         * Delete state click handler.
-         * @param event event
-         * @return nothing
-         */
         private function onDeleteStateClick(event:MouseEvent):void {
             if (this.stateSelected && this.stateGrid.selectedItem != null) {
                 Alert.show(
@@ -215,11 +148,6 @@
             }
         }
 
-        /**
-         * Perform state delete operation.
-         * @param event close event
-         * @return nothing
-         */
         private function onDeleteStateConfirm(event:CloseEvent):void {
             if (event.detail == Alert.OK) {
                 if (this.stateSelected && this.stateGrid.selectedItem != null) {
@@ -229,12 +157,6 @@
             }
         }
 
-
-        /**
-         * State selected event handler.
-         * @param event
-         * @return nothing
-         */
         private function onStateSelected(event:ListEvent):void {
             this.stateSelected = this.stateGrid.selectedItem != null;
         }

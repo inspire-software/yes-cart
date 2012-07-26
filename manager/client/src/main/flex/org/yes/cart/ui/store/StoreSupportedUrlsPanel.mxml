@@ -83,13 +83,6 @@
         }
 
 
-        /**
-         *
-         * Handle url button click.
-         *
-         * @param event miuse event
-         * @return nothing
-         */
         private function onDeleteUrlClick(event:MouseEvent):void {
 
             if (this.allowDeleteUrl && this.urlGrid.selectedItem != null) {
@@ -100,12 +93,6 @@
             }
         }
 
-        /**
-         * Call service to delete attribute group.
-         * Delete operation will be failed if group contains at least one attribute .
-         * @param event event
-         * @return nothing
-         */
         private function onDeleteUrlConfirm(event:CloseEvent):void {
             if (event.detail == Alert.OK) {
                 if (this.allowDeleteUrl && this.urlGrid.selectedItem != null) {

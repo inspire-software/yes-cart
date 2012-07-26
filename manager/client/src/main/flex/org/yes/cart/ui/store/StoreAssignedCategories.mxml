@@ -44,10 +44,6 @@
         public var shopDto:ShopDTOImpl;
 
 
-        /**
-         * Init categories panel.
-         * @return nothing
-         */
         private function init():void {
             remoteCategoryService.getAll();
         }
@@ -62,11 +58,6 @@
             return false;
         }
 
-        /**
-         * Category to assign selection handler
-         * @param event selection event
-         * @return nothing
-         */
         private function onCategorySelected(event:ListEvent):void {
             this.availableSelected = this.categoryTree.selectedItem != null &&
                     !DomainUtils.isRootCategory(this.categoryTree.selectedItem) &&
@@ -74,22 +65,12 @@
             Debug.trace("Selected to assing category dto id is :" + this.categoryTree.selectedItem);
         }
 
-        /**
-         * Category to unassign selection handler
-         * @param event selection event
-         * @return nothing
-         */
         private function onCategoryToUnassignSelected(event:ListEvent):void {
             this.assignedSelected = this.assignedCategoriesList.selectedItem != null;
             Debug.trace("Selected to unassing category dto id is :" + this.assignedCategoriesList.selectedItem);
 
         }
 
-        /**
-         * Assign selected category as one of top level categories into selected shop.
-         * @param event event
-         * @return nothing.
-         */
         private function onAssignCategoryClick(event:Event):void {
             if (this.availableSelected && this.categoryTree.selectedItem != null) {
                 var selectedId:Object = this.categoryTree.selectedItem.categoryId;
@@ -103,11 +84,6 @@
             }
         }
 
-        /**
-         * Remove selected category from selected shop.
-         * @param event event
-         * @return nothing.
-         */
         private function onUnassignCategoryClick(event:Event):void {
             if (this.assignedSelected && this.assignedCategoriesList.selectedItem != null) {
                 remoteCategoryService.unassignFromShop(this.assignedCategoriesList.selectedItem.categoryId, shopDto.shopId);

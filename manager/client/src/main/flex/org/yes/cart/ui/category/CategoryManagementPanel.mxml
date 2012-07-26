@@ -169,7 +169,7 @@
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryTemplateTextInput, "text", this.selectedCategoryDTOImpl, "uitemplate"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryRankTextInput, "text", this.selectedCategoryDTOImpl, "rank"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryAvailableFromDateField, "selectedDate", this.selectedCategoryDTOImpl, "availablefrom"));
-            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryAvailableTillDateField, "selectedDate", this.selectedCategoryDTOImpl, "availabletill"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryAvailableToDateField, "selectedDate", this.selectedCategoryDTOImpl, "availableto"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryFNByAttributesCheckBox, "selected", this.selectedCategoryDTOImpl, "navigationByAttributes"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryFNByBrandsCheckBox, "selected", this.selectedCategoryDTOImpl, "navigationByBrand"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryFNByPriceCheckBox, "selected", this.selectedCategoryDTOImpl, "navigationByPrice"));
@@ -183,7 +183,7 @@
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "uitemplate", categoryTemplateTextInput, "text"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "rank", categoryRankTextInput, "text"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "availablefrom", categoryAvailableFromDateField, "selectedDate"));
-            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "availabletill", categoryAvailableTillDateField, "selectedDate"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "availableto", categoryAvailableToDateField, "selectedDate"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "navigationByAttributes", categoryFNByAttributesCheckBox, "selected"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "navigationByBrand", categoryFNByBrandsCheckBox, "selected"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "navigationByPrice", categoryFNByPriceCheckBox, "selected"));
@@ -200,7 +200,7 @@
             categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "uitemplate", categoryDtoChanged));
             categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "rank", categoryDtoChanged));
             categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "availablefrom", categoryDtoChanged));
-            categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "availabletill", categoryDtoChanged));
+            categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "availableto", categoryDtoChanged));
             categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "navigationByAttributes", categoryDtoChanged));
             categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "navigationByBrand", categoryDtoChanged));
             categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "navigationByPrice", categoryDtoChanged));
@@ -303,11 +303,6 @@
         }
 
 
-        /**
-         * Create new category in tree. Category not persisted till user press save.
-         * @param event event
-         * @return nothing
-         */
         private function onCreateNewCategorySaveClick(event:Event):void {
             if (newCategoryPopUp != null) {
                 var newCategory:CategoryDTOImpl = new CategoryDTOImpl();
@@ -403,11 +398,11 @@
             }
         }
 
-        private function productAssignedResultHandler(event:ResultEvent, obj:Object = null):void {
+        private function onProductAssignedResult(event:ResultEvent, obj:Object = null):void {
             assignedProductsTabSelected();
         }
 
-        private function productAssignedFaultHandler(event:FaultEvent, obj:Object = null):void {
+        private function onProductAssignedFault(event:FaultEvent, obj:Object = null):void {
             Alert.show(
                     event.toString(),
                     resourceManager.getString('ShopManagerApplication', 'warning'));
@@ -665,14 +660,14 @@
                                         </mx:HBox>
                                     </mx:FormItem>
                                     <mx:FormItem width="100%"
-                                                 label="@Resource(bundle='CategoryManagementPanel',key='availableTill')">
+                                                 label="@Resource(bundle='CategoryManagementPanel',key='availableTo')">
                                         <mx:HBox>
-                                            <mx:DateField id="categoryAvailableTillDateField" width="125"/>
+                                            <mx:DateField id="categoryAvailableToDateField" width="125"/>
                                             <mx:Button
-                                                    visible="{categoryAvailableTillDateField.selectedDate != null}"
+                                                    visible="{categoryAvailableToDateField.selectedDate != null}"
                                                     label="@Resource(bundle='CategoryManagementPanel',key='clearDate')"
-                                                    toolTip="@Resource(bundle='CategoryManagementPanel',key='clearTillDate')"
-                                                    click="categoryAvailableTillDateField.selectedDate = null;"/>
+                                                    toolTip="@Resource(bundle='CategoryManagementPanel',key='clearToDate')"
+                                                    click="categoryAvailableToDateField.selectedDate = null;"/>
                                         </mx:HBox>
                                     </mx:FormItem>
                                     <mx:FormItem width="100%"
@@ -795,7 +790,7 @@
                                                 dataField="name"/>
                                         <!--
                                                                                             <mx:DataGridColumn headerText="@Resource(bundle='CategoryManagementPanel',key='availablefrom')" dataField="availablefrom"/>
-                                                                                            <mx:DataGridColumn headerText="@Resource(bundle='CategoryManagementPanel',key='availabletill')" dataField="availabletill"/>
+                                                                                            <mx:DataGridColumn headerText="@Resource(bundle='CategoryManagementPanel',key='availableto')" dataField="availableto"/>
                                         -->
                                     </mx:columns>
                                 </mx:DataGrid>

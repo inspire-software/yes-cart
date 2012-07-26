@@ -151,9 +151,6 @@
         }
 
 
-        /**
-         * Update image seo data.
-         */
         private function updateImageSeoData():void {
             seoImage.imageName = value;
             seoImage.alt = altTextInput.text;
@@ -181,12 +178,6 @@
 
         }
 
-
-        /**
-         * Get image storage label. For sku and products the null will be returned.
-         * @param attrGroupName
-         * @return image starage label.
-         */
         private function resolveImageStorage(attrGroupName:String):String {
             if (AttributeGroupNames.CATEGORY == attrGroupName) {
                 return Constants.CATEGOTY_IMAGE_REPOSITORY_URL_PATTERN;
@@ -199,22 +190,12 @@
 
         }
 
-
-        /**
-         * Load file from local disk and show in {@link imageView}.
-         * @return nothing
-         */
         private function onLoadImageDialogButtonClick():void {
             loadFileRef = new FileReference();
             loadFileRef.addEventListener(Event.SELECT, onImageDialogFileSelect);
             loadFileRef.browse();
         }
 
-        /**
-         * Hanlde file selection event.
-         * @param e event
-         * @return nothing
-         */
         private function onImageDialogFileSelect(e:Event):void {
 
             loadFileRef.removeEventListener(Event.SELECT, onImageDialogFileSelect);
@@ -223,11 +204,6 @@
         }
 
 
-        /**
-         * File loaded event handle
-         * @param e event
-         * @return nothing
-         */
         private function onImageFileDialogLoadComplete(e:Event):void {
             loadFileRef.removeEventListener(Event.COMPLETE, onImageFileDialogLoadComplete);
 
@@ -249,8 +225,6 @@
 
         /**
          * Image loading complete, so we can show it.
-         * @param e event
-         * @return nothing
          */
         private function onDataLoadComplete(e:Event):void {
             bitmapData = Bitmap(e.target.content).bitmapData;

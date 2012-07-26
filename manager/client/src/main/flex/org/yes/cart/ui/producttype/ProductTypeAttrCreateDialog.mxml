@@ -56,7 +56,7 @@
         </mx:FormItem>
 
         <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='navigationType')">
-            <mx:RadioButtonGroup id="navtype" itemClick="handleNavigationType(event);" selectedValue="S"/>
+            <mx:RadioButtonGroup id="navtype" itemClick="onNavigationTypeClick(event);" selectedValue="S"/>
             <mx:RadioButton id="navTypeSingle" groupName="navtype" value="S"
                             label="@Resource(bundle='ProductTypeManagementPanel',key='singleValueNavigation')"
                             toolTip="@Resource(bundle='ProductTypeManagementPanel',key='singleValueNavigationHint')"
@@ -137,7 +137,7 @@
             }
         }
 
-        private function handleNavigationType(event:mx.events.ItemClickEvent):void {
+        private function onNavigationTypeClick(event:mx.events.ItemClickEvent):void {
             navigationTypeRangeEditEnabled = (event.currentTarget.selectedValue == "R");
             productTypeAttr.navigationType = event.currentTarget.selectedValue;
         }

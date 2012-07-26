@@ -61,11 +61,6 @@
             canDelete = valueDataGrid.selectedItem != null && DomainUtils.isPersistent(valueDataGrid.selectedItem, 'attrvalueId');
         }
 
-        /**
-         * Attribute value edit end.
-         * @param event grid event.
-         * @return nothing
-         */
         private function onAttributeValueEditEnd(event:DataGridEvent):void {
             if (event.reason == DataGridEventReason.CANCELLED) {
                 return; // Do not update cell.
@@ -112,9 +107,6 @@
 
         /**
          * Label function for id column
-         * @param item
-         * @param column
-         * @return  string representation of id
          */
         private function idLabelFunction(item:Object, column:DataGridColumn):String {
             if (DomainUtils.isNew(item, 'attrvalueId')) {
@@ -125,11 +117,6 @@
 
         private var newAttrPopUp:AttributeValueAddDialog;
 
-        /**
-         * Open attribute dialog.
-         * @param event event
-         * @return nothing
-         */
         private function onAddAttributeValueClick(event:MouseEvent):void {
             newAttrPopUp = AttributeValueAddDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), AttributeValueAddDialog, true));
             newAttrPopUp.okBtn.addEventListener(MouseEvent.CLICK, onAddAttrSaveClick);
@@ -138,11 +125,6 @@
             PopUpManager.centerPopUp(newAttrPopUp);
         }
 
-        /**
-         * Perform call back when attribute selected.
-         * @param event event
-         * @return nothing
-         */
         private function onAddAttrSaveClick(event:Event):void {
             if (newAttrPopUp != null) {
                 Debug.traceObj(newAttrPopUp.selectedAttributeDTO);
@@ -163,11 +145,6 @@
         }
 
 
-        /**
-         * Remove attribute value  click handler
-         * @param event event
-         * @return nothing
-         */
         private function onRemoveAttributeValueClick(event:MouseEvent):void {
             if (canDelete && this.valueDataGrid.selectedItem != null) {
                 Alert.show(
@@ -177,11 +154,6 @@
             }
         }
 
-        /**
-         * Perform delete operation.
-         * @param event close event
-         * @return nothing
-         */
         private function onRemoveAttributeValueConfirm(event:CloseEvent):void {
             if (canDelete && this.valueDataGrid.selectedItem != null) {
                 Debug.trace("INFO delete attribute value " + this.valueDataGrid.selectedItem);

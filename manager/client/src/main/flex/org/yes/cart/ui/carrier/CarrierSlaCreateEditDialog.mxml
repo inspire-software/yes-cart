@@ -188,10 +188,6 @@
 
         }
 
-        /**
-         * Update model.
-         * @return nothing
-         */
         public function updateModel():void {
 
 
@@ -227,42 +223,20 @@
 
         }
 
-
-        /**
-         * Is given string blank. TODO move to util
-         * @param str string to check
-         * @return true in case if given string is blanks
-         */
         public static function isBlank(str:String):Boolean {
             return (str == null || StringUtil.trim(str).length == 0);
         }
 
-        /**
-         * Sla type is changed
-         * @param event
-         * @return
-         */
         private function slaTypeChangeEvt(event:Event):void {
             _carrierSlaDTOImpl.slaType = SlaType(event.currentTarget.selectedItem).data;
             changeControlsVisibility(_carrierSlaDTOImpl.slaType);
         }
 
-        /**
-         * Handle currency change event
-         * @param event event
-         * @return nothing
-         */
         private function currencyChangeEvt(event:Event):void {
             _carrierSlaDTOImpl.currency = event.currentTarget.selectedItem;
 
         }
 
-
-        /**
-         * Change the conponent visibility, depends from sla type
-         * @param slaType sla type
-         * @return nothing
-         */
         private function changeControlsVisibility(slaType:String):void {
 
             scriptFormItem.includeInLayout = scriptFormItem.visible = false;
@@ -303,8 +277,6 @@
 
         /**
          * Create dialog to edit distance - weight and distanse-volume matrix to price determination.
-         * @param event event
-         * @return nothing
          */
         private function editPriceMatrix(event:MouseEvent):void {
             Alert.show(

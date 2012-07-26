@@ -200,21 +200,11 @@
         private var attrValuePanel:EntityAttributeValuesManagementPanel;
 
 
-        /**
-         * Init Panel
-         *
-         * @return nothing
-         */
         public function init():void {
             remoteBrandService.getAll();
             remoteProductTypeService.getAll();
         }
 
-        /**
-         * Product selected.
-         * @param event event
-         * @return nothing
-         */
         private function onProductSelected(event:ListEvent):void {
 
             productSelected = productGrid.selectedItem != null;
@@ -253,11 +243,6 @@
             }
         }
 
-
-        /**
-         * Handle prouct creation.
-         * @param event event.
-         */
         private function onCreateNewProductSaveClick(event:Event):void {
 
             if (productCreateDialog != null) {

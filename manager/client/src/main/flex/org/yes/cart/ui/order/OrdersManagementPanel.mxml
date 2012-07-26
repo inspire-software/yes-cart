@@ -16,7 +16,7 @@
   -->
 
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
-           xmlns:controls="controls.*" xmlns:georg="com.georg.*" width="100%" height="100%"
+           xmlns:georg="com.georg.*" width="100%" height="100%"
            creationComplete="init();">
 
     <mx:RemoteObject showBusyCursor="true" id="remoteCustomerOrderService"
@@ -49,8 +49,8 @@
                                 />
                         <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderFromDateFilter')"/>
                         <georg:DateTimeField id="orderFromDateField" width="130"/>
-                        <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderTillDateFilter')"/>
-                        <georg:DateTimeField id="orderTillDateField" width="130"/>
+                        <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderToDateFilter')"/>
+                        <georg:DateTimeField id="orderToDateField" width="130"/>
                         <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderNumberFilter')"/>
                         <mx:TextInput id="orderNumberFilterValue" width="150"/>
                     </mx:HBox>
@@ -66,7 +66,7 @@
             </mx:ControlBar>
             <mx:DataGrid x="0" y="0" width="100%" height="99%"
                          dataTipFunction="orderToolTip"
-                         dataProvider="{remoteCustomerOrderService.findCustomerOrdersByCriterias.lastResult}"
+                         dataProvider="{remoteCustomerOrderService.findCustomerOrdersByCriteria.lastResult}"
                     >
 
                 <mx:columns>
@@ -123,7 +123,7 @@
         private var _searchCriteriarOrderStatus:String;
         private var _searchCriteriarOrderNum:String;
         private var _searchCriteriarOrderDateFrom:Date;
-        private var _searchCriteriarOrderDateTill:Date;
+        private var _searchCriteriarOrderDateTo:Date;
 
 
         public function init():void {
@@ -191,7 +191,7 @@
             _searchCriteriarOrderStatus = statusComboBox.selectedIndex == -1 ? null : statusComboBox.selectedItem.code;
             _searchCriteriarOrderNum = orderNumberFilterValue.text;
             _searchCriteriarOrderDateFrom = orderFromDateField.selectedDate;
-            _searchCriteriarOrderDateTill = orderTillDateField.selectedDate;
+            _searchCriteriarOrderDateTo = orderToDateField.selectedDate;
 
             performSearch();
 
@@ -205,14 +205,14 @@
          */
         public function performSearch():void {
 
-            remoteCustomerOrderService.findCustomerOrdersByCriterias(
+            remoteCustomerOrderService.findCustomerOrdersByCriteria(
                     _searchCriteriaCustomerId,
                     _searchCriteriaCustomerFirstName,
                     _searchCriteriaCustomerLastName,
                     _searchCriteriaCustomerEMailName,
                     _searchCriteriarOrderStatus == "all" ? null : _searchCriteriarOrderStatus,
                     _searchCriteriarOrderDateFrom,
-                    _searchCriteriarOrderDateTill,
+                    _searchCriteriarOrderDateTo,
                     _searchCriteriarOrderNum
             );
 
@@ -231,7 +231,7 @@
             _searchCriteriarOrderStatus = null;
             _searchCriteriarOrderNum = null;
             _searchCriteriarOrderDateFrom = null;
-            _searchCriteriarOrderDateTill = null;
+            _searchCriteriarOrderDateTo = null;
 
 
             firstNameFilterValue.text = "";
@@ -240,13 +240,13 @@
             statusComboBox.selectedIndex = -1;
             orderNumberFilterValue.text = "";
             orderFromDateField.selectedDate = null;
-            orderTillDateField.selectedDate = null;
+            orderToDateField.selectedDate = null;
 
         }
 
 
         public override function toString():String {
-            return super.toString() + "    \n\n{_searchCriteriaCustomerId=" + String(_searchCriteriaCustomerId) + ",_searchCriteriaCustomerFirstName=" + String(_searchCriteriaCustomerFirstName) + ",_searchCriteriaCustomerLastName=" + String(_searchCriteriaCustomerLastName) + ",_searchCriteriaCustomerEMailName=" + String(_searchCriteriaCustomerEMailName) + ",_searchCriteriarOrderStatus=" + String(_searchCriteriarOrderStatus) + ",_searchCriteriarOrderNum=" + String(_searchCriteriarOrderNum) + ",_searchCriteriarOrderDateFrom=" + String(_searchCriteriarOrderDateFrom) + ",_searchCriteriarOrderDateTill=" + String(_searchCriteriarOrderDateTill) + "}";
+            return super.toString() + "    \n\n{_searchCriteriaCustomerId=" + String(_searchCriteriaCustomerId) + ",_searchCriteriaCustomerFirstName=" + String(_searchCriteriaCustomerFirstName) + ",_searchCriteriaCustomerLastName=" + String(_searchCriteriaCustomerLastName) + ",_searchCriteriaCustomerEMailName=" + String(_searchCriteriaCustomerEMailName) + ",_searchCriteriarOrderStatus=" + String(_searchCriteriarOrderStatus) + ",_searchCriteriarOrderNum=" + String(_searchCriteriarOrderNum) + ",_searchCriteriarOrderDateFrom=" + String(_searchCriteriarOrderDateFrom) + ",_searchCriteriarOrderDateTo=" + String(_searchCriteriarOrderDateTo) + "}";
         }
         ]]></mx:Script>
 
