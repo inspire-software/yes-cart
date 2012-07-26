@@ -39,7 +39,7 @@ public class CategoryDTOImpl {
 
     public var availablefrom:Date ;
 
-    public var availabletill:Date ;
+    public var availableto:Date ;
 
     public var   uri:String;
 
@@ -87,7 +87,7 @@ public class CategoryDTOImpl {
                 + ",description=" + String(description)
                 + ",uitemplate=" + String(uitemplate)
                 + ",availablefrom=" + String(availablefrom)
-                + ",availabletill=" + String(availabletill)
+                + ",availableto=" + String(availableto)
                 + ",navigationByAttributes=" + String(navigationByAttributes)
                 + ",navigationByBrand=" + String(navigationByBrand)
                 + ",navigationByPrice=" + String(navigationByPrice)

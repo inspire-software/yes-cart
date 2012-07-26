@@ -50,8 +50,8 @@ public class SkuPriceDTOImpl implements SkuPriceDTO {
     @DtoField(value = "salefrom")
     private Date salefrom;
 
-    @DtoField(value = "saletill")
-    private Date saletill;
+    @DtoField(value = "saleto")
+    private Date saleto;
 
     @DtoField(
             value = "sku",
@@ -182,13 +182,13 @@ public class SkuPriceDTOImpl implements SkuPriceDTO {
     }
 
     /** {@inheritDoc}*/
-    public Date getSaletill() {
-        return saletill;
+    public Date getSaleto() {
+        return saleto;
     }
 
     /** {@inheritDoc}*/
-    public void setSaletill(final Date saletill) {
-        this.saletill = saletill;
+    public void setSaleto(final Date saleto) {
+        this.saleto = saleto;
     }
 
     /** {@inheritDoc}*/
@@ -271,7 +271,7 @@ public class SkuPriceDTOImpl implements SkuPriceDTO {
                 ", regularPrice=" + regularPrice +
                 ", minimalPrice=" + minimalPrice +
                 ", salefrom=" + salefrom +
-                ", saletill=" + saletill +
+                ", saleto=" + saleto +
                 ", productSkuId=" + productSkuId +
                 ", shopId=" + shopId +
                 ", quantity=" + quantity +

@@ -50,8 +50,8 @@ public class ProductDTOImpl implements ProductDTO {
     @DtoField(value = "availablefrom")
     private Date availablefrom;
 
-    @DtoField(value = "availabletill")
-    private Date availabletill;
+    @DtoField(value = "availableto")
+    private Date availableto;
 
     @DtoField(value = "availability")
     private int availability;
@@ -169,15 +169,15 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
-    public Date getAvailabletill() {
-        return availabletill;
+    public Date getAvailableto() {
+        return availableto;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setAvailabletill(final Date availabletill) {
-        this.availabletill = availabletill;
+    public void setAvailableto(final Date availableto) {
+        this.availableto = availableto;
     }
 
     /**
@@ -370,7 +370,7 @@ public class ProductDTOImpl implements ProductDTO {
                 ", code='" + code + '\'' +
                 ", tag='" + tag + '\'' +
                 ", availablefrom=" + availablefrom +
-                ", availabletill=" + availabletill +
+                ", availableto=" + availableto +
                 ", availability=" + availability +
                 ", brandDTO=" + brandDTO +
                 ", productTypeDTO=" + productTypeDTO +

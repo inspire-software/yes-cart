@@ -66,8 +66,8 @@ public class CategoryDTOImpl implements CategoryDTO {
     @DtoField(value = "availablefrom")
     private Date availablefrom;
 
-    @DtoField(value = "availabletill")
-    private Date availabletill;
+    @DtoField(value = "availableto")
+    private Date availableto;
 
     @DtoField(value = "seo.uri", entityBeanKeys = "org.yes.cart.domain.entity.Seo")
     private String uri;
@@ -258,15 +258,15 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
-    public Date getAvailabletill() {
-        return availabletill;
+    public Date getAvailableto() {
+        return availableto;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setAvailabletill(final Date availabletill) {
-        this.availabletill = availabletill;
+    public void setAvailableto(final Date availableto) {
+        this.availableto = availableto;
     }
 
 
@@ -409,7 +409,7 @@ public class CategoryDTOImpl implements CategoryDTO {
                 ", description='" + description + '\'' +
                 ", uitemplate='" + uitemplate + '\'' +
                 ", availablefrom=" + availablefrom +
-                ", availabletill=" + availabletill +
+                ", availableto=" + availableto +
                 ", navigationByAttributes=" + navigationByAttributes +
                 ", navigationByBrand=" + navigationByBrand +
                 ", navigationByPrice=" + navigationByPrice +

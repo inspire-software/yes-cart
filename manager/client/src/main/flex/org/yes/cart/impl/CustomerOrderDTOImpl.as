@@ -15,6 +15,8 @@
  */
 
 package org.yes.cart.impl {
+import org.yes.cart.util.DomainUtils;
+
 [Bindable]
 [RemoteClass(alias="org.yes.cart.domain.dto.impl.CustomerOrderDTOImpl")]
 public class CustomerOrderDTOImpl {
@@ -57,6 +59,10 @@ public class CustomerOrderDTOImpl {
     public var code:String;
 
     public var amount:Number;
+
+    public function get fullname():String {
+        return firstname + ' ' + (DomainUtils.isNotBlankString(middlename) ? (middlename + ' ') : '') + lastname;
+    }
 
     public function CustomerOrderDTOImpl() {
     }

@@ -67,18 +67,18 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
      * @param email       optional to perform search using like by email
      * @param orderStatus optional order status
      * @param fromDate    optional order created from
-     * @param tillDate    optional orer created till
+     * @param toDate    optional order created to
      * @param orderNum    optional to perform search using like by order number
      * @return
      */
-    List<CustomerOrder> findCustomerOrdersByCriterias(
+    List<CustomerOrder> findCustomerOrdersByCriteria(
             long customerId,
             String firstName,
             String lastName,
             String email,
             String orderStatus,
             Date fromDate,
-            Date tillDate,
+            Date toDate,
             String orderNum
     );
 

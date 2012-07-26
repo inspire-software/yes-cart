@@ -88,14 +88,14 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
-    public List<CustomerOrder> findCustomerOrdersByCriterias(
+    public List<CustomerOrder> findCustomerOrdersByCriteria(
             final long customerId,
             final String firstName,
             final String lastName,
             final String email,
             final String orderStatus,
             final Date fromDate,
-            final Date tillDate,
+            final Date toDate,
             final String orderNum
             ) {
         if (customerId > 0) {
@@ -107,7 +107,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
                     likeValue(email),
                     orderStatus,
                     fromDate,
-                    tillDate,
+                    toDate,
                     likeValue(orderNum)
                     );
         }
