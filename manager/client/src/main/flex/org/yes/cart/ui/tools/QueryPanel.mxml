@@ -16,33 +16,31 @@
   -->
 
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
-           xmlns:controls="controls.*" xmlns:georg="com.georg.*" width="100%" height="100%">
+           width="100%" height="100%" creationComplete="initPanel()">
 
 
     <mx:Script>
     <![CDATA[
         import mx.containers.VDividedBox;
-        import mx.controls.Alert;
+        import mx.controls.DataGrid;
+        import mx.controls.TextArea;
         import mx.events.IndexChangedEvent;
-        import mx.rpc.AsyncResponder;
+        import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
 
         import org.yes.cart.shopmanager.ShopManagerGlobal;
 
 
-        /**
-         * Add new tab to edit query and execute it.
-         * @param event maouse event
-         */
-        private function onAddTabClick(event:MouseEvent):void {
-
+        private function addNewTab():void {
             //queryTabNavigator.add
             var divBox:VDividedBox = new VDividedBox();
-            divBox.label = "" + queryType.selectedValue;
-            divBox.setStyle("width", "100%");
-            divBox.setStyle("height", "100%");
+            divBox.label = String(queryType.selectedValue);
             divBox.percentHeight = 100;
             divBox.percentWidth = 100;
+            divBox.setStyle('paddingLeft', 2);
+            divBox.setStyle('paddingRight', 2);
+            divBox.setStyle('paddingTop', 2);
+            divBox.setStyle('paddingBottom', 2);
 
             var textArea:TextArea = new TextArea();
             textArea.percentWidth = 100;
@@ -57,7 +55,10 @@
             divBox.addChild(dataGrid);
 
             queryTabNavigator.addChild(divBox);
+        }
 
+        private function onAddTabClick(event:MouseEvent):void {
+            addNewTab();
         }
 
         private function onTabClick(event:IndexChangedEvent):void {
@@ -71,55 +72,57 @@
 
         private function onExecuteQueryClick(event:MouseEvent):void {
 
+            var sqlLabel:String = resourceManager.getString('QueryPanel', 'sql');
+            var hsqlLabel:String = resourceManager.getString('QueryPanel', 'hsql');
+            var luceneLabel:String = resourceManager.getString('QueryPanel', 'lucene');
+
             var sql:String = ((queryTabNavigator.selectedChild as VDividedBox).getChildAt(0) as TextArea).text;
 
-            var dataGrid:DataGrid = ((queryTabNavigator.selectedChild as VDividedBox).getChildAt(1) as DataGrid);
+            if (sqlLabel == (queryTabNavigator.selectedChild as VDividedBox).label) {
 
-            if ("Sql" == (queryTabNavigator.selectedChild as VDividedBox).label) {
+                remoteBackdoorService.sqlQuery(sql);
 
-                remoteBackdoorService.sqlQuery(sql).addResponder(
+            } else if (hsqlLabel == (queryTabNavigator.selectedChild as VDividedBox).label) {
 
-                        new AsyncResponder(
-                                function (event:ResultEvent, obj:Object = null):void {
+                remoteBackdoorService.hsqlQuery(sql);
 
-                                    dataGrid.dataProvider = event.result;
+            } else if (luceneLabel == (queryTabNavigator.selectedChild as VDividedBox).label) {
 
-                                },
-                                ShopManagerGlobal.instance.defaultOnRpcMethodFault)
-
-                );
-
-            } else if ("Hsql" == (queryTabNavigator.selectedChild as VDividedBox).label) {
-
-                remoteBackdoorService.hsqlQuery(sql).addResponder(
-
-                        new AsyncResponder(
-                                function (event:ResultEvent, obj:Object = null):void {
-
-                                    dataGrid.dataProvider = event.result;
-
-                                },
-                                ShopManagerGlobal.instance.defaultOnRpcMethodFault)
-
-                );
-
-            } else if ("Lucene" == (queryTabNavigator.selectedChild as VDividedBox).label) {
-
-                remoteBackdoorService.luceneQuery(sql).addResponder(
-
-                        new AsyncResponder(
-                                function (event:ResultEvent, obj:Object = null):void {
-
-                                    dataGrid.dataProvider = event.result;
-
-                                },
-                                ShopManagerGlobal.instance.defaultOnRpcMethodFault)
-
-                );
+                remoteBackdoorService.luceneQuery(sql);
 
             }
 
         }
+
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        private function onSqlQueryResult(event:ResultEvent):void {
+
+            var dataGrid:DataGrid = ((queryTabNavigator.selectedChild as VDividedBox).getChildAt(1) as DataGrid);
+            dataGrid.dataProvider = event.result;
+
+        }
+
+        private function onHSqlQueryResult(event:ResultEvent):void {
+
+            var dataGrid:DataGrid = ((queryTabNavigator.selectedChild as VDividedBox).getChildAt(1) as DataGrid);
+            dataGrid.dataProvider = event.result;
+
+        }
+
+        private function onLuceneQueryResult(event:ResultEvent):void {
+
+            var dataGrid:DataGrid = ((queryTabNavigator.selectedChild as VDividedBox).getChildAt(1) as DataGrid);
+            dataGrid.dataProvider = event.result;
+
+        }
+
+        private function initPanel():void {
+            addNewTab();
+        }
+
         ]]>
 </mx:Script>
 
@@ -127,49 +130,47 @@
                      result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
                      fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
                      destination="remoteBackdoorService"
-                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
 
-    <mx:Panel width="100%" height="100%" title="@Resource(bundle='QueryPanel',key='query')">
-        <mx:VBox width="100%" height="100%">
+        <mx:method id="sqlQuery" name="sqlQuery"
+                   result="onSqlQueryResult(event)"
+                   fault="onRpcMethodFault(event)"/>
 
-            <mx:HBox paddingTop="5" width="100%">
+        <mx:method id="hsqlQuery" name="hsqlQuery"
+                   result="onHSqlQueryResult(event)"
+                   fault="onRpcMethodFault(event)"/>
 
-                <mx:RadioButtonGroup id="queryType"/>
+        <mx:method id="luceneQuery" name="luceneQuery"
+                   result="onLuceneQueryResult(event)"
+                   fault="onRpcMethodFault(event)"/>
 
-                <mx:Label text="@Resource(bundle='QueryPanel',key='queryType')"/>
+    </mx:RemoteObject>
 
-                <mx:RadioButton group="{queryType}" selected="true" id="Sql"
-                                label="@Resource(bundle='QueryPanel',key='sql')"/>
-                <mx:RadioButton group="{queryType}" id="Hsql" label="@Resource(bundle='QueryPanel',key='hsql')"/>
-                <mx:RadioButton group="{queryType}" id="Lucene" label="@Resource(bundle='QueryPanel',key='lucene')"/>
+    <mx:Panel width="100%" height="100%" title="@Resource(bundle='QueryPanel',key='query')"
+            paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
 
+        <mx:HBox paddingTop="5" width="100%">
 
-                <mx:Button id="executeSqlBtn" toolTip="@Resource(bundle='QueryPanel',key='executeHint')"
-                           label="@Resource(bundle='QueryPanel',key='execute')" click="onExecuteQueryClick(event)"/>
-                <mx:Button id="addTabBtn" toolTip="@Resource(bundle='QueryPanel',key='newTabHint')"
-                           label="@Resource(bundle='QueryPanel',key='newTab')" click="onAddTabClick(event)"/>
-                <mx:Button id="deleteTabBtn" toolTip="@Resource(bundle='QueryPanel',key='deleteTabHint')"
-                           label="@Resource(bundle='QueryPanel',key='deleteTab')" click="onDeleteTabClick(event)"/>
+            <mx:RadioButtonGroup id="queryType"/>
 
-            </mx:HBox>
+            <mx:Label text="@Resource(bundle='QueryPanel',key='queryType')"/>
 
-            <mx:TabNavigator id="queryTabNavigator" width="100%" height="100%">
-                <mx:VDividedBox width="100%"
-                                height="100%" label="SQL">
-                    <mx:TextArea width="100%">
-
-                    </mx:TextArea>
-                    <mx:DataGrid width="100%">
-
-                    </mx:DataGrid>
-
-                </mx:VDividedBox>
-
-            </mx:TabNavigator>
+            <mx:RadioButton group="{queryType}" selected="true" id="Sql" label="@Resource(bundle='QueryPanel',key='sql')"/>
+            <mx:RadioButton group="{queryType}" id="Hsql" label="@Resource(bundle='QueryPanel',key='hsql')"/>
+            <mx:RadioButton group="{queryType}" id="Lucene" label="@Resource(bundle='QueryPanel',key='lucene')"/>
 
 
-        </mx:VBox>
+            <mx:Button id="executeQueryBtn" toolTip="@Resource(bundle='QueryPanel',key='executeHint')"
+                       label="@Resource(bundle='QueryPanel',key='execute')" click="onExecuteQueryClick(event)"/>
+            <mx:Button id="addTabBtn" toolTip="@Resource(bundle='QueryPanel',key='newTabHint')"
+                       label="@Resource(bundle='QueryPanel',key='newTab')" click="onAddTabClick(event)"/>
+            <mx:Button id="deleteTabBtn" toolTip="@Resource(bundle='QueryPanel',key='deleteTabHint')"
+                       label="@Resource(bundle='QueryPanel',key='deleteTab')" click="onDeleteTabClick(event)"/>
+
+        </mx:HBox>
+
+        <mx:TabNavigator id="queryTabNavigator" width="100%" height="100%"/>
+
     </mx:Panel>
-
 
 </mx:Canvas>
