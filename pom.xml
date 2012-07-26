@@ -285,6 +285,7 @@
             </properties>
         </profile>
         <profile>
+            <activation><activeByDefault>true</activeByDefault></activation>
             <id>derby</id>
             <properties>
                 <db.config.yes.hibernate.dialect>org.hibernate.dialect.DerbyDialect</db.config.yes.hibernate.dialect>
