@@ -35,19 +35,10 @@
 
         private var newPopUp:UserCreateEditDialog;
 
-        /**
-         * Init user management panel.
-         * @return nothing
-         */
         public function init():void {
 
         }
 
-        /**
-         * Call the remote method to get filtered list of managers.
-         * @param event event
-         * @return nothing
-         */
         private function onApplyFilterClick(event:MouseEvent):void {
 
             userSelected = false;
@@ -75,16 +66,16 @@
             remoteUserManagementService.getAvailableManagerRoles(email);
         }
 
-        private function handle_availableRolesItemClick(event:ListEvent):void {
+        private function onAvailableRolesItemClick(event:ListEvent):void {
             grantOneEnabled = this.availableRolesList.selectedItem != null;
         }
 
-        private function handle_assigedRolesItemClick(event:ListEvent):void {
+        private function onAssigedRolesItemClick(event:ListEvent):void {
             revokeOneEnabled = this.assignedRolesList.selectedItem != null;
         }
 
 
-        private function handle_grantOneRoleClick(event:Event):void {
+        private function onGrantOneRoleClick(event:Event):void {
             if (this.usersDataGrid.selectedItem != null && this.availableRolesList.selectedItem != null) {
                 var email:String = this.usersDataGrid.selectedItem.email;
                 var roleToGrant:Object = this.availableRolesList.selectedItem.code;
@@ -92,7 +83,7 @@
             }
         }
 
-        private function handle_revokeOneRoleClick(event:Event):void {
+        private function onRevokeOneRoleClick(event:Event):void {
             if (this.usersDataGrid.selectedItem != null && this.assignedRolesList.selectedItem != null) {
                 var email:String = this.usersDataGrid.selectedItem.email;
                 var roleToRevoke:Object = this.assignedRolesList.selectedItem.code;
@@ -121,11 +112,6 @@
 
         }
 
-        /**
-         * Handle create new user action.
-         * @param event event to handle
-         * @return nothing
-         */
         private function onCreateUserClick(event:Event):void {
             remoteUserManagementService.addUser(
                     newPopUp.email.text,
@@ -134,11 +120,6 @@
             );
         }
 
-        /**
-         * Handle user edited action.
-         * @param event event to handle
-         * @return nothing
-         */
         private function onUpdateUserClick(event:Event):void {
             remoteUserManagementService.updateUser(
                     newPopUp.email.text,
@@ -147,12 +128,6 @@
             );
         }
 
-        /**
-         * Reload use list
-         * @param result resutl event
-         * @param obj token
-         * @return nothing
-         */
         private function loadUsers(result:Object, obj:Object = null):void {
             onApplyFilterClick(null);
             PopUpManager.removePopUp(newPopUp);
@@ -191,11 +166,6 @@
             }
         }
 
-        /**
-         * Handle delete action.
-         * @param event event
-         * @return nothing
-         */
         private function onDeleteUserConfirm(event:CloseEvent):void {
             if (event.detail == Alert.OK) {
 
@@ -406,9 +376,9 @@
 
             <mx:GridRow width="100%" height="95%">
                 <mx:GridItem  width="44%" height="100%">
-                    <mx:List itemClick="handle_availableRolesItemClick(event)"
+                    <mx:List itemClick="onAvailableRolesItemClick(event)"
                              doubleClickEnabled="true"
-                             itemDoubleClick="handle_grantOneRoleClick(event)"
+                             itemDoubleClick="onGrantOneRoleClick(event)"
                              id="availableRolesList" width="100%" height="100%"  labelField="code">
 
                     </mx:List>
@@ -416,15 +386,15 @@
                 <mx:GridItem width="12%" height="100%">
                     <mx:VBox height="100%" width="100%" horizontalAlign="center" verticalAlign="middle">
 
-                        <mx:Button width="60" enabled="{grantOneEnabled}" click="handle_grantOneRoleClick(event)" label="@Resource(bundle='UserManagementPanel',key='grantOneRole')"/>
-                        <mx:Button width="60" enabled="{revokeOneEnabled}" click="handle_revokeOneRoleClick(event)" label="@Resource(bundle='UserManagementPanel',key='revokeOneRole')"/>
+                        <mx:Button width="60" enabled="{grantOneEnabled}" click="onGrantOneRoleClick(event)" label="@Resource(bundle='UserManagementPanel',key='grantOneRole')"/>
+                        <mx:Button width="60" enabled="{revokeOneEnabled}" click="onRevokeOneRoleClick(event)" label="@Resource(bundle='UserManagementPanel',key='revokeOneRole')"/>
 
                     </mx:VBox>
                 </mx:GridItem>
                 <mx:GridItem width="44%" height="100%">
-                    <mx:List itemClick="handle_assigedRolesItemClick(event)"
+                    <mx:List itemClick="onAssigedRolesItemClick(event)"
                              doubleClickEnabled="true"
-                             itemDoubleClick="handle_revokeOneRoleClick(event)"
+                             itemDoubleClick="onRevokeOneRoleClick(event)"
                              id="assignedRolesList" width="100%" height="100%" labelField="code">
 
                     </mx:List>

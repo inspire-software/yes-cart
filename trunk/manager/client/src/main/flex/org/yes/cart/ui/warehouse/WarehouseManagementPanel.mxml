@@ -40,28 +40,14 @@
         private var newPopUp:WarehouseCreateEditDialog;
 
 
-        /**
-         * Init warehouse panel
-         * @return none.
-         */
         public function init():void {
             remoteWarehouseService.getAll();
         }
 
-        /**
-         * Handle the warehouse selection in data grid.
-         * @param event event
-         * @return nothing
-         */
-        private function handle_warehouseSelectedClick(event:ListEvent):void {
+        private function onWarehouseSelectedClick(event:ListEvent):void {
             this.warehouseSelected = this.warehouseGrid.selectedItem != null;
         }
 
-        /**
-         * Create new warehouse click handler.
-         * @param event event
-         * @return nothing
-         */
         private function onNewWarehouseClick(event:MouseEvent):void {
             Debug.trace("warehouse panel onNewWarehouseClick");
             newPopUp = WarehouseCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), WarehouseCreateEditDialog, true));
@@ -70,20 +56,10 @@
             PopUpManager.centerPopUp(newPopUp);
         }
 
-        /**
-         * Perform new warehouse creation.
-         * @param event event
-         * @return nothing
-         */
         private function createNewWarehouse(event:Event):void {
             remoteWarehouseService.create(newPopUp.warehouseDTOImpl);
         }
 
-        /**
-         * Edit existing warehouse click handler.
-         * @param event event
-         * @return nothing
-         */
         private function onEditWarehouseClick(event:Event):void {
             if (this.warehouseSelected && this.warehouseGrid.selectedItem != null) {
                 Debug.trace("warehouse panel onEditWarehouseClick");
@@ -94,22 +70,12 @@
             }
         }
 
-        /**
-         * Perform warehouse update.
-         * @param event event
-         * @return nothing.
-         */
         private function updateExistingWarehouse(event:Event):void {
 
             remoteWarehouseService.update(newPopUp.warehouseDTOImpl);
 
         }
 
-        /**
-         * Delete warehouse click handler.
-         * @param event event
-         * @return nothing
-         */
         private function onDeleteWarehouseClick(event:MouseEvent):void {
             if (this.warehouseSelected && this.warehouseGrid.selectedItem != null) {
                 Alert.show(
@@ -119,11 +85,6 @@
             }
         }
 
-        /**
-         * Perform delete warehouse operation.
-         * @param event close event
-         * @return nothing
-         */
         private function onDeleteWarehouseConfirm(event:CloseEvent):void {
             if (event.detail == Alert.OK) {
 
@@ -166,7 +127,7 @@
         }
 
         private function onRemoveResult(event:ResultEvent):void {
-            Debug.trace("warehouse panel delete fault handler:" + event.toString());
+            Debug.trace("warehouse panel delete fault:" + event.toString());
             Alert.show(
                     resourceManager.getString('WarehouseManagementPanel', 'warehouseDeletedConfirm'),
                     resourceManager.getString('ShopManagerApplication', 'info'));
@@ -219,7 +180,7 @@
                      width="100%" height="100%"
                      doubleClickEnabled="true"
                      doubleClick="onEditWarehouseClick(event)"
-                     itemClick="handle_warehouseSelectedClick(event)">
+                     itemClick="onWarehouseSelectedClick(event)">
             <mx:columns>
                 <mx:DataGridColumn width="80" headerText="@Resource(bundle='WarehouseManagementPanel',key='code')" dataField="code"/>
                 <mx:DataGridColumn width="300" headerText="@Resource(bundle='WarehouseManagementPanel',key='name')" dataField="name"/>

@@ -16,81 +16,99 @@
   -->
 
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
-           xmlns:controls="controls.*" width="100%" height="100%"
-           creationComplete="init();">
+           width="100%" height="100%">
 
-    <mx:RemoteObject showBusyCursor="true" id="remoteAddressService"
-                     destination="remoteAddressService"
-                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
-                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
-                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+    <mx:RemoteObject showBusyCursor="true" id="remoteAddressService" destination="remoteAddressService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
 
-    <mx:DataGrid x="0" y="0" width="100%" height="99%"
-                 dataProvider="{remoteAddressService.getAddressesByCustomerId.lastResult}">
-        <mx:columns>
-            <mx:DataGridColumn width="70" headerText="@Resource(bundle='CustomerManagementPanel',key='id')"
-                               dataField="addressId"/>
-            <mx:DataGridColumn width="60" headerText="@Resource(bundle='CustomerManagementPanel',key='countryCodestateCode')">
-                <mx:itemRenderer>
-                    <mx:Component>
-                        <mx:VBox>
-                            <mx:Label text="{data.countryCode}"/>
-                            <mx:Label text="{data.stateCode}"/>
-                        </mx:VBox>
-                    </mx:Component>
-                </mx:itemRenderer>
-            </mx:DataGridColumn>
-            <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='cityPostcode')">
-                <mx:itemRenderer>
-                    <mx:Component>
-                        <mx:VBox>
-                            <mx:Label text="{data.city}"/>
-                            <mx:Label text="{data.postcode}"/>
-                        </mx:VBox>
-                    </mx:Component>
-                </mx:itemRenderer>
-            </mx:DataGridColumn>
+        <mx:method id="getAddressesByCustomerId" name="getAddressesByCustomerId"
+                   result="onGetAddressesByCustomerIdResult(event)"
+                   fault="onRpcMethodFault(event)"/>
 
-            <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='addrlines')">
-                <mx:itemRenderer>
-                    <mx:Component>
-                        <mx:VBox>
-                            <mx:Label text="{data.addrline1}"/>
-                            <mx:Label text="{data.addrline2}"/>
-                        </mx:VBox>
-                    </mx:Component>
-                </mx:itemRenderer>
-            </mx:DataGridColumn>
-            <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='fullname')">
-                <mx:itemRenderer>
-                    <mx:Component>
-                        <mx:VBox>
-                            <mx:Label text="{data.lastname}"/>
-                            <mx:Label text="{data.firstname}"/>
-                            <mx:Label text="{data.firstname}"/>
-                        </mx:VBox>
-                    </mx:Component>
-                </mx:itemRenderer>
+    </mx:RemoteObject>
 
-            </mx:DataGridColumn>
-            <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='phone')"
-                               dataField="phoneList"/>
-            <mx:DataGridColumn width="40" headerText="@Resource(bundle='CustomerManagementPanel',key='addressType')"
-                               dataField="addressType"/>
-            <mx:DataGridColumn width="40" headerText="@Resource(bundle='CustomerManagementPanel',key='defaultAddress')"
-                               dataField="defaultAddress"/>
+    <mx:VBox paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2" width="100%" height="100%">
 
-        </mx:columns>
-    </mx:DataGrid>
+        <mx:DataGrid width="100%" height="100%" id="addressBookGrid">
+            <mx:columns>
+                <mx:DataGridColumn width="70" headerText="@Resource(bundle='CustomerManagementPanel',key='id')"
+                                   dataField="addressId"/>
+                <mx:DataGridColumn width="60" headerText="@Resource(bundle='CustomerManagementPanel',key='countryCodestateCode')"
+                                   dataField="countryCode">
+                    <mx:itemRenderer>
+                        <mx:Component>
+                            <mx:VBox>
+                                <mx:Text text="{data.fullcountry}"/>
+                            </mx:VBox>
+                        </mx:Component>
+                    </mx:itemRenderer>
+                </mx:DataGridColumn>
+                <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='addrlines')"
+                                   dataField="postcode">
+                    <mx:itemRenderer>
+                        <mx:Component>
+                            <mx:VBox>
+                                <mx:Text text="{data.fulladdress}"/>
+                            </mx:VBox>
+                        </mx:Component>
+                    </mx:itemRenderer>
+                </mx:DataGridColumn>
+                <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='fullname')"
+                                   dataField="lastname">
+                    <mx:itemRenderer>
+                        <mx:Component>
+                            <mx:VBox>
+                                <mx:Text text="{data.fullname}"/>
+                            </mx:VBox>
+                        </mx:Component>
+                    </mx:itemRenderer>
 
+                </mx:DataGridColumn>
+                <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='phone')"
+                                   dataField="phoneList"/>
+                <mx:DataGridColumn width="40" headerText="@Resource(bundle='CustomerManagementPanel',key='addressType')"
+                                   dataField="addressType"/>
+                <mx:DataGridColumn width="40" headerText="@Resource(bundle='CustomerManagementPanel',key='defaultAddress')"
+                                   dataField="defaultAddress">
+                    <mx:itemRenderer>
+                        <mx:Component>
+                            <mx:HBox horizontalAlign="center"><mx:CheckBox enabled="false" selected="{data.defaultAddress}"/></mx:HBox>
+                        </mx:Component>
+                    </mx:itemRenderer>
+                </mx:DataGridColumn>
+
+            </mx:columns>
+        </mx:DataGrid>
+    </mx:VBox>
 
     <mx:Script><![CDATA[
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
         import org.yes.cart.shopmanager.ShopManagerGlobal;
 
-        public var customerId:Number;
+        private var _customerId:Number;
 
-        public function init():void {
+
+        public function get customerId():Number {
+            return _customerId;
+        }
+
+        public function set customerId(value:Number):void {
+            if (_customerId == value) {
+                return;
+            }
+            _customerId = value;
             remoteAddressService.getAddressesByCustomerId(customerId);
         }
+
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        private function onGetAddressesByCustomerIdResult(event:ResultEvent):void {
+            addressBookGrid.dataProvider = event.result;
+        }
+
         ]]></mx:Script>
 </mx:Canvas>

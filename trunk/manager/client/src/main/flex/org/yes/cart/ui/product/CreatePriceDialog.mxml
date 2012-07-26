@@ -50,8 +50,8 @@
         <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='saleFrom')">
             <georg:DateTimeField id="saleFromDateField" width="160" enabled="{selectedSku != null}"/>
         </mx:FormItem>
-        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='saleTill')">
-            <georg:DateTimeField id="saleTillDateField" width="160" enabled="{selectedSku != null}"/>
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='saleTo')">
+            <georg:DateTimeField id="saleToDateField" width="160" enabled="{selectedSku != null}"/>
         </mx:FormItem>
 
         <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='minimalPrice')">
@@ -156,14 +156,14 @@
             BindingUtils.bindProperty(listPriceTextInput, "text", _skuPrice, "regularPrice");
             BindingUtils.bindProperty(salePriceTextInput, "text", _skuPrice, "salePrice");
             BindingUtils.bindProperty(saleFromDateField, "selectedDate", _skuPrice, "salefrom");
-            BindingUtils.bindProperty(saleTillDateField, "selectedDate", _skuPrice, "saletill");
+            BindingUtils.bindProperty(saleToDateField, "selectedDate", _skuPrice, "saleto");
             BindingUtils.bindProperty(minimalPriceTextInput, "text", _skuPrice, "minimalPrice");
 
             BindingUtils.bindProperty(_skuPrice, "quantity", quantityTextInput, "text");
             BindingUtils.bindProperty(_skuPrice, "regularPrice", listPriceTextInput, "text");
             BindingUtils.bindProperty(_skuPrice, "salePrice", salePriceTextInput, "text");
             BindingUtils.bindProperty(_skuPrice, "salefrom", saleFromDateField, "selectedDate");
-            BindingUtils.bindProperty(_skuPrice, "saletill", saleTillDateField, "selectedDate");
+            BindingUtils.bindProperty(_skuPrice, "saleto", saleToDateField, "selectedDate");
             BindingUtils.bindProperty(_skuPrice, "minimalPrice", minimalPriceTextInput, "text");
 
 

@@ -42,10 +42,6 @@
             _shopDTOImpl = value;
         }
 
-        /**
-         * Edit created or existing shop.
-         * @return nothing
-         */
         private function editShop():void {
             summaryTab.removeAllChildren();
             var storeSummaryPanel:StoreSummaryPanel = new StoreSummaryPanel();
@@ -54,11 +50,6 @@
             initTab(shopTabNavigator.selectedIndex);
         }
 
-        /**
-         * Url supprted by shop tab selected
-         * @param event event
-         * @return nothing
-         */
         private function urlsTabSelected(event:MouseEvent):void {
             urlTab.removeAllChildren();
             var storeSupportedUrlsPanel:StoreSupportedUrlsPanel = new StoreSupportedUrlsPanel();
@@ -66,11 +57,6 @@
             urlTab.addChild(storeSupportedUrlsPanel);
         }
 
-        /**
-         * Url supprted by shop tab selected
-         * @param event event
-         * @return nothing
-         */
         private function currencyTabSelected(event:MouseEvent):void {
             currencyTab.removeAllChildren();
             var storeSupportedCurrencyPanel:StoreSupportedCurrency = new StoreSupportedCurrency();
@@ -78,11 +64,6 @@
             currencyTab.addChild(storeSupportedCurrencyPanel);
         }
 
-        /**
-         * Assigned categories
-         * @param event event
-         * @return nothing
-         */
         private function categoryTabSelected(event:MouseEvent):void {
             categoryTab.removeAllChildren();
             var panel:StoreAssignedCategories = new StoreAssignedCategories();
@@ -90,11 +71,6 @@
             categoryTab.addChild(panel);
         }
 
-        /**
-         * Shop warehouses tab selected
-         * @param event event
-         * @return nothing
-         */
         private function warehouseTabSelected(event:MouseEvent):void {
             warehouseTab.removeAllChildren();
             var panel:StoreSupportedWarehouses = new StoreSupportedWarehouses();
@@ -102,11 +78,6 @@
             warehouseTab.addChild(panel);
         }
 
-        /**
-         * Tab clicked handler
-         * @param event event
-         * @return nothing
-         */
         private function onTabClick(event:IndexChangedEvent):void {
             initTab(event.newIndex);
         }

@@ -39,7 +39,35 @@
         import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
 
+        import org.yes.cart.impl.AddressDTOImpl;
+        import org.yes.cart.impl.AssociationDTOImpl;
+        import org.yes.cart.impl.AttrValueBrandDTOImpl;
+        import org.yes.cart.impl.AttrValueCategoryDTOImpl;
+        import org.yes.cart.impl.AttrValueCustomerDTOImpl;
+        import org.yes.cart.impl.AttrValueProductSkuDTOImpl;
+        import org.yes.cart.impl.AttributeDTOImpl;
+        import org.yes.cart.impl.BrandDTOImpl;
+        import org.yes.cart.impl.CarrierDTOImpl;
+        import org.yes.cart.impl.CarrierSlaDTOImpl;
+        import org.yes.cart.impl.CategoryDTOImpl;
+        import org.yes.cart.impl.CustomerDTOImpl;
+        import org.yes.cart.impl.CustomerOrderDTOImpl;
+        import org.yes.cart.impl.ProdTypeAttributeViewGroupDTOImpl;
+        import org.yes.cart.impl.ProductAssociationDTOImpl;
+        import org.yes.cart.impl.ProductCategoryDTOImpl;
+        import org.yes.cart.impl.ProductDTOImpl;
+        import org.yes.cart.impl.ProductSkuDTOImpl;
+        import org.yes.cart.impl.ProductTypeAttrDTOImpl;
+        import org.yes.cart.impl.ProductTypeDTOImpl;
+        import org.yes.cart.impl.SeoDTOImpl;
+        import org.yes.cart.impl.SeoImageDTOImpl;
+
         import org.yes.cart.impl.ShopDTOImpl;
+        import org.yes.cart.impl.ShopUrlDTOImpl;
+        import org.yes.cart.impl.SkuPriceDTOImpl;
+        import org.yes.cart.impl.SkuWarehouseDTOImpl;
+        import org.yes.cart.impl.StateDTOImpl;
+        import org.yes.cart.impl.WarehouseDTOImpl;
 
         import org.yes.cart.shopmanager.ShopManagerGlobal;
         import org.yes.cart.ui.attributes.AttributesManagementPanel;
@@ -49,7 +77,7 @@
         import org.yes.cart.ui.category.CategoryManagementPanel;
         import org.yes.cart.ui.customer.CustomerManagementPanel;
         import org.yes.cart.ui.location.LocationManagementPanel;
-        import org.yes.cart.ui.order.CustomerOrderPanel;
+        import org.yes.cart.ui.order.OrdersManagementPanel;
         import org.yes.cart.ui.product.ProductManagementPanel;
         import org.yes.cart.ui.producttype.ProductTypeManagementPanel;
         import org.yes.cart.ui.reindex.ReindexPanel;
@@ -68,6 +96,40 @@
             currentState = "loginState";
             var url:String = "http://{server.name}:{server.port}/yes-manager/spring/amf";
             // var url:String = "http://localhost:8080/yes-manager/spring/amf";
+
+            /*
+             * Registering RMI classes by hand is more robust than annotations, since annotations
+             * only work if DTO class is directly referenced in components (i.e. imported).
+             * With this mapping it is not necessary.
+             */
+            registerClassAlias("org.yes.cart.domain.dto.impl.AddressDTOImpl", AddressDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.AssociationDTOImpl", AssociationDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.AttributeDTOImpl", AttributeDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.AttrValueBrandDTOImpl", AttrValueBrandDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.AttrValueCategoryDTOImpl", AttrValueCategoryDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.AttrValueCustomerDTOImpl", AttrValueCustomerDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.AttrValueProductSkuDTOImpl", AttrValueProductSkuDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.BrandDTOImpl", BrandDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.CarrierDTOImpl", CarrierDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.CarrierSlaDTOImpl", CarrierSlaDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.CategoryDTOImpl", CategoryDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.CustomerDTOImpl", CustomerDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.CustomerOrderDTOImpl", CustomerOrderDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.ProdTypeAttributeViewGroupDTOImpl", ProdTypeAttributeViewGroupDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.ProductAssociationDTOImpl", ProductAssociationDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.ProductCategoryDTOImpl", ProductCategoryDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.ProductDTOImpl", ProductDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.ProductSkuDTOImpl", ProductSkuDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.ProductTypeAttrDTOImpl", ProductTypeAttrDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.ProductTypeDTOImpl", ProductTypeDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.SeoDTOImpl", SeoDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.SeoImageDTOImpl", SeoImageDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.ShopDTOImpl", ShopDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.ShopUrlDTOImpl", ShopUrlDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.SkuPriceDTOImpl", SkuPriceDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.SkuWarehouseDTOImpl", SkuWarehouseDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.StateDTOImpl", StateDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.WarehouseDTOImpl", WarehouseDTOImpl);
 
             ShopManagerGlobal.instance.url = url;
 
@@ -239,7 +301,7 @@
         private function onOrderManagementClick(event:MouseEvent):void {
             setFontWeight(ordersBtn);
             mainPanel.removeAllChildren();
-            mainPanel.addChild(new CustomerOrderPanel());
+            mainPanel.addChild(new OrdersManagementPanel());
         }
 
         private function userNameOrPasswordChanged(event:Event):void {

@@ -154,8 +154,8 @@
                                    rendererIsEditor="false"
                                    editorDataField="selectedDate"
                         />
-                <mx:DataGridColumn headerText="@Resource(bundle='ProductManagementPanel',key='saleTill')"
-                                   dataField="saletill"
+                <mx:DataGridColumn headerText="@Resource(bundle='ProductManagementPanel',key='saleTo')"
+                                   dataField="saleto"
                                    itemEditor="mx.controls.DateField"
                                    rendererIsEditor="false"
                                    editorDataField="selectedDate"

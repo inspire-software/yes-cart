@@ -52,12 +52,7 @@
         }
 
 
-        /**
-         * Handle the warehouse selection in data grid.
-         * @param event event
-         * @return nothing
-         */
-        private function handleBrandSelectedClick(event:ListEvent):void {
+        private function onBrandSelectedClick(event:ListEvent):void {
             brandSelected = this.brandGrid.selectedItem != null;
             if (brandSelected) {
                 initTab(brandTabNavigator.selectedIndex);
@@ -103,22 +98,10 @@
             }
         }
 
-
-        /**
-         * Tab clicked handler
-         * @param event event
-         * @return nothing
-         */
         private function onTabClick(event:IndexChangedEvent):void {
             initTab(event.newIndex);
         }
 
-
-        /**
-         * Create new warehouse click handler.
-         * @param event event
-         * @return nothing
-         */
         private function onNewBrandClick(event:MouseEvent):void {
             newPopUp = BrandCreateDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), BrandCreateDialog, true));
             newPopUp.saveBtn.addEventListener(MouseEvent.CLICK, onCreateBrandClick);
@@ -126,11 +109,6 @@
             PopUpManager.centerPopUp(newPopUp);
         }
 
-        /**
-         * Perform new warehouse creation.
-         * @param event event
-         * @return nothing
-         */
         private function onCreateBrandClick(event:Event):void {
             if (newPopUp != null) {
                 remoteBrandService.create(newPopUp.brandDTOImpl);
@@ -140,12 +118,6 @@
             }
         }
 
-
-        /**
-         * Edit existing warehouse click handler.
-         * @param event event
-         * @return nothing
-         */
         private function onEditBrandClick(event:Event):void {
             if (this.brandSelected && this.brandGrid.selectedItem != null) {
                 newPopUp = BrandCreateDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), BrandCreateDialog, true));
@@ -155,11 +127,6 @@
             }
         }
 
-        /**
-         * Perform warehouse update.
-         * @param event event
-         * @return nothing.
-         */
         private function onUpdateBrandClick(event:Event):void {
             if (newPopUp != null) {
                 remoteBrandService.update(newPopUp.brandDTOImpl);
@@ -170,11 +137,6 @@
         }
 
 
-        /**
-         * Delete warehouse click handler.
-         * @param event event
-         * @return nothing
-         */
         private function onDeleteBrandClick(event:MouseEvent):void {
             if (this.brandSelected && this.brandGrid.selectedItem != null) {
                 Alert.show(
@@ -184,11 +146,6 @@
             }
         }
 
-        /**
-         * Perform delete warehouse operation.
-         * @param event close event
-         * @return nothing
-         */
         private function onDeleteBrandConfirm(event:CloseEvent):void {
             if (event.detail == Alert.OK) {
                 if (this.brandSelected && this.brandGrid.selectedItem != null) {
@@ -272,7 +229,7 @@
                          width="100%" height="100%"
                          doubleClickEnabled="true"
                          itemDoubleClick="onEditBrandClick(event)"
-                         itemClick="handleBrandSelectedClick(event)">
+                         itemClick="onBrandSelectedClick(event)">
                 <mx:columns>
                     <mx:DataGridColumn width="80" headerText="@Resource(bundle='BrandManagementPanel',key='id')"
                                        dataField="brandId"/>

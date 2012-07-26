@@ -103,11 +103,6 @@
 
         }
 
-        /**
-         * Add new empty price navigation row.
-         * @param event
-         * @return nothing
-         */
         private function addNewPriceRangeRow(event:MouseEvent):void {
             var selectedIdx:int = currencyTabBar.selectedIndex;
             var pnl:PriceRangeModel = PriceRangeModel(currArray[selectedIdx]);
@@ -139,11 +134,6 @@
             PopUpManager.centerPopUp(selectCurrencyDialog);
         }
 
-        /**
-         * Add new currency.
-         * @param event
-         * @return
-         */
         private function newCurrencySelected(event:Event):void {
             if (xml == null || xml.priceMap.entry.length() == 0) {
                 xml = <pricetree>
@@ -179,7 +169,6 @@
         }
 
         /**
-         * Get the price navigation xml string.
          * @return price navigation xml string
          */
         public function get xmlString():String {
@@ -226,7 +215,6 @@
 
         /**
          * Create tab and datagrids to edit xml price navigation model.
-         * @return nothing
          */
         private function internalInit(xml:XML):void {
             currArray = [];
@@ -239,11 +227,6 @@
 
         }
 
-        /**
-         * Handle item selection.
-         * @param event event
-         * @return nothing
-         */
         private function onXmlNodeSelected(event:ListEvent):void {
             Debug.trace("TRACE PriceNavigationDialog selected node " + event.currentTarget.selectedItem);
             xmlNode = event.currentTarget.selectedItem;
@@ -257,7 +240,7 @@
                 dataGrid.editable = true;
 
                 addDataGridColumn(dataGrid, "first", resourceManager.getString('CategoryManagementPanel', 'priceFrom'));
-                addDataGridColumn(dataGrid, "second", resourceManager.getString('CategoryManagementPanel', 'priceTill'));
+                addDataGridColumn(dataGrid, "second", resourceManager.getString('CategoryManagementPanel', 'priceTo'));
 
                 dataGrid.dataProvider = priceRangeList.entry.list.pricenode.priceRange;
 
@@ -305,7 +288,6 @@
 
         /**
          * Add new tab to tab bar
-         * @param priceRangeList
          */
         private function addTab(priceRangeList:PriceRangeModel):void {
 

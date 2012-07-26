@@ -80,5 +80,14 @@ public class DomainUtils {
         return cat != null && cat is CategoryDTOImpl && isPersistent(cat, 'categoryId') && cat['categoryId'] == cat['parentId'];
     }
 
+
+    /**
+     * @param str string to check
+     * @return true if this string is not null and has length
+     */
+    public static function isNotBlankString(str:String):Boolean {
+        return str != null && str.length > 0;
+    }
+
 }
 }
