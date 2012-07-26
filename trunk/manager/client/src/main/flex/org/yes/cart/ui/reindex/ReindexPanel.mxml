@@ -17,8 +17,7 @@
 
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
            width="100%"
-           height="100%"
-           creationComplete="init();">
+           height="100%">
 
 	<mx:Script>
 		<![CDATA[
@@ -31,12 +30,7 @@
         import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
 
-        public function init():void {
-
-        }
-
-
-        protected function onReindexBtnClick(event:MouseEvent):void {
+        private function onReindexBtnClick(event:MouseEvent):void {
 
             reindexBtn.enabled = false;
             resultReady = false;
@@ -77,24 +71,23 @@
     <mx:Boolean id="reindexInProcess">false</mx:Boolean>
 
 
-	<mx:VBox height="100%" width="100%">
+	<mx:Panel height="100%" width="100%" title="@Resource(bundle='ReindexPanel',key='reindexProducts')">
 
-		<mx:Label text="@Resource(bundle='ReindexPanel',key='reindexProducts')"/>
-		<mx:Label text="@Resource(bundle='ReindexPanel',key='reindexMessage')"/>
-
-		<mx:HBox height="64" width="100%">
-			<mx:Label text="@Resource(bundle='ReindexPanel',key='startMessage')"/>
-			<mx:Button id="reindexBtn" label="@Resource(bundle='ReindexPanel',key='start')" click="onReindexBtnClick(event)"/>
-		</mx:HBox>
+        <mx:Form width="100%" height="80">
+            <mx:FormHeading label="@Resource(bundle='ReindexPanel',key='reindexMessage')"/>
+            <mx:FormItem label="@Resource(bundle='ReindexPanel',key='startMessage')">
+                <mx:Button id="reindexBtn" label="@Resource(bundle='ReindexPanel',key='start')" click="onReindexBtnClick(event)"/>
+            </mx:FormItem>
+        </mx:Form>
 
         <mx:Label id="resultText"
                   includeInLayout="{resultReady}"
                   visible="{resultReady}"/>
-        <mx:Label id="reintexingText"
+        <mx:Label id="reindexingText"
                   text="@Resource(bundle='ReindexPanel',key='reindexInProcess')"
                   includeInLayout="{reindexInProcess}"
                   visible="{reindexInProcess}"/>
 
-	</mx:VBox>
+	</mx:Panel>
 
 </mx:Canvas>
