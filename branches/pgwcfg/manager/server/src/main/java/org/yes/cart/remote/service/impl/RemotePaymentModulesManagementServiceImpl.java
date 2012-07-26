@@ -39,9 +39,16 @@ import java.util.List;
 public class RemotePaymentModulesManagementServiceImpl implements RemotePaymentModulesManagementService {
 
 
-    private PaymentModulesManager paymentModulesManager;
-    
-    
+    private final PaymentModulesManager paymentModulesManager;
+
+    /**
+     * Create remote payment gateway manager service.
+     * @param paymentModulesManager service to use.
+     */
+    public RemotePaymentModulesManagementServiceImpl(final PaymentModulesManager paymentModulesManager) {
+        this.paymentModulesManager = paymentModulesManager;
+    }
+
     /** {@inheritDoc}*/
     public List<Pair<String, String>> getAllowedPaymentGateways(final String lang) {
         
@@ -100,12 +107,12 @@ public class RemotePaymentModulesManagementServiceImpl implements RemotePaymentM
 
     /** {@inheritDoc}*/
     public void allowPaymentGateway(final String label) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        paymentModulesManager.allowPaymentGateway(label);
     }
 
     /** {@inheritDoc}*/
     public void disallowPaymentGateway(final String label) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        paymentModulesManager.disallowPaymentGateway(label);
     }
 
 

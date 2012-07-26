@@ -45,6 +45,7 @@
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.SystemServiceImpl">
                 <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="systemDao"/>
+                <constructor-arg type="org.yes.cart.service.domain.AttributeService" ref="attributeService"/>
             </bean>
         </property>
     </bean>

@@ -125,6 +125,62 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
         return getPaymentModulesMap().get(paymentModuleLabel).getPaymentGateways();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void allowPaymentGateway(final String label) {
+
+        String allowed = systemService.getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS);
+
+        if (!allowed.contains(label)) {       //not yet allowed
+
+            if (allowed.endsWith(","))  {
+                allowed += label;
+            } else {
+                allowed += ',' + label;
+            }
+
+            systemService.setAttributeValue(
+                    AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS,
+                    allowed
+            );
+
+        }
+
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void disallowPaymentGateway(final String label) {
+
+        String allowed = systemService.getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS);
+
+        if (allowed.contains(label)) {       //neet to remove
+
+            allowed = StringUtils.remove(allowed, label).replace(",,",",");
+
+            if (allowed.endsWith(",")) {
+
+                allowed = StringUtils.chop(allowed);
+
+            }
+
+            if (allowed.startsWith(",")) {
+
+                allowed = allowed.substring(1);
+
+            }
+
+            systemService.setAttributeValue(
+                    AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS,
+                    allowed
+            );
+
+        }
+
+    }
 
     /**
      * {@inheritDoc}
@@ -143,9 +199,8 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
                 //final String [] labels =  allowed.split(",");
                 final List<PaymentGatewayDescriptor> allowedDescr = new ArrayList<PaymentGatewayDescriptor>();
                 for (PaymentGatewayDescriptor descriptor : paymentGatewayDescriptors) {
-                    if (allowed.indexOf(descriptor.getLabel()) > -1) {
+                    if (allowed.contains(descriptor.getLabel())) {
                         allowedDescr.add(descriptor);
-
                     }
                 }
                 paymentGatewayDescriptors.retainAll(allowedDescr);
