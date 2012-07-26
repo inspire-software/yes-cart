@@ -48,24 +48,24 @@ public class RemoteCustomerOrderServiceImpl
     /**
      * {@inheritDoc}
      */
-    public List<CustomerOrderDTO> findCustomerOrdersByCriterias(
+    public List<CustomerOrderDTO> findCustomerOrdersByCriteria(
             final long customerId,
             final String firstName,
             final String lastName,
             final String email,
             final String orderStatus,
             final Date fromDate,
-            final Date tillDate,
+            final Date toDate,
             final String orderNum
     ) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return ((DtoCustomerOrderService) getGenericDTOService()).findCustomerOrdersByCriterias(
+        return ((DtoCustomerOrderService) getGenericDTOService()).findCustomerOrdersByCriteria(
                 customerId,
                 firstName,
                 lastName,
                 email,
                 orderStatus,
                 fromDate,
-                tillDate,
+                toDate,
                 orderNum
         );
     }

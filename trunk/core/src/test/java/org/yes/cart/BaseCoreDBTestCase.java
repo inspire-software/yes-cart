@@ -116,7 +116,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
         new SetSkuQuantityToCartEventCommandImpl(ctx(), param)
                 .execute(shoppingCart);
-        // this digital product not available till date
+        // this digital product not available to date
         param = new HashMap<String, String>();
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST8");
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");

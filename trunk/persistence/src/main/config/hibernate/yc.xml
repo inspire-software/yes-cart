@@ -1861,7 +1861,7 @@ public void setRangeList(final RangeList rangeList) {
                 </column>
             </property>
             <property name="availablefrom" column="AVAILABLEFROM" type="timestamp"/>
-            <property name="availabletill" column="AVAILABLETILL" type="timestamp"/>
+            <property name="availableto" column="AVAILABLETO" type="timestamp"/>
 
 
             <bag name="attribute" inverse="true" lazy="false" cascade="all">
@@ -2133,11 +2133,11 @@ public void setRangeList(final RangeList rangeList) {
                 <meta attribute="field-description">UNCOMMENT @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)</meta>
                 <column name="AVAILABLEFROM">
                     <comment>
-                        AVAILABLEFROM AVAILABLETILL date range when product will be available, for pre and back orders
+                        AVAILABLEFROM AVAILABLETO date range when product will be available, for pre and back orders
                     </comment>
                 </column>
             </property>
-            <property name="availabletill" column="AVAILABLETILL" type="timestamp" not-null="false">
+            <property name="availableto" column="AVAILABLETO" type="timestamp" not-null="false">
                 <meta attribute="field-description">UNCOMMENT @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)</meta>
             </property>
             <property name="name" type="string" length="255" not-null="true">
@@ -2520,7 +2520,7 @@ public void setRangeList(final RangeList rangeList) {
                 </column>
             </property>
             <property name="salefrom" column="SALE_FROM" type="timestamp" not-null="false"/>
-            <property name="saletill" column="SALE_TILL" type="timestamp" not-null="false"/>
+            <property name="saleto" column="SALE_TO" type="timestamp" not-null="false"/>
 
 
 
@@ -3313,7 +3313,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="name" column="NAME" type="string" length="255" not-null="true"/>
             <property name="description" column="DESCRIPTION" type="string" length="4000"/>
             <property name="availablefrom" column="AVAILABLEFROM" type="timestamp"/>
-            <property name="availabletill" column="AVAILABLETILL" type="timestamp"/>
+            <property name="availableto" column="AVAILABLETO" type="timestamp"/>
             <many-to-one name="shop" class="org.yes.cart.domain.entity.Shop" foreign-key="FK_SD_SHOP">
                 <column name="SHOP_ID" not-null="true"/>
             </many-to-one>
@@ -3599,7 +3599,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="name" column="NAME" type="string" length="255" not-null="true"/>
             <property name="description" column="DESCRIPTION" type="string" length="4000"/>
             <property name="availablefrom" column="AVAILABLEFROM" type="timestamp"/>
-            <property name="availabletill" column="AVAILABLETILL" type="timestamp"/>
+            <property name="availableto" column="AVAILABLETO" type="timestamp"/>
             <property name="rule" column="RULE" type="string" length="4000"/>
             <many-to-one name="shopAdvPlace" class="org.yes.cart.domain.entity.ShopAdvPlace" foreign-key="FK_ADVR_ADVPLACE">
                 <column name="SHOPADVPLACE_ID" not-null="true"/>
@@ -4489,7 +4489,7 @@ public void setRangeList(final RangeList rangeList) {
        select c from CategoryEntity c, ShopCategoryEntity sc
        where c.categoryId = sc.category.categoryId and sc.shop.shopId = ?1
        and (c.availablefrom < ?2 OR c.availablefrom IS NULL)
-       and (c.availabletill > ?2 OR c.availabletill IS NULL)
+       and (c.availableto > ?2 OR c.availableto IS NULL)
        order by sc.rank
        ]]>
     </query>
@@ -4513,7 +4513,7 @@ public void setRangeList(final RangeList rangeList) {
        select c from CategoryEntity c where c.parentId = ?1
        and c.categoryId <> c.parentId 
        and (c.availablefrom < ?2 OR c.availablefrom IS NULL)
-       and (c.availabletill > ?2 OR c.availabletill IS NULL)
+       and (c.availableto > ?2 OR c.availableto IS NULL)
        order by c.rank 
        ]]>
     </query>
@@ -4541,7 +4541,7 @@ public void setRangeList(final RangeList rangeList) {
             where p.productId = pc.product.productId
             and pc.category.categoryId = ?1
             and (p.availablefrom < ?2 OR p.availablefrom IS NULL)
-            and (p.availabletill > ?2 OR p.availabletill IS NULL)
+            and (p.availableto > ?2 OR p.availableto IS NULL)
             order by pc.rank
        ]]>
     </query>
@@ -4552,7 +4552,7 @@ public void setRangeList(final RangeList rangeList) {
             where p.productId = pc.product.productId
             and pc.category.categoryId = ?1
             and (p.availablefrom < ?2 OR p.availablefrom IS NULL)
-            and (p.availabletill > ?2 OR p.availabletill IS NULL)
+            and (p.availableto > ?2 OR p.availableto IS NULL)
             order by p.createdTimestamp desc
        ]]>
     </query>
@@ -4563,7 +4563,7 @@ public void setRangeList(final RangeList rangeList) {
             where p.productId = pc.product.productId
             and pc.category.categoryId = ?1
             and (p.availablefrom < ?2 OR p.availablefrom IS NULL)
-            and (p.availabletill > ?2 OR p.availabletill IS NULL)
+            and (p.availableto > ?2 OR p.availableto IS NULL)
        ]]>
     </query>
 
@@ -4750,7 +4750,7 @@ public void setRangeList(final RangeList rangeList) {
        from ProductEntity a, ProductCategoryEntity pc
        where a.featured = ?2
        and (a.availablefrom < ?1 OR a.availablefrom IS NULL)
-       and (a.availabletill > ?1 OR a.availabletill IS NULL)
+       and (a.availableto > ?1 OR a.availableto IS NULL)
        and a.productId = pc.product.productId
        and pc.category.categoryId in (:list)
        ]]>

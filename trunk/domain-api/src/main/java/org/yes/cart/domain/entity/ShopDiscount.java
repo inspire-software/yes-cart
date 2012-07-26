@@ -55,9 +55,9 @@ public interface ShopDiscount extends Auditable {
 
     /**
      */
-    Date getAvailabletill();
+    Date getAvailableto();
 
-    void setAvailabletill(Date availabletill);
+    void setAvailableto(Date availableto);
 
     /**
      */

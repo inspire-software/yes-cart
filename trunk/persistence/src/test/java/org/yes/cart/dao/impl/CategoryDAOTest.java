@@ -96,7 +96,7 @@ public class CategoryDAOTest extends AbstractTestDAO {
         Date date = new Date();
         for (Category category : assignedCategories) {
             assertTrue((category.getAvailablefrom() == null) || (category.getAvailablefrom().getTime() > date.getTime()));
-            assertTrue((category.getAvailabletill() == null) || (category.getAvailabletill().getTime() < date.getTime()));
+            assertTrue((category.getAvailableto() == null) || (category.getAvailableto().getTime() < date.getTime()));
         }
     }
 }

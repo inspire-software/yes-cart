@@ -29,7 +29,7 @@ public class SkuPriceDTOImpl {
 
     public var salefrom:Date;
 
-    public var saletill:Date;
+    public var saleto:Date;
 
     public var minimalPrice:Number;
 
@@ -56,7 +56,7 @@ public class SkuPriceDTOImpl {
                ",minimalPrice=" + String(minimalPrice) +
                ",salePrice=" + String(salePrice) +
                ",salefrom=" + String(salefrom) +
-               ",saletill=" + String(saletill) +
+               ",saleto=" + String(saleto) +
                ",productSkuId=" + String(productSkuId) +
                ",shopId=" + String(shopId) +
                ",quantity=" + String(quantity) +

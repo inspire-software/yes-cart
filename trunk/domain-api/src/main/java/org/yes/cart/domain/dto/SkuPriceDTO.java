@@ -151,18 +151,18 @@ public interface SkuPriceDTO extends Identifiable {
     void setSalefrom(Date salefrom);
 
     /**
-     * Get sale till date.
+     * Get sale to date.
      *
-     * @return sale till date.
+     * @return sale to date.
      */
-    Date getSaletill();
+    Date getSaleto();
 
     /**
-     * Set sale till date
+     * Set sale to date
      *
-     * @param saletill sale till date
+     * @param saleto sale to date
      */
-    void setSaletill(Date saletill);
+    void setSaleto(Date saleto);
 
     /**
      * Primary key.

@@ -140,14 +140,14 @@ public interface ProductDTO extends Identifiable {
      *
      * @return end of product availability.
      */
-    Date getAvailabletill();
+    Date getAvailableto();
 
     /**
      * Set end of product availability.
      *
-     * @param availabletill end of product availability.
+     * @param availableto end of product availability.
      */
-    void setAvailabletill(Date availabletill);
+    void setAvailableto(Date availableto);
 
     /**
      * Get product availability

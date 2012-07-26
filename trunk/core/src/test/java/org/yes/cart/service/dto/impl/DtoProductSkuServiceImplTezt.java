@@ -143,7 +143,7 @@ public class DtoProductSkuServiceImplTezt extends BaseCoreDBTestCase {
         skuPriceDTO.setSalePrice(new BigDecimal("2.33"));
         skuPriceDTO.setMinimalPrice(new BigDecimal("2.32"));
         skuPriceDTO.setSalefrom(date);
-        skuPriceDTO.setSaletill(date);
+        skuPriceDTO.setSaleto(date);
         dtoService.updateSkuPrice(skuPriceDTO);
         dto = dtoService.getById(pk);
         skuPriceDTO = dto.getPrice().iterator().next();

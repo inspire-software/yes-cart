@@ -155,18 +155,18 @@ public interface Category extends Auditable, Attributable, Seoable  {
     void setAvailablefrom(Date availablefrom);
 
     /**
-     * Get available till date.  Null value means no end date.
+     * Get available to date.  Null value means no end date.
      *
-     * @return available till date.
+     * @return available to date.
      */
-    Date getAvailabletill();
+    Date getAvailableto();
 
     /**
-     * Set available till date.
+     * Set available to date.
      *
-     * @param availabletill available till date.
+     * @param availableto available to date.
      */
-    void setAvailabletill(Date availabletill);
+    void setAvailableto(Date availableto);
 
     /**
      * Get all caterory attributes.

@@ -17,7 +17,6 @@
 package org.yes.cart.service.dto.impl;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -25,10 +24,8 @@ import org.yes.cart.domain.dto.*;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.AttrValueProductDTOImpl;
 import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.ProductTypeAttr;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
-import org.yes.cart.service.domain.ProductTypeAttrService;
 import org.yes.cart.service.dto.*;
 
 import java.util.Date;
@@ -88,7 +85,7 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
         long pk = dto.getProductId();
         Date availableFrom = new Date();
         dto.setAvailablefrom(availableFrom);
-        dto.setAvailabletill(availableFrom);
+        dto.setAvailableto(availableFrom);
         dto.setName("new-name");
         dto.setDescription("new desciption");
         dto.setBrandDTO(dtoBrandService.getById(102L));
@@ -97,7 +94,7 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
         dtoService.update(dto);
         dto = dtoService.getById(pk);
         assertEquals(availableFrom, dto.getAvailablefrom());
-        assertEquals(availableFrom, dto.getAvailabletill());
+        assertEquals(availableFrom, dto.getAvailableto());
         assertEquals("new-name", dto.getName());
         assertEquals("new desciption", dto.getDescription());
         assertEquals(102L, dto.getBrandDTO().getBrandId());
@@ -109,7 +106,7 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testGetProductByCategory() throws Exception {
         List<ProductDTO> list = dtoService.getProductByCategory(211L);
-        assertEquals(8, list.size()); //FEATURED-PRODUCT3 AVAILABLEFROM="2000-04-08 11:15:17.451" AVAILABLETILL="2001-04-08 11:15:17.451"
+        assertEquals(8, list.size()); //FEATURED-PRODUCT3 AVAILABLEFROM="2000-04-08 11:15:17.451" AVAILABLETO="2001-04-08 11:15:17.451"
         for (ProductDTO dto : list) {
             assertFalse(dto.getCode().equals("FEATURED-PRODUCT3"));
         }

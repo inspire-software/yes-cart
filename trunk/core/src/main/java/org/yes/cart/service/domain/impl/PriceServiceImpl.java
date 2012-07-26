@@ -389,8 +389,8 @@ public class PriceServiceImpl
         skuPriceDao.executeNativeUpdate(sql);
 
 
-        sql = MessageFormat.format("insert into tskuprice (sku_id, shop_id, currency, qty, regular_price, sale_price, minimal_price, sale_from, sale_till)" +
-                " select o.sku_id, o.shop_id, ''{0}'', o.qty, o.regular_price * {1}, o.sale_price * {1}, o.minimal_price * {1}, sale_from, sale_till from tskuprice o" +
+        sql = MessageFormat.format("insert into tskuprice (sku_id, shop_id, currency, qty, regular_price, sale_price, minimal_price, sale_from, sale_to)" +
+                " select o.sku_id, o.shop_id, ''{0}'', o.qty, o.regular_price * {1}, o.sale_price * {1}, o.minimal_price * {1}, sale_from, sale_to from tskuprice o" +
                 " where o.shop_id = {2} and o.currency = ''{3}''",
                 derivedCurrency,
                 decimalFormat.format(exchangeRate),
