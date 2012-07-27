@@ -26,15 +26,26 @@
                 <mx:DataGrid id="gatewayGrid" width="100%" height="100%"
                              itemClick="onGatewaySelected(event)">
                     <mx:columns>
-                        <mx:DataGridColumn width="120"
+                        <mx:DataGridColumn width="200"
                                            headerText="@Resource(bundle='PaymentGateConfigManagementPanel',key='label')"
                                            dataField="label"/>
-                        <mx:DataGridColumn
-                                headerText="@Resource(bundle='PaymentGateConfigManagementPanel',key='name')"
-                                dataField="name"/>
+                        <mx:DataGridColumn width="400"
+                                           headerText="@Resource(bundle='PaymentGateConfigManagementPanel',key='name')"
+                                           dataField="name"/>
+
                         <mx:DataGridColumn width="60"
                                            headerText="@Resource(bundle='PaymentGateConfigManagementPanel',key='active')"
-                                           dataField="active"/>
+                                           dataField="active" textAlign="center">
+                            <mx:itemRenderer>
+                                <mx:Component>
+                                    <mx:HBox horizontalAlign="center">
+                                        <mx:CheckBox enabled="false" selected="{data.active}"/>
+                                    </mx:HBox>
+                                </mx:Component>
+                            </mx:itemRenderer>
+                        </mx:DataGridColumn>
+
+
                     </mx:columns>
                 </mx:DataGrid>
             </mx:VBox>
@@ -44,11 +55,27 @@
                         <mx:DataGridColumn width="200"
                                            headerText="@Resource(bundle='PaymentGateConfigManagementPanel',key='name')"
                                            dataField="name"/>
-                        <mx:DataGridColumn
-                                headerText="@Resource(bundle='PaymentGateConfigManagementPanel',key='value')"
-                                dataField="value"/>
-                        <mx:DataGridColumn width="50"
-                                />
+                        <mx:DataGridColumn width="400"
+                                           headerText="@Resource(bundle='PaymentGateConfigManagementPanel',key='value')"
+                                           dataField="value">
+
+                            <mx:itemRenderer>
+                                <mx:Component>
+                                    <mx:HBox>
+                                        <mx:TextInput id="valueTextInput" editable="false" width="100%"
+                                                      text="{data.value}"/>
+                                        <mx:Button id="editBtn" width="30"
+                                                   label="..."
+                                                   click="Alert.show('asdasasdasd');"/>
+                                        <mx:Script><![CDATA[
+                                            import mx.controls.Alert;
+                                            ]]></mx:Script>
+                                    </mx:HBox>
+                                </mx:Component>
+                            </mx:itemRenderer>
+
+
+                        </mx:DataGridColumn>
                     </mx:columns>
                 </mx:DataGrid>
 
@@ -69,6 +96,7 @@
         import mx.events.ListEvent;
         import mx.rpc.AsyncResponder;
         import mx.rpc.events.ResultEvent;
+        import mx.controls.Alert;
 
         import org.yes.cart.shopmanager.ShopManagerGlobal;
 
@@ -87,7 +115,7 @@
             remotePaymentModulesManagementService.getPaymentGateways(localeFilter).addResponder(
                     new AsyncResponder(
                             function (event:ResultEvent, obj:Object = null):void {
-                                gatewayGrid.dataProvider  = event.result;
+                                gatewayGrid.dataProvider = event.result;
                             }
                             ,
                             ShopManagerGlobal.instance.defaultOnRpcMethodFault)
@@ -99,6 +127,16 @@
          * @param event
          */
         private function onGatewaySelected(event:ListEvent):void {
+
+            remotePaymentModulesManagementService.getPaymentGatewayParameters(gatewayGrid.selectedItem.label, localeFilter).addResponder(
+                    new AsyncResponder(
+                            function (event:ResultEvent, obj:Object = null):void {
+                                parameterGrid.dataProvider = event.result;
+                            }
+                            ,
+                            ShopManagerGlobal.instance.defaultOnRpcMethodFault)
+            );
+
 
         }
         ]]></mx:Script>
