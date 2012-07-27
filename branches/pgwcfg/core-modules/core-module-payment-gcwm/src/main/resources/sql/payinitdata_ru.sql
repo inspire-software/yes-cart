@@ -81,5 +81,5 @@ INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LA
 VALUES (455, 'liqPayPaymentGateway',
 'LP_PAYWAY_URL',
 'card'
-, 'способ которым оплатит покупатель с карты, с телефона card, liqpay', 'способ которым оплатит покупатель с карты, с телефона card, liqpay');
+, 'способ оплаты карта,телефон,liqpay', 'способ оплаты карта,телефон,liqpay');
 
