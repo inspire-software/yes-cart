@@ -15,6 +15,8 @@
  */
 package org.yes.cart.remote.service.impl;
 
+import org.yes.cart.domain.dto.DtoPaymentGatewayInfo;
+import org.yes.cart.domain.dto.impl.DtoPaymentGatewayInfoImpl;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
@@ -22,9 +24,7 @@ import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 import org.yes.cart.remote.service.RemotePaymentModulesManagementService;
 import org.yes.cart.service.payment.PaymentModulesManager;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  *
@@ -47,6 +47,37 @@ public class RemotePaymentModulesManagementServiceImpl implements RemotePaymentM
      */
     public RemotePaymentModulesManagementServiceImpl(final PaymentModulesManager paymentModulesManager) {
         this.paymentModulesManager = paymentModulesManager;
+    }
+
+    /** {@inheritDoc} */
+    public List<DtoPaymentGatewayInfo> getPaymentGateways(final String lang) {
+        List<DtoPaymentGatewayInfo> rez = new ArrayList<DtoPaymentGatewayInfo> ();
+        List<Pair<String, String>> active = getAllowedPaymentGateways(lang);
+        List<Pair<String, String>> awailable = getAvailablePaymentGateways(lang);
+        for (Pair<String, String> pair : active) {
+            rez.add(
+                    new DtoPaymentGatewayInfoImpl(pair.getFirst(), pair.getSecond(), true)
+            );
+        }
+
+        for (Pair<String, String> pair : awailable) {
+            rez.add(
+                    new DtoPaymentGatewayInfoImpl(pair.getFirst(), pair.getSecond(), false)
+            );
+        }
+
+        Collections.sort(
+                rez,
+                new Comparator<DtoPaymentGatewayInfo>() {
+
+                    /** {@inheritDoc} */
+                    public int compare(DtoPaymentGatewayInfo o1, DtoPaymentGatewayInfo o2) {
+                        return o1.getName().compareTo(o2.getName());
+                    }
+                }
+        );
+
+        return rez;
     }
 
     /** {@inheritDoc}*/

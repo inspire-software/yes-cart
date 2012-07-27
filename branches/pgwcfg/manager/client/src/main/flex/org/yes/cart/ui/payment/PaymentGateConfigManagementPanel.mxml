@@ -54,14 +54,23 @@
         </mx:VDividedBox>
 
     </mx:Panel>
+
+
+    <mx:RemoteObject showBusyCursor="true" id="remotePaymentModulesManagementService"
+                     destination="remotePaymentModulesManagementService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+
     <mx:Script><![CDATA[
         import mx.events.ListEvent;
+
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
 
         /**
          * Init created panel.
          */
         private function init():void {
-
+            remotePaymentModulesManagementService.getPaymentGateways();
         }
 
         /**

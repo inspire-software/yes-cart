@@ -15,6 +15,7 @@
  */
 package org.yes.cart.remote.service;
 
+import org.yes.cart.domain.dto.DtoPaymentGatewayInfo;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
@@ -34,6 +35,13 @@ import java.util.List;
  * Time: 8:59 PM
  */
 public interface RemotePaymentModulesManagementService {
+
+    /**
+     * Get allowed payment gateways in all modules.
+     * @param lang ui lang
+     * @return list of label-name pairs .
+     */
+    List<DtoPaymentGatewayInfo> getPaymentGateways(String lang);
 
     /**
      * Get allowed payment gateways in all modules.
