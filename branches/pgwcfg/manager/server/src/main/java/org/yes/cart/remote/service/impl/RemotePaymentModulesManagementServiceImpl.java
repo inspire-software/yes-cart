@@ -88,7 +88,7 @@ public class RemotePaymentModulesManagementServiceImpl implements RemotePaymentM
         for (PaymentGatewayDescriptor descr :  descriptors) {
             final PaymentGateway paymentGateway = paymentModulesManager.getPaymentGateway(descr.getLabel());
             rez.add(new Pair<String, String>(
-                    paymentGateway.getLabel(),
+                    descr.getLabel(),
                     descr.getName()
             ));
         }
@@ -106,7 +106,7 @@ public class RemotePaymentModulesManagementServiceImpl implements RemotePaymentM
         for (PaymentGatewayDescriptor descr :  descriptors) {
             final PaymentGateway paymentGateway = paymentModulesManager.getPaymentGateway(descr.getLabel());
             final Pair<String, String> pairCandidate = new Pair<String, String>(
-                    paymentGateway.getLabel(),
+                    descr.getLabel(),
                     descr.getName()
             );
             if (!allowed.contains(pairCandidate) ) {

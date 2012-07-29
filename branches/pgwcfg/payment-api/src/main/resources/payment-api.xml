@@ -54,7 +54,7 @@
 
         <property name="hibernateProperties">
             <map>
-                <entry key="hibernate.show_sql" value="false"/>
+                <entry key="hibernate.show_sql" value="true"/>
                 <entry key="hibernate.dialect" value="${db.config.yespay.hibernate.dialect}"/>
                 <entry key="hibernate.hbm2ddl.auto" value="update"/>
             </map>
