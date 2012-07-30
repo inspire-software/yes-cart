@@ -1,3 +1,0 @@
-Dear $customer.firstname !
-Result of payment at $shop.name for $root.ordernum was $result
-Please check detail at self care page at "<%out.print(shop.getDefaultShopUrl())%>" $shop.name
