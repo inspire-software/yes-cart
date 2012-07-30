@@ -29,7 +29,7 @@
                 />
         <mx:Form width="100%">
             <mx:FormItem label="@Resource(bundle='AttributesManagementPanel',key='value')">
-                <mx:TextInput width="400" id="valueTextInput"/>
+                <mx:TextArea width="400" height="120" id="valueTextInput"/>
             </mx:FormItem>
         </mx:Form>
         <mx:ControlBar width="100%" horizontalAlign="right">
@@ -57,7 +57,7 @@
         private var _attributeGroup:String;
 
 
-        private function init(): void {
+        private function init():void {
 
             BindingUtils.bindProperty(valueTextInput, "text", this, "value");
 
@@ -71,7 +71,7 @@
 
         }
 
-        public function getButtonSave(): Button {
+        public function getButtonSave():Button {
             return this.btnSave;
         }
 
@@ -117,8 +117,6 @@
         public function setInformation(value:String):void {
             infoLabel.text = value;
         }
-
-
 
         ]]>
     </mx:Script>

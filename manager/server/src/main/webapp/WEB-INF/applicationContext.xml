@@ -139,7 +139,9 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
     <import resource="classpath*:core-config.xml"/>
 
     <import resource="classpath*:payment-api.xml"/>
-
+    <import resource="classpath*:core-module-payment-base.xml"/>
+    <import resource="classpath*:core-module-payment-capp.xml"/>
+    <import resource="classpath*:core-module-payment-gswm.xml"/>
 
 
     <bean id="methodCacheAdvice" class="org.yes.cart.cache.MethodCacheAdvice">

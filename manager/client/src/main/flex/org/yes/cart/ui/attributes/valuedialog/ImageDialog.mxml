@@ -310,6 +310,10 @@
             _attributeGroup = value;
         }
 
+        public function setInformation(value:String):void {
+            //do nothing
+        }
+
         protected function onRpcMethodFault(event:FaultEvent):void {
             ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
         }

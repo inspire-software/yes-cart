@@ -62,5 +62,20 @@ public interface PaymentModulesManager {
      */
     PaymentGateway getPaymentGateway(String paymentGatewayLabel);
 
+    /**
+     * Put available payment gateway into allowed.
+     *
+     * @param label   payment gateway label
+     */
+    void allowPaymentGateway(String label);
+
+    /**
+     * Remove available payment gateway from allowed and put it into allowed.
+     *
+     * @param label   payment gateway label
+     */
+    void disallowPaymentGateway(String label);
+
+
 
 }

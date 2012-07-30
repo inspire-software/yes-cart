@@ -129,7 +129,7 @@ public class ImageServiceTest {
         assertTrue(destination.exists());
         image = Base64.decode(BASE64_ENCODED_JPEG_1);
         imageService.addImageToRepository(tmpFileName, "PRODUCT1", image, StringUtils.EMPTY);
-        assertEquals(1097, destination.length());
+        assertTrue("At least some info must be in the file" , destination.length() > 1000);
     }
 
     @Test

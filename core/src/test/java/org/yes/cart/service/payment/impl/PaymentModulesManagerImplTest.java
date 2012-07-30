@@ -16,14 +16,19 @@
 
 package org.yes.cart.service.payment.impl;
 
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.PaymentModule;
 import org.yes.cart.payment.persistence.entity.Descriptor;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
+import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.payment.PaymentModulesManager;
 
 import java.util.Collection;
@@ -38,13 +43,25 @@ import static org.junit.Assert.assertNotNull;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
+
 public class PaymentModulesManagerImplTest extends BaseCoreDBTestCase {
+
+    private Mockery mockery = new JUnit4Mockery();
+
+    
 
     PaymentModulesManager paymentModulesManager;
 
+
     @Before
     public void setUp() throws Exception {
+        
+        
         paymentModulesManager = (PaymentModulesManager) ctx().getBean(ServiceSpringKeys.PAYMENT_MODULES_MANAGER);
+
+
+
+
     }
 
     /**
@@ -78,4 +95,83 @@ public class PaymentModulesManagerImplTest extends BaseCoreDBTestCase {
         assertNotNull(paymentGateway);
         assertEquals("testPaymentGateway", paymentGateway.getLabel());
     }
+
+
+    @Test
+    public void testAllowPaymentGateway() {
+        final SystemService systemService = mockery.mock(SystemService.class);
+
+        mockery.checking(new Expectations() {{
+            oneOf(systemService).getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS);  will(returnValue("aaa,bbb,ccc,ddd"));
+        }});
+        mockery.checking(new Expectations() {{
+            oneOf(systemService).updateAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS, "aaa,bbb,ccc,ddd,eee");
+        }});
+
+        mockery.checking(new Expectations() {{
+            oneOf(systemService).getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS);  will(returnValue("aaa,bbb"));
+        }});
+
+
+        mockery.checking(new Expectations() {{
+            oneOf(systemService).getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS);  will(returnValue("xx,yy,"));
+        }});
+        mockery.checking(new Expectations() {{
+            oneOf(systemService).updateAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS, "xx,yy,zz");
+        }});
+
+
+
+        PaymentModulesManager pmm = new PaymentModulesManagerImpl( null, systemService );
+        pmm.allowPaymentGateway("eee");
+
+        pmm = new PaymentModulesManagerImpl( null, systemService );
+        pmm.allowPaymentGateway("aaa");
+
+        pmm = new PaymentModulesManagerImpl( null, systemService );
+        pmm.allowPaymentGateway("zz");
+
+
+    }
+
+    @Test
+    public void testdisallowPaymentGateway() {
+        final SystemService systemService = mockery.mock(SystemService.class);
+
+        mockery.checking(new Expectations() {{
+            oneOf(systemService).getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS);  will(returnValue("aaa,bbb,ccc,ddd"));
+        }});
+        mockery.checking(new Expectations() {{
+            oneOf(systemService).updateAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS, "aaa,bbb,ddd");
+        }});
+
+        mockery.checking(new Expectations() {{
+            oneOf(systemService).getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS);  will(returnValue("1,2,3"));
+        }});
+        mockery.checking(new Expectations() {{
+            oneOf(systemService).updateAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS, "2,3");
+        }});
+
+        mockery.checking(new Expectations() {{
+            oneOf(systemService).getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS);  will(returnValue("xxx,yyy,zzz"));
+        }});
+        mockery.checking(new Expectations() {{
+            oneOf(systemService).updateAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS, "xxx,yyy");
+        }});
+
+
+
+
+        PaymentModulesManager pmm = new PaymentModulesManagerImpl( null, systemService );
+        pmm.disallowPaymentGateway("ccc");
+
+        pmm = new PaymentModulesManagerImpl( null, systemService );
+        pmm.disallowPaymentGateway("1");
+
+        pmm = new PaymentModulesManagerImpl( null, systemService );
+        pmm.disallowPaymentGateway("zzz");
+
+
+    }
+
 }

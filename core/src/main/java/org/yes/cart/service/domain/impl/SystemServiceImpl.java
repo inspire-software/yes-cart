@@ -18,11 +18,16 @@ package org.yes.cart.service.domain.impl;
 
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.entity.AttrValueSystem;
+import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.System;
+import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.SystemService;
-import org.yes.cart.util.DomainApiUtil;
 
 import java.io.File;
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -35,15 +40,50 @@ public class SystemServiceImpl implements SystemService {
 
     private final GenericDAO<System, Long> systemDao;
 
-    public SystemServiceImpl(final GenericDAO<System, Long> systemDao) {
+    private final AttributeService attributeService;
+
+    /**
+     * Construct system services, which is determinate shop set.
+     * @param systemDao system dao
+     * @param attributeService attribute service.
+     */
+    public SystemServiceImpl(
+            final GenericDAO<System, Long> systemDao,
+            final AttributeService attributeService) {
         this.systemDao = systemDao;
+        this.attributeService = attributeService;
     }
 
     /**
      * {@inheritDoc}
      */
     public String getAttributeValue(final String key) {
-        return DomainApiUtil.getAttirbuteValue(key, getSystem().getAttribute());
+        return getAttirbuteValue(key, getSystem().getAttribute());
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateAttributeValue(final String key, final String value) {
+
+        AttrValueSystem attrVal = getSystem().getAttribute().get(key);
+
+        if (attrVal == null) {
+            Attribute attr = attributeService.findByAttributeCode(key);
+            if (attr != null) {
+
+                attrVal = systemDao.getEntityFactory().getByIface(AttrValueSystem.class);
+                attrVal.setVal(value);
+                attrVal.setAttribute(attr);
+                attrVal.setSystem(this.system);
+                this.system.getAttribute().put(key, attrVal);
+            }
+        } else {
+            attrVal.setVal(value);
+        }
+
+        systemDao.saveOrUpdate(getSystem());
     }
 
     /**
@@ -58,7 +98,7 @@ public class SystemServiceImpl implements SystemService {
      * {@inheritDoc}
      */
     public String getDefaultShopURL() {
-        return DomainApiUtil.getAttirbuteValue(AttributeNamesKeys.System.SYSTEM_DEFAULT_SHOP,
+        return getAttirbuteValue(AttributeNamesKeys.System.SYSTEM_DEFAULT_SHOP,
                 getSystem().getAttribute());
     }
 
@@ -66,7 +106,7 @@ public class SystemServiceImpl implements SystemService {
      * {@inheritDoc}
      */
     public String getMailResourceDirectory() {
-        return addTailFileSeparator(DomainApiUtil.getAttirbuteValue(AttributeNamesKeys.SYSTEM_MAILTEMPLATES_FSPOINTER,
+        return addTailFileSeparator(getAttirbuteValue(AttributeNamesKeys.SYSTEM_MAILTEMPLATES_FSPOINTER,
                 getSystem().getAttribute()));
     }
 
@@ -75,7 +115,7 @@ public class SystemServiceImpl implements SystemService {
      * {@inheritDoc}
      */
     public String getDefaultResourceDirectory() {
-        return DomainApiUtil.getAttirbuteValue(AttributeNamesKeys.System.SYSTEM_DEFAULT_FSPOINTER,
+        return getAttirbuteValue(AttributeNamesKeys.System.SYSTEM_DEFAULT_FSPOINTER,
                 getSystem().getAttribute());
     }
 
@@ -84,7 +124,7 @@ public class SystemServiceImpl implements SystemService {
      */
     public String getImageRepositoryDirectory() {
         return addTailFileSeparator(
-                DomainApiUtil.getAttirbuteValue(AttributeNamesKeys.System.SYSTEM_IMAGE_VAULT,
+                getAttirbuteValue(AttributeNamesKeys.System.SYSTEM_IMAGE_VAULT,
                         getSystem().getAttribute()));
     }
 
@@ -94,7 +134,7 @@ public class SystemServiceImpl implements SystemService {
      * {@inheritDoc}
      */
     public Integer getEtagExpirationForImages() {
-        final String expirationTimeout = DomainApiUtil.getAttirbuteValue(
+        final String expirationTimeout = getAttirbuteValue(
                 AttributeNamesKeys.System.SYSTEM_ETAG_CACHE_IMAGES_TIME,
                 getSystem().getAttribute());
         if (expirationTimeout != null) {
@@ -107,7 +147,7 @@ public class SystemServiceImpl implements SystemService {
      * {@inheritDoc}
      */
     public Integer getEtagExpirationForPages() {
-        final String expirationTimeout = DomainApiUtil.getAttirbuteValue(
+        final String expirationTimeout = getAttirbuteValue(
                 AttributeNamesKeys.System.SYSTEM_ETAG_CACHE_PAGES_TIME,
                 getSystem().getAttribute());
         if (expirationTimeout != null) {
@@ -130,6 +170,38 @@ public class SystemServiceImpl implements SystemService {
             system = systemDao.findAll().get(0);
         }
         return system;
+    }
+
+
+    /**
+     * Get the value of attribute from attribute value map.
+     *
+     * @param attrName attribute name
+     * @param values   map of attribute name and {@link AttrValue}
+     * @return null if attribute not present in map, otherwise value of attribute
+     */
+    public static String getAttirbuteValue(final String attrName, final Map<String, AttrValueSystem> values) {
+        AttrValue attrValue = values.get(attrName);
+        if (attrValue != null) {
+            return attrValue.getVal();
+        }
+        return null;
+    }
+
+    /**
+     * Get attribute value
+     *
+     * @param attrName   attribute name
+     * @param attributes collection of attribute
+     * @return value if fount otherwise null
+     */
+    public static String getAttirbuteValue(final String attrName, final Collection<? extends AttrValueSystem> attributes) {
+        for (AttrValue attrValue : attributes) {
+            if (attrName.equals(attrValue.getAttribute().getName())) {
+                return attrValue.getVal();
+            }
+        }
+        return null;
     }
 
 }
