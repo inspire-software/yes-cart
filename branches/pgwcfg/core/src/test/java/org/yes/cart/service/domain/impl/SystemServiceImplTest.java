@@ -20,7 +20,6 @@ import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.service.domain.AddressService;
 import org.yes.cart.service.domain.SystemService;
 
 import java.util.UUID;
@@ -48,14 +47,14 @@ public class SystemServiceImplTest extends BaseCoreDBTestCase {
         
         String newValue = UUID.randomUUID().toString();
 
-        systemService.setAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS, newValue);
+        systemService.updateAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS, newValue);
 
         assertEquals(
                 newValue,
                 systemService.getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS)
         );
 
-        systemService.setAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS, oldValue);
+        systemService.updateAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS, oldValue);
 
         assertEquals(
                 oldValue,

@@ -65,7 +65,7 @@ public class SystemServiceImpl implements SystemService {
     /**
      * {@inheritDoc}
      */
-    public void setAttributeValue(final String key, final String value) {
+    public void updateAttributeValue(final String key, final String value) {
 
         AttrValueSystem attrVal = getSystem().getAttribute().get(key);
 

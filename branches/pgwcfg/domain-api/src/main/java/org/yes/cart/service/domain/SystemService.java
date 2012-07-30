@@ -96,7 +96,7 @@ public interface SystemService {
      * @param key attribute key
      * @param value attribute value
      */
-    void setAttributeValue(String key, String value);
+    void updateAttributeValue(String key, String value);
 
 
 

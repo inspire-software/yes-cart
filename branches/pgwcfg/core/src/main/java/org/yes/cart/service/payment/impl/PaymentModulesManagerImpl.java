@@ -140,7 +140,7 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
                 allowed += ',' + label;
             }
 
-            systemService.setAttributeValue(
+            systemService.updateAttributeValue(
                     AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS,
                     allowed
             );
@@ -173,7 +173,7 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
 
             }
 
-            systemService.setAttributeValue(
+            systemService.updateAttributeValue(
                     AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS,
                     allowed
             );
@@ -196,7 +196,6 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
         if (!allModules) {
             final String allowed = systemService.getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS);
             if (StringUtils.isNotBlank(allowed)) {
-                //final String [] labels =  allowed.split(",");
                 final List<PaymentGatewayDescriptor> allowedDescr = new ArrayList<PaymentGatewayDescriptor>();
                 for (PaymentGatewayDescriptor descriptor : paymentGatewayDescriptors) {
                     if (allowed.contains(descriptor.getLabel())) {
@@ -204,6 +203,9 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
                     }
                 }
                 paymentGatewayDescriptors.retainAll(allowedDescr);
+            } else {
+                paymentGatewayDescriptors.clear();
+
             }
 
         }
