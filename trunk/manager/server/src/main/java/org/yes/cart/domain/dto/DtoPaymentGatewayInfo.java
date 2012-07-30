@@ -13,54 +13,53 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-
-package org.yes.cart.payment.persistence.entity;
-
-import java.io.Serializable;
+package org.yes.cart.domain.dto;
 
 /**
+ *
+ * Just transfet info about gateways.
+ *
  * User: Igor Azarny iazarny@yahoo.com
- * Date: 07-May-2011
- * Time: 10:22:53
+ * Date: 7/27/12
+ * Time: 7:52 AM
  */
-public interface Descriptor extends Serializable {
+public interface DtoPaymentGatewayInfo {
+
 
     /**
      * Get name.
-     *
-     * @return name.
+     * @return  name
      */
     String getName();
 
     /**
-     * @param name name
+     * Set name
+     * @param name name to set
      */
     void setName(String name);
 
-
     /**
-     * Get label, unique id of payment gateway.
-     *
-     * @return label.
+     * Payment gateway label.
+     * @return pg label
      */
     String getLabel();
 
     /**
+     * Set pg label.
      * @param label label
      */
     void setLabel(String label);
 
     /**
-     * @param description description
+     * Is active or not.
+     * @return active or not .
      */
-    void setDescription(String description);
+    boolean isActive();
 
     /**
-     * Get description.
-     *
-     * @return description.
+     * Set active flag.
+     * @param active active flag
      */
-    String getDescription();
-
+    void setActive(boolean active);
 
 }

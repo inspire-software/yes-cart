@@ -90,6 +90,16 @@ public interface SystemService {
     boolean isGoogleCheckoutEnabled();
 
 
+    /**
+     * set system attribute value. This method will create new one , in case if it not existst or
+     * just update
+     * @param key attribute key
+     * @param value attribute value
+     */
+    void updateAttributeValue(String key, String value);
+
+
+
 
 
 

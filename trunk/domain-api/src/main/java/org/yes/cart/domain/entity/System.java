@@ -35,9 +35,9 @@ public interface System extends Auditable {
 
     void setDescription(String description);
 
-    Map<String, AttrValue> getAttribute();
+    Map<String, AttrValueSystem> getAttribute();
 
-    void setAttribute(Map<String, AttrValue> attribute);
+    void setAttribute(Map<String, AttrValueSystem> attribute);
 
     long getSystemId();
 

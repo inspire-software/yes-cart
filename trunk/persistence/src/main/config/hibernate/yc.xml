@@ -552,7 +552,7 @@
         </subclass>
     </class>
 
-    <class name="org.yes.cart.domain.entity.AttrValue" table="TSYSTEMATTRVALUE" entity-name="SystemAttrValueEntity"
+    <class name="org.yes.cart.domain.entity.AttrValueSystem" table="TSYSTEMATTRVALUE" entity-name="SystemAttrValueEntity"
            discriminator-value="0">
         <meta attribute="interface">true</meta>
         <id name="attrvalueId" type="long">
@@ -599,6 +599,7 @@
                          foreign-key="FK_PYS_ATTRIBUTE" property-ref="code" insert="false" update="false">
                 <column name="CODE" not-null="true"/>
             </many-to-one>
+            <many-to-one name="system" class="org.yes.cart.domain.entity.System"  not-null="true" column="SYSTEM_ID"/>
 
             <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -1233,11 +1234,12 @@
                 <column name="DESCRIPTION" length="4000"/>
             </property>
 
-            <map name="attribute" inverse="false" lazy="false" cascade="all">
+            <map name="attribute" inverse="true" lazy="false" cascade="all">
                 <key column="SYSTEM_ID" not-null="true" foreign-key="FK_ATTR_SYS"/>
                 <map-key type="string" column="CODE"/>
                 <one-to-many not-found="ignore" entity-name="SystemAttrValueEntity"/>
             </map>
+
 
             <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -2799,7 +2801,6 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">java.util.List</meta>
             <meta attribute="extra-import">java.util.Arrays</meta>
             <meta attribute="extra-import">org.yes.cart.constants.AttributeNamesKeys</meta>
-            <meta attribute="extra-import">org.yes.cart.util.DomainApiUtil</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
