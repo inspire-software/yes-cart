@@ -98,19 +98,17 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
             final Date toDate,
             final String orderNum
             ) {
-        if (customerId > 0) {
-            return getGenericDao().findByCriteria(Restrictions.eq("customer", customerDao.findById(customerId)));
-        } else {
-            return getGenericDao().findByNamedQuery("ORDERS.BY.CRITERIA",
-                    likeValue(firstName),
-                    likeValue(lastName),
-                    likeValue(email),
-                    orderStatus,
-                    fromDate,
-                    toDate,
-                    likeValue(orderNum)
-                    );
-        }
+        return getGenericDao().findByNamedQuery("ORDERS.BY.CRITERIA",
+                likeValue(firstName),
+                likeValue(lastName),
+                likeValue(email),
+                orderStatus,
+                fromDate,
+                toDate,
+                likeValue(orderNum),
+                customerId
+        );
+
     }
 
 
