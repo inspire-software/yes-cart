@@ -20,6 +20,7 @@ package org.yes.cart.payment.service;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -45,6 +46,27 @@ public interface CustomerOrderPaymentService extends PaymentModuleGenericService
             String shipmentNumber,
             String paymentProcessorResult,
             String transactionOperation);
+
+    /**
+     * Find all payments by given parameters.
+     * All parameters are optional, but at leasn one must be present. Please verify this fact on UI.
+     *
+     * @param orderNumber            given order number. optional
+     * @param fromDate from date
+     * @param tillDate till date
+     * @param lastCardDigits last 4 digits of plastic card
+     * @param cardHolderName card holder name
+     * @param paymentGateway payment gateway
+     * @return list of payments which satisfy search criteria
+     */
+    List<CustomerOrderPayment> findBy(
+            String orderNumber,
+            Date fromDate,
+            Date tillDate,
+            String lastCardDigits,
+            String cardHolderName,
+            String paymentGateway
+            );
 
     /**
      * Get order amount

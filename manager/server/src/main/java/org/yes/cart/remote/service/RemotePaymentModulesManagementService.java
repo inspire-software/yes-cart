@@ -18,10 +18,12 @@ package org.yes.cart.remote.service;
 import org.yes.cart.domain.dto.DtoPaymentGatewayInfo;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.payment.PaymentGateway;
+import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -88,6 +90,29 @@ public interface RemotePaymentModulesManagementService {
      * @param label   payment gateway label
      */
     void disallowPaymentGateway(String label);
+
+
+    /**
+     * Find all payments by given parameters.
+     * All parameters are optional, but at leasn one must be present. Please verify this fact on UI.
+     *
+     * @param orderNumber            given order number. optional
+     * @param fromDate from date
+     * @param tillDate till date
+     * @param lastCardDigits last 4 digits of plastic card
+     * @param cardHolderName card holder name
+     * @param paymentGateway payment gateway
+     * @return list of payments which satisfy search criteria
+     */
+    List<CustomerOrderPayment> findPayments(
+            String orderNumber,
+            Date fromDate,
+            Date tillDate,
+            String lastCardDigits,
+            String cardHolderName,
+            String paymentGateway
+    );
+
 
 
 }

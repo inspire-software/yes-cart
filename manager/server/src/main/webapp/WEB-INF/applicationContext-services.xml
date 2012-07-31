@@ -512,6 +512,7 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
 
 
     <import resource="report.xml"/>
+    <import resource="classpath*:payment-api.xml"/>
 
 
     <bean id="remoteReportService" class="org.yes.cart.report.impl.ReportServiceImpl">
@@ -535,6 +536,7 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
 
     <bean id="remotePaymentModulesManagementService" class="org.yes.cart.remote.service.impl.RemotePaymentModulesManagementServiceImpl">
         <constructor-arg index="0" ref="paymentModulesManager"/>
+        <constructor-arg index="1" ref="customerOrderPaymentService"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="getAllowedPaymentGateways" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
@@ -543,6 +545,8 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
             <security:protect method="updateConfigurationParameter" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
             <security:protect method="allowPaymentGateway" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
             <security:protect method="disallowPaymentGateway" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="findPayments" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getPaymentGateways" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
         </security:intercept-methods>
     </bean>
 
