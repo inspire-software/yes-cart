@@ -247,7 +247,7 @@ class CategoryWalker {
     }
 
     private def createPictureCacheFolder() {
-        def cacheFolderName = "$context.dataDirectory/export/freexml.int/pictcache/";
+        def cacheFolderName = "$context.dataDirectory/export/freexml.int/pictcache/$context.productDir/";
         File cacheFolderFile = new File(cacheFolderName);
         if (!cacheFolderFile.exists()) {
             cacheFolderFile.mkdirs();
