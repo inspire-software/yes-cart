@@ -19,6 +19,7 @@ package org.yes.cart.bulkimport.service;
 
 import org.yes.cart.bulkimport.csv.CvsImportDescriptor;
 import org.yes.cart.bulkimport.model.ImportColumn;
+import org.yes.cart.bulkimport.model.ImportTuple;
 
 /**
  * Bulk Import desriptor service.
@@ -36,16 +37,17 @@ public interface BulkImportService extends ImportService {
     void setPathToImportDescriptor(String pathToImportDescriptor);
 
     /**
-     * Import single line. This method can be called recursive in case of sum imports.
+     * Import single tuple of data. This method can be called recursive in case
+     * of cumulative imports.
      *
-     * @param errorReport      error report
-     * @param line             single line from csv file
-     * @param importDescriptor import desciptor
+     * @param statusListener   status listener
+     * @param tuple             single line from csv file
+     * @param importDescriptor import descriptor
      * @param pkColumn         column to locate object.
      * @param masterObject     optional master object if found sub import
      */
-    void doImport(StringBuilder errorReport,
-                  String[] line,
+    void doImport(BulkImportStatusListener statusListener,
+                  ImportTuple tuple,
                   CvsImportDescriptor importDescriptor,
                   ImportColumn pkColumn,
                   Object masterObject);

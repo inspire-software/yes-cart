@@ -93,16 +93,16 @@ public interface ImportColumn {
     void setFieldType(FieldTypeEnum fieldType);
 
     /**
-     * Filed name in object in java beans notation.
+     * Field name in object in java beans notation.
      *
-     * @return filed name.
+     * @return field name.
      */
     String getName();
 
     /**
-     * Set the filed name.
+     * Set the field name.
      *
-     * @param name fileld name.
+     * @param name field name.
      */
     void setName(String name);
 
@@ -111,7 +111,7 @@ public interface ImportColumn {
      * in case if csv field contains more than one object field.
      * Example:  gold,855
      *
-     * @return regula expression to get the value from csv field
+     * @return regular expression to get the value from csv field
      */
     String getRegExp();
 

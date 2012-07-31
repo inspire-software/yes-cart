@@ -17,8 +17,15 @@
 package org.yes.cart.bulkimport.image.impl;
 
 import net.sf.ehcache.Cache;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.bulkimport.service.BulkImportStatusListener;
+import org.yes.cart.bulkimport.service.ImportService;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.domain.ProductService;
@@ -38,9 +45,9 @@ import static junit.framework.Assert.*;
  * Date: 12/12/11
  * Time: 4:18 PM
  */
-
 public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
 
+    private final Mockery mockery = new JUnit4Mockery();
 
     private String[] fileNames = {
             "some_seo_image_file-name_PRODUCT-or-SKU-CODE_a.jpeg",
@@ -119,21 +126,28 @@ public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
         assertNotNull(product);
         assertNull(product.getAttributeByCode("IMAGE0")); // product has not IMAGE0 attribute
 
+        final BulkImportStatusListener listener = mockery.mock(BulkImportStatusListener.class, "listener");
+
+        mockery.checking(new Expectations() {{
+            allowing(listener).notifyMessage(with(any(String.class)));
+        }});
+
+
         BulkImportImagesServiceImpl service = getBulkImportService();
-        StringBuilder errorReport = new StringBuilder();
         boolean rez = service.doImportProductImage(
-                errorReport,
+                listener,
                 "im-image-file_BENDER-ua_a.jpeg",
                 "BENDER-ua",
                 "0");
         assertTrue(rez);
-        assertFalse(errorReport.toString().indexOf("ERROR") > -1);
 
         clearCache();
         product = productService.getProductById(9998L, true);
         assertNotNull(product);
         assertNotNull(product.getAttributeByCode("IMAGE0")); // image was imported as IMAGE0 attribute
         assertEquals("im-image-file_BENDER-ua_a.jpeg", product.getAttributeByCode("IMAGE0").getVal());
+
+        mockery.assertIsSatisfied();
 
     }
 
@@ -153,25 +167,30 @@ public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
         }
 
 
+        final BulkImportStatusListener listener = mockery.mock(BulkImportStatusListener.class, "listener");
+
+        mockery.checking(new Expectations() {{
+            allowing(listener).notifyMessage(with(any(String.class)));
+        }});
+
+
         BulkImportImagesServiceImpl service = getBulkImportService();
-        StringBuilder errorReport = new StringBuilder();
         boolean rez = service.doImportProductSkuImage(
-                errorReport,
+                listener,
                 "im-image1-file_SOBOT-BEER_a.jpeg",
                 "SOBOT-BEER",
                 "0");
         rez &= service.doImportProductSkuImage(
-                errorReport,
+                listener,
                 "im-image2-file_SOBOT-BEER_b.jpeg",
                 "SOBOT-BEER",
                 "1");
         rez &= service.doImportProductSkuImage(
-                errorReport,
+                listener,
                 "im-image-file_SOBOT-BEER_c.jpeg",
                 "SOBOT-BEER",
                 "2");
-        assertTrue(errorReport.toString(), rez);
-        assertFalse(errorReport.toString().indexOf("ERROR") > -1);
+        assertTrue(rez);
 
         clearCache();
         product = productService.getProductById(10000L);
@@ -188,6 +207,9 @@ public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
                 assertEquals("im-image-file_SOBOT-BEER_c.jpeg", productSku.getAttributeByCode("SKUIMAGE2").getVal());
             }
         }
+
+        mockery.assertIsSatisfied();
+
     }
 
     @Test
@@ -198,14 +220,19 @@ public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
         assertNotNull(product);
         assertNull(product.getAttributeByCode("IMAGE2")); // product has not IMAGE2 attribute
 
+        final BulkImportStatusListener listener = mockery.mock(BulkImportStatusListener.class, "listener");
+
+        mockery.checking(new Expectations() {{
+            allowing(listener).notifyWarning(with(any(String.class)));
+            allowing(listener).notifyMessage(with(any(String.class)));
+        }});
+
+
         BulkImportImagesServiceImpl service = getBulkImportService();
-        StringBuilder errorReport = new StringBuilder();
         service.doImport(
                 new File("src/test/resources/import/im-image-file_SOBOT-BEER_c.jpeg"),
-                errorReport,
+                listener,
                 new HashSet<String>());
-
-        assertFalse(errorReport.toString().indexOf("ERROR") > -1);
 
         clearCache();
         product = productService.getProductById(10000L, true);
@@ -219,6 +246,9 @@ public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
                 assertEquals("im-image-file_SOBOT-BEER_c.jpeg", productSku.getAttributeByCode("SKUIMAGE2").getVal());
             }
         }
+
+        mockery.assertIsSatisfied();
+
     }
 
     private void clearCache() {

@@ -52,6 +52,7 @@
         import org.yes.cart.impl.CategoryDTOImpl;
         import org.yes.cart.impl.CustomerDTOImpl;
         import org.yes.cart.impl.CustomerOrderDTOImpl;
+        import org.yes.cart.impl.ImportJobStatusImpl;
         import org.yes.cart.impl.ProdTypeAttributeViewGroupDTOImpl;
         import org.yes.cart.impl.ProductAssociationDTOImpl;
         import org.yes.cart.impl.ProductCategoryDTOImpl;
@@ -116,6 +117,7 @@
             registerClassAlias("org.yes.cart.domain.dto.impl.CategoryDTOImpl", CategoryDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.CustomerDTOImpl", CustomerDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.CustomerOrderDTOImpl", CustomerOrderDTOImpl);
+            registerClassAlias("org.yes.cart.bulkimport.model.impl.ImportJobStatusImpl", ImportJobStatusImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.ProdTypeAttributeViewGroupDTOImpl", ProdTypeAttributeViewGroupDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.ProductAssociationDTOImpl", ProductAssociationDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.ProductCategoryDTOImpl", ProductCategoryDTOImpl);

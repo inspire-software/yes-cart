@@ -16,7 +16,7 @@
 
 <import-descriptor>
 
-    <entityIntface>org.yes.cart.domain.entity.AttributeViewGroup</entityIntface>
+    <entityIntface>org.yes.cart.domain.entity.AttributeGroup</entityIntface>
 
     <importFile class="file-descriptor">
         <columnDelimeter>;</columnDelimeter>
@@ -33,13 +33,25 @@
             <fieldType>FIELD</fieldType>
             <name>name</name>
             <regExp>(.*)</regExp>
-            <lookupQuery>select b from AttributeViewGroupEntity b where b.name = ?1</lookupQuery>
+            <lookupQuery>select b from AttributeGroupEntity b where b.name = ?1</lookupQuery>
         </column-descriptor>
 
         <column-descriptor>
-            <columnIndex>0</columnIndex>
+            <columnIndex>1</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>code</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <columnIndex>2</columnIndex>
             <fieldType>FIELD</fieldType>
             <name>description</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <columnIndex>3</columnIndex>
+            <fieldType>FIELD</fieldType>
+            <name>guid</name>
         </column-descriptor>
 
     </importColumns>

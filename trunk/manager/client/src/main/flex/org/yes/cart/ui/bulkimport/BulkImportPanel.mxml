@@ -17,7 +17,8 @@
 
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
            width="100%"
-           height="100%">
+           height="100%"
+           creationComplete="initImportPanel()">
 
     <mx:Script>
 		<![CDATA[
@@ -25,12 +26,18 @@
 
         import mx.controls.Alert;
 
+        import org.yes.cart.impl.ImportJobStatusImpl;
+
         import org.yes.cart.shopmanager.ShopManagerGlobal;
 
         import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
 
         private var loadFileRef:FileReference;
+        private var reportHeaderText:String;
+        private var importJobToken:String;
+
+        private var importStatusTimer:Timer = new Timer(15000, 1); // 15 sec timer
 
         private function onSelectFileClick(event:MouseEvent):void {
 
@@ -52,8 +59,8 @@
 
         private function onFileSelected(e:Event):void {
             loadFileRef.load();
-            resultDetails.text = resourceManager.getString("BulkImportPanel", "loadingFile", [ loadFileRef.name ]) + '\n';
-            resultDetails.text = ' ';
+            reportHeaderText = resourceManager.getString("BulkImportPanel", "loadingFile", [ loadFileRef.name ]) + '\n';
+            resultDetails.text = reportHeaderText;
         }
 
         private function onFileLoadingCompleted(e:Event):void {
@@ -64,9 +71,13 @@
 
         protected function onImportResult(event:ResultEvent):void {
             Debug.trace("INFO Bulk import result is " + bulkImportService.doImport.lastResult);
-            resultDetails.text += resourceManager.getString("BulkImportPanel", "importResult") +
+            importJobToken = event.result as String;
+            jobToken.text = importJobToken;
+            reportHeaderText += resourceManager.getString("BulkImportPanel", "importToken", [ importJobToken ]) +
                     '\n' + event.result;
+            resultDetails.text = reportHeaderText;
             Debug.trace("INFO current state is readyToImport");
+            importStatusTimer.start(); // start the status update timer
         }
 
 
@@ -78,25 +89,61 @@
                     '\n' + event.fault.faultDetail;
 
             Alert.show(resourceManager.getString('ShopManagerApplication', 'error'), msg);
-            resultDetails.text += msg;
+            reportHeaderText += msg;
+            resultDetails.text += reportHeaderText;
 
             Debug.trace("INFO current state is readyToImport");
         }
 
         protected function onUploadToServerResult(event:ResultEvent):void {
             Debug.trace("INFO uploaded file on server " + remoteUploadService.upload.lastResult);
-            resultDetails.text += resourceManager.getString('BulkImportPanel', 'uploadSuccess', [ loadFileRef.name ]) +
+            reportHeaderText += resourceManager.getString('BulkImportPanel', 'uploadSuccess', [ loadFileRef.name ]) +
                     '\n' + resourceManager.getString('BulkImportPanel', 'importInProcess') + '\n';
-            bulkImportService.doImport(event.result); // result is full server filename with path
+            resultDetails.text = reportHeaderText;
+            bulkImportService.doImport(event.result, true); // result is full server filename with path
         }
 
         private function onUploadToServerFault(event:FaultEvent):void {
 
             var msg:String = resourceManager.getString('BulkImportPanel', 'uploadFailed', [ loadFileRef.name ]) +
-                    '\n' + event.fault.faultDetail
+                    '\n' + event.fault.faultDetail;
 
             Alert.show(resourceManager.getString('ShopManagerApplication', 'error'), msg);
             resultDetails.text += msg;
+        }
+
+        private function onWatchClick(event:MouseEvent):void {
+            if (jobToken.text != null) {
+                reportHeaderText = "";
+                importJobToken = jobToken.text;
+                bulkImportService.getImportStatus(importJobToken);
+            }
+        }
+
+        private function initImportPanel():void {
+
+            importStatusTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onStatusTimerComplete);
+
+        }
+
+        private function onStatusTimerComplete(event:TimerEvent):void {
+            if (importJobToken != null) {
+                bulkImportService.getImportStatus(importJobToken);
+            }
+        }
+
+        private function onGetImportStatusResult(event:ResultEvent):void {
+            var status:ImportJobStatusImpl = event.result as ImportJobStatusImpl;
+            resultDetails.text = reportHeaderText + '\n' + status.report;
+            if (status.state == 'INPROGRESS' || status.state == 'STARTED') {
+                importStatusTimer.start(); // do another timed status update
+            }
+
+        }
+
+        private function onGetImportStatusFault(event:FaultEvent):void {
+            importStatusTimer.stop();
+            this.onUploadToServerFault(event);
         }
 
         ]]>
@@ -109,6 +156,10 @@
         <mx:method id="doImport" name="doImport"
                    result="onImportResult(event)"
                    fault="onImportFault(event)"/>
+
+        <mx:method id="getImportStatus" name="getImportStatus"
+                   result="onGetImportStatusResult(event)"
+                   fault="onGetImportStatusFault(event)"/>
 
     </mx:RemoteObject>
 
@@ -127,11 +178,18 @@
 
             <mx:Text width="100%" text="@Resource(bundle='BulkImportPanel',key='description')"/>
 
-            <mx:Form width="100%" height="80">
+            <mx:Form width="100%" height="120">
                 <mx:FormHeading label="@Resource(bundle='BulkImportPanel',key='importMessage')"/>
                 <mx:FormItem label="@Resource(bundle='BulkImportPanel',key='selectFile')">
                     <mx:Button id="selectFileBtn" label="@Resource(bundle='BulkImportPanel',key='open')"
                                click="onSelectFileClick(event)"/>
+                </mx:FormItem>
+                <mx:FormItem label="@Resource(bundle='BulkImportPanel',key='jobToken')">
+                    <mx:HBox>
+                        <mx:TextInput id="jobToken"/>
+                        <mx:Button id="watchBtn" label="@Resource(bundle='BulkImportPanel',key='watch')"
+                                   click="onWatchClick(event)"/>
+                    </mx:HBox>
                 </mx:FormItem>
 
             </mx:Form>

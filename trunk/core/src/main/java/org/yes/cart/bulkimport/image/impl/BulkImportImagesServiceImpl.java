@@ -18,8 +18,11 @@ package org.yes.cart.bulkimport.image.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Hibernate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.yes.cart.bulkimport.service.BulkImportImagesService;
+import org.yes.cart.bulkimport.service.BulkImportStatusListener;
 import org.yes.cart.bulkimport.service.impl.AbstractImportService;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
@@ -39,6 +42,8 @@ import java.util.regex.Pattern;
  * Time: 10:35 AM
  */
 public class BulkImportImagesServiceImpl extends AbstractImportService implements BulkImportImagesService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(BulkImportImagesServiceImpl.class);
 
     private final GenericDAO<Object, Long> genericDAO;
 
@@ -95,22 +100,27 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
     /**
      * {@inheritDoc}
      */
-    public BulkImportResult doImport(final StringBuilder errorReport, final Set<String> importedFiles,
+    public BulkImportResult doImport(final BulkImportStatusListener statusListener, final Set<String> importedFiles,
                                      final String fileName, final String importFolder) {
-        errorReport.append(MessageFormat.format(
-                "\nINFO start images import with {0} path and {1} file mask",
+
+        String info = MessageFormat.format(
+                "start images import with {0} path and {1} file mask",
                 pathToImportFolder,
-                regExp));
+                regExp);
+        statusListener.notifyMessage(info);
+        LOG.info(info);
         File[] files = getFilesToImport(
                 StringUtils.isNotBlank(importFolder) ? importFolder : pathToImportFolder,
                 filePatterntRegExp,
                 fileName);
         if (files != null) {
-            errorReport.append(MessageFormat.format(
+            info = MessageFormat.format(
                     "\nINFO found {0} images to import",
-                    files.length));
+                    files.length);
+            statusListener.notifyMessage(info);
+            LOG.info(info);
             for (File file : files) {
-                doImport(file, errorReport, importedFiles);
+                doImport(file, statusListener, importedFiles);
             }
 
         }
@@ -125,64 +135,72 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
      * If product or sku image attribute was inserted or update, that copy file to particular folder.
      *
      * @param file          file to import
-     * @param errorReport   error report
+     * @param statusListener error report
      * @param importedFiles add file to this set if imported it successfuly imported.
      */
-    void doImport(final File file, final StringBuilder errorReport, final Set<String> importedFiles) {
+    void doImport(final File file, final BulkImportStatusListener statusListener, final Set<String> importedFiles) {
         final String fileName = file.getName();
         Matcher matcher = pattern.matcher(fileName);
         if (matcher.find()) {
             final String code = matcher.group(1);
             final String suffix = getImageAttributeSuffixName(fileName);
-            boolean importRezult = doImportProductImage(errorReport, fileName, code, suffix);
-            importRezult |= doImportProductSkuImage(errorReport, fileName, code, suffix);
+            boolean importRezult = doImportProductImage(statusListener, fileName, code, suffix);
+            importRezult |= doImportProductSkuImage(statusListener, fileName, code, suffix);
             if (importRezult) {
                 try {
 
                     String newFileName = imageService.addImageToRepository(file.getAbsolutePath(), code, pathToRepository);
-                    errorReport.append(MessageFormat.format(
-                                "\nINFO image {0} {1} added to image repository", file.getAbsolutePath(), newFileName));
-                        importedFiles.add(file.getAbsolutePath());
+                    final String info = MessageFormat.format(
+                            "image {0} {1} added to image repository", file.getAbsolutePath(), newFileName);
+                    statusListener.notifyMessage(info);
+                    LOG.info(info);
+                    importedFiles.add(file.getAbsolutePath());
 
                 } catch (IOException e) {
-                    String message = MessageFormat.format(
-                            "\nERROR can not add {0} to image repository. Try to add it manually. Error is {1}", file.getAbsolutePath(), e.getMessage());
-                    e.printStackTrace();
-                    errorReport.append(message);
+                    final String err = MessageFormat.format(
+                            "can not add {0} to image repository. Try to add it manually. Error is {1}", file.getAbsolutePath(), e.getMessage());
+                    LOG.error(err, e);
+                    statusListener.notifyError(err);
                 }
             }
         } else {
-            errorReport.append(MessageFormat.format(
-                    "\nWARINIG sorry, product or sku code can not be found with {0} expression for file {1}, but files is mached by the same expression",
+            final String warn = MessageFormat.format(
+                    "sorry, product or sku code can not be found with {0} expression for file {1}, but files is matched by the same expression",
                     regExp,
-                    fileName));
+                    fileName);
+            statusListener.notifyWarning(warn);
+            LOG.warn(warn);
         }
     }
 
     /**
      * Prepare import for product image.
      *
-     * @param errorReport error report
+     * @param statusListener error report
      * @param fileName    file name without the full path
      * @param code        product code
      * @param suffix      image suffix
      * @return true if given image file attached as attribute to giveb product
      */
     boolean doImportProductImage(
-            final StringBuilder errorReport,
+            final BulkImportStatusListener statusListener,
             final String fileName,
             final String code,
             final String suffix) {
         Product product = (Product) genericDAO.getScalarResultByNamedQuery("PRODUCT.BY.CODE", true, code);
 
         if (product == null) {
-            errorReport.append(MessageFormat.format("\nWARINIG product with code {0} not found.", code));
+            final String warn = MessageFormat.format("product with code {0} not found.", code);
+            statusListener.notifyWarning(warn);
+            LOG.warn(warn);
             return false;
         } else {
             final String attributeCode = Constants.PRODUCT_IMAGE_ATTR_NAME_PREFIX + suffix;
             final Attribute attribute = getAttribute(attributeCode);
             if (attribute == null) {
-                errorReport.append(MessageFormat.format("\nERROR attribute with code {0} not found.", attributeCode));
+                final String warn = MessageFormat.format("attribute with code {0} not found.", attributeCode);
+                statusListener.notifyWarning(warn);
+                LOG.warn(warn);
                 return false;
             } else {
                 AttrValueProduct imageAttibute = (AttrValueProduct) product.getAttributeByCode(attributeCode);
@@ -193,7 +211,9 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
                     product.getAttribute().add(imageAttibute);
                 }
                 imageAttibute.setVal(fileName);
-                errorReport.append(MessageFormat.format("\nINFO file {0} attached as {1} to product {2}", fileName, attributeCode, product.getCode()));
+                final String info = MessageFormat.format("file {0} attached as {1} to product {2}", fileName, attributeCode, product.getCode());
+                statusListener.notifyMessage(info);
+                LOG.info(info);
             }
         }
         try {
@@ -201,7 +221,9 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
             return true;
 
         } catch (DataIntegrityViolationException e) {
-            errorReport.append(MessageFormat.format("\nWARINIG image {0} for product with code {1} not found.", fileName, product.getCode()));
+            final String err = MessageFormat.format("image {0} for product with code {1} not found.", fileName, product.getCode());
+            statusListener.notifyError(err);
+            LOG.error(err, e);
             return false;
 
         }
@@ -210,26 +232,30 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
     /**
      * Prepare import for product sku image.
      *
-     * @param errorReport error report
+     * @param statusListener error report
      * @param fileName    file name without the full path
      * @param code        product sku code
      * @param suffix      image suffix
      * @return true if given image file attached as attribute to giveb product
      */
     boolean doImportProductSkuImage(
-            final StringBuilder errorReport,
+            final BulkImportStatusListener statusListener,
             final String fileName,
             final String code,
             final String suffix) {
         ProductSku productSku = (ProductSku) genericDAO.getScalarResultByNamedQuery("PRODUCT.SKU.BY.CODE", code);
         if (productSku == null) {
-            errorReport.append(MessageFormat.format("\nWARINIG product sku with code {0} not found.", code));
+            final String warn = MessageFormat.format("product sku with code {0} not found.", code);
+            statusListener.notifyWarning(warn);
+            LOG.warn(warn);
             return false;
         } else {
             final String attributeCode = Constants.PRODUCT_SKU_IMAGE_ATTR_NAME_PREFIX + suffix;
             final Attribute attribute = getAttribute(attributeCode);
             if (attribute == null) {
-                errorReport.append(MessageFormat.format("\nERROR attribute with code {0} not found.", attributeCode));
+                final String warn = MessageFormat.format("attribute with code {0} not found.", attributeCode);
+                statusListener.notifyWarning(warn);
+                LOG.warn(warn);
                 return false;
             } else {
                 AttrValueProductSku imageAttibute = (AttrValueProductSku) productSku.getAttributeByCode(attributeCode);
@@ -240,18 +266,21 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
                     productSku.getAttribute().add(imageAttibute);
                 }
                 imageAttibute.setVal(fileName);
-                errorReport.append(MessageFormat.format("\nINFO file {0} attached as {1} to product sku {2}",
+                final String info = MessageFormat.format("file {0} attached as {1} to product sku {2}",
                         fileName,
                         attributeCode,
-                        productSku.getCode()));
-
+                        productSku.getCode());
+                statusListener.notifyMessage(info);
+                LOG.info(info);
             }
         }
         try {
             genericDAO.saveOrUpdate(productSku);
             return true;
         } catch (DataIntegrityViolationException e) {
-            errorReport.append(MessageFormat.format("\nWARINIG image {0} for product sku with code {1} not found.", fileName, productSku.getCode()));
+            final String err = MessageFormat.format("image {0} for product sku with code {1} not found.", fileName, productSku.getCode());
+            statusListener.notifyError(err);
+            LOG.error(err, e);
             return false;
         }
     }
