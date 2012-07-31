@@ -25,6 +25,7 @@ import org.xml.sax.Attributes
 import org.yes.cart.icecat.transform.domain.Category
 import org.yes.cart.icecat.transform.domain.CategoryFeatureGroup
 import org.yes.cart.icecat.transform.domain.Feature
+import org.yes.cart.icecat.transform.Util
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -33,11 +34,10 @@ import org.yes.cart.icecat.transform.domain.Feature
  */
 class CategoryFeaturesListHandler extends DefaultHandler {
 
-    final List<Category> categoryList;
-    final List<String> categoryIdFiler;
+    final Map<String, Category> categoryMap;
     final String langFilter;
 
-
+    final Map<String, CategoryFeatureGroup> groupMap = new HashMap<String, CategoryFeatureGroup>();
 
     boolean allowWork = false;
     Category category = null;
@@ -46,13 +46,12 @@ class CategoryFeaturesListHandler extends DefaultHandler {
     boolean readyToGetFeatureName = false;
     Feature feature = null;
 
+    int counter = 0;
 
 
 
-
-    CategoryFeaturesListHandler(List<Category> categoryList, List<String> categoryIdFiler, String langFilter) {
-        this.categoryList = categoryList
-        this.categoryIdFiler = categoryIdFiler
+    CategoryFeaturesListHandler(Map<String, Category> categoryMap, String langFilter) {
+        this.categoryMap = categoryMap
         this.langFilter = langFilter
     }
 
@@ -67,12 +66,14 @@ class CategoryFeaturesListHandler extends DefaultHandler {
             if ("Category" == qName) {
 
 
-                if (categoryIdFiler.contains(attributes.getValue("ID"))) {
-                    category = locateCategory(attributes.getValue("ID"));
+                if (categoryMap.containsKey(attributes.getValue("ID"))) {
+                    category = categoryMap.get(attributes.getValue("ID"));
+                    println("Start category " + category.id + " features");
                 }
             }
 
             if ("CategoryFeatureGroup" == qName) {
+
                 categoryFeatureGroup = new CategoryFeatureGroup();
                 categoryFeatureGroup.ID = attributes.getValue("ID");
                 categoryFeatureGroup.No = attributes.getValue("No");
@@ -86,11 +87,11 @@ class CategoryFeaturesListHandler extends DefaultHandler {
             if ("Name" == qName) {
                 if (langFilter == attributes.getValue("langid")) {
                     if (readyToGetCfgName) {
-                        categoryFeatureGroup.Name = attributes.getValue("Value");
+                        categoryFeatureGroup.Name = Util.maxLength(attributes.getValue("Value"), 255);
                         readyToGetCfgName = false;
                     }
                     if(readyToGetFeatureName) {
-                        feature.Name = attributes.getValue("Value");
+                        feature.Name = Util.maxLength(attributes.getValue("Value"), 255);
                         readyToGetFeatureName = false;
                     }
                 }
@@ -124,26 +125,37 @@ class CategoryFeaturesListHandler extends DefaultHandler {
 
         if (allowWork) {
             if ("Category" == qName) {
-                if(category != null) {
-                    println category;
-                }
                 category = null;
             }
 
             if ("CategoryFeatureGroup" == qName) {
                 if (category != null) {
+                    println("Adding feature group " + categoryFeatureGroup.ID + " to category " + category.id);
                     category.categoryFeatureGroup.add(categoryFeatureGroup);
+                    if (!groupMap.containsKey(categoryFeatureGroup.ID)) {
+                        groupMap.put(categoryFeatureGroup.ID, categoryFeatureGroup);
+                    }
                     categoryFeatureGroup = null;
 
                 }
             }
 
+            if ("FeatureGroup" == qName) {
+                readyToGetCfgName = false;
+            }
+
             if ("Feature" == qName) {
-                CategoryFeatureGroup cfg = locateCategoryFeatureGroup(feature.categoryFeatureGroup_ID);
+                CategoryFeatureGroup cfg = groupMap.get(feature.CategoryFeatureGroup_ID);
                 if (cfg != null) {
+                    if (feature.Name == null) {
+                        feature.Name = feature.ID;
+                    }
+                    println("Feature " + feature.ID + " belongs to category feature group " + feature.CategoryFeatureGroup_ID + "... adding");
                     cfg.featureList.add(feature);
+                    counter++;
                 }
                 feature = null;
+                readyToGetFeatureName = false;
 
             }
 
@@ -151,32 +163,6 @@ class CategoryFeaturesListHandler extends DefaultHandler {
 
 
     }
-
-
-    Category locateCategory(String categId) {
-        for (Category cat: categoryList) {
-            if (categId == cat.id) {
-                return cat;
-            }
-        }
-        return null;
-
-    }
-
-    CategoryFeatureGroup locateCategoryFeatureGroup(String categoryFeatureGroupID) {
-
-        for (Category cat: categoryList) {
-            for (CategoryFeatureGroup c: cat.categoryFeatureGroup) {
-                if (c.ID.equals(categoryFeatureGroupID)) {
-                    return c;
-                }
-            }
-
-        }
-
-        return null;
-    }
-
 
 }
 

@@ -24,15 +24,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.codehaus.gmaven.archetypes</groupId>
-    <artifactId>gmaven-archetype-basic</artifactId>
-    <name>GMaven Archetypes :: Basic</name>
-    <version>1.1</version>
+    <artifactId>icecat-downloader</artifactId>
+    <name>IceCat open catalog sample data downloader</name>
+    <version>1.0.0-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
             <groupId>org.codehaus.gmaven.runtime</groupId>
-            <artifactId>gmaven-runtime-1.7</artifactId>
-            <version>1.1</version>
+            <artifactId>gmaven-runtime-2.0</artifactId>
+            <version>1.4</version>
         </dependency>
         
         <dependency>
@@ -46,15 +46,29 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.5.1</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.codehaus.gmaven</groupId>
                 <artifactId>gmaven-plugin</artifactId>
-                <version>1.1</version>
+                <version>1.4</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.gmaven.runtime</groupId>
+                        <artifactId>gmaven-runtime-2.0</artifactId>
+                        <version>1.4</version>
+                    </dependency>
+                </dependencies>
                 <executions>
                     <execution>
                         <goals>
-                            <goal>generateStubs</goal>
                             <goal>compile</goal>
-                            <goal>generateTestStubs</goal>
                             <goal>testCompile</goal>
                         </goals>
                     </execution>
