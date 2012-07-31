@@ -127,11 +127,11 @@
             <version>2.0</version>
         </dependency>
 
-<dependency> 
-  <groupId>org.apache.xmlgraphics</groupId> 
-  <artifactId>fop</artifactId> 
-  <version>1.0</version> 
-</dependency> 
+        <dependency>
+          <groupId>org.apache.xmlgraphics</groupId>
+          <artifactId>fop</artifactId>
+          <version>1.0</version>
+        </dependency>
 
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
@@ -149,11 +149,11 @@
             <version>2.2</version>
             <scope>test</scope>
         </dependency>
-<dependency>
-	<groupId>commons-collections</groupId>
-	<artifactId>commons-collections</artifactId>
-	<version>3.2</version>
-</dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2</version>
+        </dependency>
             
         <dependency>
             <groupId>commons-beanutils</groupId>
@@ -187,12 +187,12 @@
             <version>3.8.0.GA</version>
             <scope>runtime</scope>
         </dependency>
-<dependency>
-	<groupId>org.hsqldb</groupId>
-	<artifactId>hsqldb</artifactId>
-	<version>2.2.8</version>
-        <scope>test</scope>
-</dependency>
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>2.2.8</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.dbunit</groupId>
             <artifactId>dbunit</artifactId>
@@ -303,21 +303,9 @@
                 </includes>
             </testResource>
             <testResource>
-                <directory>src/test/config/spring</directory>
+                <directory>src/test/resources</directory>
                 <includes>
-                    <include>**/*.xml</include>
-                </includes>
-            </testResource>
-            <testResource>
-                <directory>src/test/config/spring</directory>
-                <includes>
-                    <include>**/*.properties</include>
-                </includes>
-            </testResource>
-            <testResource>
-                <directory>src/main/config/spring</directory>
-                <includes>
-                    <include>**/*.xml</include>
+                    <include>**/*</include>
                 </includes>
             </testResource>
         </testResources>

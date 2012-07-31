@@ -59,7 +59,12 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
 
     protected synchronized ApplicationContext createContext() {
         if (sharedContext == null) {
-            sharedContext = new ClassPathXmlApplicationContext("testApplicationContext.xml", "core-aspects.xml");
+            sharedContext = new ClassPathXmlApplicationContext(
+                    "testApplicationContext.xml",
+                    "core-services.xml",
+                    "core-aspects.xml",
+                    "test-core-module-payment-base.xml",
+                    "test-payment-api.xml");
         }
         return sharedContext;
     }
