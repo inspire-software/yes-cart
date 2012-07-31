@@ -80,6 +80,7 @@
         import org.yes.cart.ui.location.LocationManagementPanel;
         import org.yes.cart.ui.order.OrdersManagementPanel;
         import org.yes.cart.ui.payment.PaymentGateConfigManagementPanel;
+        import org.yes.cart.ui.payment.PaymentManagementPanel;
         import org.yes.cart.ui.product.ProductManagementPanel;
         import org.yes.cart.ui.producttype.ProductTypeManagementPanel;
         import org.yes.cart.ui.reindex.ReindexPanel;
@@ -361,9 +362,7 @@
         private function onPaymentsManagementClick(event:MouseEvent):void {
             setFontWeight(paymentsBtn);
             mainPanel.removeAllChildren();
-            var label:Text = new Text();
-            label.text = "TODO: this is not yet implemented";
-            mainPanel.addChild(label);
+            mainPanel.addChild(new PaymentManagementPanel());
         }
 
         private function onRpcMethodFault(event:FaultEvent):void {
