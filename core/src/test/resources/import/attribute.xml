@@ -28,7 +28,7 @@
 
     <importColumns class="list">
 
-        <column-descriptor> <!-- promary key -->
+        <column-descriptor> <!-- primary key -->
             <columnIndex>1</columnIndex>
             <fieldType>FIELD</fieldType>
             <name>code</name>

@@ -36,19 +36,14 @@ public interface ImportService {
         }
     }
 
-
-
-
-
     /**
      * Perform bulk import.
      *
-     *
-     * @param errorReport   error report place holder
+     * @param listener   error report place holder
      * @param importedFiles imported files
      * @param fileName optional file  name
      * @return {@link BulkImportResult}
      */
-    BulkImportResult doImport(StringBuilder errorReport, Set<String> importedFiles, String fileName, String pathToImportFolder);
+    BulkImportResult doImport(BulkImportStatusListener listener, Set<String> importedFiles, String fileName, String pathToImportFolder);
 
 }

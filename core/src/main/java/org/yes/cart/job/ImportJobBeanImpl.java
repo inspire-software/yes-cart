@@ -35,7 +35,9 @@ import java.util.Set;
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
+ * @deprecated  ImportDirectorService now has capability to do async imports
  */
+@Deprecated
 public class ImportJobBeanImpl extends QuartzJobBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
@@ -51,7 +53,7 @@ public class ImportJobBeanImpl extends QuartzJobBean {
      */
     protected void executeInternal(final JobExecutionContext jobExecutionContext) throws JobExecutionException {
 
-        importDirector.doImport();
+        importDirector.doImport(false);
         productService.clearEmptyAttributes();
         productService.reindexProducts();
 

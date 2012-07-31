@@ -33,7 +33,7 @@
             <fieldType>FIELD</fieldType>
             <name>guid</name>
             <regExp>(.*)</regExp>
-            <lookupQuery>select b from ProductTypeAttr b where b.guid = ?1</lookupQuery>
+            <lookupQuery>select b from ProductTypeAttrEntity b where b.guid = ?1</lookupQuery>
         </column-descriptor>
 
 

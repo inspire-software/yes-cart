@@ -471,6 +471,14 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
         </security:intercept-methods>
     </bean>
 
+    <bean id="bulkImportExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <description>
+            Thread pool for bulk imports since they may be slow.
+        </description>
+        <property name="corePoolSize" value="1" />
+        <property name="maxPoolSize" value="3" />
+    </bean>
+
 
     <bean id="bulkImportService" class="org.yes.cart.bulkimport.service.impl.ImportDirectorImplService">
         <constructor-arg index="0" ref="bulkImportServiceImpl"/>
@@ -500,11 +508,13 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
         <constructor-arg index="4" value="import-descriptor"/>
         <constructor-arg index="5" value="#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'+systemProperties['file.separator']+'import'}"/>
         <constructor-arg index="6" ref="productService"/>
+        <constructor-arg index="7" ref="bulkImportExecutor"/>
 
 
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="doImport" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
+            <security:protect method="getImportStatus" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
         </security:intercept-methods>
 
 

@@ -16,24 +16,31 @@
 
 package org.yes.cart.bulkimport.csv.impl;
 
+import org.hamcrest.Description;
+import org.hamcrest.Factory;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.After;
 import org.junit.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.core.io.Resource;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.bulkimport.csv.CsvFileReader;
 import org.yes.cart.bulkimport.service.BulkImportService;
+import org.yes.cart.bulkimport.service.BulkImportStatusListener;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.fail;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -44,6 +51,8 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
 
     BulkImportService bulkImportService = null;
+
+    private final Mockery mockery = new JUnit4Mockery();
 
 
     @Before
@@ -106,20 +115,51 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
             getConnection().getConnection().createStatement().execute("CREATE index asdsda on TPRODUCTATTRVALUE(code)") ;
 
-            StringBuilder stringBuilder = new StringBuilder();
+            final BulkImportStatusListener listener = mockery.mock(BulkImportStatusListener.class, "listener");
+
+            mockery.checking(new Expectations() {{
+                allowing(listener).notifyMessage(with(any(String.class)));
+                one(listener).notifyError(with(aStringStartingWith("unexpected error src/test/resources/import/availability.xml (No such file or directory)")));
+                // data truncation in groups
+                one(listener).notifyError(with(aStringContains("right truncation")));
+                one(listener).notifyError(with(aStringStartingWith("Tuple: CsvImportTupleImpl{sid=productypeattributeviewgroup.csv:31")));
+                one(listener).notifyError(with(aStringContains("right truncation")));
+                one(listener).notifyError(with(aStringStartingWith("Tuple: CsvImportTupleImpl{sid=productypeattributeviewgroup.csv:110")));
+                // data truncation in products
+                one(listener).notifyError(with(aStringContains("right truncation")));
+                one(listener).notifyError(with(aStringStartingWith("Tuple: CsvImportTupleImpl{sid=productentity.csv:4")));
+                one(listener).notifyError(with(aStringContains("right truncation")));
+                one(listener).notifyError(with(aStringStartingWith("Tuple: CsvImportTupleImpl{sid=productentity.csv:14")));
+                one(listener).notifyError(with(aStringContains("right truncation")));
+                one(listener).notifyError(with(aStringStartingWith("Tuple: CsvImportTupleImpl{sid=productentity.csv:101")));
+                // inventory import crashes due to truncation in product
+                one(listener).notifyError(with(aStringContains("additional info Property name sku type")));
+                one(listener).notifyError(with(aStringStartingWith("Tuple: CsvImportTupleImpl{sid=productentity.csv:4")));
+                one(listener).notifyError(with(aStringContains("additional info Property name sku type")));
+                one(listener).notifyError(with(aStringStartingWith("Tuple: CsvImportTupleImpl{sid=productentity.csv:14")));
+                one(listener).notifyError(with(aStringContains("additional info Property name sku type")));
+                one(listener).notifyError(with(aStringStartingWith("Tuple: CsvImportTupleImpl{sid=productentity.csv:101")));
+                one(listener).notifyError(with(aStringContains("fillEntityForeignKeys")));
+                one(listener).notifyError(with(aStringStartingWith("Tuple: CsvImportTupleImpl{sid=productentity.csv:4")));
+                one(listener).notifyError(with(aStringContains("fillEntityForeignKeys")));
+                one(listener).notifyError(with(aStringStartingWith("Tuple: CsvImportTupleImpl{sid=productentity.csv:14")));
+                one(listener).notifyError(with(aStringContains("fillEntityForeignKeys")));
+                one(listener).notifyError(with(aStringStartingWith("Tuple: CsvImportTupleImpl{sid=productentity.csv:101")));
+            }});
+
             Set<String> importedFilesSet = new HashSet<String>();
 
             BulkImportService bulkImportService = null;
 
             long dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/brandimport.xml");
-            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+            bulkImportService.doImport(listener, importedFilesSet, null, "");
             System.out.println("brands in " + (System.currentTimeMillis() - dt) + "millis");
 
 
             dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/attribute.xml");
-            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+            bulkImportService.doImport(listener, importedFilesSet, null, "");
             System.out.println("attribute  in " + (System.currentTimeMillis() - dt) + "millis");
 
             /*dt = new Date();
@@ -129,13 +169,13 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
             dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/producttype.xml");
-            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+            bulkImportService.doImport(listener, importedFilesSet, null, "");
             System.out.println("producttype in " + (System.currentTimeMillis() - dt) + "millis");
 
 
             dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/category.xml");
-            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+            bulkImportService.doImport(listener, importedFilesSet, null, "");
             System.out.println("category in " + (System.currentTimeMillis() - dt) + "millis");
 
 
@@ -150,17 +190,17 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
            dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/shopcategory.xml");
-            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+            bulkImportService.doImport(listener, importedFilesSet, null, "");
             System.out.println("shopcategory in " + (System.currentTimeMillis() - dt) + "millis");
 
             dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/availability.xml");
-            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+            bulkImportService.doImport(listener, importedFilesSet, null, "");
             System.out.println("availability in " + (System.currentTimeMillis() - dt) + "millis");
 
             dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/productypeattributeviewgroup.xml");
-            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+            bulkImportService.doImport(listener, importedFilesSet, null, "");
             System.out.println("productypeattributeviewgroup in " + (System.currentTimeMillis() - dt) + "millis");
 
              rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TPRODTYPEATTRVIEWGROUP  ");
@@ -174,18 +214,18 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
             dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/producttypeattr.xml");
-            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+            bulkImportService.doImport(listener, importedFilesSet, null, "");
             System.out.println("producttypeattr in " + (System.currentTimeMillis() - dt) + "millis");
 
 
             dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/product.xml");
-            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+            bulkImportService.doImport(listener, importedFilesSet, null, "");
             System.out.println("product in " + (System.currentTimeMillis() - dt) + "millis");
 
             dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/productsku.xml");
-            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+            bulkImportService.doImport(listener, importedFilesSet, null, "");
             System.out.println("attributeviewgroup in " + (System.currentTimeMillis() - dt) + "millis");
 
 
@@ -193,23 +233,23 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
             dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/warehouse.xml");
-            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+            bulkImportService.doImport(listener, importedFilesSet, null, "");
             System.out.println("warehouse in " + (System.currentTimeMillis() - dt) + "millis");
 
 
             dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/skuquantity.xml");
-            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+            bulkImportService.doImport(listener, importedFilesSet, null, "");
             System.out.println("skuquantity in " + (System.currentTimeMillis() - dt) + "millis");
 
             dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/skuprice.xml");
-            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+            bulkImportService.doImport(listener, importedFilesSet, null, "");
             System.out.println("skuprice in " + (System.currentTimeMillis() - dt) + "millis");
 
             dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/productcategory.xml");
-            bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+            bulkImportService.doImport(listener, importedFilesSet, null, "");
             System.out.println("productcategory in in " + (System.currentTimeMillis() - dt) + "millis");
 
             //System.out.println(stringBuilder.toString());
@@ -217,9 +257,10 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
 
             //assertTrue(stringBuilder.toString(), stringBuilder.toString().indexOf("ERROR") == -1);
+            mockery.assertIsSatisfied();
 
         } catch (Exception e) {
-            assertTrue(e.getMessage(), false);
+            fail(e.getMessage());
         } finally {
             dumpDataBase("www", new String[]{"TATTRIBUTE", "TPRODUCTTYPE", "TPRODUCTTYPEATTR",
                     "TPRODUCT", "TSKU", "TPRODUCTATTRVALUE",
@@ -231,17 +272,81 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
     }
 
+    private static class StringStartsWithMatcher extends TypeSafeMatcher<String> {
+        private String prefix;
+
+        public StringStartsWithMatcher(String prefix) {
+            this.prefix = prefix;
+        }
+
+        public boolean matchesSafely(String s) {
+            return s.startsWith(prefix);
+        }
+
+        public void describeTo(Description description) {
+            description.appendText("a string starting with ").appendValue(prefix);
+        }
+    }
+
+    private static class StringContainsMatcher extends TypeSafeMatcher<String> {
+        private String text;
+
+        public StringContainsMatcher(String text) {
+            this.text = text;
+        }
+
+        public boolean matchesSafely(String s) {
+            return s.contains(text);
+        }
+
+        public void describeTo(Description description) {
+            description.appendText("a string containing text: ").appendValue(text);
+        }
+    }
+
+    @Factory
+    public static Matcher<String> aStringStartingWith(String prefix) {
+        return new StringStartsWithMatcher(prefix);
+    }
+
+    @Factory
+    public static Matcher<String> aStringContains(String text) {
+        return new StringContainsMatcher(text);
+    }
+
 
     @Test
     public void testDoImportWithForeignKeys() {
-        StringBuilder stringBuilder = new StringBuilder();
+
+
+        final BulkImportStatusListener listenerCarrier = mockery.mock(BulkImportStatusListener.class, "listenerCarrier");
+
+        mockery.checking(new Expectations() {{
+            //allowing(listenerCarrier).getJobToken(); will(returnValue("1"));
+            //allowing(listener).notifyWarning(with(any(String.class)));
+            allowing(listenerCarrier).notifyMessage(with(any(String.class)));
+            //allowing(listener).notifyError(with(any(String.class)));
+            //one(listenerCarrier).notifyCompleted(ImportService.BulkImportResult.OK);
+        }});
+
+        final BulkImportStatusListener listenerCarrierSla = mockery.mock(BulkImportStatusListener.class, "listenerCarrierSla");
+
+        mockery.checking(new Expectations() {{
+            //allowing(listenerCarrierSla).getJobToken(); will(returnValue("1"));
+            //allowing(listener).notifyWarning(with(any(String.class)));
+            allowing(listenerCarrierSla).notifyMessage(with(any(String.class)));
+            one(listenerCarrierSla).notifyError(with(aStringStartingWith("during import row : NEW_V 1 day;New Vasuki express 1 day delivery;5.58;UAH;NEWVASUKIEXPRESS;F;")));
+            one(listenerCarrierSla).notifyError(with(aStringStartingWith("Tuple: CsvImportTupleImpl{sid=carriersla.csv:1")));
+            //one(listenerCarrierSla).notifyCompleted(ImportService.BulkImportResult.OK);
+        }});
+
         Set<String> importedFilesSet = new HashSet<String>();
 
         BulkImportService bulkImportService = getBulkImportService("src/test/resources/import/carrier.xml");
-        bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+        bulkImportService.doImport(listenerCarrier, importedFilesSet, null, "");
 
         bulkImportService = getBulkImportService("src/test/resources/import/carriersla.xml");
-        bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+        bulkImportService.doImport(listenerCarrierSla, importedFilesSet, null, "");
 
         try {
             dumpDataBase(
@@ -271,29 +376,32 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
                     "select count(*) as cnt from tcarriersla");
             rs = pst.executeQuery();
             rs.next();
-            assertEquals(stringBuilder.toString(), 4, rs.getInt("cnt"));
+            assertEquals(4, rs.getInt("cnt"));
             rs.close();
             pst.close();
-
-            //check that new valuki express sla not imported because fk constraint
-            String errorReport = stringBuilder.toString();
-            assertTrue(errorReport.indexOf("NEWVASUKIEXPRESS") > -1);
-
 
         } catch (Exception e) {
             e.printStackTrace();
             assertTrue(e.getMessage(), false);
         }
+        mockery.assertIsSatisfied();
 
     }
 
     @Test
     public void testDoImportWithSimpleSlaveFiled() {
-        StringBuilder stringBuilder = new StringBuilder();
+
+        final BulkImportStatusListener listener = mockery.mock(BulkImportStatusListener.class, "listener");
+
+        mockery.checking(new Expectations() {{
+            allowing(listener).notifyMessage(with(any(String.class)));
+        }});
+
+
         Set<String> importedFilesSet = new HashSet<String>();
 
         BulkImportService bulkImportService = getBulkImportService("src/test/resources/import/shop.xml");
-        bulkImportService.doImport(stringBuilder, importedFilesSet, null, "");
+        bulkImportService.doImport(listener, importedFilesSet, null, "");
 
         try {
 
@@ -319,9 +427,11 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
         } catch (Exception e) {
             e.printStackTrace();
-            assertTrue(e.getMessage() + " \n\n\n" + stringBuilder.toString(), false);
+            fail(e.getMessage());
 
         }
+
+        mockery.assertIsSatisfied();
 
     }
 }
