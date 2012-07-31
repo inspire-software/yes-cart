@@ -18,13 +18,16 @@ package org.yes.cart.payment.service.impl;
 
 
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.util.Assert;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.persistence.service.PaymentModuleGenericDAO;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -60,6 +63,53 @@ public class CustomerOrderPaymentServiceImpl
             rez = rez.add(payment.getPaymentAmount());
         }
         return rez.setScale(DEFAULT_SCALE);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<CustomerOrderPayment> findBy(
+            final String orderNumber,
+            final Date fromDate,
+            final Date tillDate,
+            final String lastCardDigits,
+            final String cardHolderName,
+            final String paymentGateway
+    ) {
+
+        final ArrayList<Criterion> creterias = new ArrayList<Criterion>(6);
+
+        if (orderNumber != null) {
+            creterias.add(Restrictions.like("orderNumber", orderNumber, MatchMode.ANYWHERE));
+        }
+
+        if (fromDate != null) {
+            creterias.add(Restrictions.ge("orderDate", fromDate));
+        }
+
+        if (tillDate != null) {
+            creterias.add(Restrictions.le("orderDate", tillDate));
+        }
+
+        if (lastCardDigits != null) {
+            creterias.add(Restrictions.eq("cardNumber", lastCardDigits));
+        }
+
+        if (cardHolderName != null) {
+            creterias.add(Restrictions.like("cardHolderName", cardHolderName, MatchMode.ANYWHERE));
+        }
+
+        if (paymentGateway != null) {
+            creterias.add(Restrictions.eq("transactionGatewayLabel", paymentGateway));
+        }
+
+        Assert.isTrue(!creterias.isEmpty(), "At least one search criteria must be present");
+
+        return getGenericDao().findByCriteria(
+                creterias.toArray(new Criterion[creterias.size()])
+        );
+
     }
 
 

@@ -19,8 +19,10 @@ import org.yes.cart.domain.dto.DtoPaymentGatewayInfo;
 import org.yes.cart.domain.dto.impl.DtoPaymentGatewayInfoImpl;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.payment.PaymentGateway;
+import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
+import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.remote.service.RemotePaymentModulesManagementService;
 import org.yes.cart.service.payment.PaymentModulesManager;
 
@@ -41,12 +43,17 @@ public class RemotePaymentModulesManagementServiceImpl implements RemotePaymentM
 
     private final PaymentModulesManager paymentModulesManager;
 
+    private final CustomerOrderPaymentService customerOrderPaymentService;
+
     /**
      * Create remote payment gateway manager service.
      * @param paymentModulesManager service to use.
      */
-    public RemotePaymentModulesManagementServiceImpl(final PaymentModulesManager paymentModulesManager) {
+    public RemotePaymentModulesManagementServiceImpl(
+            final PaymentModulesManager paymentModulesManager,
+            final CustomerOrderPaymentService customerOrderPaymentService) {
         this.paymentModulesManager = paymentModulesManager;
+        this.customerOrderPaymentService = customerOrderPaymentService;
     }
 
     /** {@inheritDoc} */
@@ -135,6 +142,38 @@ public class RemotePaymentModulesManagementServiceImpl implements RemotePaymentM
     /** {@inheritDoc}*/
     public void disallowPaymentGateway(final String label) {
         paymentModulesManager.disallowPaymentGateway(label);
+    }
+
+
+    /**
+     * Find all payments by given parameters.
+     * All parameters are optional, but at leasn one must be present. Please verify this fact on UI.
+     *
+     * @param orderNumber            given order number. optional
+     * @param fromDate from date
+     * @param tillDate till date
+     * @param lastCardDigits last 4 digits of plastic card
+     * @param cardHolderName card holder name
+     * @param paymentGateway payment gateway
+     * @return list of payments which satisfy search criteria
+     */
+    public List<CustomerOrderPayment> findPayments(
+            final String orderNumber,
+            final Date fromDate,
+            final Date tillDate,
+            final String lastCardDigits,
+            final String cardHolderName,
+            final String paymentGateway
+    ) {
+
+        return customerOrderPaymentService.findBy(
+                orderNumber,
+                fromDate,
+                tillDate,
+                lastCardDigits,
+                cardHolderName,
+                paymentGateway);
+
     }
 
 

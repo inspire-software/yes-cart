@@ -219,7 +219,7 @@
         }
 
         /**
-         * Perform customer search.
+         * Clear search criteria.
          * @param event event
          * @return nothing
          */
