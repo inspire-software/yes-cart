@@ -4585,6 +4585,7 @@ public void setRangeList(final RangeList rangeList) {
        and (p.orderTimestamp > ?5 or ?5 is null)
        and (p.orderTimestamp < ?6 or ?6 is null)
        and (p.ordernum like ?7 or ?7 is null)
+       and (p.customer.customerId > ?8 or ?8 = 0)
        ]]>
     </query>
 
