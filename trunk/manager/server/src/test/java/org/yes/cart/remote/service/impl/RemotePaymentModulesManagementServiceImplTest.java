@@ -67,7 +67,9 @@ public class RemotePaymentModulesManagementServiceImplTest {
             will( returnValue(  null     )       );
         }});
 
-        RemotePaymentModulesManagementServiceImpl service = new RemotePaymentModulesManagementServiceImpl(paymentModulesManager);
+        RemotePaymentModulesManagementServiceImpl service = new RemotePaymentModulesManagementServiceImpl(
+                paymentModulesManager,
+                null);
         List<DtoPaymentGatewayInfo> rez = service.getPaymentGateways("ru");
         assertEquals(2, rez.size());
         
@@ -118,7 +120,9 @@ public class RemotePaymentModulesManagementServiceImplTest {
             will( returnValue(  null     )       );
         }});
 
-        RemotePaymentModulesManagementServiceImpl service = new RemotePaymentModulesManagementServiceImpl(paymentModulesManager);
+        RemotePaymentModulesManagementServiceImpl service = new RemotePaymentModulesManagementServiceImpl(
+                paymentModulesManager,
+                null);
         List<DtoPaymentGatewayInfo> rez = service.getPaymentGateways("ru");
         assertEquals(2, rez.size());
         
