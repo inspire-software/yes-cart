@@ -215,6 +215,7 @@ prepare_demo_clean() {
 
     echo " Cleaning Tomcat Temp                           ";
     rm -rf $YC_HOME/demo/yes-server/work/*
+    rm -rf $YC_HOME/demo/yes-server/temp/*
     echo " done...                                        ";
 
     echo " Cleaning Derby bundle $YC_HOME/demo/yes-db/*   ";
