@@ -24,6 +24,7 @@ import org.yes.cart.icecat.transform.domain.ProductPointer
 import org.yes.cart.icecat.transform.domain.Category
 import org.xml.sax.helpers.DefaultHandler
 import org.xml.sax.Attributes
+import org.yes.cart.icecat.transform.Util
 
 /**
  * 
@@ -34,31 +35,39 @@ import org.xml.sax.Attributes
  */
 class ProductPointerHandler extends DefaultHandler {
 
-    List<Category> categoryList;
+    Map<String, Category> categoryMap;
 
+    Category category;
     ProductPointer productPointer;
 
-    ProductPointerHandler(List<Category> categoryList) {
-        this.categoryList = categoryList
+    long updateLimit;
+    int maxProductsPerCat;
+
+    int counter = 0;
+
+    ProductPointerHandler(Map<String, Category> categoryMap, long updateLimit, int maxProductsPerCat) {
+        this.categoryMap = categoryMap;
+        this.updateLimit = updateLimit;
+        this.maxProductsPerCat = maxProductsPerCat;
     }
 
 
     void startElement(String uri, String localName, String qName, Attributes attributes) {
         if ("file" == qName) {
-            Category cat = getCategory(attributes.getValue("Catid"));
-            if (cat == null) {
+            category = categoryMap.get(attributes.getValue("Catid"));
+            if (category == null) {
                 productPointer = null;
             } else {
                 productPointer = new ProductPointer()
                 productPointer.path   = attributes.getValue("path");
-                productPointer.Product_ID = attributes.getValue("Product_ID")
+                productPointer.Product_ID = Util.maxLength(attributes.getValue("Product_ID"), 255);
                 productPointer.Updated= attributes.getValue("Updated");
                 productPointer.Quality= attributes.getValue("Quality");
                 productPointer.Supplier_id= attributes.getValue("Supplier_id")
                 productPointer.Prod_ID = attributes.getValue("Prod_ID")
                 productPointer.Catid = attributes.getValue("Catid");
                 productPointer.On_Market = attributes.getValue("On_Market")
-                productPointer.Model_Name = attributes.getValue("Model_Name")
+                productPointer.Model_Name = Util.maxLength(attributes.getValue("Model_Name"), 255);
                 productPointer.Product_View= attributes.getValue("Product_View");
                 productPointer.HighPic = attributes.getValue("HighPic")
                 productPointer.HighPicHeight = attributes.getValue("HighPicHeight")
@@ -74,26 +83,17 @@ class ProductPointerHandler extends DefaultHandler {
 
     void endElement(String ns, String localName, String qName) {
 
-        if ("file" == qName && productPointer != null) {
+        if ("file" == qName && category != null && productPointer.Date_Added.toLong() > updateLimit) {
 
-            Category cat = getCategory(productPointer.Catid);
-            cat.productPointer.add(productPointer);
-
-        }
-
-    }
-
-
-    Category getCategory(String catid) {
-        Category cat = null;
-        categoryList.each {
-            if (it.id == catid) {
-                cat = it;
+            if (category.productPointer.size() > maxProductsPerCat) {
+                return; // limit reached
             }
+            println("Added product " + productPointer.Product_ID + " to category " + category.id);
+            category.productPointer.add(productPointer);
+            counter++;
+
         }
-        return cat;
+
     }
-
-
 
 }

@@ -144,6 +144,12 @@ class Category {
         StringBuilder builder = new StringBuilder();
         for (CategoryFeatureGroup cfg : categoryFeatureGroup) {
             builder.append(cfg.Name)
+            builder.append(';')
+            builder.append(cfg.ID)
+            builder.append(';')
+            builder.append(cfg.Name)
+            builder.append(';')
+            builder.append((((name == null ? id : name)) + cfg.Name).hashCode())
             builder.append("\n")
 
         }

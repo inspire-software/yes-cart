@@ -23,6 +23,7 @@ package org.yes.cart.icecat.transform.xml
 import org.xml.sax.helpers.DefaultHandler
 import org.xml.sax.Attributes
 import org.yes.cart.icecat.transform.domain.Category;
+import org.yes.cart.icecat.transform.Util;
 
 /**
  *
@@ -35,21 +36,17 @@ class CategoryHandler extends DefaultHandler {
 
     boolean allowAddToCategoryList = false;
 
-    List<Category> categoryList = new ArrayList<Category>();
+    Map<String, Category> categoryMap = new HashMap<String, Category>();
     List<String> categoryIdFiler;
     String langFilter;
+    int counter = 0;
 
     Category category;
 
-
-    String description;
-    String keywords;
-    String name;
-
-    CategoryHandler(String categoryList, String langFilter) {
+    CategoryHandler(String allowedCategories, String langFilter) {
 
         this.langFilter = langFilter
-        categoryIdFiler = Arrays.asList(categoryList.split(","));
+        categoryIdFiler = Arrays.asList(allowedCategories.split(","));
 
     }
 
@@ -68,20 +65,20 @@ class CategoryHandler extends DefaultHandler {
             category.visible = attributes.getValue("Visible");
         } else if ("Description" == qName) {
             if ("1" == attributes.getValue("langid") || langFilter == attributes.getValue("langid")) {
-                if (org.yes.cart.icecat.transform.Util.isNotBlank(attributes.getValue("Value"))) {
-                    category.description = attributes.getValue("Value");
+                if (Util.isNotBlank(attributes.getValue("Value"))) {
+                    category.description = Util.maxLength(attributes.getValue("Value"), 4000);
                 }
             }
         } else if ("Name" == qName) {
             if ("1" == attributes.getValue("langid") || langFilter == attributes.getValue("langid")) {
-                if (org.yes.cart.icecat.transform.Util.isNotBlank(attributes.getValue("Value"))) {
-                    category.name = attributes.getValue("Value");
+                if (Util.isNotBlank(attributes.getValue("Value"))) {
+                    category.name = Util.maxLength(attributes.getValue("Value"), 255);
                 }
             }
         } else if ("Keywords" == qName) {
             if ("1" == attributes.getValue("langid") || langFilter == attributes.getValue("langid")) {
-                if (org.yes.cart.icecat.transform.Util.isNotBlank(attributes.getValue("Value"))) {
-                    category.keywords = attributes.getValue("Value");
+                if (Util.isNotBlank(attributes.getValue("Value"))) {
+                    category.keywords = Util.maxLength(attributes.getValue("Value"), 255);
                 }
             }
         } else if ("CategoriesList" == qName) {
@@ -93,8 +90,14 @@ class CategoryHandler extends DefaultHandler {
     void endElement(String ns, String localName, String qName) {
 
         if ("Category" == qName) {
+
             if (allowAddToCategoryList && categoryIdFiler.contains(category.id)) {
-                categoryList.add(category);
+                println("Category " + category.id + " ... added")
+                if (category.name == null) {
+                    category.name = category.id;
+                }
+                categoryMap.put(category.id, category);
+                counter++;
             }
         } else if ("CategoriesList" == qName) {
             allowAddToCategoryList = false;

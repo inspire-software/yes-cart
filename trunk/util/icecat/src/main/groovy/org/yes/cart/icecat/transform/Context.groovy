@@ -25,13 +25,13 @@ package org.yes.cart.icecat.transform
  */
 class Context  {
     
-    String dataDirectory = "/dev/yes-cart/icecatdata";
+    String dataDirectory = "/development/projects/java/yc/env/sampledata/demo-data/icecat";
 
     String url = "http://data.icecat.biz/";
 
-    String login;
+    String login = "denis.v.pavlov";
 
-    String pwd;
+    String pwd = "d3n1\$PaV098";
 
     int langId = 8;
 
@@ -43,7 +43,7 @@ class Context  {
 
     long mindata =  20110101000000L;
 
-    int limit = 1000;
+    int productsPerCategoryLimit = 1000;
 
 
 
@@ -57,7 +57,7 @@ class Context  {
                 ", langId=" + langId +
                 ", categories='" + categories + '\'' +
                 ", mindata=" + mindata +
-                ", limit=" + limit +
+                ", productsPerCategoryLimit=" + productsPerCategoryLimit +
                 '}';
     }
 

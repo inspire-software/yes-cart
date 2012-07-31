@@ -27,6 +27,7 @@ import org.yes.cart.icecat.transform.domain.ProductFeature
 import org.yes.cart.icecat.transform.domain.Feature
 import org.yes.cart.icecat.transform.domain.Category
 import org.yes.cart.icecat.transform.domain.CategoryFeatureGroup
+import org.yes.cart.icecat.transform.Util
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -36,21 +37,24 @@ import org.yes.cart.icecat.transform.domain.CategoryFeatureGroup
 class ProductHandler extends DefaultHandler {
 
     Product product = null;
-    List<Category> categoryList;
+    Map<String, Category> categoryMap;
 
     boolean inProductRelated = false
 
 
 
-    ProductHandler(List<Category> categoryList) {
-        this.categoryList = categoryList
+    ProductHandler(Map<String, Category> categoryMap) {
+        this.categoryMap = categoryMap
     }
 
     void startElement(String uri, String localName, String qName, Attributes attributes) {
 
         if ("ProductRelated" == qName) {
             inProductRelated = true
-            product.relatedCategories.add(attributes.getValue("Category_ID"))
+            String catId = attributes.getValue("Category_ID");
+            if (this.categoryMap.containsKey(catId)) {
+                product.relatedCategories.add(catId)
+            }
 
         }
 
@@ -59,9 +63,9 @@ class ProductHandler extends DefaultHandler {
 
         }
 
-        if ("Product" == qName && product == null && inProductRelated == false) {
+        if ("Product" == qName && product == null && !inProductRelated) {
             product = new Product();
-            product.Code = attributes.getValue("Code");
+            product.Code = Util.maxLength(attributes.getValue("Code"), 255);
             product.HighPic = attributes.getValue("HighPic");
             product.HighPicHeight = attributes.getValue("HighPicHeight");
             product.HighPicSize = attributes.getValue("HighPicSize");
@@ -71,7 +75,7 @@ class ProductHandler extends DefaultHandler {
             product.LowPicHeight = attributes.getValue("LowPicHeight");
             product.LowPicSize = attributes.getValue("LowPicSize");
             product.LowPicWidth = attributes.getValue("LowPicWidth");
-            product.Name = attributes.getValue("Name");
+            product.Name = Util.maxLength(attributes.getValue("Name"), 255);
             product.Pic500x500 = attributes.getValue("Pic500x500");
             product.Pic500x500Height = attributes.getValue("Pic500x500Height");
             product.Pic500x500Size = attributes.getValue("Pic500x500Size");
@@ -81,7 +85,7 @@ class ProductHandler extends DefaultHandler {
             product.ReleaseDate = attributes.getValue("ReleaseDate");
             product.ThumbPic = attributes.getValue("ThumbPic");
             product.ThumbPicSize = attributes.getValue("ThumbPicSize");
-            product.Title = attributes.getValue("Title");
+            product.Title = Util.maxLength(attributes.getValue("Title"), 255);
 
         }
 
@@ -116,7 +120,7 @@ class ProductHandler extends DefaultHandler {
 
         if ("Feature" == qName) {
             String featureId = attributes.getValue("ID");
-            feature = locateFeature(locateCategory(product.CategoryID),  featureId);
+            feature = locateFeature(categoryMap.get(product.CategoryID),  featureId);
             productFeature.feature = feature
         }
 
@@ -147,28 +151,18 @@ class ProductHandler extends DefaultHandler {
 
     Feature locateFeature(Category category, String featureId) {
 
-        for(CategoryFeatureGroup cfg : category.categoryFeatureGroup) {
-            for(Feature f:cfg.featureList) {
-                if(f.ID == featureId) {
-                    return f;
+        if (category != null) {
+            for(CategoryFeatureGroup cfg : category.categoryFeatureGroup) {
+                for(Feature f:cfg.featureList) {
+                    if(f.ID == featureId) {
+                        return f;
+                    }
                 }
             }
         }
         return null;
 
     }
-
-    Category locateCategory(String categId) {
-        for (Category cat: categoryList) {
-            if (categId == cat.id) {
-                return cat;
-            }
-        }
-        return null;
-
-    }
-
-
 
     void endElement(String ns, String localName, String qName) {
 
@@ -178,16 +172,21 @@ class ProductHandler extends DefaultHandler {
         }
 
         if ("ProductFeature" == qName) {
-            product.productFeatures.add(productFeature);
+            if (productFeature.feature != null) {
+                product.productFeatures.add(productFeature);
+            }
             productFeature = null;
             feature = null;
         }
 
         if("Product" == qName  && !inProductRelated) {
 
-            Category c = locateCategory(product.CategoryID);
-            c.product.add(product);
-            product.CategoryName = (c.name == null ? c.id : c.name); //category name and product type
+            Category c = categoryMap.get(product.CategoryID);
+            if (c != null) {
+                c.product.add(product);
+                product.CategoryName = (c.name == null ? c.id : c.name); //category name and product type
+                println("Added product " + product.Prod_id + " with " + product.productFeatures.size() +  " features to category " + product.CategoryName)
+            }
 
         }
 
