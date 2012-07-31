@@ -4901,9 +4901,9 @@ public void setRangeList(final RangeList rangeList) {
         ]]>
     </query>
 
-    <query name="ADDRESSES.RESET.DEFALT">
+    <query name="ADDRESSES.RESET.DEFAULT">
         <![CDATA[
-            update AddressEntity a set a.defaultAddress = false
+            update AddressEntity a set a.defaultAddress = ?3
                 where a.customer.customerId = ?1
                 and a.addressType = ?2
         ]]>
