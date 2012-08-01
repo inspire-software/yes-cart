@@ -18,6 +18,8 @@ http://roznicy.ru/ Блог о розничной торговле
 
 http://themeforest.net/item/storefront-mobile-mobile-html-shop-template/full_screen_preview/904511
 
+http://help.gotiggr.com/5steps
+
 == Tools ==
 
 Fo editor http://sourceforge.net/projects/wysiwyg-edit/
