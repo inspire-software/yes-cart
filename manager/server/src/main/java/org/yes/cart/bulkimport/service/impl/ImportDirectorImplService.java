@@ -16,7 +16,6 @@
 
 package org.yes.cart.bulkimport.service.impl;
 
-import flex.messaging.FlexContext;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -137,8 +136,23 @@ public class ImportDirectorImplService implements ImportDirectorService, Applica
     /** {@inheritDoc} */
     public String doImport(final String fileName, final boolean async) {
 
-        if (lock.isLocked() && jobListeners.isEmpty()) {
-            lock.unlock(); // TODO: investigate why unlock in finally does not always get called?
+        if (lock.isLocked()) {
+            if (jobListeners.isEmpty()) {
+                lock.unlock(); // if we do not have any listeners then it is all done
+            } else {
+                // check for locks. it would be better to do this at the end of runnable
+                // however if that runnable crashes we will be locked forever.
+                boolean shouldUnlock = true;
+                for (final BulkImportStatusListener listener : jobListeners.values()) {
+                    if (!listener.isCompleted() && !listener.isTimedOut()) {
+                        shouldUnlock = false;
+                        break;
+                    }
+                }
+                if (shouldUnlock) {
+                    lock.unlock(); // unlock because all is completed or timed out
+                }
+            }
         }
 
         if (!lock.isLocked()) {
@@ -147,8 +161,10 @@ public class ImportDirectorImplService implements ImportDirectorService, Applica
             /*
              * Max 10K char of report to UI since it get huge and simply will crash the UI,
              * not to mention traffic cost.
+             * Timeout is set to 60sec - just in case runnable crashes and we need to unlock through
+             * timeout.
              */
-            final BulkImportStatusListener listener = new BulkImportStatusListenerImpl(10000);
+            final BulkImportStatusListener listener = new BulkImportStatusListenerImpl(10000, 60000);
             jobListeners.put(listener.getJobToken(), listener);
 
             final Runnable job = createImportJobRunnable(fileName, listener);
@@ -169,7 +185,6 @@ public class ImportDirectorImplService implements ImportDirectorService, Applica
     private Runnable createImportJobRunnable(final String fileName, final BulkImportStatusListener statusListener) {
         return new Runnable() {
 
-            private final ReentrantLock mangerLock = lock;
             private final String file = fileName;
             private final BulkImportStatusListener listener = statusListener;
 
@@ -191,13 +206,11 @@ public class ImportDirectorImplService implements ImportDirectorService, Applica
                     LOG.error(ioe.getMessage(), ioe);
                     listener.notifyError(ioe.getMessage());
                     listener.notifyCompleted(ImportService.BulkImportResult.OK);
-                } catch (Exception e) {
+                } catch (Throwable trw) {
                     // something very wrong
-                    LOG.error(e.getMessage(), e);
-                    listener.notifyError(e.getMessage());
+                    LOG.error(trw.getMessage(), trw);
+                    listener.notifyError(trw.getMessage());
                     listener.notifyCompleted(ImportService.BulkImportResult.ERROR);
-                } finally {
-                    mangerLock.unlock();
                 }
             }
         };
