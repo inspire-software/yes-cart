@@ -31,19 +31,29 @@ import java.util.UUID;
 public class BulkImportStatusListenerImpl implements BulkImportStatusListener {
 
     private static final int REPORT_MAX_CHARS = 80000;
+    private static final int MSG_TIMEOUT = 60000;
 
     private int reportMaxChars = REPORT_MAX_CHARS;
     private final UUID token;
     private ImportService.BulkImportResult result;
+
+    private int warn = 0;
+    private int err = 0;
+
+    private long timeout = MSG_TIMEOUT;
+    private long lastMsgTimestamp = System.currentTimeMillis();
+    private boolean timedOut = false;
+
     private final StringBuilder report = new StringBuilder();
 
     public BulkImportStatusListenerImpl() {
         token = UUID.randomUUID();
     }
 
-    public BulkImportStatusListenerImpl(final int reportMaxChars) {
+    public BulkImportStatusListenerImpl(final int reportMaxChars, final long timeout) {
         this();
         this.reportMaxChars = reportMaxChars;
+        this.timeout = timeout;
     }
 
     /** {@inheritDoc} */
@@ -77,6 +87,7 @@ public class BulkImportStatusListenerImpl implements BulkImportStatusListener {
             throw new IllegalArgumentException("Job " + token.toString() + " has finished and cannot be updated");
         }
         report.append("INFO: ").append(message).append('\n');
+        lastMsgTimestamp = System.currentTimeMillis();
     }
 
     /** {@inheritDoc} */
@@ -85,6 +96,8 @@ public class BulkImportStatusListenerImpl implements BulkImportStatusListener {
             throw new IllegalArgumentException("Job " + token.toString() + " has finished and cannot be updated");
         }
         report.append("WARNING: ").append(warning).append('\n');
+        lastMsgTimestamp = System.currentTimeMillis();
+        warn++;
     }
 
     /** {@inheritDoc} */
@@ -93,6 +106,8 @@ public class BulkImportStatusListenerImpl implements BulkImportStatusListener {
             throw new IllegalArgumentException("Job " + token.toString() + " has finished and cannot be updated");
         }
         report.append("ERROR: ").append(error).append('\n');
+        lastMsgTimestamp = System.currentTimeMillis();
+        err++;
     }
 
     /** {@inheritDoc} */
@@ -101,5 +116,35 @@ public class BulkImportStatusListenerImpl implements BulkImportStatusListener {
             throw new IllegalArgumentException("Job " + token.toString() + " has finished and cannot be updated");
         }
         this.result = result;
+    }
+
+    /** {@inheritDoc} */
+    public boolean isCompleted() {
+        return result != null;
+    }
+
+    /** {@inheritDoc} */
+    public boolean isTimedOut() {
+        if (timedOut) {
+            return true;
+        }
+        timedOut = lastMsgTimestamp + timeout < System.currentTimeMillis();
+        if (timedOut) {
+            this.notifyError("Timed out (timeout: " + timeout + "millis)");
+            this.result = ImportService.BulkImportResult.ERROR;
+        }
+        return timedOut;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        return "BulkImportStatusListenerImpl{" +
+                "token=" + token +
+                ", warnings=" + warn +
+                ", errors=" + err +
+                ", timedOut=" + timedOut +
+                ", lastMsgTimestamp=" + lastMsgTimestamp +
+                '}';
     }
 }

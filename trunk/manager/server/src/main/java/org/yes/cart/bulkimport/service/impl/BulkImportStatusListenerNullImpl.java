@@ -69,4 +69,14 @@ public class BulkImportStatusListenerNullImpl implements BulkImportStatusListene
     public void notifyCompleted(final ImportService.BulkImportResult result) {
         throw new IllegalArgumentException("Job is UNDEFINED and cannot be updated");
     }
+
+    /** {@inheritDoc} */
+    public boolean isCompleted() {
+        return true;
+    }
+
+    /** {@inheritDoc} */
+    public boolean isTimedOut() {
+        return false;
+    }
 }

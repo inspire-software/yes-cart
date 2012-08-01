@@ -59,4 +59,14 @@ public interface BulkImportStatusListener {
      */
     void notifyCompleted(ImportService.BulkImportResult result);
 
+    /**
+     * @return true if listeners has received result
+     */
+    boolean isCompleted();
+
+    /**
+     * @return true if listeners last message timestamp exceed timeout
+     */
+    boolean isTimedOut();
+
 }
