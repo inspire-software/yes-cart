@@ -117,11 +117,10 @@ p {
     list-style: none;
     background: rgb(255, 0, 0);
 }
-.vmenu li{padding:0; margin:0 0 1px 0; height:40px; display:block; }
+.vmenu li{padding:0; margin:0 0 1px 0; display:block; }
 .vmenu li a {
     text-align: left;
-    height: 40px;
-    padding: 0px 3px;
+    padding: 5px 5px 5px 5px;
     font: 12px Verdana, Arial, Helvetica, sans-serif;
     color: rgb(0, 0, 0);
     display: block;
@@ -129,13 +128,13 @@ p {
     text-decoration: none;
 }
 .vmenu li a:hover{background:url('verMenuImages.png') 0px -40px no-repeat; color:rgb(51,0,0);}
-.vmenu li a.active, .menu li a.active:hover{background:url('verMenuImages.png') 0px -80px no-repeat; color:rgb(0,0,0);}
-.vmenu li a span {line-height:40px; }
+.vmenu li a.active, .vmenu li a.active-category, .menu li a.active:hover{background:url('verMenuImages.png') 0px -40px no-repeat; color:rgb(0,0,0);}
+.vmenu li a span { }
 
 
 
 .filternav {margin:0; padding:0; width:236px; list-style:none;background:rgb(255,0,0);}
-.filternav li{padding:0; margin:0 0 1px 0; height:20px; display:block; }
+.filternav li{padding:0; margin:0 0 1px 0; display:block; }
 .filternav-head {
     width: 236px;
     background: rgb(255, 255, 255);
@@ -153,18 +152,17 @@ p {
 }
 .filternav li a {
     text-align: left;
-    height: 20px;
-    padding: 0px 3px;
-    font: 9px Verdana, Arial, Helvetica, sans-serif;
+    padding: 5px 5px 5px 5px;
+    font: 12px Verdana, Arial, Helvetica, sans-serif;
     color: rgb(0, 0, 0);
     display: block;
     background: url('verMenuImages.png') 0px 0px no-repeat;
     text-decoration: none;
 }
 .filternav li a:hover{background:url('verMenuImages.png') 0px -40px no-repeat; color:rgb(51,0,0);}
-.filternav li a.active, .menu li a.active:hover{background:url('verMenuImages.png') 0px -80px no-repeat; color:rgb(0,0,0);}
-.filternav li a span {line-height:20px; }
-.filternav li a em   {line-height:20px; float:right; font-style: normal;}
+.filternav li a.active, .menu li a.active:hover{background:url('verMenuImages.png') 0px -40px no-repeat; color:rgb(0,0,0);}
+.filternav li a span { }
+.filternav li a em   { float:right; font-style: normal;}
 .filternav li a em:before   {   content: "[" }
 .filternav li a em:after    {   content: "]" }
 
@@ -190,16 +188,15 @@ p {
 }
 .attr   {
     text-align: left;
-    height: 20px;
-    padding: 0px 3px;
+    padding: 5px 0px 5px 5px;
     font: 9px Verdana, Arial, Helvetica, sans-serif;
     color: rgb(0, 0, 0);
     display: block;
     /*background: url('verMenuImages.png') 0px 0px no-repeat;*/
     text-decoration: none;
 }
-.attr span{line-height:20px;}
-.attr em   {line-height:20px; float:right; font-style: normal;}
+.attr span{font-style: italic;}
+.attr em   {float:right; font-style: normal;margin: 0px 0px 0px 150px;text-align: justify;}
 
 
 
@@ -246,7 +243,6 @@ p {
 }
 
 .sku-in-list-row {
-    width: 300px;
     margin: 0px 0px 0px 0px;
     padding: 5px 5px 5px 5px;
     overflow: hidden;
@@ -273,10 +269,14 @@ p {
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#ffffff', endColorstr = '#efefef'); /* for IE */
     background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#efefef)); /* for webkit browsers */
     background: -moz-linear-gradient(top, #ffffff, #efefef); /* for firefox 3.6+ */
-    width: 300px;
     border: solid 1px #d6d6d6;
     margin-top: 2px;
     margin-left: 3px;
+}
+
+.sku-in-list-name {
+    height: 40px;
+    overflow: hidden;
 }
 
 .sku-in-list-description {
