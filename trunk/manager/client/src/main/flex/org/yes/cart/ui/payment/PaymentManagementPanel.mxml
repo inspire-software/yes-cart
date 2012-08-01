@@ -21,6 +21,9 @@
 
 
     <mx:Script><![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import mx.events.ListEvent;
         import mx.rpc.AsyncResponder;
         import mx.rpc.events.ResultEvent;
 
@@ -31,14 +34,6 @@
             localeFilter = resourceManager.getString('ReportPanel', 'localeFilter');       //todo move to one place
 
 
-            remotePaymentModulesManagementService.getAvailablePaymentGateways(localeFilter).addResponder(
-                    new AsyncResponder(
-                            function (event:ResultEvent, obj:Object = null):void {
-                                paymentGateway.dataProvider = event.result;
-                            }
-                            ,
-                            ShopManagerGlobal.instance.defaultOnRpcMethodFault)
-            );
 
         }
 
@@ -57,7 +52,7 @@
                     tillDate.selectedDate,
                     cardHolderName.text==""?null:cardHolderName.text,
                     lastCardDigits.text==""?null:lastCardDigits.text,
-                    paymentGateway.selectedIndex==-1?null:paymentGateway.text
+                    null
             );
 
         }
@@ -75,7 +70,6 @@
             orderNumber.text = "";
             lastCardDigits.text = "";
             cardHolderName.text = "";
-            paymentGateway.selectedIndex = -1;
 
 
         }
@@ -84,6 +78,8 @@
             var toolTip:String = "";
             return toolTip;
         }
+
+
         ]]>
 
     </mx:Script>
@@ -124,8 +120,7 @@
                                 <mx:TextInput id="lastCardDigits" width="150"/>
                             </mx:GridItem>
                             <mx:GridItem>
-                                <mx:Label text="@Resource(bundle='PaymentManagementPanel',key='paymentGateway')"/>
-                                <mx:ComboBox id="paymentGateway" width="150" dataProvider=""/>
+
                             </mx:GridItem>
                         </mx:GridRow>
                     </mx:Grid>
