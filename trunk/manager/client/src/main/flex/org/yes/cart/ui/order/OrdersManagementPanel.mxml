@@ -31,30 +31,48 @@
                     visible="{_searchCriteriaCustomerId == 0}"
                     includeInLayout="{_searchCriteriaCustomerId == 0}"
                     >
-                <mx:VBox width="100%">
-                    <mx:HBox width="100%">
-                        <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='firstNameFilter')"/>
-                        <mx:TextInput id="firstNameFilterValue" width="150"/>
-                        <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='lastNameFilter')"/>
-                        <mx:TextInput id="lastNameFilterValue" width="150"/>
-                        <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='emailNameFilter')"/>
-                        <mx:TextInput id="emailNameFilterValue" width="150"/>
-                    </mx:HBox>
-                    <mx:HBox width="100%">
-                        <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderStatusFilter')"/>
-                        <mx:ComboBox id="statusComboBox" width="120"
-                                     prompt="@Resource(bundle='CustomerOrderPanel',key='selectStatusPropmt')"
-                                     dataProvider="{statuses}"
-                                     data="code" labelField="name"
-                                />
-                        <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderFromDateFilter')"/>
-                        <georg:DateTimeField id="orderFromDateField" width="130"/>
-                        <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderToDateFilter')"/>
-                        <georg:DateTimeField id="orderToDateField" width="130"/>
-                        <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderNumberFilter')"/>
-                        <mx:TextInput id="orderNumberFilterValue" width="150"/>
-                    </mx:HBox>
-                </mx:VBox>
+
+                <mx:Grid>
+                    <mx:GridRow>
+                        <mx:GridItem>
+                            <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='firstNameFilter')"/>
+                            <mx:TextInput id="firstNameFilterValue" width="150"/>
+                        </mx:GridItem>
+                        <mx:GridItem>
+                            <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='lastNameFilter')"/>
+                            <mx:TextInput id="lastNameFilterValue" width="150"/>
+                        </mx:GridItem>
+                        <mx:GridItem>
+                            <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='emailNameFilter')"/>
+                            <mx:TextInput id="emailNameFilterValue" width="150"/>
+                        </mx:GridItem>
+                        <mx:GridItem>
+                            <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderNumberFilter')"/>
+                            <mx:TextInput id="orderNumberFilterValue" width="150"/>
+                        </mx:GridItem>
+                    </mx:GridRow>
+                    <mx:GridRow>
+                        <mx:GridItem>
+                            <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderStatusFilter')"/>
+                            <mx:ComboBox id="statusComboBox" width="120"
+                                         prompt="@Resource(bundle='CustomerOrderPanel',key='selectStatusPropmt')"
+                                         dataProvider="{statuses}"
+                                         data="code" labelField="name"   />
+                        </mx:GridItem>
+                        <mx:GridItem>
+                            <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderFromDateFilter')"/>
+                            <georg:DateTimeField id="orderFromDateField" width="130"/>
+                        </mx:GridItem>
+                        <mx:GridItem>
+                            <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderToDateFilter')"/>
+                            <georg:DateTimeField id="orderToDateField" width="130"/>
+                        </mx:GridItem>
+                        <mx:GridItem>
+
+                        </mx:GridItem>
+                    </mx:GridRow>
+                </mx:Grid>
+
                 <mx:Button height="100%" label="@Resource(bundle='CustomerOrderPanel',key='applyFilter')"
                            toolTip="@Resource(bundle='CustomerOrderPanel',key='applyFilterToolTip')"
                            click="onApplyFilterClick(event)"
