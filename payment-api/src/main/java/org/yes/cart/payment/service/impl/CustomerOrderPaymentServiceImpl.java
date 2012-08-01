@@ -104,8 +104,6 @@ public class CustomerOrderPaymentServiceImpl
             creterias.add(Restrictions.eq("transactionGatewayLabel", paymentGateway));
         }
 
-        Assert.isTrue(!creterias.isEmpty(), "At least one search criteria must be present");
-
         return getGenericDao().findByCriteria(
                 creterias.toArray(new Criterion[creterias.size()])
         );
