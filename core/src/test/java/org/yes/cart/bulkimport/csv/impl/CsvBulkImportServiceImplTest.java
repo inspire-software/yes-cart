@@ -119,7 +119,6 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
             mockery.checking(new Expectations() {{
                 allowing(listener).notifyMessage(with(any(String.class)));
-                one(listener).notifyError(with(aStringStartingWith("unexpected error src/test/resources/import/availability.xml (No such file or directory)")));
                 // data truncation in groups
                 one(listener).notifyError(with(aStringContains("right truncation")));
                 one(listener).notifyError(with(aStringStartingWith("Tuple: CsvImportTupleImpl{sid=productypeattributeviewgroup.csv:31")));
@@ -192,11 +191,6 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             bulkImportService = getBulkImportService("src/test/resources/import/shopcategory.xml");
             bulkImportService.doImport(listener, importedFilesSet, null, "");
             System.out.println("shopcategory in " + (System.currentTimeMillis() - dt) + "millis");
-
-            dt = System.currentTimeMillis();
-            bulkImportService = getBulkImportService("src/test/resources/import/availability.xml");
-            bulkImportService.doImport(listener, importedFilesSet, null, "");
-            System.out.println("availability in " + (System.currentTimeMillis() - dt) + "millis");
 
             dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/productypeattributeviewgroup.xml");

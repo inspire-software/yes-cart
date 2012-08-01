@@ -32,6 +32,8 @@
         <property name="poolPreparedStatements" value="true"/>
         <property name="maxOpenPreparedStatements" value="1000"/>
         <property name="defaultAutoCommit" value="true"/>
+        <property name="maxIdle" value="100"/>
+        <property name="maxWait" value="500"/>
     </bean>
 
     <!-- Hibernate Session Factory  -->
