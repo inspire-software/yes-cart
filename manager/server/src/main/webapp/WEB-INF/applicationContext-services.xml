@@ -526,6 +526,7 @@
             <list>
                 <ref bean="reportShopSummaryInfo"/>
                 <ref bean="reportAvailableStock"/>
+                <ref bean="payments"/>
             </list>
         </constructor-arg>
         <constructor-arg value="report" index="2"/>

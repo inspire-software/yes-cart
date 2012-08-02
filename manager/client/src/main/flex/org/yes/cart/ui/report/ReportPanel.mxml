@@ -95,6 +95,8 @@
 
             pdf = null;
 
+            Debug.trace("Report has " + reportDescriptor.parameters.length + " parameters");
+
             for (var i:int = 0; i < reportDescriptor.parameters.length; i++) {
 
                 var repoParam:ReportParameter = ReportParameter(reportDescriptor.parameters.getItemAt(i));
