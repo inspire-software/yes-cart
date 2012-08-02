@@ -105,5 +105,72 @@
         </property>
     </bean>
 
+    <bean id="payments" class="org.yes.cart.report.impl.ReportDescriptor">
+        <property name="reportId" value="payments"/>
+        <property name="hsqlQuery" value="todo"/>
+        <property name="parameters">
+            <list>
+                <bean class="org.yes.cart.report.impl.ReportParameter">
+                    <constructor-arg index="0" value="fromDate"/>
+                    <constructor-arg index="1">
+                        <list>
+                            <bean class="org.yes.cart.report.impl.ReportPair">
+                                <constructor-arg index="0" value="ru"/>
+                                <constructor-arg index="1" value="С даты"/>
+                            </bean>
+                            <bean class="org.yes.cart.report.impl.ReportPair">
+                                <constructor-arg index="0" value="en"/>
+                                <constructor-arg index="1" value="From date"/>
+                            </bean>
+                        </list>
+                    </constructor-arg>
+                    <constructor-arg index="2" value="Date"/>
+                    <constructor-arg index="3" value="true"/>
+                </bean>
+                <bean class="org.yes.cart.report.impl.ReportParameter">
+                    <constructor-arg index="0" value="tillDate"/>
+                    <constructor-arg index="1">
+                        <list>
+                            <bean class="org.yes.cart.report.impl.ReportPair">
+                                <constructor-arg index="0" value="ru"/>
+                                <constructor-arg index="1" value="По дату"/>
+                            </bean>
+                            <bean class="org.yes.cart.report.impl.ReportPair">
+                                <constructor-arg index="0" value="en"/>
+                                <constructor-arg index="1" value="Till date"/>
+                            </bean>
+                        </list>
+                    </constructor-arg>
+                    <constructor-arg index="2" value="Date"/>
+                    <constructor-arg index="3" value="false"/>
+                </bean>
+            </list>
+        </property>
+        <property name="langLabel">
+            <list>
+                <bean class="org.yes.cart.report.impl.ReportPair">
+                    <constructor-arg index="0" value="en"/>
+                    <constructor-arg index="1" value="Payments"/>
+                </bean>
+                <bean class="org.yes.cart.report.impl.ReportPair">
+                    <constructor-arg index="0" value="ru"/>
+                    <constructor-arg index="1" value="Payments"/>
+                </bean>
+            </list>
+        </property>
+        <property name="langXslfo">
+            <list>
+                <bean class="org.yes.cart.report.impl.ReportPair">
+                    <constructor-arg index="0" value="en"/>
+                    <constructor-arg index="1" value="available-stock_en.xslfo"/>
+                </bean>
+                <bean class="org.yes.cart.report.impl.ReportPair">
+                    <constructor-arg index="0" value="ru"/>
+                    <constructor-arg index="1" value="available-stock_ru.xslfo"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
 
 </beans>
