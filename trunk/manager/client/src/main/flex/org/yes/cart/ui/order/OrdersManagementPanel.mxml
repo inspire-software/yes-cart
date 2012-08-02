@@ -91,9 +91,9 @@
                     <mx:DataGridColumn showDataTips="true" width="50"
                                        headerText="@Resource(bundle='CustomerOrderPanel',key='id')"
                                        dataField="customerorderId"/>
-                    <mx:DataGridColumn width="70" headerText="@Resource(bundle='CustomerOrderPanel',key='orderNum')"
+                    <mx:DataGridColumn showDataTips="true" width="70" headerText="@Resource(bundle='CustomerOrderPanel',key='orderNum')"
                                        dataField="ordernum"/>
-                    <mx:DataGridColumn width="120" headerText="@Resource(bundle='CustomerOrderPanel',key='shopper')"
+                    <mx:DataGridColumn showDataTips="true" width="120" headerText="@Resource(bundle='CustomerOrderPanel',key='shopper')"
                                        sortable="false">
                         <mx:itemRenderer>
                             <mx:Component>
@@ -106,14 +106,14 @@
                         </mx:itemRenderer>
                     </mx:DataGridColumn>
 
-                    <mx:DataGridColumn width="50" headerText="@Resource(bundle='CustomerOrderPanel',key='amount')"
+                    <mx:DataGridColumn showDataTips="true" width="50" headerText="@Resource(bundle='CustomerOrderPanel',key='amount')"
                                        dataField="amount"/>
-                    <mx:DataGridColumn width="50" headerText="@Resource(bundle='CustomerOrderPanel',key='currency')"
+                    <mx:DataGridColumn showDataTips="true" width="50" headerText="@Resource(bundle='CustomerOrderPanel',key='currency')"
                                        dataField="currency"/>
-                    <mx:DataGridColumn width="50"
+                    <mx:DataGridColumn showDataTips="true" width="50"
                                        headerText="@Resource(bundle='CustomerOrderPanel',key='status')"
                                        labelFunction="statusLabelFunction"/>
-                    <mx:DataGridColumn width="50" headerText="@Resource(bundle='CustomerOrderPanel',key='date')"
+                    <mx:DataGridColumn showDataTips="true" width="50" headerText="@Resource(bundle='CustomerOrderPanel',key='date')"
                                        dataField="orderTimestamp"/>
 
 

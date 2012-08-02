@@ -73,9 +73,56 @@
 
 
         }
+        
+        
+        private function addLine(info:String, toAddName:String, toAddValue:Object) : String {
+
+            var val:String = "" + toAddValue;
+            
+            if (val.length > 0 && val != "null") {
+
+                info += toAddName + " : " +  val + "\n";
+                
+            }
+            
+            return info;
+            
+        }
 
         private function paymentToolTip(item:Object):String {
             var toolTip:String = "";
+            
+            
+            toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'id'), item.customerOrderPaymentId) + "\n";
+
+            
+            
+            toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'cardHolderName') ,item.cardHolderName);
+            toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'cardNumber') ,item.cardNumber);
+            toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'cardExpired') ,item.cardExpireMonth + "/" + item.cardExpireYear);
+            toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'cardIsuueNumber') ,item.cardIsuueNumber) + "\n";
+            
+            
+            
+            toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'orderNumber') ,item.orderNumber);
+            toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'orderDate') ,item.orderDate);
+            toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'paymentAmount') ,item.paymentAmount);
+            toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'orderCurrency') ,item.orderCurrency);
+            toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'orderShipment') ,item.orderShipment) + "\n";
+            
+            
+            
+            toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'transactionReferenceId') ,item.transactionReferenceId);
+            toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'transactionRequestToken') ,item.transactionRequestToken);
+            toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'transactionAuthorizationCode') ,item.transactionAuthorizationCode);
+            toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'transactionOperation') ,item.transactionOperation);
+            toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'transactionOperationResultCode') ,item.transactionOperationResultCode);
+            toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'transactionOperationResultMessage') ,item.transactionOperationResultMessage) + "\n";
+
+            toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'paymentProcessorResult') ,item.paymentProcessorResult) + "\n";
+
+            toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'paymentProcessorBatchSettlement') ,item.paymentProcessorBatchSettlement);
+
             return toolTip;
         }
 
@@ -137,7 +184,7 @@
 
             </mx:ControlBar>
 
-            <mx:DataGrid x="0" y="0" width="100%" height="99%"
+            <mx:DataGrid x="0" y="0" width="100%" height="99%"  editable="true"
                          dataTipFunction="paymentToolTip"
                          dataProvider="{remotePaymentModulesManagementService.findPayments.lastResult}">
 
