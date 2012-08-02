@@ -1,0 +1,37 @@
+
+Unexpected RuntimeException
+
+Last cause: could not initialize proxy - no Session
+WicketMessage: Can't instantiate page using constructor 'public org.yes.cart.web.page.CustomerSelfCarePage(org.apache.wicket.request.mapper.parameter.PageParameters)' and argument ''. Might be it doesn't exist, may be it is not visible (public).
+
+Stacktrace
+
+Root cause:
+
+org.hibernate.LazyInitializationException: could not initialize proxy - no Session
+     at org.hibernate.proxy.AbstractLazyInitializer.initialize(AbstractLazyInitializer.java:149)
+     at org.hibernate.proxy.AbstractLazyInitializer.getImplementation(AbstractLazyInitializer.java:195)
+     at org.hibernate.proxy.pojo.javassist.JavassistLazyInitializer.invoke(JavassistLazyInitializer.java:185)
+     at org.hibernate.proxy.HibernateProxy_$$_javassist_66.getBusinesstype(HibernateProxy_$$_javassist_66.java)
+     at org.yes.cart.web.page.component.customer.dynaform.DynaFormPanel.getEditor(DynaFormPanel.java:179)
+     at org.yes.cart.web.page.component.customer.dynaform.DynaFormPanel.<init>(DynaFormPanel.java:145)
+     at org.yes.cart.web.page.CustomerSelfCarePage.<init>(CustomerSelfCarePage.java:72)
+     at java.lang.reflect.Constructor.newInstance(Constructor.java:513)
+     at org.apache.wicket.session.DefaultPageFactory.newPage(DefaultPageFactory.java:173)
+     at org.apache.wicket.session.DefaultPageFactory.newPage(DefaultPageFactory.java:77)
+     at org.apache.wicket.session.DefaultPageFactory.newPage(DefaultPageFactory.java:47)
+     at org.apache.wicket.DefaultMapperContext.newPageInstance(DefaultMapperContext.java:103)
+     at org.apache.wicket.request.handler.PageProvider.resolvePageInstance(PageProvider.java:264)
+     at org.apache.wicket.request.handler.PageProvider.getPageInstance(PageProvider.java:165)
+     at org.apache.wicket.request.handler.render.PageRenderer.getPage(PageRenderer.java:78)
+     at org.apache.wicket.request.handler.render.WebPageRenderer.renderPage(WebPageRenderer.java:105)
+     at org.apache.wicket.request.handler.render.WebPageRenderer.respond(WebPageRenderer.java:224)
+     at org.apache.wicket.request.handler.RenderPageRequestHandler.respond(RenderPageRequestHandler.java:167)
+     at org.apache.wicket.request.cycle.RequestCycle$HandlerExecutor.respond(RequestCycle.java:781)
+     at org.apache.wicket.request.RequestHandlerStack.execute(RequestHandlerStack.java:64)
+     at org.apache.wicket.request.cycle.RequestCycle.execute(RequestCycle.java:255)
+     at org.apache.wicket.request.cycle.RequestCycle.processRequest(RequestCycle.java:212)
+
+
+----------------------------------
+Just add projection to eager loadig for shoppers attributes etype 
