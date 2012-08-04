@@ -50,7 +50,7 @@
     <context:annotation-config/>
     <context:component-scan base-package="org.yes"/>
 
-    <import resource="classpath*:dao.xml"/>
+    <import resource="classpath*:spring/dao.xml"/>
     <import resource="core-services.xml"/>
 
 

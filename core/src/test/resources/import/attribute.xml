@@ -14,85 +14,90 @@
   ~    limitations under the License.
   -->
 
-<import-descriptor>
+<import-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/xstream/import-descriptor-1.0.0.xsd">
 
-    <entityIntface>org.yes.cart.domain.entity.Attribute</entityIntface>
+    <entity-type>org.yes.cart.domain.entity.Attribute</entity-type>
 
-    <importFile class="file-descriptor">
-        <columnDelimeter>;</columnDelimeter>
-        <textQualifier>&quot;</textQualifier>
-        <ignoreFirstLine>true</ignoreFirstLine>
-        <fileNameMask>producttypeattr.csv</fileNameMask>
-        <fileEncoding>UTF-8</fileEncoding>
-    </importFile>
+    <import-directory>src/test/resources/import</import-directory>
 
-    <importColumns class="list">
+    <import-file-descriptor>
+        <file-encoding>UTF-8</file-encoding>
+        <file-name-mask>producttypeattr.csv</file-name-mask>
+        <ignore-first-line>true</ignore-first-line>
+        <column-delimiter>;</column-delimiter>
+        <text-qualifier>&quot;</text-qualifier>
+    </import-file-descriptor>
+
+    <import-columns>
 
         <column-descriptor> <!-- primary key -->
-            <columnIndex>1</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>1</column-index>
+            <field-type>FIELD</field-type>
             <name>code</name>
-            <regExp>(.*)</regExp>
-            <lookupQuery>select b from AttributeEntity b where b.code = ?1</lookupQuery>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>select b from AttributeEntity b where b.code = ?1</lookup-query>
         </column-descriptor>
 
 
         <column-descriptor>
-            <columnIndex>-1</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>-1</column-index>
+            <field-type>FIELD</field-type>
             <name>mandatory</name>
-            <constant>true</constant>
+            <value-constant>true</value-constant>
         </column-descriptor>
 
         <column-descriptor>
-            <columnIndex>-1</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>-1</column-index>
+            <field-type>FIELD</field-type>
             <name>allowduplicate</name>
-            <constant>false</constant>
+            <value-constant>false</value-constant>
         </column-descriptor>
 
         <column-descriptor>
-            <columnIndex>-1</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>-1</column-index>
+            <field-type>FIELD</field-type>
             <name>allowfailover</name>
-            <constant>false</constant>
+            <value-constant>false</value-constant>
         </column-descriptor>
 
         <column-descriptor>
-            <columnIndex>-1</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>-1</column-index>
+            <field-type>FIELD</field-type>
             <name>rank</name>
-            <constant>500</constant>
+            <value-constant>500</value-constant>
         </column-descriptor>
 
         <column-descriptor>
-            <columnIndex>1</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>1</column-index>
+            <field-type>FIELD</field-type>
             <name>name</name>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
         <column-descriptor>
-            <columnIndex>1</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>1</column-index>
+            <field-type>FIELD</field-type>
             <name>description</name>
+            <value-regex>(.{0,4000})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
         <column-descriptor>
-            <columnIndex>-1</columnIndex>
-            <fieldType>FK_FIELD</fieldType>
+            <column-index>-1</column-index>
+            <field-type>FK_FIELD</field-type>
             <name>etype</name>
-            <lookupQuery>select b from EtypeEntity b where b.businesstype = 'String'</lookupQuery>
+            <lookup-query>select b from EtypeEntity b where b.businesstype = 'String'</lookup-query>
         </column-descriptor>
 
         <column-descriptor>
-            <columnIndex>-1</columnIndex>
-            <fieldType>FK_FIELD</fieldType>
+            <column-index>-1</column-index>
+            <field-type>FK_FIELD</field-type>
             <name>attributeGroup</name>
-            <lookupQuery>select b from AttributeGroupEntity b where b.code = 'PRODUCT'</lookupQuery>
+            <lookup-query>select b from AttributeGroupEntity b where b.code = 'PRODUCT'</lookup-query>
         </column-descriptor>
 
-
-
-    </importColumns>
-    <importFolder>src/test/resources/import</importFolder>
+    </import-columns>
 </import-descriptor>

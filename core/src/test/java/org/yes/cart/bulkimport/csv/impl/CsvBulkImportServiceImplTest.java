@@ -118,32 +118,9 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             final BulkImportStatusListener listener = mockery.mock(BulkImportStatusListener.class, "listener");
 
             mockery.checking(new Expectations() {{
+                // ONLY allow messages during import
+                allowing(listener).notifyPing();
                 allowing(listener).notifyMessage(with(any(String.class)));
-                // data truncation in groups
-                one(listener).notifyError(with(aStringContains("right truncation")));
-                one(listener).notifyError(with(aStringStartingWith("Tuple: CsvImportTupleImpl{sid=productypeattributeviewgroup.csv:31")));
-                one(listener).notifyError(with(aStringContains("right truncation")));
-                one(listener).notifyError(with(aStringStartingWith("Tuple: CsvImportTupleImpl{sid=productypeattributeviewgroup.csv:110")));
-                // data truncation in products
-                one(listener).notifyError(with(aStringContains("right truncation")));
-                one(listener).notifyError(with(aStringStartingWith("Tuple: CsvImportTupleImpl{sid=productentity.csv:4")));
-                one(listener).notifyError(with(aStringContains("right truncation")));
-                one(listener).notifyError(with(aStringStartingWith("Tuple: CsvImportTupleImpl{sid=productentity.csv:14")));
-                one(listener).notifyError(with(aStringContains("right truncation")));
-                one(listener).notifyError(with(aStringStartingWith("Tuple: CsvImportTupleImpl{sid=productentity.csv:101")));
-                // inventory import crashes due to truncation in product
-                one(listener).notifyError(with(aStringContains("additional info Property name sku type")));
-                one(listener).notifyError(with(aStringStartingWith("Tuple: CsvImportTupleImpl{sid=productentity.csv:4")));
-                one(listener).notifyError(with(aStringContains("additional info Property name sku type")));
-                one(listener).notifyError(with(aStringStartingWith("Tuple: CsvImportTupleImpl{sid=productentity.csv:14")));
-                one(listener).notifyError(with(aStringContains("additional info Property name sku type")));
-                one(listener).notifyError(with(aStringStartingWith("Tuple: CsvImportTupleImpl{sid=productentity.csv:101")));
-                one(listener).notifyError(with(aStringContains("fillEntityForeignKeys")));
-                one(listener).notifyError(with(aStringStartingWith("Tuple: CsvImportTupleImpl{sid=productentity.csv:4")));
-                one(listener).notifyError(with(aStringContains("fillEntityForeignKeys")));
-                one(listener).notifyError(with(aStringStartingWith("Tuple: CsvImportTupleImpl{sid=productentity.csv:14")));
-                one(listener).notifyError(with(aStringContains("fillEntityForeignKeys")));
-                one(listener).notifyError(with(aStringStartingWith("Tuple: CsvImportTupleImpl{sid=productentity.csv:101")));
             }});
 
             Set<String> importedFilesSet = new HashSet<String>();
@@ -151,7 +128,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             BulkImportService bulkImportService = null;
 
             long dt = System.currentTimeMillis();
-            bulkImportService = getBulkImportService("src/test/resources/import/brandimport.xml");
+            bulkImportService = getBulkImportService("src/test/resources/import/brand.xml");
             bulkImportService.doImport(listener, importedFilesSet, null, "");
             System.out.println("brands in " + (System.currentTimeMillis() - dt) + "millis");
 
@@ -200,7 +177,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
              rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TPRODTYPEATTRVIEWGROUP  ");
             rs.next();
             long cnt = rs.getLong(1);
-            assertEquals("181 view group configured per all types" , 182, cnt );
+            assertEquals("184 view group configured per all types" , 184, cnt );
             rs.close();
 
 
@@ -316,22 +293,17 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
         final BulkImportStatusListener listenerCarrier = mockery.mock(BulkImportStatusListener.class, "listenerCarrier");
 
         mockery.checking(new Expectations() {{
-            //allowing(listenerCarrier).getJobToken(); will(returnValue("1"));
-            //allowing(listener).notifyWarning(with(any(String.class)));
+            allowing(listenerCarrier).notifyPing();
             allowing(listenerCarrier).notifyMessage(with(any(String.class)));
-            //allowing(listener).notifyError(with(any(String.class)));
-            //one(listenerCarrier).notifyCompleted(ImportService.BulkImportResult.OK);
         }});
 
         final BulkImportStatusListener listenerCarrierSla = mockery.mock(BulkImportStatusListener.class, "listenerCarrierSla");
 
         mockery.checking(new Expectations() {{
-            //allowing(listenerCarrierSla).getJobToken(); will(returnValue("1"));
-            //allowing(listener).notifyWarning(with(any(String.class)));
+            allowing(listenerCarrierSla).notifyPing();
             allowing(listenerCarrierSla).notifyMessage(with(any(String.class)));
             one(listenerCarrierSla).notifyError(with(aStringStartingWith("during import row : NEW_V 1 day;New Vasuki express 1 day delivery;5.58;UAH;NEWVASUKIEXPRESS;F;")));
             one(listenerCarrierSla).notifyError(with(aStringStartingWith("Tuple: CsvImportTupleImpl{sid=carriersla.csv:1")));
-            //one(listenerCarrierSla).notifyCompleted(ImportService.BulkImportResult.OK);
         }});
 
         Set<String> importedFilesSet = new HashSet<String>();
@@ -388,6 +360,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
         final BulkImportStatusListener listener = mockery.mock(BulkImportStatusListener.class, "listener");
 
         mockery.checking(new Expectations() {{
+            allowing(listener).notifyPing();
             allowing(listener).notifyMessage(with(any(String.class)));
         }});
 

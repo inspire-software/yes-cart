@@ -30,21 +30,21 @@ public interface ImportDescriptor {
      *
      * @return full qualiffied entity interface
      */
-    String getEntityIntface();
+    String getEntityType();
 
     /**
      * Set full qualiffied entity interface.
      *
      * @param entityIntface entity interface
      */
-    void setEntityIntface(String entityIntface);
+    void setEntityType(String entityIntface);
 
     /**
      * Get the import file decription.
      *
      * @return {@link org.yes.cart.bulkimport.model.ImportFile}
      */
-    ImportFile getImportFile();
+    ImportFile getImportFileDescriptor();
 
     /**
      * Get the collection of import columns.
@@ -59,14 +59,14 @@ public interface ImportDescriptor {
      *
      * @return configured import folder.
      */
-    String getImportFolder();
+    String getImportDirectory();
 
     /**
      * Set the import folder.
      *
      * @param importFolder import folder to use.
      */
-    void setImportFolder(String importFolder);
+    void setImportDirectory(String importFolder);
 
     /**
      * Get insert sql, which used instead of hibernate object save for

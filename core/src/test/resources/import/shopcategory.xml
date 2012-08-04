@@ -14,51 +14,53 @@
   ~    limitations under the License.
   -->
 
-<import-descriptor>
+<import-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/xstream/import-descriptor-1.0.0.xsd">
     <!--
     Example how related bulk import can consune the same file several times
     -->
-    <entityIntface>org.yes.cart.domain.entity.ShopCategory</entityIntface>
+    <entity-type>org.yes.cart.domain.entity.ShopCategory</entity-type>
 
-    <importFile class="file-descriptor">
-        <columnDelimeter>;</columnDelimeter>
-        <textQualifier>&quot;</textQualifier>
-        <ignoreFirstLine>true</ignoreFirstLine>
-        <fileNameMask>category.csv</fileNameMask>
-        <fileEncoding>UTF-8</fileEncoding>
-    </importFile>
+    <import-directory>src/test/resources/import</import-directory>
 
-    <importColumns class="list">
+    <import-file-descriptor>
+        <file-encoding>UTF-8</file-encoding>
+        <file-name-mask>category.csv</file-name-mask>
+        <ignore-first-line>true</ignore-first-line>
+        <column-delimiter>;</column-delimiter>
+        <text-qualifier>&quot;</text-qualifier>
+    </import-file-descriptor>
+
+    <import-columns>
 
         <column-descriptor>
-            <columnIndex>1</columnIndex>
-            <fieldType>FIELD</fieldType>
-            <regExp>(.*)</regExp>
-            <lookupQuery>
-                select p from ShopCategoryEntity p
-                where p.category.name = ?1
-            </lookupQuery>
+            <column-index>1</column-index>
+            <field-type>FIELD</field-type>
+            <name/>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>select p from ShopCategoryEntity p where p.category.name = ?1</lookup-query>
         </column-descriptor>
 
 
         <!-- Category -->
         <column-descriptor>
-            <columnIndex>1</columnIndex>
-            <fieldType>FK_FIELD</fieldType>
+            <column-index>1</column-index>
+            <field-type>FK_FIELD</field-type>
             <name>category</name>
-            <regExp>(.*)</regExp>
-            <lookupQuery>select c from CategoryEntity c where c.name = ?1</lookupQuery>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>select c from CategoryEntity c where c.name = ?1</lookup-query>
         </column-descriptor>
 
         <!-- Shop -->
         <column-descriptor>
-            <columnIndex>-1</columnIndex>
-            <fieldType>FK_FIELD</fieldType>
+            <column-index>-1</column-index>
+            <field-type>FK_FIELD</field-type>
             <name>shop</name>
-            <lookupQuery>select a from ShopEntity a where a.code = 'SHOIP1'</lookupQuery>
+            <lookup-query>select a from ShopEntity a where a.code = 'SHOIP1'</lookup-query>
         </column-descriptor>
 
 
-    </importColumns>
-    <importFolder>src/test/resources/import</importFolder>
+    </import-columns>
 </import-descriptor>

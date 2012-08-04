@@ -27,7 +27,7 @@ import java.io.Serializable;
  */
 public class CsvImportFileImpl implements CsvImportFile, Serializable {
 
-    private char columnDelimeter;
+    private char columnDelimiter;
     private char textQualifier;
     private boolean ignoreFirstLine;
     private String fileNameMask;
@@ -55,15 +55,15 @@ public class CsvImportFileImpl implements CsvImportFile, Serializable {
     /**
      * {@inheritDoc
      */
-    public char getColumnDelimeter() {
-        return columnDelimeter;
+    public char getColumnDelimiter() {
+        return columnDelimiter;
     }
 
     /**
      * {@inheritDoc
      */
-    public void setColumnDelimeter(char columnDelimeter) {
-        this.columnDelimeter = columnDelimeter;
+    public void setColumnDelimiter(char columnDelimiter) {
+        this.columnDelimiter = columnDelimiter;
     }
 
     /**

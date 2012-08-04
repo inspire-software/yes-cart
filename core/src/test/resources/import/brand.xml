@@ -16,60 +16,36 @@
 
 <import-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/xstream/import-descriptor-1.0.0.xsd">
-    <!--
-    Example how related bulk import can consune the same file several times
-    -->
-    <entity-type>org.yes.cart.domain.entity.ProductCategory</entity-type>
+
+    <entity-type>org.yes.cart.domain.entity.Brand</entity-type>
 
     <import-directory>src/test/resources/import</import-directory>
 
     <import-file-descriptor>
         <file-encoding>UTF-8</file-encoding>
-        <file-name-mask>productentity.csv</file-name-mask>
+        <file-name-mask>brand.csv</file-name-mask>
         <ignore-first-line>true</ignore-first-line>
         <column-delimiter>;</column-delimiter>
         <text-qualifier>&quot;</text-qualifier>
     </import-file-descriptor>
 
     <import-columns>
-
+        
         <column-descriptor>
-            <column-index>5</column-index>
+            <column-index>0</column-index>
             <field-type>FIELD</field-type>
-            <name/>
+            <name>name</name>
             <value-regex>(.{0,255})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
-            <lookup-query>select p from ProductCategoryEntity p where p.product.code = ?1 </lookup-query>
-            <!-- TODO atm we can not pass second parameter to lookup query "and p.category.name = ?2" -->
+            <lookup-query>select b from BrandEntity b where b.name = ?1</lookup-query>
         </column-descriptor>
 
-        <!-- Category -->
         <column-descriptor>
             <column-index>1</column-index>
-            <field-type>FK_FIELD</field-type>
-            <name>category</name>
-            <value-regex>(.{0,255})(.*)</value-regex>
-            <value-regex-group>1</value-regex-group>
-            <lookup-query>select c from CategoryEntity c where c.name = ?1</lookup-query>
-        </column-descriptor>
-
-
-        <!-- Product -->
-        <column-descriptor>
-            <column-index>5</column-index>
-            <field-type>FK_FIELD</field-type>
-            <name>product</name>
-            <value-regex>(.{0,255})(.*)</value-regex>
-            <value-regex-group>1</value-regex-group>
-            <lookup-query>select p from ProductEntity p where p.code = ?1</lookup-query>
-        </column-descriptor>
-
-        <!-- Product rank in category -->
-        <column-descriptor>
-            <column-index>-1</column-index>
             <field-type>FIELD</field-type>
-            <name>rank</name>
-            <value-constant>500</value-constant>
+            <name>description</name>
+            <value-regex>(.{0,4000})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
     </import-columns>

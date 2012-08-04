@@ -47,14 +47,14 @@ public interface CsvImportFile extends ImportFile {
      *
      * @return column delimiter
      */
-    char getColumnDelimeter();
+    char getColumnDelimiter();
 
     /**
      * Set column delimiter.
      *
      * @param columnDelimeter column delimiter
      */
-    void setColumnDelimeter(char columnDelimeter);
+    void setColumnDelimiter(char columnDelimeter);
 
     /**
      * Get text qualifier.

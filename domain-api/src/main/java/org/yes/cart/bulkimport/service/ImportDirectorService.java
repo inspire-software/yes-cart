@@ -18,6 +18,7 @@ package org.yes.cart.bulkimport.service;
 
 import org.yes.cart.bulkimport.model.ImportJobStatus;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -31,22 +32,28 @@ import java.util.Set;
  */
 public interface ImportDirectorService {
 
+    /**
+     * @return configured import groups
+     */
+    List<String> getImportGroups();
 
     /**
      * Perform bulk import.
+     * @param descriptorGroup descriptor group marker
      * @param async if true then perform asynchronous import
      * @return status object token
      */
-    String doImport(boolean async);
+    String doImport(String descriptorGroup, boolean async);
 
 
     /**
      * Perform bulk import.
+     * @param descriptorGroup descriptor group marker
      * @param fileName optional full filename to import
      * @param async if true then perform asynchronous import
      * @return status object token
      */
-    String doImport(String fileName, boolean async);
+    String doImport(String descriptorGroup, String fileName, boolean async);
 
     /**
      * Get latest job status update for given token

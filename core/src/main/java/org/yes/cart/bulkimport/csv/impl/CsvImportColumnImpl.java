@@ -40,19 +40,22 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
 
     private FieldTypeEnum fieldType;
 
+    private String entityType;
+
     private String name;
 
-    private String regExp;
+    private String valueRegEx;
+    private Integer valueRegExGroup;
+
+    private String valueConstant;
 
     private String lookupQuery; //for locate fk and pk
 
     private boolean useMasterObject;
 
-    private ImportDescriptor importDescriptor; //comple fileds.
+    private ImportDescriptor importDescriptor; //complex fields.
 
     private transient Pattern pattern = null;
-
-    private String constant;
 
 
     public CsvImportColumnImpl() {
@@ -65,23 +68,23 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
      * @param columnIndex 0 based index
      * @param fieldType   {@link FieldTypeEnum} filed type
      * @param name        name
-     * @param regExp      regular expression to extract data
+     * @param valueRegEx      regular expression to extract data
      * @param lookupQuery lookup query to determinate duplication, in this case the update
      *                    or insert strategy will be selected
      */
     public CsvImportColumnImpl(final int columnIndex, final FieldTypeEnum fieldType,
-                               final String name, final String regExp, final String lookupQuery) {
+                               final String name, final String valueRegEx, final String lookupQuery) {
         super();
         this.columnIndex = columnIndex;
         this.fieldType = fieldType;
         this.name = name;
-        this.regExp = regExp;
+        this.valueRegEx = valueRegEx;
         this.lookupQuery = lookupQuery;
     }
 
     private Pattern getPattern() {
-        if (pattern == null && StringUtils.isNotBlank(regExp)) {
-            pattern = Pattern.compile(regExp, Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE);
+        if (pattern == null && StringUtils.isNotBlank(valueRegEx)) {
+            pattern = Pattern.compile(valueRegEx, Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE);
         }
         return pattern;
     }
@@ -90,13 +93,16 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * In case if column has reg exp.
      *
-     * @return mathced groups or 0 if column has not reg exp.
+     * @return matched groups or 0 if column has not reg exp.
      */
     public int getGroupCount(final String rawValue) {
         if (getPattern() != null) {
             if (forceGroupCount == 0) {
                 Matcher matcher = getPattern().matcher(rawValue);
                 if (matcher.find()) {
+                    if (valueRegExGroup != null) {
+                        return 1;
+                    }
                     return matcher.groupCount();
                 }
             }
@@ -145,7 +151,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
         if (getPattern() != null) {
             Matcher matcher = getPattern().matcher(rawValue);
             if (matcher.find()) {
-                return matcher.group(1).trim();
+                return matcher.group(getValueRegExGroup()).trim();
             } else {
                 return null;
             }
@@ -199,16 +205,33 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
-    public String getRegExp() {
-        return regExp;
+    public String getValueRegEx() {
+        return valueRegEx;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setRegExp(final String regExp) {
-        this.regExp = regExp;
+    public void setValueRegEx(final String valueRegEx) {
+        this.valueRegEx = valueRegEx;
         this.pattern = null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Integer getValueRegExGroup() {
+        if (valueRegExGroup == null) {
+            return 1;
+        }
+        return valueRegExGroup;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setValueRegExGroup(final Integer valueRegExGroup) {
+        this.valueRegExGroup = valueRegExGroup;
     }
 
     /**
@@ -257,15 +280,15 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
-    public String getConstant() {
-        return constant;
+    public String getValueConstant() {
+        return valueConstant;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setConstant(final String constant) {
-        this.constant = constant;
+    public void setValueConstant(final String valueConstant) {
+        this.valueConstant = valueConstant;
     }
 
     /**
@@ -282,18 +305,35 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
         this.forceGroupCount = forceGroupCount;
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getEntityType() {
+        return entityType;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setEntityType(final String entityType) {
+        this.entityType = entityType;
+    }
+
+
     @Override
     public String toString() {
         return "CsvImportColumnImpl{" +
                 "columnIndex=" + columnIndex +
                 ", fieldType=" + fieldType +
                 ", name='" + name + '\'' +
-                ", regExp='" + regExp + '\'' +
+                ", valueRegEx='" + valueRegEx + '\'' +
+                ", valueRegExGroup=" + valueRegExGroup +
                 ", lookupQuery='" + lookupQuery + '\'' +
                 ", useMasterObject=" + useMasterObject +
                 ", importDescriptor=" + importDescriptor +
                 ", pattern=" + pattern +
-                ", constant='" + constant + '\'' +
+                ", valueConstant='" + valueConstant + '\'' +
                 ", forceGroupCount='" + forceGroupCount + '\'' +
                 '}';
     }

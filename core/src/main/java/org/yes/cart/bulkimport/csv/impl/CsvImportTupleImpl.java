@@ -17,7 +17,7 @@
 package org.yes.cart.bulkimport.csv.impl;
 
 import org.yes.cart.bulkimport.csv.CsvImportTuple;
-import org.yes.cart.bulkimport.csv.CvsImportDescriptor;
+import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.model.ImportColumn;
 import org.yes.cart.bulkimport.model.ImportTuple;
 
@@ -64,7 +64,7 @@ public class CsvImportTupleImpl implements CsvImportTuple {
     }
 
     /** {@inheritDoc} */
-    public List<ImportTuple<String, String[]>> getSubTuples(final CvsImportDescriptor importDescriptor, final ImportColumn column) {
+    public List<ImportTuple<String, String[]>> getSubTuples(final CsvImportDescriptor importDescriptor, final ImportColumn column) {
         if (line == null || column.getColumnIndex() > line.length - 1) {
             return null;
         }
@@ -74,7 +74,7 @@ public class CsvImportTupleImpl implements CsvImportTuple {
         int subLine = 0;
         for (String row : rows) {
             subTuples.add(new CsvImportTupleImpl(filename + ":" + lineNumber + ":" + column.getName(), subLine++,
-                    row.split(String.valueOf(importDescriptor.getImportFile().getColumnDelimeter()))));
+                    row.split(String.valueOf(importDescriptor.getImportFileDescriptor().getColumnDelimiter()))));
         }
         return subTuples;
     }

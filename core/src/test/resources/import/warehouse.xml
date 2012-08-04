@@ -14,41 +14,48 @@
   ~    limitations under the License.
   -->
 
-<import-descriptor>
+<import-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/xstream/import-descriptor-1.0.0.xsd">
 
-    <entityIntface>org.yes.cart.domain.entity.Warehouse</entityIntface>
+    <entity-type>org.yes.cart.domain.entity.Warehouse</entity-type>
 
-    <importFile class="file-descriptor">
-        <columnDelimeter>;</columnDelimeter>
-        <textQualifier>&quot;</textQualifier>
-        <ignoreFirstLine>true</ignoreFirstLine>
-        <fileNameMask>warehouse.csv</fileNameMask>
-        <fileEncoding>UTF-8</fileEncoding>
-    </importFile>
+    <import-directory>src/test/resources/import</import-directory>
 
-    <importColumns class="list">
+    <import-file-descriptor>
+        <file-encoding>UTF-8</file-encoding>
+        <file-name-mask>warehouse.csv</file-name-mask>
+        <ignore-first-line>true</ignore-first-line>
+        <column-delimiter>;</column-delimiter>
+        <text-qualifier>&quot;</text-qualifier>
+    </import-file-descriptor>
+
+    <import-columns>
 
         <column-descriptor>
-            <columnIndex>0</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>0</column-index>
+            <field-type>FIELD</field-type>
             <name>code</name>
-            <regExp>(.*)</regExp>
-            <lookupQuery>select b from Warehouse b where b.code = ?1</lookupQuery>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>select b from Warehouse b where b.code = ?1</lookup-query>
         </column-descriptor>
 
         <column-descriptor>
-            <columnIndex>1</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>1</column-index>
+            <field-type>FIELD</field-type>
             <name>name</name>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
         <column-descriptor>
-            <columnIndex>2</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>2</column-index>
+            <field-type>FIELD</field-type>
             <name>description</name>
+            <value-regex>(.{0,4000})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
 
-    </importColumns>
-    <importFolder>src/test/resources/import</importFolder>
+    </import-columns>
 </import-descriptor>

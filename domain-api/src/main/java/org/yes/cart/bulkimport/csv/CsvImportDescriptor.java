@@ -29,7 +29,7 @@ import java.util.Collection;
  * Date: 11/27/11
  * Time: 11:49 AM
  */
-public interface CvsImportDescriptor extends ImportDescriptor {
+public interface CsvImportDescriptor extends ImportDescriptor {
 
 
     /**
@@ -37,7 +37,7 @@ public interface CvsImportDescriptor extends ImportDescriptor {
      *
      * @return {@link CsvImportFile}
      */
-    CsvImportFile getImportFile();
+    CsvImportFile getImportFileDescriptor();
 
     /**
      * Get the collection of all import columns.
@@ -45,6 +45,12 @@ public interface CvsImportDescriptor extends ImportDescriptor {
      * @return collection of import columns
      */
     Collection<ImportColumn> getImportColumns();
+
+    /**
+     * @param columnName column name
+     * @return get column by name
+     */
+    ImportColumn getImportColumn(String columnName);
 
     /**
      * Get the collection of import columns filtered by given field type.

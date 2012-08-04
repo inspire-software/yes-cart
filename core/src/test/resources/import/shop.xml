@@ -14,92 +14,109 @@
   ~    limitations under the License.
   -->
 
-<import-descriptor>
+<import-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/xstream/import-descriptor-1.0.0.xsd">
 
-    <entityIntface>org.yes.cart.domain.entity.Shop</entityIntface>
+    <entity-type>org.yes.cart.domain.entity.Shop</entity-type>
 
-    <importFile class="file-descriptor">
-        <columnDelimeter>;</columnDelimeter>
-        <textQualifier>&quot;</textQualifier>
-        <ignoreFirstLine>true</ignoreFirstLine>
-        <fileNameMask>shop.csv</fileNameMask>
-        <fileEncoding>UTF-8</fileEncoding>
-    </importFile>
+    <import-directory>src/test/resources/import</import-directory>
 
-    <importColumns class="list">
+    <import-file-descriptor>
+        <file-encoding>UTF-8</file-encoding>
+        <file-name-mask>shop.csv</file-name-mask>
+        <ignore-first-line>true</ignore-first-line>
+        <column-delimiter>;</column-delimiter>
+        <text-qualifier>&quot;</text-qualifier>
+    </import-file-descriptor>
+
+    <import-columns>
 
         <column-descriptor>
-            <columnIndex>0</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>0</column-index>
+            <field-type>FIELD</field-type>
             <name>code</name>
-            <regExp>(.*)</regExp>
-            <lookupQuery>select c from ShopEntity c where c.code = ?1</lookupQuery>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>select c from ShopEntity c where c.code = ?1</lookup-query>
         </column-descriptor>
 
         <column-descriptor>
-            <columnIndex>1</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>1</column-index>
+            <field-type>FIELD</field-type>
             <name>name</name>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
         <column-descriptor>
-            <columnIndex>2</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>2</column-index>
+            <field-type>FIELD</field-type>
             <name>description</name>
+            <value-regex>(.{0,4000})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
         <column-descriptor>
-            <columnIndex>3</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>3</column-index>
+            <field-type>FIELD</field-type>
             <name>fspointer</name>
+            <value-regex>(.{0,4000})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
         <column-descriptor>
-            <columnIndex>4</columnIndex>
-            <fieldType>SIMPLE_SLAVE_FIELD</fieldType>
+            <column-index>4</column-index>
+            <field-type>SIMPLE_SLAVE_FIELD</field-type>
             <name>shopUrl</name>
 
-            <importDescriptor class="import-descriptor">
-                <entityIntface>org.yes.cart.domain.entity.ShopUrl</entityIntface>
-                <importFile class="file-descriptor">
-                    <columnDelimeter>;</columnDelimeter>
-                    <textQualifier null="true"/>
-                    <ignoreFirstLine>false</ignoreFirstLine>
-                </importFile>
+            <import-descriptor>
+                <entity-type>org.yes.cart.domain.entity.ShopUrl</entity-type>
+                <import-directory/>
+                <import-file-descriptor>
+                    <file-encoding/>
+                    <file-name-mask/>
+                    <ignore-first-line>false</ignore-first-line>
+                    <column-delimiter>;</column-delimiter>
+                    <text-qualifier>&quot;</text-qualifier>
+                </import-file-descriptor>
 
 
-                <importColumns class="list">
+                <import-columns>
 
                     <column-descriptor>
-                        <columnIndex>-1</columnIndex>
-                        <fieldType>FK_FIELD</fieldType>
+                        <column-index>-1</column-index>
+                        <field-type>FK_FIELD</field-type>
                         <name>shop</name>
-                        <useMasterObject>true</useMasterObject>
+                        <value-regex>(.{0,255})(.*)</value-regex>
+                        <value-regex-group>1</value-regex-group>
+                        <use-master-object>true</use-master-object>
                     </column-descriptor>
 
                     <column-descriptor>
-                        <columnIndex>0</columnIndex>
-                        <fieldType>FIELD</fieldType>
+                        <column-index>0</column-index>
+                        <field-type>FIELD</field-type>
                         <name>url</name>
-                        <regExp>(.*)</regExp>
-                        <useMasterObject>true</useMasterObject>
-                        <lookupQuery>select u from ShopUrl u where u.url = ?1 and u.shop = ?2</lookupQuery>
+                        <value-regex>(.{0,512})(.*)</value-regex>
+                        <value-regex-group>1</value-regex-group>
+                        <lookup-query>select u from ShopUrl u where u.url = ?1 and u.shop = ?2</lookup-query>
+                        <use-master-object>true</use-master-object>
                     </column-descriptor>
 
-                </importColumns>
-            </importDescriptor>
+                </import-columns>
+            </import-descriptor>
 
 
         </column-descriptor>
 
 
         <column-descriptor>
-            <columnIndex>5</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>5</column-index>
+            <field-type>FIELD</field-type>
             <name>imageVaultFolder</name>
+            <value-regex>(.{0,4000})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
 
-    </importColumns>
-    <importFolder>src/test/resources/import</importFolder>
+    </import-columns>
 </import-descriptor>
