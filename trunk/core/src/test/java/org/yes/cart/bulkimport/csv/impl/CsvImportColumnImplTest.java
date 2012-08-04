@@ -48,70 +48,70 @@ public class CsvImportColumnImplTest {
         String rawValue = "rawValue";
         assertEquals(rawValue, column.getValue(rawValue));
 
-        column.setRegExp("(.*)");
+        column.setValueRegEx("(.*)");
         assertEquals(rawValue, column.getValue(rawValue));
 
-        column.setRegExp("(raw)");
+        column.setValueRegEx("(raw)");
         assertEquals("raw", column.getValue(rawValue));
 
-        column.setRegExp("(Value)");
+        column.setValueRegEx("(Value)");
         assertEquals("Value", column.getValue(rawValue));
 
 
-        column.setRegExp(reExpKey);
+        column.setValueRegEx(reExpKey);
         assertEquals("SomeKey", column.getValue("SomeKey       -  Value"));
 
-        column.setRegExp(reExpKey);
+        column.setValueRegEx(reExpKey);
         assertEquals("Ключик", column.getValue("Ключик       -  Значение"));
 
-        column.setRegExp(reExpKey);
+        column.setValueRegEx(reExpKey);
         assertEquals("Ключик", column.getValue(" Ключик       -  Значение"));
 
         //The same test on unicode strign with some noise
-        column.setRegExp(reExpKey);
+        column.setValueRegEx(reExpKey);
         assertEquals(getprops(), "result", column.getValue("as фыф result - шум 34 123.56 значение sd ыв #"));
 
 
         //The same test on unicode strign with some noise
-        column.setRegExp(reExpKey);
+        column.setValueRegEx(reExpKey);
         assertEquals("результат", column.getValue("as фыф результат - шум 34 123.56 значение sd ыв #"));
 
-        column.setRegExp(reExpKey);
+        column.setValueRegEx(reExpKey);
         assertEquals("Діамант жовтий", column.getValue("фыв 3 фвк Діамант жовтий 3/ 6 - 0,10 Ct"));
 
-        column.setRegExp(reExpKey);
+        column.setValueRegEx(reExpKey);
         assertEquals("Кубічний цирконій", column.getValue("2 Кубічний цирконій - 66 шт"));
 
-        column.setRegExp(reExpKey);
+        column.setValueRegEx(reExpKey);
         assertEquals("Онікс,перли,кварц димчастий", column.getValue("0 Онікс,перли,кварц димчастий -  гр"));
 
-        column.setRegExp(reExpKey);
+        column.setValueRegEx(reExpKey);
         assertEquals("Онікс", column.getValue("Онікс -"));
 
 
         // a value in key - value pair
-        column.setRegExp(".*\\s{0,}\\-\\s{0,}(Value)");
+        column.setValueRegEx(".*\\s{0,}\\-\\s{0,}(Value)");
         assertEquals("Value", column.getValue("SomeKey       -  ValueZZZ"));
 
-        column.setRegExp(reExpValue);
+        column.setValueRegEx(reExpValue);
         assertEquals("Value", column.getValue("SomeKey       -  Value"));
 
 
-        column.setRegExp(reExpValue);
+        column.setValueRegEx(reExpValue);
         assertEquals("Значение", column.getValue(" Ключ       -  Значение"));
 
-        column.setRegExp(reExpValue);
+        column.setValueRegEx(reExpValue);
         assertEquals("значение", column.getValue("as фыф результат-шум 34 123.56 значение sd ыв #"));
 
 
         //some single unicode word re
-        column.setRegExp("\\b([a-z]{3,})\\b");
+        column.setValueRegEx("\\b([a-z]{3,})\\b");
         assertEquals("word", column.getValue("1234sdcvdfv hfkdf34 word 2134"));
 
-        column.setRegExp("\\b(\\S\\D{3,})\\b");
+        column.setValueRegEx("\\b(\\S\\D{3,})\\b");
         assertEquals("word", column.getValue("1234sdcvdfv hfkdf34 word 2134"));
 
-        column.setRegExp("\\b(\\S\\D{3,})\\b");
+        column.setValueRegEx("\\b(\\S\\D{3,})\\b");
         assertEquals("слово", column.getValue("1234sdcvdfv hfkdf34 слово 2134"));
 
 

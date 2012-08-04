@@ -60,7 +60,7 @@ public interface ImportColumn {
      * In case if column has reg exp.
      *
      * @param rawValue the whole value from cell
-     * @return mathced groups or 0 if column has not reg exp.
+     * @return matched groups or 0 if column has not reg exp.
      */
     int getGroupCount(String rawValue);
 
@@ -107,20 +107,31 @@ public interface ImportColumn {
     void setName(String name);
 
     /**
-     * Regular expression for get value for specified filed name
+     * Regular expression for get value for specified field name
      * in case if csv field contains more than one object field.
      * Example:  gold,855
      *
      * @return regular expression to get the value from csv field
      */
-    String getRegExp();
+    String getValueRegEx();
 
     /**
      * Set optional regexp to get the value from csv field.
      *
      * @param regExp regular expression.
      */
-    void setRegExp(String regExp);
+    void setValueRegEx(String regExp);
+
+    /**
+     * @return group that defines the value in regex specified
+     */
+    Integer getValueRegExGroup();
+
+    /**
+     * @param valueRegExGroup group that defines the value in regex specified
+     */
+    void setValueRegExGroup(Integer valueRegExGroup);
+
 
     /**
      * Get the HQL lookup query to get the foreign key object within csv filed value
@@ -154,7 +165,7 @@ public interface ImportColumn {
     void setImportDescriptor(ImportDescriptor importDescriptor);
 
     /**
-     * Boolean flag need to use master object for fk in case of subimport.
+     * Boolean flag needed to use master object for fk in case of subimport.
      *
      * @return true if need to use master object.
      */
@@ -168,18 +179,26 @@ public interface ImportColumn {
     void setUseMasterObject(boolean useMasterObject);
 
     /**
-     * Get the constant for field. Some fields can be filedd with constants
+     * Get the constant for field. Some fields can be field with constants
      *
      * @return filed constant
      */
-    String getConstant();
+    String getValueConstant();
 
     /**
      * Set the constants
      *
      * @param constant string constant
      */
-    void setConstant(String constant);
+    void setValueConstant(String constant);
 
+    /**
+     * @return entity type for FK's
+     */
+    String getEntityType();
 
+    /**
+     * @param entityType entity type for FK's
+     */
+    void setEntityType(String entityType);
 }

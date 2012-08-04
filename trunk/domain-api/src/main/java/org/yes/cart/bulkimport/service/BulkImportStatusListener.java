@@ -36,6 +36,11 @@ public interface BulkImportStatusListener {
     String getJobToken();
 
     /**
+     * Ping the listener to notify job's healthy state and reset timeout.
+     */
+    void notifyPing();
+
+    /**
      * Notify of a message (equivalent to info)
      * @param message message
      */

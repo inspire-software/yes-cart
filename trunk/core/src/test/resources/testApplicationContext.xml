@@ -41,7 +41,7 @@
         <property name="dataSource" ref="dataSource"/>
         <property name="mappingResources">
             <list>
-                <value>yc.xml</value>
+                <value>hibernate/yc.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">
@@ -80,7 +80,7 @@
 
     <aop:aspectj-autoproxy/>
     
-    <import resource="classpath*:dao.xml"/>
+    <import resource="classpath*:spring/dao.xml"/>
 
     <import resource="classpath*:test-payment-api.xml"/>
     <import resource="classpath*:test-core-module-payment-base.xml"/>

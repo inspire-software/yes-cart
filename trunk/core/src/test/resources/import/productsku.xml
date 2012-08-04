@@ -14,69 +14,76 @@
   ~    limitations under the License.
   -->
 
-<import-descriptor>
+<import-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/xstream/import-descriptor-1.0.0.xsd">
     <!--
     Example how related bulk import can consune the same file several times
     -->
-    <entityIntface>org.yes.cart.domain.entity.ProductSku</entityIntface>
+    <entity-type>org.yes.cart.domain.entity.ProductSku</entity-type>
 
-    <importFile class="file-descriptor">
-        <columnDelimeter>;</columnDelimeter>
-        <textQualifier>&quot;</textQualifier>
-        <ignoreFirstLine>true</ignoreFirstLine>
-        <fileNameMask>productentity.csv</fileNameMask>
-        <fileEncoding>UTF-8</fileEncoding>
-    </importFile>
+    <import-directory>src/test/resources/import</import-directory>
 
-    <importColumns class="list">
+    <import-file-descriptor>
+        <file-encoding>UTF-8</file-encoding>
+        <file-name-mask>productentity.csv</file-name-mask>
+        <ignore-first-line>true</ignore-first-line>
+        <column-delimiter>;</column-delimiter>
+        <text-qualifier>&quot;</text-qualifier>
+    </import-file-descriptor>
 
-        <!-- primari key -->
+    <import-columns>
+
+        <!-- primary key -->
         <column-descriptor>
-            <columnIndex>5</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>5</column-index>
+            <field-type>FIELD</field-type>
             <name>code</name>
-            <regExp>(.*)</regExp>
-            <lookupQuery>select p from ProductSkuEntity p where p.code = ?1</lookupQuery>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>select p from ProductSkuEntity p where p.code = ?1</lookup-query>
         </column-descriptor>
 
         <!--  sku name -->
         <column-descriptor>
-            <columnIndex>0</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>0</column-index>
+            <field-type>FIELD</field-type>
             <name>name</name>
-            <regExp>(.*)</regExp>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
         <!-- Product code the same as product sku code for single sku product.  field for lookup object -->
         <column-descriptor>
-            <columnIndex>5</columnIndex>
-            <fieldType>FK_FIELD</fieldType>
+            <column-index>5</column-index>
+            <field-type>FK_FIELD</field-type>
             <name>product</name>
-            <regExp>(.*)</regExp>
-            <lookupQuery>select p from ProductEntity p where p.code = ?1</lookupQuery>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>select p from ProductEntity p where p.code = ?1</lookup-query>
         </column-descriptor>
 
 
 
         <!--  bar code -->
         <column-descriptor>
-            <columnIndex>8</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>8</column-index>
+            <field-type>FIELD</field-type>
             <name>barCode</name>
-            <regExp>(.*)</regExp>
+            <value-regex>(.{0,128})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
         </column-descriptor>
         
         <!-- Description -->
         <column-descriptor>
-            <columnIndex>10</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>10</column-index>
+            <field-type>FIELD</field-type>
             <name>description</name>
-            <regExp>(.*)</regExp>
+            <value-regex>(.{0,4000})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
 
 
 
-    </importColumns>
-    <importFolder>src/test/resources/import</importFolder>
+    </import-columns>
 </import-descriptor>

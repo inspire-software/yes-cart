@@ -1,0 +1,127 @@
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<!--
+    Schema for all import descriptor files.
+
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/xstream/import-descriptor-1.0.0.xsd"
+
+    This namespace is not actually pointing to the URL for schema, so you need to
+    create an alias in your IDE that would point that namespace to this file.
+
+    @author D.Pavlov
+ -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="import-descriptor" type="ImportDescriptorType"/>
+
+    <xs:complexType name="ImportDescriptorType">
+        <xs:annotation>
+            <xs:documentation>
+                Defines the schema for how to represent an import descriptor.
+                In general it maps and entity type (by interface) to columns in
+                tuples source (e.g. a CSV file).
+
+                File descriptor section specifies file specific configurations and columns
+                define the actual mapping for columns to entity type.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="entity-type" type="xs:string" minOccurs="1"/>
+            <xs:element name="import-directory" type="xs:string" minOccurs="1"/>
+            <xs:element name="import-file-descriptor" type="ImportFileDescriptorType" minOccurs="1"/>
+            <xs:element name="insert-sql" type="xs:string" minOccurs="0"/>
+            <xs:element name="import-columns" type="ImportColumnsType" minOccurs="1"/>
+        </xs:sequence>
+
+    </xs:complexType>
+
+
+    <xs:complexType name="ImportFileDescriptorType">
+        <xs:annotation>
+            <xs:documentation>
+                Filemask is important aspect of the import descriptor since when uploading a zip file
+                with many sources this mask will filter out only relevant files applicable to this
+                import descriptor.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="file-encoding" type="xs:string"/>
+            <xs:element name="file-name-mask" type="xs:string"/>
+            <xs:element name="ignore-first-line" type="xs:boolean"/>
+            <xs:element name="column-delimiter" type="xs:string"/>
+            <xs:element name="text-qualifier" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ImportColumnsType">
+        <xs:sequence>
+            <xs:element name="column-descriptor" minOccurs="1" maxOccurs="unbounded" type="ImportColumnType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ImportColumnType">
+        <xs:annotation>
+            <xs:documentation>
+                Column index defines the index of a column in a tuple that is represented by
+                a property with name (i.e. name element) on the entity type. Say mapping
+                column-index = 0 and name = code means that 0th column in import tuple is mapped
+                to code property on the entity to be imported.
+
+                Field type defined what type of field this is and will define the import strategy
+                for that field (e.g. FK_FIELD would fetch a parent entity using lookup-query).
+                For FK field entity-type must be specified to auto generate parent dependencies.
+
+                Value regex allows to extract data from the column to allow more control over what
+                gets imported into entity. By default group 1 is selected as the value but it is possible
+                to define custom group by specifying regex group element.
+
+                Constants just mean that some columns will be prepopulated with values. This is
+                useful in some case, as for example setting default online properties for products.
+
+                Lookup query is used to check is the entity exists for normal fields or to retrieve
+                parent entities for FK fields. The query syntax follows HSQL (Hibernate) syntax
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="column-index" type="xs:int"/>
+            <xs:element name="field-type">
+                <xs:annotation>
+                    <xs:documentation>
+                        This constraint corresponds to org.yes.cart.bulkimport.model.FieldTypeEnum.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="FIELD"/>
+                        <xs:enumeration value="FK_FIELD"/>
+                        <xs:enumeration value="SIMPLE_SLAVE_FIELD"/>
+                        <xs:enumeration value="KEYVALUE_SLAVE_FIELD"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="entity-type" type="xs:string" minOccurs="0"/>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="value-regex" type="xs:string" minOccurs="0"/>
+            <xs:element name="value-regex-group" type="xs:string" minOccurs="0"/>
+            <xs:element name="value-constant" type="xs:string" minOccurs="0"/>
+            <xs:element name="lookup-query" type="xs:string" minOccurs="0"/>
+            <xs:element name="use-master-object" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="import-descriptor" type="ImportDescriptorType" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

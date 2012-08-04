@@ -14,53 +14,57 @@
   ~    limitations under the License.
   -->
 
-<import-descriptor>
+<import-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/xstream/import-descriptor-1.0.0.xsd">
 
-    <entityIntface>org.yes.cart.domain.entity.SkuWarehouse</entityIntface>
+    <entity-type>org.yes.cart.domain.entity.SkuWarehouse</entity-type>
 
+    <import-directory>src/test/resources/import</import-directory>
 
-    <importFile class="file-descriptor">
-        <columnDelimeter>;</columnDelimeter>
-        <textQualifier>&quot;</textQualifier>
-        <ignoreFirstLine>true</ignoreFirstLine>
-        <fileNameMask>productentity.csv</fileNameMask>
-        <fileEncoding>UTF-8</fileEncoding>
-    </importFile>
+    <import-file-descriptor>
+        <file-encoding>UTF-8</file-encoding>
+        <file-name-mask>productentity.csv</file-name-mask>
+        <ignore-first-line>true</ignore-first-line>
+        <column-delimiter>;</column-delimiter>
+        <text-qualifier>&quot;</text-qualifier>
+    </import-file-descriptor>
 
-    <importColumns class="list">
+    <import-columns>
 
         <column-descriptor>
-            <columnIndex>5</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>5</column-index>
+            <field-type>FIELD</field-type>
             <!--<name>sku</name>-->
-            <regExp>(.*)</regExp>
-            <lookupQuery>select p from SkuWarehouseEntity p where p.sku.code = ?1 and p.warehouse.code = 'Main'</lookupQuery>
+            <name/>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>select p from SkuWarehouseEntity p where p.sku.code = ?1 and p.warehouse.code = 'Main'</lookup-query>
         </column-descriptor>
 
         <column-descriptor>
-            <columnIndex>5</columnIndex>
-            <fieldType>FK_FIELD</fieldType>
+            <column-index>5</column-index>
+            <field-type>FK_FIELD</field-type>
             <name>sku</name>
-            <regExp>(.*)</regExp>
-            <lookupQuery>select p from ProductSkuEntity p where p.code = ?1</lookupQuery>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>select p from ProductSkuEntity p where p.code = ?1</lookup-query>
         </column-descriptor>
 
 
         <column-descriptor>
-            <columnIndex>-1</columnIndex>
-            <fieldType>FK_FIELD</fieldType>
+            <column-index>-1</column-index>
+            <field-type>FK_FIELD</field-type>
             <name>warehouse</name>
-            <lookupQuery>select a from WarehouseEntity a where a.code = 'Main'</lookupQuery>
+            <lookup-query>select a from WarehouseEntity a where a.code = 'Main'</lookup-query>
         </column-descriptor>
 
 
         <column-descriptor>
-            <columnIndex>6</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>6</column-index>
+            <field-type>FIELD</field-type>
             <name>quantity</name>
         </column-descriptor>
 
 
-    </importColumns>
-    <importFolder>src/test/resources/import</importFolder>
+    </import-columns>
 </import-descriptor>

@@ -14,96 +14,95 @@
   ~    limitations under the License.
   -->
 
-<import-descriptor>
+<import-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/xstream/import-descriptor-1.0.0.xsd">
     <!--
     Example how related bulk import can consune the same file several times
     -->
-    <entityIntface>org.yes.cart.domain.entity.Category</entityIntface>
+    <entity-type>org.yes.cart.domain.entity.Category</entity-type>
 
-    <importFile class="file-descriptor">
-        <columnDelimeter>;</columnDelimeter>
-        <textQualifier>&quot;</textQualifier>
-        <ignoreFirstLine>true</ignoreFirstLine>
-        <fileNameMask>category.csv</fileNameMask>
-        <fileEncoding>UTF-8</fileEncoding>
-    </importFile>
+    <import-directory>src/test/resources/import</import-directory>
 
-    <importColumns class="list">
+    <import-file-descriptor>
+        <file-encoding>UTF-8</file-encoding>
+        <file-name-mask>category.csv</file-name-mask>
+        <ignore-first-line>true</ignore-first-line>
+        <column-delimiter>;</column-delimiter>
+        <text-qualifier>&quot;</text-qualifier>
+    </import-file-descriptor>
 
-        <column-descriptor>
-            <columnIndex>1</columnIndex>
-            <fieldType>FIELD</fieldType>
-            <regExp>(.*)</regExp>
-            <lookupQuery>
-                select p from CategoryEntity p
-                where p.name = ?1
-            </lookupQuery> <!-- TODO atm we can not pass second parameter to lookup query "and p.category.name = ?2" -->
-        </column-descriptor>
+    <import-columns>
 
         <!-- Name -->
         <column-descriptor>
-            <columnIndex>1</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>1</column-index>
+            <field-type>FIELD</field-type>
             <name>name</name>
-            <regExp>(.*)</regExp>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>
+                select p from CategoryEntity p where p.name = ?1
+            </lookup-query>
         </column-descriptor>
 
         <!-- product type -->
         <column-descriptor>
-            <columnIndex>1</columnIndex>
-            <fieldType>FK_FIELD</fieldType>
+            <column-index>1</column-index>
+            <field-type>FK_FIELD</field-type>
             <name>productType</name>
-            <regExp>(.*)</regExp>
-            <lookupQuery>select pt from ProductTypeEntity pt where pt.name = ?1</lookupQuery>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>select pt from ProductTypeEntity pt where pt.name = ?1</lookup-query>
         </column-descriptor>
 
         <!-- Description -->
         <column-descriptor>
-            <columnIndex>1</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>1</column-index>
+            <field-type>FIELD</field-type>
             <name>description</name>
-            <regExp>(.*)</regExp>
+            <value-regex>(.{0,4000})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
         <!-- Category rank in parent category -->
         <column-descriptor>
-            <columnIndex>-1</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>-1</column-index>
+            <field-type>FIELD</field-type>
             <name>rank</name>
-            <constant>500</constant>
+            <value-constant>500</value-constant>
         </column-descriptor>
 
         <!-- navigation by attributes -->
         <column-descriptor>
-            <columnIndex>-1</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>-1</column-index>
+            <field-type>FIELD</field-type>
             <name>navigationByAttributes</name>
-            <constant>true</constant>
+            <value-constant>true</value-constant>
         </column-descriptor>
 
         <!-- navigation by brand -->
         <column-descriptor>
-            <columnIndex>-1</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>-1</column-index>
+            <field-type>FIELD</field-type>
             <name>navigationByBrand</name>
-            <constant>true</constant>
+            <value-constant>true</value-constant>
         </column-descriptor>
 
 
         <!-- navigation by price -->
         <column-descriptor>
-            <columnIndex>-1</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>-1</column-index>
+            <field-type>FIELD</field-type>
             <name>navigationByPrice</name>
-            <constant>true</constant>
+            <value-constant>true</value-constant>
         </column-descriptor>
 
         <!-- navigation by price. tiers description -->
         <column-descriptor>
-            <columnIndex>-1</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>-1</column-index>
+            <field-type>FIELD</field-type>
             <name>navigationByPriceTiers</name>
-            <constant>
+            <value-constant>
                 <![CDATA[
 
 
@@ -204,20 +203,18 @@
 
 
                 ]]>
-            </constant>
+            </value-constant>
         </column-descriptor>
 
 
         <!-- Parent Category Id -->
         <column-descriptor>
-            <columnIndex>0</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>0</column-index>
+            <field-type>FIELD</field-type>
             <name>parentId</name>
-            <regExp>(.*)</regExp>
         </column-descriptor>
 
 
 
-    </importColumns>
-    <importFolder>src/test/resources/import</importFolder>
+    </import-columns>
 </import-descriptor>

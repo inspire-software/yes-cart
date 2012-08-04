@@ -14,73 +14,75 @@
   ~    limitations under the License.
   -->
 
-<import-descriptor>
+<import-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/xstream/import-descriptor-1.0.0.xsd">
 
-    <entityIntface>org.yes.cart.domain.entity.SkuPrice</entityIntface>
+    <entity-type>org.yes.cart.domain.entity.SkuPrice</entity-type>
 
+    <import-directory>src/test/resources/import</import-directory>
 
-    <importFile class="file-descriptor">
-        <columnDelimeter>;</columnDelimeter>
-        <textQualifier>&quot;</textQualifier>
-        <ignoreFirstLine>true</ignoreFirstLine>
-        <fileNameMask>productentity.csv</fileNameMask>
-        <fileEncoding>UTF-8</fileEncoding>
-    </importFile>
+    <import-file-descriptor>
+        <file-encoding>UTF-8</file-encoding>
+        <file-name-mask>productentity.csv</file-name-mask>
+        <ignore-first-line>true</ignore-first-line>
+        <column-delimiter>;</column-delimiter>
+        <text-qualifier>&quot;</text-qualifier>
+    </import-file-descriptor>
 
-    <importColumns class="list">
+    <import-columns>
 
         <column-descriptor>
-            <columnIndex>5</columnIndex>
-            <fieldType>FIELD</fieldType>
-            <regExp>(.*)</regExp>
-            <lookupQuery>
+            <column-index>5</column-index>
+            <field-type>FIELD</field-type>
+            <name/>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>
                 select p from SkuPriceEntity p
                 where p.sku.code = ?1
-                and p.shop.code = 'SHOP10'
+                and p.shop.code = 'SHOIP1'
                 and p.currency = 'USD'
                 and p.quantity = 1
-            </lookupQuery> <!-- at this moment i see only one price tier -->
+            </lookup-query> <!-- at this moment i see only one price tier -->
         </column-descriptor>
 
         <column-descriptor>
-            <columnIndex>5</columnIndex>
-            <fieldType>FK_FIELD</fieldType>
+            <column-index>5</column-index>
+            <field-type>FK_FIELD</field-type>
             <name>sku</name>
-            <regExp>(.*)</regExp>
-            <lookupQuery>select p from ProductSkuEntity p where p.code = ?1</lookupQuery>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>select p from ProductSkuEntity p where p.code = ?1</lookup-query>
         </column-descriptor>
 
 
         <column-descriptor>
-            <columnIndex>-1</columnIndex>
-            <fieldType>FK_FIELD</fieldType>
+            <column-index>-1</column-index>
+            <field-type>FK_FIELD</field-type>
             <name>shop</name>
-            <lookupQuery>select a from ShopEntity a where a.code = 'SHOIP1'</lookupQuery>
+            <lookup-query>select a from ShopEntity a where a.code = 'SHOIP1'</lookup-query>
         </column-descriptor>
 
         <column-descriptor>
-            <columnIndex>7</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>7</column-index>
+            <field-type>FIELD</field-type>
             <name>regularPrice</name>
         </column-descriptor>
 
 
         <column-descriptor>
-            <columnIndex>-1</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>-1</column-index>
+            <field-type>FIELD</field-type>
             <name>quantity</name>
-            <constant>1</constant>
+            <value-constant>1</value-constant>
         </column-descriptor>
 
         <column-descriptor>
-            <columnIndex>-1</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>-1</column-index>
+            <field-type>FIELD</field-type>
             <name>currency</name>
-            <constant>USD</constant>
+            <value-constant>USD</value-constant>
         </column-descriptor>
 
-
-
-    </importColumns>
-    <importFolder>src/test/resources/import</importFolder>
+    </import-columns>
 </import-descriptor>

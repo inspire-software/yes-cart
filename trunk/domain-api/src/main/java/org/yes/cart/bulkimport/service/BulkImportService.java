@@ -17,7 +17,7 @@
 package org.yes.cart.bulkimport.service;
 
 
-import org.yes.cart.bulkimport.csv.CvsImportDescriptor;
+import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.model.ImportColumn;
 import org.yes.cart.bulkimport.model.ImportTuple;
 
@@ -48,7 +48,7 @@ public interface BulkImportService extends ImportService {
      */
     void doImport(BulkImportStatusListener statusListener,
                   ImportTuple tuple,
-                  CvsImportDescriptor importDescriptor,
+                  CsvImportDescriptor importDescriptor,
                   ImportColumn pkColumn,
                   Object masterObject);
 

@@ -53,7 +53,7 @@ public class ImportJobBeanImpl extends QuartzJobBean {
      */
     protected void executeInternal(final JobExecutionContext jobExecutionContext) throws JobExecutionException {
 
-        importDirector.doImport(false);
+        importDirector.doImport("YC DEMO", false);
         productService.clearEmptyAttributes();
         productService.reindexProducts();
 
