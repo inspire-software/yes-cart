@@ -16,6 +16,7 @@
 
 package org.yes.cart.bulkimport.service.impl;
 
+import org.apache.avro.generic.GenericData;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +54,7 @@ public class ImportDirectorImplService implements ImportDirectorService, Applica
 
     private final BulkImportImagesService bulkImportImagesService;
 
-    private final List<String> importDescriptors;
+    private final Map<String, List<String>> importDescriptors;
 
     private final String pathToImportDescriptors;
 
@@ -86,7 +87,7 @@ public class ImportDirectorImplService implements ImportDirectorService, Applica
     public ImportDirectorImplService(
             final BulkImportService bulkImportService,
             final BulkImportImagesService bulkImportImagesService,
-            final List<String> importDescriptors,
+            final Map<String, List<String>> importDescriptors,
             final String pathToArchiveFolder,
             final String pathToImportDescriptors,
             final String pathToImportFolder,
@@ -109,8 +110,8 @@ public class ImportDirectorImplService implements ImportDirectorService, Applica
      * @param importedFiles imported files
      * @param fileName      file name to import
      */
-    public void doImportInternal(final BulkImportStatusListener listener, final Set<String> importedFiles, final String fileName) throws IOException {
-        doDataImport(listener, importedFiles, fileName);
+    public void doImportInternal(final BulkImportStatusListener listener, final Set<String> importedFiles, final String descriptorGroup, final String fileName) throws IOException {
+        doDataImport(listener, importedFiles, descriptorGroup, fileName);
         doImageImport(listener, importedFiles, fileName);
         moveImportFilesToArchive(importedFiles);
     }
@@ -129,12 +130,12 @@ public class ImportDirectorImplService implements ImportDirectorService, Applica
     }
 
     /** {@inheritDoc} */
-    public String doImport(final boolean async) {
-        return doImport(null, async);
+    public String doImport(final String descriptorGroup, final boolean async) {
+        return doImport(descriptorGroup, null, async);
     }
 
     /** {@inheritDoc} */
-    public String doImport(final String fileName, final boolean async) {
+    public String doImport(final String descriptorGroup, final String fileName, final boolean async) {
 
         if (lock.isLocked()) {
             if (jobListeners.isEmpty()) {
@@ -167,7 +168,7 @@ public class ImportDirectorImplService implements ImportDirectorService, Applica
             final BulkImportStatusListener listener = new BulkImportStatusListenerImpl(10000, 60000);
             jobListeners.put(listener.getJobToken(), listener);
 
-            final Runnable job = createImportJobRunnable(fileName, listener);
+            final Runnable job = createImportJobRunnable(descriptorGroup, fileName, listener);
             if (async) {
                 executor.execute(job);
             } else {
@@ -182,10 +183,11 @@ public class ImportDirectorImplService implements ImportDirectorService, Applica
         }
     }
 
-    private Runnable createImportJobRunnable(final String fileName, final BulkImportStatusListener statusListener) {
+    private Runnable createImportJobRunnable(final String descriptorGroup, final String fileName, final BulkImportStatusListener statusListener) {
         return new Runnable() {
 
             private final String file = fileName;
+            private final String descriptors = descriptorGroup;
             private final BulkImportStatusListener listener = statusListener;
 
             public void run() {
@@ -195,9 +197,9 @@ public class ImportDirectorImplService implements ImportDirectorService, Applica
                     if (file.matches("(.*)\\.zip(.*)")) {
                         importedFiles.add(file);
                         ZipUtils.unzipArchive(file, pathToImportFolder);
-                        doImportInternal(listener, importedFiles, null);
+                        doImportInternal(listener, importedFiles, descriptors, null);
                     } else {
-                        doImportInternal(listener, importedFiles, file); //single file import
+                        doImportInternal(listener, importedFiles, descriptors, file); //single file import
                     }
                     productService.clearEmptyAttributes();
                     listener.notifyCompleted(ImportService.BulkImportResult.OK);
@@ -224,8 +226,12 @@ public class ImportDirectorImplService implements ImportDirectorService, Applica
         bulkImportImagesService.doImport(listener, importedFiles, fileName, this.pathToImportFolder);
     }
 
-    private void doDataImport(final BulkImportStatusListener listener, final Set<String> importedFiles, final String fileName) throws IOException {
-        for (String descriptor : importDescriptors) {
+    private void doDataImport(final BulkImportStatusListener listener, final Set<String> importedFiles, final String descriptorGroup, final String fileName) throws IOException {
+        final List<String> descriptors = importDescriptors.get(descriptorGroup);
+        if (descriptors == null) {
+            return;
+        }
+        for (final String descriptor : descriptors) {
             Resource res = applicationContext.getResource("WEB-INF/" + pathToImportDescriptors + "/" + descriptor);
             bulkImportService.setPathToImportDescriptor(res.getFile().getAbsolutePath());
             bulkImportService.doImport(listener, importedFiles, fileName, this.pathToImportFolder);
@@ -258,6 +264,12 @@ public class ImportDirectorImplService implements ImportDirectorService, Applica
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public List<String> getImportGroups() {
+        return new ArrayList<String>(importDescriptors.keySet());
+    }
 
     /**
      * {@inheritDoc}
