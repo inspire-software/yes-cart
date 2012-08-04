@@ -20,8 +20,8 @@
         "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
-        <mapping resource="yc.xml"/>
-
+        <mapping resource="hibernate/yc.xml"/>
+        
         <!--event type="post-update">
             <listener class="org.hibernate.search.event.FullTextIndexEventListener"/>
         </event>

@@ -38,7 +38,7 @@
         <property name="dataSource" ref="dataSource"/>
         <property name="mappingResources">
             <list>
-                <value>yc.xml</value>
+                <value>hibernate/yc.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">
@@ -72,7 +72,7 @@
     </bean>
 
 
-    <import resource="dao.xml"/>
+    <import resource="spring/dao.xml"/>
 
 
 </beans>
