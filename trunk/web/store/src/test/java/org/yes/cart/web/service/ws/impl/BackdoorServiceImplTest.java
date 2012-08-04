@@ -76,6 +76,10 @@ public class BackdoorServiceImplTest implements CallbackHandler {
             }
         });
         endpoint.getOutInterceptors().add(wssOut);
+
+        // TODO: why is this test written in such a way? are we expecting an exception? why just not test for that?
+        // javax.xml.ws.WebServiceException maybe?
+
         try {
             backdoorService.reindexAllProducts();
 
