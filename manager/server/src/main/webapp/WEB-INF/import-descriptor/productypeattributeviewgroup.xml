@@ -14,59 +14,65 @@
   ~    limitations under the License.
   -->
 
-<import-descriptor>
+<import-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/xstream/import-descriptor-1.0.0.xsd">
     <!--
     Example how related bulk import can consune the same file several times
     -->
-    <entityIntface>org.yes.cart.domain.entity.ProdTypeAttributeViewGroup</entityIntface>
+    <entity-type>org.yes.cart.domain.entity.ProdTypeAttributeViewGroup</entity-type>
 
-    <importFile class="file-descriptor">
-        <columnDelimeter>;</columnDelimeter>
-        <textQualifier>&quot;</textQualifier>
-        <ignoreFirstLine>true</ignoreFirstLine>
-        <fileNameMask>productypeattributeviewgroup(.*).csv(.*)</fileNameMask>
-        <fileEncoding>UTF-8</fileEncoding>
-    </importFile>
+    <import-directory></import-directory>
 
-    <importColumns class="list">
+    <import-file-descriptor>
+        <file-encoding>UTF-8</file-encoding>
+        <file-name-mask>productypeattributeviewgroup(.*).csv(.*)</file-name-mask>
+        <ignore-first-line>true</ignore-first-line>
+        <column-delimiter>;</column-delimiter>
+        <text-qualifier>&quot;</text-qualifier>
+    </import-file-descriptor>
+
+    <import-columns>
 
         <!-- primary key -->
         <column-descriptor>
-            <columnIndex>3</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>3</column-index>
+            <field-type>FIELD</field-type>
             <name>guid</name>
-            <regExp>(.*)</regExp>
-            <lookupQuery>select p from ProdTypeAttributeViewGroupEntity p where p.guid = ?1</lookupQuery>
+            <value-regex>(.{0,36})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>select p from ProdTypeAttributeViewGroupEntity p where p.guid = ?1</lookup-query>
         </column-descriptor>
 
 
         <!-- attr view group -->
         <column-descriptor>
-            <columnIndex>1</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>1</column-index>
+            <field-type>FIELD</field-type>
             <name>name</name>
-            <regExp>(.*)</regExp>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
         <!-- Product type -->
         <column-descriptor>
-            <columnIndex>0</columnIndex>
-            <fieldType>FK_FIELD</fieldType>
+            <column-index>0</column-index>
+            <field-type>FK_FIELD</field-type>
+            <entity-type>org.yes.cart.domain.entity.ProductType</entity-type>
             <name>producttype</name>
-            <regExp>(.*)</regExp>
-            <lookupQuery>select p from ProductTypeEntity p where p.name = ?1</lookupQuery>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>select p from ProductTypeEntity p where p.name = ?1</lookup-query>
         </column-descriptor>
 
         <!-- attributes code list -->
         <column-descriptor>
-            <columnIndex>2</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>2</column-index>
+            <field-type>FIELD</field-type>
             <name>attrCodeList</name>
+            <value-regex>(.{0,4000})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
 
-
-
-    </importColumns>
-    <importFolder>src/test/resources/import</importFolder>
+    </import-columns>
 </import-descriptor>

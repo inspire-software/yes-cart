@@ -14,68 +14,76 @@
   ~    limitations under the License.
   -->
 
-<import-descriptor>
+<import-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/xstream/import-descriptor-1.0.0.xsd">
 
-    <entityIntface>org.yes.cart.domain.entity.ProductTypeAttr</entityIntface>
+    <entity-type>org.yes.cart.domain.entity.ProductTypeAttr</entity-type>
 
-    <importFile class="file-descriptor">
-        <columnDelimeter>;</columnDelimeter>
-        <textQualifier>&quot;</textQualifier>
-        <ignoreFirstLine>true</ignoreFirstLine>
-        <fileNameMask>producttypeattr(.*).csv(.*)</fileNameMask>
-        <fileEncoding>UTF-8</fileEncoding>
-    </importFile>
+    <import-directory></import-directory>
 
-    <importColumns class="list">
+    <import-file-descriptor>
+        <file-encoding>UTF-8</file-encoding>
+        <file-name-mask>producttypeattr(.*).csv(.*)</file-name-mask>
+        <ignore-first-line>true</ignore-first-line>
+        <column-delimiter>;</column-delimiter>
+        <text-qualifier>&quot;</text-qualifier>
+    </import-file-descriptor>
+
+    <import-columns>
 
         <column-descriptor>
-            <columnIndex>4</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>4</column-index>
+            <field-type>FIELD</field-type>
             <name>guid</name>
-            <regExp>(.*)</regExp>
-            <lookupQuery>select b from ProductTypeAttr b where b.guid = ?1</lookupQuery>
+            <value-regex>(.{0,36})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>select b from ProductTypeAttrEntity b where b.guid = ?1</lookup-query>
         </column-descriptor>
 
 
         <column-descriptor>
-            <columnIndex>0</columnIndex>
-            <fieldType>FK_FIELD</fieldType>
+            <column-index>0</column-index>
+            <field-type>FK_FIELD</field-type>
+            <entity-type>org.yes.cart.domain.entity.ProductType</entity-type>
             <name>producttype</name>
-            <regExp>(.*)</regExp>
-            <lookupQuery>select b from ProductTypeEntity b where b.name = ?1</lookupQuery>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>select b from ProductTypeEntity b where b.name = ?1</lookup-query>
         </column-descriptor>
 
         <column-descriptor>
-            <columnIndex>1</columnIndex>
-            <fieldType>FK_FIELD</fieldType>
+            <column-index>1</column-index>
+            <field-type>FK_FIELD</field-type>
+            <entity-type>org.yes.cart.domain.entity.Attribute</entity-type>
             <name>attribute</name>
-            <regExp>(.*)</regExp>
-            <lookupQuery>select b from AttributeEntity b where b.code = ?1</lookupQuery>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>select b from AttributeEntity b where b.code = ?1</lookup-query>
         </column-descriptor>
 
         <column-descriptor>
-            <columnIndex>5</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>5</column-index>
+            <field-type>FIELD</field-type>
             <name>navigation</name>
-            <regExp>(.*)</regExp>
         </column-descriptor>
 
         <column-descriptor>
-            <columnIndex>6</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>6</column-index>
+            <field-type>FIELD</field-type>
             <name>navigationType</name>
-            <regExp>(.*)</regExp>
+            <value-regex>(.{1,1})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
         <column-descriptor>
-            <columnIndex>7</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>7</column-index>
+            <field-type>FIELD</field-type>
             <name>rangeNavigation</name>
-            <regExp>(.*)</regExp>
+            <value-regex>(.{0,4000})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
 
 
-    </importColumns>
-    <importFolder></importFolder>
+    </import-columns>
 </import-descriptor>
