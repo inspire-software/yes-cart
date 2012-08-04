@@ -2383,8 +2383,8 @@ public void setRangeList(final RangeList rangeList) {
             <property name="code" column="CODE" type="string" length="255" not-null="true">
                 <!--<meta attribute="field-description">UNCOMMENT @Field(index=Index.UN_TOKENIZED) @ContainedIn</meta>-->
             </property>
-            <property name="name" type="string" length="64" not-null="true">
-                <column name="NAME" length="64" not-null="true"/>
+            <property name="name" type="string" length="255" not-null="true">
+                <column name="NAME" length="255" not-null="true"/>
             </property>
             <property name="description" length="4000" type="string">
                 <column name="DESCRIPTION" length="4000"/>

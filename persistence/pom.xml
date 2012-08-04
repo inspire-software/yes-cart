@@ -202,44 +202,6 @@
 
 
     <build>
-        <testResources>
-            <testResource>
-                <directory>src/test/config/spring</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                </includes>
-            </testResource>
-            <testResource>
-                <directory>src/main/config/spring</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                </includes>
-            </testResource>
-            <testResource>
-                <directory>src/test/resources</directory>
-                <includes>
-                    <include>*.xml</include>
-                </includes>
-            </testResource>
-        </testResources>
-        <resources>
-            <resource>
-                <!-- this should pull in your hibernate template (.hbm.xml) files -->
-                <directory>src/main/config/hibernate</directory>
-                <includes>
-                    <include>yc.xml</include>
-                </includes>
-                <filtering>false</filtering>
-            </resource>
-            <resource>
-                <!-- this should pull in your hibernate template (.hbm.xml) files -->
-                <directory>src/main/config/spring</directory>
-                <includes>
-                    <include>dao.xml</include>
-                </includes>
-                <filtering>false</filtering>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
@@ -375,7 +337,7 @@
                         </component>
                     </components>
                     <componentProperties>
-                        <configurationfile>src/main/config/hibernate/hibernate.cfg.xml</configurationfile>
+                        <configurationfile>src/main/resources/hibernate/hibernate.cfg.xml</configurationfile>
                         <drop>false</drop>
                         <create>true</create>
                         <export>false</export>
