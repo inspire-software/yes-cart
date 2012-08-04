@@ -75,10 +75,15 @@ public class BulkImportStatusListenerImpl implements BulkImportStatusListener {
 
         if (report.length() > reportMaxChars) {
             return new ImportJobStatusImpl(getJobToken(), state,
-                    "\n\n...\n\n" + report.substring(report.length() - REPORT_MAX_CHARS));
+                    "\n\n...\n\n" + report.substring(report.length() - reportMaxChars));
         }
 
         return new ImportJobStatusImpl(getJobToken(), state, report.toString());
+    }
+
+    /** {@inheritDoc} */
+    public void notifyPing() {
+        lastMsgTimestamp = System.currentTimeMillis();
     }
 
     /** {@inheritDoc} */
@@ -87,7 +92,7 @@ public class BulkImportStatusListenerImpl implements BulkImportStatusListener {
             throw new IllegalArgumentException("Job " + token.toString() + " has finished and cannot be updated");
         }
         report.append("INFO: ").append(message).append('\n');
-        lastMsgTimestamp = System.currentTimeMillis();
+        notifyPing();
     }
 
     /** {@inheritDoc} */
@@ -96,7 +101,7 @@ public class BulkImportStatusListenerImpl implements BulkImportStatusListener {
             throw new IllegalArgumentException("Job " + token.toString() + " has finished and cannot be updated");
         }
         report.append("WARNING: ").append(warning).append('\n');
-        lastMsgTimestamp = System.currentTimeMillis();
+        notifyPing();
         warn++;
     }
 
@@ -106,7 +111,7 @@ public class BulkImportStatusListenerImpl implements BulkImportStatusListener {
             throw new IllegalArgumentException("Job " + token.toString() + " has finished and cannot be updated");
         }
         report.append("ERROR: ").append(error).append('\n');
-        lastMsgTimestamp = System.currentTimeMillis();
+        notifyPing();
         err++;
     }
 
@@ -116,6 +121,7 @@ public class BulkImportStatusListenerImpl implements BulkImportStatusListener {
             throw new IllegalArgumentException("Job " + token.toString() + " has finished and cannot be updated");
         }
         this.result = result;
+        notifyPing();
     }
 
     /** {@inheritDoc} */

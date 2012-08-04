@@ -51,6 +51,11 @@ public class BulkImportStatusListenerNullImpl implements BulkImportStatusListene
     }
 
     /** {@inheritDoc} */
+    public void notifyPing() {
+        // nothing
+    }
+
+    /** {@inheritDoc} */
     public void notifyMessage(final String message) {
         throw new IllegalArgumentException("Job is UNDEFINED and cannot be updated");
     }
