@@ -14,59 +14,65 @@
   ~    limitations under the License.
   -->
 
-<import-descriptor>
+<import-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/xstream/import-descriptor-1.0.0.xsd">
     <!--
     Example how related bulk import can consune the same file several times
     -->
-    <entityIntface>org.yes.cart.domain.entity.ProductCategory</entityIntface>
+    <entity-type>org.yes.cart.domain.entity.ProductCategory</entity-type>
 
-    <importFile class="file-descriptor">
-        <columnDelimeter>;</columnDelimeter>
-        <textQualifier>&quot;</textQualifier>
-        <ignoreFirstLine>true</ignoreFirstLine>
-        <fileNameMask>productentity(.*).csv(.*)</fileNameMask>
-        <fileEncoding>UTF-8</fileEncoding>
-    </importFile>
+    <import-directory></import-directory>
 
-    <importColumns class="list">
+    <import-file-descriptor>
+        <file-encoding>UTF-8</file-encoding>
+        <file-name-mask>productentity(.*).csv(.*)</file-name-mask>
+        <ignore-first-line>true</ignore-first-line>
+        <column-delimiter>;</column-delimiter>
+        <text-qualifier>&quot;</text-qualifier>
+    </import-file-descriptor>
+
+    <import-columns>
 
         <column-descriptor>
-            <columnIndex>5</columnIndex>
-            <fieldType>FIELD</fieldType>
-            <regExp>(.*)</regExp>
-            <lookupQuery>
-                select p from ProductCategoryEntity p
-                where p.product.code = ?1
-            </lookupQuery> <!-- TODO atm we can not pass second parameter to lookup query "and p.category.name = ?2" -->
+            <column-index>5</column-index>
+            <field-type>FIELD</field-type>
+            <name/>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>select p from ProductCategoryEntity p where p.product.code = ?1 </lookup-query>
+            <!-- TODO atm we can not pass second parameter to lookup query "and p.category.name = ?2" -->
         </column-descriptor>
 
         <!-- Category -->
         <column-descriptor>
-            <columnIndex>1</columnIndex>
-            <fieldType>FK_FIELD</fieldType>
+            <column-index>1</column-index>
+            <field-type>FK_FIELD</field-type>
+            <entity-type>org.yes.cart.domain.entity.Category</entity-type>
             <name>category</name>
-            <regExp>(.*)</regExp>
-            <lookupQuery>select c from CategoryEntity c where c.name = ?1</lookupQuery>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>select c from CategoryEntity c where c.name = ?1</lookup-query>
         </column-descriptor>
 
 
         <!-- Product -->
         <column-descriptor>
-            <columnIndex>5</columnIndex>
-            <fieldType>FK_FIELD</fieldType>
+            <column-index>5</column-index>
+            <field-type>FK_FIELD</field-type>
+            <entity-type>org.yes.cart.domain.entity.Product</entity-type>
             <name>product</name>
-            <regExp>(.*)</regExp>
-            <lookupQuery>select p from ProductEntity p where p.code = ?1</lookupQuery>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>select p from ProductEntity p where p.code = ?1</lookup-query>
         </column-descriptor>
 
         <!-- Product rank in category -->
         <column-descriptor>
-            <columnIndex>-1</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>-1</column-index>
+            <field-type>FIELD</field-type>
             <name>rank</name>
-            <constant>500</constant>
+            <value-constant>500</value-constant>
         </column-descriptor>
 
-    </importColumns>
-    <importFolder></importFolder>
+    </import-columns>
 </import-descriptor>

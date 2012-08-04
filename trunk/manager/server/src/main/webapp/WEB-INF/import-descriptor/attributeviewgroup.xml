@@ -14,46 +14,56 @@
   ~    limitations under the License.
   -->
 
-<import-descriptor>
+<import-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/xstream/import-descriptor-1.0.0.xsd">
 
-    <entityIntface>org.yes.cart.domain.entity.AttributeGroup</entityIntface>
+    <entity-type>org.yes.cart.domain.entity.AttributeGroup</entity-type>
 
-    <importFile class="file-descriptor">
-        <columnDelimeter>;</columnDelimeter>
-        <textQualifier>&quot;</textQualifier>
-        <ignoreFirstLine>true</ignoreFirstLine>
-        <fileNameMask>attributeviewgroup(.*).csv(.*)</fileNameMask>
-        <fileEncoding>UTF-8</fileEncoding>
-    </importFile>
+    <import-directory></import-directory>
 
-    <importColumns class="list">
+    <import-file-descriptor>
+        <file-encoding>UTF-8</file-encoding>
+        <file-name-mask>attributeviewgroup(.*).csv(.*)</file-name-mask>
+        <ignore-first-line>true</ignore-first-line>
+        <column-delimiter>;</column-delimiter>
+        <text-qualifier>&quot;</text-qualifier>
+    </import-file-descriptor>
+
+    <import-columns>
         
         <column-descriptor>
-            <columnIndex>0</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>0</column-index>
+            <field-type>FIELD</field-type>
             <name>name</name>
-            <regExp>(.*)</regExp>
-            <lookupQuery>select b from AttributeGroupEntity b where b.name = ?1</lookupQuery>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>select b from AttributeGroupEntity b where b.name = ?1</lookup-query>
         </column-descriptor>
 
         <column-descriptor>
-            <columnIndex>1</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>1</column-index>
+            <field-type>FIELD</field-type>
             <name>code</name>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
         <column-descriptor>
-            <columnIndex>2</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>2</column-index>
+            <field-type>FIELD</field-type>
             <name>description</name>
+            <value-regex>(.{0,4000})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
         <column-descriptor>
-            <columnIndex>3</columnIndex>
-            <fieldType>FIELD</fieldType>
+            <column-index>3</column-index>
+            <field-type>FIELD</field-type>
             <name>guid</name>
+            <value-regex>(.{0,36})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
-    </importColumns>
-    <importFolder></importFolder>
+    </import-columns>
+
 </import-descriptor>

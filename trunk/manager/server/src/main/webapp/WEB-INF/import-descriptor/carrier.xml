@@ -16,16 +16,14 @@
 
 <import-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/xstream/import-descriptor-1.0.0.xsd">
-    <!--
-    Example how related bulk import can consune the same file several times
-    -->
-    <entity-type>org.yes.cart.domain.entity.ShopCategory</entity-type>
+
+    <entity-type>org.yes.cart.domain.entity.Carrier</entity-type>
 
     <import-directory></import-directory>
 
     <import-file-descriptor>
         <file-encoding>UTF-8</file-encoding>
-        <file-name-mask>category(.*).csv(.*)</file-name-mask>
+        <file-name-mask>carrier(.*).csv(.*)</file-name-mask>
         <ignore-first-line>true</ignore-first-line>
         <column-delimiter>;</column-delimiter>
         <text-qualifier>&quot;</text-qualifier>
@@ -34,35 +32,21 @@
     <import-columns>
 
         <column-descriptor>
+            <column-index>0</column-index>
+            <field-type>FIELD</field-type>
+            <name>name</name>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>select c from CarrierEntity c where c.name = ?1</lookup-query>
+        </column-descriptor>
+
+        <column-descriptor>
             <column-index>1</column-index>
             <field-type>FIELD</field-type>
-            <name/>
-            <value-regex>(.{0,255})(.*)</value-regex>
+            <name>description</name>
+            <value-regex>(.{0,4000})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
-            <lookup-query>select p from ShopCategoryEntity p where p.category.name = ?1</lookup-query>
         </column-descriptor>
-
-
-        <!-- Category -->
-        <column-descriptor>
-            <column-index>1</column-index>
-            <field-type>FK_FIELD</field-type>
-            <entity-type>org.yes.cart.domain.entity.Category</entity-type>
-            <name>category</name>
-            <value-regex>(.{0,255})(.*)</value-regex>
-            <value-regex-group>1</value-regex-group>
-            <lookup-query>select c from CategoryEntity c where c.name = ?1</lookup-query>
-        </column-descriptor>
-
-        <!-- Shop -->
-        <column-descriptor>
-            <column-index>-1</column-index>
-            <field-type>FK_FIELD</field-type>
-            <entity-type>org.yes.cart.domain.entity.Shop</entity-type>
-            <name>shop</name>
-            <lookup-query>select a from ShopEntity a where a.code = 'SHOP10'</lookup-query>
-        </column-descriptor>
-
 
     </import-columns>
 </import-descriptor>
