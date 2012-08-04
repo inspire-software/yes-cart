@@ -479,24 +479,29 @@
         <constructor-arg index="0" ref="bulkImportServiceImpl"/>
         <constructor-arg index="1" ref="bulkImportImageService"/>
         <constructor-arg index="2">
-            <list>
-
-                <value>brandimport.xml</value>
-                <value>attribute.xml</value>  <!--product attributes only, sku and rest attributes import not implemented-->
-                <value>attributeviewgroup.xml</value>  <!-- group of attributes -->
-                <value>producttype.xml</value>  <!-- product types -->
-                <value>category.xml</value>
-                <value>shopcategory.xml</value>
-                <value>productypeattributeviewgroup.xml</value>  <!-- attributes view groups for product types -->
-                <value>producttypeattr.xml</value>  <!-- attribute  for product types -->
-                <value>product.xml</value>  <!-- products and description -->
-                <value>productsku.xml</value>  <!-- product sku -->
-                <value>warehouse.xml</value>
-                <value>skuquantity.xml</value>  <!--sku qty on warehouse-->
-                <value>skuprice.xml</value>  <!--sku prices-->
-                <value>productcategory.xml</value>  <!-- distribution products by categories -->
-
-            </list>
+            <map>
+                <entry key="YC DEMO">
+                    <list>
+                        <value>brand.xml</value>
+                        <value>attribute.xml</value>  <!--product attributes only, sku and rest attributes import not implemented-->
+                        <value>attributeviewgroup.xml</value>  <!-- group of attributes -->
+                        <value>producttype.xml</value>  <!-- product types -->
+                        <value>category.xml</value>
+                        <value>shopcategory.xml</value>
+                        <value>productypeattributeviewgroup.xml</value>  <!-- attributes view groups for product types -->
+                        <value>producttypeattr.xml</value>  <!-- attribute  for product types -->
+                        <value>product.xml</value>  <!-- products and description -->
+                        <value>productsku.xml</value>  <!-- product sku -->
+                        <value>warehouse.xml</value>
+                        <value>skuquantity.xml</value>  <!--sku qty on warehouse-->
+                        <value>skuprice.xml</value>  <!--sku prices-->
+                        <value>productcategory.xml</value>  <!-- distribution products by categories -->
+                    </list>
+                </entry>
+                <entry key="IMAGES ONLY">
+                    <list/>
+                </entry>
+            </map>
         </constructor-arg>
 
         <constructor-arg index="3" value="#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'+systemProperties['file.separator']+'archive'}"/>
@@ -510,6 +515,7 @@
         <security:intercept-methods>
             <security:protect method="doImport" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
             <security:protect method="getImportStatus" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
+            <security:protect method="getImportGroups" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
         </security:intercept-methods>
 
 
