@@ -108,7 +108,7 @@
         <property name="configLocation" value="classpath:hibernate-nc.cfg.xml"/>
         <property name="mappingResources">
             <list>
-                <value>yc.xml</value>
+                <value>hibernate/yc.xml</value>
             </list>
         </property>
         <property name="entityInterceptor">
