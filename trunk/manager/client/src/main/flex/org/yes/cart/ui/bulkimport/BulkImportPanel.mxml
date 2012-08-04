@@ -25,6 +25,7 @@
         import com.hexagonstar.util.debug.Debug;
 
         import mx.controls.Alert;
+        import mx.events.CloseEvent;
 
         import org.yes.cart.impl.ImportJobStatusImpl;
 
@@ -40,6 +41,10 @@
         private var importStatusTimer:Timer = new Timer(15000, 1); // 15 sec timer
 
         private function onSelectFileClick(event:MouseEvent):void {
+
+            if (importGroups.selectedItem == null) {
+                return;
+            }
 
             loadFileRef = new FileReference();
             loadFileRef.addEventListener(Event.SELECT, onFileSelected);
@@ -100,7 +105,7 @@
             reportHeaderText += resourceManager.getString('BulkImportPanel', 'uploadSuccess', [ loadFileRef.name ]) +
                     '\n' + resourceManager.getString('BulkImportPanel', 'importInProcess') + '\n';
             resultDetails.text = reportHeaderText;
-            bulkImportService.doImport(event.result, true); // result is full server filename with path
+            bulkImportService.doImport(this.importGroups.selectedItem, event.result, true); // result is full server filename with path
         }
 
         private function onUploadToServerFault(event:FaultEvent):void {
@@ -108,7 +113,7 @@
             var msg:String = resourceManager.getString('BulkImportPanel', 'uploadFailed', [ loadFileRef.name ]) +
                     '\n' + event.fault.faultDetail;
 
-            Alert.show(resourceManager.getString('ShopManagerApplication', 'error'), msg);
+            Alert.show(msg, resourceManager.getString('ShopManagerApplication', 'error'));
             resultDetails.text += msg;
         }
 
@@ -123,6 +128,7 @@
         private function initImportPanel():void {
 
             importStatusTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onStatusTimerComplete);
+            bulkImportService.getImportGroups();
 
         }
 
@@ -143,7 +149,23 @@
 
         private function onGetImportStatusFault(event:FaultEvent):void {
             importStatusTimer.stop();
-            this.onUploadToServerFault(event);
+            Alert.show(resourceManager.getString('BulkImportPanel','checkStatusFailed', [ importJobToken, event.fault.faultDetail ]),
+                    resourceManager.getString('ShopManagerApplication', 'error'),
+                    Alert.YES | Alert.CANCEL, this, onGetImportStatusFaultTryAgain, null, Alert.YES);
+        }
+
+        private function onGetImportStatusFaultTryAgain(event:CloseEvent):void {
+            if (event.detail == Alert.OK) {
+                importStatusTimer.start();
+            }
+        }
+
+        private function onGetImportGroupsResult(event:ResultEvent):void {
+            this.importGroups.dataProvider = event.result;
+        }
+
+        private function onGetImportGroupsFault(event:FaultEvent):void {
+            // do nothing
         }
 
         ]]>
@@ -156,6 +178,10 @@
         <mx:method id="doImport" name="doImport"
                    result="onImportResult(event)"
                    fault="onImportFault(event)"/>
+
+        <mx:method id="getImportGroups" name="getImportGroups"
+                   result="onGetImportGroupsResult(event)"
+                   fault="onGetImportGroupsFault(event)"/>
 
         <mx:method id="getImportStatus" name="getImportStatus"
                    result="onGetImportStatusResult(event)"
@@ -181,8 +207,11 @@
             <mx:Form width="100%" height="120">
                 <mx:FormHeading label="@Resource(bundle='BulkImportPanel',key='importMessage')"/>
                 <mx:FormItem label="@Resource(bundle='BulkImportPanel',key='selectFile')">
-                    <mx:Button id="selectFileBtn" label="@Resource(bundle='BulkImportPanel',key='open')"
-                               click="onSelectFileClick(event)"/>
+                    <mx:HBox>
+                        <mx:ComboBox id="importGroups"/>
+                        <mx:Button id="selectFileBtn" label="@Resource(bundle='BulkImportPanel',key='open')"
+                                   click="onSelectFileClick(event)"/>
+                    </mx:HBox>
                 </mx:FormItem>
                 <mx:FormItem label="@Resource(bundle='BulkImportPanel',key='jobToken')">
                     <mx:HBox>
