@@ -14,11 +14,11 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.bulkimport.service.impl;
+package org.yes.cart.service.async.impl;
 
-import org.yes.cart.bulkimport.model.ImportJobStatus;
-import org.yes.cart.bulkimport.model.impl.ImportJobStatusImpl;
-import org.yes.cart.bulkimport.service.BulkImportStatusListener;
+import org.yes.cart.service.async.model.impl.JobStatusImpl;
+import org.yes.cart.service.async.model.JobStatus;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.bulkimport.service.ImportService;
 
 import java.util.UUID;
@@ -28,14 +28,14 @@ import java.util.UUID;
  * Date: 12-07-30
  * Time: 9:50 AM
  */
-public class BulkImportStatusListenerImpl implements BulkImportStatusListener {
+public class JobStatusListenerImpl implements JobStatusListener {
 
     private static final int REPORT_MAX_CHARS = 80000;
     private static final int MSG_TIMEOUT = 60000;
 
     private int reportMaxChars = REPORT_MAX_CHARS;
     private final UUID token;
-    private ImportService.BulkImportResult result;
+    private JobStatus.Completion result;
 
     private int warn = 0;
     private int err = 0;
@@ -46,11 +46,11 @@ public class BulkImportStatusListenerImpl implements BulkImportStatusListener {
 
     private final StringBuilder report = new StringBuilder();
 
-    public BulkImportStatusListenerImpl() {
+    public JobStatusListenerImpl() {
         token = UUID.randomUUID();
     }
 
-    public BulkImportStatusListenerImpl(final int reportMaxChars, final long timeout) {
+    public JobStatusListenerImpl(final int reportMaxChars, final long timeout) {
         this();
         this.reportMaxChars = reportMaxChars;
         this.timeout = timeout;
@@ -62,23 +62,23 @@ public class BulkImportStatusListenerImpl implements BulkImportStatusListener {
     }
 
     /** {@inheritDoc} */
-    public ImportJobStatus getLatestStatus() {
+    public JobStatus getLatestStatus() {
 
-        final ImportJobStatus.State state;
+        final JobStatus.State state;
         if (result != null) {
-            state = ImportJobStatus.State.FINISHED;
+            state = JobStatus.State.FINISHED;
         } else if (report.length() == 0) {
-            state = ImportJobStatus.State.STARTED;
+            state = JobStatus.State.STARTED;
         } else {
-            state = ImportJobStatus.State.INPROGRESS;
+            state = JobStatus.State.INPROGRESS;
         }
 
         if (report.length() > reportMaxChars) {
-            return new ImportJobStatusImpl(getJobToken(), state,
+            return new JobStatusImpl(getJobToken(), state, result,
                     "\n\n...\n\n" + report.substring(report.length() - reportMaxChars));
         }
 
-        return new ImportJobStatusImpl(getJobToken(), state, report.toString());
+        return new JobStatusImpl(getJobToken(), state, result, report.toString());
     }
 
     /** {@inheritDoc} */
@@ -116,7 +116,7 @@ public class BulkImportStatusListenerImpl implements BulkImportStatusListener {
     }
 
     /** {@inheritDoc} */
-    public void notifyCompleted(final ImportService.BulkImportResult result) {
+    public void notifyCompleted(final JobStatus.Completion result) {
         if (this.result != null) {
             throw new IllegalArgumentException("Job " + token.toString() + " has finished and cannot be updated");
         }
@@ -130,6 +130,11 @@ public class BulkImportStatusListenerImpl implements BulkImportStatusListener {
     }
 
     /** {@inheritDoc} */
+    public long getTimeoutValue() {
+        return timeout;
+    }
+
+    /** {@inheritDoc} */
     public boolean isTimedOut() {
         if (timedOut) {
             return true;
@@ -137,7 +142,7 @@ public class BulkImportStatusListenerImpl implements BulkImportStatusListener {
         timedOut = lastMsgTimestamp + timeout < System.currentTimeMillis();
         if (timedOut) {
             this.notifyError("Timed out (timeout: " + timeout + "millis)");
-            this.result = ImportService.BulkImportResult.ERROR;
+            this.result = JobStatus.Completion.ERROR;
         }
         return timedOut;
     }
@@ -145,7 +150,7 @@ public class BulkImportStatusListenerImpl implements BulkImportStatusListener {
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return "BulkImportStatusListenerImpl{" +
+        return "JobStatusListenerImpl{" +
                 "token=" + token +
                 ", warnings=" + warn +
                 ", errors=" + err +

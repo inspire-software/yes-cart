@@ -20,6 +20,8 @@ import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.endpoint.Endpoint;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
+import org.apache.cxf.transport.http.HTTPConduit;
+import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
 import org.apache.ws.security.WSConstants;
 import org.apache.ws.security.WSPasswordCallback;
@@ -62,7 +64,8 @@ public class BackdoorServiceClientFactory implements CallbackHandler {
      * @param url      url
      * @return {@link BackdoorService}
      */
-    public BackdoorService getBackdoorService(final String userName, final String password, final String url) {
+    public BackdoorService getBackdoorService(final String userName, final String password, final String url,
+                                              final long timeout) {
 
         final BackdoorService backdoorService;
 
@@ -75,6 +78,13 @@ public class BackdoorServiceClientFactory implements CallbackHandler {
         }
 
         final Client client = ClientProxy.getClient(backdoorService);
+
+        HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
+        httpClientPolicy.setConnectionTimeout(timeout);
+        httpClientPolicy.setAllowChunking(false);
+        httpClientPolicy.setReceiveTimeout(timeout);
+
+        ((HTTPConduit) client.getConduit()).setClient(httpClientPolicy);
 
         final Endpoint endpoint = client.getEndpoint();
 

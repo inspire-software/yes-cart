@@ -19,13 +19,10 @@ package org.yes.cart.bulkimport.image.impl;
 import net.sf.ehcache.Cache;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.yes.cart.BaseCoreDBTestCase;
-import org.yes.cart.bulkimport.service.BulkImportStatusListener;
-import org.yes.cart.bulkimport.service.ImportService;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.domain.ProductService;
@@ -126,7 +123,7 @@ public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
         assertNotNull(product);
         assertNull(product.getAttributeByCode("IMAGE0")); // product has not IMAGE0 attribute
 
-        final BulkImportStatusListener listener = mockery.mock(BulkImportStatusListener.class, "listener");
+        final JobStatusListener listener = mockery.mock(JobStatusListener.class, "listener");
 
         mockery.checking(new Expectations() {{
             allowing(listener).notifyMessage(with(any(String.class)));
@@ -167,7 +164,7 @@ public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
         }
 
 
-        final BulkImportStatusListener listener = mockery.mock(BulkImportStatusListener.class, "listener");
+        final JobStatusListener listener = mockery.mock(JobStatusListener.class, "listener");
 
         mockery.checking(new Expectations() {{
             allowing(listener).notifyMessage(with(any(String.class)));
@@ -220,7 +217,7 @@ public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
         assertNotNull(product);
         assertNull(product.getAttributeByCode("IMAGE2")); // product has not IMAGE2 attribute
 
-        final BulkImportStatusListener listener = mockery.mock(BulkImportStatusListener.class, "listener");
+        final JobStatusListener listener = mockery.mock(JobStatusListener.class, "listener");
 
         mockery.checking(new Expectations() {{
             allowing(listener).notifyWarning(with(any(String.class)));

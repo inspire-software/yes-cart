@@ -16,7 +16,6 @@
 
 package org.yes.cart.bulkimport.service.impl;
 
-import org.apache.avro.generic.GenericData;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +24,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
 import org.springframework.core.task.TaskExecutor;
-import org.yes.cart.bulkimport.model.ImportJobStatus;
+import org.yes.cart.service.async.JobStatusListener;
+import org.yes.cart.service.async.SingletonJobRunner;
+import org.yes.cart.service.async.impl.JobStatusListenerImpl;
+import org.yes.cart.service.async.impl.JobStatusListenerNullImpl;
+import org.yes.cart.service.async.model.JobContext;
+import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.bulkimport.service.*;
+import org.yes.cart.service.async.model.impl.JobContextImpl;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.utils.impl.ZipUtils;
@@ -46,9 +51,9 @@ import java.util.concurrent.locks.ReentrantLock;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class ImportDirectorImplService implements ImportDirectorService, ApplicationContextAware {
+public class ImportDirectorImplService extends SingletonJobRunner implements ImportDirectorService, ApplicationContextAware {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
+    private static final Logger LOG = LoggerFactory.getLogger(ImportDirectorImplService.class);
 
     private final BulkImportService bulkImportService;
 
@@ -65,12 +70,6 @@ public class ImportDirectorImplService implements ImportDirectorService, Applica
     private final ProductService productService;
 
     private ApplicationContext applicationContext;
-
-    private final TaskExecutor executor;
-
-    private final ReentrantLock lock = new ReentrantLock();
-
-    private final Map<String, BulkImportStatusListener> jobListeners = new HashMap<String, BulkImportStatusListener>();
 
 
     /**
@@ -92,6 +91,7 @@ public class ImportDirectorImplService implements ImportDirectorService, Applica
             final String pathToImportDescriptors,
             final String pathToImportFolder,
             final ProductService productService, final TaskExecutor executor) {
+        super(executor);
         this.bulkImportService = bulkImportService;
         this.pathToImportDescriptors = pathToImportDescriptors;
         this.pathToArchiveFolder = pathToArchiveFolder;
@@ -99,7 +99,6 @@ public class ImportDirectorImplService implements ImportDirectorService, Applica
         this.importDescriptors = importDescriptors;
         this.bulkImportImagesService = bulkImportImagesService;
         this.productService = productService;
-        this.executor = executor;
     }
 
 
@@ -110,23 +109,15 @@ public class ImportDirectorImplService implements ImportDirectorService, Applica
      * @param importedFiles imported files
      * @param fileName      file name to import
      */
-    public void doImportInternal(final BulkImportStatusListener listener, final Set<String> importedFiles, final String descriptorGroup, final String fileName) throws IOException {
+    public void doImportInternal(final JobStatusListener listener, final Set<String> importedFiles, final String descriptorGroup, final String fileName) throws IOException {
         doDataImport(listener, importedFiles, descriptorGroup, fileName);
         doImageImport(listener, importedFiles, fileName);
         moveImportFilesToArchive(importedFiles);
     }
 
     /** {@inheritDoc} */
-    public ImportJobStatus getImportStatus(final String token) {
-        if (token == null || !jobListeners.containsKey(token)) {
-            throw new IllegalArgumentException("Job token: " + token + " unknown");
-        }
-        final BulkImportStatusListener listener = jobListeners.get(token);
-        final ImportJobStatus status = listener.getLatestStatus();
-        if (status.getState() == ImportJobStatus.State.FINISHED || status.getState() == ImportJobStatus.State.UNDEFINED) {
-            jobListeners.remove(token); // remove those for which we ask for the last time
-        }
-        return status;
+    public JobStatus getImportStatus(final String token) {
+        return getStatus(token);
     }
 
     /** {@inheritDoc} */
@@ -137,58 +128,25 @@ public class ImportDirectorImplService implements ImportDirectorService, Applica
     /** {@inheritDoc} */
     public String doImport(final String descriptorGroup, final String fileName, final boolean async) {
 
-        if (lock.isLocked()) {
-            if (jobListeners.isEmpty()) {
-                lock.unlock(); // if we do not have any listeners then it is all done
-            } else {
-                // check for locks. it would be better to do this at the end of runnable
-                // however if that runnable crashes we will be locked forever.
-                boolean shouldUnlock = true;
-                for (final BulkImportStatusListener listener : jobListeners.values()) {
-                    if (!listener.isCompleted() && !listener.isTimedOut()) {
-                        shouldUnlock = false;
-                        break;
-                    }
-                }
-                if (shouldUnlock) {
-                    lock.unlock(); // unlock because all is completed or timed out
-                }
-            }
-        }
-
-        if (!lock.isLocked()) {
-            lock.lock();
-
-            /*
-             * Max 10K char of report to UI since it get huge and simply will crash the UI,
-             * not to mention traffic cost.
-             * Timeout is set to 60sec - just in case runnable crashes and we need to unlock through
-             * timeout.
-             */
-            final BulkImportStatusListener listener = new BulkImportStatusListenerImpl(10000, 60000);
-            jobListeners.put(listener.getJobToken(), listener);
-
-            final Runnable job = createImportJobRunnable(descriptorGroup, fileName, listener);
-            if (async) {
-                executor.execute(job);
-            } else {
-                job.run();
-            }
-
-            return listener.getJobToken();
-        } else {
-            final BulkImportStatusListener listener = new BulkImportStatusListenerNullImpl("ERROR: Import job is already running");
-            jobListeners.put(listener.getJobToken(), listener);
-            return listener.getJobToken();
-        }
+        /*
+         * Max 10K char of report to UI since it get huge and simply will crash the UI,
+         * not to mention traffic cost.
+         * Timeout is set to 60sec - just in case runnable crashes and we need to unlock through
+         * timeout.
+         */
+        return doJob(new JobContextImpl(async, new JobStatusListenerImpl(10000, 60000),
+                new HashMap<String, Object>() {{
+                    put("descriptorGroup", descriptorGroup);
+                    put("fileName", fileName);
+                }}));
     }
 
-    private Runnable createImportJobRunnable(final String descriptorGroup, final String fileName, final BulkImportStatusListener statusListener) {
+    protected Runnable createJobRunnable(final JobContext ctx) {
         return new Runnable() {
 
-            private final String file = fileName;
-            private final String descriptors = descriptorGroup;
-            private final BulkImportStatusListener listener = statusListener;
+            private final String file = (String) ctx.getParameters().get("fileName");
+            private final String descriptors = (String) ctx.getParameters().get("descriptorGroup");
+            private final JobStatusListener listener = ctx.getListener();
 
             public void run() {
                 try {
@@ -202,23 +160,23 @@ public class ImportDirectorImplService implements ImportDirectorService, Applica
                         doImportInternal(listener, importedFiles, descriptors, file); //single file import
                     }
                     productService.clearEmptyAttributes();
-                    listener.notifyCompleted(ImportService.BulkImportResult.OK);
+                    listener.notifyCompleted(JobStatus.Completion.OK);
                 } catch (IOException ioe) {
                     // if we are here this is probably due images failure
                     LOG.error(ioe.getMessage(), ioe);
                     listener.notifyError(ioe.getMessage());
-                    listener.notifyCompleted(ImportService.BulkImportResult.OK);
+                    listener.notifyCompleted(JobStatus.Completion.OK);
                 } catch (Throwable trw) {
                     // something very wrong
                     LOG.error(trw.getMessage(), trw);
                     listener.notifyError(trw.getMessage());
-                    listener.notifyCompleted(ImportService.BulkImportResult.ERROR);
+                    listener.notifyCompleted(JobStatus.Completion.ERROR);
                 }
             }
         };
     }
 
-    private void doImageImport(final BulkImportStatusListener listener, final Set<String> importedFiles, final String fileName) throws IOException {
+    private void doImageImport(final JobStatusListener listener, final Set<String> importedFiles, final String fileName) throws IOException {
         final File ycsimg = new File(applicationContext.getResource("WEB-INF").getFile().getAbsolutePath()
                 + File.separator + ".." + File.separator + ".." + File.separator + "yes-shop"
                 + File.separator + "default" + File.separator + "imagevault");
@@ -226,7 +184,7 @@ public class ImportDirectorImplService implements ImportDirectorService, Applica
         bulkImportImagesService.doImport(listener, importedFiles, fileName, this.pathToImportFolder);
     }
 
-    private void doDataImport(final BulkImportStatusListener listener, final Set<String> importedFiles, final String descriptorGroup, final String fileName) throws IOException {
+    private void doDataImport(final JobStatusListener listener, final Set<String> importedFiles, final String descriptorGroup, final String fileName) throws IOException {
         final List<String> descriptors = importDescriptors.get(descriptorGroup);
         if (descriptors == null) {
             return;

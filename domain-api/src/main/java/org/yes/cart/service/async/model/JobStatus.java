@@ -14,35 +14,45 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.remote.service;
-
-import org.yes.cart.service.async.model.JobStatus;
+package org.yes.cart.service.async.model;
 
 /**
- * User: Igor Azarny iazarny@yahoo.com
- * Date: 15-May-2011
- * Time: 17:22:15
+ * Status object for async updates.
+ *
+ * User: denispavlov
+ * Date: 12-07-30
+ * Time: 8:49 AM
  */
-public interface ReindexService {
+public interface JobStatus {
 
     /**
-     * @param token job token
-     * @return staus of indexing
+     * Current job state that describes if job is running or not.
      */
-    JobStatus getIndexAllStatus(final String token);
+    public enum State { UNDEFINED, STARTED, INPROGRESS, FINISHED }
 
     /**
-     * Reindex all products
-     * @return quantity product in created index.
+     * Final outcome of the job
      */
-    String reindexAllProducts();
+    public enum Completion { OK, ERROR }
 
     /**
-     * Reindex product by given sku code.
-     *
-     * @param pk product primary key
-     * @return quantity product in created index.
+     * @return token to uniquely identify this job
      */
-    int reindexProduct(long pk);
+    String getToken();
+
+    /**
+     * @return overall state
+     */
+    State getState();
+
+    /**
+     * @return completion status or null if not completed
+     */
+    Completion getCompletion();
+
+    /**
+     * @return current report stack
+     */
+    String getReport();
 
 }

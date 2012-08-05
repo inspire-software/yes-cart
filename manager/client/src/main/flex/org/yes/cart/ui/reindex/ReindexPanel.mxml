@@ -17,42 +17,70 @@
 
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
            width="100%"
-           height="100%">
+           height="100%"
+           creationComplete="initIndexPanel()">
 
 	<mx:Script>
 		<![CDATA[
+        import org.yes.cart.impl.JobStatusImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
 
-        import mx.controls.Alert;
-
-        import mx.rpc.AsyncResponder;
-        import mx.rpc.AsyncToken;
         import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
+
+        private var indexJobToken:String;
+
+        private var indexStatusTimer:Timer = new Timer(15000, 1); // 15 sec timer
 
         private function onReindexBtnClick(event:MouseEvent):void {
 
             reindexBtn.enabled = false;
-            resultReady = false;
-            reindexInProcess = true;
             reindexService.reindexAllProducts();
 
         }
 
         private function onReindexAllProductsFault(event:FaultEvent):void {
-            resultText.text = resourceManager.getString("ReindexPanel", "reindexFailedOk") + event.fault;
+
+            resultDetails.text = resourceManager.getString("ReindexPanel", "reindexFailedOk") + event.fault;
             reindexBtn.enabled = true;
-            resultReady = true;
-            reindexInProcess = false;
         }
 
         private function onReindexAllProductsResult(event:ResultEvent):void {
-            reindexBtn.enabled = true;
-            resultText.text = resourceManager.getString("ReindexPanel", "reindexResultOk") + event.result;
-            resultReady = true;
-            reindexInProcess = false;
+            indexJobToken = event.result as String;
+            jobToken.text = indexJobToken;
+            indexStatusTimer.start(); // start the status update timer
         }
 
+        private function initIndexPanel():void {
+
+            indexStatusTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onStatusTimerComplete);
+
+        }
+
+        private function onStatusTimerComplete(event:TimerEvent):void {
+
+            if (jobToken.text != null) {
+                reindexService.getIndexAllStatus(indexJobToken);
+            }
+
+        }
+
+        private function onWatchClick(event:MouseEvent):void {
+
+            if (jobToken.text != null) {
+                indexJobToken = jobToken.text;
+                reindexService.getIndexAllStatus(indexJobToken);
+            }
+
+        }
+
+        private function onGetIndexAllStatusResult(event:ResultEvent):void {
+            var status:JobStatusImpl = event.result as JobStatusImpl;
+            resultDetails.text = status.report;
+            if (status.state == 'INPROGRESS' || status.state == 'STARTED') {
+                indexStatusTimer.start(); // do another timed status update
+            }
+        }
         ]]>
 	</mx:Script>
 
@@ -65,29 +93,36 @@
                    result="onReindexAllProductsResult(event)"
                    fault="onReindexAllProductsFault(event)"/>
 
+        <mx:method id="getIndexAllStatus" name="getIndexAllStatus"
+                   result="onGetIndexAllStatusResult(event)"
+                   fault="onReindexAllProductsFault(event)"/>
+
     </mx:RemoteObject>
 
-    <mx:Boolean id="resultReady">false</mx:Boolean>
-    <mx:Boolean id="reindexInProcess">false</mx:Boolean>
+	<mx:Panel height="100%" width="100%" title="@Resource(bundle='ReindexPanel',key='reindexProducts')"
+              paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2">
 
+        <mx:VBox width="100%" height="100%">
 
-	<mx:Panel height="100%" width="100%" title="@Resource(bundle='ReindexPanel',key='reindexProducts')">
+            <mx:Text width="100%" text="@Resource(bundle='ReindexPanel',key='description')"/>
 
-        <mx:Form width="100%" height="80">
-            <mx:FormHeading label="@Resource(bundle='ReindexPanel',key='reindexMessage')"/>
-            <mx:FormItem label="@Resource(bundle='ReindexPanel',key='startMessage')">
-                <mx:Button id="reindexBtn" label="@Resource(bundle='ReindexPanel',key='start')" click="onReindexBtnClick(event)"/>
-            </mx:FormItem>
-        </mx:Form>
+            <mx:Form width="100%" height="120">
+                <mx:FormHeading label="@Resource(bundle='ReindexPanel',key='reindexMessage')"/>
+                <mx:FormItem label="@Resource(bundle='ReindexPanel',key='startMessage')">
+                    <mx:Button id="reindexBtn" label="@Resource(bundle='ReindexPanel',key='start')" click="onReindexBtnClick(event)"/>
+                </mx:FormItem>
+                <mx:FormItem label="@Resource(bundle='BulkImportPanel',key='jobToken')">
+                    <mx:HBox>
+                        <mx:TextInput id="jobToken" width="200"/>
+                        <mx:Button id="watchBtn" label="@Resource(bundle='BulkImportPanel',key='watch')"
+                                   click="onWatchClick(event)"/>
+                    </mx:HBox>
+                </mx:FormItem>
+            </mx:Form>
 
-        <mx:Label id="resultText"
-                  includeInLayout="{resultReady}"
-                  visible="{resultReady}"/>
-        <mx:Label id="reindexingText"
-                  text="@Resource(bundle='ReindexPanel',key='reindexInProcess')"
-                  includeInLayout="{reindexInProcess}"
-                  visible="{reindexInProcess}"/>
+            <mx:TextArea id="resultDetails" width="100%" height="100%"/>
 
+        </mx:VBox>
 	</mx:Panel>
 
 </mx:Canvas>

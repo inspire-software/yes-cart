@@ -17,12 +17,11 @@
 package org.yes.cart.bulkimport.image.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.yes.cart.bulkimport.service.BulkImportImagesService;
-import org.yes.cart.bulkimport.service.BulkImportStatusListener;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.bulkimport.service.impl.AbstractImportService;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
@@ -100,7 +99,7 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
     /**
      * {@inheritDoc}
      */
-    public BulkImportResult doImport(final BulkImportStatusListener statusListener, final Set<String> importedFiles,
+    public BulkImportResult doImport(final JobStatusListener statusListener, final Set<String> importedFiles,
                                      final String fileName, final String importFolder) {
 
         String info = MessageFormat.format(
@@ -138,7 +137,7 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
      * @param statusListener error report
      * @param importedFiles add file to this set if imported it successfuly imported.
      */
-    void doImport(final File file, final BulkImportStatusListener statusListener, final Set<String> importedFiles) {
+    void doImport(final File file, final JobStatusListener statusListener, final Set<String> importedFiles) {
         final String fileName = file.getName();
         Matcher matcher = pattern.matcher(fileName);
         if (matcher.find()) {
@@ -183,7 +182,7 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
      * @return true if given image file attached as attribute to giveb product
      */
     boolean doImportProductImage(
-            final BulkImportStatusListener statusListener,
+            final JobStatusListener statusListener,
             final String fileName,
             final String code,
             final String suffix) {
@@ -239,7 +238,7 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
      * @return true if given image file attached as attribute to giveb product
      */
     boolean doImportProductSkuImage(
-            final BulkImportStatusListener statusListener,
+            final JobStatusListener statusListener,
             final String fileName,
             final String code,
             final String suffix) {

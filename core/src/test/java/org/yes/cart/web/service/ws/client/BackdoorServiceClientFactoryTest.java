@@ -35,7 +35,7 @@ public class BackdoorServiceClientFactoryTest {
         BackdoorService serv = factory.getBackdoorService(
                 "admin@yes-cart.com",
                 "1234567",
-                "http://localhost:8080/yes-shop/services/backdoor");
+                "http://localhost:8080/yes-shop/services/backdoor", 10000L);
         assertNotNull(serv);
 
         // TODO: why is this test written in such a way? are we expecting an exception? why just not test for that?

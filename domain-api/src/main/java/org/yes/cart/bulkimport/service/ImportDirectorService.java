@@ -16,10 +16,9 @@
 
 package org.yes.cart.bulkimport.service;
 
-import org.yes.cart.bulkimport.model.ImportJobStatus;
+import org.yes.cart.service.async.model.JobStatus;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  *
@@ -60,6 +59,6 @@ public interface ImportDirectorService {
      * @param token job token from #doImport
      * @return status object
      */
-    ImportJobStatus getImportStatus(String token);
+    JobStatus getImportStatus(String token);
 
 }

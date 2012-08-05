@@ -14,11 +14,11 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.bulkimport.service.impl;
+package org.yes.cart.service.async.impl;
 
-import org.yes.cart.bulkimport.model.ImportJobStatus;
-import org.yes.cart.bulkimport.model.impl.ImportJobStatusImpl;
-import org.yes.cart.bulkimport.service.BulkImportStatusListener;
+import org.yes.cart.service.async.JobStatusListener;
+import org.yes.cart.service.async.model.JobStatus;
+import org.yes.cart.service.async.model.impl.JobStatusImpl;
 import org.yes.cart.bulkimport.service.ImportService;
 
 import java.util.UUID;
@@ -30,12 +30,12 @@ import java.util.UUID;
  * Date: 12-07-30
  * Time: 9:50 AM
  */
-public class BulkImportStatusListenerNullImpl implements BulkImportStatusListener {
+public class JobStatusListenerNullImpl implements JobStatusListener {
 
     private final UUID token;
     private final String message;
 
-    public BulkImportStatusListenerNullImpl(final String message) {
+    public JobStatusListenerNullImpl(final String message) {
         token = UUID.randomUUID();
         this.message = message;
     }
@@ -46,8 +46,8 @@ public class BulkImportStatusListenerNullImpl implements BulkImportStatusListene
     }
 
     /** {@inheritDoc} */
-    public ImportJobStatus getLatestStatus() {
-        return  new ImportJobStatusImpl(getJobToken(), ImportJobStatus.State.UNDEFINED, message);
+    public JobStatus getLatestStatus() {
+        return  new JobStatusImpl(getJobToken(), JobStatus.State.UNDEFINED, JobStatus.Completion.ERROR, message);
     }
 
     /** {@inheritDoc} */
@@ -71,13 +71,18 @@ public class BulkImportStatusListenerNullImpl implements BulkImportStatusListene
     }
 
     /** {@inheritDoc} */
-    public void notifyCompleted(final ImportService.BulkImportResult result) {
+    public void notifyCompleted(final JobStatus.Completion result) {
         throw new IllegalArgumentException("Job is UNDEFINED and cannot be updated");
     }
 
     /** {@inheritDoc} */
     public boolean isCompleted() {
         return true;
+    }
+
+    /** {@inheritDoc} */
+    public long getTimeoutValue() {
+        return 0;
     }
 
     /** {@inheritDoc} */
