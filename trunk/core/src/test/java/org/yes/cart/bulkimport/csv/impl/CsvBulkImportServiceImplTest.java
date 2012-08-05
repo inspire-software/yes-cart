@@ -29,14 +29,13 @@ import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.bulkimport.csv.CsvFileReader;
 import org.yes.cart.bulkimport.service.BulkImportService;
-import org.yes.cart.bulkimport.service.BulkImportStatusListener;
+import org.yes.cart.service.async.JobStatusListener;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
@@ -115,7 +114,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
             getConnection().getConnection().createStatement().execute("CREATE index asdsda on TPRODUCTATTRVALUE(code)") ;
 
-            final BulkImportStatusListener listener = mockery.mock(BulkImportStatusListener.class, "listener");
+            final JobStatusListener listener = mockery.mock(JobStatusListener.class, "listener");
 
             mockery.checking(new Expectations() {{
                 // ONLY allow messages during import
@@ -290,14 +289,14 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
     public void testDoImportWithForeignKeys() {
 
 
-        final BulkImportStatusListener listenerCarrier = mockery.mock(BulkImportStatusListener.class, "listenerCarrier");
+        final JobStatusListener listenerCarrier = mockery.mock(JobStatusListener.class, "listenerCarrier");
 
         mockery.checking(new Expectations() {{
             allowing(listenerCarrier).notifyPing();
             allowing(listenerCarrier).notifyMessage(with(any(String.class)));
         }});
 
-        final BulkImportStatusListener listenerCarrierSla = mockery.mock(BulkImportStatusListener.class, "listenerCarrierSla");
+        final JobStatusListener listenerCarrierSla = mockery.mock(JobStatusListener.class, "listenerCarrierSla");
 
         mockery.checking(new Expectations() {{
             allowing(listenerCarrierSla).notifyPing();
@@ -357,7 +356,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testDoImportWithSimpleSlaveFiled() {
 
-        final BulkImportStatusListener listener = mockery.mock(BulkImportStatusListener.class, "listener");
+        final JobStatusListener listener = mockery.mock(JobStatusListener.class, "listener");
 
         mockery.checking(new Expectations() {{
             allowing(listener).notifyPing();

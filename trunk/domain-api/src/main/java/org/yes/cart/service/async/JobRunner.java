@@ -14,32 +14,30 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.bulkimport.model;
+package org.yes.cart.service.async;
+
+import org.yes.cart.service.async.model.JobContext;
+import org.yes.cart.service.async.model.JobStatus;
 
 /**
- * Status object for async updates.
- *
  * User: denispavlov
- * Date: 12-07-30
- * Time: 8:49 AM
+ * Date: 12-08-05
+ * Time: 2:48 PM
  */
-public interface ImportJobStatus {
-
-    public enum State { UNDEFINED, STARTED, INPROGRESS, FINISHED }
+public interface JobRunner {
 
     /**
-     * @return token to uniquely identify this job
+     * Check current job status by given token
+     *
+     * @param token job token
+     * @return status
      */
-    String getToken();
+    JobStatus getStatus(String token);
 
     /**
-     * @return overall state
+     * Run a job with given context
+     * @param ctx context
+     * @return token for this job ({@see #getStatus})
      */
-    State getState();
-
-    /**
-     * @return current report stack
-     */
-    String getReport();
-
+    String doJob(JobContext ctx);
 }

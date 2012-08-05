@@ -440,11 +440,21 @@
         </security:intercept-methods>
     </bean>
 
+    <bean id="productIndexExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <description>
+            Thread pool for bulk imports since they may be slow.
+        </description>
+        <property name="corePoolSize" value="1" />
+        <property name="maxPoolSize" value="2" />
+    </bean>
+
     <bean id="reindexService"
           class="org.yes.cart.remote.service.impl.ReindexServiceImpl">
+        <constructor-arg index="0" ref="productIndexExecutor"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="reindexAllProducts" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
+            <security:protect method="getIndexAllStatus" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
         </security:intercept-methods>
     </bean>
 
@@ -471,7 +481,7 @@
             Thread pool for bulk imports since they may be slow.
         </description>
         <property name="corePoolSize" value="1" />
-        <property name="maxPoolSize" value="3" />
+        <property name="maxPoolSize" value="2" />
     </bean>
 
 

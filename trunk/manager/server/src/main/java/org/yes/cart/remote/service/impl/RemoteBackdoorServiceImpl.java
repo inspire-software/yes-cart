@@ -37,32 +37,32 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
 
     /** {@inheritDoc} */
     public int reindexAllProducts() {
-        return getBackdoorService().reindexAllProducts();
+        return getBackdoorService(300000).reindexAllProducts();
     }
 
     /** {@inheritDoc} */
     public int reindexProduct(final long productPk) {
-        return getBackdoorService().reindexProduct(productPk);
+        return getBackdoorService(60000).reindexProduct(productPk);
     }
 
     /** {@inheritDoc} */
     public int reindexProducts(final long[] productPks) {
-        return getBackdoorService().reindexProducts(productPks);
+        return getBackdoorService(60000).reindexProducts(productPks);
     }
 
     /** {@inheritDoc} */
     public List<Object[]> sqlQuery(final String query) {
-        return getBackdoorService().sqlQuery(query);
+        return getBackdoorService(60000).sqlQuery(query);
     }
 
     /** {@inheritDoc} */
     public List<Object[]> hsqlQuery(final String query) {
-        return getBackdoorService().hsqlQuery(query);
+        return getBackdoorService(60000).hsqlQuery(query);
     }
 
     /** {@inheritDoc} */
     public List<Object[]> luceneQuery(final String query) {
-        return getBackdoorService().luceneQuery(query);
+        return getBackdoorService(60000).luceneQuery(query);
     }
 
     private BackdoorServiceClientFactory backdoorServiceClientFactory = null;
@@ -77,7 +77,7 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
 
     }
 
-    private BackdoorService getBackdoorService() {
+    private BackdoorService getBackdoorService(final long timeout) {
 
 
         String userName =  ((UsernamePasswordAuthenticationToken) FlexContext.getUserPrincipal()).getName();
@@ -87,7 +87,7 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
         return getBackdoorServiceClientFactory().getBackdoorService(
                 userName,
                 password,
-                "http://localhost:8080/yes-shop/services/backdoor");
+                "http://localhost:8080/yes-shop/services/backdoor", timeout);
 
     }
 

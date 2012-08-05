@@ -14,22 +14,32 @@
  *    limitations under the License.
  */
 
+package org.yes.cart.service.async.model;
+
+import org.yes.cart.service.async.JobStatusListener;
+
+import java.util.Map;
+
 /**
  * User: denispavlov
- * Date: 12-07-30
- * Time: 4:11 PM
+ * Date: 12-08-05
+ * Time: 2:42 PM
  */
-package org.yes.cart.impl {
+public interface JobContext {
 
-[Bindable]
-[RemoteClass(alias="org.yes.cart.bulkimport.model.impl.ImportJobStatusImpl")]
-public class ImportJobStatusImpl {
+    /**
+     * @return context parameters
+     */
+    Map<String, Object> getParameters();
 
-    public var token:String;
-    public var state:String;
-    public var report:String;
+    /**
+     * @return listener for this job
+     */
+    JobStatusListener getListener();
 
-    public function ImportJobStatusImpl() {
-    }
-}
+    /**
+     * @return true if this task need to be asynchronous
+     */
+    boolean isAsync();
+
 }

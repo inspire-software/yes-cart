@@ -35,7 +35,7 @@ import org.yes.cart.bulkimport.model.ImportColumn;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.bulkimport.model.ImportTuple;
 import org.yes.cart.bulkimport.service.BulkImportService;
-import org.yes.cart.bulkimport.service.BulkImportStatusListener;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.bulkimport.service.impl.AbstractImportService;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Identifiable;
@@ -108,7 +108,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
      * @param fileName      optional file  name
      * @return {@link BulkImportResult}
      */
-    public BulkImportResult doImport(final BulkImportStatusListener statusListener, final Set<String> importedFiles,
+    public BulkImportResult doImport(final JobStatusListener statusListener, final Set<String> importedFiles,
                                      final String fileName, final String pathToImportFolder) {
 
         try {
@@ -165,7 +165,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
      * @param csvImportDescriptor import descriptor.
      * @param importedFiles       imported files.
      */
-    void doImport(final BulkImportStatusListener statusListener,
+    void doImport(final JobStatusListener statusListener,
                   final File[] filesToImport,
                   final CsvImportDescriptor csvImportDescriptor,
                   final Set<String> importedFiles) {
@@ -182,7 +182,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
      * @param fileToImport        array of files to import
      * @param csvImportDescriptor import descriptor.
      */
-    void doImport(final BulkImportStatusListener statusListener, final File fileToImport, final CsvImportDescriptor csvImportDescriptor) {
+    void doImport(final JobStatusListener statusListener, final File fileToImport, final CsvImportDescriptor csvImportDescriptor) {
 
         final ImportColumn pkColumn = csvImportDescriptor.getPrimaryKeyColumn();
 
@@ -249,7 +249,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
      * @param pkColumn         column to locate object.
      * @param masterObject     optional master object if found sub import
      */
-    public void doImport(final BulkImportStatusListener statusListener,
+    public void doImport(final JobStatusListener statusListener,
                          final ImportTuple tuple,
                          final CsvImportDescriptor importDescriptor,
                          final ImportColumn pkColumn,
@@ -339,7 +339,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
         genericDAO.executeNativeUpdate(sql.toString());
     }
 
-    private void performSubImport(final BulkImportStatusListener statusListener,
+    private void performSubImport(final JobStatusListener statusListener,
                                   final ImportTuple tuple,
                                   final CsvImportDescriptor importDescriptor,
                                   final Object object,

@@ -20,6 +20,7 @@ package org.yes.cart.bulkimport.service;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.model.ImportColumn;
 import org.yes.cart.bulkimport.model.ImportTuple;
+import org.yes.cart.service.async.JobStatusListener;
 
 /**
  * Bulk Import desriptor service.
@@ -46,7 +47,7 @@ public interface BulkImportService extends ImportService {
      * @param pkColumn         column to locate object.
      * @param masterObject     optional master object if found sub import
      */
-    void doImport(BulkImportStatusListener statusListener,
+    void doImport(JobStatusListener statusListener,
                   ImportTuple tuple,
                   CsvImportDescriptor importDescriptor,
                   ImportColumn pkColumn,

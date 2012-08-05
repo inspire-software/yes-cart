@@ -14,27 +14,29 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.bulkimport.model.impl;
+package org.yes.cart.service.async.model.impl;
 
-import org.yes.cart.bulkimport.model.ImportJobStatus;
+import org.yes.cart.service.async.model.JobStatus;
 
 /**
  * User: denispavlov
  * Date: 12-07-30
  * Time: 9:32 AM
  */
-public class ImportJobStatusImpl implements ImportJobStatus {
+public class JobStatusImpl implements JobStatus {
 
     private String token;
     private State state;
+    private Completion completion;
     private String report;
 
-    public ImportJobStatusImpl() {
+    public JobStatusImpl() {
     }
 
-    public ImportJobStatusImpl(final String token, final State state, final String report) {
+    public JobStatusImpl(final String token, final State state, final Completion completion, final String report) {
         this.token = token;
         this.state = state;
+        this.completion = completion;
         this.report = report;
     }
 
@@ -46,6 +48,11 @@ public class ImportJobStatusImpl implements ImportJobStatus {
     /** {@inheritDoc} */
     public State getState() {
         return state;
+    }
+
+    /** {@inheritDoc} */
+    public Completion getCompletion() {
+        return completion;
     }
 
     /** {@inheritDoc} */
@@ -61,13 +68,17 @@ public class ImportJobStatusImpl implements ImportJobStatus {
         this.state = state;
     }
 
+    public void setCompletion(final Completion completion) {
+        this.completion = completion;
+    }
+
     public void setReport(final String report) {
         this.report = report;
     }
 
     @Override
     public String toString() {
-        return "ImportJobStatusImpl{" +
+        return "JobStatusImpl{" +
                 "token='" + token + '\'' +
                 ", state=" + state +
                 '}';

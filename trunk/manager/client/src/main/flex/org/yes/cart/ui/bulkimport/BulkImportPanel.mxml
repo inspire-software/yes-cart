@@ -27,7 +27,7 @@
         import mx.controls.Alert;
         import mx.events.CloseEvent;
 
-        import org.yes.cart.impl.ImportJobStatusImpl;
+        import org.yes.cart.impl.JobStatusImpl;
 
         import org.yes.cart.shopmanager.ShopManagerGlobal;
 
@@ -139,7 +139,7 @@
         }
 
         private function onGetImportStatusResult(event:ResultEvent):void {
-            var status:ImportJobStatusImpl = event.result as ImportJobStatusImpl;
+            var status:JobStatusImpl = event.result as JobStatusImpl;
             resultDetails.text = reportHeaderText + '\n' + status.report;
             if (status.state == 'INPROGRESS' || status.state == 'STARTED') {
                 importStatusTimer.start(); // do another timed status update
@@ -149,7 +149,7 @@
 
         private function onGetImportStatusFault(event:FaultEvent):void {
             importStatusTimer.stop();
-            Alert.show(resourceManager.getString('BulkImportPanel','checkStatusFailed', [ importJobToken, event.fault.faultDetail ]),
+            Alert.show(resourceManager.getString('BulkImportPanel', 'checkStatusFailed', [ importJobToken, event.fault.faultDetail ]),
                     resourceManager.getString('ShopManagerApplication', 'error'),
                     Alert.YES | Alert.CANCEL, this, onGetImportStatusFaultTryAgain, null, Alert.YES);
         }
@@ -167,7 +167,6 @@
         private function onGetImportGroupsFault(event:FaultEvent):void {
             // do nothing
         }
-
         ]]>
 	</mx:Script>
 
@@ -199,7 +198,7 @@
     </mx:RemoteObject>
 
     <mx:Panel id="reindexPanel" height="100%" width="100%" title="@Resource(bundle='BulkImportPanel',key='title')"
-            paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2">
+              paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2">
         <mx:VBox width="100%" height="100%">
 
             <mx:Text width="100%" text="@Resource(bundle='BulkImportPanel',key='description')"/>
@@ -208,14 +207,14 @@
                 <mx:FormHeading label="@Resource(bundle='BulkImportPanel',key='importMessage')"/>
                 <mx:FormItem label="@Resource(bundle='BulkImportPanel',key='selectFile')">
                     <mx:HBox>
-                        <mx:ComboBox id="importGroups"/>
+                        <mx:ComboBox id="importGroups" width="200"/>
                         <mx:Button id="selectFileBtn" label="@Resource(bundle='BulkImportPanel',key='open')"
                                    click="onSelectFileClick(event)"/>
                     </mx:HBox>
                 </mx:FormItem>
                 <mx:FormItem label="@Resource(bundle='BulkImportPanel',key='jobToken')">
                     <mx:HBox>
-                        <mx:TextInput id="jobToken"/>
+                        <mx:TextInput id="jobToken" width="200"/>
                         <mx:Button id="watchBtn" label="@Resource(bundle='BulkImportPanel',key='watch')"
                                    click="onWatchClick(event)"/>
                     </mx:HBox>

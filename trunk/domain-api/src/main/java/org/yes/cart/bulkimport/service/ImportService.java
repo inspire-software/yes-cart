@@ -16,6 +16,8 @@
 
 package org.yes.cart.bulkimport.service;
 
+import org.yes.cart.service.async.JobStatusListener;
+
 import java.util.Set;
 
 /**
@@ -44,6 +46,6 @@ public interface ImportService {
      * @param fileName optional file  name
      * @return {@link BulkImportResult}
      */
-    BulkImportResult doImport(BulkImportStatusListener listener, Set<String> importedFiles, String fileName, String pathToImportFolder);
+    BulkImportResult doImport(JobStatusListener listener, Set<String> importedFiles, String fileName, String pathToImportFolder);
 
 }

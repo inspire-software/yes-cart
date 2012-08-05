@@ -18,8 +18,15 @@ package org.yes.cart.remote.service.impl;
 
 import flex.messaging.FlexContext;
 import flex.messaging.FlexRemoteCredentials;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.yes.cart.remote.service.ReindexService;
+import org.yes.cart.service.async.JobStatusListener;
+import org.yes.cart.service.async.SingletonJobRunner;
+import org.yes.cart.service.async.impl.JobStatusListenerImpl;
+import org.yes.cart.service.async.model.JobContext;
+import org.yes.cart.service.async.model.JobStatus;
+import org.yes.cart.service.async.model.impl.JobContextImpl;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.service.ws.BackdoorService;
 import org.yes.cart.web.service.ws.client.BackdoorServiceClientFactory;
@@ -29,16 +36,53 @@ import org.yes.cart.web.service.ws.client.BackdoorServiceClientFactory;
  * Date: 15-May-2011
  * Time: 17:22:15
  */
-public class ReindexServiceImpl implements ReindexService {
+public class ReindexServiceImpl extends SingletonJobRunner implements ReindexService {
 
+
+    public ReindexServiceImpl(final TaskExecutor executor) {
+        super(executor);
+    }
+
+    /** {@inheritDoc} */
+    public JobStatus getIndexAllStatus(final String token) {
+        return getStatus(token);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    protected Runnable createJobRunnable(final JobContext ctx) {
+
+        final BackdoorService backdoor = getBackdoorService(ctx.getListener().getTimeoutValue());
+
+        return new Runnable() {
+
+            private final JobStatusListener listener = ctx.getListener();
+            private final BackdoorService backdoorService = backdoor;
+
+            public void run() {
+
+                listener.notifyPing();
+                try {
+                    listener.notifyMessage("Indexing stared");
+                    final int cnt = backdoorService.reindexAllProducts();
+                    listener.notifyMessage("Indexing completed. Indexed products count: " + cnt);
+                    listener.notifyCompleted(JobStatus.Completion.OK);
+                } catch (Throwable trw) {
+                    listener.notifyError(trw.getMessage());
+                    listener.notifyCompleted(JobStatus.Completion.ERROR);
+                }
+
+            }
+        };
+    }
 
     /**
      * Reindex all products
      *
      * @return quantity product in created index.
      */
-    public int reindexAllProducts() {
-        return getBackdoorService().reindexAllProducts();
+    public String reindexAllProducts() {
+        return doJob(new JobContextImpl(true, new JobStatusListenerImpl(10000, 300000)));
     }
 
     /**
@@ -48,7 +92,7 @@ public class ReindexServiceImpl implements ReindexService {
      * @return quantity product in created index.
      */
     public int reindexProduct(long pk) {
-        return getBackdoorService().reindexProduct(pk);
+        return getBackdoorService(15000).reindexProduct(pk);
     }
 
 
@@ -64,7 +108,7 @@ public class ReindexServiceImpl implements ReindexService {
 
     }
 
-    private BackdoorService getBackdoorService() {
+    private BackdoorService getBackdoorService(final long timeout) {
 
         String userName = ((UsernamePasswordAuthenticationToken) FlexContext.getUserPrincipal()).getName();
         //String password = (String) ((UsernamePasswordAuthenticationToken) FlexContext.getUserPrincipal()).getCredentials();
@@ -73,7 +117,7 @@ public class ReindexServiceImpl implements ReindexService {
         return getBackdoorServiceClientFactory().getBackdoorService(
                 userName,
                 password,
-                "http://localhost:8080/yes-shop/services/backdoor");
+                "http://localhost:8080/yes-shop/services/backdoor", timeout);
 
     }
 

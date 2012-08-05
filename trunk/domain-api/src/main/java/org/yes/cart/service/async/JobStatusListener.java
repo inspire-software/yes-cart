@@ -14,21 +14,22 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.bulkimport.service;
+package org.yes.cart.service.async;
 
-import org.yes.cart.bulkimport.model.ImportJobStatus;
+import org.yes.cart.bulkimport.service.ImportService;
+import org.yes.cart.service.async.model.JobStatus;
 
 /**
  * User: denispavlov
  * Date: 12-07-30
  * Time: 9:43 AM
  */
-public interface BulkImportStatusListener {
+public interface JobStatusListener {
 
     /**
      * @return latest job status
      */
-    ImportJobStatus getLatestStatus();
+    JobStatus getLatestStatus();
 
     /**
      * @return unique job token
@@ -62,12 +63,17 @@ public interface BulkImportStatusListener {
      * Notify completion
      * @param result import result
      */
-    void notifyCompleted(ImportService.BulkImportResult result);
+    void notifyCompleted(JobStatus.Completion result);
 
     /**
      * @return true if listeners has received result
      */
     boolean isCompleted();
+
+    /**
+     * @return timeout setting in millis
+     */
+    long getTimeoutValue();
 
     /**
      * @return true if listeners last message timestamp exceed timeout
