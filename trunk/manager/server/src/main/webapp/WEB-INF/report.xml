@@ -107,7 +107,8 @@
 
     <bean id="payments" class="org.yes.cart.report.impl.ReportDescriptor">
         <property name="reportId" value="payments"/>
-        <property name="hsqlQuery" value="todo"/>
+        <property name="hsqlQuery" value="customerOrderPaymentService.getData.paymentReport"/>
+        <!-- point to report data method "getData" in  "customerOrderPaymentService" bean. label of report is "paymentReport" -->
         <property name="parameters">
             <list>
                 <bean class="org.yes.cart.report.impl.ReportParameter">
@@ -162,11 +163,11 @@
             <list>
                 <bean class="org.yes.cart.report.impl.ReportPair">
                     <constructor-arg index="0" value="en"/>
-                    <constructor-arg index="1" value="available-stock_en.xslfo"/>
+                    <constructor-arg index="1" value="payments_en.xslfo"/>
                 </bean>
                 <bean class="org.yes.cart.report.impl.ReportPair">
                     <constructor-arg index="0" value="ru"/>
-                    <constructor-arg index="1" value="available-stock_ru.xslfo"/>
+                    <constructor-arg index="1" value="payments_en.xslfo"/>
                 </bean>
             </list>
         </property>

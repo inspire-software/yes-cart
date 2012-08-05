@@ -116,4 +116,13 @@ public interface PaymentModuleGenericDAO<T, PK extends Serializable> {
     void delete(T entity);
 
 
+    /**
+     * Find by hsql query.
+     * @param hsqlQuery query
+     * @param parameters parameters
+     * @return list of objects.
+     */
+    List<Object> findByQuery(String hsqlQuery, Object... parameters);
+
+
 }
