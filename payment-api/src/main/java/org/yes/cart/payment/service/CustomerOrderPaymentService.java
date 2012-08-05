@@ -68,6 +68,17 @@ public interface CustomerOrderPaymentService extends PaymentModuleGenericService
             String paymentGateway
             );
 
+
+    /**
+     * Get report data.
+     * @param dataIdentifier
+     * @param params
+     * @return
+     */
+    List<?> getData(
+            String dataIdentifier,
+            Object... params);
+
     /**
      * Get order amount
      *

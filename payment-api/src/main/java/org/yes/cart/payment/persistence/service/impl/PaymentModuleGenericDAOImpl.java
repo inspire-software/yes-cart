@@ -143,6 +143,21 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
+    public List<Object> findByQuery(final String hsqlQuery, final Object... parameters) {
+        Query query = sessionFactory.getCurrentSession().createQuery(hsqlQuery);
+        int idx = 1;
+        if (parameters != null) {
+            for (Object param : parameters) {
+                query.setParameter(String.valueOf(idx), param);
+                idx++;
+            }
+        }
+        return query.list();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings(UNCHECKED)
     public List<T> findByNamedQuery(final String namedQueryName, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);

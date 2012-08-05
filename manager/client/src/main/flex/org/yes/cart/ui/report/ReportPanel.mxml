@@ -22,6 +22,7 @@
 
     <mx:Script>
         <![CDATA[
+        import com.georg.DateTimeField;
         import com.hexagonstar.util.debug.Debug;
 
         import mx.collections.ArrayList;
@@ -88,7 +89,6 @@
         private function fillParameterForm(event:Event):void {
 
 
-
             var reportDescriptor:ReportDescriptor = ReportDescriptor(reportComboBox.selectedItem);
 
             parameterForm.removeAllChildren();
@@ -97,41 +97,62 @@
 
             Debug.trace("Report has " + reportDescriptor.parameters.length + " parameters");
 
-            for (var i:int = 0; i < reportDescriptor.parameters.length; i++) {
+            try {
 
-                var repoParam:ReportParameter = ReportParameter(reportDescriptor.parameters.getItemAt(i));
-                for (var j:int = 0; i < repoParam.langLabel.length; j++) {
 
-                    var localizedParamName:ReportPair = ReportPair(repoParam.langLabel.getItemAt(j));
-                    if (localizedParamName.lang == localeFilter) {
+                var debugStr:String = "";
 
-                        var formItem:FormItem = new FormItem();
-                        formItem.label = localizedParamName.value;
+                for (var i:int = 0; i < reportDescriptor.parameters.length; i++) {
 
-                        if (repoParam.allowedValuesQuery != null && repoParam.allowedValuesQuery.length > 0) {
-                            var cbmBox:ComboBox = new ComboBox();
-                            cbmBox.prompt = resourceManager.getString('ReportPanel', 'selectDataPrompt');
-                            cbmBox.labelField = "value";
-                            remoteReportService.getParameterValues(repoParam.allowedValuesQuery).addResponder(
-                                    new AsyncResponder(
-                                            function (event:ResultEvent, obj:Object = null):void {
-                                                cbmBox.dataProvider = event.result;
-                                            }
-                                            ,
-                                            function (event:FaultEvent):void {
-                                                ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
-                                            }
-                                    )
-                            );
-                            formItem.addChild(cbmBox); //todo data
-                        } else {
-                            formItem.addChild(new TextInput());
+                    var repoParam:ReportParameter = ReportParameter(reportDescriptor.parameters.getItemAt(i));
+                    debugStr += repoParam + "\n";
+                    for (var j:int = 0; j < repoParam.langLabel.length; j++) { //loop through languages
+
+
+                        var localizedParamName:ReportPair = ReportPair(repoParam.langLabel.getItemAt(j));
+
+                        debugStr += "       " + localizedParamName + "\n";
+
+                        if (localizedParamName.lang == localeFilter) {
+
+                            var formItem:FormItem = new FormItem();
+                            formItem.label = localizedParamName.value;
+
+                            if (repoParam.allowedValuesQuery != null && repoParam.allowedValuesQuery.length > 0) {
+                                var cbmBox:ComboBox = new ComboBox();
+                                cbmBox.prompt = resourceManager.getString('ReportPanel', 'selectDataPrompt');
+                                cbmBox.labelField = "value";
+                                remoteReportService.getParameterValues(repoParam.allowedValuesQuery).addResponder(
+                                        new AsyncResponder(
+                                                function (event:ResultEvent, obj:Object = null):void {
+                                                    cbmBox.dataProvider = event.result;
+                                                }
+                                                ,
+                                                function (event:FaultEvent):void {
+                                                    ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+                                                }
+                                        )
+                                );
+                                formItem.addChild(cbmBox); //todo data
+
+                            } else if (repoParam.businesstype == "Date") {
+                                //var offsetDay = 1000*60*60*24;// milliseconds in one day
+                                var dtf:DateTimeField = new DateTimeField();
+                                //dtf.selectedDate = new Date( (new Date()).getTime() - offsetDay ); //one day ago
+                                formItem.addChild(dtf);
+                            } else {
+                                formItem.addChild(new TextInput());
+                            }
+
+                            parameterForm.addChild(formItem);
+
                         }
-
-                        parameterForm.addChild(formItem);
-
                     }
                 }
+
+                Debug.trace(debugStr);
+            } catch (e:Error) {
+                Debug.trace("" + e);
             }
 
             okBtnCrtlBar.width = parameterForm.width;
@@ -151,6 +172,8 @@
                     var uiComponent:UIComponent = UIComponent(formItem.getChildAt(0));
                     if (uiComponent is ComboBox) {
                         rez.addItem(ComboBox(uiComponent).selectedItem.lang);
+                    } else if (uiComponent is DateTimeField) {
+                        rez.addItem(DateTimeField(uiComponent).selectedDate);
                     } else if (uiComponent is TextInput) {
                         rez.addItem(TextInput(uiComponent).text);
                     } else {
@@ -208,7 +231,6 @@
                     resourceManager.getString("ReportPanel", "reportReadyToSave"),
                     resourceManager.getString("ReportPanel", "info"));
         }
-
         ]]>
     </mx:Script>
 
@@ -252,7 +274,7 @@
             </mx:Form>
 
             <mx:ControlBar id="okBtnCrtlBar"
-                           width="100%"  visible="{reportComboBox.selectedItem != null}">
+                           width="100%" visible="{reportComboBox.selectedItem != null}">
 
 
                 <mx:Button visible="{pdf != null}" click="onDownloadReportClick(event)"

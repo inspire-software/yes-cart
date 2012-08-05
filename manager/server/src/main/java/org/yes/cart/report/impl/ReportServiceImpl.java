@@ -23,6 +23,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.fop.apps.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.Assert;
 import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.dao.GenericDAO;
@@ -33,6 +36,8 @@ import javax.servlet.ServletContext;
 import javax.xml.transform.*;
 import javax.xml.transform.sax.SAXResult;
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,7 +57,7 @@ import org.apache.fop.apps.FopFactory;
  * Date: 7/2/12
  * Time: 2:46 PM
  */
-public class ReportServiceImpl implements ReportService, ServletContextAware {
+public class ReportServiceImpl implements ReportService, ServletContextAware, ApplicationContextAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(ReportServiceImpl.class);
 
@@ -65,6 +70,7 @@ public class ReportServiceImpl implements ReportService, ServletContextAware {
 
     private ServletContext servletContext;
 
+    private ApplicationContext applicationContext;
 
     /**
      * Consstruct report service.
@@ -73,7 +79,8 @@ public class ReportServiceImpl implements ReportService, ServletContextAware {
      * @param reportDescriptors list of configured reports.
      * @param reportFolder      report folder
      */
-    public ReportServiceImpl(GenericDAO<Object, Long> genericDAO, final List<ReportDescriptor> reportDescriptors, final String reportFolder) {
+    public ReportServiceImpl(GenericDAO<Object, Long> genericDAO, final List<ReportDescriptor> reportDescriptors,
+                             final String reportFolder) {
         this.genericDAO = genericDAO;
         this.reportDescriptors = reportDescriptors;
 
@@ -86,16 +93,18 @@ public class ReportServiceImpl implements ReportService, ServletContextAware {
     }
 
 
-    /**{@inheritDoc} */
-    public List<ReportPair> getParameterValues(final  String hsql) {
-        List<Object> queryRez  = genericDAO.executeHsqlQuery(hsql);
+    /**
+     * {@inheritDoc}
+     */
+    public List<ReportPair> getParameterValues(final String hsql) {
+        List<Object> queryRez = genericDAO.executeHsqlQuery(hsql);
         if (queryRez != null && !queryRez.isEmpty()) {
-            final List<ReportPair>  rez = new ArrayList<ReportPair>(queryRez.size());
+            final List<ReportPair> rez = new ArrayList<ReportPair>(queryRez.size());
             for (Object obj : queryRez) {
                 Object[] data = (Object[]) obj;
                 rez.add(new ReportPair(
-                        (String)data[0],
-                        (String)data[1])
+                        (String) data[0],
+                        (String) data[1])
                 );
             }
             return rez;
@@ -298,12 +307,31 @@ public class ReportServiceImpl implements ReportService, ServletContextAware {
      * @param params parameters.
      * @return list of objects.
      */
-    List<Object> getQueryResult(final String query, final Object... params) {
+    List<Object> getQueryResult(final String query, final Object... params) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
 
-        return genericDAO.findByQuery(
-                query,
-                params
-        );
+        if (query.toLowerCase().trim().contains("select ")) {
+            return genericDAO.findByQuery(
+                    query,
+                    params
+            );
+
+        } else {
+            //this is bean name, which should be taken to via service locator (because may be remote)
+            //at this particula case we are treat payment module report data provider
+
+            final String [] dataProviderPointer = query.split("\\.");
+            final String beanName = dataProviderPointer[0];
+            final String methodName = dataProviderPointer[1];
+            final String repornName = dataProviderPointer[2];
+
+
+            final Object reportDataProvider =  applicationContext.getBean(beanName);
+            final Method method = reportDataProvider.getClass().getMethod(methodName, String.class, Object [] .class);
+
+
+            return (List<Object>) method.invoke(reportDataProvider, repornName, params);
+        }
+
 
     }
 
@@ -312,5 +340,12 @@ public class ReportServiceImpl implements ReportService, ServletContextAware {
      */
     public void setServletContext(final ServletContext servletContext) {
         this.servletContext = servletContext;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 }

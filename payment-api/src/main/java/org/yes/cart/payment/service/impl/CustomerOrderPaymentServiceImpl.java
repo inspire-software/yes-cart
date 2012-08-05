@@ -69,6 +69,32 @@ public class CustomerOrderPaymentServiceImpl
     /**
      * {@inheritDoc}
      */
+    public List<?> getData(final String dataIdentifier, final Object... params) {
+        final ArrayList<Criterion> creterias = new ArrayList<Criterion>(6);
+        if ("paymentReport".equals(dataIdentifier)) {
+            int idx = 0;
+            for (Object param : params) {
+                if (param != null) {
+                    if (idx == 0) {
+                        creterias.add(Restrictions.ge("createdTimestamp", param));
+                    } else if (idx == 1) {
+                        creterias.add(Restrictions.le("createdTimestamp", param));
+                    }
+                }
+                idx ++;
+            }
+            return getGenericDao().findByCriteria(
+                    creterias.toArray(new Criterion[creterias.size()])
+            );
+        }
+        return null;
+
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
     public List<CustomerOrderPayment> findBy(
             final String orderNumber,
             final Date fromDate,
