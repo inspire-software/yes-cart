@@ -17,13 +17,13 @@
 <import-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/xstream/import-descriptor-1.0.0.xsd">
 
-    <entity-type>org.yes.cart.domain.entity.Carrier</entity-type>
+    <entity-type>org.yes.cart.domain.entity.State</entity-type>
 
     <import-directory></import-directory>
 
     <import-file-descriptor>
         <file-encoding>UTF-8</file-encoding>
-        <file-name-mask>carriernames(.*).csv(.*)</file-name-mask>
+        <file-name-mask>locations(.*).csv(.*)</file-name-mask>
         <ignore-first-line>true</ignore-first-line>
         <column-delimiter>;</column-delimiter>
         <text-qualifier>&quot;</text-qualifier>
@@ -34,42 +34,26 @@
         <column-descriptor>
             <column-index>0</column-index>
             <field-type>FIELD</field-type>
-            <name>name</name>
-            <value-regex>(.{0,255})(.*)</value-regex>
+            <name>countryCode</name>
+            <value-regex>(.{0,2})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
-            <lookup-query>select c from CarrierEntity c where c.name = ?1</lookup-query>
-        </column-descriptor>
-
-        <column-descriptor>
-            <column-index>1</column-index>
-            <field-type>FIELD</field-type>
-            <name>description</name>
-            <value-regex>(.{0,4000})(.*)</value-regex>
-            <value-regex-group>1</value-regex-group>
-        </column-descriptor>
-
-        <column-descriptor>
-            <column-index>2</column-index>
-            <field-type>FIELD</field-type>
-            <name>worldwide</name>
         </column-descriptor>
 
         <column-descriptor>
             <column-index>3</column-index>
             <field-type>FIELD</field-type>
-            <name>country</name>
+            <name>stateCode</name>
+            <value-regex>(.{0,64})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>select s from StateEntity s where s.stateCode = ?1</lookup-query>
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>4</column-index>
+            <column-index>3</column-index>
             <field-type>FIELD</field-type>
-            <name>state</name>
-        </column-descriptor>
-
-        <column-descriptor>
-            <column-index>5</column-index>
-            <field-type>FIELD</field-type>
-            <name>local</name>
+            <name>name</name>
+            <value-regex>(.{0,64})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
     </import-columns>

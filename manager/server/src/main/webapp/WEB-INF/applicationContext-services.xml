@@ -492,6 +492,10 @@
             <map>
                 <entry key="YC DEMO">
                     <list>
+                        <value>country.xml</value>
+                        <value>state.xml</value>
+                        <value>carrier.xml</value>
+                        <value>carriersla.xml</value>
                         <value>brand.xml</value>
                         <value>attribute.xml</value>  <!--product attributes only, sku and rest attributes import not implemented-->
                         <value>attributeviewgroup.xml</value>  <!-- group of attributes -->
