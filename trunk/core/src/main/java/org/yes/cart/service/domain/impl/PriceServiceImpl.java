@@ -330,8 +330,8 @@ public class PriceServiceImpl
                             ProductSearchQueryBuilder.PRODUCT_PRICE,
                             priceNavigation.composePriceRequestParams(
                                     currency,
-                                    priceTierNode.getPriceRange().getFirst(),
-                                    priceTierNode.getPriceRange().getSecond()
+                                    priceTierNode.getFrom(),
+                                    priceTierNode.getTo()
                             ),
                             0
                     )
@@ -362,12 +362,8 @@ public class PriceServiceImpl
     private List<PriceTierNode> createPriceTierNodes(final List<PriceTierNode> priceTierNodes, final BigDecimal exchangeRate) {
 
         for (PriceTierNode priceTierNode : priceTierNodes) {
-            priceTierNode.setPriceRange(
-                    new Pair<BigDecimal, BigDecimal>(
-                            priceTierNode.getPriceRange().getFirst().multiply(exchangeRate),
-                            priceTierNode.getPriceRange().getSecond().multiply(exchangeRate)
-                    )
-            );
+            priceTierNode.setFrom(priceTierNode.getFrom().multiply(exchangeRate));
+            priceTierNode.setTo(priceTierNode.getTo().multiply(exchangeRate));
         }
         return priceTierNodes;
     }

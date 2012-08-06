@@ -32,20 +32,20 @@
                     <mx:Button label="@Resource(bundle='ProductTypeManagementPanel',key='priceNavigationAddRow')"
                                toolTip="@Resource(bundle='ProductTypeManagementPanel',key='priceNavigationAddRowHint')"
                                enabled="{addRowEnabled}"
-                               click="onAddNewPriceRangeRowClick(event)"
+                               click="onAddNewNavRangeRowClick(event)"
                             />
                     <mx:Button label="@Resource(bundle='ProductTypeManagementPanel',key='priceNavigationDeleteRow')"
                                toolTip="@Resource(bundle='ProductTypeManagementPanel',key='priceNavigationDeleteRowHint')"
                                enabled="{xmlNode != null}"
-                               click="deleteSelectedPriceRangeRow(event)"
+                               click="deleteSelectedNavRangeRow(event)"
                             />
                 </mx:HBox>
                 <mx:DataGrid id="rangesGrid" itemEditEnd="onItemEditEnd(event)" itemClick="onXmlNodeSelected(event)"
                              editable="true"
                              width="100%" height="100%">
                     <mx:columns>
-                        <mx:DataGridColumn dataField="range.first" headerText="@Resource(bundle='ProductTypeManagementPanel',key='valueFrom')"/>
-                        <mx:DataGridColumn dataField="range.second" headerText="@Resource(bundle='ProductTypeManagementPanel',key='valueTo')"/>
+                        <mx:DataGridColumn dataField="from" headerText="@Resource(bundle='ProductTypeManagementPanel',key='valueFrom')"/>
+                        <mx:DataGridColumn dataField="to" headerText="@Resource(bundle='ProductTypeManagementPanel',key='valueTo')"/>
                     </mx:columns>
                 </mx:DataGrid>
             </mx:VBox>
@@ -63,8 +63,6 @@
     <mx:Boolean id="addCurrencyEnabled">true</mx:Boolean>
     <mx:Boolean id="addRowEnabled">true</mx:Boolean>
 
-    <mx:ArrayCollection id="rangesList"/>
-
 
     <mx:Script><![CDATA[
         import com.hexagonstar.util.debug.Debug;
@@ -80,8 +78,6 @@
         import mx.events.ItemClickEvent;
         import mx.events.ListEvent;
         import mx.managers.PopUpManager;
-
-        import org.yes.cart.model.PriceRangeModel;
 
         [Bindable]
         private var xmlNode:XML;
@@ -107,7 +103,7 @@
             } else {
                 try {
                     xml = new XML(rawXML.text);
-                    gridXml = xml.list.range.copy();
+                    gridXml = xml.ranges.range.copy();
                     rangesGrid.dataProvider = gridXml;
                 } catch (e:Error) {
 
@@ -122,13 +118,13 @@
             }
         }
 
-        private function deleteSelectedPriceRangeRow(event:MouseEvent):void {
+        private function deleteSelectedNavRangeRow(event:MouseEvent):void {
 
             var xmlRowIndex:int = rangesGrid.selectedIndex;
             if (xmlRowIndex > -1) {
-                delete gridXml.children()[xmlRowIndex];
+                delete gridXml[xmlRowIndex];
                 xmlNode = null;
-                xml.list.range = gridXml.copy();
+                xml.ranges.range = gridXml.copy();
                 rangesGrid.dataProvider = gridXml;
                 currencyTabBar.selectedIndex = 0;
                 currencyViewStack.selectedIndex = 0;
@@ -139,9 +135,7 @@
             var newXml:XML = xml;
 
             if (gridXml != null) {
-                newXml.list.default.size = gridXml.children().length();
-                newXml.list.int = gridXml.children().length();
-                newXml.list.range = gridXml;
+                newXml.ranges.range = gridXml;
             }
 
             return newXml;
@@ -163,25 +157,18 @@
 
             try {
                 if (xmlString == null || xmlString.length == 0) {
-                    xml = <rangeList serialization="custom">
-                        <unserializable-parents/>
-                        <list>
-                            <default>
-                                <size>1</size>
-                            </default>
-                            <int>1</int>
+                    xml = <range-list>
+                        <ranges>
                             <range>
-                                <range>
-                                    <first class="string">from</first>
-                                    <second class="string">to</second>
-                                </range>
+                                <from>from</from>
+                                <to>to</to>
                             </range>
-                        </list>
-                    </rangeList>;
+                        </ranges>
+                    </range-list>;
                 } else {
                     xml = new XML(xmlString);
                 }
-                gridXml = xml.list.range;
+                gridXml = xml.ranges.range;
 
                 rangesGrid.dataProvider = gridXml;
 
@@ -203,15 +190,13 @@
             var obj:Object = DataGrid(event.target).dataProvider[event.rowIndex];
         }
 
-        private function onAddNewPriceRangeRowClick(event:MouseEvent):void {
+        private function onAddNewNavRangeRowClick(event:MouseEvent):void {
             var xml:XML = <root/>;
             xml.appendChild(gridXml.copy());
             xml.appendChild(
                     <range>
-                        <range>
-                            <first class="string">from</first>
-                            <second class="string">to</second>
-                        </range>
+                        <from>from</from>
+                        <to>to</to>
                     </range>);
             gridXml = new XMLList(xml.range);
             rangesGrid.dataProvider = gridXml;

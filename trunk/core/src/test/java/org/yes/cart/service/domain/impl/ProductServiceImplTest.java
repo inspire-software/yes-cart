@@ -74,7 +74,7 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
 
         List<FilteredNavigationRecord> rez = productService.getRangeValueNavigationRecords(1);
 
-        assertEquals("Ten range naviration records was configured for 32 type", 10, rez.size());
+        assertEquals("Ten range navigation records was configured for 32 type", 10, rez.size());
 
     }
 
@@ -265,7 +265,7 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
         List<Product> rezLimit = productService.getFeaturedProducts(shopCategoryIds, 2);
         assertNotNull(rezLimit);
         try {
-            dumpDataBase("x2x2", new String[]{"TPRODUCT"});
+            dumpDataBase("x2x2xx_products", new String[]{"TPRODUCT"});
         } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }

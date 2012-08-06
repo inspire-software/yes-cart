@@ -17,13 +17,12 @@
 package org.yes.cart.bulkimport.csv.impl;
 
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.junit.Test;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.model.FieldTypeEnum;
 import org.yes.cart.bulkimport.model.ImportColumn;
-import org.yes.cart.bulkimport.stream.xml.ImportDescriptorXStreamProvider;
+import org.yes.cart.bulkimport.stream.xml.CsvImportDescriptorXStreamProvider;
 import org.yes.cart.stream.xml.XStreamProvider;
 
 import java.util.ArrayList;
@@ -167,8 +166,6 @@ public class CsvImportDescriptorImplTest {
 
         String xmlSerializationResult;
 
-        XStream xStream = getXStream();
-
         CsvImportDescriptorImpl csvImportDescriptor = new CsvImportDescriptorImpl();
 
         csvImportDescriptor.getImportFileDescriptor().setColumnDelimiter(';');
@@ -192,12 +189,12 @@ public class CsvImportDescriptorImplTest {
 
 
 
-        xmlSerializationResult = xStream.toXML(csvImportDescriptor);
+        xmlSerializationResult = new CsvImportDescriptorXStreamProvider().toXML(csvImportDescriptor);
 
         assertNotNull(xmlSerializationResult);
         assertTrue(xmlSerializationResult.length() > 0);
 
-        CsvImportDescriptor csvImportDeserializedDescriptor = (CsvImportDescriptor) xStream.fromXML(xmlSerializationResult);
+        CsvImportDescriptor csvImportDeserializedDescriptor = new CsvImportDescriptorXStreamProvider().fromXML(xmlSerializationResult);
 
         assertEquals(csvImportDescriptor.getImportFileDescriptor().getColumnDelimiter(), csvImportDeserializedDescriptor.getImportFileDescriptor().getColumnDelimiter());
         assertEquals(csvImportDescriptor.getImportFileDescriptor().getFileEncoding(), csvImportDeserializedDescriptor.getImportFileDescriptor().getFileEncoding());
@@ -218,12 +215,5 @@ public class CsvImportDescriptorImplTest {
                      csvImportDeserializedDescriptor.getImportColumns().iterator().next().getValueRegEx());
 
     }
-
-
-    protected XStream getXStream() {
-        final XStreamProvider provider = new ImportDescriptorXStreamProvider();
-           return provider.provide();
-       }
-
 
 }

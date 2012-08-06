@@ -1278,6 +1278,8 @@
             <meta attribute="extra-import">org.yes.cart.domain.misc.navigation.range.RangeList</meta>
             <meta attribute="extra-import">org.yes.cart.domain.misc.navigation.range.impl.RangeListImpl</meta>
             <meta attribute="extra-import">org.yes.cart.domain.misc.navigation.range.impl.RangeNodeImpl</meta>
+            <meta attribute="extra-import">org.yes.cart.stream.xml.XStreamProvider</meta>
+            <meta attribute="extra-import">org.yes.cart.domain.entity.xml.ProductTypeRangeListXStreamProvider</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -1300,27 +1302,20 @@ public void setProductTypeAttrId(long productTypeAttrId) {
      this.productTypeAttrId = productTypeAttrId;
 }
 
-@Transient
-private XStream getXStream() {
-    XStream xStream = new XStream(new DomDriver());
-    xStream.alias(RangeList.RANGE_NODE_ALIAS, RangeNodeImpl.class);
-    xStream.alias(RangeList.RANGE_LIST_ALIAS, RangeListImpl.class);
-    return xStream;
-}
+private static final XStreamProvider xStreamProvider = new ProductTypeRangeListXStreamProvider();
 
 private RangeList rangeListCache = null;
 
 @Transient
 public RangeList getRangeList() {
    if (rangeListCache == null && getRangeNavigation()!= null) {
-       XStream xStream = getXStream();
-       rangeListCache = (RangeList) xStream.fromXML(getRangeNavigation());
+       rangeListCache = (RangeList) xStreamProvider.fromXML(getRangeNavigation());
    }
    return rangeListCache;
 }
 
 public void setRangeList(final RangeList rangeList) {
-    setRangeNavigation(getXStream().toXML(rangeList));
+    setRangeNavigation(xStreamProvider.toXML(rangeList));
     this.rangeListCache = rangeList;
 }
 
@@ -1725,6 +1720,8 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="extra-import">org.yes.cart.domain.entity.AttrValue</meta>
             <meta attribute="extra-import">java.util.Map</meta>
             <meta attribute="extra-import">java.util.HashMap</meta>
+            <meta attribute="extra-import">org.yes.cart.stream.xml.XStreamProvider</meta>
+            <meta attribute="extra-import">org.yes.cart.domain.entity.xml.CategoryPriceNavigationXStreamProvider</meta>
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
@@ -1756,28 +1753,21 @@ public void setRangeList(final RangeList rangeList) {
         return (int) (categoryId ^ (categoryId >>> 32));
     }
 
-    @Transient
-    private XStream getXStream() {
-        XStream xStream = new XStream(new DomDriver());
-        xStream.alias(PRICE_TREE_ALIAS, PriceTierTreeImpl.class);
-        xStream.alias(PRICE_NODE_ALIAS, PriceTierNodeImpl.class);
-        return xStream;
-    }
+    private static final XStreamProvider<PriceTierTree> xStreamProvider = new CategoryPriceNavigationXStreamProvider();
 
     private PriceTierTree priceTierTreeCache = null;
 
     @Transient
     public PriceTierTree getNavigationByPriceTree() {
         if (priceTierTreeCache == null && getNavigationByPriceTiers()!=null) {
-            XStream xStream = getXStream();
-            priceTierTreeCache = (PriceTierTree)xStream.fromXML(getNavigationByPriceTiers()); //This method like to eat CPU
+            priceTierTreeCache = xStreamProvider.fromXML(getNavigationByPriceTiers()); //This method like to eat CPU
         }
         return priceTierTreeCache;
     }
 
 
     public void setNavigationByPriceTree(PriceTierTree tree) {
-        setNavigationByPriceTiers(getXStream().toXML(tree));
+        setNavigationByPriceTiers(xStreamProvider.toXML(tree));
         this.priceTierTreeCache = tree;
     }
 

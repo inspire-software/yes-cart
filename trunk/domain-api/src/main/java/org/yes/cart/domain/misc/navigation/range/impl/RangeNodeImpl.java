@@ -28,38 +28,34 @@ import org.yes.cart.domain.misc.navigation.range.RangeNode;
  */
 public class RangeNodeImpl implements RangeNode {
 
-    private Pair<String, String> range;
+    private String from;
+    private String to;
 
-    /**
-     * {@inheritDoc}
-     */
-    public Pair<String, String> getRange() {
-        return range;
+    /** {@inheritDoc} */
+    public String getFrom() {
+        return from;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void setRange(final Pair<String, String> range) {
-        this.range = range;
+    /** {@inheritDoc} */
+    public void setFrom(final String from) {
+        this.from = from;
+    }
+
+    /** {@inheritDoc} */
+    public String getTo() {
+        return to;
+    }
+
+    /** {@inheritDoc} */
+    public void setTo(final String to) {
+        this.to = to;
     }
 
     /**
      * Construct value range. Default constructor
-     *
-     * @param range value range.
      */
     public RangeNodeImpl() {
 	super();
-    }
-
-    /**
-     * Construct value range.
-     *
-     * @param range value range.
-     */
-    public RangeNodeImpl(final Pair<String, String> range) {
-        this.range = range;
     }
 
     /**
@@ -69,6 +65,7 @@ public class RangeNodeImpl implements RangeNode {
      * @param hiValue hi value of range
      */
     public RangeNodeImpl(final String loValue, final String hiValue) {
-        range = new Pair<String, String>(loValue, hiValue);
+        from = loValue;
+        to = hiValue;
     }
 }

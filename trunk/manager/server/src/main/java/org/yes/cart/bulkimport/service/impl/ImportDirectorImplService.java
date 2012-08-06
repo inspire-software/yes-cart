@@ -160,16 +160,19 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
                         doImportInternal(listener, importedFiles, descriptors, file); //single file import
                     }
                     productService.clearEmptyAttributes();
+                    listener.notifyMessage("Import Job completed successfully");
                     listener.notifyCompleted(JobStatus.Completion.OK);
                 } catch (IOException ioe) {
                     // if we are here this is probably due images failure
                     LOG.error(ioe.getMessage(), ioe);
                     listener.notifyError(ioe.getMessage());
+                    listener.notifyMessage("Import Job completed but there was an IO error: " + ioe.getMessage());
                     listener.notifyCompleted(JobStatus.Completion.OK);
                 } catch (Throwable trw) {
                     // something very wrong
                     LOG.error(trw.getMessage(), trw);
                     listener.notifyError(trw.getMessage());
+                    listener.notifyMessage("Import Job was terminated. Error: " + trw.getMessage());
                     listener.notifyCompleted(JobStatus.Completion.ERROR);
                 }
             }

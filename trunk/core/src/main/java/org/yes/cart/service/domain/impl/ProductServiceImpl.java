@@ -437,15 +437,15 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         final List<FilteredNavigationRecord> records = new ArrayList<FilteredNavigationRecord>();
 
         for (ProductTypeAttr entry : rangeNavigationInType) {
-            RangeList<RangeNode> rangeList = entry.getRangeList();
-            if (rangeList != null) {
-                for (RangeNode node : rangeList) {
+            RangeList rangeList = entry.getRangeList();
+            if (rangeList != null && rangeList.getRanges() != null) {
+                for (RangeNode node : rangeList.getRanges()) {
                     records.add(
                             new FilteredNavigationRecordImpl(
                                     entry.getAttribute().getName(),
                                     entry.getAttribute().getCode(),
-                                    node.getRange().getFirst() + '-' + node.getRange().getSecond(),
-                                    node.getRange().getFirst() + '-' + node.getRange().getSecond(),
+                                    node.getFrom() + '-' + node.getTo(),
+                                    node.getFrom() + '-' + node.getTo(),
                                     0,
                                     entry.getRank(),
                                     "R"

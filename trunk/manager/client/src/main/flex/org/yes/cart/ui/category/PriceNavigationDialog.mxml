@@ -94,11 +94,10 @@
             var selectedIdx:int = currencyTabBar.selectedIndex;
             var dg:DataGrid = (currencyViewStack.getChildAt(selectedIdx) as Canvas).getChildAt(0) as DataGrid;
             var pnl:PriceRangeModel = PriceRangeModel(currArray[selectedIdx]);
-            var x:XMLList = pnl.entry.list;
-            Debug.trace("INFO PriceNavigationdialog delete node " + xml.priceMap.entry.(string = pnl.currency).list.pricenode.priceRange.(first == xmlNode.first.text() && second == xmlNode.second.text())[0]);
-            delete xml.priceMap.entry.(string = pnl.currency).list.pricenode[dg.selectedIndex];
+            Debug.trace("INFO PriceNavigationdialog delete node " + xml.currencies.currency.(name = pnl.currency)['price-tiers']['price-tier'][dg.selectedIndex]);
+            delete xml.currencies.currency.(name = pnl.currency)['price-tiers']['price-tier'][dg.selectedIndex];
             xmlNode = null;
-            dg.dataProvider = pnl.entry.list.pricenode.priceRange;
+            dg.dataProvider = pnl.entry['price-tiers']['price-tier'];
             currencyViewStack.selectedIndex = selectedIdx;
 
         }
@@ -106,23 +105,21 @@
         private function addNewPriceRangeRow(event:MouseEvent):void {
             var selectedIdx:int = currencyTabBar.selectedIndex;
             var pnl:PriceRangeModel = PriceRangeModel(currArray[selectedIdx]);
-            var x:XMLList = pnl.entry.list;
-            if (x.pricenode.length() > 0) {
-                var newXML:XML = x.pricenode[x.pricenode.length() - 1].copy();
-                newXML.priceRange.first = newXML.priceRange.second.text();
-                newXML.priceRange.second = Number(Number(newXML.priceRange.second.text()) + Number(addRowStep.text)).toFixed(2);
+            var x:XMLList = pnl.entry['price-tiers'];
+            if (x['price-tier'].length() > 0) {
+                var newXML:XML = x['price-tier'][x['price-tier'].length() - 1].copy();
+                newXML.from = newXML.to.text();
+                newXML.to = Number(Number(newXML.to.text()) + Number(addRowStep.text)).toFixed(2);
                 x.appendChild(newXML);
             } else {
                 x.appendChild(
-                        <pricenode>
-                            <priceRange>
-                                <first class="big-decimal">0</first>
-                                <second class="big-decimal">9.99</second>
-                            </priceRange>
-                        </pricenode>
+                        <price-tier>
+                            <from>0.00</from>
+                            <to>9.99</to>
+                        </price-tier>
                 );
             }
-            ((currencyViewStack.getChildAt(selectedIdx) as Canvas).getChildAt(0) as DataGrid).dataProvider = pnl.entry.list.pricenode.priceRange;
+            ((currencyViewStack.getChildAt(selectedIdx) as Canvas).getChildAt(0) as DataGrid).dataProvider = pnl.entry['price-tiers']['price-tier'];
             currencyTabBar.selectedIndex = selectedIdx;
 
         }
@@ -135,26 +132,24 @@
         }
 
         private function newCurrencySelected(event:Event):void {
-            if (xml == null || xml.priceMap.entry.length() == 0) {
-                xml = <pricetree>
-                    <priceMap>
-                    </priceMap>
-                </pricetree>;
+            if (xml == null || xml.currencies.currency.length() == 0) {
+                xml = <price-navigation>
+                    <currencies>
+                    </currencies>
+                </price-navigation>;
                 Debug.trace("INFO PriceNavigationDialog empty navigation xml was created");
             }
-            var newXML:XML = <entry>
-                <string/>
-                <list>
-                    <pricenode>
-                        <priceRange>
-                            <first class="big-decimal">0</first>
-                            <second class="big-decimal">9.99</second>
-                        </priceRange>
-                    </pricenode>
-                </list>
-            </entry>;
-            newXML.string = selectCurrencyDialog.currency;
-            xml.priceMap.appendChild(newXML);
+            var newXML:XML = <currency>
+                <name/>
+                <price-tiers>
+                    <price-tier>
+                        <from>0.00</from>
+                        <to>9.99</to>
+                    </price-tier>
+                </price-tiers>
+            </currency>;
+            newXML.name = selectCurrencyDialog.currency;
+            xml.currencies.appendChild(newXML);
             rawXML.text = xml.toXMLString();
             recreateTabs(xml);
             selectCurrencyDialog.removeEventListener(MouseEvent.CLICK, newCurrencySelected);
@@ -172,7 +167,7 @@
          * @return price navigation xml string
          */
         public function get xmlString():String {
-            if (xml != null && xml.priceMap.entry.length() > 0) {
+            if (xml != null && xml.currencies.currency.length() > 0) {
                 var idx:int = currencyTabBar.selectedIndex;
                 if (PriceRangeModel(currArray[idx]).currency == "XML") {
                     return rawXML.text;
@@ -219,8 +214,8 @@
         private function internalInit(xml:XML):void {
             currArray = [];
             var curr:PriceRangeModel, entry:XML;
-            for each (entry in xml.priceMap.entry) {
-                curr = new PriceRangeModel(entry.string, entry, 0);
+            for each (entry in xml.currencies.currency) {
+                curr = new PriceRangeModel(entry.name, entry, 0);
                 currArray.push(curr);
                 addTab(curr);
             }
@@ -239,23 +234,13 @@
                 var dataGrid:DataGrid = new DataGrid();
                 dataGrid.editable = true;
 
-                addDataGridColumn(dataGrid, "first", resourceManager.getString('CategoryManagementPanel', 'priceFrom'));
-                addDataGridColumn(dataGrid, "second", resourceManager.getString('CategoryManagementPanel', 'priceTo'));
+                addDataGridColumn(dataGrid, "from", resourceManager.getString('CategoryManagementPanel', 'priceFrom'));
+                addDataGridColumn(dataGrid, "to", resourceManager.getString('CategoryManagementPanel', 'priceTo'));
 
-                dataGrid.dataProvider = priceRangeList.entry.list.pricenode.priceRange;
+                dataGrid.dataProvider = priceRangeList.entry['price-tiers']['price-tier'];
 
                 dataGrid.addEventListener(DataGridEvent.ITEM_EDIT_END, onItemEditEnd);
                 dataGrid.addEventListener(ListEvent.ITEM_CLICK, onXmlNodeSelected);
-
-
-                /*var dataProvider:ArrayCollection = new ArrayCollection();
-                 for each (var pair:XML in priceRangeList.entry.list.pricenode.priceRange) {
-                 Debug.trace(">>>> pair " + pair.first + " " + pair.second);
-                 dataProvider.addItem(  {first: pair.first, second: pair.second} );
-
-                 }
-                 dataGrid.dataProvider = dataProvider;*/
-
 
                 result = dataGrid;
             } else if (priceRangeList.tag == 1) {

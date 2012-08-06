@@ -74,7 +74,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
 
     private PropertyDescriptor propertyDescriptor;
 
-    private XStreamProvider importDescriptorXStreamProvider;
+    private XStreamProvider<CsvImportDescriptor> importDescriptorXStreamProvider;
 
     private ApplicationContext applicationContext;
 
@@ -115,7 +115,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
             entityCache.clear();
 
             final InputStream inputStream = new FileInputStream(pathToImportDescriptor);
-            final CsvImportDescriptor csvImportDescriptor = (CsvImportDescriptor) getXStream().fromXML(inputStream);
+            final CsvImportDescriptor csvImportDescriptor = getImportDescriptorFromXML(inputStream);
             if (StringUtils.isNotBlank(pathToImportFolder)) {
                 csvImportDescriptor.setImportDirectory(pathToImportFolder);
             }
@@ -613,8 +613,8 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
         this.importDescriptorXStreamProvider = importDescriptorXStreamProvider;
     }
 
-    protected XStream getXStream() {
-        return importDescriptorXStreamProvider.provide();
+    protected CsvImportDescriptor getImportDescriptorFromXML(InputStream is) {
+        return importDescriptorXStreamProvider.fromXML(is);
     }
 
     /**

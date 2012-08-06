@@ -28,12 +28,24 @@ import java.util.List;
  */
 public interface PriceTierNode {
 
-    Pair<BigDecimal, BigDecimal> getPriceRange();
+    /**
+     * @return from price
+     */
+    BigDecimal getFrom();
 
-    void setPriceRange(Pair<BigDecimal, BigDecimal> priceRange);
+    /**
+     * @param from from price
+     */
+    void setFrom(BigDecimal from);
 
-    List<PriceTierNode> getPriceSubRange();
+    /**
+     * @return to price
+     */
+    BigDecimal getTo();
 
-    void setPriceSubRange(List<PriceTierNode> priceSubRange);
+    /**
+     * @param to to price
+     */
+    void setTo(BigDecimal to);
 
 }

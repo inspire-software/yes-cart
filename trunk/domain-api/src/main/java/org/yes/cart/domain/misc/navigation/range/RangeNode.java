@@ -28,17 +28,24 @@ import org.yes.cart.domain.misc.Pair;
 public interface RangeNode {
 
     /**
-     * Get the values range.
-     *
-     * @return {@link Pair} values range
+     * @return from range
      */
-    Pair<String, String> getRange();
+    String getFrom();
 
     /**
-     * Set value range.
-     *
-     * @param range {@link Pair} values range
+     * @param string from range
      */
-    void setRange(Pair<String, String> range);
+    void setFrom(String string);
+
+    /**
+     * @return to range
+     */
+    String getTo();
+
+    /**
+     * @param string to range
+     */
+    void setTo(String string);
+
 
 }
