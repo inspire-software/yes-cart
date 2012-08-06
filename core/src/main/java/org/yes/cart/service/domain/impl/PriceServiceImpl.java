@@ -343,12 +343,17 @@ public class PriceServiceImpl
     private List<PriceTierNode> getPriceTierNodes(final PriceTierTree priceTierTree, final String currency, final Shop shop) {
         List<PriceTierNode> priceTierNodes = priceTierTree.getPriceTierNodes(currency);
         if (priceTierNodes == null) {
+            return Collections.emptyList();
+            /*
+            TODO: YC-54 we must not use auto conversion since that would not make round numbers, which will make nav weird
+
             final String defaultCurrency = shop.getDefaultCurrency();
             final List<PriceTierNode> defTiers = priceTierTree.getPriceTierNodes(defaultCurrency);
             final BigDecimal exchangeRate = exchangeRateService.getExchangeRate(shop, defaultCurrency, currency);
             priceTierNodes = createPriceTierNodes(
                     defTiers,
                     MoneyUtils.notNull(exchangeRate, BigDecimal.ONE));
+            */
         }
         return priceTierNodes;
     }

@@ -26,6 +26,8 @@ import org.yes.cart.domain.entity.SkuPrice;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -42,18 +44,39 @@ public class SkuPriceBridge implements FieldBridge {
     /** {@inheritDoc} */
     public void set(final String proposedFiledName, final Object value, final Document document, final LuceneOptions luceneOptions) {
         if (value instanceof Collection) {
+            final Map<Long, Map<String, SkuPrice>> lowestQuantityPrice = new HashMap<Long, Map<String, SkuPrice>>();
             for (Object obj : (Collection)value) {
                 SkuPrice skuPrice = (SkuPrice) obj;
-                if (skuPrice.getQuantity().intValue() == 1) {
-                    String rez = objectToString(skuPrice.getShop().getShopId(), skuPrice.getCurrency(), skuPrice.getRegularPrice());
-                    Field field = new Field(
-                            proposedFiledName,
-                            rez,
-                            luceneOptions.getStore(),
-                            Field.Index.NOT_ANALYZED,
-                            luceneOptions.getTermVector()
-                    );
-                    document.add(field);
+                final Map<String, SkuPrice> lowestQuantityPriceByShop = lowestQuantityPrice.get(skuPrice.getShop().getId());
+                if (lowestQuantityPriceByShop == null) {
+                    // if we do not have a "byShop" this is the new lowest price
+                    final Map<String, SkuPrice> newLowestQuantity = new HashMap<String, SkuPrice>();
+                    newLowestQuantity.put(skuPrice.getCurrency(), skuPrice);
+                    lowestQuantityPrice.put(skuPrice.getShop().getId(), newLowestQuantity);
+                } else {
+                    final SkuPrice oldLowestQuantity = lowestQuantityPriceByShop.get(skuPrice.getCurrency());
+                    if (oldLowestQuantity == null) {
+                        // if we do not have the lowest for this shop for this currency just add it
+                        lowestQuantityPriceByShop.put(skuPrice.getCurrency(), skuPrice);
+                    } else if (oldLowestQuantity.getQuantity().compareTo(skuPrice.getQuantity()) < 0) {
+                        // if this sku price has lower quantity then this is probably better starting price
+                        lowestQuantityPriceByShop.put(skuPrice.getCurrency(), skuPrice);
+                    }
+                }
+            }
+            if (lowestQuantityPrice != null) {
+                for (final Map.Entry<Long, Map<String, SkuPrice>> shop : lowestQuantityPrice.entrySet()) {
+                    for (final Map.Entry<String, SkuPrice> currency : shop.getValue().entrySet()) {
+                        String rez = objectToString(shop.getKey(), currency.getKey(), currency.getValue().getRegularPrice());
+                        Field field = new Field(
+                                proposedFiledName,
+                                rez,
+                                luceneOptions.getStore(),
+                                Field.Index.NOT_ANALYZED,
+                                luceneOptions.getTermVector()
+                        );
+                        document.add(field);
+                    }
                 }
             }
         }

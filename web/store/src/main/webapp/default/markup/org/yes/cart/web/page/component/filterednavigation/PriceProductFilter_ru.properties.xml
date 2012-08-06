@@ -17,5 +17,5 @@
 
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-	<entry key="price">Price</entry>
+	<entry key="price">Цена</entry>
 </properties>
