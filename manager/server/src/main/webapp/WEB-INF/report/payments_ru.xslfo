@@ -25,16 +25,13 @@
                 <fo:static-content flow-name="xsl-region-before">
                     <fo:block text-align="left" font-weight="bold" font-size="16pt">
                         <fo:external-graphic src="report/yes-logo.png" width="30mm"/>
-                        Payments
+                        Оплата
                     </fo:block>
                 </fo:static-content>
 
                 <fo:static-content flow-name="xsl-region-after">
                     <fo:block text-align="right">
-                        Page
-                        <fo:page-number/>
-                        of
-                        <fo:page-number-citation ref-id="end"/>
+                        Страница <fo:page-number/> из <fo:page-number-citation ref-id="end"/>
                     </fo:block>
                 </fo:static-content>
 
@@ -50,46 +47,46 @@
                                             <fo:block font-weight="bold">N</fo:block>
                                         </fo:table-cell>
                                         <fo:table-cell border="solid 1px black" width="1.5cm" text-align="right">
-                                            <fo:block font-weight="bold">Id</fo:block>
+                                            <fo:block font-weight="bold">Ид</fo:block>
                                         </fo:table-cell>
                                         <fo:table-cell border="solid 1px black" width="2cm">
-                                            <fo:block font-weight="bold">Order</fo:block>
+                                            <fo:block font-weight="bold">Заказ</fo:block>
                                         </fo:table-cell>
                                         <fo:table-cell border="solid 1px black" width="2.2cm">
-                                            <fo:block font-weight="bold">Shipment</fo:block>
+                                            <fo:block font-weight="bold">Доставка</fo:block>
                                         </fo:table-cell>
                                         <fo:table-cell border="solid 1px black" width="3.5cm">
-                                            <fo:block font-weight="bold">Shopper</fo:block>
+                                            <fo:block font-weight="bold">Владелец</fo:block>
+                                            <fo:block font-weight="bold">карты</fo:block>
                                         </fo:table-cell>
                                         <fo:table-cell border="solid 1px black" width="1.5cm">
-                                            <fo:block font-weight="bold">Card</fo:block>
-                                            <fo:block font-weight="bold">data</fo:block>
+                                            <fo:block font-weight="bold">Данные</fo:block>
+                                            <fo:block font-weight="bold">карты</fo:block>
                                         </fo:table-cell>
 
                                         <fo:table-cell border="solid 1px black" width="3.5cm">
-                                            <fo:block font-weight="bold">Operation</fo:block>
+                                            <fo:block font-weight="bold">Операция</fo:block>
                                         </fo:table-cell>
 
                                         <fo:table-cell border="solid 1px black" width="3.5cm">
-                                            <fo:block font-weight="bold">Gateway</fo:block>
-                                            <fo:block font-weight="bold">info</fo:block>
+                                            <fo:block font-weight="bold">Платежный</fo:block>
+                                            <fo:block font-weight="bold">шлюз</fo:block>
                                         </fo:table-cell>
 
                                         <fo:table-cell border="solid 1px black" width="2.5cm">
-                                            <fo:block font-weight="bold">Date</fo:block>
+                                            <fo:block font-weight="bold">Дата</fo:block>
                                         </fo:table-cell>
 
                                         <fo:table-cell border="solid 1px black" width="2cm">
-                                            <fo:block font-weight="bold">Settlement</fo:block>
+                                            <fo:block font-weight="bold">Зачисленно</fo:block>
                                         </fo:table-cell>
 
                                         <fo:table-cell border="solid 1px black" width="1cm">
-                                            <fo:block font-weight="bold">Curr</fo:block>
-                                            <fo:block font-weight="bold">ency</fo:block>
+                                            <fo:block font-weight="bold">Валюта</fo:block>
                                         </fo:table-cell>
 
                                         <fo:table-cell border="solid 1px black" text-align="right" width="1.5cm">
-                                            <fo:block font-weight="bold">Amount</fo:block>
+                                            <fo:block font-weight="bold">Сумма</fo:block>
                                         </fo:table-cell>
                                     </fo:table-row>
                                 </fo:table-header>
@@ -183,7 +180,7 @@
                                                 <fo:table-row>
                                                     <fo:table-cell border="solid 1px black"
                                                                    number-columns-spanned="11" font-weight="bold">
-                                                        <fo:block>Summary</fo:block>
+                                                        <fo:block>Итого</fo:block>
                                                     </fo:table-cell>
                                                     <fo:table-cell border="solid 1px black" text-align="right"
                                                                    font-weight="bold">

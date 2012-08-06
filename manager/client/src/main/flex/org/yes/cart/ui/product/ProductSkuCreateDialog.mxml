@@ -111,6 +111,9 @@
         }
 
 
+        /**
+         * Wire ui and model.
+         */
         public function rebind():void {
 
             if (productSku != null) {
