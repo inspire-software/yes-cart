@@ -143,7 +143,40 @@
             </price-tiers>
         </currency>
         <currency>
-            <name>RUS</name>
+            <name>USD</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>UAH</name>
             <price-tiers>
                 <price-tier>
                     <from>0</from>

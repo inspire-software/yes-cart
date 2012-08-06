@@ -344,10 +344,11 @@ public class PriceServiceImpl
         List<PriceTierNode> priceTierNodes = priceTierTree.getPriceTierNodes(currency);
         if (priceTierNodes == null) {
             final String defaultCurrency = shop.getDefaultCurrency();
+            final List<PriceTierNode> defTiers = priceTierTree.getPriceTierNodes(defaultCurrency);
             final BigDecimal exchangeRate = exchangeRateService.getExchangeRate(shop, defaultCurrency, currency);
             priceTierNodes = createPriceTierNodes(
-                    priceTierTree.getPriceTierNodes(defaultCurrency),
-                    MoneyUtils.notNull(exchangeRate, BigDecimal.ZERO));
+                    defTiers,
+                    MoneyUtils.notNull(exchangeRate, BigDecimal.ONE));
         }
         return priceTierNodes;
     }
@@ -361,11 +362,14 @@ public class PriceServiceImpl
      */
     private List<PriceTierNode> createPriceTierNodes(final List<PriceTierNode> priceTierNodes, final BigDecimal exchangeRate) {
 
-        for (PriceTierNode priceTierNode : priceTierNodes) {
-            priceTierNode.setFrom(priceTierNode.getFrom().multiply(exchangeRate));
-            priceTierNode.setTo(priceTierNode.getTo().multiply(exchangeRate));
+        if (priceTierNodes != null) {
+            for (PriceTierNode priceTierNode : priceTierNodes) {
+                priceTierNode.setFrom(priceTierNode.getFrom().multiply(exchangeRate));
+                priceTierNode.setTo(priceTierNode.getTo().multiply(exchangeRate));
+            }
+            return priceTierNodes;
         }
-        return priceTierNodes;
+        return Collections.emptyList();
     }
 
     /**
