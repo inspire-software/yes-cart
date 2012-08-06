@@ -198,6 +198,9 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
         }
         final List<AttrValueCustomer> rez = new ArrayList<AttrValueCustomer>(customer.getAttribute());
         Collections.sort(rez, new AttrValueRankComparator());
+        for (AttrValueCustomer avc : rez) {
+            avc.getAttribute().getEtype().getBusinesstype(); //load lazy values
+        }
         return rez;
     }
 
