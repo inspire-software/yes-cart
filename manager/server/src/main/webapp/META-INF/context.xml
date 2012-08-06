@@ -26,10 +26,10 @@
               maxIdle="30"
               maxWait="10000"
               removeAbandoned="true"
-              username="app"
-              password="app"
-              driverClassName="org.apache.derby.jdbc.ClientDriver"
-              url="jdbc:derby://localhost:1527/yespay"
+              username="${db.config.yespay.login}"
+              password="${db.config.yespay.password}"
+              driverClassName="${db.config.yespay.driver}"
+              url="${db.config.yespay.url}"
             />
 
 
@@ -42,10 +42,10 @@
               maxIdle="30"
               maxWait="10000"
               removeAbandoned="true"
-              username="app"
-              password="app"
-              driverClassName="org.apache.derby.jdbc.ClientDriver"
-              url="jdbc:derby://localhost:1527/yes"
+              username="${db.config.yes.login}"
+              password="${db.config.yes.password}"
+              driverClassName="${db.config.yes.driver}"
+              url="${db.config.yes.url}"
             />
 
 
