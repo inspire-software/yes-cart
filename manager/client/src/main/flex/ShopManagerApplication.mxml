@@ -97,8 +97,8 @@
 
         public function init():void {
             currentState = "loginState";
-            var url:String = "http://{server.name}:{server.port}/yes-manager/spring/amf";
-            // var url:String = "http://localhost:8080/yes-manager/spring/amf";
+            // var url:String = "http://{server.name}:{server.port}/yes-manager/spring/amf";
+            var url:String = "http://localhost:8080/yes-manager/spring/amf";
 
             /*
              * Registering RMI classes by hand is more robust than annotations, since annotations
