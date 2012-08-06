@@ -162,7 +162,7 @@ public interface ProductTypeAttr extends Auditable, Rankable {
      *
      * @return {@link RangeList}
      */
-    RangeList<RangeNode> getRangeList();
+    RangeList getRangeList();
 
     /**
      * Set value ranges list.

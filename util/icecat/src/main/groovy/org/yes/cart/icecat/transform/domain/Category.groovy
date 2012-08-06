@@ -131,9 +131,9 @@ class Category {
 
     private String getRangeNavigationXml(String name) {
         if ("Вес".equals(name) ) {
-            return '<rangeList serialization="custom"><unserializable-parents/><list><default><size>8</size></default><int>8</int><range><range><first class="string">1200 г</first><second class="string">1500 г</second></range></range><range><range><first class="string">1500 г</first><second class="string">1800 г</second></range></range><range><range><first class="string">1800 г</first><second class="string">2000 г</second></range></range><range><range><first class="string">2000 г</first><second class="string">2500 г</second></range></range><range><range><first class="string">2500 г</first><second class="string">3000 г</second></range></range><range><range><first class="string">3000 г</first><second class="string">3500 г</second></range></range><range><range><first class="string">3500 г</first><second class="string">4000 г</second></range></range><range><range><first class="string">4000 г</first><second class="string">5000 г</second></range></range></list></rangeList>'
+            return '<range-list><ranges><range><from>1200 г</from><to>1500 г</to></range><range><from>1500 г</from><to>1800 г</to></range><range><from>1800 г</from><to>2000 г</to></range><range><from>2000 г</from><to>2500 г</to></range><range><from>2500 г</from><to>3000 г</to></range><range><from>3000 г</from><to>3500 г</to></range><range><from>3500 г</from><to>4000 г</to></range><range><from>4000 г</from><to>5000 г</to></range></ranges></range-list>'
         }   else if ("Weight".equals(name)) {
-           return  ''
+            return '<range-list><ranges><range><from>1200 g</from><to>1500 g</to></range><range><from>1500 g</from><to>1800 g</to></range><range><from>1800 g</from><to>2000 g</to></range><range><from>2000 g</from><to>2500 g</to></range><range><from>2500 g</from><to>3000 g</to></range><range><from>3000 g</from><to>3500 g</to></range><range><from>3500 g</from><to>4000 g</to></range><range><from>4000 g</from><to>5000 g</to></range></ranges></range-list>'
         }
         return ''
 

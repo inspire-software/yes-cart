@@ -107,100 +107,72 @@
                 <![CDATA[
 
 
-<pricetree>
-    <priceMap>
-        <entry>
-            <string>USD</string>
-            <list>
-                <pricenode>
-                    <priceRange>
-                        <first class="big-decimal">0</first>
-                        <second class="big-decimal">200</second>
-                    </priceRange>
-                </pricenode>
-                <pricenode>
-                    <priceRange>
-                        <first class="big-decimal">200</first>
-                        <second class="big-decimal">500</second>
-                    </priceRange>
-                </pricenode>
-                <pricenode>
-                    <priceRange>
-                        <first class="big-decimal">500</first>
-                        <second class="big-decimal">1000</second>
-                    </priceRange>
-                </pricenode>
-                <pricenode>
-                    <priceRange>
-                        <first class="big-decimal">1000</first>
-                        <second class="big-decimal">1300</second>
-                    </priceRange>
-                </pricenode>
-                <pricenode>
-                    <priceRange>
-                        <first class="big-decimal">1300</first>
-                        <second class="big-decimal">1500</second>
-                    </priceRange>
-                </pricenode>
-                <pricenode>
-                    <priceRange>
-                        <first class="big-decimal">1500</first>
-                        <second class="big-decimal">2000</second>
-                    </priceRange>
-                </pricenode>
-                <pricenode>
-                    <priceRange>
-                        <first class="big-decimal">2000</first>
-                        <second class="big-decimal">3000</second>
-                    </priceRange>
-                </pricenode>
-            </list>
-        </entry>
-        <entry>
-            <string>UAH</string>
-            <list>
-                <pricenode>
-                    <priceRange>
-                        <first class="big-decimal">0</first>
-                        <second class="big-decimal">5000</second>
-                    </priceRange>
-                </pricenode>
-                <pricenode>
-                    <priceRange>
-                        <first class="big-decimal">5000</first>
-                        <second class="big-decimal">6000</second>
-                    </priceRange>
-                </pricenode>
-                <pricenode>
-                    <priceRange>
-                        <first class="big-decimal">6000</first>
-                        <second class="big-decimal">8000</second>
-                    </priceRange>
-                </pricenode>
-                <pricenode>
-                    <priceRange>
-                        <first class="big-decimal">8000</first>
-                        <second class="big-decimal">10000</second>
-                    </priceRange>
-                </pricenode>
-                <pricenode>
-                    <priceRange>
-                        <first class="big-decimal">10000</first>
-                        <second class="big-decimal">16000</second>
-                    </priceRange>
-                </pricenode>
-                <pricenode>
-                    <priceRange>
-                        <first class="big-decimal">16000</first>
-                        <second class="big-decimal">24000</second>
-                    </priceRange>
-                </pricenode>
-            </list>
-        </entry>
-    </priceMap>
-</pricetree>
-
-
+<price-navigation>
+    <currencies>
+        <currency>
+            <name>EUR</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>RUS</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>5000</to>
+                </price-tier>
+                <price-tier>
+                    <from>5000</from>
+                    <to>6000</to>
+                </price-tier>
+                <price-tier>
+                    <from>6000</from>
+                    <to>8000</to>
+                </price-tier>
+                <price-tier>
+                    <from>8000</from>
+                    <to>10000</to>
+                </price-tier>
+                <price-tier>
+                    <from>10000</from>
+                    <to>16000</to>
+                </price-tier>
+                <price-tier>
+                    <from>16000</from>
+                    <to>24000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+    </currencies>
+</price-navigation>
 
 
                 ]]>

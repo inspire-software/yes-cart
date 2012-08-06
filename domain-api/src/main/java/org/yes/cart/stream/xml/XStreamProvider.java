@@ -16,19 +16,37 @@
 
 package org.yes.cart.stream.xml;
 
-import com.thoughtworks.xstream.XStream;
+import java.io.InputStream;
 
 /**
- * Interface to encapsulate creation of XStreams
+ * Interface to encapsulate creation of XStreams.
+ *
+ * XStream instantiation is an expensive process to this method should
+ * use as much cacheing as possible. XStream instance itself is thread-safe
+ * therefore is can be safely re-used after it had been configured once.
+ *
  * User: denispavlov
  * Date: 12-08-03
  * Time: 8:13 AM
  */
-public interface XStreamProvider {
+public interface XStreamProvider<T> {
 
     /**
-     * @return pre-configured XML stream
+     * @param xml representation of the object
+     * @return object
      */
-    XStream provide();
+    T fromXML(String xml);
+
+    /**
+     * @param is xml representation of the object
+     * @return object
+     */
+    T fromXML(InputStream is);
+
+    /**
+     * @param object object to serialize
+     * @return xml representation
+     */
+    String toXML(T object);
 
 }

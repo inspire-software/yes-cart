@@ -19,9 +19,15 @@ package org.yes.cart.domain.entity.bridge;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.junit.Test;
+import org.yes.cart.domain.entity.xml.ProductTypeRangeListXStreamProvider;
 import org.yes.cart.domain.misc.navigation.range.RangeList;
+import org.yes.cart.domain.misc.navigation.range.RangeNode;
 import org.yes.cart.domain.misc.navigation.range.impl.RangeListImpl;
 import org.yes.cart.domain.misc.navigation.range.impl.RangeNodeImpl;
+import org.yes.cart.stream.xml.XStreamProvider;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -35,12 +41,6 @@ import static org.junit.Assert.assertNotNull;
  */
 public class RangeListImplTest {
 
-    private XStream getXStream() {
-        XStream xStream = new XStream(new DomDriver());
-        xStream.alias(RangeList.RANGE_NODE_ALIAS, RangeNodeImpl.class);
-        xStream.alias(RangeList.RANGE_LIST_ALIAS, RangeListImpl.class);
-        return xStream;
-    }
 
     /**
      * <rangeList serialization="custom">
@@ -74,18 +74,24 @@ public class RangeListImplTest {
     @Test
     public void testXmlSerialization() {
         RangeList rangeList = new RangeListImpl();
-        rangeList.add(new RangeNodeImpl("0.001", "0.999"));
-        rangeList.add(new RangeNodeImpl("1.000", "1.999"));
-        rangeList.add(new RangeNodeImpl("2.000", "2.999"));
-        rangeList.add(new RangeNodeImpl("3.000", "3.999"));
-        rangeList.add(new RangeNodeImpl("4.000", "4.999"));
-        rangeList.add(new RangeNodeImpl("5.000", "5.999"));
-        rangeList.add(new RangeNodeImpl("6.000", "6.999"));
-        rangeList.add(new RangeNodeImpl("7.000", "7.999"));
-        String result = getXStream().toXML(rangeList);
+        List<RangeNode> nodes = new ArrayList<RangeNode>();
+        nodes.add(new RangeNodeImpl("0.001", "0.999"));
+        nodes.add(new RangeNodeImpl("1.000", "1.999"));
+        nodes.add(new RangeNodeImpl("2.000", "2.999"));
+        nodes.add(new RangeNodeImpl("3.000", "3.999"));
+        nodes.add(new RangeNodeImpl("4.000", "4.999"));
+        nodes.add(new RangeNodeImpl("5.000", "5.999"));
+        nodes.add(new RangeNodeImpl("6.000", "6.999"));
+        nodes.add(new RangeNodeImpl("7.000", "7.999"));
+        rangeList.setRanges(nodes);
+
+        final XStreamProvider<RangeList> provider = new ProductTypeRangeListXStreamProvider();
+
+        String result = provider.toXML(rangeList);
         assertNotNull(result);
-        rangeList = (RangeList) getXStream().fromXML(result);
+        rangeList = provider.fromXML(result);
         assertNotNull(rangeList);
-        assertEquals(8, rangeList.size());
+        assertNotNull(rangeList.getRanges());
+        assertEquals(8, rangeList.getRanges().size());
     }
 }

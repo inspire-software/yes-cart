@@ -30,7 +30,9 @@ import org.junit.rules.ExternalResource;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -96,8 +98,20 @@ public abstract class AbstractTestDAO {
         for (String tableName : tables) {
             queryDataSet.addTable(tableName);
         }
-        FlatXmlDataSet.write(queryDataSet,
-                new FileOutputStream("target/test-classes/" + prefix + "_dataset.xml"));
+        FileOutputStream fos = null;
+        try {
+            final File dump = new File("target/test-classes/" + prefix + "_dataset.xml");
+            if (!dump.exists()) {
+                dump.createNewFile();
+            }
+            System.out.println("DUMP: " + dump.getAbsoluteFile());
+            fos = new FileOutputStream(dump);
+            FlatXmlDataSet.write(queryDataSet, fos);
+        } finally {
+            if (fos != null) {
+                fos.close();
+            }
+        }
 
     }
 

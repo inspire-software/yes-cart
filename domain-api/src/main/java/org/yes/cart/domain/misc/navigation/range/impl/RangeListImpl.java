@@ -17,9 +17,11 @@
 package org.yes.cart.domain.misc.navigation.range.impl;
 
 import org.yes.cart.domain.misc.navigation.range.RangeList;
+import org.yes.cart.domain.misc.navigation.range.RangeNode;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * List of range values.
@@ -28,15 +30,24 @@ import java.util.ArrayList;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public class RangeListImpl<E> extends ArrayList implements RangeList, Serializable {
+public class RangeListImpl implements RangeList {
 
-    private static final long serialVersionUID = 20100711L;
+    private List<RangeNode> ranges;
 
     /**
-     * Default constructror.
+     * Default constructor.
      */
     public RangeListImpl() {
         super();
     }
 
+    /** {@inheritDoc} */
+    public List<RangeNode> getRanges() {
+        return ranges;
+    }
+
+    /** {@inheritDoc} */
+    public void setRanges(final List<RangeNode> ranges) {
+        this.ranges = ranges;
+    }
 }

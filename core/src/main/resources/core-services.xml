@@ -1073,7 +1073,7 @@
 
     <!-- ########################################## bulk import ########################## -->
 
-    <bean id="importDescriptorXStreamProvider" class="org.yes.cart.bulkimport.stream.xml.ImportDescriptorXStreamProvider"/>
+    <bean id="importDescriptorXStreamProvider" class="org.yes.cart.bulkimport.stream.xml.CsvImportDescriptorXStreamProvider"/>
 
     <bean id="bulkImportServiceImpl" class="org.yes.cart.bulkimport.csv.impl.CsvBulkImportServiceImpl">
         <property name="genericDAO" ref="genericDao"/>

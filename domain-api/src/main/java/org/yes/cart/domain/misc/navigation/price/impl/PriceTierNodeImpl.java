@@ -29,9 +29,28 @@ import java.util.List;
  */
 public class PriceTierNodeImpl implements PriceTierNode {
 
-    private Pair<BigDecimal, BigDecimal> priceRange;
+    private BigDecimal from;
+    private BigDecimal to;
 
-    private List<PriceTierNode> priceSubRange;
+    /** {@inheritDoc} */
+    public BigDecimal getFrom() {
+        return from;
+    }
+
+    /** {@inheritDoc} */
+    public void setFrom(final BigDecimal from) {
+        this.from = from;
+    }
+
+    /** {@inheritDoc} */
+    public BigDecimal getTo() {
+        return to;
+    }
+
+    /** {@inheritDoc} */
+    public void setTo(final BigDecimal to) {
+        this.to = to;
+    }
 
     /**
      * Defualt PriceTierNodeImpl constructor. 
@@ -40,27 +59,8 @@ public class PriceTierNodeImpl implements PriceTierNode {
         super();
     }
 
-    public Pair<BigDecimal, BigDecimal> getPriceRange() {
-        return priceRange;
-    }
-
-    public void setPriceRange(final Pair<BigDecimal, BigDecimal> priceRange) {
-        this.priceRange = priceRange;
-    }
-
-    public List<PriceTierNode> getPriceSubRange() {
-        return priceSubRange;
-    }
-
-    public void setPriceSubRange(final List<PriceTierNode> priceSubRange) {
-        this.priceSubRange = priceSubRange;
-    }
-
-    public PriceTierNodeImpl(final Pair<BigDecimal, BigDecimal> priceRange) {
-        this.priceRange = priceRange;
-    }
-
-    public PriceTierNodeImpl(final BigDecimal bottomBorder, final BigDecimal topBorder) {
-        this.priceRange = new Pair<BigDecimal, BigDecimal>(bottomBorder, topBorder);
+    public PriceTierNodeImpl(final BigDecimal loPrice, final BigDecimal hiPrice) {
+        from = loPrice;
+        to = hiPrice;
     }
 }

@@ -19,6 +19,7 @@ package org.yes.cart.bulkimport.stream.xml;
 import com.thoughtworks.xstream.XStream;
 import org.junit.Test;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
+import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.csv.CsvImportFile;
 import org.yes.cart.bulkimport.model.FieldTypeEnum;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
@@ -36,16 +37,14 @@ import static org.junit.Assert.assertTrue;
  * Date: 12-08-03
  * Time: 9:35 AM
  */
-public class ImportDescriptorXStreamProviderTest {
+public class CsvImportDescriptorXStreamProviderTest {
 
     @Test
     public void testProvide() throws Exception {
-        final XStreamProvider provider = new ImportDescriptorXStreamProvider();
-
-        final XStream xStream = provider.provide();
+        final XStreamProvider<CsvImportDescriptor> provider = new CsvImportDescriptorXStreamProvider();
 
         final InputStream inputStream = new FileInputStream("src/test/resources/import/attribute.xml");
-        final ImportDescriptor desc = (ImportDescriptor)xStream.fromXML(inputStream);
+        final ImportDescriptor desc = provider.fromXML(inputStream);
 
         assertNotNull(desc);
         assertEquals("org.yes.cart.domain.entity.Attribute", desc.getEntityType());
