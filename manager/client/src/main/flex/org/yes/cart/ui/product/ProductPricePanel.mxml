@@ -28,10 +28,8 @@
                                  labelField="name"
                                  data="shopId"
                                  change="onShopSelectionChanged(event)"
-                                 prompt="@Resource(bundle='ProductManagementPanel',key='selectStorePropmt')">
-                    </mx:ComboBox>
-                    <mx:Label text="@Resource(bundle='ProductManagementPanel',key='defaultCurrency')"/>
-                    <mx:Label id="defaultCurrencyLabel"/>
+                                 prompt="@Resource(bundle='ProductManagementPanel',key='selectStorePropmt')"/>
+                    <mx:ComboBox id="storeCurrencyComboBox" change="onShopCurrencyChange(event)"/>
                 </mx:HBox>
             </mx:FormItem>
             <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='price')">
@@ -300,17 +298,18 @@
 
         private function refreshSkuPrices():void {
             prices = new ArrayCollection();
-            if (storesComboBox.selectedItem == null) {
+            if (storesComboBox.selectedItem == null || storeCurrencyComboBox.selectedItem == null) {
                 return;
             }
             var shopDTOImpl:ShopDTOImpl = storesComboBox.selectedItem as ShopDTOImpl;
-            if (shopDTOImpl != null) {
+            var selectedPrice:String = storeCurrencyComboBox.selectedItem as String;
+            if (shopDTOImpl != null && selectedPrice != null) {
                 for each (var sku:ProductSkuDTOImpl in allProductSkus) {
                     Debug.trace("DEBUG ProductPricePanel sku is:" + sku);
                     for each (var priceCandidate:SkuPriceDTOImpl in sku.price) {
                         Debug.trace("DEBUG ProductPricePanel priceCandidate is:" + priceCandidate);
                         if (shopDTOImpl.shopId == priceCandidate.shopId
-                                && defaultCurrencyLabel.text == priceCandidate.currency) {
+                                && selectedPrice == priceCandidate.currency) {
                             prices.addItem(priceCandidate);
                         }
                     }
@@ -379,7 +378,8 @@
         }
 
         private function onEditPriceClick(event:MouseEvent):void {
-            if (allowEditPrice && priceDataGrid.selectedItem != null && storesComboBox.selectedItem != null) {
+            if (allowEditPrice && priceDataGrid.selectedItem != null && storesComboBox.selectedItem != null
+                    && storeCurrencyComboBox.selectedItem != null) {
                 createPriceDialog = CreatePriceDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CreatePriceDialog, true));
                 createPriceDialog.skuComboBox.dataProvider = allProductSkus;
                 for (var i:int = 0, il:int = allProductSkus.length; i < il; i++) {
@@ -392,7 +392,7 @@
                     }
                 }
 
-                createPriceDialog.currency = defaultCurrencyLabel.text;
+                createPriceDialog.currency = storeCurrencyComboBox.selectedItem as String;
                 createPriceDialog.shopId = storesComboBox.selectedItem.shopId;
                 createPriceDialog.saveBtn.addEventListener(MouseEvent.CLICK, onUpdatePriceSaveClick);
                 createPriceDialog.skuPrice = priceDataGrid.selectedItem as SkuPriceDTOImpl;
@@ -413,10 +413,10 @@
         }
 
         private function onAddPriceClick(event:MouseEvent):void {
-            if (allowAddPrice && storesComboBox.selectedItem != null) {
+            if (allowAddPrice && storesComboBox.selectedItem != null && storeCurrencyComboBox.selectedItem != null) {
                 createPriceDialog = CreatePriceDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CreatePriceDialog, true));
-                createPriceDialog.skuComboBox.dataProvider = remoteProductSkuService.getAllProductSkus.lastResult;
-                createPriceDialog.currency = defaultCurrencyLabel.text;
+                createPriceDialog.skuComboBox.dataProvider = allProductSkus;
+                createPriceDialog.currency = storeCurrencyComboBox.selectedItem as String;
                 createPriceDialog.shopId = storesComboBox.selectedItem.shopId;
                 createPriceDialog.saveBtn.addEventListener(MouseEvent.CLICK, onAddPriceSaveClick);
                 createPriceDialog.skuPriceCreate();
@@ -426,10 +426,10 @@
 
         private function onAddPriceSaveClick(event:Event):void {
 
-            if (allowAddPrice && storesComboBox.selectedItem != null) {
+            if (allowAddPrice && storesComboBox.selectedItem != null && storeCurrencyComboBox.selectedItem != null) {
                 var price:SkuPriceDTOImpl = createPriceDialog.skuPrice;
                 price.shopId = storesComboBox.selectedItem.shopId;
-                price.currency = defaultCurrencyLabel.text;
+                price.currency = storeCurrencyComboBox.selectedItem as String;
                 remoteProductSkuService.createSkuPrice(price);
                 createPriceDialog.saveBtn.removeEventListener(MouseEvent.CLICK, onAddPriceSaveClick);
                 PopUpManager.removePopUp(createPriceDialog);
@@ -460,10 +460,14 @@
             allowDeletePrice = false;
             allowEditPrice = false;
             if (assignedCurrencyStr == null || assignedCurrencyStr == "null") {
-                defaultCurrencyLabel.text = resourceManager.getString("ProductManagementPanel", "currencyNotConfigured");
+                storeCurrencyComboBox.dataProvider = null;
+                storeCurrencyComboBox.enabled = false;
                 allowAddPrice = false;
             } else {
-                defaultCurrencyLabel.text = assignedCurrencyStr.split(",")[0];
+                storeCurrencyComboBox.dataProvider = new ArrayCollection(assignedCurrencyStr.split(","));
+                storeCurrencyComboBox.enabled = true;
+                storeCurrencyComboBox.selectedIndex = 0;
+                storeCurrencyComboBox.selectedItem = storeCurrencyComboBox.dataProvider.getItemAt(0);
                 refreshSkuPrices();
                 allowAddPrice = true;
             }
@@ -472,9 +476,7 @@
 
         private function onGetAllProductSkusResult(event:ResultEvent):void {
             allProductSkus = event.result as ArrayCollection;
-            if (storesComboBox.selectedItem != null) {
-                refreshSkuPrices();
-            }
+            refreshSkuPrices();
         }
 
         private function onUpdateSkuPriceResult(event:ResultEvent):void {
@@ -487,6 +489,10 @@
 
         private function onCreateSkuPriceResult(event:ResultEvent):void {
             remoteProductSkuService.getAllProductSkus(productId);
+        }
+
+        private function onShopCurrencyChange(event:ListEvent):void {
+            refreshSkuPrices();
         }
         ]]>
    </mx:Script>
