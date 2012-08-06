@@ -73,9 +73,10 @@
 
 
         <column-descriptor>
-            <column-index>6</column-index>
+            <column-index>-1</column-index>
             <field-type>FIELD</field-type>
             <name>quantity</name>
+            <value-constant>1</value-constant>
         </column-descriptor>
 
         <column-descriptor>

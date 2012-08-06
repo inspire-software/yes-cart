@@ -97,7 +97,7 @@ public interface SkuPrice extends Auditable {
     /**
      * Set regular price.
      *
-     * @param regularPrice regula price.
+     * @param regularPrice regular price.
      */
     void setRegularPrice(BigDecimal regularPrice);
 

@@ -17,6 +17,7 @@
 
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
+	<entry key="home">Home</entry>
 	<entry key="brand">Brand</entry>
 	<entry key="price">Price</entry>
 	<entry key="query">Search</entry>
