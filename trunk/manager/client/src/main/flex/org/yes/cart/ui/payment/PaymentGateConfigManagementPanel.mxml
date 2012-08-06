@@ -205,13 +205,8 @@
          */
         private function init():void {
             localeFilter = resourceManager.getString('ReportPanel', 'localeFilter');       //todo move to one place
-            loadGatewayList()
-        }
 
-        /**
-         * Load payment gateways configuration.
-         */
-        private function loadGatewayList():void {
+            //Load list of payment gateways.
             remotePaymentModulesManagementService.getPaymentGateways(localeFilter).addResponder(
                     new AsyncResponder(
                             function (event:ResultEvent, obj:Object = null):void {
@@ -221,6 +216,7 @@
                             ShopManagerGlobal.instance.defaultOnRpcMethodFault)
             );
         }
+
 
         /**
          * Handle gataway selection event.
@@ -236,8 +232,6 @@
                             ,
                             ShopManagerGlobal.instance.defaultOnRpcMethodFault)
             );
-
-
         }
 
 
@@ -249,17 +243,12 @@
          * @return nothing
          */
         private function onAttributeValueEditEnd(event:DataGridEvent):void {
-
             if (event.reason == DataGridEventReason.CANCELLED) {
                 return; // Do not update cell.
             }
-
             event.preventDefault(); // Disable copying data back to the control.
-
             var paymentGatewayParameter:Object = DataGrid(event.target).dataProvider[event.rowIndex];
-
             onValueChanged(event, paymentGatewayParameter, /*textInput.text*/ paymentGatewayParameter.value);
-
         }
 
         /**
@@ -271,7 +260,6 @@
                     gatewayGrid.selectedItem.label,
                     pgParameter.label,
                     pgParameter.value);
-
         }
 
 

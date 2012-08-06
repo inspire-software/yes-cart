@@ -30,11 +30,7 @@
         import org.yes.cart.shopmanager.ShopManagerGlobal;
 
         private function init():void {
-
             localeFilter = resourceManager.getString('ReportPanel', 'localeFilter');       //todo move to one place
-
-
-
         }
 
 
@@ -63,55 +59,51 @@
          * @return nothing
          */
         private function onCleanFilterClick(event:MouseEvent):void {
-
-
             fromDate.selectedDate = null;
             tillDate.selectedDate = null;
             orderNumber.text = "";
             lastCardDigits.text = "";
             cardHolderName.text = "";
-
-
         }
-        
-        
+
+
+        /**
+         * Add info line to tooltip.   Line will be added if value is not null and not empty.
+         * @param info   tooltip
+         * @param toAddName  value description
+         * @param toAddValue  value
+         * @return     tooltip
+         */
         private function addLine(info:String, toAddName:String, toAddValue:Object) : String {
-
             var val:String = "" + toAddValue;
-            
             if (val.length > 0 && val != "null") {
-
                 info += toAddName + " : " +  val + "\n";
-                
             }
-            
             return info;
-            
         }
 
-        private function paymentToolTip(item:Object):String {
+        /**
+         * Construct tooltip for given payment item.
+         * @param item given item
+         * @return tooltip
+         */
+        private function onConstructToolTip(item:Object):String {
+
             var toolTip:String = "";
-            
-            
+
             toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'id'), item.customerOrderPaymentId) + "\n";
 
-            
-            
             toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'cardHolderName') ,item.cardHolderName);
             toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'cardNumber') ,item.cardNumber);
             toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'cardExpired') ,item.cardExpireMonth + "/" + item.cardExpireYear);
             toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'cardIsuueNumber') ,item.cardIsuueNumber) + "\n";
-            
-            
-            
+
             toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'orderNumber') ,item.orderNumber);
             toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'orderDate') ,item.orderDate);
             toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'paymentAmount') ,item.paymentAmount);
             toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'orderCurrency') ,item.orderCurrency);
             toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'orderShipment') ,item.orderShipment) + "\n";
-            
-            
-            
+
             toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'transactionReferenceId') ,item.transactionReferenceId);
             toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'transactionRequestToken') ,item.transactionRequestToken);
             toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'transactionAuthorizationCode') ,item.transactionAuthorizationCode);
@@ -185,7 +177,7 @@
             </mx:ControlBar>
 
             <mx:DataGrid x="0" y="0" width="100%" height="99%"  editable="true"
-                         dataTipFunction="paymentToolTip"
+                         dataTipFunction="onConstructToolTip"
                          dataProvider="{remotePaymentModulesManagementService.findPayments.lastResult}">
 
                 <mx:columns>

@@ -32,9 +32,14 @@
         import mx.controls.DateField;
         import mx.controls.TextInput;
         import mx.core.UIComponent;
+        import mx.events.ValidationResultEvent;
         import mx.rpc.AsyncResponder;
         import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
+        import mx.validators.DateValidator;
+        import mx.validators.NumberValidator;
+        import mx.validators.StringValidator;
+        import mx.validators.Validator;
 
         import org.yes.cart.report.impl.ReportDescriptor;
         import org.yes.cart.report.impl.ReportPair;
@@ -43,13 +48,13 @@
 
         [Bindable]
         private var pdf:ByteArray;
+        private var validationArray:Array = new Array();
 
         private var reportName:String;
 
         private function init():void {
             localeFilter = resourceManager.getString('ReportPanel', 'localeFilter');
             remoteReportService.getReportDescriptors();
-
         }
 
 
@@ -61,24 +66,16 @@
         private function getReportLabel(itm:Object):String {
             var reportDesriptor:ReportDescriptor = itm as ReportDescriptor;
             var rez:String = reportDesriptor.reportId;
-            try {
-                for (var i:int = 0; i < reportDesriptor.langLabel.length; i++) {
-                    var langLabel:ReportPair = ReportPair(reportDesriptor.langLabel.getItemAt(i));
-                    if (langLabel != null) {
-                        Debug.trace(langLabel);
-                        if (langLabel.lang == localeFilter) {
-                            rez = langLabel.value;
-                            break;
-                        }
-
+            for (var i:int = 0; i < reportDesriptor.langLabel.length; i++) {
+                var langLabel:ReportPair = ReportPair(reportDesriptor.langLabel.getItemAt(i));
+                if (langLabel != null) {
+                    Debug.trace(langLabel);
+                    if (langLabel.lang == localeFilter) {
+                        rez = langLabel.value;
+                        break;
                     }
                 }
-
-            } catch (errObject:Error) {
-                rez = rez + errObject.message;
             }
-
-
             return rez;
         }
 
@@ -86,38 +83,20 @@
          * Fill parameter form with new parameters to get user input for selected report.
          * @param event
          */
-        private function fillParameterForm(event:Event):void {
-
-
+        private function onReportComboboxChange(event:Event):void {
             var reportDescriptor:ReportDescriptor = ReportDescriptor(reportComboBox.selectedItem);
-
             parameterForm.removeAllChildren();
-
+            validationArray = new Array();
             pdf = null;
-
-            Debug.trace("Report has " + reportDescriptor.parameters.length + " parameters");
-
+            Debug.trace("DEBUG Report has " + reportDescriptor.parameters.length + " parameters");
             try {
-
-
-                var debugStr:String = "";
-
                 for (var i:int = 0; i < reportDescriptor.parameters.length; i++) {
-
                     var repoParam:ReportParameter = ReportParameter(reportDescriptor.parameters.getItemAt(i));
-                    debugStr += repoParam + "\n";
                     for (var j:int = 0; j < repoParam.langLabel.length; j++) { //loop through languages
-
-
                         var localizedParamName:ReportPair = ReportPair(repoParam.langLabel.getItemAt(j));
-
-                        debugStr += "       " + localizedParamName + "\n";
-
                         if (localizedParamName.lang == localeFilter) {
-
                             var formItem:FormItem = new FormItem();
                             formItem.label = localizedParamName.value;
-
                             if (repoParam.allowedValuesQuery != null && repoParam.allowedValuesQuery.length > 0) {
                                 var cbmBox:ComboBox = new ComboBox();
                                 cbmBox.prompt = resourceManager.getString('ReportPanel', 'selectDataPrompt');
@@ -133,15 +112,36 @@
                                                 }
                                         )
                                 );
-                                formItem.addChild(cbmBox); //todo data
-
+                                if (repoParam.mandatory) {
+                                    var numberValidator:NumberValidator = new NumberValidator();
+                                    numberValidator.source = cbmBox;
+                                    numberValidator.property = "selectedIndex";
+                                    numberValidator.minValue = 0; // -1 means no selection
+                                    numberValidator.lowerThanMinError = resourceManager.getString('ReportPanel', 'cmbSelectValue');
+                                    validationArray.push(numberValidator);
+                                }
+                                formItem.addChild(cbmBox);
                             } else if (repoParam.businesstype == "Date") {
-                                //var offsetDay = 1000*60*60*24;// milliseconds in one day
                                 var dtf:DateTimeField = new DateTimeField();
-                                //dtf.selectedDate = new Date( (new Date()).getTime() - offsetDay ); //one day ago
+                                if (repoParam.mandatory) {
+                                    var dataValidator:DateValidator = new DateValidator();
+                                    dataValidator.source = dtf;
+                                    dataValidator.property =  "selectedDate";
+                                    dataValidator.required = true;
+                                    validationArray.push(dataValidator);
+                                }
                                 formItem.addChild(dtf);
                             } else {
-                                formItem.addChild(new TextInput());
+                                var textInput:TextInput = new TextInput();
+                                if (repoParam.mandatory) {
+                                    var stringValidator:StringValidator = new StringValidator();
+                                    stringValidator.source = textInput;
+                                    stringValidator.property = "text";
+                                    stringValidator.required = true;
+                                    stringValidator.maxLength = 1;
+                                    validationArray.push(stringValidator);
+                                }
+                                formItem.addChild(textInput);
                             }
 
                             parameterForm.addChild(formItem);
@@ -149,13 +149,10 @@
                         }
                     }
                 }
-
-                Debug.trace(debugStr);
             } catch (e:Error) {
-                Debug.trace("" + e);
+                Debug.trace("DEBUG error " + e);
             }
 
-            okBtnCrtlBar.width = parameterForm.width;
         }
 
 
@@ -186,15 +183,17 @@
 
         }
 
+        /**
+         * Save report to disk.
+         * @param event  mouse event
+         */
         private function onDownloadReportClick(event:MouseEvent):void {
             //http://forums.adobe.com/message/3614898
-            var fileReference:FileReference = new FileReference();
-
-            fileReference.save(
+            new FileReference().save(
                     pdf,
                     reportName
             );
-
+            pdf = null;
         }
 
         /**
@@ -202,23 +201,29 @@
          *
          * @param event mouse event
          */
-        private function createReport(event:MouseEvent):void {
-
-            pdf = null;
-            reportName = getReportLabel(reportComboBox.selectedItem) + "_" + DateField.dateToString(new Date(), "DD-MM-YYYY") + ".pdf";
-
-            for (var obj:Object in parameterForm.getChildren()) {
-                Debug.traceObj(obj, 10);
+        private function onCreateReportButtonClick(event:MouseEvent):void {
+            var errArr:Array = Validator.validateAll(validationArray);
+            if(errArr.length == 0) {
+                pdf = null;
+                reportName = getReportLabel(reportComboBox.selectedItem) + "_" + DateField.dateToString(new Date(), "DD-MM-YYYY") + ".pdf";
+                var reportDescriptor:ReportDescriptor = ReportDescriptor(reportComboBox.selectedItem);
+                remoteReportService.downloadReport(
+                        localeFilter,
+                        reportDescriptor.reportId,
+                        collectReportParameters()
+                );
+            } else {
+                var err:ValidationResultEvent;
+                var errorMessageArray:Array = [];
+                for each (err in errArr) {
+                    var errField:String = FormItem(err.currentTarget.source.parent).label;
+                    errorMessageArray.push(errField + " : " + err.message);
+                }
+                Alert.show(
+                        errorMessageArray.join("\n\n"),
+                        resourceManager.getString('ReportPanel', 'invalidForm'),
+                        Alert.OK);
             }
-
-            var reportDescriptor:ReportDescriptor = ReportDescriptor(reportComboBox.selectedItem);
-
-            remoteReportService.downloadReport(
-                    localeFilter,
-                    reportDescriptor.reportId,
-                    collectReportParameters()
-            );
-
         }
 
         private function onRpcMethodFault(event:FaultEvent):void {
@@ -251,18 +256,26 @@
     <mx:Canvas width="100%" height="100%">
         <mx:VBox x="0" y="0" width="100%" height="100%" id="shopManagmenlPanel">
             <mx:ControlBar width="100%">
+
                 <mx:Text text="@Resource(bundle='ReportPanel',key='report')"/>
+
                 <mx:ComboBox id="reportComboBox"
                              labelFunction="getReportLabel"
                              data="reportId"
                              dataProvider="{remoteReportService.getReportDescriptors.lastResult}"
-                             change="fillParameterForm(event)"
+                             change="onReportComboboxChange(event)"
                              prompt="@Resource(bundle='ReportPanel',key='selectReportPropmt')">
                 </mx:ComboBox>
+
+                <mx:Button visible="{reportComboBox.selectedItem != null}" click="onCreateReportButtonClick(event)"
+                           id="okBtn" label="@Resource(bundle='ReportPanel',key='ok')"/>
+
+                <mx:Button visible="{pdf != null}" click="onDownloadReportClick(event)"
+                           id="saveBtn" label="@Resource(bundle='ReportPanel',key='save')"/>
+
             </mx:ControlBar>
 
-            <mx:Form id="parameterForm" visible="{reportComboBox.selectedItem != null}" x="0" y="0" borderStyle="solid"
-                     borderVisible="true">
+            <mx:Form id="parameterForm" visible="{reportComboBox.selectedItem != null}" x="0" y="0">
                 <mx:FormItem label="@Resource(bundle='BrandManagementPanel',key='name')">
                     <mx:TextInput id="nameTextImput" width="200"/>
                 </mx:FormItem>
@@ -272,18 +285,6 @@
 
 
             </mx:Form>
-
-            <mx:ControlBar id="okBtnCrtlBar"
-                           width="100%" visible="{reportComboBox.selectedItem != null}">
-
-
-                <mx:Button visible="{pdf != null}" click="onDownloadReportClick(event)"
-                           id="saveBtn" label="@Resource(bundle='ReportPanel',key='save')"/>
-
-                <mx:Button visible="{reportComboBox.selectedItem != null}" click="createReport(event)"
-                           id="okBtn" label="@Resource(bundle='ReportPanel',key='ok')"/>
-
-            </mx:ControlBar>
 
 
         </mx:VBox>
