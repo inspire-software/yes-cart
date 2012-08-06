@@ -181,6 +181,7 @@
             if (event.label == "XML") {
                 rawXML.text = xml.toXMLString();
             } else {
+                xml = new XML(rawXML.text);
                 recreateTabs(xml);
                 addRowEnabled = currencyViewStack.numChildren > 0;
             }
