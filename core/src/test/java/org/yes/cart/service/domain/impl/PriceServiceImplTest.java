@@ -83,10 +83,7 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
         // In other currency
         navigationRecords = priceService.getPriceNavigationRecords(priceTierTree, "UAH", shop);
         assertNotNull(navigationRecords);
-        assertEquals(3, navigationRecords.size());
-        assertEquals("UAH-0-1138", navigationRecords.get(0).getValue());
-        assertEquals("UAH-1138-3414", navigationRecords.get(1).getValue());
-        assertEquals("UAH-3414-5690", navigationRecords.get(2).getValue());
+        assertEquals(0, navigationRecords.size()); // we only use explicit navs (no auto exchange)
     }
 
     /**
