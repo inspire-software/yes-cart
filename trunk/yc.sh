@@ -10,6 +10,8 @@ RUNDIR=`pwd`
 
 YC_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+MVN=$M2_HOME/bin/mvn
+
 show_env() {
     echo "================================================";
     echo " Environment variables                          ";
@@ -60,25 +62,25 @@ add_mvn_extra_dep() {
     cd $YC_HOME/env/setup/lib3rdparty
 
     LIBFILE=$YC_HOME/env/setup/lib3rdparty/authorize.net/anet-java-sdk-1.4.2.jar
-    $M2_HOME/bin/mvn install:install-file -DgroupId=net.authorize -DartifactId=authorize-client -Dversion=1.4.2 -Dpackaging=jar -Dfile=$LIBFILE
+    $MVN install:install-file -DgroupId=net.authorize -DartifactId=authorize-client -Dversion=1.4.2 -Dpackaging=jar -Dfile=$LIBFILE
 
     LIBFILE=$YC_HOME/env/setup/lib3rdparty/cybersource/cybssecurity.jar
-    $M2_HOME/bin/mvn install:install-file -DgroupId=com.cybersource -DartifactId=cybersource-security -Dversion=1.5 -Dpackaging=jar -Dfile=$LIBFILE
+    $MVN install:install-file -DgroupId=com.cybersource -DartifactId=cybersource-security -Dversion=1.5 -Dpackaging=jar -Dfile=$LIBFILE
 
     LIBFILE=$YC_HOME/env/setup/lib3rdparty/cybersource/cybsclients15.jar
-    $M2_HOME/bin/mvn install:install-file -DgroupId=com.cybersource -DartifactId=cybersource-client -Dversion=1.5 -Dpackaging=jar -Dfile=$LIBFILE
+    $MVN install:install-file -DgroupId=com.cybersource -DartifactId=cybersource-client -Dversion=1.5 -Dpackaging=jar -Dfile=$LIBFILE
 
     LIBFILE=$YC_HOME/env/setup/lib3rdparty/payflow/payflow.jar
-    $M2_HOME/bin/mvn install:install-file -DgroupId=paypal.payflow -DartifactId=payflow-client -Dversion=4.31 -Dpackaging=jar -Dfile=$LIBFILE
+    $MVN install:install-file -DgroupId=paypal.payflow -DartifactId=payflow-client -Dversion=4.31 -Dpackaging=jar -Dfile=$LIBFILE
 
     LIBFILE=$YC_HOME/env/setup/lib3rdparty/paypal/paypal_base.jar
-    $M2_HOME/bin/mvn install:install-file -DgroupId=com.paypal -DartifactId=paypal-client -Dversion=5.1.1 -Dpackaging=jar -Dfile=$LIBFILE
+    $MVN install:install-file -DgroupId=com.paypal -DartifactId=paypal-client -Dversion=5.1.1 -Dpackaging=jar -Dfile=$LIBFILE
 
     LIBFILE=$YC_HOME/env/setup/lib3rdparty/google.checkout/checkout-sdk-2.5.1.jar
-    $M2_HOME/bin/mvn install:install-file -DgroupId=com.google.checkout -DartifactId=checkout-sdk -Dversion=2.5.1 -Dpackaging=jar -Dfile=$LIBFILE
+    $MVN install:install-file -DgroupId=com.google.checkout -DartifactId=checkout-sdk -Dversion=2.5.1 -Dpackaging=jar -Dfile=$LIBFILE
 
     LIBFILE=$YC_HOME/env/setup/lib3rdparty/jai/mlibwrapper_jai.jar
-    $M2_HOME/bin/mvn install:install-file -DgroupId=com.sun.media -DartifactId=mlibwrapper_jai -Dversion=1.1.3 -Dpackaging=jar -Dfile=$LIBFILE
+    $MVN install:install-file -DgroupId=com.sun.media -DartifactId=mlibwrapper_jai -Dversion=1.1.3 -Dpackaging=jar -Dfile=$LIBFILE
 
     cd $YC_HOME
 
@@ -92,8 +94,8 @@ cp_client_to_webapp() {
     echo " Copy SWF client to webapps                     ";
     echo "================================================";
 
-    echo " copying... `pwd`/manager/client/target/ShopManagerApplication.swf";
-    cp ./manager/client/target/ShopManagerApplication.swf  ./manager/server/src/main/webapp/ShopManagerApplication.swf
+    echo " copying... $YC_HOME/manager/client/target/ShopManagerApplication.swf";
+    cp $YC_HOME/manager/client/target/ShopManagerApplication.swf  $YC_HOME/manager/server/src/main/webapp/ShopManagerApplication.swf
 
 }
 
