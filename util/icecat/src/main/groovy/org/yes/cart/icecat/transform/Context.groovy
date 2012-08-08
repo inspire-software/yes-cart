@@ -31,7 +31,7 @@ class Context  {
 
     String login = "denis.v.pavlov";
 
-    String pwd = "d3n1\$PaV098";
+    String pwd = "";
 
     int langId = 8;
 
