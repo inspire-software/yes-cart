@@ -34,31 +34,33 @@
                                click="onRemoveBtnClick(event)"
                                enabled="{productSelected}"
                             />
+
+                    <mx:TextInput id="codeTextInput" width="100" toolTip="@Resource(bundle='ProductManagementPanel',key='code')"/>
+
+                    <mx:Button label="@Resource(bundle='ProductManagementPanel',key='findBtn')"
+                               toolTip="@Resource(bundle='ProductManagementPanel',key='findBtnHint')"
+                               click="onSearchBtnClick(event)"/>
+
                     <mx:Button label="@Resource(bundle='ProductManagementPanel',key='findBtnToggleOn')"
                                click="onSearchShowBtnClick(event)"/>
                 </mx:HBox>
                 <mx:HBox paddingTop="5" width="100%" id="filterPanel" visible="false" includeInLayout="false">
-                    <mx:Label text="@Resource(bundle='ProductManagementPanel',key='code')"/>
-                    <mx:TextInput id="codeTextInput" width="100"/>
                     <mx:Label text="@Resource(bundle='ProductManagementPanel',key='name')"/>
                     <mx:TextInput id="nameTextInput" width="100"/>
                     <mx:Label text="@Resource(bundle='ProductManagementPanel',key='brand')"/>
-                    <mx:ComboBox id="brandComboBox" width="200"
+                    <mx:ComboBox id="brandComboBox" width="150"
                                  dataProvider="{brandsList}"
                                  labelField="name"
                                  data="brandId"
                                  prompt="@Resource(bundle='ProductManagementPanel',key='selectBrandPropmt')"
                             />
                     <mx:Label text="@Resource(bundle='ProductManagementPanel',key='type')"/>
-                    <mx:ComboBox id="typeComboBox" width="200"
+                    <mx:ComboBox id="typeComboBox" width="150"
                                  dataProvider="{productTypesList}"
                                  labelField="name"
                                  data="producttypeId"
                                  prompt="@Resource(bundle='ProductManagementPanel',key='selectTypePropmt')"
                             />
-                    <mx:Button label="@Resource(bundle='ProductManagementPanel',key='findBtn')"
-                               toolTip="@Resource(bundle='ProductManagementPanel',key='findBtnHint')"
-                               click="onSearchBtnClick(event)"/>
                 </mx:HBox>
                 <mx:DataGrid id="productGrid" width="100%" height="100%"
                              itemClick="onProductSelected(event)"

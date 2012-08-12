@@ -28,6 +28,8 @@ public class AttributeDTOImpl {
 
     public var name:String ;
 
+    public var displayName:Object;
+
     public var description:String;
 
     public var etypeId:Number;
