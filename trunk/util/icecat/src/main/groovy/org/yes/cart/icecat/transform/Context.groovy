@@ -33,9 +33,11 @@ class Context  {
 
     String pwd = "";
 
-    int langId = 8;
+    String langId = "9,8";
 
-    String productDir = "RU";
+    String langNames = "en,ru";
+
+    String productDir = "EN,RU";
 
     String categories = "151,1296,942,803,788,195,194,197,943,196,191,192";
 

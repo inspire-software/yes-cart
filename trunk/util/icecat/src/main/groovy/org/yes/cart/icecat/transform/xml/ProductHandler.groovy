@@ -22,12 +22,8 @@ package org.yes.cart.icecat.transform.xml
 
 import org.xml.sax.Attributes
 import org.xml.sax.helpers.DefaultHandler
-import org.yes.cart.icecat.transform.domain.Product
-import org.yes.cart.icecat.transform.domain.ProductFeature
-import org.yes.cart.icecat.transform.domain.Feature
-import org.yes.cart.icecat.transform.domain.Category
-import org.yes.cart.icecat.transform.domain.CategoryFeatureGroup
 import org.yes.cart.icecat.transform.Util
+import org.yes.cart.icecat.transform.domain.*
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -38,13 +34,21 @@ class ProductHandler extends DefaultHandler {
 
     Product product = null;
     Map<String, Category> categoryMap;
+    Map<String, Feature> featureMap;
+    ProductPointer productPointer;
 
     boolean inProductRelated = false
 
+    String lang;
+    String langid;
 
-
-    ProductHandler(Map<String, Category> categoryMap) {
+    ProductHandler(Map<String, Category> categoryMap, Map<String, Feature> featureMap, ProductPointer productPointer,
+            String lang, String langid) {
         this.categoryMap = categoryMap
+        this.featureMap = featureMap
+        this.productPointer = productPointer
+        this.lang = lang
+        this.langid = langid
     }
 
     void startElement(String uri, String localName, String qName, Attributes attributes) {
@@ -64,7 +68,16 @@ class ProductHandler extends DefaultHandler {
         }
 
         if ("Product" == qName && product == null && !inProductRelated) {
-            product = new Product();
+
+            if (productPointer.product == null) {
+                println "Adding product instance to pp in $lang: $productPointer.Product_ID"
+                product = new Product();
+                productPointer.product = product;
+            } else {
+                println "Reusing product instance of pp for $lang: $productPointer.Product_ID"
+                product = productPointer.product;
+            }
+
             product.Code = Util.maxLength(attributes.getValue("Code"), 255);
             product.HighPic = attributes.getValue("HighPic");
             product.HighPicHeight = attributes.getValue("HighPicHeight");
@@ -75,7 +88,7 @@ class ProductHandler extends DefaultHandler {
             product.LowPicHeight = attributes.getValue("LowPicHeight");
             product.LowPicSize = attributes.getValue("LowPicSize");
             product.LowPicWidth = attributes.getValue("LowPicWidth");
-            product.Name = Util.maxLength(attributes.getValue("Name"), 255);
+            Util.setLocalisedValue(product, 'Name', langid, attributes.getValue("Name"), 255, [langid], [lang]);
             product.Pic500x500 = attributes.getValue("Pic500x500");
             product.Pic500x500Height = attributes.getValue("Pic500x500Height");
             product.Pic500x500Size = attributes.getValue("Pic500x500Size");
@@ -85,7 +98,7 @@ class ProductHandler extends DefaultHandler {
             product.ReleaseDate = attributes.getValue("ReleaseDate");
             product.ThumbPic = attributes.getValue("ThumbPic");
             product.ThumbPicSize = attributes.getValue("ThumbPicSize");
-            product.Title = Util.maxLength(attributes.getValue("Title"), 255);
+            Util.setLocalisedValue(product, 'Title', langid, attributes.getValue("Title"), 255, [langid], [lang]);
 
         }
 
@@ -115,12 +128,14 @@ class ProductHandler extends DefaultHandler {
 
         if ("ProductFeature" == qName) {
             productFeature = new ProductFeature();
-            productFeature.Presentation_Value = attributes.getValue("Presentation_Value")
+            productFeature.Value = attributes.getValue("Value")
+            Util.setLocalisedValue(productFeature, 'PresentationValue',
+                    langid, attributes.getValue("Presentation_Value"), 255, [langid], [lang]);
         }
 
         if ("Feature" == qName) {
             String featureId = attributes.getValue("ID");
-            feature = locateFeature(categoryMap.get(product.CategoryID),  featureId);
+            feature = featureMap.get(featureId);
             productFeature.feature = feature
         }
 
@@ -138,29 +153,16 @@ class ProductHandler extends DefaultHandler {
 
     void characters(char[] ch, int start, int length) {
         if (readyToGetShortSummaryDescription) {
-            product.ShortSummaryDescription = new String(ch, start, length);
+            Util.setLocalisedValue(product, 'ShortSummaryDescription', langid,
+                    new String(ch, start, length), 1900, [langid], [lang]);
             readyToGetShortSummaryDescription = false;
         }
 
         if (readyToGetLongSummaryDescription) {
-            product.LongSummaryDescription = new String(ch, start, length);
+            Util.setLocalisedValue(product, 'LongSummaryDescription', langid,
+                    new String(ch, start, length), 1900, [langid], [lang]);
             readyToGetLongSummaryDescription = false;
         }
-
-    }
-
-    Feature locateFeature(Category category, String featureId) {
-
-        if (category != null) {
-            for(CategoryFeatureGroup cfg : category.categoryFeatureGroup) {
-                for(Feature f:cfg.featureList) {
-                    if(f.ID == featureId) {
-                        return f;
-                    }
-                }
-            }
-        }
-        return null;
 
     }
 
@@ -183,9 +185,8 @@ class ProductHandler extends DefaultHandler {
 
             Category c = categoryMap.get(product.CategoryID);
             if (c != null) {
-                c.product.add(product);
-                product.CategoryName = (c.name == null ? c.id : c.name); //category name and product type
-                println("Added product " + product.Prod_id + " with " + product.productFeatures.size() +  " features to category " + product.CategoryName)
+                c.product.put(product.ID, product);
+                println("Added product " + product.Prod_id + "[" + product.ID + "] with " + product.productFeatures.size() +  " features to category " + c.getNameFor('def'))
             }
 
         }

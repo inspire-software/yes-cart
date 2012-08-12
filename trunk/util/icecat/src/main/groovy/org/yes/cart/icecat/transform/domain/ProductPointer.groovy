@@ -29,13 +29,12 @@ package org.yes.cart.icecat.transform.domain
  */
 class ProductPointer {
 
-    String path;
+    Map<String, String> path = new HashMap<String, String>();
     String Product_ID;
     String Updated;
     String Quality;
     String Supplier_id;
     String Prod_ID;
-    String Catid;
     String On_Market;
     String Model_Name;
     String Product_View;
@@ -44,6 +43,14 @@ class ProductPointer {
     String HighPicWidth;
     String HighPicHeight;
     String Date_Added;
+
+    Product product;
+
+    Map<String, BigDecimal> inventory = new HashMap<String, BigDecimal>();
+    Map<String, Map<String, BigDecimal>> prices = new HashMap<String, Map<String, BigDecimal>>();
+
+
+    Map<String, Category> categories = new HashMap<String, Category>();
 
     @Override
     public String toString() {
@@ -54,7 +61,6 @@ class ProductPointer {
                 ", Quality='" + Quality + '\'' +
                 ", Supplier_id='" + Supplier_id + '\'' +
                 ", Prod_ID='" + Prod_ID + '\'' +
-                ", Catid='" + Catid + '\'' +
                 ", On_Market='" + On_Market + '\'' +
                 ", Model_Name='" + Model_Name + '\'' +
                 ", Product_View='" + Product_View + '\'' +

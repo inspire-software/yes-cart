@@ -20,6 +20,8 @@
 
 package org.yes.cart.icecat.transform.domain
 
+import org.yes.cart.icecat.transform.Util
+
 /**
  *
  * User: igora Igor Azarny
@@ -39,7 +41,7 @@ class Product {
     String LowPicHeight;
     String LowPicSize;
     String LowPicWidth;
-    String Name;
+    Map<String, String> Name = new HashMap<String, String>();
     String Pic500x500;
     String Pic500x500Height;
     String Pic500x500Size;
@@ -49,7 +51,7 @@ class Product {
     String ReleaseDate;
     String ThumbPic;
     String ThumbPicSize;
-    String Title;
+    Map<String, String> Title = new HashMap<String, String>();
 
     String CategoryID;
     String CategoryName;
@@ -61,16 +63,32 @@ class Product {
     Set<String> relatedCategories = new HashSet<String>();
 
 
-    String ShortSummaryDescription;
-    String LongSummaryDescription;
+    Map<String, String> ShortSummaryDescription = new HashMap<String, String>();
+    Map<String, String> LongSummaryDescription = new HashMap<String, String>();
     List<String> productPicture = new ArrayList<String>();
 
     String Supplier;
 
+    public String getNameFor(String lang) {
+        return Util.getLocalisedValue(this, "Name", lang);
+    }
+
+    public String getTitleFor(String lang) {
+        return Util.getLocalisedValue(this, "Title", lang);
+    }
+
+    public String getShortSummaryDescriptionFor(String lang) {
+        return Util.getLocalisedValue(this, "ShortSummaryDescription", lang);
+    }
+
+    public String getLongSummaryDescriptionFor(String lang) {
+        return Util.getLocalisedValue(this, "LongSummaryDescription", lang);
+    }
+
     public String toString() {
         StringBuilder prodFeature = new StringBuilder();
-        for (ProductFeature pf: productFeatures) {
-            prodFeature.append(pf.feature.Name.replace(";", " ").replace('"', "\\\"").replace(',', " "));
+     /*   for (ProductFeature pf: productFeatures) {
+            prodFeature.append(pf.feature.name.replace(";", " ").replace('"', "\\\"").replace(',', " "));
             prodFeature.append("->");
             prodFeature.append(pf.Presentation_Value.replace(";", " ").replace('"', "\\\"").replace(',', " ") ) ;
             prodFeature.append(',');
@@ -88,10 +106,10 @@ class Product {
                 + new BigDecimal(500f + new Random().nextFloat() * 3000).setScale(2, BigDecimal.ROUND_HALF_UP) + ";" //price
                 + EANCode + ";"
                 + prodFeature + ";"
-                + LongSummaryDescription
+                + LongSummaryDescription.values().toString()
                 + "\n"
-        );
-
+        );   */
+        return ID;
 
     }
 

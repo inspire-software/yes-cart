@@ -20,6 +20,8 @@
 
 package org.yes.cart.icecat.transform.domain
 
+import org.yes.cart.icecat.transform.Util
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 5/9/12
@@ -27,7 +29,16 @@ package org.yes.cart.icecat.transform.domain
  */
  class ProductFeature {
 
-     String Presentation_Value
+     String Value
+     Map<String,String> PresentationValue = new HashMap<String, String>();
      Feature feature
+
+     public String getPresentationValueFor(String lang) {
+         def PresentationValue = Util.getLocalisedValue(this, "PresentationValue", lang);
+         if (PresentationValue == '') {
+             return Value;
+         }
+         return PresentationValue;
+     }
 
 }

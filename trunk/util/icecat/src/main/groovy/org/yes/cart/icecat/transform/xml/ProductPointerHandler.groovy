@@ -20,11 +20,11 @@
 
 package org.yes.cart.icecat.transform.xml
 
-import org.yes.cart.icecat.transform.domain.ProductPointer
-import org.yes.cart.icecat.transform.domain.Category
-import org.xml.sax.helpers.DefaultHandler
 import org.xml.sax.Attributes
+import org.xml.sax.helpers.DefaultHandler
 import org.yes.cart.icecat.transform.Util
+import org.yes.cart.icecat.transform.domain.Category
+import org.yes.cart.icecat.transform.domain.ProductPointer
 
 /**
  * 
@@ -37,11 +37,15 @@ class ProductPointerHandler extends DefaultHandler {
 
     Map<String, Category> categoryMap;
 
+    Map<String, ProductPointer> productMap = new HashMap<String, ProductPointer>();
+
     Category category;
     ProductPointer productPointer;
 
     long updateLimit;
     int maxProductsPerCat;
+
+    String lang;
 
     int counter = 0;
 
@@ -53,19 +57,32 @@ class ProductPointerHandler extends DefaultHandler {
 
 
     void startElement(String uri, String localName, String qName, Attributes attributes) {
-        if ("file" == qName) {
+        if ("file" == qName && attributes.getValue("Date_Added").toLong() > updateLimit /* old products */) {
             category = categoryMap.get(attributes.getValue("Catid"));
-            if (category == null) {
+            if (category == null || (!productMap.containsKey(attributes.getValue("Product_ID")) && category.productPointer.size() > maxProductsPerCat) /* limit reached */) {
                 productPointer = null;
             } else {
-                productPointer = new ProductPointer()
-                productPointer.path   = attributes.getValue("path");
-                productPointer.Product_ID = Util.maxLength(attributes.getValue("Product_ID"), 255);
+                if (productMap.containsKey(attributes.getValue("Product_ID"))) {
+                    productPointer = productMap.get(attributes.getValue("Product_ID"));
+                } else {
+                    productPointer = new ProductPointer();
+                    productPointer.inventory.put('Main', new BigDecimal(new Random().nextFloat() * 999).setScale(0, BigDecimal.ROUND_HALF_UP));
+                    BigDecimal priceUSD = new BigDecimal(500f + new Random().nextFloat() * 3000).setScale(2, BigDecimal.ROUND_HALF_UP);
+                    BigDecimal priceEUR = priceUSD.multiply(new BigDecimal("0.814232")).setScale(2, BigDecimal.ROUND_HALF_UP) // 10 Aug 2012
+                    BigDecimal priceUAH = priceUSD.multiply(new BigDecimal("8.098000")).setScale(2, BigDecimal.ROUND_HALF_UP) // 10 Aug 2012
+                    productPointer.prices.put('SHOP10', [
+                            'USD' : priceUSD,
+                            'EUR' : priceEUR,
+                            'UAH' : priceUAH
+                    ]);
+                }
+                productPointer.path.put(lang, attributes.getValue("path"));
+                productPointer.Product_ID = attributes.getValue("Product_ID");
                 productPointer.Updated= attributes.getValue("Updated");
                 productPointer.Quality= attributes.getValue("Quality");
                 productPointer.Supplier_id= attributes.getValue("Supplier_id")
                 productPointer.Prod_ID = attributes.getValue("Prod_ID")
-                productPointer.Catid = attributes.getValue("Catid");
+                productPointer.categories.put(attributes.getValue("Catid"), category);
                 productPointer.On_Market = attributes.getValue("On_Market")
                 productPointer.Model_Name = Util.maxLength(attributes.getValue("Model_Name"), 255);
                 productPointer.Product_View= attributes.getValue("Product_View");
@@ -83,13 +100,11 @@ class ProductPointerHandler extends DefaultHandler {
 
     void endElement(String ns, String localName, String qName) {
 
-        if ("file" == qName && category != null && productPointer.Date_Added.toLong() > updateLimit) {
+        if ("file" == qName && productPointer != null) {
 
-            if (category.productPointer.size() > maxProductsPerCat) {
-                return; // limit reached
-            }
             println("Added product " + productPointer.Product_ID + " to category " + category.id);
             category.productPointer.add(productPointer);
+            productMap.put(productPointer.Product_ID, productPointer);
             counter++;
 
         }
