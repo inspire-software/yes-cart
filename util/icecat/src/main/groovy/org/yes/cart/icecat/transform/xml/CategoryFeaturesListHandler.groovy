@@ -20,12 +20,12 @@
 
 package org.yes.cart.icecat.transform.xml
 
-import org.xml.sax.helpers.DefaultHandler
 import org.xml.sax.Attributes
+import org.xml.sax.helpers.DefaultHandler
+import org.yes.cart.icecat.transform.Util
 import org.yes.cart.icecat.transform.domain.Category
 import org.yes.cart.icecat.transform.domain.CategoryFeatureGroup
 import org.yes.cart.icecat.transform.domain.Feature
-import org.yes.cart.icecat.transform.Util
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -35,7 +35,9 @@ import org.yes.cart.icecat.transform.Util
 class CategoryFeaturesListHandler extends DefaultHandler {
 
     final Map<String, Category> categoryMap;
-    final String langFilter;
+    final List<String> langIdFilter;
+    final List<String> langFilter;
+    final Map<String, Feature> featureMap = new HashMap<String, Feature>();
 
     final Map<String, CategoryFeatureGroup> groupMap = new HashMap<String, CategoryFeatureGroup>();
 
@@ -50,9 +52,11 @@ class CategoryFeaturesListHandler extends DefaultHandler {
 
 
 
-    CategoryFeaturesListHandler(Map<String, Category> categoryMap, String langFilter) {
+    CategoryFeaturesListHandler(Map<String, Category> categoryMap, String langIdFilter, String langFilter) {
         this.categoryMap = categoryMap
-        this.langFilter = langFilter
+        this.langIdFilter = Arrays.asList(langIdFilter.split(","));
+        this.langFilter = Arrays.asList(langFilter.split(","));
+
     }
 
     void startElement(String uri, String localName, String qName, Attributes attributes) {
@@ -72,48 +76,49 @@ class CategoryFeaturesListHandler extends DefaultHandler {
                 }
             }
 
-            if ("CategoryFeatureGroup" == qName) {
+            if (category != null) {
+                if ("CategoryFeatureGroup" == qName) {
 
-                categoryFeatureGroup = new CategoryFeatureGroup();
-                categoryFeatureGroup.ID = attributes.getValue("ID");
-                categoryFeatureGroup.No = attributes.getValue("No");
+                    categoryFeatureGroup = new CategoryFeatureGroup();
+                    categoryFeatureGroup.ID = attributes.getValue("ID");
+                    categoryFeatureGroup.No = attributes.getValue("No");
 
-            }
+                }
 
-            if ("FeatureGroup" == qName) {
-                readyToGetCfgName = true;
-            }
+                if ("FeatureGroup" == qName) {
+                    readyToGetCfgName = true;
+                }
 
-            if ("Name" == qName) {
-                if (langFilter == attributes.getValue("langid")) {
+                if ("Name" == qName) {
+
                     if (readyToGetCfgName) {
-                        categoryFeatureGroup.Name = Util.maxLength(attributes.getValue("Value"), 255);
-                        readyToGetCfgName = false;
+                        Util.setLocalisedValue(categoryFeatureGroup, 'name',
+                                attributes.getValue("langid"), attributes.getValue("Value"), 255, langIdFilter, langFilter);
                     }
                     if(readyToGetFeatureName) {
-                        feature.Name = Util.maxLength(attributes.getValue("Value"), 255);
-                        readyToGetFeatureName = false;
+                        Util.setLocalisedValue(feature, 'name',
+                                attributes.getValue("langid"), attributes.getValue("Value"), 255, langIdFilter, langFilter);
                     }
                 }
+
+                if ("Feature" == qName && groupMap.containsKey(attributes.getValue("CategoryFeatureGroup_ID"))) {
+
+                    feature = new Feature();
+                    feature.CategoryFeatureGroup_ID = attributes.getValue("CategoryFeatureGroup_ID");
+                    feature.CategoryFeature_ID = attributes.getValue("CategoryFeature_ID");
+                    feature.lClass = attributes.getValue("Class");
+                    feature.ID = attributes.getValue("ID");
+                    feature.LimitDirection = attributes.getValue("LimitDirection");
+                    feature.Mandatory = attributes.getValue("Mandatory");
+                    feature.No = attributes.getValue("No");
+                    feature.Searchable = attributes.getValue("Searchable");
+                    feature.Use_Dropdown_Input = attributes.getValue("Use_Dropdown_Input");
+
+                    readyToGetFeatureName = true;
+
+                }
+
             }
-
-            if ("Feature" == qName) {
-
-                feature = new Feature();
-                feature.CategoryFeatureGroup_ID = attributes.getValue("CategoryFeatureGroup_ID");
-                feature.CategoryFeature_ID = attributes.getValue("CategoryFeature_ID");
-                feature.lClass = attributes.getValue("Class");
-                feature.ID = attributes.getValue("ID");
-                feature.LimitDirection = attributes.getValue("LimitDirection");
-                feature.Mandatory = attributes.getValue("Mandatory");
-                feature.No = attributes.getValue("No");
-                feature.Searchable = attributes.getValue("Searchable");
-                feature.Use_Dropdown_Input = attributes.getValue("Use_Dropdown_Input");
-
-                readyToGetFeatureName = true;
-
-            }
-
         }
     }
 
@@ -128,40 +133,40 @@ class CategoryFeaturesListHandler extends DefaultHandler {
                 category = null;
             }
 
-            if ("CategoryFeatureGroup" == qName) {
-                if (category != null) {
-                    println("Adding feature group " + categoryFeatureGroup.ID + " to category " + category.id);
-                    category.categoryFeatureGroup.add(categoryFeatureGroup);
-                    if (!groupMap.containsKey(categoryFeatureGroup.ID)) {
-                        groupMap.put(categoryFeatureGroup.ID, categoryFeatureGroup);
+            if (category != null) {
+
+                if ("CategoryFeatureGroup" == qName) {
+                    if (category != null) {
+                        println("Adding feature group " + categoryFeatureGroup.ID + " to category " + category.id);
+                        category.categoryFeatureGroup.add(categoryFeatureGroup);
+                        if (!groupMap.containsKey(categoryFeatureGroup.ID)) {
+                            groupMap.put(categoryFeatureGroup.ID, categoryFeatureGroup);
+                        }
+                        categoryFeatureGroup = null;
+
                     }
-                    categoryFeatureGroup = null;
+                }
+
+                if ("FeatureGroup" == qName) {
+                    readyToGetCfgName = false;
+                }
+
+                if ("Feature" == qName && feature != null) {
+                    CategoryFeatureGroup cfg = groupMap.get(feature.CategoryFeatureGroup_ID);
+                    if (cfg != null) {
+                        println("Feature " + feature.ID + " belongs to category feature group " + feature.CategoryFeatureGroup_ID + "... adding");
+                        cfg.featureList.add(feature);
+                        featureMap.put(feature.ID, feature);
+                        counter++;
+                    }
+                    feature = null;
+                    readyToGetFeatureName = false;
 
                 }
-            }
-
-            if ("FeatureGroup" == qName) {
-                readyToGetCfgName = false;
-            }
-
-            if ("Feature" == qName) {
-                CategoryFeatureGroup cfg = groupMap.get(feature.CategoryFeatureGroup_ID);
-                if (cfg != null) {
-                    if (feature.Name == null) {
-                        feature.Name = feature.ID;
-                    }
-                    println("Feature " + feature.ID + " belongs to category feature group " + feature.CategoryFeatureGroup_ID + "... adding");
-                    cfg.featureList.add(feature);
-                    counter++;
-                }
-                feature = null;
-                readyToGetFeatureName = false;
 
             }
 
         }
-
-
     }
 
 }

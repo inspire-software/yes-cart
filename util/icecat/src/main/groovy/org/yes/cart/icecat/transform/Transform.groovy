@@ -35,9 +35,16 @@ package org.yes.cart.icecat.transform
 
          println ctx;
 
-         CategoryWalker categoryWalker = new CategoryWalker(ctx);
+         try {
 
-         categoryWalker.collectData();
+             CategoryWalker categoryWalker = new CategoryWalker(ctx);
+
+             categoryWalker.collectData();
+
+         } catch (e) {
+             println e.getMessage()
+             e.printStackTrace();
+         }
          
 
      }
@@ -73,8 +80,16 @@ package org.yes.cart.icecat.transform
              println("Input language id [$ctx.langId] (8 - RU, 9 - EN, see refs.xml for other ids)" );
              line = it.readLine();
              if (line != "") {
-                 ctx.langId = line.toInteger()
+                 ctx.langId = line
              }
+             ctx.langId += ",1"  // default language for blank values fallback
+
+             println("Input language names [$ctx.langNames] (ru,en, exactly as they are mapped in storefront locale)" );
+             line = it.readLine();
+             if (line != "") {
+                 ctx.langNames = line
+             }
+             ctx.langNames += ",def" // default language for blank values fallback
 
              println("Input product lang directory [$ctx.productDir]. This will be used to get index.html" );
              line = it.readLine();

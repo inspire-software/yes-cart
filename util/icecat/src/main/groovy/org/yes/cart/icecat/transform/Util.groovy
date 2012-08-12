@@ -23,10 +23,81 @@ package org.yes.cart.icecat.transform
  */
 class Util {
 
+    /**
+     * @param raw text
+     * @return string without ; or ".
+     */
+    public static String escapeCSV(String raw) {
+        if (raw == null || raw.length() == 0) {
+            return '';
+        }
+        return raw.replace(";", ",").replace('"', "\\\"")
+    }
+
+    /**
+     * set localised value to a property if it is applicable.
+     * So if:
+     *   prop = name
+     *   langid = 8
+     *   value = English
+     *   langIdFilter = [8, 9]
+     *   langFilter = [en, ru]
+     * then we update:
+     *   obj.name_en = "English"
+     *   obj.name = "English"   // since 8 is the first id in filter, so default one
+     *
+     * @param obj object to update
+     * @param prop property name base
+     * @param langid value language id (e.g. 8 - EN)
+     * @param value raw value
+     * @param maxLength maximum length allowed
+     * @param langIdFilter applicable ids
+     * @param langFilter corresponding locale keys
+     * @return
+     */
+    public static boolean setLocalisedValue(Object obj, String prop, String langid, String value, int maxLength,
+                                            List<String> langIdFilter,
+                                            List<String> langFilter) {
+        int langIndex = langIdFilter.indexOf(langid);
+        if (langIndex != -1 && Util.isNotBlank(value)) {
+            def lang = langFilter[langIndex];
+            obj."$prop".put(lang, Util.maxLength(value, maxLength));
+            return true; // added
+        }
+        return false; // skipped
+    }
+
+    /**
+     * Get localised value.
+     *
+     * @param obj source object
+     * @param prop property
+     * @param lang language required
+     * @return value in required language or in default
+     */
+    public static String getLocalisedValue(Object obj, String prop, String lang) {
+        def val = obj."$prop".get(lang);
+        if (val == null) {
+            val = obj."$prop".get("def");
+        }
+        if (val == null) {
+            return '';
+        }
+        return val;
+    }
+
+    /**
+     * @param str text
+     * @return true if not blank
+     */
     public static boolean isNotBlank(final String str) {
         return !isBlank(str);
     }
 
+    /**
+     * @param str text
+     * @return true if null, empty or whitespace only
+     */
     public static boolean isBlank(final String str) {
 
         int strLen;
@@ -42,6 +113,11 @@ class Util {
 
     }
 
+    /**
+     * @param str text
+     * @param maxChars max chars
+     * @return truncated string if it is larger than max chars length
+     */
     public static String maxLength(final String str, final int maxChars) {
         if (str == null || str.length() < maxChars) {
             return str;

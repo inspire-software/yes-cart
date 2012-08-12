@@ -39,8 +39,8 @@ etc...
 4. Run the Transform class
 # Put this jar and groovy on classpath e.g.
 export CLASSPATH=./icecat-downloader-1.0.0-SNAPSHOT.jar:/Users/denispavlov/.m3/repository/org/codehaus/groovy/groovy-all/2.0.0-beta-2/groovy-all-2.0.0-beta-2.jar:.
-# run the Transform
-java org.yes.cart.icecat.transform.Transform
+# run the Transform (optional add memory switches)
+java -Xmx700m -XX:MaxPermSize=256m org.yes.cart.icecat.transform.Transform
 
 5. Follow instructions, which should result in:
 * all product data being downloaded into $ROOT/export/freexml.int/xmlcache/[product lang]

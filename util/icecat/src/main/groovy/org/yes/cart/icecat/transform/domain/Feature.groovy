@@ -20,6 +20,8 @@
 
 package org.yes.cart.icecat.transform.domain
 
+import org.yes.cart.icecat.transform.Util
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 5/9/12
@@ -37,6 +39,15 @@ package org.yes.cart.icecat.transform.domain
      String Searchable;
      String Use_Dropdown_Input;
 
-     String Name;
+     Map<String, String> name = new HashMap<String, String>();
 
-}
+     public String getNameFor(String lang) {
+         def name = Util.getLocalisedValue(this, "name", lang);
+         if (name == '') {
+             return ID;
+         }
+         return name;
+     }
+
+
+ }

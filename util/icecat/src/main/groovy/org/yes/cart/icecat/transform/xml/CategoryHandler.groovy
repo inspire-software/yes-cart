@@ -20,10 +20,10 @@
 
 package org.yes.cart.icecat.transform.xml
 
-import org.xml.sax.helpers.DefaultHandler
 import org.xml.sax.Attributes
-import org.yes.cart.icecat.transform.domain.Category;
-import org.yes.cart.icecat.transform.Util;
+import org.xml.sax.helpers.DefaultHandler
+import org.yes.cart.icecat.transform.Util
+import org.yes.cart.icecat.transform.domain.Category
 
 /**
  *
@@ -38,14 +38,16 @@ class CategoryHandler extends DefaultHandler {
 
     Map<String, Category> categoryMap = new HashMap<String, Category>();
     List<String> categoryIdFiler;
-    String langFilter;
+    List<String> langIdFilter;
+    List<String> langFilter;
     int counter = 0;
 
     Category category;
 
-    CategoryHandler(String allowedCategories, String langFilter) {
+    CategoryHandler(String allowedCategories, String langIdFilter, String langFilter) {
 
-        this.langFilter = langFilter
+        this.langIdFilter = Arrays.asList(langIdFilter.split(","));
+        this.langFilter = Arrays.asList(langFilter.split(","));
         categoryIdFiler = Arrays.asList(allowedCategories.split(","));
 
     }
@@ -54,35 +56,39 @@ class CategoryHandler extends DefaultHandler {
 
     void startElement(String uri, String localName, String qName, Attributes attributes) {
 
-        if ("Category" == qName) {
+        if (allowAddToCategoryList && "Category" == qName) {
             category = new Category();
             category.id = attributes.getValue("ID");
-            category.lowPic = attributes.getValue("LowPic");
-            category.score = attributes.getValue("Score");
-            category.searchable = attributes.getValue("Searchable");
-            category.thumbPic = attributes.getValue("ThumbPic");
-            category.UNCATID = attributes.getValue("UNCATID");
-            category.visible = attributes.getValue("Visible");
-        } else if ("Description" == qName) {
-            if ("1" == attributes.getValue("langid") || langFilter == attributes.getValue("langid")) {
-                if (Util.isNotBlank(attributes.getValue("Value"))) {
-                    category.description = Util.maxLength(attributes.getValue("Value"), 4000);
-                }
+            if (categoryIdFiler.contains(category.id)) {
+                category.lowPic = attributes.getValue("LowPic");
+                category.score = attributes.getValue("Score");
+                category.searchable = attributes.getValue("Searchable");
+                category.thumbPic = attributes.getValue("ThumbPic");
+                category.UNCATID = attributes.getValue("UNCATID");
+                category.visible = attributes.getValue("Visible");
             }
-        } else if ("Name" == qName) {
-            if ("1" == attributes.getValue("langid") || langFilter == attributes.getValue("langid")) {
-                if (Util.isNotBlank(attributes.getValue("Value"))) {
-                    category.name = Util.maxLength(attributes.getValue("Value"), 255);
-                }
-            }
-        } else if ("Keywords" == qName) {
-            if ("1" == attributes.getValue("langid") || langFilter == attributes.getValue("langid")) {
-                if (Util.isNotBlank(attributes.getValue("Value"))) {
-                    category.keywords = Util.maxLength(attributes.getValue("Value"), 255);
-                }
-            }
+
         } else if ("CategoriesList" == qName) {
+
             allowAddToCategoryList = true;
+
+        } else if ("CategoryFeaturesList" == qName) {
+
+            allowAddToCategoryList = false;
+            category = null;
+
+        } else if (category != null) {
+
+            if ("Description" == qName && categoryIdFiler.contains(category.id)) {
+                Util.setLocalisedValue(category, 'description',
+                        attributes.getValue("langid"), attributes.getValue("Value"), 4000, langIdFilter, langFilter);
+            } else if ("Name" == qName && categoryIdFiler.contains(category.id)) {
+                Util.setLocalisedValue(category, 'name',
+                        attributes.getValue("langid"), attributes.getValue("Value"), 255, langIdFilter, langFilter);
+            } else if ("Keywords" == qName && categoryIdFiler.contains(category.id)) {
+                Util.setLocalisedValue(category, 'keywords',
+                        attributes.getValue("langid"), attributes.getValue("Value"), 255, langIdFilter, langFilter);
+            }
         }
     }
 
@@ -99,6 +105,7 @@ class CategoryHandler extends DefaultHandler {
                 categoryMap.put(category.id, category);
                 counter++;
             }
+            category = null;
         } else if ("CategoriesList" == qName) {
             allowAddToCategoryList = false;
 

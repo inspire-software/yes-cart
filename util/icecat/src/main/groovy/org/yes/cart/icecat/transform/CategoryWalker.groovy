@@ -20,13 +20,18 @@
 
 package org.yes.cart.icecat.transform
 
-import org.yes.cart.icecat.transform.xml.CategoryHandler
-import org.yes.cart.icecat.transform.domain.Category
-import javax.xml.parsers.SAXParserFactory
 import org.xml.sax.InputSource
-import org.yes.cart.icecat.transform.xml.ProductPointerHandler
+import org.yes.cart.icecat.transform.domain.Category
 import org.yes.cart.icecat.transform.xml.CategoryFeaturesListHandler
+import org.yes.cart.icecat.transform.xml.CategoryHandler
 import org.yes.cart.icecat.transform.xml.ProductHandler
+import org.yes.cart.icecat.transform.xml.ProductPointerHandler
+
+import javax.xml.parsers.SAXParserFactory
+
+import org.yes.cart.icecat.transform.csv.*
+import org.yes.cart.icecat.transform.domain.ProductPointer
+import org.yes.cart.icecat.transform.domain.Feature
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -46,21 +51,19 @@ class CategoryWalker {
 
     void collectData() {
 
-        print("Parsing categories...")
+        println("Parsing categories...")
         def FileInputStream refs = new FileInputStream("$context.dataDirectory/export/freexml.int/refs.xml");
-        def handler = new CategoryHandler(context.categories, context.langId.toString())
+        def handler = new CategoryHandler(context.categories, context.langId, context.langNames)
         def reader = SAXParserFactory.newInstance().newSAXParser().XMLReader
         reader.setContentHandler(handler)
         reader.parse(new InputSource(refs))
         refs.close();
         println("Added " + handler.counter + " categories...")
 
-
         println("Parsing categories features...")
         refs = new FileInputStream("$context.dataDirectory/export/freexml.int/refs.xml");
-        def categoryFeaturelistHandler = new CategoryFeaturesListHandler(
-                handler.categoryMap,
-                context.langId.toString())
+        def categoryFeaturelistHandler = new CategoryFeaturesListHandler(handler.categoryMap,
+                context.langId, context.langNames)
         reader = SAXParserFactory.newInstance().newSAXParser().XMLReader
         reader.setContentHandler(categoryFeaturelistHandler)
         reader.parse(new InputSource(refs))
@@ -68,21 +71,35 @@ class CategoryWalker {
         println("Added " + categoryFeaturelistHandler.counter + " features to categories...")
 
         println("Parsing product indexes...")
-        def indexes = new FileInputStream("$context.dataDirectory/export/freexml.int/$context.productDir/index.html");
         def productPointerHandler = new ProductPointerHandler(handler.categoryMap, context.mindata, context.productsPerCategoryLimit);
         def productReadeReader = SAXParserFactory.newInstance().newSAXParser().XMLReader
-        productReadeReader.setContentHandler(productPointerHandler)
-        productReadeReader.parse(new InputSource(indexes))
-        println("Added " + productPointerHandler.counter + " products to categories...")
+
+        def i = 0;
+        for (String dir : Arrays.asList(context.productDir.split(','))) {
+            println("index file: $context.dataDirectory/export/freexml.int/$dir/index.html")
+            def indexes = new FileInputStream("$context.dataDirectory/export/freexml.int/$dir/index.html");
+            productPointerHandler.lang = context.langNames.split(',')[i];
+            productReadeReader.setContentHandler(productPointerHandler)
+            productReadeReader.parse(new InputSource(indexes))
+            i++
+        }
+
+        println("Added " + productPointerHandler.productMap.size() + " products to categories...")
 
         println("Download product data...")
         //check the cache and download product's xml if need
-        String cacheFolderName = createCacheFolder()
-        downloadProducts(handler.categoryMap, cacheFolderName)
-        parseProducts(handler.categoryMap, cacheFolderName)
+        downloadProducts(productPointerHandler.productMap,
+                Arrays.asList(context.productDir.split(',')),
+                Arrays.asList(context.langNames.split(',')))
+        parseProducts(handler.categoryMap, categoryFeaturelistHandler.featureMap, productPointerHandler.productMap,
+                Arrays.asList(context.productDir.split(',')),
+                Arrays.asList(context.langNames.split(',')),
+                Arrays.asList(context.langId.split(',')))
 
-        String pictCacheFolder = createPictureCacheFolder();
-        downloadProductPictures(handler.categoryMap, pictCacheFolder)
+        downloadProductPictures(productPointerHandler.productMap,
+                Arrays.asList(context.productDir.split(',')),
+                Arrays.asList(context.langNames.split(',')),
+                Arrays.asList(context.langId.split(',')))
         println("Added products data to categories...")
 
         println("Generating CSV files...")
@@ -92,32 +109,38 @@ class CategoryWalker {
         //create folder for csv
         new File(rootDir).mkdirs();
 
+        println("Generating producttypenames.csv")
+        new ProductTypeCsvAdapter(handler.categoryMap).toCsvFile("$rootDir/producttypenames.csv");
 
-        StringBuilder csv = new StringBuilder();
+        println("Generating attributenames.csv")
+        new AttributeCsvAdapter(categoryFeaturelistHandler.featureMap).toCsvFile("$rootDir/attributenames.csv");
 
-        csv.append("parent category name; category name\n");
-        handler.categoryMap.values().each { csv.append(it.toProductType())}
-        new File("$rootDir/category.csv").write(csv.toString(), 'UTF-8');
+        println("Generating productypeattributeviewgroupnames.csv")
+        new ProductTypeViewGroupCsvAdapter(handler.categoryMap).toCsvFile("$rootDir/productypeattributeviewgroupnames.csv");
 
-        csv = new StringBuilder();
-        csv.append("name;attrname;mandatory;searchable;num;navigable;navtype;rangenav\n")
-        handler.categoryMap.values().each { csv.append(it.toProductTypeAttr())}
-        new File("$rootDir/producttypeattr.csv").write(csv.toString(), 'UTF-8');
+        println("Generating producttypeattrnames.csv")
+        new ProductTypeAttributeCsvAdapter(handler.categoryMap).toCsvFile("$rootDir/producttypeattrnames.csv");
 
-        csv = new StringBuilder();
-        csv.append("name;code;description;guid\n")
-        handler.categoryMap.values().each { csv.append(it.toArrtViewGroup())}
-        new File("$rootDir/attributeviewgroup.csv").write(csv.toString(), 'UTF-8');
+        println("Generating categorynames.csv")
+        new CategoryCsvAdapter(handler.categoryMap).toCsvFile("$rootDir/categorynames.csv");
 
-        csv = new StringBuilder();
-         csv.append("producttype;viewgroupname;arributes;guid\n")
-        handler.categoryMap.values().each { csv.append(it.toProductTypeAttrViewGroup())}
-        new File("$rootDir/productypeattributeviewgroup.csv").write(csv.toString(), 'UTF-8');
+        println("Generating productcategorynames.csv")
+        new ProductCategoryCsvAdapter(productPointerHandler.productMap).toCsvFile("$rootDir/productcategorynames.csv");
 
-        new File("$rootDir/brand.csv").write(dumpBrands(handler.categoryMap), 'UTF-8');
+        println("Generating brandnames.csv")
+        new BrandCsvAdapter(handler.categoryMap).toCsvFile("$rootDir/brandnames.csv");
 
+        println("Generating skuinventory.csv")
+        new ProductInventoryCsvAdapter(productPointerHandler.productMap).toCsvFile("$rootDir/skuinventory.csv");
 
-        new File("$rootDir/productentity.csv").write(dumpProducts(handler.categoryMap), 'UTF-8');
+        println("Generating skuprices.csv")
+        new ProductPricesCsvAdapter(productPointerHandler.productMap).toCsvFile("$rootDir/skuprices.csv");
+
+        println("Generating productnames.csv")
+        new ProductsCsvAdapter(productPointerHandler.productMap, context.langNames.split(',')[0]).toCsvFile("$rootDir/productnames.csv");
+
+        println("Generating productsattributes.csv")
+        new ProductsAttributesCsvAdapter(productPointerHandler.productMap).toCsvFile("$rootDir/productsattributes.csv");
 
         // Main warehouse is part of initial data
         // new File("$rootDir/warehouse.csv").write("Ware house code;name;description\nMain;Main warehouse;Main warehouse", 'UTF-8');
@@ -139,79 +162,51 @@ class CategoryWalker {
         return builder.toString();
     }
 
-    private def dumpBrands(Map<String, Category> categoryMap) {
-        Set<String> rez = new HashSet<String>();
-        categoryMap.values().each {
-            Category cat = it;
-            cat.product.each {
-                rez.add(it.Supplier);
-            }
-        }
-        StringBuilder builder = new StringBuilder();
-        builder.append("brand;description\n");
-        rez.each {
-            builder.append(it)
-            builder.append(";")
-            builder.append(it)
-            builder.append("\n")
-        }
-        return builder.toString();
-    }
 
+    private def parseProducts(Map<String, Category> categoryMap,
+                              Map<String, Feature> featureMap,
+                              Map<String, ProductPointer> productMap,
+                              List<String> dirs, List<String> langs, List<String> langsids) {
+        productMap.values().each {
+            for (int i = 0; i < dirs.size(); i++) {
+                String cacheFolderName = createCacheFolder(dirs[i])
+                String lang = langs.get(i);
+                String langId = langsids.get(i);
+                String path = it.path.get(lang);
+                String productFile = cacheFolderName + path.substring(1 + path.lastIndexOf("/"));
 
-
-    private def parseProducts(Map<String, Category> categoryMap, String cacheFolderName) {
-        categoryMap.values().each {
-            it.productPointer.each {
-
-                String productFile = cacheFolderName + it.path.substring(1 + it.path.lastIndexOf("/"));
                 def FileInputStream prodis = new FileInputStream(productFile);
-                def handler = new ProductHandler(categoryMap)
+                def handler = new ProductHandler(categoryMap, featureMap, it, lang, langId);
                 def reader = SAXParserFactory.newInstance().newSAXParser().XMLReader
                 reader.setContentHandler(handler)
                 reader.parse(new InputSource(prodis))
                 prodis.close();
-
-
             }
         }
-
-        Set<String> refsCatIds = new HashSet<String>();
-        categoryMap.values().each {
-            it.product.relatedCategories.each {
-                refsCatIds.addAll(it);
-            }
-
-        }
-
-        println "Related categories " + refsCatIds;
-
-        
     }
 
-    private def downloadProductPictures(Map<String, Category> categoryMap, String cacheFolderName) {
+    private def downloadProductPictures(Map<String, ProductPointer> productMap,
+                                        List<String> dirs, List<String> langs, List<String> langsids) {
         def authString = "$context.login:$context.pwd".getBytes().encodeBase64().toString()
         def cacheFolder = createPictureCacheFolder();
-        categoryMap.values().each {
-            it.product.each {
-                char idx = 'a';
+        productMap.values().each {
+            char idx = 'a';
 
-                String productName = it.Title.replace("_", "-").replace(" ", "-").replace("?", "-").replace(".", "-");
-                String skuCode = it.Prod_id;
+            println "Scanning pictures for: $it.Prod_ID with title $it.product.Title"
+            // images are the same, so it really is only upto file name in one language
+            String productName = it.product.Title.get(langs.get(0)).replace("_", "-").replace(" ", "-").replace("?", "-").replace(".", "-");
+            String skuCode = it.product.Prod_id;
 
-                downloadProductPicture(it.HighPic, authString, cacheFolder, idx++, productName, skuCode);
-                it.productPicture.each {
+            downloadProductPicture(it.product.HighPic, authString, cacheFolder, idx++, productName, skuCode);
+            it.product.productPicture.each {
 
-                    //limit to 3 pictures only, because of import size
-                    if (idx != 'd') {
-                        downloadProductPicture(it, authString, cacheFolder, idx++, productName, skuCode);
-                    }
-
+                //limit to 3 pictures only, because of import size
+                if (idx != 'd') {
+                    downloadProductPicture(it, authString, cacheFolder, idx++, productName, skuCode);
                 }
 
-
-
             }
+
         }
     }
 
@@ -258,11 +253,16 @@ class CategoryWalker {
 
 
 
-    private def downloadProducts(Map<String, Category> categoryMap, String cacheFolderName) {
+    private def downloadProducts(Map<String, ProductPointer> productMap,
+                                 List<String> dirs, List<String> langs) {
         def authString = "$context.login:$context.pwd".getBytes().encodeBase64().toString()
-        categoryMap.values().each {
-            it.productPointer.each {
-                String productFile = cacheFolderName + it.path.substring(1 + it.path.lastIndexOf("/"));
+        productMap.values().each {
+            for (int i = 0; i < dirs.size(); i++) {
+                String cacheFolderName = createCacheFolder(dirs[i])
+                String lang = langs.get(i);
+                String path = it.path.get(lang);
+                String productFile = cacheFolderName + path.substring(1 + path.lastIndexOf("/"));
+                println("file: $productFile")
                 downloadSingleProduct(productFile, authString, it)
             }
         }
@@ -281,8 +281,8 @@ class CategoryWalker {
         }
     }
 
-    private def createCacheFolder() {
-        def cacheFolderName = "$context.dataDirectory/export/freexml.int/xmlcache/$context.productDir/";
+    private def createCacheFolder(String dir) {
+        def cacheFolderName = "$context.dataDirectory/export/freexml.int/xmlcache/$dir/";
         File cacheFolderFile = new File(cacheFolderName);
         if (!cacheFolderFile.exists()) {
             cacheFolderFile.mkdirs();

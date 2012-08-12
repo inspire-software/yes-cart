@@ -20,6 +20,8 @@
 
 package org.yes.cart.icecat.transform.domain
 
+import org.yes.cart.icecat.transform.Util
+
 /**
  * 
  * User: igora Igor Azarny
@@ -37,149 +39,30 @@ class Category {
     String UNCATID;
     String visible;
 
-    String description;
-    String keywords;
-    String name;
-    
+    Map<String, String> description = new HashMap<String, String>();
+    Map<String, String> keywords = new HashMap<String, String>();
+    Map<String, String> name = new HashMap<String, String>();
+
     List<ProductPointer> productPointer = new ArrayList<ProductPointer>();
-    List<Product> product = new ArrayList<Product>();
+    Map<String, Product> product = new HashMap<String, Product>();
 
     List<CategoryFeatureGroup> categoryFeatureGroup = new ArrayList<CategoryFeatureGroup>();
 
-    public String toProductType() { //TPRODTYPE  and TCATEGORY
-        //100 default root category
-        return "100;" + (name == null ? id : name) + ";" + description + "\n";
-    }
-
-
-
-    public String toProductTypeAttr() {       //TPRODUCTTYPEATTR & TATTRIBUTE
-        StringBuilder builder = new StringBuilder();
-        for (CategoryFeatureGroup cfg : categoryFeatureGroup) {
-
-            for(Feature feature : cfg.featureList) {
-
-                final String attributeName = feature.Name.replace(";", " ").replace('"', "\\\"").replace(',', " ");
-
-                builder.append(name == null ? id : name)
-                builder.append(";")
-                builder.append(attributeName);
-                builder.append(";");
-                builder.append(feature.Mandatory);
-                builder.append(";");
-                builder.append(feature.Searchable);
-                builder.append(";");
-                builder.append(  ((name == null ? id : name) + feature.Name).hashCode() );
-                builder.append(";");
-
-                if (isFilteredNavigation(attributeName)) {
-                    builder.append("true");
-                }   else {
-                    builder.append("false");
-                }
-                builder.append(";");
-
-
-                if (isRangeNavigation(attributeName)) {
-                    builder.append("R");
-                } else {
-                    builder.append("S");
-                }
-                builder.append(";");
-
-                if (isRangeNavigation(attributeName)) {
-                    builder.append(getRangeNavigationXml(attributeName));
-                }   else {
-                    builder.append("\"\"");
-
-                }
-                builder.append(";");
-
-
-
-                builder.append("\n")
-            }
-
+    public String getNameFor(String lang) {
+        def name = Util.getLocalisedValue(this, "name", lang);
+        if (name == '') {
+            return id;
         }
-        return builder.toString();
+        return name;
     }
 
-    def navigableMap = [
-            "Дисплей" : 120,
-            "Диагональ экрана" : 100,
-            "Разрешение экрана" : 110,
-            "Вес" : 200,
-            "Емкость батареи" : 250,
-            "Емкость жесткого диска" : 60,
-            "Оперативная память" : 50,
-            "Семейство процессоров" : 10,
-            "Тактовая частота процессора" : 20,
-            "Тип оптического привода" : 300,
-            "Цвет продукта" : 400
-    ];
-
-    private boolean isFilteredNavigation(String name) {
-        return navigableMap.get(name) != null;
+    public String getDescriptionFor(String lang) {
+        return Util.getLocalisedValue(this, "description", lang);
     }
 
-
-
-    private boolean isRangeNavigation(String name) {
-        return  "Вес".equals(name) ||   "Weight".equals(name)
-
+    public String getKeywordsFor(String lang) {
+        return Util.getLocalisedValue(this, "keywords", lang);
     }
-
-    private String getRangeNavigationXml(String name) {
-        if ("Вес".equals(name) ) {
-            return '<range-list><ranges><range><from>1200 г</from><to>1500 г</to></range><range><from>1500 г</from><to>1800 г</to></range><range><from>1800 г</from><to>2000 г</to></range><range><from>2000 г</from><to>2500 г</to></range><range><from>2500 г</from><to>3000 г</to></range><range><from>3000 г</from><to>3500 г</to></range><range><from>3500 г</from><to>4000 г</to></range><range><from>4000 г</from><to>5000 г</to></range></ranges></range-list>'
-        }   else if ("Weight".equals(name)) {
-            return '<range-list><ranges><range><from>1200 g</from><to>1500 g</to></range><range><from>1500 g</from><to>1800 g</to></range><range><from>1800 g</from><to>2000 g</to></range><range><from>2000 g</from><to>2500 g</to></range><range><from>2500 g</from><to>3000 g</to></range><range><from>3000 g</from><to>3500 g</to></range><range><from>3500 g</from><to>4000 g</to></range><range><from>4000 g</from><to>5000 g</to></range></ranges></range-list>'
-        }
-        return ''
-
-    }
-
-
-    public String toArrtViewGroup() { //TATTRVIEWGROUP
-        StringBuilder builder = new StringBuilder();
-        for (CategoryFeatureGroup cfg : categoryFeatureGroup) {
-            builder.append(cfg.Name)
-            builder.append(';')
-            builder.append(cfg.ID)
-            builder.append(';')
-            builder.append(cfg.Name)
-            builder.append(';')
-            builder.append((((name == null ? id : name)) + cfg.Name).hashCode())
-            builder.append("\n")
-
-        }
-        return builder.toString();
-        
-        
-    }
-
-    public String toProductTypeAttrViewGroup() {       //TPRODTYPEATTRVIEWGROUP
-        StringBuilder builder = new StringBuilder();
-        for (CategoryFeatureGroup cfg : categoryFeatureGroup) {
-            builder.append((name == null ? id : name))
-            builder.append(";")
-            builder.append(cfg.Name)
-            builder.append(";")
-            for(Feature feature : cfg.featureList) {
-                builder.append(feature.Name);
-                builder.append(",");
-            }
-            builder.append(";")
-            builder.append((((name == null ? id : name)) + cfg.Name).hashCode())
-            builder.append(";")
-
-            builder.append("\n")
-        }
-        return builder.toString();
-        
-    }
-
-
 
     @Override
     public String toString() {
