@@ -18,8 +18,10 @@ package org.yes.cart.domain.dto;
 
 import org.yes.cart.domain.entity.Identifiable;
 
+import java.util.Map;
+
 /**
- * Common attribute intefrace.
+ * Common attribute interface.
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
@@ -112,6 +114,22 @@ public interface AttributeDTO extends Identifiable {
      */
     void setName(String name);
 
+
+    /**
+     * Attribute name.
+     *
+     * @return localised locale => name pairs.
+     */
+    Map<String, String> getDisplayNames();
+
+    /**
+     * Get attribute name
+     *
+     * @param names localised locale => name pairs
+     */
+    void setDisplayNames(Map<String, String> names);
+
+
     /**
      * Get description.
      *
@@ -155,7 +173,7 @@ public interface AttributeDTO extends Identifiable {
     void setEtypeName(String etypeName);
 
     /**
-     * Is attribute duplicates allowed. Attribute can have several values. Example color - black and red.
+     * Is attributes duplicates allowed. Attribute can have several values. Example color - black and red.
      *
      * @return true if duplicates allowed
      */

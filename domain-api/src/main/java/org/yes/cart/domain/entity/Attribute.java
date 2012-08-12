@@ -91,11 +91,25 @@ public interface Attribute extends Auditable, Rankable {
     String getName();
 
     /**
-     * Get atribute name
+     * Get attribute name
      *
      * @param name name
      */
     void setName(String name);
+
+    /**
+     * Attribute name.
+     *
+     * @return attribute name.
+     */
+    String getDisplayName();
+
+    /**
+     * Get attribute name
+     *
+     * @param name name
+     */
+    void setDisplayName(String name);
 
     /**
      * Get description.

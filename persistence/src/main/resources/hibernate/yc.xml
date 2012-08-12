@@ -426,6 +426,7 @@
 
 
             <property name="name" column="NAME" not-null="true" type="string" length="255"/>
+            <property name="displayName" column="DISPLAYNAME" type="string" length="4000"/>
             <property name="description" column="DESCRIPTION" type="string" length="4000"/>
             <many-to-one name="etype" class="org.yes.cart.domain.entity.Etype" foreign-key="FK_ATTRIBUTE_ETYPE" lazy="proxy">
                 <column name="ETYPE_ID" not-null="true"/>

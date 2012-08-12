@@ -27,10 +27,16 @@ import java.io.StringWriter;
 public class ExceptionUtil {
 
 
-    public static String toString(final Exception e) {
+    /**
+     * Convert stack trace of an exception to string.
+     *
+     * @param exception exception
+     * @return full stack strace as string
+     */
+    public static String stackTraceToString(final Exception exception) {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
-        e.printStackTrace(pw);
+        exception.printStackTrace(pw);
         return sw.toString();
     }
 

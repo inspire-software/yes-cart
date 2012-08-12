@@ -57,7 +57,7 @@ public interface AttrValue extends Auditable {
     /**
      * Get display value to show on the web. The some
      * correct attributes value does not look good on the web,
-     * so need to use dislplay value to eliminate this situation.
+     * so need to use display value to eliminate this situation.
      * Need to use val in case if displayVal is empty.
      * Affect UI only.
      *

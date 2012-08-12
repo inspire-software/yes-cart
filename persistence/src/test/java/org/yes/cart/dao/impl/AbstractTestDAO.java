@@ -41,6 +41,9 @@ import java.io.IOException;
  */
 public abstract class AbstractTestDAO {
 
+    // Do not enable dump unless this is necessary as it is very slow.
+    private static final boolean ENABLED_DUMPS = false;
+
     private ApplicationContext ctx;
     private SessionFactory sessionFactory;
     private Session session;
@@ -94,6 +97,12 @@ public abstract class AbstractTestDAO {
     }
 
     protected void dumpDataBase(final String prefix, final String[] tables) throws Exception {
+
+        if (!ENABLED_DUMPS) {
+            System.out.println("DUMP: [DISABLED] - change parameter in AbstractTestDAO.ENABLED_DUMPS");
+            return;
+        }
+
         QueryDataSet queryDataSet = new QueryDataSet(dbTester.getConnection());
         for (String tableName : tables) {
             queryDataSet.addTable(tableName);
