@@ -42,12 +42,12 @@ public class DtoStateServiceImpl extends AbstractDtoServiceImpl<StateDTO, StateD
      * Construct state dto service.
      * @param dtoFactory    {@link org.yes.cart.domain.dto.factory.DtoFactory}
      * @param stateGenericService generic serivce
-     * @param AdaptersRepository     value converter
+     * @param adaptersRepository     value converter
      */
     public DtoStateServiceImpl(final DtoFactory dtoFactory,
                                final GenericService<State> stateGenericService,
-                               final AdaptersRepository AdaptersRepository) {
-        super(dtoFactory, stateGenericService, AdaptersRepository);
+                               final AdaptersRepository adaptersRepository) {
+        super(dtoFactory, stateGenericService, adaptersRepository);
     }
 
 

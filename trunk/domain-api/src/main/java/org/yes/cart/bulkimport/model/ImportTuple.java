@@ -16,8 +16,6 @@
 
 package org.yes.cart.bulkimport.model;
 
-import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
-
 import java.util.List;
 
 /**
@@ -41,15 +39,17 @@ public interface ImportTuple<S, T> {
 
     /**
      * @param column column descriptor
+     * @param adapter value adapter
      * @return column value (or values) depending on data
      */
-    Object getColumnValue(ImportColumn column);
+    Object getColumnValue(ImportColumn column, ValueAdapter adapter);
 
     /**
      * @param importDescriptor import descriptor
      * @param column column descriptor
+     * @param adapter value adapter
      * @return sub tuple from a column
      */
-    List<ImportTuple<S, T>> getSubTuples(CsvImportDescriptor importDescriptor, ImportColumn column);
+    List<ImportTuple<S, T>> getSubTuples(ImportDescriptor importDescriptor, ImportColumn column, ValueAdapter adapter);
 
 }

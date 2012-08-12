@@ -67,7 +67,7 @@ public class DtoCustomerServiceImpl
      *
      * @param dtoFactory               {@link org.yes.cart.domain.dto.factory.DtoFactory}
      * @param customerGenericService   {@link org.yes.cart.service.domain.GenericService}
-     * @param AdaptersRepository {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
+     * @param adaptersRepository {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
      * @param dtoAttributeService      {@link DtoAttributeService}
      * @param attrValueEntityCustomerDao       link to customer attribute values dao
      * @param shopDao shop dao
@@ -75,12 +75,12 @@ public class DtoCustomerServiceImpl
     public DtoCustomerServiceImpl(
             final DtoFactory dtoFactory,
             final GenericService<Customer> customerGenericService,
-            final AdaptersRepository AdaptersRepository,
+            final AdaptersRepository adaptersRepository,
             final DtoAttributeService dtoAttributeService,
             final GenericDAO<AttrValueEntityCustomer, Long> attrValueEntityCustomerDao,
             final GenericDAO<Shop, Long> shopDao) {
 
-        super(dtoFactory, customerGenericService, AdaptersRepository);
+        super(dtoFactory, customerGenericService, adaptersRepository);
 
         this.dtoAttributeService = dtoAttributeService;
 
@@ -157,7 +157,7 @@ public class DtoCustomerServiceImpl
      */
     public AttrValueDTO updateEntityAttributeValue(final AttrValueDTO attrValueDTO) {
         AttrValueEntityCustomer attrValueCustomer = attrValueEntityCustomerDao.findById(attrValueDTO.getAttrvalueId());
-        attrValueAssembler.assembleEntity(attrValueDTO, attrValueCustomer, null, dtoFactory);
+        attrValueAssembler.assembleEntity(attrValueDTO, attrValueCustomer, getAdaptersRepository(), dtoFactory);
         attrValueEntityCustomerDao.update(attrValueCustomer);
         return attrValueDTO;
     }
@@ -167,7 +167,7 @@ public class DtoCustomerServiceImpl
      */
     public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
         AttrValueCustomer valueEntityCustomer = getEntityFactory().getByIface(AttrValueCustomer.class);
-        attrValueAssembler.assembleEntity(attrValueDTO, valueEntityCustomer, null, dtoFactory);
+        attrValueAssembler.assembleEntity(attrValueDTO, valueEntityCustomer, getAdaptersRepository(), dtoFactory);
         Attribute atr =((AttributeService)dtoAttributeService.getService()).getById(attrValueDTO.getAttributeDTO().getAttributeId());
         valueEntityCustomer.setAttribute(atr);
         valueEntityCustomer.setCustomer(service.getById(((AttrValueCustomerDTO) attrValueDTO).getCustomerId()));

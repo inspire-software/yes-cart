@@ -27,13 +27,11 @@ import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.SingletonJobRunner;
 import org.yes.cart.service.async.impl.JobStatusListenerImpl;
-import org.yes.cart.service.async.impl.JobStatusListenerNullImpl;
 import org.yes.cart.service.async.model.JobContext;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.bulkimport.service.*;
 import org.yes.cart.service.async.model.impl.JobContextImpl;
 import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.utils.impl.ZipUtils;
 
 import java.io.File;
@@ -41,7 +39,6 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Import Director class to perform import via {@link BulkImportService}

@@ -60,12 +60,4 @@ public interface CsvImportDescriptor extends ImportDescriptor {
      */
     Collection<ImportColumn> getImportColumns(FieldTypeEnum fieldType);
 
-
-    /**
-     * Get the {@link ImportColumn} for object lookup.
-     *
-     * @return {@link ImportColumn} if found, otherwise null.
-     */
-    ImportColumn getPrimaryKeyColumn();
-
 }

@@ -262,10 +262,8 @@
                 <entry key="TTD" value="&#x54;&#x54;&#x24;"/>
                 <entry key="TVD" value="&#x24;"/>
                 <entry key="TWD" value="&#x4e;&#x54;&#x24;"/>
-                <entry key="UAH" value="&#1075;&#1088;&#1085;."/>
-                <!-- not all browser supoprt &#x20b4; -->
-                <entry key="USD" value="&#x0443;.&#x0435;."/>
-                <!--                <entry key="USD" value="&#x24;"/>-->
+                <entry key="UAH" value="&#1075;&#1088;&#1085;."/><!-- not all browser support &#x20b4; -->
+                <entry key="USD" value="&#x24;"/>
                 <entry key="UYU" value="&#x24;&#x55;"/>
                 <entry key="UZS" value="&#x43b;&#x432;"/>
                 <entry key="VEF" value="&#x42;&#x73;"/>

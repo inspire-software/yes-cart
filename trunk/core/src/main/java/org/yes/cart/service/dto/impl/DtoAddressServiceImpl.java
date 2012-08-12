@@ -42,13 +42,13 @@ public class DtoAddressServiceImpl
      *
      * @param dtoFactory               {@link org.yes.cart.domain.dto.factory.DtoFactory}
      * @param addressGenericService    {@link org.yes.cart.service.domain.GenericService}
-     * @param AdaptersRepository {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
+     * @param adaptersRepository {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
      */
     public DtoAddressServiceImpl(
             final DtoFactory dtoFactory,
             final GenericService<Address> addressGenericService,
-            final AdaptersRepository AdaptersRepository) {
-        super(dtoFactory, addressGenericService, AdaptersRepository);
+            final AdaptersRepository adaptersRepository) {
+        super(dtoFactory, addressGenericService, adaptersRepository);
     }
 
 

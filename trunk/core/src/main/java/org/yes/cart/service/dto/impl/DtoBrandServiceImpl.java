@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.dto.impl;
 
+import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.dao.GenericDAO;
@@ -70,9 +71,9 @@ public class DtoBrandServiceImpl
                                final DtoFactory dtoFactory,
                                final DtoAttributeService dtoAttributeService,
                                final GenericDAO<AttrValueEntityBrand, Long> attrValueEntityBrandDao,
-                               final ImageService imageService
-                               ) {
-        super(dtoFactory, brandGenericService, null);
+                               final ImageService imageService,
+                               final AdaptersRepository adaptersRepository) {
+        super(dtoFactory, brandGenericService, adaptersRepository);
         this.attrValueAssembler = DTOAssembler.newAssembler(
                 dtoFactory.getImplClass(AttrValueBrandDTO.class),
                 brandGenericService.getGenericDao().getEntityFactory().getImplClass(AttrValueBrand.class)
@@ -131,7 +132,7 @@ public class DtoBrandServiceImpl
     /** {@inheritDoc}*/
     public AttrValueDTO updateEntityAttributeValue(final AttrValueDTO attrValueDTO) {
         final AttrValueEntityBrand valueEntityBrand = attrValueEntityBrandDao.findById(attrValueDTO.getAttrvalueId());
-        attrValueAssembler.assembleEntity(attrValueDTO, valueEntityBrand, null, dtoFactory);
+        attrValueAssembler.assembleEntity(attrValueDTO, valueEntityBrand, getAdaptersRepository(), dtoFactory);
         attrValueEntityBrandDao.update(valueEntityBrand);
         return attrValueDTO;
         
@@ -140,7 +141,7 @@ public class DtoBrandServiceImpl
     /** {@inheritDoc}*/
     public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
         AttrValueBrand valueEntityBrand = getEntityFactory().getByIface(AttrValueBrand.class);
-        attrValueAssembler.assembleEntity(attrValueDTO, valueEntityBrand, null, dtoFactory);
+        attrValueAssembler.assembleEntity(attrValueDTO, valueEntityBrand, getAdaptersRepository(), dtoFactory);
         Attribute atr = ((GenericService<Attribute>)dtoAttributeService.getService()).getById(attrValueDTO.getAttributeDTO().getAttributeId());
         valueEntityBrand.setAttribute(atr);
         valueEntityBrand.setBrand(service.getById(((AttrValueBrandDTO) attrValueDTO).getBrandId()));

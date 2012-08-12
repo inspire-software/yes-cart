@@ -16,6 +16,8 @@
 
 package org.yes.cart.bulkimport.model;
 
+import java.util.List;
+
 /**
  * Single import line description.
  * <p/>
@@ -29,18 +31,20 @@ public interface ImportColumn {
      * Get the field value. Regular expression will be used for obtain value if reg exp is set.
      *
      * @param rawValue the whole value from cell
+     * @param adapter value adapter
      * @return value
      */
-    String getValue(String rawValue);
+    Object getValue(String rawValue, ValueAdapter adapter);
 
 
     /**
      * Get the field value as string array via reg exp.
      *
      * @param rawValue the whole value from cell
+     * @param adapter value adapter
      * @return field value as string array
      */
-    String[] getValues(String rawValue);
+    List getValues(String rawValue, ValueAdapter adapter);
 
 
     /**
@@ -91,6 +95,20 @@ public interface ImportColumn {
      * @param fieldType to set.
      */
     void setFieldType(FieldTypeEnum fieldType);
+
+    /**
+     * Get the {@link DataTypeEnum}.
+     *
+     * @return data type (used for converting data correctly)
+     */
+    DataTypeEnum getDataType();
+
+    /**
+     * Set the {@link DataTypeEnum}
+     *
+     * @param dataType to set.
+     */
+    void setDataType(DataTypeEnum dataType);
 
     /**
      * Field name in object in java beans notation.
@@ -201,4 +219,14 @@ public interface ImportColumn {
      * @param entityType entity type for FK's
      */
     void setEntityType(String entityType);
+
+    /**
+     * @return language of the localisable value (or null if this is not localisable)
+     */
+    String getLanguage();
+
+    /**
+     * @param language language of the localisable value (or null if this is not localisable)
+     */
+    void setLanguage(String language);
 }

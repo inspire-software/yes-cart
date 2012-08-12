@@ -18,10 +18,14 @@ package org.yes.cart.bulkimport.csv.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
+import org.yes.cart.bulkimport.model.DataTypeEnum;
 import org.yes.cart.bulkimport.model.FieldTypeEnum;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
+import org.yes.cart.bulkimport.model.ValueAdapter;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,6 +44,8 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
 
     private FieldTypeEnum fieldType;
 
+    private DataTypeEnum dataType;
+
     private String entityType;
 
     private String name;
@@ -52,6 +58,8 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     private String lookupQuery; //for locate fk and pk
 
     private boolean useMasterObject;
+
+    private String language;
 
     private ImportDescriptor importDescriptor; //complex fields.
 
@@ -129,34 +137,38 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
-    public String[] getValues(final String rawValue) {
+    public List getValues(final String rawValue, final ValueAdapter adapter) {
+        List result = new ArrayList();
         if (getPattern() != null) {
             Matcher matcher = getPattern().matcher(rawValue);
             if (matcher.find()) {
                 int groupCount = getGroupCount(rawValue);
-                String[] result = new String[groupCount];
                 for (int i = 0; i < groupCount; i++) {
-                    result[i] = matcher.group(i + 1).trim();
+                    result.add(adapter.fromRaw(matcher.group(i + 1).trim(), getDataType()));
                 }
-                return result;
             }
         }
-        return new String[0];
+        return result;
     }
 
     /**
      * {@inheritDoc}
      */
-    public String getValue(final String rawValue) {
-        if (getPattern() != null) {
-            Matcher matcher = getPattern().matcher(rawValue);
-            if (matcher.find()) {
-                return matcher.group(getValueRegExGroup()).trim();
-            } else {
-                return null;
+    public Object getValue(final String rawValue, final ValueAdapter adapter) {
+        if (getValueConstant() != null) {
+            return adapter.fromRaw(getValueConstant(), getDataType());
+        } else if (rawValue != null) {
+            if (getPattern() != null) {
+                Matcher matcher = getPattern().matcher(rawValue);
+                if (matcher.find()) {
+                    return adapter.fromRaw(matcher.group(getValueRegExGroup()).trim(), getDataType());
+                } else {
+                    return null;
+                }
             }
+            return adapter.fromRaw(rawValue, getDataType());
         }
-        return rawValue;
+        return null;
 
     }
 
@@ -186,6 +198,20 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
      */
     public void setFieldType(final FieldTypeEnum fieldType) {
         this.fieldType = fieldType;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public DataTypeEnum getDataType() {
+        return dataType;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setDataType(final DataTypeEnum dataType) {
+        this.dataType = dataType;
     }
 
     /**
@@ -320,6 +346,19 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
         this.entityType = entityType;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public String getLanguage() {
+        return language;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setLanguage(final String language) {
+        this.language = language;
+    }
 
     @Override
     public String toString() {
@@ -335,6 +374,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
                 ", pattern=" + pattern +
                 ", valueConstant='" + valueConstant + '\'' +
                 ", forceGroupCount='" + forceGroupCount + '\'' +
+                ", language='" + language + '\'' +
                 '}';
     }
 }

@@ -42,12 +42,12 @@ public class DtoCustomerWishListServiceImpl
      * construct service.
      * @param dtoFactory               {@link org.yes.cart.domain.dto.factory.DtoFactory}
      * @param customerWishListGenericService    {@link org.yes.cart.service.domain.GenericService}
-     * @param AdaptersRepository {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
+     * @param adaptersRepository {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
      */
     public DtoCustomerWishListServiceImpl(final DtoFactory dtoFactory,
                                           final GenericService<CustomerWishList> customerWishListGenericService,
-                                          final AdaptersRepository AdaptersRepository) {
-        super(dtoFactory, customerWishListGenericService, AdaptersRepository);
+                                          final AdaptersRepository adaptersRepository) {
+        super(dtoFactory, customerWishListGenericService, adaptersRepository);
     }
 
 

@@ -29,6 +29,8 @@
         <text-qualifier>&quot;</text-qualifier>
     </import-file-descriptor>
 
+    <select-sql>select b from Warehouse b where b.code = {code}</select-sql>
+
     <import-columns>
 
         <column-descriptor>
@@ -37,7 +39,6 @@
             <name>code</name>
             <value-regex>(.{0,255})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
-            <lookup-query>select b from Warehouse b where b.code = ?1</lookup-query>
         </column-descriptor>
 
         <column-descriptor>

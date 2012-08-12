@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.dto.impl;
 
+import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import org.yes.cart.domain.dto.EtypeDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.EtypeDTOImpl;
@@ -39,8 +40,9 @@ public class DtoEtypeServiceImpl
      * @param dtoFactory {@link DtoFactory}
      */
     public DtoEtypeServiceImpl(final EtypeService etypeService,
-                                  final DtoFactory dtoFactory) {
-        super(dtoFactory, etypeService, null);
+                               final DtoFactory dtoFactory,
+                               final AdaptersRepository adaptersRepository) {
+        super(dtoFactory, etypeService, adaptersRepository);
     }
 
 

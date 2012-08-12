@@ -46,7 +46,7 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
 
     protected GenericService<IFACE> service;
 
-    private final Map<String, Object> AdaptersRepository;
+    private final AdaptersRepository adaptersRepository;
 
     /** {@inheritDoc}*/
     public GenericService<IFACE> getService() {
@@ -63,7 +63,7 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
 
     /** {@inheritDoc} */
     public DTOIFACE getById(final long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return getById(id, AdaptersRepository);
+        return getById(id, getAdaptersRepository());
     }
 
     /** {@inheritDoc} */
@@ -116,7 +116,7 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         for (IFACE entity : entities) {
             DTOIFACE dto = (DTOIFACE) dtoFactory.getByIface(getDtoIFace());
-            assembler.assembleDto(dto, entity, AdaptersRepository, dtoFactory);
+            assembler.assembleDto(dto, entity, getAdaptersRepository(), dtoFactory);
             dtos.add(dto);
         }
     }
@@ -125,19 +125,15 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
      * Construct base remote service.
      * @param dtoFactory {@link DtoFactory}
      * @param service {@link org.yes.cart.service.domain.GenericService}
-     * @param AdaptersRepository {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
+     * @param adaptersRepository {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
      */
     public AbstractDtoServiceImpl(final DtoFactory dtoFactory,
                                   final GenericService<IFACE> service,
-                                  final AdaptersRepository AdaptersRepository) {
+                                  final AdaptersRepository adaptersRepository) {
         this.dtoFactory = dtoFactory;
         this.service = service;
         this.assembler = DTOAssembler.newAssembler(getDtoImpl(), getEntityIFace());
-        if (AdaptersRepository == null) {
-            this.AdaptersRepository = null;
-        } else {
-            this.AdaptersRepository = AdaptersRepository.getAll();
-        }
+        this.adaptersRepository = adaptersRepository;
     }
 
     /**
@@ -145,7 +141,10 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
      * @return converters repository.
      */
     public Map<String, Object> getAdaptersRepository() {
-        return AdaptersRepository;
+        if (adaptersRepository == null) {
+            return null;
+        }
+        return adaptersRepository.getAll();
     }
 
     /**

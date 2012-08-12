@@ -18,6 +18,7 @@ package org.yes.cart.domain.message.consumer;
 
 import com.dumbster.smtp.SimpleSmtpServer;
 import com.dumbster.smtp.SmtpMessage;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.yes.cart.BaseCoreDBTestCase;
@@ -39,6 +40,7 @@ import static org.hamcrest.Matchers.*;
 public class CustomerRegistrationMessageListenerTest extends BaseCoreDBTestCase {
 
     @Test
+    @Ignore("Need to refactor this, since this test just hangs, goes into infine loop to send mail")
     public void testOnMessage0() throws Exception {
         RegistrationMessage registrationMessage = createRegistrationMessage();
         SimpleSmtpServer server = SimpleSmtpServer.start(2525);

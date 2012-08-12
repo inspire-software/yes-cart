@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.dto.impl;
 
+import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import org.yes.cart.domain.dto.AttributeGroupDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.AttributeGroupDTOImpl;
@@ -42,8 +43,9 @@ public class DtoAttributeGroupServiceImpl
      */
     public DtoAttributeGroupServiceImpl(
             final AttributeGroupService attributeGroupService,
-            final DtoFactory dtoFactory) {
-        super(dtoFactory, attributeGroupService, null);
+            final DtoFactory dtoFactory,
+            final AdaptersRepository adaptersRepository) {
+        super(dtoFactory, attributeGroupService, adaptersRepository);
     }
 
 
@@ -58,7 +60,7 @@ public class DtoAttributeGroupServiceImpl
         final AttributeGroup attributeGroup =  getAttributeGroupService().getAttributeGroupByCode(code);
         if (attributeGroup != null) {
             final AttributeGroupDTO attributeGroupDTO = dtoFactory.getByIface(AttributeGroupDTO.class);
-            assembler.assembleDto(attributeGroupDTO, attributeGroup, null, dtoFactory);
+            assembler.assembleDto(attributeGroupDTO, attributeGroup, getAdaptersRepository(), dtoFactory);
             return attributeGroupDTO;
         }
         return null;

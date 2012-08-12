@@ -221,8 +221,8 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
 
         } catch (DataIntegrityViolationException e) {
             final String err = MessageFormat.format("image {0} for product with code {1} not found.", fileName, product.getCode());
-            statusListener.notifyError(err);
             LOG.error(err, e);
+            statusListener.notifyError(err);
             return false;
 
         }
@@ -278,8 +278,8 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
             return true;
         } catch (DataIntegrityViolationException e) {
             final String err = MessageFormat.format("image {0} for product sku with code {1} not found.", fileName, productSku.getCode());
-            statusListener.notifyError(err);
             LOG.error(err, e);
+            statusListener.notifyError(err);
             return false;
         }
     }

@@ -16,12 +16,14 @@
 
 package org.yes.cart.bulkimport.csv.impl;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.yes.cart.bulkimport.csv.CsvImportTuple;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
-import org.yes.cart.bulkimport.model.ImportColumn;
-import org.yes.cart.bulkimport.model.ImportTuple;
+import org.yes.cart.bulkimport.model.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -30,6 +32,8 @@ import java.util.List;
  * Time: 8:06 AM
  */
 public class CsvImportTupleImpl implements CsvImportTuple {
+
+    private static final ValueAdapter SUB_TUPLE = new CsvPlainStringValueAdapter();
 
     private final String filename;
     private final long lineNumber;
@@ -52,38 +56,47 @@ public class CsvImportTupleImpl implements CsvImportTuple {
     }
 
     /** {@inheritDoc} */
-    public Object getColumnValue(final ImportColumn column) {
-        if (line == null || column.getColumnIndex() > line.length - 1) {
-            return null;
+    public Object getColumnValue(final ImportColumn column, final ValueAdapter valueAdapter) {
+        final int colIndex = column.getColumnIndex();
+        String rawValue = null;
+        if (colIndex > -1 && line != null && colIndex < line.length) {
+            rawValue = StringEscapeUtils.escapeSql(line[colIndex]);
         }
-        final String rawValue = line[column.getColumnIndex()];
-        if (column.getGroupCount(rawValue) > 1) {
-            return column.getValues(rawValue);
+        if (rawValue != null && column.getGroupCount(rawValue) > 1) {
+            return column.getValues(rawValue, valueAdapter);
         }
-        return column.getValue(rawValue);
+        return column.getValue(rawValue, valueAdapter);
     }
 
     /** {@inheritDoc} */
-    public List<ImportTuple<String, String[]>> getSubTuples(final CsvImportDescriptor importDescriptor, final ImportColumn column) {
-        if (line == null || column.getColumnIndex() > line.length - 1) {
-            return null;
+    public List<ImportTuple<String, String[]>> getSubTuples(final ImportDescriptor importDescriptor, final ImportColumn column, final ValueAdapter valueAdapter) {
+        if (column.getFieldType() == FieldTypeEnum.SLAVE_TUPLE_FIELD) {
+            final String rawValue = (String) getColumnValue(column, SUB_TUPLE);
+            final String[] rows = rawValue.split(",");
+            final List<ImportTuple<String, String[]>> subTuples = new ArrayList<ImportTuple<String, String[]>>(rows.length);
+            int subLine = 0;
+            for (String row : rows) {
+                subTuples.add(new CsvImportTupleImpl(filename + ":" + lineNumber + ":" + column.getName(), subLine++,
+                        row.split(String.valueOf(((CsvImportDescriptor) importDescriptor).getImportFileDescriptor().getColumnDelimiter()))));
+            }
+            return subTuples;
+        } else if (column.getFieldType() == FieldTypeEnum.SLAVE_INLINE_FIELD) {
+            return (List) Arrays.asList(this);
         }
-        final String rawValue = line[column.getColumnIndex()];
-        final String[] rows = rawValue.split(",");
-        final List<ImportTuple<String, String[]>> subTuples = new ArrayList<ImportTuple<String, String[]>>(rows.length);
-        int subLine = 0;
-        for (String row : rows) {
-            subTuples.add(new CsvImportTupleImpl(filename + ":" + lineNumber + ":" + column.getName(), subLine++,
-                    row.split(String.valueOf(importDescriptor.getImportFileDescriptor().getColumnDelimiter()))));
-        }
-        return subTuples;
+        return Collections.emptyList();
     }
 
     @Override
     public String toString() {
-        return "CsvImportTupleImpl{" +
-                "sid=" + getSourceId() +
-                ", line=" + line +
-                '}';
+        final StringBuilder stringBuilder = new StringBuilder("CsvImportTupleImpl{sid=");
+        stringBuilder.append(getSourceId()).append(", line=[");
+        if (line != null) {
+            for (String column : line) {
+                stringBuilder.append(column);
+                stringBuilder.append(',');
+            }
+        }
+        stringBuilder.append("]}");
+        return stringBuilder.toString();
     }
 }

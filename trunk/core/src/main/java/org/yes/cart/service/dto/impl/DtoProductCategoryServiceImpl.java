@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.dto.impl;
 
+import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import org.yes.cart.domain.dto.ProductCategoryDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.ProductCategoryDTOImpl;
@@ -51,9 +52,10 @@ public class DtoProductCategoryServiceImpl
                                          final GenericService<ProductCategory> productCategoryGenericService,
                                          final GenericService<Product> productService,
                                          final GenericService<Category> categoryService,
-                                         final DtoFactory dtoFactory
+                                         final DtoFactory dtoFactory,
+                                         final AdaptersRepository adaptersRepository
     ) {
-        super(dtoFactory, productCategoryGenericService, null);
+        super(dtoFactory, productCategoryGenericService, adaptersRepository);
         this.productService = productService;
         this.categoryService = categoryService;
     }
@@ -64,7 +66,7 @@ public class DtoProductCategoryServiceImpl
     public ProductCategoryDTO create(final ProductCategoryDTO instance)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         ProductCategory productCategory = getEntityFactory().getByIface(ProductCategory.class);
-        assembler.assembleEntity(instance, productCategory, null, dtoFactory);
+        assembler.assembleEntity(instance, productCategory, getAdaptersRepository(), dtoFactory);
         productCategory.setCategory(categoryService.getById(instance.getCategoryId()));
         productCategory.setProduct(productService.getById(instance.getProductId()));
         productCategory = service.create(productCategory);
@@ -77,7 +79,7 @@ public class DtoProductCategoryServiceImpl
     public ProductCategoryDTO update(final ProductCategoryDTO instance)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         ProductCategory productCategory = service.getById(instance.getProductCategoryId());
-        assembler.assembleEntity(instance, productCategory, null, dtoFactory);
+        assembler.assembleEntity(instance, productCategory, getAdaptersRepository(), dtoFactory);
         productCategory.setCategory(categoryService.getById(instance.getCategoryId()));
         productCategory.setProduct(productService.getById(instance.getProductId()));
         productCategory = service.update(productCategory);

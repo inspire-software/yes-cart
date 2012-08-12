@@ -38,12 +38,12 @@ public class DtoCarrierServiceImpl
      *
      * @param dtoFactory               dto factory
      * @param carrierGenericService    generic service to use
-     * @param AdaptersRepository convertor factory.
+     * @param adaptersRepository       converter factory.
      */
     public DtoCarrierServiceImpl(final DtoFactory dtoFactory,
                                  final GenericService<Carrier> carrierGenericService,
-                                 final AdaptersRepository AdaptersRepository) {
-        super(dtoFactory, carrierGenericService, AdaptersRepository);
+                                 final AdaptersRepository adaptersRepository) {
+        super(dtoFactory, carrierGenericService, adaptersRepository);
     }
 
 

@@ -46,13 +46,13 @@ public class DtoCustomerOrderServiceImpl
      *
      * @param dtoFactory                  {@link org.yes.cart.domain.dto.factory.DtoFactory}
      * @param customerOrderGenericService generic serivce
-     * @param AdaptersRepository    value converter
+     * @param adaptersRepository    value converter
      */
     public DtoCustomerOrderServiceImpl(
             final DtoFactory dtoFactory,
             final GenericService<CustomerOrder> customerOrderGenericService,
-            final AdaptersRepository AdaptersRepository) {
-        super(dtoFactory, customerOrderGenericService, AdaptersRepository);
+            final AdaptersRepository adaptersRepository) {
+        super(dtoFactory, customerOrderGenericService, adaptersRepository);
     }
 
     /**

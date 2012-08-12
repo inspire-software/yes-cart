@@ -29,6 +29,8 @@
         <text-qualifier>&quot;</text-qualifier>
     </import-file-descriptor>
 
+    <select-sql>select s from StateEntity s where s.stateCode = {stateCode}</select-sql>
+
     <import-columns>
 
         <column-descriptor>
@@ -45,7 +47,6 @@
             <name>stateCode</name>
             <value-regex>(.{0,64})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
-            <lookup-query>select s from StateEntity s where s.stateCode = ?1</lookup-query>
         </column-descriptor>
 
         <column-descriptor>

@@ -1,0 +1,1313 @@
+group code;code;name;EN;RU;mandatory;searchable
+"PRODUCT";"1411";"Keys";"Keys";"Клавиши";true;true
+"PRODUCT";"1410";"Keyboard layout";"Keyboard type";"Раскладка клавиатуры";true;true
+"PRODUCT";"8419";"Trackball";"Trackball";"Трэкбол";true;true
+"PRODUCT";"8416";"Wireless receiver interface";"Wireless receiver interface";"Интерфейс беспроводного ресивера";true;true
+"PRODUCT";"1414";"I/O ports type";"I/O ports type";"Тип портов ввода/вывода";true;true
+"PRODUCT";"8220";"4G WiMAX";"4G WiMAX";"4G WiMAX";true;true
+"PRODUCT";"942";"Display number of colours";"Display number of colors";"Количество цветов экрана";true;true
+"PRODUCT";"8415";"Laser pointer colour";"Laser pointer colour";"Цвет лазерной указки";true;true
+"PRODUCT";"8418";"Receiver included";"Receiver included";"Поставляемый ресивер";true;true
+"PRODUCT";"940";"Display manufacturer";"Display manufacturer";"Производитель экрана";true;true
+"PRODUCT";"1412";"Function keys";"Function keys";"Функциональные клавиши";true;true
+"PRODUCT";"8417";"Receiver type";"Receiver type";"Тип ресивера";true;true
+"PRODUCT";"3282";"Scanning noise level";"Scanning noise level";"Уровень шума при сканировании";true;true
+"PRODUCT";"946";"Display response rise/fall";"Display response rise/fall";"Время отклика подъём/падение";true;true
+"PRODUCT";"8018";"Flatbed scan speed (b/w, A3)";"Flatbed scan speed (b/w, A3)";"Скорость планшетного сканирования (ч/б, A3)";true;true
+"PRODUCT";"8017";"Flatbed scan speed (b/w, A4)";"Flatbed scan speed (b/w, A4)";"Скорость планшетного сканирования (ч/б, A4)";true;true
+"PRODUCT";"944";"Display diagonal";"Display diagonal";"Диагональ экрана";true;true
+"PRODUCT";"8014";"ADF scan speed (b/w, A3)";"ADF scan speed (b/w, A3)";"Скорость сканирования автоматического податчика бумаги (ч/б, A3)";true;true
+"PRODUCT";"530";"Pallet dimensions (W x D x H)";"Pallet dimensions (W x D x H)";"Размеры поддона (ШхГхВ)";true;true
+"PRODUCT";"747";"Cabling technology";"Cabling technology";"Свивка кабеля";true;true
+"PRODUCT";"534";"Copy resolution (black text)";"Copy resolution (black text)";"Разрешение копирования (текст)";true;true
+"PRODUCT";"8734";"Included memory card size";"Included memory card size";"Объем карты памяти в комплекте";true;true
+"PRODUCT";"1822";"L3 cache";"L3 cache";"L3 кэш-память";true;true
+"PRODUCT";"8737";"Main camera resolution";"Main camera resolution";"Разрешение основной камеры";true;true
+"PRODUCT";"538";"Flash memory";"Flash memory";"Флэш-память";true;true
+"PRODUCT";"537";"Scan type";"Scan type";"Тип сканирования";true;true
+"PRODUCT";"536";"Full duplex";"Full duplex";"Полнодуплексный режим";true;true
+"PRODUCT";"7350";"Orientation sensor";"Orientation sensor";"Датчик ориентации";true;true
+"PRODUCT";"1829";"BIOS type";"BIOS type";"Тип BIOS";true;true
+"PRODUCT";"743";"Send to other application";"Send to other application";"Отправить в другое приложение";true;true
+"PRODUCT";"741";"Copy resolution (black graphics)";"Copy resolution (black graphics)";"Разрешение при копировании (черная графика)";true;true
+"PRODUCT";"8421";"Spill resistant keyboard";"Spill resistant keyboard";"Клавиатура с защитой от попадания жидкости";true;true
+"PRODUCT";"1828";"Processors compatible";"Processors compatible";"Совместимые процессоры";true;true
+"PRODUCT";"8021";"ADF scan speed (colour, A4)";"ADF scan speed (colour, A4)";"Скорость сканирования автоматического податчика бумаги (цвет, A4)";true;true
+"PRODUCT";"8020";"ADF scan speed (colour, A3)";"ADF scan speed (colour, A3)";"Скорость сканирования автоматического податчика бумаги (цвет, A3)";true;true
+"PRODUCT";"8409";"Non-slip base";"Non-slip base";"Нескользкая база";true;true
+"PRODUCT";"1422";"Drive bays";"Drive bays";"Отсеки для приводов";true;true
+"PRODUCT";"1421";"Number of drive bays";"Number of drive bays";"Число отсеков для приводов";true;true
+"PRODUCT";"8406";"Labelflash";"Labelflash";"Labelflash";true;true
+"PRODUCT";"930";"CD/DVD drive rotational speed";"CD/DVD drive rotational speed";"Скорость вращения CD/DVD-привода";true;true
+"PRODUCT";"931";"Optical drive removable";"Optical drive removable";"CD-RW/DVD-ROM-привод съемный";true;true
+"PRODUCT";"932";"Optical drive player software";"Optical drive player software";"ПО для CD-RW/DVD-ROM -плеера";true;true
+"PRODUCT";"8028";"Dolby technologies";"Dolby technologies";"Технологии Dolby";true;true
+"PRODUCT";"933";"CD/DVD writing software";"CD/DVD writing software";"ПО для записи CD/DVD";true;true
+"PRODUCT";"342";"Manageability features";"Manageability features";"Свойства управления";true;true
+"PRODUCT";"3294";"Country of origin";"Country of origin";"Страна происхождения";true;true
+"PRODUCT";"8027";"Scanning media types supported";"Scanning media types supported";"Типы носителей сканирования";true;true
+"PRODUCT";"934";"Diskette drive manufacturer";"Diskette drive manufacturer";"Производитель флоппи-дисковода";true;true
+"PRODUCT";"8026";"Daily duty cycle (max)";"Daily duty cycle (max)";"Ежедневная нагрузка (макс)";true;true
+"PRODUCT";"935";"Diskette drive";"Diskette drive";"Флоппи-дисковод";true;true
+"PRODUCT";"8025";"Duplex ADF scan speed (colour, A3)";"Duplex ADF scan speed (colour, A3)";"Скорость сканирования дуплексного атоподатчика (цвет, A3)";true;true
+"PRODUCT";"936";"Diskette drive media supported";"Diskette drive media supported";"Носители, поддерживаемые флоппи-дисководом";true;true
+"PRODUCT";"8024";"Duplex ADF scan speed (colour, A4)";"Duplex ADF scan speed (colour, A4)";"Скорость сканирования дуплексного атоподатчика (цвет, A4)";true;true
+"PRODUCT";"8023";"Duplex ADF scan speed (b/w, A3)";"Duplex ADF scan speed (b/w, A3)";"Скорость сканирования дуплексного атоподатчика (ч/б, A3)";true;true
+"PRODUCT";"938";"Diskette drive maximum transfer rate";"Diskette drive maximum transfer rate";"Максимальная скорость передачи данных флоппи-дисковода";true;true
+"PRODUCT";"8022";"Duplex ADF scan speed (b/w, A4)";"Duplex ADF scan speed (b/w, A4)";"Скорость сканирования дуплексного атоподатчика (ч /б, А4)";true;true
+"PRODUCT";"939";"Diskette drive dimensions (W x D x H)";"Diskette drive dimensions (W x D x H)";"Размеры флоппи-дисковода (ШхГхВ)";true;true
+"PRODUCT";"2940";"DVI-I ports quantity";"DVI-I ports quantity";"Количество портов DVI-I";true;true
+"PRODUCT";"734";"Chassis type";"Chassis type";"Тип корпуса";true;true
+"PRODUCT";"737";"Enhanced scan resolution";"Enhanced scan resolution";"Улучшеное разрешение сканирования";true;true
+"PRODUCT";"3490";"Teletext function";"Teletext function";"Функция телетекста";true;true
+"PRODUCT";"2944";"Mouse included";"Mouse included";"Мышь входит в комплектацию";true;true
+"PRODUCT";"7";"Hard drive capacity";"Hard drive capacity";"Емкость жесткого диска";true;true
+"PRODUCT";"739";"Disk subsystem controller";"Disk subsystem controller";"Контроллер дисковой подсистемы";true;true
+"PRODUCT";"738";"Communication";"Communication";"Средства связи";true;true
+"PRODUCT";"6";"Internal memory";"Internal memory";"Оперативная память";true;true
+"PRODUCT";"8019";"ADF scan speed (b/w, A4)";"ADF scan speed (b/w, A4)";"Скорость сканирования автоматического податчика бумаги (ч/б, A4)";true;true
+"PRODUCT";"5";"Processor clock speed";"Processor clock speed";"Тактовая частота процессора";true;true
+"PRODUCT";"2941";"DVI-D ports quantity";"DVI-D ports quantity";"Количество портов DVI-D";true;true
+"PRODUCT";"547";"Colour printing technology";"Color printing technology";"Технология цветной печати";true;true
+"PRODUCT";"8414";"Presenter functions";"Presenter functions";"Функции презентера";true;true
+"PRODUCT";"8411";"Surface coloration";"Surface coloration";"Расцветка покрытия";true;true
+"PRODUCT";"8410";"Game edition";"Game edition";"Издание игры";true;true
+"PRODUCT";"730";"Compatible memory cards";"Compatible memory cards";"Совместимые карты памяти";true;true
+"PRODUCT";"732";"Quantity per pallet";"Quantity per pallet";"Количество в паллете";true;true
+"PRODUCT";"920";"Device read/write media compatibility";"Device read/write media compatibility";"Совместимость с носителями для чтения/записи";true;true
+"PRODUCT";"6084";"Rear ports";"Rear ports";"Задние порты";true;true
+"PRODUCT";"6085";"Rear ports note";"Rear ports note";"Примечание по задним портам";true;true
+"PRODUCT";"6088";"64-bit computing";"64-bit computing";"64-битные вычисления";true;true
+"PRODUCT";"6089";"Processor number of cores";"Processor number of cores";"Количество ядер процессора";true;true
+"PRODUCT";"6086";"Recovery time";"Recovery time";"Время восстановления";true;true
+"PRODUCT";"925";"CD/DVD drive ultra DMA burst data transfer rate";"CD/DVD drive ultra DMA burst data transfer rate";"Скорость пакетной передачи данных CD/DVD-привода в режиме UDMA";true;true
+"PRODUCT";"926";"CD/DVD drive multiword DMA burst data transfer rate";"CD/DVD drive multiword DMA burst data transfer rate";"Скорость пакетной передачи данных CD/DVD-привода в режиме multiword DMA";true;true
+"PRODUCT";"923";"CD-RW/DVD-ROM interface";"CD-RW/DVD-ROM interface";"Интерфейс CD-RW/DVD-ROM";true;true
+"PRODUCT";"8037";"Pivot angle";"Pivot angle";"Угол вращения вокруг оси";true;true
+"PRODUCT";"924";"CD/DVD drive DMA burst data transfer rate";"CD/DVD drive DMA burst data transfer rate";"Скорость пакетной передачи данных CD/DVD-привода в режиме DMA";true;true
+"PRODUCT";"6893";"Video formats supported";"Video compression format";"Поддерживаемый видеоформат";true;true
+"PRODUCT";"1439";"Relative humidity";"Relative humidity";"Относительная влажность";true;true
+"PRODUCT";"1438";"Network integrated ports";"Network integrated ports";"Встроенные порты для сети";true;true
+"PRODUCT";"922";"Drive device weight";"Drive device weight";"Вес привода устройства";true;true
+"PRODUCT";"513";"Pallet weight";"Pallet weight";"Вес поддона";true;true
+"PRODUCT";"1843";"CD/DVD weight";"CD/DVD weight";"Вес CD/DVD";true;true
+"PRODUCT";"1844";"DVD drive transfer rate";"DVD drive transfer rate";"Скорость передачи DVD-привода";true;true
+"PRODUCT";"729";"Video adapter resolution";"Video adapter resolution";"Разрешение видеоадаптера";true;true
+"PRODUCT";"511";"Maximum operating temperature range (T-T)";"Maximum operating temperature range (T-T)";"Максимальный рабочий диапазон температур (Т-Т)";true;true
+"PRODUCT";"727";"Optical scanning resolution";"Optical scanning resolution";"Разрешение оптического сканирования";true;true
+"PRODUCT";"8758";"Video capture capability";"Video capture capability";"Функция записи видео";true;true
+"PRODUCT";"6886";"Energy saving functions";"Energy saving functions:";"Функции для энергосбережения:";true;true
+"PRODUCT";"2971";"Software type";"Software type";"Тип ПО";true;true
+"PRODUCT";"919";"CD-RW/DVD-ROM transfer rate";"CD-RW/DVD-ROM transfer rate";"Скорость передачи CD-RW/DVD-ROM";true;true
+"PRODUCT";"8441";"Mini-USB 2.0 ports quantity";"Mini-USB 2.0 ports quantity";"Количество портов Mini-USB 2.0";true;true
+"PRODUCT";"8442";"Second camera resolution";"Second camera resolution";"Мегапиксели второй камеры";true;true
+"PRODUCT";"515";"Scan speed (black and white drawing)";"Scan speed (black and white drawing)";"Скорость сканирования (ч/б рисунок)";true;true
+"PRODUCT";"514";"Power supply type";"Power supply type";"Тип подачи питания";true;true
+"PRODUCT";"1448";"Warranty";"Warranty";"Гарантия";true;true
+"PRODUCT";"8426";"Programmable mouse buttons";"Programmable mouse buttons";"Программируемые кнопки мыши";true;true
+"PRODUCT";"6071";"Paper sizes supported (Auto Document Feeder)";"Paper sizes supported (Auto Document Feeder)";"Поддерживаемые размеры бумаги (автоподатчик бумаги)";true;true
+"PRODUCT";"1442";"Wireless option type";"Wireless option type";"Тип беспроводной опции";true;true
+"PRODUCT";"1444";"Processor core voltage (Battery mode)";"Processor core voltage (Battery mode)";"Напряжение ядра процессора (режим батареи)";true;true
+"PRODUCT";"914";"Battery special features";"Battery special features";"Особые свойства батареи";true;true
+"PRODUCT";"6076";"Power supply note";"Power supply note";"Примечание к блоку питания";true;true
+"PRODUCT";"915";"CD/DVD drive manufacturer";"CD/DVD drive manufacturer";"Производитель CD/DVD-привода";true;true
+"PRODUCT";"917";"CD/DVD maximum speed";"CD/DVD maximum speed";"Максимальная скорость CD/DVD";true;true
+"PRODUCT";"910";"Resume battery backup after";"Resume battery backup after";"Возобновление аварийного питания от аккумулятора после";true;true
+"PRODUCT";"911";"Battery life with optional 2nd battery";"Battery life with optional 2nd battery";"Время работы с дополнительной второй батареей";true;true
+"PRODUCT";"1449";"Non-operating altitude";"Non-operating altitude";"Высота в нерабочем режиме";true;true
+"PRODUCT";"912";"Battery life power on";"Battery life power on";"Срок службы батареи во включенном состоянии";true;true
+"PRODUCT";"913";"Battery life power off";"Battery life power off";"Срок службы батареи в выключенном состоянии";true;true
+"PRODUCT";"717";"Scan speed (OCR, A4)";"Scan speed (OCR, A4)";"Скорость сканирования (OCR, A4)";true;true
+"PRODUCT";"1830";"Cables included";"Cables included";"Поставляемые кабели";true;true
+"PRODUCT";"716";"Minimum scan size";"Minimum scan size";"Минимальный размер сканирования";true;true
+"PRODUCT";"2965";"Non-operating shock";"Non-operating shock";"Ударная нагрузка в нерабочем режиме";true;true
+"PRODUCT";"719";"Cache external";"Cache external";"Внешняя кэш-память";true;true
+"PRODUCT";"908";"Battery type";"Battery type";"Тип батареек";true;true
+"PRODUCT";"2961";"Backlight colour";"Backlight color";"Цвет подсветки";true;true
+"PRODUCT";"907";"AC adapter weight";"AC adapter weight";"Вес адаптера переменного тока";true;true
+"PRODUCT";"909";"Battery capacity";"Battery performance";"Емкость батареи";true;true
+"PRODUCT";"6482";"Depth (max)";"Depth (max.)";"Глубина (макс)";true;true
+"PRODUCT";"1450";"CD/DVD drive buffer size";"CD/DVD drive buffer size";"Размер буфера CD/DVD";true;true
+"PRODUCT";"526";"Paper handling";"Paper handling";"Управление бумагой";true;true
+"PRODUCT";"6486";"Height (max)";"Height (max)";"Высота (макс)";true;true
+"PRODUCT";"2969";"Output resolutions";"Output resolutions";"Разрешение вывода";true;true
+"PRODUCT";"6488";"Weight (max)";"Weight (max)";"Вес (макс)";true;true
+"PRODUCT";"989";"Hard disk desktop or notebook?";"Hard disk desktop or notebook?";"Жесткий диск для ПК или ноутбука?";true;true
+"PRODUCT";"7599";"3D compatibility";"3D compatibility";"3D совместимость";true;true
+"PRODUCT";"2110";"Technology";"Technology";"Технология";true;true
+"PRODUCT";"8058";"Effective megapixels (image)";"Effective megapixels (image)";"Эффективные мегапиксели (фото)";true;true
+"PRODUCT";"982";"Hard drive interface";"Host interface";"Интерфейс жесткого диска";true;true
+"PRODUCT";"980";"Hard disk number of heads";"Hard disk number of heads";"Количество головок жесткого диска";true;true
+"PRODUCT";"986";"Hard disk data buffer (PIO 4 mode)";"Hard disk data buffer (PIO 4 mode)";"Буфер жесткого диска (PIO режим 4)";true;true
+"PRODUCT";"985";"Hard disk data buffer (Ultra ATA mode 2)";"Hard disk data buffer (Ultra ATA mode 2)";"Буфер жесткого диска (Ultra ATA режим 2)";true;true
+"PRODUCT";"983";"Hard disk interleave";"Hard disk interleave";"Фактор чередования секторов жесткого  диска";true;true
+"PRODUCT";"4963";"Touch sensitive screen";"Touch sensitive screen";"Сенсорный экран";true;true
+"PRODUCT";"3235";"Duplex scanning";"Duplex scanning";"Двустороннее сканирование";true;true
+"PRODUCT";"574";"Maximum graphic adapter memory";"Maximum graphic adapter memory";"Объём памяти графического адаптера";true;true
+"PRODUCT";"703";"Operating relative humidity range";"Operating relative humidity range";"Диапазон рабочей относительной влажности";true;true
+"PRODUCT";"2101";"Standby time";"Standby time";"Время работы в режиме ожидания";true;true
+"PRODUCT";"701";"Copier resize";"Copier resize";"Масштабирование копии";true;true
+"PRODUCT";"3237";"Wireless LAN data transfer rate (max)";"Wireless LAN data transfer rate (max)";"Максимальная скорость передачи данных WLAN";true;true
+"PRODUCT";"3239";"Wireless LAN connection";"Wireless LAN connection";"Подключение WLAN";true;true
+"PRODUCT";"2108";"TV tuner type";"TV tuner type";"Тип TV-тюнера";true;true
+"PRODUCT";"579";"Video adapter, bus";"Video adapter, bus";"Шина графического адаптера";true;true
+"PRODUCT";"2106";"TV tuner formats";"TV tuner formats";"Форматы ТВ-тюнера";true;true
+"PRODUCT";"977";"Hard disk height";"Hard disk height";"Высота жесткого диска";true;true
+"PRODUCT";"979";"Hard disk number of plates";"Hard disk number of plates";"Количество пластин жесткого диска";true;true
+"PRODUCT";"2991";"Antenna connector type";"Antenna connector type";"Тип разъема антенны";true;true
+"PRODUCT";"582";"Package dimensions (WxDxH)";"Package dimensions (WxDxH)";"Размеры упаковки (ШхГхВ)";true;true
+"PRODUCT";"970";"Graphics adapter RAMDAC";"Graphics adapter RAMDAC";"RAMDAC графического адаптера";true;true
+"PRODUCT";"973";"Hard disk manufacturer";"Hard disk manufacturer";"Производитель жесткого диска";true;true
+"PRODUCT";"972";"Graphics adapter output connector";"Graphics adapter output connector";"Выходной коннектор графического адаптера";true;true
+"PRODUCT";"974";"Hard disk drive type";"Hard disk drive type";"Тип жесткого диска";true;true
+"PRODUCT";"9584";"Number of discrete graphics adapters";"Number of discrete graphics adapters";"Количество дискретных графических адаптеров";true;true
+"PRODUCT";"2112";"Model availability";"Model availability";"Наличие модели";true;true
+"PRODUCT";"584";"Memory upgrade";"Memory upgrade";"Увеличение объёма памяти";true;true
+"PRODUCT";"585";"Acoustic pressure emissions";"Acoustic pressure emissions";"Эмиссии звукового давления";true;true
+"PRODUCT";"7385";"Fan diameter";"Fan diameter";"Диаметр вентилятора";true;true
+"PRODUCT";"3263";"Number of devices supported";"Number of devices supported";"Число поддерживаемых устройств";true;true
+"PRODUCT";"1602";"Format";"Format";"Формат";true;true
+"PRODUCT";"8079";"Other mounting interfaces compatibility";"Other mounting interfaces compatibility";"Другие настенные крепления";true;true
+"PRODUCT";"2131";"Multi-bay devices";"Multi-bay devices";"Устройства с несколькими отсеками";true;true
+"PRODUCT";"2130";"Pressure levels";"Pressure levels";"Уровни давления";true;true
+"PRODUCT";"969";"Graphic adapter triangle setup";"Graphic adapter triangle setup";"Блок обработки треугольников";true;true
+"PRODUCT";"8519";"Battery capacity";"Battery capacity";"Емкость батареи";true;true
+"PRODUCT";"968";"Graphics adapter multiple display support";"Graphics adapter multiple display support";"Функция поддержки нескольких дисплеев";true;true
+"PRODUCT";"8720";"Ambient light sensor";"Ambient light sensor";"Сенсор рассеяного света";true;true
+"PRODUCT";"967";"Graphic adapter reduce TV out flicker";"Graphic adapter reduce TV out flicker";"Графический адаптер с уменьшением мерцания на ТВ-выходе";true;true
+"PRODUCT";"966";"Graphics adapter integrated TV encoder";"Graphics adapter integrated TV encoder";"ТВ-тюнер, встроенный в графический адаптер";true;true
+"PRODUCT";"965";"Motion compensation";"Motion compensation";"Компенсация движения";true;true
+"PRODUCT";"964";"Graphic adapter direct 3D support";"Graphic adapter direct 3D support";"Поддержка графическим адаптером спецификации direct 3D";true;true
+"PRODUCT";"963";"Graphics adapter Open GL support";"Graphics adapter Open GL support";"Поддержка графическим адаптером Open GL";true;true
+"PRODUCT";"962";"3D graphics accelerator";"3D graphics accelerator";"3D графический акселератор";true;true
+"PRODUCT";"8072";"Protection features";"Protection features";"Защитные возможности";true;true
+"PRODUCT";"961";"2D graphics accelerator";"2D graphics accelerator";"2D графический акселератор";true;true
+"PRODUCT";"960";"Graphics adapter bus clock speed";"Graphics adapter bus clock speed";"Тактовая частота шины графического адаптера";true;true
+"PRODUCT";"8074";"Built-in camera";"Built-in camera";"Встроенная камера";true;true
+"PRODUCT";"1803";"Network connection type";"Network connection type";"Тип сетевого соединения";true;true
+"PRODUCT";"1802";"Networking standards";"Network standard";"Стандарты сети";true;true
+"PRODUCT";"557";"Supported network protocols";"Supported network protocols";"Поддерживаемые сетевые протоколы";true;true
+"PRODUCT";"5307";"Dimensions (W x D x H)";"Designjet model size (metric)";"Размеры (Ш х Г х В)";true;true
+"PRODUCT";"2127";"Multimedia";"Multimedia";"Мультимедиа";true;true
+"PRODUCT";"552";"Copy speed (normal quality, black, A4)";"Copy speed (normal quality, black, A4)";"Скорость копирования (обычное кач., ч/б, A4)";true;true
+"PRODUCT";"3257";"Maximum operating temperature";"Maximum operating temperature";"Максимальная температура при эксплуатации";true;true
+"PRODUCT";"8480";"Recommended usage";"Recommended usage";"Рекомендованное применение";true;true
+"PRODUCT";"2124";"QosmioEngine";"QosmioEngine";"QosmioEngine";true;true
+"PRODUCT";"959";"Graphics adapter BitBLT";"Graphics adapter BitBLT";"Графический адаптер BitBLT";true;true
+"PRODUCT";"7563";"Operating system architecture";"Operating system architecture";"Архитектура операционной системы";true;true
+"PRODUCT";"2143";"Technical features";"Technical features";"Технические особенности";true;true
+"PRODUCT";"10035";"Swivel angle";"Swivel angle";"Swivel angle";true;true
+"PRODUCT";"7566";"Depth outer carton";"Depth outer carton";"Глубина внешней упаковки";true;true
+"PRODUCT";"955";"Number of expansion types";"Number of expansion types";"Количество типов расширения";true;true
+"PRODUCT";"954";"Expansion type";"Expansion type";"Тип расширения";true;true
+"PRODUCT";"2140";"Diagonal";"Diagonal";"Диагональ";true;true
+"PRODUCT";"7564";"Depth inner carton";"Depth inner carton";"Глубина внутренней упаковки";true;true
+"PRODUCT";"3271";"Minimum processor (server)";"Minimum processor (server)";"Минимальный процессор (сервер)";true;true
+"PRODUCT";"953";"LCD brightness levels 1-8";"LCD brightness levels 1-8";"Уровни 1-8 яркости ЖКД";true;true
+"PRODUCT";"7361";"Connector contacts plating";"Connector contacts plating";"Покрытие контактов разъема";true;true
+"PRODUCT";"2138";"Service & support";"Service & support";"Сервис и поддержка";true;true
+"PRODUCT";"8704";"FM antenna ports quantity";"FM antenna ports quantity";"Количество портов FM антенны";true;true
+"PRODUCT";"2134";"Preset stations quantity";"Preset stations quantity";"Предварительно установленное количество станций";true;true
+"PRODUCT";"1208";"Bluetooth version";"Bluetooth version";"Версия Bluetooth";true;true
+"PRODUCT";"3269";"Minimum RAM (server)";"Minimum RAM (server)";"Минимальная оперативная память (сервер)";true;true
+"PRODUCT";"563";"Recommended humidity operating range";"Recommended humidity operating range";"Рекомендуемый диапазон относительной влажности";true;true
+"PRODUCT";"8510";"Device interface";"Device interface";"Интерфейс устройства";true;true
+"PRODUCT";"7367";"Data network";"Data network";"Сеть передачи данных";true;true
+"PRODUCT";"564";"Duplex print options";"Duplex print options";"Опции двусторонней печати";true;true
+"PRODUCT";"3267";"Minimum hard disk space (server)";"Minimum hard disk space (server)";"Минимальный объём жесткого диска (сервер)";true;true
+"PRODUCT";"2746";"Bandwidth";"Bandwidth";"Ширина полосы частот";true;true
+"PRODUCT";"9140";"Playback disc types";"Playback disc types";"Типы дисков (воспроизведение)";true;true
+"PRODUCT";"4925";"Gross weight packaging";"Gross weight packaging";"Вес брутто упаковки";true;true
+"PRODUCT";"3013";"Multi feed detection";"Multi feed detection";"Обнаружение многолистовой подачи";true;true
+"PRODUCT";"4037";"VESA mounting interfaces compatibility";"VESA mounting interfaces compatibility";"Крепление VESA";true;true
+"PRODUCT";"3200";"S-Video out";"S-Video out";"Выход S-Video";true;true
+"PRODUCT";"4924";"EAN/UPC/GTIN";"EAN/UPC/GTIN";"EAN/UPC/GTIN";true;true
+"PRODUCT";"6022";"Host alert";"Host alert";"Тревога на хосте";true;true
+"PRODUCT";"3201";"DVD+R write speed";"DVD+R write speed";"Скорость записи DVD+R";true;true
+"PRODUCT";"3202";"DVD-R write speed";"DVD-R write speed";"Скорость записи DVD-R";true;true
+"PRODUCT";"3203";"DVD-R Double Layer write speed";"DVD-R Double Layer write speed";"Скорость записи двухслойного DVD-R";true;true
+"PRODUCT";"3204";"DVD+R Double Layer write speed";"DVD+R Double Layer write speed";"Скорость записи двухслойного DVD+R";true;true
+"PRODUCT";"2156";"Downloadable software";"Downloadable software";"Загружаемое программное обеспечение";true;true
+"PRODUCT";"3205";"DVD+RW write speed";"DVD+RW write speed";"Скорость записи DVD+RW";true;true
+"PRODUCT";"6298";"Recharge station for parent unit";"Recharge station for parent unit";"Станция для подзарядки главного устройства";true;true
+"PRODUCT";"3206";"DVD-RW write speed";"DVD-RW write speed";"Скорость записи DVD-RW";true;true
+"PRODUCT";"3207";"CD-R write speed";"CD-R write speed";"Скорость записи CD-R";true;true
+"PRODUCT";"4292";"Recording";"Recording";"Запись";true;true
+"PRODUCT";"3208";"CD-RW write speed";"CD-RW write speed";"Скорость записи CD-RW";true;true
+"PRODUCT";"3209";"DVD+R read speed";"DVD+R read speed";"Скорость чтения DVD+R";true;true
+"PRODUCT";"4298";"Scroll";"Scroll";"Прокрутка";true;true
+"PRODUCT";"2757";"Thickness";"Thickness";"Толщина";true;true
+"PRODUCT";"4936";"EAN/UPC/GTIN (packaging)";"EAN/UPC/GTIN (packaging)";"EAN/UPC/GTIN (упаковка)";true;true
+"PRODUCT";"3408";"Internal video mode, resolution";"Internal video mode, resolution";"Разрешение внутреннего видеорежима";true;true
+"PRODUCT";"1614";"Auto focus";"Auto focus";"Автофокусировка";true;true
+"PRODUCT";"3002";"Scan speed (film)";"Scan speed (film)";"Скорость сканирования (негатив)";true;true
+"PRODUCT";"1618";"Optical sensor size";"Optical sensor size";"Размер оптического сенсора";true;true
+"PRODUCT";"4931";"Battery LED indicator";"Battery LED indicator";"Индикатор состояния батареи";true;true
+"PRODUCT";"6014";"Video card note";"Video card note";"Примечание по видеокарте";true;true
+"PRODUCT";"4932";"Packaging length";"Packaging length";"Длина упаковки";true;true
+"PRODUCT";"4933";"Packaging net weight";"Packaging net weight";"Вес нетто упаковки";true;true
+"PRODUCT";"1611";"Audio quality";"Audio quality";"Качество звука";true;true
+"PRODUCT";"3211";"DVD-R Dual Layer read speed";"DVD-R Dual Layer read speed";"Скорость чтения двухслойного DVD-R";true;true
+"PRODUCT";"4934";"Packaging tare weight";"Packaging tare weight";"Сухой вес упаковки";true;true
+"PRODUCT";"3210";"DVD-R read speed";"DVD-R read speed";"Скорость чтения DVD-R";true;true
+"PRODUCT";"3218";"DVD-RAM read speed";"DVD-RAM read speed";"Скорость чтения DVD-RAM";true;true
+"PRODUCT";"3219";"DVD-RAM write speed";"DVD-RAM write speed";"Скорость записи DVD-RAM";true;true
+"PRODUCT";"6801";"Minimum distance to ceiling";"Minimum distance to ceiling";"Минимальное расстояние до потолка";true;true
+"PRODUCT";"4023";"Warranty card";"Warranty card";"Гарантийная карточка";true;true
+"PRODUCT";"3216";"CD-RW read speed";"CD-RW read speed";"Скорость чтения CD-RW";true;true
+"PRODUCT";"6803";"Minimum size";"Minimum size";"Минимальный размер";true;true
+"PRODUCT";"3214";"DVD-RW read speed";"DVD-RW read speed";"Скорость чтения DVD-RW";true;true
+"PRODUCT";"6802";"Distance to the wall (min)";"Distance to the wall (min)";"Расстояние от стены (мин)";true;true
+"PRODUCT";"3215";"CD-R read speed";"CD-R read speed";"Скорость чтения CD-R";true;true
+"PRODUCT";"3212";"DVD+R Double Layer read speed";"DVD+R Double Layer read speed";"Скорость чтения двухслойного DVD+R";true;true
+"PRODUCT";"6804";"Movable";"Movable";"Подвижной";true;true
+"PRODUCT";"3213";"DVD+RW read speed";"DVD+RW read speed";"Скорость чтения DVD+RW";true;true
+"PRODUCT";"2169";"Continuous audio playback time";"Continuous audio playback time";"Время непрерывного воспроизведения аудио";true;true
+"PRODUCT";"6807";"Pre-assembled";"Pre-assembled";"Готовые";true;true
+"PRODUCT";"6806";"Number of pivot points";"Number of pivot points";"Количество опорных точек";true;true
+"PRODUCT";"6809";"Safety glass";"Safety glass";"Защитное стекло";true;true
+"PRODUCT";"8944";"Main camera resolution";"Main camera resolution";"Разрешение основной камеры";true;true
+"PRODUCT";"6808";"Rubber pads";"Rubber pads";"Резиновые прокладки";true;true
+"PRODUCT";"2765";"Teletext standards";"Teletext standards";"Стандарты телетекста";true;true
+"PRODUCT";"3035";"On/off switch or button";"On/off switch or button";"Переключатель (кнопка) включения/выключения";true;true
+"PRODUCT";"4949";"Batteries included";"Batteries included";"Батарейки в комплекте";true;true
+"PRODUCT";"8952";"Maximum RAM supported";"Maximum RAM supported";"Максимальный объем RAM";true;true
+"PRODUCT";"10274";"Number of displays supported";"Number of displays supported";"Количество поддерживаемых дисплеев";true;true
+"PRODUCT";"5800";"Trial software";"Trial software";"ПО с ограниченным сроком использования";true;true
+"PRODUCT";"9164";"Storage media type";"Storage media type";"Тип носителя памяти";true;true
+"PRODUCT";"9165";"GSM module";"GSM module";"GSM модуль";true;true
+"PRODUCT";"1649";"Width";"Width";"Ширина";true;true
+"PRODUCT";"9166";"SIM card type";"SIM card type";"Тип SIM карты";true;true
+"PRODUCT";"9167";"Light sensor";"Light sensor";"Светловой сенсор";true;true
+"PRODUCT";"3220";"Picture-in-Picture";"Picture-in-Picture";"Картинка-в-картинке";true;true
+"PRODUCT";"2177";"Display included";"Display included";"Дисплей в комплекте";true;true
+"PRODUCT";"2170";"File type";"File type";"Тип файла";true;true
+"PRODUCT";"2172";"FM radio";"FM radio";"FM радио";true;true
+"PRODUCT";"3410";"Sectors per track";"Sectors per track";"Число секторов на дорожке";true;true
+"PRODUCT";"5807";"Capacity range native";"Capacity range native";"Объем хранения несжатых данных";true;true
+"PRODUCT";"6812";"SMM (Smart Movement Mechanism)";"SMM (Smart Movement Mechanism)";"SMM (Smart Movement Mechanism)";true;true
+"PRODUCT";"6811";"Sloping ceiling support";"Sloping ceiling support";"Поддержка покатого потолока";true;true
+"PRODUCT";"3430";"BD-RE write speed";"BD-RE write speed";"Скорость записи BD-RE";true;true
+"PRODUCT";"9375";"Mini VGA ports quantity";"Mini VGA ports quantity";"Количество портов Mini VGA";true;true
+"PRODUCT";"3431";"BD-ROM read speed";"BD-ROM read speed";"Скорость чтения BD-ROM";true;true
+"PRODUCT";"6815";"Wheels";"Wheels";"Колеса";true;true
+"PRODUCT";"6814";"Top plate thickness";"Top plate thickness";"Толщина верхней пластины";true;true
+"PRODUCT";"2179";"Operating frequency";"Operating frequency";"Рабочая частота";true;true
+"PRODUCT";"6813";"SPS (Screen Protection System)";"SPS (Screen Protection System)";"SPS (система защиты экрана)";true;true
+"PRODUCT";"3226";"DVD-ROM read speed";"DVD-ROM read speed";"Скорость чтения DVD-ROM";true;true
+"PRODUCT";"795";"Recommended Macintosh system requirements";"Recommended Macintosh system requirements";"Рекомендуемые требования к системе Macintosh";true;true
+"PRODUCT";"9374";"Micro HDMI ports quantity";"Micro HDMI ports quantity";"Количество micro HDMI портов";true;true
+"PRODUCT";"3016";"Composite video out";"Composite video out";"Композитный видео выход";true;true
+"PRODUCT";"793";"Compliance industry standards";"Compliance industry standards";"Соответствие промышленным стандартам";true;true
+"PRODUCT";"790";"Copy speed (normal quality, colour, A4)";"Copy speed (normal quality, color, A4)";"Скорость копирования (обычное кач., цвет., A4)";true;true
+"PRODUCT";"996";"Keyboard number of keys";"Keyboard number of keys";"Число клавиш клавиатуры";true;true
+"PRODUCT";"9171";"Display resolution equivalent (3D mode)";"Display resolution equivalent (3D mode)";"Эквивалент разрешения дисплея (режим 3D)";true;true
+"PRODUCT";"997";"Windows keys";"Windows keys";"Клавиши Windows";true;true
+"PRODUCT";"994";"Keyboard manufacturer";"Keyboard manufacturer";"Производитель клавиатуры";true;true
+"PRODUCT";"995";"Keyboard type";"Keyboard type";"Тип клавиатуры";true;true
+"PRODUCT";"992";"I/O adaptor interfaces";"I/O adaptor interfaces";"Интерфейсы адаптера ввода/вывода";true;true
+"PRODUCT";"993";"Internal video modes maximum number of colours";"Internal video modes maximum number of colors";"Максимальное количество цветов внутренних видеорежимов";true;true
+"PRODUCT";"3429";"BD-R write speed";"BD-R write speed";"Скорость записи BD-R";true;true
+"PRODUCT";"990";"Interface type";"Interface type";"Тип интерфейса";true;true
+"PRODUCT";"1637";"Operating shock";"Operating shock";"Ударная нагрузка в рабочем режиме";true;true
+"PRODUCT";"991";"Number of interfaces";"Number of interfaces";"Число интерфейсов";true;true
+"PRODUCT";"3426";"Lift";"Lift";"Подъем (лифт)";true;true
+"PRODUCT";"1635";"CAS latency";"CAS latency";"Время задержки CAS";true;true
+"PRODUCT";"3233";"Operating system provided";"Operating system provided";"Операционная система";true;true
+"PRODUCT";"1633";"Upgrade type";"Upgrade type";"Тип апгрейда";true;true
+"PRODUCT";"2185";"Camera included";"Camera included";"Камера";true;true
+"PRODUCT";"2183";"Bluetooth";"Bluetooth";"Bluetooth";true;true
+"PRODUCT";"3421";"Box contents";"Box contents";"Содержимое коробки";true;true
+"PRODUCT";"1630";"Memory bus";"Memory bus";"Шина памяти";true;true
+"PRODUCT";"2181";"E-mail";"E-mail";"Электронная почта";true;true
+"PRODUCT";"998";"Keyboard function keys";"Keyboard function keys";"Функциональные клавиши клавиатуры";true;true
+"PRODUCT";"999";"Keyboard euro key";"Keyboard euro key";"Euro-клавиша клавиатуры";true;true
+"PRODUCT";"1867";"Mounting";"Mounting";"Сборка";true;true
+"PRODUCT";"6828";"Telescopic";"Telescopic";"Выдвижной";true;true
+"PRODUCT";"785";"Supported internet fax solutions";"Supported internet fax solutions";"Поддержка решений факсимильной передачи через интернет";true;true
+"PRODUCT";"786";"Network ready";"Network ready";"Поддержка сети";true;true
+"PRODUCT";"6824";"Minimum distance to floor";"Minimum distance to floor";"Минимальное расстояние до пола";true;true
+"PRODUCT";"2705";"Energy efficiency class";"Energy efficiency compliance";"Класс энергоэффективности";true;true
+"PRODUCT";"789";"Recommended system requirements";"Recommended system requirements";"Рекомендуемые требования к системе";true;true
+"PRODUCT";"6825";"Tare weight";"Tare weight";"Вес тары";true;true
+"PRODUCT";"6826";"Adjustable depth";"Adjustable depth";"Регулируемая глубина";true;true
+"PRODUCT";"6827";"Drawers";"Drawers";"Ящики";true;true
+"PRODUCT";"1861";"Illumination";"Illumination";"Освещение";true;true
+"PRODUCT";"6821";"eSATA/USB 2.0 ports quantity";"eSATA/USB 2.0 ports quantity";"Количество eSATA/USB 2.0 портов";true;true
+"PRODUCT";"6822";"Maximum distance to floor";"Maximum distance to floor";"Максимальное расстояние до пола";true;true
+"PRODUCT";"6823";"Net weight";"Net weight";"Вес нетто";true;true
+"PRODUCT";"2507";"Compatible operating systems";"Compatible operating systems";"Совместимые операционные системы";true;true
+"PRODUCT";"6830";"Supplemental colours";"Supplemental colors";"Дополнительные цвета";true;true
+"PRODUCT";"2195";"Media Center remote control function";"Media Center remote control function";"Дистанционное управление мультимедийным центром";true;true
+"PRODUCT";"2505";"UNSPSC-code";"UNSPSC-code";"Код UNSPSC";true;true
+"PRODUCT";"2194";"Toshiba EasyGuard";"Toshiba EasyGuard";"Toshiba EasyGuard";true;true
+"PRODUCT";"1665";"Handheld remote control";"Handheld remote control";"Пульт дистанционного управления";true;true
+"PRODUCT";"2196";"Processor family";"Processor family";"Семейство процессоров";true;true
+"PRODUCT";"6067";"Operating system note";"Operating system note";"Примечание по операционной системе";true;true
+"PRODUCT";"2191";"Double Layer DVD write speed";"Double Layer DVD write speed";"Скорость записи двухслойного DVD-диска";true;true
+"PRODUCT";"780";"Power requirements";"Power requirements";"Требования к питанию";true;true
+"PRODUCT";"2190";"Compatible products";"Compatible products";"Совместимые продукты";true;true
+"PRODUCT";"2901";"Pan range";"Pan range";"Диапазон панорамирования";true;true
+"PRODUCT";"3037";"Audio adapter type";"Audio adapter type";"Тип аудиоадаптера";true;true
+"PRODUCT";"771";"Form factor";"Form factor";"Формат";true;true
+"PRODUCT";"2905";"Full HD";"Full HD";"Full HD";true;true
+"PRODUCT";"777";"Case or master carton quantity";"Case or master carton quantity";"Количество в главной упаковке";true;true
+"PRODUCT";"508";"Scan input modes";"Scan input modes";"Режимы ввода при сканировании";true;true
+"PRODUCT";"775";"Plug and Play";"Plug and Play";"Plug & Play";true;true
+"PRODUCT";"1851";"Number of built-in speakers";"Number of built-in speakers";"Число встроенных динамиков";true;true
+"PRODUCT";"6833";"Remote controlled";"Remote controlled";"Дистанционно управляемый";true;true
+"PRODUCT";"2718";"Maximum weight (capacity)";"Maximum weight (capacity)";"Максимальный вес (емкость)";true;true
+"PRODUCT";"1660";"Speaker power";"Speaker power";"Мощность динамика";true;true
+"PRODUCT";"6834";"Product line";"Product line";"Линия продуктов";true;true
+"PRODUCT";"6831";"Recommended selling price";"Recommended selling price";"Рекомендуемая цена продажи";true;true
+"PRODUCT";"1852";"Audio decoders";"Built-in audio decoders";"Аудио декодеры";true;true
+"PRODUCT";"2900";"Memory clock speed";"Memory clock speed";"Тактовая частота памяти";true;true
+"PRODUCT";"1652";"Maximum number of SMP processors";"Maximum number of SMP processors";"Максимальное число процессоров для SMP";true;true
+"PRODUCT";"1653";"BIOS memory";"BIOS memory";"Память BIOS";true;true
+"PRODUCT";"1650";"Depth";"Depth";"Глубина";true;true
+"PRODUCT";"1657";"Software productivity";"Software productivity";"Продуктивность ПО";true;true
+"PRODUCT";"6054";"Maximum media width  (imperial)";"Maximum media width  (imperial)";"Максимальная ширина носителя (брит)";true;true
+"PRODUCT";"1655";"Connectivity technology";"Wireless technologies";"Технология подключения";true;true
+"PRODUCT";"1658";"Software - education / reference";"Software - education / reference";"ПО - образование / справочники";true;true
+"PRODUCT";"1659";"Maximum resolution";"Maximum resolution";"Максимальное разрешение";true;true
+"PRODUCT";"3045";"External display";"External display";"Внешний дисплей";true;true
+"PRODUCT";"766";"Scanner features";"Scanner features";"Функции сканера";true;true
+"PRODUCT";"1889";"Impedance";"Impedance";"Полное сопротивление";true;true
+"PRODUCT";"2935";"Input frequency";"Input frequency";"Частота входного сигнала";true;true
+"PRODUCT";"762";"Package weight";"Package weight";"Вес упаковки";true;true
+"PRODUCT";"1885";"Service included";"Service included";"Сервисы включённые в обслуживание";true;true
+"PRODUCT";"1888";"Headphone sensitivity";"Headphone sensitivity";"Чувствительность наушников";true;true
+"PRODUCT";"769";"Standard media sizes";"Standard media sizes";"Стандартные размеры носителей";true;true
+"PRODUCT";"4902";"EAN/UPC/GTIN (outer carton)";"EAN/UPC/GTIN (outer carton)";"EAN/UPC/GTIN (внешняя картонная упаковка)";true;true
+"PRODUCT";"8280";"Height (rear)";"Height (rear)";"Высота (сзади)";true;true
+"PRODUCT";"1688";"Driver software for optical drive";"Driver software for optical drive";"Драйверы для оптических приводов";true;true
+"PRODUCT";"1891";"Microphone sensitivity";"Microphone sensitivity";"Чувствительность микрофона";true;true
+"PRODUCT";"6047";"Media thickness minimum (imperial)";"Media thickness minimum (imperial)";"Минимальная толщина носителей (брит)";true;true
+"PRODUCT";"1684";"Viewing angle";"Viewing angle";"Угол обзора";true;true
+"PRODUCT";"6049";"Media weight imperial (Auto Document Feeder)";"Media weight imperial (Auto Document Feeder)";"Плотность носителей (Автоподатчик бумаги, брит)";true;true
+"PRODUCT";"6048";"Media thickness minimum (metric)";"Media thickness minimum (metric)";"Минимальная толщина носителей (метр)";true;true
+"PRODUCT";"4909";"Quantity outer carton";"Quantity outer carton";"Количество внешних упаковок";true;true
+"PRODUCT";"3656";"Battery recharge time (off)";"Battery recharge time (off)";"Время перезарядки батареи (выкл)";true;true
+"PRODUCT";"4908";"Net weight outer carton";"Net weight outer carton";"Вес нетто внешней упаковки";true;true
+"PRODUCT";"4907";"Length outer carton";"Length outer carton";"Длина внешней упаковки";true;true
+"PRODUCT";"4906";"Length (cm) outer carton";"Length (cm) outer carton";"Длина внешней упаковки (см)";true;true
+"PRODUCT";"4905";"Height outer carton";"Height outer carton";"Высота внешней упаковки";true;true
+"PRODUCT";"3655";"Battery recharge time (on)";"Battery recharge time (on)";"Время перезарядки батареи (вкл)";true;true
+"PRODUCT";"3072";"Dynamic range";"Dynamic range";"Динамический диапазон";true;true
+"PRODUCT";"4904";"Height (cm) outer carton";"Height (cm) outer carton";"Высота внешней упаковки (см)";true;true
+"PRODUCT";"4903";"Gross weight outer carton";"Gross weight outer carton";"Вес брутто (внешняя картонная упаковка)";true;true
+"PRODUCT";"752";"Standard input capacity";"Standard input capacity";"Стандартная вместимость на входе";true;true
+"PRODUCT";"3672";"Auto exposure";"Auto exposure";"Автоэкспозиция";true;true
+"PRODUCT";"753";"Chipset";"Chipset";"Чипсет";true;true
+"PRODUCT";"751";"Case or master carton dimensions (W x D x H)";"Case or master carton dimensions (W x D x H)";"Размеры Master Carton (ШхГхВ)";true;true
+"PRODUCT";"1877";"Connector material";"Connector material";"Материал разъема";true;true
+"PRODUCT";"1680";"Number of layers per pallet";"Number of layers per pallet";"Число слоев в паллете";true;true
+"PRODUCT";"2922";"Turn angle";"Turn angle";"Угол поворота";true;true
+"PRODUCT";"6230";"Bag included";"Bag included";"Сумка в комплекте";true;true
+"PRODUCT";"2738";"Length";"Length";"Длина";true;true
+"PRODUCT";"757";"Storage temperature range (T-T)";"Storage temperature range (T-T)";"Диапазон температуры хранения";true;true
+"PRODUCT";"4911";"Width (cm) outer carton";"Width (cm) outer carton";"Ширина внешней упаковки (см)";true;true
+"PRODUCT";"6229";"Intel Turbo Memory";"Intel Turbo Memory";"Intel Turbo память";true;true
+"PRODUCT";"1880";"Services (supportpack)";"Services (supportpack)";"Услуги (пакет поддержки)";true;true
+"PRODUCT";"1679";"Number of cartons per pallet";"Number of cartons per pallet";"Число коробок на паллету";true;true
+"PRODUCT";"4910";"Tare weight outer carton";"Tare weight outer carton";"Сухой вес внешней упаковки";true;true
+"PRODUCT";"4912";"Width outer carton";"Width outer carton";"Ширина внешней упаковки";true;true
+"PRODUCT";"2539";"Rechargeable";"Rechargeable";"Перезаряжающийся";true;true
+"PRODUCT";"8005";"Power source type";"Power source type";"Тип источника питания";true;true
+"PRODUCT";"8006";"Built-in battery";"Built-in battery";"Встроенная батарея";true;true
+"PRODUCT";"6035";"Linear scan speed (imperial)";"Linear scan speed (imperial)";"Линейная скорость сканирования (брит)";true;true
+"PRODUCT";"3068";"Tuning range";"Tuning range";"Диапазон настройки";true;true
+"PRODUCT";"8279";"Height (front)";"Height (front)";"Высота (спереди)";true;true
+"PRODUCT";"3064";"On Screen Display (OSD)";"On Screen Display (OSD)";"Экранное меню (OSD)";true;true
+"PRODUCT";"5736";"Weight";"Weight";"Вec";true;true
+"PRODUCT";"1198";"Wireless standard";"Wireless standard";"Беспроводной стандарт";true;true
+"PRODUCT";"2433";"Built-in speakers";"Built-in speakers";"Встроенные колонки";true;true
+"PRODUCT";"2431";"Functions";"Functions";"Функции";true;true
+"PRODUCT";"2432";"Applications supported";"Supported applications";"Поддерживаемые приложения";true;true
+"PRODUCT";"6621";"Instant messaging (IM)";"Instant messaging (IM)";"Обмен мгновенными сообщениями";true;true
+"PRODUCT";"1190";"Wireless network support";"Wireless network support";"Поддержка беспроводной  сети";true;true
+"PRODUCT";"1574";"Sensor type";"Scan technology";"Тип сенсора";true;true
+"PRODUCT";"4898";"Quantity outer carton 2";"Quantity outer carton 2";"Количество (внешняя картонная упаковка 2)";true;true
+"PRODUCT";"2439";"Display illumination";"Display illumination";"Подсветка дисплея";true;true
+"PRODUCT";"4614";"Rubber grips";"Rubber grips";"Резиновые ручки";true;true
+"PRODUCT";"9858";"Combo headphone/microphone port";"Combo headphone/microphone port";"Combo headphone/microphone port";true;true
+"PRODUCT";"6611";"DisplayPorts quantity";"DisplayPorts quantity";"Количество портов DisplayPort";true;true
+"PRODUCT";"5741";"Keyboard dimensions (WxDxH)";"Keyboard dimensions (WxDxH)";"Размеры клавиатуры (ШхГхВ)";true;true
+"PRODUCT";"1189";"Integrated wireless LAN, type of network I/F chip";"Integrated wireless LAN, type of network I/F chip";"Интегрированная беспроводная LAN, тип I/F микросхемы сети";true;true
+"PRODUCT";"6617";"Source data-sheet";"Source data-sheet";"Исходные данные листов";true;true
+"PRODUCT";"5748";"Fixed focal length";"Fixed focal length";"Фиксированное фокусное расстояние";true;true
+"PRODUCT";"5744";"Receiver weight";"Receiver weight";"Вес приемника";true;true
+"PRODUCT";"5743";"Keyboard weight";"Keyboard weight";"Вес клавиатуры";true;true
+"PRODUCT";"5742";"Receiver dimensions (WxDxH)";"Receiver dimensions (WxDxH)";"Размеры приемника (ШхГхВ)";true;true
+"PRODUCT";"1587";"Bandwidth";"Bandwidth";"Ширина полосы частот";true;true
+"PRODUCT";"1586";"Expansion slots";"Expansion slots";"Слоты расширения";true;true
+"PRODUCT";"6219";"Optional operating system supplied";"Optional operating system supplied";"Альтернативная операционная система в комплекте";true;true
+"PRODUCT";"1585";"Display resolution";"Display resolution";"Разрешение экрана";true;true
+"PRODUCT";"4887";"Resolution";"Resolution";"Разрешение";true;true
+"PRODUCT";"1594";"Video in";"Video in";"Вход видео";true;true
+"PRODUCT";"6220";"Drivers included";"Drivers included";"Драйвера в комплекте";true;true
+"PRODUCT";"4894";"EAN/UPC/GTIN (outer carton 2)";"EAN/UPC/GTIN (outer carton 2)";"EAN/UPC/GTIN (внешняя картонная упаковка 2)";true;true
+"PRODUCT";"1592";"Peripheral/ interface devices";"Peripheral/ interface devices";"Периферийные/интерфейсные устройства";true;true
+"PRODUCT";"6225";"Swivel webcam";"Swivel webcam";"Вращающаяся вебкамера";true;true
+"PRODUCT";"6224";"Password protection";"Password protection";"Защита паролем";true;true
+"PRODUCT";"6603";"Weight (min.)";"Weight (min.)";"Вес (мин)";true;true
+"PRODUCT";"3911";"Carrying case";"Carrying case";"Футляр для транспортировки";true;true
+"PRODUCT";"6601";"Glossy display";"Glossy display";"Глянцевый дисплей";true;true
+"PRODUCT";"6607";"Shelf thickness";"Shelf thickness";"Толщина полки";true;true
+"PRODUCT";"6606";"Maximum distance to ceiling";"Maximum distance to ceiling";"Максимальное расстояние до потолка";true;true
+"PRODUCT";"6605";"Minimum horizontal distance";"Min. horizontal distance";"Минимальное расстояние по горизонтали";true;true
+"PRODUCT";"1177";"Option type";"Option type";"Тип опции";true;true
+"PRODUCT";"6604";"Maximum horizontal distance";"Max. horizontal distance";"Максимальное расстояние по горизонтали";true;true
+"PRODUCT";"5754";"Acoustic pressure emissions (standby)";"Acoustic pressure emissions (standby)";"Эмиссия звукового давления (режим ожидания)";true;true
+"PRODUCT";"2459";"Pen included";"Pen included";"Перо входит в комплектацию";true;true
+"PRODUCT";"5758";"Acoustic power emissions (standby)";"Acoustic power emissions (standby)";"Эмиссия звуковой мощности (режим ожидания)";true;true
+"PRODUCT";"1597";"Video capture resolution (max)";"Video capture resolution (max)";"Разрешение видеозахвата";true;true
+"PRODUCT";"9882";"S-Video port";"S-Video port";"Порт S-Video";true;true
+"PRODUCT";"2460";"Tablet included";"Tablet included";"Планшет входит к комплектацию";true;true
+"PRODUCT";"5766";"Memory access time";"Memory access time";"Время доступа к памяти";true;true
+"PRODUCT";"5765";"BitBLT";"BitBLT";"BitBLT";true;true
+"PRODUCT";"5764";"Warranty";"Warranty";"Гарантия";true;true
+"PRODUCT";"4858";"Battery voltage";"Battery voltage";"Напряжение батареи";true;true
+"PRODUCT";"4851";"Supported video modes";"Supported video modes";"Поддерживаемые видеоформаты";true;true
+"PRODUCT";"7988";"Linux operating systems supported";"Linux operating systems supported";"Поддерживаемые операционные системы Linux";true;true
+"PRODUCT";"7989";"Server operating systems supported";"Server operating systems supported";"Поддерживаемые серверные операционные системы";true;true
+"PRODUCT";"7986";"Windows operating systems supported";"Windows operating systems supported";"Поддерживаемые операционные системы Windows";true;true
+"PRODUCT";"7987";"Mac operating systems supported";"Mac operating systems supported";"Поддерживаемые операционные системы Mac";true;true
+"PRODUCT";"7798";"UMTS ready";"UMTS ready";"Готов к использованию UMTS";true;true
+"PRODUCT";"7990";"Other operating systems supported";"Other operating systems supported";"Другие поддерживаемые операционные системы";true;true
+"PRODUCT";"3965";"Manual";"Manual";"Инструкция";true;true
+"PRODUCT";"10380";"NVIDIA Optimus technology";"NVIDIA Optimus technology";"Технология NVIDIA Optimus";true;true
+"PRODUCT";"5709";"Type of shelf-placement";"Type of shelf-placement";"Вариант размещения на поверхности";true;true
+"PRODUCT";"5704";"SIM card support";"SIM card support";"Поддержка SIM карт";true;true
+"PRODUCT";"4463";"Packaging type";"Packaging type";"Тип упаковки";true;true
+"PRODUCT";"5702";"Height (front)";"Height (front)";"Высота (спереди)";true;true
+"PRODUCT";"7978";"Turbo frequency (max)";"Turbo frequency (max)";"Максимальная частота Turbo Boost";true;true
+"PRODUCT";"10379";"Built-in Wi-Fi switch";"Built-in Wi-Fi switch";"Встроенный Wi-Fi коммутатор";true;true
+"PRODUCT";"5703";"Height (rear)";"Height (rear)";"Высота (сзади)";true;true
+"PRODUCT";"7783";"eSATA/USB 3.0 ports quantity";"eSATA/USB 3.0 ports quantity";"Количество eSATA/USB 3.0 портов";true;true
+"PRODUCT";"5701";"Toshiba EasyMedia";"Toshiba EasyMedia";"Toshiba EasyMedia";true;true
+"PRODUCT";"4461";"Net weight";"Net weight";"Вес нетто";true;true
+"PRODUCT";"7787";"Built-in processor";"Built-in processor";"Встроенный процессор";true;true
+"PRODUCT";"2663";"PCI Bus";"PCI Bus";"Шина PCI";true;true
+"PRODUCT";"4262";"Installation steps";"Installation steps";"Шаги установки";true;true
+"PRODUCT";"5501";"Gross weight";"Gross weight";"Вес брутто";true;true
+"PRODUCT";"4850";"Supported graphics resolutions";"Supported graphics resolutions";"Поддерживаемые разрешения";true;true
+"PRODUCT";"3709";"Backlight";"Backlight";"Подсветка";true;true
+"PRODUCT";"5713";"Frequency range";"Frequency range";"Диапазон частот";true;true
+"PRODUCT";"7772";"Full-size keyboard";"Full-size keyboard";"Полноразмерная клавиатура";true;true
+"PRODUCT";"4275";"On Screen Display (OSD) languages";"On Screen Display (OSD) languages";"Языки экранных меню";true;true
+"PRODUCT";"4276";"Parental control";"Parental control";"Родительский контроль";true;true
+"PRODUCT";"7086";"Maximum hard drive capacity";"Maximum hard drive capacity";"Максимальная емкость жесткого диска";true;true
+"PRODUCT";"7083";"Keyboard features";"Keyboard features";"Функции клавиатуры";true;true
+"PRODUCT";"4882";"Maximum input power";"Maximum input power";"Максимальная входная мощность";true;true
+"PRODUCT";"7081";"Hard drive controller type";"Hard drive controller type";"Тип контроллера жестких дисков";true;true
+"PRODUCT";"5722";"Package dimensions (W x D x H)";"Package dimensions (W x D x H)";"Размеры упаковки (ШхГхВ)";true;true
+"PRODUCT";"7958";"Input colour depth";"Input colour depth";"Глубина входного цвета";true;true
+"PRODUCT";"9733";"Intel Turbo Boost Technology";"Intel Turbo Boost Technology";"Intel Turbo Boost Technology";true;true
+"PRODUCT";"7959";"Output colour depth";"Output colour depth";"Выходная глубина цвета";true;true
+"PRODUCT";"5721";"Product dimensions when open (LxWxD)";"Product dimensions when open (LxWxD)";"Размер в открытом виде (ДхШхГ)";true;true
+"PRODUCT";"7953";"Standard interfaces";"Standard interfaces";"Стандартные интерфейсы";true;true
+"PRODUCT";"7761";"Micro-USB 2.0 ports quantity";"Micro-USB 2.0 ports quantity";"Количество портов Micro-USB 2.0";true;true
+"PRODUCT";"3981";"Quick start guide";"Quick start guide";"Краткая инструкция пользователя";true;true
+"PRODUCT";"7963";"HDMI in";"HDMI in";"Вход HDMI";true;true
+"PRODUCT";"5529";"Battery charger included";"Battery charger";"Зарядное устройство включено";true;true
+"PRODUCT";"2688";"Airflow";"Airflow";"Воздушный поток";true;true
+"PRODUCT";"3975";"Pouch";"Pouch";"Чехол";true;true
+"PRODUCT";"5950";"Package weight";"Package weight";"Вес упаковки";true;true
+"PRODUCT";"5167";"Video memory capacity";"Video memory capacity";"Объем видеопамяти";true;true
+"PRODUCT";"1109";"Non-operating altitude relative to sea level";"Non-operating altitude relative to sea level";"Высота над уровнем моря в нерабочем режиме";true;true
+"PRODUCT";"1107";"Non-operating maximum thermal gradient";"Non-operating maximum thermal gradient";"Максимальный тепловой градиент в нерабочем режиме";true;true
+"PRODUCT";"1104";"Networking features";"Networking features";"Характеристики сети";true;true
+"PRODUCT";"1105";"Networking connector";"Networking connector";"Разъем сети";true;true
+"PRODUCT";"1394";"Deskbased accessories description";"Deskbased accessories description";"Описание настольных принадлежностей";true;true
+"PRODUCT";"6423";"Width (max)";"Width (max)";"Максимальная ширина";true;true
+"PRODUCT";"1391";"Resume battery backup after";"Resume battery backup after";"Возобновление аварийного питания от аккумулятора после";true;true
+"PRODUCT";"1102";"Networking manufacturer";"Networking manufacturer";"Производитель сетевого оборудования";true;true
+"PRODUCT";"1103";"Networking type";"Networking type";"Тип сети";true;true
+"PRODUCT";"1100";"Expansion station";"Expansion station";"Станция расширения";true;true
+"PRODUCT";"1390";"Power source";"Power source";"Источник питания";true;true
+"PRODUCT";"1101";"CardDock";"CardDock";"CardDock";true;true
+"PRODUCT";"1110";"Non-operating shock with/without CD-ROM drive installed";"Non-operating shock with/without CD-ROM drive installed";"Ударопрочность с/без установленного CD-ROM-привода в нерабочем режиме";true;true
+"PRODUCT";"1389";"Display brightness";"Display brightness";"Яркость дисплея";true;true
+"PRODUCT";"8542";"Keyboard language";"Keyboard language";"Язык клавиатуры";true;true
+"PRODUCT";"8545";"Number of scroll wheels";"Number of scroll wheels";"Количество колесиков прокрутки";true;true
+"PRODUCT";"8543";"Built-in memory";"Built-in memory";"Внутрення память";true;true
+"PRODUCT";"5548";"Maximum aperture";"Maximum aperture";"Максимальная установка диафрагмы";true;true
+"PRODUCT";"5170";"USB required";"USB required";"Требуется USB";true;true
+"PRODUCT";"1383";"Storage relative humidity range";"Storage relative humidity range";"Диапазон относительной влажности при хранении";true;true
+"PRODUCT";"5171";"CD-ROM drive required";"CD-ROM drive required";"Необходим привод CD-ROM";true;true
+"PRODUCT";"5172";"CD/DVD-ROM drive required";"CD/DVD-ROM drive required";"CD/DVD-ROM необходим";true;true
+"PRODUCT";"5546";"Minimum aperture";"Minimum aperture";"Минимальная установка диафрагмы";true;true
+"PRODUCT";"1379";"Ergonomics";"Ergonomics";"Эргономичность";true;true
+"PRODUCT";"6404";"NAND flash module capacity";"NAND flash module capacity";"Объем модуля памяти NAND";true;true
+"PRODUCT";"6694";"RoHS compliance";"RoHS compliance";"Cоответствие RoHS";true;true
+"PRODUCT";"1376";"Power management";"Power management";"Управление питанием";true;true
+"PRODUCT";"5937";"Design features";"Design features";"Характеристики дизайна";true;true
+"PRODUCT";"5936";"Data and application protection";"Data and application protection";"Защита данных и приложений";true;true
+"PRODUCT";"5930";"Minimum scan area";"Minimum scan area";"Минимальная область сканирования";true;true
+"PRODUCT";"5932";"Output power";"Output power";"Выходная мощность";true;true
+"PRODUCT";"5931";"Minimum scan area (ADF)";"Minimum scan area (Auto Document Feeder)";"Минимальная область сканирования (Автоподатчик бумаги)";true;true
+"PRODUCT";"8551";"Keypad integrated";"Keypad integrated";"Встроенная цифровая клавиатура";true;true
+"PRODUCT";"8550";"Scrolling directions";"Scrolling directions";"Направления прокрутки";true;true
+"PRODUCT";"8552";"Works on any surface";"Works on any surface";"Работает на любой поверхности";true;true
+"PRODUCT";"1124";"CD-ROM drive burst transfer rate (PIO mode 4)";"CD-ROM drive burst transfer rate (PIO mode 4)";"Скорость пакетной передачи данных CD-ROM  (PIO mode 4)";true;true
+"PRODUCT";"6400";"Digital sender features";"Digital sender features";"Функции цифровой отправки";true;true
+"PRODUCT";"1125";"CD-ROM DMA single mode transfer rate (DMA mode 2)";"CD-ROM DMA single mode transfer rate (DMA mode 2)";"Скорость передачи данных CD-ROM DMA single mode (DMA mode 2)";true;true
+"PRODUCT";"4422";"Box depth";"Box depth";"Глубина коробки (дюймы)";true;true
+"PRODUCT";"1122";"CD-ROM drive media supported";"CD-ROM drive media supported";"Носители, поддерживаемые CD-ROM приводом";true;true
+"PRODUCT";"4425";"Box width";"Box width";"Ширина коробки";true;true
+"PRODUCT";"1123";"CD transfer rate (sustained mode)";"CD transfer rate (sustained mode)";"Скорость передачи CD-ROM (непрерывный режим)";true;true
+"PRODUCT";"7930";"Optical drive interface";"Optical drive interface";"Интерфейс оптического привода";true;true
+"PRODUCT";"4424";"Box height";"Box height";"Высота коробки";true;true
+"PRODUCT";"1128";"CD-ROM drive average random seek time (CD-ROM mode)";"CD-ROM drive average random seek time (CD-ROM mode)";"Среднее время произвольного позиционирования CD-ROM привода(режим CD-ROM )";true;true
+"PRODUCT";"1126";"CD-ROM DMA multi mode (DMA mode 1)";"CD-ROM DMA multi mode (DMA mode 1)";"CD-ROM DMA мульти-режим (DMA режим 1)";true;true
+"PRODUCT";"5560";"Channels preview quantity";"Channels preview quantity";"Количество предпрасматриваемых каналов";true;true
+"PRODUCT";"7921";"Number of processors supported";"Number of processors supported";"Количество поддерживаемых процессоров";true;true
+"PRODUCT";"1132";"CD-ROM interface type";"CD-ROM interface type";"Тип интерфейса CD-ROM";true;true
+"PRODUCT";"1131";"Optical drive average full stroke access";"Optical drive average full stroke access";"Среднее время полного цикла доступа CD-ROM привода";true;true
+"PRODUCT";"1130";"CD-ROM drive average random access time";"CD-ROM drive average random access time";"Среднее время прямого доступа CD-ROM привода";true;true
+"PRODUCT";"8547";"Customizable weight";"Customizable weight";"Настраиваемый вес";true;true
+"PRODUCT";"8548";"Unifying receiver";"Unifying receiver";"\"Объединяющий\" приемник";true;true
+"PRODUCT";"8549";"Retractable cable";"Retractable cable";"Вытяжной кабель";true;true
+"PRODUCT";"8568";"Keyboard form factor";"Keyboard form factor";"Формат клавиатуры";true;true
+"PRODUCT";"8561";"Tablet weight";"Tablet weight";"Вес планшета";true;true
+"PRODUCT";"1111";"Non-operating vibration with/without CD-ROM drive installed";"Non-operating vibration with/without CD-ROM drive installed";"Вибрация с/без установленного CD-ROM-привода в нерабочем режиме";true;true
+"PRODUCT";"1112";"Operating temperature range (T-T)";"Operating temperature range (T-T)";"Диапазон рабочих температур";true;true
+"PRODUCT";"1113";"Operating maximum thermal gradient";"Operating maximum thermal gradient";"Максимальный тепловой градиент в рабочем режиме";true;true
+"PRODUCT";"1115";"Operating altitude relative to sea level";"Operating altitude relative to sea level";"Высота над уровнем моря в рабочем режиме";true;true
+"PRODUCT";"1116";"Operating shock with/without CD-ROM drive installed";"Operating shock with/without CD-ROM drive installed";"Ударопрочность с/без установленного CD-ROM-привода в рабочем режиме";true;true
+"PRODUCT";"1117";"Operating vibration with/without CD-ROM drive installed";"Operating vibration with/without CD-ROM drive installed";"Вибрация с/без установленного CD-ROM-привода в рабочем режиме";true;true
+"PRODUCT";"1118";"Internal memory access speed";"Internal memory access speed";"Скорость доступа к внутренней памяти";true;true
+"PRODUCT";"7916";"Parity bit";"Parity bit";"Бит чётности";true;true
+"PRODUCT";"4440";"Gross weight";"Gross weight";"Вес брутто";true;true
+"PRODUCT";"5576";"Hot-swap";"Hot-swap";"Функция \"горячей\" замены";true;true
+"PRODUCT";"1121";"CD drive maximum speed";"CD drive maximum speed";"Максимальная скорость CD-привода";true;true
+"PRODUCT";"1120";"Optical drive type";"Optical drive type";"Тип оптического привода";true;true
+"PRODUCT";"590";"Duty cycle letter size (maximum)";"Duty cycle letter size (maximum)";"Производительность для формата Letter (макс)";true;true
+"PRODUCT";"592";"Maximum scan size";"Maximum scan size";"Максимальный размер сканирования";true;true
+"PRODUCT";"7918";"Motherboard southbridge";"Motherboard southbridge";"Южный мост материнской платы";true;true
+"PRODUCT";"593";"Print resolution (colour, normal quality)";"Print quality (color, normal quality)";"Качество печати (цвет, обычное качество)";true;true
+"PRODUCT";"1352";"Cable lock slot";"Cable lock slot";"Слот кабельной блокировки";true;true
+"PRODUCT";"7021";"Maximum memory card size";"Maximum memory card size";"Максимальный объем флеш-карты";true;true
+"PRODUCT";"1147";"Size";"Size";"Размер";true;true
+"PRODUCT";"1146";"Drive devices applicable disk format";"Drive devices applicable disk format";"Формат диска, соответствующий приводу";true;true
+"PRODUCT";"5579";"BD-RE read speed";"BD-RE read speed";"Скорость чтения BD-RE";true;true
+"PRODUCT";"5578";"BD-R read speed";"BD-R read speed";"Скорость чтения BD-R";true;true
+"PRODUCT";"8571";"Flexible keyboard";"Flexible keyboard";"Гибкая клавиатура";true;true
+"PRODUCT";"1144";"Device media compatibility";"Media compatibility";"Совместимость устройства с носителями";true;true
+"PRODUCT";"5993";"Document weight minimum (Auto Document Feeder, imperial)";"Document weight minimum (Auto Document Feeder, imperial)";"Минимальная плотность документа (Автоподатчик бумаги брит)";true;true
+"PRODUCT";"8573";"Programmable hot keys";"Programmable hot keys";"Програмируемые горячие клавиши";true;true
+"PRODUCT";"5992";"Document weight maximum (Auto document Feeder, imperial)";"Document weight maximum (Auto document Feeder, imperial)";"Максимальная плотность носителя (Автоподатчик листов, брит)";true;true
+"PRODUCT";"8574";"Keyboard integrated devices";"Keyboard integrated devices";"Устройства, встроенные в клавиатуру";true;true
+"PRODUCT";"8575";"Keyboard style";"Keyboard style";"Стиль клавиатуры";true;true
+"PRODUCT";"5991";"Dimension note (metric)";"Dimension note (metric)";"Примечание к размерам (метрич.)";true;true
+"PRODUCT";"8576";"Interface adapters included";"Interface adapters included";"Интерфейс адаптеры, которые поставляются";true;true
+"PRODUCT";"5990";"Dimension note (imperial)";"Dimension note (imperial)";"Примечание к размерам (брит.)";true;true
+"PRODUCT";"7303";"Resolution touch input";"Resolution touch input";"Разрешение ввода (касание)";true;true
+"PRODUCT";"8569";"Adjustable keyboard height";"Adjustable keyboard height";"Регулировка высоты клавиатуры";true;true
+"PRODUCT";"5988";"Scan subsystem note";"Scan subsystem note";"Подсистема сканирования (примечание)";true;true
+"PRODUCT";"7500";"Main compartment dimensions (WxDxH)";"Main compartment dimensions (WxDxH)";"Размеры основного отсека (ШхГхВ)";true;true
+"PRODUCT";"7501";"Exterior dimensions (WxDxH)";"Exterior dimensions (WxDxH)";"Внешние размеры (ШхГхВ)";true;true
+"PRODUCT";"6661";"AdvanCIS™";"AdvanCIS™";"Advancis™";true;true
+"PRODUCT";"5586";"Solid-state drive capacity";"Solid-state drive capacity";"Объем SSD";true;true
+"PRODUCT";"5584";"Solid-state drive interfaces";"Solid-state drive interfaces";"Интерфейс SSD";true;true
+"PRODUCT";"5585";"Solid State Disk drive, height";"Solid State Disk drive, height";"Высота SSD накопителя";true;true
+"PRODUCT";"1347";"Ethernet LAN connection";"Ethernet LAN connection";"Подключение Ethernet";true;true
+"PRODUCT";"1344";"Line-in";"Line-in";"Вход линии";true;true
+"PRODUCT";"6663";"Amount of appliances";"Amount of appliances";"Количество устройств";true;true
+"PRODUCT";"6644";"3G network access module";"3G network access module";"Модуль доступа к сети 3G";true;true
+"PRODUCT";"1138";"Storage capacity";"Storage capacity";"Емкость памяти";true;true
+"PRODUCT";"1139";"Seek time";"Seek time";"Время поиска";true;true
+"PRODUCT";"1340";"PS/2 ports quantity";"PS/2 ports quantity";"Количество портов PS/2";true;true
+"PRODUCT";"5790";"Workflow features";"Workflow features";"Свойства рабочего процесса";true;true
+"PRODUCT";"5589";"HD DVD-ROM read speed";"HD DVD-ROM read speed";"Скорость чтения HD DVD-ROM";true;true
+"PRODUCT";"1133";"CD-ROM drive transport";"CD-ROM drive transport";"CD-ROM drive transport";true;true
+"PRODUCT";"7502";"Interior dimensions (WxDxH)";"Interior dimensions (WxDxH)";"Внутренние размеры (ШхГхВ)";true;true
+"PRODUCT";"7306";"Report rate (touch)";"Report rate (touch)";"Скорость доклада (касание)";true;true
+"PRODUCT";"7304";"Resolution pen input";"Resolution pen input";"Разрешение ввода (перо)";true;true
+"PRODUCT";"7305";"Accuracy touch";"Accuracy touch";"Точность (касание)";true;true
+"PRODUCT";"5590";"HD DVD-ROM write speed";"HD DVD-ROM write speed";"Скорость записи HD DVD-ROM";true;true
+"PRODUCT";"1339";"USB port";"USB port";"USB порт";true;true
+"PRODUCT";"1140";"Drive device, transfer rate";"Drive device, transfer rate";"Скорость передачи привода";true;true
+"PRODUCT";"1336";"Parallel ports quantity";"Parallel ports quantity";"Количество параллельных портов";true;true
+"PRODUCT";"1141";"Drive device speed";"Drive device speed";"Скорость привода";true;true
+"PRODUCT";"1337";"Serial ports quantity";"Serial ports quantity";"Количество последовательных портов";true;true
+"PRODUCT";"1142";"Sustained data rate";"Sustained data rate";"Постоянная скорость передачи данных";true;true
+"PRODUCT";"1331";"Dimensions (W x D x H)";"Dimensions (W x D x H)";"Размеры (ШхГхВ)";true;true
+"PRODUCT";"5787";"Media thickness (imperial)";"Media thickness (imperial)";"Толщина носителя (брит.)";true;true
+"PRODUCT";"5789";"Optional functions";"Optional features";"Опциональные функции";true;true
+"PRODUCT";"6639";"Max. number of shelves";"Max. number of shelves";"Максимальная количество полок";true;true
+"PRODUCT";"6638";"Included number of shelves";"Included number of shelves";"Количество полок в комплекте";true;true
+"PRODUCT";"5184";"Sensor resolution";"Sensor resolution";"Разрешение датчика изображения";true;true
+"PRODUCT";"6642";"Legs";"Legs";"Ноги";true;true
+"PRODUCT";"6641";"Interface width";"Interface width";"Ширина интерфейса";true;true
+"PRODUCT";"6640";"Interface height";"Interface height";"Высота интерфейса";true;true
+"PRODUCT";"1157";"Vendor";"Vendor";"Производитель";true;true
+"PRODUCT";"8400";"EPEAT compliance";"EPEAT compliance";"EPEAT стандарт";true;true
+"PRODUCT";"6623";"Assisted GPS (A-GPS) function";"Assisted GPS (A-GPS) function";"A-GPS функция";true;true
+"PRODUCT";"5997";"Exifprint supported";"Exifprint supported";"Поддержка формата Exifprint";true;true
+"PRODUCT";"5999";"Fax characters per number";"Fax characters per number";"Количество символов в номере";true;true
+"PRODUCT";"1358";"Motherboard microprocessor";"Motherboard microprocessor";"Микропроцессор материнской платы";true;true
+"PRODUCT";"1163";"Track to track seek time (read/write)";"Track to track seek time (read/write)";"Время поиска track to track (чтение/запись)";true;true
+"PRODUCT";"1164";"Drive device maximum speed";"Drive device maximum speed";"Максимальная скорость привода";true;true
+"PRODUCT";"806";"Maximum duty cycle";"Maximum duty cycle";"Месячный рабочий цикл (макс)";true;true
+"PRODUCT";"7495";"Simultaneous external display";"Simultaneous external display";"Одновременный внешний дисплей";true;true
+"PRODUCT";"2009";"Linear scan speed (metric)";"Linear scan speed (metric)";"Скорость линейного сканирования (метрическая)";true;true
+"PRODUCT";"7494";"Security chip";"Security chip";"Чип безопасности";true;true
+"PRODUCT";"2006";"Image scaling/enlargement range";"Image scaling/enlargement range";"Масштабирование изображения / диапазон увеличения";true;true
+"PRODUCT";"7497";"Total (available) slots & bays";"Total (available) slots & bays";"Всего (в наличии) слотов и заливов";true;true
+"PRODUCT";"7496";"Wireless features";"Wireless features";"Беспроводные функции";true;true
+"PRODUCT";"7499";"Other features";"Other features";"Другие особенности";true;true
+"PRODUCT";"7498";"External dimensions (WxDxH)";"External dimensions (WxDxH)";"Внешние размеры (ШхГхВ)";true;true
+"PRODUCT";"800";"Colour scanning";"Color scanning";"Цветное сканирование";true;true
+"PRODUCT";"7491";"Keyboard illumination";"Keyboard illumination";"Освещение клавиатуры";true;true
+"PRODUCT";"7490";"Graphics adapter family";"Graphics adapter family";"Семейство графического адаптера";true;true
+"PRODUCT";"7493";"Memory module type";"Memory module type";"Тип модулей памяти";true;true
+"PRODUCT";"7492";"Maximum number of colours (max video RAM)";"Maximum number of colours (max video RAM)";"Максимальное количество цветов (макс. видео ОЗУ)";true;true
+"PRODUCT";"10617";"Height adjustment range";"Height adjustment range";"Диапазон регулируемой высоты";true;true
+"PRODUCT";"8324";"Cord management";"Cord management";"Управление кабелем";true;true
+"PRODUCT";"609";"Maximum length of sheet media";"Maximum length of sheet media";"Максимальная длина листов";true;true
+"PRODUCT";"6768";"USB 3.0 ports quantity";"USB 3.0 ports quantity";"Количество портов USB 3.0";true;true
+"PRODUCT";"6767";"Maximum screen size compatibility";"Maximum screen size compatibility";"Максимальный размер экрана";true;true
+"PRODUCT";"2011";"Media handling";"Media handling";"Обращение с носителями";true;true
+"PRODUCT";"6766";"Minimum screen size compatibility";"Minimum screen size compatibility";"Минимальная совместимость от размера экрана";true;true
+"PRODUCT";"607";"Safety";"Safety";"Безопасность";true;true
+"PRODUCT";"606";"Supported data transfer rates";"Supported data transfer rates";"Поддерживаемые скорости передачи данных";true;true
+"PRODUCT";"1721";"Battery life (max)";"Battery life (max)";"Время работы батареи (макс)";true;true
+"PRODUCT";"604";"Send to fax (via Internet)";"Send to fax (via Internet)";"Отправить на факс (через интернет)";true;true
+"PRODUCT";"2202";"Purchase country";"Purchase country";"Страна закупки";true;true
+"PRODUCT";"2201";"Teletext";"Teletext";"Телетекст";true;true
+"PRODUCT";"7486";"Memory slots (available)";"Memory slots (available)";"Слоты для памяти (доступные)";true;true
+"PRODUCT";"7485";"Multimedia features";"Multimedia features";"Мультимедийные возможности";true;true
+"PRODUCT";"7484";"Ethernet interface type";"Ethernet interface type";"Тип Ethernet интерфейса";true;true
+"PRODUCT";"6783";"Floppy drive installed";"Floppy drive installed";"Встроенный флоппи-дисковод";true;true
+"PRODUCT";"2014";"Memory layout";"Memory layout";"Разметка памяти";true;true
+"PRODUCT";"7489";"Graphics adapter interface";"Graphics adapter interface";"Графический интерфейс адаптера";true;true
+"PRODUCT";"6784";"LED backlight";"LED backlight";"LED подсветка";true;true
+"PRODUCT";"7488";"Worldwide AC compatibility";"Worldwide AC compatibility";"Всемирная AC совместимость";true;true
+"PRODUCT";"1325";"BIOS memory size";"BIOS memory size";"Размер памяти BIOS";true;true
+"PRODUCT";"1326";"Resume battery backup after";"Resume battery backup after";"Возобновление аварийного питания от аккумулятора после";true;true
+"PRODUCT";"7481";"Wireless Wide Area Network (WWAN)";"Wireless Wide Area Network (WWAN)";"Wireless Wide Area Network (WWAN)";true;true
+"PRODUCT";"1330";"DVD-ROM transfer rate (sustained mode)";"DVD-ROM transfer rate (sustained mode)";"Скорость передачи DVD-ROM (непрерывный режим)";true;true
+"PRODUCT";"1714";"TWAIN version";"TWAIN version";"Версия TWAIN";true;true
+"PRODUCT";"6777";"BD interface type";"BD interface type";"Тип интерфейса Blu-ray";true;true
+"PRODUCT";"2845";"External power adapter";"External power adapter";"Внешний адаптер питания";true;true
+"PRODUCT";"1710";"Scan speed footnote";"Scan speed footnote";"Примечание к скорости сканирования";true;true
+"PRODUCT";"2020";"Operating temperature range (T-T)";"Operating temperature range (T-T)";"Диапазон рабочих температур";true;true
+"PRODUCT";"5214";"Housing material";"Housing material";"Материал корпуса";true;true
+"PRODUCT";"2841";"Controller type";"Controller type";"Тип контроллера";true;true
+"PRODUCT";"823";"Auto document feeder (ADF) input capacity";"Auto document feeder (ADF) input capacity";"Емкость автоподатчика бумаги";true;true
+"PRODUCT";"827";"Scan speed (4x6, colour photo)";"Scan speed (4x6";"Скорость сканирования (цвет. фото 4x6)";true;true
+"PRODUCT";"820";"Recommended media";"Recommended media";"Рекомендуемые носители";true;true
+"PRODUCT";"8301";"Number of buttons";"Number of buttons";"Количество кнопок";true;true
+"PRODUCT";"1708";"Scalable resolution";"Scalable resolution";"Масштабируемое разрешение";true;true
+"PRODUCT";"1709";"Scan speed (auto document feed)";"Scan speed (auto document feed)";"Скорость сканирования (ADF)";true;true
+"PRODUCT";"622";"Hard disk controller";"Hard disk controller";"Контроллер жёсткого диска";true;true
+"PRODUCT";"621";"Non-operating relative humidity (non-condensing)";"Non-operating relative humidity (non-condensing)";"Относительная влажность хранения (без образования конденсата)";true;true
+"PRODUCT";"6371";"Ergonomic design";"Ergonomic design";"Эргономический дизайн";true;true
+"PRODUCT";"2830";"eSATA ports quantity";"eSATA ports quantity";"Количество портов eSATA";true;true
+"PRODUCT";"624";"Scan media weight";"Scan media weight";"Плотность сканируемых носителей";true;true
+"PRODUCT";"1700";"Media weight (tray 1)";"Media weight (tray 1)";"Плотность носителей для печати (лоток 1)";true;true
+"PRODUCT";"1701";"Mounting interface";"Mounting interface";"Установка интерфейса";true;true
+"PRODUCT";"628";"Supported network fax solutions";"Supported network fax solutions";"Поддерживаемые решения по сетевому пользованию факсом";true;true
+"PRODUCT";"812";"Colour copy capability";"Color copy capability";"Возможность цветного копирования";true;true
+"PRODUCT";"813";"Scan speed (ADF, A4)";"Scan speed (auto document feed, A4)";"Скорость сканирования (ADF, A4)";true;true
+"PRODUCT";"815";"All-In-One-multitasking";"All-In-One-multitasking";"Многозадачность AIO";true;true
+"PRODUCT";"1305";"Additional accessories";"Additional accessories";"Дополнительные принадлежности";true;true
+"PRODUCT";"427";"Internal memory type";"Internal memory type";"Тип внутренней памяти";true;true
+"PRODUCT";"614";"Graphic adapter";"Graphics";"Видеокарта";true;true
+"PRODUCT";"616";"Send to email (Digital Sender)";"Send to email (Digital Sender)";"Отправить на электронный адрес (Digital Sender)";true;true
+"PRODUCT";"8847";"Touch working area (WxD)";"Touch working area (WxD)";"Сенсорная рабочая зона (шхг)";true;true
+"PRODUCT";"8846";"Pen working area (WxD)";"Pen working area (WxD)";"Рабочая зона пера (шхг)";true;true
+"PRODUCT";"2001";"Scan file formats";"Scan file formats";"Форматы файла к сканнерам";true;true
+"PRODUCT";"6595";"Next Business Day (NBD)";"Next Business Day (NBD)";"Следующий рабочий день (NBD)";true;true
+"PRODUCT";"842";"Recommended media weight";"Recommended media weight";"Рекоммендуемая плотность носителей";true;true
+"PRODUCT";"841";"Copy subsystem footnotes";"Copy subsystem footnotes";"Примечания подсистемы копирования";true;true
+"PRODUCT";"6596";"Digital Satellite Equipment Control (DiSEqC)";"Digital Satellite Equipment Control (DiSEqC)";"Digital Satellite Equipment Control (DiSEqC)";true;true
+"PRODUCT";"2253";"Pre-installed software";"Pre-installed software";"Предварительно установленное ПО";true;true
+"PRODUCT";"2252";"TV tuner integrated";"TV tuner integrated";"Встроенный TV-тюнер";true;true
+"PRODUCT";"8841";"Tablet function keys";"Tablet function keys";"Функциональные клавишы планшета";true;true
+"PRODUCT";"7454";"Scan speed";"Scan speed";"Скорость сканирования";true;true
+"PRODUCT";"8840";"Tablet input type";"Tablet input type";"Тип ввода планшета";true;true
+"PRODUCT";"8842";"Tablet buttons";"Tablet buttons";"Кнопки планшета";true;true
+"PRODUCT";"8834";"Multi-channel preview";"Multi-channel preview";"Мультиканальный просмотр";true;true
+"PRODUCT";"436";"Motherboard chipset";"Chipset";"Чипсет материнской платы";true;true
+"PRODUCT";"8835";"Tool ID";"Tool ID";"Tool ID";true;true
+"PRODUCT";"8836";"Tablet stand";"Tablet stand";"Стенд для планшета";true;true
+"PRODUCT";"434";"Battery technology";"Battery technology";"Технология батареи";true;true
+"PRODUCT";"8837";"TV antenna ports quantity (75 Ohm)";"TV antenna ports quantity (75 Ohm)";"Количество антенных портов (75 Ом)";true;true
+"PRODUCT";"431";"Hard disk average seek time";"Hard disk average seek time";"Среднее время доступа жесткого диска";true;true
+"PRODUCT";"2247";"Auto Document Feeder (ADF) media weight";"Auto Document Feeder (ADF) media weight";"Вес носителей для автоподатчика бумаги";true;true
+"PRODUCT";"432";"Wireless LAN type";"Wireless technologies";"Тип WLAN";true;true
+"PRODUCT";"6390";"Anti-Reflective";"Anti-Reflective";"Анти-бликовый";true;true
+"PRODUCT";"2245";"Maximum copy speed (black, A4)";"Copy speed (black, draft quality, A4)";"Максимальная скорость копирования  (ч/б, A4)";true;true
+"PRODUCT";"6391";"Widescreen";"Widescreen";"Широкоэкранный";true;true
+"PRODUCT";"430";"Hard drive rotational speed";"Hard disk rotational speed";"Скорость вращения шпинделя";true;true
+"PRODUCT";"437";"Motherboard manufacturer";"Motherboard manufacturer";"Производитель материнской платы";true;true
+"PRODUCT";"438";"Display viewable area HxV";"Display viewable area HxV";"Видимая область экрана (ГхВ)";true;true
+"PRODUCT";"3100";"Bytes per sector";"Bytes per sector";"Байтов на сектор";true;true
+"PRODUCT";"5927";"Maximum scan area (Auto Document Feeder)";"Maximum scan area (Auto Document Feeder)";"Максимальная область сканирования (Автоподатчик бумаги)";true;true
+"PRODUCT";"5928";"Maximum scan area (ADF)";"Maximum scan area (ADF)";"Максимальная область сканирования (Автоподатчик бумаги)";true;true
+"PRODUCT";"5929";"Minimum scan area (Auto Document Feeder)";"Minimum scan area (Auto Document Feeder)";"Минимальная область сканирования (Автоподатчик бумаги)";true;true
+"PRODUCT";"3397";"L2 cache";"L2 cache";"L2 кэш-память";true;true
+"PRODUCT";"838";"Energy Star certified";"Energy Star certified";"Сертифицировано Energy Star";true;true
+"PRODUCT";"2262";"LightScribe";"LightScribe";"Технология LightScribe";true;true
+"PRODUCT";"3393";"Fixed netwerk speed";"Fixed netwerk speed";"Фиксированная скорость сети";true;true
+"PRODUCT";"833";"Performance management";"Performance management";"Управление производительностью";true;true
+"PRODUCT";"3394";"BIOS memory size";"BIOS memory size";"Размер памяти BIOS";true;true
+"PRODUCT";"8824";"Widescreen/Standard modes switching";"Widescreen/Standard modes switching";"Переключение широкоформатного/стандартного режимов";true;true
+"PRODUCT";"8825";"Number of programmable keys";"Number of programmable keys";"Количество програмируемых клавиш";true;true
+"PRODUCT";"445";"Power consumption (typical)";"Power consumption (typical)";"Потребляемая мощность (типичная)";true;true
+"PRODUCT";"8822";"Report rate (pen)";"Report rate (pen)";"Скорость передачи (перо)";true;true
+"PRODUCT";"8823";"Refill tweezer";"Refill tweezer";"Пинцет для пополнения";true;true
+"PRODUCT";"447";"Modem speed";"Modem speed";"Скорость модема";true;true
+"PRODUCT";"8828";"Integrated pen storage cavity";"Integrated pen storage cavity";"Встроенная полость для хранения пера";true;true
+"PRODUCT";"440";"Pointing device";"Pointing device";"Манипулятор";true;true
+"PRODUCT";"8829";"Transparent trace sheet";"Transparent trace sheet";"Прозрачный лист";true;true
+"PRODUCT";"9215";"Scroll type";"Scroll type";"Тип прокрутки";true;true
+"PRODUCT";"8826";"Can be used as mouse pad";"Can be used as mouse pad";"Может использоваться как коврик для мыши";true;true
+"PRODUCT";"442";"Audio system";"Audio system";"Аудиосистема";true;true
+"PRODUCT";"8827";"Eraser";"Eraser";"Ластик";true;true
+"PRODUCT";"443";"Networking speed";"Networking speed";"Скорость сети";true;true
+"PRODUCT";"6190";"Scan resolution enhanced disclaimer (long)";"Scan resolution enhanced disclaimer (long)";"Отказ от улучшеного разрешения сканирования (длинный)";true;true
+"PRODUCT";"6191";"Scan resolution enhanced disclaimer (short)";"Scan resolution enhanced disclaimer (short)";"Отказ от улучшеного разрешения сканирования (краткий)";true;true
+"PRODUCT";"6192";"Software licensing option";"Software licensing option";"Опции лицензирования программного обеспечения";true;true
+"PRODUCT";"861";"Minimum system requirements";"Minimum system requirements";"Минимальные системные требования";true;true
+"PRODUCT";"864";"Feed speed (colour photo)";"Feed speed (color photo)";"Скорость подачи (цвет. фото)";true;true
+"PRODUCT";"6796";"Distance to the wall (max)";"Distance to the wall (max)";"Расстояние от стены (макс)";true;true
+"PRODUCT";"6795";"CIS";"CIS";"СНГ";true;true
+"PRODUCT";"8821";"Wireless pen";"Wireless pen";"Беспроводное перо";true;true
+"PRODUCT";"6791";"Flash memory";"Flash memory";"Флэш-память";true;true
+"PRODUCT";"3356";"Adjustable shelves";"Adjustable shelves";"Регулируемые полки";true;true
+"PRODUCT";"8815";"Pen number of buttons";"Pen number of buttons";"Количество кнопок в пере";true;true
+"PRODUCT";"2224";"Audio formats supported";"Audio formats supported";"Поддерживаемые форматы аудио";true;true
+"PRODUCT";"3355";"Maximum distance from floor";"Maximum distance from floor";"Максимальное расстояние от пола (этажа)";true;true
+"PRODUCT";"8816";"Battery free pen";"Battery free pen";"Перо без батарейки";true;true
+"PRODUCT";"2225";"Video compression formats";"Video compression formats";"Форматы сжатия видео";true;true
+"PRODUCT";"454";"Security algorithms supported";"Security algorithm supported";"Алгоритмы шифрования данных";true;true
+"PRODUCT";"8817";"Number of hot keys";"Number of hot keys";"Количество горячих клавиш";true;true
+"PRODUCT";"3357";"Spikes included";"Spikes included";"Гвозди в комплекте";true;true
+"PRODUCT";"8818";"Maximum working area (WxD)";"Maximum working area (WxD)";"Максимальная рабочая зона (ШхГ)";true;true
+"PRODUCT";"2875";"Basic software version";"Basic software version";"Основная версия ПО";true;true
+"PRODUCT";"8812";"Pen holder";"Pen holder";"Держатель пера";true;true
+"PRODUCT";"458";"Custom media sizes";"Custom media sizes";"Индивидуальные размеры";true;true
+"PRODUCT";"7274";"Mini DisplayPort quantity";"Mini DisplayPort quantity";"Количество мini DisplayPort портов";true;true
+"PRODUCT";"8813";"Number of pen tips";"Number of pen tips";"Количество насадок для пера";true;true
+"PRODUCT";"5208";"Repair time";"Repair time";"Время ремонта";true;true
+"PRODUCT";"8814";"Mouse number of buttons";"Mouse number of buttons";"Количество кнопок в мышке";true;true
+"PRODUCT";"7271";"Mini HDMI ports quantity";"Mini HDMI ports quantity";"Количество mini HDMI портов";true;true
+"PRODUCT";"8819";"Number of rolling pads";"Number of rolling pads";"Количество сенсорных колец";true;true
+"PRODUCT";"8329";"Personal Video Recorder (PVR) included";"Personal Video Recorder (PVR) included";"Personal Video Recorder (PVR) входит в комплектацию";true;true
+"PRODUCT";"853";"Mac compatibility";"Mac compatibility";"Совместимость с Mac";true;true
+"PRODUCT";"3371";"Mouse dimensions (WxDxH)";"Product dimensions (W x D x H)";"Размеры мыши (ШхГхВ)";true;true
+"PRODUCT";"3372";"Mouse weight";"Weight note (metric)";"Вес мыши";true;true
+"PRODUCT";"3370";"Pen weight";"Pen weight";"Вес пера";true;true
+"PRODUCT";"857";"Video card features";"Video card features";"Свойства видеокарты";true;true
+"PRODUCT";"7463";"Line inputs (RCA)";"Line inputs (RCA)";"Линейные входы (RCA)";true;true
+"PRODUCT";"3374";"Card reader integrated";"Card reader integrated";"Встроенный кардридер";true;true
+"PRODUCT";"3369";"Pen dimensions LxD";"Pen dimensions LxD";"Размеры пера (Длина х Диаметр)";true;true
+"PRODUCT";"464";"Digital Sender feeding speed footnote";"Digital Sender feeding speed footnote";"Примечание о скорости подачи Digital Sender";true;true
+"PRODUCT";"2235";"DVD+R speed";"DVD+R speed";"Скорость DVD+R";true;true
+"PRODUCT";"2236";"DVD+RW speed";"DVD+RW speed";"Скорость DVD+RW";true;true
+"PRODUCT";"465";"Audio drivers";"Audio drivers";"Звуковые драйверы";true;true
+"PRODUCT";"6798";"Maximum size";"Maximum size";"Максимальный размер";true;true
+"PRODUCT";"466";"Scan speed in preview mode";"Scan speed in preview mode";"Скорость в режиме предварительного просмотра";true;true
+"PRODUCT";"7266";"Cover material";"Cover material";"Материал чехла";true;true
+"PRODUCT";"2237";"DVD-R speed";"DVD-R speed";"Скорость DVD-R";true;true
+"PRODUCT";"6799";"Vertical distance (max)";"Vertical distance (max)";"Вертикальное расстояние (макс)";true;true
+"PRODUCT";"2238";"DVD-RW speed";"DVD-RW speed";"Скорость DVD-RW";true;true
+"PRODUCT";"469";"Processor upgrade";"Processor upgrade";"Модернизация процессора";true;true
+"PRODUCT";"6160";"Standard memory capacity";"Standard memory capacity";"Стандартный объем памяти";true;true
+"PRODUCT";"682";"White balance";"White balance";"Баланс белого";true;true
+"PRODUCT";"685";"Browser supported";"Browser supported";"Поддерживаемые браузеры";true;true
+"PRODUCT";"6161";"Standard memory note";"Standard memory note";"Примечание по стандартному объему памяти";true;true
+"PRODUCT";"3540";"Calendar";"Calendar";"Календарь";true;true
+"PRODUCT";"3335";"Non-operating vibration";"Non-operating vibration";"Вибрация в нерабочем режиме";true;true
+"PRODUCT";"3336";"Operating vibration";"Operating vibration";"Вибрация в рабочем режиме";true;true
+"PRODUCT";"6169";"Supported business applications";"Supported business applications";"Поддерживаемые бизнес приложения";true;true
+"PRODUCT";"2095";"Alarms";"Alarms";"Сигналы тревоги";true;true
+"PRODUCT";"3538";"Electronic Programme Guide (EPG)";"Electronic Programme Guide (EPG)";"Электронный гид телепрограмм";true;true
+"PRODUCT";"1525";"DVD rewrite speed";"DVD rewrite speed";"Скорость повторной записи DVD";true;true
+"PRODUCT";"1524";"DVD write speed";"DVD write speed";"Скорость записи DVD";true;true
+"PRODUCT";"7682";"Number of SSDs installed";"Number of SSDs installed";"Количество установленных накопителей SSD";true;true
+"PRODUCT";"681";"Certified operating system";"Certified operating system";"Сертифицированная операционная система";true;true
+"PRODUCT";"9636";"Keys operating life";"Keys operating life";"Срок службы клавиш";true;true
+"PRODUCT";"673";"Electromagnetic compatibility";"Electromagnetic compatibility";"Электромагнитная совместимость";true;true
+"PRODUCT";"672";"Memory slots";"Memory slots";"Слоты памяти";true;true
+"PRODUCT";"6152";"Remote network printer supported";"Remote network printer supported";"Поддержка удаленного сетевого принтера";true;true
+"PRODUCT";"6159";"Send to email capability";"Send to email capability";"Возможность отправки на e-mail";true;true
+"PRODUCT";"1793";"Noise level";"Noise level";"Уровень шума";true;true
+"PRODUCT";"8394";"Wrist rest";"Wrist rest";"Подушка для запястья";true;true
+"PRODUCT";"3352";"Accuracy mouse";"Accuracy mouse";"Точность мыши";true;true
+"PRODUCT";"3351";"Accuracy pen";"Accuracy pen";"Точность пера";true;true
+"PRODUCT";"3546";"HD-Ready";"HD-Ready";"HD-ready";true;true
+"PRODUCT";"6975";"System bus";"System bus";"Системная шина";true;true
+"PRODUCT";"3548";"ExpressCard slot";"ExpressCard slot";"ExpressCard слот";true;true
+"PRODUCT";"6978";"BD-R Dual Layer write speed";"BD-R Dual Layer write speed";"Cкорость записи BD-R DL";true;true
+"PRODUCT";"7693";"Recommended RAM";"Recommended RAM";"Рекомендуемый объем памяти";true;true
+"PRODUCT";"3143";"LAN controller";"LAN controller";"Контроллер LAN";true;true
+"PRODUCT";"7694";"Recommended hard disk space";"Recommended hard disk space";"Рекомендуемый объем жесткого диска";true;true
+"PRODUCT";"7697";"Operating system version";"Operating system version";"Версия операционной системы";true;true
+"PRODUCT";"3141";"Packaging material";"Packaging material";"Упаковочный материал";true;true
+"PRODUCT";"1516";"Response time";"Response time";"Время отклика";true;true
+"PRODUCT";"7698";"Touch technology";"Touch technology";"Сенсорная технология";true;true
+"PRODUCT";"1515";"Diskette drive rotational speed";"Diskette drive rotational speed";"Частота вращения флоппи-дисковода";true;true
+"PRODUCT";"9629";"Number of batteries (mouse)";"Number of batteries (mouse)";"Количество батареек мышки";true;true
+"PRODUCT";"3319";"Number of hard drives installed";"Number of hard drives installed";"Число установленных жестких дисков";true;true
+"PRODUCT";"6183";"Supported hardware environment";"Supported hardware environment";"Совместимая среда для комплектующих";true;true
+"PRODUCT";"6180";"Software licensing option type";"Software licensing option type";"Тип лицензии программного обеспечения";true;true
+"PRODUCT";"1783";"Light source";"Light source";"Источник света";true;true
+"PRODUCT";"3311";"Second camera";"Second camera";"Вторая камера";true;true
+"PRODUCT";"1785";"Audio input";"Audio input";"Вход аудио";true;true
+"PRODUCT";"1786";"Audio output";"Audio output";"Выход аудио";true;true
+"PRODUCT";"3318";"Total storage capacity";"Hard drive capacity";"Полный объем хранения";true;true
+"PRODUCT";"2078";"Transparency adapter";"Transparency adapter";"Адаптер для прозрачных плёнок (слайд-приставка)";true;true
+"PRODUCT";"2077";"Tilt angle";"Tilt angle";"Угол наклона";true;true
+"PRODUCT";"3511";"Integrated graphics adapter";"Integrated graphics adapter";"Встроенный графический адаптер";true;true
+"PRODUCT";"1501";"LED indicators";"LED indicators";"Светодиодные индикаторы";true;true
+"PRODUCT";"2273";"Double Layer DVD read speed";"Double Layer DVD read speed";"Скорость чтения двустороннего DVD-диска";true;true
+"PRODUCT";"1503";"Modulation";"Modulation";"Модуляция";true;true
+"PRODUCT";"2275";"Channels quantity";"Channels quantity";"Количество каналов";true;true
+"PRODUCT";"9632";"Keyboard battery type";"Keyboard battery type";"Тип батареи клавиатуры";true;true
+"PRODUCT";"1505";"Wireless range";"Wireless range";"Дальность действия (беспроводная)";true;true
+"PRODUCT";"3519";"Number of tuners";"Number of tuners";"Число тюнеров";true;true
+"PRODUCT";"9020";"Discrete graphics memory type";"Discrete graphics memory type";"Тип памяти дискретного графического адаптера";true;true
+"PRODUCT";"3518";"Replication features";"Replication features";"Характеристики репликации";true;true
+"PRODUCT";"9021";"Market positioning";"Market positioning";"Позиционирование на рынке";true;true
+"PRODUCT";"9630";"Number of batteries (keyboard)";"Number of batteries (keyboard)";"Количество батареек клавиатуры";true;true
+"PRODUCT";"9631";"Mouse battery type";"Mouse battery type";"Тип батареи мышки";true;true
+"PRODUCT";"3115";"Splash proof";"Splash proof";"Защита от брызг";true;true
+"PRODUCT";"4174";"Display diagonal";"Display diagonal";"Размер диагонали экрана (метрич.)";true;true
+"PRODUCT";"2081";"Video RAM";"Video RAM";"Видео-RAM";true;true
+"PRODUCT";"10183";"Number of speakers";"Number of speakers";"Количество колонок";true;true
+"PRODUCT";"890";"Compatibility";"Compatibility";"Совместимость";true;true
+"PRODUCT";"3322";"Optical density (Dmax)";"Optical density";"Оптическая плотность (Dmax)";true;true
+"PRODUCT";"1773";"Movement resolution";"Movement resolution";"Разрешительная способность движения";true;true
+"PRODUCT";"3323";"Film scanning";"Film scanning";"Сканирование плёнок (негативов)";true;true
+"PRODUCT";"2084";"Control panel";"Control panel";"Панель управления";true;true
+"PRODUCT";"1774";"Data transfer rate";"Data transfer rate";"Скорость передачи данных";true;true
+"PRODUCT";"1772";"Movement detection technology";"Movement detection technology";"Датчик перемещения";true;true
+"PRODUCT";"3326";"Operating elevation";"Operating elevation";"Рабочая высота";true;true
+"PRODUCT";"6175";"Storage options";"Storage options";"Опции хранения";true;true
+"PRODUCT";"3328";"Protection tools";"Protection tools";"Средства защиты";true;true
+"PRODUCT";"2086";"Audio included";"Audio";"Аудио входит в комплектацию";true;true
+"PRODUCT";"4170";"Microphone connectivity";"Microphone connectivity";"Подключение микрофона";true;true
+"PRODUCT";"6174";"Service provider";"Service provider";"Сервис провайдер";true;true
+"PRODUCT";"3329";"GPS function";"GPS function";"Функция GPS";true;true
+"PRODUCT";"2282";"Display size (HxV)";"Display size (HxV)";"Размер дисплея (ГхВ)";true;true
+"PRODUCT";"8172";"License term (years)";"License term (years)";"Срок действия лицензии (лет)";true;true
+"PRODUCT";"3520";"Timeshift";"Timeshift";"Timeshift";true;true
+"PRODUCT";"8175";"License term (days)";"License term (days)";"Срок действия лицензии (дней)";true;true
+"PRODUCT";"8174";"License term (months)";"License term (months)";"Срок действия лицензии (месяцев)";true;true
+"PRODUCT";"3527";"Scan to";"Scan to";"Сканировать в";true;true
+"PRODUCT";"3526";"Response time";"Response time";"Время отклика";true;true
+"PRODUCT";"691";"Feed speed (colour)";"Feed speed (color)";"Скорость подачи (цвет.)";true;true
+"PRODUCT";"898";"Material";"Material";"Материал";true;true
+"PRODUCT";"2053";"Processor technology";"Processor technology";"Технология процессора";true;true
+"PRODUCT";"6120";"Product weight optional (metric)";"Product weight optional (metric)";"Опциональный вес продукта (метр)";true;true
+"PRODUCT";"2055";"Quantity per box";"Quantity per box";"Количество в одной коробке";true;true
+"PRODUCT";"2056";"Remote front panel software";"Remote front panel software";"ПО для удаленного управления";true;true
+"PRODUCT";"1766";"Colour of product";"Color of product";"Цвет товара";true;true
+"PRODUCT";"646";"Copy speed (best quality, black, A4)";"Copy speed (best quality, black, A4)";"Скорость копирования (выс. кач., ч/б, A4)";true;true
+"PRODUCT";"647";"Acoustic power emissions";"Acoustic power emissions";"Эмиссии мощности звука";true;true
+"PRODUCT";"6124";"Replication distance";"Replication distance";"Расстояние отображения";true;true
+"PRODUCT";"648";"Scan speed system setup";"Scan speed system setup";"Установка системы скоростей сканирования";true;true
+"PRODUCT";"642";"Memory type";"Memory type";"Тип памяти";true;true
+"PRODUCT";"644";"Memory description";"Memory description";"Описание памяти";true;true
+"PRODUCT";"1769";"Frequency band";"Frequency band";"Полоса частот";true;true
+"PRODUCT";"10395";"Actuation force";"Actuation force";"Усилие";true;true
+"PRODUCT";"3199";"S-Video in";"S-Video in";"Вход S-Video";true;true
+"PRODUCT";"10394";"Built-in memory capacity";"Built-in memory capacity";"Объем встроенной памяти";true;true
+"PRODUCT";"10393";"Number of profiles";"Number of profiles";"Количество профилей";true;true
+"PRODUCT";"1566";"Brightness";"Brightness";"Яркость";true;true
+"PRODUCT";"6117";"Product dimensions optional (imperial)";"Product dimensions optional (imperial)";"Опциональные размеры продукта (брит.)";true;true
+"PRODUCT";"6119";"Product weight optional (imperial)";"Product weight optional (imperial)";"Опциональный вес продукта (брит)";true;true
+"PRODUCT";"6118";"Product dimensions optional (metric)";"Product dimensions optional (metric)";"Опциональные размеры продукта (метрич.)";true;true
+"PRODUCT";"1562";"Volume dial";"Volume dial";"Регулятор громкости";true;true
+"PRODUCT";"3577";"Fingerprint reader";"Fingerprint reader";"Сканер отпечатков пальцев";true;true
+"PRODUCT";"1564";"L2 cache";"L2 cache";"L2 кэш-память";true;true
+"PRODUCT";"6730";"Screw type";"Screw type";"Тип винта";true;true
+"PRODUCT";"3576";"HDD user password";"Hard disk drive, user password";"Пароль для защиты жесткого диска";true;true
+"PRODUCT";"2066";"Stacking number for pallet";"Stacking number for pallet";"Допустимое число устанавливаемых друг на друга паллет";true;true
+"PRODUCT";"1560";"Language version";"Languages supported";"Версия языка";true;true
+"PRODUCT";"639";"Copy speed (best quality, colour, A4)";"Copy speed (best quality, color, A4)";"Скорость копирования (выс. кач., цвет., A4)";true;true
+"PRODUCT";"2065";"Stacking number for carton";"Stacking number for carton";"Допустимое число устанавливаемых друг на друга коробок (упаковок)";true;true
+"PRODUCT";"637";"Maximum output capacity";"Maximum output capacity";"Максимальная вместимость выходного лотка";true;true
+"PRODUCT";"2060";"Security management description";"Security management";"Описание управления безопасностью";true;true
+"PRODUCT";"633";"Feed speed (black & white)";"Feed speed (black & white)";"Скорость подачи (ч/б)";true;true
+"PRODUCT";"631";"Print quality (colour, draft uality)";"Print quality (color, draft uality)";"Качество печати (цвет, черновое качество)";true;true
+"PRODUCT";"630";"Video card resolution";"Video card resolution";"Разрешение видеокарты";true;true
+"PRODUCT";"2416";"Rotation";"Rotation";"Вращение";true;true
+"PRODUCT";"1559";"License type";"License type";"Тип лицензии";true;true
+"PRODUCT";"9687";"Customs code";"Customs code";"Customs code";true;true
+"PRODUCT";"1558";"License quantity";"License quantity";"Количество лицензий";true;true
+"PRODUCT";"9019";"Discrete graphics memory";"Discrete graphics memory";"Объём памяти дискретного графического адаптера";true;true
+"PRODUCT";"9018";"Discrete graphics adapter model";"Discrete graphics adapter model";"Модель дискретного графического адаптера";true;true
+"PRODUCT";"2417";"Image formats supported";"Image formats supported";"Поддерживаемые форматы изображения";true;true
+"PRODUCT";"2058";"Scan quality (colour, draft)";"Scan quality (color, draft)";"Качество сканирования (цвет, черновой)";true;true
+"PRODUCT";"9017";"On-board graphics adapter memory";"On-board graphics adapter memory";"Память встроенного графического адаптера";true;true
+"PRODUCT";"1551";"Data transfer rate";"Data transfer rate";"Скорость передачи данных";true;true
+"PRODUCT";"2057";"Scan quality (black, draft)";"Scan quality (black, draft)";"Качество сканирования (ч/б, черновой)";true;true
+"PRODUCT";"9016";"On-board graphics adapter model";"On-board graphics adapter model";"Модель встроенного графического адаптера";true;true
+"PRODUCT";"669";"Maximum dimensions (W x D x H)";"Maximum dimensions (W x D x H)";"Максимальные размеры (ШхГхВх)";true;true
+"PRODUCT";"1743";"Working area";"Working area";"Рабочая зона";true;true
+"PRODUCT";"1744";"Maximum reading height";"Maximum reading height";"Максимальная высота чтения";true;true
+"PRODUCT";"2034";"Power consumption (off)";"Power consumption (off)";"Потребляемая мощность (выкл.)";true;true
+"PRODUCT";"1747";"Resolution";"Resolution";"Разрешение";true;true
+"PRODUCT";"9669";"Intel Smart Connect Technology";"Intel Smart Connect Technology";"Intel Smart Connect Technology";true;true
+"PRODUCT";"665";"Management platform";"Management platform";"Панель управления";true;true
+"PRODUCT";"666";"Video adapter features";"Video adapter features";"Характеристики видеоадаптера";true;true
+"PRODUCT";"667";"Operating altitude";"Operating altitude";"Рабочая высота";true;true
+"PRODUCT";"1548";"Average latency";"Average latency";"Среднее время ожидания";true;true
+"PRODUCT";"1549";"Maximum scan resolution";"Maximum scan resolution";"Максимальное разрешения сканирования";true;true
+"PRODUCT";"9672";"Intel Hyper-Threading Technology";"Intel Hyper-Threading Technology";"Intel Hyper-Threading Technology";true;true
+"PRODUCT";"3555";"Composite video in";"Composite video in";"Композитный видео вход";true;true
+"PRODUCT";"9671";"Intel visual technologies";"Intel visual technologies";"Intel visual technologies";true;true
+"PRODUCT";"1543";"Scan quality (black, best)";"Scan quality (black, best)";"Качество сканирования (ч/б, высшее)";true;true
+"PRODUCT";"3554";"SCART ports quantity";"SCART ports quantity";"Количество SCART портов";true;true
+"PRODUCT";"9670";"Intel vPro Technology";"Intel vPro Technology";"Intel vPro Technology";true;true
+"PRODUCT";"1544";"Scan quality (black, normal)";"Scan quality (black, normal)";"Качество сканирования (ч/б, обычное)";true;true
+"PRODUCT";"3559";"Audio (L,R) in";"Audio (L,R) in";"Аудио (Л,П) вход";true;true
+"PRODUCT";"1545";"Scan quality (colour, best)";"Scan quality (color, best)";"Качество сканирования (цвет, высшее)";true;true
+"PRODUCT";"1546";"Scan quality (colour, normal)";"Scan quality (color, normal)";"Качество сканирования (цвет, обычное)";true;true
+"PRODUCT";"1547";"DVD drive compatibility";"DVD drive compatibility";"Совместимость DVD привода";true;true
+"PRODUCT";"658";"Line accuracy";"Line accuracy";"Точность линий";true;true
+"PRODUCT";"1733";"Electronic compass";"Electronic compass";"Электронный компас";true;true
+"PRODUCT";"2042";"Printer features";"Printer features";"Характеристики принтера";true;true
+"PRODUCT";"3574";"Trusted Platform Module (TPM)";"Trusted Platform Module (TPM)";"TPM модуль";true;true
+"PRODUCT";"3158";"Hard disk drive partition";"Hard disk drive partition";"Раздел жесткого диска";true;true
+"PRODUCT";"1738";"Buttons quantity";"Buttons quantity";"Количество кнопок";true;true
+"PRODUCT";"1737";"Timer";"Timer";"Таймер";true;true
+"PRODUCT";"650";"Copy resolution (colour text and graphics)";"Copy resolution (color text and graphics)";"Разрешение копирования (цвет. текст и графика)";true;true
+"PRODUCT";"656";"Send to PC";"Send to PC";"Отправить на ПК";true;true
+"PRODUCT";"9659";"Start-up time";"Start-up time";"Время запуска";true;true
+"PRODUCT";"9668";"Intel Smart Response Technology";"Intel Smart Response Technology";"Intel Smart Response Technology";true;true
+"PRODUCT";"9667";"Intel Rapid Start Technology";"Intel Rapid Start Technology";"Intel Rapid Start Technology";true;true
+"PRODUCT";"9666";"Intel Anti-Theft Technology";"Intel Anti-Theft Technology";"Intel Anti-Theft Technology";true;true
+"PRODUCT";"9665";"Intel Identity Protection Technology";"Intel Identity Protection Technology";"Intel Identity Protection Technology";true;true
+"PRODUCT";"9664";"Intel My WiFi Technology";"Intel My WiFi Technology";"Intel My WiFi Technology";true;true
+"PRODUCT";"8132";"User guide";"User guide";"Руководство пользователя";true;true
+"PRODUCT";"9663";"Wireless display connectivity";"Wireless display connectivity";"Беспроводное подключение дисплея";true;true
+"PRODUCT";"9662";"HDD recovery";"HDD recovery";"Восстановление жесткого диска";true;true
+"PRODUCT";"3768";"Ethernet LAN data transfer rates";"Ethernet LAN data transfer rates";"Скорость передачи данных Ethernet LAN";true;true
+"PRODUCT";"9661";"Power auto-sensing";"Power auto-sensing";"Автоматическое определение питания";true;true
+"PRODUCT";"1532";"Print quality (black, best quality)";"Print quality (black, best quality)";"Качество печати (ч/б, высшее качество)";true;true
+"PRODUCT";"2036";"Power consumption (standby)";"Power consumption (standby)";"Потребляемая мощность (режим ожидания)";true;true
+"PRODUCT";"3566";"HDMI ports quantity";"HDMI ports quantity";"Количество HDMI портов";true;true
+"PRODUCT";"2035";"Power consumption (PowerSave)";"Power consumption (PowerSave)";"Потребляемая мощность (режим экономии энергии)";true;true
+"PRODUCT";"1530";"Optional connectivity";"Optional connectivity";"Опциональное соединение";true;true
+"PRODUCT";"1535";"Battery recharge time";"Battery recharge time";"Время подзарядки батареи";true;true
+"PRODUCT";"6129";"Recovery point";"Recovery point";"Точка восстановления";true;true
+"PRODUCT";"1533";"Analog signal format system";"Analog signal format system";"Система аналогового формата сигнала";true;true
+"PRODUCT";"4799";"12 NC code";"12 NC code";"12 NC-код";true;true
+"PRODUCT";"1091";"LCD brightness (battery, super bright)";"LCD brightness (battery, super bright)";"Яркость LCD (батарея, сверх яркий)";true;true
+"PRODUCT";"1090";"LCD brightness (AC adaptor, semi bright)";"LCD brightness (AC adaptor, semi bright)";"Яркость LCD  (сетевой адаптер, полу яркий)";true;true
+"PRODUCT";"2334";"Wake-on-LAN ready";"Wake-on-LAN ready";"Функция Wake-on-LAN";true;true
+"PRODUCT";"1093";"LCD brightness (battery, semi bright)";"LCD brightness (battery, semi bright)";"Яркость LCD (батарея, полу яркий)";true;true
+"PRODUCT";"1092";"LCD brightness (battery, bright)";"LCD brightness (battery, bright)";"Яркость LCD (батарея, яркий)";true;true
+"PRODUCT";"34";"Contrast ratio (typical)";"Contrast ratio (typical)";"Контрастность (типичная)";true;true
+"PRODUCT";"1094";"External video adapter resolution";"External video adapter resolution";"Разрешение внешнего видеоадаптера";true;true
+"PRODUCT";"39";"Aspect ratio";"Aspect ratio";"Форматное соотношение";true;true
+"PRODUCT";"1097";"Graphics accelerator";"Graphics accelerator";"Графический адаптер";true;true
+"PRODUCT";"1096";"External video modes maximum refresh rate (non interlaced)";"External video modes maximum refresh rate (non interlaced)";"Максимальная частота обновления внешних видео режимов (не чередующихся)";true;true
+"PRODUCT";"1099";"NetDock port replicator";"NetDock port replicator";"Порт репликатор NetDock";true;true
+"PRODUCT";"2337";"USB powered";"USB powered";"Питание через USB";true;true
+"PRODUCT";"1098";"Hard disk data buffer (PIO 4 mode)";"Hard disk data buffer (PIO 4 mode)";"Буфер жесткого диска (PIO режим 4)";true;true
+"PRODUCT";"1089";"LCD brightness (AC adaptor, bright)";"LCD brightness (AC adaptor, bright)";"Яркость LCD  (сетевой адаптер, яркий)";true;true
+"PRODUCT";"1971";"Copier settings";"Copier settings";"Настройки копировального аппарата";true;true
+"PRODUCT";"1974";"Maximum number of copies";"Maximum number of copies";"Максимальное число копий";true;true
+"PRODUCT";"42";"CD write speed";"CD write speed";"Скорость записи CD";true;true
+"PRODUCT";"5641";"Wireless communication version";"Wireless communication version";"Версия беспроводного соединения";true;true
+"PRODUCT";"7891";"Subtitles function";"Subtitles function";"Поддержка субтитров";true;true
+"PRODUCT";"1482";"Type of bays";"Type of bays";"Тип отсеков";true;true
+"PRODUCT";"1080";"DVD interface type";"DVD interface type";"Тип интерфейса DVD";true;true
+"PRODUCT";"22";"Internal";"Internal";"Внутренний";true;true
+"PRODUCT";"2321";"CardBus PCMCIA slot type";"CardBus PCMCIA slot type";"Тип слота CardBus PCMCIA";true;true
+"PRODUCT";"4114";"Antenna";"Antenna";"Антенна";true;true
+"PRODUCT";"23";"Access time";"Access time";"Время доступа";true;true
+"PRODUCT";"2322";"SmartCard slot";"SmartCard slot";"Слот SmartCard";true;true
+"PRODUCT";"2323";"VGA (D-Sub) ports quantity";"VGA (D-Sub) ports quantity";"Количество портов VGA (D-Sub)";true;true
+"PRODUCT";"1081";"DVD-ROM drive transport";"DVD-ROM drive transport";"Перемещение DVD-ROM-привода";true;true
+"PRODUCT";"1088";"LCD brightness (AC adaptor, super bright)";"LCD brightness (AC adaptor, super bright)";"Яркость LCD (сетевой адаптер, сверх яркий)";true;true
+"PRODUCT";"2325";"Processor socket";"Processor socket";"Сокет процессора";true;true
+"PRODUCT";"27";"Drive device, buffer size";"Drive device, buffer size";"Объём буфера";true;true
+"PRODUCT";"7883";"Simplex scan speed (black & white)";"Simplex scan speed (black & white)";"Скорость симплекс сканирования (ч/б)";true;true
+"PRODUCT";"7884";"Simplex scan speed (colour)";"Simplex scan speed (colour)";"Скорость симплекс сканирования (цвет.)";true;true
+"PRODUCT";"7885";"Duplex scan speed (black & white)";"Duplex scan speed (black & white)";"Скорость дуплекс сканирования (ч/б)";true;true
+"PRODUCT";"1078";"DVD drive average random seek time";"DVD drive average random seek time";"Среднее время произвольного позиционирования DVD-ROM-привода";true;true
+"PRODUCT";"7886";"Duplex scan speed (colour)";"Duplex scan speed (colour)";"Скорость дуплекс сканирования (цвет.)";true;true
+"PRODUCT";"1079";"DVD drive average random access time";"DVD drive average random access time";"Среднее время прямого доступа  DVD-ROM-приводу";true;true
+"PRODUCT";"1987";"Docking solution";"Docking solution";"Варианты док-станций";true;true
+"PRODUCT";"32";"Pixel pitch";"Pixel pitch";"Размер точки";true;true
+"PRODUCT";"31";"Type";"Type";"Тип";true;true
+"PRODUCT";"1988";"Driver updates";"Driver updates";"Обновления драйвера";true;true
+"PRODUCT";"1494";"Antenna type";"Antenna type";"Тип антенны";true;true
+"PRODUCT";"1495";"Channel bandwidth";"Channel bandwidth";"Пропускная способность канала";true;true
+"PRODUCT";"9983";"Minimum processor family";"Minimum processor family";"Minimum processor family";true;true
+"PRODUCT";"4779";"Net weight inner carton";"Net weight inner carton";"Вес нетто внутренней упаковки";true;true
+"PRODUCT";"4776";"Height inner carton";"Height inner carton";"Высота внутренней упаковки";true;true
+"PRODUCT";"1452";"Maximum internal memory";"Maximum internal memory";"Максимальная внутренняя память";true;true
+"PRODUCT";"5618";"Webcamera description";"Webcamera description";"Описание веб-камеры";true;true
+"PRODUCT";"4774";"Gross weight inner carton";"Gross weight (inner carton)";"Вес брутто (внутренняя упаковка)";true;true
+"PRODUCT";"2318";"TV in port";"TV in port";"Порт входа TV";true;true
+"PRODUCT";"2319";"DVI port";"DVI port";"Порт DVI";true;true
+"PRODUCT";"2316";"DC-in jack";"DC-in jack";"Гнездо входа постоянного тока (DC)";true;true
+"PRODUCT";"1075";"DVD DMA multi mode (DMA mode 1)";"DVD DMA multi mode (DMA mode 1)";"DVD DMA мультирежим (DMA режим 1)";true;true
+"PRODUCT";"1074";"DVD-ROM DMA single mode transfer rate (DMA mode 2)";"DVD-ROM DMA single mode transfer rate (DMA mode 2)";"Скорость передачи данных DVD-ROM DMA single mode (DMA mode 2)";true;true
+"PRODUCT";"2317";"TV out port";"TV out port";"Порт ТВ-выхода";true;true
+"PRODUCT";"1077";"DVD-ROM drive average random seek time (CD-ROM mode)";"DVD-ROM drive average random seek time (CD-ROM mode)";"Среднее время произвольного позиционирования DVD-ROM-привода (режим CD-ROM )";true;true
+"PRODUCT";"2314";"Microphone in";"Microphone in";"Линейный вход микрофона";true;true
+"PRODUCT";"16";"CD read speed";"CD read speed";"Скорость чтения CD";true;true
+"PRODUCT";"2315";"S/PDIF out port";"S/PDIF out port";"Порт выхода S/PDIF";true;true
+"PRODUCT";"2312";"Ethernet LAN (RJ-45) ports quantity";"Ethernet LAN (RJ-45) ports quantity";"Количество портов Ethernet LAN ( RJ-45)";true;true
+"PRODUCT";"5610";"Operating voltage";"Operating voltage";"Рабочее напряжение";true;true
+"PRODUCT";"14";"Weight";"Weight";"Вес";true;true
+"PRODUCT";"2313";"Headphone out";"Headphone out";"Разъем линейного выхода наушников";true;true
+"PRODUCT";"1073";"DVD-ROM drive burst transfer rate (PIO mode 4)";"DVD-ROM drive burst transfer rate (PIO mode 4)";"Скорость пакетной передачи данных DVD-ROM (PIO mode 4)";true;true
+"PRODUCT";"11";"Diskette drive";"Diskette drive";"Флоппи-дисковод";true;true
+"PRODUCT";"2310";"IEEE 1394/Firewire ports quantity";"IEEE 1394/Firewire ports quantity";"Количество портов FireWire";true;true
+"PRODUCT";"12";"Internal modem";"Internal modem";"Внутренний модем";true;true
+"PRODUCT";"2311";"Modem (RJ-11) ports";"Modem (RJ-11) ports";"Порты модема (RJ-11)";true;true
+"PRODUCT";"1072";"DVD transfer rate (sustained mode)";"DVD transfer rate (sustained mode)";"Скорость передачи данных DVD-ROM  (непрерывный режим)";true;true
+"PRODUCT";"21";"Interface";"Interface";"Интерфейс";true;true
+"PRODUCT";"2320";"CardBus PCMCIA slots quantity";"CardBus PCMCIA slots quantity";"Количество слотов CardBus PCMCIA";true;true
+"PRODUCT";"7623";"Active area (WxD)";"Active area (WxD)";"Рабочая площадь (ШхГ)";true;true
+"PRODUCT";"5620";"HDMI";"HDMI";"HDMI";true;true
+"PRODUCT";"1067";"Wake-on-Ring ready";"Wake-on-Ring ready";"Включення при надходженні дзвінка на модем (WOR)";true;true
+"PRODUCT";"1069";"DVD drive type";"DVD drive type";"Тип DVD-привода";true;true
+"PRODUCT";"4783";"Width inner carton";"Width inner carton";"Ширина внутренней упаковки";true;true
+"PRODUCT";"9978";"Minimum processor speed";"Minimum processor speed";"Минимальная скорость процессора";true;true
+"PRODUCT";"1461";"Ethernet specifications";"Ethernet specifications";"Спецификации Ethernet";true;true
+"PRODUCT";"4780";"Quantity inner carton";"Quantity (inner carton)";"Количество (внутренняя упаковка)";true;true
+"PRODUCT";"7185";"Built-in touchpad";"Built-in touchpad";"Встроенный тачпад";true;true
+"PRODUCT";"2307";"Software version";"Software version";"Версия ПО";true;true
+"PRODUCT";"1466";"Input voltage";"Input voltage";"Входное напряжение";true;true
+"PRODUCT";"2308";"USB 2.0 ports quantity";"USB 2.0 ports quantity";"Количество портов USB 2.0";true;true
+"PRODUCT";"1464";"Height";"Height";"Высота";true;true
+"PRODUCT";"2309";"USB 1.1 ports quantity";"USB 1.1 ports quantity";"Количество портов USB 1.1";true;true
+"PRODUCT";"3833";"Auto power off";"Auto power off";"Автовыключение";true;true
+"PRODUCT";"5628";"Width outer carton";"Width outer carton";"Ширина внешней упаковки";true;true
+"PRODUCT";"1066";"Communication ports";"Communication ports";"Порты связи";true;true
+"PRODUCT";"3832";"Current consumption";"Current consumption";"Потребление тока";true;true
+"PRODUCT";"5627";"Height outer carton";"Height outer carton";"Высота внешней упаковки";true;true
+"PRODUCT";"1065";"Modem chip";"Modem chip";"Чип модема";true;true
+"PRODUCT";"5626";"Length outer carton";"Length outer carton";"Длина внешней упаковки";true;true
+"PRODUCT";"1064";"Supported protocols";"Supported protocols";"Поддерживаемые протоколы";true;true
+"PRODUCT";"5625";"Tare weight (outer carton)";"Tare weight (outer carton)";"Вес тары (внешняя упаковка)";true;true
+"PRODUCT";"3834";"Number of years";"Number of years";"Количество лет";true;true
+"PRODUCT";"5624";"Net weight (outer carton)";"Net weight (outer carton)";"Вес нетто внешней упаковки";true;true
+"PRODUCT";"1062";"Communication manufacturer";"Communication manufacturer";"Производитель связи";true;true
+"PRODUCT";"5623";"Gross weight (outer carton)";"Gross weight (outer carton)";"Вес брутто (внешняя упаковка)";true;true
+"PRODUCT";"1061";"BIOS Plug and Play support";"BIOS Plug and Play support";"Поддержка BIOS Plug and Play";true;true
+"PRODUCT";"1060";"BIOS DDC support";"BIOS DDC support";"Поддержка BIOS DDC";true;true
+"PRODUCT";"1058";"BIOS DPMS support";"BIOS DPMS support";"Поддержка BIOS DPMS";true;true
+"PRODUCT";"2585";"Purpose";"Purpose";"Предназначение";true;true
+"PRODUCT";"1059";"BIOS VESA support";"BIOS VESA support";"Поддержка BIOS VESA";true;true
+"PRODUCT";"7617";"Maximum internal memory (64-bit)";"Maximum internal memory (64-bit)";"Максимальный объем RAM (64 бит)";true;true
+"PRODUCT";"1056";"BIOS memory size";"BIOS memory size";"Размер памяти BIOS";true;true
+"PRODUCT";"2587";"Volume control";"Volume control";"Регулятор громкости";true;true
+"PRODUCT";"1057";"BIOS advanced power management";"BIOS advanced power management";"Улучшеное управление электропитанием BIOS";true;true
+"PRODUCT";"1473";"RAID controller type";"RAID controller type";"Тип контроллера RAID";true;true
+"PRODUCT";"1471";"Cache internal";"Cache internal";"Внутренняя кэш-память";true;true
+"PRODUCT";"3629";"ISO B-series sizes (B0...B9)";"ISO B-series sizes (B0...B9)";"ISO B-форматы (B0…B9)";true;true
+"PRODUCT";"7849";"Maximum shipping altitude";"Maximum shipping altitude";"Максимальная высота доставки";true;true
+"PRODUCT";"78";"Print technology";"Print technology";"Технология печати";true;true
+"PRODUCT";"7847";"Maximum operating altitude";"Maximum operating altitude";"Максимальная высота эксплуатации";true;true
+"PRODUCT";"3628";"ISO A-series sizes (A0...A9)";"ISO A-series sizes (A0...A9)";"ISO A-форматы (А0…А9)";true;true
+"PRODUCT";"7848";"Maximum storage altitude";"Maximum storage altitude";"Максимальная высота хранения";true;true
+"PRODUCT";"7845";"Volume inner carton";"Volume inner carton";"Объем внутренней упаковки";true;true
+"PRODUCT";"7844";"Volume outer carton";"Volume outer carton";"Объем внешней упаковки";true;true
+"PRODUCT";"83";"Display";"Display";"Дисплей";true;true
+"PRODUCT";"80";"Resolution";"Resolution";"Разрешение";true;true
+"PRODUCT";"2574";"Hardware prerequisites";"Hardware prerequisites";"Предварительные требования по аппаратному обеспечению";true;true
+"PRODUCT";"2575";"Installation server prerequisites";"Installation server prerequisites";"Предварительные требования по установке на сервер";true;true
+"PRODUCT";"7649";"Frequency range";"Frequency range";"Частотный диапазон";true;true
+"PRODUCT";"86";"Special features";"Special features";"Особые свойства";true;true
+"PRODUCT";"4157";"Width";"Width";"Ширина";true;true
+"PRODUCT";"84";"Slot type";"Slot type";"Тип разъема";true;true
+"PRODUCT";"67";"Minimum processor";"Minimum processor";"Минимальный процессор";true;true
+"PRODUCT";"66";"Minimum hard disk space";"Minimum hard disk space";"Минимальный объём жесткого диска";true;true
+"PRODUCT";"68";"Minimum RAM";"Minimum RAM";"Минимальный объём ОЗУ";true;true
+"PRODUCT";"7834";"Quantity per pack";"Quantity per pack";"Количество в упаковке";true;true
+"PRODUCT";"2573";"Client prerequisites";"Client prerequisites";"Предварительные требования клиента";true;true
+"PRODUCT";"2572";"Maximum port bandwidth";"Maximum port bandwidth";"Максимальная пропускная способность порта";true;true
+"PRODUCT";"4160";"Front / Side connections";"Front / Side connections";"Подключения спереди/сбоку";true;true
+"PRODUCT";"5404";"Wi-Fi certified";"WiFi certified";"Wi-Fi сертифицировано";true;true
+"PRODUCT";"2564";"Supported hard disk drive interfaces";"Supported hard disk drive interfaces";"Поддерживаемые интерфейсы жесткого диска";true;true
+"PRODUCT";"7842";"Package volume";"Package volume";"Объем упаковки";true;true
+"PRODUCT";"4163";"Headphone connectivity";"Headphone connectivity";"Подключение наушников";true;true
+"PRODUCT";"2371";"Diagnostics";"Diagnostics";"Диагностика";true;true
+"PRODUCT";"5408";"Additional available colours";"Additional available colors";"Дополнительные варианты цветового оформления";true;true
+"PRODUCT";"2568";"Indication light";"Indication light";"Световой индикатор";true;true
+"PRODUCT";"75";"Platform";"Platform";"Платформа";true;true
+"PRODUCT";"58";"Infrared data port";"Infrared data port";"ИК-порт";true;true
+"PRODUCT";"3601";"Legal";"Legal";"Формат Legal";true;true
+"PRODUCT";"3807";"Packaging height";"Packaging height";"Высота упаковки";true;true
+"PRODUCT";"3602";"Letter";"Letter";"Формат Letter";true;true
+"PRODUCT";"3808";"Packaging width";"Packaging width";"Ширина коробки";true;true
+"PRODUCT";"1496";"Connector(s)";"Connector(s)";"Разъем(ы)";true;true
+"PRODUCT";"3806";"Packaging depth";"Packaging depth";"Глубина коробки";true;true
+"PRODUCT";"4539";"Number of fans";"Number of fans";"Количество вентиляторов";true;true
+"PRODUCT";"1695";"Speakers and microphone";"Speakers and microphone";"Колонки и микрофон";true;true
+"PRODUCT";"1696";"Maximum media width";"Maximum media width";"Максимальная ширина бумаги";true;true
+"PRODUCT";"65";"Minimum hard disk space";"Minimum hard disk space";"Минимальный объём жесткого диска";true;true
+"PRODUCT";"63";"Megapixel";"Megapixel";"Мегапиксели";true;true
+"PRODUCT";"49";"Dimensions (WxDxH)";"Dimensions (WxDxH)";"Размеры (ШхГхВ)";true;true
+"PRODUCT";"2347";"Duty cycle";"Duty cycle";"Рабочий цикл";true;true
+"PRODUCT";"2349";"Screen size compatibility";"Screen size compatibility";"Совместимость размера экрана";true;true
+"PRODUCT";"45";"CD rewrite speed";"CD rewrite speed";"Скорость перезаписи CD";true;true
+"PRODUCT";"47";"Processor model";"Processor";"Модель процессора";true;true
+"PRODUCT";"46";"Colour";"Color";"Цвет";true;true
+"PRODUCT";"51";"DVD read speed";"DVD read speed";"Скорость чтения DVD";true;true
+"PRODUCT";"4143";"Docking connector";"Docking connector";"Разъем докстанции";true;true
+"PRODUCT";"54";"Gray scale levels";"Gray scale levels";"Шкала уровней серого цвета";true;true
+"PRODUCT";"50";"DVD";"DVD";"DVD";true;true
+"PRODUCT";"1003";"Keyboard easy keys";"Keyboard easy keys";"Клавиши быстрого доступа";true;true
+"PRODUCT";"1001";"Keyboard key stroke";"Keyboard key stroke";"Нажатие клавиши клавиатуры";true;true
+"PRODUCT";"1007";"Hot keys";"Hot keys";"Горячие клавиши";true;true
+"PRODUCT";"1008";"Keyboard special features";"Keyboard special features";"Особые свойства клавиатуры";true;true
+"PRODUCT";"1005";"Number of keyboard cursor keys";"Number of keyboard cursor keys";"Количество клавиш управления курсором";true;true
+"PRODUCT";"6556";"Mounting type";"Mounting type";"Тип крепления";true;true
+"PRODUCT";"1006";"Numeric keypad";"Numeric keypad";"Цифровая клавиатура";true;true
+"PRODUCT";"487";"Larger master carton dimensions (W x D x H)";"Larger master carton dimensions (W x D x H)";"Размеры Larger Master Carton  (ШхГхВ)";true;true
+"PRODUCT";"486";"Case or master carton weight";"Case or master carton weight";"Вес главной упаковки";true;true
+"PRODUCT";"482";"Send to printers";"Send to printers";"Отправить на принтер";true;true
+"PRODUCT";"5846";"Recommended processor";"Recommended processor";"Рекомендуемый процессор";true;true
+"PRODUCT";"7804";"Thunderbolt ports quantity";"Thunderbolt ports quantity";"Количество портов Thunderbolt";true;true
+"PRODUCT";"1280";"Cable type";"Cable type";"Тип кабеля";true;true
+"PRODUCT";"1284";"Camera resolution";"Camera resolution";"Разрешение фотоаппарата";true;true
+"PRODUCT";"474";"Button functions";"Button functions";"Функции кнопок";true;true
+"PRODUCT";"473";"Recommended operating temperature range (T-T)";"Recommended operating temperature range (T-T)";"Рекомендуемый диапазон температур при эксплуатации";true;true
+"PRODUCT";"477";"Media types supported";"Media types supported";"Поддерживаемые типы носителей";true;true
+"PRODUCT";"479";"Print quality (colour, best quality)";"Print quality (color, best quality)";"Качество печати (цвет, высшее качество)";true;true
+"PRODUCT";"470";"I/O ports";"I/O ports";"Порты ввода/вывода";true;true
+"PRODUCT";"5452";"HDMI version";"HDMI version";"Версия HDMI";true;true
+"PRODUCT";"1000";"Keyboard key pitch";"Keyboard key pitch";"Размер клавиш клавиатуры";true;true
+"PRODUCT";"1274";"Number of pins";"Number of pins";"Количество контактов";true;true
+"PRODUCT";"2788";"Speakers manufacturer";"Speakers manufacturer";"Производитель колонок";true;true
+"PRODUCT";"1917";"SelectBay adaptor";"SelectBay adaptor";"Адаптер SelectBay";true;true
+"PRODUCT";"1918";"System memory technology";"System memory technology";"Технология системной памяти";true;true
+"PRODUCT";"2789";"Built-in subwoofer";"Built-in subwoofer";"Встроенный сабвуфер";true;true
+"PRODUCT";"7418";"Weight (including battery)";"Weight (including battery)";"Вес с батареей";true;true
+"PRODUCT";"5826";"Net weight (inner carton)";"Net weight (inner carton)";"Вес нетто внутренней упаковки";true;true
+"PRODUCT";"2791";"Video capturing speed";"Video capturing speed";"Скорость захвата видео";true;true
+"PRODUCT";"10010";"Scanner type";"Scanner type";"Тип сканнера";true;true
+"PRODUCT";"5821";"Copy quality (colour, draft)";"Copy quality (color, draft)";"Качество копирования (цвет, черновое качество)";true;true
+"PRODUCT";"5820";"Copy quality (black, draft)";"Copy quality (black, draft)";"Качество копирования (ч/б, черновое качество)";true;true
+"PRODUCT";"5039";"Memory card included";"Memory card included";"Карта памяти в комплекте";true;true
+"PRODUCT";"1919";"Video modes display type";"Video modes display type";"Тип отображения видео режимов";true;true
+"PRODUCT";"5699";"Pallet dimensions (W x D x H)";"Pallet dimensions (W x D x H)";"Размеры поддона (ШхГхВ)";true;true
+"PRODUCT";"6585";"Browsing time";"Browsing time";"Просмотр времени";true;true
+"PRODUCT";"1266";"Cable length";"Cable length";"Длина кабеля";true;true
+"PRODUCT";"5698";"Maximum scan area";"Maximum scan area";"Максимальная область сканирования";true;true
+"PRODUCT";"1265";"Motherboard USB";"Motherboard USB";"USB материнская плата";true;true
+"PRODUCT";"5427";"Wireless transmission";"Wireless transmission";"Беспроводная передача";true;true
+"PRODUCT";"1262";"Motherboard form factor";"Motherboard form factor";"Формат материнской платы";true;true
+"PRODUCT";"1920";"Video modes maximum number of colours";"Video modes maximum number of colors";"Максимальное число цветов видеорежимов";true;true
+"PRODUCT";"1921";"Video modes maximum refresh rate (non interlaced)";"Video modes maximum refresh rate (non interlaced)";"Максимальная частота обновления видеорежимов (не чередующихся)";true;true
+"PRODUCT";"1264";"Motherboard architecture";"Motherboard architecture";"Архитектура материнской платы";true;true
+"PRODUCT";"95";"Battery performance";"Battery performance";"Рабочая характеристика батареи";true;true
+"PRODUCT";"2393";"Supported radio bands";"Supported bands";"Поддерживаемые диапазоны радио";true;true
+"PRODUCT";"94";"Weight";"Weight";"Вес";true;true
+"PRODUCT";"2391";"AM band range";"AM band range";"AM диапазон";true;true
+"PRODUCT";"2390";"FM band range";"FM band";"FM диапазон";true;true
+"PRODUCT";"1926";"Hard drive size";"Hard drive size";"Размер жесткого диска";true;true
+"PRODUCT";"1927";"Geographic coverage";"Geographic coverage";"Географическое покрытие";true;true
+"PRODUCT";"1928";"Key benefits";"Key benefits";"Ключевые преимущества";true;true
+"PRODUCT";"1929";"Service time (days x hours)";"Service time (days x hours)";"Время обслуживания (дни x часы)";true;true
+"PRODUCT";"1922";"Video modes resolution";"Video modes resolution";"Разрешение видеорежимов";true;true
+"PRODUCT";"1923";"Video modes technology";"Video modes technology";"Технология видеорежимов";true;true
+"PRODUCT";"8665";"On-site support";"On-site support";"Поддержка на сайте";true;true
+"PRODUCT";"1924";"Activation";"Activation";"Активация";true;true
+"PRODUCT";"8664";"Phone support";"Phone support";"Поддержка телефона";true;true
+"PRODUCT";"1925";"Exclusions";"Exclusions";"Исключения";true;true
+"PRODUCT";"493";"Minimum system requirements for Macintosh";"Minimum system requirements for Macintosh";"Минимальные системные требования для Macintosh";true;true
+"PRODUCT";"5814";"Colour space standard";"Color space standard";"Стандарт цветового пространства";true;true
+"PRODUCT";"494";"Remote administration";"Remote administration";"Удаленное администрирование";true;true
+"PRODUCT";"490";"TWAIN compliance interface";"TWAIN compliance interface";"Интерфейс совместимости TWAIN";true;true
+"PRODUCT";"6572";"Hard disk drive protection";"Hard disk drive protection";"Защита жесткого диска";true;true
+"PRODUCT";"1257";"Modem type";"Modem type";"Тип модема";true;true
+"PRODUCT";"1934";"Insurance range";"Insurance range";"Диапазон действия страховки";true;true
+"PRODUCT";"1933";"Minimum equipment value";"Minimum equipment value";"Минимальная цена оборудования";true;true
+"PRODUCT";"1937";"Maximum operating distance";"Maximum operating distance";"Максимальное рабочее расстояние";true;true
+"PRODUCT";"1048";"Wireless technology";"Wireless technology";"Беспроводная технология";true;true
+"PRODUCT";"1047";"Wireless communication manufacturer";"Wireless communication manufacturer";"Производитель беспроводной связи";true;true
+"PRODUCT";"1045";"Wireless compliancy";"Wireless compliancy";"Беспроводная совместимость";true;true
+"PRODUCT";"5478";"Height";"Height";"Высота";true;true
+"PRODUCT";"1253";"External video modes non-interlaced resolution with max. refresh rate";"External video modes non-interlaced resolution with max. refresh rate";"Нечередующееся разрешение внешних видеорежимов с максимальной частотой регенерации";true;true
+"PRODUCT";"1932";"Maximum equipment value";"Maximum equipment value";"Максимальная стоимость оборудования";true;true
+"PRODUCT";"5685";"Requires shelf";"Requires shelf";"Требует полку";true;true
+"PRODUCT";"1252";"External video modes refresh rate (max)";"External video modes max. refresh rate";"Максимальная частота обновления внешних видеорежимов";true;true
+"PRODUCT";"1931";"Terms & conditions";"Terms & conditions";"Постановления и условия";true;true
+"PRODUCT";"1930";"Service level";"Service level";"Уровень обслуживания";true;true
+"PRODUCT";"6513";"Duplex ADF scanning";"Duplex ADF scanning";"Двустороннее сканирование с Автоподатчика бумаги";true;true
+"PRODUCT";"1049";"Wireless communication version";"Wireless communication version";"Версия беспроводного соединения";true;true
+"PRODUCT";"1050";"Input devices description";"Input devices description";"Описание устройства ввода";true;true
+"PRODUCT";"1054";"System management BIOS";"System management BIOS";"Системное управление BIOS";true;true
+"PRODUCT";"1249";"External video modes graphics accelerator";"External video modes graphics accelerator";"Внешние видеорежимы графического адаптера";true;true
+"PRODUCT";"1055";"BIOS flash ROM";"BIOS flash ROM";"Флеш-ROM BIOS";true;true
+"PRODUCT";"5485";"Tare weight";"Tare weight";"Вес тары";true;true
+"PRODUCT";"1052";"BIOS manufacturer";"BIOS manufacturer";"Производитель BIOS";true;true
+"PRODUCT";"1053";"BIOS ACPI";"BIOS ACPI";"BIOS ACPI";true;true
+"PRODUCT";"5486";"Depth";"Depth";"Глубина";true;true
+"PRODUCT";"249";"Certification";"Certification";"Сертификация";true;true
+"PRODUCT";"248";"Security features";"Security features";"Функции безопасности";true;true
+"PRODUCT";"247";"Casework";"Casework";"Casework";true;true
+"PRODUCT";"1945";"Scan time";"Scan time";"Время сканирования";true;true
+"PRODUCT";"1946";"Density range";"Density range";"Интервал плотностей";true;true
+"PRODUCT";"1948";"Film type";"Film type";"Тип пленки";true;true
+"PRODUCT";"5693";"Pallet weight";"Pallet weight";"Вес поддона";true;true
+"PRODUCT";"1037";"Internal memory expansion module sizes";"Internal memory expansion module sizes";"Размеры модуля расширения внутренней памяти";true;true
+"PRODUCT";"1036";"Number of free internal memory expansion slots";"Number of free internal memory expansion slots";"Число свободных слотов расширения внутренней памяти";true;true
+"PRODUCT";"1039";"Wired communication manufacturer";"Wired communication manufacturer";"Производитель кабельной связи";true;true
+"PRODUCT";"1038";"Internal memory manufacturer";"Internal memory manufacturer";"Производитель внутренней памяти";true;true
+"PRODUCT";"1242";"Power supply";"Power supply";"Источник питания";true;true
+"PRODUCT";"5687";"Power consumption";"Power consumption";"Потребляемая мощность";true;true
+"PRODUCT";"6511";"Scan bed (platen) size";"Scan bed (platen) size";"Размер рабочей поверхности сканера";true;true
+"PRODUCT";"1040";"Wired communication type";"Wired communication type";"Тип кабельной связи";true;true
+"PRODUCT";"5496";"Battery level indicator";"Battery level indicator";"Индикатор уровня заряда батареи";true;true
+"PRODUCT";"1041";"Networking topology";"Networking topology";"Топология сети";true;true
+"PRODUCT";"1042";"Wired communication features";"Wired communication features";"Свойства кабельной связи";true;true
+"PRODUCT";"1043";"Wired communication connector";"Wired communication connector";"Разъем кабельной связи";true;true
+"PRODUCT";"6306";"On/off switch";"On/Off switch";"Вкл/Выкл переключатель";true;true
+"PRODUCT";"6305";"Cable length";"Cable length";"Длина кабеля";true;true
+"PRODUCT";"1239";"DVD transfer rate (sustained mode)";"DVD transfer rate (sustained mode)";"Скорость передачи данных DVD (непрерывный режим)";true;true
+"PRODUCT";"1044";"Wired communication chipset";"Wired communication chipset";"Чипсет кабельной связи";true;true
+"PRODUCT";"5276";"Minimum weight";"Minimum weight";"Минимальный вес";true;true
+"PRODUCT";"1956";"Swivel angle";"Swivel angle";"Шарнирное соединение";true;true
+"PRODUCT";"7141";"Connector type";"Connector type";"Тип коннектора";true;true
+"PRODUCT";"1954";"Height adjustment";"Height adjustment";"Регулировка высоты";true;true
+"PRODUCT";"1029";"Audio system full duplex";"Audio system full duplex";"Полный дуплекс аудиосистемы";true;true
+"PRODUCT";"1230";"AC adapter included";"AC adapter bundled";"Сетевой адаптер в комплекте";true;true
+"PRODUCT";"6534";"Rubber feet";"Rubber feet";"Резиновые ножки";true;true
+"PRODUCT";"1028";"Audio system ports";"Audio system ports";"Порты аудиосистемы";true;true
+"PRODUCT";"1027";"Audio system maximum sampling rate";"Audio system maximum sampling rate";"Максимальная частота выборки аудиосистемы";true;true
+"PRODUCT";"1025";"Built-in microphone";"Built-in microphone";"Встроенный микрофон";true;true
+"PRODUCT";"1024";"Speakers";"Speakers";"Колонки";true;true
+"PRODUCT";"5456";"Number of products included";"Number of products included";"Количество продуктов в комплекте";true;true
+"PRODUCT";"1023";"Supported audio standards";"Supported audio standards";"Поддерживаемые звуковые стандарты";true;true
+"PRODUCT";"6337";"Bluetooth range";"Bluetooth range";"Радиус действия Bluetooth ®";true;true
+"PRODUCT";"1030";"Audio system direct sound";"Audio system direct sound";"Прямой звук аудиосистемы";true;true
+"PRODUCT";"5659";"Contents";"Contents";"Содержание";true;true
+"PRODUCT";"1031";"Audio system direct 3D sound";"Audio system direct 3D sound";"Прямой трехмерный звук аудиосистемы";true;true
+"PRODUCT";"1226";"Number of battery cells";"Number of battery cells";"Количество элементов аккумулятора";true;true
+"PRODUCT";"1224";"Removable";"Removable";"Съемный";true;true
+"PRODUCT";"1229";"Number of slots";"Number of slots";"Число слотов";true;true
+"PRODUCT";"250";"Bundled hardware";"Bundled hardware";"Аппаратура в комплекте";true;true
+"PRODUCT";"251";"Bundled software";"Bundled software";"Поставляемое ПО";true;true
+"PRODUCT";"1969";"Configuration management description";"Configuration management";"Описание управления конфигурированием";true;true
+"PRODUCT";"1017";"Processor core voltage (AC)";"Processor core voltage (AC)";"Напряжение ядра процессора (переменный ток)";true;true
+"PRODUCT";"1962";"Disc types supported";"Disc types supported";"Поддерживаемые типы дисков";true;true
+"PRODUCT";"1019";"Co-processor";"Co-processor";"Со-процессор";true;true
+"PRODUCT";"6527";"Scan drivers";"Scan drivers";"Драйверы сканирования";true;true
+"PRODUCT";"1013";"Processor manufacturer";"Processor manufacturer";"Производитель процессора";true;true
+"PRODUCT";"1020";"Processor front side bus";"Processor front side bus";"Частота шины процессора";true;true
+"PRODUCT";"1021";"Audio system manufacturer";"Audio system manufacturer";"Производитель аудиосистемы";true;true
+"PRODUCT";"1211";"Number of batteries supported";"Number of batteries supported";"Число поддерживаемых батарей";true;true
+"PRODUCT";"6532";"Stereo sound";"Stereo sound";"Стереофоническое звучание";true;true
+"PRODUCT";"904";"AC adapter output voltage";"AC adapter output voltage";"Выходное напряжение адаптера переменного тока";true;true
+"PRODUCT";"903";"AC adapter frequency";"AC adapter frequency";"Частота адаптера переменного тока";true;true
+"PRODUCT";"5858";"Internet fax providers";"Internet fax providers";"Провайдеры интернет факсов";true;true
+"PRODUCT";"906";"AC adapter power";"Power";"Рассеиваемая мощность адаптера переменного тока";true;true
+"PRODUCT";"905";"AC adapter output current";"AC adapter output current";"Выходной ток адаптера переменного тока";true;true
+"PRODUCT";"902";"AC adapter input voltage";"AC adapter input voltage";"Входное напряжение адаптера переменного тока";true;true

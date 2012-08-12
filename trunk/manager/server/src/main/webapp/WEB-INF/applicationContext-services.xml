@@ -486,34 +486,69 @@
 
 
     <bean id="bulkImportService" class="org.yes.cart.bulkimport.service.impl.ImportDirectorImplService">
+        <description>
+            Import descriptor groups define set of descriptor that should be used in case we have a
+            zip import to define exactly what sort of entities we need to update.
+
+            It is recommended to craft these sets according to business model of the company
+            to maximise performance.
+        </description>
         <constructor-arg index="0" ref="bulkImportServiceImpl"/>
         <constructor-arg index="1" ref="bulkImportImageService"/>
         <constructor-arg index="2">
             <map>
-                <entry key="YC DEMO">
+                <entry key="YC DEMO: Initial Data">
+                    <!--
+                        This is for data in env/sampledata/demo-data/yc/import/import.zip
+                        that contains basic countries and carries information so that
+                        we can complete checkout in demo store.
+                      -->
                     <list>
                         <value>country.xml</value>
                         <value>state.xml</value>
-                        <value>carrier.xml</value>
-                        <value>carriersla.xml</value>
-                        <value>brand.xml</value>
-                        <value>attribute.xml</value>  <!--product attributes only, sku and rest attributes import not implemented-->
-                        <value>attributeviewgroup.xml</value>  <!-- group of attributes -->
-                        <value>producttype.xml</value>  <!-- product types -->
-                        <value>category.xml</value>
+                        <value>carriernames.xml</value>
+                        <value>carrierslanames.xml</value>
+                    </list>
+                </entry>
+                <entry key="YC DEMO: IceCat Catalog">
+                    <!--
+                        This is a sample data kindly provided by IceCat (http://icecat.biz)
+                        and is located in env/sampledata/demo-data/icecat/import/import-EN,RU.zip
+                        with images for products in env/sampledata/demo-data/icecat/import/import-EN,RU-img.zip
+                        that contains an example catalog with product SKUs and attributes
+                        and also some made up inventory and price data. The shop categories
+                        are specifically set for SHOP10.
+                      -->
+                    <list>
+                        <value>brandnames.xml</value>
+                        <value>attributenames.xml</value>
+                        <value>attributegroupnames.xml</value>
+                        <value>producttypenames.xml</value>
+                        <value>categorynames.xml</value>
                         <value>shopcategory.xml</value>
-                        <value>productypeattributeviewgroup.xml</value>  <!-- attributes view groups for product types -->
-                        <value>producttypeattr.xml</value>  <!-- attribute  for product types -->
-                        <value>product.xml</value>  <!-- products and description -->
-                        <value>productsku.xml</value>  <!-- product sku -->
-                        <value>warehouse.xml</value>
-                        <value>skuquantity.xml</value>  <!--sku qty on warehouse-->
-                        <value>skuprice.xml</value>  <!--sku prices-->
-                        <value>productcategory.xml</value>  <!-- distribution products by categories -->
+                        <value>productypeattributeviewgroupnames.xml</value>
+                        <value>producttypeattrnames.xml</value>
+                        <value>productnames.xml</value>
+                        <value>productsku.xml</value>
+                        <value>productsattributes.xml</value>
+                        <value>skuinventory.xml</value>
+                        <value>skuprices.xml</value>
+                        <value>productcategorynames.xml</value>
                     </list>
                 </entry>
                 <entry key="IMAGES ONLY">
+                    <!--
+                        Images are always scanned so if we have no descriptor it is image
+                        only import
+                      -->
                     <list/>
+                </entry>
+                <entry key="Shops and Warehouses">
+                    <!-- This is just example for completeness -->
+                    <list>
+                        <value>shop.xml</value>
+                        <value>warehouse.xml</value>
+                    </list>
                 </entry>
             </map>
         </constructor-arg>
@@ -527,6 +562,7 @@
 
         <flex:remoting-destination/>
         <security:intercept-methods>
+            <!-- TODO: add security settings so that each descriptor group is driven by a certain role -->
             <security:protect method="doImport" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
             <security:protect method="getImportStatus" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
             <security:protect method="getImportGroups" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
