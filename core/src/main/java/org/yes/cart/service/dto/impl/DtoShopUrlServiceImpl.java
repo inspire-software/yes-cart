@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.dto.impl;
 
+import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import org.yes.cart.domain.dto.ShopUrlDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.ShopUrlDTOImpl;
@@ -50,15 +51,16 @@ public class DtoShopUrlServiceImpl
     public DtoShopUrlServiceImpl(
             final GenericService<ShopUrl> shopUrlGenericService,
             final GenericService<Shop> shopService,
-            final DtoFactory dtoFactory ) {
-        super(dtoFactory, shopUrlGenericService, null);
+            final DtoFactory dtoFactory,
+            final AdaptersRepository adaptersRepository) {
+        super(dtoFactory, shopUrlGenericService, adaptersRepository);
         this.shopService = shopService;
     }
 
     /** {@inheritDoc}     */
     public ShopUrlDTO create(final ShopUrlDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         ShopUrl shopUrl = getEntityFactory().getByIface(ShopUrl.class);
-        assembler.assembleEntity(instance, shopUrl, null, dtoFactory);
+        assembler.assembleEntity(instance, shopUrl, getAdaptersRepository(), dtoFactory);
         shopUrl.setShop(shopService.getById(instance.getShopId()));
         shopUrl = service.create(shopUrl);        
         return getById(shopUrl.getStoreUrlId());

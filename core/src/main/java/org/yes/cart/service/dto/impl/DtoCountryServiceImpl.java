@@ -40,12 +40,12 @@ public class DtoCountryServiceImpl
      *
      * @param dtoFactory               {@link org.yes.cart.domain.dto.factory.DtoFactory}
      * @param countryGenericService    generic counry service
-     * @param AdaptersRepository value converter
+     * @param adaptersRepository value converter
      */
     public DtoCountryServiceImpl(final DtoFactory dtoFactory,
                                  final GenericService<Country> countryGenericService,
-                                 final AdaptersRepository AdaptersRepository) {
-        super(dtoFactory, countryGenericService, AdaptersRepository);
+                                 final AdaptersRepository adaptersRepository) {
+        super(dtoFactory, countryGenericService, adaptersRepository);
     }
 
 

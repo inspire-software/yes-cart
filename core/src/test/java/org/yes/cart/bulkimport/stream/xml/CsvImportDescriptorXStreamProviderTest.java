@@ -28,9 +28,8 @@ import org.yes.cart.stream.xml.XStreamProvider;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 /**
  * User: denispavlov
@@ -43,7 +42,7 @@ public class CsvImportDescriptorXStreamProviderTest {
     public void testProvide() throws Exception {
         final XStreamProvider<CsvImportDescriptor> provider = new CsvImportDescriptorXStreamProvider();
 
-        final InputStream inputStream = new FileInputStream("src/test/resources/import/attribute.xml");
+        final InputStream inputStream = new FileInputStream("src/test/resources/import/attributenames.xml");
         final ImportDescriptor desc = provider.fromXML(inputStream);
 
         assertNotNull(desc);
@@ -52,22 +51,22 @@ public class CsvImportDescriptorXStreamProviderTest {
         assertNotNull(desc.getImportFileDescriptor());
 
         assertEquals("UTF-8", desc.getImportFileDescriptor().getFileEncoding());
-        assertEquals("producttypeattr.csv", desc.getImportFileDescriptor().getFileNameMask());
+        assertEquals("attributenames.csv", desc.getImportFileDescriptor().getFileNameMask());
         assertTrue(((CsvImportFile) desc.getImportFileDescriptor()).isIgnoreFirstLine());
         assertEquals(';', ((CsvImportFile) desc.getImportFileDescriptor()).getColumnDelimiter());
         assertEquals('"', ((CsvImportFile) desc.getImportFileDescriptor()).getTextQualifier());
 
         assertNotNull(desc.getImportColumns());
-        assertEquals(9, desc.getImportColumns().size());
+        assertEquals(11, desc.getImportColumns().size());
 
         final CsvImportColumn col0 = (CsvImportColumn) desc.getImportColumns().iterator().next();
         assertNotNull(col0);
-        assertEquals(1, col0.getColumnIndex());
-        assertEquals(FieldTypeEnum.FIELD, col0.getFieldType());
-        assertEquals("code", col0.getName());
-        assertEquals("(.{0,255})(.*)", col0.getValueRegEx());
-        assertEquals(new Integer(1), col0.getValueRegExGroup());
-        assertEquals("select b from AttributeEntity b where b.code = ?1", col0.getLookupQuery());
+        assertEquals(0, col0.getColumnIndex());
+        assertEquals(FieldTypeEnum.FK_FIELD, col0.getFieldType());
+        assertEquals("attributeGroup", col0.getName());
+        assertNull(col0.getValueRegEx());
+        assertEquals(Integer.valueOf(1), col0.getValueRegExGroup());
+        assertEquals("select b from AttributeGroupEntity b where b.code = {attributeGroup}", col0.getLookupQuery());
 
 
 

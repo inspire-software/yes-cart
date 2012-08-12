@@ -25,38 +25,40 @@
 
     <import-file-descriptor>
         <file-encoding>UTF-8</file-encoding>
-        <file-name-mask>category.csv</file-name-mask>
+        <file-name-mask>categorynames.csv</file-name-mask>
         <ignore-first-line>true</ignore-first-line>
         <column-delimiter>;</column-delimiter>
         <text-qualifier>&quot;</text-qualifier>
     </import-file-descriptor>
 
+    <select-sql>select p from ShopCategoryEntity p where p.category.guid = {category} and p.shop.code = 'SHOIP1'</select-sql>
+
     <import-columns>
 
         <column-descriptor>
-            <column-index>1</column-index>
+            <column-index>-1</column-index>
             <field-type>FIELD</field-type>
-            <name/>
+            <name>guid</name>
             <value-regex>(.{0,255})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
-            <lookup-query>select p from ShopCategoryEntity p where p.category.name = ?1</lookup-query>
         </column-descriptor>
-
 
         <!-- Category -->
         <column-descriptor>
             <column-index>1</column-index>
             <field-type>FK_FIELD</field-type>
+            <entity-type>org.yes.cart.domain.entity.Category</entity-type>
             <name>category</name>
             <value-regex>(.{0,255})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
-            <lookup-query>select c from CategoryEntity c where c.name = ?1</lookup-query>
+            <lookup-query>select c from CategoryEntity c where c.guid = {category}</lookup-query>
         </column-descriptor>
 
         <!-- Shop -->
         <column-descriptor>
             <column-index>-1</column-index>
             <field-type>FK_FIELD</field-type>
+            <entity-type>org.yes.cart.domain.entity.Shop</entity-type>
             <name>shop</name>
             <lookup-query>select a from ShopEntity a where a.code = 'SHOIP1'</lookup-query>
         </column-descriptor>

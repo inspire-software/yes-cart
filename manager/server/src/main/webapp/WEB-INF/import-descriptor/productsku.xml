@@ -25,66 +25,76 @@
 
     <import-file-descriptor>
         <file-encoding>UTF-8</file-encoding>
-        <file-name-mask>productentity(.*).csv(.*)</file-name-mask>
+        <file-name-mask>productnames(.*).csv(.*)</file-name-mask>
         <ignore-first-line>true</ignore-first-line>
         <column-delimiter>;</column-delimiter>
         <text-qualifier>&quot;</text-qualifier>
     </import-file-descriptor>
 
+    <select-sql>select p from ProductSkuEntity p where p.guid = {guid}</select-sql>
+
     <import-columns>
+
+        <!-- Product guid -->
+        <column-descriptor>
+            <column-index>0</column-index>
+            <field-type>FK_FIELD</field-type>
+            <entity-type>org.yes.cart.domain.entity.Product</entity-type>
+            <name>product</name>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>select p from ProductEntity p where p.guid = {product}</lookup-query>
+        </column-descriptor>
+
 
         <!-- primary key -->
         <column-descriptor>
-            <column-index>5</column-index>
+            <column-index>1</column-index>
+            <field-type>FIELD</field-type>
+            <name>guid</name>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <!-- SKU code -->
+        <column-descriptor>
+            <column-index>1</column-index>
             <field-type>FIELD</field-type>
             <name>code</name>
             <value-regex>(.{0,255})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
-            <lookup-query>select p from ProductSkuEntity p where p.code = ?1</lookup-query>
         </column-descriptor>
 
         <!--  sku name -->
         <column-descriptor>
-            <column-index>0</column-index>
+            <column-index>6</column-index>
             <field-type>FIELD</field-type>
             <name>name</name>
             <value-regex>(.{0,255})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
-        <!-- Product code the same as product sku code for single sku product.  field for lookup object -->
-        <column-descriptor>
-            <column-index>5</column-index>
-            <field-type>FK_FIELD</field-type>
-            <entity-type>org.yes.cart.domain.entity.Product</entity-type>
-            <name>product</name>
-            <value-regex>(.{0,255})(.*)</value-regex>
-            <value-regex-group>1</value-regex-group>
-            <lookup-query>select p from ProductEntity p where p.code = ?1</lookup-query>
-        </column-descriptor>
-
-
+        <!-- TODO: add localisable -->
 
         <!--  bar code -->
         <column-descriptor>
-            <column-index>8</column-index>
+            <column-index>5</column-index>
             <field-type>FIELD</field-type>
             <name>barCode</name>
             <value-regex>(.{0,128})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
-
+        
         <!-- Description -->
         <column-descriptor>
-            <column-index>10</column-index>
+            <column-index>9</column-index>
             <field-type>FIELD</field-type>
             <name>description</name>
             <value-regex>(.{0,4000})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
-
-
+        <!-- TODO: add localisable -->
 
     </import-columns>
 </import-descriptor>

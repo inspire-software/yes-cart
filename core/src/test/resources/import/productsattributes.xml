@@ -1,0 +1,100 @@
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<import-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/xstream/import-descriptor-1.0.0.xsd">
+
+    <entity-type>org.yes.cart.domain.entity.AttrValueProduct</entity-type>
+
+    <import-directory>src/test/resources/import</import-directory>
+
+    <import-file-descriptor>
+        <file-encoding>UTF-8</file-encoding>
+        <file-name-mask>productsattributes.csv</file-name-mask>
+        <ignore-first-line>true</ignore-first-line>
+        <column-delimiter>;</column-delimiter>
+        <text-qualifier>&quot;</text-qualifier>
+    </import-file-descriptor>
+
+    <select-sql>select v from AttrValueEntityProduct v where v.attribute.code = {attribute} and v.product.guid = {product}</select-sql>
+
+    <!--
+        Product attributes are very slow therefore a native query is run to make it faster
+
+        '#~#' is default separator for localised text fields the syntax is:
+            'locale1#~#value1#~#locale2#~#value2 ... #~#localeN#~#valueN'
+        where locales match YeS locale settings.
+      -->
+    <insert-sql>
+        INSERT INTO TPRODUCTATTRVALUE (PRODUCT_ID, CODE, VAL, DISPLAYVAL) VALUES (
+        (SELECT p.PRODUCT_ID FROM TPRODUCT p WHERE p.GUID = '{product}'),
+        '{attribute}','{val}','en#~#{displayValEn}#~#ru#~#{displayValRu}')
+    </insert-sql>
+
+
+    <import-columns>
+
+        <!-- Product by GUID -->
+        <column-descriptor>
+            <column-index>0</column-index>
+            <field-type>FK_FIELD</field-type>
+            <name>product</name>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>select p from ProductEntity p where p.guid = {product}</lookup-query>
+        </column-descriptor>
+
+        <!-- Attr code -->
+        <column-descriptor>
+            <column-index>3</column-index>
+            <field-type>FK_FIELD</field-type>
+            <name>attribute</name>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>select a from AttributeEntity a where a.code = {attribute}</lookup-query>
+        </column-descriptor>
+
+        <!-- Attr raw value -->
+        <column-descriptor>
+            <column-index>4</column-index>
+            <field-type>FIELD</field-type>
+            <name>val</name>
+            <value-regex>(.{0,4000})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <!-- Attr EN value -->
+        <column-descriptor>
+            <column-index>5</column-index>
+            <field-type>FIELD</field-type>
+            <name>displayValEn</name>
+            <language>en</language>
+            <value-regex>(.{0,1900})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <!-- Attr RU value -->
+        <column-descriptor>
+            <column-index>6</column-index>
+            <field-type>FIELD</field-type>
+            <name>displayValRu</name>
+            <language>ru</language>
+            <value-regex>(.{0,1900})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+    </import-columns>
+</import-descriptor>

@@ -17,7 +17,6 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
-import org.hibernate.criterion.Restrictions;
 import org.yes.cart.domain.dto.ProdTypeAttributeViewGroupDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.ProdTypeAttributeViewGroupDTOImpl;
@@ -48,13 +47,13 @@ public class DtoProdTypeAttributeViewGroupServiceImpl
      *
      * @param dtoFactory               {@link org.yes.cart.domain.dto.factory.DtoFactory}
      * @param prodTypeAttributeViewGroupGenericService                  {@link org.yes.cart.service.domain.GenericService}
-     * @param AdaptersRepository {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
+     * @param adaptersRepository {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
      */
     public DtoProdTypeAttributeViewGroupServiceImpl(final DtoFactory dtoFactory,
                                                     final GenericService<ProdTypeAttributeViewGroup> prodTypeAttributeViewGroupGenericService,
-                                                    final AdaptersRepository AdaptersRepository,
+                                                    final AdaptersRepository adaptersRepository,
                                                     final GenericService<ProductType> productTypeService) {
-        super(dtoFactory, prodTypeAttributeViewGroupGenericService, AdaptersRepository);
+        super(dtoFactory, prodTypeAttributeViewGroupGenericService, adaptersRepository);
         this.productTypeService = productTypeService;
     }
 

@@ -46,12 +46,12 @@ public class DtoImageServiceImpl
      *
      * @param dtoFactory               {@link org.yes.cart.domain.dto.factory.DtoFactory}
      * @param seoImageGenericService                  {@link org.yes.cart.service.domain.GenericService}
-     * @param AdaptersRepository {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
+     * @param adaptersRepository {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
      */
     public DtoImageServiceImpl(final DtoFactory dtoFactory,
                                final GenericService<SeoImage> seoImageGenericService,
-                               final AdaptersRepository AdaptersRepository) {
-        super(dtoFactory, seoImageGenericService, AdaptersRepository);
+                               final AdaptersRepository adaptersRepository) {
+        super(dtoFactory, seoImageGenericService, adaptersRepository);
         imageService = (ImageService) seoImageGenericService;
     }
 
@@ -120,7 +120,7 @@ public class DtoImageServiceImpl
         final SeoImage seoImage = imageService.getSeoImage(imageFileName);
         if (seoImage != null) {
             final SeoImageDTO seoImageDTO = getNew();
-            assembler.assembleDto(seoImageDTO, seoImage, null, dtoFactory);
+            assembler.assembleDto(seoImageDTO, seoImage, getAdaptersRepository(), dtoFactory);
             return seoImageDTO;
         }
         return null;

@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.dto.impl;
 
+import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.Criterion;
@@ -65,6 +66,8 @@ public class ManagementServiceImpl implements ManagementService {
 
     private final DTOAssembler roleAssembler;
 
+    private final AdaptersRepository adaptersRepository;
+
 
     /**
      * Construct user managment service.
@@ -77,11 +80,13 @@ public class ManagementServiceImpl implements ManagementService {
     public ManagementServiceImpl(final ManagerService managerService,
                                     final GenericDAO<ManagerRole, Long> managerRoleDao,
                                     final GenericDAO<Role, Long> roleDao,
-                                    final DtoFactory dtoFactory) {
+                                    final DtoFactory dtoFactory,
+                                    final AdaptersRepository adaptersRepository) {
         this.managerService = managerService;
         this.managerRoleDao = managerRoleDao;
         this.roleDao = roleDao;
         this.dtoFactory = dtoFactory;
+        this.adaptersRepository = adaptersRepository;
 
         managerAssembler = DTOAssembler.newAssembler(ManagerDTOImpl.class, Manager.class);
 
@@ -123,7 +128,7 @@ public class ManagementServiceImpl implements ManagementService {
 
         for (Manager manager : managers) {
             final ManagerDTO managerDTO = dtoFactory.getByIface(ManagerDTO.class);
-            managerAssembler.assembleDto(managerDTO, manager, null, dtoFactory);
+            managerAssembler.assembleDto(managerDTO, manager, adaptersRepository.getAll(), dtoFactory);
             managersDTO.add(managerDTO);
         }
 
@@ -164,7 +169,7 @@ public class ManagementServiceImpl implements ManagementService {
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         for (Role role : roles) {
             final RoleDTO roleDTO = dtoFactory.getByIface(RoleDTO.class);
-            roleAssembler.assembleDto(roleDTO, role, null, dtoFactory);
+            roleAssembler.assembleDto(roleDTO, role, adaptersRepository.getAll(), dtoFactory);
             result.add(roleDTO);
         }
     }

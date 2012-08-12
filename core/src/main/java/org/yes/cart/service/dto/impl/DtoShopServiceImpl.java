@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.dto.impl;
 
+import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
@@ -47,8 +48,9 @@ public class DtoShopServiceImpl
     public DtoShopServiceImpl(
             final ShopService shopService,
             final CustomerService customerService,
-            final DtoFactory dtoFactory) {
-        super(dtoFactory, shopService, null);
+            final DtoFactory dtoFactory,
+            final AdaptersRepository adaptersRepository) {
+        super(dtoFactory, shopService, adaptersRepository);
 
         this.customerService = customerService;
 

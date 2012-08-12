@@ -38,12 +38,12 @@ public class DtoAssociationServiceImpl
      *
      * @param dtoFactory                {@link org.yes.cart.domain.dto.factory.DtoFactory}
      * @param associationGenericService {@link org.yes.cart.service.domain.GenericService}
-     * @param AdaptersRepository  {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
+     * @param adaptersRepository  {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
      */
     public DtoAssociationServiceImpl(final DtoFactory dtoFactory,
                                      final GenericService<Association> associationGenericService,
-                                     final AdaptersRepository AdaptersRepository) {
-        super(dtoFactory, associationGenericService, AdaptersRepository);
+                                     final AdaptersRepository adaptersRepository) {
+        super(dtoFactory, associationGenericService, adaptersRepository);
     }
 
 

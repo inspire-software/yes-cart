@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.dto.impl;
 
+import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.dao.GenericDAO;
@@ -72,8 +73,9 @@ public class DtoCategoryServiceImpl
                                   final GenericService<ProductType> productTypeService,
                                   final DtoAttributeService dtoAttributeService,
                                   final GenericDAO<AttrValueEntityCategory, Long> attrValueEntityCategoryDao,
-                                  final ImageService imageService) {
-        super(dtoFactory, categoryGenericService, null);
+                                  final ImageService imageService,
+                                  final AdaptersRepository adaptersRepository) {
+        super(dtoFactory, categoryGenericService, adaptersRepository);
 
 
         this.shopCategoryGenericService = shopCategoryGenericService;
@@ -289,7 +291,7 @@ public class DtoCategoryServiceImpl
      */
     public AttrValueDTO updateEntityAttributeValue(final AttrValueDTO attrValueDTO) {
         final AttrValueEntityCategory valueEntityCategory = attrValueEntityCategoryDao.findById(attrValueDTO.getAttrvalueId());
-        attrValueAssembler.assembleEntity(attrValueDTO, valueEntityCategory, null, dtoFactory);
+        attrValueAssembler.assembleEntity(attrValueDTO, valueEntityCategory, getAdaptersRepository(), dtoFactory);
         attrValueEntityCategoryDao.update(valueEntityCategory);
         return attrValueDTO;
 
@@ -318,7 +320,7 @@ public class DtoCategoryServiceImpl
      */
     public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
         AttrValueCategory valueEntityCategory = getEntityFactory().getByIface(AttrValueCategory.class);
-        attrValueAssembler.assembleEntity(attrValueDTO, valueEntityCategory, null, dtoFactory);
+        attrValueAssembler.assembleEntity(attrValueDTO, valueEntityCategory, getAdaptersRepository(), dtoFactory);
         Attribute atr = attributeService.getById(attrValueDTO.getAttributeDTO().getAttributeId());
         valueEntityCategory.setAttribute(atr);
         valueEntityCategory.setCategory(service.getById(((AttrValueCategoryDTO) attrValueDTO).getCategoryId()));

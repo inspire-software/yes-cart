@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.dto.impl;
 
+import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import org.yes.cart.domain.dto.AttributeDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.AttributeDTOImpl;
@@ -58,8 +59,9 @@ public class DtoAttributeServiceImpl
             final AttributeService attributeService,
             final EtypeService etypeService,
             final AttributeGroupService attributeGroupService,
-            final DtoFactory dtoFactory) {
-        super(dtoFactory, attributeService, null);
+            final DtoFactory dtoFactory,
+            final AdaptersRepository adapters) {
+        super(dtoFactory, attributeService, adapters);
         this.etypeService = etypeService;
         this.attributeGroupService = attributeGroupService;
 
@@ -68,7 +70,7 @@ public class DtoAttributeServiceImpl
     /** {@inheritDoc}  */
     public AttributeDTO create(final AttributeDTO dto) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         Attribute attribute = getEntityFactory().getByIface(Attribute.class);
-        assembler.assembleEntity(dto, attribute,  null, dtoFactory);
+        assembler.assembleEntity(dto, attribute,  getAdaptersRepository(), dtoFactory);
         attribute.setEtype(etypeService.getById(dto.getEtypeId()));
         attribute.setAttributeGroup(attributeGroupService.getById(dto.getAttributegroupId()));
         attribute = service.create(attribute);
@@ -78,7 +80,7 @@ public class DtoAttributeServiceImpl
     /** {@inheritDoc}  */
     public AttributeDTO update(final AttributeDTO dto) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         Attribute attribute = service.getById(dto.getAttributeId());
-        assembler.assembleEntity(dto, attribute,  null, dtoFactory);
+        assembler.assembleEntity(dto, attribute,  getAdaptersRepository(), dtoFactory);
         attribute.setEtype(etypeService.getById(dto.getEtypeId()));
         attribute.setAttributeGroup(attributeGroupService.getById(dto.getAttributegroupId()));
         attribute = service.update(attribute);

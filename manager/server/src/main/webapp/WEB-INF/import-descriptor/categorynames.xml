@@ -1,0 +1,236 @@
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<import-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/xstream/import-descriptor-1.0.0.xsd">
+    <!--
+    Example how related bulk import can consune the same file several times
+    -->
+    <entity-type>org.yes.cart.domain.entity.Category</entity-type>
+
+    <import-directory></import-directory>
+
+    <import-file-descriptor>
+        <file-encoding>UTF-8</file-encoding>
+        <file-name-mask>categorynames(.*).csv(.*)</file-name-mask>
+        <ignore-first-line>true</ignore-first-line>
+        <column-delimiter>;</column-delimiter>
+        <text-qualifier>&quot;</text-qualifier>
+    </import-file-descriptor>
+
+    <select-sql>select c from CategoryEntity c where c.guid = {guid}</select-sql>
+
+    <import-columns>
+
+        <!-- Parent Category Id -->
+        <column-descriptor>
+            <column-index>0</column-index>
+            <field-type>FIELD</field-type>
+            <data-type>LONG</data-type>
+            <name>parentId</name>
+        </column-descriptor>
+
+        <!-- Name -->
+        <column-descriptor>
+            <column-index>1</column-index>
+            <field-type>FIELD</field-type>
+            <name>guid</name>
+            <value-regex>(.{0,36})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>2</column-index>
+            <field-type>FIELD</field-type>
+            <name>name</name>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <!-- TODO: Localised name -->
+
+        <!-- product type -->
+        <column-descriptor>
+            <column-index>2</column-index>
+            <field-type>FK_FIELD</field-type>
+            <entity-type>org.yes.cart.domain.entity.ProductType</entity-type>
+            <name>productType</name>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>select pt from ProductTypeEntity pt where pt.name = {productType}</lookup-query>
+        </column-descriptor>
+
+        <!-- Description -->
+        <column-descriptor>
+            <column-index>5</column-index>
+            <field-type>FIELD</field-type>
+            <name>description</name>
+            <value-regex>(.{0,4000})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <!-- Category rank in parent category -->
+        <column-descriptor>
+            <column-index>-1</column-index>
+            <field-type>FIELD</field-type>
+            <data-type>INT</data-type>
+            <name>rank</name>
+            <value-constant>500</value-constant>
+        </column-descriptor>
+
+        <!-- navigation by attributes -->
+        <column-descriptor>
+            <column-index>-1</column-index>
+            <field-type>FIELD</field-type>
+            <data-type>BOOLEAN</data-type>
+            <name>navigationByAttributes</name>
+            <value-constant>true</value-constant>
+        </column-descriptor>
+
+        <!-- navigation by brand -->
+        <column-descriptor>
+            <column-index>-1</column-index>
+            <field-type>FIELD</field-type>
+            <data-type>BOOLEAN</data-type>
+            <name>navigationByBrand</name>
+            <value-constant>true</value-constant>
+        </column-descriptor>
+
+
+        <!-- navigation by price -->
+        <column-descriptor>
+            <column-index>-1</column-index>
+            <field-type>FIELD</field-type>
+            <data-type>BOOLEAN</data-type>
+            <name>navigationByPrice</name>
+            <value-constant>true</value-constant>
+        </column-descriptor>
+
+        <!-- navigation by price. tiers description -->
+        <column-descriptor>
+            <column-index>-1</column-index>
+            <field-type>FIELD</field-type>
+            <name>navigationByPriceTiers</name>
+            <value-constant>
+                <![CDATA[
+
+<price-navigation>
+    <currencies>
+        <currency>
+            <name>EUR</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>USD</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>UAH</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>5000</to>
+                </price-tier>
+                <price-tier>
+                    <from>5000</from>
+                    <to>6000</to>
+                </price-tier>
+                <price-tier>
+                    <from>6000</from>
+                    <to>8000</to>
+                </price-tier>
+                <price-tier>
+                    <from>8000</from>
+                    <to>10000</to>
+                </price-tier>
+                <price-tier>
+                    <from>10000</from>
+                    <to>16000</to>
+                </price-tier>
+                <price-tier>
+                    <from>16000</from>
+                    <to>24000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+    </currencies>
+</price-navigation>
+
+
+                ]]>
+            </value-constant>
+        </column-descriptor>
+
+    </import-columns>
+</import-descriptor>

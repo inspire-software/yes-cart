@@ -29,6 +29,8 @@
         <text-qualifier>&quot;</text-qualifier>
     </import-file-descriptor>
 
+    <select-sql>select c from ShopEntity c where c.code = {code}</select-sql>
+
     <import-columns>
 
         <column-descriptor>
@@ -37,7 +39,6 @@
             <name>code</name>
             <value-regex>(.{0,255})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
-            <lookup-query>select c from ShopEntity c where c.code = ?1</lookup-query>
         </column-descriptor>
 
         <column-descriptor>
@@ -66,7 +67,7 @@
 
         <column-descriptor>
             <column-index>4</column-index>
-            <field-type>SIMPLE_SLAVE_FIELD</field-type>
+            <field-type>SLAVE_TUPLE_FIELD</field-type>
             <name>shopUrl</name>
 
             <import-descriptor>
@@ -80,6 +81,7 @@
                     <text-qualifier>&quot;</text-qualifier>
                 </import-file-descriptor>
 
+                <select-sql>select u from ShopUrl u where u.url = {url} and u.shop = {masterObject}</select-sql>
 
                 <import-columns>
 
@@ -98,8 +100,6 @@
                         <name>url</name>
                         <value-regex>(.{0,512})(.*)</value-regex>
                         <value-regex-group>1</value-regex-group>
-                        <lookup-query>select u from ShopUrl u where u.url = ?1 and u.shop = ?2</lookup-query>
-                        <use-master-object>true</use-master-object>
                     </column-descriptor>
 
                 </import-columns>

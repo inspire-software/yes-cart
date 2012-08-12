@@ -18,6 +18,8 @@ package org.yes.cart.remote.service.impl;
 
 import flex.messaging.FlexContext;
 import flex.messaging.FlexRemoteCredentials;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.yes.cart.remote.service.ReindexService;
@@ -38,6 +40,7 @@ import org.yes.cart.web.service.ws.client.BackdoorServiceClientFactory;
  */
 public class ReindexServiceImpl extends SingletonJobRunner implements ReindexService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ReindexServiceImpl.class);
 
     public ReindexServiceImpl(final TaskExecutor executor) {
         super(executor);
@@ -68,6 +71,7 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
                     listener.notifyMessage("Indexing completed. Indexed products count: " + cnt);
                     listener.notifyCompleted(JobStatus.Completion.OK);
                 } catch (Throwable trw) {
+                    LOG.error(trw.getMessage(), trw);
                     listener.notifyError(trw.getMessage());
                     listener.notifyCompleted(JobStatus.Completion.ERROR);
                 }

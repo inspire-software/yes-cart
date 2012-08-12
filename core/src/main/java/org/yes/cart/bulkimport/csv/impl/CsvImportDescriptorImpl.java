@@ -44,29 +44,10 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
 
     private String entityType;
 
+    private String selectSql;
     private String insertSql;
 
     private boolean initialised = false;
-
-
-    /**
-     * Get insert sql.
-     *
-     * @return insert sql
-     */
-    public String getInsertSql() {
-        return insertSql;
-    }
-
-    /**
-     * Set inser sql
-     *
-     * @param insertSql insert sql
-     */
-    public void setInsertSql(final String insertSql) {
-        this.insertSql = insertSql;
-    }
-
 
     /**
      * Default constructor.
@@ -76,29 +57,38 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
         importColumns = new ArrayList<CsvImportColumn>();
     }
 
-    /**
-     * Get full qualiffied entity interface. For example - org.yes.cart.domain.entity.Brand
-     *
-     * @return full qualiffied entity interface
-     */
+    /** {@inheritDoc} */
     public String getEntityType() {
         return entityType;
     }
 
-    /**
-     * Set full qualiffied entity interface.
-     *
-     * @param entityType entity interface
-     */
-    public void setEntityType(final String entityType) {
-        this.entityType = entityType;
+    /** {@inheritDoc} */
+    public void setEntityType(final String entityInterface) {
+        this.entityType = entityInterface;
     }
 
-    /**
-     * Get the {@link ImportColumn} for object lookup.
-     *
-     * @return {@link ImportColumn} if found, otherwise null.
-     */
+    /** {@inheritDoc} */
+    public String getSelectSql() {
+        return selectSql;
+    }
+
+    /** {@inheritDoc} */
+    public void setSelectSql(final String selectSql) {
+        this.selectSql = selectSql;
+    }
+
+    /** {@inheritDoc} */
+    public String getInsertSql() {
+        return insertSql;
+    }
+
+    /** {@inheritDoc} */
+    public void setInsertSql(final String insertSql) {
+        this.insertSql = insertSql;
+    }
+
+
+    /** {@inheritDoc} */
     public ImportColumn getPrimaryKeyColumn() {
         if (!initialised) {
             this.reloadMappings();

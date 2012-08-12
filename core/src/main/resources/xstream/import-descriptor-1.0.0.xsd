@@ -38,12 +38,24 @@
 
                 File descriptor section specifies file specific configurations and columns
                 define the actual mapping for columns to entity type.
+
+                select-sql defines query that is to be used to look up existing object (HSQL)
+                insert-sql defines a native insert query to improve performance (NATIVE SQL)
+
+                Syntax for queries follows either native SQL or HSQL with parameters
+                specified as column names in curly brackets.
+                e.g.
+                    HSQL: select c from CategoryEntity c where c.guid = {guid}
+                    SQL : insert into TCATEGORY (GUID) values ('{guid}')
+                Note the difference that '' are necessary for native SQL but not for HSQL.
+
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
             <xs:element name="entity-type" type="xs:string" minOccurs="1"/>
             <xs:element name="import-directory" type="xs:string" minOccurs="1"/>
             <xs:element name="import-file-descriptor" type="ImportFileDescriptorType" minOccurs="1"/>
+            <xs:element name="select-sql" type="xs:string" minOccurs="1"/>
             <xs:element name="insert-sql" type="xs:string" minOccurs="0"/>
             <xs:element name="import-columns" type="ImportColumnsType" minOccurs="1"/>
         </xs:sequence>
@@ -82,6 +94,10 @@
                 column-index = 0 and name = code means that 0th column in import tuple is mapped
                 to code property on the entity to be imported.
 
+                If language is defined the values will be attempted to be inserted as a i18n.
+                The language specified must be exactly the same configuration as Locale used by
+                YeS (Yes Shop).
+
                 Field type defined what type of field this is and will define the import strategy
                 for that field (e.g. FK_FIELD would fetch a parent entity using lookup-query).
                 For FK field entity-type must be specified to auto generate parent dependencies.
@@ -109,13 +125,30 @@
                     <xs:restriction base="xs:string">
                         <xs:enumeration value="FIELD"/>
                         <xs:enumeration value="FK_FIELD"/>
-                        <xs:enumeration value="SIMPLE_SLAVE_FIELD"/>
-                        <xs:enumeration value="KEYVALUE_SLAVE_FIELD"/>
+                        <xs:enumeration value="SLAVE_INLINE_FIELD"/>
+                        <xs:enumeration value="SLAVE_TUPLE_FIELD"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="data-type" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        This constraint corresponds to org.yes.cart.bulkimport.model.DataTypeEnum.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="STRING"/>
+                        <xs:enumeration value="BOOLEAN"/>
+                        <xs:enumeration value="LONG"/>
+                        <xs:enumeration value="INT"/>
+                        <xs:enumeration value="DECIMAL"/>
                     </xs:restriction>
                 </xs:simpleType>
             </xs:element>
             <xs:element name="entity-type" type="xs:string" minOccurs="0"/>
             <xs:element name="name" type="xs:string"/>
+            <xs:element name="language" type="xs:string" minOccurs="0"/>
             <xs:element name="value-regex" type="xs:string" minOccurs="0"/>
             <xs:element name="value-regex-group" type="xs:string" minOccurs="0"/>
             <xs:element name="value-constant" type="xs:string" minOccurs="0"/>

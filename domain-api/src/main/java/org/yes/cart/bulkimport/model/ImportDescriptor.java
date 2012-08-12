@@ -26,21 +26,21 @@ import java.util.Collection;
 public interface ImportDescriptor {
 
     /**
-     * Get full qualiffied entity interface. For example - org.yes.cart.domain.entity.Brand
+     * Get full qualified entity interface. For example - org.yes.cart.domain.entity.Brand
      *
-     * @return full qualiffied entity interface
+     * @return full qualified entity interface
      */
     String getEntityType();
 
     /**
-     * Set full qualiffied entity interface.
+     * Set full qualified entity interface.
      *
-     * @param entityIntface entity interface
+     * @param entityInterface entity interface
      */
-    void setEntityType(String entityIntface);
+    void setEntityType(String entityInterface);
 
     /**
-     * Get the import file decription.
+     * Get the import file description.
      *
      * @return {@link org.yes.cart.bulkimport.model.ImportFile}
      */
@@ -69,14 +69,26 @@ public interface ImportDescriptor {
     void setImportDirectory(String importFolder);
 
     /**
-     * Get insert sql, which used instead of hibernate object save for
+     * Get select sql, which used to look up objects that are to
+     * be modified (if they exist).
+     * @return        select sql
+     */
+    String getSelectSql();
+
+    /**
+     * @param selectSql select sql
+     */
+    void setSelectSql(String selectSql);
+
+    /**
+     * Get insert sql, which used instead of hibernate object save to
      * speed up bulk import.
+     *
      * @return        insert sql
      */
     String getInsertSql();
 
     /**
-     * Set inser sql
      * @param insertSql insert sql
      */
     void setInsertSql(String insertSql);

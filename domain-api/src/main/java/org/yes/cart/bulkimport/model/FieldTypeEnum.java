@@ -23,42 +23,25 @@ package org.yes.cart.bulkimport.model;
  */
 public enum FieldTypeEnum {
 
-    FIELD("field"),
-    FK_FIELD("fk_field"),
-    SIMPLE_SLAVE_FIELD("simple_slave_field"),
-    KEYVALUE_SLAVE_FIELD("keyvalue_slave_field");
-
-    private final String fieldType;
-
-    FieldTypeEnum(final String fieldType) {
-        this.fieldType = fieldType;
-    }
-
     /**
-     * Return the enum constant from the String representation
-     *
-     * @param fieldType string representation of fieldType
-     * @return FieldTypeImpl instance if found, otherwise IllegalArgumentException will be thrown.
+     * Single Value field (Also used as PK if has lookup query to check for update
+     * entities).
      */
-    public static FieldTypeEnum fromValue(final String fieldType) {
-        if (fieldType != null) {
-            for (FieldTypeEnum myFieldType : FieldTypeEnum.values()) {
-                if (myFieldType.getFieldType().equals(fieldType)) {
-                    return myFieldType;
-                }
-            }
-        }
-        throw new IllegalArgumentException(fieldType);
-    }
-
+    FIELD,
     /**
-     * Get string representation of FieldTypeImpl.
-     *
-     * @return string representation.
+     * Foreign key field. (Uses look up queries to look up parent objects).
      */
-    public String getFieldType() {
-        return fieldType;
-    }
-
+    FK_FIELD,
+    /**
+     * Defines sub tuple which uses various column to populate its object.
+     * This kind of field uses sub descriptor to define sub tuple columns.
+     */
+    SLAVE_INLINE_FIELD,
+    /**
+     * Defines sub tuple which is encoded fully inside current field and has
+     * no access to other fields.
+     * This kind of field uses sub descriptor to define sub tuple columns.
+     */
+    SLAVE_TUPLE_FIELD
 
 }

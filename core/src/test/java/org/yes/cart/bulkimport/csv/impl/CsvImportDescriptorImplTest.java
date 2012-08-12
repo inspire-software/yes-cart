@@ -23,7 +23,6 @@ import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.model.FieldTypeEnum;
 import org.yes.cart.bulkimport.model.ImportColumn;
 import org.yes.cart.bulkimport.stream.xml.CsvImportDescriptorXStreamProvider;
-import org.yes.cart.stream.xml.XStreamProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,7 +58,7 @@ public class CsvImportDescriptorImplTest {
 
         importColumn = new CsvImportColumnImpl();
         importColumn.setColumnIndex(2);
-        importColumn.setFieldType(FieldTypeEnum.SIMPLE_SLAVE_FIELD);
+        importColumn.setFieldType(FieldTypeEnum.SLAVE_TUPLE_FIELD);
         importColumn.setLookupQuery("not important");
         importColumn.setName("attributes");
         importColumn.setValueRegEx(".*");
@@ -75,7 +74,7 @@ public class CsvImportDescriptorImplTest {
 
         importColumn = new CsvImportColumnImpl();
         importColumn.setColumnIndex(2);
-        importColumn.setFieldType(FieldTypeEnum.SIMPLE_SLAVE_FIELD);
+        importColumn.setFieldType(FieldTypeEnum.SLAVE_TUPLE_FIELD);
         importColumn.setLookupQuery("not important");
         importColumn.setName("someOtherFiled");
         importColumn.setValueRegEx(null);
@@ -105,7 +104,7 @@ public class CsvImportDescriptorImplTest {
 
         importColumn = new CsvImportColumnImpl();
         importColumn.setColumnIndex(2);
-        importColumn.setFieldType(FieldTypeEnum.SIMPLE_SLAVE_FIELD);
+        importColumn.setFieldType(FieldTypeEnum.SLAVE_TUPLE_FIELD);
         importColumn.setLookupQuery("not important");
         importColumn.setName("attributes");
         importColumn.setValueRegEx(".*");
@@ -121,7 +120,7 @@ public class CsvImportDescriptorImplTest {
 
         importColumn = new CsvImportColumnImpl();
         importColumn.setColumnIndex(2);
-        importColumn.setFieldType(FieldTypeEnum.SIMPLE_SLAVE_FIELD);
+        importColumn.setFieldType(FieldTypeEnum.SLAVE_TUPLE_FIELD);
         importColumn.setLookupQuery("not important");
         importColumn.setName("someOtherFiled");
         importColumn.setValueRegEx(null);

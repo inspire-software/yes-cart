@@ -20,13 +20,15 @@ import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.AttributeDTO;
 
+import java.util.Map;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
 @Dto
-public class AttributeDTOImpl  implements AttributeDTO {
+public class AttributeDTOImpl implements AttributeDTO {
 
     private static final long serialVersionUID = 20100717L;
 
@@ -77,6 +79,9 @@ public class AttributeDTOImpl  implements AttributeDTO {
 
     @DtoField(value = "choiceData")
     private String choiceData;
+
+    @DtoField(value = "displayName", converter = "i18nStringConverter")
+    private Map<String, String> displayNames;
 
     /** {@inheritDoc} */
     public int getRank() {
@@ -173,6 +178,16 @@ public class AttributeDTOImpl  implements AttributeDTO {
     /** {@inheritDoc} */
     public void setName(final String name) {
         this.name = name;
+    }
+
+    /** {@inheritDoc} */
+    public Map<String, String> getDisplayNames() {
+        return displayNames;
+    }
+
+    /** {@inheritDoc} */
+    public void setDisplayNames(final Map<String, String> displayNames) {
+        this.displayNames = displayNames;
     }
 
     /** {@inheritDoc} */

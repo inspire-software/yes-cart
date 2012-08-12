@@ -116,6 +116,7 @@ public class CustomerRegistrationMessageListener implements Runnable {
         
         boolean send = false;
         while (!send) {
+            // TODO: This is not good with timeout done by sleep, need to refactor this into a Job task with persistent queue, JMS maybe?
             try {
                 javaMailSender.send(mimeMessage);
                 send = true;

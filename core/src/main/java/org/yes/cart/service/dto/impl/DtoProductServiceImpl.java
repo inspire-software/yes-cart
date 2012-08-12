@@ -63,7 +63,6 @@ public class DtoProductServiceImpl
 
     private final ProductService productService;
     private final DtoFactory dtoFactory;
-    private final Map<String, Object> AdaptersRepository;
     private final GenericService<Seo> seoGenericService;
 
     private final DtoAttributeService dtoAttributeService;
@@ -86,13 +85,13 @@ public class DtoProductServiceImpl
      *
      * @param productService     domain objects product service
      * @param dtoFactory         factory for creating DTO object instances
-     * @param AdaptersRepository value converter repository
+     * @param adaptersRepository value converter repository
      * @param imageService       {@link ImageService} to manipulate  related images.
      */
     public DtoProductServiceImpl(
             final DtoFactory dtoFactory,
             final GenericService<Product> productService,
-            final AdaptersRepository AdaptersRepository,
+            final AdaptersRepository adaptersRepository,
             final GenericService<Seo> seoGenericService,
             final DtoAttributeService dtoAttributeService,
             final GenericDAO<AttrValueEntityProduct, Long> attrValueEntityProductDao,
@@ -100,7 +99,7 @@ public class DtoProductServiceImpl
             final ProductTypeAttrService productTypeAttrService,
             final DtoProductCategoryService dtoProductCategoryService,
             final DtoProductSkuService dtoProductSkuService) {
-        super(dtoFactory, productService, null);
+        super(dtoFactory, productService, adaptersRepository);
 
         this.dtoProductSkuService = dtoProductSkuService;
 
@@ -110,7 +109,6 @@ public class DtoProductServiceImpl
 
         this.productService = (ProductService) productService;
         this.dtoFactory = dtoFactory;
-        this.AdaptersRepository = AdaptersRepository.getAll();
         this.dtoProductCategoryService = dtoProductCategoryService;
 /*
         this.AdaptersRepository = AdaptersRepository.getByKeysAsMap(
@@ -152,7 +150,7 @@ public class DtoProductServiceImpl
         }
         try {
             final ProductSkuDTO dtoSku = dtoFactory.getByIface(ProductSkuDTO.class);
-            productSkuDTOAssembler.assembleDto(dtoSku, domainSku, AdaptersRepository, dtoFactory);
+            productSkuDTOAssembler.assembleDto(dtoSku, domainSku, getAdaptersRepository(), dtoFactory);
             return dtoSku;
         } catch (Exception exp) {
             throw new UnableToWrapObjectException(ProductSku.class, ProductSkuDTO.class, exp);
@@ -166,7 +164,7 @@ public class DtoProductServiceImpl
      */
     public ProductDTO create(final ProductDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         Product product = getEntityFactory().getByIface(Product.class);
-        assembler.assembleEntity(instance, product, AdaptersRepository,
+        assembler.assembleEntity(instance, product, getAdaptersRepository(),
                 new EntityFactoryToBeanFactoryAdaptor(productService.getGenericDao().getEntityFactory()));
         product = service.create(product);
         return getById(product.getProductId());
@@ -180,7 +178,7 @@ public class DtoProductServiceImpl
         assembler.assembleEntity(
                 instance,
                 product,
-                AdaptersRepository,
+                getAdaptersRepository(),
                 new EntityFactoryToBeanFactoryAdaptor(service.getGenericDao().getEntityFactory()));
         product = service.update(product);
         return getById(product.getProductId());
@@ -375,7 +373,7 @@ public class DtoProductServiceImpl
      */
     public AttrValueDTO updateEntityAttributeValue(final AttrValueDTO attrValueDTO) {
         final AttrValueEntityProduct attrValue = attrValueEntityProductDao.findById(attrValueDTO.getAttrvalueId());
-        attrValueAssembler.assembleEntity(attrValueDTO, attrValue, null, dtoFactory);
+        attrValueAssembler.assembleEntity(attrValueDTO, attrValue, getAdaptersRepository(), dtoFactory);
         attrValueEntityProductDao.update(attrValue);
         return attrValueDTO;
     }
@@ -385,7 +383,7 @@ public class DtoProductServiceImpl
      */
     public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
         AttrValueProduct valueEntity = getEntityFactory().getByIface(AttrValueProduct.class);
-        attrValueAssembler.assembleEntity(attrValueDTO, valueEntity, null, dtoFactory);
+        attrValueAssembler.assembleEntity(attrValueDTO, valueEntity, getAdaptersRepository(), dtoFactory);
         Attribute atr = attributeService.getById(attrValueDTO.getAttributeDTO().getAttributeId());
         valueEntity.setAttribute(atr);
         valueEntity.setProduct(service.getById(((AttrValueProductDTO) attrValueDTO).getProductId()));

@@ -62,6 +62,7 @@ public class CsvImportDescriptorXStreamProvider implements XStreamProvider<CsvIm
             xStream.addDefaultImplementation(CsvImportDescriptorImpl.class, ImportDescriptor.class);
             xStream.aliasField("entity-type", CsvImportDescriptorImpl.class, "entityType");
             xStream.aliasField("import-directory", CsvImportDescriptorImpl.class, "importDirectory");
+            xStream.aliasField("select-sql", CsvImportDescriptorImpl.class, "selectSql");
             xStream.aliasField("insert-sql", CsvImportDescriptorImpl.class, "insertSql");
 
             xStream.aliasField("import-file-descriptor", CsvImportDescriptorImpl.class, "importFileDescriptor");
@@ -78,6 +79,8 @@ public class CsvImportDescriptorXStreamProvider implements XStreamProvider<CsvIm
             xStream.alias("column-descriptor", CsvImportColumnImpl.class);
             xStream.aliasField("column-index", CsvImportColumnImpl.class, "columnIndex");
             xStream.aliasField("field-type", CsvImportColumnImpl.class, "fieldType");
+            xStream.aliasField("data-type", CsvImportColumnImpl.class, "dataType");
+            xStream.aliasField("language", CsvImportColumnImpl.class, "language");
             xStream.aliasField("value-regex", CsvImportColumnImpl.class, "valueRegEx");
             xStream.aliasField("value-regex-group", CsvImportColumnImpl.class, "valueRegExGroup");
             xStream.aliasField("lookup-query", CsvImportColumnImpl.class, "lookupQuery");

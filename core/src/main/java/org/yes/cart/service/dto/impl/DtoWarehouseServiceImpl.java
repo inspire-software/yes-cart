@@ -59,14 +59,14 @@ public class DtoWarehouseServiceImpl
      *
      * @param dtoFactory    {@link org.yes.cart.domain.dto.factory.DtoFactory}
      * @param warehouseGenericService       {@link org.yes.cart.service.domain.GenericService}
-     * @param AdaptersRepository     value converter
+     * @param adaptersRepository     value converter
      * @param skuWarehouseService service to manage sku qty on warehouses
      */
     public DtoWarehouseServiceImpl(final GenericService<Warehouse> warehouseGenericService,
                                    final DtoFactory dtoFactory,
-                                   final AdaptersRepository AdaptersRepository,
+                                   final AdaptersRepository adaptersRepository,
                                    final SkuWarehouseService skuWarehouseService) {
-        super(dtoFactory, warehouseGenericService, AdaptersRepository);
+        super(dtoFactory, warehouseGenericService, adaptersRepository);
         this.skuWarehouseService = skuWarehouseService;
         dtoSkuWarehouseAssembler = DTOAssembler.newAssembler(
                 dtoFactory.getImplClass(SkuWarehouseDTO.class),
@@ -111,7 +111,7 @@ public class DtoWarehouseServiceImpl
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         ShopWarehouse shopWarehouse = ((WarehouseService)service).assignWarehouse(warehouseId, shopId);
         ShopWarehouseDTO dto = dtoFactory.getByIface(ShopWarehouseDTO.class);
-        shopWarehouseAssembler.assembleDto(dto, shopWarehouse, null, dtoFactory);
+        shopWarehouseAssembler.assembleDto(dto, shopWarehouse, getAdaptersRepository(), dtoFactory);
         return dto;
     }
 

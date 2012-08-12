@@ -29,6 +29,8 @@
         <text-qualifier>&quot;</text-qualifier>
     </import-file-descriptor>
 
+    <select-sql>select c from CountryEntity c where c.countryCode = {countryCode}</select-sql>
+
     <import-columns>
 
         <column-descriptor>
@@ -37,7 +39,6 @@
             <name>countryCode</name>
             <value-regex>(.{0,2})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
-            <lookup-query>select c from CountryEntity c where c.countryCode = ?1</lookup-query>
         </column-descriptor>
 
         <column-descriptor>

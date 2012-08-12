@@ -378,6 +378,7 @@
             <bean class="org.yes.cart.service.dto.impl.DtoAttributeGroupServiceImpl">
                 <constructor-arg index="0" ref="attributeGroupService"/>
                 <constructor-arg index="1" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
             </bean>
         </property>
     </bean>
@@ -389,6 +390,7 @@
                 <constructor-arg index="1" ref="etypeService"/>
                 <constructor-arg index="2" ref="attributeGroupService"/>
                 <constructor-arg index="3" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="4" ref="dtoAssemblerAdaptersRepository"/>
             </bean>
         </property>
     </bean>
@@ -403,6 +405,7 @@
                 <constructor-arg index="4" ref="dtoAttributeService"/>
                 <constructor-arg index="5" ref="attrValueEntityCategoryDao"/>
                 <constructor-arg index="6" ref="imageService"/>
+                <constructor-arg index="7" ref="dtoAssemblerAdaptersRepository"/>
             </bean>
         </property>
     </bean>
@@ -412,6 +415,7 @@
             <bean class="org.yes.cart.service.dto.impl.DtoEtypeServiceImpl">
                 <constructor-arg index="0" ref="etypeService"/>
                 <constructor-arg index="1" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
             </bean>
         </property>
     </bean>
@@ -423,7 +427,7 @@
             <bean class="org.yes.cart.service.dto.impl.DtoProductServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
                 <constructor-arg index="1" ref="productService"/>
-                <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+                <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
                 <constructor-arg index="3" ref="seoService"/>
                 <constructor-arg index="4" ref="dtoAttributeService"/>
                 <constructor-arg index="5" ref="attrValueEntityProductDao"/>
@@ -442,7 +446,7 @@
                 <constructor-arg index="1" ref="productSkuService"/>
                 <constructor-arg index="2" ref="dtoAttributeService"/>
                 <constructor-arg index="3" ref="attrValueEntityProductSkuDao"/>
-                <constructor-arg index="4" ref="dtoValueConvertersRepository"/>
+                <constructor-arg index="4" ref="dtoAssemblerAdaptersRepository"/>
                 <constructor-arg index="5" ref="priceService"/>
                 <constructor-arg index="6" ref="seoService"/>
                 <constructor-arg index="7" ref="imageService"/>
@@ -459,6 +463,7 @@
                 <constructor-arg index="0" ref="shopService"/>
                 <constructor-arg index="1" ref="customerService"/>
                 <constructor-arg index="2" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="3" ref="dtoAssemblerAdaptersRepository"/>
             </bean>
         </property>
     </bean>
@@ -469,6 +474,7 @@
                 <constructor-arg index="0" ref="shopUrlService"/>
                 <constructor-arg index="1" ref="shopService"/>
                 <constructor-arg index="2" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="3" ref="dtoAssemblerAdaptersRepository"/>
             </bean>
         </property>
     </bean>
@@ -481,6 +487,7 @@
                 <constructor-arg index="2" ref="dtoAttributeService"/>
                 <constructor-arg index="3" ref="attrValueEntityBrandDao"/>
                 <constructor-arg index="4" ref="imageService"/>
+                <constructor-arg index="5" ref="dtoAssemblerAdaptersRepository"/>
             </bean>
         </property>
     </bean>
@@ -490,7 +497,7 @@
             <bean class="org.yes.cart.service.dto.impl.DtoWarehouseServiceImpl">
                 <constructor-arg index="0" ref="warehouseService"/>
                 <constructor-arg index="1" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
-                <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+                <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
                 <constructor-arg index="3" ref="skuWarehouseService"/>
             </bean>
         </property>
@@ -501,6 +508,7 @@
             <bean class="org.yes.cart.service.dto.impl.DtoProductTypeServiceImpl">
                 <constructor-arg index="0" ref="productTypeService"/>
                 <constructor-arg index="1" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
             </bean>
         </property>
     </bean>
@@ -510,7 +518,7 @@
             <bean class="org.yes.cart.service.dto.impl.DtoProductTypeAttrServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
                 <constructor-arg index="1" ref="productTypeAttrService"/>
-                <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+                <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
             </bean>
         </property>
     </bean>
@@ -520,7 +528,7 @@
             <bean class="org.yes.cart.service.dto.impl.DtoAssociationServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
                 <constructor-arg index="1" ref="associationService"/>
-                <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+                <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
             </bean>
         </property>
     </bean>
@@ -530,7 +538,7 @@
             <bean class="org.yes.cart.service.dto.impl.DtoProductAssociationServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
                 <constructor-arg index="1" ref="productAssociationService"/>
-                <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+                <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
             </bean>
         </property>
     </bean>
@@ -540,7 +548,7 @@
             <bean class="org.yes.cart.service.dto.impl.DtoCustomerServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
                 <constructor-arg index="1" ref="customerService"/>
-                <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+                <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
                 <constructor-arg index="3" ref="dtoAttributeService"/>
                 <constructor-arg index="4" ref="attrValueEntityCustomerDao"/>
                 <constructor-arg index="5" ref="shopDao"/>
@@ -554,7 +562,7 @@
             <bean class="org.yes.cart.service.dto.impl.DtoAddressServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
                 <constructor-arg index="1" ref="addressService"/>
-                <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+                <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
             </bean>
         </property>
     </bean>
@@ -566,7 +574,7 @@
             <bean class="org.yes.cart.service.dto.impl.DtoCarrierServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
                 <constructor-arg index="1" ref="carrierService"/>
-                <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+                <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
             </bean>
         </property>
     </bean>
@@ -576,7 +584,7 @@
             <bean class="org.yes.cart.service.dto.impl.DtoCarrierSlaServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
                 <constructor-arg index="1" ref="carrierSlaService"/>
-                <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+                <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
             </bean>
         </property>
     </bean>
@@ -586,7 +594,7 @@
             <bean class="org.yes.cart.service.dto.impl.DtoProdTypeAttributeViewGroupServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
                 <constructor-arg index="1" ref="prodTypeAttributeViewGroupService"/>
-                <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+                <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
                 <constructor-arg index="3" ref="productTypeService"/>
             </bean>
         </property>
@@ -597,7 +605,7 @@
             <bean class="org.yes.cart.service.dto.impl.DtoCustomerOrderServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
                 <constructor-arg index="1" ref="customerOrderService"/>
-                <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+                <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
             </bean>
         </property>
     </bean>
@@ -608,7 +616,7 @@
             <bean class="org.yes.cart.service.dto.impl.DtoCustomerWishListServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
                 <constructor-arg index="1" ref="customerWishListService"/>
-                <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+                <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
             </bean>
         </property>
     </bean>
@@ -619,7 +627,7 @@
             <bean class="org.yes.cart.service.dto.impl.DtoImageServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
                 <constructor-arg index="1" ref="imageService"/>
-                <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+                <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
             </bean>
         </property>
     </bean>
@@ -631,6 +639,7 @@
                 <constructor-arg index="1" ref="productService"/>
                 <constructor-arg index="2" ref="categoryService"/>
                 <constructor-arg index="3" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="4" ref="dtoAssemblerAdaptersRepository"/>
             </bean>
         </property>
     </bean>
@@ -643,6 +652,7 @@
                 <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="managerRoleDao"/>
                 <constructor-arg index="2" type="org.yes.cart.dao.GenericDAO" ref="roleDao"/>
                 <constructor-arg index="3" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="4" ref="dtoAssemblerAdaptersRepository"/>
             </bean>
         </property>
     </bean>
@@ -652,7 +662,7 @@
             <bean class="org.yes.cart.service.dto.impl.DtoCountryServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
                 <constructor-arg index="1" ref="countryService"/>
-                <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+                <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
             </bean>
         </property>
     </bean>
@@ -662,7 +672,7 @@
             <bean class="org.yes.cart.service.dto.impl.DtoStateServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
                 <constructor-arg index="1" ref="stateService"/>
-                <constructor-arg index="2" ref="dtoValueConvertersRepository"/>
+                <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
             </bean>
         </property>
     </bean>
@@ -766,7 +776,9 @@
 
     <bean id="bigDecimalToFloat" class="org.yes.cart.domain.dto.adapter.impl.BigDecimalToFloatValueConverter"/>
 
-    <bean id="dtoValueConvertersRepository"
+    <bean id="i18nStringConverter" class="org.yes.cart.domain.dto.adapter.impl.I18NStringConverter"/>
+
+    <bean id="dtoAssemblerAdaptersRepository"
           class="com.inspiresoftware.lib.dto.geda.adapter.repository.impl.AdaptersRepositoryImpl">
         <constructor-arg>
             <map>
@@ -782,6 +794,8 @@
                 <entry key="producttypeId2ProductType" value-ref="producttypeId2ProductType"/>
 
                 <entry key="attributeDTO2Attribute" value-ref="attributeDTO2Attribute"/>
+
+                <entry key="i18nStringConverter" value-ref="i18nStringConverter"/>
 
             </map>
         </constructor-arg>

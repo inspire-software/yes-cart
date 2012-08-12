@@ -44,13 +44,13 @@ public class DtoProductTypeAttrServiceImpl
      *
      * @param dtoFactory               {@link org.yes.cart.domain.dto.factory.DtoFactory}
      * @param productTypeAttrGenericService                  {@link org.yes.cart.service.domain.GenericService}
-     * @param AdaptersRepository {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
+     * @param adaptersRepository {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
      */
     public DtoProductTypeAttrServiceImpl(
             final DtoFactory dtoFactory,
             final GenericService<ProductTypeAttr> productTypeAttrGenericService,
-            final AdaptersRepository AdaptersRepository) {
-        super(dtoFactory, productTypeAttrGenericService, AdaptersRepository);
+            final AdaptersRepository adaptersRepository) {
+        super(dtoFactory, productTypeAttrGenericService, adaptersRepository);
     }
 
 

@@ -16,8 +16,13 @@
 
 package org.yes.cart.bulkimport.csv.impl;
 
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
+import org.yes.cart.bulkimport.model.DataTypeEnum;
 import org.yes.cart.bulkimport.model.ImportColumn;
+import org.yes.cart.bulkimport.model.ValueAdapter;
 
 import java.util.Map;
 import java.util.Properties;
@@ -37,83 +42,87 @@ public class CsvImportColumnImplTest {
     @Test
     public void testGetValue() {
 
+        final ValueAdapter adapter = new ValueAdapter() {
+            public Object fromRaw(final Object rawValue, final DataTypeEnum requiredType) {
+                return rawValue;
+            }
+        };
 
         String reExpKey = "((\\D?\\S{4,}){1,}).*-?.*";
         String reExpValue = ".*-.*\\s{1,}((\\D?\\S{4,}){1,})\\s{0,}.*";
 
 
         ImportColumn column = new CsvImportColumnImpl();
-        assertNull(column.getValue(null));
+        assertNull(column.getValue(null, adapter));
 
         String rawValue = "rawValue";
-        assertEquals(rawValue, column.getValue(rawValue));
+        assertEquals(rawValue, column.getValue(rawValue, adapter));
 
         column.setValueRegEx("(.*)");
-        assertEquals(rawValue, column.getValue(rawValue));
+        assertEquals(rawValue, column.getValue(rawValue, adapter));
 
         column.setValueRegEx("(raw)");
-        assertEquals("raw", column.getValue(rawValue));
+        assertEquals("raw", column.getValue(rawValue, adapter));
 
         column.setValueRegEx("(Value)");
-        assertEquals("Value", column.getValue(rawValue));
+        assertEquals("Value", column.getValue(rawValue, adapter));
 
 
         column.setValueRegEx(reExpKey);
-        assertEquals("SomeKey", column.getValue("SomeKey       -  Value"));
+        assertEquals("SomeKey", column.getValue("SomeKey       -  Value", adapter));
 
         column.setValueRegEx(reExpKey);
-        assertEquals("Ключик", column.getValue("Ключик       -  Значение"));
+        assertEquals("Ключик", column.getValue("Ключик       -  Значение", adapter));
 
         column.setValueRegEx(reExpKey);
-        assertEquals("Ключик", column.getValue(" Ключик       -  Значение"));
+        assertEquals("Ключик", column.getValue(" Ключик       -  Значение", adapter));
 
         //The same test on unicode strign with some noise
         column.setValueRegEx(reExpKey);
-        assertEquals(getprops(), "result", column.getValue("as фыф result - шум 34 123.56 значение sd ыв #"));
+        assertEquals(getprops(), "result", column.getValue("as фыф result - шум 34 123.56 значение sd ыв #", adapter));
 
 
         //The same test on unicode strign with some noise
         column.setValueRegEx(reExpKey);
-        assertEquals("результат", column.getValue("as фыф результат - шум 34 123.56 значение sd ыв #"));
+        assertEquals("результат", column.getValue("as фыф результат - шум 34 123.56 значение sd ыв #", adapter));
 
         column.setValueRegEx(reExpKey);
-        assertEquals("Діамант жовтий", column.getValue("фыв 3 фвк Діамант жовтий 3/ 6 - 0,10 Ct"));
+        assertEquals("Діамант жовтий", column.getValue("фыв 3 фвк Діамант жовтий 3/ 6 - 0,10 Ct", adapter));
 
         column.setValueRegEx(reExpKey);
-        assertEquals("Кубічний цирконій", column.getValue("2 Кубічний цирконій - 66 шт"));
+        assertEquals("Кубічний цирконій", column.getValue("2 Кубічний цирконій - 66 шт", adapter));
 
         column.setValueRegEx(reExpKey);
-        assertEquals("Онікс,перли,кварц димчастий", column.getValue("0 Онікс,перли,кварц димчастий -  гр"));
+        assertEquals("Онікс,перли,кварц димчастий", column.getValue("0 Онікс,перли,кварц димчастий -  гр", adapter));
 
         column.setValueRegEx(reExpKey);
-        assertEquals("Онікс", column.getValue("Онікс -"));
+        assertEquals("Онікс", column.getValue("Онікс -", adapter));
 
 
         // a value in key - value pair
         column.setValueRegEx(".*\\s{0,}\\-\\s{0,}(Value)");
-        assertEquals("Value", column.getValue("SomeKey       -  ValueZZZ"));
+        assertEquals("Value", column.getValue("SomeKey       -  ValueZZZ", adapter));
 
         column.setValueRegEx(reExpValue);
-        assertEquals("Value", column.getValue("SomeKey       -  Value"));
+        assertEquals("Value", column.getValue("SomeKey       -  Value", adapter));
 
 
         column.setValueRegEx(reExpValue);
-        assertEquals("Значение", column.getValue(" Ключ       -  Значение"));
+        assertEquals("Значение", column.getValue(" Ключ       -  Значение", adapter));
 
         column.setValueRegEx(reExpValue);
-        assertEquals("значение", column.getValue("as фыф результат-шум 34 123.56 значение sd ыв #"));
+        assertEquals("значение", column.getValue("as фыф результат-шум 34 123.56 значение sd ыв #", adapter));
 
 
         //some single unicode word re
         column.setValueRegEx("\\b([a-z]{3,})\\b");
-        assertEquals("word", column.getValue("1234sdcvdfv hfkdf34 word 2134"));
+        assertEquals("word", column.getValue("1234sdcvdfv hfkdf34 word 2134", adapter));
 
         column.setValueRegEx("\\b(\\S\\D{3,})\\b");
-        assertEquals("word", column.getValue("1234sdcvdfv hfkdf34 word 2134"));
+        assertEquals("word", column.getValue("1234sdcvdfv hfkdf34 word 2134", adapter));
 
         column.setValueRegEx("\\b(\\S\\D{3,})\\b");
-        assertEquals("слово", column.getValue("1234sdcvdfv hfkdf34 слово 2134"));
-
+        assertEquals("слово", column.getValue("1234sdcvdfv hfkdf34 слово 2134", adapter));
 
         /*
         real eaxmples
