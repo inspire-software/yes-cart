@@ -21,6 +21,8 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.AttrValueCategoryDTO;
 import org.yes.cart.domain.dto.AttributeDTO;
 
+import java.util.Map;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -36,6 +38,10 @@ public class AttrValueCategoryDTOImpl implements AttrValueCategoryDTO {
 
     @DtoField(value = "val")
     private String val;
+
+    @DtoField(value = "displayVal", converter = "i18nStringConverter")
+    private Map<String, String> displayVals;
+
 
     @DtoField(value = "attribute",
             dtoBeanKey = "org.yes.cart.domain.dto.AttributeDTO", readOnly = true)
@@ -70,6 +76,16 @@ public class AttrValueCategoryDTOImpl implements AttrValueCategoryDTO {
     /** {@inheritDoc} */
     public void setVal(final String val) {
         this.val = val;
+    }
+
+    /** {@inheritDoc} */
+    public Map<String, String> getDisplayVals() {
+        return displayVals;
+    }
+
+    /** {@inheritDoc} */
+    public void setDisplayVals(final Map<String, String> displayVals) {
+        this.displayVals = displayVals;
     }
 
     /** {@inheritDoc} */

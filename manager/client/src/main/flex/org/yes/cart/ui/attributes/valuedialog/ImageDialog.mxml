@@ -19,41 +19,40 @@
                 showCloseButton="true"
                 close="PopUpManager.removePopUp(this)"
                 implements="org.yes.cart.ui.attributes.valuedialog.ValueDialog"
+                layout="vertical"
                 creationComplete="init();">
 
-    <mx:VBox>
-        <mx:Canvas id="imageView"
-                   width="480"
-                   height="480"
-                   borderColor="#CCCCCC"
-                   borderStyle="solid"/>
+    <mx:Canvas id="imageView"
+               width="480"
+               height="480"
+               borderColor="#CCCCCC"
+               borderStyle="solid"/>
 
-        <mx:Form x="0" y="0" width="100%">
-            <mx:FormItem label="@Resource(bundle='AttributesManagementPanel',key='value')">
-                <mx:TextInput width="310" id="valueTextInput"/>
-            </mx:FormItem>
-            <mx:FormItem label="@Resource(bundle='AttributesManagementPanel',key='altText')">
-                <mx:TextInput width="310" id="altTextInput"/>
-            </mx:FormItem>
-            <mx:FormItem label="@Resource(bundle='AttributesManagementPanel',key='title')">
-                <mx:TextInput width="310" id="titleTextInput"/>
-            </mx:FormItem>
+    <mx:Form x="0" y="0" width="100%">
+        <mx:FormItem label="@Resource(bundle='AttributesManagementPanel',key='value')">
+            <mx:TextInput width="310" id="valueTextInput"/>
+        </mx:FormItem>
+        <mx:FormItem label="@Resource(bundle='AttributesManagementPanel',key='altText')">
+            <mx:TextInput width="310" id="altTextInput"/>
+        </mx:FormItem>
+        <mx:FormItem label="@Resource(bundle='AttributesManagementPanel',key='title')">
+            <mx:TextInput width="310" id="titleTextInput"/>
+        </mx:FormItem>
 
-        </mx:Form>
-        <mx:ControlBar width="100%" horizontalAlign="right">
-            <mx:Button id="btnLoad"
-                       label="@Resource(bundle='AttributesManagementPanel',key='loadImage')"
-                       toolTip="@Resource(bundle='AttributesManagementPanel',key='loadImageHint')"
-                       click="onLoadImageDialogButtonClick()"/>
-            <mx:Button id="btnSave"
-                       label="@Resource(bundle='AttributesManagementPanel',key='save')" click="onSaveImageClick(event)"/>
-            <mx:Button id="btnCancel"
-                       label="@Resource(bundle='AttributesManagementPanel',key='cancel')"
-                       click="PopUpManager.removePopUp(this)"
-                    />
-        </mx:ControlBar>
+    </mx:Form>
+    <mx:ControlBar width="100%" horizontalAlign="right">
+        <mx:Button id="btnLoad"
+                   label="@Resource(bundle='AttributesManagementPanel',key='loadImage')"
+                   toolTip="@Resource(bundle='AttributesManagementPanel',key='loadImageHint')"
+                   click="onLoadImageDialogButtonClick()"/>
+        <mx:Button id="btnSave"
+                   label="@Resource(bundle='AttributesManagementPanel',key='save')" click="onSaveImageClick(event)"/>
+        <mx:Button id="btnCancel"
+                   label="@Resource(bundle='AttributesManagementPanel',key='cancel')"
+                   click="PopUpManager.removePopUp(this)"
+                />
+    </mx:ControlBar>
 
-    </mx:VBox>
     <mx:RemoteObject showBusyCursor="true" id="remoteImageService"
                      destination="remoteImageService"
                      channelSet="{ShopManagerGlobal.instance.channelSet}">
@@ -118,15 +117,12 @@
 
         private var seoImage:SeoImageDTOImpl;
         private var imageBodyHasChanges:Boolean = false;
-         private var _dataReadyCallbackFunction:Function;
+        private var _dataReadyCallbackFunction:Function;
 
         private function init():void {
             this.title = windowTitle;
 
         }
-
-
-
 
 
         public function get dataReadyCallbackFunction():Function {
@@ -161,7 +157,6 @@
                 remoteImageService.update(seoImage);
             }
 
-            
 
         }
 
@@ -271,6 +266,14 @@
 
             }
 
+
+        }
+
+        public function get displayValues():Object {
+            return { };
+        }
+
+        public function set displayValues(value:Object):void {
 
         }
 

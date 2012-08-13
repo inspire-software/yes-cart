@@ -1,0 +1,197 @@
+<?xml version="1.0"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%">
+    <mx:HBox paddingBottom="2" paddingLeft="2">
+        <mx:TextInput id="newLocale" width="65"
+                      toolTip="@Resource(bundle='ShopManagerApplication',key='i18nAddLocaleName')"
+                      change="onNewLocaleTextChange(event)"  />
+        <mx:Button id="addLocale" enabled="{allowAdd}"
+                   label="@Resource(bundle='ShopManagerApplication',key='i18nAddLocaleButton')"
+                   click="onAddLocaleClick(event)"/>
+        <mx:Button id="removeLocale" enabled="{allowRemove}"
+                   label="@Resource(bundle='ShopManagerApplication',key='i18nRemoveLocaleButton')"
+                   click="onRemoveLocaleClick(event)"/>
+    </mx:HBox>
+    <mx:DataGrid id="i18nValues" dataProvider="{i18nValuesProvider}" editable="true"
+                 itemClick="onLocaleItemSelected(event)"
+                 itemEditEnd="onItemEditEndHandler(event)"
+                 minHeight="75" maxHeight="75" width="100%">
+        <mx:columns>
+            <mx:DataGridColumn dataField="locale"
+                               headerText="@Resource(bundle='ShopManagerApplication',key='i18nLocale')"
+                               editable="false" width="65"/>
+            <mx:DataGridColumn dataField="value"
+                               headerText="@Resource(bundle='ShopManagerApplication',key='i18nValue')"
+                               editable="true"/>
+        </mx:columns>
+    </mx:DataGrid>
+
+    <mx:ArrayCollection id="i18nValuesProvider"/>
+    <mx:Boolean id="allowAdd"/>
+    <mx:Boolean id="allowRemove"/>
+
+    <mx:Script><![CDATA[
+        import mx.collections.ArrayCollection;
+        import mx.collections.Sort;
+        import mx.collections.SortField;
+        import mx.controls.Alert;
+        import mx.controls.TextInput;
+        import mx.events.CloseEvent;
+        import mx.events.DataGridEvent;
+        import mx.events.DataGridEventReason;
+        import mx.events.ListEvent;
+
+        /*
+         * source object (e.g. DTO)
+         */
+        private var _source:Object;
+        /*
+         * property on the source object that corresponds to
+         * String map of locale => value pairs
+         */
+        private var _i18nProp:String;
+
+        private var _tempI18nMap:Object;
+
+        /**
+         * @param value source object (e.g. DTO)
+         * @param i18nProp property on the source object
+         */
+        public function setSourceObject(value:Object, i18nProp:String):void {
+            _source = value;
+            _i18nProp = i18nProp;
+            if (_source[_i18nProp] == null) {
+                _source[_i18nProp] = {};
+            }
+            initTemp();
+            refreshValues();
+        }
+
+        private function isLocaleProp(prop:String):Boolean {
+            /*
+             * simple hack to only use locale properties, since
+             * flex has other internal properties (like mx_internal_id)
+             * which we do not want to mess with.
+             */
+            return prop.length <= 6;
+        }
+
+        private function initTemp():void {
+            _tempI18nMap = {};
+            if (_source == null || _i18nProp == null) {
+                return;
+            }
+            var localeVal:String;
+            for (localeVal in _source[_i18nProp]) {
+                if (isLocaleProp(localeVal)) {
+                    _tempI18nMap[localeVal] = _source[_i18nProp][localeVal];
+                }
+            }
+        }
+
+        private function updateSource():void {
+            if (_source == null || _i18nProp == null) {
+                return;
+            }
+            var localeVal:String;
+            for (localeVal in _source[_i18nProp]) {
+                if (isLocaleProp(localeVal)) {
+                    delete _source[_i18nProp][localeVal];
+                }
+            }
+            for (localeVal in _tempI18nMap) {
+                if (isLocaleProp(localeVal)) {
+                    _source[_i18nProp][localeVal] = _tempI18nMap[localeVal];
+                }
+            }
+        }
+
+        private function refreshValues():void {
+            i18nValuesProvider.removeAll();
+            var i18nMap:Object = _tempI18nMap;
+            if (i18nMap == null) {
+                return;
+            }
+            var tempArray:ArrayCollection = new ArrayCollection();
+            var sortField:SortField = new SortField();
+            sortField.name = 'locale';
+            var sort:Sort = new Sort();
+            sort.fields = [ sortField ];
+            tempArray.sort = sort;
+
+            var localeVal:String;
+            for (localeVal in i18nMap) {
+                tempArray.addItem({
+                    locale:localeVal,
+                    value:i18nMap[localeVal]
+                });
+            }
+            tempArray.refresh();
+            i18nValuesProvider.addAll(tempArray);
+
+        }
+
+        private function onNewLocaleTextChange(event:Event):void {
+            allowAdd = newLocale.text != null && newLocale.text != '';
+        }
+
+        private function onLocaleItemSelected(event:ListEvent):void {
+            allowRemove = i18nValues.selectedItem != null;
+        }
+
+        private function onAddLocaleClick(event:MouseEvent):void {
+            if (_source == null || _i18nProp == null) {
+                return;
+            }
+            var i18nMap:Object = _tempI18nMap;
+            if (i18nMap == null || i18nMap.hasOwnProperty(newLocale.text)) {
+                return;
+            }
+
+            i18nMap[newLocale.text] = '-';
+            updateSource();
+            refreshValues();
+        }
+
+        private function onRemoveLocaleClick(event:MouseEvent):void {
+            if (this.allowRemove && this.i18nValues.selectedItem != null) {
+                Alert.show(
+                        resourceManager.getString('ShopManagerApplication', 'i18nRemoveConfirm', [ this.i18nValues.selectedItem.locale ]),
+                        resourceManager.getString('ShopManagerApplication', 'warning'),
+                        Alert.OK | Alert.CANCEL, this, onRemoveLocaleConfirm, null, Alert.OK);
+            }
+
+        }
+
+        private function onRemoveLocaleConfirm(event:CloseEvent):void {
+            if (event.detail == Alert.OK) {
+                if (this.allowRemove && this.i18nValues.selectedItem != null) {
+                    if (_source == null || _i18nProp == null) {
+                        return;
+                    }
+                    var i18nMap:Object = _tempI18nMap;
+                    if (i18nMap == null || i18nMap.hasOwnProperty(newLocale.text)) {
+                        return;
+                    }
+
+                    delete i18nMap[this.i18nValues.selectedItem.locale];
+                    updateSource();
+                    refreshValues();
+
+                }
+                this.allowRemove = false;
+            }
+        }
+
+        private function onItemEditEndHandler(event:DataGridEvent):void {
+            if (event.reason != DataGridEventReason.CANCELLED) {
+                var i18nMap:Object = _tempI18nMap;
+                if (i18nMap == null) {
+                    return;
+                }
+                var item:Object = this.i18nValues.selectedItem;
+                i18nMap[item.locale] = TextInput(i18nValues.itemEditorInstance).text;
+                updateSource();
+            }
+        }
+        ]]></mx:Script>
+</mx:VBox>

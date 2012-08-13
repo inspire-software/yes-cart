@@ -15,10 +15,10 @@
   -    limitations under the License.
   -->
 
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
-				title="Create attribute"
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:yci18n="org.yes.cart.ui.i18n.*"
+                title="Create attribute"
                 showCloseButton="true"
-                close="PopUpManager.removePopUp(this)" >
+                close="PopUpManager.removePopUp(this)">
 
     <mx:Boolean id="newAttributeFlag">false</mx:Boolean>
 
@@ -28,6 +28,9 @@
         </mx:FormItem>
         <mx:FormItem  width="100%" label="@Resource(bundle='AttributeCreateEditDialog',key='name')">
             <mx:TextInput width="160" id="attrName"/>
+        </mx:FormItem>
+        <mx:FormItem  width="100%" label="@Resource(bundle='AttributeCreateEditDialog',key='displayName')">
+            <yci18n:i18nStringField id="displayNames"/>
         </mx:FormItem>
         <mx:FormItem  width="100%" label="@Resource(bundle='AttributeCreateEditDialog',key='type')">
             <mx:ComboBox change="etypeChangeEvt(event)"
@@ -89,6 +92,9 @@
 
 
         private function init():void {
+
+            displayNames.setSourceObject(_attrbuteDTO, 'displayNames');
+
             if (newAttributeFlag) {
                 this.title = resourceManager.getString('AttributeCreateEditDialog', 'newAttribute');
                 saveBtn.label = resourceManager.getString('AttributeCreateEditDialog', 'create');

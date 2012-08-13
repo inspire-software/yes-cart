@@ -18,6 +18,8 @@ package org.yes.cart.domain.dto;
 
 import org.yes.cart.domain.entity.Identifiable;
 
+import java.util.Map;
+
 /**
  * Attribute value DTO.
  * User: Igor Azarny iazarny@yahoo.com
@@ -53,6 +55,20 @@ public interface AttrValueDTO extends Identifiable {
      * @param val value
      */
     void setVal(String val);
+
+    /**
+     * Get the localised attribute values.
+     *
+     * @return localised attribute values.
+     */
+    Map<String, String> getDisplayVals();
+
+    /**
+     * Set localised attribute values.
+     *
+     * @param val value
+     */
+    void setDisplayVals(Map<String, String> val);
 
     /**
      * Get the attribute.
