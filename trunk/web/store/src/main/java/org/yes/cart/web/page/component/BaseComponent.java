@@ -17,8 +17,11 @@
 package org.yes.cart.web.page.component;
 
 
+import org.apache.wicket.ThreadContext;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.yes.cart.web.i18n.I18NWebSupport;
+import org.yes.cart.web.i18n.impl.I18NWebSupportImpl;
 
 
 public class BaseComponent extends Panel {
@@ -54,5 +57,13 @@ public class BaseComponent extends Panel {
         super(id, model);
     }
 
+    private static final I18NWebSupport SUPPORT = new I18NWebSupportImpl();
+
+    /**
+     * @return I18n support object
+     */
+    public I18NWebSupport getI18NSupport() {
+        return SUPPORT;
+    }
 
 }

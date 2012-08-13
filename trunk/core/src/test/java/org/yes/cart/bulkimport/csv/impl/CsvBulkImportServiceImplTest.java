@@ -336,6 +336,10 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
 
 
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TPRODUCT  ");
+            rs.next();
+            long cntBeforeProd = rs.getLong(1);
+            rs.close();
 
             dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/productnames.xml");
@@ -346,7 +350,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.next();
             long cntProd = rs.getLong(1);
             rs.close();
-            assertEquals(104L, cntProd);   // 60 new + 44 initialdata.xml
+            assertEquals(60L + cntBeforeProd, cntProd);   // 60 new + 44 initialdata.xml
 
             rs = getConnection().getConnection().createStatement().executeQuery (
                     "select PRODUCT_ID, NAME, DESCRIPTION from TPRODUCT where GUID = '11042544'");
@@ -360,6 +364,10 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             assertEquals("Xerox Workcentre 6015, 2 Year Extended On-Site Service. Package weight: 160 g", prodDesc);
 
 
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TSKU  ");
+            rs.next();
+            long cntBeforeProdSku = rs.getLong(1);
+            rs.close();
 
             dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/productsku.xml");
@@ -370,7 +378,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.next();
             long cntProdSku = rs.getLong(1);
             rs.close();
-            assertEquals(95L, cntProdSku);   // 60 new + 35 initialdata.xml
+            assertEquals(60L + cntBeforeProdSku, cntProdSku);   // 60 new + 35 initialdata.xml
 
             rs = getConnection().getConnection().createStatement().executeQuery (
                     "select CODE, PRODUCT_ID, NAME, DESCRIPTION, BARCODE from TSKU where GUID = '6015ES3'");
@@ -390,6 +398,10 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
 
 
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TPRODUCTATTRVALUE  ");
+            rs.next();
+            long cntBeforeProdValues = rs.getLong(1);
+            rs.close();
 
             dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/productsattributes.xml");
@@ -400,7 +412,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.next();
             long cntProdValues = rs.getLong(1);
             rs.close();
-            assertEquals(6059L, cntProdValues);   // 6045 new + 14 initialdata.xml
+            assertEquals(6046L + cntBeforeProdValues, cntProdValues);   // 6046 new + 14 initialdata.xml
 
 
             rs = getConnection().getConnection().createStatement().executeQuery (
@@ -426,6 +438,11 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
             assertEquals(4L, cntWarehouse);   // 1 new + 3 initialdata.xml
 
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TSKUWAREHOUSE  ");
+            rs.next();
+            long cntBeforeInventory = rs.getLong(1);
+            rs.close();
+
             dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/skuinventory.xml");
             bulkImportService.doImport(listener, importedFilesSet, null, "");
@@ -435,7 +452,13 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.next();
             long cntInventory = rs.getLong(1);
             rs.close();
-            assertEquals(88L, cntInventory);   // 60 new + 28 initialdata.xml
+            assertEquals(60L + cntBeforeInventory, cntInventory);   // 60 new + 28 initialdata.xml
+
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TSKUPRICE  ");
+            rs.next();
+            long cntBeforePrices = rs.getLong(1);
+            rs.close();
 
             dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/skuprices.xml");
@@ -446,7 +469,13 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.next();
             long cntPrices = rs.getLong(1);
             rs.close();
-            assertEquals(233L, cntPrices);   // 180 new + 53 initialdata.xml
+            assertEquals(180L + cntBeforePrices, cntPrices);   // 180 new + 53 initialdata.xml
+
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TPRODUCTCATEGORY  ");
+            rs.next();
+            long cntBeforeProductCategory = rs.getLong(1);
+            rs.close();
 
             dt = System.currentTimeMillis();
             bulkImportService = getBulkImportService("src/test/resources/import/productcategorynames.xml");
@@ -457,7 +486,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.next();
             long cntProductCategory = rs.getLong(1);
             rs.close();
-            assertEquals(87L, cntProductCategory);   // 60 new + 27 initialdata.xml
+            assertEquals(60L + cntBeforeProductCategory, cntProductCategory);   // 60 new + 27 initialdata.xml
 
             mockery.assertIsSatisfied();
 

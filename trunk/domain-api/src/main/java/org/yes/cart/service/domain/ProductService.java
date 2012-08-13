@@ -144,35 +144,39 @@ public interface ProductService extends GenericService<Product> {
      * Get the ranked by ProductTypeAttr.rank list of unique product attribute values by given product type
      * and attribute code.
      *
+     * @param locale locale
      * @param productTypeId product type id
      * @return list of distinct attib values
      */
-    List<FilteredNavigationRecord> getDistinctAttributeValues(long productTypeId);
+    List<FilteredNavigationRecord> getDistinctAttributeValues(String locale, long productTypeId);
 
     /**
      * Collect the single attribute value navigation see ProductTypeAttr#navigationType
      *
+     * @param locale locale
      * @param productTypeId product type id
      * @return list of {@link org.yes.cart.domain.queryobject.FilteredNavigationRecord}
      */
-    List<FilteredNavigationRecord> getSingleValueNavigationRecords(long productTypeId);
+    List<FilteredNavigationRecord> getSingleValueNavigationRecords(String locale, long productTypeId);
 
 
     /**
      * Get the navigation records for range values.
      *
+     * @param locale locale
      * @param productTypeId product type id
      * @return list of {@link org.yes.cart.domain.queryobject.FilteredNavigationRecord}
      */
-    List<FilteredNavigationRecord> getRangeValueNavigationRecords(long productTypeId);
+    List<FilteredNavigationRecord> getRangeValueNavigationRecords(String locale, long productTypeId);
 
     /**
      * Get all distinct brands in given categories list
      *
+     * @param locale locale
      * @param categories categories id list
      * @return list of distinct brands
      */
-    List<FilteredNavigationRecord> getDistinctBrands(List categories);
+    List<FilteredNavigationRecord> getDistinctBrands(String locale, List categories);
 
 
     /**

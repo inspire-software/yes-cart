@@ -17,12 +17,15 @@
 package org.yes.cart.web.page.component.product;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.ThreadContext;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.ProductService;
@@ -68,25 +71,31 @@ public class SkuAttributesView extends BaseComponent {
     public SkuAttributesView(final String id, final ProductSku sku, final boolean productOnly) {
         super(id);
 
+        final String selectedLocale = ThreadContext.getSession().getLocale().getLanguage();
+
         final long productTypeId = sku.getProduct().getProducttype().getId();
 
+        // TODO: add localisable names to groups
         List<Pair<String, List<AttrValue>>> productAttributes = productService.getProductAttributes(
                 productService.getProductById(sku.getProduct().getProductId(), true) , productTypeId);
         if (productOnly) {
-            attributesToShow = getAdaptedAttributes(productAttributes);
+            attributesToShow = getAdaptedAttributes(selectedLocale, productAttributes);
         } else {
             List<Pair<String, List<AttrValue>>> skuAttributes = productService.getProductAttributes(sku, productTypeId);
-            attributesToShow = getAdaptedAttributes(attributeService.merge(productAttributes, skuAttributes));
+            attributesToShow = getAdaptedAttributes(selectedLocale, attributeService.merge(productAttributes, skuAttributes));
         }
 
     }
 
     /**
      * Get the list of pair attr group - attr values
+     *
+     * @param locale locale
      * @param attributesToAdapt list of attribute sections with values to adapt.
      * @return list of pair attr group - attr values
      */
     private List<Pair<String, List<Pair<String, String>>>> getAdaptedAttributes(
+            final String locale,
             final List<Pair<String, List<AttrValue>>> attributesToAdapt) {
 
         final List<Pair<String, List<Pair<String, String>>>> adaptedAttributesToShow =
@@ -96,7 +105,7 @@ public class SkuAttributesView extends BaseComponent {
             adaptedAttributesToShow.add(
                     new Pair<String, List<Pair<String, String>>>(
                             stringListPair.getFirst(),
-                            adaptAttrValueList(stringListPair.getSecond()))
+                            adaptAttrValueList(locale, stringListPair.getSecond()))
             );
         }
 
@@ -106,19 +115,24 @@ public class SkuAttributesView extends BaseComponent {
     /**
      * Get list of pairs attr name - attr value.
      *
+     * @param locale locale
      * @param attrValues list of {@link AttrValue}
      * @return list of pairs attr name - attr value.
      */
-    private List<Pair<String, String>> adaptAttrValueList(List<AttrValue> attrValues) {
+    private List<Pair<String, String>> adaptAttrValueList(
+            final String locale,
+            final List<AttrValue> attrValues) {
 
         Map<String, String> map = new TreeMap<String, String>();
         for (AttrValue attrValue : attrValues) {
-            final String key = attrValue.getAttribute().getName();
+            final I18NModel attrNameModel = getI18NSupport().getFailoverModel(attrValue.getAttribute().getDisplayName(), attrValue.getAttribute().getName());
+            final String key = attrNameModel.getValue(locale);
             String existingValue = map.get(key);
+            final I18NModel attrValueModel = getI18NSupport().getFailoverModel(attrValue.getDisplayVal(), attrValue.getVal());
             if (existingValue == null) {
-                map.put(key, attrValue.getVal() + ',');
+                map.put(key, attrValueModel.getValue(locale) + ',');
             } else {
-                map.put(key, existingValue + ' ' + attrValue.getVal() + ',');
+                map.put(key, existingValue + ' ' + attrValueModel.getValue(locale) + ',');
             }
         }
 

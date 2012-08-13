@@ -28,6 +28,7 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.misc.navigation.range.RangeList;
 import org.yes.cart.domain.misc.navigation.range.RangeNode;
@@ -368,7 +369,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    public List<FilteredNavigationRecord> getDistinctBrands(final List categories) {
+    public List<FilteredNavigationRecord> getDistinctBrands(final String locale, final List categories) {
         List<Object[]> list = productDao.findQueryObjectsByNamedQueryWithList(
                 "PRODUCTS.ATTR.CODE.VALUES.BY.ASSIGNED.CATEGORIES",
                 categories);
@@ -380,14 +381,15 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * Get the ranked by ProductTypeAttr.rank list of unique product attribute values by given product type
      * and attribute code.
      *
+     * @param locale locale
      * @param productTypeId product type id
      * @return list of distinct attib values
      */
     @Cacheable(value = PROD_SERV_METHOD_CACHE)
-    public List<FilteredNavigationRecord> getDistinctAttributeValues(final long productTypeId) {
+    public List<FilteredNavigationRecord> getDistinctAttributeValues(final String locale, final long productTypeId) {
         final List<FilteredNavigationRecord> records = new ArrayList<FilteredNavigationRecord>();
-        records.addAll(getSingleValueNavigationRecords(productTypeId));
-        records.addAll(getRangeValueNavigationRecords(productTypeId));
+        records.addAll(getSingleValueNavigationRecords(locale, productTypeId));
+        records.addAll(getRangeValueNavigationRecords(locale, productTypeId));
         Collections.sort(
                 records,
                 new Comparator<FilteredNavigationRecord>() {
@@ -408,25 +410,27 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * Collect the single attribute value navigation see ProductTypeAttr#navigationType
      *
+     * @param locale locale
      * @param productTypeId product type id
      * @return list of {@link org.yes.cart.domain.queryobject.FilteredNavigationRecord}
      */
-    public List<FilteredNavigationRecord> getSingleValueNavigationRecords(final long productTypeId) {
+    public List<FilteredNavigationRecord> getSingleValueNavigationRecords(final String locale, final long productTypeId) {
         List<Object[]> list = productDao.findQueryObjectsByNamedQuery(
                 "PRODUCTS.ATTR.CODE.VALUES.BY.PRODUCTTYPEID",
                 productTypeId,
                 true);
-        return constructFilteredNavigationRecords(list);
+        return constructFilteredNavigationRecords(locale, list);
     }
 
 
     /**
      * Get the navigation records for range values.
      *
+     * @param locale locale
      * @param productTypeId product type id
      * @return list of {@link org.yes.cart.domain.queryobject.FilteredNavigationRecord}
      */
-    public List<FilteredNavigationRecord> getRangeValueNavigationRecords(final long productTypeId) {
+    public List<FilteredNavigationRecord> getRangeValueNavigationRecords(final String locale, final long productTypeId) {
 
         final List<ProductTypeAttr> rangeNavigationInType = productTypeAttrDao.findByNamedQuery(
                 "PRODUCTS.RANGE.ATTR.CODE.VALUES.BY.PRODUCTTYPEID",
@@ -463,7 +467,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * @param list of raw object arrays after, result of named query
      * @return constructed list of navigation records.
      */
-    private List<FilteredNavigationRecord> constructFilteredNavigationRecords(final List<Object[]> list) {
+    private List<FilteredNavigationRecord> constructFilteredNavigationRecords(final String locale, final List<Object[]> list) {
         List<FilteredNavigationRecord> result = new ArrayList<FilteredNavigationRecord>(list.size());
         for (Object[] objArray : list) {
             result.add(
@@ -471,7 +475,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                             (String) objArray[0],
                             (String) objArray[1],
                             (String) objArray[2],
-                            (String) objArray[3],
+                            new FailoverStringI18NModel((String) objArray[3], (String) objArray[2]).getValue(locale),
                             (Integer) objArray[4],
                             (Integer) objArray[5],
                             "S"

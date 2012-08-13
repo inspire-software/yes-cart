@@ -77,7 +77,7 @@ public class DtoProductSkuServiceImpl
      * @param productSkuGenericService     generic product service
      * @param dtoAttributeService          attr service to determinate allowed duplicates for attribute values.
      * @param attrValueEntityProductSkuDao sku attributes dao
-     * @param AdaptersRepository           value converter
+     * @param adaptersRepository           value converter
      * @param imageService                 {@link ImageService} to manipulate  related images.
      */
     public DtoProductSkuServiceImpl(
@@ -85,12 +85,12 @@ public class DtoProductSkuServiceImpl
             final ProductSkuService productSkuGenericService,
             final DtoAttributeService dtoAttributeService,
             final GenericDAO<AttrValueEntityProductSku, Long> attrValueEntityProductSkuDao,
-            final AdaptersRepository AdaptersRepository,
+            final AdaptersRepository adaptersRepository,
             final PriceService priceService,
             final GenericService<Seo> seoGenericService,
             final ImageService imageService,
             final ProductService productService) {
-        super(dtoFactory, productSkuGenericService, AdaptersRepository);
+        super(dtoFactory, productSkuGenericService, adaptersRepository);
 
         this.imageService = imageService;
 
@@ -264,7 +264,7 @@ public class DtoProductSkuServiceImpl
      */
     public AttrValueDTO updateEntityAttributeValue(final AttrValueDTO attrValueDTO) {
         final AttrValueEntityProductSku attrValue = attrValueEntityProductSkuDao.findById(attrValueDTO.getAttrvalueId());
-        attrValueAssembler.assembleEntity(attrValueDTO, attrValue, null, dtoFactory);
+        attrValueAssembler.assembleEntity(attrValueDTO, attrValue, getAdaptersRepository(), dtoFactory);
         attrValueEntityProductSkuDao.update(attrValue);
         return attrValueDTO;
 
@@ -275,7 +275,7 @@ public class DtoProductSkuServiceImpl
      */
     public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
         AttrValueProductSku valueEntity = getEntityFactory().getByIface(AttrValueProductSku.class);
-        attrValueAssembler.assembleEntity(attrValueDTO, valueEntity, null, dtoFactory);
+        attrValueAssembler.assembleEntity(attrValueDTO, valueEntity, getAdaptersRepository(), dtoFactory);
         Attribute atr = attributeService.getById(attrValueDTO.getAttributeDTO().getAttributeId());
         valueEntity.setAttribute(atr);
         valueEntity.setProductSku(service.getById(((AttrValueProductSkuDTO) attrValueDTO).getSkuId()));
