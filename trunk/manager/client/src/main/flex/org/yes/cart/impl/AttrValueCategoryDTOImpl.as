@@ -24,7 +24,7 @@ public class AttrValueCategoryDTOImpl {
 
 
     public var val:String ;
-
+    public var displayVals:Object;
 
     public var attributeDTO:AttributeDTOImpl ;
 

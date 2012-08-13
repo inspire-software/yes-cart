@@ -271,10 +271,11 @@
                                         popUp.windowTitle = data.attributeDTO.name;
                                         popUp.code = outerDocument.entityCode;
                                         popUp.value = data.val;
+                                        popUp.displayValues = data.displayVals;
                                         var btnSave:Button = popUp.getButtonSave();
                                         if (popUp is ImageDialog) {
 
-                                            (popUp as ImageDialog).dataReadyCallbackFunction =  onSaveBtnclick;
+                                            (popUp as ImageDialog).dataReadyCallbackFunction = onSaveBtnclick;
 
                                         } else {
                                             btnSave.addEventListener(MouseEvent.CLICK, onSaveBtnclick);
@@ -287,6 +288,7 @@
                                     private function onSaveBtnclick(event:MouseEvent):void {
                                         if (popUp != null) {
                                             data.val = popUp.value;
+                                            data.displayVals = popUp.displayValues;
                                             var dg:DataGrid = DataGrid(this.owner);
                                             dg.dataProvider.itemUpdated(data);
 

@@ -23,6 +23,7 @@ public class AttrValueProductSkuDTOImpl {
     public var attrvalueId:Number;
 
     public var val: String ;
+    public var displayVals:Object;
 
     public var attributeDTO:AttributeDTOImpl;
 

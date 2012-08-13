@@ -242,11 +242,11 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             System.out.println("category in " + (System.currentTimeMillis() - dt) + "millis");
 
             rs = getConnection().getConnection().createStatement().executeQuery (
-                    "select count(*) as cnt from TCATEGORY c where c.CATEGORY_ID <> '100' ");
+                    "select count(*) as cnt from TCATEGORY c where c.GUID in ('151','1296','942','803','788','195','194','197','943','196','191','192') ");
             rs.next();
             long cntCats = rs.getLong("cnt");
             rs.close();
-            assertEquals(77L, cntCats);  // 12 categories + 65 from initial data (apart from root (ID:100))
+            assertEquals(12L, cntCats);  // 12 categories
 
             rs = getConnection().getConnection().createStatement().executeQuery (
                     "select PARENT_ID, PRODUCTTYPE_ID, DESCRIPTION, GUID from TCATEGORY where NAME = 'mice'");

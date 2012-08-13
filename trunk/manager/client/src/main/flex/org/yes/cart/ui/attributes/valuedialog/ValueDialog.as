@@ -23,6 +23,10 @@ public interface ValueDialog {
 
     function set value(value:String):void;
 
+    function get displayValues():Object;
+
+    function set displayValues(value:Object):void;
+
     function get windowTitle():String;
 
     function set windowTitle(value:String):void;

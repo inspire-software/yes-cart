@@ -19,31 +19,28 @@
                 showCloseButton="true"
                 close="PopUpManager.removePopUp(this)"
                 implements="org.yes.cart.ui.attributes.valuedialog.ValueDialog"
+                layout="vertical"
                 creationComplete="init();">
 
-
-    <mx:VBox>
-        <mx:Label id="infoLabel"
-                  visible="{this.infoLabel.text != null &amp;&amp; this.infoLabel.text.length >0}"
-                  includeInLayout="{this.infoLabel.text != null &amp;&amp; this.infoLabel.text.length >0}"
+    <mx:Label id="infoLabel"
+              visible="{this.infoLabel.text != null &amp;&amp; this.infoLabel.text.length >0}"
+              includeInLayout="{this.infoLabel.text != null &amp;&amp; this.infoLabel.text.length >0}"
+            />
+    <mx:Form width="100%">
+        <mx:FormItem label="@Resource(bundle='AttributesManagementPanel',key='value')">
+            <mx:TextArea width="400" height="120" id="valueTextInput"/>
+        </mx:FormItem>
+    </mx:Form>
+    <mx:ControlBar width="100%" horizontalAlign="right">
+        <mx:Button id="btnSave"
+                   width="94"
+                   label="@Resource(bundle='AttributesManagementPanel',key='save')"/>
+        <mx:Button id="btnCancel"
+                   width="94"
+                   label="@Resource(bundle='AttributesManagementPanel',key='cancel')"
+                   click="PopUpManager.removePopUp(this)"
                 />
-        <mx:Form width="100%">
-            <mx:FormItem label="@Resource(bundle='AttributesManagementPanel',key='value')">
-                <mx:TextArea width="400" height="120" id="valueTextInput"/>
-            </mx:FormItem>
-        </mx:Form>
-        <mx:ControlBar width="100%" horizontalAlign="right">
-            <mx:Button id="btnSave"
-                       width="94"
-                       label="@Resource(bundle='AttributesManagementPanel',key='save')"/>
-            <mx:Button id="btnCancel"
-                       width="94"
-                       label="@Resource(bundle='AttributesManagementPanel',key='cancel')"
-                       click="PopUpManager.removePopUp(this)"
-                    />
-        </mx:ControlBar>
-
-    </mx:VBox>
+    </mx:ControlBar>
 
 
     <mx:Script><![CDATA[
@@ -98,6 +95,14 @@
         }
 
 
+        public function get displayValues():Object {
+            return { };
+        }
+
+        public function set displayValues(value:Object):void {
+
+        }
+
         public function get code():String {
             return _code;
         }
@@ -117,7 +122,6 @@
         public function setInformation(value:String):void {
             infoLabel.text = value;
         }
-
         ]]>
     </mx:Script>
 </mx:TitleWindow>
