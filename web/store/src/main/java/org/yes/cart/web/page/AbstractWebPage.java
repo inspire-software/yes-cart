@@ -25,6 +25,8 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.shoppingcart.impl.ChangeLocaleCartCommandImpl;
 import org.yes.cart.web.application.ApplicationDirector;
+import org.yes.cart.web.i18n.I18NWebSupport;
+import org.yes.cart.web.i18n.impl.I18NWebSupportImpl;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.LanguageService;
 import org.yes.cart.web.support.util.cookie.ShoppingCartPersister;
@@ -126,6 +128,17 @@ public class AbstractWebPage extends WebPage {
     public ShoppingCartPersister getShoppingCartPersister() {
         return shoppingCartPersister;
     }
+
+
+    private static final I18NWebSupport SUPPORT = new I18NWebSupportImpl();
+
+    /**
+     * @return I18n support object
+     */
+    public I18NWebSupport getI18NSupport() {
+        return SUPPORT;
+    }
+
 
 
 }

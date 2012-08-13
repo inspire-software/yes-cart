@@ -17,6 +17,7 @@
 package org.yes.cart.web.page.component.filterednavigation;
 
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.wicket.ThreadContext;
 import org.yes.cart.domain.entity.ProductType;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
@@ -55,6 +56,8 @@ public class AttributeProductFilter extends AbstractProductFilter {
 
         if (categoryId > 0) {
 
+            final String selectedLocale = ThreadContext.getSession().getLocale().getLanguage();
+
             filteredNavigationByAttribute = getCategory().getNavigationByAttributes() == null ? false : getCategory().getNavigationByAttributes();
 
             final ProductType productType = getCategory().getProductType();
@@ -63,7 +66,7 @@ public class AttributeProductFilter extends AbstractProductFilter {
 
                 setNavigationRecords(
                         getFilteredNavigationRecords(
-                                getProductService().getDistinctAttributeValues(productType.getProducttypeId())
+                                getProductService().getDistinctAttributeValues(selectedLocale, productType.getProducttypeId())
                         )
                 );
 

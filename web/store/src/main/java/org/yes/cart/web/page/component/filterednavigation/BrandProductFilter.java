@@ -17,6 +17,7 @@
 package org.yes.cart.web.page.component.filterednavigation;
 
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.wicket.ThreadContext;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.query.impl.BrandSearchQueryBuilder;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
@@ -49,13 +50,15 @@ public class BrandProductFilter extends AbstractProductFilter {
 
         if (categoryId > 0) {
 
+            final String selectedLocale = ThreadContext.getSession().getLocale().getLanguage();
+
             filteredNavigationByBrand = getCategory().getNavigationByBrand() == null ? false : getCategory().getNavigationByBrand();
 
             if (filteredNavigationByBrand) {
 
                 setNavigationRecords(
                         getFilteredNavigationRecords(
-                                getProductService().getDistinctBrands(getCategories())
+                                getProductService().getDistinctBrands(selectedLocale, getCategories())
                         )
                 );
 
