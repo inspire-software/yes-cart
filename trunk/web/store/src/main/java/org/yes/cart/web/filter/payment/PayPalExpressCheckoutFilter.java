@@ -28,8 +28,6 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.filter.AbstractFilter;
-import org.yes.cart.web.filter.ShopResolverFilter;
-import org.yes.cart.web.support.util.HttpUtil;
 
 import javax.servlet.Filter;
 import javax.servlet.ServletException;

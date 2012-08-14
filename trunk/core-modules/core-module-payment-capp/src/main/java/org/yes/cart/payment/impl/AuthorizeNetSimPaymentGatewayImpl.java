@@ -1,25 +1,21 @@
 package org.yes.cart.payment.impl;
 
-import org.yes.cart.payment.PaymentGatewayExternalForm;
-import org.yes.cart.payment.dto.PaymentGatewayFeature;
-import org.yes.cart.payment.dto.Payment;
-import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
-import org.yes.cart.payment.dto.impl.PaymentImpl;
-import org.yes.cart.payment.PaymentGateway;
-
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.Random;
-import java.util.Date;
-import java.util.Map;
-
 import net.authorize.sim.Fingerprint;
 import org.apache.commons.lang.StringUtils;
+import org.yes.cart.payment.PaymentGatewayExternalForm;
+import org.yes.cart.payment.dto.Payment;
+import org.yes.cart.payment.dto.PaymentGatewayFeature;
+import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
+import org.yes.cart.payment.dto.impl.PaymentImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com

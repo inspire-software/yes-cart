@@ -16,16 +16,12 @@
 
 package org.yes.cart.web.support.util;
 
-import org.yes.cart.constants.AttributeNamesKeys;
-
-import javax.mail.Message;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Enumeration;
-import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com

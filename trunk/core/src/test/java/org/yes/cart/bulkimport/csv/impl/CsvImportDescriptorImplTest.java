@@ -16,7 +16,6 @@
 
 package org.yes.cart.bulkimport.csv.impl;
 
-import com.thoughtworks.xstream.XStream;
 import org.junit.Test;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
@@ -29,8 +28,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com

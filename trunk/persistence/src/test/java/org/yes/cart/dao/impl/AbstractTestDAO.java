@@ -32,7 +32,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com

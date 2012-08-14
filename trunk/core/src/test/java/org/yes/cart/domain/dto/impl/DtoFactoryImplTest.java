@@ -27,7 +27,8 @@ import org.yes.cart.domain.dto.factory.impl.DtoFactoryImpl;
 import java.util.List;
 import java.util.Map;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * DtoFactoryImpl test.

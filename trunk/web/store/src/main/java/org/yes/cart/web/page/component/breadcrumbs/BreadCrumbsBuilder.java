@@ -18,17 +18,17 @@ package org.yes.cart.web.page.component.breadcrumbs;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.string.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.constants.WebParametersKeys;
-import org.yes.cart.web.support.util.HttpUtil;
 import org.yes.cart.web.util.WicketUtil;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Bread crumbs builder produce category and

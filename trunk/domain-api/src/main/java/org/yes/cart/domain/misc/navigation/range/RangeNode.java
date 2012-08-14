@@ -16,8 +16,6 @@
 
 package org.yes.cart.domain.misc.navigation.range;
 
-import org.yes.cart.domain.misc.Pair;
-
 /**
  * Hi and lo values for filtered navigation.
  * <p/>

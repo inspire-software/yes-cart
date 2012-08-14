@@ -9,7 +9,6 @@ import org.yes.cart.payment.dto.PaymentLine;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
 import org.yes.cart.payment.dto.impl.PaymentLineImpl;
 
-import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;

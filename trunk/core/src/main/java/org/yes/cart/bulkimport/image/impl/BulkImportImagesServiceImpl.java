@@ -21,11 +21,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.yes.cart.bulkimport.service.BulkImportImagesService;
-import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.bulkimport.service.impl.AbstractImportService;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.ImageService;
 
 import java.io.File;

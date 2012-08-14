@@ -24,10 +24,10 @@ import org.yes.cart.service.domain.ShopCategoryService;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.util.WicketUtil;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.ArrayList;
 
 /**
  *

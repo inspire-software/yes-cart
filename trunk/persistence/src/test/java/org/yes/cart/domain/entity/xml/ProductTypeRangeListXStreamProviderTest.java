@@ -18,11 +18,9 @@ package org.yes.cart.domain.entity.xml;
 
 import org.junit.Test;
 import org.yes.cart.domain.misc.navigation.range.RangeList;
-import org.yes.cart.domain.misc.navigation.range.RangeNode;
 import org.yes.cart.stream.xml.XStreamProvider;
 
 import java.io.File;
-import java.io.FileReader;
 import java.util.Scanner;
 
 import static org.junit.Assert.assertEquals;

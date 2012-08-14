@@ -23,8 +23,6 @@ import org.yes.cart.domain.entity.Attributable;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.AttributableImageService;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 7/4/11

@@ -24,7 +24,7 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>yes-manager-client</artifactId>
-    <name>Yes cart manager client</name>
+    <name>YUM Yes cart update manager client</name>
     <packaging>swf</packaging>
     <dependencies>
         <dependency>

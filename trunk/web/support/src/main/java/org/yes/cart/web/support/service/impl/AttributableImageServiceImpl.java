@@ -17,7 +17,6 @@
 package org.yes.cart.web.support.service.impl;
 
 import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.entity.Attributable;
 import org.yes.cart.web.support.service.AttributableImageService;
 
 /**

@@ -17,7 +17,6 @@
 package org.yes.cart.web.page.component;
 
 
-import org.apache.wicket.ThreadContext;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.yes.cart.web.i18n.I18NWebSupport;

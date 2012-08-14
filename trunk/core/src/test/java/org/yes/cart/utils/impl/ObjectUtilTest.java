@@ -19,8 +19,6 @@ package org.yes.cart.utils.impl;
 import org.junit.Test;
 import org.yes.cart.domain.misc.Pair;
 
-import java.util.Date;
-
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 

@@ -31,8 +31,8 @@ import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.component.BaseComponent;
-import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.CurrencySymbolService;
 
 import java.math.BigDecimal;

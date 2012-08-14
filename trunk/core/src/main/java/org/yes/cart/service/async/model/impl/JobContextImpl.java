@@ -20,7 +20,6 @@ import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobContext;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 /**

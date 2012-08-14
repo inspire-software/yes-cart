@@ -30,7 +30,6 @@ import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.CheckoutPage;
 import org.yes.cart.web.page.CustomerSelfCarePage;
-import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 
 /**

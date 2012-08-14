@@ -16,11 +16,9 @@
 
 package org.yes.cart.domain.misc.navigation.price.impl;
 
-import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.misc.navigation.price.PriceTierNode;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com

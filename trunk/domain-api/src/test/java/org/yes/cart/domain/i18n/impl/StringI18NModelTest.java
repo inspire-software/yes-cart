@@ -59,4 +59,15 @@ public class StringI18NModelTest {
         assertNull(model.getValue("UK"));
         assertNull(model.getValue("CA"));
     }
+
+    @Test
+    public void testStringNoFinalMarker() throws Exception {
+        final I18NModel model = new StringI18NModel("EN#~#Some text#~#RU#~#Текст");
+        assertNotNull(model.getAllValues());
+        assertEquals(2, model.getAllValues().size());
+        assertEquals("Some text", model.getValue("EN"));
+        assertEquals("Текст", model.getValue("RU"));
+        assertNull(model.getValue("UK"));
+        assertNull(model.getValue("CA"));
+    }
 }

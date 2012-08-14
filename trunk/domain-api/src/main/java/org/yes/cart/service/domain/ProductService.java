@@ -25,6 +25,7 @@ import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -67,22 +68,48 @@ public interface ProductService extends GenericService<Product> {
     ProductSku getSkuById(Long skuId);
 
     /**
+     * Get product sku by his id
+     *
+     * @param skuId given sku id
+     * @param withAttributes with attributes
+     * @return product sku
+     */
+    ProductSku getSkuById(Long skuId, boolean withAttributes);
+
+    /**
      * Get the grouped product attributes, with values. The result can be represented in following form:
      * Shippment details:
      * weight: 17 Kg
-     * lenght: 15 Cm
+     * length: 15 Cm
      * height: 20 Cm
      * width: 35 Cm
      * Power:
      * Charger: 200/110
      * Battery type: Litium
      *
+     * So the hierarchy returned for the above example will be:
+     * Map
+     *    Entry[1001, Shippment details] =>
+     *      Map
+     *          Entry [10010, weight] =>
+     *              List
+     *                  [100001, 17 Kg]
+     *          Entry [10011, length] =>
+     *              List
+     *                  [100002, 15 cm]
+     *  ... etc
+     *
+     *  If this is SKU then it should inherit the attributes of the product,
+     *  If this is just product then we only display product attributes
+     *
      * @param locale locale
-     * @param attributable  product  or sku
+     * @param productId  product ID
+     * @param skuId sku ID
      * @param productTypeId product type id
-     * @return List of pair group names - list of attribute name and value.
+     * @return hierarchy of attributes for this product or sku.
      */
-    List<Pair<String, List<AttrValue>>> getProductAttributes(final String locale, Attributable attributable, long productTypeId);
+    Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> getProductAttributes(
+            String locale, long productId, long skuId, long productTypeId);
 
     /**
      * Get product by his primary key value
@@ -96,7 +123,7 @@ public interface ProductService extends GenericService<Product> {
      * Get product by his primary key value
      *
      * @param productId product id
-     * @param withAttribute flag if need to load product with attrubute
+     * @param withAttribute flag if need to load product with attributes
      * @return product if found, otherwise null
      */
     Product getProductById(Long productId, boolean withAttribute);

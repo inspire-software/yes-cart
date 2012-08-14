@@ -16,9 +16,9 @@
 
 package org.yes.cart.domain.query.impl;
 
+import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.PriceNavigation;
-import org.yes.cart.constants.Constants;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;

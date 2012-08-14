@@ -23,7 +23,6 @@ import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
-import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.misc.navigation.price.PriceTierNode;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
 import org.yes.cart.domain.query.PriceNavigation;

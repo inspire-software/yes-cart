@@ -17,7 +17,7 @@
 
 <html>
 <head>
-    <title>Yes-shop managment panel</title>
+    <title>YUM Yes cart update manager</title>
     <link rel="stylesheet" href="style/style.css" type="text/css"/>
 </head>
 <body>

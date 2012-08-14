@@ -17,7 +17,6 @@
 package org.yes.cart.web.application;
 
 import org.apache.wicket.markup.IMarkupCache;
-import org.apache.wicket.markup.MarkupCache;
 import org.apache.wicket.markup.MarkupFactory;
 
 /**

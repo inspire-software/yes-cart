@@ -21,7 +21,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
-import org.apache.wicket.util.string.*;
+import org.apache.wicket.util.string.StringValue;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 
 import javax.servlet.http.HttpServletRequest;

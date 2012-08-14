@@ -22,9 +22,6 @@ import org.yes.cart.remote.service.RemoteBackdoorService;
 import org.yes.cart.web.service.ws.BackdoorService;
 import org.yes.cart.web.service.ws.client.BackdoorServiceClientFactory;
 
-import javax.jws.WebMethod;
-import javax.jws.WebParam;
-import javax.jws.WebResult;
 import java.util.List;
 
 /**

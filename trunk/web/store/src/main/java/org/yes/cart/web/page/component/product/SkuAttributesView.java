@@ -16,16 +16,12 @@
 
 package org.yes.cart.web.page.component.product;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.ThreadContext;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.ProductSku;
-import org.yes.cart.domain.i18n.I18NModel;
-import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.ProductService;
@@ -34,7 +30,6 @@ import org.yes.cart.web.page.component.BaseComponent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * View to show attributes of particular sku.
@@ -75,76 +70,39 @@ public class SkuAttributesView extends BaseComponent {
 
         final long productTypeId = sku.getProduct().getProducttype().getId();
 
-        List<Pair<String, List<AttrValue>>> productAttributes = productService.getProductAttributes(
-                selectedLocale, productService.getProductById(sku.getProduct().getProductId(), true), productTypeId);
         if (productOnly) {
-            attributesToShow = getAdaptedAttributes(selectedLocale, productAttributes);
+            attributesToShow = adapt(productService.getProductAttributes(selectedLocale, sku.getProduct().getId(), 0L, productTypeId));
         } else {
-            List<Pair<String, List<AttrValue>>> skuAttributes = productService.getProductAttributes(selectedLocale, sku, productTypeId);
-            attributesToShow = getAdaptedAttributes(selectedLocale, attributeService.merge(productAttributes, skuAttributes));
+            attributesToShow = adapt(productService.getProductAttributes(selectedLocale, sku.getProduct().getId(), sku.getId(), productTypeId));
         }
 
     }
 
-    /**
-     * Get the list of pair attr group - attr values
-     *
-     * @param locale locale
-     * @param attributesToAdapt list of attribute sections with values to adapt.
-     * @return list of pair attr group - attr values
-     */
-    private List<Pair<String, List<Pair<String, String>>>> getAdaptedAttributes(
-            final String locale,
-            final List<Pair<String, List<AttrValue>>> attributesToAdapt) {
+    private List<Pair<String, List<Pair<String, String>>>> adapt(
+            final Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> attributes) {
 
-        final List<Pair<String, List<Pair<String, String>>>> adaptedAttributesToShow =
-                new ArrayList<Pair<String, List<Pair<String, String>>>>();
+        final List<Pair<String, List<Pair<String, String>>>> displayGroups = new ArrayList<Pair<String, List<Pair<String, String>>>>(attributes.size());
+        for (final Pair<String, String> group : attributes.keySet()) {
 
-        for (Pair<String, List<AttrValue>> stringListPair : attributesToAdapt) {
-            adaptedAttributesToShow.add(
-                    new Pair<String, List<Pair<String, String>>>(
-                            stringListPair.getFirst(),
-                            adaptAttrValueList(locale, stringListPair.getSecond()))
-            );
-        }
+            final Map<Pair<String, String>, List<Pair<String, String>>> attrs = attributes.get(group);
+            final List<Pair<String, String>> displayAttrs = new ArrayList<Pair<String, String>>(attrs.size());
 
-        return adaptedAttributesToShow;
-    }
+            displayGroups.add(new Pair<String, List<Pair<String, String>>>(group.getSecond(), displayAttrs));
 
-    /**
-     * Get list of pairs attr name - attr value.
-     *
-     * @param locale locale
-     * @param attrValues list of {@link AttrValue}
-     * @return list of pairs attr name - attr value.
-     */
-    private List<Pair<String, String>> adaptAttrValueList(
-            final String locale,
-            final List<AttrValue> attrValues) {
+            for (final Pair<String, String> attr : attrs.keySet()) {
 
-        Map<String, String> map = new TreeMap<String, String>();
-        for (AttrValue attrValue : attrValues) {
-            final I18NModel attrNameModel = getI18NSupport().getFailoverModel(attrValue.getAttribute().getDisplayName(), attrValue.getAttribute().getName());
-            final String key = attrNameModel.getValue(locale);
-            String existingValue = map.get(key);
-            final I18NModel attrValueModel = getI18NSupport().getFailoverModel(attrValue.getDisplayVal(), attrValue.getVal());
-            if (existingValue == null) {
-                map.put(key, attrValueModel.getValue(locale) + ',');
-            } else {
-                map.put(key, existingValue + ' ' + attrValueModel.getValue(locale) + ',');
+                final List<Pair<String, String>> values = attrs.get(attr);
+
+                final StringBuilder csv = new StringBuilder();
+                for (int i = 0; i < values.size(); i++) {
+                    csv.append(values.get(i).getSecond()).append(", ");
+                }
+                csv.delete(csv.length() - 2, csv.length());
+
+                displayAttrs.add(new Pair<String, String>(attr.getSecond(), csv.toString()));
             }
         }
-
-        List<Pair<String, String>> pairList = new ArrayList<Pair<String, String>>(attrValues.size());
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            pairList.add(
-                    new Pair<String, String>(
-                            entry.getKey(),
-                            StringUtils.chop(entry.getValue())
-                    ));
-
-        }
-        return pairList;
+        return displayGroups;
     }
 
 

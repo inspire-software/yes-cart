@@ -16,12 +16,10 @@
 
 package org.yes.cart.web.support.util;
 
-import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 import javax.servlet.http.Cookie;
-
 import java.util.ArrayList;
 
 import static junit.framework.Assert.assertEquals;

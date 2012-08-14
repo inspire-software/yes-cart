@@ -23,7 +23,6 @@ package org.yes.cart.web.shoppingcart.impl;
  */
 
 import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
-import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.util.cookie.annotations.PersistentCookie;
 
 

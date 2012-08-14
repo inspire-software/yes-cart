@@ -25,7 +25,6 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.yes.cart.domain.entity.RegisteredPerson;
 import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.domain.entity.ShopUrl;
 import org.yes.cart.domain.message.RegistrationMessage;
 import org.yes.cart.domain.message.consumer.CustomerRegistrationMessageListener;
 import org.yes.cart.domain.message.impl.RegistrationMessageImpl;

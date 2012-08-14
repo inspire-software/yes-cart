@@ -18,17 +18,24 @@ package org.yes.cart.web.page.component;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.search.BooleanQuery;
-import org.apache.wicket.markup.html.panel.Fragment;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.*;
+import org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl;
+import org.yes.cart.web.application.ApplicationDirector;
+import org.yes.cart.web.page.HomePage;
+import org.yes.cart.web.page.component.price.PriceTierView;
+import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.page.component.product.ImageView;
 import org.yes.cart.web.page.component.product.ProductAssociationsView;
+import org.yes.cart.web.page.component.product.SkuAttributesView;
+import org.yes.cart.web.page.component.product.SkuListView;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.entity.decorator.Depictable;
@@ -36,17 +43,10 @@ import org.yes.cart.web.support.entity.decorator.impl.ProductDecoratorImpl;
 import org.yes.cart.web.support.entity.decorator.impl.ProductSkuDecoratorImpl;
 import org.yes.cart.web.support.service.AttributableImageService;
 import org.yes.cart.web.util.WicketUtil;
-import org.yes.cart.web.page.HomePage;
-import org.yes.cart.web.page.component.price.PriceView;
-import org.yes.cart.web.page.component.price.PriceTierView;
-import org.yes.cart.web.page.component.product.SkuListView;
-import org.yes.cart.web.page.component.product.SkuAttributesView;
-import org.yes.cart.web.application.ApplicationDirector;
-import org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Collections;
-import java.math.BigDecimal;
 import java.util.List;
 
 /**

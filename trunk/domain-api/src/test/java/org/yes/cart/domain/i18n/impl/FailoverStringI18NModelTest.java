@@ -20,8 +20,6 @@ import org.junit.Test;
 import org.yes.cart.domain.i18n.I18NModel;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 /**
  * User: denispavlov

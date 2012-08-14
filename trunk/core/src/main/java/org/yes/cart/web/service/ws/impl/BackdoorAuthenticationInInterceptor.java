@@ -18,7 +18,6 @@ package org.yes.cart.web.service.ws.impl;
 
 
 import org.apache.cxf.binding.soap.SoapMessage;
-import org.apache.cxf.binding.soap.saaj.SAAJInInterceptor;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor;
 import org.apache.ws.security.WSConstants;
@@ -35,7 +34,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.Assert;
 import org.yes.cart.util.ShopCodeContext;
 
-import javax.xml.soap.SOAPMessage;
 import java.util.List;
 import java.util.Map;
 

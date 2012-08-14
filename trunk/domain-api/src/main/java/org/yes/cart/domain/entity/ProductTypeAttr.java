@@ -17,7 +17,6 @@
 package org.yes.cart.domain.entity;
 
 import org.yes.cart.domain.misc.navigation.range.RangeList;
-import org.yes.cart.domain.misc.navigation.range.RangeNode;
 
 /**
  * Attributes of product type.

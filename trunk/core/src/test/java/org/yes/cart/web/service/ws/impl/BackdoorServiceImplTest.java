@@ -18,9 +18,6 @@ package org.yes.cart.web.service.ws.impl;
 
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
-import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.dao.constants.DaoServiceBeanKeys;
-import org.yes.cart.domain.entity.Product;
 import org.yes.cart.web.service.ws.BackdoorService;
 
 import java.math.BigInteger;

@@ -17,7 +17,6 @@
 package org.yes.cart.web.service.ws.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.util.Version;

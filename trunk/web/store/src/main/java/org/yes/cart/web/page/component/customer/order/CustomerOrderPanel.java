@@ -27,7 +27,6 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDet;
-import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.utils.impl.CustomerOrderComparator;

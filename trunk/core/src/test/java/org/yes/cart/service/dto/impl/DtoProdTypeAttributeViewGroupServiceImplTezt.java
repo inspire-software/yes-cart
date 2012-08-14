@@ -24,7 +24,6 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.ProdTypeAttributeViewGroupDTO;
 import org.yes.cart.domain.dto.impl.ProdTypeAttributeViewGroupDTOImpl;
 import org.yes.cart.service.dto.DtoProdTypeAttributeViewGroupService;
-import org.yes.cart.service.dto.DtoProductTypeAttrService;
 import org.yes.cart.service.dto.DtoProductTypeService;
 
 import java.util.List;

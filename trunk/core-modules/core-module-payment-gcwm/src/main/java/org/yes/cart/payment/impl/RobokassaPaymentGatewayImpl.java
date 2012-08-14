@@ -2,7 +2,6 @@ package org.yes.cart.payment.impl;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.SerializationUtils;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
@@ -11,7 +10,6 @@ import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
 import org.yes.cart.util.ShopCodeContext;
-import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

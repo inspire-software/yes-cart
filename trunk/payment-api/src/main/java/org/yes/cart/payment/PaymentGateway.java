@@ -23,7 +23,6 @@ import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 /**

@@ -1,8 +1,8 @@
 package org.yes.cart.payment.impl;
 
+import org.yes.cart.payment.PaymentModule;
 import org.yes.cart.payment.persistence.entity.Descriptor;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
-import org.yes.cart.payment.PaymentModule;
 
 import java.util.Collection;
 import java.util.Map;

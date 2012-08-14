@@ -57,6 +57,11 @@ public class StringI18NModel implements I18NModel {
                     if (value != null && value.length() > 0) {
                         values.put(key, value);
                     }
+                } else if (raw.length() - 1 != lastPosition) {
+                    final String value = raw.substring(lastPosition);
+                    if (value != null && value.length() > 0) {
+                        values.put(key, value);
+                    }
                 }
             }
         }

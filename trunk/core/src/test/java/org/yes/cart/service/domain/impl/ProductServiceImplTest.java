@@ -23,15 +23,14 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.service.domain.*;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -294,6 +293,55 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
     public void testGetDefaultImage() {
        assertEquals("sobot-picture.jpeg", productService.getDefaultImage(10000L));
        assertNull("sobot-picture.jpeg", productService.getDefaultImage(9999L));
+
+    }
+
+    @Test
+    public  void testNoneAttributesView() {
+
+        final Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> attrs =
+                productService.getProductAttributes("en", 0L, 0L, 1L);
+
+        assertNotNull(attrs);
+        assertEquals(0, attrs.size());
+
+    }
+
+    @Test
+    public  void testProductAttributesView() {
+
+        // bender product
+        final Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> attrs =
+                productService.getProductAttributes("en", 9998L, 0L, 1L);
+
+        assertNotNull(attrs);
+        assertFalse(attrs.isEmpty());
+        final Pair<String, String> dvdKey = new Pair<String, String>("3", "DVD Players view group");
+        assertTrue(attrs.containsKey(dvdKey));
+        final Pair<String, String> weightKey = new Pair<String, String>("WEIGHT", "Weight");
+        assertTrue(attrs.get(dvdKey).containsKey(weightKey));
+        final List<Pair<String, String>> values = attrs.get(dvdKey).get(weightKey);
+        assertEquals(1, values.size());
+        assertEquals("1.15", values.get(0).getSecond());
+
+    }
+
+    @Test
+    public  void testProductSkuAttributesView() {
+
+        // bender sku
+        final Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> attrs =
+                productService.getProductAttributes("en", 0L, 9998L, 1L);
+
+        assertNotNull(attrs);
+        assertFalse(attrs.isEmpty());
+        final Pair<String, String> dvdKey = new Pair<String, String>("3", "DVD Players view group");
+        assertTrue(attrs.containsKey(dvdKey));
+        final Pair<String, String> weightKey = new Pair<String, String>("WEIGHT", "Weight");
+        assertTrue(attrs.get(dvdKey).containsKey(weightKey));
+        final List<Pair<String, String>> values = attrs.get(dvdKey).get(weightKey);
+        assertEquals(1, values.size());
+        assertEquals("1.16", values.get(0).getSecond());
 
     }
 

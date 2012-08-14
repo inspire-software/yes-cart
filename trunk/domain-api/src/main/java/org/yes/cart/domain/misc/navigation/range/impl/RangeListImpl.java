@@ -19,8 +19,6 @@ package org.yes.cart.domain.misc.navigation.range.impl;
 import org.yes.cart.domain.misc.navigation.range.RangeList;
 import org.yes.cart.domain.misc.navigation.range.RangeNode;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

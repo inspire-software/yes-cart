@@ -22,18 +22,18 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
-import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.ProductService;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.io.File;
 
 import static junit.framework.Assert.*;
 

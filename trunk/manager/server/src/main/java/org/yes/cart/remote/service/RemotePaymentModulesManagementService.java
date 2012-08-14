@@ -17,9 +17,7 @@ package org.yes.cart.remote.service;
 
 import org.yes.cart.domain.dto.DtoPaymentGatewayInfo;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
-import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 
 import java.util.Collection;

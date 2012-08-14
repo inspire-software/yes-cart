@@ -16,7 +16,6 @@
 
 package org.yes.cart.service.async;
 
-import org.yes.cart.bulkimport.service.ImportService;
 import org.yes.cart.service.async.model.JobStatus;
 
 /**

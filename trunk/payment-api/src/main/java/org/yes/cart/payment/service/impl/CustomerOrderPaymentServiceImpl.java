@@ -20,7 +20,6 @@ package org.yes.cart.payment.service.impl;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.util.Assert;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.persistence.service.PaymentModuleGenericDAO;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;

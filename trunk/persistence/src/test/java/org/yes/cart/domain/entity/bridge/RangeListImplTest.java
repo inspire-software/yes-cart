@@ -16,8 +16,6 @@
 
 package org.yes.cart.domain.entity.bridge;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.junit.Test;
 import org.yes.cart.domain.entity.xml.ProductTypeRangeListXStreamProvider;
 import org.yes.cart.domain.misc.navigation.range.RangeList;

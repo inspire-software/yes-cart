@@ -24,8 +24,6 @@ import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.service.domain.CustomerOrderService;
-import org.yes.cart.service.order.OrderAssembler;
-import org.yes.cart.service.order.impl.DeliveryAssemblerImpl;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.service.order.impl.handler.PendingOrderEventHandlerImpl;
 import org.yes.cart.shoppingcart.ShoppingCart;
@@ -41,7 +39,6 @@ import java.util.UUID;
 
 import static java.util.Collections.singletonMap;
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com

@@ -19,13 +19,11 @@ package org.yes.cart.web.filter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.shoppingcart.impl.WebShoppingCartImpl;
-import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.util.cookie.CookieTuplizer;
 import org.yes.cart.web.support.util.cookie.UnableToObjectizeCookieException;
 
@@ -35,7 +33,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.Date;
 
 /**

@@ -27,7 +27,6 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
-import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.ProductSkuService;

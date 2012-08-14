@@ -1,26 +1,25 @@
 package org.yes.cart.payment.impl;
 
-import com.paypal.sdk.core.nvp.NVPEncoder;
 import com.paypal.sdk.core.nvp.NVPDecoder;
-import com.paypal.sdk.services.NVPCallerServices;
+import com.paypal.sdk.core.nvp.NVPEncoder;
+import com.paypal.sdk.exceptions.PayPalException;
 import com.paypal.sdk.profiles.APIProfile;
 import com.paypal.sdk.profiles.ProfileFactory;
-import com.paypal.sdk.exceptions.PayPalException;
-import org.yes.cart.payment.PaymentGatewayInternalForm;
-import org.yes.cart.payment.dto.PaymentGatewayFeature;
-import org.yes.cart.payment.dto.Payment;
-import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
-import org.yes.cart.payment.exception.PaymentException;
-
-import java.util.Properties;
-import java.math.RoundingMode;
-import java.text.MessageFormat;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.paypal.sdk.services.NVPCallerServices;
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.yes.cart.payment.PaymentGatewayInternalForm;
+import org.yes.cart.payment.dto.Payment;
+import org.yes.cart.payment.dto.PaymentGatewayFeature;
+import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
+import org.yes.cart.payment.exception.PaymentException;
 import org.yes.cart.util.ShopCodeContext;
+
+import java.math.RoundingMode;
+import java.text.MessageFormat;
+import java.util.Properties;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com

@@ -19,18 +19,13 @@ package org.yes.cart.domain.entity.bridge;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-
-
 import org.hibernate.search.bridge.FieldBridge;
 import org.hibernate.search.bridge.LuceneOptions;
-import org.hibernate.search.bridge.StringBridge;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.AttrValueProductSku;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 
 import java.util.Collection;
-import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com

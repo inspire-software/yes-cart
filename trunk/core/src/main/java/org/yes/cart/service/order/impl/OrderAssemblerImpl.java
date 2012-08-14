@@ -23,11 +23,11 @@ import org.hibernate.criterion.Restrictions;
 import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.shoppingcart.CartItem;
-import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.order.OrderAssembler;
 import org.yes.cart.service.order.OrderNumberGenerator;
+import org.yes.cart.shoppingcart.CartItem;
+import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.text.MessageFormat;
 import java.util.Date;
