@@ -77,11 +77,12 @@ public interface ProductService extends GenericService<Product> {
      * Charger: 200/110
      * Battery type: Litium
      *
+     * @param locale locale
      * @param attributable  product  or sku
      * @param productTypeId product type id
      * @return List of pair group names - list of attribute name and value.
      */
-    List<Pair<String, List<AttrValue>>> getProductAttributes(Attributable attributable, long productTypeId);
+    List<Pair<String, List<AttrValue>>> getProductAttributes(final String locale, Attributable attributable, long productTypeId);
 
     /**
      * Get product by his primary key value

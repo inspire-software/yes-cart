@@ -65,7 +65,23 @@
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
-        <!-- TODO: add localisation -->
+        <column-descriptor>
+            <column-index>3</column-index>
+            <field-type>FIELD</field-type>
+            <name>displayName</name>
+            <language>en</language>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>4</column-index>
+            <field-type>FIELD</field-type>
+            <name>displayName</name>
+            <language>ru</language>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
 
         <!-- attributes code list -->
         <column-descriptor>

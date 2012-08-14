@@ -161,11 +161,12 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * Get the grouped product attributes, with values.
      *
+     * @param locale locale
      * @param attributable  product  or sku
      * @param productTypeId product type id
      * @return List of pair group names - list of attribute name and value.
      */
-    public List<Pair<String, List<AttrValue>>> getProductAttributes(final Attributable attributable, final long productTypeId) {
+    public List<Pair<String, List<AttrValue>>> getProductAttributes(final String locale, final Attributable attributable, final long productTypeId) {
         final ProductType productType = productTypeDao.findById(productTypeId);
         final Collection<ProdTypeAttributeViewGroup> attributeViewGroup = productType.getAttributeViewGroup();
         final List<Pair<String, List<AttrValue>>> attributesToShow =
@@ -176,7 +177,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             final List<AttrValue> attrNameValues = getProductAttributeValues(attrValues, viewGroup);
             attributesToShow.add(
                     new Pair<String, List<AttrValue>>(
-                            viewGroup.getName(),
+                            new FailoverStringI18NModel(viewGroup.getDisplayName(), viewGroup.getName()).getValue(locale),
                             attrNameValues)
             );
         }

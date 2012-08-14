@@ -318,6 +318,11 @@
                     </configuration>
                     <inherited>true</inherited>
                     <executions>
+                        <!--
+                            TODO: fix tests YC-64
+                            something is interfering with executions because depending on which order below
+                            tests run we either do or don't get different counts in CsvBulkImport
+                          -->
                         <execution>
                             <id>isolated-dirty-test</id>
                             <goals>

@@ -19,6 +19,8 @@ package org.yes.cart.domain.dto;
 import org.yes.cart.domain.entity.Identifiable;
 import org.yes.cart.domain.entity.ProductType;
 
+import java.util.Map;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 6/28/12
@@ -88,5 +90,22 @@ public interface ProdTypeAttributeViewGroupDTO extends Identifiable {
      * @param name name.
      */
     void setName(String name);
+
+
+    /**
+     * Product type view group name.
+     *
+     * @return localised locale => name pairs.
+     */
+    Map<String, String> getDisplayNames();
+
+    /**
+     * Get Product type view group name
+     *
+     * @param names localised locale => name pairs
+     */
+    void setDisplayNames(Map<String, String> names);
+
+
 
 }

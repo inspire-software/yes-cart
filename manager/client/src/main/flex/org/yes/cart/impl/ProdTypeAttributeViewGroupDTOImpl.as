@@ -36,6 +36,8 @@ public class ProdTypeAttributeViewGroupDTOImpl {
 
     public var name:String;
 
+    public var displayNames:Object;
+
     public function ProdTypeAttributeViewGroupDTOImpl() {
     }
 

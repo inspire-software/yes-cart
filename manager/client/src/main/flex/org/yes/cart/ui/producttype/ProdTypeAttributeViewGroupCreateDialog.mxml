@@ -15,11 +15,12 @@
   -    limitations under the License.
   -->
 
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="300" height="200"
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:yci18n="org.yes.cart.ui.i18n.*" layout="absolute"
+                width="500" height="400"
                 title="@Resource(bundle='ProductTypeManagementPanel',key='productTypeAttrViewGroup')"
                 showCloseButton="true"
                 close="PopUpManager.removePopUp(this)"
-           creationComplete="init();">
+                creationComplete="init();">
 
     <mx:Script>
         <![CDATA[
@@ -34,6 +35,8 @@
         public var productTypeAttrVG:ProdTypeAttributeViewGroupDTOImpl;
         
         private function init():void {
+
+            displayNames.setSourceObject(productTypeAttrVG, 'displayNames');
             
             BindingUtils.bindProperty(rankTextInput, "text", productTypeAttrVG, "rank");
             BindingUtils.bindProperty(nameTextInput, "text", productTypeAttrVG, "name");
@@ -51,9 +54,12 @@
     
     <mx:Form width="100%">
 
-
         <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='name')">
             <mx:TextInput id="nameTextInput" width="200"/>
+        </mx:FormItem>
+
+        <mx:FormItem  width="100%" label="@Resource(bundle='ProductTypeManagementPanel',key='displayName')">
+            <yci18n:i18nStringField id="displayNames"/>
         </mx:FormItem>
 
         <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='rankEdit')">

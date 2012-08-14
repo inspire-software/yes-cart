@@ -54,9 +54,9 @@ public class StringI18NModel implements I18NModel {
                     beforeSep = matcher.start();
                     final String value = raw.substring(lastPosition, beforeSep);
                     lastPosition = matcher.end();
-                    values.put(key, value);
-                } else {
-                    values.put(key, "");
+                    if (value != null && value.length() > 0) {
+                        values.put(key, value);
+                    }
                 }
             }
         }
