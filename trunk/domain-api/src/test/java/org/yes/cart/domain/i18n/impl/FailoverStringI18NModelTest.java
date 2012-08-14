@@ -20,43 +20,45 @@ import org.junit.Test;
 import org.yes.cart.domain.i18n.I18NModel;
 
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * User: denispavlov
- * Date: 12-08-08
- * Time: 8:43 PM
+ * Date: 12-08-14
+ * Time: 8:15 AM
  */
-public class StringI18NModelTest {
+public class FailoverStringI18NModelTest {
 
     @Test
     public void testStringNull() throws Exception {
-        final I18NModel model = new StringI18NModel((String) null);
+        final I18NModel model = new FailoverStringI18NModel(null, null);
         assertNotNull(model.getAllValues());
         assertTrue(model.getAllValues().isEmpty());
     }
 
     @Test
     public void testStringEmpty() throws Exception {
-        final I18NModel model = new StringI18NModel("");
+        final I18NModel model = new FailoverStringI18NModel("", "");
         assertNotNull(model.getAllValues());
         assertTrue(model.getAllValues().isEmpty());
     }
 
     @Test
     public void testStringInvalid() throws Exception {
-        final I18NModel model = new StringI18NModel("some text");
+        final I18NModel model = new FailoverStringI18NModel("some text", "failover");
         assertNotNull(model.getAllValues());
         assertTrue(model.getAllValues().isEmpty());
     }
 
     @Test
     public void testString() throws Exception {
-        final I18NModel model = new StringI18NModel("EN#~#Some text#~#RU#~#Текст#~#UK#~#");
+        final I18NModel model = new FailoverStringI18NModel("EN#~#Some text#~#RU#~#Текст#~#UK#~#", "failover");
         assertNotNull(model.getAllValues());
         assertEquals(2, model.getAllValues().size());
         assertEquals("Some text", model.getValue("EN"));
         assertEquals("Текст", model.getValue("RU"));
-        assertNull(model.getValue("UK"));
-        assertNull(model.getValue("CA"));
+        assertEquals("failover", model.getValue("UK"));
+        assertEquals("failover", model.getValue("CA"));
     }
 }

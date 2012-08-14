@@ -37,7 +37,7 @@ public class FailoverStringI18NModel implements I18NModel {
 
     public String getValue(final String locale) {
         final String val = model.getValue(locale);
-        if (val == null) {
+        if (val == null || val.length() == 0) {
             return this.failover;
         }
         return val;

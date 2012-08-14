@@ -75,13 +75,12 @@ public class SkuAttributesView extends BaseComponent {
 
         final long productTypeId = sku.getProduct().getProducttype().getId();
 
-        // TODO: add localisable names to groups
         List<Pair<String, List<AttrValue>>> productAttributes = productService.getProductAttributes(
-                productService.getProductById(sku.getProduct().getProductId(), true) , productTypeId);
+                selectedLocale, productService.getProductById(sku.getProduct().getProductId(), true), productTypeId);
         if (productOnly) {
             attributesToShow = getAdaptedAttributes(selectedLocale, productAttributes);
         } else {
-            List<Pair<String, List<AttrValue>>> skuAttributes = productService.getProductAttributes(sku, productTypeId);
+            List<Pair<String, List<AttrValue>>> skuAttributes = productService.getProductAttributes(selectedLocale, sku, productTypeId);
             attributesToShow = getAdaptedAttributes(selectedLocale, attributeService.merge(productAttributes, skuAttributes));
         }
 

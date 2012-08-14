@@ -20,6 +20,8 @@ import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.ProdTypeAttributeViewGroupDTO;
 
+import java.util.Map;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 6/28/12
@@ -51,6 +53,9 @@ public class ProdTypeAttributeViewGroupDTOImpl  implements ProdTypeAttributeView
 
     @DtoField(value = "name")
     private String name;
+
+    @DtoField(value = "displayName", converter = "i18nStringConverter")
+    private Map<String, String> displayNames;
 
     /** {@inheritDoc} */
     public long getId() {
@@ -105,6 +110,16 @@ public class ProdTypeAttributeViewGroupDTOImpl  implements ProdTypeAttributeView
     /** {@inheritDoc} */
     public void setName(final String name) {
         this.name = name;
+    }
+
+    /** {@inheritDoc} */
+    public Map<String, String> getDisplayNames() {
+        return displayNames;
+    }
+
+    /** {@inheritDoc} */
+    public void setDisplayNames(final Map<String, String> displayNames) {
+        this.displayNames = displayNames;
     }
 
     @Override
