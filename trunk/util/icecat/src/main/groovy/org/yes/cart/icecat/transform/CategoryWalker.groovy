@@ -140,7 +140,7 @@ class CategoryWalker {
         new ProductsCsvAdapter(productPointerHandler.productMap, context.langNames.split(',')[0]).toCsvFile("$rootDir/productnames.csv");
 
         println("Generating productsattributes.csv")
-        new ProductsAttributesCsvAdapter(productPointerHandler.productMap).toCsvFile("$rootDir/productsattributes.csv");
+        new ProductsAttributesCsvAdapter(productPointerHandler.productMap, context.langNames.split(',')[0]).toCsvFile("$rootDir/productsattributes.csv");
 
         // Main warehouse is part of initial data
         // new File("$rootDir/warehouse.csv").write("Ware house code;name;description\nMain;Main warehouse;Main warehouse", 'UTF-8');
