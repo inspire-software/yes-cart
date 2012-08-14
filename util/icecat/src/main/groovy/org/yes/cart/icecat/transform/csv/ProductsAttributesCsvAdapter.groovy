@@ -33,9 +33,11 @@ import org.yes.cart.icecat.transform.Util
 class ProductsAttributesCsvAdapter {
 
     Map<String, ProductPointer> productMap;
+    String defLang;
 
-    ProductsAttributesCsvAdapter(final Map<String, ProductPointer> productMap) {
+    ProductsAttributesCsvAdapter(final Map<String, ProductPointer> productMap, final String defLang) {
         this.productMap = productMap
+        this.defLang = defLang
     }
 
     public toCsvFile(String filename) {
@@ -45,13 +47,17 @@ class ProductsAttributesCsvAdapter {
 
         productMap.values().each {
             def pp = it;
-            pp.product.productFeatures.each {
+            pp.product.productFeatures.values().each {
                 builder.append('"')
                 builder.append(pp.Product_ID).append('";"')
                 builder.append(Util.escapeCSV(pp.Prod_ID)).append('";"') // SKU
                 builder.append(Util.escapeCSV(pp.Model_Name)).append('";"')
                 builder.append(it.feature.ID).append('";"') // code (same for product attr code)
-                builder.append(Util.escapeCSV(it.Value)).append('";"')
+                if (it.Value != null && it.Value != '') {
+                    builder.append(Util.escapeCSV(it.Value)).append('";"')
+                } else {
+                    builder.append(Util.escapeCSV(it.getPresentationValueFor(defLang))).append('";"')
+                }
                 builder.append(Util.escapeCSV(it.getPresentationValueFor('en'))).append('";"')
                 builder.append(Util.escapeCSV(it.getPresentationValueFor('ru'))).append('"\n')
 

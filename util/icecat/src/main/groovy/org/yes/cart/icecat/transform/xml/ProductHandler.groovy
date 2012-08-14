@@ -175,7 +175,13 @@ class ProductHandler extends DefaultHandler {
 
         if ("ProductFeature" == qName) {
             if (productFeature.feature != null) {
-                product.productFeatures.add(productFeature);
+                if (product.productFeatures.containsKey(productFeature.feature.ID)) {
+                    def featureVal = product.productFeatures.get(productFeature.feature.ID);
+                    // copy over new language value, do not duplicate feature
+                    featureVal.PresentationValue.put(lang, productFeature.PresentationValue.get(lang));
+                } else {
+                    product.productFeatures.put(productFeature.feature.ID, productFeature);
+                }
             }
             productFeature = null;
             feature = null;
