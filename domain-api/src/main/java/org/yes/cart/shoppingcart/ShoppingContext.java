@@ -16,8 +16,6 @@
 
 package org.yes.cart.shoppingcart;
 
-import org.springframework.security.core.context.SecurityContext;
-
 import java.io.Serializable;
 
 /**

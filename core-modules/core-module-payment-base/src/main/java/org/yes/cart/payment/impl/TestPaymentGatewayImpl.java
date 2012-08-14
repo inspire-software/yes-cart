@@ -1,8 +1,6 @@
 package org.yes.cart.payment.impl;
 
 
-import java.util.*;
-
 import org.apache.commons.lang.SerializationUtils;
 import org.yes.cart.payment.PaymentGatewayInternalForm;
 import org.yes.cart.payment.dto.Payment;
@@ -10,6 +8,11 @@ import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.exception.PaymentException;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * This payment gateway used for testing purposes, and present in test environment only.

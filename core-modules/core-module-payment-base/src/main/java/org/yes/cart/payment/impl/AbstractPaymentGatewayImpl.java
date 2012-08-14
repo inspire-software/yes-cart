@@ -10,10 +10,9 @@ import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 import org.yes.cart.payment.service.PaymentGatewayParameterService;
 import org.yes.cart.util.ShopCodeContext;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
 import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Map;
 
 /**
 * User: Igor Azarny iazarny@yahoo.com

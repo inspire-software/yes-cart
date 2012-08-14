@@ -16,23 +16,22 @@
 
 package org.yes.cart.web.page.component.customer.auth;
 
-import org.apache.wicket.Application;
 import org.apache.wicket.Page;
 import org.apache.wicket.authentication.IAuthenticationStrategy;
-import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.web.application.ApplicationDirector;
-import org.yes.cart.web.page.*;
+import org.yes.cart.web.page.AbstractWebPage;
+import org.yes.cart.web.page.CheckoutPage;
+import org.yes.cart.web.page.HomePage;
+import org.yes.cart.web.page.RegistrationPage;
 import org.yes.cart.web.page.component.BaseComponent;
 
 /**

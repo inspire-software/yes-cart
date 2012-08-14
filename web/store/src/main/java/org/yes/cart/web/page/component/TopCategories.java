@@ -18,7 +18,6 @@ package org.yes.cart.web.page.component;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -30,10 +29,7 @@ import org.yes.cart.domain.entity.Category;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.HomePage;
-import org.yes.cart.web.page.component.data.SortableCategoryDataProvider;
 import org.yes.cart.web.support.constants.WebParametersKeys;
-import org.yes.cart.web.support.entity.decorator.CategoryDecorator;
-import org.yes.cart.web.support.util.HttpUtil;
 
 import java.util.List;
 

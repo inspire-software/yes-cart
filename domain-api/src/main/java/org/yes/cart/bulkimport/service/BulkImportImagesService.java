@@ -16,8 +16,6 @@
 
 package org.yes.cart.bulkimport.service;
 
-import java.util.Set;
-
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011

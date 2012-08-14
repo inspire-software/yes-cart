@@ -19,7 +19,6 @@ package org.yes.cart.service.async.impl;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.async.model.impl.JobStatusImpl;
-import org.yes.cart.bulkimport.service.ImportService;
 
 import java.util.UUID;
 

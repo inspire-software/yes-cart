@@ -20,7 +20,10 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.fop.apps.*;
+import org.apache.fop.apps.FOUserAgent;
+import org.apache.fop.apps.Fop;
+import org.apache.fop.apps.FopFactory;
+import org.apache.fop.apps.MimeConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -29,12 +32,15 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.Assert;
 import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.report.ReportService;
 
 import javax.servlet.ServletContext;
-import javax.xml.transform.*;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXResult;
+import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -44,12 +50,7 @@ import java.util.Collections;
 import java.util.List;
 
 //JAXP
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.transform.sax.SAXResult;
-
 //FOP
-import org.apache.fop.apps.FOUserAgent;
-import org.apache.fop.apps.FopFactory;
 
 
 /**

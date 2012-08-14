@@ -17,8 +17,8 @@
 package org.yes.cart.service.domain;
 
 import org.yes.cart.domain.entity.Category;
-import org.yes.cart.domain.entity.ShopCategory;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.entity.ShopCategory;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com

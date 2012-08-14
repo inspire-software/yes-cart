@@ -21,8 +21,8 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.util.cookie.CookieTuplizer;
-import org.yes.cart.web.support.util.cookie.UnableToCookielizeObjectException;
 import org.yes.cart.web.support.util.cookie.ShoppingCartPersister;
+import org.yes.cart.web.support.util.cookie.UnableToCookielizeObjectException;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

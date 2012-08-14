@@ -16,20 +16,15 @@
 
 package org.yes.cart.bulkimport.csv.impl;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
-import org.yes.cart.bulkimport.model.ImportColumn;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.bulkimport.model.ImportTuple;
 import org.yes.cart.bulkimport.model.ValueAdapter;
 import org.yes.cart.bulkimport.service.support.LookUpQuery;
 import org.yes.cart.bulkimport.service.support.LookUpQueryParameterStrategy;
 import org.yes.cart.bulkimport.service.support.impl.NativeSQLQuery;
-import org.yes.cart.domain.entity.Identifiable;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Generates a native sql string with all parameter placeholders replaced.

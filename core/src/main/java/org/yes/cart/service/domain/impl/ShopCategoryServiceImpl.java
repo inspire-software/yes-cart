@@ -19,8 +19,8 @@ package org.yes.cart.service.domain.impl;
 import org.hibernate.criterion.Restrictions;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Category;
-import org.yes.cart.domain.entity.ShopCategory;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.entity.ShopCategory;
 import org.yes.cart.service.domain.ShopCategoryService;
 
 import java.util.Collection;

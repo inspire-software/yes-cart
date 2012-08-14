@@ -16,9 +16,6 @@
 
 package org.yes.cart.domain.entity;
 
-import java.util.Set;
-
-
 /**
  * Etype.
  * <p/>

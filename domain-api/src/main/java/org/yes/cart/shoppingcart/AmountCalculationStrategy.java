@@ -17,7 +17,6 @@
 package org.yes.cart.shoppingcart;
 
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.domain.entity.Shop;
 
 import java.math.BigDecimal;
 import java.util.Collection;

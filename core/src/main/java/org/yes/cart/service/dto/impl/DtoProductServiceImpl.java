@@ -45,7 +45,10 @@ import org.yes.cart.service.dto.DtoProductService;
 import org.yes.cart.service.dto.DtoProductSkuService;
 import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Default implementation of {@link DtoProductService}. Uses

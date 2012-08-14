@@ -16,20 +16,18 @@
 
 package org.yes.cart.web.page.component.price;
 
-import org.yes.cart.web.page.component.BaseComponent;
-import org.yes.cart.web.application.ApplicationDirector;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.misc.SkuPriceQuantityComparatorImpl;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.basic.Label;
+import org.yes.cart.web.application.ApplicationDirector;
+import org.yes.cart.web.page.component.BaseComponent;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Igor Azarny iazarny@yahoo.com

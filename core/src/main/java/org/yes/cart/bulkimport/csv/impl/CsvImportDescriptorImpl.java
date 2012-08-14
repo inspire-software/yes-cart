@@ -17,8 +17,8 @@
 package org.yes.cart.bulkimport.csv.impl;
 
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
-import org.yes.cart.bulkimport.csv.CsvImportFile;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
+import org.yes.cart.bulkimport.csv.CsvImportFile;
 import org.yes.cart.bulkimport.model.FieldTypeEnum;
 import org.yes.cart.bulkimport.model.ImportColumn;
 

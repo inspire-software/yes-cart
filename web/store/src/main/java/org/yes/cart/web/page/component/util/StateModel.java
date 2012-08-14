@@ -16,10 +16,10 @@
 
 package org.yes.cart.web.page.component.util;
 
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.IDetachable;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.model.IDetachable;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 import org.yes.cart.domain.entity.State;
 
 import java.util.List;

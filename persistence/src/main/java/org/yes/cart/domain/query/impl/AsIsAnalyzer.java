@@ -16,7 +16,6 @@
 
 package org.yes.cart.domain.query.impl;
 
-import org.apache.lucene.analysis.LowerCaseTokenizer;
 import org.apache.lucene.analysis.ReusableAnalyzerBase;
 import org.apache.lucene.util.Version;
 

@@ -27,7 +27,6 @@ import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.service.payment.PaymentProcessFacade;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
-import sun.rmi.runtime.Log;
 
 import java.util.Map;
 

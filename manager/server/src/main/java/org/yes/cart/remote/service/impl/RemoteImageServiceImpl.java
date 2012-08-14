@@ -19,7 +19,6 @@ package org.yes.cart.remote.service.impl;
 import flex.messaging.FlexContext;
 import org.yes.cart.domain.dto.SeoImageDTO;
 import org.yes.cart.domain.dto.ShopDTO;
-import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.remote.service.RemoteImageService;

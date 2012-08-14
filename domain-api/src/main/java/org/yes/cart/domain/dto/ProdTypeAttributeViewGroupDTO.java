@@ -17,7 +17,6 @@
 package org.yes.cart.domain.dto;
 
 import org.yes.cart.domain.entity.Identifiable;
-import org.yes.cart.domain.entity.ProductType;
 
 import java.util.Map;
 

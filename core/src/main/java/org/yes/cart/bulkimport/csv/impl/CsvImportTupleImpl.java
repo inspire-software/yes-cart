@@ -17,8 +17,8 @@
 package org.yes.cart.bulkimport.csv.impl;
 
 import org.apache.commons.lang.StringEscapeUtils;
-import org.yes.cart.bulkimport.csv.CsvImportTuple;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
+import org.yes.cart.bulkimport.csv.CsvImportTuple;
 import org.yes.cart.bulkimport.model.*;
 
 import java.util.ArrayList;

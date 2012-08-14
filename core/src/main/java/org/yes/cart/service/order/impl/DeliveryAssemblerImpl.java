@@ -18,13 +18,13 @@ package org.yes.cart.service.order.impl;
 
 import org.springframework.util.Assert;
 import org.yes.cart.dao.EntityFactory;
-import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.DeliveryAssembler;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;

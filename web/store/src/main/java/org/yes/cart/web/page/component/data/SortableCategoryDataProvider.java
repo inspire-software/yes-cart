@@ -18,7 +18,6 @@ package org.yes.cart.web.page.component.data;
 
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.model.IModel;
-import org.yes.cart.domain.entity.Category;
 import org.yes.cart.web.support.entity.decorator.CategoryDecorator;
 
 import java.util.Iterator;

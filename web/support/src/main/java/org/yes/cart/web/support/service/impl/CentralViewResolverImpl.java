@@ -30,7 +30,6 @@ import org.yes.cart.web.support.service.CentralViewResolver;
 import org.yes.cart.web.support.util.HttpUtil;
 
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 

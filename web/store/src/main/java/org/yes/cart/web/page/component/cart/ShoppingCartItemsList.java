@@ -32,18 +32,15 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.ProductSku;
-import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ImageService;
-import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl;
 import org.yes.cart.shoppingcart.impl.RemoveAllSkuFromCartCommandImpl;
 import org.yes.cart.shoppingcart.impl.RemoveSkuFromCartCommandImpl;
 import org.yes.cart.shoppingcart.impl.SetSkuQuantityToCartEventCommandImpl;
-import org.yes.cart.web.page.CheckoutPage;
 import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.ShoppingCartPage;
 import org.yes.cart.web.page.component.BaseComponent;
@@ -58,11 +55,7 @@ import org.yes.cart.web.util.WicketUtil;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
-import java.text.MessageFormat;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com

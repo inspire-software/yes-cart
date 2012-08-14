@@ -16,12 +16,10 @@
 
 package org.yes.cart.remote.service.impl;
 
-import org.apache.commons.io.FilenameUtils;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.remote.service.RemoteUploadService;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 

@@ -25,8 +25,8 @@ import org.yes.cart.domain.entity.CustomerShop;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
-import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.dto.DtoShopService;
 
 import java.util.ArrayList;

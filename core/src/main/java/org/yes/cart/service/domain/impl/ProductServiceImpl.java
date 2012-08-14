@@ -109,6 +109,15 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         return (ProductSku) productSkuService.getGenericDao().findById(skuId);
     }
 
+    @Cacheable(value = PROD_SERV_METHOD_CACHE)
+    public ProductSku getSkuById(final Long skuId, final boolean withAttributes) {
+        final ProductSku sku = (ProductSku) productSkuService.getGenericDao().findById(skuId);
+        if (sku != null && withAttributes) {
+            Hibernate.initialize(sku.getAttribute());
+        }
+        return sku;
+    }
+
 
     /**
      * Get default image file name by given product.
@@ -157,53 +166,156 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         return null;
     }
 
+    private static final Comparator<Pair> BY_SECOND = new Comparator<Pair>() {
+        public int compare(final Pair pair1, final Pair pair2) {
+            return ((String) pair1.getSecond()).compareTo((String) pair2.getSecond());
+        }
+    };
+
 
     /**
-     * Get the grouped product attributes, with values.
-     *
-     * @param locale locale
-     * @param attributable  product  or sku
-     * @param productTypeId product type id
-     * @return List of pair group names - list of attribute name and value.
+     * {@inheritDoc}
      */
-    public List<Pair<String, List<AttrValue>>> getProductAttributes(final String locale, final Attributable attributable, final long productTypeId) {
-        final ProductType productType = productTypeDao.findById(productTypeId);
-        final Collection<ProdTypeAttributeViewGroup> attributeViewGroup = productType.getAttributeViewGroup();
-        final List<Pair<String, List<AttrValue>>> attributesToShow =
-                new ArrayList<Pair<String, List<AttrValue>>>(attributeViewGroup.size());
-        Collection<AttrValue> attrValues = attributable.getAllAttibutes();
+    @Cacheable(value = PROD_SERV_METHOD_CACHE)
+    public Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> getProductAttributes(
+            final String locale, final long productId, final long skuId, final long productTypeId) {
 
-        for (ProdTypeAttributeViewGroup viewGroup : attributeViewGroup) {
-            final List<AttrValue> attrNameValues = getProductAttributeValues(attrValues, viewGroup);
-            attributesToShow.add(
-                    new Pair<String, List<AttrValue>>(
-                            new FailoverStringI18NModel(viewGroup.getDisplayName(), viewGroup.getName()).getValue(locale),
-                            attrNameValues)
-            );
+        final ProductType productType = productTypeDao.findById(productTypeId);
+        final Map<String, List<Pair<String, String>>> attributeViewGroupMap =
+                mapAttributeGroupsByAttributeCode(locale, productType.getAttributeViewGroup());
+
+        final ProductSku sku = skuId != 0L ? getSkuById(skuId, true) : null;
+        final Product product = productId != 0 ? getProductById(productId, true) :
+                                (sku != null ? getProductById(sku.getProduct().getId(), true) : null);
+
+        Collection<AttrValue> productAttrValues;
+        Collection<AttrValue> skuAttrValues;
+        if (sku != null) {
+            productAttrValues = product.getAllAttibutes();
+            skuAttrValues = sku.getAllAttibutes();
+        } else if (product != null) {
+            productAttrValues = product.getAllAttibutes();
+            skuAttrValues = Collections.emptyList();
+        } else {
+            return Collections.emptyMap();
         }
+
+        final Map<String, Pair<String, String>> viewsGroupsI18n = new HashMap<String, Pair<String, String>>();
+        final Map<String, Pair<String, String>> attrI18n = new HashMap<String, Pair<String, String>>();
+
+        final Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> attributesToShow =
+                new TreeMap<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>>(BY_SECOND);
+
+        for (final AttrValue attrValue : productAttrValues) {
+
+            loadAttributeValueToAttributesToShowMap(locale, attributeViewGroupMap, viewsGroupsI18n, attrI18n, attributesToShow, attrValue);
+
+        }
+
+        for (final AttrValue attrValue : skuAttrValues) {
+
+            loadAttributeValueToAttributesToShowMap(locale, attributeViewGroupMap, viewsGroupsI18n, attrI18n, attributesToShow, attrValue);
+
+        }
+
         return attributesToShow;
     }
 
+    private static final List<Pair<String, String>> NO_GROUP = Arrays.asList(new Pair<String, String>("",""));
 
-    private List<AttrValue> getProductAttributeValues(
-            final Collection<AttrValue> attrValueCollection,
-            final ProdTypeAttributeViewGroup viewGroup) {
-        //todo need sorted collection and fast search
+    private void loadAttributeValueToAttributesToShowMap(
+            final String locale, final Map<String, List<Pair<String, String>>> attributeViewGroupMap,
+            final Map<String, Pair<String, String>> viewsGroupsI18n, final Map<String, Pair<String, String>> attrI18n,
+            final Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> attributesToShow,
+            final AttrValue attrValue) {
 
-        final String[] attributesNames = viewGroup.getAttrCodeList().split(",");
-        final List<AttrValue> attrNameValues = new ArrayList<AttrValue>(attributesNames.length);
-        for (String attrName : attributesNames) {
-            for (AttrValue attrValue : attrValueCollection) {
-                if (attrValue != null && attrValue.getAttribute() != null) {
-                    final String candidatCode = attrValue.getAttribute().getCode();
-                    if (candidatCode.equals(attrName) || candidatCode.equals("SKU" + attrName)) {
-                        attrNameValues.add(attrValue);
-                    }
+        if (attrValue.getAttribute() == null) {
+            return;
+        }
+        final Pair<String, String> attr;
+        if (attrI18n.containsKey(attrValue.getAttribute().getCode())) {
+            attr = attrI18n.get(attrValue.getAttribute().getCode());
+        } else {
+            attr = new Pair<String, String>(
+                    attrValue.getAttribute().getCode(),
+                    new FailoverStringI18NModel(
+                            attrValue.getAttribute().getDisplayName(),
+                            attrValue.getAttribute().getName()
+                    ).getValue(locale)
+            );
+            attrI18n.put(attrValue.getAttribute().getCode(), attr);
+        }
+
+        List<Pair<String, String>> groupsForAttr = attributeViewGroupMap.get(attr.getFirst());
+        if (groupsForAttr == null) {
+            groupsForAttr = NO_GROUP;
+        }
+        for (final Pair<String, String> groupForAttr : groupsForAttr) {
+
+            final Pair<String, String> group;
+            final Map<Pair<String, String>, List<Pair<String, String>>> attrValuesInGroup;
+            if (viewsGroupsI18n.containsKey(groupForAttr.getFirst())) {
+                group = viewsGroupsI18n.get(groupForAttr.getFirst());
+                attrValuesInGroup = attributesToShow.get(group);
+            } else {
+                viewsGroupsI18n.put(groupForAttr.getFirst(), groupForAttr);
+                attrValuesInGroup = new TreeMap<Pair<String, String>, List<Pair<String, String>>>(BY_SECOND);
+                attributesToShow.put(groupForAttr, attrValuesInGroup);
+            }
+
+            final Pair<String, String> val = new Pair<String, String>(
+                    attrValue.getVal(),
+                    new FailoverStringI18NModel(
+                            attrValue.getDisplayVal(),
+                            attrValue.getVal()
+                    ).getValue(locale)
+            );
+
+            final List<Pair<String, String>> attrValuesForAttr;
+            if (attrValuesInGroup.containsKey(attr)) {
+                attrValuesForAttr = attrValuesInGroup.get(attr);
+                if (attrValue.getAttribute().isAllowduplicate()) {
+                    attrValuesForAttr.add(val);
+                } else {
+                    attrValuesForAttr.set(0, val); // replace with latest (hopefully SKU)
                 }
+            } else {
+                attrValuesForAttr = new ArrayList<Pair<String, String>>();
+                attrValuesInGroup.put(attr, attrValuesForAttr);
+                attrValuesForAttr.add(val);
+            }
 
+        }
+    }
+
+    /*
+        Attribute Code => List<Groups>
+     */
+    private Map<String, List<Pair<String, String>>> mapAttributeGroupsByAttributeCode(
+            final String locale, final Collection<ProdTypeAttributeViewGroup> attributeViewGroup) {
+        if (CollectionUtils.isEmpty(attributeViewGroup)) {
+            return Collections.emptyMap();
+        }
+        final Map<String, List<Pair<String, String>>> map = new HashMap<String, List<Pair<String, String>>>();
+        for (final ProdTypeAttributeViewGroup group : attributeViewGroup) {
+            final String[] attributesCodes = group.getAttrCodeList().split(",");
+            for (final String attrCode : attributesCodes) {
+                List<Pair<String, String>> groups = map.get(attrCode);
+                if (groups == null) {
+                    groups = new ArrayList<Pair<String, String>>();
+                    map.put(attrCode, groups);
+                    map.put("SKU" + attrCode, groups); // map SKU version of attribute to the same list object
+                }
+                groups.add(new Pair<String, String>(
+                        String.valueOf(group.getProdTypeAttributeViewGroupId()),
+                        new FailoverStringI18NModel(
+                                group.getDisplayName(),
+                                group.getName()
+                        ).getValue(locale)
+                ));
             }
         }
-        return attrNameValues;
+        return map;
     }
 
     /**

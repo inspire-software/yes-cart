@@ -26,9 +26,6 @@ import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.util.ShopCodeContext;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * This stateful job perform import and products indexing, in case if import was fired.
  * <p/>

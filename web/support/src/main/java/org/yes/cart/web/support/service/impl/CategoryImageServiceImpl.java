@@ -17,10 +17,8 @@
 package org.yes.cart.web.support.service.impl;
 
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Attributable;
-import org.yes.cart.domain.entity.Category;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.web.support.service.AttributableImageService;
 import org.yes.cart.web.support.service.CategoryImageRetrieveStrategy;

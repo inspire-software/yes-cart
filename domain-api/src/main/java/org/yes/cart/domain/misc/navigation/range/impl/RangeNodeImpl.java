@@ -16,7 +16,6 @@
 
 package org.yes.cart.domain.misc.navigation.range.impl;
 
-import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.misc.navigation.range.RangeNode;
 
 /**

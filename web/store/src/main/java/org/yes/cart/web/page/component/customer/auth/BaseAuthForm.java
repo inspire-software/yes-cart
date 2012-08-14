@@ -22,19 +22,10 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CustomerService;
-import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
-import org.yes.cart.shoppingcart.impl.LoginCommandImpl;
 import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.support.constants.WebParametersKeys;
-
-import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com

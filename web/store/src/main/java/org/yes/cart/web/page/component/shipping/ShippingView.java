@@ -30,7 +30,6 @@ import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.shoppingcart.impl.SetCarrierSlaCartCommandImpl;
 import org.yes.cart.web.application.ApplicationDirector;
-import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.page.component.util.CarrierRenderer;

@@ -16,8 +16,6 @@
 
 package org.yes.cart.remote.service;
 
-import sun.java2d.pipe.BufferedTextPipe;
-
 import java.io.IOException;
 
 /**

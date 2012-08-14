@@ -26,7 +26,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Component;
 import org.yes.cart.domain.misc.Pair;
 
 import java.lang.annotation.Annotation;

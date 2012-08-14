@@ -16,7 +16,6 @@
 
 package org.yes.cart.bulkimport.stream.xml;
 
-import com.thoughtworks.xstream.XStream;
 import org.junit.Test;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
@@ -29,7 +28,6 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 
 /**
  * User: denispavlov

@@ -16,9 +16,7 @@
 
 package org.yes.cart.web.support.entity.decorator.impl;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.ProductSku;

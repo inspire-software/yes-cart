@@ -17,7 +17,6 @@
 package org.yes.cart.remote.service.impl;
 
 import flex.messaging.FlexContext;
-import flex.messaging.FlexRemoteCredentials;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
@@ -29,7 +28,6 @@ import org.yes.cart.service.async.impl.JobStatusListenerImpl;
 import org.yes.cart.service.async.model.JobContext;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.async.model.impl.JobContextImpl;
-import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.service.ws.BackdoorService;
 import org.yes.cart.web.service.ws.client.BackdoorServiceClientFactory;
 

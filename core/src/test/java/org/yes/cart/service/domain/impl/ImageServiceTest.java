@@ -35,7 +35,8 @@ import org.yes.cart.service.image.impl.ProductImageNameStrategyImpl;
 import java.io.File;
 
 import static junit.framework.Assert.assertEquals;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com

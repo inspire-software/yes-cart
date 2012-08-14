@@ -1,7 +1,7 @@
 package org.yes.cart.payment.impl;
 
-import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.PaymentGateway;
+import org.yes.cart.payment.dto.Payment;
 
 import java.text.StringCharacterIterator;
 import java.util.ArrayList;

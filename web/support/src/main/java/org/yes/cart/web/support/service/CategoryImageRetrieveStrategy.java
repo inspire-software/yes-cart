@@ -17,7 +17,6 @@
 package org.yes.cart.web.support.service;
 
 import org.yes.cart.domain.entity.Attributable;
-import org.yes.cart.domain.entity.Category;
 
 
 /**

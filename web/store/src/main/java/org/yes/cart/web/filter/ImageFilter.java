@@ -26,7 +26,6 @@ import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.image.ImageNameStrategy;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
-//import org.yes.cart.web.support.shoppingcart.RequestRuntimeContainer;
 
 import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.Filter;
@@ -40,6 +39,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
+
+//import org.yes.cart.web.support.shoppingcart.RequestRuntimeContainer;
 
 /**
  * ImageServet responsible for get product or brand images

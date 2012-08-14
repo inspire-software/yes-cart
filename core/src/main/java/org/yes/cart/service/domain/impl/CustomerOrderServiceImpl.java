@@ -20,13 +20,13 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.payment.service.CustomerOrderPaymentService;
-import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.DeliveryAssembler;
 import org.yes.cart.service.order.OrderAssembler;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;

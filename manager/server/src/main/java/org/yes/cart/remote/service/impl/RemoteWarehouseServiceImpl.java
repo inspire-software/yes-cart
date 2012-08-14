@@ -16,7 +16,6 @@
 
 package org.yes.cart.remote.service.impl;
 
-import org.yes.cart.domain.dto.ProductSkuDTO;
 import org.yes.cart.domain.dto.ShopWarehouseDTO;
 import org.yes.cart.domain.dto.SkuWarehouseDTO;
 import org.yes.cart.domain.dto.WarehouseDTO;
