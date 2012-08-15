@@ -33,4 +33,14 @@
   <user username="both" password="tomcat" roles="tomcat,role1"/>
   <user username="role1" password="tomcat" roles="role1"/>
 -->
+
+    <!--
+        DP: added new user to enable status management
+      -->
+    <role rolename="manager-gui"/>
+    <role rolename="manager-script"/>
+    <role rolename="manager-status"/>
+    <role rolename="manager-jmx"/>
+    <user username="yc" password="yc" roles="manager-gui,manager-script,manager-status,manager-jmx"/>
+
 </tomcat-users>

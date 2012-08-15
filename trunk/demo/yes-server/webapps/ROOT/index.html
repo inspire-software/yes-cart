@@ -19,13 +19,14 @@
    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
-    <title>Apache Tomcat</title>
+    <title>Yes Cart Demo Server</title>
     <style type="text/css">
     /*<![CDATA[*/
       body {
           color: #000000;
           background-color: #FFFFFF;
-	  font-family: Arial, "Times New Roman", Times, serif;
+          font-family: Arial, Helvetica, sans-serif;
+          font-size: 0.9em;
           margin: 10px 0px;
       }
 
@@ -34,25 +35,27 @@
     }
     
     a:link, a:visited {
-        color: blue
+        color: #666666;
     }
 
     th {
-        font-family: Verdana, "Times New Roman", Times, serif;
         font-size: 110%;
         font-weight: normal;
         font-style: italic;
-        background: #D2A41C;
+        background: #CCCCCC;
         text-align: left;
     }
 
     td {
         color: #000000;
-	font-family: Arial, Helvetica, sans-serif;
+    }
+
+    table.menu {
+        border: 1px dashed #CCCCCC;
     }
     
     td.menu {
-        background: #FFDC75;
+
     }
 
     .center {
@@ -89,124 +92,122 @@
 <!-- Header -->
 <table id="banner" width="100%">
     <tr>
-      <td align="left" style="width:130px">
-      <a href="http://tomcat.apache.org/">
-        <img src="tomcat.gif" height="92" width="130" alt="The Mighty Tomcat - MEOW!"/>
-      </a>
+      <td align="left" style="width:236px">
+        <img src="yes-logo.png" height="64" width="236" alt="Yes Cart - open source e-commerce platform"/>
       </td>
-      <td align="left" valign="top"><b>Apache Tomcat</b></td>
-      <td align="right">
-        <a href="http://www.apache.org/">
-	  <img src="asf-logo-wide.gif" height="51" width="537" alt="The Apache Software Foundation"/>
-	</a>
-       </td>
      </tr>
 </table>
 
-<table>
+<table width="100%">
     <tr>
 
         <!-- Table of Contents -->
         <td valign="top">
-            <table width="100%" border="1" cellspacing="0" cellpadding="3">
+            <table width="100%" class="menu" border="0" cellspacing="0" cellpadding="3">
                 <tr>
-		  <th>Administration</th>
+		            <th>Yes Cart</th>
                 </tr>
                 <tr>
-		  <td class="menu">
-		    <a href="/manager/status">Status</a><br/>
-                    <a href="/manager/html">Tomcat&nbsp;Manager</a><br/>
-                    &nbsp;
-                  </td>
+		            <td class="menu">
+                        <a href="/yes-shop/">YeS</a><br/>
+                        <a href="https://localhost:8443/yes-manager/">YUM</a><br/>
+                        &nbsp;
+                    </td>
                 </tr>
             </table>
 
 	    <br />
-            <table width="100%" border="1" cellspacing="0" cellpadding="3">
+            <table width="100%" class="menu" border="0" cellspacing="0" cellpadding="3">
+                <tr>
+		            <th>Tomcat admin</th>
+                </tr>
+                <tr>
+		            <td class="menu">
+		            <a href="/manager/status">Status</a><br/>
+                    <a href="/manager/html">Tomcat&nbsp;Manager</a><br/>
+                        &nbsp;
+                    </td>
+                </tr>
+            </table>
+
+	    <br />
+            <table class="menu"  width="100%" border="0" cellspacing="0" cellpadding="3">
                 <tr>
 		  <th>Documentation</th>
                 </tr>
                 <tr>
                   <td class="menu">
-                    <a href="RELEASE-NOTES.txt">Release&nbsp;Notes</a><br/>
-                    <a href="/docs/changelog.html">Change&nbsp;Log</a><br/>
+                    <a href="http://www.inspire-software.com/confluence/display/YC">Yes Cart Documentation</a><br/>
+                    <a href="http://code.google.com/p/yes-cart/source/checkout">Yes Cart Sources</a><br/>
+                    <a href="http://www.inspire-software.com/en/feedback.html">Contact Us</a><br/>
                     <a href="/docs">Tomcat&nbsp;Documentation</a><br/>                        &nbsp;
                     &nbsp;
 		    </td>
                 </tr>
             </table>
-	    
-            <br/>
-            <table width="100%" border="1" cellspacing="0" cellpadding="3">
-                <tr>
-                  <th>Tomcat Online</th>
-                </tr>
-                <tr>
-                  <td class="menu">
-                    <a href="http://tomcat.apache.org/">Home&nbsp;Page</a><br/>
-		    <a href="http://tomcat.apache.org/faq/">FAQ</a><br/>
-                    <a href="http://tomcat.apache.org/bugreport.html">Bug&nbsp;Database</a><br/>
-                    <a href="http://issues.apache.org/bugzilla/buglist.cgi?bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=RESOLVED&amp;resolution=LATER&amp;resolution=REMIND&amp;resolution=---&amp;bugidtype=include&amp;product=Tomcat+6&amp;cmdtype=doit&amp;order=Importance">Open Bugs</a><br/>
-                    <a href="http://mail-archives.apache.org/mod_mbox/tomcat-users/">Users&nbsp;Mailing&nbsp;List</a><br/>
-                    <a href="http://mail-archives.apache.org/mod_mbox/tomcat-dev/">Developers&nbsp;Mailing&nbsp;List</a><br/>
-                    <a href="irc://irc.freenode.net/#tomcat">IRC</a><br/>
-		    &nbsp;
-                  </td>
-                </tr>
-            </table>
-	    
-            <br/>
-            <table width="100%" border="1" cellspacing="0" cellpadding="3">
-                <tr>
-		  <th>Miscellaneous</th>
-                </tr>
-                <tr>
-                  <td class="menu">
-                    <a href="/examples/servlets/">Servlets Examples</a><br/>
-                    <a href="/examples/jsp/">JSP Examples</a><br/>
-                    <a href="http://java.sun.com/products/jsp">Sun's&nbsp;Java&nbsp;Server&nbsp;Pages&nbsp;Site</a><br/>
-                    <a href="http://java.sun.com/products/servlet">Sun's&nbsp;Servlet&nbsp;Site</a><br/>
-    		    &nbsp;
-                  </td>
-                </tr>
-            </table>
         </td>
 
         <td style="width:20px">&nbsp;</td>
-	
+
         <!-- Body -->
         <td align="left" valign="top">
-          <p id="congrats">If you're seeing this page via a web browser, it means you've setup Tomcat successfully. Congratulations!</p>
- 
-          <p>As you may have guessed by now, this is the default Tomcat home page. It can be found on the local filesystem at:</p>
-          <p class="code">$CATALINA_HOME/webapps/ROOT/index.html</p>
-	  
-          <p>where "$CATALINA_HOME" is the root of the Tomcat installation directory. If you're seeing this page, and you don't think you should be, then you're either a user who has arrived at new installation of Tomcat, or you're an administrator who hasn't got his/her setup quite right. Providing the latter is the case, please refer to the <a href="/docs">Tomcat Documentation</a> for more detailed setup and administration information than is found in the INSTALL file.</p>
+          <p id="congrats">If you're seeing this page via a web browser, it means you've setup Yes Cart demo successfully. Congratulations!</p>
 
-            <p><b>NOTE: For security reasons, using the manager webapp
-            is restricted to users with role "manager".</b>
-            Users are defined in <code>$CATALINA_HOME/conf/tomcat-users.xml</code>.</p>
+          <p>This is the default page of demo server. If you see this then tomcat had successfully started.</p>
 
-            <p>Included with this release are a host of sample Servlets and JSPs (with associated source code), extensive documentation, and an introductory guide to developing web applications.</p>
+          <p>Now you get get started with Yes Cart</p>
 
-            <p>Tomcat mailing lists are available at the Tomcat project web site:</p>
+          <ul>
+              <li>YUM (Yes cart Update Manager) is here: <a href="https://localhost:8443/yes-manager/">https://localhost:8443/yes-manager/</a></li>
+              <li>YeS (Yes cart Storefront) is here: <a href="http://localhost:8080/yes-shop/">http://localhost:8080/yes-shop/</a></li>
+              <li>You can also use Tomcat's monitoring tools (see Tomcat admin menu).<br/>
+                  The username is "<b>yc</b>" and password is "<b>yc</b>"</li>
+          </ul>
 
-           <ul>
-               <li><b><a href="mailto:users@tomcat.apache.org">users@tomcat.apache.org</a></b> for general questions related to configuring and using Tomcat</li>
-               <li><b><a href="mailto:dev@tomcat.apache.org">dev@tomcat.apache.org</a></b> for developers working on Tomcat</li>
-           </ul>
-
-            <p>Thanks for using Tomcat!</p>
-
-            <p id="footer"><img src="tomcat-power.gif" width="77" height="80" alt="Powered by Tomcat"/><br/>
-	    &nbsp;
-
-	    Copyright &copy; 1999-2011 Apache Software Foundation<br/>
-            All Rights Reserved
+            <p>
+                This demo server contains only initial data - just enough to see it alive. This is done purposefully to give you the
+                idea of how it all works. At the moment there is a single shop instance configured with no data.<br/>
+                To proceed now you need to populate this shop instance with catalog, products, inventory and price information.<br/>
+                You can to this either by manually entering the data in YUM, or alternatively you can use YUM to import our
+                sample data.
             </p>
-        </td>
 
+            <p>
+                Sample data is kindly provided by <a href="http://icecat.biz">IceCat</a> and is bundled with this demo server.<br/>
+                It is located in:<br/>
+                <span class="code">$SERVER_HOME/icecat-demo/</span><br/>
+                where <span class="code">$SERVER_HOME</span> is the name of directory where you have unzipped the
+                demo server.<br/>
+                There are two import files:
+                <ul>
+                    <li><span class="code">import-EN,RU.zip</span> - which contains all data, and</li>
+                    <li><span class="code">import-EN,RU-imh.zip</span> - which contains product images</li>
+                </ul>
+                Once you import these two you should have more than plenty to play around with Yes Cart.
+            </p>
+
+            <p>You can Yes Cart team though this <a href="http://www.inspire-software.com/en/feedback.html">web form</a></p>
+
+            <p>We hope you will enjoy using Yes Cart as much as we have enjoyed developing it.</p>
+
+            <p>Thanks for using Yes Cart!</p>
+        </td>
     </tr>
+</table>
+
+<table width="100%">
+    <tr>
+        <td align="left" colspan="6"><i>Yes Cart project is powered by these awesome technologies:</i></td>
+    </tr>
+    <tr>
+        <td align="center"><img src="pb-java.png" width="81" height="50" alt="Powered by Java"/></td>
+        <td align="center"><img src="pb-tomcat.png" width="71" height="50" alt="Powered by Apache Tomcat"/></td>
+        <td align="center"><img src="pb-spring.png" width="84" height="50" alt="Powered by Spring Framework"/></td>
+        <td align="center"><img src="pb-hibernate.png" width="107" height="50" alt="Powered by Hibernate"/></td>
+        <td align="center"><img src="pb-flex.png" width="50" height="50" alt="Powered by Adobe Flex"/></td>
+        <td align="center"><img src="pb-derby.png" width="175" height="50" alt="Powered by Apache Derby"/></td>
+    </tr>
+
 </table>
 
 </body>
