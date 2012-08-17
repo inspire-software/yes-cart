@@ -173,7 +173,7 @@ init_db_derby() {
     #java org.apache.derby.tools.sysinfo
     DBINITSCRIPT=$YC_HOME/env/setup/dbi/derby/dbinit.sql
     echo "Running init script $DBINITSCRIPT"
-    java -Dderby.system.home=$YC_HOME -Dij.outfile=$YC_HOME/derbyinit.log org.apache.derby.tools.ij $DBINITSCRIPT
+    java -Dderby.system.home=$YC_HOME -Dij.outfile=$YC_HOME/derbyinit.log -Dderby.ui.codeset=UTF8 org.apache.derby.tools.ij $DBINITSCRIPT
 #    java -Dderby.system.home=$YC_HOME org.apache.derby.tools.ij $DBINITSCRIPT
     
     cd $YC_HOME;
@@ -199,7 +199,7 @@ db_derby_connect() {
     echo "  connect 'jdbc:derby://localhost:1527/yespay'; - to connect to payment gateway db";
     echo "  disconnect; - to quit";
     
-    java org.apache.derby.tools.ij
+    java -Dderby.ui.codeset=UTF8 org.apache.derby.tools.ij
 
 }
 

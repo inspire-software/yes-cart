@@ -290,7 +290,7 @@ rem Sub routines below this comment
 rem   call java org.apache.derby.tools.sysinfo
     set DBINITSCRIPT=%YC_HOME%\env\setup\dbi\derby\dbinit.sql
     echo Running init script %DBINITSCRIPT%
-    call java -Dderby.system.home=%YC_HOME% -Dij.outfile=%YC_HOME%\derbyinit.log org.apache.derby.tools.ij %DBINITSCRIPT%
+    call java -Dderby.system.home=%YC_HOME% -Dij.outfile=%YC_HOME%\derbyinit.log -Dderby.ui.codeset=UTF8 org.apache.derby.tools.ij %DBINITSCRIPT%
 rem   call java -Dderby.system.home=%YC_HOME% org.apache.derby.tools.ij %DBINITSCRIPT%
     
     call cd %YC_HOME%;
@@ -317,7 +317,7 @@ rem   call java -Dderby.system.home=%YC_HOME% org.apache.derby.tools.ij %DBINITS
     echo   connect 'jdbc:derby://localhost:1527/yespay'; - to connect to payment gateway db
     echo   disconnect; - to quit
     
-    call java org.apache.derby.tools.ij
+    call java -Dderby.ui.codeset=UTF8 org.apache.derby.tools.ij
 	goto %comeBack%
 
 
