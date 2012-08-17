@@ -87,9 +87,9 @@ public interface ProductType extends Auditable {
 
     //void setAttributeExt(Map<String, ProductTypeAttr> attributeExt);
 
-    Collection<ProductTypeAttr> getAttribute();
+    Collection<ProductTypeAttr> getAttributes();
 
-    void setAttribute(Collection<ProductTypeAttr> attribute);
+    void setAttributes(Collection<ProductTypeAttr> attribute);
 
 
     Collection<ProdTypeAttributeViewGroup> getAttributeViewGroup();

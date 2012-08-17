@@ -265,14 +265,14 @@ public interface ProductDTO extends Identifiable {
      *
      * @return list of attributes
      */
-    Collection<AttrValueProductDTO> getAttribute();
+    Collection<AttrValueProductDTO> getAttributes();
 
     /**
      * Set list of attributes.
      *
      * @param attribute list of attributes
      */
-    void setAttribute(Collection<AttrValueProductDTO> attribute);
+    void setAttributes(Collection<AttrValueProductDTO> attribute);
 
     /** Get product tags.
      *

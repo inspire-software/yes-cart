@@ -173,7 +173,7 @@ public interface Product extends Auditable, Attributable, Seoable, Codable {
      *
      * @return collection of product attributes.
      */
-    Set<AttrValueProduct> getAttribute();
+    Set<AttrValueProduct> getAttributes();
 
     /**
      * Get all products attributes filtered by given attribute code.
@@ -197,7 +197,7 @@ public interface Product extends Auditable, Attributable, Seoable, Codable {
      *
      * @param attribute collection of products attributes
      */
-    void setAttribute(Set<AttrValueProduct> attribute);
+    void setAttributes(Set<AttrValueProduct> attribute);
 
     /**
      * Get the assigned categories to product.

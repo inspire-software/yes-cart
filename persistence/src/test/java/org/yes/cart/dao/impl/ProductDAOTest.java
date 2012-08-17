@@ -82,7 +82,7 @@ public class ProductDAOTest extends AbstractTestDAO {
         attrValueProduct.setProduct(product);
         attrValueProduct.setVal("100");
         attrValueProduct.setAttribute(attribute);
-        product.getAttribute().add(attrValueProduct);
+        product.getAttributes().add(attrValueProduct);
         long pk = productDao.create(product).getProductId();
         assertTrue(pk > 0L);
         product = new ProductEntity();
@@ -101,7 +101,7 @@ public class ProductDAOTest extends AbstractTestDAO {
         attrValueProduct.setProduct(product);
         attrValueProduct.setVal("asdfasdf");
         attrValueProduct.setAttribute(attribute);
-        product.getAttribute().add(attrValueProduct);
+        product.getAttributes().add(attrValueProduct);
         pk = productDao.create(product).getProductId();
         assertTrue(pk > 0L);
         productDao.fullTextSearchReindex();

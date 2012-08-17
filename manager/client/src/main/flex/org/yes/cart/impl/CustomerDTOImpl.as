@@ -31,7 +31,7 @@ public class CustomerDTOImpl {
 
     public var middlename:String;
 
-    public var attribute:ArrayCollection;
+    public var attributes:ArrayCollection;
 
     public function CustomerDTOImpl() {
     }

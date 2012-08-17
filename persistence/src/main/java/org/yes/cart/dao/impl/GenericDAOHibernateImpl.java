@@ -179,7 +179,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
         final Object obj = query.uniqueResult();
         if (forceCollectionInit) {
             if (obj instanceof Product) {
-                Hibernate.initialize(((Product) obj).getAttribute());
+                Hibernate.initialize(((Product) obj).getAttributes());
 
             }
         }

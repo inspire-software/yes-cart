@@ -60,7 +60,7 @@ public class CategoryDTOImpl {
 
     public var navigationByPriceTiers:String ;
 
-    public var attribute:ArrayCollection;
+    public var attributes:ArrayCollection;
 
     public var children:ArrayCollection;
 
@@ -94,7 +94,7 @@ public class CategoryDTOImpl {
                 + ",navigationByBrand=" + String(navigationByBrand)
                 + ",navigationByPrice=" + String(navigationByPrice)
                 + ",changed=" + String(changed)
-                + ",attribute=\n["+ String(attribute)
+                + ",attribute=\n["+ String(attributes)
                 + "]\n,children=" + String(children) + "}";
     }
 }

@@ -22,6 +22,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.AttrValueCustomerDTO;
 import org.yes.cart.domain.dto.CustomerDTO;
 import org.yes.cart.domain.dto.matcher.impl.AttrValueCustomerMatcher;
+import org.yes.cart.domain.entity.AttrValueCustomer;
 import org.yes.cart.domain.entity.impl.AttrValueEntityCustomer;
 
 import java.util.HashSet;
@@ -52,15 +53,15 @@ public class CustomerDTOImpl implements CustomerDTO {
     private String middlename;
 
     @DtoCollection(
-            value="attribute",
+            value="attributes",
             dtoBeanKey="org.yes.cart.domain.dto.AttrValueCustomerDTO",
-            entityGenericType = AttrValueEntityCustomer.class,
+            entityGenericType = AttrValueCustomer.class,
             entityCollectionClass = HashSet.class,
             dtoCollectionClass = HashSet.class,
             dtoToEntityMatcher = AttrValueCustomerMatcher.class,
             readOnly = true
             )
-    private Set<AttrValueCustomerDTO> attribute;
+    private Set<AttrValueCustomerDTO> attributes;
 
 
     /** {@inheritDoc} */
@@ -120,13 +121,13 @@ public class CustomerDTOImpl implements CustomerDTO {
     }
 
     /** {@inheritDoc} */
-    public Set<AttrValueCustomerDTO> getAttribute() {
-        return attribute;
+    public Set<AttrValueCustomerDTO> getAttributes() {
+        return attributes;
     }
 
     /** {@inheritDoc} */
-    public void setAttribute(final Set<AttrValueCustomerDTO> attribute) {
-        this.attribute = attribute;
+    public void setAttributes(final Set<AttrValueCustomerDTO> attributes) {
+        this.attributes = attributes;
     }
 
     @Override
@@ -137,7 +138,7 @@ public class CustomerDTOImpl implements CustomerDTO {
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
                 ", middlename='" + middlename + '\'' +
-                ", attribute=" + attribute +
+                ", attribute=" + attributes +
                 '}';
     }
 }

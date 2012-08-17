@@ -24,8 +24,8 @@ import org.yes.cart.domain.dto.ProductSkuDTO;
 import org.yes.cart.domain.dto.SkuPriceDTO;
 import org.yes.cart.domain.dto.matcher.impl.AttrValueProductSkuMatcher;
 import org.yes.cart.domain.dto.matcher.impl.SkuPriceMatcher;
+import org.yes.cart.domain.entity.AttrValueProductSku;
 import org.yes.cart.domain.entity.SkuPrice;
-import org.yes.cart.domain.entity.impl.AttrValueEntityProductSku;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -89,15 +89,15 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
 
 
     @DtoCollection(
-            value = "attribute",
+            value = "attributes",
             dtoBeanKey = "org.yes.cart.domain.dto.AttrValueProductSkuDTO",
-            entityGenericType = AttrValueEntityProductSku.class,
+            entityGenericType = AttrValueProductSku.class,
             entityCollectionClass = ArrayList.class,
             dtoCollectionClass = ArrayList.class,
             dtoToEntityMatcher = AttrValueProductSkuMatcher.class,
             readOnly = true
     )
-    private Collection<AttrValueProductSkuDTO> attribute;
+    private Collection<AttrValueProductSkuDTO> attributes;
 
 
 
@@ -242,15 +242,15 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
-    public Collection<AttrValueProductSkuDTO> getAttribute() {
-        return attribute;
+    public Collection<AttrValueProductSkuDTO> getAttributes() {
+        return attributes;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setAttribute(final Collection<AttrValueProductSkuDTO> attribute) {
-        this.attribute = attribute;
+    public void setAttributes(final Collection<AttrValueProductSkuDTO> attributes) {
+        this.attributes = attributes;
     }
 
     /**
@@ -364,7 +364,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
                 ", productId=" + productId +
                 ", rank=" + rank +
                 ", barCode='" + barCode + '\'' +
-                ", attribute=" + attribute +
+                ", attribute=" + attributes +
                 ", price=" + price +
                 '}';
     }

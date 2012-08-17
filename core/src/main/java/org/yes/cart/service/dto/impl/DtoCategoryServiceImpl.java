@@ -269,7 +269,7 @@ public class DtoCategoryServiceImpl
     public List<? extends AttrValueDTO> getEntityAttributes(final long entityPk)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<AttrValueCategoryDTO> result = new ArrayList<AttrValueCategoryDTO>();
-        result.addAll(getById(entityPk).getAttribute());
+        result.addAll(getById(entityPk).getAttributes());
         final List<AttributeDTO> availableAttributeDTOs = dtoAttributeService.findAvailableAttributes(
                 AttributeGroupNames.CATEGORY,
                 getCodes(result));

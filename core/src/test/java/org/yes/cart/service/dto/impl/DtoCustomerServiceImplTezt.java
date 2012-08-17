@@ -83,8 +83,8 @@ public class DtoCustomerServiceImplTezt extends BaseCoreDBTestCase {
         attrValueDTO.setAttributeDTO(attrDto);
         dtoService.createEntityAttributeValue(attrValueDTO);
         dto = dtoService.getById(dto.getCustomerId());
-        assertFalse(dto.getAttribute().isEmpty());
-        assertEquals("+380978159999", dto.getAttribute().iterator().next().getVal());
+        assertFalse(dto.getAttributes().isEmpty());
+        assertEquals("+380978159999", dto.getAttributes().iterator().next().getVal());
     }
 
     @Test
@@ -135,11 +135,11 @@ public class DtoCustomerServiceImplTezt extends BaseCoreDBTestCase {
         attrValueDTO.setAttributeDTO(attrDto);
         dtoService.createEntityAttributeValue(attrValueDTO);
         dto = dtoService.getById(dto.getCustomerId());
-        assertFalse(dto.getAttribute().isEmpty());
-        assertEquals("+380978159999", dto.getAttribute().iterator().next().getVal());
-        dtoService.deleteAttributeValue(dto.getAttribute().iterator().next().getAttrvalueId());
+        assertFalse(dto.getAttributes().isEmpty());
+        assertEquals("+380978159999", dto.getAttributes().iterator().next().getVal());
+        dtoService.deleteAttributeValue(dto.getAttributes().iterator().next().getAttrvalueId());
         dto = dtoService.getById(dto.getCustomerId());
-        assertTrue(dto.getAttribute().isEmpty());
+        assertTrue(dto.getAttributes().isEmpty());
     }
 
     private CustomerDTO getCustomerDto(String prefix) {

@@ -58,7 +58,7 @@ public class SystemServiceImpl implements SystemService {
      * {@inheritDoc}
      */
     public String getAttributeValue(final String key) {
-        return getAttirbuteValue(key, getSystem().getAttribute());
+        return getAttirbuteValue(key, getSystem().getAttributes());
     }
 
 
@@ -67,7 +67,7 @@ public class SystemServiceImpl implements SystemService {
      */
     public void updateAttributeValue(final String key, final String value) {
 
-        AttrValueSystem attrVal = getSystem().getAttribute().get(key);
+        AttrValueSystem attrVal = getSystem().getAttributes().get(key);
 
         if (attrVal == null) {
             Attribute attr = attributeService.findByAttributeCode(key);
@@ -77,7 +77,7 @@ public class SystemServiceImpl implements SystemService {
                 attrVal.setVal(value);
                 attrVal.setAttribute(attr);
                 attrVal.setSystem(this.system);
-                this.system.getAttribute().put(key, attrVal);
+                this.system.getAttributes().put(key, attrVal);
             }
         } else {
             attrVal.setVal(value);
@@ -99,7 +99,7 @@ public class SystemServiceImpl implements SystemService {
      */
     public String getDefaultShopURL() {
         return getAttirbuteValue(AttributeNamesKeys.System.SYSTEM_DEFAULT_SHOP,
-                getSystem().getAttribute());
+                getSystem().getAttributes());
     }
 
     /**
@@ -107,7 +107,7 @@ public class SystemServiceImpl implements SystemService {
      */
     public String getMailResourceDirectory() {
         return addTailFileSeparator(getAttirbuteValue(AttributeNamesKeys.SYSTEM_MAILTEMPLATES_FSPOINTER,
-                getSystem().getAttribute()));
+                getSystem().getAttributes()));
     }
 
 
@@ -116,7 +116,7 @@ public class SystemServiceImpl implements SystemService {
      */
     public String getDefaultResourceDirectory() {
         return getAttirbuteValue(AttributeNamesKeys.System.SYSTEM_DEFAULT_FSPOINTER,
-                getSystem().getAttribute());
+                getSystem().getAttributes());
     }
 
     /**
@@ -125,7 +125,7 @@ public class SystemServiceImpl implements SystemService {
     public String getImageRepositoryDirectory() {
         return addTailFileSeparator(
                 getAttirbuteValue(AttributeNamesKeys.System.SYSTEM_IMAGE_VAULT,
-                        getSystem().getAttribute()));
+                        getSystem().getAttributes()));
     }
 
 
@@ -136,7 +136,7 @@ public class SystemServiceImpl implements SystemService {
     public Integer getEtagExpirationForImages() {
         final String expirationTimeout = getAttirbuteValue(
                 AttributeNamesKeys.System.SYSTEM_ETAG_CACHE_IMAGES_TIME,
-                getSystem().getAttribute());
+                getSystem().getAttributes());
         if (expirationTimeout != null) {
             return Integer.valueOf(expirationTimeout);
         }
@@ -149,7 +149,7 @@ public class SystemServiceImpl implements SystemService {
     public Integer getEtagExpirationForPages() {
         final String expirationTimeout = getAttirbuteValue(
                 AttributeNamesKeys.System.SYSTEM_ETAG_CACHE_PAGES_TIME,
-                getSystem().getAttribute());
+                getSystem().getAttributes());
         if (expirationTimeout != null) {
             return Integer.valueOf(expirationTimeout);
         }

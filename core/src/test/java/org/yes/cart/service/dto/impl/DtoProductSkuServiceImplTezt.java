@@ -181,8 +181,8 @@ public class DtoProductSkuServiceImplTezt extends BaseCoreDBTestCase {
         attrValueDTO.setVal("image.jpg");
         dtoService.createEntityAttributeValue(attrValueDTO);
         dto = dtoService.getById(dto.getSkuId());
-        assertFalse(dto.getAttribute().isEmpty());
-        for (AttrValueDTO val : dto.getAttribute()) {
+        assertFalse(dto.getAttributes().isEmpty());
+        for (AttrValueDTO val : dto.getAttributes()) {
             if (val.getAttributeDTO().getAttributeId() == 200L) {
                 assertEquals("image.jpg", val.getVal());
                 return;
@@ -226,9 +226,9 @@ public class DtoProductSkuServiceImplTezt extends BaseCoreDBTestCase {
         attrValueDTO.setVal("image.jpg");
         dtoService.createEntityAttributeValue(attrValueDTO);
         dto = dtoService.getById(dto.getSkuId());
-        assertFalse(dto.getAttribute().isEmpty());
+        assertFalse(dto.getAttributes().isEmpty());
         AttrValueDTO image0 = null;
-        for (AttrValueDTO val : dto.getAttribute()) {
+        for (AttrValueDTO val : dto.getAttributes()) {
             if (val.getAttributeDTO().getAttributeId() == 200L) {
                 assertEquals("image.jpg", val.getVal());
                 image0 = val;
@@ -238,8 +238,8 @@ public class DtoProductSkuServiceImplTezt extends BaseCoreDBTestCase {
         image0.setVal("image2.jpeg");
         dtoService.updateEntityAttributeValue(image0);
         dto = dtoService.getById(dto.getSkuId());
-        assertFalse(dto.getAttribute().isEmpty());
-        for (AttrValueDTO val : dto.getAttribute()) {
+        assertFalse(dto.getAttributes().isEmpty());
+        for (AttrValueDTO val : dto.getAttributes()) {
             if (val.getAttributeDTO().getAttributeId() == 200L) {
                 assertEquals("image2.jpeg", val.getVal());
                 return;
@@ -260,9 +260,9 @@ public class DtoProductSkuServiceImplTezt extends BaseCoreDBTestCase {
         attrValueDTO.setVal("image.jpg");
         dtoService.createEntityAttributeValue(attrValueDTO);
         dto = dtoService.getById(dto.getSkuId());
-        assertFalse(dto.getAttribute().isEmpty());
+        assertFalse(dto.getAttributes().isEmpty());
         AttrValueDTO image0 = null;
-        for (AttrValueDTO val : dto.getAttribute()) {
+        for (AttrValueDTO val : dto.getAttributes()) {
             if (val.getAttributeDTO().getAttributeId() == 200L) {
                 assertEquals("image.jpg", val.getVal());
                 image0 = val;
@@ -271,7 +271,7 @@ public class DtoProductSkuServiceImplTezt extends BaseCoreDBTestCase {
         assertNotNull(image0);
         dtoService.deleteAttributeValue(image0.getAttrvalueId());
         dto = dtoService.getById(dto.getSkuId());
-        assertTrue(dto.getAttribute().isEmpty());
+        assertTrue(dto.getAttributes().isEmpty());
     }
 
     @Test

@@ -1236,7 +1236,7 @@
                 <column name="DESCRIPTION" length="4000"/>
             </property>
 
-            <map name="attribute" inverse="true" lazy="false" cascade="all">
+            <map name="attributes" inverse="true" lazy="false" cascade="all">
                 <key column="SYSTEM_ID" not-null="true" foreign-key="FK_ATTR_SYS"/>
                 <map-key type="string" column="CODE"/>
                 <one-to-many not-found="ignore" entity-name="SystemAttrValueEntity"/>
@@ -1486,8 +1486,8 @@ public void setRangeList(final RangeList rangeList) {
 
     @Transient
     public ProductTypeAttr getAttributeByCode(final String attributeCode) {
-        if (this.attribute != null) {
-            for (ProductTypeAttr attr : this.attribute) {
+        if (this.attributes != null) {
+            for (ProductTypeAttr attr : this.attributes) {
                 if (attr.getAttribute() != null && attr.getAttribute().getCode() != null && attr.getAttribute().getCode().equals(attributeCode)) {
                     return attr;
                 }
@@ -1513,7 +1513,7 @@ public void setRangeList(final RangeList rangeList) {
                 <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.ProdTypeAttributeViewGroup"/>
             </bag>
 
-            <bag name="attribute" inverse="true" lazy="true" cascade="all">
+            <bag name="attributes" inverse="true" lazy="true" cascade="all">
                 <key not-null="true" on-delete="cascade" column="PRODUCTTYPE_ID"/>
                 <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.ProductTypeAttr" />
             </bag>
@@ -1784,8 +1784,8 @@ public void setRangeList(final RangeList rangeList) {
     @Transient
     public Set<AttrValueCategory> getAttributesByCode(final String attributeCode) {
         final Set<AttrValueCategory> result = new HashSet<AttrValueCategory>();
-        if (this.attribute != null) {
-            for (AttrValueCategory attrValue : this.attribute) {
+        if (this.attributes != null) {
+            for (AttrValueCategory attrValue : this.attributes) {
                 if (attrValue.getAttribute().getCode().equals(attributeCode)) {
                     result.add(attrValue);
                 }
@@ -1799,8 +1799,8 @@ public void setRangeList(final RangeList rangeList) {
 
     @Transient
     public AttrValueCategory getAttributeByCode(String attributeCode) {
-        if (this.attribute != null) {
-            for (AttrValueCategory attrValue : this.attribute) {
+        if (this.attributes != null) {
+            for (AttrValueCategory attrValue : this.attributes) {
                 if (attrValue.getAttribute() != null && attributeCode.equals(attrValue.getAttribute().getCode())) {
                     return attrValue;
                 }
@@ -1822,7 +1822,7 @@ public void setRangeList(final RangeList rangeList) {
 
     @Transient
     public Collection<AttrValue> getAllAttibutes() {
-        return new ArrayList<AttrValue>(attribute);
+        return new ArrayList<AttrValue>(attributes);
     }
 
     /** {@inheritDoc} */
@@ -1862,7 +1862,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="availableto" column="AVAILABLETO" type="timestamp"/>
 
 
-            <bag name="attribute" inverse="true" lazy="false" cascade="all">
+            <bag name="attributes" inverse="true" lazy="false" cascade="all">
                 <key column="CATEGORY_ID" not-null="true" on-delete="cascade"/>
                 <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.AttrValueCategory" />
             </bag>
@@ -2061,8 +2061,8 @@ public void setRangeList(final RangeList rangeList) {
    @Transient
     public Collection<AttrValueProduct> getAttributesByCode(final String attributeCode) {
         final Collection<AttrValueProduct> result = new ArrayList<AttrValueProduct>();
-        if (this.attribute != null) {
-            for (AttrValueProduct attrValue : this.attribute) {
+        if (this.attributes != null) {
+            for (AttrValueProduct attrValue : this.attributes) {
                 if (attrValue.getAttribute() != null && attrValue.getAttribute().getCode() != null && attrValue.getAttribute().getCode().equals(attributeCode)) {
                     result.add(attrValue);
                 }
@@ -2074,9 +2074,11 @@ public void setRangeList(final RangeList rangeList) {
     @Transient
     public Map<String, AttrValue> getAllAttibutesAsMap() {
         final Map<String, AttrValue> rez = new HashMap<String, AttrValue>();
-        for (AttrValue attrValue : getAllAttibutes()) {
-            if (attrValue != null && attrValue.getAttribute() != null) {
-                rez.put(attrValue.getAttribute().getCode(), attrValue);
+        if (this.attributes != null) {
+            for (AttrValue attrValue : this.attributes) {
+                if (attrValue != null && attrValue.getAttribute() != null) {
+                    rez.put(attrValue.getAttribute().getCode(), attrValue);
+                }
             }
         }
         return rez;
@@ -2084,8 +2086,8 @@ public void setRangeList(final RangeList rangeList) {
 
     @Transient
     public AttrValueProduct getAttributeByCode(final String attributeCode) {
-        if (this.attribute != null) {
-            for (AttrValueProduct attrValue : this.attribute) {
+        if (this.attributes != null) {
+            for (AttrValueProduct attrValue : this.attributes) {
                 if (attrValue.getAttribute() != null && attrValue.getAttribute().getCode() != null && attrValue.getAttribute().getCode().equals(attributeCode)) {
                     return attrValue;
                 }
@@ -2096,7 +2098,7 @@ public void setRangeList(final RangeList rangeList) {
 
      @Transient
     public Collection<AttrValue> getAllAttibutes() {
-        return new ArrayList<AttrValue>(attribute);
+        return new ArrayList<AttrValue>(attributes);
     }
 
     @Transient
@@ -2175,7 +2177,7 @@ public void setRangeList(final RangeList rangeList) {
                 <column name="AVAILABILITY" not-null="true" default="1"/>
             </property>
 
-            <set name="attribute" inverse="true" lazy="true" cascade="all">
+            <set name="attributes" inverse="true" lazy="true" cascade="all">
 			    <meta attribute="field-description">UNCOMMENT @Field @ContainedIn @IndexedEmbedded (targetElement =  AttrValueEntityProduct.class) @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeValueBridge.class)</meta>
                 <key not-null="true" on-delete="cascade" column="PRODUCT_ID"/>
                 <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.AttrValueProduct" />
@@ -2334,8 +2336,8 @@ public void setRangeList(final RangeList rangeList) {
    @Transient
     public Collection<AttrValueProductSku> getAttributesByCode(final String attributeCode) {
         final Collection<AttrValueProductSku> result = new ArrayList<AttrValueProductSku>();
-        if (this.attribute != null) {
-            for (AttrValueProductSku attrValue : this.attribute) {
+        if (this.attributes != null) {
+            for (AttrValueProductSku attrValue : this.attributes) {
                 if (attrValue.getAttribute().getCode().equals(attributeCode)) {
                     result.add(attrValue);
                 }
@@ -2346,8 +2348,8 @@ public void setRangeList(final RangeList rangeList) {
 
     @Transient
     public AttrValueProductSku getAttributeByCode(final String attributeCode) {
-        if (this.attribute != null) {
-            for (AttrValueProductSku attrValue : this.attribute) {
+        if (this.attributes != null) {
+            for (AttrValueProductSku attrValue : this.attributes) {
                 if (attrValue.getAttribute().getCode().equals(attributeCode)) {
                     return attrValue;
                 }
@@ -2360,9 +2362,11 @@ public void setRangeList(final RangeList rangeList) {
     @Transient
     public Map<String, AttrValue> getAllAttibutesAsMap() {
         final Map<String, AttrValue> rez = new HashMap<String, AttrValue>();
-        for (AttrValue attrValue : getAllAttibutes()) {
-            if (attrValue != null && attrValue.getAttribute() != null) {
-                rez.put(attrValue.getAttribute().getCode(), attrValue);
+        if (this.attributes != null) {
+            for (AttrValue attrValue : this.attributes) {
+                if (attrValue != null && attrValue.getAttribute() != null) {
+                    rez.put(attrValue.getAttribute().getCode(), attrValue);
+                }
             }
         }
         return rez;
@@ -2370,7 +2374,7 @@ public void setRangeList(final RangeList rangeList) {
 
     @Transient
     public Collection<AttrValue> getAllAttibutes() {
-        return new ArrayList<AttrValue>(attribute);
+        return new ArrayList<AttrValue>(attributes);
     }
 
     /** {@inheritDoc} */
@@ -2419,7 +2423,7 @@ public void setRangeList(final RangeList rangeList) {
             </bag>
 
 
-            <bag name="attribute" inverse="false" lazy="false" cascade="all-delete-orphan">
+            <bag name="attributes" inverse="false" lazy="false" cascade="all-delete-orphan">
                 <!--<meta attribute="field-description">UNCOMMENT @Field @ContainedIn @IndexedEmbedded (targetElement =  AttrValueEntityProductSku.class) @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeValueBridge.class)</meta>-->
                 <key>
                     <column name="SKU_ID" not-null="false"/>
@@ -2854,8 +2858,8 @@ public void setRangeList(final RangeList rangeList) {
    @Transient
     public Collection<AttrValueShop> getAttributesByCode(final String attributeCode) {
         final Collection<AttrValueShop> result = new ArrayList<AttrValueShop>();
-        if (this.attribute != null) {
-            for (AttrValueShop attrValue : this.attribute) {
+        if (this.attributes != null) {
+            for (AttrValueShop attrValue : this.attributes) {
                 if (attrValue.getAttribute().getCode().equals(attributeCode)) {
                     result.add(attrValue);
                 }
@@ -2866,8 +2870,8 @@ public void setRangeList(final RangeList rangeList) {
 
     @Transient
     public AttrValueShop getAttributeByCode(final String attributeCode) {
-        if (this.attribute != null) {
-            for (AttrValueShop attrValue : this.attribute) {
+        if (this.attributes != null) {
+            for (AttrValueShop attrValue : this.attributes) {
                 if (attrValue.getAttribute().getCode().equals(attributeCode)) {
                     return attrValue;
                 }
@@ -2980,7 +2984,7 @@ public void setRangeList(final RangeList rangeList) {
                 <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.ShopDiscount"/>
             </bag>
 
-            <bag name="attribute" inverse="true" lazy="false" cascade="all">
+            <bag name="attributes" inverse="true" lazy="false" cascade="all">
                 <key column="SHOP_ID" not-null="true" foreign-key="FK_ATTR_SHOP"/>
                 <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.AttrValueShop"/>
             </bag>
@@ -3664,8 +3668,8 @@ public void setRangeList(final RangeList rangeList) {
     @Transient
     public Set<AttrValueCustomer> getAttributesByCode(final String attributeCode) {
         final Set<AttrValueCustomer> result = new HashSet<AttrValueCustomer>();
-        if (this.attribute != null) {
-            for (AttrValueCustomer attrValue : this.attribute) {
+        if (this.attributes != null) {
+            for (AttrValueCustomer attrValue : this.attributes) {
                 if (attrValue.getAttribute().getCode().equals(attributeCode)) {
                     result.add(attrValue);
                 }
@@ -3679,8 +3683,8 @@ public void setRangeList(final RangeList rangeList) {
 
     @Transient
     public AttrValueCustomer getAttributeByCode(String attributeCode) {
-        if (this.attribute != null) {
-            for (AttrValueCustomer attrValue : this.attribute) {
+        if (this.attributes != null) {
+            for (AttrValueCustomer attrValue : this.attributes) {
                 if (attrValue.getAttribute().getCode().equals(attributeCode)) {
                     return attrValue;
                 }
@@ -3748,7 +3752,7 @@ public void setRangeList(final RangeList rangeList) {
             </bag>
 
 
-            <bag name="attribute" inverse="true" lazy="false" cascade="all">
+            <bag name="attributes" inverse="true" lazy="false" cascade="all">
                 <key column="CUSTOMER_ID" not-null="true" on-delete="cascade"/>
                 <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.AttrValueCustomer" />
             </bag>
@@ -4595,7 +4599,7 @@ public void setRangeList(final RangeList rangeList) {
     <query name="PRODUCT.ATTRIBUTE.VALUES.BY.CODE">
         <![CDATA[
        select a.val, a.displayVal
-       from   ProductEntity p inner join p.attribute a
+       from   ProductEntity p inner join p.attributes a
             where p.productId = ?1 and a.attribute.code = ?2
        ]]>
     </query>
@@ -4603,7 +4607,7 @@ public void setRangeList(final RangeList rangeList) {
     <query name="PRODUCTSKU.ATTRIBUTE.VALUES.BY.CODE">
         <![CDATA[
        select a.val, a.displayVal
-       from   ProductSkuEntity p inner join p.attribute a
+       from   ProductSkuEntity p inner join p.attributes a
             where p.skuId = ?1 and a.attribute.code = ?2
        ]]>
     </query>
@@ -4611,7 +4615,7 @@ public void setRangeList(final RangeList rangeList) {
     <query name="PRODUCTS.ATTRIBUTE.VALUES.BY.CODE.PRODUCTTYPEID">
         <![CDATA[
        select distinct a.val
-       from   ProductEntity p inner join p.attribute a
+       from   ProductEntity p inner join p.attributes a
             where p.producttype.producttypeId = ?1
             and a.attribute.code = ?2
        ]]>
@@ -4639,7 +4643,7 @@ public void setRangeList(final RangeList rangeList) {
     <query name="PRODUCTS.ATTR.CODE.VALUES.BY.PRODUCTTYPEID">
         <![CDATA[
        select a.attribute.name, a.attribute.displayName, a.attribute.code, a.val, a.displayVal, 0, pta.rank
-       from  ProductTypeEntity pt, ProductTypeAttrEntity pta, ProductEntity p inner join p.attribute a
+       from  ProductTypeEntity pt, ProductTypeAttrEntity pta, ProductEntity p inner join p.attributes a
             where p.producttype.producttypeId = pt.producttypeId
             and pt.producttypeId = pta.producttype.producttypeId
             and pta.producttype.producttypeId = ?1

@@ -202,14 +202,14 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
                 LOG.warn(warn);
                 return false;
             } else {
-                AttrValueProduct imageAttibute = (AttrValueProduct) product.getAttributeByCode(attributeCode);
-                if (imageAttibute == null) {
-                    imageAttibute = genericDAO.getEntityFactory().getByIface(AttrValueProduct.class);
-                    imageAttibute.setProduct(product);
-                    imageAttibute.setAttribute(attribute);
-                    product.getAttribute().add(imageAttibute);
+                AttrValueProduct imageAttribute = (AttrValueProduct) product.getAttributeByCode(attributeCode);
+                if (imageAttribute == null) {
+                    imageAttribute = genericDAO.getEntityFactory().getByIface(AttrValueProduct.class);
+                    imageAttribute.setProduct(product);
+                    imageAttribute.setAttribute(attribute);
+                    product.getAttributes().add(imageAttribute);
                 }
-                imageAttibute.setVal(fileName);
+                imageAttribute.setVal(fileName);
                 final String info = MessageFormat.format("file {0} attached as {1} to product {2}", fileName, attributeCode, product.getCode());
                 statusListener.notifyMessage(info);
                 LOG.info(info);
@@ -262,7 +262,7 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
                     imageAttibute = genericDAO.getEntityFactory().getByIface(AttrValueProductSku.class);
                     imageAttibute.setProductSku(productSku);
                     imageAttibute.setAttribute(attribute);
-                    productSku.getAttribute().add(imageAttibute);
+                    productSku.getAttributes().add(imageAttibute);
                 }
                 imageAttibute.setVal(fileName);
                 final String info = MessageFormat.format("file {0} attached as {1} to product sku {2}",

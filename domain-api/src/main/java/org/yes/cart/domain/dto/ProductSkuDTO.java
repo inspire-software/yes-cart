@@ -208,14 +208,14 @@ public interface ProductSkuDTO extends Identifiable {
      *
      * @return attribute collection.
      */
-    Collection<AttrValueProductSkuDTO> getAttribute();
+    Collection<AttrValueProductSkuDTO> getAttributes();
 
     /**
      * Set attribute collection.
      *
      * @param attribute attr collection to set.
      */
-    void setAttribute(Collection<AttrValueProductSkuDTO> attribute);
+    void setAttributes(Collection<AttrValueProductSkuDTO> attribute);
 
 
 }
