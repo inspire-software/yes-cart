@@ -26,6 +26,7 @@ import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.support.entity.decorator.ProductDecorator;
 import org.yes.cart.web.support.entity.decorator.impl.ProductDecoratorImpl;
+import org.yes.cart.web.support.i18n.I18NWebSupport;
 import org.yes.cart.web.support.service.AttributableImageService;
 import org.yes.cart.web.util.WicketUtil;
 
@@ -51,26 +52,31 @@ public class SortableProductDataProvider extends SortableDataProvider<ProductDec
     private String sortFieldName = ProductSearchQueryBuilder.PRODUCT_CATEGORY_RANK_FIELD;
     private boolean reverse = false;
     private List<ProductDecorator> products;
+    private final I18NWebSupport i18NWebSupport;
+
 
     /**
      * Construct product data provider.
      *
+     * @param imageService image service
      * @param productService product service to get the products.
      * @param attributableImageService image service
      * @param categoryService category service
      * @param query          lucene query.
-     * @param imageService image service
+     * @param i18NWebSupport i18n
      */
     public SortableProductDataProvider(final ImageService imageService,
                                        final ProductService productService,
                                        final AttributableImageService attributableImageService,
                                        final CategoryService categoryService,
-                                       final Query query) {
+                                       final Query query,
+                                       final I18NWebSupport i18NWebSupport) {
         this.productService = productService;
         this.attributableImageService = attributableImageService;
         this.categoryService = categoryService;
         this.query = query;
         this.imageService = imageService;
+        this.i18NWebSupport = i18NWebSupport;
     }
 
     public Iterator<? extends ProductDecorator> iterator(int first, int count) {
@@ -100,7 +106,8 @@ public class SortableProductDataProvider extends SortableDataProvider<ProductDec
                             product,
                             WicketUtil.getHttpServletRequest().getContextPath(),
                             false,
-                            productService.getDefaultImage(product.getProductId()))
+                            productService, productService.getDefaultImage(product.getProductId()),
+                            i18NWebSupport)
             );
         }
         return rez;

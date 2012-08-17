@@ -115,7 +115,7 @@ public class DtoBrandServiceImpl
 
     /** {@inheritDoc}*/
     public List<? extends AttrValueDTO> getEntityAttributes(final long entityPk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<AttrValueBrandDTO> result = new ArrayList<AttrValueBrandDTO>(getById(entityPk).getAttribute());
+        final List<AttrValueBrandDTO> result = new ArrayList<AttrValueBrandDTO>(getById(entityPk).getAttributes());
         final List<AttributeDTO> availableAttributeDTOs = dtoAttributeService.findAvailableAttributes(
                 AttributeGroupNames.BRAND,
                 getCodes(result));

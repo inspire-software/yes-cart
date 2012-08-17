@@ -55,6 +55,11 @@ public class JobStatusListenerNullImpl implements JobStatusListener {
     }
 
     /** {@inheritDoc} */
+    public void notifyPing(final String msg) {
+        // nothing
+    }
+
+    /** {@inheritDoc} */
     public void notifyMessage(final String message) {
         throw new IllegalArgumentException("Job is UNDEFINED and cannot be updated");
     }

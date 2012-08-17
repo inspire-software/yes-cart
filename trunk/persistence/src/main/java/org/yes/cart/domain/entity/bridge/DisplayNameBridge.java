@@ -14,31 +14,31 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.web.i18n.impl;
+package org.yes.cart.domain.entity.bridge;
 
+import org.apache.lucene.document.Document;
+import org.hibernate.search.bridge.FieldBridge;
+import org.hibernate.search.bridge.LuceneOptions;
 import org.yes.cart.domain.i18n.I18NModel;
-import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
-import org.yes.cart.web.i18n.I18NWebSupport;
 
 /**
  * User: denispavlov
- * Date: 12-08-13
- * Time: 10:00 PM
+ * Date: 12-08-15
+ * Time: 2:05 PM
  */
-public class I18NWebSupportImpl implements I18NWebSupport {
+public class DisplayNameBridge implements FieldBridge {
 
-    /**
-     * {@inheritDoc}
-     */
-    public I18NModel getDefaultModel(final Object i18nObject) {
-        return new StringI18NModel(String.valueOf(i18nObject));
-    }
+    /** {@inheritDoc} */
+    public void set(final String name, final Object value, final Document document, final LuceneOptions luceneOptions) {
 
-    /**
-     * {@inheritDoc}
-     */
-    public I18NModel getFailoverModel(final Object i18nObject, final String failover) {
-        return new FailoverStringI18NModel(String.valueOf(i18nObject), failover);
+        if (value instanceof String) {
+            final I18NModel model = new StringI18NModel((String) value);
+            for (String displayName : model.getAllValues().values()) {
+                // add all names to index
+                luceneOptions.addFieldToDocument(name, displayName, document);
+            }
+        }
+
     }
 }

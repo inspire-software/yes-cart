@@ -30,6 +30,7 @@ import org.yes.cart.domain.entity.impl.AttrValueEntityProductSku;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * Lightweigt product sku DTO.
@@ -52,6 +53,9 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
 
     @DtoField(value = "name")
     private String name;
+
+    @DtoField(value = "displayName", converter = "i18nStringConverter")
+    private Map<String, String> displayNames;
 
     @DtoField(value = "description")
     private String description;
@@ -152,6 +156,16 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
      */
     public void setName(final String name) {
         this.name = name;
+    }
+
+    /** {@inheritDoc} */
+    public Map<String, String> getDisplayNames() {
+        return displayNames;
+    }
+
+    /** {@inheritDoc} */
+    public void setDisplayNames(final Map<String, String> displayNames) {
+        this.displayNames = displayNames;
     }
 
     /**

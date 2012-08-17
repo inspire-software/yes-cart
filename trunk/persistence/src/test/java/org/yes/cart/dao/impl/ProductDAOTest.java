@@ -596,7 +596,7 @@ public class ProductDAOTest extends AbstractTestDAO {
         assertTrue(!list.isEmpty());
         // be sure, that list is ranked
         for (Object[] array : list) {
-            int rank = Integer.valueOf(String.valueOf(array[4]));
+            int rank = Integer.valueOf(String.valueOf(array[5]));
             assertTrue(rank >= currentRank);
             currentRank = rank;
         }

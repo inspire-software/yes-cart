@@ -72,6 +72,13 @@ public class TestWarehouseServiceImpl extends BaseCoreDBTestCase {
         assertNotNull(shopWarehouses);
         assertFalse(shopWarehouses.isEmpty());
         assertEquals(warehouse.getWarehouseId(), shopWarehouses.get(0).getWarehouseId());
+
+        // unassign
+        warehouseService.unassignWarehouse(warehouse.getWarehouseId(), shop.getShopId());
+        List<Warehouse> shopWarehousesAfter = warehouseService.findByShopId(shop.getShopId());
+        assertNotNull(shopWarehousesAfter);
+        assertTrue(shopWarehousesAfter.isEmpty());
+
     }
 
     @Test
@@ -87,18 +94,6 @@ public class TestWarehouseServiceImpl extends BaseCoreDBTestCase {
         warehouseService.updateShopWarehouseRank(shopWarehouse.getShopWarehouseId(), 200);
         shopWarehouse = shopWarehouseDao.findById(shopWarehouse.getShopWarehouseId());
         assertEquals("Test default rank", 200, shopWarehouse.getRank());
-    }
-
-    /**
-     * Unassign warehouse to shop test.
-     */
-    @Test
-    public void testUnassignWarehouse() {
-        testAssignWarehouse();
-        warehouseService.unassignWarehouse(warehouse.getWarehouseId(), shop.getShopId());
-        List<Warehouse> shopWarehouses = warehouseService.findByShopId(shop.getShopId());
-        assertNotNull(shopWarehouses);
-        assertTrue(shopWarehouses.isEmpty());
     }
 
     private void createShopAndWareHouse(final String shopCode, final String warehouseCode) {

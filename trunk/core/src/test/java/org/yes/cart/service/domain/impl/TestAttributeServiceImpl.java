@@ -68,7 +68,7 @@ public class TestAttributeServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testFindAvailableAttributes1() {
         List<Attribute> attrs = attributeService.findAvailableAttributes(AttributeGroupNames.PRODUCT, null); // getByKey all
-        assertEquals(20, attrs.size());
+        assertEquals(22, attrs.size());
         List<String> assignedAttributes = new ArrayList<String>();
         for (Attribute attr : attrs) {
             assignedAttributes.add(attr.getCode());

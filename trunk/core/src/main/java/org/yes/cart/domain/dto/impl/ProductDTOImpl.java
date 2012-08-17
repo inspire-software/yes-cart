@@ -80,10 +80,11 @@ public class ProductDTOImpl implements ProductDTO {
     )
     private Set<ProductCategoryDTO> productCategoryDTOs;
 
-
-
     @DtoField(value = "name")
     private String name;
+
+    @DtoField(value = "displayName", converter = "i18nStringConverter")
+    private Map<String, String> displayNames;
 
     @DtoField(value = "description")
     private String description;
@@ -249,6 +250,16 @@ public class ProductDTOImpl implements ProductDTO {
      */
     public void setName(final String name) {
         this.name = name;
+    }
+
+    /** {@inheritDoc} */
+    public Map<String, String> getDisplayNames() {
+        return displayNames;
+    }
+
+    /** {@inheritDoc} */
+    public void setDisplayNames(final Map<String, String> displayNames) {
+        this.displayNames = displayNames;
     }
 
     /**

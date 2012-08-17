@@ -25,6 +25,7 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.web.support.entity.decorator.CategoryDecorator;
+import org.yes.cart.web.support.i18n.I18NWebSupport;
 import org.yes.cart.web.support.service.AttributableImageService;
 
 import java.util.ArrayList;
@@ -57,26 +58,29 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
     private final String httpServletContextPath;
     private String categoryImageUrl;
     private final ImageService imageService;
+    private final I18NWebSupport i18NWebSupport;
 
     /**
      * Construct entity decorator.
      *
+     * @param imageService           image service to get the image seo info
      * @param categoryImageService   category image service to get the image.
+     * @param categoryService        category service to get the images width and height
      * @param categoryEntity         entity to decorate.
      * @param httpServletContextPath servlet context path
-     * @param categoryService        category service to get the images width and height
-     * @param imageService           image service to get the image seo info
+     * @param i18NWebSupport         i18n support
      */
     public CategoryDecoratorImpl(
             final ImageService imageService,
             final AttributableImageService categoryImageService,
             final CategoryService categoryService,
             final Category categoryEntity,
-            final String httpServletContextPath) {
+            final String httpServletContextPath, final I18NWebSupport i18NWebSupport) {
         this.categoryService = categoryService;
         this.categoryImageService = categoryImageService;
         this.httpServletContextPath = httpServletContextPath;
         this.imageService = imageService;
+        this.i18NWebSupport = i18NWebSupport;
         BeanUtils.copyProperties(categoryEntity, this);
     }
 
@@ -131,7 +135,7 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
      */
     public String[] getDefaultImageSize(final Category category) {
         return categoryService.getCategoryAttributeRecursive(
-                category,
+                null, category,
                 defaultSize
         );
     }
@@ -142,20 +146,20 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
      */
     public String[] getThumbnailImageSize(final Category category) {
         return categoryService.getCategoryAttributeRecursive(
-                category,
+                null, category,
                 thumbnailSize
         );
     }
 
 
     public String getThumbnailImageWidth(final Category category) {
-        return categoryService.getCategoryAttributeRecursive(category,
+        return categoryService.getCategoryAttributeRecursive(null, category,
                 AttributeNamesKeys.Category.CATEGORY_IMAGE_WIDTH,
                 "80");
     }
 
     public String getThumbnailImageHeight(final Category category) {
-        return categoryService.getCategoryAttributeRecursive(this,
+        return categoryService.getCategoryAttributeRecursive(null, this,
                 AttributeNamesKeys.Category.CATEGORY_IMAGE_HEIGHT,
                 "80");
     }
@@ -175,4 +179,29 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
         return imageService.getSeoImage(fileName);
     }
 
+    /** {@inheritDoc} */
+    public String getName(final String locale) {
+        return i18NWebSupport.getFailoverModel(getDisplayName(), getName()).getValue(locale);
+    }
+
+    /** {@inheritDoc} */
+    public String getAttributeValue(final String attribute) {
+        return categoryService.getCategoryAttributeRecursive(null, this,
+                attribute,
+                getDescription());
+    }
+
+    /** {@inheritDoc} */
+    public String getAttributeValue(final String locale, final String attribute) {
+        return categoryService.getCategoryAttributeRecursive(locale, this,
+                attribute,
+                getDescription());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getDescription(final String locale) {
+        return getAttributeValue(AttributeNamesKeys.Category.CATEGORY_DESCRIPTION_PREFIX + locale);
+    }
 }

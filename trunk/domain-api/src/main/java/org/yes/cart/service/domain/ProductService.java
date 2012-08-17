@@ -112,6 +112,17 @@ public interface ProductService extends GenericService<Product> {
             String locale, long productId, long skuId, long productTypeId);
 
     /**
+     *
+     * @param locale locale
+     * @param productId product id
+     * @param skuId sku id
+     * @param attributeCode code
+     * @return raw and display value pair
+     */
+    Pair<String, String> getProductAttribute(
+            String locale, long productId, long skuId, String attributeCode);
+
+    /**
      * Get product by his primary key value
      *
      * @param productId product id
@@ -322,8 +333,8 @@ public interface ProductService extends GenericService<Product> {
     BigDecimal getProductQuantity(Product product);
 
     /**
-     * Get the total quantity of product skus on warehouses that belong to given shop.
-     * In multishop enviroment some product has 0 quantity at one shop and non 0 quantity at another,
+     * Get the total quantity of product SKUs on warehouses that belong to given shop.
+     * In multi-shop environment some product has 0 quantity at one shop and non 0 quantity at another,
      * this is can be used when shop owner want to getByKey more money from this situation.
      *
      * @param shop    {@link Shop} given shop.

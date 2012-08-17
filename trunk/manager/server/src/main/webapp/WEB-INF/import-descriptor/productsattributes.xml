@@ -34,14 +34,21 @@
     <!--
         Product attributes are very slow therefore a native query is run to make it faster
 
+        Delete should remove the previous value only if Attribute.ALLOWDUPLICATE returns false,
+        so for multi-value attributes the delete operation should not have any effect.
+
         '#~#' is default separator for localised text fields the syntax is:
             'locale1#~#value1#~#locale2#~#value2 ... #~#localeN#~#valueN'
         where locales match YeS locale settings.
       -->
     <insert-sql>
-        INSERT INTO TPRODUCTATTRVALUE (PRODUCT_ID, CODE, VAL, DISPLAYVAL) VALUES (
-        (SELECT p.PRODUCT_ID FROM TPRODUCT p WHERE p.GUID = '{product}'),
-        '{attribute}','{val}','en#~#{displayValEn}#~#ru#~#{displayValRu}')
+        DELETE FROM TPRODUCTATTRVALUE
+            WHERE PRODUCT_ID = (SELECT p.PRODUCT_ID FROM TPRODUCT p WHERE p.GUID = '{product}')
+                AND CODE = '{attribute}' AND 0 = (SELECT a.ALLOWDUPLICATE FROM TATTRIBUTE a WHERE a.CODE = '{attribute}');
+        INSERT INTO TPRODUCTATTRVALUE (PRODUCT_ID, GUID, CODE, VAL, DISPLAYVAL)
+            VALUES (
+                (SELECT p.PRODUCT_ID FROM TPRODUCT p WHERE p.GUID = '{product}'),
+            '{GUID}', '{attribute}','{val}','en#~#{displayValEn}#~#ru#~#{displayValRu}')
     </insert-sql>
 
 
@@ -50,21 +57,23 @@
         <!-- Product by GUID -->
         <column-descriptor>
             <column-index>0</column-index>
-            <field-type>FK_FIELD</field-type>
+            <!-- field-type>FK_FIELD</field-type -->
+            <field-type>FIELD</field-type>
             <name>product</name>
             <value-regex>(.{0,255})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
-            <lookup-query>select p from ProductEntity p where p.guid = {product}</lookup-query>
+            <!-- lookup-query>select p from ProductEntity p where p.guid = {product}</lookup-query -->
         </column-descriptor>
 
         <!-- Attr code -->
         <column-descriptor>
             <column-index>3</column-index>
-            <field-type>FK_FIELD</field-type>
+            <!-- field-type>FK_FIELD</field-type -->
+            <field-type>FIELD</field-type>
             <name>attribute</name>
             <value-regex>(.{0,255})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
-            <lookup-query>select a from AttributeEntity a where a.code = {attribute}</lookup-query>
+            <!-- lookup-query>select a from AttributeEntity a where a.code = {attribute}</lookup-query -->
         </column-descriptor>
 
         <!-- Attr raw value -->

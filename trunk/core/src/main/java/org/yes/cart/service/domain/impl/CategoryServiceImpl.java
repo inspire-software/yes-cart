@@ -25,6 +25,7 @@ import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShopCategory;
+import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.service.domain.CategoryService;
 
 import java.util.*;
@@ -139,7 +140,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         if (category == null) {
             rez = Constants.DEFAULT_ITEMS_ON_PAGE;
         } else {
-            final String val = getCategoryAttributeRecursive(category, AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
+            final String val = getCategoryAttributeRecursive(null, category, AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
             if (val == null) {
                 rez = Constants.DEFAULT_ITEMS_ON_PAGE;
             } else {
@@ -153,14 +154,16 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      * Get the value of given attribute. If value not present in given category
      * failover to parent category will be used.
      *
+     *
+     * @param locale        locale for localisable value (or null for raw)
      * @param category      given category
      * @param attributeName attribute name
      * @param defaultValue  default value will be returned if value not found in hierarchy
      * @return value of given attribute name or defaultValue if value not found in category hierarchy
      */
     @Cacheable(value = CACHE_NAME)
-    public String getCategoryAttributeRecursive(final Category category, final String attributeName, final String defaultValue) {
-        final String value = getCategoryAttributeRecursive(category, attributeName);
+    public String getCategoryAttributeRecursive(final String locale, final Category category, final String attributeName, final String defaultValue) {
+        final String value = getCategoryAttributeRecursive(locale, category, attributeName);
         if (value == null) {
             return defaultValue;
         }
@@ -172,12 +175,14 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      * failover to parent category will be used.  In case if attribute value for first
      * attribute will be found, the rest values also will be collected form the same category.
      *
+     *
+     * @param locale           locale for localisable value (or null for raw)
      * @param incategory       given category
      * @param attributeNames set of attributes, to collect values.
      * @return value of given attribute name or defaultValue if value not found in category hierarchy
      */
     @Cacheable(value = CACHE_NAME)
-    public String[] getCategoryAttributeRecursive(final Category incategory, final String[] attributeNames) {
+    public String[] getCategoryAttributeRecursive(final String locale, final Category incategory, final String[] attributeNames) {
         final String[] rez;
         final Category category;
         
@@ -196,7 +201,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             } else {
                 final Category parentCategory =
                         categoryDao.findById(category.getParentId());
-                rez = getCategoryAttributeRecursive(parentCategory, attributeNames);
+                rez = getCategoryAttributeRecursive(null, parentCategory, attributeNames);
             }
         } else {
             rez = new String[attributeNames.length];
@@ -221,31 +226,36 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * Get the value of given attribute. If value not present in given category failover to parent category will be used.
      *
+     * @param locale        locale for localisable value (or null for raw)
      * @param category      given category
      * @param attributeName attribute name
      * @return value of given attribute name or null if value not found in category hierarchy
      */
-    private String getCategoryAttributeRecursive(final Category category, final String attributeName) {
-        final String rez;
+    private String getCategoryAttributeRecursive(final String locale, final Category category, final String attributeName) {
+
         if (category == null || attributeName == null) {
-            rez = null;
-        } else {
-            final AttrValue attrValue = category.getAttributeByCode(attributeName);
-            if (attrValue == null
-                    ||
-                    StringUtils.isBlank(attrValue.getVal())) {
-                if (category.getCategoryId() == category.getParentId()) {
-                    rez = null; //root of hierarchy
-                } else {
-                    final Category parentCategory =
-                            categoryDao.findById(category.getParentId());
-                    rez = getCategoryAttributeRecursive(parentCategory, attributeName);
-                }
+            return null;
+        }
+
+        final AttrValue attrValue = category.getAttributeByCode(attributeName);
+        if (attrValue != null) {
+            final String val;
+            if (locale == null) {
+                val = attrValue.getVal();
             } else {
-                rez = attrValue.getVal();
+                val = new FailoverStringI18NModel(attrValue.getDisplayVal(), attrValue.getVal()).getValue(locale);
+            }
+            if (!StringUtils.isBlank(val)) {
+                return val;
             }
         }
-        return rez;
+
+        if (category.getCategoryId() == category.getParentId()) {
+            return null; //root of hierarchy
+        }
+        final Category parentCategory =
+                categoryDao.findById(category.getParentId());
+        return getCategoryAttributeRecursive(locale, parentCategory, attributeName);
     }
 
     /**

@@ -76,7 +76,7 @@ public class Language extends BaseComponent {
 
         if (isVisible()) {
 
-            final String selectedLocale = ThreadContext.getSession().getLocale().getLanguage();
+            final String selectedLocale = getLocale().getLanguage();
 
             if (StringUtils.isBlank(ApplicationDirector.getShoppingCart().getCurrentLocale())) {
                        //todo set locale into cart

@@ -55,6 +55,7 @@ public class DtoAttributeServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testUpdate() throws Exception {
         AttributeDTO dto = getDto();
+        dto.setCode("A-001");
         dto = dtoAttributeService.create(dto);
         long id = dto.getAttributeId();
         assertTrue(dto.getAttributeId() > 0);

@@ -34,8 +34,10 @@ import java.util.regex.Pattern;
  */
 public abstract class AbstractByParameterByColumnNameStrategy implements LookUpQueryParameterStrategy {
 
-    private static final String MASTER = "{masterObject}";
-    private static final String MASTER_ID = "{masterObjectId}";
+    private static final String GUID        = "{GUID}";
+    private static final String MASTER      = "{masterObject}";
+    private static final String MASTER_ID   = "{masterObjectId}";
+
     private static final Pattern MATCH_COLUMNS_IN_SQL_TEMPLATE = Pattern.compile("(\\{[a-zA-Z\\d]*\\})");
 
     protected final void replaceColumnNamesInTemplate(final String queryTemplate,
@@ -66,6 +68,8 @@ public abstract class AbstractByParameterByColumnNameStrategy implements LookUpQ
                 } else {
                     addParameter(paramCount, 0L, query, params);
                 }
+            } else if (GUID.equals(columnName)) {
+                addParameter(paramCount, java.util.UUID.randomUUID().toString(), query, params);
             } else {
                 final String realColumnName = columnName.substring(1, columnName.length() - 1);
                 final ImportColumn column = descriptor.getImportColumn(realColumnName);

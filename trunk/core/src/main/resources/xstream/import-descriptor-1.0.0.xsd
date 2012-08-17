@@ -41,6 +41,8 @@
 
                 select-sql defines query that is to be used to look up existing object (HSQL)
                 insert-sql defines a native insert query to improve performance (NATIVE SQL)
+                It is possible to write several statement and they should be separated by ";\n"
+                (semi-colon followed by a new line)
 
                 Syntax for queries follows either native SQL or HSQL with parameters
                 specified as column names in curly brackets.
@@ -48,6 +50,10 @@
                     HSQL: select c from CategoryEntity c where c.guid = {guid}
                     SQL : insert into TCATEGORY (GUID) values ('{guid}')
                 Note the difference that '' are necessary for native SQL but not for HSQL.
+                There are special placeholders in addition to {column} placeholders:
+                1. {masterObjectId} PK of the maste object
+                2. {masterObject} master instance (for use with HSQL)
+                3. {GUID} auto generated guid (for use with native SQL inserts)
 
             </xs:documentation>
         </xs:annotation>

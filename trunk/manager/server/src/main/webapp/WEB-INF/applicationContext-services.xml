@@ -518,7 +518,28 @@
                         that contains an example catalog with product SKUs and attributes
                         and also some made up inventory and price data. The shop categories
                         are specifically set for SHOP10.
+
+                        This group also has some 'unsafe' fast insert descriptors (marked '-demo') that should not be
+                        used in production unless this is the first time data load and the data is clean.
                       -->
+                    <list>
+                        <value>brandnames.xml</value>
+                        <value>attributenames.xml</value>
+                        <value>attributegroupnames.xml</value>
+                        <value>producttypenames.xml</value>
+                        <value>categorynames-demo.xml</value>
+                        <value>shopcategory-demo.xml</value>
+                        <value>productypeattributeviewgroupnames.xml</value>
+                        <value>producttypeattrnames.xml</value>
+                        <value>productnames-demo.xml</value>
+                        <value>productsku-demo.xml</value>
+                        <value>productsattributes-demo.xml</value>
+                        <value>skuinventory.xml</value>
+                        <value>skuprices.xml</value>
+                        <value>productcategorynames.xml</value>
+                    </list>
+                </entry>
+                <entry key="Catalog import (Categories and attribute definitions)">
                     <list>
                         <value>brandnames.xml</value>
                         <value>attributenames.xml</value>
@@ -528,12 +549,24 @@
                         <value>shopcategory.xml</value>
                         <value>productypeattributeviewgroupnames.xml</value>
                         <value>producttypeattrnames.xml</value>
+                    </list>
+                </entry>
+                <entry key="Product import (Products, SKUs and attributes)">
+                    <list>
                         <value>productnames.xml</value>
                         <value>productsku.xml</value>
                         <value>productsattributes.xml</value>
-                        <value>skuinventory.xml</value>
-                        <value>skuprices.xml</value>
                         <value>productcategorynames.xml</value>
+                    </list>
+                </entry>
+                <entry key="Inventory import">
+                    <list>
+                        <value>skuinventory.xml</value>
+                    </list>
+                </entry>
+                <entry key="Prices import">
+                    <list>
+                        <value>skuprices.xml</value>
                     </list>
                 </entry>
                 <entry key="IMAGES ONLY">

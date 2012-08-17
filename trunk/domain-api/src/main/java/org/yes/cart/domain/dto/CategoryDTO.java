@@ -21,6 +21,7 @@ import org.yes.cart.domain.entity.Identifiable;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -118,6 +119,20 @@ public interface CategoryDTO extends Identifiable {
      * @param name category name.
      */
     void setName(String name);
+
+    /**
+     * Display name.
+     *
+     * @return localised locale => name pairs.
+     */
+    Map<String, String> getDisplayNames();
+
+    /**
+     * Get display name
+     *
+     * @param names localised locale => name pairs
+     */
+    void setDisplayNames(Map<String, String> names);
 
     /**
      * Get category description.

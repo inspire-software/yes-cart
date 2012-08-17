@@ -19,10 +19,17 @@ package org.yes.cart.web.page.component;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.domain.ImageService;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
+import org.yes.cart.web.support.entity.decorator.CategoryDecorator;
+import org.yes.cart.web.support.entity.decorator.impl.CategoryDecoratorImpl;
+import org.yes.cart.web.support.service.AttributableImageService;
+import org.yes.cart.web.util.WicketUtil;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -33,10 +40,13 @@ public class EmptyCentralView extends AbstractCentralView {
 
     private static final String DESCRIPTION = "description";
 
-    @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
-    protected CategoryService categoryService;
+    @SpringBean(name = StorefrontServiceSpringKeys.CATEGORY_IMAGE_SERVICE)
+    protected AttributableImageService attributableImageService;
 
-    private Category category;
+    @SpringBean(name = ServiceSpringKeys.IMAGE_SERVICE)
+    protected ImageService imageService;
+
+    private CategoryDecorator category;
 
     /**
       * Construct panel.
@@ -55,7 +65,16 @@ public class EmptyCentralView extends AbstractCentralView {
 
         String catId = getPage().getPageParameters().get(WebParametersKeys.CATEGORY_ID).toString();
         if (catId != null) {
-            category = categoryService.getById(Long.valueOf(catId));
+            Category category = getCategory();
+            if (category != null) {
+                this.category = new CategoryDecoratorImpl(
+                        imageService,
+                        attributableImageService,
+                        getCategoryService(),
+                        category,
+                        WicketUtil.getHttpServletRequest().getContextPath(),
+                        getI18NSupport());
+            }
         }
 
     }
@@ -68,17 +87,17 @@ public class EmptyCentralView extends AbstractCentralView {
 
         configureContext();
 
+        String description = null;
         if (category != null) {
-
-            add(new Label(DESCRIPTION, category.getDescription()));
-
-        } else {
-
-            add(new Label(DESCRIPTION, ""));
-
+            description = category.getDescription(getLocale().getLanguage());
         }
+
+        add(new Label(DESCRIPTION, description != null ? description : ""));
 
         super.onBeforeRender();
 
     }
+
+
+
 }

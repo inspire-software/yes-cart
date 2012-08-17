@@ -101,6 +101,20 @@ public interface FilteredNavigationRecord extends Rankable {
     String getName();
 
     /**
+     * Set name of attribute.
+     *
+     * @param name name of attribute.
+     */
+    void setDisplayName(String name);
+
+    /**
+     * Get the name of attribute.
+     *
+     * @return name of attribute.
+     */
+    String getDisplayName();
+
+    /**
      * Rank of attribute record
      *
      * @return rank

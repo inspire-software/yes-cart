@@ -18,10 +18,12 @@ package org.yes.cart.web.page.component;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ThreadContext;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.entity.decorator.CategoryDecorator;
@@ -54,6 +56,8 @@ public class CategoryView extends  BaseComponent {
     @Override
     protected void onBeforeRender() {
 
+        final String selectedLocale = getLocale().getLanguage();
+
         final CategoryDecorator category = (CategoryDecorator) this.getParent().getDefaultModel().getObject();
 
         final PageParameters pageParameters = new PageParameters().add(WebParametersKeys.CATEGORY_ID, category.getCategoryId());
@@ -72,7 +76,7 @@ public class CategoryView extends  BaseComponent {
             )
         ).add(
             new BookmarkablePageLink<HomePage>(CATEGORY_NAME_LINK, HomePage.class, pageParameters).add(
-                    new Label(CATEGORY_NAME, category.getName()).setEscapeModelStrings(false)
+                    new Label(CATEGORY_NAME, category.getName(selectedLocale)).setEscapeModelStrings(false)
             )
         ).add(
                 new BookmarkablePageLink<HomePage>(CATEGORY_DESCR_LINK, HomePage.class, pageParameters).add(
@@ -87,12 +91,13 @@ public class CategoryView extends  BaseComponent {
     /**
      * Get category description for UI.
      * @param category   category
-     * @return  category desription
+     * @return  category description
      */
     private String getDescription(final CategoryDecorator category) {
-        if(StringUtils.isBlank(category.getDescription()) || category.getName().equalsIgnoreCase(category.getDescription())) {
+        final String desc = category.getDescription(getLocale().getLanguage());
+        if(StringUtils.isBlank(desc)) {
             return "&nbsp;";
         }
-        return category.getDescription();
+        return desc;
     }
 }

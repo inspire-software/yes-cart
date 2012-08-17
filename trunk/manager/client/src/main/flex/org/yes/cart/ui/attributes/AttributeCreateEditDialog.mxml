@@ -16,7 +16,7 @@
   -->
 
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:yci18n="org.yes.cart.ui.i18n.*"
-                title="Create attribute"
+                title="@Resource(bundle='AttributeCreateEditDialog',key='editAttribute')"
                 showCloseButton="true"
                 close="PopUpManager.removePopUp(this)">
 

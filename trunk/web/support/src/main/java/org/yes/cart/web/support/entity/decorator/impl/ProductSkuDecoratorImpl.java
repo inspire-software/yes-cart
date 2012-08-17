@@ -17,7 +17,9 @@
 package org.yes.cart.web.support.entity.decorator.impl;
 
 import org.springframework.beans.BeanUtils;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
+import org.yes.cart.domain.entity.AttrValueProductSku;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SeoImage;
@@ -25,7 +27,9 @@ import org.yes.cart.domain.entity.impl.ProductSkuEntity;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ImageService;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.support.entity.decorator.ProductSkuDecorator;
+import org.yes.cart.web.support.i18n.I18NWebSupport;
 import org.yes.cart.web.support.service.AttributableImageService;
 
 import java.util.ArrayList;
@@ -51,27 +55,34 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
 
 
 
-
+    private final ProductService productService;
     private final AttributableImageService attributableImageService;
     private final CategoryService categoryService;
     private final String httpServletContextPath;
     private String productImageUrl;
     private final ImageService imageService;
+    private final I18NWebSupport i18NWebSupport;
 
     /**
      * Construct product sku decorator.
      *
+     * @param imageService             image service to get the image seo info
      * @param attributableImageService category image service to get the image.
      * @param categoryService          to get image width and height
-     * @param httpServletContextPath   servlet context path
      * @param productSkuEntity         sku to decorate
-     * @param imageService             image service to get the image seo info
+     * @param httpServletContextPath   servlet context path
+     * @param productService           product service
+     * @param i18NWebSupport           i18n
      */
     public ProductSkuDecoratorImpl(final ImageService imageService,
                                    final AttributableImageService attributableImageService,
                                    final CategoryService categoryService,
                                    final ProductSku productSkuEntity,
-                                   final String httpServletContextPath) {
+                                   final String httpServletContextPath,
+                                   final ProductService productService,
+                                   final I18NWebSupport i18NWebSupport) {
+        this.productService = productService;
+        this.i18NWebSupport = i18NWebSupport;
 
         BeanUtils.copyProperties(productSkuEntity, this);
         this.httpServletContextPath = httpServletContextPath;
@@ -138,7 +149,7 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
      */
     public String [] getDefaultImageSize(final Category category) {
         return categoryService.getCategoryAttributeRecursive(
-                category,
+                null, category,
                 ProductDecoratorImpl.defaultSize
         );
     }
@@ -148,7 +159,7 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
      */
     public String [] getThumbnailImageSize(final Category category) {
         return categoryService.getCategoryAttributeRecursive(
-                category,
+                null, category,
                 ProductDecoratorImpl.thumbnailSize
         );
     }
@@ -167,5 +178,42 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
     public SeoImage getSeoImage(final String fileName) {
         return imageService.getSeoImage(fileName);
     }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getName(final String locale) {
+        return i18NWebSupport.getFailoverModel(getDisplayName(), getName()).getValue(locale);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getAttributeValue(final String attribute) {
+        final AttrValueProductSku val =  getAttributeByCode(attribute);
+        return val != null ? val.getVal() : "";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getAttributeValue(final String locale, final String attribute) {
+        final AttrValueProductSku lval =  getAttributeByCode(attribute);
+        return lval != null ? i18NWebSupport.getFailoverModel(lval.getDisplayVal(), lval.getVal()).getValue(locale) : "";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getDescription(final String locale) {
+        final String desc = getAttributeValue(AttributeNamesKeys.Product.SKUPRODUCT_DESCRIPTION_PREFIX + locale);
+        if (desc == null) {
+            return getDescription();
+        }
+        return desc;
+    }
+
+
 
 }

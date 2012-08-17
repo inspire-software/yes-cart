@@ -118,8 +118,9 @@ public class BreadCrumbsBuilder {
         if (categoryId != category.getParentId()) {
             categoriesCrumbs.add(
                    new Crumb(category.getName(),
-                   getCategoryLinkParameters(categoryId),
-                   getRemoveCategoryLinkParameters(category))
+                           category.getDisplayName(), getCategoryLinkParameters(categoryId),
+                   getRemoveCategoryLinkParameters(category)
+                   )
             );
 
             if (LOG.isDebugEnabled()) {
@@ -209,7 +210,7 @@ public class BreadCrumbsBuilder {
         }
 
         base.add(key, value);
-        return new Crumb(linkName, new PageParameters(base), withoutCurrent);
+        return new Crumb(linkName, null, new PageParameters(base), withoutCurrent);
     }
 
 }

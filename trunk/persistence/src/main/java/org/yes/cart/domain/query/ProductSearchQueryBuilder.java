@@ -25,6 +25,7 @@ public interface ProductSearchQueryBuilder {
 
     //can be used in sort order
     public final static String PRODUCT_NAME_FIELD = "name";
+    public final static String PRODUCT_DISPLAYNAME_FIELD = "displayName";
     public final static String PRODUCT_CODE_FIELD = "code";
     public final static String PRODUCT_TAG_FIELD = "tag";
     public final static String SKU_PRODUCT_CODE_FIELD = "sku.code";

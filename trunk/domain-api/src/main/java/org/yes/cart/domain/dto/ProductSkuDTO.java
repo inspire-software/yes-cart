@@ -19,6 +19,7 @@ package org.yes.cart.domain.dto;
 import org.yes.cart.domain.entity.Identifiable;
 
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * Product Sku light weight product object.
@@ -69,6 +70,20 @@ public interface ProductSkuDTO extends Identifiable {
      * @param name sku name.
      */
     void setName(final String name);
+
+    /**
+     * Display name.
+     *
+     * @return localised locale => name pairs.
+     */
+    Map<String, String> getDisplayNames();
+
+    /**
+     * Get display name
+     *
+     * @param names localised locale => name pairs
+     */
+    void setDisplayNames(Map<String, String> names);
 
     /**
      * Get description.

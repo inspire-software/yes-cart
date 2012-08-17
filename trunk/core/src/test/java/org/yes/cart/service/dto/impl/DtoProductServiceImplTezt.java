@@ -83,6 +83,7 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testUpdate() throws Exception {
         ProductDTO dto = getDto();
+        dto.setCode("P-0000");
         dto = dtoService.create(dto);
         assertTrue(dto.getProductId() > 0);
         long pk = dto.getProductId();
@@ -129,6 +130,7 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testCreateEntityAttributeValue() throws Exception {
         ProductDTO dto = getDto();
+        dto.setCode("P-0001");
         dto = dtoService.create(dto);
         assertTrue(dto.getProductId() > 0);
         AttrValueProductDTO attrValueProductDTO = dtoFactory.getByIface(AttrValueProductDTO.class);
@@ -142,6 +144,7 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testUpdateEntityAttributeValue() throws Exception {
         ProductDTO dto = getDto();
+        dto.setCode("P-0002");
         dto = dtoService.create(dto);
         assertTrue(dto.getProductId() > 0);
         AttrValueProductDTO attrValueProductDTO = dtoFactory.getByIface(AttrValueProductDTO.class);
@@ -158,6 +161,7 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testGetEntityAttributes() throws Exception {
         ProductDTO dto = getDto();
+        dto.setCode("P-0003");
         dto = dtoService.create(dto);
         assertTrue(dto.getProductId() > 0);
         List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(dto.getProductId());
@@ -190,6 +194,7 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testDeleteAttributeValue() throws Exception {
         ProductDTO dto = getDto();
+        dto.setCode("P-0004");
         dto = dtoService.create(dto);
         assertTrue(dto.getProductId() > 0);
         AttrValueProductDTO attrValueProductDTO = dtoFactory.getByIface(AttrValueProductDTO.class);

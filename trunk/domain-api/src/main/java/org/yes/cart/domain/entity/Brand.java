@@ -73,14 +73,14 @@ public interface Brand extends Auditable {
      *
      * @return brand's attributes.
      */
-    Collection<AttrValueBrand> getAttribute();
+    Collection<AttrValueBrand> getAttributes();
 
     /**
      * Set brand's attributes.
      *
-     * @param attribute brand's attributes.
+     * @param attributes brand's attributes.
      */
-    void setAttribute(Collection<AttrValueBrand> attribute);
+    void setAttributes(Collection<AttrValueBrand> attributes);
 
 
 }

@@ -17,6 +17,7 @@
 package org.yes.cart.web.page.component.breadcrumbs;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.ThreadContext;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -24,6 +25,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.PriceNavigation;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
@@ -119,6 +121,8 @@ public class BreadCrumbsView extends BaseComponent implements CrumbNamePrefixPro
     /** {@inheritDoc} */
     protected void onBeforeRender() {
 
+        final String selectedLocale = getLocale().getLanguage();
+
         add(
                 new ListView<Crumb>(
                         BREADCRUMBS_LIST,
@@ -126,9 +130,10 @@ public class BreadCrumbsView extends BaseComponent implements CrumbNamePrefixPro
 
                     protected void populateItem(final ListItem<Crumb> crumbListItem) {
                         final Crumb crumb = crumbListItem.getModelObject();
+                        final I18NModel crumbModel = getI18NSupport().getFailoverModel(crumb.getDisplayName(), crumb.getName());
                         crumbListItem
-                                .add(getPageLink(BREADCRUMBS_LINK, crumb.getName(), new PageParameters(crumb.getCrumbLinkParameters()), true))
-                                .add(getPageLink(BREADCRUMBS_REMOVE_LINK, crumb.getName(), new PageParameters(crumb.getRemoveCrumbLinkParameters()), false)
+                                .add(getPageLink(BREADCRUMBS_LINK, crumbModel.getValue(selectedLocale), new PageParameters(crumb.getCrumbLinkParameters()), true))
+                                .add(getPageLink(BREADCRUMBS_REMOVE_LINK, crumbModel.getValue(selectedLocale), new PageParameters(crumb.getRemoveCrumbLinkParameters()), false)
                                 );
                     }
 

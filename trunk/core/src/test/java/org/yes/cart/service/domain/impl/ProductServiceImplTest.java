@@ -54,7 +54,7 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
         BrandService brandService = (BrandService) ctx().getBean(ServiceSpringKeys.BRAND_SERVICE);
         EntityFactory entityFactory = productService.getGenericDao().getEntityFactory();
         Product product = entityFactory.getByIface(Product.class);
-        product.setCode("PROD_CODE");
+        product.setCode("PROD_CODE_123");
         product.setName("product");
         product.setDescription("description");
         product.setProducttype(productTypeService.getById(1L));

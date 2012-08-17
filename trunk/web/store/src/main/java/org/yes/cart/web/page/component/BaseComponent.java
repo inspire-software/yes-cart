@@ -19,8 +19,8 @@ package org.yes.cart.web.page.component;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.yes.cart.web.i18n.I18NWebSupport;
-import org.yes.cart.web.i18n.impl.I18NWebSupportImpl;
+import org.yes.cart.web.support.i18n.I18NWebSupport;
+import org.yes.cart.web.support.i18n.impl.I18NWebSupportImpl;
 
 
 public class BaseComponent extends Panel {

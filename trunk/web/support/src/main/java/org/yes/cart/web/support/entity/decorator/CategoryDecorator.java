@@ -17,13 +17,13 @@
 package org.yes.cart.web.support.entity.decorator;
 
 import org.yes.cart.domain.entity.Category;
+import org.yes.cart.web.support.i18n.I18NObject;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 7/4/11
  * Time: 8:16 PM
  */
-public interface CategoryDecorator  extends Category, Depictable {
-
+public interface CategoryDecorator  extends Category, ObjectDecorator {
 
 }

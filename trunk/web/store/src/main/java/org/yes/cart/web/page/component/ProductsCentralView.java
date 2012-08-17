@@ -119,7 +119,7 @@ public class ProductsCentralView extends AbstractCentralView {
 
 
         final String[] widthHeight = getCategoryService().getCategoryAttributeRecursive(
-                getCategory(),
+                null, getCategory(),
                 defaultSize
         );
 
@@ -131,7 +131,7 @@ public class ProductsCentralView extends AbstractCentralView {
                 productService,
                 attributableImageService,
                 categoryService,
-                getBooleanQuery());
+                getBooleanQuery(), getI18NSupport());
 
         applySortFieldAndOrder(dataProvider);
 
@@ -154,7 +154,7 @@ public class ProductsCentralView extends AbstractCentralView {
 
         final int columns = NumberUtils.toInt(
                 getCategoryService().getCategoryAttributeRecursive(
-                        getCategory(),
+                        null, getCategory(),
                         AttributeNamesKeys.Category.CATEGORY_PRODUCTS_COLUMNS,
                         "2")
         );

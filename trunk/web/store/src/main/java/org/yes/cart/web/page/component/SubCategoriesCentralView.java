@@ -88,8 +88,8 @@ public class SubCategoriesCentralView extends AbstractCentralView {
                             attributableImageService,
                             getCategoryService(),
                             cat,
-                            WicketUtil.getHttpServletRequest().getContextPath()
-                    )
+                            WicketUtil.getHttpServletRequest().getContextPath(),
+                            getI18NSupport())
             );
         }
         return rez;
@@ -106,7 +106,7 @@ public class SubCategoriesCentralView extends AbstractCentralView {
 
         final SortableDataProvider<CategoryDecorator> dataProvider = new SortableCategoryDataProvider(categories);
 
-        final String val = getCategoryService().getCategoryAttributeRecursive(getCategory(),
+        final String val = getCategoryService().getCategoryAttributeRecursive(null, getCategory(),
                 AttributeNamesKeys.Category.CATEGORY_SUBCATEGORIES_COLUMNS,
                 DEFAULT_SUBCATEGORIES_COLUMNS);
 

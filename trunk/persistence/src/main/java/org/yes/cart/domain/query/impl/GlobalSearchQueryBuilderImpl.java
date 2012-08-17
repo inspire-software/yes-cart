@@ -75,6 +75,7 @@ public class GlobalSearchQueryBuilderImpl implements ProductSearchQueryBuilder {
         for (String word : words) {
             BooleanQuery termQuery = new BooleanQuery();
             termQuery.add( new FuzzyQuery( new Term(PRODUCT_NAME_FIELD, word)),  BooleanClause.Occur.SHOULD);
+            termQuery.add( new FuzzyQuery( new Term(PRODUCT_DISPLAYNAME_FIELD, word)),  BooleanClause.Occur.SHOULD);
             termQuery.add( new FuzzyQuery( new Term(PRODUCT_DESCIPTION_FIELD, word)),  BooleanClause.Occur.SHOULD);
             termQuery.add( new FuzzyQuery( new Term(BRAND_FIELD, word)),  BooleanClause.Occur.SHOULD);
             termQuery.add( new FuzzyQuery( new Term(ATTRIBUTE_VALUE_SEARCH_FIELD, word)),  BooleanClause.Occur.SHOULD);

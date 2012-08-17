@@ -29,7 +29,7 @@ import java.util.Collection;
  * Sku is abbreviation from stock keeping unit.
  * Attribute values is distinguish between sku for multisku product.
  */
-public interface ProductSku extends Auditable, Attributable, Rankable , Seoable {
+public interface ProductSku extends Auditable, Attributable, Rankable , Seoable, Codable {
 
     /**
      * @return sku primary key
@@ -118,6 +118,21 @@ public interface ProductSku extends Auditable, Attributable, Rankable , Seoable 
      * @param name sku name.
      */
     void setName(String name);
+
+    /**
+     * display name.
+     *
+     * @return display name.
+     */
+    String getDisplayName();
+
+    /**
+     * Get display name
+     *
+     * @param name display name
+     */
+    void setDisplayName(String name);
+
 
     /**
      * Get sku decription.

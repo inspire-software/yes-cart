@@ -19,6 +19,9 @@ package org.yes.cart.service.async;
 import org.yes.cart.service.async.model.JobStatus;
 
 /**
+ * Listener should be created per job instance and should not be shared by
+ * several threads.
+ *
  * User: denispavlov
  * Date: 12-07-30
  * Time: 9:43 AM
@@ -39,6 +42,14 @@ public interface JobStatusListener {
      * Ping the listener to notify job's healthy state and reset timeout.
      */
     void notifyPing();
+
+    /**
+     * Ping the listener to notify job's healthy state and reset timeout.
+     * Use msg to have a current progress message (like a progress bar)
+     * This message will be appended to the end of the report until a real
+     * message method of this listener is invoked - then this message is removed.
+     */
+    void notifyPing(String msg);
 
     /**
      * Notify of a message (equivalent to info)

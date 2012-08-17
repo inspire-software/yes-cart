@@ -25,10 +25,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
-import org.yes.cart.domain.entity.Auditable;
-import org.yes.cart.domain.entity.ProductCategory;
-import org.yes.cart.domain.entity.ProductSku;
-import org.yes.cart.domain.entity.SkuWarehouse;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entityindexer.ProductIndexer;
 
 import java.io.Serializable;
@@ -114,7 +111,7 @@ public class AuditInterceptor extends EmptyInterceptor implements ApplicationCon
 
         }
 
-        return "user unknown";
+        return "anonymous";
     }
 
 
@@ -124,17 +121,20 @@ public class AuditInterceptor extends EmptyInterceptor implements ApplicationCon
     @Override
     public boolean onSave(final Object entity, final Serializable serializable,
                           final Object[] objects, final String[] propertyNames, final Type[] types) {
+        if (entity instanceof Guidable) {
+            final Guidable guidable = (Guidable) entity;
+
+            if (StringUtils.isBlank(guidable.getGuid())) {
+                setGuidValue(objects, propertyNames, guidable);
+            }
+
+        }
+
         if (entity instanceof Auditable) {
             final Auditable auditable = ((Auditable) entity);
 
             final Date date = new Date();
             final String userName = getUserName();
-
-            if (StringUtils.isBlank(auditable.getGuid())) {
-                final String guid = java.util.UUID.randomUUID().toString();
-                setValue(objects, propertyNames, "guid", guid);
-                auditable.setGuid(guid);
-            }
 
             setValue(objects, propertyNames, "createdBy", userName);
             auditable.setCreatedBy(userName);
@@ -170,6 +170,16 @@ public class AuditInterceptor extends EmptyInterceptor implements ApplicationCon
     @Override
     public boolean onFlushDirty(final Object entity, final Serializable serializable, final Object[] currentState,
                                 final Object[] previousState, final String[] propertyNames, final Type[] types) {
+
+        if (entity instanceof Guidable) {
+            final Guidable guidable = (Guidable) entity;
+
+            if (StringUtils.isBlank(guidable.getGuid())) {
+                setGuidValue(currentState, propertyNames, guidable);
+            }
+
+        }
+
         if (entity instanceof Auditable) {
             final Auditable auditable = (Auditable) entity;
 
@@ -183,13 +193,6 @@ public class AuditInterceptor extends EmptyInterceptor implements ApplicationCon
                 setValue(currentState, propertyNames, "createdTimestamp", date);
                 auditable.setCreatedTimestamp(date);
             }
-
-            if (StringUtils.isBlank(((Auditable) entity).getGuid())) {
-                final String guid = java.util.UUID.randomUUID().toString();
-                setValue(currentState, propertyNames, "guid", guid);
-                auditable.setGuid(guid);
-            }
-
 
             setValue(currentState, propertyNames, "updatedBy", userName);
             auditable.setUpdatedBy(userName);
@@ -213,6 +216,22 @@ public class AuditInterceptor extends EmptyInterceptor implements ApplicationCon
         }
     }
 
+    private void setGuidValue(final Object[] objects, final String[] propertyNames, final Guidable guidable) {
+        final String guid;
+
+        if (guidable instanceof Codable) {
+            // put code value as GUID since this will make it more intuitive to work with these objects
+            // from the business perspective (e.g. Bulk import is a lot better done on product code
+            // rather than on PK's or random GUID's)
+            guid = ((Codable) guidable).getCode();
+        } else {
+            guid = java.util.UUID.randomUUID().toString();
+        }
+
+        setValue(objects, propertyNames, "guid", guid);
+        guidable.setGuid(guid);
+
+    }
 
     /**
      * {@inheritDoc}

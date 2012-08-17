@@ -184,12 +184,14 @@ public abstract class AbstractProductFilter extends BaseComponent {
     }
 
     /**
-     * Adapt list of  {@link org.yes.cart.domain.queryobject.FilteredNavigationRecord} into ugly   list of attribute name - list of attributes values pair .
-     * @param records
-     * @return
+     * Adapt list of  {@link org.yes.cart.domain.queryobject.FilteredNavigationRecord} into ugly
+     * list of attribute name - list of attributes values pair .
+     *
+     * @param records navigation records
+     * @return list of pairs
      */
     protected List<Pair<String, List<Pair<Pair<String, Integer>, PageParameters>>>>
-                        adaptNagigationRecords(final List<FilteredNavigationRecord> records) {
+                adaptNavigationRecords(final List<FilteredNavigationRecord> records) {
         String head = StringUtils.EMPTY;
         Pair<String, List<Pair<Pair<String, Integer>, PageParameters>>> currentPair = null;
 
@@ -199,7 +201,7 @@ public abstract class AbstractProductFilter extends BaseComponent {
         for (FilteredNavigationRecord navigationRecord : records) {
             if (!navigationRecord.getName().equalsIgnoreCase(head)) {
                 currentPair = new Pair<String, List<Pair<Pair<String, Integer>, PageParameters>>>(
-                        navigationRecord.getName(),
+                        navigationRecord.getDisplayName(),
                         new ArrayList<Pair<Pair<String, Integer>, PageParameters>>());
                 headValueList.add(currentPair);
                 head = navigationRecord.getName();
@@ -250,7 +252,7 @@ public abstract class AbstractProductFilter extends BaseComponent {
             add(
                     new ListView<Pair<String, List<Pair<Pair<String, Integer>, PageParameters>>>>(
                             FILTERED_NAVIGATION_LIST,
-                            adaptNagigationRecords(navigationRecords)) {
+                            adaptNavigationRecords(navigationRecords)) {
                         protected void populateItem(ListItem<Pair<String, List<Pair<Pair<String, Integer>, PageParameters>>>> pairListItem) {
                             final Pair<String, List<Pair<Pair<String, Integer>, PageParameters>>> headValues = pairListItem.getModelObject();
                             pairListItem.add(
