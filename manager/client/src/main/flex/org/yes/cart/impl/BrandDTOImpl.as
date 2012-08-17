@@ -32,7 +32,7 @@ public class BrandDTOImpl implements IUID {
     public var description:String;
 
 
-    public var attribute:ArrayCollection;
+    public var attributes:ArrayCollection;
 
 
     public function BrandDTOImpl() {

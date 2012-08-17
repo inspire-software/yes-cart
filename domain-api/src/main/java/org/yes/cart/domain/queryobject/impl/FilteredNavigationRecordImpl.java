@@ -31,6 +31,8 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
 
     private String name;
 
+    private String displayName;
+
     private String code;
 
     private String value;
@@ -102,6 +104,20 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
     /**
      * {@inheritDoc
      */
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    /**
+     * {@inheritDoc
+     */
+    public void setDisplayName(final String displayName) {
+        this.displayName = displayName;
+    }
+
+    /**
+     * {@inheritDoc
+     */
     public int getRank() {
         return rank;
     }
@@ -142,7 +158,8 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
     }
 
     /**
-     * Construct filtered navigation record.
+     * Construct filtered navigation record for simple non-localisable values.
+     * E.g. brands
      *
      * @param name  attribute nave
      * @param code  attribute code
@@ -157,26 +174,10 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
     }
 
     /**
-     * Construct filtered navigation record.
+     * Construct filtered navigation record for localisable records.
      *
      * @param name  attribute nave
-     * @param code  attribute code
-     * @param value value
-     * @param count count of objects.
-     * @param rank  rank
-     */
-    public FilteredNavigationRecordImpl(final String name, final String code, final String value, final int count, final int rank) {
-        this.name = name;
-        this.code = code;
-        this.value = value;
-        this.count = count;
-        this.rank = rank;
-    }
-
-    /**
-     * Construct filtered navigation record.
-     *
-     * @param name  attribute nave
+     * @param displayName attribute displayName
      * @param code  attribute code
      * @param value value
      * @param displayValue display value
@@ -184,9 +185,12 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
      * @param rank  rank
      * @param type  type of navigation S - single value R - range value
      */
-    public FilteredNavigationRecordImpl(final String name, final String code, final String value, final String displayValue,
+    public FilteredNavigationRecordImpl(final String name, final String displayName,
+                                        final String code,
+                                        final String value, final String displayValue,
                                         final int count, final int rank, final String type) {
         this.name = name;
+        this.displayName = displayName;
         this.code = code;
         this.value = value;
         this.displayValue = displayValue;

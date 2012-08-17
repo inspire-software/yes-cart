@@ -48,7 +48,7 @@ public class BrandDTOImpl implements BrandDTO {
 
 
     @DtoCollection(
-            value="attribute",
+            value="attributes",
             dtoBeanKey="org.yes.cart.domain.dto.AttrValueBrandDTO",
             entityGenericType = AttrValueEntityBrand.class,
             entityCollectionClass = ArrayList.class,
@@ -56,7 +56,7 @@ public class BrandDTOImpl implements BrandDTO {
             dtoToEntityMatcher = AttrValueBrandMatcher.class,
             readOnly = true
             )
-    private Collection<AttrValueBrandDTO> attribute;
+    private Collection<AttrValueBrandDTO> attributes;
 
    /** {@inheritDoc}*/
     public long getBrandId() {
@@ -96,12 +96,12 @@ public class BrandDTOImpl implements BrandDTO {
     }
 
     /** {@inheritDoc}*/
-    public Collection<AttrValueBrandDTO> getAttribute() {
-        return attribute;
+    public Collection<AttrValueBrandDTO> getAttributes() {
+        return attributes;
     }
 
     /** {@inheritDoc}*/
-    public void setAttribute(final Collection<AttrValueBrandDTO> attribute) {
-        this.attribute = attribute;
+    public void setAttributes(final Collection<AttrValueBrandDTO> attributes) {
+        this.attributes = attributes;
     }
 }

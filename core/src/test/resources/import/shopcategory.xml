@@ -16,9 +16,7 @@
 
 <import-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/xstream/import-descriptor-1.0.0.xsd">
-    <!--
-    Example how related bulk import can consune the same file several times
-    -->
+
     <entity-type>org.yes.cart.domain.entity.ShopCategory</entity-type>
 
     <import-directory>src/test/resources/import</import-directory>

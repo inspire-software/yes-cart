@@ -62,7 +62,7 @@ public class ShoppingCartView extends BaseComponent {
 
         addOrReplace(
                 new Form(CART_FORM).addOrReplace(
-                        new ShoppingCartItemsList(ITEMS_LIST, ApplicationDirector.getShoppingCart().getCartItemList())
+                        new ShoppingCartItemsList(ITEMS_LIST, ApplicationDirector.getShoppingCart().getCartItemList(), getI18NSupport())
                 ).addOrReplace(
                         new FeedbackPanel(FEEDBACK)
                 ).addOrReplace(

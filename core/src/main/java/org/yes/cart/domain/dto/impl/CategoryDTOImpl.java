@@ -24,10 +24,7 @@ import org.yes.cart.domain.dto.CategoryDTO;
 import org.yes.cart.domain.dto.matcher.impl.AttrValueCategoryMatcher;
 import org.yes.cart.domain.entity.impl.AttrValueEntityCategory;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -56,6 +53,9 @@ public class CategoryDTOImpl implements CategoryDTO {
 
     @DtoField(value = "name")
     private String name;
+
+    @DtoField(value = "displayName", converter = "i18nStringConverter")
+    private Map<String, String> displayNames;
 
     @DtoField(value = "description")
     private String description;
@@ -211,6 +211,16 @@ public class CategoryDTOImpl implements CategoryDTO {
      */
     public void setName(final String name) {
         this.name = name;
+    }
+
+    /** {@inheritDoc} */
+    public Map<String, String> getDisplayNames() {
+        return displayNames;
+    }
+
+    /** {@inheritDoc} */
+    public void setDisplayNames(final Map<String, String> displayNames) {
+        this.displayNames = displayNames;
     }
 
     /**

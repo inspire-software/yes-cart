@@ -56,7 +56,7 @@ public class AttributeProductFilter extends AbstractProductFilter {
 
         if (categoryId > 0) {
 
-            final String selectedLocale = ThreadContext.getSession().getLocale().getLanguage();
+            final String selectedLocale = getLocale().getLanguage();
 
             filteredNavigationByAttribute = getCategory().getNavigationByAttributes() == null ? false : getCategory().getNavigationByAttributes();
 

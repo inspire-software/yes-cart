@@ -28,7 +28,7 @@ package org.yes.cart.domain.entity;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface Association extends Auditable {
+public interface Association extends Auditable, Codable {
 
 
     String CROSS_SELL = "cross";

@@ -113,6 +113,20 @@ public interface Category extends Auditable, Attributable, Seoable  {
     void setName(String name);
 
     /**
+     * display name.
+     *
+     * @return display name.
+     */
+    String getDisplayName();
+
+    /**
+     * Get display name
+     *
+     * @param name display name
+     */
+    void setDisplayName(String name);
+
+    /**
      * Get category description.
      *
      * @return category decription.

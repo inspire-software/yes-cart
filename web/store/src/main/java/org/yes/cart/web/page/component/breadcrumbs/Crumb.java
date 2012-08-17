@@ -31,12 +31,18 @@ public class Crumb implements Serializable {
 
     private final String name;
 
+    private final Object displayName;
+
     private final PageParameters crumbLinkParameters;
 
     private PageParameters removeCrumbLinkParameters;
 
     public String getName() {
         return name;
+    }
+
+    public Object getDisplayName() {
+        return displayName;
     }
 
     public PageParameters getCrumbLinkParameters() {
@@ -51,15 +57,12 @@ public class Crumb implements Serializable {
         this.removeCrumbLinkParameters = removeCrumbLinkParameters;
     }
 
-    public Crumb(final String name, final PageParameters crumbLinkParameters) {
-        this.name = name;
-        this.crumbLinkParameters = crumbLinkParameters;
-    }
-
     public Crumb(final String name,
+                 final Object displayName,
                  final PageParameters crumbLinkParameters,
                  final PageParameters removeCrumbLinkParameters) {
         this.name = name;
+        this.displayName = displayName;
         this.crumbLinkParameters = crumbLinkParameters;
         this.removeCrumbLinkParameters = removeCrumbLinkParameters;
     }

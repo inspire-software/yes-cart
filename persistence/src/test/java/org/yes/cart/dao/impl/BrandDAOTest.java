@@ -58,7 +58,7 @@ public class BrandDAOTest extends AbstractTestDAO {
         entity.setName("brandName without attributes");
         long pk = brandDAO.create(entity).getBrandId();
         assertTrue(entity.getBrandId() != 0);
-        assertTrue(entity.getAttribute().isEmpty());
+        assertTrue(entity.getAttributes().isEmpty());
         List<Brand> brands = brandDAO.findByCriteria(Restrictions.eq("brandId", pk));
         assertEquals(1, brands.size());
     }
@@ -68,21 +68,23 @@ public class BrandDAOTest extends AbstractTestDAO {
         Brand entityWithAttributes = new BrandEntity();
         entityWithAttributes.setName("brandName with attributes");
         Attribute attributeEntity = attributeDAO.findByCriteria(Restrictions.eq("code", "BRAND_IMAGE")).get(0);
-        AttrValueBrand attrValueBrandEntity = new AttrValueEntityBrand(entityWithAttributes, attributeEntity);
+        AttrValueBrand attrValueBrandEntity = new AttrValueEntityBrand();
+        attrValueBrandEntity.setBrand(entityWithAttributes);
+        attrValueBrandEntity.setAttribute(attributeEntity);
         attrValueBrandEntity.setVal("brand.jpg");
         //BRAND_IMAGE
-        entityWithAttributes.getAttribute().add(attrValueBrandEntity);
+        entityWithAttributes.getAttributes().add(attrValueBrandEntity);
         long pk = brandDAO.create(entityWithAttributes).getBrandId();
         List<Brand> brands = brandDAO.findByCriteria(
                 new CriteriaTuner() {
                     public void tune(final Criteria crit) {
-                        crit.setFetchMode("attribute", FetchMode.JOIN);
+                        crit.setFetchMode("attributes", FetchMode.JOIN);
                     }
                 },
                 Restrictions.eq("brandId", pk)
         );
         assertEquals(1, brands.size());
         entityWithAttributes = brands.get(0);
-        assertEquals(1, entityWithAttributes.getAttribute().size());
+        assertEquals(1, entityWithAttributes.getAttributes().size());
     }
 }

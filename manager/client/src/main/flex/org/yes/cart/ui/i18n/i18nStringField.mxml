@@ -59,7 +59,7 @@
         public function setSourceObject(value:Object, i18nProp:String):void {
             _source = value;
             _i18nProp = i18nProp;
-            if (_source[_i18nProp] == null) {
+            if (_source != null && _i18nProp != null && _source[_i18nProp] == null) {
                 _source[_i18nProp] = {};
             }
             initTemp();

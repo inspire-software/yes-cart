@@ -115,6 +115,9 @@ public abstract class AbstractProductList extends BaseComponent {
      */
     @Override
     protected void onBeforeRender() {
+
+        final String selectedLocale = getLocale().getLanguage();
+
         final Category category;
         final long categ_id = WicketUtil.getCategoryId(getPage().getPageParameters());
         if (categ_id > 0) {
@@ -141,7 +144,8 @@ public abstract class AbstractProductList extends BaseComponent {
                                 prod,
                                 WicketUtil.getHttpServletRequest().getContextPath(),
                                 false,
-                                productService.getDefaultImage(prod.getProductId()));
+                                productService, productService.getDefaultImage(prod.getProductId()),
+                                getI18NSupport());
 
                         final String[] size = productDecorator.getThumbnailImageSize(category);
 
@@ -157,13 +161,13 @@ public abstract class AbstractProductList extends BaseComponent {
                                         new ContextImage(PRODUCT_IMAGE, productDecorator.getDefaultImage(width, height))
                                                 .add(new AttributeModifier(HTML_WIDTH, width))
                                                 .add(new AttributeModifier(HTML_HEIGHT, height))
-                                                .add(new AttributeModifier(HTML_TITLE, prod.getDescription()))
-                                                .add(new AttributeModifier(HTML_ALT, prod.getName()))
+                                                .add(new AttributeModifier(HTML_TITLE, productDecorator.getDescription(selectedLocale)))
+                                                .add(new AttributeModifier(HTML_ALT, productDecorator.getName(selectedLocale)))
                                 )
                         );
                         listItem.add(
                                 new BookmarkablePageLink<HomePage>(PRODUCT_NAME_LINK, HomePage.class, pageParameters)
-                                        .add(new Label(NAME, prod.getName()).setEscapeModelStrings(false))
+                                        .add(new Label(NAME, productDecorator.getName(selectedLocale)).setEscapeModelStrings(false))
                                         .setVisible(nameLinkVisible)
                         );
                     }

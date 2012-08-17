@@ -23,18 +23,36 @@ package org.yes.cart.domain.entity;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface Role {
+public interface Role extends Codable, Guidable {
 
+    /**
+     * @return unque role code
+     */
     String getCode();
 
+    /**
+     * @param code unique role code
+     */
     void setCode(String code);
 
+    /**
+     * @return role description
+     */
     String getDescription();
 
+    /**
+     * @param description role description
+     */
     void setDescription(String description);
 
+    /**
+     * @return role PK
+     */
     long getRoleId();
 
+    /**
+     * @param roleId role PK
+     */
     void setRoleId(long roleId);
 
 }

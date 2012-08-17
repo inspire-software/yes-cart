@@ -27,6 +27,7 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDet;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.utils.impl.CustomerOrderComparator;
@@ -85,9 +86,11 @@ public class CustomerOrderPanel extends BaseComponent {
      * @return comma separated sku names.
      */
     private String getItemsList(final CustomerOrder order) {
+        final String selectedLocale = getLocale().getLanguage();
         final StringBuilder builder = new StringBuilder();
         for (CustomerOrderDet det : order.getOrderDetail()) {
-            builder.append(det.getSku().getName());
+            final I18NModel nameModel = getI18NSupport().getFailoverModel(det.getSku().getDisplayName(), det.getSku().getName());
+            builder.append(nameModel.getValue(selectedLocale));
             builder.append('(');
             builder.append(det.getSku().getCode());
             builder.append("), ");

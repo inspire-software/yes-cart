@@ -16,7 +16,7 @@
   -->
 
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
-           xmlns:controls="controls.*" width="100%" height="100%"
+           xmlns:controls="controls.*" xmlns:yci18n="org.yes.cart.ui.i18n.*" width="100%" height="100%"
            creationComplete="onInitPanel()">
 
     <mx:Form x="0" y="0">
@@ -25,6 +25,9 @@
         </mx:FormItem>
         <mx:FormItem label="@Resource(bundle='ProductSkuManagementPanel',key='name')">
             <mx:TextInput id="nameTextInput" width="300" />
+        </mx:FormItem>
+        <mx:FormItem label="@Resource(bundle='ProductSkuManagementPanel',key='displayName')">
+            <yci18n:i18nStringField id="displayNames"/>
         </mx:FormItem>
         <mx:FormItem label="@Resource(bundle='ProductSkuManagementPanel',key='barCode')">
             <mx:TextInput id="barCodeTextInput" width="300"/>
@@ -124,12 +127,15 @@
                 watcher.unwatch();
             }
             propertyWatchers.removeAll();
+            displayNames.setSourceObject(null, null);
         }
 
         private function bindProperties():void {
 
             if (_productSku != null) {
                 Debug.trace("INFO ProductSkuSummaryPanel rebind begin");
+
+                displayNames.setSourceObject(_productSku, 'displayNames');
 
                 propertyWatchers.addItem(BindingUtils.bindProperty(codeTextInput, "text", _productSku, "code"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(uriNameTextInput, "text", _productSku, "uri"));

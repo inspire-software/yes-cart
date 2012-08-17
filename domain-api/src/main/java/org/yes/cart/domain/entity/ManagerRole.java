@@ -25,15 +25,33 @@ package org.yes.cart.domain.entity;
  */
 public interface ManagerRole extends Auditable {
 
+    /**
+     * @return email of manager who this role has been granted to
+     */
     String getEmail();
 
+    /**
+     * @param email email of manager who this role has been granted to
+     */
     void setEmail(String email);
 
+    /**
+     * @return Role code
+     */
     String getCode();
 
+    /**
+     * @param code role code
+     */
     void setCode(String code);
 
+    /**
+     * @return unique PK
+     */
     long getManagerRoleId();
 
+    /**
+     * @param managerRoleId unique PK
+     */
     void setManagerRoleId(long managerRoleId);
 }

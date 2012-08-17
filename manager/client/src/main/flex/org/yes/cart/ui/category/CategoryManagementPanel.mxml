@@ -17,7 +17,7 @@
 
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
            xmlns:cat="org.yes.cart.ui.category.*"
-           xmlns:seo="org.yes.cart.ui.seo.*"
+           xmlns:seo="org.yes.cart.ui.seo.*" xmlns:yci18n="org.yes.cart.ui.i18n.*"
            width="100%" height="100%"
            creationComplete="init();">
     <mx:Script>
@@ -153,12 +153,15 @@
                 cw.unwatch();
             }
             categoryPropertyChangeWatchers.removeAll();
+            displayNames.setSourceObject(null, null);
 
             categoryProductTypeComboBox.removeEventListener(Event.CHANGE, onCategoryProductTypeChanged);
 
         }
 
         private function bingCategoryData():void {
+
+            displayNames.setSourceObject(this.selectedCategoryDTOImpl, 'displayNames');
 
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryNameTextInput, "text", this.selectedCategoryDTOImpl, "name"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(uriNameTextInput, "text", this.selectedCategoryDTOImpl, "uri"));
@@ -638,6 +641,10 @@
                                     <mx:FormItem width="100%"
                                                  label="@Resource(bundle='CategoryManagementPanel',key='name')">
                                         <mx:TextInput id="categoryNameTextInput" width="300"/>
+                                    </mx:FormItem>
+                                    <mx:FormItem width="100%"
+                                                 label="@Resource(bundle='CategoryManagementPanel',key='displayName')">
+                                        <yci18n:i18nStringField id="displayNames"/>
                                     </mx:FormItem>
                                     <mx:FormItem width="100%"
                                                  label="@Resource(bundle='CategoryManagementPanel',key='description')">

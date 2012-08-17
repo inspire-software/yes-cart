@@ -29,6 +29,7 @@ import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ImageService;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.shoppingcart.AmountCalculationResult;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
@@ -88,6 +89,9 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
     @SpringBean(name = ServiceSpringKeys.PRODUCT_SKU_SERVICE)
     private ProductSkuService productSkuService;
 
+    @SpringBean(name = ServiceSpringKeys.PRODUCT_SERVICE)
+    protected ProductService productService;
+
     @SpringBean(name = StorefrontServiceSpringKeys.ATTRIBUTABLE_IMAGE_SERVICE)
     protected AttributableImageService attributableImageService;
 
@@ -116,6 +120,8 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
         rootCategory = categoryService.getRootCategory();
 
         final AmountCalculationResult grandTotal = amountCalculationStrategy.calculate(shoppingContext, deliveries);
+
+        final String selectedLocale = getLocale().getLanguage();
 
         add(
                 new ListView<CustomerOrderDelivery>(DELIVERY_LIST, deliveries) {
@@ -147,8 +153,9 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                                                         attributableImageService,
                                                         categoryService,
                                                         det.getSku(),
-                                                        WicketUtil.getHttpServletRequest().getContextPath()
-                                                );
+                                                        WicketUtil.getHttpServletRequest().getContextPath(),
+                                                        productService,
+                                                        getI18NSupport());
 
                                                 final String[] size = productSkuDecorator.getThumbnailImageSize(rootCategory);
 
@@ -164,7 +171,7 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
 
                                                 customerOrderDeliveryDetListItem
                                                         .add(
-                                                                new Label(ITEM_NAME, det.getSku().getName())
+                                                        new Label(ITEM_NAME, productSkuDecorator.getName(selectedLocale))
                                                         )
                                                         .add(
                                                                 new Label(ITEM_CODE, det.getSku().getCode())

@@ -23,6 +23,11 @@ import org.yes.cart.service.async.model.impl.JobStatusImpl;
 import java.util.UUID;
 
 /**
+ * Default listener that builds report from messages and has a basic
+ * timeout mechanism. by using current system millis.
+ *
+ * This is not a thread safe implementation.
+ *
  * User: denispavlov
  * Date: 12-07-30
  * Time: 9:50 AM
@@ -44,6 +49,8 @@ public class JobStatusListenerImpl implements JobStatusListener {
     private boolean timedOut = false;
 
     private final StringBuilder report = new StringBuilder();
+
+    private String pingMsg;
 
     public JobStatusListenerImpl() {
         token = UUID.randomUUID();
@@ -72,17 +79,34 @@ public class JobStatusListenerImpl implements JobStatusListener {
             state = JobStatus.State.INPROGRESS;
         }
 
-        if (report.length() > reportMaxChars) {
-            return new JobStatusImpl(getJobToken(), state, result,
-                    "\n\n...\n\n" + report.substring(report.length() - reportMaxChars));
-        }
+        final StringBuilder reportOut = adjustReportSize(report, pingMsg, reportMaxChars);
 
-        return new JobStatusImpl(getJobToken(), state, result, report.toString());
+        return new JobStatusImpl(getJobToken(), state, result, reportOut.toString());
+    }
+
+    private StringBuilder adjustReportSize(final StringBuilder report, final String pingMsg, final int reportMaxChars) {
+        final StringBuilder reportOut = new StringBuilder();
+        if (report.length() > reportMaxChars) {
+            reportOut.append("\n\n...\n\n");
+            reportOut.append(report.subSequence(report.length() - reportMaxChars, report.length()));
+        } else {
+            reportOut.append(report.subSequence(0, report.length()));
+        }
+        if (pingMsg != null) {
+            reportOut.append("\n> ").append(pingMsg);
+        }
+        return reportOut;
     }
 
     /** {@inheritDoc} */
     public void notifyPing() {
         lastMsgTimestamp = System.currentTimeMillis();
+    }
+
+    /** {@inheritDoc} */
+    public void notifyPing(final String msg) {
+        pingMsg = msg;
+        notifyPing();
     }
 
     /** {@inheritDoc} */

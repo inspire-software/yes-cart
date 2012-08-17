@@ -60,7 +60,7 @@
                 ]]>
             </meta>
 
-            <property name="email" length="255" type="java.lang.String" column="EMAIL" unique="true" not-null="true"/>
+            <property name="email" length="255" type="java.lang.String" column="EMAIL" unique="true" index="MANAGER_EMAIL" not-null="true"/>
             <property name="firstname" type="string" column="FIRSTNAME" length="128" not-null="true"/>
             <property name="lastname" type="string" column="LASTNAME" length="128" not-null="true"/>
             <property name="middlename" type="string" column="MIDDLENAME" length="128" not-null="false"/>
@@ -73,7 +73,7 @@
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-            <property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+            <property name="guid" column="GUID" type="string" length="36" unique="true" index="MANAGER_GUID" not-null="true"/>
         </subclass>
     </class>
 
@@ -118,13 +118,13 @@
                 ]]>
             </meta>
 
-            <property name="code" length="255" type="java.lang.String" column="CODE" unique="true" not-null="true"/>
+            <property name="code" length="255" type="java.lang.String" column="CODE" unique="true" index="ROLE_CODE" not-null="true"/>
             <property name="description" length="255" type="java.lang.String" column="DESCRIPTION"/>
             <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-            <property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+            <property name="guid" column="GUID" type="string" length="36"  unique="true" index="ROLE_GUID" not-null="true"/>
         </subclass>
     </class>
 
@@ -176,7 +176,7 @@
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-            <property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+            <property name="guid" column="GUID" type="string" length="36"  unique="true" index="MANAGER_ROLE_GUID" not-null="true"/>
         </subclass>
     </class>
 	    
@@ -243,7 +243,7 @@
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36"  unique="true" index="ETYPE_GUID" not-null="true"/>
         </subclass>
     </class>
 
@@ -307,7 +307,7 @@
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36"  unique="true" index="ATTRIBUTE_GROUP_GUID" not-null="true"/>
         </subclass>
     </class>
 
@@ -323,7 +323,7 @@
             </generator>
         </id>
         <discriminator type="integer" formula="1"/>
-        <property name="code" column="CODE" type="string" length="255" not-null="true"/>
+        <property name="code" column="CODE" type="string" length="255" index="ATTRIBUTE_CODE" not-null="true"/>
         <subclass name="org.yes.cart.domain.entity.impl.AttributeEntity" discriminator-value="1">
             <meta attribute="class-description">UNCOMMENT @Indexed (index = "luceneindex/attribute")</meta>
             <meta attribute="extra-import">org.hibernate.search.annotations.*</meta>
@@ -440,7 +440,7 @@
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36"  unique="true" index="ATTRIBUTE_GUID" not-null="true"/>
 
         </subclass>
     </class>
@@ -488,14 +488,15 @@
             <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
             <many-to-one name="customer" class="org.yes.cart.domain.entity.Customer"  not-null="true" column="CUSTOMER_ID"/>
             <many-to-one name="attribute" class="org.yes.cart.domain.entity.Attribute" lazy="false" foreign-key="FK_C_ATTRIBUTE"
-                         property-ref="code" insert="true" update="true">
+                         property-ref="code" insert="true" update="true" formula="'CODE'">
+
                 <column name="CODE" not-null="true"/>
             </many-to-one>
             <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="AV_CUSTOMER_GUID" not-null="true"/>
         </subclass>
     </class>
 
@@ -549,7 +550,7 @@
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="AVSHOP_GUID" not-null="true"/>
         </subclass>
     </class>
 
@@ -597,7 +598,7 @@
             <property name="val" column="VAL" type="string" length="4000"/>
             <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
             <many-to-one name="attribute" class="org.yes.cart.domain.entity.Attribute" lazy="false"
-                         foreign-key="FK_PYS_ATTRIBUTE" property-ref="code" insert="false" update="false">
+                         foreign-key="FK_SYS_ATTRIBUTE" property-ref="code" insert="false" update="false">
                 <column name="CODE" not-null="true"/>
             </many-to-one>
             <many-to-one name="system" class="org.yes.cart.domain.entity.System"  not-null="true" column="SYSTEM_ID"/>
@@ -606,7 +607,7 @@
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36"  unique="true" index="AVSYS_GUID" not-null="true"/>
 
         </subclass>
     </class>
@@ -664,7 +665,7 @@
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="AVBRAND_GUID" not-null="true"/>
         </subclass>
     </class>
 
@@ -731,7 +732,7 @@
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="AVPROD_GUID" not-null="true"/>
 
         </subclass>
     </class>
@@ -784,7 +785,7 @@
 
             <many-to-one name="productSku" class="org.yes.cart.domain.entity.ProductSku"  not-null="true" column="SKU_ID"/>
 
-            <many-to-one name="attribute" class="org.yes.cart.domain.entity.Attribute" lazy="false" foreign-key="KF_S_ATTRIBUTE"
+            <many-to-one name="attribute" class="org.yes.cart.domain.entity.Attribute" lazy="false" foreign-key="FK_S_ATTRIBUTE"
                          property-ref="code" insert="true" update="true">
 <!--
                 <meta attribute="field-description">UNCOMMENT @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO) @ContainedIn  @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeBridge.class)
@@ -797,7 +798,7 @@
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="AVSKU_GUID" not-null="true"/>
 
         </subclass>
     </class>
@@ -857,7 +858,7 @@
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="AVCATEGORY_GUID" not-null="true"/>
 
         </subclass>
     </class>
@@ -923,7 +924,7 @@
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="COUNTRY_GUID" not-null="true"/>
 
         </subclass>
     </class>
@@ -983,7 +984,7 @@
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="STATE_GUID" not-null="true"/>
 
         </subclass>
     </class>    
@@ -1051,7 +1052,7 @@
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="ADDRESS_GUID" not-null="true"/>
 
         </subclass>
     </class>
@@ -1112,7 +1113,7 @@
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="MAILTEMPLATEGROUP_GUID" not-null="true"/>
         </subclass>
     </class>
 
@@ -1181,7 +1182,7 @@
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="MAILTEMPLATE_GUID" not-null="true"/>
 
         </subclass>
 
@@ -1246,7 +1247,7 @@
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="SYSTEM_GUID" not-null="true"/>
 
 
         </subclass>
@@ -1366,7 +1367,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="PRODTYPEATTR_GUID" not-null="true"/>
 
         </subclass>
     </class>
@@ -1565,7 +1566,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="PRODTYPE_GUID" not-null="true"/>
 
         </subclass>
     </class>
@@ -1635,7 +1636,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="PRODTYPEATTRGROUP_GUID" not-null="true"/>
         </subclass>
     </class>    
 
@@ -1848,6 +1849,7 @@ public void setRangeList(final RangeList rangeList) {
             </many-to-one>
 
             <property name="name" column="NAME" type="string" length="255" not-null="true"/>
+            <property name="displayName" column="DISPLAYNAME" type="string" length="4000"/>
             <property name="description" column="DESCRIPTION" type="string" length="4000"/>
             <property name="uitemplate" type="string" length="255" not-null="true">
                 <column name="UITEMPLATE">
@@ -1912,7 +1914,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="CATEGORY_GUID" not-null="true"/>
         </subclass>
     </class>    
 
@@ -1961,7 +1963,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="description" column="DESCRIPTION" type="string" length="4000"/>
 
 
-            <bag name="attribute" inverse="true" lazy="true" cascade="all">
+            <bag name="attributes" inverse="true" lazy="true" cascade="all">
                 <key not-null="true" on-delete="cascade" column="BRAND_ID"/>
                 <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.AttrValueBrand" />
             </bag>
@@ -1971,7 +1973,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="BRAND_GUID" not-null="true"/>
 
         </subclass>
     </class>
@@ -2119,7 +2121,7 @@ public void setRangeList(final RangeList rangeList) {
 
                 ]]>
             </meta>
-            <property name="code" type="string" length="255" not-null="true">
+            <property name="code" type="string" length="255" index="PRODUCT_CODE" not-null="true">
                 <meta attribute="field-description">UNCOMMENT @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)</meta>
                 <column name="CODE" length="255" not-null="true">
                     <comment>Product or product sku code</comment>
@@ -2140,6 +2142,11 @@ public void setRangeList(final RangeList rangeList) {
                 <meta attribute="field-description">UNCOMMENT @Fields( { @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES), @Field(name = "name_sort", index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES) }) </meta>
                 <column name="NAME" length="255" not-null="true"/>
             </property>
+            <property name="displayName" type="string" length="4000">
+                <meta attribute="field-description">UNCOMMENT @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES) @FieldBridge(impl = org.yes.cart.domain.entity.bridge.DisplayNameBridge.class)</meta>
+                <column name="DISPLAYNAME" length="4000"/>
+            </property>
+
             <property name="description" length="4000" type="string">
                 <meta attribute="field-description">UNCOMMENT @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES) </meta>
                 <column name="DESCRIPTION" length="4000"/>
@@ -2225,7 +2232,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>            
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="PRODUCT_GUID" not-null="true"/>
         </subclass>
     </class>
 
@@ -2278,7 +2285,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="ENSEMBLE_GUID" not-null="true"/>
 
         </subclass>
     </class>
@@ -2374,12 +2381,14 @@ public void setRangeList(final RangeList rangeList) {
     ]]>
 
             </meta>
-            <property name="code" column="CODE" type="string" length="255" not-null="true">
+            <property name="code" column="CODE" type="string" length="255" index="SKU_CODE" not-null="true">
                 <!--<meta attribute="field-description">UNCOMMENT @Field(index=Index.UN_TOKENIZED) @ContainedIn</meta>-->
             </property>
             <property name="name" type="string" length="255" not-null="true">
                 <column name="NAME" length="255" not-null="true"/>
             </property>
+            <property name="displayName" column="DISPLAYNAME" type="string" length="4000"/>
+
             <property name="description" length="4000" type="string">
                 <column name="DESCRIPTION" length="4000"/>
             </property>
@@ -2437,7 +2446,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="SKU_GUID" not-null="true"/>
 
         </subclass>
     </class>
@@ -2524,7 +2533,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="SKUPRICE_GUID" not-null="true"/>
         </subclass>
     </class>        
 
@@ -2587,7 +2596,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="PRODUCTCAT_GUID" not-null="true"/>
         </subclass>
     </class>
 
@@ -2637,7 +2646,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="ASSOCIATION_GUID" not-null="true"/>
 
         </subclass>
     </class>
@@ -2707,7 +2716,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="PRODUCTASSOC_GUID" not-null="true"/>
 
         </subclass>
     </class>
@@ -2770,7 +2779,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="WAREHOUSE_GUID" not-null="true"/>
 
         </subclass>
 
@@ -2925,7 +2934,7 @@ public void setRangeList(final RangeList rangeList) {
 
                 ]]>
             </meta>
-            <property name="code" column="CODE" type="string" length="255" not-null="true" lazy="false"/>
+            <property name="code" column="CODE" type="string" length="255" index="SHOP_CODE" not-null="true" lazy="false"/>
             <property name="name" type="string" length="64" not-null="true" lazy="false">
                 <column name="NAME" length="64" not-null="true"/>
             </property>
@@ -2996,7 +3005,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="SHOP_GUID" not-null="true"/>
         </subclass>
     </class>
 
@@ -3056,7 +3065,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="SHOPTOPSELLER_GUID" not-null="true"/>
         </subclass>
 
     </class>
@@ -3122,7 +3131,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="SHOPWAREHOUSE_GUID" not-null="true"/>
         </subclass>
     </class>
 
@@ -3193,7 +3202,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="SKUWAREHOUSE_GUID" not-null="true"/>
         </subclass>
     </class>
 
@@ -3258,7 +3267,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="SHOPCATEGORY_GUID" not-null="true"/>
 
         </subclass>
 
@@ -3321,7 +3330,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="SHOPDISCOUNT_GUID" not-null="true"/>
 
         </subclass>
     </class>
@@ -3375,7 +3384,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="SHOPDISCOUNTRULE_GUID" not-null="true"/>
 
         </subclass>
     </class>
@@ -3430,12 +3439,12 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="SHOPURL_GUID" not-null="true"/>
 
         </subclass>
     </class>
 
-    <class name="org.yes.cart.domain.entity.ShopExchangeRate" table="TSTOREEXCHANGERATE" discriminator-value="0">
+    <class name="org.yes.cart.domain.entity.ShopExchangeRate" table="TSHOPEXCHANGERATE" discriminator-value="0">
         <meta attribute="interface">true</meta>
         <id name="shopexchangerateId" type="long" column="SHOPEXCHANGERATE_ID">
             <generator class="native">
@@ -3485,7 +3494,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="SHOPEXRATE_GUID" not-null="true"/>
 
         </subclass>
     </class>
@@ -3544,16 +3553,16 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="SHOPADVPLACE_GUID" not-null="true"/>
 
         </subclass>
 
     </class>
 
-    <class name="org.yes.cart.domain.entity.ShopAdvPlaceRule" table="TSTOREADVRULES" discriminator-value="0">
+    <class name="org.yes.cart.domain.entity.ShopAdvPlaceRule" table="TSHOPADVRULES" discriminator-value="0">
         <meta attribute="interface">true</meta>
         <comment>Adv rules for show some item in adv place</comment>
-        <id name="shopadvrulesId" column="STOREADVRULES_ID" type="long">
+        <id name="shopadvrulesId" column="SHOPADVRULES_ID" type="long">
             <generator class="native">
                 <param name="table">HIBERNATE_UNIQUE_KEYS</param>
                 <param name="column">value</param>
@@ -3603,7 +3612,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="SHOPADVRULES_GUID" not-null="true"/>
 
         </subclass>
     </class>
@@ -3716,7 +3725,7 @@ public void setRangeList(final RangeList rangeList) {
 
                 ]]>
             </meta>
-            <property name="email" type="string" column="EMAIL" length="255" unique="true" not-null="true"/>
+            <property name="email" type="string" column="EMAIL" length="255" unique="true" index="CUSTOMER_GUID" not-null="true"/>
             <property name="firstname" type="string" column="FIRSTNAME" length="128" not-null="true"/>
             <property name="lastname" type="string" column="LASTNAME" length="128" not-null="true"/>
             <property name="middlename" type="string" column="MIDDLENAME" length="128" not-null="false"/>
@@ -3766,7 +3775,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="CUSTOMER_GUID" not-null="true"/>
 
         </subclass>
 
@@ -3830,7 +3839,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="CUSTOMERSHOP_GUID" not-null="true"/>
 
         </subclass>
     </class>
@@ -3896,7 +3905,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="CUSTOMERWISHLIST_GUID" not-null="true"/>
 
         </subclass>
     </class>
@@ -4033,7 +4042,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="CUSTOMERORDER_GUID" not-null="true"/>
 
         </subclass>
     </class>
@@ -4103,7 +4112,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="CUSTOMERORDERDET_GUID" not-null="true"/>
 
         </subclass>
     </class>
@@ -4188,7 +4197,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="CUSTOMERORDERDEL_GUID" not-null="true"/>
 
         </subclass>
     </class>
@@ -4255,7 +4264,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="CUSTOMERORDERDELDET_GUID" not-null="true"/>
 
         </subclass>
     </class>
@@ -4320,7 +4329,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="CARRIER_GUID" not-null="true"/>
 
         </subclass>
     </class>
@@ -4389,7 +4398,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="CARRIERSLA_GUID" not-null="true"/>
 
         </subclass>
     </class>
@@ -4447,7 +4456,7 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" not-null="false"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="true" index="SEOIMAGE_GUID" not-null="true"/>
 
         </subclass>
 
@@ -4583,6 +4592,22 @@ public void setRangeList(final RangeList rangeList) {
        ]]>
     </query>
 
+    <query name="PRODUCT.ATTRIBUTE.VALUES.BY.CODE">
+        <![CDATA[
+       select a.val, a.displayVal
+       from   ProductEntity p inner join p.attribute a
+            where p.productId = ?1 and a.attribute.code = ?2
+       ]]>
+    </query>
+
+    <query name="PRODUCTSKU.ATTRIBUTE.VALUES.BY.CODE">
+        <![CDATA[
+       select a.val, a.displayVal
+       from   ProductSkuEntity p inner join p.attribute a
+            where p.skuId = ?1 and a.attribute.code = ?2
+       ]]>
+    </query>
+
     <query name="PRODUCTS.ATTRIBUTE.VALUES.BY.CODE.PRODUCTTYPEID">
         <![CDATA[
        select distinct a.val
@@ -4613,7 +4638,7 @@ public void setRangeList(final RangeList rangeList) {
 
     <query name="PRODUCTS.ATTR.CODE.VALUES.BY.PRODUCTTYPEID">
         <![CDATA[
-       select a.attribute.name, a.attribute.code, a.val, a.displayVal, 0, pta.rank
+       select a.attribute.name, a.attribute.displayName, a.attribute.code, a.val, a.displayVal, 0, pta.rank
        from  ProductTypeEntity pt, ProductTypeAttrEntity pta, ProductEntity p inner join p.attribute a
             where p.producttype.producttypeId = pt.producttypeId
             and pt.producttypeId = pta.producttype.producttypeId
@@ -4621,7 +4646,7 @@ public void setRangeList(final RangeList rangeList) {
             and pta.attribute.code = a.attribute.code
             and pta.navigationType = 'S'
             and pta.navigation = ?2
-            group by a.attribute.name, a.attribute.code, a.val, a.displayVal, pta.rank
+            group by a.attribute.name, a.attribute.displayName, a.attribute.code, a.val, a.displayVal, pta.rank
             order by pta.rank, a.attribute.name, a.val
        ]]>
     </query>

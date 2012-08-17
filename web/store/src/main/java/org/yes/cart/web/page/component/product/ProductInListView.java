@@ -111,7 +111,8 @@ public class ProductInListView extends BaseComponent {
                 product,
                 WicketUtil.getHttpServletRequest().getContextPath(),
                 false,
-                defaultImageAttributeValue);
+                productService, defaultImageAttributeValue,
+                getI18NSupport());
         this.defImgSize = defImgSize;
 
     }
@@ -122,6 +123,7 @@ public class ProductInListView extends BaseComponent {
     @Override
     protected void onBeforeRender() {
 
+        final String selectedLocale = getLocale().getLanguage();
         final PageParameters linkToProductParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters());
         linkToProductParameters.set(WebParametersKeys.PRODUCT_ID, product.getId());
 
@@ -136,12 +138,12 @@ public class ProductInListView extends BaseComponent {
         );
         
         add (
-            new Label(DESCRIPTION_LABEL, product.getDescription())
+            new Label(DESCRIPTION_LABEL, product.getDescription(selectedLocale))
         );
 
         add(
                 new BookmarkablePageLink<HomePage>(PRODUCT_LINK_NAME, HomePage.class, linkToProductParameters).add(
-                        new Label(NAME_LABEL, product.getName())
+                        new Label(NAME_LABEL, product.getName(selectedLocale))
                 )
         );
 

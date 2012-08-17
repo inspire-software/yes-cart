@@ -31,7 +31,7 @@ import java.util.Set;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface Product extends Auditable, Attributable, Seoable {
+public interface Product extends Auditable, Attributable, Seoable, Codable {
 
     /**
      * When available on warehouse.
@@ -256,6 +256,20 @@ public interface Product extends Auditable, Attributable, Seoable {
      * @param name product name.
      */
     void setName(String name);
+
+    /**
+     * display name.
+     *
+     * @return display name.
+     */
+    String getDisplayName();
+
+    /**
+     * Get display name
+     *
+     * @param name display name
+     */
+    void setDisplayName(String name);
 
     /**
      * Get product description.

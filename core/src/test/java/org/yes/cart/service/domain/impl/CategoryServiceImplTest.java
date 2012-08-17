@@ -123,11 +123,11 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testGetCategoryAttributeRecursive() {
         GenericDAO<Category, Long> categoryDAO = (GenericDAO<Category, Long>) ctx().getBean(DaoServiceBeanKeys.CATEGORY_DAO);
-        String val = categoryService.getCategoryAttributeRecursive(categoryDAO.findById(105L), "SOME_NOT_EXISTING_ATTR", null);
+        String val = categoryService.getCategoryAttributeRecursive(null, categoryDAO.findById(105L), "SOME_NOT_EXISTING_ATTR", null);
         assertNull(val);
-        val = categoryService.getCategoryAttributeRecursive(categoryDAO.findById(105L), AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
+        val = categoryService.getCategoryAttributeRecursive(null, categoryDAO.findById(105L), AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
         assertEquals("10,20,50", val);
-        val = categoryService.getCategoryAttributeRecursive(categoryDAO.findById(139L), AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
+        val = categoryService.getCategoryAttributeRecursive(null, categoryDAO.findById(139L), AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
         assertEquals("6,12,24", val);
     }
 

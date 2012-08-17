@@ -111,10 +111,29 @@ public interface AttributeNamesKeys {
         /** Product columns in grid */
         String CATEGORY_PRODUCTS_COLUMNS = "CATEGORY_PRODUCTS_COLUMNS";
 
+        /**
+         * Category description attribute prefix. Requires current language to make
+         * full attribute name. E.g. CATEGORY_DESCRITION_en.
+         */
+        String CATEGORY_DESCRIPTION_PREFIX = "CATEGORY_DESCRITION_";
+
 
     }
 
     interface Product {
+
+        /**
+         * Product description attribute prefix. Requires current language to make
+         * full attribute name. E.g. PRODUCT_DESCRITION_en.
+         */
+        String PRODUCT_DESCRIPTION_PREFIX = "PRODUCT_DESCRITION_";
+
+        /**
+         * Product SKU description attribute prefix. Requires current language to make
+         * full attribute name. E.g. SKUPRODUCT_DESCRITION_en.
+         */
+        String SKUPRODUCT_DESCRIPTION_PREFIX = "SKUPRODUCT_DESCRITION_";
+
 
     }
 

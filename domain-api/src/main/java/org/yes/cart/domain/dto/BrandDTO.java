@@ -76,13 +76,13 @@ public interface BrandDTO extends Identifiable {
      *
      * @return brand attributes.
      */
-    Collection<AttrValueBrandDTO> getAttribute();
+    Collection<AttrValueBrandDTO> getAttributes();
 
     /**
      * Set brand attributes.
      *
      * @param attribute brand attributes to set.
      */
-    void setAttribute(Collection<AttrValueBrandDTO> attribute);
+    void setAttributes(Collection<AttrValueBrandDTO> attribute);
 
 }

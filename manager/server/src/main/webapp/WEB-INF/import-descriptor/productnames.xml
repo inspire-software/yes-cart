@@ -82,7 +82,23 @@
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
-        <!-- TODO: add localisable -->
+        <column-descriptor>
+            <column-index>7</column-index>
+            <field-type>FIELD</field-type>
+            <name>displayName</name>
+            <language>en</language>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>8</column-index>
+            <field-type>FIELD</field-type>
+            <name>displayName</name>
+            <language>ru</language>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
 
         <!-- availability type -->
         <column-descriptor>
@@ -101,7 +117,67 @@
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
-        <!-- TODO: add localisable -->
+        <column-descriptor>
+            <column-index>10</column-index>
+            <field-type>SLAVE_INLINE_FIELD</field-type>
+            <name/>
+            <import-descriptor>
+                <entity-type>org.yes.cart.domain.entity.AttrValueProduct</entity-type>
+                <import-directory/>
+                <import-file-descriptor>
+                    <file-encoding>UTF-8</file-encoding>
+                    <file-name-mask/>
+                    <ignore-first-line>false</ignore-first-line>
+                    <column-delimiter>,</column-delimiter>
+                    <text-qualifier>&quot;</text-qualifier>
+                </import-file-descriptor>
+                <select-sql/>
+                <insert-sql>
+                    DELETE FROM TPRODUCTATTRVALUE
+                        WHERE GUID = '{masterObjectId}_PRODDESC_en';
+                    INSERT INTO TPRODUCTATTRVALUE (PRODUCT_ID, GUID, CODE, VAL)
+                        VALUES ({masterObjectId}, '{masterObjectId}_PRODDESC_en', 'PRODUCT_DESCRITION_en','{val}')
+                </insert-sql>
+                <import-columns>
+                    <column-descriptor>
+                        <column-index>10</column-index>
+                        <field-type>FIELD</field-type>
+                        <name>val</name>
+                    </column-descriptor>
+                </import-columns>
+            </import-descriptor>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>11</column-index>
+            <field-type>SLAVE_INLINE_FIELD</field-type>
+            <name/>
+            <import-descriptor>
+                <entity-type>org.yes.cart.domain.entity.AttrValueProduct</entity-type>
+                <import-directory/>
+                <import-file-descriptor>
+                    <file-encoding>UTF-8</file-encoding>
+                    <file-name-mask/>
+                    <ignore-first-line>false</ignore-first-line>
+                    <column-delimiter>,</column-delimiter>
+                    <text-qualifier>&quot;</text-qualifier>
+                </import-file-descriptor>
+                <select-sql/>
+                <insert-sql>
+                    DELETE FROM TPRODUCTATTRVALUE
+                        WHERE GUID = '{masterObjectId}_PRODDESC_ru';
+                    INSERT INTO TPRODUCTATTRVALUE (PRODUCT_ID, GUID, CODE, VAL)
+                        VALUES ({masterObjectId}, '{masterObjectId}_PRODDESC_ru', 'PRODUCT_DESCRITION_ru','{val}')
+                </insert-sql>
+                <import-columns>
+                    <column-descriptor>
+                        <column-index>11</column-index>
+                        <field-type>FIELD</field-type>
+                        <name>val</name>
+                    </column-descriptor>
+                </import-columns>
+            </import-descriptor>
+        </column-descriptor>
 
         <!--featured-->
         <column-descriptor>

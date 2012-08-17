@@ -15,7 +15,7 @@
   -    limitations under the License.
   -->
 
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%">
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:yci18n="org.yes.cart.ui.i18n.*" width="100%" height="100%">
 
 
     <mx:Form width="100%">
@@ -25,6 +25,9 @@
         </mx:FormItem>
         <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='name')">
             <mx:TextInput id="nameTextInput" width="300"/>
+        </mx:FormItem>
+        <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='displayName')">
+            <yci18n:i18nStringField id="displayNames"/>
         </mx:FormItem>
         <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='description')">
             <mx:TextArea id="descriptionTextInput" width="300"/>
@@ -148,9 +151,12 @@
                 watcher.unwatch();
             }
             propertyWatchers.removeAll();
+            displayNames.setSourceObject(null, null);
         }
 
         private function bindProperties():void {
+
+            displayNames.setSourceObject(_productDTOImpl, 'displayNames');
 
             propertyWatchers.addItem(BindingUtils.bindProperty(codeTextInput, "text", _productDTOImpl, "code"));
             propertyWatchers.addItem(BindingUtils.bindProperty(uriNameTextInput, "text", _productDTOImpl, "uri"));

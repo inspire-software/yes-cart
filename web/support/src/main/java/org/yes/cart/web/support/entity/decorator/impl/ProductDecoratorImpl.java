@@ -28,6 +28,7 @@ import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.support.entity.decorator.ProductDecorator;
+import org.yes.cart.web.support.i18n.I18NWebSupport;
 import org.yes.cart.web.support.service.AttributableImageService;
 
 import java.util.*;
@@ -72,6 +73,7 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
 
 
 
+    private final ProductService productService;
     private final AttributableImageService attributableImageService;
     private final CategoryService categoryService;
     private final String httpServletContextPath;
@@ -79,15 +81,18 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
     private final ImageService imageService;
     private final Map<String, AttrValue> attrValueMap;
     private final String defaultImageAttributeValue;
+    private final I18NWebSupport i18NWebSupport;
 
     /**
      * Construct entity decorator.
      *
+     * @param imageService image serice to get the image seo info
      * @param attributableImageService category image service to get the image.
      * @param categoryService          to get image width and height
-     * @param httpServletContextPath   servlet context path
      * @param productEntity            original product to decorate.
-     * @param imageService image serice to get the image seo info
+     * @param httpServletContextPath   servlet context path
+     * @param productService           product service
+     * @param i18NWebSupport           i18n support
      */
     private ProductDecoratorImpl(
             final ImageService imageService,
@@ -96,7 +101,11 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
             final Product productEntity,
             final String httpServletContextPath,
             final boolean withAttributes,
-            final String defaultImageAttributeValue) {
+            final ProductService productService,
+            final String defaultImageAttributeValue,
+            final I18NWebSupport i18NWebSupport) {
+        this.productService = productService;
+        this.i18NWebSupport = i18NWebSupport;
 
         BeanUtils.copyProperties(productEntity, this);
         this.httpServletContextPath = httpServletContextPath;
@@ -124,7 +133,9 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
             final Product productEntity,
             final String httpServletContextPath,
             final boolean withAttributes,
-            final String defaultImageAttributeValue) {
+            final ProductService productService,
+            final String defaultImageAttributeValue,
+            final I18NWebSupport i18NWebSupport) {
 
         final String key = httpServletContextPath + productEntity.getProductId() + withAttributes;
 
@@ -139,7 +150,9 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
                     productEntity,
                     httpServletContextPath,
                     withAttributes,
-                    defaultImageAttributeValue);
+                    productService,
+                    defaultImageAttributeValue,
+                    i18NWebSupport);
 
             productDecoratorCache.put(key, rez);
             final String seoId = "" + rez.getProductId();
@@ -248,7 +261,7 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
      */
     public String [] getDefaultImageSize(final Category category) {
         return categoryService.getCategoryAttributeRecursive(
-                category,
+                null, category,
                 defaultSize
         );
     }
@@ -259,7 +272,7 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
      */
     public String [] getThumbnailImageSize(final Category category) {
         return categoryService.getCategoryAttributeRecursive(
-                category,
+                null, category,
                 ProductDecoratorImpl.thumbnailSize
         );
     }
@@ -280,5 +293,41 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
     public SeoImage getSeoImage(final String fileName) {
         return imageService.getSeoImage(fileName);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getName(final String locale) {
+        return i18NWebSupport.getFailoverModel(getDisplayName(), getName()).getValue(locale);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getAttributeValue(final String attribute) {
+        final AttrValueProduct val =  getAttributeByCode(attribute);
+        return val != null ? val.getVal() : "";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getAttributeValue(final String locale, final String attribute) {
+        final AttrValueProduct lval =  getAttributeByCode(attribute);
+        return lval != null ? i18NWebSupport.getFailoverModel(lval.getDisplayVal(), lval.getVal()).getValue(locale) : "";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getDescription(final String locale) {
+        final Pair<String, String> desc = productService.getProductAttribute(
+                locale, getProductId(), 0L, AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX + locale);
+        if (desc == null) {
+            return getDescription();
+        }
+        return desc.getSecond();
+    }
+
 
 }

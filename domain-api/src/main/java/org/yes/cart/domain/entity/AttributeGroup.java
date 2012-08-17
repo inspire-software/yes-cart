@@ -25,7 +25,7 @@ import java.util.Set;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface AttributeGroup extends Auditable {
+public interface AttributeGroup extends Auditable, Codable {
 
 
     /**

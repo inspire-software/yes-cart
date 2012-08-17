@@ -145,7 +145,7 @@ public class DtoCategoryServiceImpl
      */
     public CategoryDTO create(final CategoryDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         Category category = getEntityFactory().getByIface(Category.class);
-        assembler.assembleEntity(instance, category, null, dtoFactory);
+        assembler.assembleEntity(instance, category, getAdaptersRepository(), dtoFactory);
         bindDictionaryData(instance, category);
         category = service.create(category);
         return getById(category.getCategoryId());
@@ -156,7 +156,7 @@ public class DtoCategoryServiceImpl
      */
     public CategoryDTO update(final CategoryDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         Category category = service.getById(instance.getCategoryId());
-        assembler.assembleEntity(instance, category, null, dtoFactory);
+        assembler.assembleEntity(instance, category, getAdaptersRepository(), dtoFactory);
         bindDictionaryData(instance, category);
         category = service.update(category);
         return getById(category.getCategoryId());
@@ -221,7 +221,7 @@ public class DtoCategoryServiceImpl
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final ShopCategory shopCategory = ((CategoryService) service).assignToShop(categoryId, shopId);
         ShopCategoryDTO dto = dtoFactory.getByIface(ShopCategoryDTO.class);
-        shopCategoryAssembler.assembleDto(dto, shopCategory, null, dtoFactory);
+        shopCategoryAssembler.assembleDto(dto, shopCategory, getAdaptersRepository(), dtoFactory);
         return dto;
     }
 

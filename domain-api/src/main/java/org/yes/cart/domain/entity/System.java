@@ -21,25 +21,55 @@ import java.util.Map;
 /**
  * TODO kill this interface.
  */
-public interface System extends Auditable {
+public interface System extends Auditable, Codable {
 
+    /**
+     * @return code identifier
+     */
     String getCode();
 
+    /**
+     * @param code code identifier
+     */
     void setCode(String code);
 
+    /**
+     * @return name of the system
+     */
     String getName();
 
+    /**
+     * @param name name of the system
+     */
     void setName(String name);
 
+    /**
+     * @return description
+     */
     String getDescription();
 
+    /**
+     * @param description description
+     */
     void setDescription(String description);
 
+    /**
+     * @return system configuration attributes
+     */
     Map<String, AttrValueSystem> getAttribute();
 
+    /**
+     * @param attribute system configuration attributes
+     */
     void setAttribute(Map<String, AttrValueSystem> attribute);
 
+    /**
+     * @return PK
+     */
     long getSystemId();
 
+    /**
+     * @param systemId PK
+     */
     void setSystemId(long systemId);
 }

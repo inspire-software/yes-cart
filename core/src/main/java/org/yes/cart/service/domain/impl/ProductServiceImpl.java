@@ -92,6 +92,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         ProductSku sku = productDao.getEntityFactory().getByIface(ProductSku.class);
         sku.setCode(instance.getCode());
         sku.setName(instance.getName());
+        sku.setDisplayName(instance.getDisplayName());
         sku.setDescription(instance.getDescription());
         sku.setProduct(instance);
         instance.getSku().add(sku);
@@ -316,6 +317,33 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             }
         }
         return map;
+    }
+
+    @Cacheable(value = PROD_SERV_METHOD_CACHE)
+    public Pair<String, String> getProductAttribute(final String locale, final long productId, final long skuId, final String attributeCode) {
+        if (skuId > 0L) {
+            final List skuAvs =
+                    getGenericDao().findByNamedQuery("PRODUCTSKU.ATTRIBUTE.VALUES.BY.CODE", skuId, attributeCode);
+            if (skuAvs != null && skuAvs.size() > 0) {
+                final Object[] av = (Object[]) skuAvs.get(0);
+                return new Pair<String, String>(
+                    (String) av[0],
+                    new FailoverStringI18NModel((String) av[1], (String) av[0]).getValue(locale)
+                );
+            }
+        }
+        if (productId > 0L) {
+            final List prodAvs =
+                    getGenericDao().findByNamedQuery("PRODUCT.ATTRIBUTE.VALUES.BY.CODE", productId, attributeCode);
+            if (prodAvs != null && prodAvs.size() > 0) {
+                final Object[] av = (Object[]) prodAvs.get(0);
+                return new Pair<String, String>(
+                        (String) av[0],
+                        new FailoverStringI18NModel((String) av[1], (String) av[0]).getValue(locale)
+                );
+            }
+        }
+        return null;
     }
 
     /**
@@ -560,6 +588,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                     records.add(
                             new FilteredNavigationRecordImpl(
                                     entry.getAttribute().getName(),
+                                    new FailoverStringI18NModel(entry.getAttribute().getDisplayName(), entry.getAttribute().getName()).getValue(locale),
                                     entry.getAttribute().getCode(),
                                     node.getFrom() + '-' + node.getTo(),
                                     node.getFrom() + '-' + node.getTo(),
@@ -586,11 +615,12 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             result.add(
                     new FilteredNavigationRecordImpl(
                             (String) objArray[0],
-                            (String) objArray[1],
+                            new FailoverStringI18NModel((String) objArray[1], (String) objArray[0]).getValue(locale),
                             (String) objArray[2],
-                            new FailoverStringI18NModel((String) objArray[3], (String) objArray[2]).getValue(locale),
-                            (Integer) objArray[4],
+                            (String) objArray[3],
+                            new FailoverStringI18NModel((String) objArray[4], (String) objArray[3]).getValue(locale),
                             (Integer) objArray[5],
+                            (Integer) objArray[6],
                             "S"
                     )
             );

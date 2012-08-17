@@ -14,32 +14,32 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.web.i18n;
-
-import org.yes.cart.domain.i18n.I18NModel;
+package org.yes.cart.domain.entity;
 
 /**
+ * Entity that have code property to identify them. This property should be used
+ * for GUID if this is object has GUID property.
+ *
+ * This is a marker interface so that interceptors that listen to persistence layer
+ * operations can identify these objects.
+ *
  * User: denispavlov
- * Date: 12-08-13
- * Time: 9:58 PM
+ * Date: 12-08-16
+ * Time: 6:23 PM
  */
-public interface I18NWebSupport {
+public interface Guidable {
 
     /**
-     * Return i18n model from an i18n object.
+     * GUID is an auto generated identified that can help in entity synchronisation
+     * and global identification.
      *
-     * @param i18nObject i18n object
-     * @return model
+     * @return guid that uniquely identifies this object.
      */
-    I18NModel getDefaultModel(Object i18nObject);
+    String getGuid();
 
     /**
-     * Return i18n model from an i18n object.
-     *
-     * @param i18nObject i18n object
-     * @param failover default value
-     * @return model
+     * @param guid guid that uniquely identifies this object.
      */
-    I18NModel getFailoverModel(Object i18nObject, String failover);
+    void setGuid(String guid);
 
 }

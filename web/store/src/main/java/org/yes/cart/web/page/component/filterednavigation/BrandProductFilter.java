@@ -50,7 +50,7 @@ public class BrandProductFilter extends AbstractProductFilter {
 
         if (categoryId > 0) {
 
-            final String selectedLocale = ThreadContext.getSession().getLocale().getLanguage();
+            final String selectedLocale = getLocale().getLanguage();
 
             filteredNavigationByBrand = getCategory().getNavigationByBrand() == null ? false : getCategory().getNavigationByBrand();
 

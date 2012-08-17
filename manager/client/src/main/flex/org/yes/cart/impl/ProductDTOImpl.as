@@ -51,6 +51,8 @@ public class ProductDTOImpl {
 
     public var name:String;
 
+    public var displayNames:Object;
+
     public var description:String ;
 
     public var featured:Boolean;

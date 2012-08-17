@@ -482,7 +482,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
             payment.getOrderItems().add(
                     new PaymentLineImpl(
                             deliveryDet.getSku().getCode(),
-                            deliveryDet.getSku().getName(),
+                            deliveryDet.getSku().getName(),  // TODO: localise whilst YC-67
                             deliveryDet.getQty(),
                             deliveryDet.getPrice(),
                             BigDecimal.ZERO

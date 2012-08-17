@@ -21,9 +21,9 @@ package org.yes.cart.domain.entity;
  * Address part of warehouse used to:
  * <p/>
  * 1. Show only suitable delivery options to customer.
- * 2. Devivery planing in case of splited delivery or splited orders.
+ * 2. Delivery planing in case of split delivery or split orders.
  */
-public interface Warehouse extends Auditable {
+public interface Warehouse extends Auditable, Codable {
 
 
     /**

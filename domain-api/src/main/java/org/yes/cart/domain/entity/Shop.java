@@ -29,7 +29,7 @@ import java.util.Set;
  * Time: 11:12:54
  */
 
-public interface Shop extends Auditable, Seoable {
+public interface Shop extends Auditable, Seoable, Codable {
 
     /**
      * Get shop code.

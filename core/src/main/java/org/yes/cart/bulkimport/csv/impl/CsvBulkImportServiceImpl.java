@@ -279,7 +279,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
                 genericDAO.flushClear();
 
             }
-            statusListener.notifyPing(); // make sure we do not time out
+            statusListener.notifyPing("Importing tuple: " + tuple.getSourceId()); // make sure we do not time out
 
         } catch (Exception e) {
             String additionalInfo = null;
@@ -308,7 +308,13 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
 
     private void executeNativeInsert(final ImportDescriptor descriptor, final Object masterObject, final ImportTuple tuple) {
         final LookUpQuery query = descriptorInsert.getQuery(descriptor, masterObject, tuple, valueStringAdapter, descriptor.getInsertSql());
-        genericDAO.executeNativeUpdate(query.getQueryString());
+        if (query.getQueryString().indexOf(";\n") == -1) {
+            genericDAO.executeNativeUpdate(query.getQueryString());
+        } else {
+            for (final String statement : query.getQueryString().split(";\n")) {
+                genericDAO.executeNativeUpdate(statement);
+            }
+        }
     }
 
     private void performSubImport(final JobStatusListener statusListener,

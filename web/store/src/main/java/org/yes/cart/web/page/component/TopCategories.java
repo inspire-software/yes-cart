@@ -18,6 +18,7 @@ package org.yes.cart.web.page.component;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ThreadContext;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -26,6 +27,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.HomePage;
@@ -64,6 +66,8 @@ public class TopCategories extends BaseComponent {
     @Override
     protected void onBeforeRender() {
 
+        final String selectedLocale = getLocale().getLanguage();
+
         final List<Category> categories = categoryService.getTopLevelCategories(ApplicationDirector.getCurrentShop());
 
         final long categoryId = NumberUtils.toLong(getPage().getPageParameters().get(WebParametersKeys.CATEGORY_ID).toString());
@@ -75,6 +79,7 @@ public class TopCategories extends BaseComponent {
                     protected void populateItem(final ListItem<Category> categoryListItem) {
 
                         final Category category = categoryListItem.getModelObject();
+                        final I18NModel nameModel = getI18NSupport().getFailoverModel(category.getDisplayName(), category.getName());
 
                         final PageParameters pageParameters = new PageParameters().add(WebParametersKeys.CATEGORY_ID, category.getCategoryId());
 
@@ -83,7 +88,7 @@ public class TopCategories extends BaseComponent {
 
                                 new BookmarkablePageLink<HomePage>(CATEGORY_NAME_LINK, HomePage.class, pageParameters).add(
 
-                                        new Label(CATEGORY_NAME, category.getName()).setEscapeModelStrings(false)
+                                        new Label(CATEGORY_NAME, nameModel.getValue(selectedLocale)).setEscapeModelStrings(false)
 
                                 ).add(
 

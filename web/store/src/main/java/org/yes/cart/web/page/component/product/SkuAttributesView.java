@@ -66,7 +66,7 @@ public class SkuAttributesView extends BaseComponent {
     public SkuAttributesView(final String id, final ProductSku sku, final boolean productOnly) {
         super(id);
 
-        final String selectedLocale = ThreadContext.getSession().getLocale().getLanguage();
+        final String selectedLocale = getLocale().getLanguage();
 
         final long productTypeId = sku.getProduct().getProducttype().getId();
 

@@ -21,6 +21,7 @@ import org.yes.cart.domain.entity.Identifiable;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -103,6 +104,21 @@ public interface ProductDTO extends Identifiable {
      * @param name product name.
      */
     void setName(String name);
+
+    /**
+     * Display name.
+     *
+     * @return localised locale => name pairs.
+     */
+    Map<String, String> getDisplayNames();
+
+    /**
+     * Get display name
+     *
+     * @param names localised locale => name pairs
+     */
+    void setDisplayNames(Map<String, String> names);
+
 
     /**
      * Get product description.

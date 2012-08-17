@@ -35,12 +35,14 @@ import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ImageService;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl;
 import org.yes.cart.shoppingcart.impl.RemoveAllSkuFromCartCommandImpl;
 import org.yes.cart.shoppingcart.impl.RemoveSkuFromCartCommandImpl;
 import org.yes.cart.shoppingcart.impl.SetSkuQuantityToCartEventCommandImpl;
+import org.yes.cart.web.support.i18n.I18NWebSupport;
 import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.ShoppingCartPage;
 import org.yes.cart.web.page.component.BaseComponent;
@@ -89,6 +91,9 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
     @SpringBean(name = ServiceSpringKeys.PRODUCT_SKU_SERVICE)
     private ProductSkuService productSkuService;
 
+    @SpringBean(name = ServiceSpringKeys.PRODUCT_SERVICE)
+    protected ProductService productService;
+
     @SpringBean(name = StorefrontServiceSpringKeys.ATTRIBUTABLE_IMAGE_SERVICE)
     protected AttributableImageService attributableImageService;
 
@@ -102,15 +107,19 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
 
     private final Category rootCategory;
 
+    private final I18NWebSupport i18NWebSupport;
+
 
     /**
      * Construct list of product in shopping cart.
      *
      * @param id        component id
      * @param cartItems cart items
+     * @param i18NWebSupport i18n support
      */
-    public ShoppingCartItemsList(final String id, final List<? extends CartItem> cartItems) {
+    public ShoppingCartItemsList(final String id, final List<? extends CartItem> cartItems, final I18NWebSupport i18NWebSupport) {
         super(id, cartItems);
+        this.i18NWebSupport = i18NWebSupport;
         rootCategory = categoryService.getRootCategory();
 
     }
@@ -132,8 +141,9 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
                 attributableImageService,
                 categoryService,
                 sku,
-                WicketUtil.getHttpServletRequest().getContextPath()
-        );
+                WicketUtil.getHttpServletRequest().getContextPath(),
+                productService,
+                i18NWebSupport);
 
 
         cartItemListItem.add(
@@ -145,7 +155,7 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
         ).add(
                 new Label(SKU_NUM_LABEL, skuCode)
         ).add(
-                getProductLink(sku)
+                getProductLink(productSkuDecorator)
         ).add(
                 new PriceView(PRICE_VIEW, new Pair<BigDecimal, BigDecimal>(cartItem.getPrice(), null), null, false)
         ).add(
@@ -229,12 +239,12 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
      * @param productSku product    sku
      * @return link to show product and selected SKU
      */
-    private Link getProductLink(final ProductSku productSku) {
+    private Link getProductLink(final ProductSkuDecorator productSku) {
         final Link productLink = new BookmarkablePageLink<HomePage>(
                 PRODUCT_LINK, HomePage.class,
                 new PageParameters().set(WebParametersKeys.SKU_ID, String.valueOf(productSku.getId()))
         );
-        productLink.add(new Label(PRODUCT_NAME_LABEL, productSku.getName()).setEscapeModelStrings(false));
+        productLink.add(new Label(PRODUCT_NAME_LABEL, productSku.getName(getLocale().getLanguage())).setEscapeModelStrings(false));
         return productLink;
     }
 

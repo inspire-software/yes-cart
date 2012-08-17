@@ -38,7 +38,7 @@ import org.yes.cart.web.page.component.product.SkuAttributesView;
 import org.yes.cart.web.page.component.product.SkuListView;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
-import org.yes.cart.web.support.entity.decorator.Depictable;
+import org.yes.cart.web.support.entity.decorator.ObjectDecorator;
 import org.yes.cart.web.support.entity.decorator.impl.ProductDecoratorImpl;
 import org.yes.cart.web.support.entity.decorator.impl.ProductSkuDecoratorImpl;
 import org.yes.cart.web.support.service.AttributableImageService;
@@ -186,7 +186,8 @@ public class SkuCentralView extends AbstractCentralView {
         final PageParameters addToCartParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters())
                 .set(AddSkuToCartEventCommandImpl.CMD_KEY, sku.getCode());
 
-
+        final String selectedLocale = getLocale().getLanguage();
+        final ObjectDecorator decorator = getDecorator();
 
         add(
                 new PriceView(PRICE_VIEW, new Model<SkuPrice>(getSkuPrice()), true)
@@ -197,17 +198,17 @@ public class SkuCentralView extends AbstractCentralView {
         ).add(
                 new Label(SKU_CODE_LABEL, sku.getCode())
         ).add(
-                new Label(PRODUCT_NAME_LABEL, isProduct ? product.getName() : sku.getName())
+                new Label(PRODUCT_NAME_LABEL, decorator.getName(selectedLocale))
         ).add(
-                new Label(PRODUCT_NAME_LABEL2, isProduct ? product.getName() : sku.getName())
+                new Label(PRODUCT_NAME_LABEL2, decorator.getName(selectedLocale))
         ).add(
-                new Label(PRODUCT_DESCRIPTION_LABEL, isProduct ? product.getDescription() : sku.getDescription())
+                new Label(PRODUCT_DESCRIPTION_LABEL, decorator.getDescription(selectedLocale))
         ).add(
                 new BookmarkablePageLink<HomePage>(ADD_TO_CART_LINK, HomePage.class, addToCartParameters)
         ).add(
                 new SkuAttributesView(SKU_ATTR_VIEW, sku, isProduct)
         ).add(
-                new ImageView(PRODUCT_IMAGE_VIEW, getDepictable())
+                new ImageView(PRODUCT_IMAGE_VIEW, decorator)
         );
 
 
@@ -244,7 +245,7 @@ public class SkuCentralView extends AbstractCentralView {
 
     }
 
-    private Depictable getDepictable() {
+    private ObjectDecorator getDecorator() {
         if (isProduct) {
             return ProductDecoratorImpl.createProductDecoratorImpl(
                     imageService,
@@ -253,14 +254,18 @@ public class SkuCentralView extends AbstractCentralView {
                     product,
                     WicketUtil.getHttpServletRequest().getContextPath(),
                     true,
-                    productService.getDefaultImage(product.getProductId()));
+                    productService,
+                    productService.getDefaultImage(product.getProductId()),
+                    getI18NSupport());
         }
         return new ProductSkuDecoratorImpl(
                 imageService,
                 attributableImageService,
                 categoryService,
                 sku,
-                WicketUtil.getHttpServletRequest().getContextPath());
+                WicketUtil.getHttpServletRequest().getContextPath(),
+                productService,
+                getI18NSupport());
     }
 
     /**
