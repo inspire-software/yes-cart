@@ -196,6 +196,13 @@
         <mx:VBox width="100%">
 
             <mx:HBox paddingTop="5" width="100%">
+                <mx:TextInput id="lastNameFilterValue" width="100" toolTip="@Resource(bundle='CustomerManagementPanel',key='lastNameFilter')"/>
+
+                <mx:Button label="@Resource(bundle='CustomerManagementPanel',key='applyFilter')"
+                           toolTip="@Resource(bundle='CustomerManagementPanel',key='applyFilterToolTip')"
+                           click="onApplyFilterClick(event)"
+                        />
+
                 <mx:Button label="@Resource(bundle='CustomerManagementPanel',key='findBtnToggleOn')"
                            click="onApplyFilterShowClick(event)"
                         />
@@ -203,14 +210,8 @@
             <mx:HBox paddingTop="5" width="100%" id="filterPanel" visible="false" includeInLayout="false">
                 <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='emailFilter')"/>
                 <mx:TextInput id="emailFilterValue" width="150"/>
-                <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='lastNameFilter')"/>
-                <mx:TextInput id="lastNameFilterValue" width="150"/>
                 <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='firstNameFilter')"/>
                 <mx:TextInput id="firstNameFilterValue" width="150"/>
-                <mx:Button label="@Resource(bundle='CustomerManagementPanel',key='applyFilter')"
-                           toolTip="@Resource(bundle='CustomerManagementPanel',key='applyFilterToolTip')"
-                           click="onApplyFilterClick(event)"
-                        />
             </mx:HBox>
             <mx:DataGrid id="customerGrid" width="100%" height="100%"
                          itemClick="onCustomerSelected(event)">
