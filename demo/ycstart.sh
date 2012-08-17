@@ -33,7 +33,7 @@ echo "================================================";
 echo " Starting Tomcat Server                         ";
 echo "================================================";
 
-export JAVA_OPTS="-Xmx512m -Xms512m -XX:MaxPermSize=256m"
+export JAVA_OPTS="-Xmx768m -Xms512m -XX:MaxPermSize=256m"
 ./startup.sh
 
 cd $RUNDIR
