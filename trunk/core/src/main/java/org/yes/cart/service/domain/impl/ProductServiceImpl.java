@@ -249,7 +249,8 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
 
         List<Pair<String, String>> groupsForAttr = attributeViewGroupMap.get(attr.getFirst());
         if (groupsForAttr == null) {
-            groupsForAttr = NO_GROUP;
+            // groupsForAttr = NO_GROUP;
+            return; // no need to show un-groupped attributes
         }
         for (final Pair<String, String> groupForAttr : groupsForAttr) {
 
