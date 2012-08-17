@@ -261,14 +261,14 @@ public interface CategoryDTO extends Identifiable {
      *
      * @return list of attributes
      */
-    Set<AttrValueCategoryDTO> getAttribute();
+    Set<AttrValueCategoryDTO> getAttributes();
 
     /**
      * Set list of attributes.
      *
      * @param attribute list of attributes
      */
-    void setAttribute(Set<AttrValueCategoryDTO> attribute);
+    void setAttributes(Set<AttrValueCategoryDTO> attribute);
 
 
     /**

@@ -105,14 +105,14 @@ public interface CustomerDTO extends Identifiable {
      *
      * @return list of attributes
      */
-    Set<AttrValueCustomerDTO> getAttribute();
+    Set<AttrValueCustomerDTO> getAttributes();
 
     /**
      * Set list of attributes.
      *
      * @param attribute list of attributes
      */
-    void setAttribute(Set<AttrValueCustomerDTO> attribute);
+    void setAttributes(Set<AttrValueCustomerDTO> attribute);
 
 
 }

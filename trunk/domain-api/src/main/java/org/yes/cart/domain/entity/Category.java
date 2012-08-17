@@ -187,7 +187,7 @@ public interface Category extends Auditable, Attributable, Seoable  {
      *
      * @return collection of category attributes.
      */
-    Collection<AttrValueCategory> getAttribute();
+    Collection<AttrValueCategory> getAttributes();
 
 
     /**
@@ -195,7 +195,7 @@ public interface Category extends Auditable, Attributable, Seoable  {
      *
      * @param attribute collection of category  attributes
      */
-    void setAttribute(Collection<AttrValueCategory> attribute);
+    void setAttributes(Collection<AttrValueCategory> attribute);
 
 
     /**

@@ -73,8 +73,8 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      */
     public Customer findCustomer(final String email) {
         Customer customer = getGenericDao().findSingleByCriteria(Restrictions.eq("email", email));
-        Hibernate.initialize(customer.getAttribute());
-        for (AttrValueCustomer attrValueCustomer :  customer.getAttribute()) {
+        Hibernate.initialize(customer.getAttributes());
+        for (AttrValueCustomer attrValueCustomer :  customer.getAttributes()) {
             Hibernate.initialize(attrValueCustomer.getAttribute().getEtype());
         }
         return customer;
@@ -178,7 +178,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
                     attrVal.setVal(attributeValue);
                     attrVal.setAttribute(attr);
                     attrVal.setCustomer(customer);
-                    customer.getAttribute().add(attrVal);
+                    customer.getAttributes().add(attrVal);
                 }
             }
         }
@@ -188,15 +188,15 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      * {@inheritDoc}
      */
     public List<AttrValueCustomer> getRankedAttributeValues(final Customer customer) {
-        final List<String> filledAttributes = getFilledAttributes(customer.getAttribute());
+        final List<String> filledAttributes = getFilledAttributes(customer.getAttributes());
         final List<Attribute> emptyAttributes = attributeService.findAvailableAttributes(AttributeGroupNames.CUSTOMER, filledAttributes);
         for (Attribute attr : emptyAttributes) {
             AttrValueCustomer attrValueCustomer = attributeService.getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
             attrValueCustomer.setAttribute(attr);
             attrValueCustomer.setCustomer(customer);
-            customer.getAttribute().add(attrValueCustomer);
+            customer.getAttributes().add(attrValueCustomer);
         }
-        final List<AttrValueCustomer> rez = new ArrayList<AttrValueCustomer>(customer.getAttribute());
+        final List<AttrValueCustomer> rez = new ArrayList<AttrValueCustomer>(customer.getAttributes());
         Collections.sort(rez, new AttrValueRankComparator());
         for (AttrValueCustomer avc : rez) {
             avc.getAttribute().getEtype().getBusinesstype(); //load lazy values

@@ -77,7 +77,7 @@ public interface ProductSku extends Auditable, Attributable, Rankable , Seoable,
      *
      * @return collection of product attributes.
      */
-    Collection<AttrValueProductSku> getAttribute();
+    Collection<AttrValueProductSku> getAttributes();
 
     /**
      * Get all products attributes filtered by given name.
@@ -101,7 +101,7 @@ public interface ProductSku extends Auditable, Attributable, Rankable , Seoable,
      *
      * @param attribute collection of products attributes
      */
-    void setAttribute(Collection<AttrValueProductSku> attribute);
+    void setAttributes(Collection<AttrValueProductSku> attribute);
 
 
 

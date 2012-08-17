@@ -22,6 +22,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.AttrValueCategoryDTO;
 import org.yes.cart.domain.dto.CategoryDTO;
 import org.yes.cart.domain.dto.matcher.impl.AttrValueCategoryMatcher;
+import org.yes.cart.domain.entity.AttrValueCategory;
 import org.yes.cart.domain.entity.impl.AttrValueEntityCategory;
 
 import java.util.*;
@@ -95,15 +96,15 @@ public class CategoryDTOImpl implements CategoryDTO {
 
 
     @DtoCollection(
-            value = "attribute",
+            value = "attributes",
             dtoBeanKey = "org.yes.cart.domain.dto.AttrValueCategoryDTO",
-            entityGenericType = AttrValueEntityCategory.class,
+            entityGenericType = AttrValueCategory.class,
             entityCollectionClass = HashSet.class,
             dtoCollectionClass = HashSet.class,
             dtoToEntityMatcher = AttrValueCategoryMatcher.class,
             readOnly = true
     )
-    private Set<AttrValueCategoryDTO> attribute;
+    private Set<AttrValueCategoryDTO> attributes;
 
 
     private List<CategoryDTO> children;
@@ -340,15 +341,15 @@ public class CategoryDTOImpl implements CategoryDTO {
     /**
      * {@inheritDoc}
      */
-    public Set<AttrValueCategoryDTO> getAttribute() {
-        return attribute;
+    public Set<AttrValueCategoryDTO> getAttributes() {
+        return attributes;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setAttribute(final Set<AttrValueCategoryDTO> attribute) {
-        this.attribute = attribute;
+    public void setAttributes(final Set<AttrValueCategoryDTO> attributes) {
+        this.attributes = attributes;
     }
 
     /**
@@ -424,7 +425,7 @@ public class CategoryDTOImpl implements CategoryDTO {
                 ", navigationByBrand=" + navigationByBrand +
                 ", navigationByPrice=" + navigationByPrice +
                 ", navigationByPriceTiers='" + navigationByPriceTiers + '\'' +
-                ", attribute=" + attribute +
+                ", attribute=" + attributes +
                 ", children=" + children +
                 '}';
     }

@@ -57,7 +57,7 @@ public class ProductDTOImpl {
 
     public var featured:Boolean;
 
-    public var attribute:ArrayCollection; // of AttrValueProductDTO
+    public var attributes:ArrayCollection; // of AttrValueProductDTO
 
 
     public function ProductDTOImpl() {

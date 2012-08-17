@@ -56,12 +56,12 @@ public interface System extends Auditable, Codable {
     /**
      * @return system configuration attributes
      */
-    Map<String, AttrValueSystem> getAttribute();
+    Map<String, AttrValueSystem> getAttributes();
 
     /**
      * @param attribute system configuration attributes
      */
-    void setAttribute(Map<String, AttrValueSystem> attribute);
+    void setAttributes(Map<String, AttrValueSystem> attribute);
 
     /**
      * @return PK

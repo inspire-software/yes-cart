@@ -138,7 +138,7 @@ public class DtoCustomerServiceImpl
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final List<AttrValueCustomerDTO> result = new ArrayList<AttrValueCustomerDTO>();
-        result.addAll(getById(entityPk).getAttribute());
+        result.addAll(getById(entityPk).getAttributes());
         final List<AttributeDTO> availableAttributeDTOs = dtoAttributeService.findAvailableAttributes(
                 AttributeGroupNames.CUSTOMER,
                 getCodes(result));

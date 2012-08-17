@@ -140,7 +140,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
                 attrValueShop.setVal(attributeValue);
                 attrValueShop.setAttribute(attribute);
                 attrValueShop.setShop(shop);
-                shop.getAttribute().add(attrValueShop);
+                shop.getAttributes().add(attrValueShop);
             } else {
                 attrValueShop.setVal(attributeValue);
             }

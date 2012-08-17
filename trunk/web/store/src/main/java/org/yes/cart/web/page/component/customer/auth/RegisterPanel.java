@@ -251,7 +251,7 @@ public class RegisterPanel extends BaseComponent {
                                 attrValueCustomer.setAttribute(getAttributeService().findByAttributeCode(
                                         AttributeNamesKeys.CUSTOMER_PHONE));
 
-                                customer.getAttribute().add(attrValueCustomer);
+                                customer.getAttributes().add(attrValueCustomer);
 
                                 getCustomerService().create(customer, ApplicationDirector.getCurrentShop());
 

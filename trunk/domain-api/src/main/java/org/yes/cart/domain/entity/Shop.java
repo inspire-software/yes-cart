@@ -165,7 +165,7 @@ public interface Shop extends Auditable, Seoable, Codable {
      *
      * @return collection of product attributes.
      */
-    Collection<AttrValueShop> getAttribute();
+    Collection<AttrValueShop> getAttributes();
 
     /**
      * Get all  attributes filtered by given attribute code.
@@ -228,7 +228,7 @@ public interface Shop extends Auditable, Seoable, Codable {
      *
      * @param attribute collection of attributes
      */
-    void setAttribute(Collection<AttrValueShop> attribute);
+    void setAttributes(Collection<AttrValueShop> attribute);
 
 
 

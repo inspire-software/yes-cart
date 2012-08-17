@@ -150,7 +150,7 @@ public interface Customer extends RegisteredPerson, Auditable {
      *
      * @return collection of customer attributes.
      */
-    Collection<AttrValueCustomer> getAttribute();
+    Collection<AttrValueCustomer> getAttributes();
 
     /**
      * Get all customer attributes filtered by given attribute code.
@@ -192,7 +192,7 @@ public interface Customer extends RegisteredPerson, Auditable {
      *
      * @param attribute collection of customer  attributes
      */
-    void setAttribute(Collection<AttrValueCustomer> attribute);
+    void setAttributes(Collection<AttrValueCustomer> attribute);
 
     /**
      * Get all customer addresses.

@@ -38,7 +38,7 @@ public class ProductSkuDTOImpl {
 
     public var  barCode:String;
 
-    public var attribute:ArrayCollection;
+    public var attributes:ArrayCollection;
 
     public var   uri:String;
 
@@ -64,7 +64,7 @@ public class ProductSkuDTOImpl {
                 + ",productId=" + String(productId)
                 + ",rank=" + String(rank)
                 + ",barCode=" + String(barCode)
-                + ",attribute=" + String(attribute)
+                + ",attribute=" + String(attributes)
                 + ",price=" + String(price) + "}";
     }
 }

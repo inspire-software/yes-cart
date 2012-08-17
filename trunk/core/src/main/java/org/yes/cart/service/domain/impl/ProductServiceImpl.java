@@ -114,7 +114,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     public ProductSku getSkuById(final Long skuId, final boolean withAttributes) {
         final ProductSku sku = (ProductSku) productSkuService.getGenericDao().findById(skuId);
         if (sku != null && withAttributes) {
-            Hibernate.initialize(sku.getAttribute());
+            Hibernate.initialize(sku.getAttributes());
         }
         return sku;
     }
@@ -386,7 +386,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     public Product getProductById(final Long productId, final boolean withAttribute) {
         final Product prod = productDao.findById(productId);
         if (prod != null && withAttribute) {
-            Hibernate.initialize(prod.getAttribute());
+            Hibernate.initialize(prod.getAttributes());
         }
         return prod;
     }

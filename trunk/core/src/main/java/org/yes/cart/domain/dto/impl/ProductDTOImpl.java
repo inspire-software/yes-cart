@@ -23,8 +23,8 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoParent;
 import org.yes.cart.domain.dto.*;
 import org.yes.cart.domain.dto.matcher.impl.AttrValueProductMatcher;
 import org.yes.cart.domain.dto.matcher.impl.ProductCategoryMatcher;
+import org.yes.cart.domain.entity.AttrValueProduct;
 import org.yes.cart.domain.entity.ProductCategory;
-import org.yes.cart.domain.entity.impl.AttrValueEntityProduct;
 
 import java.util.*;
 
@@ -108,15 +108,15 @@ public class ProductDTOImpl implements ProductDTO {
 
 
     @DtoCollection(
-            value = "attribute",
+            value = "attributes",
             dtoBeanKey = "org.yes.cart.domain.dto.AttrValueProductDTO",
-            entityGenericType = AttrValueEntityProduct.class,
+            entityGenericType = AttrValueProduct.class,
             entityCollectionClass = ArrayList.class,
             dtoCollectionClass = ArrayList.class,
             dtoToEntityMatcher = AttrValueProductMatcher.class,
             readOnly = true
     )
-    private Collection<AttrValueProductDTO> attribute;
+    private Collection<AttrValueProductDTO> attributes;
 
     /**
      * {@inheritDoc}
@@ -293,15 +293,15 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
-    public Collection<AttrValueProductDTO> getAttribute() {
-        return attribute;
+    public Collection<AttrValueProductDTO> getAttributes() {
+        return attributes;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setAttribute(final Collection<AttrValueProductDTO> attribute) {
-        this.attribute = attribute;
+    public void setAttributes(final Collection<AttrValueProductDTO> attributes) {
+        this.attributes = attributes;
     }
 
     /**
@@ -389,7 +389,7 @@ public class ProductDTOImpl implements ProductDTO {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", featured=" + featured +
-                ", attribute=" + attribute +
+                ", attribute=" + attributes +
                 '}';
     }
 }

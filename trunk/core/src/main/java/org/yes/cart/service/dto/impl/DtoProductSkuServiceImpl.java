@@ -245,7 +245,7 @@ public class DtoProductSkuServiceImpl
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final List<AttrValueProductSkuDTO> result = new ArrayList<AttrValueProductSkuDTO>();
-        result.addAll(getById(entityPk).getAttribute());
+        result.addAll(getById(entityPk).getAttributes());
         final List<AttributeDTO> availableAttributeDTOs = dtoAttributeService.findAvailableAttributes(
                 AttributeGroupNames.SKU,
                 getCodes(result));

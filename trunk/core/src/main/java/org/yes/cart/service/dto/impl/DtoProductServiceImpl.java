@@ -297,7 +297,7 @@ public class DtoProductServiceImpl
     public List<? extends AttrValueDTO> getEntityAttributes(final long entityPk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<AttrValueProductDTO> result = new ArrayList<AttrValueProductDTO>();
         final ProductDTO productDTO = getById(entityPk);
-        result.addAll(productDTO.getAttribute());
+        result.addAll(productDTO.getAttributes());
 
 
         final List<ProductTypeAttr> ptaList = productTypeAttrService.getByProductTypeId(
