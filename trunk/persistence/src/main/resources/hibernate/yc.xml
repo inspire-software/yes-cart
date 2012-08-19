@@ -4209,7 +4209,7 @@ public void setRangeList(final RangeList rangeList) {
     <class name="org.yes.cart.domain.entity.CustomerOrderDeliveryDet" table="TCUSTOMERORDERDELIVERYDET" discriminator-value="0">
         <meta attribute="interface">true</meta>
         <comment>Delivery details</comment>
-        <id name="customerorderdeliveryId" column="CUSTOMERORDERDELIVERYDET_ID" type="long">
+        <id name="customerOrderDeliveryDetId" column="CUSTOMERORDERDELIVERYDET_ID" type="long">
             <generator class="native">
                 <param name="table">HIBERNATE_UNIQUE_KEYS</param>
                 <param name="column">value</param>
@@ -4225,27 +4225,27 @@ public void setRangeList(final RangeList rangeList) {
             <meta attribute="interface">false</meta>
             <meta attribute="class-code">
                 <![CDATA[
-     private long customerorderdeliveryId;
+     private long customerOrderDeliveryDetId;
 
      //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-    @Id @GeneratedValue /*(generator="generator")*/ 
+    @Id @GeneratedValue /*(generator="generator")*/
 
     @Column(name="CUSTOMERORDERDELIVERYDET_ID", nullable=false)
-    public long getCustomerorderdeliveryId() {
-        return this.customerorderdeliveryId;
+    public long getCustomerOrderDeliveryDetId() {
+        return this.customerOrderDeliveryDetId;
     }
 
 
     @Transient public long getId() {
-        return this.customerorderdeliveryId;
+        return this.customerOrderDeliveryDetId;
     }
 
-    public void setCustomerorderdeliveryId(long customerorderdeliveryId) {
-        this.customerorderdeliveryId = customerorderdeliveryId;
+    public void setCustomerOrderDeliveryDetId(long customerOrderDeliveryDetId) {
+        this.customerOrderDeliveryDetId = customerOrderDeliveryDetId;
     }
 
     /** {@inheritDoc} */
-    public String getProductSkuCode() {
+    @Transient public String getProductSkuCode() {
         return this.sku == null?null:this.sku.getCode();
     }
 

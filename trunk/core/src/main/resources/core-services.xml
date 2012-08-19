@@ -728,6 +728,9 @@
 
                 <entry key="org.yes.cart.domain.entity.Seo"  value="org.yes.cart.domain.entity.impl.SeoEntity"/>
 
+                <entry key="org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO"  value="org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.CustomerOrderDeliveryDTO"        value="org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl"/>
+
             </map>
         </constructor-arg>
     </bean>

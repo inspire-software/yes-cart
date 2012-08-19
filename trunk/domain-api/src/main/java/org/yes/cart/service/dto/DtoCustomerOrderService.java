@@ -17,6 +17,8 @@
 package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.CustomerOrderDTO;
+import org.yes.cart.domain.dto.CustomerOrderDeliveryDTO;
+import org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 
@@ -29,6 +31,30 @@ import java.util.List;
  * Time: 11:13:01
  */
 public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrderDTO> {
+
+    /**
+     * Get list of delivery details for given order number.
+     * @param orderNum order number
+     * @return list of delivery details.
+     * @throws UnmappedInterfaceException in case of dto mapping error
+     * @throws UnableToCreateInstanceException  in case of dto mapping error
+     */
+    List<CustomerOrderDeliveryDetailDTO> findDeliveryDetailsByOrderNumber(final String orderNum)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+    /**
+     * Get list of <code>CustomerOrderDeliveryDTO</code> for given order number. Each delivery  will include
+     * slave details objects.
+     *
+     * @param orderNum order number
+     * @return list of deliveries.
+     * @throws UnmappedInterfaceException in case of dto mapping error
+     * @throws UnableToCreateInstanceException  in case of dto mapping error
+     */
+    List<CustomerOrderDeliveryDTO> findDeliveryByOrderNumber(final String orderNum)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+
 
 
     /**

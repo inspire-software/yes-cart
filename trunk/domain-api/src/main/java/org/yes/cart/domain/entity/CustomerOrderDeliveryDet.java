@@ -36,14 +36,14 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
      *
      * @return pk value.
      */
-    long getCustomerorderdeliveryId();
+    long getCustomerOrderDeliveryDetId();
 
     /**
      * Set pk value.
      *
      * @param customerorderdeliveryId pk value
      */
-    void setCustomerorderdeliveryId(long customerorderdeliveryId);
+    void setCustomerOrderDeliveryDetId(long customerorderdeliveryId);
 
 
     /**

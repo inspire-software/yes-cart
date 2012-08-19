@@ -107,7 +107,7 @@ public interface CarrierDTO extends Identifiable {
     boolean isState();
 
     /**
-     * Set state devivery flag.
+     * Set state delivery flag.
      *
      * @param state state devivery flag
      */
