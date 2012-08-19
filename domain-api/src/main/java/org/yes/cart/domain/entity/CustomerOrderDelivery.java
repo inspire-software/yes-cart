@@ -20,10 +20,10 @@ import java.math.BigDecimal;
 import java.util.Collection;
 
 /**
- * The Order Delivery. Each eroder can have one or more deliveries.
+ * The Order Delivery. Each order has one or more deliveries.
  * Delivery/Shpiment split posible when not all skus present on warehouse
  * and skus have different availability (pre/back order, etc.), also
- * some products can not be shipped together, because of secutity.
+ * some products can not be shipped together, because of security.
  * Delivery address can be taken from order.
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
@@ -36,59 +36,59 @@ public interface CustomerOrderDelivery extends Auditable {
     /**
      * On fillfillment center.
      */
-    String DELIVERY_STATUS_ON_FULLFILMENT = "fullfillment";
+    String DELIVERY_STATUS_ON_FULLFILMENT = "ds.fullfillment";
 
     /**
      * Wait for particular date. Use for preorder.
      */
-    String DELIVERY_STATUS_DATE_WAIT = "wait.date";
+    String DELIVERY_STATUS_DATE_WAIT = "ds.wait.date";
 
     /**
      * Wait for inventory. Used for backorder.
      */
-    String DELIVERY_STATUS_INVENTORY_WAIT = "wait.inventory";
+    String DELIVERY_STATUS_INVENTORY_WAIT = "ds.wait.inventory";
 
 
     /**
      * Inventory reserved
      */
-    String DELIVERY_STATUS_INVENTORY_RESERVED = "inventory.reserved";
+    String DELIVERY_STATUS_INVENTORY_RESERVED = "ds.inventory.reserved";
 
     /**
-     * Inventory reserved
+     * Void reservation reserved
      */
-    String DELIVERY_STATUS_INVENTORY_VOID_RESERVATION = "inventory.void.reserv";
+    String DELIVERY_STATUS_INVENTORY_VOID_RESERVATION = "ds.inventory.void.reserv";
 
-
-    /**
-     * Inventory allocated
-     */
-    String DELIVERY_STATUS_INVENTORY_ALLOCATED = "inventory.allocated";
 
     /**
      * Inventory allocated
      */
-    String DELIVERY_STATUS_INVENTORY_DEALLOCATED = "inventory.deallocated";
+    String DELIVERY_STATUS_INVENTORY_ALLOCATED = "ds.inventory.allocated";
+
+    /**
+     * Inventory deallocated
+     */
+    String DELIVERY_STATUS_INVENTORY_DEALLOCATED = "ds.inventory.deallocated";
 
     /**
      * Order is packing
      */
-    String DELIVERY_STATUS_PACKING = "packing";
+    String DELIVERY_STATUS_PACKING = "ds.packing";
 
     /**
      * Wait for shipment.
      */
-    String DELIVERY_STATUS_SHIPMENT_READY = "shipment.ready";
+    String DELIVERY_STATUS_SHIPMENT_READY = "ds.shipment.ready";
 
     /**
      * Delivery in progress.
      */
-    String DELIVERY_STATUS_SHIPMENT_IN_PROGRESS = "shipment.inprogress";
+    String DELIVERY_STATUS_SHIPMENT_IN_PROGRESS = "ds.shipment.inprogress";
 
     /**
      * Delivered.
      */
-    String DELIVERY_STATUS_SHIPPED = "shipped";
+    String DELIVERY_STATUS_SHIPPED = "ds.shipped";
 
 
     /**

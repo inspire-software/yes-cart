@@ -17,20 +17,28 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
+import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
+import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.dto.CustomerOrderDTO;
+import org.yes.cart.domain.dto.CustomerOrderDeliveryDTO;
+import org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.CustomerOrderDTOImpl;
+import org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl;
+import org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl;
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.dto.DtoCustomerOrderService;
+import org.yes.cart.util.ShopCodeContext;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -40,6 +48,11 @@ import java.util.List;
 public class DtoCustomerOrderServiceImpl
         extends AbstractDtoServiceImpl<CustomerOrderDTO, CustomerOrderDTOImpl, CustomerOrder>
         implements DtoCustomerOrderService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
+
+    protected final DTOAssembler orderDeliveryDetailAssembler;
+    protected final DTOAssembler orderDeliveryAssembler;
 
     /**
      * Construct service.
@@ -53,6 +66,8 @@ public class DtoCustomerOrderServiceImpl
             final GenericService<CustomerOrder> customerOrderGenericService,
             final AdaptersRepository adaptersRepository) {
         super(dtoFactory, customerOrderGenericService, adaptersRepository);
+        orderDeliveryDetailAssembler = DTOAssembler.newAssembler(CustomerOrderDeliveryDetailDTOImpl.class, CustomerOrderDeliveryDet.class);
+        orderDeliveryAssembler = DTOAssembler.newAssembler(CustomerOrderDeliveryDTOImpl.class, CustomerOrderDelivery.class);
     }
 
     /**
@@ -77,6 +92,58 @@ public class DtoCustomerOrderServiceImpl
     public Class<CustomerOrder> getEntityIFace() {
         return CustomerOrder.class;
     }
+
+    /** {@inheritDoc} */
+    public List<CustomerOrderDeliveryDTO> findDeliveryByOrderNumber(final String orderNum)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final List<CustomerOrder> orderList = ((CustomerOrderService) service).findCustomerOrdersByCriteria(
+                0, null, null, null, null, null, null, orderNum);
+
+        if (CollectionUtils.isNotEmpty(orderList)) {
+            final CustomerOrder customerOrder = orderList.get(0);
+            final List<CustomerOrderDeliveryDTO> rez = new ArrayList<CustomerOrderDeliveryDTO>(customerOrder.getDelivery().size());
+            for(CustomerOrderDelivery delivery : customerOrder.getDelivery()) {
+                final CustomerOrderDeliveryDTO dto = dtoFactory.getByIface(CustomerOrderDeliveryDTO.class);
+                orderDeliveryAssembler.assembleDto(dto, delivery, getAdaptersRepository(), dtoFactory);
+                rez.add(dto);
+            }
+            return rez;
+
+        }   else {
+            LOG.warn("Customer order not found. Order number is " + orderNum);
+        }
+        return Collections.emptyList();
+
+    }
+
+    /** {@inheritDoc} */
+    public List<CustomerOrderDeliveryDetailDTO> findDeliveryDetailsByOrderNumber(final String orderNum) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final List<CustomerOrder> orderList = ((CustomerOrderService) service).findCustomerOrdersByCriteria(
+                0, null, null, null, null, null, null, orderNum);
+
+        if (CollectionUtils.isNotEmpty(orderList)) {
+            final CustomerOrder customerOrder = orderList.get(0);
+            final List<CustomerOrderDeliveryDet> allDeliveryDet = new ArrayList<CustomerOrderDeliveryDet>();
+            for (CustomerOrderDelivery orderDelivery : customerOrder.getDelivery())  {
+                allDeliveryDet.addAll(orderDelivery.getDetail());
+            }
+            final List<CustomerOrderDeliveryDetailDTO> rez = new ArrayList<CustomerOrderDeliveryDetailDTO>(allDeliveryDet.size());
+
+            for (CustomerOrderDeliveryDet entity : allDeliveryDet) {
+                CustomerOrderDeliveryDetailDTO dto =  dtoFactory.getByIface(CustomerOrderDeliveryDetailDTO.class);
+                orderDeliveryDetailAssembler.assembleDto(dto, entity, getAdaptersRepository(), dtoFactory);
+                rez.add(dto);
+            }
+
+            return rez;
+        }   else {
+            LOG.warn("Customer order not found. Order num is " + orderNum);
+        }
+        return Collections.emptyList();
+
+    }
+
 
     /**
      * {@inheritDoc}

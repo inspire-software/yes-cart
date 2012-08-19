@@ -32,39 +32,39 @@ public interface CustomerOrder extends Auditable {
     /**
      * Order in pending state.
      */
-    String ORDER_STATUS_NONE = "none";
+    String ORDER_STATUS_NONE = "os.none";
 
     /**
      * Order in pending state.
      */
-    String ORDER_STATUS_PENDING = "pending";
+    String ORDER_STATUS_PENDING = "os.pending";
 
     /**
      * Waiting for approvment, because of offline payment system is selected for payment.
      * It can be bank of currier payment.
      */
-    String ORDER_STATUS_WAITING = "waiting";
+    String ORDER_STATUS_WAITING = "os.waiting";
 
     /**
      * Order in progress. In this state need to look at order shipment state.
      * Quantity reserved on warehouse.
      */
-    String ORDER_STATUS_IN_PROGRESS = "inprogress";
+    String ORDER_STATUS_IN_PROGRESS = "os.in.progress";
 
     /**
      * Order canceled. Quantity returned from revervation.
      */
-    String ORDER_STATUS_CANCELLED = "cancelled";
+    String ORDER_STATUS_CANCELLED = "os.cancelled";
 
     /**
      * Order can have this state in case of shipment split. So at leas one shipment is incomplete.
      */
-    String ORDER_STATUS_PARTIALLY_SHIPPED = "partially.shipped";
+    String ORDER_STATUS_PARTIALLY_SHIPPED = "os.partially.shipped";
 
     /**
      * Order completed.
      */
-    String ORDER_STATUS_COMPLETED = "completed";
+    String ORDER_STATUS_COMPLETED = "os.completed";
 
     /**
      * Get order pk value.

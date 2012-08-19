@@ -57,7 +57,7 @@
                             <mx:ComboBox id="statusComboBox" width="120"
                                          prompt="@Resource(bundle='CustomerOrderPanel',key='selectStatusPropmt')"
                                          dataProvider="{statuses}"
-                                         data="code" labelField="name"   />
+                                         data="code" labelField="name"/>
                         </mx:GridItem>
                         <mx:GridItem>
                             <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderFromDateFilter')"/>
@@ -82,38 +82,61 @@
                            click="onCleanFilterClick(event)"
                         />
             </mx:ControlBar>
-            <mx:DataGrid x="0" y="0" width="100%" height="99%"
+            <mx:DataGrid x="0" y="0" width="100%" height="99%" id="customerOrderGrid"
                          dataTipFunction="orderToolTip"
                          dataProvider="{remoteCustomerOrderService.findCustomerOrdersByCriteria.lastResult}"
+                         itemClick="onOrderSelected(event)"
                     >
 
                 <mx:columns>
-                    <mx:DataGridColumn showDataTips="true" width="50"
+                    <mx:DataGridColumn showDataTips="true" width="25"
                                        headerText="@Resource(bundle='CustomerOrderPanel',key='id')"
                                        dataField="customerorderId"/>
-                    <mx:DataGridColumn showDataTips="true" width="70" headerText="@Resource(bundle='CustomerOrderPanel',key='orderNum')"
-                                       dataField="ordernum"/>
-                    <mx:DataGridColumn showDataTips="true" width="120" headerText="@Resource(bundle='CustomerOrderPanel',key='shopper')"
+                    <mx:DataGridColumn showDataTips="true"
+                                       headerText="@Resource(bundle='CustomerOrderPanel',key='orderNum')"
+                            >
+                        <mx:itemRenderer>
+                            <mx:Component>
+                                <mx:VBox>
+                                    <mx:Label text="{data.ordernum}"/>
+                                    <mx:Label text="{data.code}"/>
+                                </mx:VBox>
+                            </mx:Component>
+                        </mx:itemRenderer>
+                    </mx:DataGridColumn>
+                    <mx:DataGridColumn showDataTips="true"
+                                       headerText="@Resource(bundle='CustomerOrderPanel',key='shopper')"
                                        sortable="false">
                         <mx:itemRenderer>
                             <mx:Component>
-                                <mx:HBox>
-                                    <mx:Label text="{data.lastname}"/>
-                                    <mx:Label text="{data.firstname}"/>
+                                <mx:VBox>
+                                    <mx:HBox>
+                                        <mx:Label text="{data.lastname}"/>
+                                        <mx:Label text="{data.firstname}"/>
+                                    </mx:HBox>
                                     <mx:Label text="{data.email}"/>
-                                </mx:HBox>
+                                </mx:VBox>
                             </mx:Component>
                         </mx:itemRenderer>
                     </mx:DataGridColumn>
 
-                    <mx:DataGridColumn showDataTips="true" width="50" headerText="@Resource(bundle='CustomerOrderPanel',key='amount')"
-                                       dataField="amount"/>
-                    <mx:DataGridColumn showDataTips="true" width="50" headerText="@Resource(bundle='CustomerOrderPanel',key='currency')"
-                                       dataField="currency"/>
-                    <mx:DataGridColumn showDataTips="true" width="50"
+                    <mx:DataGridColumn showDataTips="true"
+                                       headerText="@Resource(bundle='CustomerOrderPanel',key='amount')"
+                            >
+                        <mx:itemRenderer>
+                            <mx:Component>
+                                <mx:VBox horizontalAlign="right">
+                                    <mx:Label text="{data.amount}"/>
+                                    <mx:Label text="{data.currency}"/>
+                                </mx:VBox>
+                            </mx:Component>
+                        </mx:itemRenderer>
+                    </mx:DataGridColumn>
+                    <mx:DataGridColumn showDataTips="true"
                                        headerText="@Resource(bundle='CustomerOrderPanel',key='status')"
                                        labelFunction="statusLabelFunction"/>
-                    <mx:DataGridColumn showDataTips="true" width="50" headerText="@Resource(bundle='CustomerOrderPanel',key='date')"
+                    <mx:DataGridColumn showDataTips="true"
+                                       headerText="@Resource(bundle='CustomerOrderPanel',key='date')"
                                        dataField="orderTimestamp"/>
 
 
@@ -123,11 +146,192 @@
             </mx:DataGrid>
         </mx:Panel>
 
+
+        <mx:Panel id="customerOrderDetailPanel" width="100%" height="100%"
+                  visible="{customerOrderGrid.selectedItem != null}">
+
+            <mx:TabNavigator id="customerOrderDetailTabNavigator"
+                             width="100%" height="100%" visible="{customerOrderGrid.selectedItem != null}">
+                <mx:Canvas id="summaryCanvas"
+                           label="@Resource(bundle='CustomerOrderPanel',key='summary')"
+                           width="100%" height="100%"
+                           toolTip="@Resource(bundle='CustomerOrderPanel',key='summaryHint')">
+
+                    <mx:VBox height="100%" width="100%">
+                        <mx:DataGrid id="orderSummaryDataGrid" width="100%" height="100%">
+                            <mx:columns>
+                                <mx:DataGridColumn showDataTips="true" width="25"
+                                                   headerText="@Resource(bundle='CustomerOrderPanel',key='id')"
+                                                   dataField="customerOrderDeliveryDetId"
+                                        />
+                                <mx:DataGridColumn showDataTips="true"
+                                                   headerText="@Resource(bundle='CustomerOrderPanel',key='skuCode')"
+                                                   dataField="skuCode"
+                                        />
+                                <mx:DataGridColumn showDataTips="true"
+                                                   headerText="@Resource(bundle='CustomerOrderPanel',key='skuName')"
+                                                   dataField="skuName"
+                                        />
+                                <mx:DataGridColumn showDataTips="true"
+                                                   headerText="@Resource(bundle='CustomerOrderPanel',key='inventoryStatus')"
+                                                   labelFunction="getDeliveryStatusLabel"
+                                        />
+                                <mx:DataGridColumn showDataTips="true"
+                                                   headerText="@Resource(bundle='CustomerOrderPanel',key='listPrice')"
+                                                   dataField="listPrice"
+                                        />
+                                <mx:DataGridColumn showDataTips="true"
+                                                   headerText="@Resource(bundle='CustomerOrderPanel',key='invoicePrice')"
+                                                   dataField="invoicePrice"
+                                        />
+                                <mx:DataGridColumn showDataTips="true"
+                                                   headerText="@Resource(bundle='CustomerOrderPanel',key='discount')"
+
+                                        />          <!-- todo func to calculate -->
+                                <mx:DataGridColumn showDataTips="true"
+                                                   headerText="@Resource(bundle='CustomerOrderPanel',key='qty')"
+                                                   dataField="qty"
+                                        />
+                                <mx:DataGridColumn showDataTips="true"
+                                                   headerText="@Resource(bundle='CustomerOrderPanel',key='total')"
+
+                                        /> <!-- todo funct to calculate -->
+                                <mx:DataGridColumn showDataTips="true"
+                                                   headerText="@Resource(bundle='CustomerOrderPanel',key='deliveryNum')"
+                                                   dataField="deliveryNum"
+                                        />
+                                <mx:DataGridColumn showDataTips="true"
+                                                   headerText="@Resource(bundle='CustomerOrderPanel',key='actions')"
+                                        />
+                            </mx:columns>
+
+                        </mx:DataGrid>
+                    </mx:VBox>
+
+                </mx:Canvas>
+
+
+                <mx:Canvas id="deliveryItemsCanvas"
+                           label="@Resource(bundle='CustomerOrderPanel',key='delivery')"
+                           width="100%" height="100%"
+                           toolTip="@Resource(bundle='CustomerOrderPanel',key='deliveryHint')">
+                    <mx:DataGrid id="deliverySummaryDataGrid" width="100%" height="100%">
+                        <mx:columns>
+                            <mx:DataGridColumn showDataTips="true" width="25"
+                                               headerText="@Resource(bundle='CustomerOrderPanel',key='id')"
+                                               dataField="customerOrderDeliveryId"
+                                    />
+                            <mx:DataGridColumn showDataTips="true"
+                                               headerText="@Resource(bundle='CustomerOrderPanel',key='deliveryNum')"
+                                               dataField="devileryNum"
+                                    />
+                            <mx:DataGridColumn showDataTips="true"
+                                               headerText="@Resource(bundle='CustomerOrderPanel',key='refNo')"
+                                               dataField="refNo"
+                                    />
+                            <mx:DataGridColumn showDataTips="true"
+                                               headerText="@Resource(bundle='CustomerOrderPanel',key='itemsInfo')"
+
+                                    />     <!-- todo function -->
+                            <mx:DataGridColumn showDataTips="true"
+                                               headerText="@Resource(bundle='CustomerOrderPanel',key='itemsCost')"
+
+                                    />         <!-- todo func -->
+                            <mx:DataGridColumn showDataTips="true"
+                                               headerText="@Resource(bundle='CustomerOrderPanel',key='shipmentCost')"
+                                               dataField="price"
+                                    />
+                            <mx:DataGridColumn showDataTips="true"
+                                               headerText="@Resource(bundle='CustomerOrderPanel',key='deliveryTotal')"
+                                    />         <!-- todo func -->
+                            <mx:DataGridColumn showDataTips="true"
+                                               headerText="@Resource(bundle='CustomerOrderPanel',key='deliveryAddr')"
+                                    />
+                            <mx:DataGridColumn showDataTips="true"
+                                               headerText="@Resource(bundle='CustomerOrderPanel',key='actions')"
+                                    />
+                        </mx:columns>
+                    </mx:DataGrid>
+                </mx:Canvas>
+
+                <mx:Canvas id="paymentCanvas"
+                           label="@Resource(bundle='CustomerOrderPanel',key='payment')"
+                           width="100%" height="100%"
+                           toolTip="@Resource(bundle='CustomerOrderPanel',key='paymentHint')">
+                    <mx:Form>
+                        <mx:FormItem label="@Resource(bundle='CustomerOrderPanel',key='payment')">
+                            <mx:HBox>
+                                <mx:Label text="{customerOrderGrid.selectedItem.amount}"/>
+                                <mx:Label text="{customerOrderGrid.selectedItem.currency}"/>
+                            </mx:HBox>
+                        </mx:FormItem>
+                        <mx:FormItem label="@Resource(bundle='CustomerOrderPanel',key='billingAddr')">
+                            <mx:Label text="{customerOrderGrid.selectedItem.billingAddress}"/>
+                        </mx:FormItem>
+                        <mx:FormItem label="@Resource(bundle='CustomerOrderPanel',key='paymentGateway')">
+                            <mx:Label text="{customerOrderGrid.selectedItem.pgLabel}"/>
+                        </mx:FormItem>
+                    </mx:Form>
+
+                </mx:Canvas>
+
+                <mx:Canvas id="returnItems"
+                           label="@Resource(bundle='CustomerOrderPanel',key='return')"
+                           width="100%" height="100%"
+                           toolTip="@Resource(bundle='CustomerOrderPanel',key='returnHint')"/>
+
+                <mx:Canvas id="customerDetailsCanvas"
+                           label="@Resource(bundle='CustomerOrderPanel',key='customerDetails')"
+                           width="100%" height="100%"
+                           toolTip="@Resource(bundle='CustomerOrderPanel',key='customerDetails')">
+                    <mx:HBox>
+                        <mx:Form>
+                            <mx:FormItem label="@Resource(bundle='CustomerOrderPanel',key='customerName')">
+                                <mx:HBox>
+                                    <mx:Label text="{customerOrderGrid.selectedItem.firstname}"/>
+                                    <mx:Label text="{customerOrderGrid.selectedItem.lastname}"/>
+                                </mx:HBox>
+                            </mx:FormItem>
+                            <mx:FormItem label="@Resource(bundle='CustomerOrderPanel',key='email')">
+                                <mx:Label text="{customerOrderGrid.selectedItem.email}"/>
+                            </mx:FormItem>
+
+                            <mx:FormItem label="@Resource(bundle='CustomerOrderPanel',key='registeredAt')">
+                                <mx:Label text="0"/>
+                            </mx:FormItem>
+                            <mx:FormItem label="@Resource(bundle='CustomerOrderPanel',key='totalOrdersQty')">
+                                <mx:Label text="0"/>
+                            </mx:FormItem>
+                            <mx:FormItem label="@Resource(bundle='CustomerOrderPanel',key='totalOrdersAmount')">
+                                <mx:Label text="0"/>
+                            </mx:FormItem>
+                            <!-- todo dynamyc customrs -->
+                        </mx:Form>
+                        <mx:Form>
+                            <mx:FormItem label="dynamic attributes">
+                                <mx:Label text="about customer"/>
+                            </mx:FormItem>
+
+                        </mx:Form>
+
+                    </mx:HBox>
+
+                </mx:Canvas>
+
+            </mx:TabNavigator>
+        </mx:Panel>
+
     </mx:VBox>
     <mx:ArrayCollection id="statuses"/>
 
 
     <mx:Script><![CDATA[
+        import mx.events.ListEvent;
+        import mx.rpc.AsyncResponder;
+        import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.impl.CustomerOrderDTOImpl;
+
         import org.yes.cart.shopmanager.ShopManagerGlobal;
 
         import mx.collections.ArrayCollection;
@@ -147,13 +351,75 @@
         public function init():void {
 
             statuses.addItem(createStatusObject("all"));
-            statuses.addItem(createStatusObject("none"));
-            statuses.addItem(createStatusObject("pending"));
-            statuses.addItem(createStatusObject("waiting"));
-            statuses.addItem(createStatusObject("inprogress"));
-            statuses.addItem(createStatusObject("cancelled"));
-            statuses.addItem(createStatusObject("partially.shipped"));
-            statuses.addItem(createStatusObject("completed"));
+            statuses.addItem(createStatusObject("os.none"));
+            statuses.addItem(createStatusObject("os.pending"));
+            statuses.addItem(createStatusObject("os.waiting"));
+            statuses.addItem(createStatusObject("os.in.progress"));
+            statuses.addItem(createStatusObject("os.cancelled"));
+            statuses.addItem(createStatusObject("os.partially.shipped"));
+            statuses.addItem(createStatusObject("os.completed"));
+
+        }
+
+
+        /**
+         * Get localized human readable name for delivery status.
+         * @param item
+         * @param column
+         * @return human readable name for delivery status.
+         */
+        private function getDeliveryStatusLabel(item:Object, column:DataGridColumn):String {
+            var rez:String = resourceManager.getString('CustomerOrderPanel', item.deliveryStatusLabel);
+            if (rez == null) {
+                rez = item.deliveryStatusLabel;
+            }
+            return "remove me " + rez;
+        }
+
+        /**
+         * Hendle order selection event.
+         * @param event event to handle
+         */
+        private function onOrderSelected(event:ListEvent):void {
+
+            try {
+                var orderDto:CustomerOrderDTOImpl = this.customerOrderGrid.selectedItem as CustomerOrderDTOImpl;
+                customerOrderDetailPanel.title = resourceManager.getString('CustomerOrderPanel', 'orderNum')
+                        + "  "
+                        + orderDto.ordernum
+                        + "      "
+                        + resourceManager.getString('CustomerOrderPanel', 'date')
+                        + "  "
+                        + orderDto.orderTimestamp;
+
+
+                remoteCustomerOrderService.findDeliveryDetailsByOrderNumber(orderDto.ordernum).addResponder(
+                        new AsyncResponder(
+                                function (event:ResultEvent, obj:Object = null):void {
+                                    orderSummaryDataGrid.dataProvider = event.result;
+                                }
+                                ,
+                                ShopManagerGlobal.instance.defaultOnRpcMethodFault
+                        )
+                );
+
+                remoteCustomerOrderService.findDeliveryByOrderNumber(orderDto.ordernum).addResponder(
+                        new AsyncResponder(
+                                function (event:ResultEvent, obj:Object = null):void {
+                                    deliverySummaryDataGrid.dataProvider = event.result;
+                                }
+                                ,
+                                ShopManagerGlobal.instance.defaultOnRpcMethodFault
+                        )
+                );
+
+
+
+
+
+            } catch (e:Error) {
+                Alert.show("" + e, "Error");
+            }
 
         }
 

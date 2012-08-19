@@ -17,6 +17,8 @@
 package org.yes.cart.remote.service.impl;
 
 import org.yes.cart.domain.dto.CustomerOrderDTO;
+import org.yes.cart.domain.dto.CustomerOrderDeliveryDTO;
+import org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.remote.service.RemoteCustomerOrderService;
@@ -70,5 +72,17 @@ public class RemoteCustomerOrderServiceImpl
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public List<CustomerOrderDeliveryDetailDTO> findDeliveryDetailsByOrderNumber(final String orderNum)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return ((DtoCustomerOrderService) getGenericDTOService()).findDeliveryDetailsByOrderNumber(orderNum);
+    }
 
+    /** {@inheritDoc} */
+    public List<CustomerOrderDeliveryDTO> findDeliveryByOrderNumber(final String orderNum)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return ((DtoCustomerOrderService) getGenericDTOService()).findDeliveryByOrderNumber(orderNum);
+    }
 }

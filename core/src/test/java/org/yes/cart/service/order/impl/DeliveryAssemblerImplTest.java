@@ -152,7 +152,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
                 assertEquals(new BigDecimal("16.77"), cod.getPrice());
             }
             for (CustomerOrderDeliveryDet det : cod.getDetail()) {
-                assertTrue(det.getCustomerorderdeliveryId() > 0);
+                assertTrue(det.getCustomerOrderDeliveryDetId() > 0);
                 assertTrue(MoneyUtils.isFirstBiggerThanSecond(det.getQty(), BigDecimal.ZERO));
             }
         }
