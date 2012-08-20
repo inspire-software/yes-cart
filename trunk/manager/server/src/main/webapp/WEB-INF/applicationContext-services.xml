@@ -506,6 +506,7 @@
                         we can complete checkout in demo store.
                       -->
                     <list>
+                        <value>shopcurrencies-demo.xml</value>
                         <value>country.xml</value>
                         <value>state.xml</value>
                         <value>carriernames.xml</value>
