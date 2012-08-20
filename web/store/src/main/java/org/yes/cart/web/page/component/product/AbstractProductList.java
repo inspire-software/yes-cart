@@ -33,7 +33,6 @@ import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.entity.decorator.ProductDecorator;
-import org.yes.cart.web.support.entity.decorator.impl.ProductDecoratorImpl;
 import org.yes.cart.web.support.service.AttributableImageService;
 import org.yes.cart.web.util.WicketUtil;
 
@@ -137,15 +136,10 @@ public abstract class AbstractProductList extends BaseComponent {
                     protected void populateItem(ListItem<Product> listItem) {
 
                         final Product prod = listItem.getModelObject();
-                        final ProductDecorator productDecorator = ProductDecoratorImpl.createProductDecoratorImpl(
-                                imageService,
-                                attributableImageService,
-                                categoryService,
+                        final ProductDecorator productDecorator = getDecoratorFacade().decorate(
                                 prod,
                                 WicketUtil.getHttpServletRequest().getContextPath(),
-                                false,
-                                productService, productService.getDefaultImage(prod.getProductId()),
-                                getI18NSupport());
+                                getI18NSupport(), false);
 
                         final String[] size = productDecorator.getThumbnailImageSize(category);
 

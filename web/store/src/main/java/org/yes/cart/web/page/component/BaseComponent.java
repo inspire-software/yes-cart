@@ -19,8 +19,10 @@ package org.yes.cart.web.page.component;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.entity.decorator.DecoratorFacade;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
-import org.yes.cart.web.support.i18n.impl.I18NWebSupportImpl;
 
 
 public class BaseComponent extends Panel {
@@ -33,6 +35,12 @@ public class BaseComponent extends Panel {
     public static final String HTML_WIDTH = "width";
     public static final String HTML_HEIGHT = "height";
 
+
+    @SpringBean(name = StorefrontServiceSpringKeys.I18N_SUPPORT)
+    private I18NWebSupport i18NWebSupport;
+
+    @SpringBean(name = StorefrontServiceSpringKeys.DECORATOR_FACADE)
+    private DecoratorFacade decoratorFacade;
 
     private boolean panelVisible = true;
 
@@ -56,13 +64,18 @@ public class BaseComponent extends Panel {
         super(id, model);
     }
 
-    private static final I18NWebSupport SUPPORT = new I18NWebSupportImpl();
-
     /**
      * @return I18n support object
      */
     public I18NWebSupport getI18NSupport() {
-        return SUPPORT;
+        return i18NWebSupport;
+    }
+
+    /**
+     * @return decorator facade
+     */
+    public DecoratorFacade getDecoratorFacade() {
+        return decoratorFacade;
     }
 
 }

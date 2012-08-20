@@ -125,7 +125,6 @@ public interface ServiceSpringKeys {
      */
     String SEO_SERVICE = "seoService";
 
-
     /**
      * {@link org.yes.cart.service.domain.ShopCategoryService} bean key.
      */

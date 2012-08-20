@@ -16,7 +16,6 @@
 
 package org.yes.cart.web.page.component.product;
 
-import org.apache.wicket.ThreadContext;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.spring.injection.annot.SpringBean;

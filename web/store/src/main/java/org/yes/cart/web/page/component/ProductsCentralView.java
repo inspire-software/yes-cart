@@ -127,11 +127,11 @@ public class ProductsCentralView extends AbstractCentralView {
                 getPage().getPageParameters(), itemsPerPageValues);
 
         final SortableProductDataProvider dataProvider = new
-                SortableProductDataProvider(imageService,
+                SortableProductDataProvider(
                 productService,
-                attributableImageService,
-                categoryService,
-                getBooleanQuery(), getI18NSupport());
+                getBooleanQuery(),
+                getI18NSupport(),
+                getDecoratorFacade());
 
         applySortFieldAndOrder(dataProvider);
 

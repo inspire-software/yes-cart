@@ -18,17 +18,9 @@ package org.yes.cart.web.page.component;
 
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Category;
-import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.service.domain.ImageService;
-import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.entity.decorator.CategoryDecorator;
-import org.yes.cart.web.support.entity.decorator.impl.CategoryDecoratorImpl;
-import org.yes.cart.web.support.service.AttributableImageService;
 import org.yes.cart.web.util.WicketUtil;
 
 /**
@@ -39,12 +31,6 @@ import org.yes.cart.web.util.WicketUtil;
 public class EmptyCentralView extends AbstractCentralView {
 
     private static final String DESCRIPTION = "description";
-
-    @SpringBean(name = StorefrontServiceSpringKeys.CATEGORY_IMAGE_SERVICE)
-    protected AttributableImageService attributableImageService;
-
-    @SpringBean(name = ServiceSpringKeys.IMAGE_SERVICE)
-    protected ImageService imageService;
 
     private CategoryDecorator category;
 
@@ -67,10 +53,7 @@ public class EmptyCentralView extends AbstractCentralView {
         if (catId != null) {
             Category category = getCategory();
             if (category != null) {
-                this.category = new CategoryDecoratorImpl(
-                        imageService,
-                        attributableImageService,
-                        getCategoryService(),
+                this.category = getDecoratorFacade().decorate(
                         category,
                         WicketUtil.getHttpServletRequest().getContextPath(),
                         getI18NSupport());

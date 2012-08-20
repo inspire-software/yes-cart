@@ -21,13 +21,10 @@ import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvid
 import org.apache.wicket.model.IModel;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
-import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.web.support.entity.decorator.DecoratorFacade;
 import org.yes.cart.web.support.entity.decorator.ProductDecorator;
-import org.yes.cart.web.support.entity.decorator.impl.ProductDecoratorImpl;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
-import org.yes.cart.web.support.service.AttributableImageService;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.util.ArrayList;
@@ -45,38 +42,30 @@ import java.util.List;
 public class SortableProductDataProvider extends SortableDataProvider<ProductDecorator> {
 
     private final ProductService productService;
-    private final AttributableImageService attributableImageService;
-    private final CategoryService categoryService;
-    private final ImageService imageService;
     private final Query query;
     private String sortFieldName = ProductSearchQueryBuilder.PRODUCT_CATEGORY_RANK_FIELD;
     private boolean reverse = false;
     private List<ProductDecorator> products;
     private final I18NWebSupport i18NWebSupport;
+    private final DecoratorFacade decoratorFacade;
 
 
     /**
      * Construct product data provider.
      *
-     * @param imageService image service
      * @param productService product service to get the products.
-     * @param attributableImageService image service
-     * @param categoryService category service
      * @param query          lucene query.
      * @param i18NWebSupport i18n
+     * @param decoratorFacade decorator facade
      */
-    public SortableProductDataProvider(final ImageService imageService,
-                                       final ProductService productService,
-                                       final AttributableImageService attributableImageService,
-                                       final CategoryService categoryService,
+    public SortableProductDataProvider(final ProductService productService,
                                        final Query query,
-                                       final I18NWebSupport i18NWebSupport) {
+                                       final I18NWebSupport i18NWebSupport,
+                                       final DecoratorFacade decoratorFacade) {
         this.productService = productService;
-        this.attributableImageService = attributableImageService;
-        this.categoryService = categoryService;
         this.query = query;
-        this.imageService = imageService;
         this.i18NWebSupport = i18NWebSupport;
+        this.decoratorFacade = decoratorFacade;
     }
 
     public Iterator<? extends ProductDecorator> iterator(int first, int count) {
@@ -99,15 +88,10 @@ public class SortableProductDataProvider extends SortableDataProvider<ProductDec
         final List<ProductDecorator> rez = new ArrayList<ProductDecorator>(productsToDecorate.size());
         for (Product product : productsToDecorate) {
             rez.add(
-                    ProductDecoratorImpl.createProductDecoratorImpl(
-                            imageService,
-                            attributableImageService,
-                            categoryService,
+                    decoratorFacade.decorate(
                             product,
                             WicketUtil.getHttpServletRequest().getContextPath(),
-                            false,
-                            productService, productService.getDefaultImage(product.getProductId()),
-                            i18NWebSupport)
+                            i18NWebSupport, false)
             );
         }
         return rez;

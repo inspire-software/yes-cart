@@ -39,8 +39,6 @@ import org.yes.cart.web.page.component.product.SkuListView;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.entity.decorator.ObjectDecorator;
-import org.yes.cart.web.support.entity.decorator.impl.ProductDecoratorImpl;
-import org.yes.cart.web.support.entity.decorator.impl.ProductSkuDecoratorImpl;
 import org.yes.cart.web.support.service.AttributableImageService;
 import org.yes.cart.web.util.WicketUtil;
 
@@ -247,24 +245,14 @@ public class SkuCentralView extends AbstractCentralView {
 
     private ObjectDecorator getDecorator() {
         if (isProduct) {
-            return ProductDecoratorImpl.createProductDecoratorImpl(
-                    imageService,
-                    attributableImageService,
-                    categoryService,
+            return getDecoratorFacade().decorate(
                     product,
                     WicketUtil.getHttpServletRequest().getContextPath(),
-                    true,
-                    productService,
-                    productService.getDefaultImage(product.getProductId()),
-                    getI18NSupport());
+                    getI18NSupport(), true);
         }
-        return new ProductSkuDecoratorImpl(
-                imageService,
-                attributableImageService,
-                categoryService,
+        return getDecoratorFacade().decorate(
                 sku,
                 WicketUtil.getHttpServletRequest().getContextPath(),
-                productService,
                 getI18NSupport());
     }
 

@@ -16,8 +16,6 @@
 
 package org.yes.cart.web.support.entity.decorator.impl;
 
-import com.google.common.collect.MapMaker;
-import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.beans.BeanUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
@@ -32,8 +30,6 @@ import org.yes.cart.web.support.i18n.I18NWebSupport;
 import org.yes.cart.web.support.service.AttributableImageService;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.TimeUnit;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -63,16 +59,6 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
                         AttributeNamesKeys.Category.PRODUCT_IMAGE_TUMB_HEIGHT
             };
 
-    public static final ConcurrentMap<String, String> PRODUCT_ENCODE_CACHE = new MapMaker()
-            .concurrencyLevel(16).softValues()
-            .expiration(Constants.DEFAULT_EXPIRATION_TIMEOUT, TimeUnit.MINUTES).makeMap();
-
-    private static final ConcurrentMap<String, ProductDecoratorImpl> productDecoratorCache = new MapMaker()
-            .concurrencyLevel(16).softValues()
-            .expiration(Constants.DEFAULT_EXPIRATION_TIMEOUT, TimeUnit.MINUTES).makeMap();
-
-
-
     private final ProductService productService;
     private final AttributableImageService attributableImageService;
     private final CategoryService categoryService;
@@ -94,7 +80,7 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
      * @param productService           product service
      * @param i18NWebSupport           i18n support
      */
-    private ProductDecoratorImpl(
+    public ProductDecoratorImpl(
             final ImageService imageService,
             final AttributableImageService attributableImageService,
             final CategoryService categoryService,
@@ -122,73 +108,6 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
         }
 
     }
-
-
-
-
-    public static ProductDecoratorImpl createProductDecoratorImpl(
-            final ImageService imageService,
-            final AttributableImageService attributableImageService,
-            final CategoryService categoryService,
-            final Product productEntity,
-            final String httpServletContextPath,
-            final boolean withAttributes,
-            final ProductService productService,
-            final String defaultImageAttributeValue,
-            final I18NWebSupport i18NWebSupport) {
-
-        final String key = httpServletContextPath + productEntity.getProductId() + withAttributes;
-
-        ProductDecoratorImpl rez = productDecoratorCache.get(key);
-
-        if (rez == null) {
-
-            rez = new ProductDecoratorImpl(
-                    imageService,
-                    attributableImageService,
-                    categoryService,
-                    productEntity,
-                    httpServletContextPath,
-                    withAttributes,
-                    productService,
-                    defaultImageAttributeValue,
-                    i18NWebSupport);
-
-            productDecoratorCache.put(key, rez);
-            final String seoId = "" + rez.getProductId();
-            String seo = DecoratorUtil.encodeId(
-                    seoId,
-                    rez.getSeo()
-            );
-            PRODUCT_ENCODE_CACHE.put(seoId, seo);
-        }
-        return rez;
-    }
-
-
-    /**
-     * Get seo uri if possible to given product id.
-     * @param idValueToEncode given product id
-     * @param productService product service.
-     * @return seo uri if seo information found otherwise id
-     */    
-    public static String getSeoUrlParameterValueProduct(final String idValueToEncode, final ProductService productService) {
-        String seo = ProductDecoratorImpl.PRODUCT_ENCODE_CACHE.get(idValueToEncode);
-        if (seo == null) {
-            final Product product = productService.getById(NumberUtils.toLong(idValueToEncode));
-            if (product != null) {
-                seo = DecoratorUtil.encodeId(
-                        idValueToEncode,
-                        product.getSeo()
-                );
-            }
-            if (seo != null) {
-                ProductDecoratorImpl.PRODUCT_ENCODE_CACHE.put(idValueToEncode, seo);
-            }
-        }
-        return seo;
-    }
-
 
 
     /**
