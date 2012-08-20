@@ -342,7 +342,12 @@ rem   call java -Dderby.system.home=%YC_HOME% org.apache.derby.tools.ij %DBINITS
     echo  Cleaning Derby bundle %YC_HOME%\demo\yes-db\*   
     call rmdir /S /Q %YC_HOME%\demo\yes-db\yes
 	call rmdir /S /Q %YC_HOME%\demo\yes-db\yespay
+	call del /Q %YC_HOME%\demo\yes-db\*
     echo  done...                                        
+
+    echo  Cleaning demo import data %YC_HOME%\demo\import-data\*
+    call del /Q %YC_HOME%\demo\import-data\*
+    echo  done...
 
     set YESCONF=%YC_HOME%\demo\yes-server\conf\Catalina\localhost
 
@@ -414,6 +419,12 @@ rem   call java -Dderby.system.home=%YC_HOME% org.apache.derby.tools.ij %DBINITS
     call copy %YESSHOPWAR_NEW% %YESWEBAPPS%
     call copy %YESMANAGERWAR_NEW% %YESWEBAPPS%
     echo  done...                                        
+
+    echo  Copy demo import data...
+    call copy %YC_HOME%/env/sampledata/demo-data/yc/import/import.zip %YC_HOME%/demo/import-data/
+    call copy %YC_HOME%/env/sampledata/demo-data/icecat/import/import-EN,RU.zip %YC_HOME%/demo/import-data/
+    call copy %YC_HOME%/env/sampledata/demo-data/icecat/import/import-EN,RU-img.zip %YC_HOME%/demo/import-data/
+    echo  done...
 
     echo  Creating zip package...                        
     call del /Q %YC_HOME%\yescart.zip

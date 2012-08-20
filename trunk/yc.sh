@@ -224,6 +224,10 @@ prepare_demo_clean() {
     rm -rf $YC_HOME/demo/yes-db/*
     echo " done...                                        ";
 
+    echo " Cleaning demo import data $YC_HOME/demo/import-data/*   ";
+    rm -rf $YC_HOME/demo/import-data/*
+    echo " done...                                        ";
+
     YESCONF=$YC_HOME/demo/yes-server/conf/Catalina/localhost
 
     YESCONFSHOP=$YESCONF/yes-shop.xml
@@ -292,6 +296,12 @@ prepare_demo_pkg() {
     echo " $YESMANAGERWAR_NEW                             ";
     cp $YESSHOPWAR_NEW $YESWEBAPPS
     cp $YESMANAGERWAR_NEW $YESWEBAPPS
+    echo " done...                                        ";
+
+    echo " Copy demo import data...                       ";
+    cp $YC_HOME/env/sampledata/demo-data/yc/import/import.zip $YC_HOME/demo/import-data/
+    cp $YC_HOME/env/sampledata/demo-data/icecat/import/import-EN,RU.zip $YC_HOME/demo/import-data/
+    cp $YC_HOME/env/sampledata/demo-data/icecat/import/import-EN,RU-img.zip $YC_HOME/demo/import-data/
     echo " done...                                        ";
 
     echo " Creating zip package...                        ";
