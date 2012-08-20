@@ -17,7 +17,6 @@
 package org.yes.cart.web.support.entity.decorator;
 
 import org.yes.cart.domain.entity.ProductSku;
-import org.yes.cart.web.support.i18n.I18NObject;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com

@@ -301,6 +301,26 @@
     </bean>
 
     <bean id="attributableImageService" class="org.yes.cart.web.support.service.impl.AttributableImageServiceImpl"/>
+
+
+    <bean id="bookmarkService" class="org.yes.cart.web.support.seo.impl.BookmarkServiceImpl">
+        <constructor-arg index="0" ref="categoryService"/>
+        <constructor-arg index="1" ref="productService"/>
+    </bean>
+
+    <bean id="i18nSupport" class="org.yes.cart.web.support.i18n.impl.I18NWebSupportImpl"/>
+
+    <bean id="decoratorFacade" class="org.yes.cart.web.support.entity.decorator.impl.DecoratorFacadeImpl">
+        <constructor-arg index="0" ref="imageService"/>
+        <constructor-arg index="1" ref="categoryImageService"/>
+        <constructor-arg index="2" ref="attributableImageService"/>
+        <constructor-arg index="3" ref="attributableImageService"/>
+        <constructor-arg index="4" ref="categoryService"/>
+        <constructor-arg index="5" ref="productService"/>
+        <constructor-arg index="6" ref="bookmarkService"/>
+    </bean>
+
+
     <!-- ############################ Category , Product and Sku image services end ############################### -->
 
     <bean id="wicketUtil" class="org.yes.cart.web.util.WicketUtil">
@@ -326,11 +346,9 @@
     </bean>
 
     <bean id="seoBookmarkablePageParametersEncoder" class="org.yes.cart.web.util.SeoBookmarkablePageParametersEncoder">
-        <constructor-arg index="0" ref="categoryService"/>
-        <constructor-arg index="1" ref="productService"/>
-        <constructor-arg index="2" value="true"/>
+        <constructor-arg index="0" ref="bookmarkService"/>
+        <constructor-arg index="1" value="true"/>
         <!-- is seo url rewriting enabled -->
-
     </bean>
 
 

@@ -34,7 +34,6 @@ import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.shoppingcart.CartItem;
@@ -42,16 +41,15 @@ import org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl;
 import org.yes.cart.shoppingcart.impl.RemoveAllSkuFromCartCommandImpl;
 import org.yes.cart.shoppingcart.impl.RemoveSkuFromCartCommandImpl;
 import org.yes.cart.shoppingcart.impl.SetSkuQuantityToCartEventCommandImpl;
-import org.yes.cart.web.support.i18n.I18NWebSupport;
 import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.ShoppingCartPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
+import org.yes.cart.web.support.entity.decorator.DecoratorFacade;
 import org.yes.cart.web.support.entity.decorator.ProductSkuDecorator;
-import org.yes.cart.web.support.entity.decorator.impl.ProductSkuDecoratorImpl;
-import org.yes.cart.web.support.service.AttributableImageService;
+import org.yes.cart.web.support.i18n.I18NWebSupport;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.io.UnsupportedEncodingException;
@@ -94,20 +92,17 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
     @SpringBean(name = ServiceSpringKeys.PRODUCT_SERVICE)
     protected ProductService productService;
 
-    @SpringBean(name = StorefrontServiceSpringKeys.ATTRIBUTABLE_IMAGE_SERVICE)
-    protected AttributableImageService attributableImageService;
-
-
     @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
     protected CategoryService categoryService;
-
-    @SpringBean(name = ServiceSpringKeys.IMAGE_SERVICE)
-    protected ImageService imageService;
 
 
     private final Category rootCategory;
 
-    private final I18NWebSupport i18NWebSupport;
+    @SpringBean(name = StorefrontServiceSpringKeys.I18N_SUPPORT)
+    private I18NWebSupport i18NWebSupport;
+
+    @SpringBean(name = StorefrontServiceSpringKeys.DECORATOR_FACADE)
+    private DecoratorFacade decoratorFacade;
 
 
     /**
@@ -115,11 +110,9 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
      *
      * @param id        component id
      * @param cartItems cart items
-     * @param i18NWebSupport i18n support
      */
-    public ShoppingCartItemsList(final String id, final List<? extends CartItem> cartItems, final I18NWebSupport i18NWebSupport) {
+    public ShoppingCartItemsList(final String id, final List<? extends CartItem> cartItems) {
         super(id, cartItems);
-        this.i18NWebSupport = i18NWebSupport;
         rootCategory = categoryService.getRootCategory();
 
     }
@@ -136,13 +129,9 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
 
         final ProductSku sku = productSkuService.getProductSkuBySkuCode(skuCode);
 
-        final ProductSkuDecorator productSkuDecorator = new ProductSkuDecoratorImpl(
-                imageService,
-                attributableImageService,
-                categoryService,
+        final ProductSkuDecorator productSkuDecorator = decoratorFacade.decorate(
                 sku,
                 WicketUtil.getHttpServletRequest().getContextPath(),
-                productService,
                 i18NWebSupport);
 
 

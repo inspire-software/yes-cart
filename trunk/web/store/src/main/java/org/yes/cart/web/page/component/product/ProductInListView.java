@@ -39,7 +39,6 @@ import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.entity.decorator.ProductDecorator;
-import org.yes.cart.web.support.entity.decorator.impl.ProductDecoratorImpl;
 import org.yes.cart.web.support.service.AttributableImageService;
 import org.yes.cart.web.util.WicketUtil;
 
@@ -103,16 +102,10 @@ public class ProductInListView extends BaseComponent {
         } else {
             this.category = category;
         }
-        final String defaultImageAttributeValue = productService.getDefaultImage(product.getProductId());
-        this.product = ProductDecoratorImpl.createProductDecoratorImpl(
-                imageService,
-                attributableImageService,
-                categoryService,
+        this.product = getDecoratorFacade().decorate(
                 product,
                 WicketUtil.getHttpServletRequest().getContextPath(),
-                false,
-                productService, defaultImageAttributeValue,
-                getI18NSupport());
+                getI18NSupport(), false);
         this.defImgSize = defImgSize;
 
     }

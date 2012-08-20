@@ -25,9 +25,9 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.shoppingcart.impl.ChangeLocaleCartCommandImpl;
 import org.yes.cart.web.application.ApplicationDirector;
-import org.yes.cart.web.support.i18n.I18NWebSupport;
-import org.yes.cart.web.support.i18n.impl.I18NWebSupportImpl;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.entity.decorator.DecoratorFacade;
+import org.yes.cart.web.support.i18n.I18NWebSupport;
 import org.yes.cart.web.support.service.LanguageService;
 import org.yes.cart.web.support.util.cookie.ShoppingCartPersister;
 import org.yes.cart.web.util.WicketUtil;
@@ -54,6 +54,12 @@ public class AbstractWebPage extends WebPage {
 
     @SpringBean(name = StorefrontServiceSpringKeys.LANGUAGE_SERVICE)
     private LanguageService languageService;
+
+    @SpringBean(name = StorefrontServiceSpringKeys.I18N_SUPPORT)
+    private I18NWebSupport i18NWebSupport;
+
+    @SpringBean(name = StorefrontServiceSpringKeys.DECORATOR_FACADE)
+    private DecoratorFacade decoratorFacade;
 
 
 
@@ -129,16 +135,17 @@ public class AbstractWebPage extends WebPage {
         return shoppingCartPersister;
     }
 
-
-    private static final I18NWebSupport SUPPORT = new I18NWebSupportImpl();
-
     /**
      * @return I18n support object
      */
     public I18NWebSupport getI18NSupport() {
-        return SUPPORT;
+        return i18NWebSupport;
     }
 
-
-
+    /**
+     * @return decorator facade
+     */
+    public DecoratorFacade getDecoratorFacade() {
+        return decoratorFacade;
+    }
 }

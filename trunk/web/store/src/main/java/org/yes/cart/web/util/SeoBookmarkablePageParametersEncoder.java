@@ -16,23 +16,13 @@
 
 package org.yes.cart.web.util;
 
-import com.google.common.collect.MapMaker;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.mapper.parameter.IPageParametersEncoder;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.entity.Category;
-import org.yes.cart.domain.entity.ProductSku;
-import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.support.constants.WebParametersKeys;
-import org.yes.cart.web.support.entity.decorator.impl.DecoratorUtil;
-import org.yes.cart.web.support.entity.decorator.impl.ProductDecoratorImpl;
-
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.TimeUnit;
+import org.yes.cart.web.support.seo.BookmarkService;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -41,22 +31,18 @@ import java.util.concurrent.TimeUnit;
  */
 public class SeoBookmarkablePageParametersEncoder implements IPageParametersEncoder {
 
-    private final CategoryService categoryService;
-    private final ProductService productService;
+    private final BookmarkService bookmarkService;
     private final boolean seoEnabled;
 
     /**
      * Construct page parameter encoder.
      *
-     * @param categoryService to get category seo info
-     * @param productService  used to get product and sku seo info.
+     * @param bookmarkService bookmark service
      * @param seoEnabled      is seo url rewriting enabled.
      */
-    public SeoBookmarkablePageParametersEncoder(final CategoryService categoryService,
-                                                final ProductService productService,
+    public SeoBookmarkablePageParametersEncoder(final BookmarkService bookmarkService,
                                                 final boolean seoEnabled) {
-        this.categoryService = categoryService;
-        this.productService = productService;
+        this.bookmarkService = bookmarkService;
         this.seoEnabled = seoEnabled;
     }
 
@@ -72,51 +58,25 @@ public class SeoBookmarkablePageParametersEncoder implements IPageParametersEnco
         return url;
     }
 
-    public static final ConcurrentMap<String, String> CATEGORY_ENCODE_CACHE = new MapMaker().concurrencyLevel(16).softValues().expiration(Constants.DEFAULT_EXPIRATION_TIMEOUT, TimeUnit.MINUTES).makeMap();
-    public static final ConcurrentMap<String, String> SKU_ENCODE_CACHE = new MapMaker().concurrencyLevel(16).softValues().expiration(Constants.DEFAULT_EXPIRATION_TIMEOUT, TimeUnit.MINUTES).makeMap();
-
     /**
-     * TODO move appropriate endocing code to decorators.
-     * TODO create reverse cache in decorators for fast decode
-     * @param idName
-     * @param idValueToEncode
-     * @return
+     * @param idName parameters name
+     * @param idValueToEncode id to encode into URI
+     * @return URI
      */
     private String encodeId(final String idName, final String idValueToEncode) {
         if (seoEnabled) {
             final String rez;
             if (WebParametersKeys.CATEGORY_ID.equals(idName)) {
-                String seo = CATEGORY_ENCODE_CACHE.get(idValueToEncode);
-                if (seo == null) {
-                    final Category category = categoryService.getById(NumberUtils.toLong(idValueToEncode));
-                    if (category != null) {
-                        seo = DecoratorUtil.encodeId(
-                                idValueToEncode,
-                                category.getSeo()
-                        );
-                    }
-                    if (seo != null) {
-                        CATEGORY_ENCODE_CACHE.put(idValueToEncode, seo);
-                    }
-                }
-                rez = seo;
+
+                return bookmarkService.saveBookmarkForCategory(idValueToEncode);
+
             } else if (WebParametersKeys.PRODUCT_ID.equals(idName)) {
-                rez = ProductDecoratorImpl.getSeoUrlParameterValueProduct(idValueToEncode, productService);
+
+                return bookmarkService.saveBookmarkForProduct(idValueToEncode);
+
             } else if (WebParametersKeys.SKU_ID.equals(idName)) {
-                String seo = SKU_ENCODE_CACHE.get(idValueToEncode);
-                if (seo == null) {
-                    final ProductSku productSku = productService.getSkuById(NumberUtils.toLong(idValueToEncode));
-                    if (productSku != null) {
-                        seo = DecoratorUtil.encodeId(
-                                idValueToEncode,
-                                productSku.getSeo()
-                        );
-                    }
-                    if (seo != null) {
-                        ProductDecoratorImpl.PRODUCT_ENCODE_CACHE.put(idValueToEncode, seo);
-                    }
-                }
-                rez = seo;
+
+                return bookmarkService.saveBookmarkForSku(idValueToEncode);
 
             } else {
                 rez = idValueToEncode;
@@ -150,21 +110,20 @@ public class SeoBookmarkablePageParametersEncoder implements IPageParametersEnco
 
     private String decodeId(final String idName, final String idValueToDecode) {
         if (seoEnabled && !NumberUtils.isDigits(idValueToDecode)) {
-            //todo use cache in decorators
             if (WebParametersKeys.CATEGORY_ID.equals(idName)) {
-                final Long id = categoryService.getCategoryIdBySeoUri(idValueToDecode);
+                final String id = bookmarkService.getCategoryForURI(idValueToDecode);
                 if (id != null) {
-                    return id.toString();
+                    return id;
                 }
             } else if (WebParametersKeys.PRODUCT_ID.equals(idName)) {
-                final Long id = productService.getProductIdBySeoUri(idValueToDecode);
+                final String id = bookmarkService.getProductForURI(idValueToDecode);
                 if (id != null) {
-                    return id.toString();
+                    return id;
                 }
             } else if (WebParametersKeys.SKU_ID.equals(idName)) {
-                final Long id = productService.getProductSkuIdBySeoUri(idValueToDecode);
+                final String id = bookmarkService.getSkuForURI(idValueToDecode);
                 if (id != null) {
-                    return id.toString();
+                    return id;
                 }
             }
 

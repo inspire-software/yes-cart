@@ -58,4 +58,14 @@ public interface StorefrontServiceSpringKeys {
       */
      public String CART_PERSISTER = "shoppingCartPersister";
 
+     /**
+      * i18n web support
+      */
+     public String I18N_SUPPORT = "i18nSupport";
+
+     /**
+      * Decorator facade
+      */
+     public String DECORATOR_FACADE = "decoratorFacade";
+
 }

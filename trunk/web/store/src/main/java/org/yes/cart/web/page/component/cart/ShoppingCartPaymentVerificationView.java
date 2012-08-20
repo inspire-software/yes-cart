@@ -37,7 +37,6 @@ import org.yes.cart.shoppingcart.ShoppingContext;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.ProductSkuDecorator;
-import org.yes.cart.web.support.entity.decorator.impl.ProductSkuDecoratorImpl;
 import org.yes.cart.web.support.service.AttributableImageService;
 import org.yes.cart.web.util.WicketUtil;
 
@@ -148,13 +147,9 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
 
                                                 final CustomerOrderDeliveryDet det = customerOrderDeliveryDetListItem.getModelObject();
 
-                                                final ProductSkuDecorator productSkuDecorator = new ProductSkuDecoratorImpl(
-                                                        imageService,
-                                                        attributableImageService,
-                                                        categoryService,
+                                                final ProductSkuDecorator productSkuDecorator = getDecoratorFacade().decorate(
                                                         det.getSku(),
                                                         WicketUtil.getHttpServletRequest().getContextPath(),
-                                                        productService,
                                                         getI18NSupport());
 
                                                 final String[] size = productSkuDecorator.getThumbnailImageSize(rootCategory);

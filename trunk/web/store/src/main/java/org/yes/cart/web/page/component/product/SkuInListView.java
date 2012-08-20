@@ -16,7 +16,6 @@
 
 package org.yes.cart.web.page.component.product;
 
-import org.apache.wicket.ThreadContext;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
