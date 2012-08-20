@@ -648,7 +648,7 @@
                                     </mx:FormItem>
                                     <mx:FormItem width="100%"
                                                  label="@Resource(bundle='CategoryManagementPanel',key='description')">
-                                        <mx:TextInput id="categoryDescriptionTextInput" height="54"
+                                        <mx:TextArea id="categoryDescriptionTextInput" height="54"
                                                       width="300"/>
                                     </mx:FormItem>
                                     <mx:FormItem width="100%"
