@@ -21,10 +21,7 @@
 
 
     <mx:Script><![CDATA[
-        import com.hexagonstar.util.debug.Debug;
-
-        import mx.events.ListEvent;
-        import mx.rpc.AsyncResponder;
+        import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
 
         import org.yes.cart.shopmanager.ShopManagerGlobal;
@@ -119,13 +116,39 @@
         }
 
 
+        /**
+         * Default fault handler.
+         * @param event
+         */
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        /**
+         * Handle obtain result.
+         * @param event event with result
+         */
+        private function onFindPaymentsResult(event:ResultEvent):void {
+            paymentsDataGrid.dataProvider = event.result;
+        }
+
+
+
         ]]>
 
     </mx:Script>
 
     <mx:RemoteObject showBusyCursor="true" id="remotePaymentModulesManagementService"
                      destination="remotePaymentModulesManagementService"
-                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="findPayments" name="findPayments"
+                   result="onFindPaymentsResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+
+
+    </mx:RemoteObject>
 
     <mx:String id="localeFilter"/>
 
@@ -176,9 +199,9 @@
 
             </mx:ControlBar>
 
-            <mx:DataGrid x="0" y="0" width="100%" height="99%"  editable="true"
+            <mx:DataGrid id ="paymentsDataGrid" x="0" y="0" width="100%" height="99%"  editable="true"
                          dataTipFunction="onConstructToolTip"
-                         dataProvider="{remotePaymentModulesManagementService.findPayments.lastResult}">
+                         >
 
                 <mx:columns>
                     <mx:DataGridColumn showDataTips="true" width="50"

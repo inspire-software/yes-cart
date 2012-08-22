@@ -23,7 +23,22 @@
                      destination="remoteCustomerOrderService"
                      result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
                      fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
-                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="findCustomerOrdersByCriteria" name="findCustomerOrdersByCriteria"
+                   result="onFindCustomerOrdersByCriteriaResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="findDeliveryDetailsByOrderNumber" name="findDeliveryDetailsByOrderNumber"
+                   result="onfindDeliveryDetailsByOrderNumberResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="findDeliveryByOrderNumber" name="findDeliveryByOrderNumber"
+                   result="onfindDeliveryByOrderNumberResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+
+    </mx:RemoteObject>
 
     <mx:VBox width="100%" height="100%">
         <mx:Panel width="100%" height="100%" title="@Resource(bundle='CustomerOrderPanel',key='orders')">
@@ -84,9 +99,7 @@
             </mx:ControlBar>
             <mx:DataGrid x="0" y="0" width="100%" height="99%" id="customerOrderGrid"
                          dataTipFunction="orderToolTip"
-                         dataProvider="{remoteCustomerOrderService.findCustomerOrdersByCriteria.lastResult}"
-                         itemClick="onOrderSelected(event)"
-                    >
+                         itemClick="onOrderSelected(event)">
 
                 <mx:columns>
                     <mx:DataGridColumn showDataTips="true" width="25"
@@ -327,7 +340,7 @@
 
     <mx:Script><![CDATA[
         import mx.events.ListEvent;
-        import mx.rpc.AsyncResponder;
+        import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
 
         import org.yes.cart.impl.CustomerOrderDTOImpl;
@@ -363,6 +376,41 @@
 
 
         /**
+         * Default fault handler.
+         * @param event
+         */
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        /**
+         * Handle obtain result.
+         * @param event event with result
+         */
+        private function onFindCustomerOrdersByCriteriaResult(event:ResultEvent):void {
+            customerOrderGrid.dataProvider = event.result;
+        }
+
+        /**
+         * Handle obtain result.
+         * @param event event with result
+         */
+        private function onfindDeliveryDetailsByOrderNumberResult(event:ResultEvent):void {
+            orderSummaryDataGrid.dataProvider = event.result;
+        }
+
+        /**
+         * Handle obtain result.
+         * @param event event with result
+         */
+        private function onfindDeliveryByOrderNumberResult(event:ResultEvent):void {
+            deliverySummaryDataGrid.dataProvider = event.result;
+        }
+
+
+
+
+        /**
          * Get localized human readable name for delivery status.
          * @param item
          * @param column
@@ -393,7 +441,7 @@
                         + orderDto.orderTimestamp;
 
 
-                remoteCustomerOrderService.findDeliveryDetailsByOrderNumber(orderDto.ordernum).addResponder(
+                remoteCustomerOrderService.findDeliveryDetailsByOrderNumber(orderDto.ordernum);/*.addResponder(
                         new AsyncResponder(
                                 function (event:ResultEvent, obj:Object = null):void {
                                     orderSummaryDataGrid.dataProvider = event.result;
@@ -401,9 +449,9 @@
                                 ,
                                 ShopManagerGlobal.instance.defaultOnRpcMethodFault
                         )
-                );
+                );*/
 
-                remoteCustomerOrderService.findDeliveryByOrderNumber(orderDto.ordernum).addResponder(
+                remoteCustomerOrderService.findDeliveryByOrderNumber(orderDto.ordernum);/*.addResponder(
                         new AsyncResponder(
                                 function (event:ResultEvent, obj:Object = null):void {
                                     deliverySummaryDataGrid.dataProvider = event.result;
@@ -411,7 +459,7 @@
                                 ,
                                 ShopManagerGlobal.instance.defaultOnRpcMethodFault
                         )
-                );
+                );*/
 
 
 

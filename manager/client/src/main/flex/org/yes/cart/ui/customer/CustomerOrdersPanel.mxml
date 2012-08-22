@@ -120,13 +120,13 @@
         public function init():void {
 
             statuses.addItem(createStatusObject("all"));
-            statuses.addItem(createStatusObject("none"));
-            statuses.addItem(createStatusObject("pending"));
-            statuses.addItem(createStatusObject("waiting"));
-            statuses.addItem(createStatusObject("inprogress"));
-            statuses.addItem(createStatusObject("cancelled"));
-            statuses.addItem(createStatusObject("partially.shipped"));
-            statuses.addItem(createStatusObject("completed"));
+            statuses.addItem(createStatusObject("os.none"));
+            statuses.addItem(createStatusObject("os.pending"));
+            statuses.addItem(createStatusObject("os.waiting"));
+            statuses.addItem(createStatusObject("os.in.progress"));
+            statuses.addItem(createStatusObject("os.cancelled"));
+            statuses.addItem(createStatusObject("os.partially.shipped"));
+            statuses.addItem(createStatusObject("os.completed"));
 
         }
 
