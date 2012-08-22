@@ -52,7 +52,7 @@
                                                     Debug.trace("DEBUG new active status is " + activeStatusCombobox.selected + " for " + data.name);
                                                     if (activeStatusCombobox.selected) {
                                                         outerDocument.remotePaymentModulesManagementService.allowPaymentGateway(data.label);
-                                                    }   else {
+                                                    } else {
                                                         outerDocument.remotePaymentModulesManagementService.disallowPaymentGateway(data.label);
                                                     }
 
@@ -66,11 +66,11 @@
                             </mx:itemRenderer>
                         </mx:DataGridColumn>
 
-                        <mx:DataGridColumn width="400"  editable="false"
+                        <mx:DataGridColumn width="400" editable="false"
                                            headerText="@Resource(bundle='PaymentGateConfigManagementPanel',key='name')"
                                            dataField="name"/>
 
-                        <mx:DataGridColumn width="200"  editable="false"
+                        <mx:DataGridColumn width="200" editable="false"
                                            headerText="@Resource(bundle='PaymentGateConfigManagementPanel',key='label')"
                                            dataField="label"/>
 
@@ -183,7 +183,16 @@
 
     <mx:RemoteObject showBusyCursor="true" id="remotePaymentModulesManagementService"
                      destination="remotePaymentModulesManagementService"
-                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+        <mx:method id="getPaymentGateways" name="getPaymentGateways"
+                   result="onGetPaymentGatewaysResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="getPaymentGatewayParameters" name="getPaymentGatewayParameters"
+                   result="onGetPaymentGatewayParametersResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
 
     <mx:String id="localeFilter"/>
 
@@ -194,7 +203,7 @@
         import mx.events.DataGridEvent;
         import mx.events.DataGridEventReason;
         import mx.events.ListEvent;
-        import mx.rpc.AsyncResponder;
+        import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
         import mx.controls.Alert;
 
@@ -204,17 +213,12 @@
          * Init created panel.
          */
         private function init():void {
+
             localeFilter = resourceManager.getString('ReportPanel', 'localeFilter');       //todo move to one place
 
             //Load list of payment gateways.
-            remotePaymentModulesManagementService.getPaymentGateways(localeFilter).addResponder(
-                    new AsyncResponder(
-                            function (event:ResultEvent, obj:Object = null):void {
-                                gatewayGrid.dataProvider = event.result;
-                            }
-                            ,
-                            ShopManagerGlobal.instance.defaultOnRpcMethodFault)
-            );
+            remotePaymentModulesManagementService.getPaymentGateways(localeFilter);
+
         }
 
 
@@ -224,16 +228,34 @@
          */
         private function onGatewaySelected(event:ListEvent):void {
 
-            remotePaymentModulesManagementService.getPaymentGatewayParameters(gatewayGrid.selectedItem.label, localeFilter).addResponder(
-                    new AsyncResponder(
-                            function (event:ResultEvent, obj:Object = null):void {
-                                parameterGrid.dataProvider = event.result;
-                            }
-                            ,
-                            ShopManagerGlobal.instance.defaultOnRpcMethodFault)
-            );
+            remotePaymentModulesManagementService.getPaymentGatewayParameters(gatewayGrid.selectedItem.label, localeFilter);
         }
 
+        /**
+         * Handle obtain result.
+         * @param event event with result
+         */
+        private function onGetPaymentGatewaysResult(event:ResultEvent):void {
+            //assign loaded list of payment gateways to grid
+            gatewayGrid.dataProvider = event.result;
+        }
+
+        /**
+         * Handle obtain result.
+         * @param event event with result
+         */
+        private function onGetPaymentGatewayParametersResult(event:ResultEvent):void {
+            //assign loaded list of payment gateways parameters to data grid.
+            parameterGrid.dataProvider = event.result;
+        }
+
+        /**
+         * Default fault handler.
+         * @param event
+         */
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
 
 
 
@@ -261,7 +283,5 @@
                     pgParameter.label,
                     pgParameter.value);
         }
-
-
         ]]></mx:Script>
 </mx:Canvas>
