@@ -214,7 +214,7 @@
          */
         private function init():void {
 
-            localeFilter = resourceManager.getString('ReportPanel', 'localeFilter');       //todo move to one place
+            localeFilter = resourceManager.getString('Common', 'localeFilter');
 
             //Load list of payment gateways.
             remotePaymentModulesManagementService.getPaymentGateways(localeFilter);

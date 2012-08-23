@@ -17,10 +17,10 @@
 
 <mx:VDividedBox xmlns:mx="http://www.adobe.com/2006/mxml"
                 xmlns:cust="org.yes.cart.ui.customer.*"
-           width="100%"
-           height="100%"
-           creationComplete="initPanel()"
-           paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
+                width="100%"
+                height="100%"
+                creationComplete="initPanel()"
+                paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
     <mx:Script>
 
         <![CDATA[
@@ -187,7 +187,7 @@
 
         <mx:method id="findCustomer" name="findCustomer"
                    result="onFindCustomerResult(event)"
-                   fault="onRpcMethodFault(event)" />
+                   fault="onRpcMethodFault(event)"/>
 
     </mx:RemoteObject>
 
@@ -196,23 +196,47 @@
         <mx:VBox width="100%">
 
             <mx:HBox paddingTop="5" width="100%">
-                <mx:TextInput id="lastNameFilterValue" width="100" toolTip="@Resource(bundle='CustomerManagementPanel',key='lastNameFilter')"/>
 
-                <mx:Button label="@Resource(bundle='CustomerManagementPanel',key='applyFilter')"
+                <mx:VBox paddingTop="5">
+
+                    <mx:Grid >
+                        <mx:GridRow>
+                            <mx:GridItem>
+                                <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='lastNameFilter')"/>
+
+                                <mx:TextInput id="lastNameFilterValue" width="100"
+                                              toolTip="@Resource(bundle='CustomerManagementPanel',key='lastNameFilter')"/>
+                            </mx:GridItem>
+                            <mx:GridItem>
+                                <mx:Button label="@Resource(bundle='Common',key='findBtnToggleOn')"
+                                           click="onApplyFilterShowClick(event)"
+                                        />
+                            </mx:GridItem>
+                        </mx:GridRow>
+                    </mx:Grid>
+
+                    <mx:Grid id="filterPanel" visible="false" includeInLayout="false" >
+                        <mx:GridRow>
+                            <mx:GridItem>
+                                <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='firstNameFilter')"/>
+                                <mx:TextInput id="firstNameFilterValue" width="150"/>
+                            </mx:GridItem>
+                            <mx:GridItem>
+                                <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='emailFilter')"/>
+                                <mx:TextInput id="emailFilterValue" width="150"/>
+                            </mx:GridItem>
+                        </mx:GridRow>
+                    </mx:Grid>
+                </mx:VBox>
+
+                <mx:Button height="100%" label="@Resource(bundle='CustomerManagementPanel',key='applyFilter')"
                            toolTip="@Resource(bundle='CustomerManagementPanel',key='applyFilterToolTip')"
                            click="onApplyFilterClick(event)"
                         />
 
-                <mx:Button label="@Resource(bundle='CustomerManagementPanel',key='findBtnToggleOn')"
-                           click="onApplyFilterShowClick(event)"
-                        />
+
             </mx:HBox>
-            <mx:HBox paddingTop="5" width="100%" id="filterPanel" visible="false" includeInLayout="false">
-                <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='emailFilter')"/>
-                <mx:TextInput id="emailFilterValue" width="150"/>
-                <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='firstNameFilter')"/>
-                <mx:TextInput id="firstNameFilterValue" width="150"/>
-            </mx:HBox>
+
             <mx:DataGrid id="customerGrid" width="100%" height="100%"
                          itemClick="onCustomerSelected(event)">
                 <mx:columns>
@@ -239,8 +263,8 @@
                        label="@Resource(bundle='CustomerManagementPanel',key='customerWishlist')"
                        width="100%" height="100%"/>
             <cust:AddressPanel id="customerAddresses"
-                       label="@Resource(bundle='CustomerManagementPanel',key='customerAddresses')"
-                       width="100%" height="100%"/>
+                               label="@Resource(bundle='CustomerManagementPanel',key='customerAddresses')"
+                               width="100%" height="100%"/>
             <mx:Canvas id="customerShops" label="@Resource(bundle='CustomerManagementPanel',key='customerShops')"
                        width="100%" height="100%"/>
 

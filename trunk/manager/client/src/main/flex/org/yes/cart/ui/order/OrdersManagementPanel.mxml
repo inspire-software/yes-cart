@@ -52,24 +52,16 @@
                         <mx:Grid>
                             <mx:GridRow>
                                 <mx:GridItem>
-                                    <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='firstNameFilter')"/>
-                                    <mx:TextInput id="firstNameFilterValue" width="150"/>
-                                </mx:GridItem>
-                                <mx:GridItem>
-                                    <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='lastNameFilter')"/>
-                                    <mx:TextInput id="lastNameFilterValue" width="150"/>
-                                </mx:GridItem>
-                                <mx:GridItem>
-                                    <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='emailNameFilter')"/>
-                                    <mx:TextInput id="emailNameFilterValue" width="150"/>
-                                </mx:GridItem>
-                                <mx:GridItem>
                                     <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderNumberFilter')"/>
                                     <mx:TextInput id="orderNumberFilterValue" width="150"/>
                                 </mx:GridItem>
+                                <mx:GridItem>
+                                    <mx:Button height="100%"  label="@Resource(bundle='Common',key='findBtnToggleOn')"
+                                               click="onApplyFilterShowClick(event)" />
+                                </mx:GridItem>
+
                             </mx:GridRow>
                         </mx:Grid>
-
                         <mx:Grid id="secondaryFilterPanel" visible="false" includeInLayout="false">
                             <mx:GridRow>
                                 <mx:GridItem>
@@ -87,8 +79,19 @@
                                     <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderToDateFilter')"/>
                                     <georg:DateTimeField id="orderToDateField" width="130"/>
                                 </mx:GridItem>
+                            </mx:GridRow>
+                            <mx:GridRow>
                                 <mx:GridItem>
-
+                                    <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='firstNameFilter')"/>
+                                    <mx:TextInput id="firstNameFilterValue" width="150"/>
+                                </mx:GridItem>
+                                <mx:GridItem>
+                                    <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='lastNameFilter')"/>
+                                    <mx:TextInput id="lastNameFilterValue" width="150"/>
+                                </mx:GridItem>
+                                <mx:GridItem>
+                                    <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='emailNameFilter')"/>
+                                    <mx:TextInput id="emailNameFilterValue" width="150"/>
                                 </mx:GridItem>
                             </mx:GridRow>
                         </mx:Grid>
@@ -103,11 +106,6 @@
                                toolTip="@Resource(bundle='CustomerOrderPanel',key='clearFilterToolTip')"
                                click="onCleanFilterClick(event)"
                             />
-
-                    <mx:Button height="100%"  label="@Resource(bundle='Common',key='findBtnToggleOn')"
-                               click="onApplyFilterShowClick(event)"
-                            />
-
 
                 </mx:HBox>
 
@@ -470,30 +468,9 @@
                         + "  "
                         + orderDto.orderTimestamp;
 
+                remoteCustomerOrderService.findDeliveryDetailsByOrderNumber(orderDto.ordernum);
 
-                remoteCustomerOrderService.findDeliveryDetailsByOrderNumber(orderDto.ordernum);/*.addResponder(
-                        new AsyncResponder(
-                                function (event:ResultEvent, obj:Object = null):void {
-                                    orderSummaryDataGrid.dataProvider = event.result;
-                                }
-                                ,
-                                ShopManagerGlobal.instance.defaultOnRpcMethodFault
-                        )
-                );*/
-
-                remoteCustomerOrderService.findDeliveryByOrderNumber(orderDto.ordernum);/*.addResponder(
-                        new AsyncResponder(
-                                function (event:ResultEvent, obj:Object = null):void {
-                                    deliverySummaryDataGrid.dataProvider = event.result;
-                                }
-                                ,
-                                ShopManagerGlobal.instance.defaultOnRpcMethodFault
-                        )
-                );*/
-
-
-
-
+                remoteCustomerOrderService.findDeliveryByOrderNumber(orderDto.ordernum);
 
             } catch (e:Error) {
                 Alert.show("" + e, "Error");
@@ -504,7 +481,7 @@
         private function createStatusObject(status:String):Object {
             var obj:Object = new Object();
             obj.code = status;
-            obj.name = resourceManager.getString('CustomerOrderPanel', status);
+            obj.name = resourceManager.getString('Common', status);
             return obj;
         }
 
