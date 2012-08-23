@@ -44,58 +44,75 @@
         <mx:Panel width="100%" height="100%" title="@Resource(bundle='CustomerOrderPanel',key='orders')">
             <mx:ControlBar
                     visible="{_searchCriteriaCustomerId == 0}"
-                    includeInLayout="{_searchCriteriaCustomerId == 0}"
-                    >
+                    includeInLayout="{_searchCriteriaCustomerId == 0}"   >
 
-                <mx:Grid>
-                    <mx:GridRow>
-                        <mx:GridItem>
-                            <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='firstNameFilter')"/>
-                            <mx:TextInput id="firstNameFilterValue" width="150"/>
-                        </mx:GridItem>
-                        <mx:GridItem>
-                            <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='lastNameFilter')"/>
-                            <mx:TextInput id="lastNameFilterValue" width="150"/>
-                        </mx:GridItem>
-                        <mx:GridItem>
-                            <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='emailNameFilter')"/>
-                            <mx:TextInput id="emailNameFilterValue" width="150"/>
-                        </mx:GridItem>
-                        <mx:GridItem>
-                            <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderNumberFilter')"/>
-                            <mx:TextInput id="orderNumberFilterValue" width="150"/>
-                        </mx:GridItem>
-                    </mx:GridRow>
-                    <mx:GridRow>
-                        <mx:GridItem>
-                            <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderStatusFilter')"/>
-                            <mx:ComboBox id="statusComboBox" width="120"
-                                         prompt="@Resource(bundle='CustomerOrderPanel',key='selectStatusPropmt')"
-                                         dataProvider="{statuses}"
-                                         data="code" labelField="name"/>
-                        </mx:GridItem>
-                        <mx:GridItem>
-                            <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderFromDateFilter')"/>
-                            <georg:DateTimeField id="orderFromDateField" width="130"/>
-                        </mx:GridItem>
-                        <mx:GridItem>
-                            <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderToDateFilter')"/>
-                            <georg:DateTimeField id="orderToDateField" width="130"/>
-                        </mx:GridItem>
-                        <mx:GridItem>
+                <mx:HBox paddingTop="5" width="100%">
 
-                        </mx:GridItem>
-                    </mx:GridRow>
-                </mx:Grid>
+                    <mx:VBox width="100%">
+                        <mx:Grid>
+                            <mx:GridRow>
+                                <mx:GridItem>
+                                    <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='firstNameFilter')"/>
+                                    <mx:TextInput id="firstNameFilterValue" width="150"/>
+                                </mx:GridItem>
+                                <mx:GridItem>
+                                    <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='lastNameFilter')"/>
+                                    <mx:TextInput id="lastNameFilterValue" width="150"/>
+                                </mx:GridItem>
+                                <mx:GridItem>
+                                    <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='emailNameFilter')"/>
+                                    <mx:TextInput id="emailNameFilterValue" width="150"/>
+                                </mx:GridItem>
+                                <mx:GridItem>
+                                    <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderNumberFilter')"/>
+                                    <mx:TextInput id="orderNumberFilterValue" width="150"/>
+                                </mx:GridItem>
+                            </mx:GridRow>
+                        </mx:Grid>
 
-                <mx:Button height="100%" label="@Resource(bundle='CustomerOrderPanel',key='applyFilter')"
-                           toolTip="@Resource(bundle='CustomerOrderPanel',key='applyFilterToolTip')"
-                           click="onApplyFilterClick(event)"
-                        />
-                <mx:Button height="100%" label="@Resource(bundle='CustomerOrderPanel',key='clearFilter')"
-                           toolTip="@Resource(bundle='CustomerOrderPanel',key='clearFilterToolTip')"
-                           click="onCleanFilterClick(event)"
-                        />
+                        <mx:Grid id="secondaryFilterPanel" visible="false" includeInLayout="false">
+                            <mx:GridRow>
+                                <mx:GridItem>
+                                    <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderStatusFilter')"/>
+                                    <mx:ComboBox id="statusComboBox" width="120"
+                                                 prompt="@Resource(bundle='CustomerOrderPanel',key='selectStatusPropmt')"
+                                                 dataProvider="{statuses}"
+                                                 data="code" labelField="name"/>
+                                </mx:GridItem>
+                                <mx:GridItem>
+                                    <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderFromDateFilter')"/>
+                                    <georg:DateTimeField id="orderFromDateField" width="130"/>
+                                </mx:GridItem>
+                                <mx:GridItem>
+                                    <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderToDateFilter')"/>
+                                    <georg:DateTimeField id="orderToDateField" width="130"/>
+                                </mx:GridItem>
+                                <mx:GridItem>
+
+                                </mx:GridItem>
+                            </mx:GridRow>
+                        </mx:Grid>
+
+                    </mx:VBox>
+
+                    <mx:Button height="100%" label="@Resource(bundle='CustomerOrderPanel',key='applyFilter')"
+                               toolTip="@Resource(bundle='CustomerOrderPanel',key='applyFilterToolTip')"
+                               click="onApplyFilterClick(event)"
+                            />
+                    <mx:Button height="100%" label="@Resource(bundle='CustomerOrderPanel',key='clearFilter')"
+                               toolTip="@Resource(bundle='CustomerOrderPanel',key='clearFilterToolTip')"
+                               click="onCleanFilterClick(event)"
+                            />
+
+                    <mx:Button height="100%"  label="@Resource(bundle='Common',key='findBtnToggleOn')"
+                               click="onApplyFilterShowClick(event)"
+                            />
+
+
+                </mx:HBox>
+
+
+
             </mx:ControlBar>
             <mx:DataGrid x="0" y="0" width="100%" height="99%" id="customerOrderGrid"
                          dataTipFunction="orderToolTip"
@@ -372,6 +389,19 @@
             statuses.addItem(createStatusObject("os.partially.shipped"));
             statuses.addItem(createStatusObject("os.completed"));
 
+        }
+
+        /**
+         * Hide / show additional search panel.
+         * @param event
+         */
+        private function onApplyFilterShowClick(event:MouseEvent):void {
+            secondaryFilterPanel.includeInLayout =  secondaryFilterPanel.visible = !secondaryFilterPanel.visible;
+            if (secondaryFilterPanel.visible) {
+                (event.target as Button).label = resourceManager.getString('Common', 'findBtnToggleOff');
+            } else {
+                (event.target as Button).label = resourceManager.getString('Common', 'findBtnToggleOn');
+            }
         }
 
 

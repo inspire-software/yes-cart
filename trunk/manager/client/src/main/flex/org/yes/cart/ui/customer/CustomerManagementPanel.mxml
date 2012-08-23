@@ -171,9 +171,9 @@
             filterPanel.visible = !filterPanel.visible;
             filterPanel.includeInLayout = filterPanel.visible;
             if (filterPanel.visible) {
-                (event.target as Button).label = resourceManager.getString('CustomerManagementPanel', 'findBtnToggleOff');
+                (event.target as Button).label = resourceManager.getString('Common', 'findBtnToggleOff');
             } else {
-                (event.target as Button).label = resourceManager.getString('CustomerManagementPanel', 'findBtnToggleOn');
+                (event.target as Button).label = resourceManager.getString('Common', 'findBtnToggleOn');
             }
         }
         ]]>
