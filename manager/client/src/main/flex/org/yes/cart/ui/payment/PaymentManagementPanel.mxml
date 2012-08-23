@@ -27,7 +27,7 @@
         import org.yes.cart.shopmanager.ShopManagerGlobal;
 
         private function init():void {
-            localeFilter = resourceManager.getString('ReportPanel', 'localeFilter');       //todo move to one place
+            localeFilter = resourceManager.getString('Common', 'localeFilter');
         }
 
 
@@ -132,6 +132,19 @@
             paymentsDataGrid.dataProvider = event.result;
         }
 
+        /**
+         * Hide / show additional search panel.
+         * @param event
+         */
+        private function onApplyFilterShowClick(event:MouseEvent):void {
+            secondaryFilterPanel.includeInLayout =  secondaryFilterPanel.visible = !secondaryFilterPanel.visible;
+            if (secondaryFilterPanel.visible) {
+                (event.target as Button).label = resourceManager.getString('Common', 'findBtnToggleOff');
+            } else {
+                (event.target as Button).label = resourceManager.getString('Common', 'findBtnToggleOn');
+            }
+        }
+
 
 
         ]]>
@@ -164,6 +177,15 @@
                                 <mx:TextInput id="orderNumber" width="150"/>
                             </mx:GridItem>
                             <mx:GridItem>
+                                <mx:Button height="100%"  label="@Resource(bundle='Common',key='findBtnToggleOn')"
+                                           click="onApplyFilterShowClick(event)" />
+                            </mx:GridItem>
+                        </mx:GridRow>
+                    </mx:Grid>
+
+                    <mx:Grid  id="secondaryFilterPanel" visible="false" includeInLayout="false">
+                        <mx:GridRow>
+                            <mx:GridItem>
                                 <mx:Label text="@Resource(bundle='PaymentManagementPanel',key='fromDate')"/>
                                 <georg:DateTimeField id="fromDate" width="130"/>
                             </mx:GridItem>
@@ -181,9 +203,6 @@
                                 <mx:Label text="@Resource(bundle='PaymentManagementPanel',key='lastCardDigits')"/>
                                 <mx:TextInput id="lastCardDigits" width="150"/>
                             </mx:GridItem>
-                            <mx:GridItem>
-
-                            </mx:GridItem>
                         </mx:GridRow>
                     </mx:Grid>
                 </mx:VBox>
@@ -196,6 +215,8 @@
                            toolTip="@Resource(bundle='PaymentManagementPanel',key='clearFilterToolTip')"
                            click="onCleanFilterClick(event)"
                         />
+
+
 
             </mx:ControlBar>
 

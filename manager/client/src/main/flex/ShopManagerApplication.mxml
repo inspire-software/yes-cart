@@ -343,13 +343,6 @@
 
         }
 
-        private function onFulfillmentClick(event:MouseEvent):void {
-            setFontWeight(fulfillmentBtn);
-            mainPanel.removeAllChildren();
-            var label:Text = new Text();
-            label.text = "TODO: this is not yet implemented";
-            mainPanel.addChild(label);
-        }
 
         private function onInventoryManagementClick(event:MouseEvent):void {
             setFontWeight(inventoryBtn);
@@ -512,12 +505,6 @@
                                                        label="@Resource(bundle='ShopManagerApplication',key='payment')"
                                                        click="onPaymentsManagementClick(event)"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='paymentHint')"
-                                                />
-                                        <mx:Spacer height="10"/>
-                                        <mx:LinkButton width="100%" id="fulfillmentBtn"
-                                                       label="@Resource(bundle='ShopManagerApplication',key='fulfillment')"
-                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='fulfillmentHint')"
-                                                       click="onFulfillmentClick(event)"
                                                 />
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton width="100%" id="customersBtn"

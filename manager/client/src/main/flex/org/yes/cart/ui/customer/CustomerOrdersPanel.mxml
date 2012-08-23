@@ -133,7 +133,7 @@
         private function createStatusObject(status:String):Object {
             return {
                 code:status,
-                name:resourceManager.getString('CustomerOrderPanel', status)
+                name:resourceManager.getString('Common', status)
             };
         }
 
