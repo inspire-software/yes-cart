@@ -35,13 +35,14 @@
                                enabled="{productSelected}"
                             />
 
+                    <mx:Label text="@Resource(bundle='ProductManagementPanel',key='code')"/>
                     <mx:TextInput id="codeTextInput" width="100" toolTip="@Resource(bundle='ProductManagementPanel',key='code')"/>
 
                     <mx:Button label="@Resource(bundle='ProductManagementPanel',key='findBtn')"
                                toolTip="@Resource(bundle='ProductManagementPanel',key='findBtnHint')"
                                click="onSearchBtnClick(event)"/>
 
-                    <mx:Button label="@Resource(bundle='ProductManagementPanel',key='findBtnToggleOn')"
+                    <mx:Button label="@Resource(bundle='Common',key='findBtnToggleOn')"
                                click="onSearchShowBtnClick(event)"/>
                 </mx:HBox>
                 <mx:HBox paddingTop="5" width="100%" id="filterPanel" visible="false" includeInLayout="false">
@@ -380,10 +381,14 @@
 
         private function onGetAllBrandsResult(event:ResultEvent):void {
             brandsList = event.result as ArrayCollection;
+            brandComboBox.selectedIndex = -1;
+            brandComboBox.selectedItem = null;
         }
 
         private function onGetAllProductTypesResult(event:ResultEvent):void {
             productTypesList = event.result as ArrayCollection;
+            typeComboBox.selectedIndex = -1;
+            typeComboBox.selectedItem = null;
         }
 
         private function onCreateUpdateProductResult(event:ResultEvent):void {
