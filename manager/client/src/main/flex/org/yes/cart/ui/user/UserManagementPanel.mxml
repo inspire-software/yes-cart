@@ -330,7 +330,7 @@
                            enabled="{userSelected}"
                            click="onDeleteUserClick(event)"
                         />
-                <mx:Button label="@Resource(bundle='UserManagementPanel',key='findBtnToggleOn')"
+                <mx:Button label="@Resource(bundle='Common',key='findBtnToggleOn')"
                            click="onApplyFilterShowClick(event)"
                         />
             </mx:HBox>
