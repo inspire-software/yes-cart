@@ -31,6 +31,9 @@ http://merchant.w1.ru/checkout/site/develope/
 http://habrahabr.ru/post/88608/
 
 == Competitors == 
+
+https://www.themes-mgnto.com/why-magento-commerce/
+
 <ul>
 	<li><a href="www.paceretail.co.uk">www.paceretail.co.uk</a></li>	
 	<li><a href="http://livecart.com">livecart.com</a></li>
