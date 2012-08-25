@@ -45,7 +45,7 @@
             </list>
         </property>
         <property name="entityInterceptor">
-            <bean class="org.yes.cart.payment.persistence.service.impl.AuditInterceptor"/>
+            <bean class="org.yes.cart.domain.interceptor.AuditInterceptor"/>
         </property>
         <property name="hibernateProperties">
             <props>

@@ -28,6 +28,7 @@ import org.yes.cart.service.order.impl.OrderEventImpl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static org.junit.Assert.*;
 
@@ -67,18 +68,14 @@ public class ProcessAllocationOrderEventHandlerImplTest extends AbstractEventHan
         // check reserved quantity
         ProductSku sku = productSkuService.getProductSkuBySkuCode("CC_TEST1");
         Pair<BigDecimal, BigDecimal> qty = skuWarehouseService.getQuantity(
-                new ArrayList<Warehouse>() {{
-                    add(warehouse);
-                }},
+                Collections.singletonList(warehouse),
                 sku
         );
         assertEquals(new BigDecimal("7.00"), qty.getFirst());
         assertEquals(new BigDecimal("0.00"), qty.getSecond());
         sku = productSkuService.getProductSkuBySkuCode("CC_TEST2");
         qty = skuWarehouseService.getQuantity(
-                new ArrayList<Warehouse>() {{
-                    add(warehouse);
-                }},
+                Collections.singletonList(warehouse),
                 sku
         );
         assertEquals(new BigDecimal("0.00"), qty.getFirst());

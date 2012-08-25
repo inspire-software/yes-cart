@@ -20,19 +20,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.Address;
-import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.domain.entity.CustomerOrder;
-import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.impl.TestPaymentGatewayImpl;
 import org.yes.cart.payment.persistence.entity.impl.PaymentGatewayParameterEntity;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
-import org.yes.cart.service.domain.AddressService;
-import org.yes.cart.service.domain.CustomerOrderService;
-import org.yes.cart.service.domain.CustomerService;
-import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.service.domain.*;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderStateManager;
@@ -65,6 +60,10 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
     private ShopService shopService;
     private OrderStateManager orderStateManager;
 
+    private WarehouseService warehouseService;
+    private SkuWarehouseService skuWarehouseService;
+    private ProductSkuService productSkuService;
+
     @Before
     public void setUp() throws Exception {
         paymentProcessorFactory = (PaymentProcessorFactory) ctx().getBean(ServiceSpringKeys.PAYMENT_PROCESSOR_FACTORY);
@@ -74,6 +73,10 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
         customerService = (CustomerService) ctx().getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
         shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
         orderStateManager = (OrderStateManager) ctx().getBean(ServiceSpringKeys.ORDER_STATE_MANAGER);
+
+        warehouseService = (WarehouseService) ctx().getBean(ServiceSpringKeys.WAREHOUSE_SERVICE);
+        skuWarehouseService = (SkuWarehouseService) ctx().getBean(ServiceSpringKeys.SKU_WAREHOUSE_SERVICE);
+        productSkuService = (ProductSkuService) ctx().getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE);
     }
 
     /**
@@ -83,6 +86,11 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
      */
     @Test
     public void testAuthorize1() throws Exception {
+
+        final Warehouse warehouse = warehouseService.getById(1);
+        final Pair<BigDecimal, BigDecimal> skuCcTest1Qty0 = skuWarehouseService.getQuantity(Collections.singletonList(warehouse) ,productSkuService.getProductSkuBySkuCode("CC_TEST1"));
+        final Pair<BigDecimal, BigDecimal> skuCcTest3Qty0 = skuWarehouseService.getQuantity(Collections.singletonList(warehouse) ,productSkuService.getProductSkuBySkuCode("CC_TEST3"));
+
         Customer customer = createCustomer();
         PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL);
         CustomerOrder customerOrder = customerOrderService.createFromCart(getShoppingCart1(customer.getEmail()), true);
@@ -94,6 +102,19 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
                 delivery0.getDevileryNum(),
                 Payment.PAYMENT_STATUS_OK,
                 PaymentGateway.AUTH).size());
+
+
+        customerOrder = customerOrderService.findByGuid(customerOrder.getCartGuid());
+
+
+        assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_ON_FULLFILMENT, customerOrder.getDelivery().iterator().next().getDeliveryStatus());
+
+        final Pair<BigDecimal, BigDecimal> skuCcTest1Qty1 = skuWarehouseService.getQuantity(Collections.singletonList(warehouse) ,productSkuService.getProductSkuBySkuCode("CC_TEST1"));
+        final Pair<BigDecimal, BigDecimal> skuCcTest3Qty1 = skuWarehouseService.getQuantity(Collections.singletonList(warehouse) ,productSkuService.getProductSkuBySkuCode("CC_TEST3"));
+
+        assertEquals(skuCcTest1Qty0.getFirst(), skuCcTest1Qty1.getFirst());
+        assertEquals(skuCcTest1Qty0.getSecond(), skuCcTest1Qty1.getSecond());
+
     }
 
     /**
@@ -551,7 +572,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
             }
         }
 
-        assertEquals("Only one order may be in rogress state :" + stringBuilder.toString(), 1, okCnt);
+        assertEquals("Only one order may be in progress state :" + stringBuilder.toString(), 1, okCnt);
 
 
 
@@ -599,7 +620,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
     }
 
     /**
-     * Create simple cart with products, that have a standard availibility and enough qty on warehouses.
+     * Create simple cart with products, that have a standard availability and enough qty on warehouses.
      *
      * @return cart
      */
