@@ -164,7 +164,13 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
                         )
                 );
             }
+
             getGenericDao().delete(customerOrderToDelete);
+
+            getGenericDao().flushClear();
+
+            getGenericDao().evict(customerOrderToDelete);
+
         }
         final CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, onePhysicalDelivery);
