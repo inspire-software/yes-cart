@@ -151,7 +151,7 @@ public class PriceServiceImpl
 
         List<SkuPrice> rez = getSkuPriceFilteredByShopCurrency(productSkus, shop, currencyCode);
         
-        if (rez.isEmpty() && !currencyCode.equals(shop.getDefaultCurrency())) {
+        if (rez.isEmpty() && currencyCode != null && !currencyCode.equals(shop.getDefaultCurrency())) {
 
             final List<SkuPrice> shopSkuPrices = getSkuPriceFilteredByShop(productSkus, shop);
             List<SkuPrice> skuPrices = getSkuPriceFilteredByCurrency(shopSkuPrices, shop.getDefaultCurrency());
