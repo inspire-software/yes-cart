@@ -44,7 +44,7 @@
         <mx:Panel width="100%" height="100%" title="@Resource(bundle='CustomerOrderPanel',key='orders')">
             <mx:ControlBar
                     visible="{_searchCriteriaCustomerId == 0}"
-                    includeInLayout="{_searchCriteriaCustomerId == 0}"   >
+                    includeInLayout="{_searchCriteriaCustomerId == 0}">
 
                 <mx:HBox paddingTop="5" width="100%">
 
@@ -56,8 +56,8 @@
                                     <mx:TextInput id="orderNumberFilterValue" width="150"/>
                                 </mx:GridItem>
                                 <mx:GridItem>
-                                    <mx:Button height="100%"  label="@Resource(bundle='Common',key='findBtnToggleOn')"
-                                               click="onApplyFilterShowClick(event)" />
+                                    <mx:Button height="100%" label="@Resource(bundle='Common',key='findBtnToggleOn')"
+                                               click="onApplyFilterShowClick(event)"/>
                                 </mx:GridItem>
 
                             </mx:GridRow>
@@ -108,7 +108,6 @@
                             />
 
                 </mx:HBox>
-
 
 
             </mx:ControlBar>
@@ -201,10 +200,6 @@
                                                    dataField="skuName"
                                         />
                                 <mx:DataGridColumn showDataTips="true"
-                                                   headerText="@Resource(bundle='CustomerOrderPanel',key='inventoryStatus')"
-                                                   labelFunction="getDeliveryStatusLabel"
-                                        />
-                                <mx:DataGridColumn showDataTips="true"
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='listPrice')"
                                                    dataField="listPrice"
                                         />
@@ -215,7 +210,8 @@
                                 <mx:DataGridColumn showDataTips="true"
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='discount')"
 
-                                        />          <!-- todo func to calculate -->
+                                        />
+                                <!-- todo func to calculate -->
                                 <mx:DataGridColumn showDataTips="true"
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='qty')"
                                                    dataField="qty"
@@ -223,7 +219,8 @@
                                 <mx:DataGridColumn showDataTips="true"
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='total')"
 
-                                        /> <!-- todo funct to calculate -->
+                                        />
+                                <!-- todo funct to calculate -->
                                 <mx:DataGridColumn showDataTips="true"
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='deliveryNum')"
                                                    dataField="deliveryNum"
@@ -258,26 +255,58 @@
                                                dataField="refNo"
                                     />
                             <mx:DataGridColumn showDataTips="true"
+                                               headerText="@Resource(bundle='CustomerOrderPanel',key='inventoryStatus')"
+                                               labelFunction="getDeliveryStatusLabel"
+                                    />
+                            <mx:DataGridColumn showDataTips="true"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='itemsInfo')"
 
-                                    />     <!-- todo function -->
+                                    />
+                            <!-- todo function -->
                             <mx:DataGridColumn showDataTips="true"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='itemsCost')"
 
-                                    />         <!-- todo func -->
+                                    />
+                            <!-- todo func -->
                             <mx:DataGridColumn showDataTips="true"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='shipmentCost')"
                                                dataField="price"
                                     />
                             <mx:DataGridColumn showDataTips="true"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='deliveryTotal')"
-                                    />         <!-- todo func -->
+                                    />
+                            <!-- todo func -->
                             <mx:DataGridColumn showDataTips="true"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='deliveryAddr')"
                                     />
-                            <mx:DataGridColumn showDataTips="true"
-                                               headerText="@Resource(bundle='CustomerOrderPanel',key='actions')"
-                                    />
+                            <mx:DataGridColumn showDataTips="true" width="280"
+                                               headerText="@Resource(bundle='CustomerOrderPanel',key='actions')">
+                                <mx:itemRenderer>
+                                    <mx:Component>
+                                        <mx:VBox horizontalAlign="right">
+                                            <mx:HBox horizontalAlign="right">
+                                                <mx:Button width="260" id="deliveryActionButton"
+                                                           label="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.ticket')"
+                                                           toolTip="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.ticket.hint')">
+
+                                                </mx:Button>
+
+                                            </mx:HBox>
+                                            <mx:HBox horizontalAlign="right">
+                                                <mx:Button width="80"
+                                                           label="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.ticket')"
+                                                           toolTip="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.ticket.hint')"/>
+                                                <mx:Button width="80"
+                                                           label="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.setrefno')"
+                                                           toolTip="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.setrefno.hint')"/>
+                                                <mx:Button width="80"
+                                                           label="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.cancel')"
+                                                           toolTip="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.cancel.hint')"/>
+                                            </mx:HBox>
+                                        </mx:VBox>
+                                    </mx:Component>
+                                </mx:itemRenderer>
+                            </mx:DataGridColumn>
                         </mx:columns>
                     </mx:DataGrid>
                 </mx:Canvas>
@@ -394,7 +423,7 @@
          * @param event
          */
         private function onApplyFilterShowClick(event:MouseEvent):void {
-            secondaryFilterPanel.includeInLayout =  secondaryFilterPanel.visible = !secondaryFilterPanel.visible;
+            secondaryFilterPanel.includeInLayout = secondaryFilterPanel.visible = !secondaryFilterPanel.visible;
             if (secondaryFilterPanel.visible) {
                 (event.target as Button).label = resourceManager.getString('Common', 'findBtnToggleOff');
             } else {
@@ -436,8 +465,6 @@
         }
 
 
-
-
         /**
          * Get localized human readable name for delivery status.
          * @param item
@@ -445,11 +472,11 @@
          * @return human readable name for delivery status.
          */
         private function getDeliveryStatusLabel(item:Object, column:DataGridColumn):String {
-            var rez:String = resourceManager.getString('CustomerOrderPanel', item.deliveryStatusLabel);
+            var rez:String = resourceManager.getString('CustomerOrderPanel', item.deliveryStatus);
             if (rez == null) {
-                rez = item.deliveryStatusLabel;
+                rez = item.deliveryStatus;
             }
-            return "remove me " + rez;
+            return rez;
         }
 
         /**
@@ -488,7 +515,12 @@
 
         private function statusLabelFunction(item:Object, column:DataGridColumn):String {
 
-            return resourceManager.getString('CustomerOrderPanel', item.orderStatus);
+            var label:String = resourceManager.getString('Common', item.orderStatus);
+            if (label == null) {
+                label = item.orderStatus;
+            }
+
+            return label;
 
         }
 
@@ -584,7 +616,7 @@
         }
 
 
-        public override function toString():String {
+        override public function toString():String {
             return super.toString() + "    \n\n{_searchCriteriaCustomerId=" + String(_searchCriteriaCustomerId) + ",_searchCriteriaCustomerFirstName=" + String(_searchCriteriaCustomerFirstName) + ",_searchCriteriaCustomerLastName=" + String(_searchCriteriaCustomerLastName) + ",_searchCriteriaCustomerEMailName=" + String(_searchCriteriaCustomerEMailName) + ",_searchCriteriarOrderStatus=" + String(_searchCriteriarOrderStatus) + ",_searchCriteriarOrderNum=" + String(_searchCriteriarOrderNum) + ",_searchCriteriarOrderDateFrom=" + String(_searchCriteriarOrderDateFrom) + ",_searchCriteriarOrderDateTo=" + String(_searchCriteriarOrderDateTo) + "}";
         }
         ]]></mx:Script>
