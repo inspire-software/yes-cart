@@ -279,27 +279,53 @@
                             <mx:DataGridColumn showDataTips="true"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='deliveryAddr')"
                                     />
-                            <mx:DataGridColumn showDataTips="true" width="280"
+                            <mx:DataGridColumn showDataTips="true" width="300"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='actions')">
                                 <mx:itemRenderer>
                                     <mx:Component>
                                         <mx:VBox horizontalAlign="right">
                                             <mx:HBox horizontalAlign="right">
-                                                <mx:Button width="260" id="deliveryActionButton"
-                                                           label="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.ticket')"
-                                                           toolTip="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.ticket.hint')">
+                                                <mx:Script>
+                                                    <![CDATA[
+                                                    import mx.controls.Alert;
 
+                                                    public function onDeliveryActionButtonClick(customerOrderDeliveryDTO:Object) : void {
+                                                        Alert.show("current status is " + customerOrderDeliveryDTO.deliveryStatus);
+                                                    }
+
+                                                    public function getDeliveryActionLabel(customerOrderDeliveryDTO:Object) : String {
+                                                        var deliveryStatus:String = customerOrderDeliveryDTO.deliveryStatus;
+                                                        deliveryActionButton.visible =  deliveryActionButton.includeInLayout = true;
+                                                        if (deliveryStatus == "ds.inventory.allocated") {
+                                                            return resourceManager.getString('CustomerOrderPanel', 'action.pack.delivery');
+                                                        } else if (deliveryStatus == "ds.packing") {
+                                                            return resourceManager.getString('CustomerOrderPanel', 'action.ready.4.shippind');
+                                                        } else if (deliveryStatus == "ds.shipment.ready") {
+                                                            return resourceManager.getString('CustomerOrderPanel', 'action.start.shipping');
+                                                        } else if (deliveryStatus == "ds.shipment.inprogress") {
+                                                            return resourceManager.getString('CustomerOrderPanel', 'action.shipped');
+                                                        }
+                                                        deliveryActionButton.visible =  deliveryActionButton.includeInLayout = false;
+                                                        return "NA";
+                                                    }
+
+                                                    ]]>
+                                                </mx:Script>
+
+                                                <mx:Button width="285" id="deliveryActionButton"
+                                                           label="{getDeliveryActionLabel(data)}"
+                                                           click="callLater(onDeliveryActionButtonClick, new Array(data))"
+                                                           >
                                                 </mx:Button>
-
                                             </mx:HBox>
                                             <mx:HBox horizontalAlign="right">
-                                                <mx:Button width="80"
+                                                <mx:Button width="90"
                                                            label="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.ticket')"
                                                            toolTip="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.ticket.hint')"/>
-                                                <mx:Button width="80"
+                                                <mx:Button width="90"
                                                            label="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.setrefno')"
                                                            toolTip="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.setrefno.hint')"/>
-                                                <mx:Button width="80"
+                                                <mx:Button width="90"
                                                            label="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.cancel')"
                                                            toolTip="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.cancel.hint')"/>
                                             </mx:HBox>
