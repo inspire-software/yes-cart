@@ -17,6 +17,7 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
+import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.dao.GenericDAO;
@@ -55,8 +56,8 @@ public class DtoCategoryServiceImpl
     private final DtoAttributeService dtoAttributeService;
     private final GenericDAO<AttrValueEntityCategory, Long> attrValueEntityCategoryDao;
 
-    private final DTOAssembler attrValueAssembler;
-    private final DTOAssembler shopCategoryAssembler;
+    private final Assembler attrValueAssembler;
+    private final Assembler shopCategoryAssembler;
 
     private final ImageService imageService;
 

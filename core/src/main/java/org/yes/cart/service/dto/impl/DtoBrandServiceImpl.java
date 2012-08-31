@@ -17,6 +17,7 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
+import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.dao.GenericDAO;
@@ -52,7 +53,7 @@ public class DtoBrandServiceImpl
         extends AbstractDtoServiceImpl<BrandDTO, BrandDTOImpl, Brand>
         implements DtoBrandService {
 
-    private final DTOAssembler attrValueAssembler;
+    private final Assembler attrValueAssembler;
     private final DtoAttributeService dtoAttributeService;
     private final GenericDAO<AttrValueEntityBrand, Long> attrValueEntityBrandDao;
     private final ImageService imageService;

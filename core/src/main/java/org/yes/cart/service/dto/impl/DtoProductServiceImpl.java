@@ -17,6 +17,7 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
+import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
@@ -78,8 +79,8 @@ public class DtoProductServiceImpl
     private final ProductTypeAttrService productTypeAttrService;
 
 
-    private final DTOAssembler productSkuDTOAssembler;
-    private final DTOAssembler attrValueAssembler;
+    private final Assembler productSkuDTOAssembler;
+    private final Assembler attrValueAssembler;
     private final ImageService imageService;
 
 

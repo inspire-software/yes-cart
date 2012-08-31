@@ -17,6 +17,7 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
+import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -51,8 +52,8 @@ public class DtoCustomerOrderServiceImpl
 
     private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
-    protected final DTOAssembler orderDeliveryDetailAssembler;
-    protected final DTOAssembler orderDeliveryAssembler;
+    protected final Assembler orderDeliveryDetailAssembler;
+    protected final Assembler orderDeliveryAssembler;
 
     /**
      * Construct service.
