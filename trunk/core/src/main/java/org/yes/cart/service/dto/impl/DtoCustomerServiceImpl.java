@@ -17,6 +17,7 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
+import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.dao.GenericDAO;
@@ -60,7 +61,7 @@ public class DtoCustomerServiceImpl
 
     private final GenericDAO<Shop, Long> shopDao;
 
-    private final DTOAssembler attrValueAssembler;
+    private final Assembler attrValueAssembler;
 
     /**
      * Construct base remote service.

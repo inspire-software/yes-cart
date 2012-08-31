@@ -17,6 +17,7 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
+import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.Criterion;
@@ -62,15 +63,15 @@ public class ManagementServiceImpl implements ManagementService {
 
     private final DtoFactory dtoFactory;
 
-    private final DTOAssembler managerAssembler;
+    private final Assembler managerAssembler;
 
-    private final DTOAssembler roleAssembler;
+    private final Assembler roleAssembler;
 
     private final AdaptersRepository adaptersRepository;
 
 
     /**
-     * Construct user managment service.
+     * Construct user management service.
      *
      * @param managerService          manager service to use
      * @param managerRoleDao      manager roles dao

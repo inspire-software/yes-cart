@@ -17,6 +17,7 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
+import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.domain.dto.AttrValueDTO;
@@ -42,7 +43,7 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
 
     protected final DtoFactory dtoFactory;
 
-    protected final DTOAssembler assembler;
+    protected final Assembler assembler;
 
     protected GenericService<IFACE> service;
 
@@ -165,7 +166,7 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
     /**
      * @return {@link DTOAssembler}
      */
-    public DTOAssembler getAssembler() {
+    public Assembler getAssembler() {
         return assembler;
     }
 
