@@ -37,6 +37,10 @@
                    result="onfindDeliveryByOrderNumberResult(event)"
                    fault="onRpcMethodFault(event)"/>
 
+        <mx:method id="fireDeliveryTransition" name="fireDeliveryTransition"
+                   result="onFireDeliveryTransitionResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
 
     </mx:RemoteObject>
 
@@ -290,7 +294,33 @@
                                                     import mx.controls.Alert;
 
                                                     public function onDeliveryActionButtonClick(customerOrderDeliveryDTO:Object) : void {
-                                                        Alert.show("current status is " + customerOrderDeliveryDTO.deliveryStatus);
+                                                        //Alert.show("current status !!! is " + customerOrderDeliveryDTO.deliveryStatus);
+
+                                                        var destiNatuinDeliveryStatus :  String;
+
+                                                        var deliveryStatus:String = customerOrderDeliveryDTO.deliveryStatus;
+
+                                                        if (deliveryStatus == "ds.inventory.allocated") {
+                                                            destiNatuinDeliveryStatus = "ds.packing";
+                                                        } else if (deliveryStatus == "ds.packing") {
+                                                            destiNatuinDeliveryStatus = "ds.shipment.ready";
+                                                        } else if (deliveryStatus == "ds.shipment.ready") {
+                                                            destiNatuinDeliveryStatus = "ds.shipment.inprogress";
+                                                        } else if (deliveryStatus == "ds.shipment.inprogress") {
+                                                            destiNatuinDeliveryStatus = "ds.shipped";
+                                                        }
+
+
+
+                                                        outerDocument.remoteCustomerOrderService.fireDeliveryTransition(
+
+                                                                customerOrderDeliveryDTO.ordernum,
+                                                                customerOrderDeliveryDTO.devileryNum,
+                                                                deliveryStatus,
+                                                                destiNatuinDeliveryStatus
+
+                                                        );
+
                                                     }
 
                                                     public function getDeliveryActionLabel(customerOrderDeliveryDTO:Object) : String {
@@ -488,6 +518,15 @@
          */
         private function onfindDeliveryByOrderNumberResult(event:ResultEvent):void {
             deliverySummaryDataGrid.dataProvider = event.result;
+        }
+
+
+        /**
+         * Handle obtain result.
+         * @param event event with result
+         */
+        private function onFireDeliveryTransitionResult(event:ResultEvent):void {
+            Alert.show("todo reread " + event.result , "info");
         }
 
 

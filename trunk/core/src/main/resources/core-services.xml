@@ -606,6 +606,7 @@
                 <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
                 <constructor-arg index="1" ref="customerOrderService"/>
                 <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
+                <constructor-arg index="3" ref="orderStateManager"/>
             </bean>
         </property>
     </bean>
