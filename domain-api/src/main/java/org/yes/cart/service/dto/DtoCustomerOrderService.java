@@ -19,6 +19,7 @@ package org.yes.cart.service.dto;
 import org.yes.cart.domain.dto.CustomerOrderDTO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDTO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO;
+import org.yes.cart.domain.misc.Result;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 
@@ -33,13 +34,28 @@ import java.util.List;
 public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrderDTO> {
 
     /**
+     * Fire transition for single delivery. This method may lead to
+     * change status for whole order , not only for single delivery.
+     *
+     *
+     * @param orderNum unique order number. not pk value.
+     * @param deliveryNum unique delivery number in order scope. not pk value.
+     * @param currentStatus from status
+     * @param destinationStatus to status
+     * @return result object
+     *
+     */
+    Result fireDeliveryTransition(String orderNum, String deliveryNum, String currentStatus, String destinationStatus)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+    /**
      * Get list of delivery details for given order number.
      * @param orderNum order number
      * @return list of delivery details.
      * @throws UnmappedInterfaceException in case of dto mapping error
      * @throws UnableToCreateInstanceException  in case of dto mapping error
      */
-    List<CustomerOrderDeliveryDetailDTO> findDeliveryDetailsByOrderNumber(final String orderNum)
+    List<CustomerOrderDeliveryDetailDTO> findDeliveryDetailsByOrderNumber(String orderNum)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
@@ -51,7 +67,7 @@ public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrder
      * @throws UnmappedInterfaceException in case of dto mapping error
      * @throws UnableToCreateInstanceException  in case of dto mapping error
      */
-    List<CustomerOrderDeliveryDTO> findDeliveryByOrderNumber(final String orderNum)
+    List<CustomerOrderDeliveryDTO> findDeliveryByOrderNumber(String orderNum)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
