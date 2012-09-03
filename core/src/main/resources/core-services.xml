@@ -1067,7 +1067,7 @@
                 <entry key="evt.release.to.pack"           value-ref="releaseToPackOrderEventHandler"/>
                 <entry key="evt.packing.complete"          value-ref="packCompleteOrderEventHandler"/>
                 <entry key="evt.release.to.shipment"       value-ref="releaseToShipmentOrderEventHandler"/>
-                <entry key="evt.shipment.complete"         value-ref="releaseToShipmentOrderEventHandler"/>
+                <entry key="evt.shipment.complete"         value-ref="shipmentCompleteOrderEventHandler"/>
                 <entry key="evt.order.cancel.refund"       value-ref="cancelOrderWithRefundOrderEventHandler"/>
             </map>
         </constructor-arg>
