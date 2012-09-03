@@ -45,8 +45,7 @@ public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrder
      * @return result object
      *
      */
-    Result fireDeliveryTransition(String orderNum, String deliveryNum, String currentStatus, String destinationStatus)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    Result updateDeliveryStatus(String orderNum, String deliveryNum, String currentStatus, String destinationStatus);
 
     /**
      * Get list of delivery details for given order number.

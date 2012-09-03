@@ -110,9 +110,8 @@ public class DtoCustomerOrderServiceImpl
     /**
      * {@inheritDoc}
      */
-    public Result fireDeliveryTransition(final String orderNum, final String deliveryNum,
-                                         final String currentStatus, final String destinationStatus)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public Result updateDeliveryStatus(final String orderNum, final String deliveryNum,
+                                       final String currentStatus, final String destinationStatus) {
 
         final CustomerOrder order = getService().findSingleByCriteria(Restrictions.eq("ordernum", orderNum));
 
@@ -129,29 +128,30 @@ public class DtoCustomerOrderServiceImpl
                     return new Result("DL-0003", "Order with number [" + orderNum + "] delivery number [" + deliveryNum + "] in [" + delivery.getDeliveryStatus() + "] state, but required [" + currentStatus + "]. Updated by [" + order.getUpdatedBy() + "]",
                             "error.delivery.in.wrong.state", orderNum, deliveryNum, delivery.getDeliveryStatus(), currentStatus, order.getUpdatedBy());
                 } else {
+                    
                     try {
+                        
+                        final boolean needToPersist;
 
                         if (CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED.equals(currentStatus) &&
                                 CustomerOrderDelivery.DELIVERY_STATUS_PACKING.equals(destinationStatus)) {
 
-
-                            orderStateManager.fireTransition(new OrderEventImpl(OrderStateManager.EVT_RELEASE_TO_PACK, order, delivery));
+                            needToPersist = orderStateManager.fireTransition(new OrderEventImpl(OrderStateManager.EVT_RELEASE_TO_PACK, order, delivery));
 
                         } else if (CustomerOrderDelivery.DELIVERY_STATUS_PACKING.equals(currentStatus) &&
                                 CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY.equals(destinationStatus)) {
 
-                            orderStateManager.fireTransition(new OrderEventImpl(OrderStateManager.EVT_PACK_COMPLETE, order, delivery));
+                            needToPersist = orderStateManager.fireTransition(new OrderEventImpl(OrderStateManager.EVT_PACK_COMPLETE, order, delivery));
 
                         } else if (CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY.equals(currentStatus) &&
                                 CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS.equals(destinationStatus)) {
 
-                            orderStateManager.fireTransition(new OrderEventImpl(OrderStateManager.EVT_RELEASE_TO_SHIPMENT, order, delivery));
+                            needToPersist = orderStateManager.fireTransition(new OrderEventImpl(OrderStateManager.EVT_RELEASE_TO_SHIPMENT, order, delivery));
 
                         } else if (CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS.equals(currentStatus) &&
                                 CustomerOrderDelivery.DELIVERY_STATUS_SHIPPED.equals(destinationStatus)) {
 
-                            orderStateManager.fireTransition(new OrderEventImpl(OrderStateManager.EVT_SHIPMENT_COMPLETE, order, delivery));
-
+                            needToPersist = orderStateManager.fireTransition(new OrderEventImpl(OrderStateManager.EVT_SHIPMENT_COMPLETE, order, delivery));
 
                         } else {
 
@@ -160,6 +160,11 @@ public class DtoCustomerOrderServiceImpl
 
                         }
 
+                        if (needToPersist) {
+
+                            getService().update(order);
+
+                        }
 
                         return new Result(Result.OK, null);
 

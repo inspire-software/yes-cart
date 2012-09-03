@@ -82,12 +82,11 @@ public class RemoteCustomerOrderServiceImpl
     }
 
     /** {@inheritDoc} */
-    public Result fireDeliveryTransition(final String orderNum, final String deliveryNum,
-                                         final String currentStatus, final String destinationStatus)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public Result updateDeliveryStatus(final String orderNum, final String deliveryNum,
+                                       final String currentStatus, final String destinationStatus) {
 
         return ((DtoCustomerOrderService) getGenericDTOService())
-                .fireDeliveryTransition(orderNum, deliveryNum, currentStatus, destinationStatus);
+                .updateDeliveryStatus(orderNum, deliveryNum, currentStatus, destinationStatus);
 
     }
 

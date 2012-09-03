@@ -37,8 +37,8 @@
                    result="onfindDeliveryByOrderNumberResult(event)"
                    fault="onRpcMethodFault(event)"/>
 
-        <mx:method id="fireDeliveryTransition" name="fireDeliveryTransition"
-                   result="onFireDeliveryTransitionResult(event)"
+        <mx:method id="updateDeliveryStatus" name="updateDeliveryStatus"
+                   result="onUpdateDeliveryStatusResult(event)"
                    fault="onRpcMethodFault(event)"/>
 
 
@@ -312,7 +312,7 @@
 
 
 
-                                                        outerDocument.remoteCustomerOrderService.fireDeliveryTransition(
+                                                        outerDocument.remoteCustomerOrderService.updateDeliveryStatus(
 
                                                                 customerOrderDeliveryDTO.ordernum,
                                                                 customerOrderDeliveryDTO.devileryNum,
@@ -525,7 +525,7 @@
          * Handle obtain result.
          * @param event event with result
          */
-        private function onFireDeliveryTransitionResult(event:ResultEvent):void {
+        private function onUpdateDeliveryStatusResult(event:ResultEvent):void {
             Alert.show("todo reread " + event.result , "info");
         }
 
