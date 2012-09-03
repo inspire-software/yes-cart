@@ -213,18 +213,16 @@
                                         />
                                 <mx:DataGridColumn showDataTips="true"
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='discount')"
-
+                                                   labelFunction="discountLabelFunction"
                                         />
-                                <!-- todo func to calculate -->
                                 <mx:DataGridColumn showDataTips="true"
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='qty')"
                                                    dataField="qty"
                                         />
                                 <mx:DataGridColumn showDataTips="true"
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='total')"
-
+                                                   labelFunction="lineTotalLabelFunction"
                                         />
-                                <!-- todo funct to calculate -->
                                 <mx:DataGridColumn showDataTips="true"
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='deliveryNum')"
                                                    dataField="deliveryNum"
@@ -269,6 +267,7 @@
                             <!-- todo function -->
                             <mx:DataGridColumn showDataTips="true"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='itemsCost')"
+                                               labelFunction="itemsCostInDeliveryLabelFunction"
 
                                     />
                             <!-- todo func -->
@@ -293,10 +292,10 @@
                                                     <![CDATA[
                                                     import mx.controls.Alert;
 
-                                                    public function onDeliveryActionButtonClick(customerOrderDeliveryDTO:Object) : void {
+                                                    public function onDeliveryActionButtonClick(customerOrderDeliveryDTO:Object):void {
                                                         //Alert.show("current status !!! is " + customerOrderDeliveryDTO.deliveryStatus);
 
-                                                        var destiNatuinDeliveryStatus :  String;
+                                                        var destiNatuinDeliveryStatus:String;
 
                                                         var deliveryStatus:String = customerOrderDeliveryDTO.deliveryStatus;
 
@@ -311,7 +310,6 @@
                                                         }
 
 
-
                                                         outerDocument.remoteCustomerOrderService.updateDeliveryStatus(
 
                                                                 customerOrderDeliveryDTO.ordernum,
@@ -323,9 +321,9 @@
 
                                                     }
 
-                                                    public function getDeliveryActionLabel(customerOrderDeliveryDTO:Object) : String {
+                                                    public function getDeliveryActionLabel(customerOrderDeliveryDTO:Object):String {
                                                         var deliveryStatus:String = customerOrderDeliveryDTO.deliveryStatus;
-                                                        deliveryActionButton.visible =  deliveryActionButton.includeInLayout = true;
+                                                        deliveryActionButton.visible = deliveryActionButton.includeInLayout = true;
                                                         if (deliveryStatus == "ds.inventory.allocated") {
                                                             return resourceManager.getString('CustomerOrderPanel', 'action.pack.delivery');
                                                         } else if (deliveryStatus == "ds.packing") {
@@ -335,17 +333,16 @@
                                                         } else if (deliveryStatus == "ds.shipment.inprogress") {
                                                             return resourceManager.getString('CustomerOrderPanel', 'action.shipped');
                                                         }
-                                                        deliveryActionButton.visible =  deliveryActionButton.includeInLayout = false;
+                                                        deliveryActionButton.visible = deliveryActionButton.includeInLayout = false;
                                                         return "NA";
                                                     }
-
                                                     ]]>
                                                 </mx:Script>
 
                                                 <mx:Button width="285" id="deliveryActionButton"
                                                            label="{getDeliveryActionLabel(data)}"
                                                            click="callLater(onDeliveryActionButtonClick, new Array(data))"
-                                                           >
+                                                        >
                                                 </mx:Button>
                                             </mx:HBox>
                                             <mx:HBox horizontalAlign="right">
@@ -437,6 +434,9 @@
     </mx:VBox>
     <mx:ArrayCollection id="statuses"/>
 
+    <mx:NumberFormatter id="moneyFormat"
+                        precision="2"/>
+
 
     <mx:Script><![CDATA[
         import mx.events.ListEvent;
@@ -526,7 +526,7 @@
          * @param event event with result
          */
         private function onUpdateDeliveryStatusResult(event:ResultEvent):void {
-            Alert.show("todo reread " + event.result , "info");
+            Alert.show("todo reread " + event.result, "info");
         }
 
 
@@ -575,6 +575,48 @@
             obj.code = status;
             obj.name = resourceManager.getString('Common', status);
             return obj;
+        }
+
+        /**
+         * Get discount .
+         * @param item
+         * @param column
+         * @return
+         */
+        private function discountLabelFunction(item:Object, column:DataGridColumn):String {
+            return "" + moneyFormat.format(item.listPrice - item.invoicePrice);
+        }
+
+
+        private function itemsCostInDeliveryLabelFunction(item:Object, column:DataGridColumn):String {
+            var sum:Number = 0;
+            try {
+
+                for (var i:int = 0; i < item.detail.length; i++) {
+
+                    sum = sum + (item.detail[i].qty * item.detail[i].invoicePrice);
+
+
+                }
+
+            } catch (e:Error) {
+                Alert.show("" + e);
+            }
+
+
+            return moneyFormat.format(sum);
+
+        }
+
+
+        /**
+         * Get discount .
+         * @param item
+         * @param column
+         * @return
+         */
+        private function lineTotalLabelFunction(item:Object, column:DataGridColumn):String {
+            return "" + moneyFormat.format(item.qty * item.invoicePrice);
         }
 
 
