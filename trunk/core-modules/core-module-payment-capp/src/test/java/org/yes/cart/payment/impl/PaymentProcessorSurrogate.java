@@ -431,11 +431,11 @@ public class PaymentProcessorSurrogate {
 
         if (payment.getTransactionReferenceId() == null) {
             // can be set by external payment gateway
-            payment.setTransactionReferenceId(delivery.getDevileryNum());
+            payment.setTransactionReferenceId(delivery.getDeliveryNum());
         }
 
 
-        payment.setOrderShipment(singlePay ? order.getOrdernum() : delivery.getDevileryNum());
+        payment.setOrderShipment(singlePay ? order.getOrdernum() : delivery.getDeliveryNum());
 
         fillPaymentItems(delivery, payment);
         fillPaymentShipment(delivery, payment);

@@ -147,7 +147,7 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
                         toReserve,
                         "PendingOrderEventHandlerImpl. Can not allocate total qty = " + det.getQty()
                         + " for sku = " + productSku.getCode()
-                        + " in delivery " + orderDelivery.getDevileryNum());
+                        + " in delivery " + orderDelivery.getDeliveryNum());
             }
         }
         orderDelivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);

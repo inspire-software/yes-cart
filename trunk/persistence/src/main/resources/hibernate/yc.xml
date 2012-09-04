@@ -3960,7 +3960,7 @@ public void setRangeList(final RangeList rangeList) {
     public CustomerOrderDelivery getCustomerOrderDelivery(final String deliveryNumber) {
         if (deliveryNumber != null) {
             for (CustomerOrderDelivery delivery : getDelivery()) {
-                if (deliveryNumber.equals(delivery.getDevileryNum())) {
+                if (deliveryNumber.equals(delivery.getDeliveryNum())) {
                     return delivery;
                 }
             }
@@ -4167,7 +4167,7 @@ public void setRangeList(final RangeList rangeList) {
     }
                 ]]>
             </meta>
-            <property name="devileryNum" type="string" length="16" not-null="true">
+            <property name="deliveryNum" type="string" length="16" not-null="true">
                 <column name="DELIVERYNUM">
                     <comment>Order contract in case of splited orders (XXX-1,XXX-2, etc).
                         Delivery contract XXX-2-DDD1,XXX-2-DDD2, XXX-2-DDD3, where XXX order num, DDD delivery num.

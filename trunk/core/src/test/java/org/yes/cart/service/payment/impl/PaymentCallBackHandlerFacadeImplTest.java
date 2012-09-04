@@ -73,8 +73,8 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
                 }},
                 "testExtFormPaymentGatewayLabel");
         customerOrder = customerOrderService.findByGuid(customerOrder.getCartGuid());
-        assertEquals("Order must be in ORDER_STATUS_NONE state",
-                CustomerOrder.ORDER_STATUS_IN_PROGRESS,
+        assertEquals("Order must be in ORDER_STATUS_PARTIALLY_SHIPPED state",  //because one of the delivery is electronic delivery
+                CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED,
                 customerOrder.getOrderStatus());
     }
 }

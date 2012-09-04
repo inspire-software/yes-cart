@@ -57,7 +57,7 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     private BigDecimal listPrice;
 
 
-    @DtoField(value = "delivery.devileryNum", readOnly = true)
+    @DtoField(value = "delivery.deliveryNum", readOnly = true)
     private String deliveryNum;
 
     @DtoField(value = "delivery.deliveryStatus", readOnly = true)

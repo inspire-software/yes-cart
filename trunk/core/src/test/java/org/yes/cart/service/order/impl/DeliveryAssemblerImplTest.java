@@ -145,7 +145,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         assertTrue(customerOrder.getCustomerorderId() > 0);
         for (CustomerOrderDelivery cod : customerOrder.getDelivery()) {
             assertTrue(cod.getCustomerOrderDeliveryId() > 0);
-            assertNotNull(cod.getDevileryNum());
+            assertNotNull(cod.getDeliveryNum());
             if (CustomerOrderDelivery.ELECTONIC_DELIVERY_GROUP.equals(cod.getDeliveryGroup())) {
                 assertEquals(BigDecimal.ZERO, cod.getPrice());
             } else {

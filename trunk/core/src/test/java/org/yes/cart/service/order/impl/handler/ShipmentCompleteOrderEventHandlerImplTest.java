@@ -97,7 +97,7 @@ public class ShipmentCompleteOrderEventHandlerImplTest extends AbstractEventHand
         assertEquals(new BigDecimal("7.00"), skuWarehouse.getQuantity().setScale(Constants.DEFAULT_SCALE));
         List<CustomerOrderPayment> rezList = customerOrderPaymentService.findBy(
                 customerOrder.getOrdernum(),
-                delivery.getDevileryNum(),
+                delivery.getDeliveryNum(),
                 Payment.PAYMENT_STATUS_FAILED,
                 PaymentGateway.CAPTURE);
         assertEquals(1, rezList.size());
@@ -112,7 +112,7 @@ public class ShipmentCompleteOrderEventHandlerImplTest extends AbstractEventHand
         assertEquals(new BigDecimal("0.00"), skuWarehouse.getQuantity().setScale(Constants.DEFAULT_SCALE));
         rezList = customerOrderPaymentService.findBy(
                 customerOrder.getOrdernum(),
-                delivery.getDevileryNum(),
+                delivery.getDeliveryNum(),
                 Payment.PAYMENT_STATUS_OK,
                 PaymentGateway.CAPTURE);
         assertEquals(1, rezList.size());

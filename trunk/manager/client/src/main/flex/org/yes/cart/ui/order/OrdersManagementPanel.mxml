@@ -250,7 +250,7 @@
                                     />
                             <mx:DataGridColumn showDataTips="true"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='deliveryNum')"
-                                               dataField="devileryNum"
+                                               dataField="deliveryNum"
                                     />
                             <mx:DataGridColumn showDataTips="true"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='refNo')"
@@ -262,23 +262,22 @@
                                     />
                             <mx:DataGridColumn showDataTips="true"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='itemsInfo')"
+                                               labelFunction="itemsInfoLabelFunction"
 
                                     />
-                            <!-- todo function -->
                             <mx:DataGridColumn showDataTips="true"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='itemsCost')"
                                                labelFunction="itemsCostInDeliveryLabelFunction"
 
                                     />
-                            <!-- todo func -->
                             <mx:DataGridColumn showDataTips="true"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='shipmentCost')"
                                                dataField="price"
                                     />
                             <mx:DataGridColumn showDataTips="true"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='deliveryTotal')"
+                                               labelFunction="deliveryTotalLabelFunction"
                                     />
-                            <!-- todo func -->
                             <mx:DataGridColumn showDataTips="true"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='deliveryAddr')"
                                     />
@@ -293,7 +292,6 @@
                                                     import mx.controls.Alert;
 
                                                     public function onDeliveryActionButtonClick(customerOrderDeliveryDTO:Object):void {
-                                                        //Alert.show("current status !!! is " + customerOrderDeliveryDTO.deliveryStatus);
 
                                                         var destiNatuinDeliveryStatus:String;
 
@@ -313,7 +311,7 @@
                                                         outerDocument.remoteCustomerOrderService.updateDeliveryStatus(
 
                                                                 customerOrderDeliveryDTO.ordernum,
-                                                                customerOrderDeliveryDTO.devileryNum,
+                                                                customerOrderDeliveryDTO.deliveryNum,
                                                                 deliveryStatus,
                                                                 destiNatuinDeliveryStatus
 
@@ -415,7 +413,7 @@
                             <mx:FormItem label="@Resource(bundle='CustomerOrderPanel',key='totalOrdersAmount')">
                                 <mx:Label text="0"/>
                             </mx:FormItem>
-                            <!-- todo dynamyc customrs -->
+                            <!-- todo dynamic attributesof customer -->
                         </mx:Form>
                         <mx:Form>
                             <mx:FormItem label="dynamic attributes">
@@ -587,25 +585,64 @@
             return "" + moneyFormat.format(item.listPrice - item.invoicePrice);
         }
 
+        /**
+         * Create list of sku code - sku name in delivery. 
+         * @param item
+         * @param column
+         * @return
+         */
+        private function itemsInfoLabelFunction(item:Object, column:DataGridColumn):String {
+            try {
+                var rez:String = "";
+                for (var i:int = 0; i < item.detail.length; i++) {
+                    if (item.deliveryNum == item.detail[i].deliveryNum) {
+                        rez += item.detail[i].skuCode + " - " + item.detail[i].skuName + "\n";
+                    }
+                }
+                return rez;
 
-        private function itemsCostInDeliveryLabelFunction(item:Object, column:DataGridColumn):String {
-            var sum:Number = 0;
+            } catch(e:Error) {
+                return "" + e;
+            }
+            return "x3";
+        }
+
+
+        /**
+         * Total cost of delivery including ites and shipment price.
+         * @param item
+         * @param column
+         * @return
+         */
+        public function deliveryTotalLabelFunction(item:Object, column:DataGridColumn):String {
             try {
 
+                var sum:Number = Number(item.price);
                 for (var i:int = 0; i < item.detail.length; i++) {
-
-                    sum = sum + (item.detail[i].qty * item.detail[i].invoicePrice);
-
-
+                    sum += Number((item.detail[i].qty * item.detail[i].invoicePrice).toFixed(2));
                 }
-
-            } catch (e:Error) {
-                Alert.show("" + e);
+                return sum.toFixed(2);
+            } catch(e:Error) {
+                return "" + e;
             }
+            return "x3";
 
 
-            return moneyFormat.format(sum);
+        }
+        
+        
+        public function itemsCostInDeliveryLabelFunction(item:Object, column:DataGridColumn):String {
+            try {
+                var sum:Number = 0;
+                for (var i:int = 0; i < item.detail.length; i++) {
+                    sum += Number((item.detail[i].qty * item.detail[i].invoicePrice).toFixed(2));
+                }
+                return sum.toFixed(2);
 
+            } catch(e:Error) {
+                return "" + e;
+            }
+            return "blya";
         }
 
 

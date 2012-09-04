@@ -79,7 +79,7 @@ public class DtoCustomerOrderServiceImplTezt extends BaseCoreDBTestCase {
         final Set deliveryNumsSet = new HashSet();
         for (CustomerOrderDeliveryDTO dto : shipments) {
             assertTrue("At lest one item in shipment must be present", !dto.getDetail().isEmpty());
-            deliveryNumsSet.add(dto.getDevileryNum());
+            deliveryNumsSet.add(dto.getDeliveryNum());
         }
         assertEquals(4, deliveryNumsSet.size());
     }

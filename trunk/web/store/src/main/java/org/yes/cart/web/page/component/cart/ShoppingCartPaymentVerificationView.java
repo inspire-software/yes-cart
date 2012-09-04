@@ -136,7 +136,7 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
 
                         customerOrderDeliveryListItem
                                 .add(
-                                        new Label(DELIVERY_CODE, delivery.getDevileryNum())
+                                        new Label(DELIVERY_CODE, delivery.getDeliveryNum())
                                 )
                                 .add(
 

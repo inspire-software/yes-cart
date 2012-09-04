@@ -48,7 +48,7 @@ public abstract class CappPaymentModuleDBTestCase extends BasePaymentModuleDBTes
         CustomerOrderDelivery delivery = new CustomerOrderDeliveryEntity();
         delivery.setCarrierSla(createCarrierSla());
         delivery.setPrice(delivery.getCarrierSla().getPrice());
-        delivery.setDevileryNum(orderNum + "-0");
+        delivery.setDeliveryNum(orderNum + "-0");
         delivery.getDetail().add(
                 createDeliveryItem("product sku 1. Three items in delivery 0", "skuCode1", new BigDecimal("12.12"), new BigDecimal("3"))
         );
@@ -62,7 +62,7 @@ public abstract class CappPaymentModuleDBTestCase extends BasePaymentModuleDBTes
         CustomerOrderDelivery delivery = new CustomerOrderDeliveryEntity();
         delivery.setCarrierSla(createCarrierSla());
         delivery.setPrice(delivery.getCarrierSla().getPrice());
-        delivery.setDevileryNum(orderNum + "-1");
+        delivery.setDeliveryNum(orderNum + "-1");
         delivery.getDetail().add(
                 createDeliveryItem("product sku 1. Two items in delivery 1", "skuCode2", new BigDecimal("25.00"), new BigDecimal("2"))
         );

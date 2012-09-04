@@ -99,7 +99,7 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
                         toAllocate,
                         "ProcessAllocationOrderEventHandlerImpl. Can not allocate total qty = " + det.getQty()
                                 + " for sku = " + productSku.getCode()
-                                + " in delivery " + orderDelivery.getDevileryNum());
+                                + " in delivery " + orderDelivery.getDeliveryNum());
             }
         }
         orderDelivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED);
