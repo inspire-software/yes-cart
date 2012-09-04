@@ -103,7 +103,7 @@ public class OrderEventImpl  implements OrderEvent {
                 + "eventId='" + eventId + '\''
                 + ", customerOrder=" +  (customerOrder == null ? "" : customerOrder.getOrdernum())
                 + " order status " + (customerOrder == null ? "" : customerOrder.getOrderStatus() )
-                + (customerOrderDelivery==null?"":", customerOrderDelivery=" + customerOrderDelivery.getDevileryNum() + " delivery status = " + customerOrderDelivery.getDeliveryStatus()) +
+                + (customerOrderDelivery==null?"":", customerOrderDelivery=" + customerOrderDelivery.getDeliveryNum() + " delivery status = " + customerOrderDelivery.getDeliveryStatus()) +
                 '}';
     }
 }

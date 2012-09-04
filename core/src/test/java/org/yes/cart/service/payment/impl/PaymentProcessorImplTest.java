@@ -99,7 +99,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
         assertEquals(Payment.PAYMENT_STATUS_OK, paymentProcessor.authorize(customerOrder, createParametersMap()));
         assertEquals(1, customerOrderPaymentService.findBy(
                 customerOrder.getOrdernum(),
-                delivery0.getDevileryNum(),
+                delivery0.getDeliveryNum(),
                 Payment.PAYMENT_STATUS_OK,
                 PaymentGateway.AUTH).size());
 
@@ -160,9 +160,9 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
         assertEquals(2, customerOrderPaymentService.findBy(
                 customerOrder.getOrdernum(), null, Payment.PAYMENT_STATUS_OK, null).size());
         assertEquals(1, customerOrderPaymentService.findBy(
-                customerOrder.getOrdernum(), delivery0.getDevileryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.AUTH).size());
+                customerOrder.getOrdernum(), delivery0.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.AUTH).size());
         assertEquals(1, customerOrderPaymentService.findBy(
-                customerOrder.getOrdernum(), delivery1.getDevileryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.AUTH).size());
+                customerOrder.getOrdernum(), delivery1.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.AUTH).size());
     }
 
     /**
@@ -207,7 +207,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
                     1,
                     customerOrderPaymentService.findBy(
                             customerOrder.getOrdernum(),
-                            delivery0.getDevileryNum(),
+                            delivery0.getDeliveryNum(),
                             Payment.PAYMENT_STATUS_FAILED,
                             PaymentGateway.AUTH).size()
             );
@@ -355,19 +355,19 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
                 customerOrder.getOrdernum(), null, null, null).size());
         assertEquals(1, customerOrderPaymentService.findBy(
                 customerOrder.getOrdernum(),
-                delivery0.getDevileryNum(),
+                delivery0.getDeliveryNum(),
                 Payment.PAYMENT_STATUS_OK,
                 PaymentGateway.AUTH).size());
-        assertEquals(Payment.PAYMENT_STATUS_OK, paymentProcessor.shipmentComplete(customerOrder, delivery0.getDevileryNum()));
+        assertEquals(Payment.PAYMENT_STATUS_OK, paymentProcessor.shipmentComplete(customerOrder, delivery0.getDeliveryNum()));
         assertEquals(1, customerOrderPaymentService.findBy(
                 customerOrder.getOrdernum(),
-                delivery0.getDevileryNum(),
+                delivery0.getDeliveryNum(),
                 Payment.PAYMENT_STATUS_OK,
                 PaymentGateway.CAPTURE).size());
         //total two records auth and capture
         assertEquals(2, customerOrderPaymentService.findBy(
                 customerOrder.getOrdernum(),
-                delivery0.getDevileryNum(),
+                delivery0.getDeliveryNum(),
                 Payment.PAYMENT_STATUS_OK,
                 null).size());
     }
@@ -391,19 +391,19 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
         assertEquals(2, customerOrderPaymentService.findBy(
                 customerOrder.getOrdernum(), null, Payment.PAYMENT_STATUS_OK, null).size());
         assertEquals(1, customerOrderPaymentService.findBy(
-                customerOrder.getOrdernum(), delivery0.getDevileryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.AUTH).size());
+                customerOrder.getOrdernum(), delivery0.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.AUTH).size());
         assertEquals(1, customerOrderPaymentService.findBy(
-                customerOrder.getOrdernum(), delivery1.getDevileryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.AUTH).size());
-        assertEquals(Payment.PAYMENT_STATUS_OK, paymentProcessor.shipmentComplete(customerOrder, delivery1.getDevileryNum()));
+                customerOrder.getOrdernum(), delivery1.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.AUTH).size());
+        assertEquals(Payment.PAYMENT_STATUS_OK, paymentProcessor.shipmentComplete(customerOrder, delivery1.getDeliveryNum()));
         assertEquals(2, customerOrderPaymentService.findBy(
-                customerOrder.getOrdernum(), delivery1.getDevileryNum(), Payment.PAYMENT_STATUS_OK, null).size());
+                customerOrder.getOrdernum(), delivery1.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, null).size());
         assertEquals(1, customerOrderPaymentService.findBy(
-                customerOrder.getOrdernum(), delivery1.getDevileryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.CAPTURE).size());
-        assertEquals(Payment.PAYMENT_STATUS_OK, paymentProcessor.shipmentComplete(customerOrder, delivery0.getDevileryNum()));
+                customerOrder.getOrdernum(), delivery1.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.CAPTURE).size());
+        assertEquals(Payment.PAYMENT_STATUS_OK, paymentProcessor.shipmentComplete(customerOrder, delivery0.getDeliveryNum()));
         assertEquals(2, customerOrderPaymentService.findBy(
-                customerOrder.getOrdernum(), delivery0.getDevileryNum(), Payment.PAYMENT_STATUS_OK, null).size());
+                customerOrder.getOrdernum(), delivery0.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, null).size());
         assertEquals(1, customerOrderPaymentService.findBy(
-                customerOrder.getOrdernum(), delivery0.getDevileryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.CAPTURE).size());
+                customerOrder.getOrdernum(), delivery0.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.CAPTURE).size());
         assertEquals(4, customerOrderPaymentService.findBy( //two auth and two captures
                 customerOrder.getOrdernum(), null, Payment.PAYMENT_STATUS_OK, null).size());
         assertEquals(2, customerOrderPaymentService.findBy( //two captures
@@ -428,20 +428,20 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
         assertEquals(2, customerOrderPaymentService.findBy(
                 customerOrder.getOrdernum(), null, Payment.PAYMENT_STATUS_OK, null).size());
         assertEquals(1, customerOrderPaymentService.findBy(
-                customerOrder.getOrdernum(), delivery0.getDevileryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.AUTH).size());
+                customerOrder.getOrdernum(), delivery0.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.AUTH).size());
         assertEquals(1, customerOrderPaymentService.findBy(
-                customerOrder.getOrdernum(), delivery1.getDevileryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.AUTH).size());
+                customerOrder.getOrdernum(), delivery1.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.AUTH).size());
         TestPaymentGatewayImpl.getGatewayConfig().put(TestPaymentGatewayImpl.CAPTURE_FAIL, new PaymentGatewayParameterEntity());
-        assertEquals(Payment.PAYMENT_STATUS_FAILED, paymentProcessor.shipmentComplete(customerOrder, delivery1.getDevileryNum()));
+        assertEquals(Payment.PAYMENT_STATUS_FAILED, paymentProcessor.shipmentComplete(customerOrder, delivery1.getDeliveryNum()));
         TestPaymentGatewayImpl.getGatewayConfig().put(TestPaymentGatewayImpl.CAPTURE_FAIL, null);
-        assertEquals(2, customerOrderPaymentService.findBy(customerOrder.getOrdernum(), delivery1.getDevileryNum(), null, null).size());
+        assertEquals(2, customerOrderPaymentService.findBy(customerOrder.getOrdernum(), delivery1.getDeliveryNum(), null, null).size());
         assertEquals(1, customerOrderPaymentService.findBy(
-                customerOrder.getOrdernum(), delivery1.getDevileryNum(), Payment.PAYMENT_STATUS_FAILED, PaymentGateway.CAPTURE).size());
-        assertEquals(Payment.PAYMENT_STATUS_OK, paymentProcessor.shipmentComplete(customerOrder, delivery0.getDevileryNum()));
+                customerOrder.getOrdernum(), delivery1.getDeliveryNum(), Payment.PAYMENT_STATUS_FAILED, PaymentGateway.CAPTURE).size());
+        assertEquals(Payment.PAYMENT_STATUS_OK, paymentProcessor.shipmentComplete(customerOrder, delivery0.getDeliveryNum()));
         assertEquals(2, customerOrderPaymentService.findBy(
-                customerOrder.getOrdernum(), delivery0.getDevileryNum(), Payment.PAYMENT_STATUS_OK, null).size());
+                customerOrder.getOrdernum(), delivery0.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, null).size());
         assertEquals(1, customerOrderPaymentService.findBy(
-                customerOrder.getOrdernum(), delivery0.getDevileryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.CAPTURE).size());
+                customerOrder.getOrdernum(), delivery0.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.CAPTURE).size());
         assertEquals(3, customerOrderPaymentService.findBy( //two auth and one capture
                 customerOrder.getOrdernum(), null, Payment.PAYMENT_STATUS_OK, null).size());
         assertEquals(4, customerOrderPaymentService.findBy( //two auth and two capture
@@ -466,8 +466,8 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
             assertEquals(Payment.PAYMENT_STATUS_OK, paymentProcessor.authorize(customerOrder, createParametersMap()));
             assertEquals(2, customerOrderPaymentService.findBy(
                     customerOrder.getOrdernum(), null, Payment.PAYMENT_STATUS_OK, PaymentGateway.AUTH_CAPTURE).size());
-            assertEquals(Payment.PAYMENT_STATUS_OK, paymentProcessor.shipmentComplete(customerOrder, delivery1.getDevileryNum()));
-            assertEquals(Payment.PAYMENT_STATUS_OK, paymentProcessor.shipmentComplete(customerOrder, delivery0.getDevileryNum()));
+            assertEquals(Payment.PAYMENT_STATUS_OK, paymentProcessor.shipmentComplete(customerOrder, delivery1.getDeliveryNum()));
+            assertEquals(Payment.PAYMENT_STATUS_OK, paymentProcessor.shipmentComplete(customerOrder, delivery0.getDeliveryNum()));
             assertEquals(2, customerOrderPaymentService.findBy(
                     customerOrder.getOrdernum(), null, null, null).size());
         } finally {
@@ -487,19 +487,19 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
         assertEquals(2, customerOrderPaymentService.findBy(
                 customerOrder.getOrdernum(), null, Payment.PAYMENT_STATUS_OK, null).size());
         assertEquals(1, customerOrderPaymentService.findBy(
-                customerOrder.getOrdernum(), delivery0.getDevileryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.AUTH).size());
+                customerOrder.getOrdernum(), delivery0.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.AUTH).size());
         assertEquals(1, customerOrderPaymentService.findBy(
-                customerOrder.getOrdernum(), delivery1.getDevileryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.AUTH).size());
-        assertEquals(Payment.PAYMENT_STATUS_OK, paymentProcessor.shipmentComplete(customerOrder, delivery1.getDevileryNum()));
+                customerOrder.getOrdernum(), delivery1.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.AUTH).size());
+        assertEquals(Payment.PAYMENT_STATUS_OK, paymentProcessor.shipmentComplete(customerOrder, delivery1.getDeliveryNum()));
         assertEquals(2, customerOrderPaymentService.findBy(
-                customerOrder.getOrdernum(), delivery1.getDevileryNum(), Payment.PAYMENT_STATUS_OK, null).size());
+                customerOrder.getOrdernum(), delivery1.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, null).size());
         assertEquals(1, customerOrderPaymentService.findBy(
-                customerOrder.getOrdernum(), delivery1.getDevileryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.CAPTURE).size());
-        assertEquals(Payment.PAYMENT_STATUS_OK, paymentProcessor.shipmentComplete(customerOrder, delivery0.getDevileryNum()));
+                customerOrder.getOrdernum(), delivery1.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.CAPTURE).size());
+        assertEquals(Payment.PAYMENT_STATUS_OK, paymentProcessor.shipmentComplete(customerOrder, delivery0.getDeliveryNum()));
         assertEquals(2, customerOrderPaymentService.findBy(
-                customerOrder.getOrdernum(), delivery0.getDevileryNum(), Payment.PAYMENT_STATUS_OK, null).size());
+                customerOrder.getOrdernum(), delivery0.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, null).size());
         assertEquals(1, customerOrderPaymentService.findBy(
-                customerOrder.getOrdernum(), delivery0.getDevileryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.CAPTURE).size());
+                customerOrder.getOrdernum(), delivery0.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.CAPTURE).size());
         assertEquals(4, customerOrderPaymentService.findBy( //two auth and two captures
                 customerOrder.getOrdernum(), null, Payment.PAYMENT_STATUS_OK, null).size());
         assertEquals(2, customerOrderPaymentService.findBy( //two captures
@@ -507,9 +507,9 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
         //cancel order
         assertEquals(Payment.PAYMENT_STATUS_OK, paymentProcessor.cancelOrder(customerOrder));
         assertEquals(1, customerOrderPaymentService.findBy(
-                customerOrder.getOrdernum(), delivery0.getDevileryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.VOID_CAPTURE).size());
+                customerOrder.getOrdernum(), delivery0.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.VOID_CAPTURE).size());
         assertEquals(1, customerOrderPaymentService.findBy(
-                customerOrder.getOrdernum(), delivery1.getDevileryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.VOID_CAPTURE).size());
+                customerOrder.getOrdernum(), delivery1.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.VOID_CAPTURE).size());
         //TODO test with cancel state wait till customerOrder.setOrderStatus();
     }
 

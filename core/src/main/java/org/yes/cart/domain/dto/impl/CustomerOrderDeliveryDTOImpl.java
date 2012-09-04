@@ -44,8 +44,8 @@ public class CustomerOrderDeliveryDTOImpl implements CustomerOrderDeliveryDTO {
     @DtoField(value = "customerOrderDeliveryId", readOnly = true)
     private long customerOrderDeliveryId;
 
-    @DtoField(value = "devileryNum")
-    private String devileryNum;
+    @DtoField(value = "deliveryNum")
+    private String deliveryNum;
 
     @DtoField(value = "refNo")
     private String refNo;
@@ -112,13 +112,13 @@ public class CustomerOrderDeliveryDTOImpl implements CustomerOrderDeliveryDTO {
     }
 
     /** {@inheritDoc} */
-    public String getDevileryNum() {
-        return devileryNum;
+    public String getDeliveryNum() {
+        return deliveryNum;
     }
 
     /** {@inheritDoc} */
-    public void setDevileryNum(final String devileryNum) {
-        this.devileryNum = devileryNum;
+    public void setDeliveryNum(final String deliveryNum) {
+        this.deliveryNum = deliveryNum;
     }
 
     /** {@inheritDoc} */

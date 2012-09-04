@@ -120,7 +120,7 @@ Discover: 6011111111111117
             //capture on first completed shipment
             Iterator<CustomerOrderDelivery> iter = customerOrder.getDelivery().iterator();
             assertEquals(Payment.PAYMENT_STATUS_OK,
-                    paymentProcessor.shipmentComplete(customerOrder, iter.next().getDevileryNum()));
+                    paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum()));
             assertEquals(1,
                     customerOrderPaymentService.findBy(
                             orderNum,
@@ -129,7 +129,7 @@ Discover: 6011111111111117
                             PaymentGateway.CAPTURE).size());
             //capture on second completed shipment
             assertEquals(Payment.PAYMENT_STATUS_OK,
-                    paymentProcessor.shipmentComplete(customerOrder, iter.next().getDevileryNum()));
+                    paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum()));
             assertEquals(2,
                     customerOrderPaymentService.findBy(
                             orderNum,
@@ -186,7 +186,7 @@ Discover: 6011111111111117
                         PaymentGateway.AUTH).size());
         //capture on first completed shipment
         Iterator<CustomerOrderDelivery> iter = customerOrder.getDelivery().iterator();
-        paymentProcessor.shipmentComplete(customerOrder, iter.next().getDevileryNum());
+        paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum());
         assertEquals(1,
                 customerOrderPaymentService.findBy(
                         orderNum,
@@ -194,7 +194,7 @@ Discover: 6011111111111117
                         Payment.PAYMENT_STATUS_OK,
                         PaymentGateway.CAPTURE).size());
         //capture on second completed shipment
-        paymentProcessor.shipmentComplete(customerOrder, iter.next().getDevileryNum());
+        paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum());
         assertEquals(2,
                 customerOrderPaymentService.findBy(
                         orderNum,

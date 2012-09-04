@@ -106,7 +106,7 @@ public class CyberSourcePaymentGatewayImplTest extends CappPaymentModuleDBTestCa
             //capture on first completed shipment
             Iterator<CustomerOrderDelivery> iter = customerOrder.getDelivery().iterator();
             assertEquals(Payment.PAYMENT_STATUS_OK,
-                    paymentProcessor.shipmentComplete(customerOrder, iter.next().getDevileryNum()));
+                    paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum()));
             assertEquals(1,
                     customerOrderPaymentService.findBy(
                             orderNum,
@@ -115,7 +115,7 @@ public class CyberSourcePaymentGatewayImplTest extends CappPaymentModuleDBTestCa
                             PaymentGateway.CAPTURE).size());
             //capture on second completed shipment
             assertEquals(Payment.PAYMENT_STATUS_OK,
-                    paymentProcessor.shipmentComplete(customerOrder, iter.next().getDevileryNum()));
+                    paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum()));
             assertEquals(2,
                     customerOrderPaymentService.findBy(
                             orderNum,
@@ -156,7 +156,7 @@ public class CyberSourcePaymentGatewayImplTest extends CappPaymentModuleDBTestCa
                         PaymentGateway.AUTH).size());
         //capture on first completed shipment
         Iterator<CustomerOrderDelivery> iter = customerOrder.getDelivery().iterator();
-        paymentProcessor.shipmentComplete(customerOrder, iter.next().getDevileryNum());
+        paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum());
         assertEquals(1,
                 customerOrderPaymentService.findBy(
                         orderNum,
@@ -164,7 +164,7 @@ public class CyberSourcePaymentGatewayImplTest extends CappPaymentModuleDBTestCa
                         Payment.PAYMENT_STATUS_OK,
                         PaymentGateway.CAPTURE).size());
         //capture on second completed shipment
-        paymentProcessor.shipmentComplete(customerOrder, iter.next().getDevileryNum());
+        paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum());
         assertEquals(2,
                 customerOrderPaymentService.findBy(
                         orderNum,

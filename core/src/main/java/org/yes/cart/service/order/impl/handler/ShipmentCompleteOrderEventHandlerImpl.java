@@ -59,11 +59,11 @@ public class ShipmentCompleteOrderEventHandlerImpl implements OrderEventHandler 
             final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(orderEvent.getCustomerOrder().getPgLabel());
 
             final boolean fundCaptured = Payment.PAYMENT_STATUS_OK.equals(
-                    paymentProcessor.shipmentComplete(orderEvent.getCustomerOrder(), orderEvent.getCustomerOrderDelivery().getDevileryNum())
+                    paymentProcessor.shipmentComplete(orderEvent.getCustomerOrder(), orderEvent.getCustomerOrderDelivery().getDeliveryNum())
             );
             if (fundCaptured) {
                 if (LOG.isInfoEnabled()) {
-                    LOG.info(MessageFormat.format("Funds captured for delivery {0}", orderEvent.getCustomerOrderDelivery().getDevileryNum()));
+                    LOG.info(MessageFormat.format("Funds captured for delivery {0}", orderEvent.getCustomerOrderDelivery().getDeliveryNum()));
                 }
                 orderEvent.getCustomerOrderDelivery().setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_SHIPPED);
                 for (CustomerOrderDelivery delivery : orderEvent.getCustomerOrder().getDelivery()) {
@@ -79,7 +79,7 @@ public class ShipmentCompleteOrderEventHandlerImpl implements OrderEventHandler 
                 return true;
             }
             if (LOG.isErrorEnabled()) {
-                LOG.error(MessageFormat.format("Funds not captured for delivery {0}", orderEvent.getCustomerOrderDelivery().getDevileryNum()));
+                LOG.error(MessageFormat.format("Funds not captured for delivery {0}", orderEvent.getCustomerOrderDelivery().getDeliveryNum()));
             }
             return false;
         }

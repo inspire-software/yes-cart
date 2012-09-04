@@ -132,14 +132,14 @@ public interface CustomerOrderDelivery extends Auditable {
      *
      * @return delivery number
      */
-    String getDevileryNum();
+    String getDeliveryNum();
 
     /**
      * Set delivery number
      *
-     * @param devileryNum delivery number
+     * @param deliveryNum delivery number
      */
-    void setDevileryNum(String devileryNum);
+    void setDeliveryNum(String deliveryNum);
 
     /**
      * Get external delivery number, if any.

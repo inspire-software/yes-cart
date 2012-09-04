@@ -160,7 +160,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
         Assert.notNull(shoppingCart, "Expecting shopping cart, but found null");
         final CustomerOrderDelivery customerOrderDelivery = entityFactory.getByIface(CustomerOrderDelivery.class);
         customerOrderDelivery.setCarrierSla(carrierSlaService.getById(shoppingCart.getCarrierSlaId() == null ? 0 : shoppingCart.getCarrierSlaId()));
-        customerOrderDelivery.setDevileryNum(order.getOrdernum() + "-" + idx);
+        customerOrderDelivery.setDeliveryNum(order.getOrdernum() + "-" + idx);
         customerOrderDelivery.setDeliveryGroup(deliveryGroup);
 
         customerOrderDelivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_ON_FULLFILMENT);
