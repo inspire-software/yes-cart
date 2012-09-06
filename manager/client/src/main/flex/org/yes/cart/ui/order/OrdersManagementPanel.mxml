@@ -249,27 +249,27 @@
                                                dataField="customerOrderDeliveryId"
                                     />
                             <mx:DataGridColumn showDataTips="true"
-                                               headerText="@Resource(bundle='CustomerOrderPanel',key='deliveryNum')"
-                                               dataField="deliveryNum"
-                                    />
-                            <mx:DataGridColumn showDataTips="true"
-                                               headerText="@Resource(bundle='CustomerOrderPanel',key='refNo')"
-                                               dataField="refNo"
-                                    />
+                                               headerText="@Resource(bundle='CustomerOrderPanel',key='deliveryNumRefNo')" >
+                                <mx:itemRenderer>
+                                    <mx:Component>
+                                        <mx:VBox>
+                                            <mx:Label text="{data.deliveryNum}"/>
+                                            <mx:Label text="{data.refNo}"/>
+                                        </mx:VBox>
+                                    </mx:Component>
+                                </mx:itemRenderer>
+                            </mx:DataGridColumn>
                             <mx:DataGridColumn showDataTips="true"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='inventoryStatus')"
                                                labelFunction="getDeliveryStatusLabel"
                                     />
-                            <mx:DataGridColumn showDataTips="true"
+                            <mx:DataGridColumn showDataTips="true" width="300"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='itemsInfo')"
                                                labelFunction="itemsInfoLabelFunction"
-
-                                    />
+                                               wordWrap="true" />
                             <mx:DataGridColumn showDataTips="true"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='itemsCost')"
-                                               labelFunction="itemsCostInDeliveryLabelFunction"
-
-                                    />
+                                               labelFunction="itemsCostInDeliveryLabelFunction"/>
                             <mx:DataGridColumn showDataTips="true"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='shipmentCost')"
                                                dataField="price"
@@ -280,6 +280,8 @@
                                     />
                             <mx:DataGridColumn showDataTips="true"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='deliveryAddr')"
+                                               labelFunction="deliveryAddrLabelFunction"
+                                               wordWrap="true"
                                     />
                             <mx:DataGridColumn showDataTips="true" width="300"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='actions')">
@@ -344,15 +346,12 @@
                                                 </mx:Button>
                                             </mx:HBox>
                                             <mx:HBox horizontalAlign="right">
-                                                <mx:Button width="90"
+                                                <mx:Button width="135"
                                                            label="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.ticket')"
                                                            toolTip="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.ticket.hint')"/>
-                                                <mx:Button width="90"
+                                                <mx:Button width="135"
                                                            label="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.setrefno')"
                                                            toolTip="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.setrefno.hint')"/>
-                                                <mx:Button width="90"
-                                                           label="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.cancel')"
-                                                           toolTip="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.cancel.hint')"/>
                                             </mx:HBox>
                                         </mx:VBox>
                                     </mx:Component>
@@ -413,12 +412,12 @@
                             <mx:FormItem label="@Resource(bundle='CustomerOrderPanel',key='totalOrdersAmount')">
                                 <mx:Label text="0"/>
                             </mx:FormItem>
-                            <!-- todo dynamic attributesof customer -->
                         </mx:Form>
                         <mx:Form>
                             <mx:FormItem label="dynamic attributes">
                                 <mx:Label text="about customer"/>
                             </mx:FormItem>
+                            <!-- todo dynamic attributesof customer -->
 
                         </mx:Form>
 
@@ -586,63 +585,62 @@
         }
 
         /**
-         * Create list of sku code - sku name in delivery. 
+         * Create list of sku code - sku name in delivery.
          * @param item
          * @param column
          * @return
          */
         private function itemsInfoLabelFunction(item:Object, column:DataGridColumn):String {
-            try {
-                var rez:String = "";
-                for (var i:int = 0; i < item.detail.length; i++) {
-                    if (item.deliveryNum == item.detail[i].deliveryNum) {
-                        rez += item.detail[i].skuCode + " - " + item.detail[i].skuName + "\n";
-                    }
+            var rez:String = "";
+            for (var i:int = 0; i < item.detail.length; i++) {
+                if (item.deliveryNum == item.detail[i].deliveryNum) {
+                    rez += "[" + item.detail[i].skuCode + "] " + item.detail[i].skuName + "\n";
                 }
-                return rez;
-
-            } catch(e:Error) {
-                return "" + e;
             }
-            return "x3";
+            return rez;
+        }
+
+
+        /**
+         * Get delivety address. The real delivery address taken from order. ATM we are not support different
+         * delivery addresses inside one order.
+         * @param item delivery item
+         * @param column grid column
+         * @return delivety address.
+         */
+        public function deliveryAddrLabelFunction(item:Object, column:DataGridColumn):String {
+            var orderDto:CustomerOrderDTOImpl = this.customerOrderGrid.selectedItem as CustomerOrderDTOImpl;
+            return orderDto.shippingAddress;
         }
 
 
         /**
          * Total cost of delivery including ites and shipment price.
-         * @param item
-         * @param column
-         * @return
+         * @param item delivery
+         * @param column column
+         * @return amount of single delivery
          */
         public function deliveryTotalLabelFunction(item:Object, column:DataGridColumn):String {
-            try {
-
-                var sum:Number = Number(item.price);
-                for (var i:int = 0; i < item.detail.length; i++) {
-                    sum += Number((item.detail[i].qty * item.detail[i].invoicePrice).toFixed(2));
-                }
-                return sum.toFixed(2);
-            } catch(e:Error) {
-                return "" + e;
+            var sum:Number = Number(item.price);
+            for (var i:int = 0; i < item.detail.length; i++) {
+                sum += Number((item.detail[i].qty * item.detail[i].invoicePrice).toFixed(2));
             }
-            return "x3";
-
-
+            return sum.toFixed(2);
         }
-        
-        
-        public function itemsCostInDeliveryLabelFunction(item:Object, column:DataGridColumn):String {
-            try {
-                var sum:Number = 0;
-                for (var i:int = 0; i < item.detail.length; i++) {
-                    sum += Number((item.detail[i].qty * item.detail[i].invoicePrice).toFixed(2));
-                }
-                return sum.toFixed(2);
 
-            } catch(e:Error) {
-                return "" + e;
+
+        /**
+         * Amount of items in delivery.
+         * @param item delivery
+         * @param column column
+         * @return amount of items in delivery.
+         */
+        public function itemsCostInDeliveryLabelFunction(item:Object, column:DataGridColumn):String {
+            var sum:Number = 0;
+            for (var i:int = 0; i < item.detail.length; i++) {
+                sum += Number((item.detail[i].qty * item.detail[i].invoicePrice).toFixed(2));
             }
-            return "blya";
+            return sum.toFixed(2);
         }
 
 
@@ -653,19 +651,22 @@
          * @return
          */
         private function lineTotalLabelFunction(item:Object, column:DataGridColumn):String {
-            return "" + moneyFormat.format(item.qty * item.invoicePrice);
+            return (item.qty * item.invoicePrice).toFixed(2);
         }
 
 
+        /**
+         * Get status.
+         * @param item
+         * @param column
+         * @return  status.
+         */
         private function statusLabelFunction(item:Object, column:DataGridColumn):String {
-
             var label:String = resourceManager.getString('Common', item.orderStatus);
             if (label == null) {
                 label = item.orderStatus;
             }
-
             return label;
-
         }
 
         private function orderToolTip(item:Object):String {
