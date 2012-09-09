@@ -81,6 +81,26 @@ public class RemoteCustomerOrderServiceImpl
         return ((DtoCustomerOrderService) getGenericDTOService()).findDeliveryDetailsByOrderNumber(orderNum);
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    public Result updateOrderSetConfirmed(String orderNum) {
+        return ((DtoCustomerOrderService) getGenericDTOService()).updateOrderSetConfirmed(orderNum);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Result updateOrderSetCancelled(final String orderNum) {
+        return ((DtoCustomerOrderService) getGenericDTOService()).updateOrderSetCancelled(orderNum);
+    }
+
+    /** {@inheritDoc} */
+    public Result updateExternalDelieryRefNo(String orderNum, String deliveryNum, String newRefNo) {
+        return ((DtoCustomerOrderService) getGenericDTOService()).updateExternalDelieryRefNo(orderNum,  deliveryNum,  newRefNo) ;
+    }
+
     /** {@inheritDoc} */
     public Result updateDeliveryStatus(final String orderNum, final String deliveryNum,
                                        final String currentStatus, final String destinationStatus) {

@@ -32,12 +32,12 @@ import java.util.Map;
  */
 public interface PaymentGateway extends Serializable {
 
-    String AUTH = "AUTH";
-    String REVERSE_AUTH = "REVERSE_AUTH";
-    String CAPTURE = "CAPTURE";
-    String AUTH_CAPTURE = "AUTH_CAPTURE";
-    String VOID_CAPTURE = "VOID_CAPTURE";
-    String REFUND = "REFUND";
+    String AUTH = "AUTH";         //Authorize a payment.
+    String REVERSE_AUTH = "REVERSE_AUTH";  // Reverse the authorization.
+    String CAPTURE = "CAPTURE";  //fund capture
+    String AUTH_CAPTURE = "AUTH_CAPTURE"; //
+    String VOID_CAPTURE = "VOID_CAPTURE";   //void capture fund  operation
+    String REFUND = "REFUND"; //return money back to client
 
 
 

@@ -41,6 +41,18 @@
                    result="onUpdateDeliveryStatusResult(event)"
                    fault="onRpcMethodFault(event)"/>
 
+        <mx:method id="updateExternalDelieryRefNo" name="updateExternalDelieryRefNo"
+                   result="onUpdateDeliveryExternalRefNoResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="updateOrderSetCancelled" name="updateOrderSetCancelled"
+                   result="onOrderResultStatusChanged(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="updateOrderSetConfirmed" name="updateOrderSetConfirmed"
+                   result="onOrderResultStatusChanged(event)"
+                   fault="onRpcMethodFault(event)"/>
+
 
     </mx:RemoteObject>
 
@@ -163,12 +175,100 @@
                             </mx:Component>
                         </mx:itemRenderer>
                     </mx:DataGridColumn>
-                    <mx:DataGridColumn showDataTips="true"
+                    <mx:DataGridColumn showDataTips="true"  width="100"
                                        headerText="@Resource(bundle='CustomerOrderPanel',key='status')"
                                        labelFunction="statusLabelFunction"/>
-                    <mx:DataGridColumn showDataTips="true"
+                    <mx:DataGridColumn showDataTips="true" wordWrap="true" width="100"
                                        headerText="@Resource(bundle='CustomerOrderPanel',key='date')"
                                        dataField="orderTimestamp"/>
+                    <mx:DataGridColumn showDataTips="true" width="100"
+                                       headerText="@Resource(bundle='CustomerOrderPanel',key='actions')">
+                        <mx:itemRenderer>
+                            <mx:Component>
+                                <mx:VBox horizontalAlign="right">
+                                    <mx:Script><![CDATA[
+                                        import mx.controls.Alert;
+                                        import mx.events.CloseEvent;
+
+                                        public function getOrderCancelLabel(customerOrderDTO:Object):String {
+
+                                            var orderStatus:String = customerOrderDTO.orderStatus;
+                                            orderCancelButton.visible = orderCancelButton.includeInLayout = true;
+                                            if (orderStatus == "os.waiting" || orderStatus == "os.in.progress") {
+                                                return resourceManager.getString('CustomerOrderPanel', 'cancel.order');
+                                            }  else if (orderStatus == "os.partially.shipped" || orderStatus == "os.completed") {
+                                                return resourceManager.getString('CustomerOrderPanel', 'return.order');
+
+                                            }
+                                            orderCancelButton.visible = orderCancelButton.includeInLayout = false;
+                                            return  orderStatus;
+                                        }
+
+                                        public function onOrderCancelButtonClick(customerOrderDTO:Object):void {
+                                            var msg:String;
+                                            var title:String;
+                                            var orderStatus:String = customerOrderDTO.orderStatus;
+
+                                            if (orderStatus == "os.waiting" || orderStatus == "os.in.progress") {
+                                                msg = resourceManager.getString('CustomerOrderPanel', 'cancel.order.confirmation', [customerOrderDTO.ordernum]);
+                                                title = resourceManager.getString('CustomerOrderPanel', 'cancel.order.confirmation.title') ;
+                                            }  else if (orderStatus == "os.partially.shipped" || orderStatus == "os.completed") {
+                                                msg = resourceManager.getString('CustomerOrderPanel', 'cancel.order.confirmation', [customerOrderDTO.ordernum]);
+                                                title = resourceManager.getString('CustomerOrderPanel', 'cancel.order.confirmation.title') ;
+                                            }
+                                            Alert.show(
+                                                    msg, title,
+                                                    Alert.YES | Alert.NO, null, onCancelOrderClick, null, Alert.NO);
+                                        }
+
+                                        /**
+                                         * User confirm cancel or return the order.
+                                         * @param event
+                                         */
+                                        private function onCancelOrderClick(event:CloseEvent):void {
+                                            if (event.detail == Alert.YES) { //cancel/return order
+                                                outerDocument.remoteCustomerOrderService.updateOrderSetCancelled(data.ordernum);
+                                            }
+                                        }
+
+
+                                        public function getOrderConfirmLabel(customerOrderDTO:Object):String {
+                                            var orderStatus:String = customerOrderDTO.orderStatus;
+                                            orderConfirmButton.visible = orderConfirmButton.includeInLayout = true;
+                                            if (orderStatus == "os.waiting") {
+                                                return resourceManager.getString('CustomerOrderPanel', 'approve.order');
+                                            }
+                                            orderConfirmButton.visible = orderConfirmButton.includeInLayout = false;
+                                            return  orderStatus;
+                                        }
+
+                                        public function onOrderConfirmButtonClick(customerOrderDTO:Object):void {
+                                            Alert.show(
+                                                    resourceManager.getString('CustomerOrderPanel', 'approve.order.confirmation', [customerOrderDTO.ordernum]),
+                                                    resourceManager.getString('CustomerOrderPanel', 'approve.order.confirmation.title'),
+                                                    Alert.YES | Alert.NO, null, onConfirmOrderClick, null, Alert.NO);
+                                        }
+
+                                        private function onConfirmOrderClick(event:CloseEvent):void {
+                                            if (event.detail == Alert.YES) { //confirm order
+                                                outerDocument.remoteCustomerOrderService.updateOrderSetConfirmed(data.ordernum);
+                                            }
+                                        }
+
+
+                                        ]]></mx:Script>
+                                    <mx:Button id="orderCancelButton"
+                                               label="{getOrderCancelLabel(data)}"
+                                               click="callLater(onOrderCancelButtonClick, new Array(data))"/>
+                                    <mx:Button id="orderConfirmButton"
+                                               label="{getOrderConfirmLabel(data)}"
+                                               click="callLater(onOrderConfirmButtonClick, new Array(data))"/>
+                                </mx:VBox>
+
+                            </mx:Component>
+                        </mx:itemRenderer>
+
+                    </mx:DataGridColumn>
 
 
                 </mx:columns>
@@ -227,29 +327,65 @@
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='deliveryNum')"
                                                    dataField="deliveryNum"
                                         />
-                                <mx:DataGridColumn showDataTips="true"
-                                                   headerText="@Resource(bundle='CustomerOrderPanel',key='actions')"
-                                        />
+
                             </mx:columns>
 
                         </mx:DataGrid>
                     </mx:VBox>
 
                 </mx:Canvas>
+                <mx:Script><![CDATA[
+                    import com.hexagonstar.util.debug.Debug;
 
+                    import mx.events.DataGridEvent;
+                    import mx.events.DataGridEventReason;
+                    import mx.utils.ObjectUtil;
+
+                    /**
+                     * Attribute value edit end.
+                     * @param event grid event.
+                     * @return nothing
+                     */
+                    private function onRefNoValueEditEnd(event:DataGridEvent):void {
+                        if (event.reason == DataGridEventReason.CANCELLED) {
+                            return; // Do not update cell.
+                        }
+                        event.preventDefault(); // Disable copying data back to the control.
+                        var сustomerOrderDeliveryDTO:Object = DataGrid(event.target).dataProvider[event.rowIndex];
+                        onValueChanged(event, сustomerOrderDeliveryDTO, /*textInput.text*/ сustomerOrderDeliveryDTO.refNo);
+                    }
+
+
+                    /**
+                     * Handle new data for external reference number.
+                     */
+                    protected function onValueChanged(event:DataGridEvent, сustomerOrderDeliveryDTO:Object, newValue:Object):void {
+
+                        remoteCustomerOrderService.updateExternalDelieryRefNo(
+                                сustomerOrderDeliveryDTO.ordernum,
+                                сustomerOrderDeliveryDTO.deliveryNum,
+                                newValue
+
+                        );
+
+                    }
+                    ]]>
+
+                </mx:Script>
 
                 <mx:Canvas id="deliveryItemsCanvas"
                            label="@Resource(bundle='CustomerOrderPanel',key='delivery')"
                            width="100%" height="100%"
                            toolTip="@Resource(bundle='CustomerOrderPanel',key='deliveryHint')">
-                    <mx:DataGrid id="deliverySummaryDataGrid" width="100%" height="100%">
+                    <mx:DataGrid id="deliverySummaryDataGrid" width="100%" height="100%"
+                                 itemEditEnd="onRefNoValueEditEnd(event);">
                         <mx:columns>
                             <mx:DataGridColumn showDataTips="true" width="25"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='id')"
                                                dataField="customerOrderDeliveryId"
                                     />
                             <mx:DataGridColumn showDataTips="true"
-                                               headerText="@Resource(bundle='CustomerOrderPanel',key='deliveryNumRefNo')" >
+                                               headerText="@Resource(bundle='CustomerOrderPanel',key='deliveryNumRefNo')">
                                 <mx:itemRenderer>
                                     <mx:Component>
                                         <mx:VBox>
@@ -266,7 +402,7 @@
                             <mx:DataGridColumn showDataTips="true" width="300"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='itemsInfo')"
                                                labelFunction="itemsInfoLabelFunction"
-                                               wordWrap="true" />
+                                               wordWrap="true"/>
                             <mx:DataGridColumn showDataTips="true"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='itemsCost')"
                                                labelFunction="itemsCostInDeliveryLabelFunction"/>
@@ -274,6 +410,18 @@
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='shipmentCost')"
                                                dataField="price"
                                     />
+                            <mx:DataGridColumn showDataTips="true"
+                                               headerText="@Resource(bundle='CustomerOrderPanel',key='carrierInfo')">
+                                <mx:itemRenderer>
+                                    <mx:Component>
+                                        <mx:VBox>
+                                            <mx:Label text="{data.carrierName}"/>
+                                            <mx:Label text="{data.carrierSlaName}"/>
+                                        </mx:VBox>
+                                    </mx:Component>
+                                </mx:itemRenderer>
+                            </mx:DataGridColumn>
+
                             <mx:DataGridColumn showDataTips="true"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='deliveryTotal')"
                                                labelFunction="deliveryTotalLabelFunction"
@@ -292,6 +440,15 @@
                                                 <mx:Script>
                                                     <![CDATA[
                                                     import mx.controls.Alert;
+                                                    import mx.controls.DataGrid;
+                                                    import mx.core.FlexGlobals;
+                                                    import mx.core.IFlexDisplayObject;
+                                                    import mx.events.DataGridEvent;
+                                                    import mx.events.DataGridEventReason;
+                                                    import mx.managers.PopUpManager;
+
+                                                    import org.yes.cart.ui.attributes.valuedialog.SimpleTextDialog;
+                                                    import org.yes.cart.ui.attributes.valuedialog.ValueDialog;
 
                                                     public function onDeliveryActionButtonClick(customerOrderDeliveryDTO:Object):void {
 
@@ -336,10 +493,66 @@
                                                         deliveryActionButton.visible = deliveryActionButton.includeInLayout = false;
                                                         return "NA";
                                                     }
+
+
+                                                    //---------------------------------------------------------------------------------------------------------------
+
+                                                    private var popUp:ValueDialog = null;
+
+                                                    private function openPopup():void {
+                                                        var clz:Class = SimpleTextDialog;
+
+                                                        popUp = ValueDialog(PopUpManager.createPopUp(
+                                                                DisplayObject(FlexGlobals.topLevelApplication), clz, true));
+                                                        popUp.windowTitle = data.name;
+                                                        popUp.value = data.refNo;
+                                                        popUp.setInformation(data.description);
+                                                        (popUp as SimpleTextDialog).displayVal.visible = false;
+                                                        (popUp as SimpleTextDialog).displayVal.includeInLayout = false;
+                                                        (popUp as SimpleTextDialog).displayValFormItem.includeInLayout = false;
+                                                        (popUp as SimpleTextDialog).displayValFormItem.includeInLayout = false;
+
+                                                        var btnSave:Button = popUp.getButtonSave();
+
+                                                        btnSave.addEventListener(MouseEvent.CLICK, onSaveBtnclick);
+
+                                                        PopUpManager.centerPopUp(IFlexDisplayObject(popUp));
+
+                                                    }
+
+                                                    private function onSaveBtnclick(event:MouseEvent):void {
+                                                        if (popUp != null) {
+                                                            data.refNo = popUp.value;
+                                                            var dg:DataGrid = DataGrid(this.owner);
+                                                            dg.dataProvider.itemUpdated(data);
+
+                                                            var dataGridEvent:DataGridEvent =
+                                                                    new DataGridEvent(DataGridEvent.ITEM_EDIT_END, false, true);
+                                                            dataGridEvent.columnIndex = /*editedItemPosition.columnIndex*/1;
+                                                            dataGridEvent.dataField = "refNo"/*_columns[editedItemPosition.columnIndex].dataField*/;
+                                                            dataGridEvent.rowIndex = dg.selectedIndex;
+                                                            dataGridEvent.itemRenderer = /*editedItemRenderer*/ null;
+                                                            dataGridEvent.reason == DataGridEventReason.OTHER;
+                                                            dg.dispatchEvent(dataGridEvent);
+
+                                                            popUp.getButtonSave().removeEventListener(MouseEvent.CLICK, onSaveBtnclick);
+                                                            PopUpManager.removePopUp(IFlexDisplayObject(popUp));
+                                                            popUp = null;
+                                                        }
+                                                    }
+
+                                                    /**
+                                                     * Set external reference number of delivery.
+                                                     * @param customerOrderDeliveryDTO
+                                                     */
+                                                    public function onRefNumberActionButtonClick(customerOrderDeliveryDTO:Object):void {
+                                                        openPopup();
+
+                                                    }
                                                     ]]>
                                                 </mx:Script>
 
-                                                <mx:Button width="285" id="deliveryActionButton"
+                                                <mx:Button width="280" id="deliveryActionButton"
                                                            label="{getDeliveryActionLabel(data)}"
                                                            click="callLater(onDeliveryActionButtonClick, new Array(data))"
                                                         >
@@ -349,9 +562,11 @@
                                                 <mx:Button width="135"
                                                            label="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.ticket')"
                                                            toolTip="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.ticket.hint')"/>
-                                                <mx:Button width="135"
+                                                <mx:Button width="135" id="refNumberActionButton"
                                                            label="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.setrefno')"
-                                                           toolTip="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.setrefno.hint')"/>
+                                                           toolTip="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.setrefno.hint')"
+                                                           click="callLater(onRefNumberActionButtonClick, new Array(data))"
+                                                        />
                                             </mx:HBox>
                                         </mx:VBox>
                                     </mx:Component>
@@ -517,13 +732,53 @@
             deliverySummaryDataGrid.dataProvider = event.result;
         }
 
+        /**
+         * Handle status change
+         * @param event
+         */
+        private function onOrderResultStatusChanged (event:ResultEvent):void {
+
+            if (event.result.errorCode == "0") {
+                performSearch(); //not sure what the best way re reread one order
+
+            }   else {
+                Alert.show(
+                        resourceManager.getString('CustomerOrderPanel', event.result.localizationKey, event.result.localizedMessageParameters),
+                        resourceManager.getString('Common', 'error')
+                );
+            }
+        }
+
+
+        /**
+         * Handle obtain result.
+         * @param event event with result
+         */
+        private function onUpdateDeliveryExternalRefNoResult(event:ResultEvent):void {
+            if (remoteCustomerOrderService.updateExternalDelieryRefNo.lastResult.errorCode != "0") {
+                Alert.show(
+                        resourceManager.getString('CustomerOrderPanel', event.result.localizationKey, event.result.localizedMessageParameters),
+                        resourceManager.getString('Common', 'error')
+                );
+            }
+        }
+
 
         /**
          * Handle obtain result.
          * @param event event with result
          */
         private function onUpdateDeliveryStatusResult(event:ResultEvent):void {
-            Alert.show("todo reread " + event.result, "info");
+            if (remoteCustomerOrderService.updateDeliveryStatus.lastResult.errorCode != "0") {
+                Alert.show(
+                        resourceManager.getString('CustomerOrderPanel', event.result.localizationKey, event.result.localizedMessageParameters),
+                        resourceManager.getString('Common', 'error')
+                );
+            } else {
+                var orderDto:CustomerOrderDTOImpl = this.customerOrderGrid.selectedItem as CustomerOrderDTOImpl;
+                remoteCustomerOrderService.findDeliveryDetailsByOrderNumber(orderDto.ordernum);
+                remoteCustomerOrderService.findDeliveryByOrderNumber(orderDto.ordernum);
+            }
         }
 
 

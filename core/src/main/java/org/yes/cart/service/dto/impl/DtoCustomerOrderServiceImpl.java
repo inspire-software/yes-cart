@@ -43,6 +43,7 @@ import org.yes.cart.service.dto.DtoCustomerOrderService;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.impl.OrderEventImpl;
+import org.yes.cart.service.payment.PaymentModulesManager;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.text.MessageFormat;
@@ -62,6 +63,7 @@ public class DtoCustomerOrderServiceImpl
     protected final Assembler orderDeliveryDetailAssembler;
     protected final Assembler orderDeliveryAssembler;
     protected final OrderStateManager orderStateManager;
+    protected final PaymentModulesManager paymentModulesManager;
 
     /**
      * Construct service.
@@ -75,11 +77,13 @@ public class DtoCustomerOrderServiceImpl
             final DtoFactory dtoFactory,
             final GenericService<CustomerOrder> customerOrderGenericService,
             final AdaptersRepository adaptersRepository,
-            final OrderStateManager orderStateManager) {
+            final OrderStateManager orderStateManager,
+            final PaymentModulesManager paymentModulesManager) {
         super(dtoFactory, customerOrderGenericService, adaptersRepository);
         orderDeliveryDetailAssembler = DTOAssembler.newAssembler(CustomerOrderDeliveryDetailDTOImpl.class, CustomerOrderDeliveryDet.class);
         orderDeliveryAssembler = DTOAssembler.newAssembler(CustomerOrderDeliveryDTOImpl.class, CustomerOrderDelivery.class);
         this.orderStateManager = orderStateManager;
+        this.paymentModulesManager = paymentModulesManager;
 
     }
 
@@ -106,6 +110,107 @@ public class DtoCustomerOrderServiceImpl
         return CustomerOrder.class;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public Result updateOrderSetConfirmed(final String orderNum) {
+        final CustomerOrder order = getService().findSingleByCriteria(Restrictions.eq("ordernum", orderNum));
+        if (order == null) {
+            return new Result("OR-0001", "Order with number [" + orderNum + "] not found",
+                    "error.order.not.found", orderNum);
+        }
+
+        try {
+            if (orderStateManager.fireTransition(
+                    new OrderEventImpl(OrderStateManager.EVT_PAYMENT_CONFIRMED, order))) {
+                getService().update(order);
+            } else {
+
+                throw new OrderException("Order payment confirmation was unsuccessful");
+
+            }
+
+        } catch (OrderException e) {
+            LOG.error(
+                    MessageFormat.format(
+                            "Cannot confirm payment for order with number [ {0} ] ",
+                            orderNum
+                    ),
+                    e);
+            return new Result("OR-0003", "Cannot confirm payment for order with number [" + orderNum + "]   ",
+                    "error.order.payment.confirm.fatal", orderNum, e.getMessage());
+
+        }
+        return new Result(Result.OK, null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Result updateOrderSetCancelled(final String orderNum) {
+        final CustomerOrder order = getService().findSingleByCriteria(Restrictions.eq("ordernum", orderNum));
+        if (order == null) {
+            return new Result("OR-0001", "Order with number [" + orderNum + "] not found",
+                    "error.order.not.found", orderNum);
+        }
+
+        try {
+            final String paymentGateway = order.getPgLabel();
+            final String cancelOperation;
+            if (paymentModulesManager.getPaymentGateway(paymentGateway).getPaymentGatewayFeatures().isOnlineGateway()) {
+                cancelOperation = OrderStateManager.EVT_CANCEL_WITH_REFUND;
+            } else {
+                cancelOperation = OrderStateManager.EVT_CANCEL;
+            }
+
+            if (orderStateManager.fireTransition(
+                    new OrderEventImpl(cancelOperation, order))) {
+                getService().update(order);
+            } else {
+
+                throw new OrderException("Transition to cancel state was unsuccessful");
+
+            }
+
+        } catch (OrderException e) {
+            LOG.error(
+                    MessageFormat.format(
+                            "Order with number [ {0} ] cannot be canceled ",
+                            orderNum
+                    ),
+                    e);
+            return new Result("OR-0002", "Order with number [" + orderNum + "] cannot be canceled  ",
+                    "error.order.cancel.fatal", orderNum, e.getMessage());
+
+        }
+        return new Result(Result.OK, null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Result updateExternalDelieryRefNo(final String orderNum, final String deliveryNum, final String newRefNo) {
+
+        final CustomerOrder order = getService().findSingleByCriteria(Restrictions.eq("ordernum", orderNum));
+
+        if (order == null) {
+            return new Result("DL-0001", "Order with number [" + orderNum + "] not found",
+                    "error.order.not.found", orderNum);
+        } else {
+            final CustomerOrderDelivery delivery = order.getCustomerOrderDelivery(deliveryNum);
+            if (delivery == null) {
+                return new Result("DL-0002", "Order with number [" + orderNum + "] has not delivery with number [" + deliveryNum + "]",
+                        "error.delivery.not.found", orderNum, deliveryNum);
+            } else {
+                delivery.setRefNo(newRefNo);
+                getService().update(order);
+            }
+        }
+
+        return new Result(Result.OK, null);
+
+    }
+
 
     /**
      * {@inheritDoc}
@@ -128,9 +233,9 @@ public class DtoCustomerOrderServiceImpl
                     return new Result("DL-0003", "Order with number [" + orderNum + "] delivery number [" + deliveryNum + "] in [" + delivery.getDeliveryStatus() + "] state, but required [" + currentStatus + "]. Updated by [" + order.getUpdatedBy() + "]",
                             "error.delivery.in.wrong.state", orderNum, deliveryNum, delivery.getDeliveryStatus(), currentStatus, order.getUpdatedBy());
                 } else {
-                    
+
                     try {
-                        
+
                         final boolean needToPersist;
 
                         if (CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED.equals(currentStatus) &&

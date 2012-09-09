@@ -28,13 +28,13 @@ public final class Result {
 
     public static final String OK = "0";
 
-    private final String errorCode;
+    private  String errorCode;
 
-    private final String localizationKey;
+    private  String localizationKey;
 
-    private final Object [] localizedMessageParameters;
+    private  Object [] localizedMessageParameters;
 
-    private final String errorMessage;
+    private  String errorMessage;
 
 
     /**
@@ -116,4 +116,19 @@ public final class Result {
     }
 
 
+    public void setErrorCode(final String errorCode) {
+        this.errorCode = errorCode;
+    }
+
+    public void setLocalizationKey(final String localizationKey) {
+        this.localizationKey = localizationKey;
+    }
+
+    public void setLocalizedMessageParameters(final Object[] localizedMessageParameters) {
+        this.localizedMessageParameters = localizedMessageParameters;
+    }
+
+    public void setErrorMessage(final String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
 }
