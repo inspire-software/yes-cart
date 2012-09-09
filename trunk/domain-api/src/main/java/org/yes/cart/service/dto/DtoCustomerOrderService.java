@@ -34,25 +34,63 @@ import java.util.List;
 public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrderDTO> {
 
     /**
+     * Confirm customer will to pay via carrie or confirm status of bank payment.
+     *
+     * @param orderNum             unique order number. not pk value.
+     * @return result object
+     */
+    Result updateOrderSetConfirmed(String orderNum);
+
+    /**
+     * Cancel order. In case of order cancelation will be performed following actions:
+     * <p/>
+     * product quantity reservation in case of off line payment gateway will be voided.
+     * product quantity in deliveries will be returned to main warehouse in case of online payments.
+     * <p/>
+     * reverse auth in case if no shipment was performed;
+     * void capture if fund/money was captured, but not yet settled to merchant account;
+     * refund in case if money were settleled to merchant account.
+     * <p/>
+     * Please refer how works particular payment gateway, which are you using, because of some difference.
+     * For more details see org.yes.cart.payment.PaymentGateway interface and his implementations.
+     *
+     * @param orderNum             unique order number. not pk value.
+     * @return result object
+     */
+    Result updateOrderSetCancelled(String orderNum);
+
+
+    /**
+     * Update external delivery number.
+     *
+     * @param orderNum    unique order number. not pk value.
+     * @param deliveryNum unique delivery number in order scope. not pk value.
+     * @param newRefNo    new reference number
+     * @return result object
+     */
+    Result updateExternalDelieryRefNo(String orderNum, String deliveryNum, String newRefNo);
+
+
+    /**
      * Fire transition for single delivery. This method may lead to
      * change status for whole order , not only for single delivery.
      *
-     *
-     * @param orderNum unique order number. not pk value.
-     * @param deliveryNum unique delivery number in order scope. not pk value.
-     * @param currentStatus from status
+     * @param orderNum          unique order number. not pk value.
+     * @param deliveryNum       unique delivery number in order scope. not pk value.
+     * @param currentStatus     from status
      * @param destinationStatus to status
      * @return result object
-     *
      */
     Result updateDeliveryStatus(String orderNum, String deliveryNum, String currentStatus, String destinationStatus);
 
     /**
      * Get list of delivery details for given order number.
+     *
      * @param orderNum order number
      * @return list of delivery details.
      * @throws UnmappedInterfaceException in case of dto mapping error
-     * @throws UnableToCreateInstanceException  in case of dto mapping error
+     * @throws UnableToCreateInstanceException
+     *                                    in case of dto mapping error
      */
     List<CustomerOrderDeliveryDetailDTO> findDeliveryDetailsByOrderNumber(String orderNum)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
@@ -64,12 +102,11 @@ public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrder
      * @param orderNum order number
      * @return list of deliveries.
      * @throws UnmappedInterfaceException in case of dto mapping error
-     * @throws UnableToCreateInstanceException  in case of dto mapping error
+     * @throws UnableToCreateInstanceException
+     *                                    in case of dto mapping error
      */
     List<CustomerOrderDeliveryDTO> findDeliveryByOrderNumber(String orderNum)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
-
-
 
 
     /**
@@ -81,7 +118,7 @@ public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrder
      * @param email       optional to perform search using like by email
      * @param orderStatus optional order status
      * @param fromDate    optional order created from
-     * @param toDate    optional order created to
+     * @param toDate      optional order created to
      * @param orderNum    optional to perform search using like by order number
      * @return list of customer's order dtos
      */

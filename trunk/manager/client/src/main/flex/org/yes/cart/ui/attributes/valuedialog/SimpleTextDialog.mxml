@@ -30,7 +30,7 @@
         <mx:FormItem label="@Resource(bundle='AttributesManagementPanel',key='value')">
             <mx:TextInput width="400" id="valueTextInput"/>
         </mx:FormItem>
-        <mx:FormItem label="@Resource(bundle='AttributesManagementPanel',key='displayValue')">
+        <mx:FormItem id="displayValFormItem" label="@Resource(bundle='AttributesManagementPanel',key='displayValue')">
             <yci18n:i18nStringField id="displayVal"/>
         </mx:FormItem>
     </mx:Form>
