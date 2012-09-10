@@ -99,6 +99,7 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
                 }
             } else {
                 // wait for confirmation about payment
+                paymentProcessor.authorize(orderEvent.getCustomerOrder(), orderEvent.getParams());
                 getOrderStateManager().fireTransition(new OrderEventImpl(OrderStateManager.EVT_PAYMENT_OFFLINE, orderEvent.getCustomerOrder()));
             }
 

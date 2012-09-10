@@ -105,9 +105,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
 
         }
         List<CustomerOrderPayment> rezList = customerOrderPaymentService.findBy(customerOrder.getOrdernum(), null, null, null);
-        assertEquals(0, rezList.size());
-        //CustomerOrderPayment customerOrderPayment = rezList.get(0);
-        //assertEquals(Payment.PAYMENT_STATUS_OK, customerOrderPayment.getPaymentProcessorResult());
+        assertEquals(1, rezList.size());
+        CustomerOrderPayment customerOrderPayment = rezList.get(0);
+        assertEquals(Payment.PAYMENT_STATUS_OK, customerOrderPayment.getPaymentProcessorResult());
     }
 
     /**
