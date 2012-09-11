@@ -37,7 +37,7 @@
          * @param event event
          * @return nothing
          */
-        private function onApplyFilterClick(event:MouseEvent):void {
+        public function onApplyFilterClick(event:MouseEvent):void {
 
             remotePaymentModulesManagementService.findPayments(
                     orderNumber.text==""?null:orderNumber.text,
@@ -167,7 +167,7 @@
 
     <mx:VBox width="100%" height="100%">
         <mx:Panel width="100%" height="100%" title="@Resource(bundle='PaymentManagementPanel',key='payments')">
-            <mx:ControlBar>
+            <mx:ControlBar id="searchFilterPanel">
                 <mx:VBox width="100%">
 
                     <mx:Grid>
