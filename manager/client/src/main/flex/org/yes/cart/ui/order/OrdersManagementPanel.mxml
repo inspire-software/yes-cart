@@ -15,7 +15,7 @@
   -    limitations under the License.
   -->
 
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"    xmlns:pay="org.yes.cart.ui.payment.*"
            xmlns:georg="com.georg.*" width="100%" height="100%"
            creationComplete="init();">
 
@@ -282,7 +282,8 @@
                   visible="{customerOrderGrid.selectedItem != null}">
 
             <mx:TabNavigator id="customerOrderDetailTabNavigator"
-                             width="100%" height="100%" visible="{customerOrderGrid.selectedItem != null}">
+                             width="100%" height="100%" visible="{customerOrderGrid.selectedItem != null}"
+                             change="onTabClick(event);">
                 <mx:Canvas id="summaryCanvas"
                            label="@Resource(bundle='CustomerOrderPanel',key='summary')"
                            width="100%" height="100%"
@@ -369,6 +370,7 @@
                         );
 
                     }
+
                     ]]>
 
                 </mx:Script>
@@ -509,7 +511,7 @@
                                                         popUp.setInformation(data.description);
                                                         (popUp as SimpleTextDialog).displayVal.visible = false;
                                                         (popUp as SimpleTextDialog).displayVal.includeInLayout = false;
-                                                        (popUp as SimpleTextDialog).displayValFormItem.includeInLayout = false;
+                                                        (popUp as SimpleTextDialog).displayValFormItem.visible = false;
                                                         (popUp as SimpleTextDialog).displayValFormItem.includeInLayout = false;
 
                                                         var btnSave:Button = popUp.getButtonSave();
@@ -579,28 +581,39 @@
                 <mx:Canvas id="paymentCanvas"
                            label="@Resource(bundle='CustomerOrderPanel',key='payment')"
                            width="100%" height="100%"
-                           toolTip="@Resource(bundle='CustomerOrderPanel',key='paymentHint')">
-                    <mx:Form>
-                        <mx:FormItem label="@Resource(bundle='CustomerOrderPanel',key='payment')">
-                            <mx:HBox>
-                                <mx:Label text="{customerOrderGrid.selectedItem.amount}"/>
-                                <mx:Label text="{customerOrderGrid.selectedItem.currency}"/>
-                            </mx:HBox>
-                        </mx:FormItem>
-                        <mx:FormItem label="@Resource(bundle='CustomerOrderPanel',key='billingAddr')">
-                            <mx:Label text="{customerOrderGrid.selectedItem.billingAddress}"/>
-                        </mx:FormItem>
-                        <mx:FormItem label="@Resource(bundle='CustomerOrderPanel',key='paymentGateway')">
-                            <mx:Label text="{customerOrderGrid.selectedItem.pgLabel}"/>
-                        </mx:FormItem>
-                    </mx:Form>
+                           toolTip="@Resource(bundle='CustomerOrderPanel',key='paymentHint')"
+
+                        >
+                    <mx:VBox width="100%" height="100%">
+                        <mx:Form width="100%" height="100%">
+                            <mx:FormItem label="@Resource(bundle='CustomerOrderPanel',key='payment')">
+                                <mx:HBox>
+                                    <mx:Label text="{customerOrderGrid.selectedItem.amount}"/>
+                                    <mx:Label text="{customerOrderGrid.selectedItem.currency}"/>
+                                </mx:HBox>
+                            </mx:FormItem>
+                            <mx:FormItem label="@Resource(bundle='CustomerOrderPanel',key='billingAddr')">
+                                <mx:Label text="{customerOrderGrid.selectedItem.billingAddress}"/>
+                            </mx:FormItem>
+                            <mx:FormItem label="@Resource(bundle='CustomerOrderPanel',key='paymentGateway')">
+                                <mx:Label text="{customerOrderGrid.selectedItem.pgLabel}"/>
+                            </mx:FormItem>
+                        </mx:Form>
+                        <pay:PaymentManagementPanel id="orderPaymentManagementPanel"
+                                                    width="100%" height="100%" />
+
+
+
+                    </mx:VBox>
 
                 </mx:Canvas>
 
+<!--
                 <mx:Canvas id="returnItems"
                            label="@Resource(bundle='CustomerOrderPanel',key='return')"
                            width="100%" height="100%"
                            toolTip="@Resource(bundle='CustomerOrderPanel',key='returnHint')"/>
+-->
 
                 <mx:Canvas id="customerDetailsCanvas"
                            label="@Resource(bundle='CustomerOrderPanel',key='customerDetails')"
@@ -651,6 +664,7 @@
 
 
     <mx:Script><![CDATA[
+        import mx.events.IndexChangedEvent;
         import mx.events.ListEvent;
         import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
@@ -736,12 +750,12 @@
          * Handle status change
          * @param event
          */
-        private function onOrderResultStatusChanged (event:ResultEvent):void {
+        private function onOrderResultStatusChanged(event:ResultEvent):void {
 
             if (event.result.errorCode == "0") {
                 performSearch(); //not sure what the best way re reread one order
 
-            }   else {
+            } else {
                 Alert.show(
                         resourceManager.getString('CustomerOrderPanel', event.result.localizationKey, event.result.localizedMessageParameters),
                         resourceManager.getString('Common', 'error')
@@ -775,9 +789,7 @@
                         resourceManager.getString('Common', 'error')
                 );
             } else {
-                var orderDto:CustomerOrderDTOImpl = this.customerOrderGrid.selectedItem as CustomerOrderDTOImpl;
-                remoteCustomerOrderService.findDeliveryDetailsByOrderNumber(orderDto.ordernum);
-                remoteCustomerOrderService.findDeliveryByOrderNumber(orderDto.ordernum);
+                initTab(customerOrderDetailTabNavigator.selectedIndex);
             }
         }
 
@@ -796,31 +808,6 @@
             return rez;
         }
 
-        /**
-         * Hendle order selection event.
-         * @param event event to handle
-         */
-        private function onOrderSelected(event:ListEvent):void {
-
-            try {
-                var orderDto:CustomerOrderDTOImpl = this.customerOrderGrid.selectedItem as CustomerOrderDTOImpl;
-                customerOrderDetailPanel.title = resourceManager.getString('CustomerOrderPanel', 'orderNum')
-                        + "  "
-                        + orderDto.ordernum
-                        + "      "
-                        + resourceManager.getString('CustomerOrderPanel', 'date')
-                        + "  "
-                        + orderDto.orderTimestamp;
-
-                remoteCustomerOrderService.findDeliveryDetailsByOrderNumber(orderDto.ordernum);
-
-                remoteCustomerOrderService.findDeliveryByOrderNumber(orderDto.ordernum);
-
-            } catch (e:Error) {
-                Alert.show("" + e, "Error");
-            }
-
-        }
 
         private function createStatusObject(status:String):Object {
             var obj:Object = new Object();
@@ -1013,6 +1000,71 @@
             orderFromDateField.selectedDate = null;
             orderToDateField.selectedDate = null;
 
+        }
+
+
+        /**
+         * Hendle order selection event.
+         * @param event event to handle
+         */
+        private function onOrderSelected(event:ListEvent):void {
+
+            try {
+                var orderDto:CustomerOrderDTOImpl = this.customerOrderGrid.selectedItem as CustomerOrderDTOImpl;
+                customerOrderDetailPanel.title = resourceManager.getString('CustomerOrderPanel', 'orderNum')
+                        + "  "
+                        + orderDto.ordernum
+                        + "      "
+                        + resourceManager.getString('CustomerOrderPanel', 'date')
+                        + "  "
+                        + orderDto.orderTimestamp;
+                initTab(customerOrderDetailTabNavigator.selectedIndex);
+
+
+
+
+
+            } catch (e:Error) {
+                Alert.show("" + e, "Error");
+            }
+
+        }
+
+
+        private function initTab(idx:int):void {
+
+            Debug.trace("INFO  selected tab idx is " + idx);
+
+            var orderDto:CustomerOrderDTOImpl = this.customerOrderGrid.selectedItem as CustomerOrderDTOImpl;
+
+            switch (idx) {
+                case 0: {
+                    remoteCustomerOrderService.findDeliveryDetailsByOrderNumber(orderDto.ordernum);
+                    break;
+                }
+                case 1: {
+                    remoteCustomerOrderService.findDeliveryByOrderNumber(orderDto.ordernum);
+                    break;
+                }
+                case 2: {
+                    readPaymentInformation();
+                    break;
+                }
+
+            }
+        }
+
+        private function readPaymentInformation():void {
+            var orderDto:CustomerOrderDTOImpl = this.customerOrderGrid.selectedItem as CustomerOrderDTOImpl;
+            orderPaymentManagementPanel.searchFilterPanel.visible = false;
+            orderPaymentManagementPanel.searchFilterPanel.includeInLayout = false;
+            orderPaymentManagementPanel.orderNumber.text = orderDto.ordernum;
+            orderPaymentManagementPanel.onApplyFilterClick(null);
+        }
+
+
+        private function onTabClick(event:IndexChangedEvent):void {
+            initTab(event.newIndex);
         }
 
 
