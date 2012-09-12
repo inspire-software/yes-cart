@@ -93,7 +93,7 @@ public class ReportServiceImplTest  {
         final File pdf = new File("shopTestReport.pdf");
         assertTrue(pdf.exists());
         assertTrue(pdf.length() > 30720); // more than 30K means it is a valid pdf
-        assertTrue(pdf.delete());
+        //assertTrue(pdf.delete());
 
     }
 
@@ -131,7 +131,7 @@ public class ReportServiceImplTest  {
         final File pdf = new File("reportAvailableStock.pdf");
         assertTrue(pdf.exists());
         assertTrue(pdf.length() > 30720); // more than 30K means it is a valid pdf
-        assertTrue(pdf.delete());
+        //assertTrue(pdf.delete());
     }
 
     @Test
@@ -167,7 +167,7 @@ public class ReportServiceImplTest  {
         final File pdf = new File("payments.pdf");
         assertTrue(pdf.exists());
         assertTrue(pdf.length() > 30720); // more than 30K means it is a valid pdf
-        assertTrue(pdf.delete());
+        //assertTrue(pdf.delete());
     }
 
 }
