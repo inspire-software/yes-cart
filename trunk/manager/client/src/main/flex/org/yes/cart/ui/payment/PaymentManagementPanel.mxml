@@ -166,7 +166,7 @@
     <mx:String id="localeFilter"/>
 
     <mx:VBox width="100%" height="100%">
-        <mx:Panel width="100%" height="100%" title="@Resource(bundle='PaymentManagementPanel',key='payments')">
+        <mx:Panel width="100%" height="100%" title="@Resource(bundle='PaymentManagementPanel',key='payments')" id="panelTitle">
             <mx:ControlBar id="searchFilterPanel">
                 <mx:VBox width="100%">
 
