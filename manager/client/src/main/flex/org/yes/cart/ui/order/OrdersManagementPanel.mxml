@@ -15,7 +15,9 @@
   -    limitations under the License.
   -->
 
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"    xmlns:pay="org.yes.cart.ui.payment.*"
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+           xmlns:pay="org.yes.cart.ui.payment.*"
+           xmlns:cattr="org.yes.cart.ui.customer.*"
            xmlns:georg="com.georg.*" width="100%" height="100%"
            creationComplete="init();">
 
@@ -55,6 +57,20 @@
 
 
     </mx:RemoteObject>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteCustomerService"
+                     destination="remoteCustomerService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getEntityAttributes" name="getEntityAttributes"
+                   result="onGetEntityAttributesResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+
+    </mx:RemoteObject>
+
+
+    <mx:ArrayCollection id="attrValues"/>
 
     <mx:VBox width="100%" height="100%">
         <mx:Panel width="100%" height="100%" title="@Resource(bundle='CustomerOrderPanel',key='orders')">
@@ -175,7 +191,7 @@
                             </mx:Component>
                         </mx:itemRenderer>
                     </mx:DataGridColumn>
-                    <mx:DataGridColumn showDataTips="true"  width="100"
+                    <mx:DataGridColumn showDataTips="true" width="100"
                                        headerText="@Resource(bundle='CustomerOrderPanel',key='status')"
                                        labelFunction="statusLabelFunction"/>
                     <mx:DataGridColumn showDataTips="true" wordWrap="true" width="100"
@@ -196,7 +212,7 @@
                                             orderCancelButton.visible = orderCancelButton.includeInLayout = true;
                                             if (orderStatus == "os.waiting" || orderStatus == "os.in.progress") {
                                                 return resourceManager.getString('CustomerOrderPanel', 'cancel.order');
-                                            }  else if (orderStatus == "os.partially.shipped" || orderStatus == "os.completed") {
+                                            } else if (orderStatus == "os.partially.shipped" || orderStatus == "os.completed") {
                                                 return resourceManager.getString('CustomerOrderPanel', 'return.order');
 
                                             }
@@ -211,10 +227,10 @@
 
                                             if (orderStatus == "os.waiting" || orderStatus == "os.in.progress") {
                                                 msg = resourceManager.getString('CustomerOrderPanel', 'cancel.order.confirmation', [customerOrderDTO.ordernum]);
-                                                title = resourceManager.getString('CustomerOrderPanel', 'cancel.order.confirmation.title') ;
-                                            }  else if (orderStatus == "os.partially.shipped" || orderStatus == "os.completed") {
+                                                title = resourceManager.getString('CustomerOrderPanel', 'cancel.order.confirmation.title');
+                                            } else if (orderStatus == "os.partially.shipped" || orderStatus == "os.completed") {
                                                 msg = resourceManager.getString('CustomerOrderPanel', 'cancel.order.confirmation', [customerOrderDTO.ordernum]);
-                                                title = resourceManager.getString('CustomerOrderPanel', 'cancel.order.confirmation.title') ;
+                                                title = resourceManager.getString('CustomerOrderPanel', 'cancel.order.confirmation.title');
                                             }
                                             Alert.show(
                                                     msg, title,
@@ -254,8 +270,6 @@
                                                 outerDocument.remoteCustomerOrderService.updateOrderSetConfirmed(data.ordernum);
                                             }
                                         }
-
-
                                         ]]></mx:Script>
                                     <mx:Button id="orderCancelButton"
                                                label="{getOrderCancelLabel(data)}"
@@ -370,7 +384,6 @@
                         );
 
                     }
-
                     ]]>
 
                 </mx:Script>
@@ -586,25 +599,25 @@
                         >
                     <mx:VBox width="100%" height="100%">
                         <pay:PaymentManagementPanel id="orderPaymentManagementPanel"
-                                                    width="100%" height="100%" />
+                                                    width="100%" height="100%"/>
 
                     </mx:VBox>
 
                 </mx:Canvas>
 
-<!--
-                <mx:Canvas id="returnItems"
-                           label="@Resource(bundle='CustomerOrderPanel',key='return')"
-                           width="100%" height="100%"
-                           toolTip="@Resource(bundle='CustomerOrderPanel',key='returnHint')"/>
--->
+                <!--
+                                <mx:Canvas id="returnItems"
+                                           label="@Resource(bundle='CustomerOrderPanel',key='return')"
+                                           width="100%" height="100%"
+                                           toolTip="@Resource(bundle='CustomerOrderPanel',key='returnHint')"/>
+                -->
 
                 <mx:Canvas id="customerDetailsCanvas"
                            label="@Resource(bundle='CustomerOrderPanel',key='customerDetails')"
                            width="100%" height="100%"
                            toolTip="@Resource(bundle='CustomerOrderPanel',key='customerDetails')">
-                    <mx:HBox>
-                        <mx:Form>
+                    <mx:HBox width="100%" height="100%">
+                        <!--<mx:Form height="100%">
                             <mx:FormItem label="@Resource(bundle='CustomerOrderPanel',key='customerName')">
                                 <mx:HBox>
                                     <mx:Label text="{customerOrderGrid.selectedItem.firstname}"/>
@@ -624,14 +637,18 @@
                             <mx:FormItem label="@Resource(bundle='CustomerOrderPanel',key='totalOrdersAmount')">
                                 <mx:Label text="0"/>
                             </mx:FormItem>
-                        </mx:Form>
-                        <mx:Form>
-                            <mx:FormItem label="dynamic attributes">
-                                <mx:Label text="about customer"/>
-                            </mx:FormItem>
-                            <!-- todo dynamic attributesof customer -->
+                        </mx:Form>-->
 
-                        </mx:Form>
+                        <mx:DataGrid id="customerAttributesGrid"  width="100%" height="100%" dataProvider="{attrValues}">
+                            <mx:columns>
+                                <mx:DataGridColumn width="200"  headerText="@Resource(bundle='AttributesManagementPanel',key='name')"
+                                                    dataField="attributeDTO.name"/>
+
+                                <mx:DataGridColumn  headerText="@Resource(bundle='AttributesManagementPanel',key='value')"
+                                                   dataField="val"/>
+                            </mx:columns>
+
+                        </mx:DataGrid>
 
                     </mx:HBox>
 
@@ -652,6 +669,8 @@
         import mx.events.ListEvent;
         import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.impl.AttrValueCustomerDTOImpl;
 
         import org.yes.cart.impl.CustomerOrderDTOImpl;
 
@@ -728,6 +747,23 @@
          */
         private function onfindDeliveryByOrderNumberResult(event:ResultEvent):void {
             deliverySummaryDataGrid.dataProvider = event.result;
+        }
+
+
+        /**
+         * Handle attributes of shopper.
+         * @param event
+         */
+        private function onGetEntityAttributesResult(event:ResultEvent):void {
+            var attrs:ArrayCollection = event.result as ArrayCollection;
+            this.attrValues.removeAll();
+            if (attrs != null) {
+                for each (var attr:AttrValueCustomerDTOImpl in attrs) {
+                    if (attr.attributeDTO.code.indexOf("IMAGE") == -1) {
+                        this.attrValues.addItem(attr);
+                    }
+                }
+            }
         }
 
         /**
@@ -1005,9 +1041,6 @@
                 initTab(customerOrderDetailTabNavigator.selectedIndex);
 
 
-
-
-
             } catch (e:Error) {
                 Alert.show("" + e, "Error");
             }
@@ -1022,16 +1055,24 @@
             var orderDto:CustomerOrderDTOImpl = this.customerOrderGrid.selectedItem as CustomerOrderDTOImpl;
 
             switch (idx) {
-                case 0: {
+                case 0:
+                {
                     remoteCustomerOrderService.findDeliveryDetailsByOrderNumber(orderDto.ordernum);
                     break;
                 }
-                case 1: {
+                case 1:
+                {
                     remoteCustomerOrderService.findDeliveryByOrderNumber(orderDto.ordernum);
                     break;
                 }
-                case 2: {
+                case 2:
+                {
                     readPaymentInformation();
+                    break;
+                }
+                case 3:
+                {
+                    remoteCustomerService.getEntityAttributes(orderDto.customerId);
                     break;
                 }
 
@@ -1046,7 +1087,7 @@
             orderPaymentManagementPanel.orderNumber.text = orderDto.ordernum;
             orderPaymentManagementPanel.onApplyFilterClick(null);
 
-            orderPaymentManagementPanel.panelTitle.title =  ""
+            orderPaymentManagementPanel.panelTitle.title = ""
                     + resourceManager.getString('CustomerOrderPanel', 'amount')
                     + " : "
                     + customerOrderGrid.selectedItem.amount
