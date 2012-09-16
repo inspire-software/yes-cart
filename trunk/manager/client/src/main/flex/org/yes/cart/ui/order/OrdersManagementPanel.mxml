@@ -55,6 +55,10 @@
                    result="onOrderResultStatusChanged(event)"
                    fault="onRpcMethodFault(event)"/>
 
+        <mx:method id="produceDeliveryReport" name="produceDeliveryReport"
+                   result="onProduceDeliveryReportResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
 
     </mx:RemoteObject>
 
@@ -462,6 +466,8 @@
                                                     import mx.events.DataGridEventReason;
                                                     import mx.managers.PopUpManager;
 
+                                                    import org.yes.cart.impl.CustomerOrderDTOImpl;
+
                                                     import org.yes.cart.ui.attributes.valuedialog.SimpleTextDialog;
                                                     import org.yes.cart.ui.attributes.valuedialog.ValueDialog;
 
@@ -564,6 +570,26 @@
                                                         openPopup();
 
                                                     }
+
+                                                    /**
+                                                     * Set external reference number of delivery.
+                                                     * @param customerOrderDeliveryDTO
+                                                     */
+                                                    public function onPrintReportButtonClick(customerOrderDeliveryDTO:Object):void {
+
+                                                        var orderDto:CustomerOrderDTOImpl = outerDocument.customerOrderGrid.selectedItem as CustomerOrderDTOImpl;
+
+                                                        outerDocument.remoteCustomerOrderService.produceDeliveryReport(
+                                                                resourceManager.getString("Common", "localeFilter"),
+                                                                orderDto.ordernum,
+                                                                data.deliveryNum
+
+                                                        )
+
+                                                    }
+
+
+
                                                     ]]>
                                                 </mx:Script>
 
@@ -576,7 +602,9 @@
                                             <mx:HBox horizontalAlign="right">
                                                 <mx:Button width="135"
                                                            label="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.ticket')"
-                                                           toolTip="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.ticket.hint')"/>
+                                                           toolTip="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.ticket.hint')"
+                                                           click="callLater(onPrintReportButtonClick, new Array(data))"
+                                                        />
                                                 <mx:Button width="135" id="refNumberActionButton"
                                                            label="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.setrefno')"
                                                            toolTip="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.setrefno.hint')"
@@ -665,6 +693,7 @@
 
 
     <mx:Script><![CDATA[
+        import mx.events.CloseEvent;
         import mx.events.IndexChangedEvent;
         import mx.events.ListEvent;
         import mx.rpc.events.FaultEvent;
@@ -688,6 +717,9 @@
         private var _searchCriteriarOrderNum:String;
         private var _searchCriteriarOrderDateFrom:Date;
         private var _searchCriteriarOrderDateTo:Date;
+
+        [Bindable]
+        private var pdf:ByteArray;
 
 
         public function init():void {
@@ -765,6 +797,42 @@
                 }
             }
         }
+
+        /**
+         * Handle status change
+         * @param event
+         */
+        private function onProduceDeliveryReportResult(event:ResultEvent):void {
+
+            pdf = ByteArray(event.result);
+
+            Alert.show(
+                    resourceManager.getString('CustomerOrderPanel', 'reportReady'),
+                    resourceManager.getString('Common', 'info'),
+                    Alert.YES | Alert.NO, null, onSaveReportToDiskClick, null, Alert.NO);
+
+        }
+
+
+        /**
+         * Save order to disk.
+         * @param event
+         */
+        private function onSaveReportToDiskClick(event:CloseEvent):void {
+
+            var orderDto:CustomerOrderDTOImpl = this.customerOrderGrid.selectedItem as CustomerOrderDTOImpl;
+            var reportName:String = "deliveryReport" + orderDto.ordernum + ".pdf";
+            if (event.detail == Alert.YES) { //csave
+                //http://forums.adobe.com/message/3614898
+                new FileReference().save(
+                        pdf,
+                        reportName
+                );
+                pdf = null;
+            }
+        }
+
+
 
         /**
          * Handle status change

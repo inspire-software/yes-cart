@@ -108,6 +108,24 @@ public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrder
     List<CustomerOrderDeliveryDTO> findDeliveryByOrderNumber(String orderNum)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
+    /**
+     * Get list of <code>CustomerOrderDeliveryDTO</code> for given order number. Each delivery  will include
+     * slave details objects.
+     *
+     * @param orderNum order number
+     * @param deliveryNum optional delivery number filter
+     * @return list of deliveries.
+     * @throws UnmappedInterfaceException in case of dto mapping error
+     * @throws UnableToCreateInstanceException
+     *                                    in case of dto mapping error
+     */
+    List<CustomerOrderDeliveryDTO> findDeliveryByOrderNumber( String orderNum, final String deliveryNum)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+
+
+
+
 
     /**
      * Find customer's order by given criteria.

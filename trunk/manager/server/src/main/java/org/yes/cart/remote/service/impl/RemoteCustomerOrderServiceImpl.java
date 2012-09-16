@@ -23,6 +23,7 @@ import org.yes.cart.domain.misc.Result;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.remote.service.RemoteCustomerOrderService;
+import org.yes.cart.report.ReportService;
 import org.yes.cart.service.dto.DtoCustomerOrderService;
 import org.yes.cart.service.dto.GenericDTOService;
 
@@ -38,14 +39,18 @@ public class RemoteCustomerOrderServiceImpl
         extends AbstractRemoteService<CustomerOrderDTO>
         implements RemoteCustomerOrderService {
 
+    private final ReportService reportService;
+
     /**
      * Construct remote service
      *
      * @param customerOrderDTOGenericDTOService
      *         dto serivese to use.
      */
-    public RemoteCustomerOrderServiceImpl(final GenericDTOService<CustomerOrderDTO> customerOrderDTOGenericDTOService) {
+    public RemoteCustomerOrderServiceImpl(final GenericDTOService<CustomerOrderDTO> customerOrderDTOGenericDTOService,
+                                          final ReportService reportService) {
         super(customerOrderDTOGenericDTOService);
+        this.reportService = reportService;
     }
 
     /**
@@ -115,4 +120,23 @@ public class RemoteCustomerOrderServiceImpl
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return ((DtoCustomerOrderService) getGenericDTOService()).findDeliveryByOrderNumber(orderNum);
     }
+
+    /** {@inheritDoc} */
+    public List<CustomerOrderDeliveryDTO> findDeliveryByOrderNumber(final String orderNum, final String deliveryNum)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return ((DtoCustomerOrderService) getGenericDTOService()).findDeliveryByOrderNumber(orderNum, deliveryNum);
+    }
+
+
+
+    /** {@inheritDoc} */
+    public byte[] produceDeliveryReport(final String reportLang, final String orderNum, final String deliveryNum)
+            throws Exception {
+
+        List rez =  findDeliveryByOrderNumber(orderNum, deliveryNum);
+
+        return reportService.produceReport(reportLang, "reportDelivery", rez);
+
+    }
+
 }

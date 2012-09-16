@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+<yes-report>
+    <org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl>
+        <customerOrderDeliveryId>18</customerOrderDeliveryId>
+        <deliveryNum>20120916-16-0</deliveryNum>
+        <refNo>йцу-213</refNo>
+        <deliveryStatus>ds.inventory.allocated</deliveryStatus>
+        <carrierSlaName>fixed</carrierSlaName>
+        <carrierName>carrier</carrierName>
+        <ordernum>20120916-16</ordernum>
+        <shippingAddress>ул. Первака дом 23 кв 213123 23144 Новый мухосранск 12 1 Ivan Pupkin +380978159119</shippingAddress>
+        <billingAddress>ул. Первака дом 23 кв 213123 23144 Новый мухосранск 12 1 Ivan Pupkin +380978159119</billingAddress>
+        <currency>USD</currency>
+        <shopName>YesCart shop</shopName>
+        <deliveryGroup>D1</deliveryGroup>
+        <price>10.00</price>
+        <detail class="list">
+            <org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl>
+                <customerOrderDeliveryDetId>19</customerOrderDeliveryDetId>
+                <skuCode>N1E5TGE</skuCode>
+                <skuName>ThinkPad T530</skuName>
+                <qty>4.00</qty>
+                <invoicePrice>1637.73</invoicePrice>
+                <listPrice>1637.73</listPrice>
+                <lineTotal>6550.92</lineTotal>
+                <deliveryNum>20120916-16-0</deliveryNum>
+                <deliveryStatusLabel>ds.inventory.allocated</deliveryStatusLabel>
+            </org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl>
+            <org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl>
+                <customerOrderDeliveryDetId>20</customerOrderDeliveryDetId>
+                <skuCode>B1R22EA#ABU</skuCode>
+                <skuName>Pavilion g6-1306sa Notebook PC</skuName>
+                <qty>3.00</qty>
+                <invoicePrice>2605.72</invoicePrice>
+                <listPrice>2605.72</listPrice>
+                <lineTotal>7817.16</lineTotal>
+                <deliveryNum>20120916-16-0</deliveryNum>
+                <deliveryStatusLabel>ds.inventory.allocated</deliveryStatusLabel>
+            </org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl>
+            <org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl>
+                <customerOrderDeliveryDetId>21</customerOrderDeliveryDetId>
+                <skuCode>B0R94EA#ABZ</skuCode>
+                <skuName>g6-1364sl</skuName>
+                <qty>2.00</qty>
+                <invoicePrice>979.39</invoicePrice>
+                <listPrice>979.39</listPrice>
+                <lineTotal>1958.78</lineTotal>
+                <deliveryNum>20120916-16-0</deliveryNum>
+                <deliveryStatusLabel>ds.inventory.allocated</deliveryStatusLabel>
+            </org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl>
+        </detail>
+    </org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl>
+</yes-report>

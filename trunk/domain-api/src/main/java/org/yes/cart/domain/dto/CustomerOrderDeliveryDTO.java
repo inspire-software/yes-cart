@@ -32,6 +32,7 @@ import java.util.Collection;
 public interface CustomerOrderDeliveryDTO   extends Identifiable {
 
 
+
     /**
      * Shipment pk.
      *
@@ -174,6 +175,55 @@ public interface CustomerOrderDeliveryDTO   extends Identifiable {
      * @param deliveryGroup delivery group.
      */
     void setDeliveryGroup(String deliveryGroup);
+
+    /**
+     * Get shipping address.
+     * @return shipping address.
+     */
+    String getShippingAddress();
+
+    /**
+     * Set shipping address.
+     * @param shippingAddress address
+     */
+    void setShippingAddress(String shippingAddress);
+
+    /**
+     * Get billing address.
+     * @return billing address.
+     */
+    String getBillingAddress();
+
+    /**
+     * Set billing address.
+     * @param billingAddress billing address.
+     */
+    void setBillingAddress(String billingAddress);
+
+    /**
+     * Order currency.
+     * @return currency
+     */
+    String getCurrency();
+
+    /**
+     * Set currency.
+     * @param currency currency
+     */
+    void setCurrency(String currency);
+
+    /**
+     * Get shop name.
+     * @return shop name.
+     */
+    String getShopName();
+
+    /**
+     * Set shop name.
+     * @param shopName shop name.
+     */
+    void setShopName(String shopName);
+
 
 
 }
