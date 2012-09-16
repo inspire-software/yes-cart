@@ -62,6 +62,20 @@ public class CustomerOrderDeliveryDTOImpl implements CustomerOrderDeliveryDTO {
     @DtoField(value = "customerOrder.ordernum", readOnly = true)
     private String ordernum;
 
+    @DtoField(value = "customerOrder.shippingAddress", readOnly = true)
+    private String shippingAddress;
+
+    @DtoField(value = "customerOrder.billingAddress", readOnly = true)
+    private String billingAddress;
+
+    @DtoField(value = "customerOrder.currency", readOnly = true)
+    private String currency;
+
+    @DtoField(value = "customerOrder.shop.name", readOnly = true)
+    private String shopName;
+
+
+
 
     @DtoField(value = "deliveryGroup", readOnly = true)
     private String deliveryGroup;
@@ -80,6 +94,47 @@ public class CustomerOrderDeliveryDTOImpl implements CustomerOrderDeliveryDTO {
             readOnly = true
     )
     private Collection<CustomerOrderDeliveryDetailDTO> detail;
+
+
+    /** {@inheritDoc} */
+    public String getShippingAddress() {
+        return shippingAddress;
+    }
+
+    /** {@inheritDoc} */
+    public void setShippingAddress(final String shippingAddress) {
+        this.shippingAddress = shippingAddress;
+    }
+
+    /** {@inheritDoc} */
+    public String getBillingAddress() {
+        return billingAddress;
+    }
+
+    /** {@inheritDoc} */
+    public void setBillingAddress(final String billingAddress) {
+        this.billingAddress = billingAddress;
+    }
+
+    /** {@inheritDoc} */
+    public String getCurrency() {
+        return currency;
+    }
+
+    /** {@inheritDoc} */
+    public void setCurrency(final String currency) {
+        this.currency = currency;
+    }
+
+    /** {@inheritDoc} */
+    public String getShopName() {
+        return shopName;
+    }
+
+    /** {@inheritDoc} */
+    public void setShopName(final String shopName) {
+        this.shopName = shopName;
+    }
 
     /** {@inheritDoc} */
     public Collection<CustomerOrderDeliveryDetailDTO> getDetail() {

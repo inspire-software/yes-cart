@@ -22,6 +22,36 @@
     <!-- #################################  reporting configuration ######################################-->
 
 
+    <bean id="reportDelivery" class="org.yes.cart.report.impl.ReportDescriptor">
+        <property name="reportId" value="reportDelivery"/>
+        <property name="visibleOnUI" value="false"/>
+        <property name="langLabel">
+            <list>
+                <bean class="org.yes.cart.report.impl.ReportPair">
+                    <constructor-arg index="0" value="en"/>
+                    <constructor-arg index="1" value="Delivery report"/>
+                </bean>
+                <bean class="org.yes.cart.report.impl.ReportPair">
+                    <constructor-arg index="0" value="ru"/>
+                    <constructor-arg index="1" value="Доcтавка"/>
+                </bean>
+            </list>
+        </property>
+        <property name="langXslfo">
+            <list>
+                <bean class="org.yes.cart.report.impl.ReportPair">
+                    <constructor-arg index="0" value="en"/>
+                    <constructor-arg index="1" value="delivery_en.xslfo"/>
+                </bean>
+                <bean class="org.yes.cart.report.impl.ReportPair">
+                    <constructor-arg index="0" value="ru"/>
+                    <constructor-arg index="1" value="delivery_ru.xslfo"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+
     <bean id="reportShopSummaryInfo" class="org.yes.cart.report.impl.ReportDescriptor">
         <property name="reportId" value="reportShopSummaryInfo"/>
         <property name="hsqlQuery" value="select s from ShopEntity s"/>

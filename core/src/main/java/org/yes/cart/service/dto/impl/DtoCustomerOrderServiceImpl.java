@@ -20,6 +20,7 @@ import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -300,16 +301,33 @@ public class DtoCustomerOrderServiceImpl
      */
     public List<CustomerOrderDeliveryDTO> findDeliveryByOrderNumber(final String orderNum)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        return findDeliveryByOrderNumber(orderNum, null);
+
+    }
+
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<CustomerOrderDeliveryDTO> findDeliveryByOrderNumber(final String orderNum, final String deliveryNum)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<CustomerOrder> orderList = ((CustomerOrderService) service).findCustomerOrdersByCriteria(
                 0, null, null, null, null, null, null, orderNum);
 
         if (CollectionUtils.isNotEmpty(orderList)) {
             final CustomerOrder customerOrder = orderList.get(0);
             final List<CustomerOrderDeliveryDTO> rez = new ArrayList<CustomerOrderDeliveryDTO>(customerOrder.getDelivery().size());
+
             for (CustomerOrderDelivery delivery : customerOrder.getDelivery()) {
-                final CustomerOrderDeliveryDTO dto = dtoFactory.getByIface(CustomerOrderDeliveryDTO.class);
-                orderDeliveryAssembler.assembleDto(dto, delivery, getAdaptersRepository(), dtoFactory);
-                rez.add(dto);
+
+                if (StringUtils.isBlank(deliveryNum) || (StringUtils.isNotBlank(deliveryNum) && delivery.getDeliveryNum().equals(deliveryNum))) {
+                    final CustomerOrderDeliveryDTO dto = dtoFactory.getByIface(CustomerOrderDeliveryDTO.class);
+                    orderDeliveryAssembler.assembleDto(dto, delivery, getAdaptersRepository(), dtoFactory);
+                    rez.add(dto);
+                }
+
             }
             return rez;
 

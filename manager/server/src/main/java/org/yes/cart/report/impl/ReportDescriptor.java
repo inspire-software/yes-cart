@@ -40,6 +40,23 @@ public class ReportDescriptor {
 
     private List<ReportPair> langXslfo = new ArrayList<ReportPair>();
 
+    private boolean visibleOnUI = true;
+
+    /**
+     * Is report visible on UI.
+     * @return   true report visible on UI.
+     */
+    public boolean isVisibleOnUI() {
+        return visibleOnUI;
+    }
+
+    /**
+     * Set report visible on UI.
+     * @param visibleOnUI flag report visible on UI.
+     */
+    public void setVisibleOnUI(boolean visibleOnUI) {
+        this.visibleOnUI = visibleOnUI;
+    }
 
     /**
      * Get reportId.

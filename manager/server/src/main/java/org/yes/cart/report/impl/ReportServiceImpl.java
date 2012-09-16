@@ -31,6 +31,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.Assert;
 import org.springframework.web.context.ServletContextAware;
+import org.xml.sax.SAXException;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.report.ReportService;
 
@@ -118,10 +119,20 @@ public class ReportServiceImpl implements ReportService, ServletContextAware, Ap
     /**
      * Get the list of report descriptors.
      *
-     * @return
+     * @return list of reports which visible on UI.
      */
+    @SuppressWarnings("unchecked")
     public List<ReportDescriptor> getReportDescriptors() {
-        return reportDescriptors;
+
+        return (List<ReportDescriptor>) CollectionUtils.select(
+                reportDescriptors,
+                new Predicate() {
+                    public boolean evaluate(Object object) {
+                        return ((ReportDescriptor)object).isVisibleOnUI();
+                    }
+                }
+
+        );
     }
 
     ReportDescriptor getReportDescriptorbyId(final String reportId) {
@@ -157,21 +168,56 @@ public class ReportServiceImpl implements ReportService, ServletContextAware, Ap
 
 
     /**
+     * Download report.
+     *
+     * @param reportId report descriptor.
+     * @param objectList   list of object for report
+     * @param lang     given lang to roduce report.
+     * @return true in case if report was generated successfuly.
+     * @
+     */
+    public byte[] produceReport(String lang, String reportId, List<Object> objectList) throws Exception {
+        final File tmpFile = File.createTempFile("yescartreport", "pdf");
+        if (createReport(lang, reportId, tmpFile.getAbsolutePath(), objectList)) {
+            return FileUtils.readFileToByteArray(tmpFile);
+        } else {
+            throw new Exception("Report can not be created , see server logs for more details. Sorry");
+        }
+    }
+
+
+    /**
      * Run report by his id.
      *
      * @param reportId report descriptor.
      * @param fileName report filename
      * @param params   report parameter values to pass it into hsql query.   Consequence of parameter must correspond to parameters in repoport description.
-     * @param lang     given lang to roduce report.
+     * @param lang     given lang to produce report.
      * @return true in case if report was generated successfuly.
      */
     public boolean createReport(final String lang, final String reportId, final String fileName, final Object... params) throws Exception {
 
-        final ReportDescriptor reportDescriptor = getReportDescriptorbyId(reportId);
+        final List<Object> rez = getQueryResult(getReportDescriptorbyId(reportId).getHsqlQuery(), params);
 
-        final List<Object> rez = getQueryResult(reportDescriptor.getHsqlQuery(), params);
+        return createReport(lang, reportId, fileName, rez);
+
+    }
+
+    /**
+     *
+     * @param reportId report descriptor.
+     * @param fileName report filename
+     * @param lang     given lang to roduce report.
+     * @param rez      list of object for report
+     * @return true in case if report was generated
+     * @throws SAXException
+     * @throws IOException
+     */
+    public boolean createReport(String lang, String reportId, String fileName, List<Object> rez) throws SAXException, IOException {
 
         final File xmlfile = getXml(rez);
+
+        final String xslFoFile = getReportDescriptorbyId(reportId).getLangXslfo(lang);
 
         if (xmlfile != null) {
 
@@ -199,19 +245,19 @@ public class ReportServiceImpl implements ReportService, ServletContextAware, Ap
 
 
             if (servletContext == null) {
-                xsltfile = new File(reportFolder + reportDescriptor.getLangXslfo(lang));
+                xsltfile = new File(reportFolder + xslFoFile);
             } else {
-                xsltfile = new File(servletContext.getRealPath(reportFolder + reportDescriptor.getLangXslfo(lang)));
+                xsltfile = new File(servletContext.getRealPath(reportFolder + xslFoFile));
                 fopFactory.getFontManager().setFontBaseURL(servletContext.getRealPath("WEB-INF"));
                 foUserAgent.setBaseURL("file:///" + servletContext.getRealPath("WEB-INF/report/"));
             }
 
 
             // Setup output
-            OutputStream out = new java.io.FileOutputStream(pdffile);
+            OutputStream out = new FileOutputStream(pdffile);
             System.out.println(pdffile.getAbsolutePath());
 
-            out = new java.io.BufferedOutputStream(out);
+            out = new BufferedOutputStream(out);
 
             try {
                 // Construct fop with desired output format
@@ -239,8 +285,6 @@ public class ReportServiceImpl implements ReportService, ServletContextAware, Ap
             } catch (Exception ex) {
 
                 LOG.error("Cannot create pdf " + ex.getMessage(), ex);
-                System.out.println("Cannot create pdf " + ex.getMessage());
-                ex.printStackTrace();
 
                 return false;
 
@@ -258,7 +302,6 @@ public class ReportServiceImpl implements ReportService, ServletContextAware, Ap
         }
 
         return false;
-
     }
 
     /**

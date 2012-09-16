@@ -56,12 +56,34 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     //@DtoField(value = "price", readOnly = true)
     private BigDecimal listPrice;
 
+    private BigDecimal lineTotal;
+
 
     @DtoField(value = "delivery.deliveryNum", readOnly = true)
     private String deliveryNum;
 
     @DtoField(value = "delivery.deliveryStatus", readOnly = true)
     private String deliveryStatusLabel;
+
+
+    /** {@inheritDoc} */
+    public BigDecimal getLineTotal() {
+        return lineTotal;
+    }
+
+    /** {@inheritDoc} */
+    public void setLineTotal(final BigDecimal lineTotal) {
+        this.lineTotal = lineTotal;
+    }
+
+
+    private void calculateLineTotal() {
+
+        if (qty != null && invoicePrice != null) {
+            lineTotal = qty.multiply(invoicePrice).setScale(2);
+        }
+
+    }
 
     /** {@inheritDoc} */
     public long getId() {
@@ -106,6 +128,7 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     /** {@inheritDoc} */
     public void setQty(final BigDecimal qty) {
         this.qty = qty;
+        calculateLineTotal();
     }
 
     /** {@inheritDoc} */
@@ -117,6 +140,7 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     public void setInvoicePrice(final BigDecimal invoicePrice) {
         this.invoicePrice = invoicePrice;
         setListPrice(invoicePrice); //todo add field and remove this
+        calculateLineTotal();
     }
 
     /** {@inheritDoc} */

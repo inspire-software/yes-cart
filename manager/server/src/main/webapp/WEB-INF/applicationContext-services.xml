@@ -410,6 +410,7 @@
 
     <bean id="remoteCustomerOrderService" class="org.yes.cart.remote.service.impl.RemoteCustomerOrderServiceImpl">
         <constructor-arg index="0" ref="dtoCustomerOrderService"/>
+        <constructor-arg index="1" ref="remoteReportService"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
@@ -623,6 +624,7 @@
                 <ref bean="reportShopSummaryInfo"/>
                 <ref bean="reportAvailableStock"/>
                 <ref bean="payments"/>
+                <ref bean="reportDelivery"/>
             </list>
         </constructor-arg>
         <constructor-arg value="report" index="2"/>
