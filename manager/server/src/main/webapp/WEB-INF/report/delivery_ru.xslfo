@@ -40,15 +40,15 @@
                 <fo:static-content flow-name="xsl-region-before">
                     <fo:block text-align="left" font-weight="bold" font-size="16pt">
                         <fo:external-graphic src="report/yes-logo.png" width="30mm"/>
-                        Delivery
+                        Доставка
                     </fo:block>
                 </fo:static-content>
 
                 <fo:static-content flow-name="xsl-region-after">
                     <fo:block text-align="right">
-                        Page
+                        Страница
                         <fo:page-number/>
-                        of
+                        из
                         <fo:page-number-citation ref-id="end"/>
                     </fo:block>
                 </fo:static-content>
@@ -64,12 +64,12 @@
                         </fo:block>
 
                         <fo:block border-width="1mm" padding-before="3mm">
-                            Order #
+                            Заказ #
                             <fo:inline font-weight="bold">
                                 <xsl:value-of
                                         select="./yes-report/org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl/ordernum"/>
                             </fo:inline>
-                            Delivery #
+                            Доставка #
                             <fo:inline font-weight="bold">
                                 <xsl:value-of
                                         select="./yes-report/org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl/deliveryNum"/>
@@ -78,12 +78,12 @@
 
 
                         <fo:block border-width="1mm" padding-before="3mm">
-                            Carrier name
+                            Перевозчик
                             <fo:inline font-weight="bold">
                                 <xsl:value-of
                                         select="./yes-report/org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl/carrierName"/>
                             </fo:inline>
-                            delivery SLA
+                            контракт
                             <fo:inline font-weight="bold">
                                 <xsl:value-of
                                         select="./yes-report/org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl/carrierSlaName"/>
@@ -93,7 +93,7 @@
                                 <xsl:value-of
                                         select="./yes-report/org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl/refNo"/>
                             </fo:inline>
-                            price
+                            цена
                             <fo:inline font-weight="bold">
                                 <xsl:value-of
                                         select="./yes-report/org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl/price"/>
@@ -111,7 +111,7 @@
                         </fo:block>
 
                         <fo:block>
-                            Delivery address
+                            Адрес доставки
                             <fo:inline font-weight="bold">
                                 <xsl:value-of
                                         select="./yes-report/org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl/shippingAddress"/>
@@ -124,7 +124,7 @@
                             </fo:block>
 
                             <fo:block>
-                                Billing address
+                                Адрес для счета
                                 <fo:inline font-weight="bold">
                                     <xsl:value-of
                                             select="./yes-report/org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl/billingAddress"/>
@@ -138,7 +138,7 @@
                         </fo:block>
 
                         <fo:block border-width="1mm" padding-before="3mm">
-                            Items delivery information
+                            Товар для доставки
                         </fo:block>
 
 
@@ -151,19 +151,19 @@
                                             <fo:block font-weight="bold">#</fo:block>
                                         </fo:table-cell>
                                         <fo:table-cell border="solid 1px black">
-                                            <fo:block font-weight="bold">SKU Code</fo:block>
+                                            <fo:block font-weight="bold">Код</fo:block>
                                         </fo:table-cell>
                                         <fo:table-cell border="solid 1px black">
-                                            <fo:block font-weight="bold">Name</fo:block>
+                                            <fo:block font-weight="bold">Наименование</fo:block>
                                         </fo:table-cell>
                                         <fo:table-cell border="solid 1px black">
-                                            <fo:block font-weight="bold">Price</fo:block>
+                                            <fo:block font-weight="bold">Цена</fo:block>
                                         </fo:table-cell>
                                         <fo:table-cell border="solid 1px black">
-                                            <fo:block font-weight="bold">Quantity</fo:block>
+                                            <fo:block font-weight="bold">Кол-во</fo:block>
                                         </fo:table-cell>
                                         <fo:table-cell border="solid 1px black">
-                                            <fo:block font-weight="bold">Total</fo:block>
+                                            <fo:block font-weight="bold">Сумма</fo:block>
                                         </fo:table-cell>
                                     </fo:table-row>
                                 </fo:table-header>
@@ -211,7 +211,7 @@
                                     <fo:table-row>
                                         <fo:table-cell border="solid 1px black" number-columns-spanned="5"
                                                        font-weight="bold">
-                                            <fo:block>Summary</fo:block>
+                                            <fo:block>Итого</fo:block>
                                         </fo:table-cell>
                                         <fo:table-cell border="solid 1px black" text-align="right" font-weight="bold">
                                             <fo:block>
@@ -221,18 +221,6 @@
                                                 <xsl:value-of
                                                         select="./yes-report/org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl/currency"/>
                                                 <xsl:text disable-output-escaping="yes"> <![CDATA[ ]]></xsl:text>
-                                            </fo:block>
-                                        </fo:table-cell>
-                                    </fo:table-row>
-                                    <fo:table-row>
-                                        <fo:table-cell border="solid 1px black" number-columns-spanned="5"
-                                                       font-weight="bold">
-                                            <fo:block>Count</fo:block>
-                                        </fo:table-cell>
-                                        <fo:table-cell border="solid 1px black" text-align="right" font-weight="bold">
-                                            <fo:block>
-                                                <xsl:value-of
-                                                        select="format-number(count(./yes-report/org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl/detail/org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl), '##')"/>
                                             </fo:block>
                                         </fo:table-cell>
                                     </fo:table-row>
