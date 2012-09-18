@@ -17,96 +17,110 @@
 
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:yci18n="org.yes.cart.ui.i18n.*" width="100%" height="100%">
 
+    <mx:HBox>
+        <mx:Form width="100%">
+            <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='code')">
+                <mx:TextInput id="codeTextInput" width="300" enabled="{allowChangeCode}"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='name')">
+                <mx:TextInput id="nameTextInput" width="300"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='displayName')">
+                <yci18n:i18nStringField id="displayNames"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='description')">
+                <mx:TextArea id="descriptionTextInput" width="300"/>
+            </mx:FormItem>
+            <mx:FormItem width="100%"
+                         label="@Resource(bundle='ProductManagementPanel',key='availableFrom')">
+                <mx:HBox>
+                    <mx:DateField id="productAvailableFromDateField" width="125"/>
+                    <mx:Button
+                            visible="{productAvailableFromDateField.selectedDate != null}"
+                            label="@Resource(bundle='ProductManagementPanel',key='clearDate')"
+                            toolTip="@Resource(bundle='ProductManagementPanel',key='clearFromDate')"
+                            click="productAvailableFromDateField.selectedDate = null;"/>
+                </mx:HBox>
+            </mx:FormItem>
+            <mx:FormItem width="100%"
+                         label="@Resource(bundle='ProductManagementPanel',key='availableTo')">
+                <mx:HBox>
+                    <mx:DateField id="productAvailableToDateField" width="125"/>
+                    <mx:Button
+                            visible="{productAvailableToDateField.selectedDate != null}"
+                            label="@Resource(bundle='ProductManagementPanel',key='clearDate')"
+                            toolTip="@Resource(bundle='ProductManagementPanel',key='clearToDate')"
+                            click="productAvailableToDateField.selectedDate = null;"/>
+                </mx:HBox>
+            </mx:FormItem>
+        </mx:Form>
 
-    <mx:Form width="100%">
-
-        <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='code')">
-            <mx:TextInput id="codeTextInput" width="300" enabled="{allowChangeCode}"/>
-        </mx:FormItem>
-        <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='name')">
-            <mx:TextInput id="nameTextInput" width="300"/>
-        </mx:FormItem>
-        <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='displayName')">
-            <yci18n:i18nStringField id="displayNames"/>
-        </mx:FormItem>
-        <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='description')">
-            <mx:TextArea id="descriptionTextInput" width="300"/>
-        </mx:FormItem>
-        <mx:FormItem width="100%"
-                     label="@Resource(bundle='ProductManagementPanel',key='availableFrom')">
-            <mx:HBox>
-                <mx:DateField id="productAvailableFromDateField" width="125"/>
-                <mx:Button
-                        visible="{productAvailableFromDateField.selectedDate != null}"
-                        label="@Resource(bundle='ProductManagementPanel',key='clearDate')"
-                        toolTip="@Resource(bundle='ProductManagementPanel',key='clearFromDate')"
-                        click="productAvailableFromDateField.selectedDate = null;"/>
-            </mx:HBox>
-        </mx:FormItem>
-        <mx:FormItem width="100%"
-                     label="@Resource(bundle='ProductManagementPanel',key='availableTo')">
-            <mx:HBox>
-                <mx:DateField id="productAvailableToDateField" width="125"/>
-                <mx:Button
-                        visible="{productAvailableToDateField.selectedDate != null}"
-                        label="@Resource(bundle='ProductManagementPanel',key='clearDate')"
-                        toolTip="@Resource(bundle='ProductManagementPanel',key='clearToDate')"
-                        click="productAvailableToDateField.selectedDate = null;"/>
-            </mx:HBox>
-        </mx:FormItem>
-        <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='featured')">
-            <mx:CheckBox id="featuredCheckBox"/>
-        </mx:FormItem>
-        <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='brand')">
-            <mx:ComboBox id="brandComboBox" width="300"
-                         dataProvider="{brands}"
-                         labelField="name"
-                         prompt="@Resource(bundle='ProductManagementPanel',key='selectBrandPropmt')"
-                    />
-        </mx:FormItem>
-        <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='type')">
-            <mx:ComboBox id="typeComboBox" width="300"
-                         dataProvider="{productTypes}"
-                         labelField="name"
-                         prompt="@Resource(bundle='ProductManagementPanel',key='selectTypePropmt')"
-                    />
-
-        </mx:FormItem>
-        <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='available')">
-            <mx:Label text="TODO: add inventory management"/>
-        </mx:FormItem>
+        <mx:Form width="100%">
 
 
-        <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='tag')">
-            <mx:TextInput id="tagTextInput" width="300"/>
-        </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='featured')">
+                <mx:CheckBox id="featuredCheckBox"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='brand')">
+                <mx:ComboBox id="brandComboBox" width="300"
+                             dataProvider="{brands}"
+                             labelField="name"
+                             prompt="@Resource(bundle='ProductManagementPanel',key='selectBrandPropmt')"
+                        />
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='type')">
+                <mx:ComboBox id="typeComboBox" width="300"
+                             dataProvider="{productTypes}"
+                             labelField="name"
+                             prompt="@Resource(bundle='ProductManagementPanel',key='selectTypePropmt')"
+                        />
 
-        <mx:FormItem width="100%"
-                     label="@Resource(bundle='ProductManagementPanel',key='uri')">
-            <mx:TextInput id="uriNameTextInput" width="300"/>
-        </mx:FormItem>
-        <mx:FormItem width="100%"
-                     label="@Resource(bundle='ProductManagementPanel',key='title')">
-            <mx:TextInput id="titleNameTextInput" width="300"/>
-        </mx:FormItem>
-        <mx:FormItem width="100%"
-                     label="@Resource(bundle='ProductManagementPanel',key='metakeywords')">
-            <mx:TextInput id="metakeywordsNameTextInput" width="300"/>
-        </mx:FormItem>
-        <mx:FormItem width="100%"
-                     label="@Resource(bundle='ProductManagementPanel',key='metadescription')">
-            <mx:TextInput id="metadescriptionNameTextInput" width="300"/>
-        </mx:FormItem>
+            </mx:FormItem>
 
-    </mx:Form>
+            <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='productAvailability')">
+                <mx:ComboBox id="productAvailabilityComboBox" width="200"
+                             labelField="name"
+                             prompt="@Resource(bundle='ProductManagementPanel',key='selectAvailability')"
+                        />
+            </mx:FormItem>
 
-    <mx:ControlBar horizontalAlign="right" width="50%">
-        <mx:Button
-                enabled="{productDTOImplChanged}"
-                label="@Resource(bundle='ProductManagementPanel',key='save')"
-                toolTip="@Resource(bundle='ProductManagementPanel',key='saveHint')"
-                click="saveProductChanges(event)"/>
-    </mx:ControlBar>
+
+
+            <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='tag')">
+                <mx:TextInput id="tagTextInput" width="300"/>
+            </mx:FormItem>
+
+            <mx:FormItem width="100%"
+                         label="@Resource(bundle='ProductManagementPanel',key='uri')">
+                <mx:TextInput id="uriNameTextInput" width="300"/>
+            </mx:FormItem>
+            <mx:FormItem width="100%"
+                         label="@Resource(bundle='ProductManagementPanel',key='title')">
+                <mx:TextInput id="titleNameTextInput" width="300"/>
+            </mx:FormItem>
+            <mx:FormItem width="100%"
+                         label="@Resource(bundle='ProductManagementPanel',key='metakeywords')">
+                <mx:TextInput id="metakeywordsNameTextInput" width="300"/>
+            </mx:FormItem>
+            <mx:FormItem width="100%"
+                         label="@Resource(bundle='ProductManagementPanel',key='metadescription')">
+                <mx:TextInput id="metadescriptionNameTextInput" width="300"/>
+            </mx:FormItem>
+
+            <mx:FormItem width="100%">
+                <mx:Button width="150"
+                           enabled="{productDTOImplChanged}"
+                           label="@Resource(bundle='ProductManagementPanel',key='save')"
+                           toolTip="@Resource(bundle='ProductManagementPanel',key='saveHint')"
+                           click="saveProductChanges(event)"/>
+
+            </mx:FormItem>
+
+        </mx:Form>
+
+    </mx:HBox>
+
+
 
     <mx:ArrayCollection id="propertyWatchers"/>
 
@@ -171,10 +185,12 @@
             propertyWatchers.addItem(BindingUtils.bindProperty(featuredCheckBox, "selected", _productDTOImpl, "featured"));
             propertyWatchers.addItem(BindingUtils.bindProperty(brandComboBox, "selectedItem", _productDTOImpl, "brandDTO"));
             propertyWatchers.addItem(BindingUtils.bindProperty(typeComboBox, "selectedItem", _productDTOImpl, "productTypeDTO"));
-            //BindingUtils.bindProperty(availableComboBox, "selectedItem", _productDTOImpl, "availabilityDTO");
+            //propertyWatchers.addItem(BindingUtils.bindProperty(productAvailabilityComboBox, "selectedItem", _productDTOImpl, "availability"));
 
+            //DataModelUtils.selectCombo(productAvailabilityComboBox, _productDTOImpl.availability, 'availability');
             DataModelUtils.selectCombo(brandComboBox, _productDTOImpl.brandDTO, 'brandId');
             DataModelUtils.selectCombo(typeComboBox, _productDTOImpl.productTypeDTO, 'producttypeId');
+
 
             propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "code", codeTextInput, "text"));
             propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "uri", uriNameTextInput, "text"));
@@ -189,7 +205,7 @@
             propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "featured", featuredCheckBox, "selected"));
             propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "brandDTO", brandComboBox, "selectedItem"));
             propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "productTypeDTO", typeComboBox, "selectedItem"));
-            //BindingUtils.bindProperty(_productDTOImpl, "availabilityDTO", availableComboBox, "selectedItem");
+            //propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "availability", productAvailabilityComboBox, "selectedItem.data"));
 
 
             propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "code", onProductDTOChanged));
