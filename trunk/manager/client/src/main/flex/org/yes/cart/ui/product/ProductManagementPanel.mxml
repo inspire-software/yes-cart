@@ -19,6 +19,10 @@
            xmlns:prod="org.yes.cart.ui.product.*"
            xmlns:seo="org.yes.cart.ui.seo.*"
            width="100%" height="100%" creationComplete="init();">
+
+
+    <mx:ArrayCollection id="productAvailability"/>
+
     <mx:Panel width="100%" height="100%" title="@Resource(bundle='ProductManagementPanel',key='products')"
               paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
 
@@ -206,6 +210,24 @@
         public function init():void {
             remoteBrandService.getAll();
             remoteProductTypeService.getAll();
+
+            productAvailability.addItem(
+                    {name: resourceManager.getString('ProductManagementPanel','productAvailabilityStandard') ,
+                     data:1}
+            );
+            productAvailability.addItem(
+                    {name: resourceManager.getString('ProductManagementPanel','productAvailabilityPreorder') ,
+                     data:2}
+            );
+            productAvailability.addItem(
+                    {name: resourceManager.getString('ProductManagementPanel','productAvailabilityBackorder') ,
+                     data:4}
+            );
+            productAvailability.addItem(
+                    {name: resourceManager.getString('ProductManagementPanel','productAvailabilityAlways') ,
+                     data:8}
+            );
+
         }
 
         private function onProductSelected(event:ListEvent):void {
@@ -223,6 +245,7 @@
             productCreateDialog = ProductCreateDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), ProductCreateDialog, true));
             productCreateDialog.brandComboBox.dataProvider = brandsList;
             productCreateDialog.productTypeComboBox.dataProvider = productTypesList;
+            productCreateDialog.productAvailabilityComboBox.dataProvider = productAvailability;
             productCreateDialog.saveBtn.addEventListener(MouseEvent.CLICK, onCreateNewProductSaveClick);
             PopUpManager.centerPopUp(productCreateDialog);
         }
@@ -254,6 +277,7 @@
                 product.name = productCreateDialog.nameTextImput.text;
                 product.productTypeDTO = ProductTypeDTOImpl(productCreateDialog.productTypeComboBox.selectedItem);
                 product.brandDTO = BrandDTOImpl(productCreateDialog.brandComboBox.selectedItem);
+                product.availability = productCreateDialog.productAvailabilityComboBox.selectedItem.data;
                 remoteProductService.create(product);
                 productCreateDialog.saveBtn.removeEventListener(MouseEvent.CLICK, onCreateNewProductSaveClick);
                 PopUpManager.removePopUp(productCreateDialog);
