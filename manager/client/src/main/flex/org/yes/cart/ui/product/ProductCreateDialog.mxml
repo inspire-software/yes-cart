@@ -41,6 +41,12 @@
                          prompt="@Resource(bundle='ProductManagementPanel',key='selectProductType')"
                     />
         </mx:FormItem>
+        <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='productAvailability')">
+            <mx:ComboBox id="productAvailabilityComboBox" width="200"
+                         labelField="name"
+                         prompt="@Resource(bundle='ProductManagementPanel',key='selectAvailability')"
+                    />
+        </mx:FormItem>
     </mx:Form>
 		
     <mx:ControlBar width="100%" horizontalAlign="right">
