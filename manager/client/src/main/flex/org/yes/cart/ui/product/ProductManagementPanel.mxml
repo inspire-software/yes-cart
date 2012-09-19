@@ -87,7 +87,10 @@
                 <mx:Canvas label="@Resource(bundle='ProductManagementPanel',key='summaryTab')"
                            width="100%"
                            height="100%">
-                    <prod:ProductSummaryPanel id="summaryPanel" brands="{brandsList}" productTypes="{productTypesList}"
+                    <prod:ProductSummaryPanel id="summaryPanel"
+                                              brands="{brandsList}"
+                                              productTypes="{productTypesList}"
+                                              productAvailability="{productAvailability}"
                                               creationComplete="initSummaryPanelListeners()"/>
                 </mx:Canvas>
                 <prod:ProductImageAttributesPanel id="imageTab"/>

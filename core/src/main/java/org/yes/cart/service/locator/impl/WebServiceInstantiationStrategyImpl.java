@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.locator.impl;
 
+import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.service.locator.InstantiationStrategy;
@@ -48,9 +49,18 @@ public class WebServiceInstantiationStrategyImpl implements InstantiationStrateg
         }
 
         try {
-            final QName qname = new QName(NAMESPACE_URI, getServiceName(serviceUrl));
+            /*final QName qname = new QName(NAMESPACE_URI, getServiceName(serviceUrl));
             final javax.xml.ws.Service webServ = javax.xml.ws.Service.create(qname);
-            return webServ.getPort(iface);
+            return webServ.getPort(iface);*/
+
+            JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
+
+            factory.setServiceClass(iface);
+
+            factory.setAddress( getServiceUrl(serviceUrl) );
+
+            return (T) factory.create();
+
         } catch (Exception e) {
             final RuntimeException instantiationException = new RuntimeException("Service " +serviceUrl + " cannot be instantiated");
             instantiationException.initCause(e);
@@ -64,6 +74,22 @@ public class WebServiceInstantiationStrategyImpl implements InstantiationStrateg
     String getServiceName(final String serviceUrl) {
         return serviceUrl.substring(serviceUrl.lastIndexOf('/') + 1);
     }
+
+
+    /**
+     * Just remove ?wsdl
+     * @param serviceUrl
+     * @return  service url without wsdl parameter.
+     */
+    String getServiceUrl(final String serviceUrl) {
+
+        if (serviceUrl.indexOf('?') > -1) {
+            return  serviceUrl.substring(0, serviceUrl.indexOf('?'));
+        }
+
+        return serviceUrl;
+    }
+
 
 
 
