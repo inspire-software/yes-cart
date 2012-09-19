@@ -17,6 +17,9 @@
 
 <mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:yci18n="org.yes.cart.ui.i18n.*" width="100%" height="100%">
 
+
+    <mx:ArrayCollection id="productAvailability"/>
+
     <mx:HBox>
         <mx:Form width="100%">
             <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='code')">
@@ -79,7 +82,9 @@
 
             <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='productAvailability')">
                 <mx:ComboBox id="productAvailabilityComboBox" width="200"
+                             dataProvider="{productAvailability}"
                              labelField="name"
+                             change="onProductAvailabilityChanged(event)"
                              prompt="@Resource(bundle='ProductManagementPanel',key='selectAvailability')"
                         />
             </mx:FormItem>
@@ -133,7 +138,9 @@
     <mx:Script><![CDATA[
         import mx.binding.utils.BindingUtils;
         import mx.binding.utils.ChangeWatcher;
+        import mx.controls.Alert;
         import mx.events.PropertyChangeEvent;
+        import mx.utils.ObjectUtil;
 
         import org.yes.cart.event.DtoEvent;
 
@@ -168,61 +175,84 @@
             displayNames.setSourceObject(null, null);
         }
 
+
+        private function onProductAvailabilityChanged(event:Event):void {
+            _productDTOImpl.availability = productAvailabilityComboBox.selectedItem.data;
+            onProductDTOChanged(null);
+        }
+
         private function bindProperties():void {
-
-            displayNames.setSourceObject(_productDTOImpl, 'displayNames');
-
-            propertyWatchers.addItem(BindingUtils.bindProperty(codeTextInput, "text", _productDTOImpl, "code"));
-            propertyWatchers.addItem(BindingUtils.bindProperty(uriNameTextInput, "text", _productDTOImpl, "uri"));
-            propertyWatchers.addItem(BindingUtils.bindProperty(titleNameTextInput, "text", _productDTOImpl, "title"));
-            propertyWatchers.addItem(BindingUtils.bindProperty(metakeywordsNameTextInput, "text", _productDTOImpl, "metakeywords"));
-            propertyWatchers.addItem(BindingUtils.bindProperty(metadescriptionNameTextInput, "text", _productDTOImpl, "metadescription"));
-            propertyWatchers.addItem(BindingUtils.bindProperty(nameTextInput, "text", _productDTOImpl, "name"));
-            propertyWatchers.addItem(BindingUtils.bindProperty(tagTextInput, "text", _productDTOImpl, "tag"));
-            propertyWatchers.addItem(BindingUtils.bindProperty(descriptionTextInput, "text", _productDTOImpl, "description"));
-            propertyWatchers.addItem(BindingUtils.bindProperty(productAvailableFromDateField, "selectedDate", _productDTOImpl, "availablefrom"));
-            propertyWatchers.addItem(BindingUtils.bindProperty(productAvailableToDateField, "selectedDate", _productDTOImpl, "availableto"));
-            propertyWatchers.addItem(BindingUtils.bindProperty(featuredCheckBox, "selected", _productDTOImpl, "featured"));
-            propertyWatchers.addItem(BindingUtils.bindProperty(brandComboBox, "selectedItem", _productDTOImpl, "brandDTO"));
-            propertyWatchers.addItem(BindingUtils.bindProperty(typeComboBox, "selectedItem", _productDTOImpl, "productTypeDTO"));
-            //propertyWatchers.addItem(BindingUtils.bindProperty(productAvailabilityComboBox, "selectedItem", _productDTOImpl, "availability"));
-
-            //DataModelUtils.selectCombo(productAvailabilityComboBox, _productDTOImpl.availability, 'availability');
-            DataModelUtils.selectCombo(brandComboBox, _productDTOImpl.brandDTO, 'brandId');
-            DataModelUtils.selectCombo(typeComboBox, _productDTOImpl.productTypeDTO, 'producttypeId');
+            
 
 
-            propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "code", codeTextInput, "text"));
-            propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "uri", uriNameTextInput, "text"));
-            propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "title", titleNameTextInput, "text"));
-            propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "metakeywords", metakeywordsNameTextInput, "text"));
-            propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "metadescription", metadescriptionNameTextInput, "text"));
-            propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "name", nameTextInput, "text"));
-            propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "tag", tagTextInput, "text"));
-            propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "description", descriptionTextInput, "text"));
-            propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "availablefrom", productAvailableFromDateField, "selectedDate"));
-            propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "availableto", productAvailableToDateField, "selectedDate"));
-            propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "featured", featuredCheckBox, "selected"));
-            propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "brandDTO", brandComboBox, "selectedItem"));
-            propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "productTypeDTO", typeComboBox, "selectedItem"));
-            //propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "availability", productAvailabilityComboBox, "selectedItem.data"));
+            try {
+
+                displayNames.setSourceObject(_productDTOImpl, 'displayNames');
+
+                propertyWatchers.addItem(BindingUtils.bindProperty(codeTextInput, "text", _productDTOImpl, "code"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(uriNameTextInput, "text", _productDTOImpl, "uri"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(titleNameTextInput, "text", _productDTOImpl, "title"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(metakeywordsNameTextInput, "text", _productDTOImpl, "metakeywords"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(metadescriptionNameTextInput, "text", _productDTOImpl, "metadescription"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(nameTextInput, "text", _productDTOImpl, "name"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(tagTextInput, "text", _productDTOImpl, "tag"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(descriptionTextInput, "text", _productDTOImpl, "description"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(productAvailableFromDateField, "selectedDate", _productDTOImpl, "availablefrom"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(productAvailableToDateField, "selectedDate", _productDTOImpl, "availableto"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(featuredCheckBox, "selected", _productDTOImpl, "featured"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(brandComboBox, "selectedItem", _productDTOImpl, "brandDTO"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(typeComboBox, "selectedItem", _productDTOImpl, "productTypeDTO"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(productAvailabilityComboBox, "selectedItem", _productDTOImpl, "availability"));
+
+                for (var i:int =0 ; i < productAvailabilityComboBox.dataProvider.length; i++) {
+                    if (productAvailabilityComboBox.dataProvider[i].data == _productDTOImpl.availability) {
+                        productAvailabilityComboBox.selectedIndex = i;
+                        break;
+                    }
+                }
+
+                DataModelUtils.selectCombo(brandComboBox, _productDTOImpl.brandDTO, 'brandId');
+                DataModelUtils.selectCombo(typeComboBox, _productDTOImpl.productTypeDTO, 'producttypeId');
 
 
-            propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "code", onProductDTOChanged));
-            propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "uri", onProductDTOChanged));
-            propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "title", onProductDTOChanged));
-            propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "metakeywords", onProductDTOChanged));
-            propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "metadescription", onProductDTOChanged));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "code", codeTextInput, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "uri", uriNameTextInput, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "title", titleNameTextInput, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "metakeywords", metakeywordsNameTextInput, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "metadescription", metadescriptionNameTextInput, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "name", nameTextInput, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "tag", tagTextInput, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "description", descriptionTextInput, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "availablefrom", productAvailableFromDateField, "selectedDate"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "availableto", productAvailableToDateField, "selectedDate"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "featured", featuredCheckBox, "selected"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "brandDTO", brandComboBox, "selectedItem"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "productTypeDTO", typeComboBox, "selectedItem"));
 
-            propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "tag", onProductDTOChanged));
-            propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "name", onProductDTOChanged));
-            propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "description", onProductDTOChanged));
-            propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "availablefrom", onProductDTOChanged));
-            propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "availableto", onProductDTOChanged));
-            propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "featured", onProductDTOChanged));
-            propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "brandDTO", onProductDTOChanged));
-            propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "productTypeDTO", onProductDTOChanged));
-            propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "availabilityDTO", onProductDTOChanged));
+
+                propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "code", onProductDTOChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "uri", onProductDTOChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "title", onProductDTOChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "metakeywords", onProductDTOChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "metadescription", onProductDTOChanged));
+
+                propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "tag", onProductDTOChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "name", onProductDTOChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "description", onProductDTOChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "availablefrom", onProductDTOChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "availableto", onProductDTOChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "featured", onProductDTOChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "brandDTO", onProductDTOChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "productTypeDTO", onProductDTOChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "availability", onProductDTOChanged));
+
+            } catch(e:Error) {
+
+                Alert.show("" + e.toString());
+
+            }
+
+
 
 
         }
