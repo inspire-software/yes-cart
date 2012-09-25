@@ -22,6 +22,7 @@ import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.ProductAssociationDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
+import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.service.dto.DtoAssociationService;
 import org.yes.cart.service.dto.DtoProductAssociationService;
 
@@ -73,6 +74,16 @@ public class DtoProductAssociationServiceImplTezt extends BaseCoreDBTestCase {
         assertEquals(5, list.size());
         dtoProductAssociationService.remove(dto.getProductassociationId());
     }
+
+
+    @Test (expected = UnableToCreateInstanceException.class)
+    public void testInvalidAssociationCreate() throws Exception {
+        ProductAssociationDTO dto = getDto();
+        dto.setProductId(11002L);
+        dto.setAssociatedProductId(11002L);
+        dtoProductAssociationService.create(dto);
+    }
+
 
     @Test
     public void testGetProductAssociationsByProductAssociationType() throws Exception {
