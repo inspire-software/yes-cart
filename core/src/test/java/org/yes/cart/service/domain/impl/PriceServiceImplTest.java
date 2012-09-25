@@ -55,7 +55,7 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
         priceService = (PriceService) ctx().getBean(ServiceSpringKeys.PRICE_SERVICE);
         shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
         try {
-            dumpDataBase("x0x0xx_cats" , new String [] {"TCATEGORY"});
+            dumpDataBase("x0x0xx_cats", new String[]{"TCATEGORY"});
         } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -69,7 +69,7 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
         assertNotNull(cat);
         PriceTierTree priceTierTree = cat.getNavigationByPriceTree();
         try {
-            dumpDataBase("x1x1xx_cats_nav" , new String [] {"TCATEGORY"});
+            dumpDataBase("x1x1xx_cats_nav", new String[]{"TCATEGORY"});
         } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -157,4 +157,40 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
         assertNotNull(skuPrice);
         assertTrue(MoneyUtils.isFirstEqualToSecond(new BigDecimal("1707.00"), skuPrice.getRegularPrice()));
     }
+
+    @Test
+    public void testUpdateDerivedPrices() {
+
+        Shop shop = shopService.getShopByDomainName("www.gadget.yescart.org");
+
+        priceService.updateDerivedPrices(shop, "UAH");
+
+        priceService.deleteDerivedPrices(shop, "UAH");
+
+
+    }
+
+    @Test
+    public void testCreatePriceTierNodes() {
+
+        PriceServiceImpl priceService1 = new PriceServiceImpl(null,null,null);
+
+        assertEquals( new BigDecimal("3000").intValue(), priceService1.niceBigDecimal(new BigDecimal("3000")).intValue());
+        assertEquals( new BigDecimal("30").intValue(), priceService1.niceBigDecimal(new BigDecimal("30")).intValue());
+        assertEquals( new BigDecimal("0").intValue(), priceService1.niceBigDecimal(new BigDecimal("3")).intValue());
+        assertEquals( new BigDecimal("10").intValue(), priceService1.niceBigDecimal(new BigDecimal("5")).intValue());
+        assertEquals( new BigDecimal("0").intValue(), priceService1.niceBigDecimal(new BigDecimal("1")).intValue());
+
+        assertEquals( new BigDecimal("10").intValue(), priceService1.niceBigDecimal(new BigDecimal("13")).intValue());
+
+        assertEquals( new BigDecimal("10").intValue(), priceService1.niceBigDecimal(new BigDecimal("9")).intValue());
+
+        assertEquals( new BigDecimal("1200").intValue(), priceService1.niceBigDecimal(new BigDecimal("1234")).intValue());
+        assertEquals( new BigDecimal("5700").intValue(), priceService1.niceBigDecimal(new BigDecimal("5678")).intValue());
+
+    }
+
+
+
+
 }

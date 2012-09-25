@@ -42,9 +42,7 @@
          * @return nothing
          */
         private function init():void {
-
             remoteShopService.getSupportedCurrencies(_shopDTOImpl.shopId);
-
         }
 
 

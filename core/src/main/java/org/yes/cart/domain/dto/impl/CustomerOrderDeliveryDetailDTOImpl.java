@@ -21,6 +21,7 @@ package org.yes.cart.domain.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO;
 
 import java.math.BigDecimal;
@@ -80,7 +81,7 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     private void calculateLineTotal() {
 
         if (qty != null && invoicePrice != null) {
-            lineTotal = qty.multiply(invoicePrice).setScale(2);
+            lineTotal = qty.multiply(invoicePrice).setScale(Constants.DEFAULT_SCALE);
         }
 
     }

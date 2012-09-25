@@ -61,4 +61,9 @@ public class PriceTierNodeImpl implements PriceTierNode {
         from = loPrice;
         to = hiPrice;
     }
+
+    public PriceTierNodeImpl(final PriceTierNode ptn) {
+        from = ptn.getFrom();
+        to = ptn.getTo();
+    }
 }

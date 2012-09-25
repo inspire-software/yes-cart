@@ -14,20 +14,21 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.domain.entity;
+package org.yes.cart.domain.dto;
+
+import org.yes.cart.domain.entity.Identifiable;
 
 import java.math.BigDecimal;
 
-
 /**
- * Currency exchange rate in particular store.
- * We are not holding the history of echange rates.
- * <p/>
- * User: Igor Azarny iazarny@yahoo.com
- * Date: 07-May-2011
- * Time: 11:12:54
+ *
+ * Dto for currencies exchange rate in shop.
+ *
+ * User: iazarny@yahoo.com
+ * Date: 9/22/12
+ * Time: 1:06 PM
  */
-public interface ShopExchangeRate extends Auditable {
+public interface ShopExchangeRateDTO extends Identifiable {
 
     /**
      * Get primary key
@@ -63,15 +64,15 @@ public interface ShopExchangeRate extends Auditable {
     void setToCurrency(String toCurrency);
 
     /**
-     * Get shop.
+     * @return {@link org.yes.cart.domain.entity.Shop}
      */
-    Shop getShop();
+    long getShopId();
 
     /**
-     * Get shop.
-     * @param shop shop
+     * Get shop id.
+     * @param shopId
      */
-    void setShop(Shop shop);
+    void setShopId(long shopId);
 
     /**
      * Get exchange rate between two currencies.
@@ -86,5 +87,3 @@ public interface ShopExchangeRate extends Auditable {
     void setRate(BigDecimal rate);
 
 }
-
-

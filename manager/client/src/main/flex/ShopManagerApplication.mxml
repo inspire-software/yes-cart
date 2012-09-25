@@ -64,6 +64,7 @@
         import org.yes.cart.impl.SeoImageDTOImpl;
 
         import org.yes.cart.impl.ShopDTOImpl;
+        import org.yes.cart.impl.ShopExchangeRateDTOImpl;
         import org.yes.cart.impl.ShopUrlDTOImpl;
         import org.yes.cart.impl.SkuPriceDTOImpl;
         import org.yes.cart.impl.SkuWarehouseDTOImpl;
@@ -130,6 +131,7 @@
             registerClassAlias("org.yes.cart.domain.dto.impl.SeoImageDTOImpl", SeoImageDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.ShopDTOImpl", ShopDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.ShopUrlDTOImpl", ShopUrlDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.ShopExchangeRateDTOImpl", ShopExchangeRateDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.SkuPriceDTOImpl", SkuPriceDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.SkuWarehouseDTOImpl", SkuWarehouseDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.StateDTOImpl", StateDTOImpl);

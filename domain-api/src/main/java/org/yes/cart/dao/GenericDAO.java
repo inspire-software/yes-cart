@@ -16,6 +16,8 @@
 
 package org.yes.cart.dao;
 
+import org.hibernate.Query;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 
 import java.io.Serializable;
@@ -83,11 +85,12 @@ public interface GenericDAO<T, PK extends Serializable> {
 
     /**
      * Find by hsql query.
-     * @param hsqlQuery query
+     *
+     * @param hsqlQuery  query
      * @param parameters parameters
      * @return list of objects.
      */
-    /*List<T> ???*/List<Object> findByQuery(String hsqlQuery,Object... parameters);
+    /*List<T> ???*/List<Object> findByQuery(String hsqlQuery, Object... parameters);
 
 
     /**
@@ -112,8 +115,8 @@ public interface GenericDAO<T, PK extends Serializable> {
     /**
      * Executes agregate named query, that return single scalar value.
      *
-     * @param namedQueryName name of query
-     * @param parameters     optional parameters for named query
+     * @param namedQueryName      name of query
+     * @param parameters          optional parameters for named query
      * @param forceCollectionInit force load collection if true
      * @return single entity
      */
@@ -191,8 +194,9 @@ public interface GenericDAO<T, PK extends Serializable> {
 
     /**
      * Find entities by criteria.
+     *
      * @param criteriaTuner optional criteria tuner.
-     * @param criterion given criterias
+     * @param criterion     given criterias
      * @return list of found entities.
      */
     List<T> findByCriteria(CriteriaTuner criteriaTuner, Criterion... criterion);
@@ -216,8 +220,9 @@ public interface GenericDAO<T, PK extends Serializable> {
 
     /**
      * Find entities by criteria.
+     *
      * @param firstResult scroll to firts result.
-     * @param criterion given criterias
+     * @param criterion   given criterias
      * @return list of found entities.
      */
     T findUniqueByCriteria(int firstResult, Criterion... criterion);
@@ -370,10 +375,11 @@ public interface GenericDAO<T, PK extends Serializable> {
     /**
      * Execute update.
      *
-     * @param hsql hibernate sql
+     * @param hsql       hibernate sql
+     * @param parameters hsql query parameters.
      * @return quantity of updated resords.
      */
-    int executeHsqlUpdate(String hsql);
+    int executeHsqlUpdate(String hsql, Object... parameters);
 
     /**
      * Execute update.
