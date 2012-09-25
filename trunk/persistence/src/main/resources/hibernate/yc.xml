@@ -2536,7 +2536,9 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
             <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" unique="true" index="SKUPRICE_GUID" not-null="true"/>
+			<property name="guid" column="GUID" type="string" length="36" unique="false" index="SKUPRICE_GUID" not-null="true"/>
+			<!--<property name="guid" column="GUID" type="string" length="36" unique="true" index="SKUPRICE_GUID" not-null="true"/>
+			some pb with bulk insert select are found-->
         </subclass>
     </class>        
 

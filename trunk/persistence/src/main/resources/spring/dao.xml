@@ -528,6 +528,16 @@
         </property>
     </bean>
 
+    <bean id="shopExchangeRateDao" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+                <constructor-arg><value>org.yes.cart.domain.entity.impl.ShopExchangeRateEntity</value></constructor-arg>
+                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+                <property name="sessionFactory" ref="sessionFactory"/>
+            </bean>
+        </property>
+    </bean>
+
     <bean id="seoDao" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">

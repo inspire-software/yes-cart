@@ -162,8 +162,8 @@ public interface PriceService extends GenericService<SkuPrice> {
             Shop shop);
 
     /**
-     * Recalculate derived prices. Derived prices - proces not in default currency, for example default shop currency is
-     * USD and sho psupport EUR also, but has not price lists for EUR currency and used currency exchange rate instead.
+     * Recalculate derived prices. Derived prices - prices not in default currency, for example default shop currency is
+     * USD and shop support EUR also, but has not price lists for EUR currency and used currency exchange rate instead.
      * Use delete / insert paragigm instead of insert/update.
      *
      * @param shop            shop
@@ -171,5 +171,13 @@ public interface PriceService extends GenericService<SkuPrice> {
      * @return quantity of created records.
      */
     int updateDerivedPrices(Shop shop, String derivedCurrency);
+
+
+    /**
+     * Delete derived prices in given shop.
+     * @param shop  given shop id
+     * @param derivedCurrency derived currency
+     */
+    void deleteDerivedPrices(Shop shop, String derivedCurrency);
 
 }

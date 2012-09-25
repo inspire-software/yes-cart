@@ -27,8 +27,9 @@
 
         private var TAB_URL_IDX:int = 1;
         private var TAB_CURRENCY_IDX:int = 2;
-        private var TAB_CATEGORY_IDX:int = 3;
-        private var TAB_WAREHOUSE_IDX:int = 4;
+        private var TAB_CURRENCY_EXCHANGE_IDX:int = 3;
+        private var TAB_CATEGORY_IDX:int = 4;
+        private var TAB_WAREHOUSE_IDX:int = 5;
 
 
         private var _shopDTOImpl:ShopDTOImpl;
@@ -64,6 +65,13 @@
             currencyTab.addChild(storeSupportedCurrencyPanel);
         }
 
+        private function currencyExcRateTabSelected(event:MouseEvent):void {
+            currencyExcangeTab.removeAllChildren();
+            var storeSupportedCurrencyPanel:StoreCurrencyExcahngePanel = new StoreCurrencyExcahngePanel();
+            storeSupportedCurrencyPanel.shopDTOImpl = _shopDTOImpl;
+            currencyExcangeTab.addChild(storeSupportedCurrencyPanel);
+        }
+
         private function categoryTabSelected(event:MouseEvent):void {
             categoryTab.removeAllChildren();
             var panel:StoreAssignedCategories = new StoreAssignedCategories();
@@ -94,6 +102,11 @@
                     currencyTabSelected(null);
                     break;
                 }
+                case TAB_CURRENCY_EXCHANGE_IDX:
+                {
+                    currencyExcRateTabSelected(null);
+                    break;
+                }
                 case TAB_CATEGORY_IDX:
                 {
                     categoryTabSelected(null);
@@ -118,18 +131,20 @@
                    id="urlTab"/>
         <mx:Canvas label="@Resource(bundle='StoresManagementPanel',key='currency')" width="100%" height="100%"
                    id="currencyTab"/>
+        <mx:Canvas label="@Resource(bundle='StoresManagementPanel',key='currencyExcRate')" width="100%" height="100%"
+                   id="currencyExcangeTab"/>
         <mx:Canvas label="@Resource(bundle='StoresManagementPanel',key='catalog')" width="100%" height="100%"
                    id="categoryTab"/>
         <mx:Canvas id="warehouseTab" label="@Resource(bundle='StoresManagementPanel',key='warehouses')"
                    width="100%" height="100%"/>
-        <mx:Canvas enabled="false" label="@Resource(bundle='StoresManagementPanel',key='payments')" width="100%"
+        <!--<mx:Canvas enabled="false" label="@Resource(bundle='StoresManagementPanel',key='payments')" width="100%"
                    height="100%"/>
         <mx:Canvas enabled="false" label="@Resource(bundle='StoresManagementPanel',key='customers')" width="100%"
                    height="100%"/>
         <mx:Canvas enabled="false" label="@Resource(bundle='StoresManagementPanel',key='marketing')" width="100%"
                    height="100%"/>
         <mx:Canvas enabled="false" label="@Resource(bundle='StoresManagementPanel',key='taxes')" width="100%"
-                   height="100%"/>
+                   height="100%"/>-->
     </mx:TabNavigator>
 
 

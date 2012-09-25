@@ -55,7 +55,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
     final private Class<T> persistentClass;
     final private EntityFactory entityFactory;
     final private EntityIndexingInterceptor entityIndexingInterceptor;
-    private SessionFactory sessionFactory;
+    protected SessionFactory sessionFactory;
 
 
     /**
@@ -643,11 +643,19 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
         return query.list();
     }
 
+
     /**
      * {@inheritDoc}
      */
-    public int executeHsqlUpdate(final String hsql) {
+    public int executeHsqlUpdate(final String hsql, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().createQuery(hsql);
+        int idx = 1;
+        if (parameters != null) {
+            for (Object param : parameters) {
+                query.setParameter(String.valueOf(idx), param);
+                idx++;
+            }
+        }
         return query.executeUpdate();
     }
 
