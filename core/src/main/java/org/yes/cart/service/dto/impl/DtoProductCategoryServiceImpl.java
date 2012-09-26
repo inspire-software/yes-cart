@@ -119,6 +119,16 @@ public class DtoProductCategoryServiceImpl
         ((ProductCategoryService)service).removeByCategoryProductIds(categoryId, productId);
     }
 
+    /**
+     * Check is product already assigned to category
+     *
+     * @param categoryId given category id
+     * @param productId  given product id
+     */
+    public boolean isAssignedCategoryProductIds(final long categoryId, final long productId) {
+        return  (((ProductCategoryService)service).findByCategoryIdProductId(categoryId, productId) != null)  ;
+    }
+
     /** {@inheritDoc} */
     public void removeByProductIds(final long productId) {
         ((ProductCategoryService)service).removeByProductIds(productId);

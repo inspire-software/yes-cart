@@ -39,6 +39,11 @@ public class ProductCategoryServiceImpl extends BaseGenericServiceImpl<ProductCa
     }
 
     /** {@inheritDoc} */
+    public ProductCategory findByCategoryIdProductId(final long categoryId, final long productId) {
+        return getGenericDao().findSingleByNamedQuery("PRODUCT.IN.CATEGORY" , categoryId, productId);
+    }
+
+    /** {@inheritDoc} */
     public void removeByCategoryProductIds(final long categoryId, final long productId) {
         getGenericDao().executeNativeUpdate(
                 "delete from tproductcategory where category_id = :1 and product_id = :2",

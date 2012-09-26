@@ -22,6 +22,8 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.service.domain.ProductCategoryService;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -40,6 +42,17 @@ public class ProductCategoryServiceImplTest extends BaseCoreDBTestCase {
         assertEquals("Next rank must be 50 for unexisting -777 category", 50, rez);
         rez = productCategoryService.getNextRank(116L);
         assertEquals("Next rank must be 50 for existing -116 category without products", 50, rez);
+    }
+             //<TPRODUCTCATEGORY PRODUCTCATEGORY_ID="10000" GUID="10000"  PRODUCT_ID="10000" CATEGORY_ID="101" RANK="999"/>
+
+    @Test
+    public void testFindByCategoryIdProductId() {
+
+        ProductCategoryService productCategoryService =
+                (ProductCategoryService) ctx().getBean(ServiceSpringKeys.PRODUCT_CATEGORY_SERVICE);
+        assertNotNull(productCategoryService.findByCategoryIdProductId(101, 10000));
+        assertNull(productCategoryService.findByCategoryIdProductId(101, 11000));
+
     }
 
 

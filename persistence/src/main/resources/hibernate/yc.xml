@@ -4576,6 +4576,14 @@ public void setRangeList(final RangeList rangeList) {
        ]]>
     </query>
 
+    <query name="PRODUCT.IN.CATEGORY">
+        <![CDATA[
+       select pc from  ProductCategoryEntity pc
+            where  pc.category.categoryId = ?1
+            and pc.product.productId =?2
+       ]]>
+    </query>
+
     <query name="ORDERS.COUNT">
         <![CDATA[
        select count(p) from CustomerOrderEntity p

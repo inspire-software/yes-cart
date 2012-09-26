@@ -34,6 +34,14 @@ public interface DtoProductCategoryService extends GenericDTOService<ProductCate
     void removeByCategoryProductIds(long categoryId, long productId);
 
     /**
+     * Check is product already assigned to category
+     *
+     * @param categoryId given category id
+     * @param productId  given product id
+     */
+    boolean isAssignedCategoryProductIds(long categoryId, long productId);
+
+    /**
      * Unlink product from all categories.
      *
      * @param productId  given product id
