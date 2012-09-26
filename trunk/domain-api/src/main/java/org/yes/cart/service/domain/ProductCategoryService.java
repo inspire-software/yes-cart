@@ -33,6 +33,14 @@ public interface ProductCategoryService extends GenericService<ProductCategory> 
      */
     void removeByCategoryProductIds(long categoryId, long productId);
 
+    /**
+     * Find single product-caterory entity by category and product id.
+     * @param categoryId  category id
+     * @param productId   product id
+     * @return {@link ProductCategory} if found, otherwise null
+     */
+    ProductCategory findByCategoryIdProductId( long categoryId,  long productId);
+
      /**
      * Unlink product from all categories.
      *

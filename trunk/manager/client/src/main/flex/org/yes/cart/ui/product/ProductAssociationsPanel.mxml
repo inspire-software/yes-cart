@@ -169,12 +169,15 @@
 
         private function onAddAssociationSaveClick(event:Event):void {
             if (createAssociationDialog != null && allowAdd) {
-                var productAssociationDTOImpl:ProductAssociationDTOImpl = getProductAssociationDTOImpl(_productId, createAssociationDialog.selectedProductDTOImpl.productId);
+
+                var productAssociationDTOImpl:ProductAssociationDTOImpl = getProductAssociationDTOImpl(
+                        _productId, createAssociationDialog.selectedProductDTOImpl.productId);
 
                 remoteProductAssociationService.create(productAssociationDTOImpl);
 
                 if (createAssociationDialog.reverseCheckBox.selected) {
-                    var reverseAssociation:ProductAssociationDTOImpl = getProductAssociationDTOImpl(createAssociationDialog.selectedProductDTOImpl.productId, _productId);
+                    var reverseAssociation:ProductAssociationDTOImpl = getProductAssociationDTOImpl(
+                            createAssociationDialog.selectedProductDTOImpl.productId, _productId);
                     remoteProductAssociationService.create(reverseAssociation);
                 }
 

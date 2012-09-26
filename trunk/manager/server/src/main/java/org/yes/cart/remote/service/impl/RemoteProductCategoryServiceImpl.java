@@ -40,7 +40,7 @@ public class RemoteProductCategoryServiceImpl
      * Construct remote service.
      *
      * @param dtoProductCategoryService dto service to use.
-     * @param reindexService product reindex service
+     * @param reindexService            product reindex service
      */
     public RemoteProductCategoryServiceImpl(
             final DtoProductCategoryService dtoProductCategoryService,
@@ -75,9 +75,14 @@ public class RemoteProductCategoryServiceImpl
      * {@inheritDoc}
      */
     public ProductCategoryDTO create(ProductCategoryDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        ProductCategoryDTO rez = super.create(instance);
-        reindexService.reindexProduct(rez.getProductId());
-        return rez;
+        if (!isAssignedCategoryProductIds(instance.getCategoryId(), instance.getProductId())) {
+            ProductCategoryDTO rez = super.create(instance);
+            reindexService.reindexProduct(rez.getProductId());
+            return rez;
+        }
+
+        throw new UnableToCreateInstanceException("Product Already assigned to this category ", null);
+
     }
 
     /**
@@ -87,6 +92,15 @@ public class RemoteProductCategoryServiceImpl
         ProductCategoryDTO rez = super.update(instance);
         reindexService.reindexProduct(rez.getProductId());
         return rez;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isAssignedCategoryProductIds(final long categoryId, final long productId) {
+
+        return ((DtoProductCategoryService) getGenericDTOService()).isAssignedCategoryProductIds(categoryId, productId);
+
     }
 
     /**
