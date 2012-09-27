@@ -17,6 +17,8 @@
 package org.yes.cart.web.page;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.yes.cart.web.page.component.footer.StandardFooter;
+import org.yes.cart.web.page.component.header.StandardHeader;
 
 /**
  * User: igora Igor Azarny
@@ -27,10 +29,24 @@ public class FaqPage extends AbstractWebPage {
 
     /**
      * FAQ page constructor.
+     *
      * @param params page parameters.
      */
     public FaqPage(PageParameters params) {
         super(params);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    protected void onBeforeRender() {
+
+        add(
+                new StandardFooter(FOOTER)
+        ).add(
+                new StandardHeader(HEADER)
+        );
+
+        super.onBeforeRender();
+    }
 }

@@ -31,5 +31,7 @@
 	
 	<entry key="checkout">Checkout</entry>
 	<entry key="shopping">Continue shopping</entry>
+	<entry key="select.addr">Provide shipping and billing addresses</entry>
+	
 	
 </properties>

@@ -18,6 +18,8 @@ package org.yes.cart.web.page;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.yes.cart.web.page.component.cart.ShoppingCartView;
+import org.yes.cart.web.page.component.footer.StandardFooter;
+import org.yes.cart.web.page.component.header.StandardHeader;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -43,10 +45,15 @@ public class ShoppingCartPage extends AbstractWebPage {
 
     @Override
     protected void onBeforeRender() {
+
         processCommands();
 
         addOrReplace(
                 new ShoppingCartView(CART_VIEW)
+        ).addOrReplace(
+                new StandardFooter(FOOTER)
+        ).addOrReplace(
+                new StandardHeader(HEADER)
         );
 
         super.onBeforeRender();

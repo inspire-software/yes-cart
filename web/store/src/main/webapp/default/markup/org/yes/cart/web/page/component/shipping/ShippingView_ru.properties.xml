@@ -19,4 +19,5 @@
 <properties>
 	<entry key="carrier">Перевозчик</entry>
 	<entry key="carrierSla">Метод доставки</entry>
+	<entry key="carrier.select">Выбери перевозчика и метод доставки</entry>
 </properties>

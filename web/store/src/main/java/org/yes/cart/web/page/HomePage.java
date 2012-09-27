@@ -32,6 +32,8 @@ import org.yes.cart.web.page.component.cart.SmallShoppingCartView;
 import org.yes.cart.web.page.component.filterednavigation.AttributeProductFilter;
 import org.yes.cart.web.page.component.filterednavigation.BrandProductFilter;
 import org.yes.cart.web.page.component.filterednavigation.PriceProductFilter;
+import org.yes.cart.web.page.component.footer.StandardFooter;
+import org.yes.cart.web.page.component.header.StandardHeader;
 import org.yes.cart.web.page.component.product.FeaturedProducts;
 import org.yes.cart.web.page.component.product.NewArrivalProducts;
 import org.yes.cart.web.page.component.search.SearchView;
@@ -116,21 +118,29 @@ public class HomePage extends AbstractWebPage {
         );
 
 
-        add(new Currency("currency"));
-        add(new Language("language"));
+
         add(new TopCategories("topCategories"));
         add(new BrandProductFilter("brandFilter", query, categoryId));
         add(new AttributeProductFilter("attributeFilter", query, categoryId));
         add(new PriceProductFilter("priceFilter", query, categoryId));
         add(new BreadCrumbsView("breadCrumbs", categoryId, shopCategories));
-        add(new SearchView("search"));
-        add(new SmallShoppingCartView("smallCart"));
+
 
         add(new NewArrivalProducts("newArrival"));
-        add(new FeaturedProducts("featured"));
+
         //add(new Carousel("featured"));
 
         add(getCentralPanel(centralViewLabel, "centralView", categoryId, query));
+
+        add(
+                new StandardHeader(HEADER)
+        );
+
+        add(
+                new StandardFooter(FOOTER)
+        );
+
+
 
 
         super.onBeforeRender();

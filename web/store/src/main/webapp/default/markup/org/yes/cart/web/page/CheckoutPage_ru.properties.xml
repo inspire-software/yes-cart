@@ -31,4 +31,5 @@
 	
 	<entry key="checkout">Оформление покупки</entry>
 	<entry key="shopping">Обратно в магазин</entry>
+	<entry key="select.addr">Укажи адреса для доставки и счета</entry>
 </properties>

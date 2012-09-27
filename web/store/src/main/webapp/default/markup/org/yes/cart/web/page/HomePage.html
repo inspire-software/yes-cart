@@ -33,87 +33,9 @@
 
 <div class="mainpage">
 
-    <div class="row grhead">
-        <div class="column grid_13 grhead">
-            <p>
-                <wicket:container wicket:id="search">
-                    [search]
-                </wicket:container>
-            </p>
-        </div>
-        <div class="column grid_3 grhead">
-            <p align="right">
-                <wicket:container wicket:id="smallCart">
-                    [small shopping cart]
-                </wicket:container>
-            </p>
-        </div>
-    </div>
 
-    <script>
-        function getCategoryId() {
-            var urlPart = document.URL.split("/");
-            var partMum = 0;
-            var hasCategoryId = false;
-            for (partNum = 0; partNum < urlPart.length; partNum++) {
-                if(hasCategoryId) {
-                    return  "/category/" +  urlPart[partNum];
-                }
-                hasCategoryId = ('category' == urlPart[partNum]);
-            }
-            return "";
+    <span wicket:id="header">[header]</span>
 
-        }
-    </script>
-
-
-    <div class="row">
-        <div class="column grid_16">
-            <ul class="menu">
-                <li><a href="tag/sale" onclick="this.href = this.href + getCategoryId(); return true;"><span><wicket:message key="sale">[Sale]</wicket:message></span></a></li>
-                <li><a href="tag/specialoffer" onclick="this.href = this.href + getCategoryId(); return true;"><span><wicket:message key="special.offer">[Special offer]</wicket:message></span></a></li>
-                <li><a href="tag/newarrival" onclick="this.href = this.href + getCategoryId(); return true;"><span><wicket:message key="new.arrivals">[New products]</wicket:message></span></a></li>
-                <li>
-                    <wicket:link>
-                        <a href="CustomerSelfCarePage.html"><span><wicket:message key="profile">[Profile]</wicket:message></span></a>
-                    </wicket:link>
-                </li>
-                <li><wicket:link><a href="FaqPage.html"><span><wicket:message key="faq">[FAQ]</wicket:message></span></a></wicket:link></li>
-                <li><wicket:link><a href="ContactPage.html"><span><wicket:message key="contacts">[Contacts]</wicket:message></span></a></wicket:link></li>
-            </ul>
-
-        </div>
-    </div>
-
-
-    <div class="row">
-        <div class="column grid_4">
-            <p>
-                <wicket:link>
-                    <img src="../../../../../style/yes-logo.png" border="0"/>
-                </wicket:link>
-            </p>
-        </div>
-        <div class="column grid_8">
-            <p>
-                <wicket:container wicket:id="featured">
-                    [featured products]
-                </wicket:container>
-            </p>
-        </div>
-        <div class="column grid_4">
-            <p align="right">
-                <wicket:container wicket:id="currency">
-                    [switch currency]
-                </wicket:container>
-            </p>
-            <p align="right">
-                <wicket:container wicket:id="language">
-                    [switch language]
-                </wicket:container>
-            </p>
-        </div>
-    </div>
 
 
     <div class="row">
@@ -163,13 +85,7 @@
         </div>
     </div>
 
-    <div class="row gr">
-        <div class="column grid_16 gr">
-            <p>
-                &nbsp;
-            </p>
-        </div>
-    </div>
+    <span wicket:id="footer">[footer]</span>
 
 
 </div>

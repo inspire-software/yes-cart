@@ -18,60 +18,48 @@
 <body>
 <wicket:panel>
     <form wicket:id="shippingForm">
-        <div class="row">
-            <div class="g72 m5">
-                <p>&nbsp;
-                </p>
-            </div>
-
-            <div class="g216 m5">
-                <p>
-                    <wicket:message key="carrier">[Carrier]</wicket:message>
-                </p>
-
-            </div>
-            <div class="g360 m5">
-                <p>
-                    <select wicket:id="carrier" class="input-select"/>
-                </p>
-            </div>
-            
-        </div>
-
-        <div class="row">
-            <div class="g72 m5">
-                <p>&nbsp;
-                </p>
-            </div>
-
-            <div class="g216 m5">
+	
+		<div class="g864 m5 menu"  style="border: solid 1px #d6d6d6;">
+			<p>
+				<span><wicket:message key="carrier.select">[Select Carrier and SLA]</wicket:message></span>
+			</p>
+		</div>
+			
+			<div style="display:inline-block">
+			<div class="g216 m5">
+			<p>
+				<wicket:message key="carrier">[Carrier]</wicket:message>
+			</p>
+		</div>
+		<div class="g360 m5">
+			<p>
+				<select wicket:id="carrier" class="input-select"/>
+			</p>
+		</div>
+		<div class="g288 m5"><p>&nbsp;</p></div>
+			</div>
+        
+<div style="display:inline-block">
+        <div class="g216 m5">
                 <p>
                     <wicket:message key="carrierSla">[Carrier SLA]</wicket:message>
                 </p>
 
             </div>
-            <div class="g576 m5">
+            <div class="g360 m5">
                 <p>
                     <select wicket:id="carrierSla" class="input-select"/>
                 </p>
 
             </div>
-        </div>
-		
-		<div class="row">
-		<div class="g504 m5">
-                <p>&nbsp;
-                </p>
-            </div>
-		<div class="g144 m5"  style="  font-size:16px; margin-top: 5px; padding-top: 10px;	">
+			<div class="g144 m5"  style="  font-size:16px; margin-left: -60px;">
                 <p>&nbsp;
                     <wicket:container wicket:id="priceView">
                         [price]
                     </wicket:container>
                 </p>
-            </div>
-		</div>
-
+            </div>	
+		  </div>
     </form>
 </wicket:panel>
 </body>

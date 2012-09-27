@@ -31,6 +31,8 @@ import org.yes.cart.web.page.component.customer.dynaform.DynaFormPanel;
 import org.yes.cart.web.page.component.customer.order.CustomerOrderPanel;
 import org.yes.cart.web.page.component.customer.password.PasswordPanel;
 import org.yes.cart.web.page.component.customer.summary.SummaryPanel;
+import org.yes.cart.web.page.component.footer.StandardFooter;
+import org.yes.cart.web.page.component.header.StandardHeader;
 
 /**
  *
@@ -83,6 +85,10 @@ public class CustomerSelfCarePage extends AbstractWebPage {
                 new SummaryPanel(SUMMARY_PANEL, customerModel)
         ).add(
                 new CustomerOrderPanel(ORDERS_PANEL, customerModel)
+        ).add(
+                new StandardFooter(FOOTER)
+        ).add(
+                new StandardHeader(HEADER)
         );
 
     }
