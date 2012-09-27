@@ -53,6 +53,8 @@ import org.yes.cart.web.page.component.cart.ShoppingCartPaymentVerificationView;
 import org.yes.cart.web.page.component.customer.address.ManageAddressesView;
 import org.yes.cart.web.page.component.customer.auth.LoginPanel;
 import org.yes.cart.web.page.component.customer.auth.RegisterPanel;
+import org.yes.cart.web.page.component.footer.StandardFooter;
+import org.yes.cart.web.page.component.header.StandardHeader;
 import org.yes.cart.web.page.component.shipping.ShippingView;
 import org.yes.cart.web.page.component.util.PaymentGatewayDescriptorModel;
 import org.yes.cart.web.page.component.util.PaymentGatewayDescriptorRenderer;
@@ -194,7 +196,12 @@ public class CheckoutPage extends AbstractWebPage {
                 googleCheckoutLabel.setVisible(ApplicationDirector.getInstance().isGoogleCheckoutEnabled())
         ).add(
                 getContent(currentStep)
+        ).addOrReplace (
+                new StandardFooter(FOOTER)
+        ).addOrReplace(
+                new StandardHeader(HEADER)
         );
+
 
 
     }
@@ -568,6 +575,7 @@ public class CheckoutPage extends AbstractWebPage {
     protected void onBeforeRender() {
 
         processCommands();
+
 
         super.onBeforeRender();
 

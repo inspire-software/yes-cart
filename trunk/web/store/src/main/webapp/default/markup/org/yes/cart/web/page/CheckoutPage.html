@@ -32,33 +32,20 @@
 <body>
 
 <div class="mainpage">
-    <div class="row grhead">
-        <div class="column grid_16 grhead">
-            <p>
-                <wicket:message key="checkout">[Checkout]</wicket:message>
-            </p>
-        </div>
-    </div>
 
+
+    <span wicket:id="header">[header]</span>
     <div class="row">
-        <div class="column grid_1">
-            <p>
-                &nbsp;
-            </p>
-        </div>
-        <div class="column grid_14">
-
-            <wicket:container wicket:id="navigation">
+		
+        <div class="column grid_16">
+			<wicket:container wicket:id="navigation">
                 [step navigation panel]
             </wicket:container>
-
-        </div>
-        <div class="column grid_1">
-            <p>
-                &nbsp;
-            </p>
+			
         </div>
     </div>
+
+    
 
     <div class="row">
         <div class="column grid_1">
@@ -104,15 +91,9 @@
         </wicket:container>
         <div class="column grid_1">
         </div>
-    </div>	    
-	
-	<div class="row gr">
-        <div class="column grid_16 gr">
-            <p>
-                &nbsp;
-            </p>
-        </div>
     </div>
+
+    <span wicket:id="footer">[footer]</span>
 
 
 
@@ -121,30 +102,27 @@
 
 <wicket:fragment wicket:id="addressFragment">
 	<div class="column grid_14">
-	
-
-		<div class="g864">
+		<div class="g864 m5 menu"  style="border: solid 1px #d6d6d6;">
 			<p>
-				<form wicket:id="billingTheSameForm">
-                    <input type="checkbox" wicket:id="billingTheSame">
-                    <wicket:message key="billingAddrTheSame">[Billing address the same]</wicket:message>
-                </form>
+				<span><wicket:message key="select.addr">[Address to use]</wicket:message></span>
 			</p>
 		</div>
+
 		
-		<div class="g864">
-				<wicket:container wicket:id="shippingAddress">
-                    [Shipping address]
-                </wicket:container>	
+		<p>
+			<form wicket:id="billingTheSameForm">
+				<input type="checkbox" wicket:id="billingTheSame">
+				<wicket:message key="billingAddrTheSame">[Billing address the same]</wicket:message>
+			</form>
+		</p>
 			
-		</div>
-		
-		
-		<div class="g864">			
-				<wicket:container wicket:id="billingAddress">
-                    [Shipping address]
-                </wicket:container>			
-		</div>
+		<wicket:container wicket:id="shippingAddress">
+			[Shipping address]
+		</wicket:container>	
+
+		<wicket:container wicket:id="billingAddress">
+			[Shipping address]
+		</wicket:container>			
 		
 		
 		
@@ -167,13 +145,6 @@
 
 <wicket:fragment wicket:id="threeStepNavigationFragment">
     <ul class="menu">
-		<li>
-            <wicket:link>
-                <a href="HomePage.html">
-                    <span><wicket:message key="shopping"> [Shopping &lt;&lt;&lt;]</wicket:message></span>
-                </a>
-            </wicket:link>
-		</li>
         <li>
             <wicket:link>
                 <a href="?thp=true&amp;step=address">
@@ -202,13 +173,6 @@
 <wicket:fragment wicket:id="fourStepNavigationFragment">
 
     <ul class="menu">
-		<li>
-            <wicket:link>
-                <a href="HomePage.html">
-                    <span><wicket:message key="shopping"> [Shopping &lt;&lt;&lt;]</wicket:message></span>
-                </a>
-            </wicket:link>
-		</li>	
         <li>
             <wicket:link>
                 <a href="?thp=true&amp;step=login">
@@ -261,29 +225,33 @@
 
 
 <wicket:fragment wicket:id="shipmentFragment">
-    <table>
-        <tr>
-            <td>
-                <wicket:container wicket:id="shipmentView">
-                    [Shipping address]
-                </wicket:container>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <wicket:link>
-                    <a href="?thp=true&amp;step=address"  class="button gray back">
-                        <span><wicket:message key="addressStep">[Address]</wicket:message></span>
-                    </a>
-                </wicket:link>
-                <wicket:link>
-                    <a href="?thp=true&amp;step=payment" class="button gray forward">
-                        <span><wicket:message key="paymentStep">[Verification and payment]</wicket:message></span>
-                    </a>
-                </wicket:link>
-            </td>
-        </tr>
-    </table>
+<div class="column grid_14">
+	<wicket:container wicket:id="shipmentView">
+        [Shipping address]
+    </wicket:container>
+	
+<div class="g864" style="display:inline-block">
+			<wicket:link>
+				<a href="?thp=true&amp;step=address"  class="button gray back">
+					<span><wicket:message key="addressStep">[Address]</wicket:message></span>
+				</a>
+			</wicket:link>
+			<wicket:link>
+				<a href="?thp=true&amp;step=payment" class="button gray forward">
+					<span><wicket:message key="paymentStep">[Verification and payment]</wicket:message></span>
+				</a>
+			</wicket:link>
+            
+        </div>	
+		
+	<div class="g864" style="display:inline-block">
+		&nbsp;
+	</div>
+
+</div>
+
+    
+
 </wicket:fragment>
 
 <wicket:fragment wicket:id="paymentFragment">

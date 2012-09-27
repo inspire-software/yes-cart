@@ -45,6 +45,8 @@ import java.util.Locale;
 public class AbstractWebPage extends WebPage {
 
     public static final String FEEDBACK = "feedback";
+    public static final String FOOTER = "footer";
+    public static final String HEADER = "header";
 
     @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)
     private ShoppingCartCommandFactory shoppingCartCommandFactory;

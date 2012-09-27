@@ -35,6 +35,8 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.shoppingcart.impl.CleanCartCommandImpl;
 import org.yes.cart.web.application.ApplicationDirector;
+import org.yes.cart.web.page.component.footer.StandardFooter;
+import org.yes.cart.web.page.component.header.StandardHeader;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.util.Collections;
@@ -124,6 +126,12 @@ public class PaymentPage extends AbstractWebPage {
 
         add(
                result ? createPositiveResultFragment() :  createNegativeResultFragment()
+        );
+
+        addOrReplace(
+                new StandardFooter(FOOTER)
+        ).addOrReplace(
+                new StandardHeader(HEADER)
         );
 
         super.onBeforeRender();

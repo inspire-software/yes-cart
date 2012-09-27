@@ -17,8 +17,18 @@
 
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-	<entry key="carrier">Carrier</entry>
-	<entry key="carrierSla">Shipping method</entry>
-	<entry key="carrier.select">Select carrier and shipping method</entry>
-	
+    <entry key="profile">Личный кабинет</entry>
+    <entry key="faq">ЧАВО</entry>
+    <entry key="contacts">Контакты</entry>
+    <entry key="site.map">Карта сайта</entry>
+	<entry key="help">Справка</entry>
+	<entry key="about.shop">О нас</entry>
+	<entry key="platform">Платформа</entry>
+	<entry key="call.center">Служба поддержки</entry>
+	<entry key="return.policy">Возврат товара</entry>
+	<entry key="order.guide">Как заказать</entry>
+	<entry key="order.history">История заказов</entry>
+	<entry key="location">Расположение</entry>
+	<entry key="licence.info">Лицензии</entry>
+	<entry key="cart">Покупки</entry>
 </properties>

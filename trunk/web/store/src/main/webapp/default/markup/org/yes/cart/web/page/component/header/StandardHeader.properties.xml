@@ -17,8 +17,11 @@
 
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-	<entry key="carrier">Carrier</entry>
-	<entry key="carrierSla">Shipping method</entry>
-	<entry key="carrier.select">Select carrier and shipping method</entry>
-	
+    <entry key="sale">Sale</entry>
+    <entry key="special.offer">Special offer</entry>
+    <entry key="new.arrivals">New arrivals</entry>
+    <entry key="profile">Profile</entry>
+    <entry key="faq">FAQ</entry>
+    <entry key="contacts">Contacts</entry>
+    <entry key="site.map">Site map</entry>
 </properties>

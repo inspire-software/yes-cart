@@ -19,6 +19,8 @@ package org.yes.cart.web.page;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.yes.cart.web.page.component.customer.auth.RegisterPanel;
+import org.yes.cart.web.page.component.footer.StandardFooter;
+import org.yes.cart.web.page.component.header.StandardHeader;
 
 /**
  * Igor Azarny iazarny@yahoo.com
@@ -47,6 +49,10 @@ public class RegistrationPage  extends AbstractWebPage {
                 new FeedbackPanel(FEEDBACK)
         ).add(
                 new RegisterPanel(CART_VIEW, false)
+        ).addOrReplace(
+                new StandardFooter(FOOTER)
+        ).addOrReplace(
+                new StandardHeader(HEADER)
         );
     }
 
@@ -55,6 +61,7 @@ public class RegistrationPage  extends AbstractWebPage {
     protected void onBeforeRender() {
 
          processCommands();
+
 
         super.onBeforeRender();
     }

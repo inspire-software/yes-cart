@@ -31,14 +31,17 @@
 
 <div class="mainpage">
 
-    <div class="row grhead">
-        <div class="column grid_16 grhead">
-            <p>
-                <wicket:message key="login">[Login]</wicket:message>
-            </p>
-        </div>
-    </div>
 
+    <span wicket:id="header">[header]</span>
+	<div class="row">
+        <div class="column grid_16">
+			<ul class="menu">
+				<li>
+					<span><span><wicket:message key="login">[Login]</wicket:message></span></span>
+				</li>
+            </ul>            
+        </div>
+    </div>	
 
     <div class="row">
         <div class="column grid_1">
@@ -77,14 +80,8 @@
             </p>
         </div>
     </div>
-	
-    <div class="row gr">
-        <div class="column grid_16 gr">
-            <p>
-                &nbsp;
-            </p>
-        </div>
-    </div>
+
+    <span wicket:id="footer">[footer]</span>
 
 
 </div>

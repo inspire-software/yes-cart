@@ -17,8 +17,18 @@
 
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-	<entry key="carrier">Carrier</entry>
-	<entry key="carrierSla">Shipping method</entry>
-	<entry key="carrier.select">Select carrier and shipping method</entry>
-	
+    <entry key="profile">Profile</entry>
+    <entry key="faq">FAQ</entry>
+    <entry key="contacts">Contacts</entry>
+    <entry key="site.map">Site map</entry>
+	<entry key="help">Help</entry>
+	<entry key="about.shop">About us</entry>
+	<entry key="platform">Platform</entry>
+	<entry key="call.center">Call center</entry>
+	<entry key="return.policy">Return policy</entry>
+	<entry key="order.guide">Order guide</entry>
+	<entry key="order.history">Order history</entry>
+	<entry key="location">Location</entry>
+	<entry key="licence.info">Licences</entry>
+	<entry key="cart">View cart</entry>
 </properties>
