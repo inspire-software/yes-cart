@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.util;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebRequest;
@@ -58,7 +59,6 @@ public class WicketUtil {
     public static HttpServletRequest getHttpServletRequest() {
         return (HttpServletRequest) ((WebRequest) RequestCycle.get().getRequest()).getContainerRequest();
     }
-
 
 
     public static PageParameters getPageParameters() {
@@ -148,17 +148,16 @@ public class WicketUtil {
      * Get the filtered, from commands, request parameters,
      * that not contains given key and his value.
      *
-     *
      * @param parameters original request parameters
-     * @param key key part to remove
-     * @param value value part to remove
+     * @param key        key part to remove
+     * @param value      value part to remove
      * @return new filtered {@link PageParameters}
      */
     public static PageParameters getFilteredRequestParameters(
             final PageParameters parameters,
             final String key,
             final String value) {
-        final PageParameters rez = getFilteredRequestParameters (parameters);
+        final PageParameters rez = getFilteredRequestParameters(parameters);
         final List<StringValue> vals = rez.getValues(key);
         if (vals.size() > 1) {
             rez.remove(key, value);
@@ -210,6 +209,32 @@ public class WicketUtil {
             result = NumberUtils.toInt(selectedItemPerPage);
         }
         return result;
+    }
+
+    /**
+     * Get selected product sorting on page.
+     *
+     * @param pageParameters page parameters from http request
+     * @param sortOrder      current sorting order
+     * @param sortField      current sorting field
+     * @return true in case if ginen sorting order and field present in paga parameters.
+     */
+    public static boolean isSelectedProductSortOnPage(final PageParameters pageParameters, final String sortOrder, final String sortField) {
+        return ((StringUtils.isNotBlank(sortOrder) && StringUtils.isNotBlank(sortField)))
+                && (sortField.equals(pageParameters.get(sortOrder).toString()));
+    }
+
+    /**
+     * Get selected product sorting on page.
+     *
+     * @param pageParameters    page parameters from http request
+     * @param pageParameterName page parameter name.
+     * @param page              current page
+     * @return true in case if ginen sorting order and field present in paga parameters.
+     */
+    public static boolean isSelectedPageActive(final PageParameters pageParameters, final String pageParameterName, final int page) {
+        return ((StringUtils.isNotBlank(pageParameterName)))
+                && page == pageParameters.get(pageParameterName).toInt(0);
     }
 
 

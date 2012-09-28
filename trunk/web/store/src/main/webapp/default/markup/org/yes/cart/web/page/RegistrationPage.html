@@ -35,32 +35,17 @@
 <div class="mainpage">
 
     <span wicket:id="header">[header]</span>
-    <div class="row">
+	<div class="row">
         <div class="column grid_16">
-            <p>
-                <wicket:message key="registraction">[Registration]</wicket:message>
-            </p>
+			<ul class="menu">
+				<li>
+					<span><span><wicket:message key="registraction">[Registration]</wicket:message></span></span>
+				</li>
+            </ul>            
         </div>
-    </div>
+    </div>	
 
 
-    <div class="row">
-        <div class="column grid_1">
-            <p>
-                &nbsp;
-            </p>
-        </div>
-        <div class="column grid_14">
-            <p>
-                <span wicket:id="feedback"/>
-            </p>
-        </div>
-        <div class="column grid_1">
-            <p>
-                &nbsp;
-            </p>
-        </div>
-    </div>
 
     <div class="row">
         <div class="column grid_1">
@@ -70,6 +55,7 @@
         </div>
         <div class="column grid_14">
             <p>
+				<span wicket:id="feedback"/>
                 <wicket:container wicket:id="registrationView">
                  [registration panel]
                 </wicket:container>
