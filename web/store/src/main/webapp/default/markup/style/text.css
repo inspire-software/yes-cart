@@ -16,10 +16,11 @@
 
 body {
 
-	background: #efefef url('storebg.png') repeat;
+    background: #efefef url('storebg.png') repeat;
     font-family: Verdana, Arial, Helvetica;
     font-size: 12px;
-	color: #333333;
+    color: #333333;
+    text-align:center;
 }
 
 a {
@@ -36,8 +37,8 @@ a:hover {
 
 
 a.image-border {
-	text-decoration: none;
-	border: 0 none;
+    text-decoration: none;
+    border: 0 none;
 }
 
 p {
@@ -60,13 +61,13 @@ p {
 
 
 .input-text {
-	width:260px;
-	
+    width:260px;
+
 }
 
 .input-select {
-	width:260px;
-	
+    width:260px;
+
 }
 
 .gr {
@@ -116,7 +117,7 @@ p {
     padding: 0;
     /*width: 226px; */
     list-style: none;
-    background: rgb(255, 0, 0);
+    /*background: rgb(255, 0, 0);*/
 }
 .vmenu li{padding:0; margin:0 0 1px 0; display:block; }
 .vmenu li a {
@@ -129,12 +130,12 @@ p {
     text-decoration: none;
 }
 .vmenu li a:hover{background:url('verMenuImages.png') 0px -40px no-repeat; color:rgb(51,0,0);}
-.vmenu li a.active, .vmenu li a.active-category, .menu li a.active:hover{background:url('verMenuImages.png') 0px -40px no-repeat; color:rgb(0,0,0);}
+.vmenu li a.active, .vmenu li a.active-category, .menu li a.active:hover{ border-bottom: solid 2px #EE7600;  background:url('verMenuImages.png') 0px -40px no-repeat; color:rgb(0,0,0);}
 .vmenu li a span { }
 
 
 
-.filternav {margin:0; padding:0; width:236px; list-style:none;background:rgb(255,0,0);}
+.filternav {margin:0; padding:0; width:236px; list-style:none;}
 .filternav li{padding:0; margin:0 0 1px 0; display:block; }
 .filternav-head {
     width: 236px;
@@ -163,40 +164,44 @@ p {
 .filternav li a:hover{background:url('verMenuImages.png') 0px -40px no-repeat; color:rgb(51,0,0);}
 .filternav li a.active, .menu li a.active:hover{background:url('verMenuImages.png') 0px -40px no-repeat; color:rgb(0,0,0);}
 .filternav li a span { }
-.filternav li a em   { float:right; font-style: normal;}
-.filternav li a em:before   {   content: "[" }
-.filternav li a em:after    {   content: "]" }
+
 
 
 .attrhead {
     width: 560px;
-   /* background: rgb(255, 255, 255);
-	margin-top: 10px;
-    margin: 1px 0px 1px 0px;
-    height: 25px;
-    display: block;
+    /*background: url('verMenuImages.png') 0px 0px repeat-x;*/
     text-align: center;
-    font: 12px Verdana, Arial, Helvetica, sans-serif;
-    color: rgb(0, 0, 0);
-    display: block;
-    background: url('verMenuImages.png') 0px 0px repeat-x;
-    text-decoration: none;
-    vertical-align : middle;
-    display : table-cell;*/
-	/*display : none;*/
-	font: 9px Verdana, Arial, Helvetica, sans-serif;
-	font-weight: bold;
+
+    height: 20px;
+    margin: 5px 5px 5px 5px;
+    /**/
+    /* background: rgb(255, 255, 255);
+  margin-top: 10px;
+  margin: 1px 0px 1px 0px;
+  height: 25px;
+  display: block;
+  text-align: center;
+  font: 12px Verdana, Arial, Helvetica, sans-serif;
+  color: rgb(0, 0, 0);
+  display: block;
+  background: url('verMenuImages.png') 0px 0px repeat-x;
+  text-decoration: none;
+  vertical-align : middle;
+  display : table-cell;*/
+    /*display : none;*/
+    font: 10px Verdana, Arial, Helvetica, sans-serif;
+    font-weight: bold;
 }
 .attr   {
     text-align: left;
-    padding: 5px 0px 5px 5px;
+    padding: 1px 0px 1px 1px;
     font: 9px Verdana, Arial, Helvetica, sans-serif;
     color: rgb(0, 0, 0);
     display: block;
     /*background: url('verMenuImages.png') 0px 0px no-repeat;*/
     text-decoration: none;
 }
-.attr span{font-style: italic;}
+.attr span{ }
 .attr em   {float:right; font-style: normal;margin: 0px 0px 0px 150px;text-align: justify;}
 
 
@@ -335,13 +340,13 @@ p {
 
 .sku-item-info {
 
-	/*font-weight : bold; */
-	font-size : 16px;  
-	margin-top: 60px; 
-	margin-bottom: 10px;  
-	padding-bottom: 10px;
-	padding-top: 6px;
-	
+    /*font-weight : bold; */
+    font-size : 16px;
+    margin-top: 60px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    padding-top: 6px;
+
 }
 
 /* -- PRICE ------------------------------------------------------------ */
@@ -390,6 +395,7 @@ p {
 .step{
     float:left;
     width:568px;
+    text-align:justify;
     /*height:320px;*/
 }
 #navigation{
@@ -404,8 +410,10 @@ p {
 }
 #navigation ul li{
     float:left;
+    display:inline-block;
 
     position:relative;
+    width:100px;
 
 }
 #navigation ul li a{
@@ -442,6 +450,7 @@ p {
     background:#d8d8d8;
     /*color:#666;*/
     text-shadow:1px 1px 1px #fff;
+    border-bottom: solid 2px #EE7600;
 }
 span.checked{
 
@@ -495,65 +504,65 @@ span.error{
     width: 720px; /* important to be same as image width */
     height: 120px; /* important to be same as image height */
     position: relative; /* important */
-	overflow: hidden; /* important */
+    overflow: hidden; /* important */
 }
 
 #slider1Content {
     width: 720px; /* important to be same as image width or wider */
     position: absolute;
-	top: 0;
-	margin-left: 0;
+    top: 0;
+    margin-left: 0;
 }
 .slider1Image {
     float: left;
     position: relative;
-	display: none;
+    display: none;
 }
 .slider1Image span {
     position: absolute;
-	font: 10px/15px Arial, Helvetica, sans-serif;
+    font: 10px/15px Arial, Helvetica, sans-serif;
     padding: 10px 13px;
     width: 694px;
     background-color: #000;
     filter: alpha(opacity=70);
     -moz-opacity: 0.7;
-	-khtml-opacity: 0.7;
+    -khtml-opacity: 0.7;
     opacity: 0.7;
     color: #fff;
     display: none;
 }
 .clear {
-	clear: both;
+    clear: both;
 }
 .slider1Image span strong {
     font-size: 14px;
 }
 .left {
-	top: 0;
+    top: 0;
     left: 0;
-	width: 110px !important;
-	height: 280px;
+    width: 110px !important;
+    height: 280px;
 }
 .right {
-	right: 0;
-	bottom: 0;
-	width: 90px !important;
-	height: 290px;
+    right: 0;
+    bottom: 0;
+    width: 90px !important;
+    height: 290px;
 }
 ul { list-style-type: none;}
 
 /*----------------------------- featured ---------------------*/
 .featured {
-	float: left;
-	margin-left: 15px;
-	
+    float: left;
+    margin-left: 15px;
+
 }
 
 .newarrival {
 
-	font-size: 10px;
-	margin-top: 15px;
-	text-align: center;
+    font-size: 10px;
+    margin-top: 15px;
+    text-align: center;
 
 }
 
@@ -564,13 +573,13 @@ ul { list-style-type: none;}
 /* =Grid >> Global
 --------------------------------------------------------------------------------*/
 .g72, .g144, .g216, .g288, .g360, .g432, .g504, .g576, .g648, .g720, .g792, .g864 {
-	display: inline;
-	float: left;
-	margin-left: 10px;
+    display: inline;
+    float: left;
+    margin-left: 10px;
 }
 
 .m5 {
-	margin-left: 5px;
+    margin-left: 5px;
 }
 
 
@@ -605,22 +614,55 @@ ul { list-style-type: none;}
 /* wicket */
 
 .feedbackPanelERROR {
-	font-size:16px;
-	font-weight:bold;
-	color: #ff4444;
-	margin-bottom:5px;
-	text-shadow:1px 1px 1px #ffaaaa;
+    font-size:16px;
+    font-weight:bold;
+    color: #ff4444;
+    margin-bottom:5px;
+    text-shadow:1px 1px 1px #ffaaaa;
 }
 
 .feedbackPanelINFO {
-	font-size:16px;
-	font-weight:bold;
-	color: #44ff44;
-	margin-bottom:5px;
-	text-shadow:1px 1px 1px #aaffaa;
+    font-size:16px;
+    font-weight:bold;
+    color: #44ff44;
+    margin-bottom:5px;
+    text-shadow:1px 1px 1px #aaffaa;
 }
 
-/* buttons */
+/****************************** active element highlight ***********************************************/
+.currency-active {
+    border-bottom: solid 2px #EE7600;
+    font-size : 1.2em;
+    color : black;
+}
+
+.language-active {
+    border-bottom: solid 2px #EE7600;
+    font-size : 1.2em;
+    color : black;
+}
+
+.items-per-page-active {
+    border-bottom: solid 2px #EE7600;
+    font-size : 1.2em;
+    color : black;
+}
+
+.sort-order-active {
+    border-bottom: solid 2px #EE7600;
+    font-size : 1.2em;
+    color : black;
+}
+
+.page-active {
+    border-bottom: solid 2px #EE7600;
+    font-size : 1.2em;
+    color : black;
+}
+
+/*alternative #FF9900*/
+
+/**************************** buttons *****************************************/
 .button {
     display: inline-block;
     outline: none;
@@ -658,7 +700,7 @@ ul { list-style-type: none;}
 }
 .orange:hover {
     background: #f47c20;
-	border: solid 1px #da7c0c;
+    border: solid 1px #da7c0c;
     background: -webkit-gradient(linear, left top, left bottom, from(#f88e11), to(#f06015));
     background: -moz-linear-gradient(top,  #f88e11,  #f06015);
     filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f88e11', endColorstr='#f06015');
@@ -681,9 +723,9 @@ ul { list-style-type: none;}
     background: -moz-linear-gradient(top,  #88ff88,  #55aa55);
     filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#88ff88', endColorstr='#55aa55');
 }
-.green:hover {    
+.green:hover {
     background: #2ff511;
-	border: solid 1px #7cda0c;
+    border: solid 1px #7cda0c;
     background: -webkit-gradient(linear, left top, left bottom, from(#66ee66), to(#449944));
     background: -moz-linear-gradient(top,  #66ee66,  #449944);
     filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#66ee66', endColorstr='#449944');
@@ -705,7 +747,7 @@ ul { list-style-type: none;}
 }
 .gray:hover {
     background: #cccccc;
-	border: solid 1px #aaaaaa;
+    border: solid 1px #aaaaaa;
     background: -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#bcbcbc));
     background: -moz-linear-gradient(top,  #f0f0f0,  #bcbcbc);
     filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f0f0f0', endColorstr='#bcbcbc');
@@ -750,11 +792,11 @@ ul { list-style-type: none;}
 
 #paymentDiv  input{
 
-	margin-left:200px;
-	width:150px;
-	height:30px;
-	cursor:pointer;
-	color: #fef4e9;
+    margin-left:200px;
+    width:150px;
+    height:30px;
+    cursor:pointer;
+    color: #fef4e9;
     border: solid 1px #da7c0c;
     background: #f78d1d;
     background: -webkit-gradient(linear, left top, left bottom, from(#faa51a), to(#f47a20));
@@ -765,9 +807,9 @@ ul { list-style-type: none;}
 }
 
 #paymentDiv  input:hover {
-	color: black;
+    color: black;
     background: #f47c20;
-	border: solid 1px #da7c0c;
+    border: solid 1px #da7c0c;
     background: -webkit-gradient(linear, left top, left bottom, from(#f88e11), to(#f06015));
     background: -moz-linear-gradient(top,  #f88e11,  #f06015);
     filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f88e11', endColorstr='#f06015');

@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page.component.navigation;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -79,6 +80,12 @@ public class ProductSorter extends BaseComponent {
         params.remove(WebParametersKeys.SORT_REVERSE);
         params.set(WebParametersKeys.PAGE, "0");
         params.add(sortOrder, sortField);
-        return new BookmarkablePageLink<Link>(id, HomePage.class, params);
+        final Link rez = new BookmarkablePageLink<Link>(id, HomePage.class, params);
+        if (WicketUtil.isSelectedProductSortOnPage(getPage().getPageParameters(), sortOrder, sortField)) {
+
+            rez.add(new AttributeModifier("class", "sort-order-active"));
+
+        }
+        return rez;
     }
 }

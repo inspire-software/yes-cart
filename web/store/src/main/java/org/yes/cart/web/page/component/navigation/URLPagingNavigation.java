@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page.component.navigation;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
@@ -41,6 +42,7 @@ public class URLPagingNavigation extends PagingNavigation {
      */
     public URLPagingNavigation(final String s, final IPageable iPageable) {
         super(s, iPageable);
+        setViewSize(7);
     }
 
     /**
@@ -48,6 +50,7 @@ public class URLPagingNavigation extends PagingNavigation {
      */
     public URLPagingNavigation(final String s, final IPageable iPageable, final IPagingLabelProvider iPagingLabelProvider) {
         super(s, iPageable, iPagingLabelProvider);
+        setViewSize(7);
     }
 
     /**
@@ -62,7 +65,13 @@ public class URLPagingNavigation extends PagingNavigation {
 
         pageParameters.set(WebParametersKeys.PAGE, pageIndex);
 
-        return new BookmarkablePageLink<Link>(id, HomePage.class, pageParameters);
+        final AbstractLink rez =  new BookmarkablePageLink<Link>(id, HomePage.class, pageParameters);
+
+        if (WicketUtil.isSelectedPageActive(getPage().getPageParameters(), WebParametersKeys.PAGE, pageIndex)) {
+            rez.add(new AttributeModifier("class", "page-active"));
+        }
+
+        return  rez;
     }
 
 }
