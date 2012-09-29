@@ -15,7 +15,6 @@
  */
 
 body {
-
     background: #efefef url('storebg.png') repeat;
     font-family: Verdana, Arial, Helvetica;
     font-size: 12px;
@@ -56,6 +55,7 @@ p {
     width: 1024px;
     margin: 0 auto;
     overflow: hidden;
+    text-align: left;
 }
 
 
@@ -106,7 +106,16 @@ p {
 .menu li{padding:0; margin:0; list-style:none; display:inline;}
 .menu li a{float:left; padding-left:15px; display:block; color:rgb(0,0,0); text-decoration:none; font:12px Verdana, Arial, Helvetica, sans-serif; cursor:pointer; background:url('topMenuImages.png') 0px -30px no-repeat;}
 .menu li a span{line-height:30px; float:left; display:block; padding-right:15px; background:url('topMenuImages.png') 100% -30px no-repeat;}
-.menu li span span{line-height:30px; float:left; display:block; padding-right:15px; background:url('topMenuImages.png') 100% -30px no-repeat;}
+.menu li span em span {
+    line-height: 30px;
+    float: left;
+    display: block;
+    padding-right: 15px;
+    padding-left: 15px;
+    background: url('topMenuImages.png') 100% -30px no-repeat;
+    font-style:normal;
+    border-bottom: solid 2px #EE7600;
+}
 .menu li a:hover{background-position:0px -60px; color:rgb(51,0,0);}
 .menu li a:hover span{background-position:100% -60px;}
 .menu li a.active, .menu li a.active:hover{line-height:30px; font:12px Verdana, Arial, Helvetica, sans-serif; background:url('topMenuImages.png') 0px -90px no-repeat; color:rgb(0,0,0);}
