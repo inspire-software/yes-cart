@@ -35,18 +35,27 @@
     </div>
 
     <script>
+        var stl = 'border-bottom: solid 2px #EE7600;';
+        var stlIE = 'solid 2px #EE7600';
+        var attrName = 'border-bottom';
+
         function getCategoryId() {
             var urlPart = document.URL.split("/");
             var partMum = 0;
             var hasCategoryId = false;
             for (partNum = 0; partNum < urlPart.length; partNum++) {
-                if(hasCategoryId) {
-                    return  "/category/" +  urlPart[partNum];
+                if (hasCategoryId) {
+                    return  "/category/" + urlPart[partNum];
                 }
                 hasCategoryId = ('category' == urlPart[partNum]);
             }
             return "";
 
+        }
+
+        function activeLinksetStyle(elem) {
+            elem.setAttribute('style', stl);
+            elem.style.setAttribute(attrName, stlIE);
         }
     </script>
 
@@ -54,16 +63,43 @@
     <div class="row">
         <div class="column grid_16">
             <ul class="menu">
-                <li><a href="tag/sale" onclick="this.href = this.href + getCategoryId(); return true;"><span><wicket:message key="sale">[Sale]</wicket:message></span></a></li>
-                <li><a href="tag/specialoffer" onclick="this.href = this.href + getCategoryId(); return true;"><span><wicket:message key="special.offer">[Special offer]</wicket:message></span></a></li>
-                <li><a href="tag/newarrival" onclick="this.href = this.href + getCategoryId(); return true;"><span><wicket:message key="new.arrivals">[New products]</wicket:message></span></a></li>
+                <li><a id="sale" href="tag/sale" onclick="this.href = this.href + getCategoryId(); return true;"><span><wicket:message
+                        key="sale">[Sale]
+                </wicket:message></span></a></li>
+                <li><a id="specialoffer" href="tag/specialoffer"
+                       onclick="this.href = this.href + getCategoryId(); return true;"><span><wicket:message
+                        key="special.offer">[Special offer]
+                </wicket:message></span></a></li>
+                <li><a id="newarrival" href="tag/newarrival"
+                       onclick="this.href = this.href + getCategoryId(); return true;"><span><wicket:message
+                        key="new.arrivals">[New products]
+                </wicket:message></span></a></li>
+                <script>
+                    if (document.URL.indexOf('tag/sale') > -1) {
+                        activeLinksetStyle(document.getElementById('sale'));
+
+                    } else if (document.URL.indexOf('tag/specialoffer') > -1) {
+                        activeLinksetStyle(document.getElementById('specialoffer'));
+
+                    } else if (document.URL.indexOf('tag/newarrival') > -1) {
+                        activeLinksetStyle(document.getElementById('newarrival'));
+                    }
+
+                </script>
                 <li>
                     <wicket:link>
-                        <a href="CustomerSelfCarePage.html"><span><wicket:message key="profile">[Profile]</wicket:message></span></a>
+                        <a href="CustomerSelfCarePage.html"><span><wicket:message key="profile">[Profile]
+                        </wicket:message></span></a>
                     </wicket:link>
                 </li>
-                <li><wicket:link><a href="FaqPage.html"><span><wicket:message key="faq">[FAQ]</wicket:message></span></a></wicket:link></li>
-                <li><wicket:link><a href="ContactPage.html"><span><wicket:message key="contacts">[Contacts]</wicket:message></span></a></wicket:link></li>
+                <li>
+                    <wicket:link><a href="FaqPage.html"><span><wicket:message key="faq">[FAQ]
+                    </wicket:message></span></a></wicket:link>
+                </li>
+                <li>
+                    <wicket:link><a href="ContactPage.html"><span><wicket:message key="contacts">[Contacts]
+                    </wicket:message></span></a></wicket:link>
+                </li>
             </ul>
 
         </div>
@@ -73,13 +109,13 @@
     <div class="row">
         <div class="column grid_4">
             <p>
-				<wicket:link>
-				<a href="HomePage.html">
-					<wicket:link>
-						<img src="../../../../../../../style/yes-logo.png" border="0"/>
-					</wicket:link>
-				</a>
-				</wicket:link>
+                <wicket:link>
+                    <a href="HomePage.html">
+                        <wicket:link>
+                            <img src="../../../../../../../style/yes-logo.png" border="0"/>
+                        </wicket:link>
+                    </a>
+                </wicket:link>
             </p>
         </div>
         <div class="column grid_8">
