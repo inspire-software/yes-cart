@@ -29,6 +29,10 @@ import org.yes.cart.web.support.entity.decorator.ProductDecorator;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
 import org.yes.cart.web.support.service.AttributableImageService;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -36,7 +40,7 @@ import java.util.*;
  * Date: 7/13/11
  * Time: 9:39 PM
  */
-public class ProductDecoratorImpl extends ProductEntity implements ProductDecorator {
+public class ProductDecoratorImpl extends ProductEntity implements ProductDecorator, Serializable {
 
     private final static List<String> attrNames = new ArrayList<String>() {{
         add(Constants.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "0");
@@ -59,54 +63,104 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
                         AttributeNamesKeys.Category.PRODUCT_IMAGE_TUMB_HEIGHT
             };
 
-    private final ProductService productService;
-    private final AttributableImageService attributableImageService;
-    private final CategoryService categoryService;
+    private transient ProductService productService;
+    private transient AttributableImageService attributableImageService;
+    private transient CategoryService categoryService;
+    private transient ImageService imageService;
+
     private final String httpServletContextPath;
     private final HashMap<String, String> productImageUrl;
-    private final ImageService imageService;
     private final Map<String, AttrValue> attrValueMap;
     private final String defaultImageAttributeValue;
     private final I18NWebSupport i18NWebSupport;
 
-    /**
-     * Construct entity decorator.
-     *
-     * @param imageService image serice to get the image seo info
-     * @param attributableImageService category image service to get the image.
-     * @param categoryService          to get image width and height
-     * @param productEntity            original product to decorate.
-     * @param httpServletContextPath   servlet context path
-     * @param productService           product service
-     * @param i18NWebSupport           i18n support
-     */
+
+        /**
+        * Construct entity decorator.
+        *
+        * @param imageService image serice to get the image seo info
+        * @param attributableImageService category image service to get the image.
+        * @param categoryService          to get image width and height
+        * @param productEntity            original product to decorate.
+        * @param httpServletContextPath   servlet context path
+        * @param productService           product service
+        * @param i18NWebSupport           i18n support
+        */
     public ProductDecoratorImpl(
             final ImageService imageService,
             final AttributableImageService attributableImageService,
             final CategoryService categoryService,
+            final ProductService productService,
+            final I18NWebSupport i18NWebSupport  ,
             final Product productEntity,
             final String httpServletContextPath,
             final boolean withAttributes,
-            final ProductService productService,
-            final String defaultImageAttributeValue,
-            final I18NWebSupport i18NWebSupport) {
-        this.productService = productService;
-        this.i18NWebSupport = i18NWebSupport;
+            final String defaultImageAttributeValue) {
 
+        this.i18NWebSupport = i18NWebSupport;
         BeanUtils.copyProperties(productEntity, this);
         this.httpServletContextPath = httpServletContextPath;
-        this.attributableImageService = attributableImageService;
-        this.categoryService = categoryService;
         this.productImageUrl = new HashMap<String, String>();
-        this.imageService = imageService;
         this.defaultImageAttributeValue = defaultImageAttributeValue;
         if (withAttributes) {
             this.attrValueMap = getAllAttibutesAsMap();
         } else {
             this.attrValueMap = Collections.emptyMap();
-
         }
 
+        this.attributableImageService = attributableImageService;
+        this.categoryService = categoryService;
+        this.productService = productService;
+        this.imageService = imageService;
+
+    }
+
+    /**
+     * Attache to context after deserialization in case of cache overflow.
+     *
+     * @param imageService image serice to get the image seo info
+     * @param attributableImageService category image service to get the image.
+     * @param categoryService          to get image width and height
+     * @param productService           product service
+     */
+    public void attachToContext(
+            final ImageService imageService,
+            final AttributableImageService attributableImageService,
+            final CategoryService categoryService,
+            final ProductService productService) {
+
+
+        this.attributableImageService = attributableImageService;
+        this.categoryService = categoryService;
+        this.productService = productService;
+        this.imageService = imageService;
+
+    }
+
+    /**
+     * Construct entity decorator.
+     *
+     * @param productEntity            original product to decorate.
+     * @param httpServletContextPath   servlet context path
+     * @param i18NWebSupport           i18n support
+     */
+    public ProductDecoratorImpl(
+            final I18NWebSupport i18NWebSupport  ,
+            final Product productEntity,
+            final String httpServletContextPath,
+            final boolean withAttributes,
+            final String defaultImageAttributeValue) {
+
+        this.i18NWebSupport = i18NWebSupport;
+        BeanUtils.copyProperties(productEntity, this);
+        this.httpServletContextPath = httpServletContextPath;
+        this.productImageUrl = new HashMap<String, String>();
+        this.defaultImageAttributeValue = defaultImageAttributeValue;
+        if (withAttributes) {
+            this.attrValueMap = getAllAttibutesAsMap();
+        } else {
+            this.attrValueMap = Collections.emptyMap();
+        }
     }
 
 

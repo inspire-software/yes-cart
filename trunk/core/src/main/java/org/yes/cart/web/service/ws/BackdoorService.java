@@ -16,6 +16,8 @@
 
 package org.yes.cart.web.service.ws;
 
+import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
+
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
@@ -93,6 +95,23 @@ public interface BackdoorService {
     @WebMethod
     @WebResult(name = "queryResult")
     List<Object[]> luceneQuery(String query);
+
+    /**
+     * Get chache information.
+     * @return list of information per each cache.
+     */
+    @WebMethod
+    @WebResult(name = "cacheInfoResult")
+    List<CacheInfoDTOImpl> getCacheInfo();
+
+    /**
+     * Evict alli caches , which are represent in getCacheInfo list.
+     */
+    @WebMethod
+    @WebResult(name = "cacheInfoResult")
+    void evictCache();
+
+
 
 
 }

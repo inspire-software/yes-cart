@@ -306,6 +306,7 @@
     <bean id="bookmarkService" class="org.yes.cart.web.support.seo.impl.BookmarkServiceImpl">
         <constructor-arg index="0" ref="categoryService"/>
         <constructor-arg index="1" ref="productService"/>
+        <constructor-arg index="2" ref="cacheManager"/>
     </bean>
 
     <bean id="i18nSupport" class="org.yes.cart.web.support.i18n.impl.I18NWebSupportImpl"/>
@@ -318,6 +319,7 @@
         <constructor-arg index="4" ref="categoryService"/>
         <constructor-arg index="5" ref="productService"/>
         <constructor-arg index="6" ref="bookmarkService"/>
+        <constructor-arg index="7" ref="cacheManager"/>
     </bean>
 
 

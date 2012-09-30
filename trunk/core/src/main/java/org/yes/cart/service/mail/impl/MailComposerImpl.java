@@ -16,14 +16,12 @@
 
 package org.yes.cart.service.mail.impl;
 
-import com.google.common.collect.MapMaker;
 import groovy.lang.Writable;
 import groovy.text.GStringTemplateEngine;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.mail.MailComposer;
@@ -35,7 +33,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -88,8 +85,6 @@ public class MailComposerImpl implements MailComposer {
         this.shopService = shopService;
     }
 
-     private Map<String, String> shopCodeMailTemplateDirMap =
-             new MapMaker().concurrencyLevel(16).softValues().expiration(Constants.DEFAULT_EXPIRATION_TIMEOUT, TimeUnit.MINUTES).makeMap();
 
     /**
      * Get mail resource directory for given shop .

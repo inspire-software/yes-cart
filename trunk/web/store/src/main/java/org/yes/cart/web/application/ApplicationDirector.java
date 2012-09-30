@@ -16,19 +16,17 @@
 
 package org.yes.cart.web.application;
 
-import com.google.common.collect.MapMaker;
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
 import org.springframework.beans.BeansException;
+import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.shoppingcart.ShoppingCart;
-
-import javax.servlet.ServletContext;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Storefront  director class responsible for data caching,
@@ -47,16 +45,13 @@ public class ApplicationDirector implements ApplicationContextAware {
 
     private static ThreadLocal<Shop> shopThreadLocal = new ThreadLocal<Shop>();
     private static ThreadLocal<ShoppingCart> shoppingCartThreadLocal = new ThreadLocal<ShoppingCart>();
-    //private static ThreadLocal<ServletContext> servletContextThreadLocal = new ThreadLocal<ServletContext>();
     private static ThreadLocal<String> mailTemplatePathThreadLocal = new ThreadLocal<String>();
 
-
-
-    private final ConcurrentMap<String, Shop> urlShopCache = new MapMaker().concurrencyLevel(16).softValues().expiration(Constants.DEFAULT_EXPIRATION_TIMEOUT, TimeUnit.MINUTES).makeMap();
-    //private final ConcurrentMap<Long, Shop> idShopCache = new MapMaker().concurrencyLevel(16).softValues().expiration(3, TimeUnit.MINUTES).makeMap();
+    private Cache urlShopCache;
 
     /**
      * Get app director instance.
+     *
      * @return app directorr instance.
      */
     public static ApplicationDirector getInstance() {
@@ -70,31 +65,6 @@ public class ApplicationDirector implements ApplicationContextAware {
         applicationDirector = this;
     }
 
-    private ConcurrentMap<String, Shop> getUrlShopCache() {
-        return urlShopCache;
-    }
-
-
-    /*private ConcurrentMap<Long, Shop> getIdShopCache() {
-        return idShopCache;
-    }  */
-
-    /**
-     * Get {@link Shop} from cache by his id.
-     *
-     * @param shopId given shop id
-     * @return {@link Shop}
-     */
-    /*public Shop getShopById(final Long shopId) {
-        Shop shop = getIdShopCache().get(shopId);
-        if (shop == null) {
-            shop = shopService.findById(shopId);
-            if (shop != null) {
-                getIdShopCache().put(shopId, shop);
-            }
-        }
-        return shop;
-    }*/
 
 
     /**
@@ -104,11 +74,16 @@ public class ApplicationDirector implements ApplicationContextAware {
      * @return {@link Shop}
      */
     public Shop getShopByDomainName(final String serverDomainName) {
-        Shop shop = getUrlShopCache().get(serverDomainName);
+        Shop shop = null;
+        Element elem = urlShopCache.get(serverDomainName);
+        if (elem != null) {
+            shop = (Shop) elem.getObjectValue();
+        }
+
         if (shop == null) {
             shop = shopService.getShopByDomainName(serverDomainName);
             if (shop != null) {
-                getUrlShopCache().put(serverDomainName, shop);
+                urlShopCache.put(new Element(serverDomainName, shop));
                 //getIdShopCache().put(shop.getId(), shop);
             }
         }
@@ -117,7 +92,8 @@ public class ApplicationDirector implements ApplicationContextAware {
 
     /**
      * Get current mail template folder.
-     * @return  current mail template folder.
+     *
+     * @return current mail template folder.
      */
     public static String getCurrentMailTemplateFolder() {
         return mailTemplatePathThreadLocal.get();
@@ -125,27 +101,13 @@ public class ApplicationDirector implements ApplicationContextAware {
 
     /**
      * Set current mail template folder.
-     * @param currentMailTemplateFolder  current mail template folder.
+     *
+     * @param currentMailTemplateFolder current mail template folder.
      */
-    public static void setCurrentMailTemplateFolder(final String currentMailTemplateFolder)  {
+    public static void setCurrentMailTemplateFolder(final String currentMailTemplateFolder) {
         mailTemplatePathThreadLocal.set(currentMailTemplateFolder);
     }
 
-    /**
-     * Get current servlet context.
-     * @return  {@link ServletContext}
-     */
-   /* public static ServletContext getCurrentServletContext() {
-        return servletContextThreadLocal.get();
-    }       */
-
-    /**
-     * Set current servlet context.
-     * @param context servlet context.
-     */
-   /* public static void setCurrentServletContext(ServletContext context) {
-        servletContextThreadLocal.set(context);
-    }  */
 
 
     /**
@@ -198,8 +160,9 @@ public class ApplicationDirector implements ApplicationContextAware {
      * {@inheritDoc}
      */
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-        //this.applicationContext = applicationContext;
         this.shopService = applicationContext.getBean("shopService", ShopService.class);
         this.systemService = applicationContext.getBean("systemService", SystemService.class);
+        final CacheManager cacheManager = applicationContext.getBean("cacheManager", CacheManager.class);
+        this.urlShopCache = cacheManager.getCache("urlShopCache");
     }
 }

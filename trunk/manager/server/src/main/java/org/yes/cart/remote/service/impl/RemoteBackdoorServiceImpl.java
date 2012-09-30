@@ -18,6 +18,7 @@ package org.yes.cart.remote.service.impl;
 
 import flex.messaging.FlexContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
 import org.yes.cart.remote.service.RemoteBackdoorService;
 import org.yes.cart.web.service.ws.BackdoorService;
 import org.yes.cart.web.service.ws.client.BackdoorServiceClientFactory;
@@ -60,6 +61,14 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
     /** {@inheritDoc} */
     public List<Object[]> luceneQuery(final String query) {
         return getBackdoorService(60000).luceneQuery(query);
+    }
+
+    public List<CacheInfoDTOImpl> getCacheInfo() {
+        return getBackdoorService(60000).getCacheInfo();
+}
+
+    public void evictCache() {
+         getBackdoorService(60000).evictCache();
     }
 
     private BackdoorServiceClientFactory backdoorServiceClientFactory = null;

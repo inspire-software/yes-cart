@@ -79,6 +79,7 @@
         import org.yes.cart.ui.category.CategoryManagementPanel;
         import org.yes.cart.ui.customer.CustomerManagementPanel;
         import org.yes.cart.ui.location.LocationManagementPanel;
+        import org.yes.cart.ui.monitoring.MonitoringPanel;
         import org.yes.cart.ui.order.OrdersManagementPanel;
         import org.yes.cart.ui.payment.PaymentGateConfigManagementPanel;
         import org.yes.cart.ui.payment.PaymentManagementPanel;
@@ -289,6 +290,13 @@
             setFontWeight(sqlBtn);
             mainPanel.removeAllChildren();
             mainPanel.addChild(new QueryPanel());
+
+        }
+
+        private function onMonitoringClick(event:MouseEvent):void {
+            setFontWeight(monitoringBtn);
+            mainPanel.removeAllChildren();
+            mainPanel.addChild(new MonitoringPanel());
 
         }
 
@@ -719,10 +727,16 @@
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='paymetgwCfgHint')"
                                                 />
 
+
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton id="sqlBtn" width="100%"
                                                        label="@Resource(bundle='ShopManagerApplication',key='query')"
                                                        click="onQueryDataClick(event)"/>
+
+                                        <mx:Spacer height="10"/>
+                                        <mx:LinkButton id="monitoringBtn" width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='monitoring')"
+                                                       click="onMonitoringClick(event)"/>
 
                                     </mx:VBox>
                                 </mx:Canvas>

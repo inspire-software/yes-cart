@@ -496,6 +496,8 @@
             <security:protect method="sqlQuery"           access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
             <security:protect method="hsqlQuery"          access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
             <security:protect method="luceneQuery"        access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getCacheInfo"       access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="evictCache"         access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
         </security:intercept-methods>
     </bean>
 
