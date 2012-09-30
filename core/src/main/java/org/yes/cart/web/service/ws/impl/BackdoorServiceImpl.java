@@ -16,13 +16,18 @@
 
 package org.yes.cart.web.service.ws.impl;
 
+import net.sf.ehcache.CacheManager;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.util.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
 import org.yes.cart.domain.query.impl.AsIsAnalyzer;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.util.ShopCodeContext;
@@ -33,6 +38,9 @@ import javax.jws.WebService;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+
+import net.sf.ehcache.Cache;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -41,13 +49,15 @@ import java.util.List;
  */
 @WebService(endpointInterface = "org.yes.cart.web.service.ws.BackdoorService",
         serviceName = "BackdoorService")
-public class BackdoorServiceImpl implements BackdoorService {
+public class BackdoorServiceImpl implements BackdoorService, ApplicationContextAware {
 
     private static final long serialVersionUID = 20120129L;
 
     private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private ProductService productService;
+
+    private ApplicationContext applicationContext;
 
 
     /**
@@ -185,5 +195,46 @@ public class BackdoorServiceImpl implements BackdoorService {
         return productService.getGenericDao();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public List<CacheInfoDTOImpl> getCacheInfo() {
+        final CacheManager cm = applicationContext.getBean("cacheManager", CacheManager.class);
+        final String[] cacheNames = cm.getCacheNames();
+        final List<CacheInfoDTOImpl> rez = new ArrayList<CacheInfoDTOImpl>(cacheNames.length);
+        for (String cacheName : cacheNames) {
+            final Cache cache = cm.getCache(cacheName);
+            rez.add(
+                    new CacheInfoDTOImpl(
+                            cache.getName(),
+                            cache.getSize(),
+                            cache.getMemoryStoreSize(),
+                            cache.getDiskStoreSize(),
+                            0,0/*cache.calculateInMemorySize(),
+                            cache.calculateOnDiskSize()*/   /*heavy operation*/
+                    )
+            );
 
+        }
+        return rez;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void evictCache() {
+        final CacheManager cm = applicationContext.getBean("cacheManager", CacheManager.class);
+        final String[] cacheNames = cm.getCacheNames();
+        for (String cacheName : cacheNames) {
+            final Cache cache = cm.getCache(cacheName);
+            cache.removeAll();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
 }

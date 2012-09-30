@@ -16,6 +16,8 @@
 
 package org.yes.cart.remote.service;
 
+import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
+
 import java.util.List;
 
 /**
@@ -71,6 +73,17 @@ public interface RemoteBackdoorService {
      * @return list of rows
      */
     List<Object[]> luceneQuery(String query);
+
+    /**
+     * Get chache information.
+     * @return list of information per each cache.
+     */
+    List<CacheInfoDTOImpl> getCacheInfo();
+
+    /**
+     * Evict alli caches , which are represent in getCacheInfo list.
+     */
+    void evictCache();
 
 
 }

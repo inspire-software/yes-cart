@@ -124,4 +124,15 @@
            overflowToDisk="false" />
 
 
+    <cache name="categoryDecodeCache"   maxElementsInMemory="300"   overflowToDisk="true"  eternal="false"   timeToLiveSeconds="180"   timeToIdleSeconds="60"/>
+    <cache name="categoryEncodeCache"   maxElementsInMemory="300"   overflowToDisk="true"  eternal="false"   timeToLiveSeconds="180"   timeToIdleSeconds="60"/>
+    <cache name="skuDecodeCache"        maxElementsInMemory="300"   overflowToDisk="true"  eternal="false"   timeToLiveSeconds="180"   timeToIdleSeconds="60"/>
+    <cache name="skuEncodeCache"        maxElementsInMemory="300"   overflowToDisk="true"  eternal="false"   timeToLiveSeconds="180"   timeToIdleSeconds="60"/>
+    <cache name="productDecodeCache"    maxElementsInMemory="3000"   overflowToDisk="true"  eternal="false"   timeToLiveSeconds="180"   timeToIdleSeconds="60"/>
+    <cache name="productEncodeCache"    maxElementsInMemory="3000"   overflowToDisk="true"  eternal="false"   timeToLiveSeconds="180"   timeToIdleSeconds="60"/>
+
+    <cache name="decoratedProductCache" maxElementsInMemory="3000"   overflowToDisk="true"  eternal="false"   timeToLiveSeconds="180"   timeToIdleSeconds="60"/>
+    <cache name="urlShopCache" maxElementsInMemory="100"   overflowToDisk="false"  eternal="false"   timeToLiveSeconds="180"   timeToIdleSeconds="60"/>
+
+
 </ehcache>
