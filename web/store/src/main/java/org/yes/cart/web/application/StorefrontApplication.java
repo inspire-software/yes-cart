@@ -21,6 +21,8 @@ import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.protocol.https.HttpsConfig;
+import org.apache.wicket.protocol.https.HttpsMapper;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.cycle.RequestCycle;
@@ -43,6 +45,18 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ *
+ * Main web application.
+ *
+ * In case if we yes-cart running without apache http server
+ *
+ *  1. Tomcat is responsible to offload ssl certificate
+ *
+ *  Main approach to work with https behind proxy is following:
+ *
+ *  1. Apache http server responsible to offload ssl
+ *  2. Tomcat accept only ajp unsecured protocol.
+ *
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 7/10/11
  * Time: 9:02 AM
@@ -66,6 +80,8 @@ public class StorefrontApplication
     private SpringComponentInjector springComponentInjector;
 
 
+
+
     /**
      * Lazy getter of spring injector.
      *
@@ -84,6 +100,8 @@ public class StorefrontApplication
     public Class<HomePage> getHomePage() {
         return HomePage.class;
     }
+
+
 
     /**
      * Create and set resource locators.
@@ -109,10 +127,18 @@ public class StorefrontApplication
         //getMarkupSettings().setDefaultBeforeDisabledLink("");
         //getMarkupSettings().setAutomaticLinking(false);
 
+        mountPages();
+
 
         getComponentInstantiationListeners().add(getSpringComponentInjector());
 
-        mountPages();
+        final HttpsConfig httpsConfig = new HttpsConfig(8080, 8443);  //TODO make it configurable
+
+        final HttpsMapper httpsMapper = new HttpsMapper(getRootRequestMapper(), httpsConfig);
+
+        setRootRequestMapper(httpsMapper);
+
+
 
     }
 

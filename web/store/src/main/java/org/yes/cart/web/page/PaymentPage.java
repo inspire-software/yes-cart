@@ -22,6 +22,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
+import org.apache.wicket.protocol.https.RequireHttps;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -52,6 +53,7 @@ import java.util.List;
  * Date: 12/11/11
  * Time: 16:56
  */
+@RequireHttps
 public class PaymentPage extends AbstractWebPage {
 
 
