@@ -27,6 +27,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.protocol.https.RequireHttps;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -79,7 +80,7 @@ import java.util.List;
  * Date: 10/8/11
  * Time: 8:06 PM
  */
-
+@RequireHttps
 public class CheckoutPage extends AbstractWebPage {
 
     private static final long serialVersionUID = 20101107L;

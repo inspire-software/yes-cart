@@ -19,6 +19,7 @@ package org.yes.cart.web.page;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.protocol.https.RequireHttps;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -42,6 +43,7 @@ import org.yes.cart.web.page.component.header.StandardHeader;
  * Date: 10/11/11
  * Time: 9:51 PM
  */
+@RequireHttps
 @AuthorizeInstantiation("USER")
 public class CustomerSelfCarePage extends AbstractWebPage {
 

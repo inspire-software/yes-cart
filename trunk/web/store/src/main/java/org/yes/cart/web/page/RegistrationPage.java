@@ -17,6 +17,7 @@
 package org.yes.cart.web.page;
 
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.protocol.https.RequireHttps;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.yes.cart.web.page.component.customer.auth.RegisterPanel;
 import org.yes.cart.web.page.component.footer.StandardFooter;
@@ -27,6 +28,7 @@ import org.yes.cart.web.page.component.header.StandardHeader;
  * Date: 22/10/11
  * Time: 18:45
  */
+@RequireHttps
 public class RegistrationPage  extends AbstractWebPage {
 
 

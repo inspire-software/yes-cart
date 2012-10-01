@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page.component.navigation;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
@@ -63,9 +64,10 @@ public class URLPagingNavigator   extends PagingNavigator {
     /**
      * {@inheritDoc}
      */
-    protected PagingNavigation newNavigation(final IPageable pageable,
+    protected PagingNavigation newNavigation(final String id,
+                                             final IPageable pageable,
                                              final IPagingLabelProvider labelProvider) {
-        return new URLPagingNavigation("navigation", pageable, labelProvider);
+        return new URLPagingNavigation(id/*"navigation"*/, pageable, labelProvider);
     }
 
     /**
@@ -75,7 +77,7 @@ public class URLPagingNavigator   extends PagingNavigator {
 
         final PageParameters map = WicketUtil.getFilteredRequestParameters(pageParameters);
 
-        map.add(WebParametersKeys.PAGE, pageable.getCurrentPage() + increment);
+        map.set(WebParametersKeys.PAGE, pageable.getCurrentPage() + increment);
 
         return new BookmarkablePageLink<Link>(id, HomePage.class, map);
 
@@ -98,10 +100,12 @@ public class URLPagingNavigator   extends PagingNavigator {
     @Override
     protected void onBeforeRender() {
 
-        if (get("first") == null) {
+        final Component component = get("first");
+
+        if (component == null) {
             // Get the navigation bar and add it to the hierarchy
 
-            pagingNavigation = newNavigation(getPageable(), labelProvider);
+            pagingNavigation = newNavigation("navigation", getPageable(), labelProvider);
             add(pagingNavigation);
 
             int previousPage = getPageable().getCurrentPage() - 1;
