@@ -16,6 +16,8 @@
 
 package org.yes.cart.web.application;
 
+import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.IRequestCycleProvider;
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
@@ -127,18 +129,22 @@ public class StorefrontApplication
         //getMarkupSettings().setDefaultBeforeDisabledLink("");
         //getMarkupSettings().setAutomaticLinking(false);
 
-        mountPages();
-
-
         getComponentInstantiationListeners().add(getSpringComponentInjector());
 
-        final HttpsConfig httpsConfig = new HttpsConfig(8080, 8443);  //TODO make it configurable
+        mountPages();
 
-        final HttpsMapper httpsMapper = new HttpsMapper(getRootRequestMapper(), httpsConfig);
+        if ("true".equalsIgnoreCase(getInitParameter("secureMode"))) {
 
-        setRootRequestMapper(httpsMapper);
+            final HttpsConfig httpsConfig = new HttpsConfig(
+                    Integer.valueOf((String) ObjectUtils.defaultIfNull(getInitParameter("unsecurePort"), "8080")),
+                    Integer.valueOf((String) ObjectUtils.defaultIfNull(getInitParameter("securePort"), "8443"))
+            );
 
+            final HttpsMapper httpsMapper = new HttpsMapper(getRootRequestMapper(), httpsConfig);
 
+            setRootRequestMapper(httpsMapper);
+
+        }
 
     }
 

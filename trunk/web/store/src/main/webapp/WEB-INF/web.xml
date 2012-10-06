@@ -190,6 +190,23 @@
             <param-name>ignorePaths</param-name>
             <param-value>services/,js/</param-value>
         </init-param>
+        <init-param>
+            <param-name>secureMode</param-name>
+            <!--
+            false security not need at all, for example intranet.
+            true in case if we are run with ssl support, regardles where the ssl ofloaded
+            on web of htt server.
+            -->
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>securePort</param-name>
+            <param-value>443</param-value>
+        </init-param>
+        <init-param>
+            <param-name>unsecurePort</param-name>
+            <param-value>80</param-value>
+        </init-param>
     </filter>
 
 
