@@ -69,7 +69,7 @@
     -->
     <Connector port="8080" protocol="HTTP/1.1" 
                connectionTimeout="20000" 
-               redirectPort="8443" />
+               redirectPort="8443" URIEncoding="UTF-8"/>
     <!-- A "Connector" using the shared thread pool-->
     <!--
     <Connector executor="tomcatThreadPool"
@@ -86,11 +86,11 @@
     <Connector port="8443" protocol="HTTP/1.1" SSLEnabled="true"
                maxThreads="150" scheme="https" secure="true"
                keystoreFile="D:\\dev\\apache-tomcat-7.0.23\\conf\\keystore.jks"  keystorePass="password"
-               clientAuth="false" sslProtocol="TLS" />
+               clientAuth="false" sslProtocol="TLS" URIEncoding="UTF-8"/>
 
 
     <!-- Define an AJP 1.3 Connector on port 8009 -->
-    <Connector port="8009" protocol="AJP/1.3" redirectPort="8443" />
+    <Connector port="8009" enableLookups="false" protocol="AJP/1.3" redirectPort="8443" URIEncoding="UTF-8"/>
 
 
     <!-- An Engine represents the entry point (within Catalina) that processes
