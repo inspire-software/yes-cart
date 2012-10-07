@@ -92,8 +92,8 @@
             <map>
                 <entry key="evt.order.cancel-os.cancelled" value="order-canceled"/>
                 <entry key="evt.packing.complete-os.in.progress-ds.shipment.ready" value="order-delivery-readytoshipping"/>
-                <entry key="evt.payment.confirmed-os.in.progress" value="order-confirmed"/>
-                <entry key="evt.pending-os.in.progress" value="order-new"/>
+                <entry key="evt.payment.confirmed-os.in.progress" value="order-confirmed"/> <!-- done -->
+                <entry key="evt.pending-os.in.progress" value="order-new"/>  <!-- done -->
                 <entry key="evt.release.to.shipment-os.in.progress-ds.shipment.inprogress" value="order-delivery-shipped"/>
                 <entry key="evt.shipment.complete-os.completed-ds.shipped" value="order-shipping-completed"/>
 

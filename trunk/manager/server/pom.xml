@@ -221,6 +221,7 @@
                                 <directory>src/main/webapp</directory>
                                 <includes>
                                     <include>**/*.xml</include>
+                                    <include>default/**</include>
                                 </includes>
                             </resource>
                             <resource>
