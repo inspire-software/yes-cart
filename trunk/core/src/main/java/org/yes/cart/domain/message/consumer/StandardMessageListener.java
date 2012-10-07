@@ -81,6 +81,26 @@ public class StandardMessageListener implements Runnable {
      */
     public static final String TEMPLATE_NAME = "templateName";
 
+    /**
+     * Carrier name.
+     */
+    public static final String DELIVERY_CARRIER = "deliveryCarrierName";
+
+    /**
+     * Delivery sla name.
+     */
+    public static final String DELIVERY_CARRIER_SLA = "deliveryCarrierSlaName";
+
+    /**
+     * Delivery number.
+     */
+    public static final String DELIVERY_NUM = "deliveryNum";
+
+    /**
+     * Delivery external number.
+     */
+    public static final String DELIVERY_EXTERNAL_NUM = "deliveryExtNum";
+
 
     private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
@@ -167,7 +187,7 @@ public class StandardMessageListener implements Runnable {
 
 
         } catch (Exception e) {
-            LOG.error("Cant cast object message body to expected format map ", objectMessage);
+            LOG.error("Cant compose or send email ", e);
         }
 
 

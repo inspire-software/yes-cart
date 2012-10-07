@@ -106,7 +106,6 @@ public class StorefrontApplication
 
 
     /**
-     * Create and set resource locators.
      * {@inheritDoc}
      */
     protected void init() {

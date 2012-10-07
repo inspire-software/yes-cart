@@ -39,7 +39,7 @@ import java.util.HashMap;
 
 /**
  * Aspect responsible to send notifications about
- * User: iga Igor Azarny
+ * User: Igor Azarny
  * Date: 7 Apr 2012
  * Time: 4:41 PM
  */
@@ -175,17 +175,5 @@ public class PaymentAspect extends BaseNotificationAspect {
         }
     }
 
-    /**
-     * Fill all passed parameters into message map.
-     *
-     * @param pjp {@link ProceedingJoinPoint}
-     * @param map contxt map
-     */
-    private void fillParameters(final ProceedingJoinPoint pjp, final HashMap<String, Object> map) {
-        if (pjp.getArgs() != null) {
-            for (int i = 0; i < pjp.getArgs().length; i++) {
-                map.put(StandardMessageListener.PARAM_PREFIX + i, pjp.getArgs()[i]);
-            }
-        }
-    }
+
 }
