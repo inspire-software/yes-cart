@@ -1,0 +1,2 @@
+New order $root.ordernum at $shop.name was created  for $customer.firstname
+Please check detail on self care page at "<%out.print(shop.getDefaultShopUrl())%>" $shop.name
