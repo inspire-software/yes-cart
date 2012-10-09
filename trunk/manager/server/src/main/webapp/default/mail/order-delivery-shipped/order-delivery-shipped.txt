@@ -1,4 +1,4 @@
-Dear $customer.firstname !
+Dear $customer.firstname $customer.lastname !
 Delivery $deliveryNum for $root.ordernum at $shop.name is shipped
 by $deliveryCarrierName $deliveryCarrierSlaName <% out.print(deliveryExtNum == null ? "" : deliveryExtNum) %>
 Please check detail on self care page at "<%out.print(shop.getDefaultShopUrl())%>" $shop.name

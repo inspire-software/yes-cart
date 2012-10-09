@@ -1,3 +1,3 @@
-Dear $customer.firstname !
+Dear $customer.firstname $customer.lastname !
 Delivery number $param1 for $root.ordernum is complete
 Please check details at self care page at "<%out.print(shop.getDefaultShopUrl())%>" $shop.name
