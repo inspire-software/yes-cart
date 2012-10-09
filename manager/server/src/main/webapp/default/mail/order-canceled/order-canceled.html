@@ -26,7 +26,7 @@
                 <tr>
                     <td>&nbsp;</td>
                     <td>
-                        Dear $customer.firstname !  <br>
+                        Dear $customer.firstname $customer.lastname !  <br>
                         New order $root.ordernum at $shop.name was cancelled <br>
                         Please check detail at self care page <br>
                         <a href="<%out.print(shop.getDefaultShopUrl())%>">$shop.name</a>

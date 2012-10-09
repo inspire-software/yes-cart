@@ -26,7 +26,7 @@
                 <tr>
                     <td>&nbsp;</td>
                     <td>
-                        Dear $customer.firstname ! <br>
+                        Dear $customer.firstname $customer.lastname ! <br>
                         New order $root.ordernum at $shop.name was created<br>
                         Please check detail at self care page
                         <a href="<%out.print(shop.getDefaultShopUrl())%>">$shop.name</a>

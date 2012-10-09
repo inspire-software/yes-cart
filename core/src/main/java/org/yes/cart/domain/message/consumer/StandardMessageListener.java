@@ -26,6 +26,7 @@ import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.util.ShopCodeContext;
 
 import javax.mail.internet.MimeMessage;
+import java.text.MessageFormat;
 import java.util.Map;
 
 /**
@@ -142,53 +143,66 @@ public class StandardMessageListener implements Runnable {
      */
     public void run() {
 
+        final Map<String, Object> map = (Map<String, Object>) objectMessage;
+
         try {
-            final Map<String, Object> map = (Map<String, Object>) objectMessage;
-            if (map.get(CUSTOMER) == null) {
-                enrichMapWithCustomer(map);
-            }
-            if (map.get(SHOP) == null) {
-                enrichMapWithShop(map);
-            }
-
-
-            final MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-
-            mailComposer.composeMessage(
-                    mimeMessage,
-                    (String) map.get(SHOP_CODE),
-                    (String) map.get(TEMPLATE_FOLDER),
-                    (String) map.get(TEMPLATE_NAME),
-                    null,//todo must be from properties "todo@getfromsho.com", //((Shop)map.get(SHOP)).getAttribute()
-                    (String) map.get(CUSTOMER_EMAIL),
-                    null,
-                    null,
-                    map);
-
-            boolean send = false;
-            while (!send) {
-                try {
-                    javaMailSender.send(mimeMessage);
-                    send = true;
-                    LOG.info("Mail send to " + (String) map.get(CUSTOMER_EMAIL) );
-                } catch (MailSendException me) {
-                    /**
-                     * TODO
-                     * In case of failure, thread must use some persisten storage to
-                     * store email and send it latter.
-                     * Any persistem cache may be used for this purposes.
-                     */
-                    LOG.error("Cant send email to " + (String) map.get(CUSTOMER_EMAIL) + " " + me.getMessage());
-                    Thread.sleep(60000);
-
+            try {
+                if (map.get(CUSTOMER) == null) {
+                    enrichMapWithCustomer(map);
                 }
+                if (map.get(SHOP) == null) {
+                    enrichMapWithShop(map);
+                }
+
+                final MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+
+                mailComposer.composeMessage(
+                        mimeMessage,
+                        (String) map.get(SHOP_CODE),
+                        (String) map.get(TEMPLATE_FOLDER),
+                        (String) map.get(TEMPLATE_NAME),
+                        null,//todo must be from properties "todo@getfromsho.com", //((Shop)map.get(SHOP)).getAttribute()
+                        (String) map.get(CUSTOMER_EMAIL),
+                        null,
+                        null,
+                        map);
+
+                boolean send = false;
+                while (!send) {
+                    try {
+                        javaMailSender.send(mimeMessage);
+                        send = true;
+                        LOG.info("Mail send to " + (String) map.get(CUSTOMER_EMAIL));
+                    } catch (MailSendException me) {
+                        /**
+                         * TODO
+                         * In case of failure, thread must use some persisten storage to
+                         * store email and send it latter.
+                         * Any persistem cache may be used for this purposes.
+                         */
+                        LOG.error("Cant send email to " + (String) map.get(CUSTOMER_EMAIL) + " " + me.getMessage());
+                        Thread.sleep(60000);
+
+                    }
+                }
+
+
+            } catch (Exception e) {
+                LOG.error(
+                        MessageFormat.format(
+                                "Cant compose or send email template {0} folder {1} to {2}",
+                                (String) map.get(TEMPLATE_NAME),
+                                (String) map.get(TEMPLATE_FOLDER),
+                                (String) map.get(CUSTOMER_EMAIL)
+                        ),
+                        e);
             }
 
+        }   catch(ClassCastException cce) {
+            LOG.error("Class cast exception ", cce);
 
-
-        } catch (Exception e) {
-            LOG.error("Cant compose or send email ", e);
         }
+
 
 
     }
