@@ -672,6 +672,26 @@
         </security:intercept-methods>
     </bean>
 
+    <!-- ################################ JMX support  begin ###################################### -->
+
+    <bean id="mbeanServer" class="org.springframework.jmx.support.MBeanServerFactoryBean">
+        <property name="locateExistingServerIfPossible" value="true"/>
+        <property name="defaultDomain" value="YesManager"/>
+    </bean>
+
+    <bean class="org.springframework.jmx.export.MBeanExporter" lazy-init="false">
+        <property name="server" ref="mbeanServer"/>
+        <property name="registrationBehaviorName" value="REGISTRATION_REPLACE_EXISTING"/>
+        <property name="beans">
+            <map>
+                <entry key="bean:name=YesManager-BulkImportImageService" value-ref="bulkImportImageService"/>
+                <entry key="bean:name=YesManager-BulkImportServiceImpl" value-ref="bulkImportServiceImpl"/>
+                <entry key="bean:name=YesManager-BulkImportService" value-ref="bulkImportService"/>
+            </map>
+        </property>
+    </bean>
+
+    <!-- ################################ JMX support  end ###################################### -->
 
 
 
