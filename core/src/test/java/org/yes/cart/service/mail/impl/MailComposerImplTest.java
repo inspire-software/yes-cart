@@ -73,7 +73,15 @@ public class MailComposerImplTest {
     }
 
     @Test
-    public void testGetResourcesId() {
+    public void testMerge3() throws ClassNotFoundException, IOException {
+        String template = "<% def deliverySum = 1.23456789; deliverySum = deliverySum.setScale(2, BigDecimal.ROUND_HALF_UP); out.print(deliverySum); %>";
+        MailComposerImpl mailComposer = new MailComposerImpl(null, null);
+        String result = mailComposer.merge(template, createModel());
+        assertEquals("1.23", result);
+    }
+
+    @Test
+    public void testGetResourcesId() throws ClassNotFoundException {
         MailComposerImpl mailComposer = new MailComposerImpl(null, null);
         //'cid:identifier1234' "cid:id" 'cid:ident' "cid:identifier5678"
         List<String> rez = mailComposer.getResourcesId("'cid:identifier1234' \"cid:id\" 'cid:ident' \"cid:identifier5678\"");
@@ -85,7 +93,7 @@ public class MailComposerImplTest {
     }
 
     @Test
-    public void getPathToTemplate() {
+    public void getPathToTemplate() throws ClassNotFoundException {
         mockery.checking(new Expectations() {{
             // allowing(systemService).getMailResourceDirectory();
             // will(returnValue("/a/b/c/"));

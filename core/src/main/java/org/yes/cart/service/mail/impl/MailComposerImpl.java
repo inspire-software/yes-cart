@@ -32,6 +32,8 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -77,10 +79,12 @@ public class MailComposerImpl implements MailComposer {
      * Construct mail composer
      *
      * @param systemService to getByKey the path to mail templates.
-     * @param shopService shop service.
+     * @param shopService   shop service.
      */
-    public MailComposerImpl(final SystemService systemService, final ShopService shopService) {
-        this.templateEngine = new GStringTemplateEngine();
+    public MailComposerImpl(final SystemService systemService, final ShopService shopService) throws ClassNotFoundException {
+        final ClassLoader classLoader = this.getClass().getClassLoader();
+        classLoader.loadClass(DecimalFormat.class.getName());
+        this.templateEngine = new GStringTemplateEngine(classLoader);
         this.systemService = systemService;
         this.shopService = shopService;
     }
@@ -88,8 +92,8 @@ public class MailComposerImpl implements MailComposer {
 
     /**
      * Get mail resource directory for given shop .
-     * @param shopCode given shop code.
      *
+     * @param shopCode given shop code.
      * @return mail resource directory.
      */
     private String getMailResourceDirectory(final String shopCode) {
