@@ -1,6 +1,5 @@
 Dear $customer.firstname $customer.lastname !
 New order $root.ordernum at $shop.name was created
-
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";
 try {
@@ -8,41 +7,28 @@ try {
     for (Object delivery : root.getDelivery()) {
           def deliverySum = 0;
           out.println(lineDelimiter);
-          out.println("| Delivery " + delivery.deliveryNum);
+          out.println(("| Delivery " + delivery.deliveryNum).padRight(lineDelimiter.length() -1 ) + "|");
           out.println(lineDelimiter);
           for(Object deliveryItem : delivery.getDetail()) {
-              
-              out.print("|" + deliveryItem.sku.code);
-              out.print(" - ");
-              out.print(deliveryItem.sku.name);
-              out.print("    ");
-              out.print(deliveryItem.qty);
-              out.print("*");
-              out.print(deliveryItem.price);
-              out.print("=");
-              def lineTotal =  deliveryItem.price * deliveryItem.qty;
-              out.print(lineTotal);
-              out.print(" ");
-              out.print(root.currency);
-              out.print("\n");
+              def lineTotal =  (deliveryItem.price * deliveryItem.qty).setScale(2, BigDecimal.ROUND_HALF_UP);
+              def line = "| " + deliveryItem.sku.code  + " - " + deliveryItem.sku.name   + "    " +  deliveryItem.qty.setScale(0, BigDecimal.ROUND_HALF_UP)   + " * " + deliveryItem.price.setScale(2, BigDecimal.ROUND_HALF_UP) + "=" + lineTotal  + " " + root.currency;
               deliverySum += lineTotal;
-
+              out.println(line.padRight(lineDelimiter.length() -1 ) + "|");
           }
           out.println(lineDelimiter);
-          out.println("| Delivery cost " + delivery.price + " " + root.currency);
-          out.println("| Delivery items cost " + deliverySum + " " + root.currency);
-          out.println("| Delivery total " + (delivery.price + deliverySum) + " " + root.currency );
+          out.println(("| Delivery items cost    " + deliverySum + " " + root.currency).padRight(lineDelimiter.length() -1 ) + "|");
+          out.println(("| Delivery cost          " + delivery.price + " " + root.currency).padRight(lineDelimiter.length() -1 ) + "|");
+          out.println(("| Delivery total         " + (delivery.price + deliverySum).setScale(2, BigDecimal.ROUND_HALF_UP) + " " + root.currency ).padRight(lineDelimiter.length() -1 ) + "|");
           out.println(lineDelimiter);
           totalSum += (delivery.price + deliverySum);
     }
     out.println(lineDelimiter);          
-    out.println("| Order total " + totalSum + " " + root.currency);
+    out.println(("| Order total            " + totalSum.setScale(2, BigDecimal.ROUND_HALF_UP) + " " + root.currency).padRight(lineDelimiter.length() -1 ) + "|");
     out.println(lineDelimiter);
 } catch (Exception e) {
 out.print(e.getMessage());
 }
 %>
-
 
 
 Please check detail on self care page at "<%out.print(shop.getDefaultShopUrl())%>" $shop.name

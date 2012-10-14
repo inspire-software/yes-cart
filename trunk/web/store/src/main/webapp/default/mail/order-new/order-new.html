@@ -22,12 +22,83 @@
     </tr>
     <tr>
         <td>
-            <table width="100%">
+            <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                     <td>&nbsp;</td>
                     <td>
                         Dear $customer.firstname $customer.lastname ! <br>
                         New order $root.ordernum at $shop.name was created<br>
+                        <table border="1" width="100%" border="0" cellpadding="0" cellspacing="0">
+                            <%
+                            def totalSum = 0;
+                            for (Object delivery : root.getDelivery()) {
+                            def deliverySum = 0;
+                            %>
+                            <tr>
+                                <td>Delivery</td>
+                                <td align="right">$delivery.deliveryNum</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <table width="100%" border="1" cellpadding="1" cellspacing="0">
+                                        <tr bgcolor="#f0f0f0">
+                                            <td>Code</td>
+                                            <td>Name</td>
+                                            <td  align="right">Quantity</td>
+                                            <td  align="right">Price</td>
+                                            <td  align="right">Sum</td>
+                                        </tr>
+                                        <%
+                                        for(Object deliveryItem : delivery.getDetail()) {
+                                        def lineTotal = (deliveryItem.price * deliveryItem.qty).setScale(2, BigDecimal.ROUND_HALF_UP);
+                                        deliverySum += lineTotal;
+                                        %>
+                                        <tr>
+                                            <td>
+                                                <%=deliveryItem.sku.code %>
+                                            </td>
+                                            <td>
+                                                <%=deliveryItem.sku.name%>
+                                            </td>
+                                            <td  align="right">
+                                                <%=deliveryItem.qty.setScale(0, BigDecimal.ROUND_HALF_UP) %>
+                                            </td>
+                                            <td  align="right">
+                                                <%=deliveryItem.price.setScale(2,BigDecimal.ROUND_HALF_UP)%>
+                                            </td>
+                                            <td  align="right">
+                                                <%=lineTotal%>  <%=root.currency%>
+                                            </td>
+                                        </tr>
+                                        <%
+                                        }
+                                        %>
+                                        <tr>
+                                            <td colspan="4">Delivery items cost</td>
+                                            <td align="right"><%=deliverySum%> <%=root.currency%></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4">Delivery cost</td>
+                                            <td align="right"><%=delivery.price%> <%=root.currency%></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4">Delivery total</td>
+                                            <td align="right"><%=(delivery.price + deliverySum).setScale(2, BigDecimal.ROUND_HALF_UP)%> <%=root.currency%></td>
+                                        </tr>
+                                        <%
+                                        totalSum += (delivery.price + deliverySum);
+                                        }
+                                        %>
+                                    </table>
+                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Order total</td>
+                                <td  align="right"><%=totalSum.setScale(2, BigDecimal.ROUND_HALF_UP)%> <%=root.currency%></td>
+                            </tr>
+                        </table>
+                        
                         Please check detail at self care page
                         <a href="<%out.print(shop.getDefaultShopUrl())%>">$shop.name</a>
                         <hr>
