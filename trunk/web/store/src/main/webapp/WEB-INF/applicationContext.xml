@@ -500,9 +500,9 @@
 
     <!-- ################################ JMX support  begin ###################################### -->
 
-    <!--<bean id="mbeanServer" class="org.springframework.jmx.support.MBeanServerFactoryBean">
+    <bean id="mbeanServer" class="org.springframework.jmx.support.MBeanServerFactoryBean">
         <property name="locateExistingServerIfPossible" value="true"/>
-        <property name="agentId" value=""/>
+        <property name="defaultDomain" value="YesShop"/>
     </bean>
 
     <bean class="org.springframework.jmx.export.MBeanExporter" lazy-init="false">
@@ -510,13 +510,15 @@
         <property name="registrationBehaviorName" value="REGISTRATION_REPLACE_EXISTING"/>
         <property name="beans">
             <map>
-                <entry key="bean:name=YesShopMemory" value-ref="memProxy"/>
-                &lt;!&ndash; other exported beans may follow ... &ndash;&gt;
+                <entry key="bean:name=YesShop-ImageFilter" value-ref="imageFilter"/>
+                <entry key="bean:name=YesShop-ShopResolverFilter" value-ref="shopResolverFilter"/>
+                <entry key="bean:name=YesShop-ProductReindexer" value-ref="productReindexer"/>
+                <entry key="bean:name=YesShop-ShoppingCartFilter" value-ref="shoppingCartFilter"/>
+
+                <entry key="bean:name=YesShop-ImageService" value-ref="imageService"/>
             </map>
         </property>
     </bean>
-
-    <bean id="memProxy" class="java.lang.management.ManagementFactory" factory-method="getMemoryMXBean" />-->
 
     <!-- ################################ JMX support  end ###################################### -->
 
