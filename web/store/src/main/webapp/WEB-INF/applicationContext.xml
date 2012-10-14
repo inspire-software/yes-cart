@@ -498,6 +498,26 @@
 
     <bean id="methodCacheAdvice" class="org.yes.cart.cache.MethodCacheAdvice"/>
 
+    <!-- ################################ JMX support  begin ###################################### -->
 
+    <!--<bean id="mbeanServer" class="org.springframework.jmx.support.MBeanServerFactoryBean">
+        <property name="locateExistingServerIfPossible" value="true"/>
+        <property name="agentId" value=""/>
+    </bean>
+
+    <bean class="org.springframework.jmx.export.MBeanExporter" lazy-init="false">
+        <property name="server" ref="mbeanServer"/>
+        <property name="registrationBehaviorName" value="REGISTRATION_REPLACE_EXISTING"/>
+        <property name="beans">
+            <map>
+                <entry key="bean:name=YesShopMemory" value-ref="memProxy"/>
+                &lt;!&ndash; other exported beans may follow ... &ndash;&gt;
+            </map>
+        </property>
+    </bean>
+
+    <bean id="memProxy" class="java.lang.management.ManagementFactory" factory-method="getMemoryMXBean" />-->
+
+    <!-- ################################ JMX support  end ###################################### -->
 
 </beans>
