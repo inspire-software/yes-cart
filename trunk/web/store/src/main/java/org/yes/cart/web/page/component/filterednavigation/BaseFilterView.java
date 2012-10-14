@@ -26,6 +26,8 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.component.BaseComponent;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -34,6 +36,8 @@ import java.util.List;
  * Time: 8:54 PM
  */
 public class BaseFilterView extends BaseComponent {
+
+    private final static int RECORD_LIMITS = 12;
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private final static String HEAD = "head";
@@ -59,8 +63,33 @@ public class BaseFilterView extends BaseComponent {
             final String head,
             final List<Pair<Pair<String, Integer>, PageParameters>> linkList) {
         super(id);
-        this.linkList = linkList;
+        this.linkList = cutTheTail(linkList);
         this.head = head;
+    }
+
+
+    /**
+     * Cut the extrac records.
+     * @param navigationList list to reduce
+     * @return  reduced nav list.
+     */
+    private List<Pair<Pair<String, Integer>, PageParameters>> cutTheTail(final List<Pair<Pair<String, Integer>, PageParameters>> navigationList) {
+
+        if (navigationList.size() > RECORD_LIMITS) {
+            Collections.sort(
+                    navigationList,
+                    new Comparator<Pair<Pair<String, Integer>, PageParameters>>() {
+                        public int compare(final Pair<Pair<String, Integer>, PageParameters> o1,
+                                           final Pair<Pair<String, Integer>, PageParameters> o2) {
+                            return o1.getFirst().getSecond() < o2.getFirst().getSecond() ? 1 : (o1.getFirst().getSecond() == o2.getFirst().getSecond() ? 0 : -1);
+                        }
+                    }
+            );
+
+            return navigationList.subList(0, RECORD_LIMITS -1);
+
+        }
+        return navigationList;
     }
 
     /**
