@@ -28,6 +28,7 @@ import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDet;
 import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.utils.impl.CustomerOrderComparator;
@@ -64,8 +65,8 @@ public class CustomerOrderPanel extends BaseComponent {
     @SpringBean(name = ServiceSpringKeys.CUSTOMER_ORDER_SERVICE)
     private CustomerService customerService;
 
-    //@SpringBean(name = ServiceSpringKeys.ORDER_PAYMENT_SERICE)
-   // private CustomerOrderPaymentService customerOrderPaymentService;
+    @SpringBean(name = ServiceSpringKeys.ORDER_PAYMENT_SERICE)
+    private CustomerOrderPaymentService customerOrderPaymentService;
 
 
     /**
@@ -98,7 +99,9 @@ public class CustomerOrderPanel extends BaseComponent {
         return StringUtils.chop(StringUtils.chop(builder.toString()));
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void onBeforeRender() {
         final Customer customer = (Customer) getDefaultModel().getObject();
@@ -116,15 +119,16 @@ public class CustomerOrderPanel extends BaseComponent {
                     protected void populateItem(final ListItem<CustomerOrder> customerOrderListItem) {
 
                         final CustomerOrder order = customerOrderListItem.getModelObject();
-
                         customerOrderListItem
                                 .add(new Label(ORDER_NUM, order.getOrdernum()))
-                                .add(new Label(ORDER_DATE, dateFormat.format(order.getOrderTimestamp()) ))
-                                .add(new Label(ORDER_STATE, getLocalizer().getString(order.getOrderStatus(), this) ))
-                                .add( new Label(ORDER_ITEMS, getItemsList(order)).setEscapeModelStrings(false) )
-                                .add(new Label(ORDER_AMOUNT, decimalFormat.format(         0))
-                                        //customerOrderPaymentService.getOrderAmount(order.getOrdernum())))
-                                );
+                                .add(new Label(ORDER_DATE, dateFormat.format(order.getOrderTimestamp())))
+                                .add(new Label(ORDER_STATE, getLocalizer().getString(order.getOrderStatus(), this)))
+                                .add(new Label(ORDER_ITEMS, getItemsList(order)).setEscapeModelStrings(false))
+                                .add(new Label(ORDER_AMOUNT,
+                                        decimalFormat.format(
+                                                customerOrderPaymentService.getOrderAmount(order.getOrdernum())
+                                        ) + " " + order.getCurrency()
+                                ));
 
                     }
                 }
