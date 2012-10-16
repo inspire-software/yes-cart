@@ -21,9 +21,9 @@ import java.io.InputStream;
 /**
  * Interface to encapsulate creation of XStreams.
  *
- * XStream instantiation is an expensive process to this method should
+ * XStream instantiation is an expensive process so this method should
  * use as much cacheing as possible. XStream instance itself is thread-safe
- * therefore is can be safely re-used after it had been configured once.
+ * therefore it can be safely re-used after it had been configured once.
  *
  * User: denispavlov
  * Date: 12-08-03
