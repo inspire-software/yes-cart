@@ -34,6 +34,11 @@ public class EntityFactoryToBeanFactoryAdaptor implements com.inspiresoftware.li
     }
 
     /** {@inheritDoc} */
+    public Class getClazz(final String entityBeanKey) {
+        return entityFactory.getImplClass(entityBeanKey);
+    }
+
+    /** {@inheritDoc} */
     public Object get(final String entityBeanKey) {
         return entityFactory.getByKey(entityBeanKey);
     }

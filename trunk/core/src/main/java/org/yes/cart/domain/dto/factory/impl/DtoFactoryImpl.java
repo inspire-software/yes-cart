@@ -37,6 +37,13 @@ public class DtoFactoryImpl implements DtoFactory {
         this.classMap = classMap;
     }
 
+    /** {@inheritDoc} */
+    public Class getClazz(final String entityBeanKey) {
+        return getImplClass(entityBeanKey);
+    }
+
+
+    /** {@inheritDoc} */
     public Object get(final String entityBeanKey) {
         return getByKey(entityBeanKey);
     }
