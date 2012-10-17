@@ -188,8 +188,20 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         IFACE iface = service.getById(instance.getId());
         assembler.assembleEntity(instance, iface, getAdaptersRepository(), dtoFactory);
+        updatePostProcess(instance, iface);
         iface = service.update(iface);
         return getById(iface.getId());
+    }
+
+    /**
+     * Use this hook in subclasses to modify entity after it had been populated with
+     * assembler from DTO.
+     *
+     * @param dto dto with update information
+     * @param entity entity to update
+     */
+    protected void updatePostProcess(DTOIFACE dto, IFACE entity) {
+        // extension hook
     }
 
 

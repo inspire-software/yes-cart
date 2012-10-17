@@ -147,7 +147,7 @@ INSERT INTO TSYSTEMATTRVALUE ( ATTRVALUE_ID,  VAL,  CODE, SYSTEM_ID, GUID)  VALU
 INSERT INTO TSYSTEMATTRVALUE ( ATTRVALUE_ID,  VAL,  CODE, SYSTEM_ID, GUID)  VALUES (1012,'testPaymentGatewayLabel,courierPaymentGatewayLabel,cyberSourcePaymentGatewayLabel,authorizeNetAimPaymentGatewayLabel,authorizeNetSimPaymentGatewayLabel,payflowPaymentGatewayLabel,payPalNvpPaymentGatewayLabel,payPalExpressPaymentGatewayLabel,liqPayPaymentGatewayLabel','SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS',100, 'YC_SYSTEM_ACTIVE_PAYMENT_GATEWAYS');
 
 
-INSERT INTO TSHOP (SHOP_ID, NAME, DESCRIPTION, FSPOINTER, IMGVAULT, CODE, GUID)  VALUES (10, 'YesCart shop', 'YesCart shop', 'default', '/default/imagevault', 'SHOP10', 'SHOP10');
+INSERT INTO TSHOP (SHOP_ID, NAME, DESCRIPTION, FSPOINTER, IMGVAULT, CODE, GUID)  VALUES (10, 'YesCart shop', 'YesCart shop', 'default', '/default/imagevault/', 'SHOP10', 'SHOP10');
 
 INSERT INTO TWAREHOUSE (WAREHOUSE_ID, GUID, CODE, NAME, DESCRIPTION) VALUES (1, 'Main', 'Main', 'Main warehouse', null);
 INSERT INTO TSHOPWAREHOUSE (SHOPWAREHOUSE_ID, SHOP_ID, WAREHOUSE_ID, RANK, GUID )

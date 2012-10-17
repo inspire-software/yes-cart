@@ -181,7 +181,7 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
     private void doImageImport(final JobStatusListener listener, final Set<String> importedFiles, final String fileName) throws IOException {
         final File ycsimg = new File(applicationContext.getResource("WEB-INF").getFile().getAbsolutePath()
                 + File.separator + ".." + File.separator + ".." + File.separator + "yes-shop"
-                + File.separator + "default" + File.separator + "imagevault");
+                + File.separator + "default" + File.separator + "imagevault" + File.separator);
         bulkImportImagesService.setPathToRepository(ycsimg.getAbsolutePath()); //TODO remove this hardcoded value. also see remoteImageServiceimpl
         bulkImportImagesService.doImport(listener, importedFiles, fileName, this.pathToImportFolder);
     }

@@ -64,7 +64,19 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
      * {@inheritDoc}
      */
     public void setPathToRepository(final String pathToRepository) {
-        this.pathToRepository = pathToRepository;
+
+        final String repoPath;
+        if (File.separatorChar == '/') {
+            repoPath = pathToRepository.replace('\\', '/');
+        } else {
+            repoPath = pathToRepository.replace('/', '\\');
+        }
+
+        if (repoPath.endsWith(File.separator)) {
+            this.pathToRepository = repoPath;
+        } else {
+            this.pathToRepository = repoPath + File.separator;
+        }
     }
 
     /**
