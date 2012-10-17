@@ -97,7 +97,6 @@ public class DtoShopServiceImpl
 
     }
 
-
     /** {@inheritDoc} */
     public Class<ShopDTO> getDtoIFace() {
         return ShopDTO.class;
