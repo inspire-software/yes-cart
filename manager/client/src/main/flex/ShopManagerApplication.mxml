@@ -33,11 +33,12 @@
         import mx.controls.Alert;
         import mx.controls.Text;
         import mx.events.IndexChangedEvent;
-        import mx.messaging.channels.AMFChannel;
+        import mx.messaging.channels.SecureAMFChannel;
         import mx.rpc.AsyncResponder;
         import mx.rpc.AsyncToken;
         import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
+        import mx.utils.URLUtil;
 
         import org.yes.cart.impl.AddressDTOImpl;
         import org.yes.cart.impl.AssociationDTOImpl;
@@ -99,8 +100,6 @@
 
         public function init():void {
             currentState = "loginState";
-            // var url:String = "http://{server.name}:{server.port}/yes-manager/spring/amf";
-            var url:String = "http://localhost:8080/yes-manager/spring/amf";
 
             /*
              * Registering RMI classes by hand is more robust than annotations, since annotations
@@ -138,11 +137,25 @@
             registerClassAlias("org.yes.cart.domain.dto.impl.StateDTOImpl", StateDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.WarehouseDTOImpl", WarehouseDTOImpl);
 
-            ShopManagerGlobal.instance.url = url;
+            var url:String;
+            if ( this.url && (this.url.indexOf("file:/") == -1 )) {
+                // var url:String = "https://{server.name}:{server.port}/yes-manager/spring/amf";
+                url =
+                        URLUtil.getProtocol(this.url) + "://" +
+                        URLUtil.getServerNameWithPort(this.url) + "/yes-manager/spring/amf";
+            } else {
+                url = "https://localhost:8443/yes-manager/spring/amf";
+            }
 
+            ShopManagerGlobal.instance.url = url;
             channelSet.removeChannel(myamf);
-            myamf = new AMFChannel("myamf", url);
+            myamf = new SecureAMFChannel("myamf", url);
             channelSet.addChannel(myamf);
+
+            // If there is troubles with channels uncomment this to see the url
+            // Also make sure crossdomain.xml is accessible at the root
+            // Alert.show("URL is '" + this.url + "', url is '" + url + "', channel is '" + myamf.url + "'");
+
         }
 
 
