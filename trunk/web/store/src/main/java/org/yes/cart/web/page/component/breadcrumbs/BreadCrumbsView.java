@@ -21,6 +21,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -129,7 +130,12 @@ public class BreadCrumbsView extends BaseComponent implements CrumbNamePrefixPro
 
                     protected void populateItem(final ListItem<Crumb> crumbListItem) {
                         final Crumb crumb = crumbListItem.getModelObject();
-                        final I18NModel crumbModel = getI18NSupport().getFailoverModel(crumb.getDisplayName(), crumb.getName());
+                        final I18NModel crumbModel;
+                        if ("tag".equals(crumb.getKey())) {
+                            crumbModel = getI18NSupport().getFailoverModel(null, getString(crumb.getName()));
+                        } else {
+                            crumbModel = getI18NSupport().getFailoverModel(crumb.getDisplayName(), crumb.getName());
+                        }
                         crumbListItem
                                 .add(getPageLink(BREADCRUMBS_LINK, crumbModel.getValue(selectedLocale), new PageParameters(crumb.getCrumbLinkParameters()), true))
                                 .add(getPageLink(BREADCRUMBS_REMOVE_LINK, crumbModel.getValue(selectedLocale), new PageParameters(crumb.getRemoveCrumbLinkParameters()), false)

@@ -29,6 +29,8 @@ import java.io.Serializable;
  */
 public class Crumb implements Serializable {
 
+    private final String key;
+
     private final String name;
 
     private final Object displayName;
@@ -36,6 +38,10 @@ public class Crumb implements Serializable {
     private final PageParameters crumbLinkParameters;
 
     private PageParameters removeCrumbLinkParameters;
+
+    public String getKey() {
+        return key;
+    }
 
     public String getName() {
         return name;
@@ -57,10 +63,12 @@ public class Crumb implements Serializable {
         this.removeCrumbLinkParameters = removeCrumbLinkParameters;
     }
 
-    public Crumb(final String name,
+    public Crumb(final String key,
+                 final String name,
                  final Object displayName,
                  final PageParameters crumbLinkParameters,
                  final PageParameters removeCrumbLinkParameters) {
+        this.key = key;
         this.name = name;
         this.displayName = displayName;
         this.crumbLinkParameters = crumbLinkParameters;

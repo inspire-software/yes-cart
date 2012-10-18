@@ -117,7 +117,7 @@ public class BreadCrumbsBuilder {
         final Category category = categoryService.getById(categoryId);
         if (categoryId != category.getParentId()) {
             categoriesCrumbs.add(
-                   new Crumb(category.getName(),
+                   new Crumb("category", category.getName(),
                            category.getDisplayName(), getCategoryLinkParameters(categoryId),
                    getRemoveCategoryLinkParameters(category)
                    )
@@ -155,6 +155,7 @@ public class BreadCrumbsBuilder {
             final List<Crumb> navigationCrumbs,
             final List<String> allowedAttributeNames) {
 
+        // TODO: getRetainedRequestParameters is looping through all getRetainedRequestParameters - maybe need a hash set instead of list?
         //This is attributive only filtered navigation from request
         final PageParameters attributesOnly = WicketUtil.getRetainedRequestParameters(
                 pageParameters,
@@ -210,7 +211,7 @@ public class BreadCrumbsBuilder {
         }
 
         base.add(key, value);
-        return new Crumb(linkName, null, new PageParameters(base), withoutCurrent);
+        return new Crumb(key, linkName, null, new PageParameters(base), withoutCurrent);
     }
 
 }

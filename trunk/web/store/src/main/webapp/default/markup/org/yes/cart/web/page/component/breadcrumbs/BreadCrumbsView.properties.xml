@@ -21,4 +21,7 @@
 	<entry key="brand">Brand</entry>
 	<entry key="price">Price</entry>
 	<entry key="query">Search</entry>
+    <entry key="sale">Sale</entry>
+    <entry key="specialoffer">Special offer</entry>
+    <entry key="newarrival">New arrivals</entry>
 </properties>
