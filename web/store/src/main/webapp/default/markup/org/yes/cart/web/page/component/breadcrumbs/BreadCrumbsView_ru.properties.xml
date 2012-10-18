@@ -21,4 +21,7 @@
 	<entry key="brand">Производитель</entry>
 	<entry key="price">Цена</entry>
 	<entry key="query">Поиск</entry>
+    <entry key="sale">Распродажа</entry>
+    <entry key="specialoffer">Специальное предложение</entry>
+    <entry key="newarrival">Новые послупления</entry>
 </properties>
