@@ -300,6 +300,23 @@
                 <db.config.yespay.url>jdbc:derby://localhost:1527/yespay;create=true</db.config.yespay.url>
             </properties>
         </profile>
+        <profile>
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <id>tomcatDefault</id>
+            <properties>
+                <wicket.secure.port>8443</wicket.secure.port>
+                <wicket.unsecure.port>8080</wicket.unsecure.port>
+            </properties>
+        </profile>
+        <profile>
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <id>tomcatBehindApache</id>
+            <properties>
+                <wicket.secure.port>443</wicket.secure.port>
+                <wicket.unsecure.port>80</wicket.unsecure.port>
+            </properties>
+        </profile>
+
     </profiles>
 
     <dependencyManagement>
