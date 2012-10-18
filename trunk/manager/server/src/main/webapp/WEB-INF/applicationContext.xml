@@ -119,7 +119,7 @@
 
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="localhost"/>
-        <property name="port" value="25"/>
+        <property name="port" value="3525"/>
         <property name="username" value="yourusername"/>
         <property name="password" value="yourpassword"/>
         <property name="javaMailProperties">
@@ -132,6 +132,10 @@
         </property>
     </bean>
 
+    <!-- ############################# demo smtp server ############################# -->
+    <bean id="fakeSmtpServer" class="com.dumbster.smtp.SimpleSmtpServer" destroy-method="stop" factory-method="start">
+        <constructor-arg index="0" value="3525"/>
+    </bean>
 
 
 
