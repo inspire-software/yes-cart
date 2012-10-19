@@ -300,6 +300,23 @@
                 <db.config.yespay.url>jdbc:derby://localhost:1527/yespay;create=true</db.config.yespay.url>
             </properties>
         </profile>
+
+        <profile>
+            <id>secure</id>
+            <properties>
+                <wicket.security.enabled>true</wicket.security.enabled>
+                <yum.transport.guarantee>CONFIDENTIAL</yum.transport.guarantee>
+            </properties>
+        </profile>
+        <profile>
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <id>unsecure</id>
+            <properties>
+                <wicket.security.enabled>false</wicket.security.enabled>
+                <yum.transport.guarantee>NONE</yum.transport.guarantee>
+            </properties>
+        </profile>
+
         <profile>
             <activation><activeByDefault>true</activeByDefault></activation>
             <id>tomcatDefault</id>
@@ -314,6 +331,49 @@
             <properties>
                 <wicket.secure.port>443</wicket.secure.port>
                 <wicket.unsecure.port>80</wicket.unsecure.port>
+            </properties>
+        </profile>
+
+        <profile>
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <id>mailDev</id>
+            <properties>
+
+                <!-- yes cart manager -->
+                <yum.mail.host>localhost</yum.mail.host>
+                <yum.mail.port>3525</yum.mail.port>
+                <yum.mail.username>username</yum.mail.username>
+                <yum.mail.password>password</yum.mail.password>
+                <yum.mail.smtp.starttls.enable>true</yum.mail.smtp.starttls.enable>
+
+                <!-- yes cart shop -->
+                <ycs.mail.host>localhost</ycs.mail.host>
+                <ycs.mail.port>2525</ycs.mail.port>
+                <ycs.mail.username>username</ycs.mail.username>
+                <ycs.mail.password>password</ycs.mail.password>
+                <ycs.mail.smtp.starttls.enable>true</ycs.mail.smtp.starttls.enable>
+
+            </properties>
+        </profile>
+
+        <profile>
+            <id>mailProd</id>
+            <properties>
+
+                <!-- yes cart manager -->
+                <yum.mail.host>localhost</yum.mail.host>
+                <yum.mail.port>25</yum.mail.port>
+                <yum.mail.username>username</yum.mail.username>
+                <yum.mail.password>password</yum.mail.password>
+                <yum.mail.smtp.starttls.enable>true</yum.mail.smtp.starttls.enable>
+
+                <!-- yes cart shop -->
+                <ycs.mail.host>localhost</ycs.mail.host>
+                <ycs.mail.port>25</ycs.mail.port>
+                <ycs.mail.username>username</ycs.mail.username>
+                <ycs.mail.password>password</ycs.mail.password>
+                <ycs.mail.smtp.starttls.enable>true</ycs.mail.smtp.starttls.enable>
+
             </properties>
         </profile>
 

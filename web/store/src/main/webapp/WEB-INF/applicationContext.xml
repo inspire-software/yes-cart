@@ -432,16 +432,16 @@
 
 
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-        <property name="host" value="localhost"/>
-        <property name="port" value="2525"/>
-        <property name="username" value="yourusername"/>
-        <property name="password" value="yourpassword"/>
+        <property name="host" value="${ycs.mail.host}"/>
+        <property name="port" value="${ycs.mail.port}"/>
+        <property name="username" value="${ycs.mail.username}"/>
+        <property name="password" value="${ycs.mail.password}"/>
         <property name="javaMailProperties">
             <props>
                 <!-- Use SMTP-AUTH to authenticate to SMTP server -->
                 <!--<prop key="mail.smtp.auth">true</prop>-->
                 <!-- Use TLS to encrypt communication with SMTP server -->
-                <prop key="mail.smtp.starttls.enable">true</prop>
+                <prop key="mail.smtp.starttls.enable">${ycs.mail.smtp.starttls.enable}</prop>
             </props>
         </property>
     </bean>
