@@ -137,6 +137,15 @@ public interface AttributeNamesKeys {
 
     }
 
+    interface Shop {
+
+        /**
+         * Admin email in particular shop.
+         */
+        String SHOP_ADMIN_EMAIL = "SHOP_ADMIN_EMAIL";
+
+    }
+
 
     /**
      * Default (failover) directory for resources.

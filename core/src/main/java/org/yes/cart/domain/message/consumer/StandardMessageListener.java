@@ -162,7 +162,7 @@ public class StandardMessageListener implements Runnable {
                         (String) map.get(TEMPLATE_FOLDER),
                         (String) map.get(TEMPLATE_NAME),
                         null,//todo must be from properties "todo@getfromsho.com", //((Shop)map.get(SHOP)).getAttribute()
-                        (String) map.get(CUSTOMER_EMAIL),
+                        (String) map.get(CUSTOMER_EMAIL),  //email recipient - to
                         null,
                         null,
                         map);
