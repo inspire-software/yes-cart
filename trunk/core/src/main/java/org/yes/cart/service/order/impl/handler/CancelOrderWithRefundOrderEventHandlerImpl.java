@@ -86,7 +86,10 @@ public class CancelOrderWithRefundOrderEventHandlerImpl extends CancelOrderEvent
 
                 return super.handle(orderEvent);
             }
-            LOG.error("Can not cancel order, because of error on payment gateway."); //TODO admin notification
+            /**
+             * Administrative notification will be send via email. See appropriate aspect
+             */
+            LOG.error("Can not cancel order, because of error on payment gateway.");
             return false;
         }
     }

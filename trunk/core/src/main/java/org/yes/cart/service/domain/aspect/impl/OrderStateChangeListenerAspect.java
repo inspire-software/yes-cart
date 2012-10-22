@@ -20,9 +20,13 @@ import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.context.ServletContextAware;
+import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.domain.entity.AttrValueShop;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.message.consumer.StandardMessageListener;
@@ -47,8 +51,9 @@ import java.util.Map;
  * Time: 12:21 AM
  */
 @Aspect
-public class OrderStateChangeListenerAspect  extends BaseNotificationAspect implements ServletContextAware {
+public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect implements ServletContextAware {
 
+    private static final Logger LOG = LoggerFactory.getLogger(OrderStateChangeListenerAspect.class);
 
     private final JavaMailSender javaMailSender;
 
@@ -64,7 +69,7 @@ public class OrderStateChangeListenerAspect  extends BaseNotificationAspect impl
 
     private final Map<String, String> adminTemplates;
 
-    private ServletContext servletContext;
+
 
 
     /**
@@ -116,25 +121,36 @@ public class OrderStateChangeListenerAspect  extends BaseNotificationAspect impl
 
         final OrderEvent orderEvent = (OrderEvent) args[0];
 
-        System.out.println("\n >>> old " + orderEvent);
+        final AttrValueShop attrVal = orderEvent.getCustomerOrder().getShop().getAttributeByCode(AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL);
+
         try {
             Object rez = pjp.proceed();
             if ((Boolean) rez) {
 
                 final String templateKey = getTemplateKey(orderEvent);
 
-                System.out.println("\n >>> templateKey " + templateKey);
-
                 fillNotificationParameters(orderEvent, shopperTemplates.get(templateKey), orderEvent.getCustomerOrder().getCustomer().getEmail());
 
-                fillNotificationParameters(orderEvent, adminTemplates.get(templateKey), "admin@asdasdads.com");
+                if (attrVal == null) {
+                    LOG.error("Cant get admin email address for shop " + orderEvent.getCustomerOrder().getShop().getCode() );
+                }   else {
+                    fillNotificationParameters(orderEvent, adminTemplates.get(templateKey), attrVal.getVal());
+                }
 
             }
             return rez;
         } catch (OrderItemAllocationException th) {
-            throw th;                                  //todo notifications
+
+            LOG.info("Cant allocation quantity for product " + th.getProductSku().getCode() );   //todo pass code to email
+
+            if (attrVal == null) {
+                LOG.error("Cant get admin email address for shop " + orderEvent.getCustomerOrder().getShop().getCode() );
+            }   else {
+                fillNotificationParameters(orderEvent, "adm-cant-allocate-product-qty", attrVal.getVal());
+            }
+
+            throw th;
         } catch (Throwable th) {
-            System.out.println("\n >>> can fire transition " + orderEvent + " ex " + th);
             throw th;
 
         }
@@ -142,49 +158,7 @@ public class OrderStateChangeListenerAspect  extends BaseNotificationAspect impl
 
     }
 
-    /**
-     * Create email and sent it.
-     *
-     * @param orderEvent       given order event
-     * @param emailTempateName optional email tempate name
-     * @param emailsAddresses  set of email addresses
-     */
-    private void fillNotificationParameters(final OrderEvent orderEvent, final String emailTempateName, final String... emailsAddresses) {
 
-        if (StringUtils.isNotBlank(emailTempateName)) {
-
-            final CustomerOrder customerOrder = orderEvent.getCustomerOrder();
-
-            for (String emailAddr : emailsAddresses) {
-
-                final HashMap<String, Object> map = new HashMap<String, Object>();
-
-                map.put(StandardMessageListener.SHOP_CODE, customerOrder.getShop().getCode());
-                map.put(StandardMessageListener.CUSTOMER_EMAIL, emailAddr);
-                map.put(StandardMessageListener.RESULT, true);
-                map.put(StandardMessageListener.ROOT, customerOrder);
-                map.put(StandardMessageListener.TEMPLATE_FOLDER, servletContext.getRealPath(customerOrder.getShop().getMailFolder()) + File.separator);
-                map.put(StandardMessageListener.SHOP, customerOrder.getShop());
-                map.put(StandardMessageListener.CUSTOMER, customerOrder.getCustomer());
-                map.put(StandardMessageListener.TEMPLATE_NAME, emailTempateName);
-
-                if (orderEvent.getCustomerOrderDelivery() != null) {
-                    final CustomerOrderDelivery delivery = orderEvent.getCustomerOrderDelivery();
-                    map.put(StandardMessageListener.DELIVERY_CARRIER, delivery.getCarrierSla().getCarrier().getName());
-                    map.put(StandardMessageListener.DELIVERY_CARRIER_SLA, delivery.getCarrierSla().getName());
-                    map.put(StandardMessageListener.DELIVERY_NUM, delivery.getDeliveryNum());
-                    map.put(StandardMessageListener.DELIVERY_EXTERNAL_NUM, delivery.getRefNo());
-                }
-
-                sendNotification(map);
-
-            }
-
-
-
-        }
-
-    }
 
     /**
      * Get ematil template key by given order event.
@@ -209,9 +183,4 @@ public class OrderStateChangeListenerAspect  extends BaseNotificationAspect impl
 
 
 
-
-    /** {@inheritDoc} */
-    public void setServletContext(final ServletContext servletContext) {
-        this.servletContext = servletContext;
-    }
 }

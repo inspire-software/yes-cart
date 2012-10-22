@@ -37,6 +37,7 @@ import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.GenericService;
+import org.yes.cart.service.domain.PassPhrazeGenerator;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoCustomerService;
 import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
@@ -63,6 +64,8 @@ public class DtoCustomerServiceImpl
 
     private final Assembler attrValueAssembler;
 
+    private final PassPhrazeGenerator passPhrazeGenerator;
+
     /**
      * Construct base remote service.
      *
@@ -72,6 +75,7 @@ public class DtoCustomerServiceImpl
      * @param dtoAttributeService      {@link DtoAttributeService}
      * @param attrValueEntityCustomerDao       link to customer attribute values dao
      * @param shopDao shop dao
+     * @param passPhrazeGenerator pass praze generator
      */
     public DtoCustomerServiceImpl(
             final DtoFactory dtoFactory,
@@ -79,13 +83,16 @@ public class DtoCustomerServiceImpl
             final AdaptersRepository adaptersRepository,
             final DtoAttributeService dtoAttributeService,
             final GenericDAO<AttrValueEntityCustomer, Long> attrValueEntityCustomerDao,
-            final GenericDAO<Shop, Long> shopDao) {
+            final GenericDAO<Shop, Long> shopDao,
+            final PassPhrazeGenerator passPhrazeGenerator) {
 
         super(dtoFactory, customerGenericService, adaptersRepository);
 
         this.dtoAttributeService = dtoAttributeService;
 
         this.attrValueEntityCustomerDao = attrValueEntityCustomerDao;
+
+        this.passPhrazeGenerator = passPhrazeGenerator;
 
 
         this.shopDao = shopDao;
@@ -104,7 +111,7 @@ public class DtoCustomerServiceImpl
     public CustomerDTO create(final CustomerDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         Customer customer = getEntityFactory().getByIface(getEntityIFace());
         assembler.assembleEntity(instance, customer, null, dtoFactory);
-        customer.setPassword("TODO"); //TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        customer.setPassword(passPhrazeGenerator.getNextPassPhrase());
         customer = ((CustomerService)service).create(customer, null);
         return getById(customer.getCustomerId());
     }

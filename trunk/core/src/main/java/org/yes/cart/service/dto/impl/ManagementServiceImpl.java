@@ -35,6 +35,7 @@ import org.yes.cart.domain.entity.Role;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.ManagerService;
+import org.yes.cart.service.domain.PassPhrazeGenerator;
 import org.yes.cart.service.dto.ManagementService;
 
 import java.io.UnsupportedEncodingException;
@@ -69,6 +70,8 @@ public class ManagementServiceImpl implements ManagementService {
 
     private final AdaptersRepository adaptersRepository;
 
+    private final PassPhrazeGenerator passPhrazeGenerator;
+
 
     /**
      * Construct user management service.
@@ -77,17 +80,20 @@ public class ManagementServiceImpl implements ManagementService {
      * @param managerRoleDao      manager roles dao
      * @param roleDao             role dao
      * @param dtoFactory          {@link DtoFactory}
+     * @param passPhrazeGenerator pass praze generator
      */
     public ManagementServiceImpl(final ManagerService managerService,
                                     final GenericDAO<ManagerRole, Long> managerRoleDao,
                                     final GenericDAO<Role, Long> roleDao,
                                     final DtoFactory dtoFactory,
-                                    final AdaptersRepository adaptersRepository) {
+                                    final AdaptersRepository adaptersRepository,
+                                    final PassPhrazeGenerator passPhrazeGenerator) {
         this.managerService = managerService;
         this.managerRoleDao = managerRoleDao;
         this.roleDao = roleDao;
         this.dtoFactory = dtoFactory;
         this.adaptersRepository = adaptersRepository;
+        this.passPhrazeGenerator = passPhrazeGenerator;
 
         managerAssembler = DTOAssembler.newAssembler(ManagerDTOImpl.class, Manager.class);
 
@@ -187,7 +193,7 @@ public class ManagementServiceImpl implements ManagementService {
         manager.setEmail(userId);
         manager.setFirstname(firstName);
         manager.setLastname(lastName);
-        manager.setPassword("TODO"); //TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        manager.setPassword(passPhrazeGenerator.getNextPassPhrase());
 
         managerService.create(manager, null); //No particular shop at this moment, but  future
 
