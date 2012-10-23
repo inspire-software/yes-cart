@@ -197,6 +197,7 @@
                                 <includes>
                                     <include>**/context.xml</include>
                                     <include>**/web.xml</include>
+                                    <include>**/applicationContext.xml</include>
                                 </includes>
                                 <excludes>
                                     <exclude>**/*.properties.xml</exclude>
