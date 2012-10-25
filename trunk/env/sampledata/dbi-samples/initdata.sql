@@ -6,11 +6,11 @@
 -- SET character_set_connection=utf8;
 
 
-INSERT INTO TASSOCIATION(ASSOCIATION_ID, CODE, NAME, DESCRIPTION)  VALUES (1, 'accessories' , 'Accessories' , 'Product accessories');
-INSERT INTO TASSOCIATION(ASSOCIATION_ID, CODE, NAME, DESCRIPTION)  VALUES (2, 'up' , 'Up sell' , 'Up sell');
-INSERT INTO TASSOCIATION(ASSOCIATION_ID, CODE, NAME, DESCRIPTION)  VALUES (3, 'cross' , 'Cross sell' , 'Cross sell');
-INSERT INTO TASSOCIATION(ASSOCIATION_ID, CODE, NAME, DESCRIPTION)  VALUES (4, 'buywiththis' , 'Buy with this products' , 'Shoppers also buy with this product');
-INSERT INTO TASSOCIATION(ASSOCIATION_ID, CODE, NAME, DESCRIPTION)  VALUES (5, 'expendable' , 'Expendable materials' , 'Expendable materials. Example inc for printer');
+INSERT INTO TASSOCIATION(ASSOCIATION_ID, CODE, NAME, DESCRIPTION, GUID)  VALUES (1, 'accessories' , 'Accessories' , 'Product accessories', '1_TASSOCIATION');
+INSERT INTO TASSOCIATION(ASSOCIATION_ID, CODE, NAME, DESCRIPTION, GUID)  VALUES (2, 'up' , 'Up sell' , 'Up sell', '2_TASSOCIATION');
+INSERT INTO TASSOCIATION(ASSOCIATION_ID, CODE, NAME, DESCRIPTION, GUID)  VALUES (3, 'cross' , 'Cross sell' , 'Cross sell', '3_TASSOCIATION');
+INSERT INTO TASSOCIATION(ASSOCIATION_ID, CODE, NAME, DESCRIPTION, GUID)  VALUES (4, 'buywiththis' , 'Buy with this products' , 'Shoppers also buy with this product', '4_TASSOCIATION');
+INSERT INTO TASSOCIATION(ASSOCIATION_ID, CODE, NAME, DESCRIPTION, GUID)  VALUES (5, 'expendable' , 'Expendable materials' , 'Expendable materials. Example inc for printer', , '5_TASSOCIATION');
 
 
 INSERT INTO TETYPE (ETYPE_ID, JAVATYPE, BUSINESSTYPE, GUID) VALUES (1000, 'java.lang.String', 'String', 'String');

@@ -21,16 +21,20 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Fragment;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.protocol.https.RequireHttps;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderException;
+import org.yes.cart.service.order.OrderItemAllocationException;
 import org.yes.cart.service.payment.PaymentProcessFacade;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
@@ -63,7 +67,11 @@ public class PaymentPage extends AbstractWebPage {
     private static final String POSITIVE_RESULT_FRAGMENT = "positiveResultFragment";
 
     private static final String NEGATIVE_RESULT_FRAGMENT = "negativeResultFragment";
+    private static final String NEGATIVE_PAYMENT_NOTES = "negativePaymentNotes";
+    private static final String POSITIVE_PAYMENT_NOTES = "positivePaymentNotes";
+    private static final String NEGATIVE_ALLOCATION_RESULT_FRAGMENT = "negativeItemAllocationResultFragment";
     private static final String PAYMENT_DETAIL_LIST = "paymentDetail";
+    private static final String ALLOCATION_DETAIL = "negativeItemAllocationNotes";
     private static final String PAYMENT_ID_LABEL = "id";
     private static final String PAYMENT_TRANS_ID = "transactionId";
     private static final String PAYMENT_AUTH_CODE = "authCode";
@@ -98,14 +106,37 @@ public class PaymentPage extends AbstractWebPage {
 
         super(params);
 
+        addOrReplace(
+                new FeedbackPanel(FEEDBACK));
+
         try {
             result = paymentProcessFacade.pay(
                         ApplicationDirector.getShoppingCart(),
                         WicketUtil.getHttpServletRequest().getParameterMap()
                     );
-        } catch (OrderException e) {
+
+            addOrReplace(
+                    createPositiveResultFragment()
+            );
+
+        } catch (OrderItemAllocationException e) {
+
+
+            addOrReplace(
+                    createNegativeItemAllocationResultFragment(e.getProductSku())
+            );
+
             result = false;
-            e.printStackTrace();  //Todo change body of catch statement use File | Settings | File Templates.
+
+        } catch (OrderException e) {
+
+
+
+            addOrReplace(
+                    createNegativePaymentResultFragment()
+            );
+
+            result = false;
         }
 
         if (result) {
@@ -126,9 +157,6 @@ public class PaymentPage extends AbstractWebPage {
 
         processCommands();
 
-        add(
-               result ? createPositiveResultFragment() :  createNegativeResultFragment()
-        );
 
         addOrReplace(
                 new StandardFooter(FOOTER)
@@ -140,11 +168,38 @@ public class PaymentPage extends AbstractWebPage {
     }
 
 
+
+
+    /**
+     * Get the negative result fragment, which responsible
+     * to show item allocation error.
+     *
+     * @param sku the {@link ProductSku} which quantity can not be allocated.
+     *
+     * @return negative result fragment
+     */
+    private MarkupContainer createNegativeItemAllocationResultFragment(final ProductSku sku) {
+
+        final String errorMessage =  new StringResourceModel(ALLOCATION_DETAIL, this, null, new Object [] {sku.getName(), sku.getCode() } ).getString()  ;
+
+        error(errorMessage);
+
+        return new Fragment(RESULT_CONTAINER, NEGATIVE_ALLOCATION_RESULT_FRAGMENT, this)
+                .add(
+                        new Label(
+                                ALLOCATION_DETAIL,
+                                errorMessage )
+                ) ;
+
+    }
+
     /**
      * Get the negative result fragment.
      * @return negative result fragment
      */
-    private MarkupContainer createNegativeResultFragment() {
+    private MarkupContainer createNegativePaymentResultFragment() {
+
+        error(getLocalizer().getString(NEGATIVE_PAYMENT_NOTES, this));
 
         final List<CustomerOrderPayment> payments = customerOrderPaymentService.findBy(
                 getOrderNumber(), null, null, null);
@@ -172,6 +227,7 @@ public class PaymentPage extends AbstractWebPage {
      * @return positive result fragment.
      */
     private MarkupContainer createPositiveResultFragment() {
+        info(getLocalizer().getString(POSITIVE_PAYMENT_NOTES, this));
         return new Fragment(RESULT_CONTAINER, POSITIVE_RESULT_FRAGMENT, this);
     }
 
