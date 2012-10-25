@@ -16,7 +16,6 @@
 
 package org.yes.cart.service.domain.aspect.impl;
 
-import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -27,8 +26,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.AttrValueShop;
-import org.yes.cart.domain.entity.CustomerOrder;
-import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.message.consumer.StandardMessageListener;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.CustomerService;
@@ -37,8 +34,6 @@ import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderItemAllocationException;
 
-import javax.servlet.ServletContext;
-import java.io.File;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -139,14 +134,19 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect implem
 
             }
             return rez;
-        } catch (OrderItemAllocationException th) {
+        } catch (final OrderItemAllocationException th) {
 
-            LOG.info("Cant allocation quantity for product " + th.getProductSku().getCode() );   //todo pass code to email
+            LOG.error("Cant allocation quantity for product " + th.getProductSku().getCode() );   //todo pass code to email
 
             if (attrVal == null) {
                 LOG.error("Cant get admin email address for shop " + orderEvent.getCustomerOrder().getShop().getCode() );
             }   else {
-                fillNotificationParameters(orderEvent, "adm-cant-allocate-product-qty", attrVal.getVal());
+
+                fillNotificationParameters(
+                        orderEvent,
+                        "adm-cant-allocate-product-qty",
+                        new HashMap<String, Object>() {{ put("sku", th.getProductSku()); }},
+                        attrVal.getVal());
             }
 
             throw th;

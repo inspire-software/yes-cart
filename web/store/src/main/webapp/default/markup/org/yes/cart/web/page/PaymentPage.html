@@ -58,6 +58,7 @@
                 </wicket:link>					
 				</li>
             </ul>
+
         </div>
         <div class="column grid_1">
             <p>
@@ -71,9 +72,10 @@
             &nbsp;
         </div>
         <div class="column grid_14">
+            <span wicket:id="feedback"/>
             <p>
                 <wicket:container wicket:id="paymentResult">
-                    [auth panel]
+                    [payment result panel]
                 </wicket:container>
             </p>
         </div>
@@ -88,8 +90,14 @@
 </div>
 
 
+<wicket:fragment wicket:id="negativeItemAllocationResultFragment">
+    <span style="display: none" wicket:id="negativeItemAllocationNotes">[negative item allocation]</span>
+
+</wicket:fragment>
+
+
 <wicket:fragment wicket:id="negativeResultFragment">
-    <span>
+    <span style="display: none">
         <wicket:message key="negativePaymentNotes">[negative payments]</wicket:message>
     </span>
     <table width="100%">
@@ -104,7 +112,7 @@
 </wicket:fragment>
 
 <wicket:fragment wicket:id="positiveResultFragment">
-    <span>
+    <span style="display: none">
         <wicket:message key="positivePaymentNotes">[negative payments]</wicket:message>
     </span>
     <wicket:link>

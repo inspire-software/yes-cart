@@ -22,4 +22,5 @@
 	<entry key="positivePaymentNotes">Оплата произведена успешно</entry>
 	<entry key="continueShopping">За новыми покупками</entry>
 	<entry key="checkStatus">Проверить статус заказа</entry>
+    <entry key="negativeItemAllocationNotes">Недостаточное количество  {0}, код {1} на складах. Попробуйте купит схожий продукт. Приносим свои извинения</entry>
 </properties>

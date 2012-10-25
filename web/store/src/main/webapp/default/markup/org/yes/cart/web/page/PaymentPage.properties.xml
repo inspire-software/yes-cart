@@ -22,4 +22,5 @@
 	<entry key="positivePaymentNotes">Order payment was ok </entry>
 	<entry key="continueShopping">Continue shopping</entry>
 	<entry key="checkStatus">Check order status</entry>
+	<entry key="negativeItemAllocationNotes">Sorry. Item quantity {0} with code {1} cannot be allocated on warehouse. Try to buy similar product</entry>
 </properties>

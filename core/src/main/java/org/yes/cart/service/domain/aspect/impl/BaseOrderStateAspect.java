@@ -10,6 +10,7 @@ import org.yes.cart.service.order.OrderEvent;
 import javax.servlet.ServletContext;
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -32,15 +33,15 @@ public abstract class BaseOrderStateAspect extends  BaseNotificationAspect  {
         super(taskExecutor);
     }
 
-
     /**
      * Create email and sent it.
      *
      * @param orderEvent       given order event
      * @param emailTempateName optional email tempate name
      * @param emailsAddresses  set of email addresses
+     * @param params additional params
      */
-    protected void fillNotificationParameters(final OrderEvent orderEvent, final String emailTempateName, final String... emailsAddresses) {
+    protected void fillNotificationParameters(final OrderEvent orderEvent, final String emailTempateName, final Map<String,Object> params, final String... emailsAddresses) {
 
         if (StringUtils.isNotBlank(emailTempateName)) {
 
@@ -49,6 +50,11 @@ public abstract class BaseOrderStateAspect extends  BaseNotificationAspect  {
             for (String emailAddr : emailsAddresses) {
 
                 final HashMap<String, Object> map = new HashMap<String, Object>();
+
+                if (params != null) {
+
+                    map.putAll(params);
+                }
 
                 map.put(StandardMessageListener.SHOP_CODE, customerOrder.getShop().getCode());
                 map.put(StandardMessageListener.CUSTOMER_EMAIL, emailAddr);
@@ -74,6 +80,19 @@ public abstract class BaseOrderStateAspect extends  BaseNotificationAspect  {
 
 
         }
+
+
+    }
+        /**
+        * Create email and sent it.
+        *
+        * @param orderEvent       given order event
+        * @param emailTempateName optional email tempate name
+        * @param emailsAddresses  set of email addresses
+        */
+    protected void fillNotificationParameters(final OrderEvent orderEvent, final String emailTempateName, final String... emailsAddresses) {
+
+        fillNotificationParameters( orderEvent, emailTempateName, null, emailsAddresses);
 
     }
 

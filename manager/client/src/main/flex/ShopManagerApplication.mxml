@@ -137,19 +137,25 @@
             registerClassAlias("org.yes.cart.domain.dto.impl.StateDTOImpl", StateDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.WarehouseDTOImpl", WarehouseDTOImpl);
 
+
+            channelSet.removeChannel(myamf);
             var url:String;
-            if ( this.url && (this.url.indexOf("file:/") == -1 )) {
-                // var url:String = "https://{server.name}:{server.port}/yes-manager/spring/amf";
+            if ( this.url && (this.url.indexOf("file:/") != -1 )) { //local unsecure connection
                 url =
                         URLUtil.getProtocol(this.url) + "://" +
                         URLUtil.getServerNameWithPort(this.url) + "/yes-manager/spring/amf";
+                myamf = new AMFChannel("myamf", url);
+            } else if ( this.url && (this.url.indexOf("http:/") != -1 )) {
+                url  = "http://{server.name}:{server.port}/yes-manager/spring/amf";
+                myamf = new AMFChannel("myamf", url);
             } else {
-                url = "https://localhost:8443/yes-manager/spring/amf";
+                url = "https://{server.name}:{server.port}/yes-manager/spring/amf";
+                myamf = new SecureAMFChannel("myamf", url);
             }
 
             ShopManagerGlobal.instance.url = url;
-            channelSet.removeChannel(myamf);
-            myamf = new SecureAMFChannel("myamf", url);
+
+
             channelSet.addChannel(myamf);
 
             // If there is troubles with channels uncomment this to see the url
