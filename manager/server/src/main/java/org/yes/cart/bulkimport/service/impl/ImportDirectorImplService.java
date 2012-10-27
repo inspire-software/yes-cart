@@ -139,7 +139,7 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
          * Timeout is set to 60sec - just in case runnable crashes and we need to unlock through
          * timeout.
          */
-        return doJob(new JobContextImpl(async, new JobStatusListenerImpl(10000, 60000),
+        return doJob(new JobContextImpl(false, new JobStatusListenerImpl(10000, 60000),
                 new HashMap<String, Object>() {{
                     put("descriptorGroup", descriptorGroup);
                     put("fileName", fileName);
@@ -185,14 +185,8 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
     }
 
     private void doImageImport(final JobStatusListener listener, final Set<String> importedFiles, final String fileName) throws IOException {
-
-        final File ycsimg = new File(applicationContext.getResource("WEB-INF").getFile().getAbsolutePath()
-                + File.separator + ".." + File.separator + ".." + File.separator + "yes-shop"
-                + File.separator + "default" + File.separator + "imagevault" + File.separator);
-        String path = ycsimg.getAbsolutePath();
-        if (path != null)
-            path = remoteBackdoorService.getImageVaultPath();
-        bulkImportImagesService.setPathToRepository(path); //TODO remove this hardcoded value. also see remoteImageServiceimpl
+        final String path  = remoteBackdoorService.getImageVaultPath() + File.separator;
+        bulkImportImagesService.setPathToRepository(path);
         bulkImportImagesService.doImport(listener, importedFiles, fileName, this.pathToImportFolder);
     }
 

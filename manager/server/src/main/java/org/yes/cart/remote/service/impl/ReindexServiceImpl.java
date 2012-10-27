@@ -90,7 +90,7 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
      * @return quantity product in created index.
      */
     public String reindexAllProducts() {
-        return doJob(new JobContextImpl(true, new JobStatusListenerImpl(10000, 300000)));
+        return doJob(new JobContextImpl(false, new JobStatusListenerImpl(10000, 300000)));
     }
 
     /**

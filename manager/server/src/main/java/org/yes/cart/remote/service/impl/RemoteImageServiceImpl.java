@@ -86,6 +86,8 @@ public class RemoteImageServiceImpl extends AbstractRemoteService<SeoImageDTO> i
      */
     private String getRealPathPrefix() {
 
+        //final String path  = remoteBackdoorService.getImageVaultPath() + File.separator;
+
         final ShopDTO shopDTO = dtoShopService.getShopDtoByDomainName(
                 FlexContext.getHttpRequest().getServerName().toLowerCase()
         );
