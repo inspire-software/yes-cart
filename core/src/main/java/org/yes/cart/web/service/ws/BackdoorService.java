@@ -22,6 +22,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -110,6 +111,15 @@ public interface BackdoorService {
     @WebMethod
     @WebResult(name = "cacheInfoResult")
     void evictCache();
+
+
+    /**
+     * Get image vault path.
+     * @return  image vault path
+     */
+    @WebMethod
+    @WebResult(name = "imageVaultPath")
+    String getImageVaultPath() throws IOException;
 
 
 

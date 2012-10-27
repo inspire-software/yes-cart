@@ -1129,15 +1129,10 @@
 
     <bean id="bulkImportImageService" class="org.yes.cart.bulkimport.image.impl.BulkImportImagesServiceImpl">
         <constructor-arg index="0" ref="genericDao"/>
-        <constructor-arg index="1" ref="attributeDao"/>
+        <constructor-arg index="1" ref="attributeService"/>
         <constructor-arg index="2" ref="imageService"/>
         <constructor-arg index="3" value="_([.[^_]]*)_[a-z]\.jpe?g$"/>
         <constructor-arg index="4" value="(.*)\.jpe?g"/>
-    </bean>
-
-
-    <bean id="backDoorBean" class="org.yes.cart.web.service.ws.impl.BackdoorServiceImpl">
-        <property name="productService" ref="productService"/>
     </bean>
 
 

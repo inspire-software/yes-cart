@@ -474,6 +474,7 @@
     <bean id="reindexService"
           class="org.yes.cart.remote.service.impl.ReindexServiceImpl">
         <constructor-arg index="0" ref="productIndexExecutor"/>
+        <constructor-arg index="1" ref="remoteBackdoorService"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="reindexAllProducts" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
@@ -617,6 +618,7 @@
         <constructor-arg index="5" value="#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'+systemProperties['file.separator']+'import'}"/>
         <constructor-arg index="6" ref="productService"/>
         <constructor-arg index="7" ref="bulkImportExecutor"/>
+        <constructor-arg index="8" ref="remoteBackdoorService"/>
 
 
         <flex:remoting-destination/>

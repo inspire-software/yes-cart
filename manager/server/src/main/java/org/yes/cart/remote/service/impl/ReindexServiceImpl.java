@@ -16,20 +16,17 @@
 
 package org.yes.cart.remote.service.impl;
 
-import flex.messaging.FlexContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.yes.cart.remote.service.ReindexService;
+import org.yes.cart.remote.service.RemoteBackdoorService;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.SingletonJobRunner;
 import org.yes.cart.service.async.impl.JobStatusListenerImpl;
 import org.yes.cart.service.async.model.JobContext;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.async.model.impl.JobContextImpl;
-import org.yes.cart.web.service.ws.BackdoorService;
-import org.yes.cart.web.service.ws.client.BackdoorServiceClientFactory;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -40,8 +37,17 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
 
     private static final Logger LOG = LoggerFactory.getLogger(ReindexServiceImpl.class);
 
-    public ReindexServiceImpl(final TaskExecutor executor) {
+    private final RemoteBackdoorService remoteBackdoorService;
+
+    /**
+     * Construct reindexer.
+     *
+     * @param executor task executor
+     * @param remoteBackdoorService remote backdoor service.
+     */
+    public ReindexServiceImpl(final TaskExecutor executor, final RemoteBackdoorService remoteBackdoorService) {
         super(executor);
+        this.remoteBackdoorService = remoteBackdoorService;
     }
 
     /** {@inheritDoc} */
@@ -53,19 +59,15 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
     @Override
     protected Runnable createJobRunnable(final JobContext ctx) {
 
-        final BackdoorService backdoor = getBackdoorService(ctx.getListener().getTimeoutValue());
-
         return new Runnable() {
 
             private final JobStatusListener listener = ctx.getListener();
-            private final BackdoorService backdoorService = backdoor;
-
             public void run() {
 
                 listener.notifyPing();
                 try {
                     listener.notifyMessage("Indexing stared");
-                    final int cnt = backdoorService.reindexAllProducts();
+                    final int cnt = remoteBackdoorService.reindexAllProducts();
                     // TODO: Need ping here too as if we get a lot of products we really only rely on the timeout
                     //       In fact we have the WS timeout, Listener timeout - so this needs to be refactored
                     //       We need a common indexing interface where we can pass in listener (or can get
@@ -98,33 +100,10 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
      * @return quantity product in created index.
      */
     public int reindexProduct(long pk) {
-        return getBackdoorService(15000).reindexProduct(pk);
+        return remoteBackdoorService.reindexProduct(pk);
     }
 
 
-    private BackdoorServiceClientFactory backdoorServiceClientFactory = null;
 
-    private synchronized BackdoorServiceClientFactory getBackdoorServiceClientFactory() {
-
-        if (backdoorServiceClientFactory == null) {
-            backdoorServiceClientFactory = new BackdoorServiceClientFactory();
-        }
-
-        return backdoorServiceClientFactory;
-
-    }
-
-    private BackdoorService getBackdoorService(final long timeout) {
-
-        String userName = ((UsernamePasswordAuthenticationToken) FlexContext.getUserPrincipal()).getName();
-        //String password = (String) ((UsernamePasswordAuthenticationToken) FlexContext.getUserPrincipal()).getCredentials();
-        String password = (String) FlexContext.getFlexSession().getAttribute("pwd");
-
-        return getBackdoorServiceClientFactory().getBackdoorService(
-                userName,
-                password,
-                "http://localhost:8080/yes-shop/services/backdoor", timeout);
-
-    }
 
 }

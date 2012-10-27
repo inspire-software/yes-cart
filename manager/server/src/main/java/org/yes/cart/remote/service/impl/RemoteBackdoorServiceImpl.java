@@ -23,10 +23,11 @@ import org.yes.cart.remote.service.RemoteBackdoorService;
 import org.yes.cart.web.service.ws.BackdoorService;
 import org.yes.cart.web.service.ws.client.BackdoorServiceClientFactory;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
- * User: iga Igor Azarny
+ * User: iazarny@yahoo.com Igor Azarny
  * Date: 4 - feb - 12
  * Time: 5:44 PM
  */
@@ -63,12 +64,19 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
         return getBackdoorService(60000).luceneQuery(query);
     }
 
+    /** {@inheritDoc} */
     public List<CacheInfoDTOImpl> getCacheInfo() {
         return getBackdoorService(60000).getCacheInfo();
 }
 
+    /** {@inheritDoc} */
     public void evictCache() {
          getBackdoorService(60000).evictCache();
+    }
+
+    /** {@inheritDoc} */
+    public String getImageVaultPath() throws IOException {
+        return getBackdoorService(60000).getImageVaultPath();
     }
 
     private BackdoorServiceClientFactory backdoorServiceClientFactory = null;
@@ -83,7 +91,12 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
 
     }
 
-    private BackdoorService getBackdoorService(final long timeout) {
+    /**
+     * Get actual remote service.
+     * @param timeout  timeout for operation.
+     * @return  {@BackdoorService}
+     */
+    private  BackdoorService getBackdoorService(final long timeout) {
 
 
         String userName =  ((UsernamePasswordAuthenticationToken) FlexContext.getUserPrincipal()).getName();
@@ -93,7 +106,7 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
         return getBackdoorServiceClientFactory().getBackdoorService(
                 userName,
                 password,
-                "http://localhost:8080/yes-shop/services/backdoor", timeout);
+                "http://localhost:8080/yes-shop/services/backdoor", timeout);  //todo move to config v2 ?
 
     }
 

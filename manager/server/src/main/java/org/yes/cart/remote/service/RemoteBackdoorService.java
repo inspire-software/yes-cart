@@ -18,6 +18,7 @@ package org.yes.cart.remote.service;
 
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -84,6 +85,13 @@ public interface RemoteBackdoorService {
      * Evict alli caches , which are represent in getCacheInfo list.
      */
     void evictCache();
+
+    /**
+     * Get real path to image vault on shop application. Need to allow have different web  context for yes-shop
+     * @return  real path to image vault
+     * @throws IOException    in case of io error.
+     */
+    String getImageVaultPath() throws IOException;
 
 
 }
