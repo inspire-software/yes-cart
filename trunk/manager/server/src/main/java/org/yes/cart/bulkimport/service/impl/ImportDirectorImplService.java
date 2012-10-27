@@ -27,6 +27,7 @@ import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.bulkimport.service.BulkImportImagesService;
 import org.yes.cart.bulkimport.service.BulkImportService;
 import org.yes.cart.bulkimport.service.ImportDirectorService;
+import org.yes.cart.remote.service.RemoteBackdoorService;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.SingletonJobRunner;
 import org.yes.cart.service.async.impl.JobStatusListenerImpl;
@@ -70,6 +71,8 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
 
     private ApplicationContext applicationContext;
 
+    private final RemoteBackdoorService remoteBackdoorService;
+
 
     /**
      * Construct the import director
@@ -89,7 +92,9 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
             final String pathToArchiveFolder,
             final String pathToImportDescriptors,
             final String pathToImportFolder,
-            final ProductService productService, final TaskExecutor executor) {
+            final ProductService productService,
+            final TaskExecutor executor,
+            final RemoteBackdoorService remoteBackdoorService) {
         super(executor);
         this.bulkImportService = bulkImportService;
         this.pathToImportDescriptors = pathToImportDescriptors;
@@ -98,6 +103,7 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
         this.importDescriptors = importDescriptors;
         this.bulkImportImagesService = bulkImportImagesService;
         this.productService = productService;
+        this.remoteBackdoorService = remoteBackdoorService;
     }
 
 
@@ -179,10 +185,14 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
     }
 
     private void doImageImport(final JobStatusListener listener, final Set<String> importedFiles, final String fileName) throws IOException {
+
         final File ycsimg = new File(applicationContext.getResource("WEB-INF").getFile().getAbsolutePath()
                 + File.separator + ".." + File.separator + ".." + File.separator + "yes-shop"
                 + File.separator + "default" + File.separator + "imagevault" + File.separator);
-        bulkImportImagesService.setPathToRepository(ycsimg.getAbsolutePath()); //TODO remove this hardcoded value. also see remoteImageServiceimpl
+        String path = ycsimg.getAbsolutePath();
+        if (path != null)
+            path = remoteBackdoorService.getImageVaultPath();
+        bulkImportImagesService.setPathToRepository(path); //TODO remove this hardcoded value. also see remoteImageServiceimpl
         bulkImportImagesService.doImport(listener, importedFiles, fileName, this.pathToImportFolder);
     }
 

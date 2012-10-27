@@ -53,7 +53,7 @@ public class BackdoorAuthenticationInInterceptor extends WSS4JInInterceptor impl
     public BackdoorAuthenticationInInterceptor(){
         super();
     }
-    public BackdoorAuthenticationInInterceptor(Map<String, Object> properties){
+    public BackdoorAuthenticationInInterceptor(final Map<String, Object> properties){
         super(properties);
     }
 

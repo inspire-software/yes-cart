@@ -26,6 +26,7 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.async.JobStatusListener;
+import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.ImageService;
 
 import java.io.File;
@@ -46,7 +47,7 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
 
     private final GenericDAO<Object, Long> genericDAO;
 
-    private final GenericDAO<Attribute, Long> attributeDao;
+    private final AttributeService attributeService;
 
     private final ImageService imageService;
 
@@ -83,17 +84,17 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
      * Construct bilk import service.
      *
      * @param genericDAO   generic dao
-     * @param attributeDao attributes dao
+     * @param attributeService attributes dao
      * @param imageService image service
      * @param regExp       image filter.
      */
     public BulkImportImagesServiceImpl(final GenericDAO<Object, Long> genericDAO,
-                                       final GenericDAO<Attribute, Long> attributeDao,
+                                       final AttributeService attributeService,
                                        final ImageService imageService,
                                        final String regExp,
                                        final String filePatterntRegExp) {
         this.genericDAO = genericDAO;
-        this.attributeDao = attributeDao;
+        this.attributeService = attributeService;
         this.imageService = imageService;
         this.regExp = regExp;
         this.pattern = Pattern.compile(regExp);
@@ -207,7 +208,7 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
             return false;
         } else {
             final String attributeCode = Constants.PRODUCT_IMAGE_ATTR_NAME_PREFIX + suffix;
-            final Attribute attribute = getAttribute(attributeCode);
+            final Attribute attribute = attributeService.findByAttributeCode(attributeCode);
             if (attribute == null) {
                 final String warn = MessageFormat.format("attribute with code {0} not found.", attributeCode);
                 statusListener.notifyWarning(warn);
@@ -262,7 +263,7 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
             return false;
         } else {
             final String attributeCode = Constants.PRODUCT_SKU_IMAGE_ATTR_NAME_PREFIX + suffix;
-            final Attribute attribute = getAttribute(attributeCode);
+            final Attribute attribute = attributeService.findByAttributeCode(attributeCode);
             if (attribute == null) {
                 final String warn = MessageFormat.format("attribute with code {0} not found.", attributeCode);
                 statusListener.notifyWarning(warn);
@@ -294,10 +295,6 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
             statusListener.notifyError(err);
             return false;
         }
-    }
-
-    private Attribute getAttribute(final String code) {
-        return attributeDao.findSingleByNamedQuery("ATTRIBUTE.BY.CODE", code); //TODO user service instead of dao
     }
 
 

@@ -37,7 +37,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
- * Facrory responsible to get back door service.
+ * Factory responsible to get back door service.
  *
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 1/29/12
