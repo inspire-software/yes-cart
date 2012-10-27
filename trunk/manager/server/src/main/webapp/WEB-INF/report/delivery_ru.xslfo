@@ -177,27 +177,27 @@
                                                     <xsl:value-of select="position()"/>
                                                 </fo:block>
                                             </fo:table-cell>
-                                            <fo:table-cell border="solid 1px black">
+                                            <fo:table-cell border="solid 1px black" width="4cm">
                                                 <fo:block>
                                                     <xsl:value-of select="skuCode"/>
                                                 </fo:block>
                                             </fo:table-cell>
-                                            <fo:table-cell border="solid 1px black">
+                                            <fo:table-cell border="solid 1px black" width="6cm">
                                                 <fo:block>
                                                     <xsl:value-of select="skuName"/>
                                                 </fo:block>
                                             </fo:table-cell>
-                                            <fo:table-cell border="solid 1px black" text-align="right">
+                                            <fo:table-cell border="solid 1px black" width="2cm" text-align="right">
                                                 <fo:block>
                                                     <xsl:value-of select="invoicePrice"/>
                                                 </fo:block>
                                             </fo:table-cell>
-                                            <fo:table-cell border="solid 1px black" text-align="right">
+                                            <fo:table-cell border="solid 1px black" width="1.8cm" text-align="right">
                                                 <fo:block>
                                                     <xsl:value-of select="qty"/>
                                                 </fo:block>
                                             </fo:table-cell>
-                                            <fo:table-cell border="solid 1px black" text-align="right">
+                                            <fo:table-cell border="solid 1px black" width="2cm" text-align="right">
                                                 <fo:block>
                                                     <xsl:value-of select="format-number(qty * invoicePrice, '##0.00')"/>
                                                     <xsl:text disable-output-escaping="yes"> <![CDATA[ ]]></xsl:text>
