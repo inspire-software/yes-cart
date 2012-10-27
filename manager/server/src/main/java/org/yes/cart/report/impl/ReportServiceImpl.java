@@ -255,7 +255,6 @@ public class ReportServiceImpl implements ReportService, ServletContextAware, Ap
 
             // Setup output
             OutputStream out = new FileOutputStream(pdffile);
-            System.out.println(pdffile.getAbsolutePath());
 
             out = new BufferedOutputStream(out);
 

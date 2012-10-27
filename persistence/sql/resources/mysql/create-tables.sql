@@ -1,0 +1,1310 @@
+
+    create table TADDRESS (
+        ADDRESS_ID bigint not null auto_increment,
+        CITY varchar(128) not null,
+        POSTCODE varchar(16),
+        ADDRLINE1 varchar(255) not null,
+        ADDRLINE2 varchar(255),
+        ADDRESS_TYPE varchar(1) not null,
+        COUNTRY_CODE varchar(64) not null,
+        STATE_CODE varchar(64),
+        PHONES varchar(255),
+        FIRSTNAME varchar(128) not null,
+        LASTNAME varchar(128) not null,
+        MIDDLENAME varchar(128),
+        DEFAULT_ADDR bit,
+        CUSTOMER_ID bigint not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (ADDRESS_ID)
+    ) comment='Locations have the same address struct in the same region' type=InnoDB;
+
+    create table TASSOCIATION (
+        ASSOCIATION_ID bigint not null auto_increment,
+        CODE varchar(255) not null,
+        NAME varchar(255) not null,
+        DESCRIPTION longtext,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (ASSOCIATION_ID)
+    ) comment='Cross/up/accesories/who buy also buy sell' type=InnoDB;
+
+    create table TATTRIBUTE (
+        ATTRIBUTE_ID bigint not null auto_increment,
+        CODE varchar(255) not null,
+        MANDATORY bit not null comment 'Attribute must have the default value if mandatory flag is true',
+        ALLOWDUPLICATE bit default 0 not null comment 'Allow to duplicate attr values. Example color - red and black',
+        ALLOWFAILOVER bit default 0 not null comment 'Allow search attribute value in parent object',
+        VAL longtext comment 'Default value , shall be force inserted for new attributes, if attribute is mandaroty',
+        REXP longtext comment 'Regular expression to validate user input on UI.',
+        V_FAILED_MSG longtext comment 'Message if type, mandatory or re validation failed',
+        RANK integer default 500 comment 'What order in dynamic form on UI',
+        CHOICES longtext comment 'Comma separated list of [key-]value. Or service url.',
+        NAME varchar(255) not null,
+        DISPLAYNAME longtext,
+        DESCRIPTION longtext,
+        ETYPE_ID bigint not null,
+        ATTRIBUTEGROUP_ID bigint not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (ATTRIBUTE_ID)
+    ) comment='Particular attribute' type=InnoDB;
+
+    create table TATTRIBUTEGROUP (
+        ATTRIBUTEGROUP_ID bigint not null auto_increment,
+        CODE varchar(255) not null,
+        NAME varchar(64) not null,
+        DESCRIPTION longtext,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (ATTRIBUTEGROUP_ID)
+    ) comment='Group attributes: prod,sku,cat,shop,customer,brand etc.' type=InnoDB;
+
+    create table TBRAND (
+        BRAND_ID bigint not null auto_increment,
+        NAME varchar(255) not null,
+        DESCRIPTION longtext,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (BRAND_ID)
+    ) comment='Product brand / manafacturer' type=InnoDB;
+
+    create table TBRANDATTRVALUE (
+        ATTRVALUE_ID bigint not null auto_increment,
+        BRAND_ID bigint not null,
+        VAL longtext,
+        DISPLAYVAL longtext,
+        CODE varchar(255) not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (ATTRVALUE_ID)
+    ) type=InnoDB;
+
+    create table TCARRIER (
+        CARRIER_ID bigint not null auto_increment,
+        NAME varchar(255) not null,
+        DESCRIPTION longtext,
+        WORLDWIDE bit,
+        COUNTRY bit,
+        STATE bit,
+        LOCAL bit,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (CARRIER_ID)
+    ) comment='Shipment' type=InnoDB;
+
+    create table TCARRIERSLA (
+        CARRIERSLA_ID bigint not null auto_increment,
+        NAME varchar(255) not null,
+        DESCRIPTION longtext,
+        CURRENCY varchar(3) not null,
+        MAX_DAYS integer,
+        SLA_TYPE varchar(1) not null,
+        PRICE decimal(19,2),
+        PER_CENT decimal(19,2),
+        SCRIPT longtext,
+        PRICE_NOTLESS decimal(19,2),
+        PERCENT_NOTLESS decimal(19,2),
+        COST_NOTLESS decimal(19,2),
+        CARRIER_ID bigint not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (CARRIERSLA_ID)
+    ) comment='Shipment service layer agreement. Days, distances , etc.' type=InnoDB;
+
+    create table TCATEGORY (
+        CATEGORY_ID bigint not null auto_increment,
+        PARENT_ID bigint,
+        RANK integer comment 'What the default order of child category in parent ?',
+        PRODUCTTYPE_ID bigint comment 'Default product type in category, can be null if category contains different product types',
+        NAME varchar(255) not null,
+        DISPLAYNAME longtext,
+        DESCRIPTION longtext,
+        UITEMPLATE varchar(255) comment 'point to a products in list template. Can be used parent template if it not set. In case of no templates at all, store product in list template will be used',
+        AVAILABLEFROM datetime,
+        AVAILABLETO datetime,
+        URI varchar(255),
+        TITLE varchar(255),
+        METAKEYWORDS varchar(255),
+        METADESCRIPTION varchar(255),
+        NAV_BY_ATTR bit comment 'Filtered navigation by attribute values',
+        NAV_BY_BRAND bit comment 'Filtered navigation by brand',
+        NAV_BY_PRICE bit comment 'Filtered navigation by price range',
+        NAV_BY_PRICE_TIERS longtext comment 'Optional price range configuration. Default shop price tiers configuration will used if empty',
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (CATEGORY_ID)
+    ) comment='Category , self related table.' type=InnoDB;
+
+    create table TCATEGORYATTRVALUE (
+        ATTRVALUE_ID bigint not null auto_increment,
+        VAL longtext,
+        DISPLAYVAL longtext,
+        CATEGORY_ID bigint not null,
+        CODE varchar(255) not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (ATTRVALUE_ID)
+    ) type=InnoDB;
+
+    create table TCOUNTRY (
+        COUNTRY_ID bigint not null auto_increment,
+        COUNTRY_CODE varchar(2) not null,
+        ISO_CODE varchar(3) not null,
+        NAME varchar(64) not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (COUNTRY_ID)
+    ) comment='List of supported countries.' type=InnoDB;
+
+    create table TCUSTOMER (
+        CUSTOMER_ID bigint not null auto_increment,
+        EMAIL varchar(255) not null unique,
+        FIRSTNAME varchar(128) not null,
+        LASTNAME varchar(128) not null,
+        MIDDLENAME varchar(128),
+        PASSWORD varchar(255) not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (CUSTOMER_ID)
+    ) type=InnoDB;
+
+    create table TCUSTOMERATTRVALUE (
+        ATTRVALUE_ID bigint not null auto_increment,
+        VAL longtext,
+        DISPLAYVAL longtext,
+        CUSTOMER_ID bigint not null,
+        CODE varchar(255) not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (ATTRVALUE_ID)
+    ) type=InnoDB;
+
+    create table TCUSTOMERORDER (
+        CUSTOMERORDER_ID bigint not null auto_increment,
+        PG_LABEL varchar(255) comment 'Payment gateway label',
+        ORDERNUM varchar(255) comment 'Depends from order num producer.',
+        CART_GUID varchar(36) not null,
+        CURRENCY varchar(3) not null,
+        MESSAGE varchar(255) comment 'Free text information per each order. Can be whatever',
+        ORDERSTATUS varchar(64) not null,
+        CUSTOMER_ID bigint,
+        SHOP_ID bigint not null,
+        BILLING_ADDRESS varchar(255) comment 'Address composed for billing',
+        SHIPPING_ADDRESS varchar(255) comment 'Shipping address',
+        MULTIPLE_SHIPMENT bit default 0 comment 'Wait for all skus in case of not all available.',
+        ORDER_TIMESTAMP datetime not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (CUSTOMERORDER_ID)
+    ) type=InnoDB;
+
+    create table TCUSTOMERORDERDELIVERY (
+        CUSTOMERORDERDELIVERY_ID bigint not null auto_increment,
+        DELIVERYNUM varchar(255) comment 'Order contract in case of splited orders (XXX-1,XXX-2, etc). Delivery contract XXX-2-DDD1,XXX-2-DDD2, XXX-2-DDD3, where XXX order num, DDD delivery num.',
+        REF_NO varchar(255) comment 'External ref number',
+        PRICE decimal(19,2) not null,
+        DELIVERYSTATUS varchar(64) not null,
+        CARRIERSLA_ID bigint,
+        CUSTOMERORDER_ID bigint not null,
+        DELIVERY_GROUP varchar(16) not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (CUSTOMERORDERDELIVERY_ID)
+    ) type=InnoDB;
+
+    create table TCUSTOMERORDERDELIVERYDET (
+        CUSTOMERORDERDELIVERYDET_ID bigint not null auto_increment,
+        QTY decimal(19,2) not null comment 'Quantity of SKU in this praticular delivery',
+        PRICE decimal(19,2) not null,
+        SKU_ID bigint not null,
+        CUSTOMERORDERDELIVERY_ID bigint not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (CUSTOMERORDERDELIVERYDET_ID)
+    ) comment='Delivery details' type=InnoDB;
+
+    create table TCUSTOMERORDERDET (
+        CUSTOMERORDERDET_ID bigint not null auto_increment,
+        QTY decimal(19,2),
+        PRICE decimal(19,2) not null comment 'Price per one unit',
+        SKU_ID bigint not null,
+        CUSTOMERORDER_ID bigint not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (CUSTOMERORDERDET_ID)
+    ) comment='Orders detail' type=InnoDB;
+
+    create table TCUSTOMERSHOP (
+        CUSTOMERSHOP_ID bigint not null auto_increment,
+        CUSTOMER_ID bigint not null,
+        SHOP_ID bigint not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (CUSTOMERSHOP_ID)
+    ) type=InnoDB;
+
+    create table TCUSTOMERWISHLIST (
+        CUSTOMERWISHLIST_ID bigint not null auto_increment,
+        SKU_ID bigint not null,
+        CUSTOMER_ID bigint not null,
+        WL_TYPE varchar(1) default 'W' comment 'W-single, A-Available reminder, P-Price reminder, R-In promo reminder',
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (CUSTOMERWISHLIST_ID)
+    ) type=InnoDB;
+
+    create table TENSEMBLEOPT (
+        ENSEMBLEOPT_ID bigint not null auto_increment,
+        QTY integer not null,
+        PRODUCT_ID bigint not null,
+        SKU_ID bigint not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (ENSEMBLEOPT_ID)
+    ) comment='Ensemble options - how many particular sku in ensemble' type=InnoDB;
+
+    create table TETYPE (
+        ETYPE_ID bigint not null auto_increment,
+        JAVATYPE varchar(255) not null comment 'Shows the java type',
+        BUSINESSTYPE varchar(255) comment 'Used mosty on UI. How to represent product, category, attributes, etc',
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (ETYPE_ID)
+    ) comment='Types, that will be used in system.' type=InnoDB;
+
+    create table TMAILTEMPLATE (
+        MAILTEMPLATE_ID bigint not null auto_increment,
+        CODE varchar(255) not null,
+        FSPOINTER longtext not null comment 'Absolute path to folder with html template files and images.',
+        NAME varchar(255) not null,
+        DESCRIPTION varchar(255),
+        MAILTEMPLATEGROUP_ID bigint not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (MAILTEMPLATE_ID)
+    ) type=InnoDB;
+
+    create table TMAILTEMPLATEGROUP (
+        MAILTEMPLATEGROUP_ID bigint not null auto_increment,
+        NAME varchar(64) not null,
+        DESCRIPTION longtext,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (MAILTEMPLATEGROUP_ID)
+    ) type=InnoDB;
+
+    create table TMANAGER (
+        MANAGER_ID bigint not null auto_increment,
+        EMAIL varchar(255) not null unique,
+        FIRSTNAME varchar(128) not null,
+        LASTNAME varchar(128) not null,
+        MIDDLENAME varchar(128),
+        PASSWORD varchar(255) not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (MANAGER_ID)
+    ) comment='Hold managers' type=InnoDB;
+
+    create table TMANAGERROLE (
+        MANAGERROLE_ID bigint not null auto_increment,
+        EMAIL varchar(255) not null,
+        CODE varchar(255) not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (MANAGERROLE_ID)
+    ) comment='Hold roles list' type=InnoDB;
+
+    create table TPRODTYPEATTRVIEWGROUP (
+        PRODTYPEATTRIBUTEGROUP_ID bigint not null auto_increment,
+        PRODUCTTYPE_ID bigint not null,
+        ATTRCODELIST longtext,
+        RANK integer comment 'What the default order of attribute group for prod type ?',
+        NAME varchar(64) not null,
+        DISPLAYNAME varchar(255),
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (PRODTYPEATTRIBUTEGROUP_ID)
+    ) comment='Attrib view group. Example: optic system, sizes, etc.' type=InnoDB;
+
+    create table TPRODUCT (
+        PRODUCT_ID bigint not null auto_increment,
+        CODE varchar(255) not null comment 'Product or product sku code',
+        AVAILABLEFROM datetime comment 'AVAILABLEFROM AVAILABLETO date range when product will be available, for pre and back orders',
+        AVAILABLETO datetime,
+        NAME varchar(255) not null,
+        DISPLAYNAME longtext,
+        DESCRIPTION longtext,
+        TAG varchar(255) comment 'Set of product tags',
+        BRAND_ID bigint not null,
+        PRODUCTTYPE_ID bigint not null,
+        AVAILABILITY integer default 1 not null,
+        FEATURED bit comment 'Is product featured?',
+        URI varchar(255),
+        TITLE varchar(255),
+        METAKEYWORDS varchar(255),
+        METADESCRIPTION varchar(255),
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (PRODUCT_ID)
+    ) type=InnoDB;
+
+    create table TPRODUCTASSOCIATION (
+        PRODUCTASSOCIATION_ID bigint not null auto_increment,
+        RANK integer comment 'RANK can have different meaning, depending from association type for example similarity always will be less, that 1000000 (MAX similarity) who buy , counter of who buy the one product also buy other product',
+        ASSOCIATION_ID bigint not null,
+        PRODUCT_ID bigint not null,
+        ASSOCIATEDPRODUCT_ID bigint not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (PRODUCTASSOCIATION_ID)
+    ) type=InnoDB;
+
+    create table TPRODUCTATTRVALUE (
+        ATTRVALUE_ID bigint not null auto_increment,
+        VAL longtext,
+        DISPLAYVAL longtext,
+        PRODUCT_ID bigint not null,
+        CODE varchar(255) not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (ATTRVALUE_ID)
+    ) type=InnoDB;
+
+    create table TPRODUCTCATEGORY (
+        PRODUCTCATEGORY_ID bigint not null auto_increment,
+        PRODUCT_ID bigint not null,
+        CATEGORY_ID bigint not null,
+        RANK integer comment 'What the default order of particular product in partcular category',
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (PRODUCTCATEGORY_ID)
+    ) type=InnoDB;
+
+    create table TPRODUCTSKUATTRVALUE (
+        ATTRVALUE_ID bigint not null auto_increment,
+        VAL longtext,
+        DISPLAYVAL longtext,
+        SKU_ID bigint not null,
+        CODE varchar(255) not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (ATTRVALUE_ID)
+    ) type=InnoDB;
+
+    create table TPRODUCTTYPE (
+        PRODUCTTYPE_ID bigint not null auto_increment,
+        NAME varchar(255),
+        DESCRIPTION varchar(255),
+        UITEMPLATE varchar(255) comment 'What UI template will be used for show particular type of product.',
+        UISEARCHTEMPLATE varchar(255) comment 'UI template label for search on category, if category has a default product type.',
+        SERVICE bit comment 'shall we treat this like service ? It mean no inventory will be check',
+        ENSEMBLE bit comment 'is this a bundle of products ?',
+        SHIPABLE bit comment 'is this the physical product ? must have weight and sizes in attributes if yes',
+        DIGITAL bit default 0 comment 'is this the digital product ?',
+        DOWNLOADABLE bit default 0 comment 'is digital product can be downloaded?',
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (PRODUCTTYPE_ID)
+    ) comment='Product type.' type=InnoDB;
+
+    create table TPRODUCTTYPEATTR (
+        PRODTYPEATTR_ID bigint not null auto_increment,
+        CODE varchar(255) not null,
+        PRODUCTTYPE_ID bigint not null,
+        RANK integer default 500 comment 'What order for filtered navigation',
+        VISIBLE bit comment 'Is attribute visible on storefront',
+        SIMILARITY bit comment 'Is attribute will be used for calculate products similarity',
+        NAV bit comment 'Will be used in filtered navigation',
+        NAV_TYPE varchar(1) default 'S' comment 'S - single, R- range',
+        RANGE_NAV longtext comment 'In case of range navigation hold the ranges values',
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (PRODTYPEATTR_ID)
+    ) type=InnoDB;
+
+    create table TROLE (
+        ROLE_ID bigint not null auto_increment,
+        CODE varchar(255) not null unique,
+        DESCRIPTION varchar(255),
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (ROLE_ID)
+    ) comment='Hold roles list' type=InnoDB;
+
+    create table TSEOIMAGE (
+        SEOIMAGE_ID bigint not null auto_increment,
+        IMAGE_NAME varchar(255),
+        ALT varchar(255),
+        TITLE varchar(255),
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (SEOIMAGE_ID)
+    ) comment='Search optimizations on images.' type=InnoDB;
+
+    create table TSHOP (
+        SHOP_ID bigint not null auto_increment,
+        CODE varchar(255) not null,
+        NAME varchar(64) not null,
+        DESCRIPTION longtext,
+        FSPOINTER longtext not null comment 'Point to jsps',
+        IMGVAULT longtext not null comment 'Point to image repository',
+        URI varchar(255),
+        TITLE varchar(255),
+        METAKEYWORDS varchar(255),
+        METADESCRIPTION varchar(255),
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (SHOP_ID)
+    ) type=InnoDB;
+
+    create table TSHOPADVPLACE (
+        SHOPADVPLACE_ID bigint not null auto_increment,
+        NAME varchar(255) not null,
+        DESCRIPTION longtext,
+        SHOP_ID bigint not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (SHOPADVPLACE_ID)
+    ) comment='Adv places in particular shop' type=InnoDB;
+
+    create table TSHOPADVRULES (
+        SHOPADVRULES_ID bigint not null auto_increment,
+        rank integer,
+        NAME varchar(255) not null,
+        DESCRIPTION longtext,
+        AVAILABLEFROM datetime,
+        AVAILABLETO datetime,
+        RULE longtext,
+        SHOPADVPLACE_ID bigint not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (SHOPADVRULES_ID)
+    ) comment='Adv rules for show some item in adv place' type=InnoDB;
+
+    create table TSHOPATTRVALUE (
+        ATTRVALUE_ID bigint not null auto_increment,
+        VAL longtext,
+        DISPLAYVAL longtext,
+        SHOP_ID bigint not null,
+        CODE varchar(255) not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (ATTRVALUE_ID)
+    ) type=InnoDB;
+
+    create table TSHOPCATEGORY (
+        SHOPCATEGORY_ID bigint not null auto_increment,
+        RANK integer comment 'What the default order of assignmet ?',
+        SHOP_ID bigint not null,
+        CATEGORY_ID bigint not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (SHOPCATEGORY_ID)
+    ) type=InnoDB;
+
+    create table TSHOPDISCOUNT (
+        SHOPDISCOUNT_ID bigint not null auto_increment,
+        NAME varchar(255) not null,
+        DESCRIPTION longtext,
+        AVAILABLEFROM datetime,
+        AVAILABLETO datetime,
+        SHOP_ID bigint not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (SHOPDISCOUNT_ID)
+    ) type=InnoDB;
+
+    create table TSHOPDISCOUNTRULE (
+        SHOPDISCOUNTRULE_ID bigint not null auto_increment,
+        RULE longtext,
+        NAME varchar(255),
+        DESCRIPTION longtext,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        SHOPDISCOUNT_ID bigint not null,
+        primary key (SHOPDISCOUNTRULE_ID)
+    ) type=InnoDB;
+
+    create table TSHOPEXCHANGERATE (
+        SHOPEXCHANGERATE_ID bigint not null auto_increment,
+        FROMCURRENCY varchar(3) not null,
+        TOCURRENCY varchar(3) not null,
+        SHOP_ID bigint not null,
+        RATE decimal(19,2) not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (SHOPEXCHANGERATE_ID)
+    ) type=InnoDB;
+
+    create table TSHOPTOPSELLER (
+        SHOPTOPSELLER_ID bigint not null auto_increment,
+        SHOP_ID bigint not null,
+        PRODUCT_ID bigint not null,
+        COUNTER decimal(19,2),
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (SHOPTOPSELLER_ID)
+    ) comment='Hold top seller information' type=InnoDB;
+
+    create table TSHOPURL (
+        STOREURL_ID bigint not null auto_increment,
+        URL longtext not null,
+        SHOP_ID bigint not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (STOREURL_ID)
+    ) type=InnoDB;
+
+    create table TSHOPWAREHOUSE (
+        SHOPWAREHOUSE_ID bigint not null auto_increment,
+        SHOP_ID bigint not null,
+        WAREHOUSE_ID bigint not null,
+        RANK integer comment 'Warehouse priority usage',
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (SHOPWAREHOUSE_ID)
+    ) comment='Relation between shop and warehouses' type=InnoDB;
+
+    create table TSKU (
+        SKU_ID bigint not null auto_increment,
+        CODE varchar(255) not null,
+        NAME varchar(255) not null,
+        DISPLAYNAME longtext,
+        DESCRIPTION longtext,
+        PRODUCT_ID bigint,
+        RANK integer comment 'Order of sku for product. Firts is default.',
+        BARCODE varchar(128),
+        URI varchar(255),
+        TITLE varchar(255),
+        METAKEYWORDS varchar(255),
+        METADESCRIPTION varchar(255),
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (SKU_ID)
+    ) type=InnoDB;
+
+    create table TSKUPRICE (
+        SKUPRICE_ID bigint not null auto_increment,
+        SKU_ID bigint not null,
+        SHOP_ID bigint not null,
+        CURRENCY varchar(3) not null,
+        QTY decimal(19,2) not null comment 'Quantity of SKU. Price tier',
+        REGULAR_PRICE decimal(19,2) not null comment 'Regular price',
+        SALE_PRICE decimal(19,2) comment 'Sale price. Must be less that regular',
+        MINIMAL_PRICE decimal(19,2) comment 'Minimal price used in name-your-price pricing strategy. Must be less that regular',
+        SALE_FROM datetime,
+        SALE_TO datetime,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null,
+        primary key (SKUPRICE_ID)
+    ) comment='Prices. Some discriminators like condition can be added' type=InnoDB;
+
+    create table TSKUWAREHOUSE (
+        SKUWAREHOUSE_ID bigint not null auto_increment,
+        WAREHOUSE_ID bigint not null,
+        SKU_ID bigint not null,
+        QUANTITY decimal(19,2) not null comment 'Current quantity',
+        RESERVED decimal(19,2) default 0 comment 'Reserved by payment transaction quantity.',
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (SKUWAREHOUSE_ID)
+    ) comment='Real quantity of sku at each warehouse' type=InnoDB;
+
+    create table TSTATE (
+        STATE_ID bigint not null auto_increment,
+        COUNTRY_CODE varchar(2) not null,
+        STATE_CODE varchar(64) not null,
+        NAME varchar(64) not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (STATE_ID)
+    ) comment='List of supported states.' type=InnoDB;
+
+    create table TSYSTEM (
+        SYSTEM_ID bigint not null auto_increment,
+        CODE varchar(255) not null,
+        NAME varchar(64) not null,
+        DESCRIPTION longtext,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (SYSTEM_ID)
+    ) type=InnoDB;
+
+    create table TSYSTEMATTRVALUE (
+        ATTRVALUE_ID bigint not null auto_increment,
+        VAL longtext,
+        DISPLAYVAL longtext,
+        CODE varchar(255) not null,
+        SYSTEM_ID bigint not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (ATTRVALUE_ID)
+    ) type=InnoDB;
+
+    create table TWAREHOUSE (
+        WAREHOUSE_ID bigint not null auto_increment,
+        CODE varchar(255) not null,
+        NAME varchar(64) not null,
+        DESCRIPTION longtext,
+        COUNTRY_CODE varchar(64),
+        STATE_CODE varchar(64),
+        CITY varchar(128),
+        POSTCODE varchar(16),
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (WAREHOUSE_ID)
+    ) type=InnoDB;
+
+    create index ADDRESS_GUID on TADDRESS (GUID);
+
+    alter table TADDRESS 
+        add index FKADDRCUSTOMER (CUSTOMER_ID), 
+        add constraint FKADDRCUSTOMER 
+        foreign key (CUSTOMER_ID) 
+        references TCUSTOMER (CUSTOMER_ID) 
+        on delete cascade;
+
+
+    create index ASSOCIATION_GUID on TASSOCIATION (GUID);
+
+    create index ATTRIBUTE_GUID on TATTRIBUTE (GUID);
+
+    create index ATTRIBUTE_CODE on TATTRIBUTE (CODE);
+
+    alter table TATTRIBUTE 
+        add index FK_ATTRIBUTE_ETYPE (ETYPE_ID), 
+        add constraint FK_ATTRIBUTE_ETYPE 
+        foreign key (ETYPE_ID) 
+        references TETYPE (ETYPE_ID);
+
+
+    alter table TATTRIBUTE 
+        add index FK_ATTRIBUTE_ATTRIBUTEGROUP (ATTRIBUTEGROUP_ID), 
+        add constraint FK_ATTRIBUTE_ATTRIBUTEGROUP 
+        foreign key (ATTRIBUTEGROUP_ID) 
+        references TATTRIBUTEGROUP (ATTRIBUTEGROUP_ID);
+
+    create index ATTRIBUTE_GROUP_GUID on TATTRIBUTEGROUP (GUID);
+
+    create index BRAND_GUID on TBRAND (GUID);
+
+    create index AVBRAND_GUID on TBRANDATTRVALUE (GUID);
+
+    alter table TBRANDATTRVALUE 
+        add index FKFA06C3CD5CB3C6AB (CODE), 
+        add constraint FKFA06C3CD5CB3C6AB 
+        foreign key (CODE) 
+        references TATTRIBUTE (CODE);
+
+    alter table TBRANDATTRVALUE 
+        add index FKFA06C3CDDF51D3AD (BRAND_ID), 
+        add constraint FKFA06C3CDDF51D3AD 
+        foreign key (BRAND_ID) 
+        references TBRAND (BRAND_ID) 
+        on delete cascade;
+
+    create index CARRIER_GUID on TCARRIER (GUID);
+
+    create index CARRIERSLA_GUID on TCARRIERSLA (GUID);
+
+
+    alter table TCARRIERSLA 
+        add index FK_CSLA_CARR (CARRIER_ID), 
+        add constraint FK_CSLA_CARR 
+        foreign key (CARRIER_ID) 
+        references TCARRIER (CARRIER_ID);
+
+    create index CATEGORY_GUID on TCATEGORY (GUID);
+
+    alter table TCATEGORY 
+        add index FK_CAT_PRODTYPE (PRODUCTTYPE_ID), 
+        add constraint FK_CAT_PRODTYPE 
+        foreign key (PRODUCTTYPE_ID) 
+        references TPRODUCTTYPE (PRODUCTTYPE_ID);
+
+    create index AVCATEGORY_GUID on TCATEGORYATTRVALUE (GUID);
+
+    alter table TCATEGORYATTRVALUE 
+        add index FK_CAT_ATTRIBUTE (CODE), 
+        add constraint FK_CAT_ATTRIBUTE 
+        foreign key (CODE) 
+        references TATTRIBUTE (CODE);
+
+    alter table TCATEGORYATTRVALUE 
+        add index FKBAB98EE5FA5E3ED (CATEGORY_ID), 
+        add constraint FKBAB98EE5FA5E3ED 
+        foreign key (CATEGORY_ID) 
+        references TCATEGORY (CATEGORY_ID) 
+        on delete cascade;
+
+
+    create index COUNTRY_GUID on TCOUNTRY (GUID);
+
+    create index CUSTOMER_GUID on TCUSTOMER (EMAIL, GUID);
+
+    create index AV_CUSTOMER_GUID on TCUSTOMERATTRVALUE (GUID);
+
+    alter table TCUSTOMERATTRVALUE 
+        add index FK_C_ATTRIBUTE (CODE), 
+        add constraint FK_C_ATTRIBUTE 
+        foreign key (CODE) 
+        references TATTRIBUTE (CODE);
+
+    alter table TCUSTOMERATTRVALUE 
+        add index FKB44A120EAF56CFED (CUSTOMER_ID), 
+        add constraint FKB44A120EAF56CFED 
+        foreign key (CUSTOMER_ID) 
+        references TCUSTOMER (CUSTOMER_ID) 
+        on delete cascade;
+
+
+    create index CUSTOMERORDER_GUID on TCUSTOMERORDER (GUID);
+
+    alter table TCUSTOMERORDER 
+        add index FK_ORDER_SHOP (SHOP_ID), 
+        add constraint FK_ORDER_SHOP 
+        foreign key (SHOP_ID) 
+        references TSHOP (SHOP_ID);
+
+
+    alter table TCUSTOMERORDER 
+        add index FK_ORDER_CUSTOMER (CUSTOMER_ID), 
+        add constraint FK_ORDER_CUSTOMER 
+        foreign key (CUSTOMER_ID) 
+        references TCUSTOMER (CUSTOMER_ID);
+
+    create index CUSTOMERORDERDEL_GUID on TCUSTOMERORDERDELIVERY (GUID);
+
+
+    alter table TCUSTOMERORDERDELIVERY         add index FK_OD_ORD (CUSTOMERORDER_ID),                  add constraint FK_OD_ORD                  foreign key (CUSTOMERORDER_ID)         references TCUSTOMERORDER (CUSTOMERORDER_ID) on delete cascade;
+
+    alter table TCUSTOMERORDERDELIVERY         add index FK_OD_CSLA (CARRIERSLA_ID),                     add constraint FK_OD_CSLA                foreign key (CARRIERSLA_ID)            references TCARRIERSLA (CARRIERSLA_ID);
+
+    create index CUSTOMERORDERDELDET_GUID on TCUSTOMERORDERDELIVERYDET (GUID);
+
+    alter table TCUSTOMERORDERDELIVERYDET         add index FK_CODD_SKU (SKU_ID),         add constraint FK_CODD_SKU         
+               foreign key (SKU_ID)         references TSKU (SKU_ID);
+
+    alter table TCUSTOMERORDERDELIVERYDET         add index FK_CODD_CDELIVERY (CUSTOMERORDERDELIVERY_ID),         add constraint FK_CODD_CDELIVERY         
+               foreign key (CUSTOMERORDERDELIVERY_ID)         references TCUSTOMERORDERDELIVERY (CUSTOMERORDERDELIVERY_ID);
+
+
+    create index CUSTOMERORDERDET_GUID on TCUSTOMERORDERDET (GUID);
+
+    alter table TCUSTOMERORDERDET 
+        add index FK_ODET_SKU (SKU_ID), 
+        add constraint FK_ODET_SKU 
+        foreign key (SKU_ID) 
+        references TSKU (SKU_ID);
+
+    alter table TCUSTOMERORDERDET 
+        add index FKCB358C37A7F39C2D (CUSTOMERORDER_ID), 
+        add constraint FKCB358C37A7F39C2D 
+        foreign key (CUSTOMERORDER_ID) 
+        references TCUSTOMERORDER (CUSTOMERORDER_ID);
+
+    create index CUSTOMERSHOP_GUID on TCUSTOMERSHOP (GUID);
+
+    alter table TCUSTOMERSHOP 
+        add index FK_CS_SHOP (SHOP_ID), 
+        add constraint FK_CS_SHOP 
+        foreign key (SHOP_ID) 
+        references TSHOP (SHOP_ID);
+
+    alter table TCUSTOMERSHOP 
+        add index FK_CS_CUSTOMER (CUSTOMER_ID), 
+        add constraint FK_CS_CUSTOMER 
+        foreign key (CUSTOMER_ID) 
+        references TCUSTOMER (CUSTOMER_ID)         on delete cascade;
+
+    create index CUSTOMERWISHLIST_GUID on TCUSTOMERWISHLIST (GUID);
+
+    alter table TCUSTOMERWISHLIST 
+        add index FK_WL_SKU (SKU_ID), 
+        add constraint FK_WL_SKU 
+        foreign key (SKU_ID) 
+        references TSKU (SKU_ID);
+
+
+    alter table TCUSTOMERWISHLIST 
+        add index FK_WL_CUSTOMER (CUSTOMER_ID), 
+        add constraint FK_WL_CUSTOMER 
+        foreign key (CUSTOMER_ID) 
+        references TCUSTOMER (CUSTOMER_ID);
+
+    create index ENSEMBLE_GUID on TENSEMBLEOPT (GUID);
+
+    alter table TENSEMBLEOPT 
+        add index FK_END_SKU (SKU_ID), 
+        add constraint FK_END_SKU 
+        foreign key (SKU_ID) 
+        references TSKU (SKU_ID);
+
+
+    alter table TENSEMBLEOPT 
+        add index FK_ENS_PROD (PRODUCT_ID), 
+        add constraint FK_ENS_PROD 
+        foreign key (PRODUCT_ID) 
+        references TPRODUCT (PRODUCT_ID);
+
+    create index ETYPE_GUID on TETYPE (GUID);
+
+    create index MAILTEMPLATE_GUID on TMAILTEMPLATE (GUID);
+
+    alter table TMAILTEMPLATE 
+        add index FK_M_TEMPLATEGROUP (MAILTEMPLATEGROUP_ID), 
+        add constraint FK_M_TEMPLATEGROUP 
+        foreign key (MAILTEMPLATEGROUP_ID) 
+        references TMAILTEMPLATEGROUP (MAILTEMPLATEGROUP_ID);
+
+    create index MAILTEMPLATEGROUP_GUID on TMAILTEMPLATEGROUP (GUID);
+
+    create index MANAGER_EMAIL on TMANAGER (EMAIL);
+
+    create index MANAGER_GUID on TMANAGER (GUID);
+
+    create index MANAGER_ROLE_GUID on TMANAGERROLE (GUID);
+
+    create index PRODTYPEATTRGROUP_GUID on TPRODTYPEATTRVIEWGROUP (GUID);
+
+    alter table TPRODTYPEATTRVIEWGROUP 
+        add index FK4589D8C42AD8F70D (PRODUCTTYPE_ID), 
+        add constraint FK4589D8C42AD8F70D 
+        foreign key (PRODUCTTYPE_ID) 
+        references TPRODUCTTYPE (PRODUCTTYPE_ID);
+
+
+    create index PRODUCT_GUID on TPRODUCT (GUID);
+
+    create index PRODUCT_CODE on TPRODUCT (CODE);
+
+    alter table TPRODUCT 
+        add index FK_PROD_PRODTYPE (PRODUCTTYPE_ID), 
+        add constraint FK_PROD_PRODTYPE 
+        foreign key (PRODUCTTYPE_ID) 
+        references TPRODUCTTYPE (PRODUCTTYPE_ID);
+
+    alter table TPRODUCT 
+        add index FK_PROD_BRAND (BRAND_ID), 
+        add constraint FK_PROD_BRAND 
+        foreign key (BRAND_ID) 
+        references TBRAND (BRAND_ID);
+
+    create index PRODUCTASSOC_GUID on TPRODUCTASSOCIATION (GUID);
+
+    alter table TPRODUCTASSOCIATION 
+        add index FK_PA_ASSOC (ASSOCIATION_ID), 
+        add constraint FK_PA_ASSOC 
+        foreign key (ASSOCIATION_ID) 
+        references TASSOCIATION (ASSOCIATION_ID);
+
+    alter table TPRODUCTASSOCIATION 
+        add index FK_PA_ASSOCPROD (ASSOCIATEDPRODUCT_ID), 
+        add constraint FK_PA_ASSOCPROD 
+        foreign key (ASSOCIATEDPRODUCT_ID) 
+        references TPRODUCT (PRODUCT_ID);
+
+
+    alter table TPRODUCTASSOCIATION 
+        add index FK_PA_PRODUCT (PRODUCT_ID), 
+        add constraint FK_PA_PRODUCT 
+        foreign key (PRODUCT_ID) 
+        references TPRODUCT (PRODUCT_ID);
+
+    create index AVPROD_GUID on TPRODUCTATTRVALUE (GUID);
+
+    alter table TPRODUCTATTRVALUE 
+        add index FK_P_ATTRIBUTE (CODE), 
+        add constraint FK_P_ATTRIBUTE 
+        foreign key (CODE) 
+        references TATTRIBUTE (CODE);
+
+    alter table TPRODUCTATTRVALUE 
+        add index FK215F4E65FFF5E8AD (PRODUCT_ID), 
+        add constraint FK215F4E65FFF5E8AD 
+        foreign key (PRODUCT_ID) 
+        references TPRODUCT (PRODUCT_ID) 
+        on delete cascade;
+
+
+    create index PRODUCTCAT_GUID on TPRODUCTCATEGORY (GUID);
+
+
+    alter table TPRODUCTCATEGORY 
+        add index FK_PC_CAT (CATEGORY_ID), 
+        add constraint FK_PC_CAT 
+        foreign key (CATEGORY_ID) 
+        references TCATEGORY (CATEGORY_ID);
+
+
+    alter table TPRODUCTCATEGORY 
+        add index FK_PC_PRODUCT (PRODUCT_ID), 
+        add constraint FK_PC_PRODUCT 
+        foreign key (PRODUCT_ID) 
+        references TPRODUCT (PRODUCT_ID);
+
+    create index AVSKU_GUID on TPRODUCTSKUATTRVALUE (GUID);
+
+
+    alter table TPRODUCTSKUATTRVALUE 
+        add index FK23B3D31E4EC4B749 (SKU_ID), 
+        add constraint FK23B3D31E4EC4B749 
+        foreign key (SKU_ID) 
+        references TSKU (SKU_ID);
+
+    alter table TPRODUCTSKUATTRVALUE 
+        add index FK_S_ATTRIBUTE (CODE), 
+        add constraint FK_S_ATTRIBUTE 
+        foreign key (CODE) 
+        references TATTRIBUTE (CODE);
+
+    create index PRODTYPE_GUID on TPRODUCTTYPE (GUID);
+
+    create index PRODTYPEATTR_GUID on TPRODUCTTYPEATTR (GUID);
+
+    alter table TPRODUCTTYPEATTR 
+        add index FK_PTA_PRODTYPE (PRODUCTTYPE_ID), 
+        add constraint FK_PTA_PRODTYPE 
+        foreign key (PRODUCTTYPE_ID) 
+        references TPRODUCTTYPE (PRODUCTTYPE_ID)         on delete cascade;
+
+    alter table TPRODUCTTYPEATTR 
+        add index FK_PTA_ATTR (CODE), 
+        add constraint FK_PTA_ATTR 
+        foreign key (CODE) 
+        references TATTRIBUTE (CODE);
+
+    create index ROLE_GUID on TROLE (GUID);
+
+    create index ROLE_CODE on TROLE (CODE);
+
+    create index SEOIMAGE_GUID on TSEOIMAGE (GUID);
+
+    create index SHOP_CODE on TSHOP (CODE);
+
+    create index SHOP_GUID on TSHOP (GUID);
+
+    create index SHOPADVPLACE_GUID on TSHOPADVPLACE (GUID);
+
+    alter table TSHOPADVPLACE 
+        add index FK_ADVP_SHOP (SHOP_ID), 
+        add constraint FK_ADVP_SHOP 
+        foreign key (SHOP_ID) 
+        references TSHOP (SHOP_ID);
+
+    create index SHOPADVRULES_GUID on TSHOPADVRULES (GUID);
+
+
+    alter table TSHOPADVRULES 
+        add index FK_ADVR_ADVPLACE (SHOPADVPLACE_ID), 
+        add constraint FK_ADVR_ADVPLACE 
+        foreign key (SHOPADVPLACE_ID) 
+        references TSHOPADVPLACE (SHOPADVPLACE_ID);
+
+    create index AVSHOP_GUID on TSHOPATTRVALUE (GUID);
+
+    alter table TSHOPATTRVALUE 
+        add index FK_ATTR_SHOP (SHOP_ID), 
+        add constraint FK_ATTR_SHOP 
+        foreign key (SHOP_ID) 
+        references TSHOP (SHOP_ID);
+
+
+    alter table TSHOPATTRVALUE 
+        add index FK_SHOP_ATTRIBUTE (CODE), 
+        add constraint FK_SHOP_ATTRIBUTE 
+        foreign key (CODE) 
+        references TATTRIBUTE (CODE);
+
+    create index SHOPCATEGORY_GUID on TSHOPCATEGORY (GUID);
+
+
+    alter table TSHOPCATEGORY 
+        add index FK_SC_SHOP (SHOP_ID), 
+        add constraint FK_SC_SHOP 
+        foreign key (SHOP_ID) 
+        references TSHOP (SHOP_ID);
+
+    alter table TSHOPCATEGORY 
+        add index FK_SC_CAT (CATEGORY_ID), 
+        add constraint FK_SC_CAT 
+        foreign key (CATEGORY_ID) 
+        references TCATEGORY (CATEGORY_ID);
+
+    create index SHOPDISCOUNT_GUID on TSHOPDISCOUNT (GUID);
+
+
+    alter table TSHOPDISCOUNT 
+        add index FK_SD_SHOP (SHOP_ID), 
+        add constraint FK_SD_SHOP 
+        foreign key (SHOP_ID) 
+        references TSHOP (SHOP_ID);
+
+    create index SHOPDISCOUNTRULE_GUID on TSHOPDISCOUNTRULE (GUID);
+
+    alter table TSHOPDISCOUNTRULE 
+        add index FK_SDR_SDRULE (SHOPDISCOUNT_ID), 
+        add constraint FK_SDR_SDRULE 
+        foreign key (SHOPDISCOUNT_ID) 
+        references TSHOPDISCOUNT (SHOPDISCOUNT_ID);
+
+    create index SHOPEXRATE_GUID on TSHOPEXCHANGERATE (GUID);
+
+
+    alter table TSHOPEXCHANGERATE 
+        add index FK_ER_SHOP (SHOP_ID), 
+        add constraint FK_ER_SHOP 
+        foreign key (SHOP_ID) 
+        references TSHOP (SHOP_ID);
+
+    create index SHOPTOPSELLER_GUID on TSHOPTOPSELLER (GUID);
+
+
+    alter table TSHOPTOPSELLER 
+        add index FKB33456EAE13125FC (PRODUCT_ID), 
+        add constraint FKB33456EAE13125FC 
+        foreign key (PRODUCT_ID) 
+        references TPRODUCT (PRODUCT_ID);
+
+    create index SHOPURL_GUID on TSHOPURL (GUID);
+
+    alter table TSHOPURL 
+        add index FK_SHOPURL_SHOP (SHOP_ID), 
+        add constraint FK_SHOPURL_SHOP 
+        foreign key (SHOP_ID) 
+        references TSHOP (SHOP_ID);
+
+    create index SHOPWAREHOUSE_GUID on TSHOPWAREHOUSE (GUID);
+
+    alter table TSHOPWAREHOUSE 
+        add index FK13C59499F65CA98 (SHOP_ID), 
+        add constraint FK13C59499F65CA98 
+        foreign key (SHOP_ID) 
+        references TSHOP (SHOP_ID);
+
+    alter table TSHOPWAREHOUSE 
+        add index FK13C594991C1544FC (WAREHOUSE_ID), 
+        add constraint FK13C594991C1544FC 
+        foreign key (WAREHOUSE_ID) 
+        references TWAREHOUSE (WAREHOUSE_ID);
+
+    create index SKU_CODE on TSKU (CODE);
+
+    create index SKU_GUID on TSKU (GUID);
+
+    alter table TSKU 
+        add index FK_SKU_PROD (PRODUCT_ID), 
+        add constraint FK_SKU_PROD 
+        foreign key (PRODUCT_ID) 
+        references TPRODUCT (PRODUCT_ID);
+
+    create index SKUPRICE_GUID on TSKUPRICE (GUID);
+
+
+    alter table TSKUPRICE 
+        add index FK_SP_SKU (SKU_ID), 
+        add constraint FK_SP_SKU 
+        foreign key (SKU_ID) 
+        references TSKU (SKU_ID);
+
+    alter table TSKUPRICE 
+        add index FK_SP_SHOP (SHOP_ID), 
+        add constraint FK_SP_SHOP 
+        foreign key (SHOP_ID) 
+        references TSHOP (SHOP_ID);
+
+    create index SKUWAREHOUSE_GUID on TSKUWAREHOUSE (GUID);
+
+
+    alter table TSKUWAREHOUSE 
+        add index FKAC00F89A4EC4B749 (SKU_ID), 
+        add constraint FKAC00F89A4EC4B749 
+        foreign key (SKU_ID) 
+        references TSKU (SKU_ID);
+
+    alter table TSKUWAREHOUSE 
+        add index FKAC00F89A1C1544FC (WAREHOUSE_ID), 
+        add constraint FKAC00F89A1C1544FC 
+        foreign key (WAREHOUSE_ID) 
+        references TWAREHOUSE (WAREHOUSE_ID);
+
+    create index STATE_GUID on TSTATE (GUID);
+
+    create index SYSTEM_GUID on TSYSTEM (GUID);
+
+    create index AVSYS_GUID on TSYSTEMATTRVALUE (GUID);
+
+    alter table TSYSTEMATTRVALUE 
+        add index FK_SYS_ATTRIBUTE (CODE), 
+        add constraint FK_SYS_ATTRIBUTE 
+        foreign key (CODE) 
+        references TATTRIBUTE (CODE);
+
+    alter table TSYSTEMATTRVALUE 
+        add index FK_ATTR_SYS (SYSTEM_ID), 
+        add constraint FK_ATTR_SYS 
+        foreign key (SYSTEM_ID) 
+        references TSYSTEM (SYSTEM_ID);
+
+
+    create index WAREHOUSE_GUID on TWAREHOUSE (GUID);

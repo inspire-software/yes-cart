@@ -204,6 +204,10 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>dbunit-maven-plugin</artifactId>
+            </plugin>
+            <!--<plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <dependencies>
                     <dependency>
@@ -279,22 +283,18 @@
                 <executions>
                     <execution>
                         <phase>process-resources</phase>
-                        <!--<phase>process-sources</phase>-->
                         <goals>
                             <goal>run</goal>
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>dbunit-maven-plugin</artifactId>
-            </plugin>
+            </plugin-->
             <plugin>
                 <artifactId>maven-clean-plugin</artifactId>
                 <version>2.2</version>
                 <configuration>
                     <filesets>
+<!--
                         <fileset>
                             <directory>src/main/java/org/yes/cart/domain/entity</directory>
                             <includes>
@@ -302,6 +302,7 @@
                             </includes>
                             <followSymlinks>false</followSymlinks>
                         </fileset>
+-->
                         <fileset>
                             <directory>${basedir}</directory>
                             <includes>
@@ -320,8 +321,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <!-- hibernate ddl generation -->
+            <!--plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>hibernate3-maven-plugin</artifactId>
                 <configuration>
@@ -354,32 +354,6 @@
                             <goal>hbm2java</goal>
                         </goals>
                     </execution>
-                    <!--execution>
-                        <id>export-oracle</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>hbm2ddl</goal>
-                        </goals>
-                        <configuration>
-                            <componentProperties>
-                                <propertyfile>src/main/resources/oracle/hibernate.properties</propertyfile>
-                                <outputfilename>sql/resources/oracle/create-tables.sql</outputfilename>
-                            </componentProperties>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>export-hsql</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>hbm2ddl</goal>
-                        </goals>
-                        <configuration>
-                            <componentProperties>
-                                <propertyfile>src/main/resources/hsql/hibernate.properties</propertyfile>
-                                <outputfilename>sql/resources/hsql/create-tables.sql</outputfilename>
-                            </componentProperties>
-                        </configuration>
-                    </execution-->
                     <execution>
                         <id>export-derby</id>
                         <phase>generate-resources</phase>
@@ -407,7 +381,7 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
                 <executions>
