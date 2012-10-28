@@ -16,6 +16,8 @@
 
 package org.yes.cart.remote.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.remote.service.RemoteUploadService;
 
@@ -31,6 +33,8 @@ import java.io.IOException;
  * Time: 18:11
  */
 public class RemoteUploadServiceImpl implements RemoteUploadService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(RemoteUploadServiceImpl.class);
 
     /**
      * {@inheritDoc}
@@ -55,7 +59,7 @@ public class RemoteUploadServiceImpl implements RemoteUploadService {
                 fos.write(bytes);
                 return file.getAbsolutePath();
             } catch (IOException e) {
-                e.printStackTrace();  //Todo log
+                LOG.error("Cant upload  file", e);
                 if (fos != null) {
                     fos.close();
                 }

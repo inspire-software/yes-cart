@@ -47,7 +47,7 @@ public class ManagerServiceImpl extends BaseGenericServiceImpl<Manager> implemen
 
     /** {@inheritDoc } */
     public Manager create(final Manager manager, final Shop shop) {
-        //TODO assign to manage particular shop
+        //TODO v2 assign to manage particular shop
         return super.create(manager);
     }
 

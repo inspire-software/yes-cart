@@ -82,8 +82,8 @@ public class RemoteProductSkuServiceImpl
      * @param skuId   product sku
      * @return product pk value
      */
-    private long getProductId(final long skuId) {
-        return 0; // todo
+    private long getProductId(final long skuId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return getById(skuId).getProductId();
     }
 
 
@@ -93,7 +93,7 @@ public class RemoteProductSkuServiceImpl
      * @param attrValueDTO value to update
      * @return updated value
      */
-    public AttrValueDTO updateEntityAttributeValue(final AttrValueDTO attrValueDTO) {
+    public AttrValueDTO updateEntityAttributeValue(final AttrValueDTO attrValueDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         AttrValueProductSkuDTO rez = (AttrValueProductSkuDTO) dtoProductSkuService.updateEntityAttributeValue(attrValueDTO);
         reindexService.reindexProduct(getProductId(rez.getSkuId()));
         return rez;
@@ -105,7 +105,7 @@ public class RemoteProductSkuServiceImpl
      * @param attrValueDTO value to persist
      * @return created value
      */
-    public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
+    public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         AttrValueProductSkuDTO rez = (AttrValueProductSkuDTO) dtoProductSkuService.createEntityAttributeValue(attrValueDTO);
         reindexService.reindexProduct(getProductId(rez.getSkuId()));
         return rez;
@@ -116,7 +116,7 @@ public class RemoteProductSkuServiceImpl
      *
      * @param attributeValuePk given pk value.
      */
-    public void deleteAttributeValue(final long attributeValuePk) {
+    public void deleteAttributeValue(final long attributeValuePk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         dtoProductSkuService.deleteAttributeValue(attributeValuePk);
         reindexService.reindexProduct(getProductId(attributeValuePk));
     }
@@ -128,7 +128,7 @@ public class RemoteProductSkuServiceImpl
      * @param skuPriceDTO to create in database
      * @return created sku dto
      */
-    public long createSkuPrice(final SkuPriceDTO skuPriceDTO) {
+    public long createSkuPrice(final SkuPriceDTO skuPriceDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         setNullPrices(skuPriceDTO);
         long rez = dtoProductSkuService.createSkuPrice(skuPriceDTO);
         reindexService.reindexProduct(getProductId(skuPriceDTO.getProductSkuId()));
@@ -142,7 +142,7 @@ public class RemoteProductSkuServiceImpl
      * @param skuPriceDTO to create in database
      * @return updated sku price dto
      */
-    public long updateSkuPrice(final SkuPriceDTO skuPriceDTO) {
+    public long updateSkuPrice(final SkuPriceDTO skuPriceDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         setNullPrices(skuPriceDTO);
         long rez = dtoProductSkuService.updateSkuPrice(skuPriceDTO);
         reindexService.reindexProduct(getProductId(skuPriceDTO.getProductSkuId()));
@@ -201,7 +201,7 @@ public class RemoteProductSkuServiceImpl
     }
 
     /** {@inheritDoc} */
-    public void remove(final long id) {
+    public void remove(final long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         super.remove(id);
         reindexService.reindexProduct(getProductId(id));
     }

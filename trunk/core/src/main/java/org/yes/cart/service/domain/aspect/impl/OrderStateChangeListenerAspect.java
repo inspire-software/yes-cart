@@ -136,7 +136,7 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect implem
             return rez;
         } catch (final OrderItemAllocationException th) {
 
-            LOG.error("Cant allocation quantity for product " + th.getProductSku().getCode() );   //todo pass code to email
+            LOG.error("Cant allocation quantity for product " + th.getProductSku().getCode() );
 
             if (attrVal == null) {
                 LOG.error("Cant get admin email address for shop " + orderEvent.getCustomerOrder().getShop().getCode() );

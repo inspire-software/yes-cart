@@ -24,7 +24,7 @@ import java.math.BigDecimal;
 /**
  * Represent sku in order with quantity and price in order currency.
  * At this moment prices in shopiing cart items list and here without
- * catalog promotions. TODO add catalog promotion sku price modificators
+ * catalog promotions. TODO v2 add catalog promotion sku price modificators
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011

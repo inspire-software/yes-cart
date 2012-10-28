@@ -17,7 +17,7 @@
 package org.yes.cart.domain.entity;
 
 /**
- * TODO nice to have scheduler, that perform old wish list items clean up
+ * TODO v2 nice to have scheduler, that perform old wish list items clean up
  * <p/>
  * Shopper wish list item. Also reponsible to notification sheduling.
  * <p/>

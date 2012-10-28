@@ -58,21 +58,21 @@ public class RemoteBrandServiceImpl
     /**
      * {@inheritDoc}
      */
-    public AttrValueDTO updateEntityAttributeValue(final AttrValueDTO attrValueDTO) {
+    public AttrValueDTO updateEntityAttributeValue(final AttrValueDTO attrValueDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return dtoBrandService.updateEntityAttributeValue(attrValueDTO);
     }
 
     /**
      * {@inheritDoc}
      */
-    public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
+    public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return dtoBrandService.createEntityAttributeValue(attrValueDTO);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void deleteAttributeValue(final long attributeValuePk) {
+    public void deleteAttributeValue(final long attributeValuePk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         dtoBrandService.deleteAttributeValue(attributeValuePk);
     }
 }

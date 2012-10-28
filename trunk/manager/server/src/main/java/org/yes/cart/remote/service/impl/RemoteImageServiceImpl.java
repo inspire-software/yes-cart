@@ -21,6 +21,7 @@ import org.yes.cart.domain.dto.SeoImageDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
+import org.yes.cart.remote.service.RemoteBackdoorService;
 import org.yes.cart.remote.service.RemoteImageService;
 import org.yes.cart.service.dto.DtoImageService;
 import org.yes.cart.service.dto.DtoShopService;
@@ -38,18 +39,22 @@ public class RemoteImageServiceImpl extends AbstractRemoteService<SeoImageDTO> i
 
     private final DtoImageService dtoImageService;
     private final DtoShopService dtoShopService;
+    private final RemoteBackdoorService remoteBackdoorService;
 
     /**
      * Construct dtoRemote service.
      *
-     * @param dtoImageService image service
-     * @param dtoShopService shop service to 
+     * @param dtoImageService       image service
+     * @param dtoShopService        shop service to
+     * @param remoteBackdoorService to get path to image vault
      */
     public RemoteImageServiceImpl(final DtoImageService dtoImageService,
-                                  final DtoShopService dtoShopService) {
+                                  final DtoShopService dtoShopService,
+                                  final RemoteBackdoorService remoteBackdoorService) {
         super(dtoImageService);
         this.dtoImageService = dtoImageService;
         this.dtoShopService = dtoShopService;
+        this.remoteBackdoorService = remoteBackdoorService;
     }
 
 
@@ -79,21 +84,10 @@ public class RemoteImageServiceImpl extends AbstractRemoteService<SeoImageDTO> i
     }
 
     /**
-     * TODO
-     * TODO yes-shop !!! This is dirty hack !!!!! Eliminate this !!!!
-     * TODO it work under tomcat, but not sure about other AS
-     * @return   path to external web context
+     * @return path to external web context
      */
-    private String getRealPathPrefix() {
-
-        //final String path  = remoteBackdoorService.getImageVaultPath() + File.separator;
-
-        final ShopDTO shopDTO = dtoShopService.getShopDtoByDomainName(
-                FlexContext.getHttpRequest().getServerName().toLowerCase()
-        );
-        //TODO storefront context
-        return FlexContext.getServletContext().getRealPath("/../yes-shop" + shopDTO.getImageVaultFolder()) + File.separator;
-
+    private String getRealPathPrefix() throws IOException {
+        return remoteBackdoorService.getImageVaultPath() + File.separator;
     }
 
     /**

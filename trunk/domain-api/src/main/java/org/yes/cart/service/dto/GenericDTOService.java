@@ -107,7 +107,7 @@ public interface GenericDTOService<T> {
      *
      * @param id given primary key value
      */
-    void remove(long id);
+    void remove(long id) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Get generic service. Please, use this method to getByKey related dao service from generic service,

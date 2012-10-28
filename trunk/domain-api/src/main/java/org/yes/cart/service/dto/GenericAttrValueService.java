@@ -57,7 +57,7 @@ public interface GenericAttrValueService {
      * @param attrValueDTO value to update
      * @return updated value
      */
-    AttrValueDTO updateEntityAttributeValue(AttrValueDTO attrValueDTO);
+    AttrValueDTO updateEntityAttributeValue(AttrValueDTO attrValueDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Create attribute value
@@ -65,7 +65,7 @@ public interface GenericAttrValueService {
      * @param attrValueDTO value to persist
      * @return created value
      */
-    AttrValueDTO createEntityAttributeValue(AttrValueDTO attrValueDTO);
+    AttrValueDTO createEntityAttributeValue(AttrValueDTO attrValueDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
     /**
@@ -73,7 +73,7 @@ public interface GenericAttrValueService {
      *
      * @param attributeValuePk given pk value.
      */
-    void deleteAttributeValue(long attributeValuePk);
+    void deleteAttributeValue(long attributeValuePk) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
 }

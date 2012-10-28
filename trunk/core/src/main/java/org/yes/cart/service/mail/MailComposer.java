@@ -31,12 +31,6 @@ import java.util.Map;
  */
 public interface MailComposer {
 
-
-
-
-    String MAIL_TEMPLATE_MANAGER_CHANGE_PASSWORD = "managerChangePassword";
-    String MAIL_TEMPLATE_MANAGER_REGISTERED = "managerRegistered";
-
     /**
      * Compose mail message. subject will be gathered from mail template property file
      *

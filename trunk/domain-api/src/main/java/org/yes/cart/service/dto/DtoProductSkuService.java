@@ -45,7 +45,7 @@ public interface DtoProductSkuService extends GenericDTOService<ProductSkuDTO>, 
      * @param skuPriceDTO to create in database
      * @return created price sku pk value
      */
-    long createSkuPrice(SkuPriceDTO skuPriceDTO);
+    long createSkuPrice(SkuPriceDTO skuPriceDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Update sku price.
@@ -53,7 +53,7 @@ public interface DtoProductSkuService extends GenericDTOService<ProductSkuDTO>, 
      * @param skuPriceDTO to create in database
      * @return update price sku pk value
      */
-    long updateSkuPrice(SkuPriceDTO skuPriceDTO);
+    long updateSkuPrice(SkuPriceDTO skuPriceDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
     /**

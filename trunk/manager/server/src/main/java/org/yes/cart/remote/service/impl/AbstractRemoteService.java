@@ -102,7 +102,7 @@ public class AbstractRemoteService<TDTOIFACE> implements GenericDTOService<TDTOI
     /**
      * {@inheritDoc}
      */
-    public void remove(final long id) {
+    public void remove(final long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         genericDTOService.remove(id);
     }
 
