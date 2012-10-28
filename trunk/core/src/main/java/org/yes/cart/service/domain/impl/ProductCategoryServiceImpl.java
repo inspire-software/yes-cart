@@ -19,6 +19,7 @@ package org.yes.cart.service.domain.impl;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.ProductCategory;
 import org.yes.cart.service.domain.ProductCategoryService;
+import org.yes.cart.service.domain.ProductService;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -32,45 +33,56 @@ public class ProductCategoryServiceImpl extends BaseGenericServiceImpl<ProductCa
 
     /**
      * Construct product category service.
+     *
      * @param productCategoryDao product category dao to use.
      */
     public ProductCategoryServiceImpl(final GenericDAO<ProductCategory, Long> productCategoryDao) {
         super(productCategoryDao);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public ProductCategory findByCategoryIdProductId(final long categoryId, final long productId) {
-        return getGenericDao().findSingleByNamedQuery("PRODUCT.IN.CATEGORY" , categoryId, productId);
+        return getGenericDao().findSingleByNamedQuery("PRODUCT.IN.CATEGORY", categoryId, productId);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void removeByCategoryProductIds(final long categoryId, final long productId) {
         getGenericDao().executeNativeUpdate(
                 "delete from tproductcategory where category_id = :1 and product_id = :2",
                 categoryId,
                 productId);
-        //todo submit reindex task
+        /**
+         * This method used from flex ui. Appropriate reindexing cal must be performed on ui side.
+         */
     }
 
     /**
      * Unlink product from all categories.
      *
-     * @param productId  given product id
+     * @param productId given product id
      */
     public void removeByProductIds(final long productId) {
         getGenericDao().executeNativeUpdate(
                 "delete from tproductcategory where  product_id = :1",
                 productId);
-        //todo submit reindex task
+        /**
+         * This method used from flex ui. Appropriate reindexing cal must be performed on ui side.
+         */
 
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public int getNextRank(final long categoryId) {
-        Integer maxRank = (Integer)getGenericDao().getScalarResultByNamedQuery("GET.MAX.RANK", categoryId);
+        Integer maxRank = (Integer) getGenericDao().getScalarResultByNamedQuery("GET.MAX.RANK", categoryId);
         if (maxRank == null) {
             return RANK_STEP;
-        } else {            
+        } else {
             return maxRank + RANK_STEP;
         }
     }

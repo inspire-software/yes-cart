@@ -65,6 +65,7 @@ public class RemoteProductCategoryServiceImpl
      */
     public void removeByCategoryProductIds(final long categoryId, final long productId) {
         ((DtoProductCategoryService) getGenericDTOService()).removeByCategoryProductIds(categoryId, productId);
+        reindexService.reindexProduct(productId);
     }
 
     /**
@@ -72,6 +73,7 @@ public class RemoteProductCategoryServiceImpl
      */
     public void removeByProductIds(final long productId) {
         ((DtoProductCategoryService) getGenericDTOService()).removeByProductIds(productId);
+        reindexService.reindexProduct(productId);
     }
 
     /**
