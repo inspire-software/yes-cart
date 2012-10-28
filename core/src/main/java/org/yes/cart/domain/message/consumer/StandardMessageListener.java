@@ -20,6 +20,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.domain.entity.AttrValueShop;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.mail.MailComposer;
@@ -156,12 +159,18 @@ public class StandardMessageListener implements Runnable {
 
                 final MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
+                final AttrValueShop attrVal = ((Shop)map.get(SHOP)).getAttributeByCode(AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL);
+                String fromEmail = null;
+                if (attrVal != null) {
+                    fromEmail = attrVal.getVal();
+                }
+
                 mailComposer.composeMessage(
                         mimeMessage,
                         (String) map.get(SHOP_CODE),
                         (String) map.get(TEMPLATE_FOLDER),
                         (String) map.get(TEMPLATE_NAME),
-                        null,//todo must be from properties "todo@getfromsho.com", //((Shop)map.get(SHOP)).getAttribute()
+                        fromEmail,
                         (String) map.get(CUSTOMER_EMAIL),  //email recipient - to
                         null,
                         null,
