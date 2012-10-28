@@ -17,7 +17,10 @@
 package org.yes.cart.web.page.component.product;
 
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
+import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ShopCategory;
 import org.yes.cart.service.domain.ShopCategoryService;
@@ -73,7 +76,7 @@ public class FeaturedProducts  extends AbstractProductList {
             }
             products = productService.getFeaturedProducts(
                     categories,
-                    getProductsLimit());
+                    getProductsLimit(categoryId));
 
         }
         return products;
@@ -101,8 +104,19 @@ public class FeaturedProducts  extends AbstractProductList {
      *
      * @return quantity limit
      */
-    public int getProductsLimit() {
-        return 5;   //TODO from configuration
+    public int getProductsLimit(final long categoryId) {
+        final Category category = categoryService.getById(categoryId);
+        if(category != null) {
+            AttrValue av = category.getAttributeByCode(AttributeNamesKeys.Category.CATEGORY_ITEMS_FEATURED);
+            if (av != null) {
+                try {
+                    return Integer.valueOf(av.getVal());
+                } catch (Exception ex) {
+                    return 5;
+                }
+            }
+        }
+        return 5;
     }
 
 

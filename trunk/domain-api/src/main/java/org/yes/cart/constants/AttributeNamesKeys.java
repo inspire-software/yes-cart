@@ -78,6 +78,10 @@ public interface AttributeNamesKeys {
 
         String CATEGORY_SUBCATEGORIES_COLUMNS = "CATEGORY_SUBCATEGORIES_COLUMNS";
 
+        String CATEGORY_ITEMS_FEATURED = "CATEGORY_ITEMS_FEATURED";
+
+        String CATEGORY_ITEMS_NEW_ARRIVAL = "CATEGORY_ITEMS_NEW_ARRIVAL";
+
         /**
          * Category image attribute name
          */

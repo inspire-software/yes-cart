@@ -62,7 +62,7 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
      */
     public boolean handle(final OrderEvent orderEvent) throws OrderItemAllocationException {
         synchronized (OrderEventHandler.syncMonitor) {
-            reserveQuantity(orderEvent.getCustomerOrderDelivery());//TOdO all
+            reserveQuantity(orderEvent.getCustomerOrderDelivery());
             return true;
         }
     }

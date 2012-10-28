@@ -81,8 +81,7 @@ public class UserManagementServiceImplTezt extends BaseCoreDBTestCase {
         String newPwdHash = managerService.findByEmail("bender4@futurama.com").get(0).getPassword();
         assertNotNull("new password can not be null ", newPwdHash);
         assertTrue("new password can not be empty ", newPwdHash.length() > 0);
-        //TODO !!!!!!!!!!!!!
-        //assertTrue("old and new pwd can not be the same " + newPwdHash, !pwdHash.equals(newPwdHash));
+        assertTrue("old and new pwd can not be the same " + newPwdHash, !pwdHash.equals(newPwdHash));
     }
 
     @Test
