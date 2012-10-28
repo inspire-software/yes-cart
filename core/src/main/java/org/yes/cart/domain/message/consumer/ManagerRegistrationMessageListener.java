@@ -87,10 +87,7 @@ public class ManagerRegistrationMessageListener implements Runnable {
         model.put("firstName", registrationMessage.getFirstname());
         model.put("lastName", registrationMessage.getLastname());
 
-
         final MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        /*
-                registrationMessage.isNewPerson()? MailComposer.MAIL_TEMPLATE_MANAGER_REGISTERED:MailComposer.MAIL_TEMPLATE_MANAGER_CHANGE_PASSWORD,*/
 
         mailComposer.composeMessage(
                 mimeMessage,

@@ -18,7 +18,7 @@ package org.yes.cart.domain.entity;
 
 /**
  * Relation between shop and warehouse.
- * TODO add usage priority in next releases
+ * TODO v2 add usage priority in next releases
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011

@@ -16,10 +16,13 @@
 
 package org.yes.cart.remote.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.dto.ProductCategoryDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.remote.service.ReindexService;
+import org.yes.cart.remote.service.RemoteBackdoorService;
 import org.yes.cart.remote.service.RemoteProductCategoryService;
 import org.yes.cart.service.dto.DtoProductCategoryService;
 
@@ -32,8 +35,13 @@ public class RemoteProductCategoryServiceImpl
         extends AbstractRemoteService<ProductCategoryDTO>
         implements RemoteProductCategoryService {
 
+    private static final Logger LOG = LoggerFactory.getLogger( RemoteProductCategoryServiceImpl.class );
+
 
     private final ReindexService reindexService;
+
+    private final RemoteBackdoorService remoteBackdoorService;
+
 
 
     /**
@@ -44,9 +52,11 @@ public class RemoteProductCategoryServiceImpl
      */
     public RemoteProductCategoryServiceImpl(
             final DtoProductCategoryService dtoProductCategoryService,
-            final ReindexService reindexService) {
+            final ReindexService reindexService,
+            final RemoteBackdoorService remoteBackdoorService) {
         super(dtoProductCategoryService);
         this.reindexService = reindexService;
+        this.remoteBackdoorService = remoteBackdoorService;
     }
 
 
@@ -106,7 +116,12 @@ public class RemoteProductCategoryServiceImpl
     /**
      * {@inheritDoc}
      */
-    public void remove(long id) {
-        super.remove(id);    //Todo reindex
+    public void remove(long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        try {
+            remoteBackdoorService.reindexProduct(this.getById(id).getProductId());
+        } catch (Exception e) {
+            LOG.error("Cant reindex product which was referenced by product category record with id  " + id, e);
+        }
+        super.remove(id);
     }
 }

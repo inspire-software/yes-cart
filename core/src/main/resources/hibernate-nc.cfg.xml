@@ -27,7 +27,7 @@
         <property name="hibernate.cache.use_second_level_cache">false</property>
         <property name="hibernate.dialect">${db.config.yes.hibernate.dialect}</property>
         <property name="hibernate.hbm2ddl.auto">update</property>
-        <property name="show_sql">true</property>
+        <property name="show_sql">false</property>
         <!-- validate | update | create | create-drop -->
         <property name="hibernate.search.autoregister_listeners">false</property>
 

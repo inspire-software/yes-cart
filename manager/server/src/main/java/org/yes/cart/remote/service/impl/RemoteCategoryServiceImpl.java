@@ -73,21 +73,21 @@ public class RemoteCategoryServiceImpl
     /**
      * {@inheritDoc}
      */
-    public AttrValueDTO updateEntityAttributeValue(final AttrValueDTO attrValueDTO) {
+    public AttrValueDTO updateEntityAttributeValue(final AttrValueDTO attrValueDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return ((DtoCategoryService) getGenericDTOService()).updateEntityAttributeValue(attrValueDTO);
     }
 
     /**
      * {@inheritDoc}
      */
-    public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
+    public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return ((DtoCategoryService) getGenericDTOService()).createEntityAttributeValue(attrValueDTO);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void deleteAttributeValue(final long attributeValuePk) {
+    public void deleteAttributeValue(final long attributeValuePk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         ((DtoCategoryService) getGenericDTOService()).deleteAttributeValue(attributeValuePk);
     }
 

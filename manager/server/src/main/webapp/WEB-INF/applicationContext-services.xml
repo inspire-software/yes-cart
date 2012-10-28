@@ -380,6 +380,7 @@
     <bean id="remoteImageService" class="org.yes.cart.remote.service.impl.RemoteImageServiceImpl">
         <constructor-arg index="0" ref="dtoImageService"/>
         <constructor-arg index="1" ref="dtoShopService"/>
+        <constructor-arg index="2" ref="remoteBackdoorService"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
@@ -398,6 +399,7 @@
     <bean id="remoteProductCategoryService" class="org.yes.cart.remote.service.impl.RemoteProductCategoryServiceImpl">
         <constructor-arg index="0" ref="dtoProductCategoryService"/>
         <constructor-arg index="1" ref="reindexService"/>
+        <constructor-arg index="2" ref="remoteBackdoorService"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>

@@ -16,17 +16,29 @@
 
 package org.yes.cart.service.domain.aspect.impl;
 
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.web.context.ServletContextAware;
+import org.yes.cart.domain.entity.Manager;
+import org.yes.cart.domain.message.RegistrationMessage;
+import org.yes.cart.domain.message.consumer.ManagerRegistrationMessageListener;
+import org.yes.cart.domain.message.consumer.StandardMessageListener;
+import org.yes.cart.domain.message.impl.RegistrationMessageImpl;
 import org.yes.cart.service.domain.HashHelper;
 import org.yes.cart.service.domain.PassPhrazeGenerator;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.util.ShopCodeContext;
 
+import javax.servlet.ServletContext;
+import java.io.File;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -34,10 +46,10 @@ import java.io.Serializable;
  * Time: 14:12:54
  */
 @Aspect
-public class ManagerRegistrationAspect  extends BaseNotificationAspect {
+public class ManagerRegistrationAspect  extends BaseNotificationAspect implements ServletContextAware {
 
 
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
+    private static final Logger LOG = LoggerFactory.getLogger(ManagerRegistrationAspect.class);
 
 
     private final HashHelper hashHelper;
@@ -47,6 +59,8 @@ public class ManagerRegistrationAspect  extends BaseNotificationAspect {
     private final JavaMailSender javaMailSender;
 
     private final MailComposer mailComposer;
+
+    private ServletContext servletContext ;
 
 
 
@@ -97,23 +111,59 @@ public class ManagerRegistrationAspect  extends BaseNotificationAspect {
      * @return Object
      * @throws Throwable in case of target method errors
      */
-    /*@Around("execution(* org.yes.cart.service.domain.impl.ManagerServiceImpl.create(..))")
+    @Around("execution(* org.yes.cart.service.domain.impl.ManagerServiceImpl.create(..))")
     public Object doCreateManager(final ProceedingJoinPoint pjp) throws Throwable {
-        return notifyInternal(pjp, true);
+        final Manager manager = (Manager) pjp.getArgs()[0];
+
+        setNewPassword(manager);
+
+        return pjp.proceed();
     }
-     * Handle reset password operation.
+
+    private void setNewPassword(Manager manager) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        final String generatedPassword  = phrazeGenerator.getNextPassPhrase();
+        final String passwordHash = hashHelper.getHash(generatedPassword);
+        manager.setPassword(passwordHash);
+
+        final RegistrationMessage registrationMessage = new RegistrationMessageImpl();
+        registrationMessage.setEmail(manager.getEmail());
+        registrationMessage.setFirstname(manager.getFirstname());
+        registrationMessage.setLastname(manager.getLastname());
+        registrationMessage.setPassword(generatedPassword);
+        registrationMessage.setPathToTemplateFolder(servletContext.getRealPath("/default/mail") + File.separator);
+
+        registrationMessage.setTemplateName("adm-passwd");
+
+        sendNotification(registrationMessage);
+    }
+
+    /** Handle reset password operation.
      *
      * @param pjp {@link ProceedingJoinPoint}
      * @return Object
      * @throws Throwable in case of target method errors
      */
-   /* @Around("execution(* org.yes.cart.service.domain.impl.ManagerServiceImpl.resetPassword(..))")
+   @Around("execution(* org.yes.cart.service.domain.impl.ManagerServiceImpl.resetPassword(..))")
     public Object doResetPassword(final ProceedingJoinPoint pjp) throws Throwable {
-        return notifyInternal(pjp, false);
-    }  */
+
+       final Manager manager = (Manager) pjp.getArgs()[0];
+
+       setNewPassword(manager);
+
+       return pjp.proceed();
+    }
 
     @Override
     public Runnable getTask(Serializable serializableMessage) {
-        return null;  //Todo change body of implemented methods use File | Settings | File Templates.
+        return new ManagerRegistrationMessageListener(
+                javaMailSender,
+                mailComposer,
+                serializableMessage
+        );
+    }
+
+    /** {@inheritDoc} */
+    public void setServletContext(final ServletContext servletContext) {
+        this.servletContext = servletContext;
     }
 }

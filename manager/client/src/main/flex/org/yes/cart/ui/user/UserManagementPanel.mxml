@@ -333,6 +333,11 @@
                 <mx:Button label="@Resource(bundle='Common',key='findBtnToggleOn')"
                            click="onApplyFilterShowClick(event)"
                         />
+                <mx:Button label="@Resource(bundle='UserManagementPanel',key='findBtn')"
+                           toolTip="@Resource(bundle='UserManagementPanel',key='applyFilterToolTip')"
+                           click="onApplyFilterClick(event)"
+                        />
+
             </mx:HBox>
             <mx:HBox paddingTop="5" width="100%" id="filterPanel" visible="false" includeInLayout="false">
                 <mx:Label text="@Resource(bundle='UserManagementPanel',key='emailFilter')"/>
@@ -342,10 +347,6 @@
                 <mx:Label text="@Resource(bundle='UserManagementPanel',key='lastNameFilter')"/>
                 <mx:TextInput id="lastNameFilterValue"  width="50"/>
 
-                <mx:Button label="@Resource(bundle='UserManagementPanel',key='findBtn')"
-                           toolTip="@Resource(bundle='UserManagementPanel',key='applyFilterToolTip')"
-                           click="onApplyFilterClick(event)"
-                        />
             </mx:HBox>
 
             <mx:DataGrid id="usersDataGrid"

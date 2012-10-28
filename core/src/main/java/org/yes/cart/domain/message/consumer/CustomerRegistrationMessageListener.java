@@ -101,8 +101,6 @@ public class CustomerRegistrationMessageListener implements Runnable {
         model.put("shopName", registrationMessage.getShopName());
 
         final MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        //
-        //     registrationMessage.isNewPerson()?MailComposer.MAIL_TEMPLATE_CUSTOMER_REGISTERED:MailComposer.MAIL_TEMPLATE_CUSTOMER_CHANGE_PASSWORD,
         mailComposer.composeMessage(
                 mimeMessage,
                 registrationMessage.getShopCode(),
