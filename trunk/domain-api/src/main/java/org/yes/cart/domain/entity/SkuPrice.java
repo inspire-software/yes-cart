@@ -103,12 +103,17 @@ public interface SkuPrice extends Auditable {
 
     /**
      * Get sale price.
-     * //TODO Create and use version with time frame check
      *
      * @return sale price.
      * @deprecated Create and use version with time frame check
      */
     BigDecimal getSalePrice();
+
+    /**
+     * Get sale price for calculation.
+     * @return sale price for calculation.
+     */
+    BigDecimal getSalePriceForCalculation();
 
     /**
      * Set sale price.

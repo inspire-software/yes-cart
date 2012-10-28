@@ -130,7 +130,7 @@ public class PriceServiceImpl
             return BigDecimal.ZERO;
         } else {
             SkuPrice skuPrice = skuPrices.get(0);
-            return MoneyUtils.minPositive(skuPrice.getSalePrice(), skuPrice.getRegularPrice());
+            return MoneyUtils.minPositive(skuPrice.getSalePriceForCalculation(), skuPrice.getRegularPrice());
         }
     }
 
@@ -186,8 +186,8 @@ public class PriceServiceImpl
 
 
             skuPrice.setRegularPrice(baseSkuPrice.getRegularPrice().multiply(exchangeRate).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
-            if (baseSkuPrice.getSalePrice() != null) {
-                skuPrice.setSalePrice(baseSkuPrice.getSalePrice().multiply(exchangeRate).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
+            if (baseSkuPrice.getSalePriceForCalculation() != null) {
+                skuPrice.setSalePrice(baseSkuPrice.getSalePriceForCalculation().multiply(exchangeRate).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
             }
             if (baseSkuPrice.getMinimalPrice() != null) {
                 skuPrice.setMinimalPrice(baseSkuPrice.getMinimalPrice().multiply(exchangeRate).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
