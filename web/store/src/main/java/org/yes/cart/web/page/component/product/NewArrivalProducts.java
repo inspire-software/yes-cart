@@ -16,6 +16,9 @@
 
 package org.yes.cart.web.page.component.product;
 
+import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.web.util.WicketUtil;
 
@@ -47,9 +50,10 @@ public class NewArrivalProducts extends AbstractProductList {
     @Override
     public List<Product> getProductListToShow() {
         if (products == null) {
+            final long categoryId = WicketUtil.getCategoryId(getPage().getPageParameters());
             products = productService.getNewArrivalsProductInCategory(
-                    WicketUtil.getCategoryId(getPage().getPageParameters()),
-                    getProductsLimit());
+                    categoryId,
+                    getProductsLimit(categoryId));
         }
         return products;
     }
@@ -59,8 +63,20 @@ public class NewArrivalProducts extends AbstractProductList {
      *
      * @return quantity limit
      */
-    public int getProductsLimit() {
-        return 5;   //TODO from configuration
+    public int getProductsLimit(final long categoryId) {
+        final Category category = categoryService.getById(categoryId);
+        if (category != null) {
+            AttrValue av = category.getAttributeByCode(AttributeNamesKeys.Category.CATEGORY_ITEMS_NEW_ARRIVAL);
+            if (av != null) {
+                try {
+                    return Integer.valueOf(av.getVal());
+                } catch (Exception ex) {
+                    return 5;
+                }
+            }
+        }
+        return 5;
+
     }
 
 }

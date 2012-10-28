@@ -454,7 +454,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
     private void fillPaymentAmount(final CustomerOrder order,
                                    final CustomerOrderDelivery delivery,
                                    final Payment payment) {
-        //TODO more sofisticated, include discount and free shipping per one and multiple delivery
+        //TODO v2 more sofisticated, include discount and free shipping per one and multiple delivery
         //TODO need calculate at shopping cart !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         BigDecimal rez = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
         for (PaymentLine paymentLine : payment.getOrderItems()) {

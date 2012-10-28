@@ -32,6 +32,8 @@ import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.LanguageService;
 import org.yes.cart.web.util.WicketUtil;
 
+import java.util.Collections;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 7/11/11
@@ -78,7 +80,10 @@ public class Language extends BaseComponent {
             final String selectedLocale = getLocale().getLanguage();
 
             if (StringUtils.isBlank(ApplicationDirector.getShoppingCart().getCurrentLocale())) {
-                       //todo set locale into cart
+                new ChangeLocaleCartCommandImpl(
+                        null,
+                        Collections.singletonMap(ChangeLocaleCartCommandImpl.CMD_KEY, getSession().getLocale().getLanguage()))
+                        .execute(ApplicationDirector.getShoppingCart());
             }
 
             final PageParameters basePageParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters());

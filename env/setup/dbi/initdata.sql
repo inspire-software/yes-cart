@@ -77,6 +77,16 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  11007,  'CATEGORY_DESCRITION_ru', 'CATEGORY_DESCRITION_ru',  0,  NULL,  'Описание Категории (ru)',
   'Описание Категории на Русском (ru)',  1000, 1002);
 
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11058,  'CATEGORY_ITEMS_FEATURED', 'CATEGORY_ITEMS_FEATURED',  0,  NULL,  'Quantity of featured items to show on category page',
+   'How many featured items need to show',  1006, 1002);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11059,  'CATEGORY_ITEMS_NEW_ARRIVAL', 'CATEGORY_ITEMS_NEW_ARRIVAL',  0,  NULL,  'Quantity of new arrival items to show on category page',
+   'Quantity of featured items to show on category page',  1006, 1002);
+
+
+
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  12000,  'PRODUCT_IMAGE_WIDTH', 'PRODUCT_IMAGE_WIDTH',  0,  NULL,  'Product image width in category',   'Product image width in category',  1006, 1002);
