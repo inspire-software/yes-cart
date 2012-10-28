@@ -53,7 +53,6 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
     }
 
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SKU_ID", nullable = false)
     public ProductSku getSku() {
@@ -104,6 +103,36 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
     @Column(name = "SALE_PRICE")
     public BigDecimal getSalePrice() {
         return this.salePrice;
+    }
+
+    /** {@inheritDoc} */
+    @Transient
+    public BigDecimal getSalePriceForCalculation() {        //todo v2 time machine
+        if (salefrom == null) {
+            if (saleto == null) {
+                return this.salePrice;
+            } else {
+                if (System.currentTimeMillis() < saleto.getTime()) {
+                    return this.salePrice;  //sale not yet end
+                } else {
+                    return null; //the sale is end;
+                }
+            }
+        } else {
+            if (saleto == null) {
+                if (System.currentTimeMillis() > salefrom.getTime()) {
+                    return this.salePrice; //endless sale
+                } else {
+                    return null; // sale not yet started
+                }
+            } else {
+                if (System.currentTimeMillis() > salefrom.getTime() && System.currentTimeMillis() < saleto.getTime()) {
+                    return this.salePrice; //sale in time range
+                } else {
+                    return null;
+                }
+            }
+        }
     }
 
     public void setSalePrice(BigDecimal salePrice) {

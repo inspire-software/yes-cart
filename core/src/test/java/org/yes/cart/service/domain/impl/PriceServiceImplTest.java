@@ -98,18 +98,18 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
         assertEquals(4, product.getSku().size());
         SkuPrice skuPrice = priceService.getMinimalRegularPrice(product.getSku(), shop, "EUR", BigDecimal.ONE);
         assertNotNull(skuPrice);
-        assertNull(skuPrice.getSalePrice());
+        assertNull(skuPrice.getSalePriceForCalculation());
         assertTrue((new BigDecimal("150.00")).equals(skuPrice.getRegularPrice()));
         skuPrice = priceService.getMinimalRegularPrice(product.getSku(), shop, "EUR", new BigDecimal("2"));
         assertNotNull(skuPrice);
-        assertNull(skuPrice.getSalePrice());
+        assertNull(skuPrice.getSalePriceForCalculation());
         assertTrue((new BigDecimal("145.00")).equals(skuPrice.getRegularPrice()));
 
         //Test than we are can not getByKey the minimal price through price tiers for multisku product for not cofigured currency
         skuPrice = priceService.getMinimalRegularPrice(product.getSku(), shop, "BYR", BigDecimal.ONE);
         assertNotNull(skuPrice);
         assertNull(skuPrice.getRegularPrice());
-        assertNull(skuPrice.getSalePrice());
+        assertNull(skuPrice.getSalePriceForCalculation());
         //Test than we are can getByKey the minimal price through price tiers for multisku product.
         skuPrice = priceService.getMinimalRegularPrice(product.getSku(), shop, "UAH", BigDecimal.ONE);
         assertNotNull(skuPrice);

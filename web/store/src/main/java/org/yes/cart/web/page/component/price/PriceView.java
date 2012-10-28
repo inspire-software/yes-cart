@@ -88,7 +88,7 @@ public class PriceView extends BaseComponent {
         final SkuPrice skuPrice = model.getObject();
         this.pricePair = new Pair<BigDecimal, BigDecimal>(
                 skuPrice == null ? null : skuPrice.getRegularPrice(),
-                skuPrice == null ? null : skuPrice.getSalePrice()
+                skuPrice == null ? null : skuPrice.getSalePriceForCalculation()
         );
         this.currencySymbol = skuPrice == null ? null : skuPrice.getCurrency();
         this.showCurrencySymbol = showCurrencySymbol;
