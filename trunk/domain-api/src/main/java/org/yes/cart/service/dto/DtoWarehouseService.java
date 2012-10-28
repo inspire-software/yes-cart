@@ -86,7 +86,7 @@ public interface DtoWarehouseService extends GenericDTOService<WarehouseDTO> {
      * @param skuWarehouseDTO given {@link org.yes.cart.domain.dto.SkuWarehouseDTO}
      * @return created SkuWarehouseDTO.
      */
-    SkuWarehouseDTO createSkuOnWarehouse(SkuWarehouseDTO skuWarehouseDTO);
+    SkuWarehouseDTO createSkuOnWarehouse(SkuWarehouseDTO skuWarehouseDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Update given {@link SkuWarehouseDTO}
@@ -94,7 +94,7 @@ public interface DtoWarehouseService extends GenericDTOService<WarehouseDTO> {
      * @param skuWarehouseDTO given {@link SkuWarehouseDTO}
      * @return updated SkuWarehouseDTO.
      */
-    SkuWarehouseDTO updateSkuOnWarehouse(SkuWarehouseDTO skuWarehouseDTO);
+    SkuWarehouseDTO updateSkuOnWarehouse(SkuWarehouseDTO skuWarehouseDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Dind product skus quantity objects on given warehouse.

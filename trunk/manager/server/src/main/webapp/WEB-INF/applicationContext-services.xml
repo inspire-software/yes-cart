@@ -332,6 +332,7 @@
     <bean id="remoteWarehouseService" class="org.yes.cart.remote.service.impl.RemoteWarehouseServiceImpl">
         <constructor-arg index="0" ref="dtoWarehouseService"/>
         <constructor-arg index="1" ref="reindexService"/>
+        <constructor-arg index="2" ref="productSkuService"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>

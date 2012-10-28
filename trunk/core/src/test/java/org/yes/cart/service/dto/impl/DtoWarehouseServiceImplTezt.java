@@ -24,6 +24,8 @@ import org.yes.cart.domain.dto.SkuWarehouseDTO;
 import org.yes.cart.domain.dto.WarehouseDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.entity.SkuWarehouse;
+import org.yes.cart.exception.UnableToCreateInstanceException;
+import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.dto.DtoWarehouseService;
 
 import java.math.BigDecimal;
@@ -123,7 +125,7 @@ public class DtoWarehouseServiceImplTezt extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testCreateSkuOnWarehouse() {
+    public void testCreateSkuOnWarehouse() throws UnmappedInterfaceException, UnableToCreateInstanceException {
         SkuWarehouseDTO skuWarehouseDTO = dtoFactory.getByIface(SkuWarehouseDTO.class);
         skuWarehouseDTO.setQuantity(BigDecimal.TEN);
         skuWarehouseDTO.setWarehouseId(1L);
@@ -133,7 +135,7 @@ public class DtoWarehouseServiceImplTezt extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testUpdateSkuOnWarehouse() {
+    public void testUpdateSkuOnWarehouse() throws UnmappedInterfaceException, UnableToCreateInstanceException {
         SkuWarehouseDTO skuWarehouseDTO = dtoFactory.getByIface(SkuWarehouseDTO.class);
         skuWarehouseDTO.setQuantity(BigDecimal.TEN);
         skuWarehouseDTO.setWarehouseId(1L);
