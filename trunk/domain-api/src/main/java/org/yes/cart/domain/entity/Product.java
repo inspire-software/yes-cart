@@ -24,7 +24,7 @@ import java.util.Set;
 
 /**
  * Product.
- * TODO v2 need to think about delivery estimation time when product has back order capabiliy and
+ * TODOV2 need to think about delivery estimation time when product has back order capabiliy and
  * it in order and no items on stock
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com

@@ -106,7 +106,7 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
         return getBackdoorServiceClientFactory().getBackdoorService(
                 userName,
                 password,
-                "http://localhost:8080/yes-shop/services/backdoor", timeout);  //todo move to config v2 ?
+                "http://localhost:8080/yes-shop/services/backdoor", timeout);  //TODO move to config v2 ?
 
     }
 

@@ -16,6 +16,8 @@
 
 package org.yes.cart.web.application;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.IRequestCycleProvider;
@@ -35,6 +37,8 @@ import org.apache.wicket.util.file.IResourceFinder;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
+import org.yes.cart.service.payment.PaymentModulesManager;
 import org.yes.cart.web.page.*;
 import org.yes.cart.web.page.component.customer.address.CreateEditAddressPage;
 import org.yes.cart.web.page.payment.callback.AuthorizeNetSimPaymentOkPage;
@@ -43,6 +47,7 @@ import org.yes.cart.web.page.payment.callback.PayPalReturnUrlPage;
 import org.yes.cart.web.page.payment.callback.ResultPage;
 import org.yes.cart.web.util.SeoBookmarkablePageParametersEncoder;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -174,6 +179,9 @@ public class StorefrontApplication
         final SeoBookmarkablePageParametersEncoder encoder = ctx.getBean(
                 "seoBookmarkablePageParametersEncoder",
                 SeoBookmarkablePageParametersEncoder.class);
+        final PaymentModulesManager paymentModulesManager = ctx.getBean(
+                "paymentModulesManager",
+                PaymentModulesManager.class);
         mount(
                 new MountedMapper(
                         "/",
@@ -247,7 +255,7 @@ public class StorefrontApplication
         );
 
 
-        mountPaymentGatewayCallBackPages();
+        mountPaymentGatewayCallBackPages(paymentModulesManager);
 
     }
 
@@ -255,8 +263,9 @@ public class StorefrontApplication
     /**
      * Mount pages for gateways, that works via redirect to
      * gateway page and back.
+     * @param paymentModulesManager to determinate what module is active
      */
-    private void mountPaymentGatewayCallBackPages() {
+    private void mountPaymentGatewayCallBackPages(final PaymentModulesManager paymentModulesManager) {
 
         mount(
                 new MountedMapper(
@@ -265,30 +274,50 @@ public class StorefrontApplication
                 )
         );
 
-
-        //TODO mount only available payment gateways
-        mount(
-                new MountedMapper(
-                        "/anetsim",
-                        AuthorizeNetSimPaymentOkPage.class
-                )
-        );
-
-        mount(
-                new MountedMapper(
-                        "/paypallreturn",
-                        PayPalReturnUrlPage.class
-                )
-        );
-
-        mount(
-                new MountedMapper(
-                        "/liqpayreturn",
-                        LiqPayReturnUrlPage.class
-                )
-        );
+        final List<PaymentGatewayDescriptor> allowedPaymentGateways = paymentModulesManager.getPaymentGatewaysDescriptors(false);
 
 
+
+
+        if (isPaymentGatewayAllowed(allowedPaymentGateways, "authorizeNetSimPaymentGatewayLabel")) {
+            mount(
+                    new MountedMapper(
+                            "/anetsim",
+                            AuthorizeNetSimPaymentOkPage.class
+                    )
+            );
+        }
+
+
+        if (isPaymentGatewayAllowed(allowedPaymentGateways, "payPalExpressPaymentGatewayLabel")) {
+            mount(
+                    new MountedMapper(
+                            "/paypallreturn",
+                            PayPalReturnUrlPage.class
+                    )
+            );
+        }
+
+        if (isPaymentGatewayAllowed(allowedPaymentGateways, "liqPayPaymentGatewayLabel")) {
+            mount(
+                    new MountedMapper(
+                            "/liqpayreturn",
+                            LiqPayReturnUrlPage.class
+                    )
+            );
+
+        }
+
+
+
+    }
+
+    private boolean isPaymentGatewayAllowed(final List<PaymentGatewayDescriptor> allowedPaymentGateways, final String gatewayLabel) {
+        return CollectionUtils.exists(allowedPaymentGateways, new Predicate() {
+            public boolean evaluate(Object o) {
+                return ((PaymentGatewayDescriptor) o).getLabel().equals(gatewayLabel);
+            }
+        });
     }
 
     /**

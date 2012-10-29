@@ -49,10 +49,14 @@ public class ShoppingContextImpl implements ShoppingContext {
 
     /** {@inheritDoc} */
     public void clearContext() {
-        latestViewedSkus = null;
-        latestViewedCategories = null;
+        clearShopRelatedParameters();
         customerEmail = null;
         customerName = null;
+    }
+
+    private void clearShopRelatedParameters() {
+        latestViewedSkus = null;
+        latestViewedCategories = null;
     }
 
     /** {@inheritDoc} */
@@ -112,7 +116,10 @@ public class ShoppingContextImpl implements ShoppingContext {
      * @param shopId current shop id.
      */
     public void setShopId(final long shopId) {
-        this.shopId = shopId; //TODO reset shop dependand parameters in case if set different shop
+        if (this.shopId != shopId) {
+            clearShopRelatedParameters();
+        }
+        this.shopId = shopId;
     }
 
     

@@ -78,7 +78,7 @@ public interface DtoWarehouseService extends GenericDTOService<WarehouseDTO> {
      *
      * @param skuWarehouseId given pk value.
      */
-    void removeSkuOnWarehouse(long skuWarehouseId);
+    void removeSkuOnWarehouse(long skuWarehouseId) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Create given {@link org.yes.cart.domain.dto.SkuWarehouseDTO}

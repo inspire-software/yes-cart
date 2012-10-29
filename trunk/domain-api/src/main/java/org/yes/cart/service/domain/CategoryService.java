@@ -67,7 +67,7 @@ public interface CategoryService extends GenericService<Category> {
 
 
     /**
-     * Get the root category.  TODO add overloaded method with particular shop
+     * Get the root category.
      *
      * @return root cateory.
      */

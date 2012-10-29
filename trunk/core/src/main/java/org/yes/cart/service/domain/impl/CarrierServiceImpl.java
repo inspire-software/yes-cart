@@ -52,7 +52,7 @@ public class CarrierServiceImpl extends BaseGenericServiceImpl<Carrier> implemen
         final List<Carrier> rez  = new ArrayList<Carrier>();
         rez.addAll(getGenericDao().findAll());
         filterByCurrency(rez, currency);
-        return rez;  //Todo v2 impl
+        return rez;  //TODOV2 implement more sofisticacted search
     }
 
     /**

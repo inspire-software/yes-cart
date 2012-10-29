@@ -72,7 +72,9 @@ public class ReportParameter {
 
     /**
      * Get allowed values query. Which will be respesented on UI.
-     * TODO this just draft solution and shuld be reviewd for more complex cases. Something like ref to value provideres or ...
+     * This just draft solution and should be reviewed for more complex cases.
+     * Something like ref to value provideres.
+     *
      * @return   hsql query to get value-representation pairs
      */
     public String getAllowedValuesQuery() {
