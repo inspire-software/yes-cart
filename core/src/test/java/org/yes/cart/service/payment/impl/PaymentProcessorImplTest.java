@@ -510,7 +510,6 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
                 customerOrder.getOrdernum(), delivery0.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.VOID_CAPTURE).size());
         assertEquals(1, customerOrderPaymentService.findBy(
                 customerOrder.getOrdernum(), delivery1.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.VOID_CAPTURE).size());
-        //TODO test with cancel state wait till customerOrder.setOrderStatus();
     }
 
     /**

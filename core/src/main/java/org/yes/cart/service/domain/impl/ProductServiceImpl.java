@@ -416,7 +416,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             List<Product> list = productDao.findQueryObjectsByNamedQueryWithList(
                     "PRODUCT.FEATURED",
                     categories,
-                    new Date(), //TODO v2 time machine
+                    new Date(), //TODOV2 time machine
                     true);
             Collections.shuffle(list);
             int toIndex = limit; //to index exclusive
@@ -441,7 +441,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                 0,
                 maxResults,
                 categoryId,
-                new Date()    //TODO time machine
+                new Date()    //TODOV2 time machine
         );
     }
 
@@ -481,7 +481,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                 firtsResult,
                 maxResults,
                 categoryId,
-                new Date()   //TODO time machine
+                new Date()   //TODOV2 time machine
         );
     }
 
@@ -685,7 +685,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     @Cacheable(value = PROD_SERV_METHOD_CACHE)
     public int getProductQty(final long categoryId) {
         return Integer.valueOf(
-                String.valueOf(productDao.getScalarResultByNamedQuery("PRODUCTS.QTY.BY.CATEGORYID", categoryId, new Date())));  //todo time machine
+                String.valueOf(productDao.getScalarResultByNamedQuery("PRODUCTS.QTY.BY.CATEGORYID", categoryId, new Date())));  //TODOV2 time machine
     }
 
 

@@ -107,7 +107,7 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
 
     /** {@inheritDoc} */
     @Transient
-    public BigDecimal getSalePriceForCalculation() {        //todo v2 time machine
+    public BigDecimal getSalePriceForCalculation() {  //TODOV2 time machine
         if (salefrom == null) {
             if (saleto == null) {
                 return this.salePrice;

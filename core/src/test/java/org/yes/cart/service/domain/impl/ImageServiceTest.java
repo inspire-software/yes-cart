@@ -43,7 +43,7 @@ import static org.junit.Assert.assertTrue;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-// TODO fix to allow running from IDE
+//In case of IDE test should be run in core folder
 @RunWith(JMock.class)
 public class ImageServiceTest {
 

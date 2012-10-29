@@ -20,6 +20,7 @@ import org.yes.cart.domain.dto.ShopWarehouseDTO;
 import org.yes.cart.domain.dto.SkuWarehouseDTO;
 import org.yes.cart.domain.dto.WarehouseDTO;
 import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.remote.service.ReindexService;
@@ -93,8 +94,11 @@ public class RemoteWarehouseServiceImpl
     /**
      * {@inheritDoc
      */
-    public void removeSkuOnWarehouse(final long skuWarehouseId) {
-        //todo reindex product
+    public void removeSkuOnWarehouse(final long skuWarehouseId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final SkuWarehouse skuWarehouse = getSkuWarehouseService().getById(skuWarehouseId);
+        if (skuWarehouse != null) {
+            reindexService.reindexProduct(getProductId(skuWarehouse.getSku().getSkuId()));
+        }
         dtoWarehouseService.removeSkuOnWarehouse(skuWarehouseId);
     }
 

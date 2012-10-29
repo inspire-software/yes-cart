@@ -284,7 +284,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
      */
     String getDeliveryGroup(final BigDecimal rest, final CustomerOrderDet customerOrderDet) {
 
-        final Date now = new Date(); //TODO v2 time machine
+        final Date now = new Date(); //TODOV2 time machine
 
         final int availability = customerOrderDet.getSku().getProduct().getAvailability();
 
@@ -313,7 +313,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
                 }
             }
             if (MoneyUtils.isFirstBiggerThanSecond(customerOrderDet.getQty(), rest)) {
-                return CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP; //we can not cover all ordered qty from warehouses. TODO v2 here posible additional split
+                return CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP; //we can not cover all ordered qty from warehouses. TODOV2 here posible additional split
             }
             return CustomerOrderDelivery.STANDARD_DELIVERY_GROUP;
         } else {
