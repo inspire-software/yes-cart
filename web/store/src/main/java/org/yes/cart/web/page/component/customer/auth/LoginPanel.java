@@ -134,7 +134,7 @@ public class LoginPanel extends BaseComponent {
                     ((AbstractWebPage) getPage()).processCommands();
 
                     if(isCheckout) {
-                        info(getLocalizer().getString("emailSent", this)); //todo localization
+                        info(getLocalizer().getString("emailSent", this));
                     } else {
                         setResponsePage(HomePage.class);
                     }

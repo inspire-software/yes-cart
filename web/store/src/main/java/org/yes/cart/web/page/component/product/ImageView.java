@@ -155,7 +155,7 @@ public class ImageView extends BaseComponent {
             component.add(
                     new AttributeModifier(HTML_ALT, seoImage.getAlt()),
                     new AttributeModifier(HTML_TITLE, seoImage.getTitle())
-            ); //todo long descr
+            ); //TODOV2 need to add image long description <img longdesc="URL">
 
         }
         return component;
@@ -171,7 +171,6 @@ public class ImageView extends BaseComponent {
     }
 
 
-    //TODO not optimal - remake
     private String getFileName(final List<Pair<String, String>> allImages, final String attrName) {
         for (Pair<String, String> attrFileName : allImages) {
             if (attrFileName.getFirst().equals(attrName)) {

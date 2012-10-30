@@ -66,7 +66,7 @@ public class SummaryPanel extends BaseComponent {
                     @Override
                     protected void onSubmit() {
                         customerService.update(getModelObject());
-                        info("Customer profile updated"); //todo localize me
+                        info(getLocalizer().getString("profileUpdated", this));
                         super.onSubmit();
                     }
                 }.add(
