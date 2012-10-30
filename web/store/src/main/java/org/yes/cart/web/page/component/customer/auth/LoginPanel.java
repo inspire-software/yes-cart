@@ -134,7 +134,7 @@ public class LoginPanel extends BaseComponent {
                     ((AbstractWebPage) getPage()).processCommands();
 
                     if(isCheckout) {
-                        info("New password was sent. Check email please."); //todo localization
+                        info(getLocalizer().getString("emailSent", this)); //todo localization
                     } else {
                         setResponsePage(HomePage.class);
                     }
