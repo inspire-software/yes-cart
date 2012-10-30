@@ -19,6 +19,7 @@ package org.yes.cart.web.filter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.aop.target.CommonsPoolTargetSource;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
@@ -46,22 +47,23 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
 
     private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
-    private final CookieTuplizer tuplizer;
+    //private final CookieTuplizer tuplizer;
+    private final CommonsPoolTargetSource tuplizerPool;
 
     private final AmountCalculationStrategy calculationStrategy;
 
 
     /**
-     * @param tuplizer   tuplizer to manage cookie to object to cookie transformation
+     * @param tuplizerPool        pool of tuplizer to manage cookie to object to cookie transformation
      * @param applicationDirector app director.
      * @param calculationStrategy calculation strategy
      */
     public ShoppingCartFilter(
             final ApplicationDirector applicationDirector,
-            final CookieTuplizer tuplizer,
+            final CommonsPoolTargetSource tuplizerPool,
             final AmountCalculationStrategy calculationStrategy) {
         super(applicationDirector);
-        this.tuplizer = tuplizer;
+        this.tuplizerPool = tuplizerPool;
         this.calculationStrategy = calculationStrategy;
     }
 
@@ -75,24 +77,37 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
 
         final HttpServletRequest httpRequest = (HttpServletRequest) request;
 
-        synchronized (tuplizer) {    //TODO here can be a bottle neck, so may be need to use a pool
+        CookieTuplizer tuplizer = null;
+        try {
+            tuplizer = (CookieTuplizer) tuplizerPool.getTarget();
             ShoppingCart cart = new WebShoppingCartImpl();
             try {
                 cart = tuplizer.toObject(
-                            httpRequest.getCookies(),
-                            cart);
+                        httpRequest.getCookies(),
+                        cart);
             } catch (UnableToObjectizeCookieException e) {
-                if(LOG.isWarnEnabled()) {
+                if (LOG.isWarnEnabled()) {
                     LOG.warn("Cart not restored from cookies");
                 }
             }
             cart.setProcessingStartDate(new Date());
             cart.setCalculationStrategy(calculationStrategy);
             ApplicationDirector.setShoppingCart(cart);
+
+        } catch (Exception e) {
+            LOG.error("Can process request", e);
+        } finally {
+            if (tuplizer != null) {
+                try {
+                    tuplizerPool.releaseTarget(tuplizer);
+                } catch (Exception e) {
+                    LOG.error("Can return object to pool ", e);
+                }
+            }
         }
+
         return request;
     }
-
 
 
     /**
