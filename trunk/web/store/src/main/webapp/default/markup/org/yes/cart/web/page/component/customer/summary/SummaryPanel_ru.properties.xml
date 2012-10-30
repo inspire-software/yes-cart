@@ -23,6 +23,7 @@
 	<entry key="email">Почта</entry>
 	<entry key="firstname">Имя</entry>
 	<entry key="lastname">Фамилия</entry>
+    <entry key="profileUpdated">Профиль покупателя обновлен</entry>
 
 
 </properties>

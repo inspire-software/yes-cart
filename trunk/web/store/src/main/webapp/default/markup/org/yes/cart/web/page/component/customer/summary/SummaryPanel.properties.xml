@@ -23,6 +23,7 @@
 	<entry key="email">Email</entry>
 	<entry key="firstname">First name</entry>
 	<entry key="lastname">Last name</entry>
+	<entry key="profileUpdated">Customer profile updated</entry>
 
 
 </properties>

@@ -571,7 +571,7 @@
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton width="100%" enabled="false" id="catalogPromo"
                                                        label="@Resource(bundle='ShopManagerApplication',key='catalogPromotion')"
-                                                       click="setFontWeight(catalogPromo); Alert.show('TODO V2')"
+                                                       click="setFontWeight(catalogPromo); Alert.show('TODOV2')"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='catalogPromotionyHint')"
                                                 />
                                         <mx:LinkButton width="100%" enabled="false" id="cartPromo"
