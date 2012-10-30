@@ -27,4 +27,5 @@
     <entry key="signIn">Вход</entry>
     <entry key="registration">Регистрация</entry>
     <entry key="tryToRestore">Нажми, восстановить пароль и он будет выслан тебе на почту</entry>
+    <entry key="emailSent">Новый пароль был выслан на почту</entry>
 </properties>

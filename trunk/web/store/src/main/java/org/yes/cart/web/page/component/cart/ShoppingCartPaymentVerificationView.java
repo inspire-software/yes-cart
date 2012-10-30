@@ -157,8 +157,10 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                                                 final String width = size[0];
                                                 final String height = size[1];
 
-                                                final String defaultImageAttributeName = productSkuDecorator.getDefaultImageAttributeName();   //TODO new attribute plus optimaze
-                                                final String defaultImageRelativePath = productSkuDecorator.getImage(width, height, defaultImageAttributeName);
+                                                final String defaultImageRelativePath = productSkuDecorator.getImage(
+                                                        width,
+                                                        height,
+                                                        productSkuDecorator.getDefaultImageAttributeName());
 
                                                 final BigDecimal itemTotal = det.getPrice()
                                                         .multiply(det.getQty())
