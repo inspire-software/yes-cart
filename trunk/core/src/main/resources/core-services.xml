@@ -1117,17 +1117,13 @@
 
     <bean id="importDescriptorXStreamProvider" class="org.yes.cart.bulkimport.stream.xml.CsvImportDescriptorXStreamProvider"/>
 
-    <bean id="bulkImportServiceImpl" class="org.yes.cart.bulkimport.csv.impl.CsvBulkImportServiceImpl">
+    <bean id="csvBulkImportService" class="org.yes.cart.bulkimport.csv.impl.CsvBulkImportServiceImpl" scope="prototype">
         <property name="genericDAO" ref="genericDao"/>
         <property name="extendedConversionService" ref="extendedConversionService"/>
         <property name="importDescriptorXStreamProvider" ref="importDescriptorXStreamProvider"/>
     </bean>
 
-
-
-
-
-    <bean id="bulkImportImageService" class="org.yes.cart.bulkimport.image.impl.BulkImportImagesServiceImpl">
+    <bean id="bulkImportImageService" class="org.yes.cart.bulkimport.image.impl.BulkImportImagesServiceImpl" scope="prototype">
         <constructor-arg index="0" ref="genericDao"/>
         <constructor-arg index="1" ref="attributeService"/>
         <constructor-arg index="2" ref="imageService"/>

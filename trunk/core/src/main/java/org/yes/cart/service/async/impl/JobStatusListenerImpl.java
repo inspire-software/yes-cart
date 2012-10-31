@@ -144,6 +144,7 @@ public class JobStatusListenerImpl implements JobStatusListener {
             throw new IllegalArgumentException("Job " + token.toString() + " has finished and cannot be updated");
         }
         this.result = result;
+        this.pingMsg = null; // we have completed the job, clear ping message
         notifyPing();
     }
 

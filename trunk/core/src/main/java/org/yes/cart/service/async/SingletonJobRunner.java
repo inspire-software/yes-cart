@@ -17,13 +17,11 @@
 package org.yes.cart.service.async;
 
 import org.springframework.core.task.TaskExecutor;
-import org.yes.cart.service.async.impl.JobStatusListenerNullImpl;
 import org.yes.cart.service.async.model.JobContext;
 import org.yes.cart.service.async.model.JobStatus;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * User: denispavlov
@@ -35,9 +33,8 @@ public abstract class SingletonJobRunner implements JobRunner {
 
     private final TaskExecutor executor;
 
-    private final ReentrantLock lock = new ReentrantLock();
-
-    private final Map<String, JobStatusListener> jobListeners = new HashMap<String, JobStatusListener>();
+    private final Object mutex = new Object();
+    private final Map<String, JobStatusListener> jobListeners = new ConcurrentHashMap<String, JobStatusListener>();
 
     protected SingletonJobRunner(final TaskExecutor executor) {
         this.executor = executor;
@@ -59,44 +56,33 @@ public abstract class SingletonJobRunner implements JobRunner {
     /** {@inheritDoc} */
     public String doJob(final JobContext ctx) {
 
-        if (lock.isLocked()) {
-            if (jobListeners.isEmpty()) {
-                lock.unlock(); // if we do not have any listeners then it is all done
-            } else {
-                // check for locks. it would be better to do this at the end of runnable
-                // however if that runnable crashes we will be locked forever.
-                boolean shouldUnlock = true;
-                for (final JobStatusListener listener : jobListeners.values()) {
-                    if (!listener.isCompleted() && !listener.isTimedOut()) {
-                        shouldUnlock = false;
-                        break;
-                    }
-                }
-                if (shouldUnlock) {
-                    lock.unlock(); // unlock because all is completed or timed out
-                }
-            }
-        }
+        final JobStatusListener listener = ctx.getListener();
+        jobListeners.put(listener.getJobToken(), listener);
 
-        if (!lock.isLocked()) {
-            lock.lock();
-
-            final JobStatusListener listener = ctx.getListener();
-            jobListeners.put(listener.getJobToken(), listener);
-
-            final Runnable job = createJobRunnable(ctx);
-            if (ctx.isAsync()) {
-                executor.execute(job);
-            } else {
-                job.run();
-            }
-
-            return listener.getJobToken();
+        final Runnable job = createMutexJobRunnable(ctx);
+        if (ctx.isAsync()) {
+            // if this is async then mutex will kick in in another thread
+            executor.execute(job);
         } else {
-            final JobStatusListener listener = new JobStatusListenerNullImpl("ERROR: Import job is already running");
-            jobListeners.put(listener.getJobToken(), listener);
-            return listener.getJobToken();
+            // if this is sync then mutex will hold the execution
+            job.run();
         }
+        return listener.getJobToken();
+    }
+
+    private Runnable createMutexJobRunnable(final JobContext ctx) {
+        final Runnable job = createJobRunnable(ctx);
+        return new Runnable() {
+
+            private final Runnable jobRunnable = job;
+
+            public void run() {
+                // ensure that we run one at a time by supplying mutex
+                synchronized (mutex) {
+                    jobRunnable.run();
+                }
+            }
+        };
     }
 
     protected abstract Runnable createJobRunnable(final JobContext ctx);
