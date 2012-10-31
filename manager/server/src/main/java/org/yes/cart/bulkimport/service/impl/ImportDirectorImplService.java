@@ -55,10 +55,6 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
 
     private static final Logger LOG = LoggerFactory.getLogger(ImportDirectorImplService.class);
 
-    private final BulkImportService bulkImportService;
-
-    private final BulkImportImagesService bulkImportImagesService;
-
     private final Map<String, List<String>> importDescriptors;
 
     private final String pathToImportDescriptors;
@@ -73,21 +69,16 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
 
     private final RemoteBackdoorService remoteBackdoorService;
 
-
     /**
      * Construct the import director
      *
-     * @param bulkImportService       {@link org.yes.cart.bulkimport.service.BulkImportService}
      * @param importDescriptors       import descriptors
      * @param pathToArchiveFolder     path to archive folder.
      * @param pathToImportDescriptors path to use.
      * @param pathToImportFolder      path to use.
-     * @param bulkImportImagesService {@link org.yes.cart.bulkimport.service.BulkImportImagesService}
      * @param executor                async executor
      */
     public ImportDirectorImplService(
-            final BulkImportService bulkImportService,
-            final BulkImportImagesService bulkImportImagesService,
             final Map<String, List<String>> importDescriptors,
             final String pathToArchiveFolder,
             final String pathToImportDescriptors,
@@ -96,12 +87,10 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
             final TaskExecutor executor,
             final RemoteBackdoorService remoteBackdoorService) {
         super(executor);
-        this.bulkImportService = bulkImportService;
         this.pathToImportDescriptors = pathToImportDescriptors;
         this.pathToArchiveFolder = pathToArchiveFolder;
         this.pathToImportFolder = pathToImportFolder;
         this.importDescriptors = importDescriptors;
-        this.bulkImportImagesService = bulkImportImagesService;
         this.productService = productService;
         this.remoteBackdoorService = remoteBackdoorService;
     }
@@ -134,12 +123,12 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
     public String doImport(final String descriptorGroup, final String fileName, final boolean async) {
 
         /*
-         * Max 10K char of report to UI since it get huge and simply will crash the UI,
+         * Max 10K char of report to UI since it will get huge and simply will crash the UI,
          * not to mention traffic cost.
          * Timeout is set to 60sec - just in case runnable crashes and we need to unlock through
          * timeout.
          */
-        return doJob(new JobContextImpl(false, new JobStatusListenerImpl(10000, 60000),
+        return doJob(new JobContextImpl(async, new JobStatusListenerImpl(10000, 60000),
                 new HashMap<String, Object>() {{
                     put("descriptorGroup", descriptorGroup);
                     put("fileName", fileName);
@@ -186,6 +175,7 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
 
     private void doImageImport(final JobStatusListener listener, final Set<String> importedFiles, final String fileName) throws IOException {
         final String path  = remoteBackdoorService.getImageVaultPath() + File.separator;
+        final BulkImportImagesService bulkImportImagesService = getNewBulkImportImagesService();
         bulkImportImagesService.setPathToRepository(path);
         bulkImportImagesService.doImport(listener, importedFiles, fileName, this.pathToImportFolder);
     }
@@ -197,6 +187,7 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
         }
         for (final String descriptor : descriptors) {
             Resource res = applicationContext.getResource("WEB-INF/" + pathToImportDescriptors + "/" + descriptor);
+            final BulkImportService bulkImportService = getNewBulkImportService();
             bulkImportService.setPathToImportDescriptor(res.getFile().getAbsolutePath());
             bulkImportService.doImport(listener, importedFiles, fileName, this.pathToImportFolder);
         }
@@ -240,5 +231,19 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
      */
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
+    }
+
+    /**
+     * @return IoC prototype instance
+     */
+    public BulkImportService getNewBulkImportService() {
+        return null;
+    }
+
+    /**
+     * @return IoC prototype instance
+     */
+    public BulkImportImagesService getNewBulkImportImagesService() {
+        return null;
     }
 }

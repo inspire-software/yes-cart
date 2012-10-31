@@ -54,23 +54,28 @@ public class RemoteUploadServiceImpl implements RemoteUploadService {
 
             FileOutputStream fos = null;
             try {
-                File file = File.createTempFile(fileName, null, folder);
+                final File file = new File(folderPath + File.separator + fileName);
+                if (file.exists()) {
+                    throw new IllegalArgumentException("File: " + file.getName() + " is already being processed. If this is a different file - rename it and try again.");
+                }
+                file.createNewFile();
                 fos = new FileOutputStream(file);
                 fos.write(bytes);
                 return file.getAbsolutePath();
-            } catch (IOException e) {
-                LOG.error("Cant upload  file", e);
+            } catch (IOException ioe) {
+                LOG.error("Error during file upload", ioe);
                 if (fos != null) {
                     fos.close();
                 }
-                throw e;
+                throw ioe;
             } finally {
                 if (fos != null) {
                     fos.close();
                 }
             }
+        } else {
+            throw new IOException("Unable to create directory: " + folderPath);
         }
-        throw new IOException("Unable to create directory: " + folderPath);
     }
 
 }

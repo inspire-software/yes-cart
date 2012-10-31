@@ -54,7 +54,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
     public void setUp() throws Exception {
 
         if (bulkImportService == null) {
-            bulkImportService = (BulkImportService) createContext().getBean("bulkImportServiceImpl");
+            bulkImportService = (BulkImportService) createContext().getBean("csvBulkImportService");
         }
 
 
