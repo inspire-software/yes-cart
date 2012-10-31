@@ -34,7 +34,9 @@ import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.shoppingcart.AmountCalculationResult;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.ShoppingContext;
+import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
+import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.ProductSkuDecorator;
 import org.yes.cart.web.support.service.AttributableImageService;
@@ -222,7 +224,11 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                         new Label(DELIVERY_GRAND_TAX, grandTotal.getTotalTax().toString())
                 )
                 .add(
-                        new Label(DELIVERY_GRAND_AMOUNT, grandTotal.getTotalAmount().toString())
+                        new PriceView(
+                                DELIVERY_GRAND_AMOUNT,
+                                grandTotal.getTotalAmount(),
+                                ApplicationDirector.getShoppingCart().getCurrencyCode(),
+                                true)
                 );
 
     }

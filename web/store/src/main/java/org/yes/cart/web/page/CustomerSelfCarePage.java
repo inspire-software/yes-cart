@@ -95,5 +95,12 @@ public class CustomerSelfCarePage extends AbstractWebPage {
 
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void onBeforeRender() {
+        processCommands();
+        super.onBeforeRender();
+    }
 }
