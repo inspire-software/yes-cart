@@ -173,8 +173,8 @@ public class CheckoutPage extends AbstractWebPage {
 
             final CustomerOrder customerOrder = customerOrderService.createFromCart(
                     ApplicationDirector.getShoppingCart(),
-                    ApplicationDirector.getInstance().isGoogleCheckoutEnabled() || true            //todo customer service isOrderCanHasMultipleDeliveries
-                    //ApplicationDirector.getShoppingCart().isMultipleDelivery()
+                    ApplicationDirector.getInstance().isGoogleCheckoutEnabled()
+                            || !ApplicationDirector.getShoppingCart().getOrderInfo().isMultipleDelivery()
             );
 
             if (ApplicationDirector.getInstance().isGoogleCheckoutEnabled()) {
@@ -197,12 +197,11 @@ public class CheckoutPage extends AbstractWebPage {
                 googleCheckoutLabel.setVisible(ApplicationDirector.getInstance().isGoogleCheckoutEnabled())
         ).add(
                 getContent(currentStep)
-        ).addOrReplace (
+        ).addOrReplace(
                 new StandardFooter(FOOTER)
         ).addOrReplace(
                 new StandardHeader(HEADER)
         );
-
 
 
     }
@@ -210,9 +209,9 @@ public class CheckoutPage extends AbstractWebPage {
     private Label getGoogleCheckoutLabel(final CustomerOrder customerOrder) {
 
         final String htmlForm = getPaymentForm(
-                        paymentModulesManager.getPaymentGateway("googleCheckoutPaymentGatewayLabel"),
-                        customerOrder,
-                        null);
+                paymentModulesManager.getPaymentGateway("googleCheckoutPaymentGatewayLabel"),
+                customerOrder,
+                null);
 
         final Label googleCheckoutLabel = new Label(
                 GOOGLECHECKOUT_VIEW,
@@ -236,7 +235,22 @@ public class CheckoutPage extends AbstractWebPage {
     private MarkupContainer getContent(final String currentStep) {
         if (!((AuthenticatedWebSession) getSession()).isSignedIn()) {
             return createLoginFragment();
-        } else  if (STEP_ADDR.equals(currentStep)) {
+        }
+
+
+        final Customer customer = customerService.findCustomer(
+                ApplicationDirector.getShoppingCart().getCustomerEmail());
+        if (customer.getAddress().isEmpty()) {
+            return createAddressFragment();
+        }
+
+        if (ApplicationDirector.getShoppingCart().getOrderInfo().getCarrierSlaId() == null) {
+            //need to select carrier
+            return createShippmentFragment();
+        }
+
+
+        if (STEP_ADDR.equals(currentStep)) {
             return createAddressFragment();
         } else if (STEP_SHIPMENT.equals(currentStep)) {
             return createShippmentFragment();
@@ -328,8 +342,18 @@ public class CheckoutPage extends AbstractWebPage {
                                                         null,
                                                         Collections.singletonMap(SetMultipleDeliveryCommandImpl.CMD_KEY, getModelObject().toString()))
                                                         .execute(ApplicationDirector.getShoppingCart());
-
                                                 super.onSelectionChanged();
+                                                processCommands();
+                                                setResponsePage(
+                                                        CheckoutPage.class,
+                                                        new PageParameters().set(
+                                                                CheckoutPage.THREE_STEPS_PROCESS,
+                                                                "true"
+                                                        ).set(
+                                                                CheckoutPage.STEP,
+                                                                CheckoutPage.STEP_PAY
+                                                        )
+                                                );
                                             }
 
                                         }.setVisible(showMultipleDelivery)
@@ -410,11 +434,11 @@ public class CheckoutPage extends AbstractWebPage {
 
         String fullName = StringUtils.EMPTY;
 
-        if(order.getCustomer() != null) {
+        if (order.getCustomer() != null) {
 
             fullName = (order.getCustomer().getFirstname()
-                + " "
-                + order.getCustomer().getLastname()).toUpperCase();
+                    + " "
+                    + order.getCustomer().getLastname()).toUpperCase();
 
         }
 

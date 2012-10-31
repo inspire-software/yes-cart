@@ -19,33 +19,34 @@
 <wicket:panel>
 
     <div wicket:id="deliveryList">
-	
-		<div class="g864 m5 menu" style="border: solid 1px #d6d6d6;">
-        <div class="g360">
-			<p>
-				<span><wicket:message key="productName">[Product name]</wicket:message></span>
-			</p>
+
+        <div class="g864 m5 menu" style="border: solid 1px #d6d6d6;">
+            <div class="g360">
+                <p>
+                    <span><wicket:message key="productName">[Product name]</wicket:message></span>
+                </p>
+            </div>
+            <div class="g144">
+                <p align="right">
+                    <wicket:message key="price">[price]</wicket:message>
+                </p>
+            </div>
+            <div class="g144">
+                <p align="right">
+                    <wicket:message key="qty">[qty]</wicket:message>
+                </p>
+            </div>
+            <div class="g144">
+                <p align="right">
+                    <wicket:message key="amount">[ amount ]</wicket:message>
+                </p>
+            </div>
         </div>
-        <div class="g144">
-            <p align="right">
-                <wicket:message key="price">[price]</wicket:message>
-            </p>
-        </div>
-        <div class="g144">
-            <p align="right">
-                <wicket:message key="qty">[qty]</wicket:message>
-            </p>
-        </div>
-        <div class="g144">
-            <p align="right">
-                <wicket:message key="amount">[ amount ]</wicket:message>
-            </p>
-        </div>
-    </div>
-	
+
         <div class="g864 m5 menu">
             <p>
-                <wicket:message key="deliveryNum">[ Delivery ]</wicket:message> <span wicket:id="deliveryCode">[delivery Code]</span>
+                <wicket:message key="deliveryNum">[ Delivery ]</wicket:message>
+                <span wicket:id="deliveryCode">[delivery Code]</span>
             </p>
         </div>
 
@@ -80,17 +81,20 @@
             </div>
             <div class="g144">
                 <p align="right">
-                    <wicket:message key="deliverySubTotal">[Delivery sub total]</wicket:message> <span wicket:id="deliverySubTotal">[sub total]</span>
+                    <wicket:message key="deliverySubTotal">[Delivery sub total]</wicket:message>
+                    <span wicket:id="deliverySubTotal">[sub total]</span>
                 </p>
             </div>
             <div class="g144">
                 <p align="right">
-                    <wicket:message key="deliverySubTotalTax">[Delivery sub total tax ]</wicket:message> <span wicket:id="deliverySubTotalTax">[sub total tax ]</span>
+                    <wicket:message key="deliverySubTotalTax">[Delivery sub total tax ]</wicket:message>
+                    <span wicket:id="deliverySubTotalTax">[sub total tax ]</span>
                 </p>
             </div>
             <div class="g144">
                 <p align="right">
-                    <wicket:message key="deliverySubTotalAmount">[Delivery sub total amount]</wicket:message> <span wicket:id="deliverySubTotalAmount">[sub total amount ]</span>
+                    <wicket:message key="deliverySubTotalAmount">[Delivery sub total amount]</wicket:message>
+                    <span wicket:id="deliverySubTotalAmount">[sub total amount ]</span>
                 </p>
             </div>
         </div>
@@ -100,17 +104,20 @@
             </div>
             <div class="g144">
                 <p align="right">
-                    <wicket:message key="deliveryCost">[Delivery sub total amount]</wicket:message> <span wicket:id="deliveryCost">[delivery cost]</span>
+                    <wicket:message key="deliveryCost">[Delivery sub total amount]</wicket:message>
+                    <span wicket:id="deliveryCost">[delivery cost]</span>
                 </p>
             </div>
             <div class="g144">
                 <p align="right">
-                    <wicket:message key="deliveryCostTax">[Delivery sub total amount]</wicket:message> <span wicket:id="deliveryCostTax">[delivery tax]</span>
+                    <wicket:message key="deliveryCostTax">[Delivery sub total amount]</wicket:message>
+                    <span wicket:id="deliveryCostTax">[delivery tax]</span>
                 </p>
             </div>
             <div class="g144">
                 <p align="right">
-                    <wicket:message key="deliveryCostAmount">[Delivery sub total amount]</wicket:message> <span wicket:id="deliveryCostAmount ">[delivery amount]</span>
+                    <wicket:message key="deliveryCostAmount">[Delivery sub total amount]</wicket:message>
+                    <span wicket:id="deliveryCostAmount ">[delivery amount]</span>
                 </p>
             </div>
         </div>
@@ -122,17 +129,24 @@
         </div>
         <div class="g144">
             <p align="right">
-                <wicket:message key="grandTotal">[Delivery sub total amount]</wicket:message> <span wicket:id="grandTotal">[grand  total]</span>
+                <wicket:message key="grandTotal">[Delivery sub total amount]</wicket:message>
+                <span wicket:id="grandTotal">[grand  total]</span>
             </p>
         </div>
         <div class="g144">
             <p align="right">
-                <wicket:message key="grandTotalTax">[Delivery sub total amount]</wicket:message> <span wicket:id="grandTotalTax">[grand total tax ]</span>
+                <wicket:message key="grandTotalTax">[Delivery sub total amount]</wicket:message>
+                <span wicket:id="grandTotalTax">[grand total tax ]</span>
             </p>
         </div>
         <div class="g144">
             <p align="right">
-                <wicket:message key="grandTotalAmount">[Delivery sub total amount]</wicket:message> <span wicket:id="grandTotalAmount">[grand total amount ]</span>
+                <wicket:message key="grandTotalAmount">[Delivery sub total amount]</wicket:message>
+                <span style=" border-top: #999999 solid 1px; font-size:16px; margin-top: 5px; padding-top: 10px;	">
+                    <wicket:container wicket:id="grandTotalAmount">
+                        [grand total amount]
+                    </wicket:container>
+                </span>
             </p>
         </div>
     </div>

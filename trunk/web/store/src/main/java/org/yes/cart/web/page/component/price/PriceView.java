@@ -113,6 +113,23 @@ public class PriceView extends BaseComponent {
     }
 
     /**
+     * Create price view.
+     * @param id component id.
+     * @param price regular price.
+     * @param showCurrencySymbol currency symbol.
+     * @param currencySymbol currency symbol
+     */
+    public PriceView(final String id,
+                     BigDecimal price,
+                     final String currencySymbol,
+                     final boolean showCurrencySymbol) {
+        super(id);
+        this.pricePair = new Pair<BigDecimal, BigDecimal> (price, null);
+        this.showCurrencySymbol = showCurrencySymbol;
+        this.currencySymbol = currencySymbol;
+    }
+
+    /**
      * Get whole and decimal part of monay to render.
      * @param price price
      * @return array of string to render.
