@@ -54,15 +54,11 @@
 
     <!-- #################################  aspects configurations begin ######################################-->
 
+    <bean id="aspectExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"/>
+
 
     <bean id="managerRegistrationAspect" class="org.yes.cart.service.domain.aspect.impl.ManagerRegistrationAspect">
-        <constructor-arg index="0">
-            <bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
-                <property name="corePoolSize" value="5" />
-                <property name="maxPoolSize" value="10" />
-                <property name="queueCapacity" value="50" />
-            </bean>
-        </constructor-arg>
+        <constructor-arg ref="aspectExecutor"/>
         <constructor-arg index="1">
             <bean class="org.yes.cart.service.domain.impl.PassPhraseGeneratorImpl">
                 <constructor-arg index="0" value="8"/>
@@ -76,13 +72,7 @@
     </bean>
 
     <bean id="orderStateChangeAspect" class="org.yes.cart.service.domain.aspect.impl.OrderStateChangeListenerAspect">
-        <constructor-arg index="0">
-            <bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
-                <property name="corePoolSize" value="5" />
-                <property name="maxPoolSize" value="10" />
-                <property name="queueCapacity" value="500" />
-            </bean>
-        </constructor-arg>
+        <constructor-arg ref="aspectExecutor"/>
         <constructor-arg index="1" type="org.springframework.mail.javamail.JavaMailSender" ref="mailSender"/>
         <constructor-arg index="2" type="org.yes.cart.service.mail.MailComposer" ref="mailComposer"/>
         <constructor-arg index="3" type="org.yes.cart.service.domain.CustomerService" ref="customerService"/>
