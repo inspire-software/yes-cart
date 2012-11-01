@@ -48,20 +48,7 @@ public class BrandProductFilter extends AbstractProductFilter {
         super(id, query, categoryId);
 
         if (categoryId > 0) {
-
-            final String selectedLocale = getLocale().getLanguage();
-
             filteredNavigationByBrand = getCategory().getNavigationByBrand() == null ? false : getCategory().getNavigationByBrand();
-
-            if (filteredNavigationByBrand) {
-
-                setNavigationRecords(
-                        getFilteredNavigationRecords(
-                                getProductService().getDistinctBrands(selectedLocale, getCategories())
-                        )
-                );
-
-            }
         }
 
     }
@@ -101,6 +88,20 @@ public class BrandProductFilter extends AbstractProductFilter {
      * {@inheritDoc}
      */
     public boolean isVisible() {
+
+        if (filteredNavigationByBrand) {
+
+            final String selectedLocale = getLocale().getLanguage();
+
+            setNavigationRecords(
+                    getFilteredNavigationRecords(
+                            getProductService().getDistinctBrands(selectedLocale, getCategories())
+                    )
+            );
+
+        }
+
+
         return  super.isVisible()
                 && filteredNavigationByBrand
                 && getNavigationRecords() != null

@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page.component.filterednavigation;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -95,7 +96,6 @@ public abstract class AbstractProductFilter extends BaseComponent {
     public AbstractProductFilter(final String id, final BooleanQuery query, final long categoryId) {
         super(id);
         this.query = query;
-        //categoryId = NumberUtils.toLong(HttpUtil.getSingleValue(getPage().getPageParameters().get(WebParametersKeys.CATEGORY_ID)));
         this.categoryId  = categoryId;
         if (categoryId > 0) {
             categories = categoryService.transform(
@@ -201,7 +201,7 @@ public abstract class AbstractProductFilter extends BaseComponent {
         for (FilteredNavigationRecord navigationRecord : records) {
             if (!navigationRecord.getName().equalsIgnoreCase(head)) {
                 currentPair = new Pair<String, List<Pair<Pair<String, Integer>, PageParameters>>>(
-                        navigationRecord.getDisplayName(),
+                        (String) ObjectUtils.defaultIfNull(navigationRecord.getDisplayName(), navigationRecord.getName()),
                         new ArrayList<Pair<Pair<String, Integer>, PageParameters>>());
                 headValueList.add(currentPair);
                 head = navigationRecord.getName();
@@ -248,20 +248,18 @@ public abstract class AbstractProductFilter extends BaseComponent {
 
     /** {@inheritDoc} */
     protected void onBeforeRender() {
-        if (isVisible()) {
-            add(
-                    new ListView<Pair<String, List<Pair<Pair<String, Integer>, PageParameters>>>>(
-                            FILTERED_NAVIGATION_LIST,
-                            adaptNavigationRecords(navigationRecords)) {
-                        protected void populateItem(ListItem<Pair<String, List<Pair<Pair<String, Integer>, PageParameters>>>> pairListItem) {
-                            final Pair<String, List<Pair<Pair<String, Integer>, PageParameters>>> headValues = pairListItem.getModelObject();
-                            pairListItem.add(
-                                    new BaseFilterView(FILTER, headValues.getFirst(), headValues.getSecond())
-                            );
-                        }
+        add(
+                new ListView<Pair<String, List<Pair<Pair<String, Integer>, PageParameters>>>>(
+                        FILTERED_NAVIGATION_LIST,
+                        adaptNavigationRecords(navigationRecords)) {
+                    protected void populateItem(ListItem<Pair<String, List<Pair<Pair<String, Integer>, PageParameters>>>> pairListItem) {
+                        final Pair<String, List<Pair<Pair<String, Integer>, PageParameters>>> headValues = pairListItem.getModelObject();
+                        pairListItem.add(
+                                new BaseFilterView(FILTER, headValues.getFirst(), headValues.getSecond())
+                        );
                     }
-            );
-        }
+                }
+        );
 
         super.onBeforeRender();
     }

@@ -437,11 +437,6 @@
         </property>
     </bean>
 
-    <!-- ############################# demo smtp server ############################# -->
-    <bean id="fakeSmtpServer" class="com.dumbster.smtp.SimpleSmtpServer" destroy-method="stop" factory-method="start">
-        <constructor-arg index="0" value="2525"/>
-    </bean>
-
 
     <!-- #################################  message consumers end ######################################-->
 

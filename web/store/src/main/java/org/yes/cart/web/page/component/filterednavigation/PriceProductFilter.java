@@ -33,6 +33,7 @@ import org.yes.cart.web.support.service.CurrencySymbolService;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -63,6 +64,8 @@ public class PriceProductFilter extends AbstractProductFilter {
     @SpringBean(name = StorefrontServiceSpringKeys.CURRENCY_SYMBOL_SERVICE)
     private CurrencySymbolService currencySymbolService;
 
+    private List<FilteredNavigationRecord> allNavigationRecords = Collections.EMPTY_LIST;
+
 
      /**
       * Create price product filter component.
@@ -71,32 +74,19 @@ public class PriceProductFilter extends AbstractProductFilter {
      * @param categoryId current category id
      */
     public PriceProductFilter(final String id, final BooleanQuery query, final long categoryId) {
-
         super(id, query, categoryId);
 
         if (categoryId > 0) {
-
             priceTierTree = getCategory().getNavigationByPriceTree();
-
             filteredNavigationByPrice = (getCategory().getNavigationByPrice() == null || priceTierTree == null)
                     ? false : getCategory().getNavigationByPrice();
-
             if (filteredNavigationByPrice) {
-
                 currency = ApplicationDirector.getShoppingCart().getCurrencyCode();
-
                 shop = ApplicationDirector.getCurrentShop();
-
-                final List<FilteredNavigationRecord> allNavigationRecords = priceService.getPriceNavigationRecords(
+                allNavigationRecords = priceService.getPriceNavigationRecords(
                         priceTierTree,
                         currency,
                         shop);
-
-                setNavigationRecords(
-                        getFilteredNavigationRecords(allNavigationRecords)
-                );
-
-
             }
 
         }
@@ -162,6 +152,10 @@ public class PriceProductFilter extends AbstractProductFilter {
      * {@inheritDoc}
      */
     public boolean isVisible() {
+        setNavigationRecords(
+                getFilteredNavigationRecords(allNavigationRecords)
+        );
+
         return  super.isVisible()
                 && filteredNavigationByPrice
                 && getNavigationRecords() != null
