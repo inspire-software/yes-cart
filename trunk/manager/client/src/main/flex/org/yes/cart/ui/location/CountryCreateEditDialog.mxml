@@ -18,35 +18,55 @@
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
                 creationComplete="init()"
                 creationCompleteEffect="Zoom"
-				title="@Resource(bundle='LocationManagementPanel',key='newCountryDialogTitle')"  showCloseButton="true"
-                close="PopUpManager.removePopUp(this)" >
+                title="@Resource(bundle='LocationManagementPanel',key='newCountryDialogTitle')" showCloseButton="true"
+                close="PopUpManager.removePopUp(this)">
 
     <mx:Boolean id="newCountryFlag">false</mx:Boolean>
 
 
     <mx:Form>
-        <mx:FormItem  width="100%" label="@Resource(bundle='LocationManagementPanel',key='charCode')">
-            <mx:TextInput   width="160" id="charCode"/>
+        <mx:FormItem width="100%" label="@Resource(bundle='LocationManagementPanel',key='charCode')">
+            <mx:TextInput width="160" id="charCode" change="onFocusLost(event);"/>
         </mx:FormItem>
-        <mx:FormItem  width="100%" label="@Resource(bundle='LocationManagementPanel',key='digitCode')">
-            <mx:TextInput   width="160" id="digitCode"/>
+        <mx:FormItem width="100%" label="@Resource(bundle='LocationManagementPanel',key='digitCode')">
+            <mx:TextInput width="160" id="digitCode" change="onFocusLost(event);"/>
         </mx:FormItem>
-        <mx:FormItem  width="100%" label="@Resource(bundle='LocationManagementPanel',key='name')">
-            <mx:TextInput   width="160" id="lname"/>
+        <mx:FormItem width="100%" label="@Resource(bundle='LocationManagementPanel',key='name')">
+            <mx:TextInput width="160" id="lname" change="onFocusLost(event);"/>
         </mx:FormItem>
     </mx:Form>
     <mx:ControlBar horizontalAlign="right" width="100%">
-        <mx:Button  id="saveBtn" label="@Resource(bundle='ShopManagerApplication',key='save')"/>
+        <mx:Button id="saveBtn" label="@Resource(bundle='ShopManagerApplication',key='save')"/>
         <mx:Button id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
                    click="PopUpManager.removePopUp(this)"/>
     </mx:ControlBar>
 
+    <mx:Array id="validatorArr">
+        <mx:NumberValidator id="digitCodeValidator"
+                            source="{digitCode}"
+                            property="text"
+                            minValue="0" maxValue="999" allowNegative="false" domain="int"/>
+
+        <mx:StringValidator id="charCodeValidator"
+                            source="{charCode}" property="text"
+                            minLength="2"
+                            maxLength="2"
+                            required="true"/>
+
+        <mx:StringValidator id="lnameValidator"
+                            source="{lname}" property="text"
+                            minLength="2"
+                            maxLength="64"
+                            required="true"/>
+
+    </mx:Array>
+
 
     <mx:Script>
        <![CDATA[
-        import org.yes.cart.impl.CountryDTOImpl;
+        import mx.validators.Validator;
 
-        import org.yes.cart.shopmanager.ShopManagerGlobal;
+        import org.yes.cart.impl.CountryDTOImpl;
 
         import mx.binding.utils.BindingUtils;
         import mx.managers.PopUpManager;
@@ -64,11 +84,20 @@
             _countryDTOImpl = value;
         }
 
+        /**
+         * Validate  form.
+         * @param evt
+         */
+        private function onFocusLost(evt:Event):void {
+            saveBtn.enabled = (Validator.validateAll(validatorArr).length == 0);
+        }
+
 
         private function init():void {
             if (newCountryFlag) {
                 this.title = resourceManager.getString('LocationManagementPanel', 'newCountryDialogTitle');
                 saveBtn.label = resourceManager.getString('LocationManagementPanel', 'create');
+                saveBtn.enabled = false;
             } else {
                 this.title = resourceManager.getString('LocationManagementPanel', 'editCountryDialogTitle');
                 saveBtn.label = resourceManager.getString('LocationManagementPanel', 'update');
