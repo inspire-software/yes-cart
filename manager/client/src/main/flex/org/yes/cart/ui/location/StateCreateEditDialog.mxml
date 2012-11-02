@@ -26,10 +26,10 @@
 
     <mx:Form>
         <mx:FormItem  width="100%" label="@Resource(bundle='LocationManagementPanel',key='stateCode')">
-            <mx:TextInput   width="160" id="stateCode"/>
+            <mx:TextInput   width="160" id="stateCode" change="onFocusLost(event);"/>
         </mx:FormItem>
         <mx:FormItem  width="100%" label="@Resource(bundle='LocationManagementPanel',key='name')">
-            <mx:TextInput   width="160" id="lname"/>
+            <mx:TextInput   width="160" id="lname" change="onFocusLost(event);"/>
         </mx:FormItem>
     </mx:Form>
     <mx:ControlBar horizontalAlign="right" width="100%">
@@ -38,9 +38,26 @@
                    click="PopUpManager.removePopUp(this)"/>
     </mx:ControlBar>
 
+    <mx:Array id="validatorArr">
+        <mx:StringValidator id="lnameValidator"
+                            source="{lname}" property="text"
+                            minLength="2"
+                            maxLength="64"
+                            required="true"/>
+        <mx:StringValidator id="stateCodeValidator"
+                            source="{stateCode}" property="text"
+                            minLength="2"
+                            maxLength="64"
+                            required="true"/>
+
+
+    </mx:Array>
+
 
     <mx:Script>
        <![CDATA[
+        import mx.validators.Validator;
+
         import org.yes.cart.impl.StateDTOImpl;
 
         import mx.binding.utils.BindingUtils;
@@ -59,10 +76,19 @@
             _stateDTOImpl = value;
         }
 
+        /**
+         * Validate  form.
+         * @param evt
+         */
+        private function onFocusLost(evt:Event):void {
+            saveBtn.enabled = (Validator.validateAll(validatorArr).length == 0);
+        }
+
         private function init():void {
             if (newStateFlag) {
                 this.title = resourceManager.getString('LocationManagementPanel', 'newStateDialogTitle');
                 saveBtn.label = resourceManager.getString('LocationManagementPanel', 'create');
+                saveBtn.enabled = false;
             } else {
                 this.title = resourceManager.getString('LocationManagementPanel', 'editStateDialogTitle');
                 saveBtn.label = resourceManager.getString('LocationManagementPanel', 'update');
