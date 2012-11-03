@@ -28,7 +28,8 @@
     <name>Yes cart installer</name>
     <properties>
         <izpack.version>4.3.5</izpack.version>
-        <tomcat.version>7.0.25</tomcat.version>
+        <tomcat.version>7.0.30</tomcat.version>
+        <derby.version>10.8.1.2</derby.version>
         <guava.version>r09</guava.version>
         <junit.version>4.10</junit.version>
         <jmock.version>2.5.1</jmock.version>

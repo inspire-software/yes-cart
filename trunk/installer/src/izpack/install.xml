@@ -24,7 +24,8 @@
             <author name="Igor Azarny" email="iazarny@yahoo.com"/>
         </authors>
         <url>http://code.google.com/p/yes-cart</url>
-        <uninstaller write="no"/>
+        <uninstaller write="yes"/>
+        <javaversion>1.6</javaversion>
     </info>
 
     <variables>
@@ -43,6 +44,17 @@
         <res id="userInputSpec.xml" src="panels.xml"/>
         <res id="CustomLangpack.xml_eng" src="i18n_eng.xml"/>
         <res id="CustomLangpack.xml_rus" src="i18n_rus.xml"/>
+
+        <res id="shortcutSpec.xml" src="shortcutSpec.xml"/>
+
+<!--
+
+        <res id="shortcutSpec.xml_rus" src="shortcutSpec_rus.xml"/>
+
+        <res id="Unix_shortcutSpec.xml" src="unix_shortcutSpec.xml"/>
+        <res id="Unix_shortcutSpec.xml_rus" src="unix_shortcutSpec_rus.xml"/>
+-->
+
     </resources>
 
     <panels>
@@ -54,6 +66,10 @@
             <validator classname="org.yes.cart.installer.WebServerConfigurationPanelValidator"/>
         </panel>
         <panel classname="InstallPanel"/>
+
+        <panel classname="ShortcutPanel">
+
+        </panel>
         <panel classname="FinishPanel"/>
     </panels>
 
@@ -66,6 +82,28 @@
             <description/>
             <fileset dir="apache-tomcat-${tomcat.version}" targetdir="$INSTALL_PATH" override="true"/>
         </pack>
+        <pack name="Derby Database" required="yes">
+            <description>Apache Derby Database</description>
+            <!--<fileset dir="apache-derby-${derby.version}"  targetdir="$INSTALL_PATH/derbydb" override="true"/>-->
+            <fileset dir="../../src/main/resources/derby"  targetdir="$INSTALL_PATH/derbydb" override="true"/>
+            <fileset dir="../../src/main/resources/common"  targetdir="$INSTALL_PATH/yesbin" override="true"/>
+
+            <executable targetfile="$INSTALL_PATH/yesbin/opendemostore.bat" />
+            <executable targetfile="$INSTALL_PATH/yesbin/opendemostore" />
+
+            <executable targetfile="$INSTALL_PATH/yesbin/opendoc.bat" />
+            <executable targetfile="$INSTALL_PATH/yesbin/opendoc" />
+
+            <executable targetfile="$INSTALL_PATH/yesbin/openyum.bat" />
+            <executable targetfile="$INSTALL_PATH/yesbin/openyum" />
+
+            <executable targetfile="$INSTALL_PATH/yesbin/startcart.bat" />
+            <executable targetfile="$INSTALL_PATH/yesbin/startcart" />
+
+            <executable targetfile="$INSTALL_PATH/yesbin/stopcart.bat" />
+            <executable targetfile="$INSTALL_PATH/yesbin/stopcart" />
+
+        </pack>
         <pack name="Yes Cart Manager Server" required="no">
             <description/>
             <file src="yes-shop.war" targetdir="$INSTALL_PATH/webapps"/>
@@ -74,8 +112,19 @@
             <description/>
             <file src="yes-manager-server.war" targetdir="$INSTALL_PATH/webapps"/>
         </pack>
+
+
+
     </packs>
 
     <jar src="installer-${project.version}.jar"/>
     <jar src="guava-${guava.version}.jar"/>
+
+
+
+
+
+    <native type="izpack" name="ShellLink.dll"/>
+    <native type="izpack" name="ShellLink_x64.dll"/>
+
 </installation>
