@@ -188,7 +188,7 @@ public class DynaFormPanel extends BaseComponent {
                         attrValue.getAttribute().getChoiceData(),
                         TypeDescriptor.valueOf(String.class),
                         TypeDescriptor.valueOf(List.class)
-                    ); //TODO need to check is it work in correct way ? in ExtendedConversionServiceTest
+                    );
 
                 }
             };
