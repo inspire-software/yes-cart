@@ -33,7 +33,7 @@ import java.util.Map;
 public class ApacheTomcat7Configurer {
 
   private String tomcatHome;
-  private String jdkHome;
+ // private String jdkHome;
   private int httpPort;
   private int httpsPort;
   private String sslKeyStoreFile;
@@ -44,9 +44,9 @@ public class ApacheTomcat7Configurer {
     this.tomcatHome = tomcatHome;
   }
 
-  public void setJdkHome(String jdkHome) {
+  /*public void setJdkHome(String jdkHome) {
     this.jdkHome = jdkHome;
-  }
+  } */
 
   public void setHttpPort(int httpPort) {
     this.httpPort = httpPort;
@@ -108,7 +108,7 @@ public class ApacheTomcat7Configurer {
     Files.write(generateSetEnvContent(
             ImmutableMap.<String, String>builder().
                     put("CATALINA_OPTS", catalinaOptions).
-                    put("JAVA_HOME", jdkHome).build(),
+                   /* put("JAVA_HOME", jdkHome).*/build(),
             isWindows
     ), setEnvFile, Charset.forName("UTF-8"));
   }

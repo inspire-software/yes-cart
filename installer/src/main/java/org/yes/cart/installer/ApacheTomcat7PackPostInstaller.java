@@ -35,7 +35,7 @@ public class ApacheTomcat7PackPostInstaller extends PackPostInstaller {
   @Override
   protected void postInstall(AutomatedInstallData data) throws Exception {
     ApacheTomcat7Configurer configurer = new ApacheTomcat7Configurer(new File(data.getInstallPath()).getCanonicalPath());
-    configurer.setJdkHome(new File(data.getVariable("JDKPath")).getCanonicalPath());
+    //configurer.setJdkHome(new File(data.getVariable("JDKPath")).getCanonicalPath());
     configurer.setHttpPort(Integer.parseInt(data.getVariable("http.port")));
     String httpsPort = data.getVariable("https.port");
     String sslKeyStoreFile = data.getVariable("ssl.keystore.file");

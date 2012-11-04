@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <shortcuts>
+    <defaultCurrentUser/>
     <skipIfNotSupported/>
-    <programGroup defaultName="Yes-Cart\Yes-Cart"
-                  location="applications||startMenu"/>
+    <programGroup defaultName="Yes-Cart"
+                  location="applications"/>
 
     <shortcut
             name="Start Yes-Cart server"
@@ -13,10 +14,10 @@
             iconFile="$INSTALL_PATH\yesbin\startcart.ico"
             iconIndex="0"
             initialState="normal"
-            programGroup="no"
+            programGroup="yes"
             desktop="yes"
             applications="yes"
-            startMenu="yes"
+            startMenu="no"
             startup="no">
     </shortcut>
 
@@ -29,10 +30,10 @@
             iconFile="$INSTALL_PATH\yesbin\stopcart.ico"
             iconIndex="0"
             initialState="normal"
-            programGroup="no"
+            programGroup="yes"
             desktop="yes"
             applications="yes"
-            startMenu="yes"
+            startMenu="no"
             startup="no">
     </shortcut>
 
@@ -45,10 +46,10 @@
             iconFile="$INSTALL_PATH\yesbin\opendoc.ico"
             iconIndex="0"
             initialState="normal"
-            programGroup="no"
+            programGroup="yes"
             desktop="yes"
             applications="yes"
-            startMenu="yes"
+            startMenu="no"
             startup="no">
     </shortcut>
 
@@ -61,10 +62,10 @@
             iconFile="$INSTALL_PATH\yesbin\opendemostore.ico"
             iconIndex="0"
             initialState="normal"
-            programGroup="no"
+            programGroup="yes"
             desktop="yes"
             applications="yes"
-            startMenu="yes"
+            startMenu="no"
             startup="no">
     </shortcut>
 
@@ -77,10 +78,10 @@
             iconFile="$INSTALL_PATH\yesbin\openyum.ico"
             iconIndex="0"
             initialState="normal"
-            programGroup="no"
+            programGroup="yes"
             desktop="yes"
             applications="yes"
-            startMenu="yes"
+            startMenu="no"
             startup="no">
     </shortcut>
 
