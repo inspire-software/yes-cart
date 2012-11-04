@@ -4,6 +4,8 @@ rem
 rem YesCart. Open Yes-Cart manager
 rem @author Igor Azarny (iazarny@yahoo.com)
 
-start http://localhost:8080/yes-manager-server
 
-exit
+echo derby shutdown
+start %~dp0\stopNetworkServer.bat
+
+exit 0

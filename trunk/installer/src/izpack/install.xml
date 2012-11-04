@@ -22,6 +22,7 @@
         <appversion>${project.version}</appversion>
         <authors>
             <author name="Igor Azarny" email="iazarny@yahoo.com"/>
+            <author name="Denis Pavlov" email="denis.v.pavlov@gmail.com"/>
         </authors>
         <url>http://code.google.com/p/yes-cart</url>
         <uninstaller write="yes"/>
@@ -45,31 +46,32 @@
         <res id="CustomLangpack.xml_eng" src="i18n_eng.xml"/>
         <res id="CustomLangpack.xml_rus" src="i18n_rus.xml"/>
 
+        <res id="ProcessPanel.Spec.xml" src="processPanelSpec.xml" />
+        <res id="ProcessPanel.Spec.xml_rus" src="processPanelSpec_rus.xml" />
+
         <res id="shortcutSpec.xml" src="shortcutSpec.xml"/>
+        <res id="shortcutSpec.xml_rus" src="shortcutSpec_rus.xml"/>
 
 <!--
-
-        <res id="shortcutSpec.xml_rus" src="shortcutSpec_rus.xml"/>
 
         <res id="Unix_shortcutSpec.xml" src="unix_shortcutSpec.xml"/>
         <res id="Unix_shortcutSpec.xml_rus" src="unix_shortcutSpec_rus.xml"/>
 -->
 
+
     </resources>
 
     <panels>
         <panel classname="HelloPanel"/>
-        <panel classname="JDKPathPanel"/>
+       <!-- <panel classname="JDKPathPanel"/>-->
         <panel classname="TargetPanel"/>
         <panel classname="PacksPanel"/>
         <panel classname="UserInputPanel" id="WebServerConfigurationPanel">
             <validator classname="org.yes.cart.installer.WebServerConfigurationPanelValidator"/>
         </panel>
         <panel classname="InstallPanel"/>
-
-        <panel classname="ShortcutPanel">
-
-        </panel>
+        <panel classname="ProcessPanel"/>
+        <panel classname="ShortcutPanel"/>
         <panel classname="FinishPanel"/>
     </panels>
 
@@ -84,9 +86,22 @@
         </pack>
         <pack name="Derby Database" required="yes">
             <description>Apache Derby Database</description>
-            <!--<fileset dir="apache-derby-${derby.version}"  targetdir="$INSTALL_PATH/derbydb" override="true"/>-->
             <fileset dir="../../src/main/resources/derby"  targetdir="$INSTALL_PATH/derbydb" override="true"/>
             <fileset dir="../../src/main/resources/common"  targetdir="$INSTALL_PATH/yesbin" override="true"/>
+            
+            <singlefile src="../../../persistence/sql/resources/derby/create-tables.sql" target="$INSTALL_PATH/derbydb/bin/create-tables.sql" override="true"/>
+            <singlefile src="../../../env/setup/dbi/initdata.sql" target="$INSTALL_PATH/derbydb/bin/initdata.sql" override="true"/>
+
+            <singlefile src="../../../core-modules/core-module-payment-base/src/main/resources/sql/derby/create-tables.sql" target="$INSTALL_PATH/derbydb/bin/pay-create-tables.sql" override="true"/>
+
+            <singlefile src="../../../core-modules/core-module-payment-base/src/main/resources/sql/payinitdata.sql" target="$INSTALL_PATH/derbydb/bin/base-payinitdata-en.sql" override="true"/>
+            <singlefile src="../../../core-modules/core-module-payment-capp/src/main/resources/sql/payinitdata.sql" target="$INSTALL_PATH/derbydb/bin/capp-payinitdata-en.sql" override="true"/>
+            <singlefile src="../../../core-modules/core-module-payment-gcwm/src/main/resources/sql/payinitdata.sql" target="$INSTALL_PATH/derbydb/bin/gcwm-payinitdata-en.sql" override="true"/>
+
+            <singlefile src="../../../core-modules/core-module-payment-base/src/main/resources/sql/payinitdata_ru.sql" target="$INSTALL_PATH/derbydb/bin/base-payinitdata-ru.sql" override="true"/>
+            <singlefile src="../../../core-modules/core-module-payment-capp/src/main/resources/sql/payinitdata_ru.sql" target="$INSTALL_PATH/derbydb/bin/capp-payinitdata-ru.sql" override="true"/>
+            <singlefile src="../../../core-modules/core-module-payment-gcwm/src/main/resources/sql/payinitdata_ru.sql" target="$INSTALL_PATH/derbydb/bin/gcwm-payinitdata-ru.sql" override="true"/>
+
 
             <executable targetfile="$INSTALL_PATH/yesbin/opendemostore.bat" />
             <executable targetfile="$INSTALL_PATH/yesbin/opendemostore" />
@@ -102,15 +117,22 @@
 
             <executable targetfile="$INSTALL_PATH/yesbin/stopcart.bat" />
             <executable targetfile="$INSTALL_PATH/yesbin/stopcart" />
-
         </pack>
         <pack name="Yes Cart Manager Server" required="no">
-            <description/>
+            <description>Yes-Cart admin aplication</description>
             <file src="yes-shop.war" targetdir="$INSTALL_PATH/webapps"/>
         </pack>
         <pack name="Yes Cart StoreFront" required="no">
-            <description/>
+            <description>Demo storefornt based on Yes-Cart platform</description>
             <file src="yes-manager-server.war" targetdir="$INSTALL_PATH/webapps"/>
+        </pack>
+        <pack name="Yes Cart bundle with demo data" required="no">
+            <description>Data to import for demo store</description>
+            <fileset dir="../../../env/sampledata/demo-data/icecat/import"  targetdir="$INSTALL_PATH/importdemodata" override="true"/>
+        </pack>
+        <pack name="Optional local email server" required="no">
+            <description>local email server, which just accept all mails</description>
+            <fileset dir="../../../util/devnullsmtp"  targetdir="$INSTALL_PATH/devnullsmtp" override="true"/>
         </pack>
 
 

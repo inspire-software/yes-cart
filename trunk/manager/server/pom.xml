@@ -39,10 +39,6 @@
         <spring-flex.version>1.5.2.RELEASE</spring-flex.version>
     </properties>
     <repositories>
-        <!--repository>
-            <id>spring-release</id>
-            <url>http://maven.springframework.org/release</url>
-        </repository-->
         <repository>
             <id>SpringFlex</id>
             <name>SpringFlex Source Repo</name>
@@ -233,10 +229,14 @@
                                 <filtering>true</filtering>
                                 <directory>../client/target</directory>
                                 <includes>
-                                    <include>ShopManagerApplication.html</include>
-                                    <include>ShopManagerApplication.swf</include>
-                                    <include>AC_OETags.js</include>
-                                    <include>history/**</include>
+                                    <include>en_US/ShopManagerApplication.html</include>
+                                    <include>en_US/ShopManagerApplication.swf</include>
+                                    <include>en_US/swfobject.js</include>
+                                    <include>en_US/history/**</include>
+                                    <include>ru_RU/ShopManagerApplication.html</include>
+                                    <include>ru_RU/ShopManagerApplication.swf</include>
+                                    <include>ru_RU/swfobject.js</include>
+                                    <include>ru_RU/history/**</include>
                                 </includes>
                             </resource>
                         </webResources>

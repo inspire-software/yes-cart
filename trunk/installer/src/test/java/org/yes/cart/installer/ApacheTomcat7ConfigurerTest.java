@@ -63,7 +63,7 @@ public class ApacheTomcat7ConfigurerTest {
                              String expectedServerXMLFileName) throws Exception {
     File tempDir = prepareInstallationDirectory();
     ApacheTomcat7Configurer configurer = new ApacheTomcat7Configurer(tempDir.getAbsolutePath());
-    configurer.setJdkHome("/usr/lib/jvm/java-6-sun");
+    //configurer.setJdkHome("/usr/lib/jvm/java-6-sun");
     configurer.setCatalinaOptions("-Xms256m -Xmx1024m -XX:MaxPermSize=256m");
     configurer.setHttpPort(httpPort);
     configurer.setHttpsPort(httpsPort);

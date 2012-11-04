@@ -25,8 +25,9 @@
     </parent>
     <artifactId>yes-manager-client</artifactId>
     <name>YUM Yes cart update manager client</name>
-    <packaging>swf</packaging>
+    <packaging>jar</packaging>
     <dependencies>
+
         <dependency>
             <groupId>com.adobe.flex.framework</groupId>
             <artifactId>flex-framework</artifactId>
@@ -40,10 +41,12 @@
             <type>swc</type>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
     <build>
+<!--
+
         <sourceDirectory>src/main/flex</sourceDirectory>
-        <!--testSourceDirectory>src/test/flex</testSourceDirectory-->
         <finalName>ShopManagerApplication</finalName>
         <pluginManagement>
             <plugins>
@@ -53,7 +56,6 @@
                     <extensions>true</extensions>
                     <configuration>
                         <debug>true</debug>
-                        <!--webappDirectory>${basedir}../server/src/main/webapp</webappDirectory-->
                         <localesSourcePath>${basedir}/src/main/resources/{locale}</localesSourcePath>
                         <localesCompiled>
                             <locale>en_US</locale>
@@ -63,7 +65,12 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+
+-->
+
         <plugins>
+
+<!--
             <plugin>
                 <groupId>org.sonatype.flexmojos</groupId>
                 <artifactId>flexmojos-maven-plugin</artifactId>
@@ -82,10 +89,29 @@
                     </execution>
                 </executions>
             </plugin>
+-->
 
-
-
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>ant-magic</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <ant antfile="${basedir}/build.xml"  target="all"/>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
         </plugins>
+
+
+
     </build>
 </project>
