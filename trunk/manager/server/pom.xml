@@ -24,7 +24,7 @@
         <artifactId>manager</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-    <artifactId>yes-manager-server</artifactId>
+    <artifactId>yes-manager</artifactId>
     <packaging>war</packaging>
     <name>Yes cart manager server</name>
     <description>Yes cart manager server</description>

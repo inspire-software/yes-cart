@@ -124,7 +124,7 @@
         </pack>
         <pack name="Yes Cart StoreFront" required="no">
             <description>Demo storefornt based on Yes-Cart platform</description>
-            <file src="yes-manager-server.war" targetdir="$INSTALL_PATH/webapps"/>
+            <file src="yes-manager.war" targetdir="$INSTALL_PATH/webapps"/>
         </pack>
         <pack name="Yes Cart bundle with demo data" required="no">
             <description>Data to import for demo store</description>
