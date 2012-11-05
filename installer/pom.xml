@@ -131,7 +131,7 @@
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.yes</groupId>
-                                    <artifactId>yes-manager-server</artifactId>
+                                    <artifactId>yes-manager</artifactId>
                                     <version>${project.version}</version>
                                     <type>war</type>
                                 </artifactItem>

@@ -4,7 +4,8 @@ rem
 rem YesCart. Start db and tomcat
 rem @author Igor Azarny (iazarny@yahoo.com)
 
-echo derby start
+echo derby starting ...
+echo Please wait and do not close any window
 set DERBY_HOME=%~dp0..
 cd %~dp0
 set LOCALCLASSPATH=%DERBY_HOME%/lib/derby.jar;%DERBY_HOME%/lib/derbynet.jar;%DERBY_HOME%/lib/derbyclient.jar;%DERBY_HOME%/lib/derbytools.jar
