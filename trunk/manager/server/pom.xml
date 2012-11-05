@@ -216,6 +216,10 @@
 
                     <configuration>
                         <!--<resourceEncoding>${project.build.sourceEncoding}</resourceEncoding>-->
+                        <nonFilteredFileExtensions>
+                            <!-- default value contains jpg,jpeg,gif,bmp,png -->
+                            <nonFilteredFileExtension>swf</nonFilteredFileExtension>
+                        </nonFilteredFileExtensions>
                         <webResources>
                             <resource>
                                 <filtering>true</filtering>
