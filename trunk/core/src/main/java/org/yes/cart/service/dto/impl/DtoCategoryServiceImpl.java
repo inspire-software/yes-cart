@@ -66,7 +66,7 @@ public class DtoCategoryServiceImpl
      *
      * @param dtoFactory             {@link org.yes.cart.domain.dto.factory.DtoFactory}
      * @param categoryGenericService category     {@link org.yes.cart.service.domain.GenericService}
-     * @param imageService {@link ImageService} to manipulate  related images.
+     * @param imageService           {@link ImageService} to manipulate  related images.
      */
     public DtoCategoryServiceImpl(final DtoFactory dtoFactory,
                                   final GenericService<Category> categoryGenericService,
@@ -87,8 +87,6 @@ public class DtoCategoryServiceImpl
         this.attributeService = dtoAttributeService.getService();
 
 
-
-
         this.attrValueAssembler = DTOAssembler.newAssembler(
                 dtoFactory.getImplClass(AttrValueCategoryDTO.class),
                 attributeService.getGenericDao().getEntityFactory().getImplClass(AttrValueCategory.class));
@@ -98,7 +96,7 @@ public class DtoCategoryServiceImpl
                 attributeService.getGenericDao().getEntityFactory().getImplClass(ShopCategory.class));
 
         this.imageService = imageService;
-        
+
 
     }
 
@@ -138,7 +136,6 @@ public class DtoCategoryServiceImpl
         }
         return childCategoriesDTO;
     }
-
 
 
     /**
@@ -208,7 +205,7 @@ public class DtoCategoryServiceImpl
         final List<Category> categories = ((CategoryService) service).getByProductId(productId);
         final List<CategoryDTO> dtos = new ArrayList<CategoryDTO>(categories.size());
         fillDTOs(categories, dtos);
-        return dtos;        
+        return dtos;
     }
 
     /**
@@ -270,17 +267,21 @@ public class DtoCategoryServiceImpl
     public List<? extends AttrValueDTO> getEntityAttributes(final long entityPk)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<AttrValueCategoryDTO> result = new ArrayList<AttrValueCategoryDTO>();
-        result.addAll(getById(entityPk).getAttributes());
-        final List<AttributeDTO> availableAttributeDTOs = dtoAttributeService.findAvailableAttributes(
-                AttributeGroupNames.CATEGORY,
-                getCodes(result));
-        for (AttributeDTO attributeDTO : availableAttributeDTOs) {
-            AttrValueCategoryDTO attrValueCategoryDTO = getDtoFactory().getByIface(AttrValueCategoryDTO.class);
-            attrValueCategoryDTO.setAttributeDTO(attributeDTO);
-            attrValueCategoryDTO.setCategoryId(entityPk);
-            result.add(attrValueCategoryDTO);
+        final CategoryDTO categoryDTO = getById(entityPk);
+        if (categoryDTO != null) {
+            result.addAll(categoryDTO.getAttributes());
+            final List<AttributeDTO> availableAttributeDTOs = dtoAttributeService.findAvailableAttributes(
+                    AttributeGroupNames.CATEGORY,
+                    getCodes(result));
+            for (AttributeDTO attributeDTO : availableAttributeDTOs) {
+                AttrValueCategoryDTO attrValueCategoryDTO = getDtoFactory().getByIface(AttrValueCategoryDTO.class);
+                attrValueCategoryDTO.setAttributeDTO(attributeDTO);
+                attrValueCategoryDTO.setCategoryId(entityPk);
+                result.add(attrValueCategoryDTO);
+            }
+            Collections.sort(result, new AttrValueDTOComparatorImpl());
         }
-        Collections.sort(result, new AttrValueDTOComparatorImpl());
+
         return result;
     }
 
