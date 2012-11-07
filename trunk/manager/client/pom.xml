@@ -25,7 +25,7 @@
     </parent>
     <artifactId>yes-manager-client</artifactId>
     <name>YUM Yes cart update manager client</name>
-    <packaging>jar</packaging>
+    <packaging>${packaging.type}</packaging>
     <dependencies>
 
         <dependency>
@@ -44,74 +44,88 @@
 
     </dependencies>
     <build>
-<!--
-
         <sourceDirectory>src/main/flex</sourceDirectory>
-        <finalName>ShopManagerApplication</finalName>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.sonatype.flexmojos</groupId>
-                    <artifactId>flexmojos-maven-plugin</artifactId>
-                    <extensions>true</extensions>
-                    <configuration>
-                        <debug>true</debug>
-                        <localesSourcePath>${basedir}/src/main/resources/{locale}</localesSourcePath>
-                        <localesCompiled>
-                            <locale>en_US</locale>
-                            <locale>ru_RU</locale>
-                        </localesCompiled>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-
--->
-
-        <plugins>
-
-<!--
-            <plugin>
-                <groupId>org.sonatype.flexmojos</groupId>
-                <artifactId>flexmojos-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>wrapper</goal>
-                        </goals>
-                        <configuration>
-                            <parameters>
-                                <swf>${project.build.finalName}</swf>
-                                <width>100%</width>
-                                <height>100%</height>
-                            </parameters>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
--->
-
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>ant-magic</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <tasks>
-                                <ant antfile="${basedir}/build.xml"  target="all"/>
-                            </tasks>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-        </plugins>
-
-
-
     </build>
+
+    <profiles>
+
+        <profile>
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <id>flexAntBuild</id>
+            <properties>
+                <packaging.type>jar</packaging.type>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>ant-magic</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <tasks>
+                                        <ant antfile="${basedir}/build.xml"  target="all"/>
+                                    </tasks>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>flexMojoBuild</id>
+            <properties>
+                <packaging.type>swf</packaging.type>
+            </properties>
+            <build>
+                <finalName>ShopManagerApplication</finalName>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.sonatype.flexmojos</groupId>
+                            <artifactId>flexmojos-maven-plugin</artifactId>
+                            <extensions>true</extensions>
+                            <configuration>
+                                <debug>true</debug>
+                                <!--webappDirectory>${basedir}../server/src/main/webapp</webappDirectory-->
+                                <localesSourcePath>${basedir}/src/main/resources/{locale}</localesSourcePath>
+                                <localesCompiled>
+                                    <locale>en_US</locale>
+                                    <locale>ru_RU</locale>
+                                </localesCompiled>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.flexmojos</groupId>
+                        <artifactId>flexmojos-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>wrapper</goal>
+                                </goals>
+                                <configuration>
+                                    <parameters>
+                                        <swf>${project.build.finalName}</swf>
+                                        <width>100%</width>
+                                        <height>100%</height>
+                                    </parameters>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+    </profiles>
 </project>
