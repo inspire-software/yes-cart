@@ -20,7 +20,7 @@
 
     <mx:Form>
         <mx:FormItem label="@Resource(bundle='CategoryCreateDialog',key='name')">
-            <mx:TextInput width="160" id="categoryName"/>
+            <mx:TextInput width="230" id="categoryName"/>
         </mx:FormItem>
     </mx:Form>
     <mx:ControlBar horizontalAlign="right" width="100%">
