@@ -323,6 +323,8 @@
                 PopUpManager.removePopUp(newCategoryPopUp);
                 newCategoryPopUp = null;
 
+                categoryTabNavigator.selectedIndex = TAB_SUMMARY_IDX;
+
                 categoryTree.selectedItem = newCategory;
                 onCategorySelected(null);
 
@@ -683,7 +685,7 @@
                                     </mx:FormItem>
                                     <mx:FormItem width="100%"
                                                  label="@Resource(bundle='CategoryManagementPanel',key='filteredNavigation')">
-                                        <mx:VBox width="100%" height="100%">
+                                        <mx:HBox width="100%" height="100%">
                                             <mx:CheckBox id="categoryFNByAttributesCheckBox"
                                                          label="@Resource(bundle='CategoryManagementPanel',key='byAttr')"
                                                          toolTip="@Resource(bundle='CategoryManagementPanel',key='byAttrHint')"/>
@@ -693,7 +695,7 @@
                                             <mx:CheckBox id="categoryFNByPriceCheckBox"
                                                          label="@Resource(bundle='CategoryManagementPanel',key='byPrice')"
                                                          toolTip="@Resource(bundle='CategoryManagementPanel',key='byPriceHint')"/>
-                                        </mx:VBox>
+                                        </mx:HBox>
 
                                     </mx:FormItem>
                                     <mx:FormItem width="100%"
@@ -743,7 +745,7 @@
 
 
                                 </mx:Form>
-                                <mx:ControlBar horizontalAlign="right">
+                                <mx:ControlBar horizontalAlign="right" width="400">
                                     <mx:Button id="saveBtn"
                                                enabled="{categorySelectedAndChanged}"
                                                click="onSaveCatgeoryChangesClick(event)"
@@ -755,7 +757,7 @@
 
                         <mx:Canvas id="assignedProductsPanel"
                                    label="@Resource(bundle='CategoryManagementPanel',key='products')"
-                                   width="100%" height="100%">
+                                   width="100%" height="100%"  enabled="{selectedCategoryDTOImpl != null &amp;&amp; selectedCategoryDTOImpl.categoryId > 0}">
 
                             <mx:VBox width="100%" height="100%" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
                                 <mx:HBox paddingTop="5"  width="100%">
@@ -805,8 +807,8 @@
                             </mx:VBox>
 
                         </mx:Canvas>
-                        <cat:CategoryImageAttributesPanel id="catImagesPanel"/>
-                        <cat:CategoryNonImageAttributesPanel id="attrValuesTabPanel"/>
+                        <cat:CategoryImageAttributesPanel id="catImagesPanel" enabled="{selectedCategoryDTOImpl != null &amp;&amp; selectedCategoryDTOImpl.categoryId > 0}"/>
+                        <cat:CategoryNonImageAttributesPanel id="attrValuesTabPanel" enabled="{selectedCategoryDTOImpl != null &amp;&amp; selectedCategoryDTOImpl.categoryId > 0}"/>
                     </mx:TabNavigator>
 
                 </mx:HDividedBox>
