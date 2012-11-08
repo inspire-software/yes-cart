@@ -130,7 +130,7 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
      */
     public void allowPaymentGateway(final String label) {
 
-        String allowed = systemService.getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS);
+        String allowed = systemService.getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL);
 
         if (!allowed.contains(label)) {       //not yet allowed
 
@@ -141,7 +141,7 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
             }
 
             systemService.updateAttributeValue(
-                    AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS,
+                    AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL,
                     allowed
             );
 
@@ -155,7 +155,7 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
      */
     public void disallowPaymentGateway(final String label) {
 
-        String allowed = systemService.getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS);
+        String allowed = systemService.getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL);
 
         if (allowed.contains(label)) {       //neet to remove
 
@@ -174,7 +174,7 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
             }
 
             systemService.updateAttributeValue(
-                    AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS,
+                    AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL,
                     allowed
             );
 
@@ -194,7 +194,7 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
             );
         }
         if (!allModules) {
-            final String allowed = systemService.getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS);
+            final String allowed = systemService.getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL);
             if (StringUtils.isNotBlank(allowed)) {
                 final List<PaymentGatewayDescriptor> allowedDescr = new ArrayList<PaymentGatewayDescriptor>();
                 for (PaymentGatewayDescriptor descriptor : paymentGatewayDescriptors) {
