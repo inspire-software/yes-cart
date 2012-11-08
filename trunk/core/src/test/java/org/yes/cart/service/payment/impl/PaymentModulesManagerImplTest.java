@@ -102,22 +102,22 @@ public class PaymentModulesManagerImplTest extends BaseCoreDBTestCase {
         final SystemService systemService = mockery.mock(SystemService.class);
 
         mockery.checking(new Expectations() {{
-            oneOf(systemService).getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS);  will(returnValue("aaa,bbb,ccc,ddd"));
+            oneOf(systemService).getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL);  will(returnValue("aaa,bbb,ccc,ddd"));
         }});
         mockery.checking(new Expectations() {{
-            oneOf(systemService).updateAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS, "aaa,bbb,ccc,ddd,eee");
-        }});
-
-        mockery.checking(new Expectations() {{
-            oneOf(systemService).getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS);  will(returnValue("aaa,bbb"));
+            oneOf(systemService).updateAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL, "aaa,bbb,ccc,ddd,eee");
         }});
 
+        mockery.checking(new Expectations() {{
+            oneOf(systemService).getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL);  will(returnValue("aaa,bbb"));
+        }});
+
 
         mockery.checking(new Expectations() {{
-            oneOf(systemService).getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS);  will(returnValue("xx,yy,"));
+            oneOf(systemService).getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL);  will(returnValue("xx,yy,"));
         }});
         mockery.checking(new Expectations() {{
-            oneOf(systemService).updateAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS, "xx,yy,zz");
+            oneOf(systemService).updateAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL, "xx,yy,zz");
         }});
 
 
@@ -139,24 +139,24 @@ public class PaymentModulesManagerImplTest extends BaseCoreDBTestCase {
         final SystemService systemService = mockery.mock(SystemService.class);
 
         mockery.checking(new Expectations() {{
-            oneOf(systemService).getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS);  will(returnValue("aaa,bbb,ccc,ddd"));
+            oneOf(systemService).getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL);  will(returnValue("aaa,bbb,ccc,ddd"));
         }});
         mockery.checking(new Expectations() {{
-            oneOf(systemService).updateAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS, "aaa,bbb,ddd");
-        }});
-
-        mockery.checking(new Expectations() {{
-            oneOf(systemService).getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS);  will(returnValue("1,2,3"));
-        }});
-        mockery.checking(new Expectations() {{
-            oneOf(systemService).updateAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS, "2,3");
+            oneOf(systemService).updateAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL, "aaa,bbb,ddd");
         }});
 
         mockery.checking(new Expectations() {{
-            oneOf(systemService).getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS);  will(returnValue("xxx,yyy,zzz"));
+            oneOf(systemService).getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL);  will(returnValue("1,2,3"));
         }});
         mockery.checking(new Expectations() {{
-            oneOf(systemService).updateAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS, "xxx,yyy");
+            oneOf(systemService).updateAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL, "2,3");
+        }});
+
+        mockery.checking(new Expectations() {{
+            oneOf(systemService).getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL);  will(returnValue("xxx,yyy,zzz"));
+        }});
+        mockery.checking(new Expectations() {{
+            oneOf(systemService).updateAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL, "xxx,yyy");
         }});
 
 

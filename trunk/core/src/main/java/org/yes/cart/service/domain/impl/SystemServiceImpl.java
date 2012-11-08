@@ -91,7 +91,7 @@ public class SystemServiceImpl implements SystemService {
      * @return    true if google checkout enabled.
      */
     public boolean isGoogleCheckoutEnabled() {
-        return getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS).contains("googleCheckoutPaymentGatewayLabel");
+        return getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL).contains("googleCheckoutPaymentGatewayLabel");
     }
 
     /**

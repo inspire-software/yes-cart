@@ -36,7 +36,7 @@ public interface AttributeNamesKeys {
         /**
          * Comma separated list of active payment gateways.
          */
-        String SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS = "SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABELS";
+        String SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL = "SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL";
         /**
          * Etag expiration timeout for images.
          */
