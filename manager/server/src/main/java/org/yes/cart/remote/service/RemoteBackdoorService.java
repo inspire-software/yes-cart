@@ -17,6 +17,7 @@
 package org.yes.cart.remote.service;
 
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
+import org.yes.cart.service.async.model.AsyncContext;
 
 import java.io.IOException;
 import java.util.List;
@@ -30,68 +31,83 @@ public interface RemoteBackdoorService {
 
     /**
      * Reindex all products.
+     *
+     * @param context web service context
      * @return quantity product in index.
      */
-    int reindexAllProducts();
+    int reindexAllProducts(AsyncContext context);
 
     /**
      * Reindex single products.
+     *
+     * @param context web service context
      * @param productPk product pk.
      * @return quantity of objects in index
      */
-    int reindexProduct(long productPk);
+    int reindexProduct(AsyncContext context, long productPk);
 
 
     /**
      * Reindex given set of products.
+     *
+     * @param context web service context
      * @param productPks product PKs to reindex
      * @return quantity of objects in index
      */
-    int reindexProducts(long[] productPks);
+    int reindexProducts(AsyncContext context, long[] productPks);
 
 
     /**
      * Execute sql and return result.
      * DML operatin also allowed, in this case result has quantity of affected rows.
      *
+     * @param context web service context
      * @param query query ot execute.
      * @return list of rows
      */
-    List<Object[]> sqlQuery(String query);
+    List<Object[]> sqlQuery(AsyncContext context, String query);
 
     /**
      * Execute hsql and return result.
      *
+     * @param context web service context
      * @param query query ot execute.
      * @return list of rows
      */
-    List<Object[]> hsqlQuery(String query);
+    List<Object[]> hsqlQuery(AsyncContext context, String query);
 
     /**
      * Execute lucene and return result.
      *
+     * @param context web service context
      * @param query query ot execute.
      * @return list of rows
      */
-    List<Object[]> luceneQuery(String query);
+    List<Object[]> luceneQuery(AsyncContext context, String query);
 
     /**
-     * Get chache information.
+     * Get cache information.
+     *
+     * @param context web service context
      * @return list of information per each cache.
      */
-    List<CacheInfoDTOImpl> getCacheInfo();
+    List<CacheInfoDTOImpl> getCacheInfo(AsyncContext context);
 
     /**
      * Evict alli caches , which are represent in getCacheInfo list.
+     *
+     * @param context web service context
      */
-    void evictCache();
+    void evictCache(AsyncContext context);
 
     /**
-     * Get real path to image vault on shop application. Need to allow have different web  context for yes-shop
+     * Get real path to image vault on shop application. Need to allow have different web  context for yes-shop.
+     *
+     * @param context web service context
      * @return  real path to image vault
      * @throws IOException    in case of io error.
      */
-    String getImageVaultPath() throws IOException;
+    String getImageVaultPath(AsyncContext context) throws IOException;
 
 
 }

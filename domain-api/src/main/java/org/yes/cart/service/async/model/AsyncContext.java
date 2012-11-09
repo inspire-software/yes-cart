@@ -16,23 +16,33 @@
 
 package org.yes.cart.service.async.model;
 
-import org.yes.cart.service.async.JobStatusListener;
+import java.util.Map;
 
 /**
+ * Web services context. This is used to hold special values (such as authentication
+ * details) when we run web service in the background.
+ *
  * User: denispavlov
- * Date: 12-08-05
- * Time: 2:42 PM
+ * Date: 12-11-09
+ * Time: 8:31 AM
  */
-public interface JobContext extends AsyncContext {
+public interface AsyncContext {
+
+    String USERNAME = "USERNAME";
+    String CREDENTIALS = "CREDENTIALS";
+    String WEB_SERVICE_URI = "URI";
 
     /**
-     * @return listener for this job
+     * Convenience method for retrieving attributes.
+     *
+     * @param name name of the attribute
+     * @param <T> cast
+     * @return attribute value or null.
      */
-    JobStatusListener getListener();
+    <T> T getAttribute(String name);
 
     /**
-     * @return true if this task need to be asynchronous
+     * @return context parameters
      */
-    boolean isAsync();
-
+    Map<String, Object> getAttributes();
 }

@@ -16,23 +16,25 @@
 
 package org.yes.cart.service.async.model;
 
-import org.yes.cart.service.async.JobStatusListener;
-
 /**
  * User: denispavlov
- * Date: 12-08-05
- * Time: 2:42 PM
+ * Date: 12-11-09
+ * Time: 10:31 AM
  */
-public interface JobContext extends AsyncContext {
+public interface JobContextKeys {
 
-    /**
-     * @return listener for this job
-     */
-    JobStatusListener getListener();
+    /** file name of the currently imported file */
+    String IMPORT_FILE = "fileName";
+    /** Set of imported file, so that we can archive them. */
+    String IMPORT_FILE_SET = "importedFiles";
+    /** chosen descriptors group */
+    String IMPORT_DESCRIPTOR_GROUP = "descriptorGroup";
+    /** chosen import descriptor path */
+    String IMPORT_DESCRIPTOR_PATH = "pathToImportDescriptor";
+    /** path to import directory. */
+    String IMPORT_DIRECTORY_ROOT = "pathToImportDirectoryRoot";
+    /** path to image vault. */
+    String IMAGE_VAULT_PATH = "pathToImageVault";
 
-    /**
-     * @return true if this task need to be asynchronous
-     */
-    boolean isAsync();
 
 }

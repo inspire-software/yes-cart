@@ -25,6 +25,7 @@ import org.yes.cart.remote.service.ReindexService;
 import org.yes.cart.remote.service.RemoteBackdoorService;
 import org.yes.cart.remote.service.RemoteProductCategoryService;
 import org.yes.cart.service.dto.DtoProductCategoryService;
+import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -120,7 +121,7 @@ public class RemoteProductCategoryServiceImpl
      */
     public void remove(long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         try {
-            remoteBackdoorService.reindexProduct(this.getById(id).getProductId());
+            remoteBackdoorService.reindexProduct(new AsyncFlexContextImpl(), this.getById(id).getProductId());
         } catch (Exception e) {
             LOG.error("Cant reindex product which was referenced by product category record with id  " + id, e);
         }

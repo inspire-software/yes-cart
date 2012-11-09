@@ -30,23 +30,18 @@ import org.yes.cart.service.async.JobStatusListener;
 public interface BulkImportService extends ImportService {
 
     /**
-     * Set path to import descriptor.
-     *
-     * @param pathToImportDescriptor path to use.
-     */
-    void setPathToImportDescriptor(String pathToImportDescriptor);
-
-    /**
      * Import single tuple of data. This method can be called recursive in case
      * of cumulative imports.
      *
      * @param statusListener   status listener
      * @param tuple             single line from csv file
+     * @param importDescriptorPath file path where the import descriptor originated from
      * @param importDescriptor import descriptor
      * @param masterObject     optional master object if found sub import
      */
     void doImport(JobStatusListener statusListener,
                   ImportTuple tuple,
+                  String importDescriptorPath,
                   ImportDescriptor importDescriptor,
                   Object masterObject);
 

@@ -16,9 +16,7 @@
 
 package org.yes.cart.bulkimport.service;
 
-import org.yes.cart.service.async.JobStatusListener;
-
-import java.util.Set;
+import org.yes.cart.service.async.model.JobContext;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -41,11 +39,10 @@ public interface ImportService {
     /**
      * Perform bulk import.
      *
-     * @param listener   error report place holder
-     * @param importedFiles imported files
-     * @param fileName optional file  name
+     * @param context job context of this import.
+     *
      * @return {@link BulkImportResult}
      */
-    BulkImportResult doImport(JobStatusListener listener, Set<String> importedFiles, String fileName, String pathToImportFolder);
+    BulkImportResult doImport(JobContext context);
 
 }

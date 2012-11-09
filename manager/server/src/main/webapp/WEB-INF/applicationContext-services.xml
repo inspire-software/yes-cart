@@ -468,10 +468,8 @@
 
     <bean id="productIndexExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
         <description>
-            Thread pool for bulk imports since they may be slow.
+            Thread pool (1,max int) forproduct indexing since they may be slow.
         </description>
-        <property name="corePoolSize" value="1" />
-        <property name="maxPoolSize" value="2" />
     </bean>
 
     <bean id="reindexService"
@@ -507,10 +505,8 @@
 
     <bean id="bulkImportExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
         <description>
-            Thread pool for bulk imports since they may be slow.
+            Thread pool (1, max int) for bulk imports since they may be slow.
         </description>
-        <property name="corePoolSize" value="1" />
-        <property name="maxPoolSize" value="2" />
     </bean>
 
 
