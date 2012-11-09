@@ -24,9 +24,11 @@ import org.yes.cart.remote.service.RemoteBackdoorService;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.SingletonJobRunner;
 import org.yes.cart.service.async.impl.JobStatusListenerImpl;
+import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.async.model.JobContext;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.async.model.impl.JobContextImpl;
+import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -67,7 +69,7 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
                 listener.notifyPing();
                 try {
                     listener.notifyMessage("Indexing stared");
-                    final int cnt = remoteBackdoorService.reindexAllProducts();
+                    final int cnt = remoteBackdoorService.reindexAllProducts(ctx);
                     // TODO: Need ping here too as if we get a lot of products we really only rely on the timeout
                     //       In fact we have the WS timeout, Listener timeout - so this needs to be refactored
                     //       We need a common indexing interface where we can pass in listener (or can get
@@ -90,7 +92,7 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
      * @return quantity product in created index.
      */
     public String reindexAllProducts() {
-        return doJob(new JobContextImpl(false, new JobStatusListenerImpl(10000, 300000)));
+        return doJob(createAsyncContext());
     }
 
     /**
@@ -100,10 +102,12 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
      * @return quantity product in created index.
      */
     public int reindexProduct(long pk) {
-        return remoteBackdoorService.reindexProduct(pk);
+        return remoteBackdoorService.reindexProduct(createAsyncContext(), pk);
     }
 
-
-
+    private JobContext createAsyncContext() {
+        final AsyncContext flex = new AsyncFlexContextImpl();
+        return new JobContextImpl(false, new JobStatusListenerImpl(10000, 300000), flex.getAttributes());
+    }
 
 }

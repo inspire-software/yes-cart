@@ -16,10 +16,9 @@
 
 package org.yes.cart.remote.service.impl;
 
-import flex.messaging.FlexContext;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
 import org.yes.cart.remote.service.RemoteBackdoorService;
+import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.web.service.ws.BackdoorService;
 import org.yes.cart.web.service.ws.client.BackdoorServiceClientFactory;
 
@@ -35,48 +34,48 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
 
 
     /** {@inheritDoc} */
-    public int reindexAllProducts() {
-        return getBackdoorService(300000).reindexAllProducts();
+    public int reindexAllProducts(final AsyncContext context) {
+        return getBackdoorService(context, 300000).reindexAllProducts();
     }
 
     /** {@inheritDoc} */
-    public int reindexProduct(final long productPk) {
-        return getBackdoorService(60000).reindexProduct(productPk);
+    public int reindexProduct(final AsyncContext context, final long productPk) {
+        return getBackdoorService(context, 60000).reindexProduct(productPk);
     }
 
     /** {@inheritDoc} */
-    public int reindexProducts(final long[] productPks) {
-        return getBackdoorService(60000).reindexProducts(productPks);
+    public int reindexProducts(final AsyncContext context, final long[] productPks) {
+        return getBackdoorService(context, 60000).reindexProducts(productPks);
     }
 
     /** {@inheritDoc} */
-    public List<Object[]> sqlQuery(final String query) {
-        return getBackdoorService(60000).sqlQuery(query);
+    public List<Object[]> sqlQuery(final AsyncContext context, final String query) {
+        return getBackdoorService(context, 60000).sqlQuery(query);
     }
 
     /** {@inheritDoc} */
-    public List<Object[]> hsqlQuery(final String query) {
-        return getBackdoorService(60000).hsqlQuery(query);
+    public List<Object[]> hsqlQuery(final AsyncContext context, final String query) {
+        return getBackdoorService(context, 60000).hsqlQuery(query);
     }
 
     /** {@inheritDoc} */
-    public List<Object[]> luceneQuery(final String query) {
-        return getBackdoorService(60000).luceneQuery(query);
+    public List<Object[]> luceneQuery(final AsyncContext context, final String query) {
+        return getBackdoorService(context, 60000).luceneQuery(query);
     }
 
     /** {@inheritDoc} */
-    public List<CacheInfoDTOImpl> getCacheInfo() {
-        return getBackdoorService(60000).getCacheInfo();
+    public List<CacheInfoDTOImpl> getCacheInfo(final AsyncContext context) {
+        return getBackdoorService(context, 60000).getCacheInfo();
 }
 
     /** {@inheritDoc} */
-    public void evictCache() {
-         getBackdoorService(60000).evictCache();
+    public void evictCache(final AsyncContext context) {
+         getBackdoorService(context, 60000).evictCache();
     }
 
     /** {@inheritDoc} */
-    public String getImageVaultPath() throws IOException {
-        return getBackdoorService(60000).getImageVaultPath();
+    public String getImageVaultPath(final AsyncContext context) throws IOException {
+        return getBackdoorService(context, 60000).getImageVaultPath();
     }
 
     private BackdoorServiceClientFactory backdoorServiceClientFactory = null;
@@ -93,20 +92,22 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
 
     /**
      * Get actual remote service.
+     *
+     * @param context web service context.
      * @param timeout  timeout for operation.
      * @return  {@BackdoorService}
      */
-    private  BackdoorService getBackdoorService(final long timeout) {
+    private  BackdoorService getBackdoorService(final AsyncContext context, final long timeout) {
 
 
-        String userName =  ((UsernamePasswordAuthenticationToken) FlexContext.getUserPrincipal()).getName();
-        //String password = (String) ((UsernamePasswordAuthenticationToken) FlexContext.getUserPrincipal()).getCredentials();
-        String password = (String) FlexContext.getFlexSession().getAttribute("pwd");
+        String userName = context.getAttribute(AsyncContext.USERNAME);
+        String password = context.getAttribute(AsyncContext.CREDENTIALS);
+        String uri = context.getAttribute(AsyncContext.WEB_SERVICE_URI);
 
         return getBackdoorServiceClientFactory().getBackdoorService(
                 userName,
                 password,
-                "http://localhost:8080/yes-shop/services/backdoor", timeout);  //TODO move to config v2 ?
+                uri, timeout);  //TODO move to config v2 ?
 
     }
 

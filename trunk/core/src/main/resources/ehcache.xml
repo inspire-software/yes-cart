@@ -14,7 +14,8 @@
   ~    limitations under the License.
   -->
 
-<ehcache>
+<ehcache updateCheck="false">
+
     <defaultCache
             maxElementsInMemory="10000"
             overflowToDisk="false"

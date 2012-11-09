@@ -16,7 +16,6 @@
 
 package org.yes.cart.bulkimport.image.impl;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -26,6 +25,8 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.async.JobStatusListener;
+import org.yes.cart.service.async.model.JobContext;
+import org.yes.cart.service.async.model.JobContextKeys;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.ImageService;
 
@@ -51,34 +52,11 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
 
     private final ImageService imageService;
 
-    private String pathToImportFolder;
-
     private final Pattern pattern;
 
     private final String regExp;
 
     private final String filePatterntRegExp;
-
-    private String pathToRepository;
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setPathToRepository(final String pathToRepository) {
-
-        final String repoPath;
-        if (File.separatorChar == '/') {
-            repoPath = pathToRepository.replace('\\', '/');
-        } else {
-            repoPath = pathToRepository.replace('/', '\\');
-        }
-
-        if (repoPath.endsWith(File.separator)) {
-            this.pathToRepository = repoPath;
-        } else {
-            this.pathToRepository = repoPath + File.separator;
-        }
-    }
 
     /**
      * Construct bilk import service.
@@ -101,28 +79,25 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
         this.filePatterntRegExp = filePatterntRegExp;
     }
 
-
     /**
      * {@inheritDoc}
      */
-    public void setPathToImportFolder(final String pathToImportFolder) {
-        this.pathToImportFolder = pathToImportFolder;
-    }
+    public BulkImportResult doImport(final JobContext context) {
 
-    /**
-     * {@inheritDoc}
-     */
-    public BulkImportResult doImport(final JobStatusListener statusListener, final Set<String> importedFiles,
-                                     final String fileName, final String importFolder) {
+        final JobStatusListener statusListener = context.getListener();
+        final Set<String> importedFiles = context.getAttribute(JobContextKeys.IMPORT_FILE_SET);
+        final String fileName = context.getAttribute(JobContextKeys.IMPORT_FILE);
+        final String importFolder = context.getAttribute(JobContextKeys.IMPORT_DIRECTORY_ROOT);
+        final String imageVault = context.getAttribute(JobContextKeys.IMAGE_VAULT_PATH);
 
         String info = MessageFormat.format(
                 "start images import with {0} path and {1} file mask",
-                pathToImportFolder,
+                importFolder,
                 regExp);
         statusListener.notifyMessage(info);
         LOG.info(info);
         File[] files = getFilesToImport(
-                StringUtils.isNotBlank(importFolder) ? importFolder : pathToImportFolder,
+                importFolder,
                 filePatterntRegExp,
                 fileName);
         if (files != null) {
@@ -132,7 +107,7 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
             statusListener.notifyMessage(info);
             LOG.info(info);
             for (File file : files) {
-                doImport(file, statusListener, importedFiles);
+                doImport(file, statusListener, importedFiles, imageVault);
             }
 
         }
@@ -149,8 +124,9 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
      * @param file          file to import
      * @param statusListener error report
      * @param importedFiles add file to this set if imported it successfuly imported.
+     * @param pathToRepository path to image vault
      */
-    void doImport(final File file, final JobStatusListener statusListener, final Set<String> importedFiles) {
+    void doImport(final File file, final JobStatusListener statusListener, final Set<String> importedFiles, final String pathToRepository) {
         final String fileName = file.getName();
         Matcher matcher = pattern.matcher(fileName);
         if (matcher.find()) {

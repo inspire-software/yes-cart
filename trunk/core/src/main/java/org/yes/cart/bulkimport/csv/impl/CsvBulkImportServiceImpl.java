@@ -20,9 +20,6 @@ package org.yes.cart.bulkimport.csv.impl;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.support.GenericConversionService;
 import org.yes.cart.bulkimport.csv.CsvFileReader;
@@ -38,6 +35,8 @@ import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.service.async.JobStatusListener;
+import org.yes.cart.service.async.model.JobContext;
+import org.yes.cart.service.async.model.JobContextKeys;
 import org.yes.cart.stream.xml.XStreamProvider;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.util.misc.ExceptionUtil;
@@ -59,21 +58,17 @@ import java.util.*;
  * example - shop and shop url, in this case {@link ImportColumn} has a
  * {@link ImportDescriptor}. At this moment rows in cell are split by comma by default.
  */
-public class CsvBulkImportServiceImpl extends AbstractImportService implements BulkImportService, ApplicationContextAware {
+public class CsvBulkImportServiceImpl extends AbstractImportService implements BulkImportService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private GenericDAO<Object, Long> genericDAO;
-
-    private String pathToImportDescriptor;
 
     private GenericConversionService extendedConversionService;
 
     private PropertyDescriptor propertyDescriptor;
 
     private XStreamProvider<CsvImportDescriptor> importDescriptorXStreamProvider;
-
-    private ApplicationContext applicationContext;
 
     private ValueAdapter valueDataAdapter;
     private ValueAdapter valueStringAdapter = new CsvPlainStringValueAdapter();
@@ -91,15 +86,6 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
         valueDataAdapter = new CsvImportValueAdapter(extendedConversionService);
     }
 
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setPathToImportDescriptor(final String pathToImportDescriptor) {
-        this.pathToImportDescriptor = pathToImportDescriptor;
-    }
-
-
     /**
      * Perform bulk import.
      * Service has s set of import descriptors, eac of them may perform the import
@@ -107,13 +93,17 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
      * not empty, than only one may be imported instead of set, that satisfy
      * regular expressions.
      *
-     * @param statusListener error report place holder
-     * @param importedFiles imported files
-     * @param fileName      optional file  name
+     * @param context job context
      * @return {@link BulkImportResult}
      */
-    public BulkImportResult doImport(final JobStatusListener statusListener, final Set<String> importedFiles,
-                                     final String fileName, final String pathToImportFolder) {
+    public BulkImportResult doImport(final JobContext context) {
+
+
+        final JobStatusListener statusListener = context.getListener();
+        final Set<String> importedFiles = context.getAttribute(JobContextKeys.IMPORT_FILE_SET);
+        final String fileName = context.getAttribute(JobContextKeys.IMPORT_FILE);
+        final String pathToImportFolder = context.getAttribute(JobContextKeys.IMPORT_DIRECTORY_ROOT);
+        final String pathToImportDescriptor = context.getAttribute(JobContextKeys.IMPORT_DESCRIPTOR_PATH);
 
         try {
             entityCache.clear();
@@ -145,7 +135,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
                     statusListener.notifyError(msgErr);
                     return BulkImportResult.ERROR;
                 }
-                doImport(statusListener, filesToImport, csvImportDescriptor, importedFiles);
+                doImport(statusListener, filesToImport, pathToImportDescriptor, csvImportDescriptor, importedFiles);
             }
         } catch (Exception e) {
             final String msgError = MessageFormat.format(
@@ -166,15 +156,17 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
      *
      * @param statusListener      error report
      * @param filesToImport       array of files to import
+     * @param pathToImportDescriptor file path where the import descriptor originated from
      * @param csvImportDescriptor import descriptor.
      * @param importedFiles       imported files.
      */
     void doImport(final JobStatusListener statusListener,
                   final File[] filesToImport,
+                  final String pathToImportDescriptor,
                   final CsvImportDescriptor csvImportDescriptor,
                   final Set<String> importedFiles) {
         for (File fileToImport : filesToImport) {
-            doImport(statusListener, fileToImport, csvImportDescriptor);
+            doImport(statusListener, fileToImport, pathToImportDescriptor, csvImportDescriptor);
             importedFiles.add(fileToImport.getAbsolutePath());
         }
     }
@@ -184,9 +176,13 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
      *
      * @param statusListener      error report
      * @param fileToImport        array of files to import
+     * @param pathToImportDescriptor file path where the import descriptor originated from
      * @param csvImportDescriptor import descriptor.
      */
-    void doImport(final JobStatusListener statusListener, final File fileToImport, final CsvImportDescriptor csvImportDescriptor) {
+    void doImport(final JobStatusListener statusListener,
+                  final File fileToImport,
+                  final String pathToImportDescriptor,
+                  final CsvImportDescriptor csvImportDescriptor) {
 
         final String msgInfoImp = MessageFormat.format("import file : {0}", fileToImport.getAbsolutePath());
         statusListener.notifyMessage(msgInfoImp);
@@ -207,8 +203,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
             String[] line;
             while ((line = csvFileReader.readLine()) != null) {
                 final CsvImportTuple tuple = new CsvImportTupleImpl(filename, lineNumber++, line);
-                /*applicationContext.getBean("bulkImportServiceImpl", BulkImportService.class).*/
-                doImport(statusListener, tuple, csvImportDescriptor, null);
+                doImport(statusListener, tuple, pathToImportDescriptor, csvImportDescriptor, null);
             }
             final String msgInfoLines = MessageFormat.format("total data lines : {0}",
                     (csvImportDescriptor.getImportFileDescriptor().isIgnoreFirstLine() ? csvFileReader.getRowsRead() - 1 : csvFileReader.getRowsRead()));
@@ -248,11 +243,13 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
      *
      * @param statusListener   error report
      * @param tuple            single line from csv file
+     * @param pathToImportDescriptor file path where the import descriptor originated from
      * @param descriptor       import descriptor
      * @param masterObject     optional master object if found sub import
      */
     public void doImport(final JobStatusListener statusListener,
                          final ImportTuple tuple,
+                         final String pathToImportDescriptor,
                          final ImportDescriptor descriptor,
                          final Object masterObject) {
         Object object = null;
@@ -274,8 +271,8 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
                 fillEntityForeignKeys(tuple, object, importDescriptor.getImportColumns(FieldTypeEnum.FK_FIELD), masterObject, importDescriptor);
 
                 genericDAO.saveOrUpdate(object);
-                performSubImport(statusListener, tuple, importDescriptor, object, importDescriptor.getImportColumns(FieldTypeEnum.SLAVE_INLINE_FIELD));
-                performSubImport(statusListener, tuple, importDescriptor, object, importDescriptor.getImportColumns(FieldTypeEnum.SLAVE_TUPLE_FIELD));
+                performSubImport(statusListener, tuple, pathToImportDescriptor, importDescriptor, object, importDescriptor.getImportColumns(FieldTypeEnum.SLAVE_INLINE_FIELD));
+                performSubImport(statusListener, tuple, pathToImportDescriptor, importDescriptor, object, importDescriptor.getImportColumns(FieldTypeEnum.SLAVE_TUPLE_FIELD));
                 genericDAO.flushClear();
 
             }
@@ -319,6 +316,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
 
     private void performSubImport(final JobStatusListener statusListener,
                                   final ImportTuple tuple,
+                                  final String pathToImportDescriptor,
                                   final ImportDescriptor importDescriptor,
                                   final Object object,
                                   final Collection<ImportColumn> slaves) {
@@ -326,9 +324,9 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
             final List<ImportTuple> subTuples = tuple.getSubTuples(importDescriptor, slaveTable, valueDataAdapter);
             CsvImportDescriptor innerCsvImportDescriptor = (CsvImportDescriptor) slaveTable.getImportDescriptor();
             for (ImportTuple subTuple : subTuples) {
-                /*applicationContext.getBean("bulkImportServiceImpl", BulkImportService.class).*/
                 doImport(statusListener,
                         subTuple,
+                        pathToImportDescriptor,
                         innerCsvImportDescriptor,
                         object);
             }
@@ -553,10 +551,4 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
         return importDescriptorXStreamProvider.fromXML(is);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
 }

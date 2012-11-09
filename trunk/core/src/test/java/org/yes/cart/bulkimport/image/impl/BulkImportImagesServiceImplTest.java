@@ -109,7 +109,6 @@ public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
     private BulkImportImagesServiceImpl getBulkImportService() {
         BulkImportImagesServiceImpl service = (BulkImportImagesServiceImpl)
                 createContext().getBean("bulkImportImageService");
-        service.setPathToImportFolder("/zzz/yyy/");
         return service;
 
     }
@@ -229,7 +228,8 @@ public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
         service.doImport(
                 new File("src/test/resources/import/im-image-file_SOBOT-BEER_c.jpeg"),
                 listener,
-                new HashSet<String>());
+                new HashSet<String>(),
+                "");
 
         clearCache();
         product = productService.getProductById(10000L, true);

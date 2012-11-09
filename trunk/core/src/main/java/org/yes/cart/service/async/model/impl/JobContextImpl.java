@@ -20,6 +20,7 @@ import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobContext;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -31,23 +32,30 @@ public class JobContextImpl implements JobContext {
 
     private final boolean async;
     private final JobStatusListener listener;
-    private final Map<String, Object> parameters;
+    private final Map<String, Object> attributes = new HashMap<String, Object>();
 
     public JobContextImpl(final boolean async, final JobStatusListener listener) {
         this.async = async;
         this.listener = listener;
-        this.parameters = Collections.emptyMap();
     }
 
-    public JobContextImpl(final boolean async, final JobStatusListener listener, final Map<String, Object> parameters) {
+    public JobContextImpl(final boolean async, final JobStatusListener listener, final Map<String, Object> attributes) {
         this.async = async;
         this.listener = listener;
-        this.parameters = parameters;
+        this.attributes.putAll(attributes);
     }
 
     /** {@inheritDoc} */
-    public Map<String, Object> getParameters() {
-        return parameters;
+    public <T> T getAttribute(final String name) {
+        if (this.attributes.containsKey(name)) {
+            return (T) this.attributes.get(name);
+        }
+        return null;
+    }
+
+    /** {@inheritDoc} */
+    public Map<String, Object> getAttributes() {
+        return Collections.unmodifiableMap(attributes);
     }
 
     /** {@inheritDoc} */

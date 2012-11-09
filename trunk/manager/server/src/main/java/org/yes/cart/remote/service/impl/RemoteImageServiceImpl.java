@@ -16,15 +16,14 @@
 
 package org.yes.cart.remote.service.impl;
 
-import flex.messaging.FlexContext;
 import org.yes.cart.domain.dto.SeoImageDTO;
-import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.remote.service.RemoteBackdoorService;
 import org.yes.cart.remote.service.RemoteImageService;
 import org.yes.cart.service.dto.DtoImageService;
 import org.yes.cart.service.dto.DtoShopService;
+import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
 
 import java.io.File;
 import java.io.IOException;
@@ -67,7 +66,10 @@ public class RemoteImageServiceImpl extends AbstractRemoteService<SeoImageDTO> i
             final byte[] imgBody,
             final String storagePrefix) throws IOException {
 
-        return addImageToRepository(fullFileName, code, imgBody, storagePrefix, getRealPathPrefix());
+        // TODO: this is quite strange that we have this method on dtoImageService but we do not use it since it puts
+        // TODO: a blank string into path? maybe we need to revise all this??
+        final String realPath = remoteBackdoorService.getImageVaultPath(new AsyncFlexContextImpl()) + File.separator;
+        return addImageToRepository(fullFileName, code, imgBody, storagePrefix, realPath);
     }
 
     /**
@@ -84,19 +86,16 @@ public class RemoteImageServiceImpl extends AbstractRemoteService<SeoImageDTO> i
     }
 
     /**
-     * @return path to external web context
-     */
-    private String getRealPathPrefix() throws IOException {
-        return remoteBackdoorService.getImageVaultPath() + File.separator;
-    }
-
-    /**
      * {@inheritDoc}
      */
     public byte[] getImageAsByteArray(final String fileName,
                                       final String code,
                                       final String storagePrefix) throws IOException {
-        return getImageAsByteArray(fileName, code, storagePrefix, getRealPathPrefix());
+
+        // TODO: this is quite strange that we have this method on dtoImageService but we do not use it since it puts
+        // TODO: a blank string into path? maybe we need to revise all this??
+        final String realPath = remoteBackdoorService.getImageVaultPath(new AsyncFlexContextImpl()) + File.separator;
+        return getImageAsByteArray(fileName, code, storagePrefix, realPath);
     }
 
     /**

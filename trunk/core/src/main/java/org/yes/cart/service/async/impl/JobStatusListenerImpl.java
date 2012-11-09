@@ -48,7 +48,8 @@ public class JobStatusListenerImpl implements JobStatusListener {
     private long lastMsgTimestamp = System.currentTimeMillis();
     private boolean timedOut = false;
 
-    private final StringBuilder report = new StringBuilder();
+    private final StringBuffer report = new StringBuffer();
+    private boolean reportIsCut = false;
 
     private String pingMsg;
 
@@ -79,23 +80,21 @@ public class JobStatusListenerImpl implements JobStatusListener {
             state = JobStatus.State.INPROGRESS;
         }
 
-        final StringBuilder reportOut = adjustReportSize(report, pingMsg, reportMaxChars);
+        final String reportOut = formatReport(report, pingMsg, reportIsCut);
 
-        return new JobStatusImpl(getJobToken(), state, result, reportOut.toString());
+        return new JobStatusImpl(getJobToken(), state, result, reportOut);
     }
 
-    private StringBuilder adjustReportSize(final StringBuilder report, final String pingMsg, final int reportMaxChars) {
+    private String formatReport(final StringBuffer report, final String pingMsg, final boolean reportIsCut) {
         final StringBuilder reportOut = new StringBuilder();
-        if (report.length() > reportMaxChars) {
+        if (reportIsCut) {
             reportOut.append("\n\n...\n\n");
-            reportOut.append(report.subSequence(report.length() - reportMaxChars, report.length()));
-        } else {
-            reportOut.append(report.subSequence(0, report.length()));
         }
+        reportOut.append(report);
         if (pingMsg != null) {
             reportOut.append("\n> ").append(pingMsg);
         }
-        return reportOut;
+        return reportOut.toString();
     }
 
     /** {@inheritDoc} */
@@ -114,7 +113,7 @@ public class JobStatusListenerImpl implements JobStatusListener {
         if (result != null) {
             throw new IllegalArgumentException("Job " + token.toString() + " has finished and cannot be updated");
         }
-        report.append("INFO: ").append(message).append('\n');
+        append(report, "INFO: ", message, "\n");
         notifyPing();
     }
 
@@ -123,7 +122,7 @@ public class JobStatusListenerImpl implements JobStatusListener {
         if (result != null) {
             throw new IllegalArgumentException("Job " + token.toString() + " has finished and cannot be updated");
         }
-        report.append("WARNING: ").append(warning).append('\n');
+        append(report, "WARNING: ", warning, "\n");
         notifyPing();
         warn++;
     }
@@ -133,7 +132,7 @@ public class JobStatusListenerImpl implements JobStatusListener {
         if (result != null) {
             throw new IllegalArgumentException("Job " + token.toString() + " has finished and cannot be updated");
         }
-        report.append("ERROR: ").append(error).append('\n');
+        append(report, "ERROR: ", error, "\n");
         notifyPing();
         err++;
     }
@@ -146,6 +145,15 @@ public class JobStatusListenerImpl implements JobStatusListener {
         this.result = result;
         this.pingMsg = null; // we have completed the job, clear ping message
         notifyPing();
+    }
+
+    private void append(StringBuffer report, String ... text) {
+        for (String part : text) {
+            report.append(part);
+        }
+        if (report.length() > reportMaxChars) {
+            report.delete(0, report.length() - reportMaxChars);
+        }
     }
 
     /** {@inheritDoc} */
