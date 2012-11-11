@@ -397,10 +397,13 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCappPaymentGatewayImp
                 CS_PROXY_HOST, CS_PROXY_PORT, CS_PROXY_USER, CS_PROXY_PASSWORD
         }) {
             final String value = getParameterValue(paramLabel);
-            if (value != null) {
+            if ( StringUtils.isNotBlank(value) ) {
                 props.put(paramLabel, value);
             }
         }
+
+
+
         return props;
     }
 

@@ -115,9 +115,17 @@ public class PaymentPage extends AbstractWebPage {
                         WicketUtil.getHttpServletRequest().getParameterMap()
                     );
 
-            addOrReplace(
-                    createPositiveResultFragment()
-            );
+            if (result) {
+                addOrReplace(
+                        createPositiveResultFragment()
+                );
+
+            }   else {
+                addOrReplace(
+                        createNegativePaymentResultFragment()
+                );
+            }
+
 
         } catch (OrderItemAllocationException e) {
 
