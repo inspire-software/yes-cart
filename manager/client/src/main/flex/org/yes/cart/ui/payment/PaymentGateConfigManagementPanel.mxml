@@ -100,6 +100,7 @@
                                                    click="openPopup();"/>
                                         <mx:Script><![CDATA[
                                             import mx.controls.Alert;
+                                            import mx.controls.Button;
                                             import mx.controls.DataGrid;
                                             import mx.core.FlexGlobals;
                                             import mx.core.IFlexDisplayObject;
