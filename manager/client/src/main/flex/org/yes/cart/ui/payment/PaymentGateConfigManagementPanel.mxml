@@ -124,6 +124,13 @@
                                                 popUp.windowTitle = data.name;
                                                 popUp.value = data.value;
                                                 popUp.setInformation(data.description);
+
+                                                if (clz == SimpleTextDialog)  {   //not localizable
+                                                    (popUp as SimpleTextDialog).displayValFormItem.visible = false;
+                                                    (popUp as SimpleTextDialog).displayValFormItem.includeInLayout = false;
+
+                                                }
+
                                                 var btnSave:Button = popUp.getButtonSave();
 
                                                 btnSave.addEventListener(MouseEvent.CLICK, onSaveBtnclick);
