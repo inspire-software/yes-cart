@@ -32,9 +32,14 @@
         import org.yes.cart.impl.AttributeDTOImpl;
         import org.yes.cart.impl.CustomerDTOImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
+        import org.yes.cart.ui.attributes.valuedialog.ValueDialog;
         import org.yes.cart.util.DomainUtils;
 
         private var _customer:CustomerDTOImpl;
+
+        override public function isLocalizationEnabled(popUp:ValueDialog):Boolean {
+            return false;
+        }
 
         public function get customer():CustomerDTOImpl {
             return _customer;
