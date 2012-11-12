@@ -35,10 +35,15 @@
         import org.yes.cart.impl.AttributeDTOImpl;
 
         import org.yes.cart.shopmanager.ShopManagerGlobal;
+        import org.yes.cart.ui.attributes.valuedialog.ValueDialog;
         import org.yes.cart.util.DomainUtils;
 
         private var _attributeGroup:String;
         private var _entityCode:String;
+
+         public  function isLocalizationEnabled(popUp:ValueDialog):Boolean {
+            return true;
+        }
 
         protected function onEntitySet(attributeGroup:String):void {
 
@@ -273,6 +278,13 @@
                                         popUp.value = data.val;
                                         popUp.displayValues = data.displayVals;
                                         var btnSave:Button = popUp.getButtonSave();
+                                        if (popUp is SimpleTextDialog && !outerDocument.isLocalizationEnabled(popUp)) {
+
+                                            //not localizable
+                                            (popUp as SimpleTextDialog).displayValFormItem.visible = false;
+                                            (popUp as SimpleTextDialog).displayValFormItem.includeInLayout = false;
+
+                                        }
                                         if (popUp is ImageDialog) {
 
                                             (popUp as ImageDialog).dataReadyCallbackFunction = onSaveBtnclick;
