@@ -48,11 +48,7 @@ public class ShopDTOImpl {
 
 
     public function toString():String {
-        return "ShopDTOImpl{code=" + String(code) +
-               ",name=" + String(name) +
-               ",description=" + String(description) +
-               ",fspointer=" + String(fspointer) +
-               ",shopId=" + String(shopId) + "}";
+        return String(name);
     }
 }
 }

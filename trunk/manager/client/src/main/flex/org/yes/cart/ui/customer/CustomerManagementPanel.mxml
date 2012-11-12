@@ -52,9 +52,9 @@
 
         private var TAB_ATTRIB_IDX:int = 0;
         private var TAB_ORDERS_IDX:int = 1;
-        private var TAB_WISHLIST_IDX:int = 2;
-        private var TAB_ADDRESS_IDX:int = 3;
-        private var TAB_SHOP_IDX:int = 4;
+        //private var TAB_WISHLIST_IDX:int = 2;
+        private var TAB_ADDRESS_IDX:int = 2;
+        private var TAB_SHOP_IDX:int = 3;
 
 
         [Bindable]
@@ -90,11 +90,11 @@
                         break;
                     }
 
-                    case TAB_WISHLIST_IDX:
+                    /*case TAB_WISHLIST_IDX:
                     {
                         wishListTabSelected();
                         break;
-                    }
+                    } */
 
                     case TAB_ADDRESS_IDX:
                     {
@@ -137,13 +137,13 @@
             customerAddresses.customerId = selectedCustomer.customerId;
         }
 
-        private function wishListTabSelected():void {
+        /*private function wishListTabSelected():void {
             Debug.trace("INFO Customer wish list tab selected for customer id" + selectedCustomer.customerId);
             var panel:CustomerWishListPanel = new CustomerWishListPanel();
             panel.customerId = selectedCustomer.customerId;
             customerWishlist.removeAllChildren();
             customerWishlist.addChild(panel);
-        }
+        }*/
 
         private function onApplyFilterClick(event:MouseEvent):void {
 
@@ -259,9 +259,11 @@
 
             <cust:CustomerAttributesPanel id="customerSummary"/>
             <cust:CustomerOrdersPanel id="customerOrders"/>
+<!--
             <mx:Canvas id="customerWishlist"
                        label="@Resource(bundle='CustomerManagementPanel',key='customerWishlist')"
                        width="100%" height="100%"/>
+-->
             <cust:AddressPanel id="customerAddresses"
                                label="@Resource(bundle='CustomerManagementPanel',key='customerAddresses')"
                                width="100%" height="100%"/>
