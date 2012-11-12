@@ -74,6 +74,8 @@
     </mx:RemoteObject>
 
 
+
+
     <mx:ArrayCollection id="attrValues"/>
 
     <mx:VBox width="100%" height="100%">
@@ -200,7 +202,18 @@
                                        labelFunction="statusLabelFunction"/>
                     <mx:DataGridColumn showDataTips="true" wordWrap="true" width="100"
                                        headerText="@Resource(bundle='CustomerOrderPanel',key='date')"
-                                       dataField="orderTimestamp"/>
+                                       dataField="orderTimestamp">
+                        <mx:itemRenderer>
+                            <mx:Component>
+                                <mx:VBox>
+                                    <mx:DateFormatter id="formatDateTime0" formatString="YYYY-MM-DD" ></mx:DateFormatter>
+                                    <mx:DateFormatter id="formatDateTime1" formatString="J:NN" ></mx:DateFormatter>
+                                    <mx:Label text="{formatDateTime0.format(data.orderTimestamp)}"/>
+                                    <mx:Label text="{formatDateTime1.format(data.orderTimestamp)}"/>
+                                </mx:VBox>
+                            </mx:Component>
+                        </mx:itemRenderer>
+                    </mx:DataGridColumn>
                     <mx:DataGridColumn showDataTips="true" width="100"
                                        headerText="@Resource(bundle='CustomerOrderPanel',key='actions')">
                         <mx:itemRenderer>
