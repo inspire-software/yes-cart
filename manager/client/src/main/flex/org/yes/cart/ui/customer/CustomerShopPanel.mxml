@@ -33,8 +33,6 @@
         public var customerId:Number;
 
         public function init():void {
-            //remoteAddressService.getAddressesByCustomerId(customerId);
-            //jdbc:derby://localhost:1527/yes;create=true
             remoteShopService.getAll().addResponder(
                     new AsyncResponder(
                             readCustomerShop,
@@ -86,7 +84,7 @@
             try {
 
                 if (item != null) {
-                    return (item as ShopDTOImpl).name;
+                    return item.toString();
 
                 } else {
                     return "" + item;
@@ -100,8 +98,8 @@
                     e2 = "yessss";
 
                 }
-                var emsg:String = error.toString() + " --- " + item + "   ++++ " + e2;
-                Alert.show("eoorrroor", emsg);
+                var emsg:String = error.toString() + " --- " + item.toString() + "   ++++ " + e2;
+                Alert.show( emsg, "eoorrroor");
 
 
             }
@@ -148,11 +146,12 @@
             </mx:GridItem>
             <mx:GridItem width="100%" height="100%" verticalAlign="middle" textAlign="center">
                 <mx:VBox width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
-                    <mx:Button enabled="{availableShopList.selectedItem != null}"
+                    <mx:Button width="100"
+                               enabled="{false &amp;&amp; availableShopList.selectedItem != null}"
                                label="@Resource(bundle='CustomerShopPanel',key='assign')"
                                toolTip="@Resource(bundle='CustomerShopPanel',key='assignHint')"
                                click="Alert.show('assign')"/>
-                    <mx:Button enabled="{assignedShopList.selectedItem != null}"
+                    <mx:Button width="100" enabled="{false &amp;&amp; assignedShopList.selectedItem != null}"
                                label="@Resource(bundle='CustomerShopPanel',key='unassign')"
                                toolTip="@Resource(bundle='CustomerShopPanel',key='unassignHint')"
                                click="Alert.show('unassign')"/>
