@@ -463,12 +463,11 @@
                                                labelFunction="deliveryAddrLabelFunction"
                                                wordWrap="true"
                                     />
-                            <mx:DataGridColumn showDataTips="true" width="300"
+                            <mx:DataGridColumn showDataTips="true" width="150"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='actions')">
                                 <mx:itemRenderer>
                                     <mx:Component>
-                                        <mx:VBox horizontalAlign="right">
-                                            <mx:HBox horizontalAlign="right">
+                                            <mx:VBox horizontalAlign="right">
                                                 <mx:Script>
                                                     <![CDATA[
                                                     import mx.controls.Alert;
@@ -606,13 +605,11 @@
                                                     ]]>
                                                 </mx:Script>
 
-                                                <mx:Button width="280" id="deliveryActionButton"
+                                                <mx:Button width="135" id="deliveryActionButton"
                                                            label="{getDeliveryActionLabel(data)}"
                                                            click="callLater(onDeliveryActionButtonClick, new Array(data))"
                                                         >
                                                 </mx:Button>
-                                            </mx:HBox>
-                                            <mx:HBox horizontalAlign="right">
                                                 <mx:Button width="135"
                                                            label="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.ticket')"
                                                            toolTip="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.ticket.hint')"
@@ -623,8 +620,8 @@
                                                            toolTip="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.setrefno.hint')"
                                                            click="callLater(onRefNumberActionButtonClick, new Array(data))"
                                                         />
-                                            </mx:HBox>
-                                        </mx:VBox>
+
+                                            </mx:VBox>
                                     </mx:Component>
                                 </mx:itemRenderer>
                             </mx:DataGridColumn>
