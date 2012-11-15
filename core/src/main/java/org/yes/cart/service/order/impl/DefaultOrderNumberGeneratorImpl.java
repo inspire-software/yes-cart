@@ -37,7 +37,7 @@ public class DefaultOrderNumberGeneratorImpl implements OrderNumberGenerator {
 
     private final GenericDAO<CustomerOrder, Long> customerOrderDao ;
 
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyMMddHHmmss");
     private static long orderSequence;
 
     /**
@@ -69,7 +69,8 @@ public class DefaultOrderNumberGeneratorImpl implements OrderNumberGenerator {
 
     private  long getOrderSequence() {
         if (DefaultOrderNumberGeneratorImpl.orderSequence == -1) {
-           DefaultOrderNumberGeneratorImpl.orderSequence = Long.valueOf(String.valueOf(customerOrderDao.getScalarResultByNamedQuery("ORDERS.COUNT")));
+           DefaultOrderNumberGeneratorImpl.orderSequence = Long.valueOf(
+                   String.valueOf(customerOrderDao.getScalarResultByNamedQuery("ORDERS.COUNT")));
         }
         DefaultOrderNumberGeneratorImpl.orderSequence ++;
         return DefaultOrderNumberGeneratorImpl.orderSequence;

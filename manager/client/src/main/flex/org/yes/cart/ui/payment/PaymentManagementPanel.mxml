@@ -235,7 +235,17 @@
 
                     <mx:DataGridColumn showDataTips="true"
                                        headerText="@Resource(bundle='PaymentManagementPanel',key='orderDate')"
-                                       dataField="orderDate"/>
+                                       editable="false" width="120">
+                        <mx:itemRenderer>
+                            <mx:Component>
+                                <mx:VBox>
+                                    <mx:DateFormatter id="formatDateTime0" formatString="YYYY-MM-DD J:NN" ></mx:DateFormatter>
+                                    <mx:Label text="{formatDateTime0.format(data.orderDate)}"/>
+                                </mx:VBox>
+                            </mx:Component>
+                        </mx:itemRenderer>
+
+                    </mx:DataGridColumn>
 
                     <mx:DataGridColumn showDataTips="true"
                                        headerText="@Resource(bundle='PaymentManagementPanel',key='paymentAmount')"
