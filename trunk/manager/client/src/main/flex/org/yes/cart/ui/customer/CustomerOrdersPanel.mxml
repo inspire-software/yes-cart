@@ -83,7 +83,17 @@
                                    headerText="@Resource(bundle='CustomerOrderPanel',key='status')"
                                    labelFunction="statusLabelFunction"/>
                 <mx:DataGridColumn showDataTips="true" width="50" headerText="@Resource(bundle='CustomerOrderPanel',key='date')"
-                                   dataField="orderTimestamp"/>
+                                   >
+                    <mx:itemRenderer>
+                        <mx:Component>
+                            <mx:VBox>
+                                <mx:DateFormatter id="formatDateTime0" formatString="YYYY-MM-DD J:NN" ></mx:DateFormatter>
+                                <mx:Label text="{formatDateTime0.format(data.orderTimestamp)}"/>
+                            </mx:VBox>
+                        </mx:Component>
+                    </mx:itemRenderer>
+
+                </mx:DataGridColumn>
 
 
             </mx:columns>
