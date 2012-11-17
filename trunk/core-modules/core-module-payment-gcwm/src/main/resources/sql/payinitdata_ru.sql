@@ -21,13 +21,13 @@ VALUES (400, 'googleCheckoutPaymentGateway',
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (401, 'googleCheckoutPaymentGateway',
 'GC_MERCHANT_ID',
-'951076354081708'
+'!!!ЗНАЧЕНИЕ!!!'
 , 'Merchant id', 'Merchant id');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (402, 'googleCheckoutPaymentGateway',
 'GC_MERCHANT_KEY',
-'1DbImipHlIEVsi0liSeA_A'
+'!!!ЗНАЧЕНИЕ!!!'
 , 'Merchant Signature', 'Merchant Signature');
 
 
@@ -50,25 +50,25 @@ VALUES (404, 'googleCheckoutPaymentGateway',
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (450, 'liqPayPaymentGateway',
 'LP_MERCHANT_ID',
-'i6840685592'
+'!!!ЗНАЧЕНИЕ!!!'
 , 'id мерчанта', 'id мерчанта');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (451, 'liqPayPaymentGateway',
 'LP_MERCHANT_KEY',
-'JMkUT6En0uglRAKCK7STlFA7HLk1g6Xk75Wpdf9ogarpET'
+'!!!ЗНАЧЕНИЕ!!!'
 , 'Ключ для подписи', 'Ключ для подписи');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (452, 'liqPayPaymentGateway',
 'LP_RESULT_URL',
-'http://testdevshop.yes-cart.org:8080/yes-shop/liqpayreturn'
+'http://@domain@/yes-shop/liqpayreturn'
 , 'URL для показа результата платежа', 'URL для показа результата платежа');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (453, 'liqPayPaymentGateway',
 'LP_SERVER_URL',
-'http://testdevshop.yes-cart.org:8080/yes-shop/liqpaycallback'
+'http://@domain@/yes-shop/liqpaycallback'
 , 'URL страница на которую прийдет ответ от сервера', 'URL страница на которую прийдет ответ от сервера');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)

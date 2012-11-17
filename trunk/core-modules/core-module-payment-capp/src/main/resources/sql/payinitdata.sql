@@ -2,14 +2,14 @@
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (100, 'cyberSourcePaymentGateway',
 'merchantID',
-'iazarny'
+'!!!PROVIDE VALUE!!!'
 , 'Merchand Id', 'Merchand Id');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (101, 'cyberSourcePaymentGateway',
 'keysDirectory',
 '/yescart/resources/paymentgateway/cskeys'
-, 'Directory with keys', 'Directory with keys');
+, 'Absolute path to directory with keys', 'Absolute path to directory with keys');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (102, 'cyberSourcePaymentGateway',
@@ -39,36 +39,36 @@ INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LA
 VALUES (106, 'cyberSourcePaymentGateway',
 'logDirectory',
 '/yescart/log'
-, 'Log directory', 'Log directory');
+, 'Absolute path to log directory', 'Absolute path to log directory');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (107, 'cyberSourcePaymentGateway',
 'logMaximumSize',
 '10'
-, 'Max size of log file', 'Max size of log file. Value in MB');
+, 'Max size of log file. MB', 'Max size of log file. Value in MB');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (109, 'cyberSourcePaymentGateway',
 'proxyHost',
-'192.168.1.1'
+''
 , 'Proxy host', 'Proxy host');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (110, 'cyberSourcePaymentGateway',
 'proxyPort',
-'3128'
+''
 , 'Proxy port', 'Proxy port');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (111, 'cyberSourcePaymentGateway',
 'proxyUser',
-'proxyUserName'
+''
 , 'Proxy user', 'Proxy user');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (112, 'cyberSourcePaymentGateway',
 'proxyPassword',
-'password'
+''
 , 'Proxy password', 'Proxy password');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
@@ -119,8 +119,6 @@ VALUES (113, 'cyberSourcePaymentGateway',
             <option value="11">11 - November</option>
             <option value="12">12 - December</option>
         </select> <select name="ccExpireYear" class="paymentshortfield">
-            <option value="2011">2011</option>
-            <option value="2012">2012</option>
             <option value="2013">2013</option>
             <option value="2014">2014</option>
             <option value="2015">2015</option>
@@ -148,13 +146,13 @@ VALUES (120, 'authorizeNetAimPaymentGateway',
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (121, 'authorizeNetAimPaymentGateway',
 'API_LOGIN_ID',
-'6uY7T8YfwR6'
+'!!!PROVIDE VALUE!!!'
 , 'Merchant login.', 'Merchant login.');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (122, 'authorizeNetAimPaymentGateway',
 'TRANSACTION_KEY',
-'4765Udc8t48qBNSa'
+'!!!PROVIDE VALUE!!!'
 , 'Transaction key', 'Transaction key');
 
 
@@ -197,8 +195,6 @@ VALUES (127, 'authorizeNetAimPaymentGateway',
             <option value="11">11 - November</option>
             <option value="12">12 - December</option>
         </select> <select name="ccExpireYear" class="paymentshortfield">
-            <option value="2011">2011</option>
-            <option value="2012">2012</option>
             <option value="2013">2013</option>
             <option value="2014">2014</option>
             <option value="2015">2015</option>
@@ -260,25 +256,25 @@ VALUES (146, 'payflowPaymentGateway',
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (147, 'payflowPaymentGateway',
 'PROXY_HOST',
-'192.168.1.1'
+''
 , 'Proxy host', 'Proxy host');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (148, 'payflowPaymentGateway',
 'PROXY_PORT',
-'3128'
+''
 , 'Proxy port', 'Proxy port');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (149, 'payflowPaymentGateway',
 'PROXY_USER',
-'proxyuser'
+''
 , 'Proxy user', 'Proxy user');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (150, 'payflowPaymentGateway',
 'PROXY_PASSWORD',
-'password'
+''
 , 'Proxy password', 'Proxy password');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
@@ -290,19 +286,19 @@ VALUES (151, 'payflowPaymentGateway',
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (152, 'payflowPaymentGateway',
 'USER_NAME',
-'aaz911'
+'!!!PROVIDE VALUE!!!'
 , 'Payment gateway user name', 'Payment gateway user name (Merchant id ?)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (153, 'payflowPaymentGateway',
 'USER_PASSWORD',
-'sharpevil77'
+'!!!PROVIDE VALUE!!!'
 , 'Payment gateway user password', 'Payment gateway user password');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (154, 'payflowPaymentGateway',
 'VENDOR',
-'aaz911'
+'!!!PROVIDE VALUE!!!'
 , 'Vendor', 'Vendor');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
@@ -354,8 +350,6 @@ VALUES (156, 'payflowPaymentGateway',
             <option value="11">11 - November</option>
             <option value="12">12 - December</option>
         </select> <select name="ccExpireYear" class="paymentshortfield">
-            <option value="2011">2011</option>
-            <option value="2012">2012</option>
             <option value="2013">2013</option>
             <option value="2014">2014</option>
             <option value="2015">2015</option>
@@ -380,33 +374,21 @@ VALUES (156, 'payflowPaymentGateway',
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (170, 'payPalNvpPaymentGateway',
 'API_USER_NAME',
-'azarny_1324325086_biz_api1.gmail.com'
+'!!!PROVIDE VALUE!!!'
 , 'Api user name', 'Api user name');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (171, 'payPalNvpPaymentGateway',
 'API_USER_PASSWORD',
-'1324325124'
+'!!!PROVIDE VALUE!!!'
 , 'Api user password', 'Api user password');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (172, 'payPalNvpPaymentGateway',
 'SIGNATURE',
-'AlH.6ZOY.CsakUGCdfdTg4JxaG4tA71FLEoZ5abQPArA5wL.poNPPQcB'
+'!!!PROVIDE VALUE!!!'
 , 'Signature', 'Signature');
 
--- INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
--- VALUES (173, 'payPalNvpPaymentGateway',
--- 'KEY_PATH',
--- '/yescart/resources/paymentgateway/paypal/some.p12'
--- , 'Path to key', 'Path to key');
-
-
--- INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
--- VALUES (174, 'payPalNvpPaymentGateway',
--- 'KEY_PASSWORD',
--- 'passwd for key'
--- , 'Key password', 'Key password');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (175, 'payPalNvpPaymentGateway',
@@ -448,8 +430,6 @@ VALUES (176, 'payPalNvpPaymentGateway',
             <option value="11">11 - November</option>
             <option value="12">12 - December</option>
         </select> <select name="ccExpireYear" class="paymentshortfield">
-            <option value="2011">2011</option>
-            <option value="2012">2012</option>
             <option value="2013">2013</option>
             <option value="2014">2014</option>
             <option value="2015">2015</option>
@@ -475,27 +455,22 @@ VALUES (200, 'authorizeNetSimPaymentGateway',
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (201, 'authorizeNetSimPaymentGateway',
 'API_LOGIN_ID',
-'6uY7T8YfwR6'
+'!!!PROVIDE VALUE!!!'
 , 'Merchant login.', 'Merchant login.');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (202, 'authorizeNetSimPaymentGateway',
 'TRANSACTION_KEY',
-'4765Udc8t48qBNSa'
+'!!!PROVIDE VALUE!!!'
 , 'Transaction key', 'Transaction key');
 
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (203, 'authorizeNetSimPaymentGateway',
 'MD5_HASH_KEY',
-'bender'
+'!!!PROVIDE VALUE!!!'
 , 'MD5 hash key', 'MD5 hash key. SIM only');
 
--- INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
--- VALUES (204, 'authorizeNetSimPaymentGateway',
--- 'MERCHANT_HOST',
--- '----'
--- , 'Host', 'Host. SIM only');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (205, 'authorizeNetSimPaymentGateway',
@@ -506,7 +481,7 @@ VALUES (205, 'authorizeNetSimPaymentGateway',
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (206, 'authorizeNetSimPaymentGateway',
 'ORDER_RECEIPT_URL',
-'http://testdevshop.yes-cart.org:8080/yes-shop/receipt/page'
+'http://@domain@/yes-shop/receipt/page'
 , 'SIM/DPM order receipt url', 'SIM/DPM order receipt url. SIM only');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
@@ -524,33 +499,33 @@ VALUES (207, 'authorizeNetSimPaymentGateway',
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (220, 'payPalExpressPaymentGateway',
 'API_USER_NAME',
-'yescas_1324326469_biz_api1.gmail.com'
+'!!!PROVIDE VALUE!!!'
 , 'Api user name', 'Api user name');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (221, 'payPalExpressPaymentGateway',
 'API_USER_PASSWORD',
-'1324326494'
+'!!!PROVIDE VALUE!!!'
 , 'Api user password', 'Api user password');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (222, 'payPalExpressPaymentGateway',
 'SIGNATURE',
-'AarMlaEPlNPHEsSS-tLgoTRafwgYAkJWGgDrLpn-Wp90NhGz102UYPy2'
+'!!!PROVIDE VALUE!!!'
 , 'Signature', 'Signature');
 
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (223, 'payPalExpressPaymentGateway',
 'RETURNURL',
-'http://testdevshop.yes-cart.org:8080/yes-shop/paypallreturn'
+'http://@domain@/yes-shop/paypallreturn'
 , 'Return url', 'Return url');
 
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (224, 'payPalExpressPaymentGateway',
 'CANCELURL',
-'http://testdevshop.yes-cart.org:8080/yes-shop'
+'http://@domain@/yes-shop'
 , 'Cancel url', 'Cancel url');
 
 
