@@ -22,13 +22,13 @@ VALUES (400, 'googleCheckoutPaymentGateway',
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (401, 'googleCheckoutPaymentGateway',
 'GC_MERCHANT_ID',
-'951076354081708'
+'!!!PROVIDE VALUE!!!'
 , 'Merchant id', 'Merchant id');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (402, 'googleCheckoutPaymentGateway',
 'GC_MERCHANT_KEY',
-'1DbImipHlIEVsi0liSeA_A'
+'!!!PROVIDE VALUE!!!'
 , 'Merchant Signature', 'Merchant Signature');
 
 
@@ -50,25 +50,25 @@ VALUES (404, 'googleCheckoutPaymentGateway',
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (450, 'liqPayPaymentGateway',
 'LP_MERCHANT_ID',
-'i6840685592'
+'!!!PROVIDE VALUE!!!'
 , 'Merchant Id', 'Merchant Id');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (451, 'liqPayPaymentGateway',
 'LP_MERCHANT_KEY',
-'JMkUT6En0uglRAKCK7STlFA7HLk1g6Xk75Wpdf9ogarpET'
+'!!!PROVIDE VALUE!!!'
 , 'Merchant signature', 'Merchant signature');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (452, 'liqPayPaymentGateway',
 'LP_RESULT_URL',
-'http://testdevshop.yes-cart.org:8080/yes-shop/liqpayreturn'
+'http://@domain@/yes-shop/liqpayreturn'
 , 'Page URL to show payment result', 'Page URL to show payment result');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (453, 'liqPayPaymentGateway',
 'LP_SERVER_URL',
-'http://testdevshop.yes-cart.org:8080/yes-shop/liqpaycallback'
+'http://@domain@/yes-shop/liqpaycallback'
 , 'Call back URL with payment result.', 'Call back URL with payment result. ');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)

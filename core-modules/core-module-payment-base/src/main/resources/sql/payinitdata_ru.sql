@@ -2,6 +2,10 @@ INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LA
 VALUES (50, 'testPaymentGateway', 'htmlForm',
 '<table>
     <tr>
+        <td>Имя на карте</td>
+        <td><input type="text" class="paymentlongfield" name="ccHolderName" value="@CARDHOLDERNAME@" maxlength="128"/>
+    </tr>
+    <tr>
         <td>Номер карты</td>
         <td><input type="text" class="paymentlongfield" name="ccNumber"  maxlength="16"/></td>
     </tr>
@@ -21,8 +25,6 @@ VALUES (50, 'testPaymentGateway', 'htmlForm',
             <option value="11">11 - Ноябрь</option>
             <option value="12">12 - Декабрь</option>
         </select> <select name="ccExpireYear" class="paymentshortfield">
-            <option value="2011">2011</option>
-            <option value="2012">2012</option>
             <option value="2013">2013</option>
             <option value="2014">2014</option>
             <option value="2015">2015</option>
