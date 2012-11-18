@@ -21,6 +21,7 @@ import org.apache.lucene.search.BooleanQuery;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.Fragment;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -289,5 +290,51 @@ public class SkuCentralView extends AbstractCentralView {
                 BigDecimal.ONE
         );
     }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public IModel<String> getPageTitle() {
+        final Seoable seoable = isProduct ? product : sku;
+        if (seoable != null) {
+            Seo seo = seoable.getSeo();
+            if (seo != null) {
+                return new Model<String>(seo.getTitle());
+            }
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public IModel<String> getDescription() {
+        final Seoable seoable = isProduct ? product : sku;
+        if (seoable != null) {
+            Seo seo = seoable.getSeo();
+            if (seo != null) {
+                return new Model<String>(seo.getMetadescription());
+            }
+        }
+        return null;
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public IModel<String> getKeywords() {
+        final Seoable seoable = isProduct ? product : sku;
+        if (seoable != null) {
+            Seo seo = seoable.getSeo();
+            if (seo != null) {
+                return new Model<String>(seo.getMetakeywords());
+            }
+        }
+        return null;
+
+    }
+
 
 }

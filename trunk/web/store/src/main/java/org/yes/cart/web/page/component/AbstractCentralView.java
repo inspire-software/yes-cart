@@ -17,9 +17,12 @@
 package org.yes.cart.web.page.component;
 
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.Seo;
 import org.yes.cart.service.domain.CategoryService;
 
 /**
@@ -87,4 +90,51 @@ public abstract class AbstractCentralView extends BaseComponent {
     public CategoryService getCategoryService() {
         return categoryService;
     }
+
+
+    /**
+     * Get page title.
+     * @return page title
+     */
+    public IModel<String> getPageTitle() {
+        if (getCategory() != null) {
+            Seo seo = getCategory().getSeo();
+            if (seo != null) {
+                return new Model<String>(seo.getTitle());
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get opage description
+     * @return description
+     */
+    public IModel<String> getDescription() {
+        if (getCategory() != null) {
+            Seo seo = getCategory().getSeo();
+            if (seo != null) {
+                return new Model<String>(seo.getMetadescription());
+            }
+        }
+        return null;
+
+    }
+
+    /**
+     * Get keywords.
+     * @return keywords
+     */
+    public IModel<String> getKeywords() {
+        if (getCategory() != null) {
+            Seo seo = getCategory().getSeo();
+            if (seo != null) {
+                return new Model<String>(seo.getMetakeywords());
+            }
+        }
+        return null;
+
+    }
+
+
 }

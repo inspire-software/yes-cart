@@ -18,6 +18,7 @@ package org.yes.cart.web.page;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -25,6 +26,7 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.utils.impl.ObjectUtil;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.*;
 import org.yes.cart.web.page.component.breadcrumbs.BreadCrumbsView;
@@ -73,6 +75,7 @@ public class HomePage extends AbstractWebPage {
     @SpringBean(name = ServiceSpringKeys.SHOP_SERVICE)
     private ShopService shopService;
 
+    private AbstractCentralView centralPanel;
 
 
     /**
@@ -88,7 +91,9 @@ public class HomePage extends AbstractWebPage {
 
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void onBeforeRender() {
 
@@ -98,7 +103,7 @@ public class HomePage extends AbstractWebPage {
 
         final long categoryId = NumberUtils.toLong(HttpUtil.getSingleValue(mapParams.get(WebParametersKeys.CATEGORY_ID)));
 
-        final Shop shop =  ApplicationDirector.getCurrentShop();
+        final Shop shop = ApplicationDirector.getCurrentShop();
 
         final List<Long> shopCategories = getCategories(categoryId);
 
@@ -118,7 +123,6 @@ public class HomePage extends AbstractWebPage {
         );
 
 
-
         add(new TopCategories("topCategories"));
         add(new BrandProductFilter("brandFilter", query, categoryId));
         add(new AttributeProductFilter("attributeFilter", query, categoryId));
@@ -130,7 +134,9 @@ public class HomePage extends AbstractWebPage {
 
         //add(new Carousel("featured"));
 
-        add(getCentralPanel(centralViewLabel, "centralView", categoryId, query));
+        centralPanel = getCentralPanel(centralViewLabel, "centralView", categoryId, query);
+
+        add(centralPanel);
 
         add(
                 new StandardHeader(HEADER)
@@ -141,8 +147,6 @@ public class HomePage extends AbstractWebPage {
         );
 
 
-
-
         super.onBeforeRender();
 
 
@@ -150,6 +154,7 @@ public class HomePage extends AbstractWebPage {
 
     /**
      * Get product id or product sku id.
+     *
      * @return product id or product sku id.
      */
     private String getItemId() {
@@ -205,7 +210,7 @@ public class HomePage extends AbstractWebPage {
             final Long categoryId,
             final BooleanQuery booleanQuery) {
 
-        Class<? extends AbstractCentralView>  clz = rendererPanelMap.get(rendererLabel);
+        Class<? extends AbstractCentralView> clz = rendererPanelMap.get(rendererLabel);
         try {
             Constructor<? extends AbstractCentralView> constructor = clz.getConstructor(String.class,
                     long.class,
@@ -220,6 +225,53 @@ public class HomePage extends AbstractWebPage {
 
         }
 
+    }
+
+
+    /**
+     * Get page title.
+     *
+     * @return page title
+     */
+    public IModel<String> getPageTitle() {
+        if (centralPanel != null) {
+            final IModel<String> rez = centralPanel.getPageTitle();
+            if (rez == null) {
+                return super.getPageTitle();
+            }
+        }
+        return super.getPageTitle();
+    }
+
+
+    /**
+     * Get opage description
+     *
+     * @return description
+     */
+    public IModel<String> getDescription() {
+        if (centralPanel != null) {
+            final IModel<String> rez = centralPanel.getDescription();
+            if (rez == null) {
+                return super.getDescription();
+            }
+        }
+        return super.getDescription();
+    }
+
+    /**
+     * Get keywords.
+     *
+     * @return keywords
+     */
+    public IModel<String> getKeywords() {
+        if (centralPanel != null) {
+            final IModel<String> rez = centralPanel.getKeywords();
+            if (rez == null) {
+                return super.getKeywords();
+            }
+        }
+        return super.getKeywords();
     }
 
 
