@@ -17,7 +17,11 @@
 package org.yes.cart.web.page;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -64,6 +68,17 @@ public class AbstractWebPage extends WebPage {
     private DecoratorFacade decoratorFacade;
 
 
+    /** Page title. */
+    public static final String PAGE_TITLE="pageTitle";
+    /** Meta created. */
+    public static final String CREATED="created";
+    /** Meta description. */
+    public static final String DESCRIPTION="description";
+    /** Meta keywords. */
+    public static final String KEYWORDS="keywords";
+
+
+
 
 
     /**
@@ -94,6 +109,27 @@ public class AbstractWebPage extends WebPage {
     }
 
 
+    protected void onBeforeRender() {
+
+        addOrReplace(new Label(
+                PAGE_TITLE,
+                getPageTitle()));
+
+        Label desc = new Label(DESCRIPTION,"");
+        desc.add( new AttributeAppender("content", getDescription(), " "));
+        addOrReplace(desc);
+
+        Label keywords = new Label(KEYWORDS,"");
+        keywords.add( new AttributeAppender("content", getKeywords(), " "));
+        addOrReplace(keywords);
+
+        /*Label created = new Label(CREATED,"");
+        created.add( new AttributeAppender("content", getCreated(), " "));
+        addOrReplace(created);*/ //TODOV2
+
+
+        super.onBeforeRender();
+    }
 
     /**
      * {@inheritDoc}
@@ -115,7 +151,7 @@ public class AbstractWebPage extends WebPage {
                     cart
             );
         }
-        super.onBeforeRender();
+        //wft ??? super.onBeforeRender();
 
     }
 
@@ -150,4 +186,38 @@ public class AbstractWebPage extends WebPage {
     public DecoratorFacade getDecoratorFacade() {
         return decoratorFacade;
     }
+
+
+    /**
+     * Get page title.
+     * @return page title
+     */
+    public IModel<String> getPageTitle() {
+        return new Model<String>(ApplicationDirector.getCurrentShop().getName());
+    }
+
+
+    /**
+     * Get opage description
+     * @return description
+     */
+    public IModel<String> getDescription() {
+        if (ApplicationDirector.getCurrentShop().getSeo() != null) {
+            return new Model<String>(ApplicationDirector.getCurrentShop().getSeo().getMetadescription());
+        }
+        return null;
+    }
+
+    /**
+     * Get keywords.
+     * @return keywords
+     */
+    public IModel<String> getKeywords() {
+        if (ApplicationDirector.getCurrentShop().getSeo() != null) {
+            return new Model<String>(ApplicationDirector.getCurrentShop().getSeo().getMetakeywords());
+        }
+        return null;
+    }
+
+
 }
