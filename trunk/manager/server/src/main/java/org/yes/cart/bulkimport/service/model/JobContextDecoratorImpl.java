@@ -55,7 +55,7 @@ public class JobContextDecoratorImpl implements JobContext {
         if (this.additionalAttributes.containsKey(name)) {
             return (T) this.additionalAttributes.get(name);
         }
-        return wrapped.getAttribute(name);
+        return (T)  wrapped.getAttribute(name);
     }
 
     /** {@inheritDoc} */
