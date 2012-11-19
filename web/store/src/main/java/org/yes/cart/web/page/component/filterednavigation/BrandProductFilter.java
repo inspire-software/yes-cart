@@ -34,7 +34,9 @@ import java.util.List;
  */
 public class BrandProductFilter extends AbstractProductFilter {
 
-    private boolean filteredNavigationByBrand = false;
+    private boolean filteringNavigationAllowedIncategory = false;
+
+    private Boolean visibilityRezult;
 
     /**
      * Construct filtered navigation by brand.
@@ -48,7 +50,7 @@ public class BrandProductFilter extends AbstractProductFilter {
         super(id, query, categoryId);
 
         if (categoryId > 0) {
-            filteredNavigationByBrand = getCategory().getNavigationByBrand() == null ? false : getCategory().getNavigationByBrand();
+            filteringNavigationAllowedIncategory = getCategory().getNavigationByBrand() == null ? false : getCategory().getNavigationByBrand();
         }
 
     }
@@ -84,28 +86,40 @@ public class BrandProductFilter extends AbstractProductFilter {
     }
 
 
+
+
+
     /**
      * {@inheritDoc}
      */
     public boolean isVisible() {
 
-        if (filteredNavigationByBrand) {
+        if (filteringNavigationAllowedIncategory) {
 
-            final String selectedLocale = getLocale().getLanguage();
+            if (visibilityRezult == null) {
 
-            setNavigationRecords(
-                    getFilteredNavigationRecords(
-                            getProductService().getDistinctBrands(selectedLocale, getCategories())
-                    )
-            );
+                final String selectedLocale = getLocale().getLanguage();
+
+                setNavigationRecords(
+                        getFilteredNavigationRecords(
+                                getProductService().getDistinctBrands(selectedLocale, getCategories())
+                        )
+                );
+
+                visibilityRezult = super.isVisible()
+                        && filteringNavigationAllowedIncategory
+                        && getNavigationRecords() != null
+                        && !getNavigationRecords().isEmpty();
+
+
+            }
+
+            return visibilityRezult;
 
         }
 
+        return false;
 
-        return  super.isVisible()
-                && filteredNavigationByBrand
-                && getNavigationRecords() != null
-                && !getNavigationRecords().isEmpty();
     }
 
 }

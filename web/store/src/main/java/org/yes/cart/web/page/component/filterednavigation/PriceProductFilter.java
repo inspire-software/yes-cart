@@ -47,7 +47,9 @@ import java.util.List;
  */
 public class PriceProductFilter extends AbstractProductFilter {
 
-    protected boolean filteredNavigationByPrice = false;
+    protected boolean filteredNavigationByPriceAllowed = false;
+
+    private Boolean visibilityRezult;
 
     private PriceTierTree priceTierTree = null;
 
@@ -78,9 +80,9 @@ public class PriceProductFilter extends AbstractProductFilter {
 
         if (categoryId > 0) {
             priceTierTree = getCategory().getNavigationByPriceTree();
-            filteredNavigationByPrice = (getCategory().getNavigationByPrice() == null || priceTierTree == null)
+            filteredNavigationByPriceAllowed = (getCategory().getNavigationByPrice() == null || priceTierTree == null)
                     ? false : getCategory().getNavigationByPrice();
-            if (filteredNavigationByPrice) {
+            if (filteredNavigationByPriceAllowed) {
                 currency = ApplicationDirector.getShoppingCart().getCurrencyCode();
                 shop = ApplicationDirector.getCurrentShop();
                 allNavigationRecords = priceService.getPriceNavigationRecords(
@@ -152,14 +154,27 @@ public class PriceProductFilter extends AbstractProductFilter {
      * {@inheritDoc}
      */
     public boolean isVisible() {
-        setNavigationRecords(
-                getFilteredNavigationRecords(allNavigationRecords)
-        );
 
-        return  super.isVisible()
-                && filteredNavigationByPrice
-                && getNavigationRecords() != null
-                && !getNavigationRecords().isEmpty();
+        if (filteredNavigationByPriceAllowed) {
+
+            if(visibilityRezult == null) {
+
+                setNavigationRecords(
+                        getFilteredNavigationRecords(allNavigationRecords)
+                );
+
+                visibilityRezult = super.isVisible()
+                        && getNavigationRecords() != null
+                        && !getNavigationRecords().isEmpty();
+
+            }
+
+            return visibilityRezult;
+
+        }
+
+        return false;
+
     }
 
 }
