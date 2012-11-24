@@ -42,7 +42,7 @@ public class URLPagingNavigation extends PagingNavigation {
      */
     public URLPagingNavigation(final String s, final IPageable iPageable) {
         super(s, iPageable);
-        setViewSize(7);
+        setViewSize(5);
     }
 
     /**
@@ -50,7 +50,7 @@ public class URLPagingNavigation extends PagingNavigation {
      */
     public URLPagingNavigation(final String s, final IPageable iPageable, final IPagingLabelProvider iPagingLabelProvider) {
         super(s, iPageable, iPagingLabelProvider);
-        setViewSize(7);
+        setViewSize(5);
     }
 
     /**
