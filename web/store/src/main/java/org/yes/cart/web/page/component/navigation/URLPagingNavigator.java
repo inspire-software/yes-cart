@@ -89,9 +89,18 @@ public class URLPagingNavigator   extends PagingNavigator {
      * {@inheritDoc}
      */
     protected AbstractLink newPagingNavigationLink(final String id, final IPageable pageable, int pageNumber) {
+
         final PageParameters params = WicketUtil.getFilteredRequestParameters(pageParameters);
 
-        params.set(WebParametersKeys.PAGE, pageNumber);
+        final int pNum;
+
+        if ("last".equals(id)) {
+            pNum = getPageable().getPageCount() - 1;
+        } else {
+            pNum = pageNumber;
+        }
+
+        params.set(WebParametersKeys.PAGE, pNum);
 
         return new BookmarkablePageLink<Link>(id, HomePage.class, new PageParameters(params));
 
