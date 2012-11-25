@@ -1024,6 +1024,7 @@
           class="org.yes.cart.service.order.impl.handler.ProcessAllocationOrderEventHandlerImpl">
         <constructor-arg index="0" ref="warehouseService"/>
         <constructor-arg index="1" ref="skuWarehouseService"/>
+        <constructor-arg index="2" ref="productService"/>
 
     </bean>
 
@@ -1049,6 +1050,7 @@
     <bean id="deliveryAllowedByInventoryOrderEventHandler"  class="org.yes.cart.service.order.impl.handler.DeliveryAllowedByInventoryOrderEventHandlerImpl">
         <constructor-arg index="0" ref="warehouseService"/>
         <constructor-arg index="1" ref="skuWarehouseService"/>
+        <constructor-arg index="2" ref="productService"/>
     </bean>
 
 

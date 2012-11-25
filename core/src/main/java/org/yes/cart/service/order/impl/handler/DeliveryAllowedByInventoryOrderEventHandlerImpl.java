@@ -20,6 +20,7 @@ import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
 import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.OrderEvent;
@@ -46,8 +47,9 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImpl
      * @param skuWarehouseService sku on warehouse service to change quantity
      */
     public DeliveryAllowedByInventoryOrderEventHandlerImpl(final WarehouseService warehouseService,
-                                                           final SkuWarehouseService skuWarehouseService) {
-        super(warehouseService, skuWarehouseService);
+                                                           final SkuWarehouseService skuWarehouseService,
+                                                           final ProductService productService) {
+        super(warehouseService, skuWarehouseService, productService);
     }
 
     /**

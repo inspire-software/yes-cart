@@ -22,6 +22,7 @@ import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Warehouse;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.OrderEvent;
@@ -31,6 +32,7 @@ import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -45,16 +47,21 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
 
     private final WarehouseService warehouseService;
     private final SkuWarehouseService skuWarehouseService;
+    private final ProductService productService;
 
     /**
      * Construct transition.
      *
      * @param warehouseService    warehouse service
      * @param skuWarehouseService sku on warehouse service to change quantity
+     * @param productService use to reindex allocated products, in case if qty is 0
      */
-    public ProcessAllocationOrderEventHandlerImpl(final WarehouseService warehouseService, final SkuWarehouseService skuWarehouseService) {
+    public ProcessAllocationOrderEventHandlerImpl(final WarehouseService warehouseService,
+                                                  final SkuWarehouseService skuWarehouseService,
+                                                  final ProductService productService) {
         this.warehouseService = warehouseService;
         this.skuWarehouseService = skuWarehouseService;
+        this.productService = productService;
     }
 
     /**
@@ -82,14 +89,28 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
                 orderDelivery.getCustomerOrder().getShop().getShopId());
 
 
+        final List<Long> productToReindex = new ArrayList<Long>();
+
+
         for (CustomerOrderDeliveryDet det : deliveryDetails) {
             ProductSku productSku = det.getSku();
             BigDecimal toAllocate = det.getQty();
             for (Warehouse warehouse : warehouses) {
+
                 skuWarehouseService.voidReservation(warehouse, productSku, toAllocate);
 
                 toAllocate = skuWarehouseService.debit(warehouse, productSku, toAllocate);
+
                 if (toAllocate.equals(BigDecimal.ZERO)) {
+
+                    final BigDecimal qtyLeft = skuWarehouseService.getQuantity(warehouses, productSku).getFirst();
+
+                    if (MoneyUtils.isFirstEqualToSecond( BigDecimal.ZERO, qtyLeft) ) {
+
+                        productToReindex.add(productSku.getProduct().getProductId());  // product qty is 0 so need to reindex
+
+                    }
+
                     break; // quantity allocated
                 }
             }
@@ -102,6 +123,12 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
                                 + " in delivery " + orderDelivery.getDeliveryNum());
             }
         }
+
+        // reindex product with 0 qty
+        for(Long pk : productToReindex) {
+            productService.reindexProduct(pk);
+        }
+
         orderDelivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED);
 
     }
