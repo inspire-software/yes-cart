@@ -45,7 +45,7 @@ public class AttributeValueBridge implements FieldBridge {
                 final AttrValue attrValue = (AttrValue) obj;
                 final String prefix = (obj instanceof AttrValueProductSku) ? "sku." : "";
 
-                if (StringUtils.isNotBlank(attrValue.getVal())) {
+                if (isIndexingAllowed(attrValue)) {
                     document.add(new Field(
                             prefix + ProductSearchQueryBuilder.ATTRIBUTE_VALUE_FIELD,
                             (attrValue.getAttribute() == null ? "" : attrValue.getAttribute().getCode()) + attrValue.getVal(),
@@ -76,6 +76,22 @@ public class AttributeValueBridge implements FieldBridge {
             }
         }
 
+    }
+
+    /**
+     * Is value may be in index ans searchable.
+     * @param attrValue given attribute value
+     * @return true if value must be in index.
+     */
+    private boolean isIndexingAllowed(final AttrValue attrValue) {
+        return StringUtils.isNotBlank(attrValue.getVal())
+                &&
+                !attrValue.getVal().contains("±")  //ice cat hack
+                &&
+                !attrValue.getVal().contains("+")  //ice cat hack
+                &&
+                !attrValue.getVal().contains("/")  //ice cat hack
+                ;
     }
 
 
