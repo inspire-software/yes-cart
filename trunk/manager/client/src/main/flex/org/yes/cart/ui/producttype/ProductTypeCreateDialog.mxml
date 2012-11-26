@@ -35,10 +35,10 @@
             <mx:TextInput id="uisearchtemplateTextInput" width="200"/>
         </mx:FormItem>
 
-        <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='shipable')">
+        <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='shippable')">
             <mx:CheckBox
-                    id="shipableCheckBox"
-                    toolTip="@Resource(bundle='ProductTypeManagementPanel',key='shipableHint')"
+                    id="shippableCheckBox"
+                    toolTip="@Resource(bundle='ProductTypeManagementPanel',key='shippableHint')"
                     />
         </mx:FormItem>
 
@@ -92,7 +92,7 @@
             BindingUtils.bindProperty(descriptionTextInput, "text", productType, "description");
             BindingUtils.bindProperty(uitemplateTextInput, "text", productType, "uitemplate");
             BindingUtils.bindProperty(uisearchtemplateTextInput, "text", productType, "uisearchtemplate");
-            BindingUtils.bindProperty(shipableCheckBox, "selected", productType, "shipable");
+            BindingUtils.bindProperty(shippableCheckBox, "selected", productType, "shippable");
             BindingUtils.bindProperty(ensembleCheckBox, "selected", productType, "ensemble");
             BindingUtils.bindProperty(serviceCheckBox, "selected", productType, "service");
             BindingUtils.bindProperty(digitalCheckBox, "selected", productType, "digital");
@@ -103,7 +103,7 @@
             BindingUtils.bindProperty(productType, "description", descriptionTextInput, "text");
             BindingUtils.bindProperty(productType, "uitemplate", uitemplateTextInput, "text");
             BindingUtils.bindProperty(productType, "uisearchtemplate", uisearchtemplateTextInput, "text");
-            BindingUtils.bindProperty(productType, "shipable", shipableCheckBox, "selected");
+            BindingUtils.bindProperty(productType, "shippable", shippableCheckBox, "selected");
             BindingUtils.bindProperty(productType, "ensemble", ensembleCheckBox, "selected");
             BindingUtils.bindProperty(productType, "service", serviceCheckBox, "selected");
             BindingUtils.bindProperty(productType, "digital", digitalCheckBox, "selected");

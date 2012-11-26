@@ -37,7 +37,7 @@ public class ProductTypeDTOImpl implements IUID {
 
     public var ensemble:Boolean;
 
-    public var shipable:Boolean;
+    public var shippable:Boolean;
 
     public var downloadable:Boolean;
 
@@ -55,7 +55,7 @@ public class ProductTypeDTOImpl implements IUID {
                 + ",uitemplate=" + String(uitemplate)
                 + ",uisearchtemplate=" + String(uisearchtemplate)
                 + ",service=" + String(service)
-                + ",ensemble=" + String(ensemble) + ",shipable=" + String(shipable) + "}";
+                + ",ensemble=" + String(ensemble) + ",shippable=" + String(shippable) + "}";
     }
 
     public function get uid():String {
