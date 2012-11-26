@@ -18,6 +18,7 @@ package org.yes.cart.service.order.impl.handler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
 import org.yes.cart.domain.entity.ProductSku;
@@ -46,7 +47,10 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
     private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final WarehouseService warehouseService;
+
     private final SkuWarehouseService skuWarehouseService;
+
+
     private final ProductService productService;
 
     /**
@@ -74,11 +78,41 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
         }
     }
 
+
+
+    /**
+     * Get warehouse service.
+     *
+     * @return {@link WarehouseService}
+     */
+    protected WarehouseService getWarehouseService() {
+        return warehouseService;
+    }
+
+    /**
+     * Get sku warehouse service.
+     *
+     * @return {@link SkuWarehouseService}
+     */
+    protected SkuWarehouseService getSkuWarehouseService() {
+        return skuWarehouseService;
+    }
+
+    /**
+     * Get product service.
+     *
+     * @return {@link ProductService}
+     */
+    protected ProductService getProductService() {
+        return productService;
+    }
+
+
     /**
      * Allocate sku quantity on warehouses, that belong to shop, where order was made.
      *
      * @param orderDelivery reserve for this delivery
-     * @throws Exception in case if can not allocate quantity for each sku
+     * @throws OrderItemAllocationException in case if can not allocate quantity for each sku
      */
     void reserveQuantity(final CustomerOrderDelivery orderDelivery) throws OrderItemAllocationException {
 
@@ -93,15 +127,18 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
 
 
         for (CustomerOrderDeliveryDet det : deliveryDetails) {
+
             ProductSku productSku = det.getSku();
+
             BigDecimal toAllocate = det.getQty();
+
             for (Warehouse warehouse : warehouses) {
 
                 skuWarehouseService.voidReservation(warehouse, productSku, toAllocate);
 
                 toAllocate = skuWarehouseService.debit(warehouse, productSku, toAllocate);
 
-                if (toAllocate.equals(BigDecimal.ZERO)) {
+                if (MoneyUtils.isFirstEqualToSecond(toAllocate, BigDecimal.ZERO, Constants.DEFAULT_SCALE)) {
 
                     final BigDecimal qtyLeft = skuWarehouseService.getQuantity(warehouses, productSku).getFirst();
 
@@ -113,6 +150,7 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
 
                     break; // quantity allocated
                 }
+                
             }
             if (MoneyUtils.isFirstBiggerThanSecond(toAllocate, BigDecimal.ZERO)) {
                 throw new OrderItemAllocationException(
@@ -133,21 +171,7 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
 
     }
 
-    /**
-     * Get warehouse service.
-     *
-     * @return {@link WarehouseService}
-     */
-    protected WarehouseService getWarehouseService() {
-        return warehouseService;
-    }
 
-    /**
-     * Get sku warehouse service.
-     *
-     * @return {@link SkuWarehouseService}
-     */
-    protected SkuWarehouseService getSkuWarehouseService() {
-        return skuWarehouseService;
-    }
+
+
 }

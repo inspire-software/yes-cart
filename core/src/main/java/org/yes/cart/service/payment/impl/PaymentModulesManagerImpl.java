@@ -132,7 +132,14 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
 
         String allowed = systemService.getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL);
 
-        if (!allowed.contains(label)) {       //not yet allowed
+        if (StringUtils.isBlank(allowed)) {       //not yet allowed
+
+            systemService.updateAttributeValue(
+                    AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL,
+                    label
+            );
+
+        } else  if (!allowed.contains(label)) {       //not yet allowed
 
             if (allowed.endsWith(","))  {
                 allowed += label;
@@ -157,7 +164,7 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
 
         String allowed = systemService.getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL);
 
-        if (allowed.contains(label)) {       //neet to remove
+        if (allowed.contains(label)) {       //need to remove
 
             allowed = StringUtils.remove(allowed, label).replace(",,",",");
 
