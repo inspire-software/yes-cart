@@ -19,6 +19,8 @@ package org.yes.cart.remote.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.yes.cart.remote.service.ReindexService;
 import org.yes.cart.remote.service.RemoteBackdoorService;
 import org.yes.cart.service.async.JobStatusListener;
@@ -29,6 +31,8 @@ import org.yes.cart.service.async.model.JobContext;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.async.model.impl.JobContextImpl;
 import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
+
+import java.util.HashMap;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -68,6 +72,7 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
 
                 listener.notifyPing();
                 try {
+                    SecurityContextHolder.setContext((SecurityContext) ctx.getAttribute("security"));
                     listener.notifyMessage("Indexing stared");
                     final int cnt = remoteBackdoorService.reindexAllProducts(ctx);
                     // TODO: Need ping here too as if we get a lot of products we really only rely on the timeout
@@ -80,6 +85,8 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
                     LOG.error(trw.getMessage(), trw);
                     listener.notifyError(trw.getMessage());
                     listener.notifyCompleted(JobStatus.Completion.ERROR);
+                } finally {
+                    SecurityContextHolder.clearContext();
                 }
 
             }
@@ -107,7 +114,10 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
 
     private JobContext createAsyncContext() {
         final AsyncContext flex = new AsyncFlexContextImpl();
-        return new JobContextImpl(true, new JobStatusListenerImpl(10000, 300000), flex.getAttributes());
+        return new JobContextImpl(true, new JobStatusListenerImpl(10000, 300000), new HashMap<String, Object>() {{
+            putAll(flex.getAttributes());
+            put("security", SecurityContextHolder.getContext());
+        }});
     }
 
 }
