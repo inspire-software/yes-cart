@@ -515,7 +515,7 @@
         UISEARCHTEMPLATE varchar(255),
         SERVICE smallint,
         ENSEMBLE smallint,
-        SHIPABLE smallint,
+        SHIPPABLE smallint,
         DIGITAL smallint default 0,
         DOWNLOADABLE smallint default 0,
         CREATED_TIMESTAMP timestamp,

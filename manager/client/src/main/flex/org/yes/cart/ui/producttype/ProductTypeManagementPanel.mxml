@@ -575,11 +575,11 @@
                                 </mx:Component>
                             </mx:itemRenderer>
                         </mx:DataGridColumn>
-                        <mx:DataGridColumn headerText="@Resource(bundle='ProductTypeManagementPanel',key='shipable')"
-                                           dataField="shipable" textAlign="center">
+                        <mx:DataGridColumn headerText="@Resource(bundle='ProductTypeManagementPanel',key='shippable')"
+                                           dataField="shippable" textAlign="center">
                             <mx:itemRenderer>
                                 <mx:Component>
-                                    <mx:HBox horizontalAlign="center"><mx:CheckBox enabled="false" selected="{data.shipable}"/></mx:HBox>
+                                    <mx:HBox horizontalAlign="center"><mx:CheckBox enabled="false" selected="{data.shippable}"/></mx:HBox>
                                 </mx:Component>
                             </mx:itemRenderer>
                         </mx:DataGridColumn>

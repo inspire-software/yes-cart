@@ -493,7 +493,7 @@
         UISEARCHTEMPLATE varchar(255) comment 'UI template label for search on category, if category has a default product type.',
         SERVICE bit comment 'shall we treat this like service ? It mean no inventory will be check',
         ENSEMBLE bit comment 'is this a bundle of products ?',
-        SHIPABLE bit comment 'is this the physical product ? must have weight and sizes in attributes if yes',
+        SHIPPABLE bit comment 'is this a physical product ? must have weight and sizes in attributes if yes',
         DIGITAL bit default 0 comment 'is this the digital product ?',
         DOWNLOADABLE bit default 0 comment 'is digital product can be downloaded?',
         CREATED_TIMESTAMP datetime,

@@ -142,15 +142,15 @@ public interface ProductType extends Auditable {
      *
      * @return true if product shippable
      */
-    boolean isShipable();
+    boolean isShippable();
 
 
     /**
      * Set product type to shippable.
      *
-     * @param shipable true if shippable
+     * @param shippable true if shippable
      */
-    void setShipable(boolean shipable);
+    void setShippable(boolean shippable);
 
     /**
      * Is product digital.

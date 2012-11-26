@@ -44,7 +44,7 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
     private String uisearchtemplate;
     private boolean service;
     private boolean ensemble;
-    private boolean shipable;
+    private boolean shippable;
     private boolean digital;
     private boolean downloadable;
     private Date createdTimestamp;
@@ -132,13 +132,13 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
         this.ensemble = ensemble;
     }
 
-    @Column(name = "SHIPABLE")
-    public boolean isShipable() {
-        return this.shipable;
+    @Column(name = "SHIPPABLE")
+    public boolean isShippable() {
+        return this.shippable;
     }
 
-    public void setShipable(boolean shipable) {
-        this.shipable = shipable;
+    public void setShippable(boolean shippable) {
+        this.shippable = shippable;
     }
 
     @Column(name = "DIGITAL")

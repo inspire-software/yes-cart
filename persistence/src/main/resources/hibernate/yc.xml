@@ -1542,9 +1542,9 @@ public void setRangeList(final RangeList rangeList) {
                     </comment>
                 </column>
             </property>
-            <property name="shipable" type="boolean">
-                <column name="SHIPABLE">
-                    <comment>is this the physical product ? must have weight and sizes in attributes if yes
+            <property name="shippable" type="boolean">
+                <column name="SHIPPABLE">
+                    <comment>is this a physical product ? must have weight and sizes in attributes if yes
                     </comment>
                 </column>
             </property>
