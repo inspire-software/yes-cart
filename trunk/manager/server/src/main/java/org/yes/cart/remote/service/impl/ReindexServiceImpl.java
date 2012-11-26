@@ -107,7 +107,7 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
 
     private JobContext createAsyncContext() {
         final AsyncContext flex = new AsyncFlexContextImpl();
-        return new JobContextImpl(false, new JobStatusListenerImpl(10000, 300000), flex.getAttributes());
+        return new JobContextImpl(true, new JobStatusListenerImpl(10000, 300000), flex.getAttributes());
     }
 
 }
