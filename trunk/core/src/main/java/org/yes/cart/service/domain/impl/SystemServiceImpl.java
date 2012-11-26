@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValue;
@@ -91,7 +92,8 @@ public class SystemServiceImpl implements SystemService {
      * @return    true if google checkout enabled.
      */
     public boolean isGoogleCheckoutEnabled() {
-        return getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL).contains("googleCheckoutPaymentGatewayLabel");
+        final String allGws = getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL);
+        return StringUtils.isNotBlank(allGws) &&  allGws.contains("googleCheckoutPaymentGatewayLabel");
     }
 
     /**
