@@ -23,6 +23,7 @@ import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Warehouse;
+import org.yes.cart.domain.entityindexer.ProductIndexer;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
@@ -51,21 +52,21 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
     private final SkuWarehouseService skuWarehouseService;
 
 
-    private final ProductService productService;
+    private final ProductIndexer productIndexer;
 
     /**
      * Construct transition.
      *
      * @param warehouseService    warehouse service
      * @param skuWarehouseService sku on warehouse service to change quantity
-     * @param productService use to reindex allocated products, in case if qty is 0
+     * @param productIndexer use to reindex allocated products, in case if qty is 0
      */
     public ProcessAllocationOrderEventHandlerImpl(final WarehouseService warehouseService,
                                                   final SkuWarehouseService skuWarehouseService,
-                                                  final ProductService productService) {
+                                                  final ProductIndexer productIndexer) {
         this.warehouseService = warehouseService;
         this.skuWarehouseService = skuWarehouseService;
-        this.productService = productService;
+        this.productIndexer = productIndexer;
     }
 
     /**
@@ -103,8 +104,8 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
      *
      * @return {@link ProductService}
      */
-    protected ProductService getProductService() {
-        return productService;
+    protected ProductIndexer getProductIndexer() {
+        return productIndexer;
     }
 
 
@@ -164,7 +165,7 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
 
         // reindex product with 0 qty
         for(Long pk : productToReindex) {
-            productService.reindexProduct(pk);
+            productIndexer.submitIndexTask(pk);
         }
 
         orderDelivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED);
