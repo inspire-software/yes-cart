@@ -25,7 +25,7 @@ import org.yes.cart.util.MoneyUtils;
 import java.math.BigDecimal;
 
 /**
- * User: igora Igor Azarny
+ * User:  Igor Azarny
  * Date: 5/5/12
  * Time: 3:40 PM
  */
