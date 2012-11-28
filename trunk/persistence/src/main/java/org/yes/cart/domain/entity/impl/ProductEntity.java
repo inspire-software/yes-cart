@@ -30,14 +30,9 @@ import java.util.*;
  * Time: 9:10 AM
  */
 
-/**
- */
 @Indexed(index = "luceneindex/product", interceptor = org.yes.cart.domain.interceptor.ProductEntityIndexingInterceptor.class)
-/*
-*/
 @Entity
-@Table(name = "TPRODUCT"
-)
+@Table(name = "TPRODUCT")
 public class ProductEntity implements org.yes.cart.domain.entity.Product, java.io.Serializable {
 
 
@@ -77,23 +72,16 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     @ContainedIn
     @IndexedEmbedded(targetElement = AttrValueEntityProduct.class)
     @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeValueBridge.class)
-    /*
-    */
     private Set<AttrValueProduct> attributes = new HashSet<AttrValueProduct>(0);
-    /**
-     */
+
     @Field
     @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductCategoryBridge.class)
-    /*
-    */
     private Set<ProductCategory> productCategory = new HashSet<ProductCategory>(0);
-    /**
-     */
+
     @Field
     @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductSkuBridge.class)
-    /*
-    */
     private Collection<ProductSku> sku = new ArrayList<ProductSku>(0);
+
     private Set<ProductEnsebleOption> ensebleOption = new HashSet<ProductEnsebleOption>(0);
     private Set<ProductAssociation> productAssociations = new HashSet<ProductAssociation>(0);
     private Boolean featured;

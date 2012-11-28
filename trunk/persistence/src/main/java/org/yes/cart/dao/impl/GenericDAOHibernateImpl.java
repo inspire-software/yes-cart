@@ -464,17 +464,6 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public final void fullTextSearchPurge(final PK primaryKey) {
-        /*FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
-        fullTextSession.setFlushMode(FlushMode.MANUAL);
-        fullTextSession.setCacheMode(CacheMode.IGNORE);
-        fullTextSession.purge(getPersistentClass(), primaryKey);
-        fullTextSession.flushToIndexes(); //apply changes to indexes
-        fullTextSession.clear(); //clear since the queue is processed  */
-    }
 
 
     /**
@@ -488,15 +477,9 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
             FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
             fullTextSession.setFlushMode(FlushMode.MANUAL);
             fullTextSession.setCacheMode(CacheMode.IGNORE);
-            //fullTextSession.purge(getPersistentClass(), primaryKey);
+            fullTextSession.purge(getPersistentClass(), primaryKey);
             final T unproxed = (T) HibernateHelper.unproxy(entity);
-            if (entityIndexingInterceptor != null) {
-                if (IndexingOverride.APPLY_DEFAULT == entityIndexingInterceptor.onAdd(unproxed)) {
-                    fullTextSession.index(unproxed);
-                }
-            } else {
-                fullTextSession.index(unproxed);
-            }
+            fullTextSession.index(unproxed);
             result++;
             fullTextSession.flushToIndexes(); //apply changes to indexes
             fullTextSession.clear(); //clear since the queue is processed
