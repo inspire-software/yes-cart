@@ -483,6 +483,19 @@
         </security:intercept-methods>
     </bean>
 
+    <bean id="remoteDevService"
+          class="org.yes.cart.remote.service.impl.RemoteDevServiceImpl">
+        <constructor-arg index="0" ref="remoteBackdoorService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="sqlQuery" access="ROLE_SMADMIN"/>
+            <security:protect method="hsqlQuery" access="ROLE_SMADMIN"/>
+            <security:protect method="luceneQuery" access="ROLE_SMADMIN"/>
+            <security:protect method="getCacheInfo" access="ROLE_SMADMIN"/>
+            <security:protect method="evictCache" access="ROLE_SMADMIN"/>
+        </security:intercept-methods>
+    </bean>
+
     <bean id="remoteFlexSupportService"
           class="org.yes.cart.remote.service.impl.RemoteFlexSupportServiceImpl">
         <flex:remoting-destination/>

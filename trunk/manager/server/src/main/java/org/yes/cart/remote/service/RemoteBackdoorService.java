@@ -94,7 +94,7 @@ public interface RemoteBackdoorService {
     List<CacheInfoDTOImpl> getCacheInfo(AsyncContext context);
 
     /**
-     * Evict alli caches , which are represent in getCacheInfo list.
+     * Evict all caches , which are represent in getCacheInfo list.
      *
      * @param context web service context
      */

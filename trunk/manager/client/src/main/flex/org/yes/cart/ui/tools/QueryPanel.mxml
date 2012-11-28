@@ -80,15 +80,15 @@
 
             if (sqlLabel == (queryTabNavigator.selectedChild as VDividedBox).label) {
 
-                remoteBackdoorService.sqlQuery(sql);
+                remoteDevService.sqlQuery(sql);
 
             } else if (hsqlLabel == (queryTabNavigator.selectedChild as VDividedBox).label) {
 
-                remoteBackdoorService.hsqlQuery(sql);
+                remoteDevService.hsqlQuery(sql);
 
             } else if (luceneLabel == (queryTabNavigator.selectedChild as VDividedBox).label) {
 
-                remoteBackdoorService.luceneQuery(sql);
+                remoteDevService.luceneQuery(sql);
 
             }
 
@@ -122,14 +122,12 @@
         private function initPanel():void {
             addNewTab();
         }
-
         ]]>
 </mx:Script>
 
-    <mx:RemoteObject showBusyCursor="true" id="remoteBackdoorService"
-                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
-                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
-                     destination="remoteBackdoorService"
+    <mx:RemoteObject showBusyCursor="true" id="remoteDevService"
+                     fault="onRpcMethodFault(event)"
+                     destination="remoteDevService"
                      channelSet="{ShopManagerGlobal.instance.channelSet}">
 
         <mx:method id="sqlQuery" name="sqlQuery"
