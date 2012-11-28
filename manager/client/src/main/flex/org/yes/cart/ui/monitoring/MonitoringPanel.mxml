@@ -31,7 +31,7 @@
 
 
         private function monitoringIndexPanel():void {
-            remoteBackdoorService.getCacheInfo();
+            remoteDevService.getCacheInfo();
         }
 
         /* private function onStatusTimerComplete(event:TimerEvent):void {
@@ -43,11 +43,11 @@
          * @param event
          */
         private function onClearCacheClick(event:MouseEvent):void {
-            remoteBackdoorService.evictCache();
+            remoteDevService.evictCache();
         }
 
         private function onRefreshCacheClick(event:MouseEvent):void {
-            remoteBackdoorService.getCacheInfo();
+            remoteDevService.getCacheInfo();
         }
 
         protected function onRpcMethodFault(event:FaultEvent):void {
@@ -59,16 +59,15 @@
         }
 
         private function onEvictCacheResult(event:ResultEvent):void {
-            remoteBackdoorService.getCacheInfo();
+            remoteDevService.getCacheInfo();
         }
         ]]>
 	</mx:Script>
 
 
-    <mx:RemoteObject showBusyCursor="true" id="remoteBackdoorService"
-                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
-                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
-                     destination="remoteBackdoorService"
+    <mx:RemoteObject showBusyCursor="true" id="remoteDevService"
+                     fault="onRpcMethodFault(event)"
+                     destination="remoteDevService"
                      channelSet="{ShopManagerGlobal.instance.channelSet}">
 
         <mx:method id="getCacheInfo" name="getCacheInfo"

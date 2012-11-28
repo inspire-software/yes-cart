@@ -141,9 +141,7 @@
             channelSet.removeChannel(myamf);
             var url:String;
             if ( this.url && (this.url.indexOf("file:/") != -1 )) { //local unsecure connection
-                url =
-                        URLUtil.getProtocol(this.url) + "://" +
-                        URLUtil.getServerNameWithPort(this.url) + "/yes-manager/spring/amf";
+                url = "http://localhost:8080/yes-manager/spring/amf";
                 myamf = new AMFChannel("myamf", url);
             } else if ( this.url && (this.url.indexOf("http:/") != -1 )) {
                 url  = "http://{server.name}:{server.port}/yes-manager/spring/amf";
@@ -230,6 +228,10 @@
                             resourceManager.getString('ShopManagerApplication', 'buildDateLabel') + resourceManager.getString('ShopManagerApplication', 'buildDate') + "\n",
                     resourceManager.getString('ShopManagerApplication', 'info')
             );
+        }
+
+        private function onHelpURLClick(event:MouseEvent):void {
+            navigateToURL(new URLRequest("http://www.inspire-software.com/confluence/display/YC"),"_help");
         }
 
         private function onImportClick(event:MouseEvent):void {
@@ -769,6 +771,12 @@
                                                        label="@Resource(bundle='ShopManagerApplication',key='about')"
                                                        click="onHelpClick(event)"
                                                 />
+                                        <mx:Spacer height="10"/>
+                                        <mx:LinkButton width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='help')"
+                                                       click="onHelpURLClick(event)"
+                                                />
+
                                     </mx:VBox>
                                 </mx:Canvas>
 
