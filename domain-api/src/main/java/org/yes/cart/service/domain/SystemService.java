@@ -91,7 +91,7 @@ public interface SystemService {
 
 
     /**
-     * set system attribute value. This method will create new one , in case if it not existst or
+     * set system attribute value. This method will create new one , in case if it not exists or
      * just update
      * @param key attribute key
      * @param value attribute value

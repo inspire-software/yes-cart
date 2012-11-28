@@ -55,7 +55,7 @@ public class ProductEntityIndexingInterceptor implements EntityIndexingIntercept
     public IndexingOverride onAdd(final ProductEntity entity) {
         return isIncludeInLuceneIndex(entity)
                 ?IndexingOverride.APPLY_DEFAULT
-                :IndexingOverride.SKIP;
+                :IndexingOverride.REMOVE;
     }
 
     /** {@inheritDoc} */
