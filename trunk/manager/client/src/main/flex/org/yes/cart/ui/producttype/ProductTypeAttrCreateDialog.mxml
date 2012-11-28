@@ -34,10 +34,6 @@
                     />
         </mx:FormItem>
 
-        <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='rankEdit')">
-            <mx:TextInput id="rankTextInput" width="200"/>
-        </mx:FormItem>
-
         <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='visible')">
             <mx:CheckBox id="visibleCheckBox"
                          toolTip="@Resource(bundle='ProductTypeManagementPanel',key='visibleHint')"/>
@@ -73,6 +69,10 @@
                         click="editRangeNavigationXml(event)"/>
             </mx:HBox>
 
+        </mx:FormItem>
+
+        <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='rankEdit')">
+            <mx:TextInput id="rankTextInput" width="200"/>
         </mx:FormItem>
 
 
