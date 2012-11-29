@@ -24,6 +24,7 @@ import org.hibernate.search.FullTextQuery;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;
 import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.engine.spi.SearchFactoryImplementor;
 import org.hibernate.search.indexes.interceptor.EntityIndexingInterceptor;
 import org.hibernate.search.indexes.interceptor.IndexingOverride;
 import org.hibernate.search.util.impl.ClassLoaderHelper;
@@ -488,16 +489,54 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
             fullTextSession.setCacheMode(CacheMode.GET);
             final T unproxed = (T) HibernateHelper.unproxy(entity);
 
-            update(entity);
 
-            /*if (needPurge) {
-                fullTextSession.purge(getPersistentClass(), primaryKey);
+            if (needPurge) {
+                SearchFactoryImplementor searchFactory = (SearchFactoryImplementor)  fullTextSession.getSearchFactory();
+                //fullTextSession.purge(getPersistentClass(), primaryKey);
+                //SearchFactoryImplementor searchFactory = (SearchFactoryImplementor) this.sessionFactory.
+
+                /*private void createLuceneIndex() {
+       this.fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
+      try {
+         this.fullTextEntityManager.createIndexer().startAndWait();
+         logger.info("Index created.");
+      } catch (InterruptedException e) {
+         logger.error("Indexing process interrupted: {}.", e);
+      }
+    }
+
+    private void createLuceneSpellCheckIndex() {
+       SearchFactoryImplementor searchFactory = (SearchFactoryImplementor)
+             this.fullTextEntityManager.getSearchFactory();
+      IndexManager indexManager = searchFactory.getAllIndexesManager().
+            getIndexManager(Note.class.getName());
+      IndexReader indexReader = this.fullTextEntityManager.getSearchFactory().
+            getIndexReaderAccessor().open(Note.class);
+
+      Directory directory = ((DirectoryBasedIndexManager) indexManager).getDirectoryProvider().getDirectory();
+      SpellChecker spellChecker = null;
+      try {
+         spellChecker = new SpellChecker(directory);
+         LuceneDictionary dictionary = new LuceneDictionary(indexReader, "spellcheck");
+
+         IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_35, defaultAnalyzer);
+         spellChecker.indexDictionary(dictionary, config, true);
+      } catch (IOException e) {
+         logger.error("IOException when create spell checker directory: {}", e);
+      } finally {
+         if (spellChecker != null)
+            try {
+               spellChecker.close();
+            } catch (IOException e) {
+               logger.error("IOException when close spellChecker object: {}", e);
+            }
+      }
+    }*/
             }
 
             if (needIndex) {
-
                 fullTextSession.index(unproxed);
-            } */
+            }
 
             result++;
             fullTextSession.flushToIndexes(); //apply changes to indexes
