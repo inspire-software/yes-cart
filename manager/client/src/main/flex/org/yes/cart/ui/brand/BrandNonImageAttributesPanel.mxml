@@ -16,7 +16,7 @@
   -->
 
 <brand:BrandAttributesPanel
-           label="@Resource(bundle='BrandManagementPanel',key='images')"
+           label="@Resource(bundle='ShopManagerApplication',key='attr.values')"
            xmlns:mx="http://www.adobe.com/2006/mxml"
            xmlns:brand="org.yes.cart.ui.brand.*"
            width="100%"
@@ -26,7 +26,7 @@
         import org.yes.cart.impl.AttrValueBrandDTOImpl;
 
         override protected function allowManageAttribute(attr:AttrValueBrandDTOImpl):Boolean {
-            return attr.attributeDTO.code.indexOf("IMAGE") != -1;
+            return attr.attributeDTO.code.indexOf("IMAGE") == -1;
         }
         ]]></mx:Script>
 

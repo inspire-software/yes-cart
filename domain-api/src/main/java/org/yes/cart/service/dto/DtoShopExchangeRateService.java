@@ -16,8 +16,6 @@
 package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.ShopExchangeRateDTO;
-import org.yes.cart.domain.dto.ShopUrlDTO;
-import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 

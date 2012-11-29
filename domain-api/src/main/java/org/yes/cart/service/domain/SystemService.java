@@ -16,6 +16,12 @@
 
 package org.yes.cart.service.domain;
 
+import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.entity.AttrValueSystem;
+
+import java.util.Map;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
@@ -38,13 +44,20 @@ public interface SystemService {
     Integer getEtagExpirationForPages();
 
     /**
-     * Get atribute value
+     * Get attribute value
      *
      * @param key key
      * @return value if found, otherwise is null
      */
 
     String getAttributeValue(String key);
+
+    /**
+     * Get all system attributes.
+     *
+     * @return system attributes
+     */
+    Map<String, AttrValueSystem> getAttributeValues();
 
     /**
      * Need to know default shop URL, in case if shop can not be resolvel by domain name.
@@ -98,9 +111,12 @@ public interface SystemService {
      */
     void updateAttributeValue(String key, String value);
 
-
-
-
+    /**
+     * Get generic dao
+     *
+     * @return generic dao
+     */
+    GenericDAO getGenericDao();
 
 
 }

@@ -47,7 +47,7 @@ public interface DtoAttributeService extends GenericDTOService<AttributeDTO> {
      * Get list of available attributes within given <code>attributeGroupCode</code>, that can be assigned to business entity.
      *
      * @param attributeGroupCode     see AttributeGroup#code
-     * @param assignedAttributeCodes list of codes, that already assinged to entity
+     * @param assignedAttributeCodes list of codes, that already assigned to entity (hence excluded)
      * @return list of available attributes to fill with values.
      * @throws org.yes.cart.exception.UnableToCreateInstanceException
      *          in case of reflection problem

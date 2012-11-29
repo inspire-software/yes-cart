@@ -16,7 +16,7 @@
   -->
 
 <cat:CategoryAttributesPanel
-           label="@Resource(bundle='CategoryManagementPanel',key='attr.values')"
+           label="@Resource(bundle='ShopManagerApplication',key='attr.values')"
            xmlns:mx="http://www.adobe.com/2006/mxml"
            xmlns:cat="org.yes.cart.ui.category.*"
            width="100%"

@@ -78,6 +78,14 @@
             }
         }
 
+        private function attrTabSelected():void {
+            if (brandSelected && this.brandGrid.selectedItem != null) {
+                brandNonImagesPanel.brand = this.brandGrid.selectedItem as BrandDTOImpl;
+            } else {
+                brandNonImagesPanel.brand = null;
+            }
+        }
+
         private function initTab(idx:int):void {
             Debug.trace("INFO BrandManagementPanel selected tab idx is " + idx);
             switch (idx) {
@@ -91,10 +99,10 @@
                     imageTabSelected();
                     break;
                 }
-                /*case TAB_ATTR_IDX: {
-                 attrTabSelected(null);
+                case TAB_ATTR_IDX: {
+                    attrTabSelected();
                  break;
-                 } */
+                }
             }
         }
 
@@ -255,6 +263,7 @@
                 </mx:Form>
             </mx:Canvas>
             <attr:BrandImageAttributesPanel id="brandImagesPanel"/>
+            <attr:BrandNonImageAttributesPanel id="brandNonImagesPanel"/>
 
         </mx:TabNavigator>
 

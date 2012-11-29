@@ -28,7 +28,7 @@ import java.util.List;
  * Date: 07-May-2011
  * Time: 11:13:01
  */
-public interface DtoShopService extends GenericDTOService<ShopDTO> {
+public interface DtoShopService extends GenericDTOService<ShopDTO>, GenericAttrValueService {
 
     /**
      * Get supported currencies by given shop.

@@ -62,7 +62,7 @@
         }
 
 
-        private function onAttributeSelected(event:ListEvent):void {
+        protected function onAttributeSelected(event:ListEvent):void {
             canDelete = valueDataGrid.selectedItem != null && DomainUtils.isPersistent(valueDataGrid.selectedItem, 'attrvalueId');
         }
 

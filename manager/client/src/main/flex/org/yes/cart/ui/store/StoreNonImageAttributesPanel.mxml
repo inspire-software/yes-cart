@@ -15,19 +15,19 @@
   -    limitations under the License.
   -->
 
-<brand:BrandAttributesPanel
-           label="@Resource(bundle='BrandManagementPanel',key='images')"
+<store:StoreAttributesPanel
+           label="@Resource(bundle='ShopManagerApplication',key='attr.values')"
            xmlns:mx="http://www.adobe.com/2006/mxml"
-           xmlns:brand="org.yes.cart.ui.brand.*"
+           xmlns:store="org.yes.cart.ui.store.*"
            width="100%"
            height="100%">
 
     <mx:Script><![CDATA[
-        import org.yes.cart.impl.AttrValueBrandDTOImpl;
+        import org.yes.cart.impl.AttrValueShopDTOImpl;
 
-        override protected function allowManageAttribute(attr:AttrValueBrandDTOImpl):Boolean {
-            return attr.attributeDTO.code.indexOf("IMAGE") != -1;
+        override protected function allowManageAttribute(attr:AttrValueShopDTOImpl):Boolean {
+            return attr.attributeDTO.code.indexOf("IMAGE") == -1 && attr.attributeDTO.code.indexOf("CURRENCY") == -1;;
         }
         ]]></mx:Script>
 
-</brand:BrandAttributesPanel>
+</store:StoreAttributesPanel>

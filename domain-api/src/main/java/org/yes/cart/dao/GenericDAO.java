@@ -16,8 +16,6 @@
 
 package org.yes.cart.dao;
 
-import org.hibernate.Query;
-import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 
 import java.io.Serializable;

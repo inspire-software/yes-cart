@@ -65,7 +65,7 @@ public interface AttributeService extends GenericService<Attribute> {
      * Get list of available attributes within given <code>attributeGroupCode</code>, that can be assigned to business entity.
      *
      * @param attributeGroupCode     see AttributeGroup#code
-     * @param assignedAttributeCodes list of codes, that already assinged to entity
+     * @param assignedAttributeCodes list of codes, that already assigned to entity (hence excluded)
      * @return list of available attributes to fill with values.
      */
     List<Attribute> findAvailableAttributes(String attributeGroupCode, List<String> assignedAttributeCodes);
