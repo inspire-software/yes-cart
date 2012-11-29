@@ -1,0 +1,1 @@
+Order confirmed $root.ordernum at $shop.name  for $customer.firstname  $customer.email

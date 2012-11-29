@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shortcuts>
+    <defaultCurrentUser/>
+    <skipIfNotSupported/>
+    <programGroup defaultName="Yes-Cart"
+                  location="applications"/>
+
+    <shortcut
+            name="Запустить Yes-Cart сервер"
+            target="$INSTALL_PATH\yesbin\startcart.bat"
+            commandLine=""
+            workingDirectory="$INSTALL_PATH\yesbin"
+            description="Старт веб сервера и базы данных"
+            iconFile="$INSTALL_PATH\yesbin\startcart.ico"
+            iconIndex="0"
+            initialState="normal"
+            programGroup="no"
+            desktop="yes"
+            applications="yes"
+            startMenu="no"
+            startup="no">
+    </shortcut>
+
+    <shortcut
+            name="Остановить Yes-Cart сервер"
+            target="$INSTALL_PATH\yesbin\stopcart.bat"
+            commandLine=""
+            workingDirectory="$INSTALL_PATH\yesbin"
+            description="Остановка веб сервера и базы данных"
+            iconFile="$INSTALL_PATH\yesbin\stopcart.ico"
+            iconIndex="0"
+            initialState="normal"
+            programGroup="no"
+            desktop="yes"
+            applications="yes"
+            startMenu="no"
+            startup="no">
+    </shortcut>
+
+    <shortcut
+            name="Документация по Yes-Cart"
+            target="$INSTALL_PATH\yesbin\opendoc.bat"
+            commandLine=""
+            workingDirectory="$INSTALL_PATH\yesbin"
+            description="Открыть документации"
+            iconFile="$INSTALL_PATH\yesbin\opendoc.ico"
+            iconIndex="0"
+            initialState="normal"
+            programGroup="no"
+            desktop="yes"
+            applications="yes"
+            startMenu="no"
+            startup="no">
+    </shortcut>
+
+    <shortcut
+            name="Открыть страничку магазина"
+            target="$INSTALL_PATH\yesbin\opendemostore.bat"
+            commandLine=""
+            workingDirectory="$INSTALL_PATH\yesbin"
+            description="Открыть страничку магазина"
+            iconFile="$INSTALL_PATH\yesbin\opendemostore.ico"
+            iconIndex="0"
+            initialState="normal"
+            programGroup="no"
+            desktop="yes"
+            applications="yes"
+            startMenu="no"
+            startup="no">
+    </shortcut>
+
+    <shortcut
+            name="Открыть админку магазина"
+            target="$INSTALL_PATH\yesbin\openyum.bat"
+            commandLine=""
+            workingDirectory="$INSTALL_PATH\yesbin"
+            description="Открыть админку магазина"
+            iconFile="$INSTALL_PATH\yesbin\openyum.ico"
+            iconIndex="0"
+            initialState="normal"
+            programGroup="no"
+            desktop="yes"
+            applications="yes"
+            startMenu="no"
+            startup="no">
+    </shortcut>
+
+</shortcuts>

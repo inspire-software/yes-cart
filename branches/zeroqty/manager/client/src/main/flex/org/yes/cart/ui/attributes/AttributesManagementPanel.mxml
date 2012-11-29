@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  - Copyright 2009 Igor Azarnyi, Denys Pavlov
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" creationComplete="onPanelInit()">
+
+    <mx:Script>
+		<![CDATA[
+        import mx.core.FlexGlobals;
+        import mx.core.IFlexDisplayObject;
+        import mx.rpc.events.FaultEvent;
+
+        import org.yes.cart.impl.AttributeDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        import mx.controls.Alert;
+        import mx.events.CloseEvent;
+        import mx.events.ListEvent;
+        import mx.managers.PopUpManager;
+        import mx.rpc.AsyncResponder;
+        import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.util.CloneUtil;
+
+        private var newAttrGroupPopUp:AttributeGroupCreateEditDialog;
+        private var newAttrPopUp:AttributeCreateEditDialog;
+
+        private function onPanelInit():void {
+            remoteAttributeGroupService.getAll();
+            remoteEtypeService.getAll();
+        }
+
+        private function onAttributeGroupSelected(event:ListEvent):void {
+            groupSelected = attributeGroupsGrid.selectedItem != null;
+            if (groupSelected) {
+                remoteAttributeService.findByAttributeGroupCode(attributeGroupsGrid.selectedItem.code);
+                attributeSelected = false;
+            }
+        }
+
+        private function onNewAttrGroupClick(event:MouseEvent):void {
+            newAttrGroupPopUp = AttributeGroupCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), AttributeGroupCreateEditDialog, true));
+            newAttrGroupPopUp.saveBtn.addEventListener(MouseEvent.CLICK, onNewAttrGroupSaveClick);
+            newAttrGroupPopUp.createNewAttrGroup();
+            PopUpManager.centerPopUp(newAttrGroupPopUp);
+        }
+
+        private function onNewAttrGroupSaveClick(event:Event):void {
+            if (newAttrGroupPopUp != null) {
+                remoteAttributeGroupService.create(
+                        newAttrGroupPopUp.code.text,
+                        newAttrGroupPopUp.attrname.text,
+                        newAttrGroupPopUp.description.text);
+                newAttrGroupPopUp.saveBtn.removeEventListener(MouseEvent.CLICK, onNewAttrGroupSaveClick);
+                PopUpManager.removePopUp(newAttrGroupPopUp);
+                newAttrGroupPopUp = null;
+            }
+        }
+
+        private function onEditAttrGroupClick(event:Event):void {
+            if (groupSelected && this.attributeGroupsGrid.selectedItem != null) {
+                newAttrGroupPopUp = AttributeGroupCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), AttributeGroupCreateEditDialog, true));
+                newAttrGroupPopUp.saveBtn.addEventListener(MouseEvent.CLICK, onEditAttrGroupSaveClick);
+                newAttrGroupPopUp.editAttrGroup(
+                        attributeGroupsGrid.selectedItem.code,
+                        attributeGroupsGrid.selectedItem.name,
+                        attributeGroupsGrid.selectedItem.description);
+                PopUpManager.centerPopUp(newAttrGroupPopUp);
+            }
+        }
+
+        private function onEditAttrGroupSaveClick(event:Event):void {
+            if (newAttrGroupPopUp != null) {
+                remoteAttributeGroupService.update(
+                        newAttrGroupPopUp.code.text,
+                        newAttrGroupPopUp.attrname.text,
+                        newAttrGroupPopUp.description.text);
+                newAttrGroupPopUp.saveBtn.removeEventListener(MouseEvent.CLICK, onEditAttrGroupSaveClick);
+                PopUpManager.removePopUp(newAttrGroupPopUp);
+                newAttrGroupPopUp = null;
+            }
+        }
+
+        private function onDeleteAttrGroupClick(event:MouseEvent):void {
+            if (groupSelected && this.attributeGroupsGrid.selectedItem != null) {
+                Alert.show(
+                        resourceManager.getString('AttributesManagementPanel', 'deleteAttrGroupConfirm',
+                            [ this.attributeGroupsGrid.selectedItem.name ]),
+                        resourceManager.getString('ShopManagerApplication', 'warning'),
+                        Alert.OK | Alert.CANCEL, this, onDeleteAttrGroupConfirmClick, null, Alert.OK);
+            }
+        }
+
+        private function onDeleteAttrGroupConfirmClick(event:CloseEvent):void {
+
+            if (event.detail == Alert.OK) {
+                if (groupSelected && this.attributeGroupsGrid.selectedItem != null) {
+                    remoteAttributeGroupService.remove(this.attributeGroupsGrid.selectedItem.code);
+                }
+            }
+        }
+
+        private function onAttributeSelected(event:ListEvent):void {
+            attributeSelected = attributesGrid.selectedItem != null;
+        }
+
+        private function onCreateAttributeClick(event:MouseEvent):void {
+            if (groupSelected && attributeGroupsGrid.selectedItem != null) {
+                var currentAttributeDTO:AttributeDTOImpl = new AttributeDTOImpl();
+                currentAttributeDTO.attributegroupId = attributeGroupsGrid.selectedItem.attributegroupId;
+                newAttrPopUp = AttributeCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), AttributeCreateEditDialog, true));
+                newAttrPopUp.saveBtn.addEventListener(MouseEvent.CLICK, onCreateAttributeSaveClick);
+                newAttrPopUp.type.dataProvider = etypesList;
+                newAttrPopUp.createNewAttr(currentAttributeDTO);
+                PopUpManager.centerPopUp(newAttrPopUp);
+            }
+        }
+
+
+        private function onCreateAttributeSaveClick(event:Event):void {
+            if (newAttrPopUp != null) {
+                var currentAttributeDTO:AttributeDTOImpl = newAttrPopUp.attrbuteDTO;
+                newAttrPopUp.saveBtn.removeEventListener(MouseEvent.CLICK, onCreateAttributeSaveClick);
+                remoteAttributeService.create(currentAttributeDTO);
+                PopUpManager.removePopUp(newAttrPopUp);
+                newAttrPopUp = null;
+                attributeSelected = false;
+            }
+        }
+
+
+        private function onUpdateAttributeClick(event:Event):void {
+            if (attributeSelected && attributesGrid.selectedItem != null) {
+                var currentAttributeDTO:AttributeDTOImpl = AttributeDTOImpl(CloneUtil.clone(attributesGrid.selectedItem));
+                newAttrPopUp = AttributeCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), AttributeCreateEditDialog, true));
+                newAttrPopUp.saveBtn.addEventListener(MouseEvent.CLICK, onUpdateAttributeSaveClick);
+                newAttrPopUp.type.dataProvider = etypesList;
+                newAttrPopUp.editAttr(currentAttributeDTO);
+                PopUpManager.centerPopUp(newAttrPopUp);
+
+            }
+        }
+
+
+        private function onUpdateAttributeSaveClick(event:Event):void {
+            if (newAttrPopUp != null) {
+                remoteAttributeService.update(newAttrPopUp.attrbuteDTO);
+                newAttrPopUp.saveBtn.removeEventListener(MouseEvent.CLICK, onUpdateAttributeSaveClick);
+                PopUpManager.removePopUp(newAttrPopUp);
+                newAttrPopUp = null;
+            }
+        }
+
+        private function onDeleteAttributeClick(event:MouseEvent):void {
+            if (attributeSelected && attributesGrid.selectedItem != null) {
+                Alert.show(
+                        resourceManager.getString('AttributesManagementPanel', 'deleteAttrConfirm',
+                            [ attributesGrid.selectedItem.name ]),
+                        resourceManager.getString('ShopManagerApplication', 'warning'),
+                        Alert.OK | Alert.CANCEL, this, onDeleteAttributeConfirmClick, null, Alert.OK);
+            }
+        }
+
+        private function onDeleteAttributeConfirmClick(event:CloseEvent):void {
+
+            if (event.detail == Alert.OK) {
+                if (attributeSelected && attributesGrid.selectedItem != null) {
+                    remoteAttributeService.remove(attributesGrid.selectedItem.attributeId);
+                }
+                attributeSelected = false;
+            }
+        }
+
+        protected function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        private function onGetAllGroupsResult(event:ResultEvent):void {
+            groupSelected = false;
+            attributeGroupsGrid.dataProvider = event.result;
+        }
+
+        private function onCreateOrUpdateGroupResult(event:ResultEvent):void {
+            groupSelected = false;
+            attributeSelected = false;
+            remoteAttributeGroupService.getAll();
+        }
+
+        private function onRemoveGroupResult(event:ResultEvent):void {
+
+            Alert.show(
+                    resourceManager.getString('AttributesManagementPanel', 'attrGroupDeletedConfirm'),
+                    resourceManager.getString('ShopManagerApplication', 'info'));
+
+            groupSelected = false;
+            attributeSelected = false;
+            remoteAttributeGroupService.getAll();
+
+        }
+
+        private function onFindByAttributeGroupCodeResult(event:ResultEvent):void {
+            attributeSelected = false;
+            attributesGrid.dataProvider = event.result;
+        }
+
+        private function onGetAllETypesResult(event:ResultEvent):void {
+            etypesList = event.result as ArrayCollection;
+        }
+
+        private function onCreateOrUpdateAttributeResult(event:ResultEvent):void {
+            if (groupSelected && attributeGroupsGrid.selectedItem != null) {
+                remoteAttributeService.findByAttributeGroupCode(attributeGroupsGrid.selectedItem.code);
+            }
+            attributeSelected = false;
+        }
+
+        private function onRemoveAttributeResult(event:ResultEvent):void {
+
+            Alert.show(
+                    resourceManager.getString('AttributesManagementPanel', 'attrDeletedConfirm'),
+                    resourceManager.getString('ShopManagerApplication', 'info'));
+
+            if (groupSelected && attributeGroupsGrid.selectedItem != null) {
+                remoteAttributeService.findByAttributeGroupCode(attributeGroupsGrid.selectedItem.code);
+            }
+            attributeSelected = false;
+        }
+        ]]>
+    </mx:Script>
+
+
+    <mx:Boolean id="groupSelected">false</mx:Boolean>
+    <mx:Boolean id="attributeSelected">false</mx:Boolean>
+
+    <mx:ArrayCollection id="etypesList"/>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteAttributeGroupService" destination="remoteAttributeGroupService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getAllGroups" name="getAll"
+                   result="onGetAllGroupsResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="createGroup" name="create"
+                   result="onCreateOrUpdateGroupResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="updateGroup" name="update"
+                   result="onCreateOrUpdateGroupResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="removeGroup" name="remove"
+                   result="onRemoveGroupResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteAttributeService" destination="remoteAttributeService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="findByAttributeGroupCode" name="findByAttributeGroupCode"
+                   result="onFindByAttributeGroupCodeResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="createAttribute" name="create"
+                   result="onCreateOrUpdateAttributeResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="updateAttribute" name="update"
+                   result="onCreateOrUpdateAttributeResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="removeAttribute" name="remove"
+                   result="onRemoveAttributeResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteEtypeService" destination="remoteEtypeService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getAllETypes" name="getAll"
+                   result="onGetAllETypesResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+     <mx:Panel width="100%" height="100%" title="@Resource(bundle='AttributesManagementPanel',key='attributes')">
+
+
+
+    <mx:VDividedBox id="attributesManagementPanel" width="100%"
+                    height="100%">
+        <mx:VBox width="100%" height="50%" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
+            <mx:HBox paddingLeft="5" paddingTop="5" width="100%">
+                <mx:Button label="@Resource(bundle='AttributesManagementPanel',key='addNewGroup')"
+                           toolTip="@Resource(bundle='AttributesManagementPanel',key='addNewGroupHint')"
+                           click="onNewAttrGroupClick(event)"
+                        />
+                <mx:Button label="@Resource(bundle='AttributesManagementPanel',key='editGroup')"
+                           toolTip="@Resource(bundle='AttributesManagementPanel',key='editGroupHint')"
+                           enabled="{groupSelected}"
+                           click="onEditAttrGroupClick(event)"
+                        />
+                <mx:Button label="@Resource(bundle='AttributesManagementPanel',key='deleteGroup')"
+                           toolTip="@Resource(bundle='AttributesManagementPanel',key='deleteGroupHint')"
+                           enabled="{groupSelected}"
+                           click="onDeleteAttrGroupClick(event)"
+                        />
+            </mx:HBox>
+            <mx:DataGrid width="100%" height="90%" id="attributeGroupsGrid"
+                         doubleClickEnabled="true"
+                         itemDoubleClick="onEditAttrGroupClick(event)"
+                         itemClick="onAttributeGroupSelected(event)">
+                <mx:columns>
+                    <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='code')"
+                                       dataField="code"/>
+                    <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='name')"
+                                       dataField="name"/>
+                    <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='description')"
+                                       dataField="description"/>
+                </mx:columns>
+            </mx:DataGrid>
+        </mx:VBox>
+        <mx:VBox width="100%" height="50%" visible="{groupSelected}" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
+            <mx:HBox paddingLeft="5" paddingTop="5" width="100%">
+                <mx:Button label="@Resource(bundle='AttributesManagementPanel',key='addNew')"
+                           toolTip="@Resource(bundle='AttributesManagementPanel',key='addNewHint')"
+                           enabled="{groupSelected}"
+                           click="onCreateAttributeClick(event)"
+                        />
+                <mx:Button label="@Resource(bundle='AttributesManagementPanel',key='edit')"
+                           toolTip="@Resource(bundle='AttributesManagementPanel',key='editHint')"
+                           enabled="{attributeSelected}"
+                           click="onUpdateAttributeClick(event)"
+                        />
+                <mx:Button label="@Resource(bundle='AttributesManagementPanel',key='delete')"
+                           toolTip="@Resource(bundle='AttributesManagementPanel',key='deleteHint')"
+                           enabled="{attributeSelected}"
+                           click="onDeleteAttributeClick(event)"
+
+                        />
+            </mx:HBox>
+            <mx:DataGrid width="100%" height="90%" id="attributesGrid"
+                         doubleClickEnabled="true"
+                         itemDoubleClick="onUpdateAttributeClick(event)"
+                         itemClick="onAttributeSelected(event)">
+                <mx:columns>
+                    <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='attribute_id')"
+                                       dataField="attributeId" width="30"
+                            />
+                    <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='code')"
+                                       dataField="code" width="100"
+                            />
+                    <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='name')"
+                                       dataField="name"/>
+                    <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='etype')"
+                                       dataField="etypeName"/>
+                    <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='mandatory')"
+                                       dataField="mandatory" width="100" textAlign="center">
+                        <mx:itemRenderer>
+                            <mx:Component>
+                                <mx:HBox horizontalAlign="center"><mx:CheckBox enabled="false" selected="{data.mandatory}"/></mx:HBox>
+                            </mx:Component>
+                        </mx:itemRenderer>
+                    </mx:DataGridColumn>
+                    <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='value')"
+                                       dataField="val"/>
+                    <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='description')"
+                                       dataField="description"/>
+                </mx:columns>
+            </mx:DataGrid>
+
+        </mx:VBox>
+    </mx:VDividedBox>
+
+     </mx:Panel>
+</mx:Canvas>
