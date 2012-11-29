@@ -16,6 +16,7 @@
 
 package org.yes.cart.remote.service.impl;
 
+import org.yes.cart.domain.dto.AttrValueDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
@@ -79,4 +80,31 @@ public class RemoteShopServiceImpl
         return ((DtoShopService) getGenericDTOService()).getAssignedShop(customerId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public List<? extends AttrValueDTO> getEntityAttributes(final long entityPk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return ((DtoShopService) getGenericDTOService()).getEntityAttributes(entityPk);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public AttrValueDTO updateEntityAttributeValue(final AttrValueDTO attrValueDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return ((DtoShopService) getGenericDTOService()).updateEntityAttributeValue(attrValueDTO);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return ((DtoShopService) getGenericDTOService()).createEntityAttributeValue(attrValueDTO);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void deleteAttributeValue(final long attributeValuePk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        ((DtoShopService) getGenericDTOService()).deleteAttributeValue(attributeValuePk);
+    }
 }

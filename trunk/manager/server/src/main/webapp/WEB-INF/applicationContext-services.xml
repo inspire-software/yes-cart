@@ -106,6 +106,25 @@
             <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
             <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
             <security:protect method="updateSupportedCurrencies" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+
+            <security:protect method="getEntityAttributes" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="updateEntityAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="createEntityAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="deleteAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+
+        </security:intercept-methods>
+    </bean>
+
+    <bean id="remoteSystemService" class="org.yes.cart.remote.service.impl.RemoteSystemServiceImpl">
+        <constructor-arg index="0" ref="dtoSystemService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+
+            <security:protect method="getEntityAttributes" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="updateEntityAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="createEntityAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="deleteAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+
         </security:intercept-methods>
     </bean>
 

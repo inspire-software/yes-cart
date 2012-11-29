@@ -15,7 +15,9 @@
   -    limitations under the License.
   -->
 
-<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%"
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml"
+          xmlns:attr="org.yes.cart.ui.store.*"
+          width="100%" height="100%"
            title="@Resource(bundle='StoresManagementPanel',key='store')"
            paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2"
            creationComplete="init();">
@@ -30,6 +32,7 @@
         private var TAB_CURRENCY_EXCHANGE_IDX:int = 3;
         private var TAB_CATEGORY_IDX:int = 4;
         private var TAB_WAREHOUSE_IDX:int = 5;
+        private var TAB_ATTR_IDX:int = 6;
 
 
         private var _shopDTOImpl:ShopDTOImpl;
@@ -86,6 +89,10 @@
             warehouseTab.addChild(panel);
         }
 
+        private function attrTabSelected():void {
+            storeNonImagesPanel.shop = this._shopDTOImpl;
+        }
+
         private function onTabClick(event:IndexChangedEvent):void {
             initTab(event.newIndex);
         }
@@ -117,6 +124,11 @@
                     warehouseTabSelected(null);
                     break;
                 }
+                case TAB_ATTR_IDX:
+                {
+                    attrTabSelected();
+                    break;
+                }
 
             }
 
@@ -145,6 +157,7 @@
                    height="100%"/>
         <mx:Canvas enabled="false" label="@Resource(bundle='StoresManagementPanel',key='taxes')" width="100%"
                    height="100%"/>-->
+        <attr:StoreNonImageAttributesPanel id="storeNonImagesPanel"/>
     </mx:TabNavigator>
 
 

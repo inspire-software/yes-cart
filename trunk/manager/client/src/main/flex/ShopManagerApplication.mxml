@@ -46,6 +46,8 @@
         import org.yes.cart.impl.AttrValueCategoryDTOImpl;
         import org.yes.cart.impl.AttrValueCustomerDTOImpl;
         import org.yes.cart.impl.AttrValueProductSkuDTOImpl;
+        import org.yes.cart.impl.AttrValueShopDTOImpl;
+        import org.yes.cart.impl.AttrValueSystemDTOImpl;
         import org.yes.cart.impl.AttributeDTOImpl;
         import org.yes.cart.impl.BrandDTOImpl;
         import org.yes.cart.impl.CarrierDTOImpl;
@@ -74,6 +76,7 @@
 
         import org.yes.cart.shopmanager.ShopManagerGlobal;
         import org.yes.cart.ui.attributes.AttributesManagementPanel;
+        import org.yes.cart.ui.attributes.SystemAttributesPanel;
         import org.yes.cart.ui.brand.BrandManagementPanel;
         import org.yes.cart.ui.bulkimport.BulkImportPanel;
         import org.yes.cart.ui.carrier.CarrierManagementPanel;
@@ -113,6 +116,8 @@
             registerClassAlias("org.yes.cart.domain.dto.impl.AttrValueCategoryDTOImpl", AttrValueCategoryDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.AttrValueCustomerDTOImpl", AttrValueCustomerDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.AttrValueProductSkuDTOImpl", AttrValueProductSkuDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.AttrValueShopDTOImpl", AttrValueShopDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.AttrValueSystemDTOImpl", AttrValueSystemDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.BrandDTOImpl", BrandDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.CarrierDTOImpl", CarrierDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.CarrierSlaDTOImpl", CarrierSlaDTOImpl);
@@ -305,6 +310,13 @@
             setFontWeight(brandBtn);
             mainPanel.removeAllChildren();
             mainPanel.addChild(new BrandManagementPanel());
+        }
+
+        private function onPreferencesClick(event:MouseEvent):void {
+            setFontWeight(prefsBtn);
+            mainPanel.removeAllChildren();
+            mainPanel.addChild(new SystemAttributesPanel());
+
         }
 
         private function onQueryDataClick(event:MouseEvent):void {
@@ -748,6 +760,11 @@
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='paymetgwCfgHint')"
                                                 />
 
+
+                                        <mx:Spacer height="10"/>
+                                        <mx:LinkButton id="prefsBtn" width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='sysprefs')"
+                                                       click="onPreferencesClick(event)"/>
 
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton id="sqlBtn" width="100%"

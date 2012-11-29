@@ -18,7 +18,10 @@ package org.yes.cart.service.domain;
 
 import org.apache.lucene.search.Query;
 import org.yes.cart.dao.CriteriaTuner;
-import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 

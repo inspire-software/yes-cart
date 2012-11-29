@@ -23,7 +23,6 @@ import org.yes.cart.service.locator.InstantiationStrategy;
 import org.yes.cart.util.ShopCodeContext;
 
 import javax.xml.XMLConstants;
-import javax.xml.namespace.QName;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com

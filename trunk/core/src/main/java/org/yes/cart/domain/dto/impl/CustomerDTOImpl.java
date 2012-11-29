@@ -23,7 +23,6 @@ import org.yes.cart.domain.dto.AttrValueCustomerDTO;
 import org.yes.cart.domain.dto.CustomerDTO;
 import org.yes.cart.domain.dto.matcher.impl.AttrValueCustomerMatcher;
 import org.yes.cart.domain.entity.AttrValueCustomer;
-import org.yes.cart.domain.entity.impl.AttrValueEntityCustomer;
 
 import java.util.HashSet;
 import java.util.Set;

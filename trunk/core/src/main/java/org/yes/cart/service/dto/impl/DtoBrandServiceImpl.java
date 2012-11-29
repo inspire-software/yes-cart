@@ -121,10 +121,10 @@ public class DtoBrandServiceImpl
                 AttributeGroupNames.BRAND,
                 getCodes(result));
         for (AttributeDTO attributeDTO : availableAttributeDTOs) {
-            AttrValueBrandDTO attrValueCategoryDTO = getDtoFactory().getByIface(AttrValueBrandDTO.class);
-            attrValueCategoryDTO.setAttributeDTO(attributeDTO);
-            attrValueCategoryDTO.setBrandId(entityPk);
-            result.add(attrValueCategoryDTO);
+            AttrValueBrandDTO attrValueBarndDTO = getDtoFactory().getByIface(AttrValueBrandDTO.class);
+            attrValueBarndDTO.setAttributeDTO(attributeDTO);
+            attrValueBarndDTO.setBrandId(entityPk);
+            result.add(attrValueBarndDTO);
         }
         Collections.sort(result, new AttrValueDTOComparatorImpl());
         return result;
@@ -155,10 +155,10 @@ public class DtoBrandServiceImpl
 
     /** {@inheritDoc}*/
     public void deleteAttributeValue(final long attributeValuePk) {
-        final AttrValueEntityBrand valueEntityCategory = attrValueEntityBrandDao.findById(attributeValuePk);
-        if (Etype.IMAGE_BUSINESS_TYPE.equals(valueEntityCategory.getAttribute().getEtype().getBusinesstype())) {
-            imageService.deleteImage(valueEntityCategory.getVal());
+        final AttrValueEntityBrand valueEntityBrand = attrValueEntityBrandDao.findById(attributeValuePk);
+        if (Etype.IMAGE_BUSINESS_TYPE.equals(valueEntityBrand.getAttribute().getEtype().getBusinesstype())) {
+            imageService.deleteImage(valueEntityBrand.getVal());
         }
-        attrValueEntityBrandDao.delete(valueEntityCategory);
+        attrValueEntityBrandDao.delete(valueEntityBrand);
     }
 }

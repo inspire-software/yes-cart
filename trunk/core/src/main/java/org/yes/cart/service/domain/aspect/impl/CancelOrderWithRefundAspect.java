@@ -30,12 +30,9 @@ import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.order.OrderEvent;
-import org.yes.cart.util.ShopCodeContext;
 
 import javax.servlet.ServletContext;
-import java.io.File;
 import java.io.Serializable;
-import java.util.HashMap;
 
 /**
  *

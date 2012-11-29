@@ -19,7 +19,6 @@ package org.yes.cart.service.domain.impl;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.ProductCategory;
 import org.yes.cart.service.domain.ProductCategoryService;
-import org.yes.cart.service.domain.ProductService;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com

@@ -18,6 +18,8 @@ package org.yes.cart.domain.dto;
 
 import org.yes.cart.domain.entity.Identifiable;
 
+import java.util.Collection;
+
 /**
  * Shop DTO interface.
  * <p/>
@@ -158,5 +160,21 @@ public interface ShopDTO extends Identifiable {
      * @param metadescription description to use
      */
     void setMetadescription(String metadescription);
+
+
+    /**
+     * Get the shop attributes.
+     *
+     * @return shop attributes.
+     */
+    Collection<AttrValueShopDTO> getAttributes();
+
+    /**
+     * Set shop attributes.
+     *
+     * @param attribute shop attributes to set.
+     */
+    void setAttributes(Collection<AttrValueShopDTO> attribute);
+
 
 }

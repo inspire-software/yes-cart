@@ -65,6 +65,7 @@
 
                 <entry key="org.yes.cart.domain.entity.AttrValueProduct" value="org.yes.cart.domain.entity.impl.AttrValueEntityProduct"/>
                 <entry key="org.yes.cart.domain.entity.AttrValueShop" value="org.yes.cart.domain.entity.impl.AttrValueEntityShop"/>
+                <entry key="org.yes.cart.domain.entity.AttrValueSystem" value="org.yes.cart.domain.entity.impl.AttrValueEntitySystem"/>
                 <entry key="org.yes.cart.domain.entity.AttrValueProductSku" value="org.yes.cart.domain.entity.impl.AttrValueEntityProductSku"/>
                 <entry key="org.yes.cart.domain.entity.AttrValueCategory" value="org.yes.cart.domain.entity.impl.AttrValueEntityCategory"/>
                 <entry key="org.yes.cart.domain.entity.AttrValueCustomer" value="org.yes.cart.domain.entity.impl.AttrValueEntityCustomer"/>
@@ -224,6 +225,26 @@
         <property name="target">
             <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
                 <constructor-arg><value>org.yes.cart.domain.entity.impl.AttrValueEntityBrand</value></constructor-arg>
+                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+                <property name="sessionFactory" ref="sessionFactory"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="attrValueEntityShopDao" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+                <constructor-arg><value>org.yes.cart.domain.entity.impl.AttrValueEntityShop</value></constructor-arg>
+                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+                <property name="sessionFactory" ref="sessionFactory"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="attrValueEntitySystemDao" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+                <constructor-arg><value>org.yes.cart.domain.entity.impl.AttrValueEntitySystem</value></constructor-arg>
                 <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
                 <property name="sessionFactory" ref="sessionFactory"/>
             </bean>

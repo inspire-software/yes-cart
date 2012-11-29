@@ -27,7 +27,6 @@ import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collections;
 
 import static org.junit.Assert.*;

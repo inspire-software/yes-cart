@@ -62,6 +62,12 @@ public class SystemServiceImpl implements SystemService {
         return getAttirbuteValue(key, getSystem().getAttributes());
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public Map<String, AttrValueSystem> getAttributeValues() {
+        return getSystem().getAttributes();
+    }
 
     /**
      * {@inheritDoc}
@@ -206,4 +212,8 @@ public class SystemServiceImpl implements SystemService {
         return null;
     }
 
+    /** {@inheritDoc} */
+    public GenericDAO getGenericDao() {
+        return systemDao;
+    }
 }

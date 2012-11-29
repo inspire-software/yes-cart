@@ -23,7 +23,6 @@ import org.yes.cart.domain.dto.AttrValueBrandDTO;
 import org.yes.cart.domain.dto.BrandDTO;
 import org.yes.cart.domain.dto.matcher.impl.AttrValueBrandMatcher;
 import org.yes.cart.domain.entity.AttrValueBrand;
-import org.yes.cart.domain.entity.impl.AttrValueEntityBrand;
 
 import java.util.ArrayList;
 import java.util.Collection;

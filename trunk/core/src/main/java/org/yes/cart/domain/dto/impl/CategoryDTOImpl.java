@@ -23,7 +23,6 @@ import org.yes.cart.domain.dto.AttrValueCategoryDTO;
 import org.yes.cart.domain.dto.CategoryDTO;
 import org.yes.cart.domain.dto.matcher.impl.AttrValueCategoryMatcher;
 import org.yes.cart.domain.entity.AttrValueCategory;
-import org.yes.cart.domain.entity.impl.AttrValueEntityCategory;
 
 import java.util.*;
 

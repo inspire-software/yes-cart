@@ -17,8 +17,15 @@
 package org.yes.cart.domain.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoCollection;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import org.yes.cart.domain.dto.AttrValueShopDTO;
 import org.yes.cart.domain.dto.ShopDTO;
+import org.yes.cart.domain.dto.matcher.impl.AttrValueShopMatcher;
+import org.yes.cart.domain.entity.AttrValueShop;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -59,6 +66,17 @@ public class ShopDTOImpl implements ShopDTO {
 
     @DtoField(value = "seo.metadescription", entityBeanKeys = "org.yes.cart.domain.entity.Seo")
     private String metadescription;
+
+    @DtoCollection(
+            value="attributes",
+            dtoBeanKey="org.yes.cart.domain.dto.AttrValueShopDTO",
+            entityGenericType = AttrValueShop.class,
+            entityCollectionClass = ArrayList.class,
+            dtoCollectionClass = ArrayList.class,
+            dtoToEntityMatcher = AttrValueShopMatcher.class,
+            readOnly = true
+    )
+    private Collection<AttrValueShopDTO> attributes;
 
 
 
@@ -200,6 +218,16 @@ public class ShopDTOImpl implements ShopDTO {
      */
     public void setMetadescription(final String metadescription) {
         this.metadescription = metadescription;
+    }
+
+    /** {@inheritDoc}*/
+    public Collection<AttrValueShopDTO> getAttributes() {
+        return attributes;
+    }
+
+    /** {@inheritDoc}*/
+    public void setAttributes(final Collection<AttrValueShopDTO> attributes) {
+        this.attributes = attributes;
     }
 
     @Override
