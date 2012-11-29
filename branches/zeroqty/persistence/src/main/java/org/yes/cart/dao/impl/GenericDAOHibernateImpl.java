@@ -16,7 +16,9 @@
 
 package org.yes.cart.dao.impl;
 
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.SortField;
+import org.apache.lucene.store.Directory;
 import org.hibernate.*;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Example;
@@ -25,8 +27,10 @@ import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.engine.spi.SearchFactoryImplementor;
+import org.hibernate.search.indexes.impl.DirectoryBasedIndexManager;
 import org.hibernate.search.indexes.interceptor.EntityIndexingInterceptor;
 import org.hibernate.search.indexes.interceptor.IndexingOverride;
+import org.hibernate.search.indexes.spi.IndexManager;
 import org.hibernate.search.util.impl.ClassLoaderHelper;
 import org.hibernate.search.util.impl.HibernateHelper;
 import org.slf4j.Logger;
@@ -37,6 +41,7 @@ import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.util.ShopCodeContext;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
@@ -401,8 +406,9 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
 
     /**
      * Find entities by criteria.
+     *
      * @param criteriaTuner optional criteria tuner.
-     * @param criterion given criterias
+     * @param criterion     given criterias
      * @return list of found entities.
      */
     @SuppressWarnings("unchecked")
@@ -415,13 +421,14 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
             criteriaTuner.tune(crit);
         }
         return crit.list();
-        
+
     }
-    
+
     /**
      * Find entities by criteria.
+     *
      * @param firstResult scroll to firts result.
-     * @param criterion given criterias
+     * @param criterion   given criterias
      * @return list of found entities.
      */
     @SuppressWarnings("unchecked")
@@ -430,7 +437,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
         for (Criterion c : criterion) {
             crit.add(c);
         }
-        return (T)  crit.setFirstResult(firstResult).setMaxResults(1).uniqueResult();
+        return (T) crit.setFirstResult(firstResult).setMaxResults(1).uniqueResult();
 
     }
 
@@ -475,7 +482,6 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
     }
 
 
-
     /**
      * {@inheritDoc}
      */
@@ -491,7 +497,20 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
 
 
             if (needPurge) {
-                SearchFactoryImplementor searchFactory = (SearchFactoryImplementor)  fullTextSession.getSearchFactory();
+                SearchFactoryImplementor searchFactory = (SearchFactoryImplementor) fullTextSession.getSearchFactory();
+                IndexManager indexManager = searchFactory.getAllIndexesManager().getIndexManager("luceneindex/product");
+                IndexReader indexReader = indexManager.getReaderProvider().openIndexReader();
+
+                try {
+                    indexReader.deleteDocument(Integer.valueOf(String.valueOf(primaryKey)));
+                } catch (IOException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+                fullTextSession.flushToIndexes();
+
+                //Directory directory = ((DirectoryBasedIndexManager) indexManager).getDirectoryProvider().getDirectory();
+
+
                 //fullTextSession.purge(getPersistentClass(), primaryKey);
                 //SearchFactoryImplementor searchFactory = (SearchFactoryImplementor) this.sessionFactory.
 
