@@ -69,7 +69,7 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     private int availability;
 
     @Field
-    @ContainedIn
+    //@ContainedIn
     @IndexedEmbedded(targetElement = AttrValueEntityProduct.class)
     @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeValueBridge.class)
     private Set<AttrValueProduct> attributes = new HashSet<AttrValueProduct>(0);
@@ -239,7 +239,7 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     /**
      *      */
     @Field
-    @ContainedIn
+    //@ContainedIn
     @IndexedEmbedded(targetElement = AttrValueEntityProduct.class)
     @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeValueBridge.class)
     /*

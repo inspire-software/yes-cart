@@ -497,69 +497,20 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
 
 
             if (needPurge) {
-                SearchFactoryImplementor searchFactory = (SearchFactoryImplementor) fullTextSession.getSearchFactory();
-                IndexManager indexManager = searchFactory.getAllIndexesManager().getIndexManager("luceneindex/product");
-                IndexReader indexReader = indexManager.getReaderProvider().openIndexReader();
 
-                try {
-                    indexReader.deleteDocument(Integer.valueOf(String.valueOf(primaryKey)));
-                } catch (IOException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                }
-                fullTextSession.flushToIndexes();
+                fullTextSession.purge(getPersistentClass(), primaryKey);
+                fullTextSession.flushToIndexes(); //apply changes to indexes
 
-                //Directory directory = ((DirectoryBasedIndexManager) indexManager).getDirectoryProvider().getDirectory();
-
-
-                //fullTextSession.purge(getPersistentClass(), primaryKey);
-                //SearchFactoryImplementor searchFactory = (SearchFactoryImplementor) this.sessionFactory.
-
-                /*private void createLuceneIndex() {
-       this.fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
-      try {
-         this.fullTextEntityManager.createIndexer().startAndWait();
-         logger.info("Index created.");
-      } catch (InterruptedException e) {
-         logger.error("Indexing process interrupted: {}.", e);
-      }
-    }
-
-    private void createLuceneSpellCheckIndex() {
-       SearchFactoryImplementor searchFactory = (SearchFactoryImplementor)
-             this.fullTextEntityManager.getSearchFactory();
-      IndexManager indexManager = searchFactory.getAllIndexesManager().
-            getIndexManager(Note.class.getName());
-      IndexReader indexReader = this.fullTextEntityManager.getSearchFactory().
-            getIndexReaderAccessor().open(Note.class);
-
-      Directory directory = ((DirectoryBasedIndexManager) indexManager).getDirectoryProvider().getDirectory();
-      SpellChecker spellChecker = null;
-      try {
-         spellChecker = new SpellChecker(directory);
-         LuceneDictionary dictionary = new LuceneDictionary(indexReader, "spellcheck");
-
-         IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_35, defaultAnalyzer);
-         spellChecker.indexDictionary(dictionary, config, true);
-      } catch (IOException e) {
-         logger.error("IOException when create spell checker directory: {}", e);
-      } finally {
-         if (spellChecker != null)
-            try {
-               spellChecker.close();
-            } catch (IOException e) {
-               logger.error("IOException when close spellChecker object: {}", e);
-            }
-      }
-    }*/
             }
 
             if (needIndex) {
                 fullTextSession.index(unproxed);
+                fullTextSession.flushToIndexes(); //apply changes to indexes
             }
 
             result++;
-            fullTextSession.flushToIndexes(); //apply changes to indexes
-            //fullTextSession.clear(); //clear since the queue is processed
+
+            fullTextSession.clear(); //clear since the queue is processed
         }
         return result;
     }
@@ -568,7 +519,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
      * {@inheritDoc}
      */
     public int fullTextSearchReindex() {
-        final int BATCH_SIZE = 20;
+        final int BATCH_SIZE = 42; // :)
         int index = 0;
 
         if (null != getPersistentClass().getAnnotation(org.hibernate.search.annotations.Indexed.class)) {
