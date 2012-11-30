@@ -45,7 +45,6 @@ public class ProductEntityIndexingInterceptor implements EntityIndexingIntercept
      */
     public boolean isIncludeInLuceneIndex(final Product entity) {
        if (entity != null && Product.AVAILABILITY_STANDARD == entity.getAvailability()) {
-           System.out.println("\n\n>>>>>>>> ProductEntityIndexingInterceptor entity.getQtyOnWarehouse() = " + entity.getQtyOnWarehouse() + "\n");
            return MoneyUtils.isFirstBiggerThanSecond(entity.getQtyOnWarehouse(), BigDecimal.ZERO);
        }
        return true;

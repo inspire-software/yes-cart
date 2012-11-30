@@ -282,14 +282,13 @@ public interface GenericDAO<T, PK extends Serializable> {
     int fullTextSearchReindex(PK primaryKey);
 
     /**
-     * Force reindex given entity.
+     * Force purge given entity from index.
      *
-     * @param primaryKey to reindex.
-     * @param needPurge flag to perform purge from index.
-     * @param needIndex flag to perform indexing.
+     * @param primaryKey to purge.
      * @return document quantity in index
      */
-    int fullTextSearchReindex(PK primaryKey, boolean needPurge, boolean needIndex);
+    public int fullTextSearchPurge(final PK primaryKey);
+
 
 
     /**

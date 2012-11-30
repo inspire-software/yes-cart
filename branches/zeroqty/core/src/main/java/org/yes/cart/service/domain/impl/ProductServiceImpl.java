@@ -706,8 +706,8 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    public int reindexProduct(final Long pk, boolean needPurge, boolean needIndex) {
-        return productDao.fullTextSearchReindex(pk, needPurge, needIndex);
+    public int reindexPurge(final Long pk) {
+        return productDao.fullTextSearchPurge(pk);
     }
 
     /**

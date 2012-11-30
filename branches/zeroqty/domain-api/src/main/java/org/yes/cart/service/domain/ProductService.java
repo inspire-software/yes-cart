@@ -293,11 +293,9 @@ public interface ProductService extends GenericService<Product> {
      * Reindex the products.
      *
      * @param pk the product primary key
-     * @param needPurge flag to perform purge from index.
-     * @param needIndex flag to perform indexing.
      * @return document quantity in index
      */
-    int reindexProduct(Long pk, boolean needPurge, boolean needIndex);
+    int reindexPurge(Long pk);
 
 
     /**

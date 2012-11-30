@@ -405,6 +405,7 @@
     <TBRAND BRAND_ID="103" NAME="Sony" GUID="Sony" DESCRIPTION="Sony"/>
     <TBRAND BRAND_ID="104" NAME="Samsung" GUID="Samsung" DESCRIPTION="Samsung"/>
     <TBRAND BRAND_ID="105" NAME="cc tests" GUID="cc tests" DESCRIPTION="cart and command tests"/>
+    <TBRAND BRAND_ID="106" NAME="Flextronic" GUID="Flextronic" DESCRIPTION="Flextronic"/>
 
 
     <!-- products -->

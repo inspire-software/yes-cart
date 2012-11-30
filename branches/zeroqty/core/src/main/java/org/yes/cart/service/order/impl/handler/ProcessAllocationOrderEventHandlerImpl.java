@@ -23,7 +23,6 @@ import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Warehouse;
-import org.yes.cart.domain.entityindexer.ProductIndexer;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
@@ -165,7 +164,7 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
 
         // reindex product with 0 qty
         for(Long pk : productToReindex) {
-            productService.reindexProduct(pk, true, false);
+            productService.reindexPurge(pk);
         }
 
         orderDelivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED);

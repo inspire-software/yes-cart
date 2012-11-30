@@ -443,6 +443,69 @@ public class ProductDAOTest extends AbstractTestDAO {
 
     }
 
+
+    @Test
+    public void testPurge() throws InterruptedException {
+
+        productDao.fullTextSearchReindex();
+
+        Product product = new ProductEntity();
+        product.setAvailability(Product.AVAILABILITY_STANDARD);
+        Brand brand = brandDao.findById(106L);
+        assertNotNull(brand);
+        product.setBrand(brand);
+        product.setCode("PURGE-ME");
+        product.setName("product to purge");
+        product.setDescription("Description ");
+
+        ProductType productType = productTypeDao.findById(1L);
+        assertNotNull(productType);
+        product.setProducttype(productType);
+        long pk = productDao.create(product).getProductId();
+        assertTrue(pk > 0L);
+
+        // add sku
+        ProductSku productSku = new ProductSkuEntity();
+        productSku.setProduct(product);
+        productSku.setCode("PURGE-ME");
+        productSku.setName("purge");
+        product.getSku().add(productSku);
+        productDao.saveOrUpdate(product);
+
+        // add quantity on warehoues
+        SkuWarehouse skuWarehouse = new SkuWarehouseEntity();
+        skuWarehouse.setSku(productSku);
+        skuWarehouse.setQuantity(BigDecimal.ONE);
+        skuWarehouse.setWarehouse(warehouseDao.findById(2L));
+
+        skuWareHouseDao.create(skuWarehouse);
+
+        // assign it to category
+        ProductCategory productCategory = assignToCategory(product, 128L);
+
+        List<Product> products = null;
+
+        //productDao.fullTextSearchReindex();
+        GlobalSearchQueryBuilderImpl queryBuilder = new GlobalSearchQueryBuilderImpl();
+        Query query = queryBuilder.createQuery("purge", Arrays.asList(128L));
+        products = productDao.fullTextSearch(query);
+        assertTrue("Product must be found in category with id = 128 . Failed query [" + query + "]", !products.isEmpty());
+
+
+        query = queryBuilder.createQuery("purge", (Long) null);
+        products = productDao.fullTextSearch(query);
+        assertTrue("Failed global search [" + query + "]", !products.isEmpty());
+
+        //just purge from search index
+        productDao.fullTextSearchPurge(pk);
+
+
+        query = queryBuilder.createQuery("purge", (List<Long>) null);
+        products = productDao.fullTextSearch(query);
+        assertTrue("Failed global search [" + query + "]", products.isEmpty());
+
+    }
+
     private ProductCategory assignToCategory(Product product, long categoryId) {
         ProductCategory productCategory = new ProductCategoryEntity();
         productCategory.setProduct(product);

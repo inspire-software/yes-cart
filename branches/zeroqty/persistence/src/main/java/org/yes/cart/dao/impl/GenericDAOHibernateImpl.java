@@ -472,20 +472,12 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
         return true;
     }
 
+
+
     /**
      * {@inheritDoc}
      */
     public int fullTextSearchReindex(final PK primaryKey) {
-
-        return fullTextSearchReindex(primaryKey, false, true);
-
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    public int fullTextSearchReindex(final PK primaryKey, final boolean needPurge, final boolean needIndex) {
         int result = 0;
         if (null != getPersistentClass().getAnnotation(org.hibernate.search.annotations.Indexed.class)) {
             sessionFactory.evict(getPersistentClass(), primaryKey);
@@ -494,22 +486,28 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
             fullTextSession.setFlushMode(FlushMode.MANUAL);
             fullTextSession.setCacheMode(CacheMode.GET);
             final T unproxed = (T) HibernateHelper.unproxy(entity);
-
-
-            if (needPurge) {
-
-                fullTextSession.purge(getPersistentClass(), primaryKey);
-                fullTextSession.flushToIndexes(); //apply changes to indexes
-
-            }
-
-            if (needIndex) {
-                fullTextSession.index(unproxed);
-                fullTextSession.flushToIndexes(); //apply changes to indexes
-            }
-
+            fullTextSession.index(unproxed);
+            fullTextSession.flushToIndexes(); //apply changes to indexes
             result++;
+            fullTextSession.clear(); //clear since the queue is processed
+        }
+        return result;
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+    public int fullTextSearchPurge(final PK primaryKey) {
+        int result = 0;
+        if (null != getPersistentClass().getAnnotation(org.hibernate.search.annotations.Indexed.class)) {
+            sessionFactory.evict(getPersistentClass(), primaryKey);
+            T entity = findById(primaryKey);
+            FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
+            fullTextSession.setFlushMode(FlushMode.MANUAL);
+            fullTextSession.setCacheMode(CacheMode.GET);
+            System.out.println("\n\n>>>>>>>> purge = " + primaryKey + "\n");
+            fullTextSession.purge(getPersistentClass(), primaryKey);
+            fullTextSession.flushToIndexes(); //apply changes to indexes
             fullTextSession.clear(); //clear since the queue is processed
         }
         return result;
