@@ -16,6 +16,8 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.apache.commons.collections.MultiMap;
+import org.apache.commons.collections.map.MultiValueMap;
 import org.yes.cart.cache.Cacheable;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
@@ -92,6 +94,10 @@ public class PriceServiceImpl
                     skuPrices,
                     quantity);
         }
+
+        skuPrices = getSkuPricesFilteredByTimeFrame(
+                skuPrices);
+
         SkuPrice rez = null;
         for (SkuPrice skuPrice : skuPrices) {
             if (minimalRegularPrice == null
@@ -134,13 +140,22 @@ public class PriceServiceImpl
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public List<SkuPrice> getSkuPrices(final ProductSku productSku, final Shop shop, final String currencyCode) {
-        final Collection<ProductSku> productSkus = new ArrayList<ProductSku>(1);
-        productSkus.add(productSku);
-        return getSkuPrices(productSkus, shop, currencyCode);
+
+    List<SkuPrice> getSkuPricesFilteredByTimeFrame(final List<SkuPrice> skuPrices) {
+
+        MultiMap qtySkuPriceMap = new MultiValueMap();
+
+        for (SkuPrice skuPrice : skuPrices) {
+            qtySkuPriceMap.put(skuPrice.getQuantity(), skuPrice);
+        }
+
+        Iterator iter = qtySkuPriceMap.keySet().iterator();
+        while(iter.hasNext()) {
+            BigDecimal qty  = (BigDecimal) iter.next();
+
+        }
+
+        return null;
     }
 
 
@@ -253,22 +268,7 @@ public class PriceServiceImpl
         return stringSet;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public List<SkuPrice> getSkuPrices(final Collection<ProductSku> productSkus,
-                                       final Shop shop,
-                                       final String currencyCode,
-                                       final String selectedSkuCode) {
-        final List<SkuPrice> allSkusPrices = getSkuPrices(productSkus, shop, currencyCode);
-        final List<SkuPrice> result = new ArrayList<SkuPrice>();
-        for (SkuPrice skuPrice : allSkusPrices) {
-            if (skuPrice.getSku().getCode().equals(selectedSkuCode)) {
-                result.add(skuPrice);
-            }
-        }
-        return result;
-    }
+
 
 
     /**
@@ -417,17 +417,6 @@ public class PriceServiceImpl
         String sql;
 
 
-        /*final String hsql = "insert into SkuPriceEntity (sku,  shop, currency, quantity,         regularPrice,         salePrice,      minimalPrice ,   salefrom,  saleto ) " +
-                " select                       ( o.sku, o.shop, ?1,     o.quantity,  o.regularPrice * ?2,  o.salePrice * ?2, o.minimalPrice * ?2, o.salefrom, o.saleto ) " +
-                " from SkuPriceEntity o where o.shop = ?3 and o.currency = ?4";
-
-        Query query = skuPriceDao.getSessionFactory().getCurrentSession().createQuery(hsql);
-        query.setString(1, derivedCurrency);
-        query.setBigDecimal(2, exchangeRate);
-        query.setParameter(3, shop);
-        query.setString(4, defaultCurrency);
-
-        return skuPriceDao.executeHsqlUpdate(query);*/
 
         /**
          * Native sql is used, because i have got from hibernate

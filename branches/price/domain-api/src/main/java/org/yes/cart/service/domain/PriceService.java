@@ -86,17 +86,6 @@ public interface PriceService extends GenericService<SkuPrice> {
     List<SkuPrice> getSkuPrices(Collection<ProductSku> productSkus, Shop shop, String currencyCode);
 
 
-    /**
-     * Get the sku prices filtered by shop.
-     * Exchange rate will be used if shop has not prices
-     * for gived curency.
-     *
-     * @param productSku   product sku
-     * @param shop         shop filter
-     * @param currencyCode currency code
-     * @return list of sku prices
-     */
-    List<SkuPrice> getSkuPrices(ProductSku productSku, Shop shop, String currencyCode);
 
     /**
      * Get the sku prices filtered by quantity. Example:
@@ -114,21 +103,7 @@ public interface PriceService extends GenericService<SkuPrice> {
     List<SkuPrice> getSkuPricesFilteredByQuantity(List<SkuPrice> prices, BigDecimal quantity);
 
 
-    /**
-     * Get the sku prices filtered by shop.
-     * Exchange rate will be used if shop has not prices
-     * for gived curency.
-     *
-     * @param productSkus     product skus
-     * @param shop            shop filter
-     * @param currencyCode    currency code
-     * @param selectedSkuCode sku code
-     * @return list of sku proces
-     */
-    List<SkuPrice> getSkuPrices(Collection<ProductSku> productSkus,
-                                Shop shop,
-                                String currencyCode,
-                                String selectedSkuCode);
+
 
     /**
      * Get the list of skus prices filtered by currency.
