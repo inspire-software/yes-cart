@@ -143,19 +143,40 @@ public class PriceServiceImpl
 
     List<SkuPrice> getSkuPricesFilteredByTimeFrame(final List<SkuPrice> skuPrices) {
 
-        MultiMap qtySkuPriceMap = new MultiValueMap();
+        final List<SkuPrice> allPrices = new LinkedList<SkuPrice>();
+
+        final MultiMap qtySkuPriceMap = new MultiValueMap();
 
         for (SkuPrice skuPrice : skuPrices) {
-            qtySkuPriceMap.put(skuPrice.getQuantity(), skuPrice);
+            qtySkuPriceMap.put(skuPrice.getSku().getCode(), skuPrice);
         }
 
         Iterator iter = qtySkuPriceMap.keySet().iterator();
+
         while(iter.hasNext()) {
-            BigDecimal qty  = (BigDecimal) iter.next();
+
+            final String skuCode  = (String) iter.next();
+
+            final Collection<SkuPrice> skuPricesForOneSku = (Collection<SkuPrice>) qtySkuPriceMap.get(skuCode);
+
+            final Iterator<SkuPrice> iterSku = skuPricesForOneSku.iterator();
+
+            SkuPrice candidate;
+
+            while(iterSku.hasNext()) {
+
+
+
+
+
+            }
+
+            allPrices.add(candidate);
+
 
         }
 
-        return null;
+        return allPrices;
     }
 
 
