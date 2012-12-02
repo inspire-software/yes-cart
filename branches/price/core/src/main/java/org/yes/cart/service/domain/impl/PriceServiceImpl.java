@@ -157,21 +157,21 @@ public class PriceServiceImpl
 
             final String skuCode  = (String) iter.next();
 
-            final Collection<SkuPrice> skuPricesForOneSku = (Collection<SkuPrice>) qtySkuPriceMap.get(skuCode);
+            final List<SkuPrice> skuPricesForOneSku = new ArrayList<SkuPrice>(  (Collection<SkuPrice>) qtySkuPriceMap.get(skuCode) );
 
-            final Iterator<SkuPrice> iterSku = skuPricesForOneSku.iterator();
+            Collections.sort(
+                    skuPricesForOneSku,
+                    new Comparator<SkuPrice>() {
 
-            SkuPrice candidate;
+                        public int compare(final SkuPrice skuPrice1, final SkuPrice skuPrice2) {
+                            return 0;  //To change body of implemented methods use File | Settings | File Templates.
+                        }
 
-            while(iterSku.hasNext()) {
+                    }
+            );
 
 
-
-
-
-            }
-
-            allPrices.add(candidate);
+            allPrices.add(skuPricesForOneSku.get(0));
 
 
         }
