@@ -22,6 +22,7 @@ import org.hibernate.search.annotations.Indexed;
 import org.yes.cart.domain.entity.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -294,6 +295,15 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
      */
     public void setSeo(final Seo seo) {
         this.seo = (SeoEntity) seo;
+    }
+
+    @Transient
+    public BigDecimal getQty() {
+        BigDecimal rez = BigDecimal.ZERO.setScale(2);
+        for (SkuWarehouse swe : getQuantityOnWarehouse()) {
+            rez = rez.add(swe.getQuantity());
+        }
+        return rez;
     }
 
 

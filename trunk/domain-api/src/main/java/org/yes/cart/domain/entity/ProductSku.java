@@ -16,6 +16,7 @@
 
 package org.yes.cart.domain.entity;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 
 /**
@@ -197,6 +198,15 @@ public interface ProductSku extends Auditable, Attributable, Rankable , Seoable,
      * @param quantityOnWarehouse quantity of sku on warehouse.
      */
     void setQuantityOnWarehouse(Collection<SkuWarehouse> quantityOnWarehouse);
+
+
+    /**
+     * Get total quantity of skus on all warehouses.
+     *
+     * @return total quantity
+     */
+    BigDecimal getQty();
+
 
 
 

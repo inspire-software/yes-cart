@@ -47,9 +47,8 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImpl
      * @param skuWarehouseService sku on warehouse service to change quantity
      */
     public DeliveryAllowedByInventoryOrderEventHandlerImpl(final WarehouseService warehouseService,
-                                                           final SkuWarehouseService skuWarehouseService,
-                                                           final ProductIndexer productService) {
-        super(warehouseService, skuWarehouseService, productService);
+                                                           final SkuWarehouseService skuWarehouseService) {
+        super(warehouseService, skuWarehouseService);
     }
 
     /**
