@@ -1,0 +1,733 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:flex="http://www.springframework.org/schema/flex"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+            http://www.springframework.org/schema/flex http://www.springframework.org/schema/flex/spring-flex-1.5.xsd
+            http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+    <bean name="myJpaHibernateConfigProcessor" class="org.springframework.flex.core.io.LocalJpaHibernateConfigProcessor">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+
+    <flex:message-broker>
+        <flex:config-processor ref="myJpaHibernateConfigProcessor"/>
+        <flex:secured/>
+    </flex:message-broker>
+
+    <!--    ROLE_SMADMIN    ROLE_SMSHOPADMIN    ROLE_SMWAREHOUSEADMIN    ROLE_SMCALLCENTER    -->
+
+    <bean id="remoteUserManagementService" class="org.yes.cart.remote.service.impl.RemoteManagementServiceImpl">
+        <constructor-arg index="0" ref="userManagementService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="addUser" access="ROLE_SMADMIN"/>
+            <security:protect method="getManagers" access="ROLE_SMADMIN"/>
+            <security:protect method="updateUser" access="ROLE_SMADMIN"/>
+            <security:protect method="resetPassword"
+                              access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="deleteUser" access="ROLE_SMADMIN"/>
+            <security:protect method="addRole" access="ROLE_SMADMIN"/>
+            <security:protect method="updateRole" access="ROLE_SMADMIN"/>
+            <security:protect method="deleteRole" access="ROLE_SMADMIN"/>
+            <security:protect method="grantRole" access="ROLE_SMADMIN"/>
+            <security:protect method="revokeRole" access="ROLE_SMADMIN"/>
+        </security:intercept-methods>
+
+    </bean>
+
+    <bean id="remoteAttributeGroupService" class="org.yes.cart.remote.service.impl.RemoteAttributeGroupServiceImpl">
+        <constructor-arg index="0" ref="dtoAttributeGroupService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="create" access="ROLE_SMADMIN"/>
+            <security:protect method="update" access="ROLE_SMADMIN"/>
+            <security:protect method="remove" access="ROLE_SMADMIN"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getAttributeGroupByCode" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+        </security:intercept-methods>
+    </bean>
+
+    <bean id="remoteAttributeService" class="org.yes.cart.remote.service.impl.RemoteAttributeServiceImpl">
+        <constructor-arg index="0" ref="dtoAttributeService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="create" access="ROLE_SMADMIN"/>
+            <security:protect method="update" access="ROLE_SMADMIN"/>
+            <security:protect method="remove" access="ROLE_SMADMIN"/>
+            <security:protect method="getNew" access="ROLE_SMADMIN"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="findByAttributeGroupCode" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+        </security:intercept-methods>
+    </bean>
+
+    <bean id="remoteEtypeService" class="org.yes.cart.remote.service.impl.RemoteEtypeServiceImpl">
+        <constructor-arg index="0" ref="dtoEtypeService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="create" access="ROLE_SMADMIN"/>
+            <security:protect method="update" access="ROLE_SMADMIN"/>
+            <security:protect method="remove" access="ROLE_SMADMIN"/>
+            <security:protect method="getNew" access="ROLE_SMADMIN"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+        </security:intercept-methods>
+    </bean>
+
+    <bean id="remoteShopService" class="org.yes.cart.remote.service.impl.RemoteShopServiceImpl">
+        <constructor-arg index="0" ref="dtoShopService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="create" access="ROLE_SMADMIN"/>
+            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="remove" access="ROLE_SMADMIN"/>
+            <security:protect method="getNew" access="ROLE_SMADMIN"/>
+            <security:protect method="getSupportedCurrencies" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="updateSupportedCurrencies" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+
+            <security:protect method="getEntityAttributes" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="updateEntityAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="createEntityAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="deleteAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+
+        </security:intercept-methods>
+    </bean>
+
+    <bean id="remoteSystemService" class="org.yes.cart.remote.service.impl.RemoteSystemServiceImpl">
+        <constructor-arg index="0" ref="dtoSystemService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+
+            <security:protect method="getEntityAttributes" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="updateEntityAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="createEntityAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="deleteAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+
+        </security:intercept-methods>
+    </bean>
+
+    <bean id="remoteShopExchangeRateService" class="org.yes.cart.remote.service.impl.RemoteShopExchangeRateServiceImpl">
+        <constructor-arg index="0" ref="dtoShopExchangeRateService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="create" access="ROLE_SMADMIN"/>
+            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="remove" access="ROLE_SMADMIN"/>
+            <security:protect method="getNew" access="ROLE_SMADMIN"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getAllByShopId" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="updateDerivedPrices" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
+        </security:intercept-methods>
+
+    </bean>
+
+    <bean id="remoteShopUrlService" class="org.yes.cart.remote.service.impl.RemoteShopUrlServiceImpl">
+        <constructor-arg index="0" ref="dtoShopUrlService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="create" access="ROLE_SMADMIN"/>
+            <security:protect method="update" access="ROLE_SMADMIN"/>
+            <security:protect method="remove" access="ROLE_SMADMIN"/>
+            <security:protect method="getNew" access="ROLE_SMADMIN"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getAllByShopId" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+        </security:intercept-methods>
+    </bean>
+
+    <!--seoGenericService-->
+
+    <bean id="remoteCategoryService" class="org.yes.cart.remote.service.impl.RemoteCategoryServiceImpl">
+        <constructor-arg index="0" ref="dtoCategoryService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="remove" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getNew" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getAllByShopId" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+
+
+            <security:protect method="getEntityAttributes" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="updateEntityAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="createEntityAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="deleteAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="assignToShop" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="unassignFromShop" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getByProductId" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+        </security:intercept-methods>
+    </bean>
+
+    <bean id="remoteCustomerService" class="org.yes.cart.remote.service.impl.RemoteCustomerServiceImpl">
+        <constructor-arg index="0" ref="dtoCustomerService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="findCustomer" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="remoteResetPassword" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+
+            <security:protect method="getEntityAttributes" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="updateEntityAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="createEntityAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="deleteAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+        </security:intercept-methods>
+    </bean>
+
+
+
+    <bean id="remoteProductService" class="org.yes.cart.remote.service.impl.RemoteProductServiceImpl">
+        <constructor-arg index="0" ref="dtoProductService"/>
+        <constructor-arg index="1" ref="reindexService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="remove" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getNew" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getProductByCategory" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getProductByCategoryWithPaging" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+        </security:intercept-methods>
+    </bean>
+
+    <bean id="remoteProductSkuService" class="org.yes.cart.remote.service.impl.RemoteProductSkuServiceImpl">
+        <constructor-arg index="0" ref="dtoProductSkuService"/>
+        <constructor-arg index="1" ref="reindexService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="createSkuPrice" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="updateSkuPrice" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="removeSkuPrice" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="remove" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getNew" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getEntityAttributes" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="updateEntityAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="createEntityAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="deleteAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getAllProductSkus" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+        </security:intercept-methods>
+    </bean>
+
+
+    <bean id="remoteBrandService" class="org.yes.cart.remote.service.impl.RemoteBrandServiceImpl">
+        <constructor-arg index="0" ref="dtoBrandService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="remove" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getNew" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+
+            <security:protect method="getEntityAttributes" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="updateEntityAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="createEntityAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="deleteAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+
+        </security:intercept-methods>
+    </bean>
+
+    <bean id="remoteCarrierService" class="org.yes.cart.remote.service.impl.RemoteCarrierServiceImpl">
+        <constructor-arg index="0" ref="dtoCarrierService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="remove" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getNew" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+        </security:intercept-methods>
+    </bean>
+
+    <bean id="remoteCarrierSlaService" class="org.yes.cart.remote.service.impl.RemoteCarrierSlaServiceImpl">
+        <constructor-arg index="0" ref="dtoCarrierSlaService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="remove" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getNew" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+        </security:intercept-methods>
+    </bean>
+
+    <bean id="remoteProductAssociationService" class="org.yes.cart.remote.service.impl.RemoteProductAssociationServiceImpl">
+        <constructor-arg index="0" ref="dtoProductAssociationService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="remove" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getNew" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getProductAssociations" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getProductAssociationsByProductAssociationType" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+        </security:intercept-methods>
+    </bean>
+
+    <bean id="remoteAssociationService" class="org.yes.cart.remote.service.impl.RemoteAssociationServiceImpl">
+        <constructor-arg index="0" ref="dtoAssociationService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="remove" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getNew" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+        </security:intercept-methods>
+    </bean>
+
+    <bean id="remoteProdTypeAttributeViewGroupService" class="org.yes.cart.remote.service.impl.RemoteProdTypeAttributeViewGroupServiceImpl">
+        <constructor-arg index="0" ref="dtoProdTypeAttributeViewGroupService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="remove" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getNew" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+        </security:intercept-methods>
+    </bean>
+
+    <bean id="remoteAddressService" class="org.yes.cart.remote.service.impl.RemoteAddressServiceImpl">
+        <constructor-arg index="0" ref="dtoAddressService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="getAddressesByCustomerId" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+        </security:intercept-methods>
+    </bean>
+
+
+    <bean id="remoteCustomerWishListService" class="org.yes.cart.remote.service.impl.RemoteCustomerWishListServiceImpl">
+        <constructor-arg index="0" ref="dtoCustomerWishListService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="getByCustomerId" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+        </security:intercept-methods>
+    </bean>
+
+    <bean id="remoteWarehouseService" class="org.yes.cart.remote.service.impl.RemoteWarehouseServiceImpl">
+        <constructor-arg index="0" ref="dtoWarehouseService"/>
+        <constructor-arg index="1" ref="reindexService"/>
+        <constructor-arg index="2" ref="productSkuService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
+            <security:protect method="remove" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getNew" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="findByShopId" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="assignWarehouse" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="unassignWarehouse" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="removeSkuOnWarehouse" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
+            <security:protect method="createSkuOnWarehouse" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
+            <security:protect method="updateSkuOnWarehouse" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
+            <security:protect method="findProductSkusOnWarehouse" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+        </security:intercept-methods>
+    </bean>
+
+    <bean id="remoteProductTypeService" class="org.yes.cart.remote.service.impl.RemoteProductTypeServiceImpl">
+        <constructor-arg index="0" ref="dtoProductTypeService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="remove" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getNew" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+        </security:intercept-methods>
+    </bean>
+
+    <bean id="remoteProductTypeAttrService" class="org.yes.cart.remote.service.impl.RemoteProductTypeAttrServiceImpl">
+        <constructor-arg index="0" ref="dtoProductTypeAttrService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="remove" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getNew" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getByProductTypeId" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+        </security:intercept-methods>
+    </bean>
+
+    <bean id="remoteImageService" class="org.yes.cart.remote.service.impl.RemoteImageServiceImpl">
+        <constructor-arg index="0" ref="dtoImageService"/>
+        <constructor-arg index="1" ref="dtoShopService"/>
+        <constructor-arg index="2" ref="remoteBackdoorService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="remove" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getNew" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="addImageToRepository" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getImageAsByteArray" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getSeoImage" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+        </security:intercept-methods>
+    </bean>
+
+
+    <bean id="remoteProductCategoryService" class="org.yes.cart.remote.service.impl.RemoteProductCategoryServiceImpl">
+        <constructor-arg index="0" ref="dtoProductCategoryService"/>
+        <constructor-arg index="1" ref="reindexService"/>
+        <constructor-arg index="2" ref="remoteBackdoorService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="remove" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="removeByCategoryProductIds" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getNew" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+        </security:intercept-methods>
+    </bean>
+
+
+    <bean id="remoteCountryService" class="org.yes.cart.remote.service.impl.RemoteCountryServiceImpl">
+        <constructor-arg index="0" ref="dtoCountryService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
+            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
+            <security:protect method="remove" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
+            <security:protect method="getNew" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+        </security:intercept-methods>
+    </bean>
+
+    <bean id="remoteCustomerOrderService" class="org.yes.cart.remote.service.impl.RemoteCustomerOrderServiceImpl">
+        <constructor-arg index="0" ref="dtoCustomerOrderService"/>
+        <constructor-arg index="1" ref="remoteReportService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="findCustomerOrdersByCriteria" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="findDeliveryDetailsByOrderNumber" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="findDeliveryByOrderNumber" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="updateDeliveryStatus" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="updateExternalDelieryRefNo" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="updateOrderSetCancelled" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="updateOrderSetConfirmed" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+        </security:intercept-methods>
+    </bean>
+
+
+    <bean id="remoteStateService" class="org.yes.cart.remote.service.impl.RemoteStateServiceImpl">
+        <constructor-arg index="0" ref="dtoStateService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
+            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
+            <security:protect method="remove" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
+            <security:protect method="getNew" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+        </security:intercept-methods>
+    </bean>
+
+    <bean id="remoteUploadService" class="org.yes.cart.remote.service.impl.RemoteUploadServiceImpl">
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="upload" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
+        </security:intercept-methods>
+    </bean>
+
+    <bean id="productIndexExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <description>
+            Thread pool (1,max int) forproduct indexing since they may be slow.
+        </description>
+    </bean>
+
+    <bean id="reindexService"
+          class="org.yes.cart.remote.service.impl.ReindexServiceImpl">
+        <constructor-arg index="0" ref="productIndexExecutor"/>
+        <constructor-arg index="1" ref="remoteBackdoorService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="reindexAllProducts" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
+            <security:protect method="getIndexAllStatus" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
+        </security:intercept-methods>
+    </bean>
+
+    <bean id="remoteDevService"
+          class="org.yes.cart.remote.service.impl.RemoteDevServiceImpl">
+        <constructor-arg index="0" ref="remoteBackdoorService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="sqlQuery" access="ROLE_SMADMIN"/>
+            <security:protect method="hsqlQuery" access="ROLE_SMADMIN"/>
+            <security:protect method="luceneQuery" access="ROLE_SMADMIN"/>
+            <security:protect method="getCacheInfo" access="ROLE_SMADMIN"/>
+            <security:protect method="evictCache" access="ROLE_SMADMIN"/>
+        </security:intercept-methods>
+    </bean>
+
+    <bean id="remoteFlexSupportService"
+          class="org.yes.cart.remote.service.impl.RemoteFlexSupportServiceImpl">
+        <flex:remoting-destination/>
+    </bean>
+
+
+    <bean id="remoteBackdoorService" class="org.yes.cart.remote.service.impl.RemoteBackdoorServiceImpl">
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="reindexAllProducts" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="reindexProduct"     access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="reindexProducts"    access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="sqlQuery"           access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="hsqlQuery"          access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="luceneQuery"        access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getCacheInfo"       access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="evictCache"         access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+        </security:intercept-methods>
+    </bean>
+
+    <bean id="bulkImportExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <description>
+            Thread pool (1, max int) for bulk imports since they may be slow.
+        </description>
+    </bean>
+
+
+    <bean id="bulkImportService" class="org.yes.cart.bulkimport.service.impl.ImportDirectorImplService">
+        <description>
+            Import descriptor groups define set of descriptor that should be used in case we have a
+            zip import to define exactly what sort of entities we need to update.
+
+            It is recommended to craft these sets according to business model of the company
+            to maximise performance.
+        </description>
+        <constructor-arg index="0">
+            <map>
+                <entry key="YC DEMO: Initial Data">
+                    <!--
+                        This is for data in env/sampledata/demo-data/yc/import/import.zip
+                        that contains basic countries and carries information so that
+                        we can complete checkout in demo store.
+                      -->
+                    <list>
+                        <value>shopcurrencies-demo.xml</value>
+                        <value>country.xml</value>
+                        <value>state.xml</value>
+                        <value>carriernames.xml</value>
+                        <value>carrierslanames.xml</value>
+                    </list>
+                </entry>
+                <entry key="YC DEMO: IceCat Catalog">
+                    <!--
+                        This is a sample data kindly provided by IceCat (http://icecat.biz)
+                        and is located in env/sampledata/demo-data/icecat/import/import-EN,RU.zip
+                        with images for products in env/sampledata/demo-data/icecat/import/import-EN,RU-img.zip
+                        that contains an example catalog with product SKUs and attributes
+                        and also some made up inventory and price data. The shop categories
+                        are specifically set for SHOP10.
+
+                        This group also has some 'unsafe' fast insert descriptors (marked '-demo') that should not be
+                        used in production unless this is the first time data load and the data is clean.
+                      -->
+                    <list>
+                        <value>brandnames.xml</value>
+                        <value>attributenames.xml</value>
+                        <value>attributegroupnames.xml</value>
+                        <value>producttypenames.xml</value>
+                        <value>categorynames-demo.xml</value>
+                        <value>shopcategory-demo.xml</value>
+                        <value>productypeattributeviewgroupnames.xml</value>
+                        <value>producttypeattrnames.xml</value>
+                        <value>productnames-demo.xml</value>
+                        <value>productsku-demo.xml</value>
+                        <value>productsattributes-demo.xml</value>
+                        <value>skuinventory.xml</value>
+                        <value>skuprices.xml</value>
+                        <value>productcategorynames.xml</value>
+                    </list>
+                </entry>
+                <entry key="Catalog import (Categories and attribute definitions)">
+                    <list>
+                        <value>brandnames.xml</value>
+                        <value>attributenames.xml</value>
+                        <value>attributegroupnames.xml</value>
+                        <value>producttypenames.xml</value>
+                        <value>categorynames.xml</value>
+                        <value>shopcategory.xml</value>
+                        <value>productypeattributeviewgroupnames.xml</value>
+                        <value>producttypeattrnames.xml</value>
+                    </list>
+                </entry>
+                <entry key="Product import (Products, SKUs and attributes)">
+                    <list>
+                        <value>productnames.xml</value>
+                        <value>productsku.xml</value>
+                        <value>productsattributes.xml</value>
+                        <value>productcategorynames.xml</value>
+                    </list>
+                </entry>
+                <entry key="Inventory import">
+                    <list>
+                        <value>skuinventory.xml</value>
+                    </list>
+                </entry>
+                <entry key="Prices import">
+                    <list>
+                        <value>skuprices.xml</value>
+                    </list>
+                </entry>
+                <entry key="IMAGES ONLY">
+                    <!--
+                        Images are always scanned so if we have no descriptor it is image
+                        only import
+                      -->
+                    <list/>
+                </entry>
+                <entry key="Shops and Warehouses">
+                    <!-- This is just example for completeness -->
+                    <list>
+                        <value>shop.xml</value>
+                        <value>warehouse.xml</value>
+                    </list>
+                </entry>
+            </map>
+        </constructor-arg>
+        <constructor-arg index="1" value="#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'+systemProperties['file.separator']+'archive'}"/>
+        <constructor-arg index="2" value="import-descriptor"/>
+        <constructor-arg index="3" value="#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'+systemProperties['file.separator']+'import'}"/>
+        <constructor-arg index="4" ref="productService"/>
+        <constructor-arg index="5" ref="bulkImportExecutor"/>
+        <constructor-arg index="6" ref="remoteBackdoorService"/>
+
+        <lookup-method name="getNewBulkImportService" bean="csvBulkImportService"/>
+        <lookup-method name="getNewBulkImportImagesService" bean="bulkImportImageService"/>
+
+
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <!-- TODO: add security settings so that each descriptor group is driven by a certain role -->
+            <security:protect method="doImport" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
+            <security:protect method="getImportStatus" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
+            <security:protect method="getImportGroups" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
+        </security:intercept-methods>
+
+
+    </bean>
+
+
+    <import resource="report.xml"/>
+    <import resource="classpath*:payment-api.xml"/>
+
+
+    <bean id="remoteReportService" class="org.yes.cart.report.impl.ReportServiceImpl">
+        <constructor-arg ref="genericDao" index="0"/>
+        <constructor-arg index="1">
+            <list>
+                <ref bean="reportShopSummaryInfo"/>
+                <ref bean="reportAvailableStock"/>
+                <ref bean="payments"/>
+                <ref bean="reportDelivery"/>
+            </list>
+        </constructor-arg>
+        <constructor-arg value="report" index="2"/>
+
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="downloadReport" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
+            <security:protect method="downloadReport" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
+        </security:intercept-methods>
+
+
+    </bean>
+
+    <bean id="remotePaymentModulesManagementService" class="org.yes.cart.remote.service.impl.RemotePaymentModulesManagementServiceImpl">
+        <constructor-arg index="0" ref="paymentModulesManager"/>
+        <constructor-arg index="1" ref="customerOrderPaymentService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="getAllowedPaymentGateways" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getAvailablePaymentGateways" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getPaymentGatewayParameters" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="updateConfigurationParameter" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="allowPaymentGateway" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="disallowPaymentGateway" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="findPayments" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getPaymentGateways" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+        </security:intercept-methods>
+    </bean>
+
+    <!-- ################################ JMX support  begin ###################################### -->
+
+    <bean id="mbeanServer" class="org.springframework.jmx.support.MBeanServerFactoryBean">
+        <property name="locateExistingServerIfPossible" value="true"/>
+        <property name="defaultDomain" value="YesManager"/>
+    </bean>
+
+    <bean class="org.springframework.jmx.export.MBeanExporter" lazy-init="false">
+        <property name="server" ref="mbeanServer"/>
+        <property name="registrationBehaviorName" value="REGISTRATION_REPLACE_EXISTING"/>
+        <property name="beans">
+            <map>
+                <entry key="bean:name=YesManager-BulkImportImageService" value-ref="bulkImportImageService"/>
+                <entry key="bean:name=YesManager-BulkImportServiceImpl" value-ref="bulkImportService"/>
+                <entry key="bean:name=YesManager-BulkImportService" value-ref="bulkImportService"/>
+            </map>
+        </property>
+    </bean>
+
+    <!-- ################################ JMX support  end ###################################### -->
+
+
+
+
+</beans>
+        

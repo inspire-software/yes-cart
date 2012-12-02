@@ -1,0 +1,163 @@
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<body>
+<wicket:head>
+    <wicket:link>
+        <script type="text/javascript" src="../../../../../../js/sliding.form.js"></script>
+    </wicket:link>
+</wicket:head>
+
+<wicket:panel>
+
+    <div class="column grid_10 menu sku-in-list-head">
+        <table width="96%" align="center">
+            <tr>
+                <td>
+                    <span wicket:id="name">[product or sku name]</span>
+                </td>
+                <td align="right">
+                    <wicket:message key="sku.code">[sku.code:]</wicket:message>
+                    <span wicket:id="skuCode">[sku num]</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+    <div class="sku">
+
+        <div class="sku-row">
+
+            <div class="sku-column sku-row-grid_5">
+                <wicket:container wicket:id="imageView">
+                    [product image view]
+                </wicket:container>
+            </div>
+
+            <div class="sku-column sku-row-grid_5 sku-item-info">
+                <div wicket:id="name2">[product or sku name 2]</div>
+            </div>
+
+
+            <div class="sku-column sku-row-grid_3 sku-item-info">
+                <a wicket:id="addToCartLink" class="button orange">
+                    <wicket:message key="add.to.cart">[add one to cart]</wicket:message>
+                </a>
+            </div>
+            <div class="sku-column sku-row-grid_2 sku-item-info" style="padding-top:15px">
+                <wicket:container wicket:id="priceView">
+                    [price]
+                </wicket:container>
+            </div>
+
+
+            <div class="sku-column sku-row-grid_5">
+                <wicket:container wicket:id="priceTiersView">
+                    [price tiers view]
+                </wicket:container>
+            </div>
+
+        </div>
+        <div class="sku-row">
+
+            <div class="sku-column sku-row-grid_10">
+
+
+                <wicket:container wicket:id="skuList">
+                    [product variation / sku list]
+                </wicket:container>
+            </div>
+
+        </div>
+
+
+        <div class="sku-row">
+            <div class="sku-column sku-row-grid_10">
+                <div id="content">
+                    <div id="wrapper">
+                        <div id="navigation" style="display:none;">
+                            <ul>
+                                <li class="selected">
+                                    <a href="#">
+                                        <wicket:message key="description">[description]</wicket:message>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <wicket:message key="details">[details]</wicket:message>
+                                    </a>
+                                </li>
+                                <wicket:container wicket:id="accessoriesHeadContainer">
+                                       [attributes view]
+                                </wicket:container>
+                            </ul>
+                        </div>
+                        <div id="steps">
+                            <form id="formElem" name="formElem" action="#" method="post">
+                                <fieldset class="step">
+                                    <legend>
+                                        <wicket:message key="description">[description]</wicket:message>
+                                    </legend>
+                                    <wicket:container wicket:id="description">
+                                        [product or sku description]
+                                    </wicket:container>
+                                </fieldset>
+                                <fieldset class="step">
+                                    <legend>
+                                        <wicket:message key="details">[details]</wicket:message>
+                                    </legend>
+                                    <wicket:container wicket:id="skuAttrView">
+                                        [attributes view]
+                                    </wicket:container>
+                                </fieldset>
+                                 <wicket:container wicket:id="accessoriesBodyContainer">
+                                        [attributes view]
+                                 </wicket:container>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</wicket:panel>
+
+
+<wicket:fragment wicket:id="accessoriesHead">
+    <li>
+        <a href="#">
+            <wicket:message key="accessories">[accessories]</wicket:message>
+        </a>
+    </li>
+</wicket:fragment>
+
+<wicket:fragment wicket:id="accessoriesBody">
+    <fieldset class="step">
+        <legend>
+            <wicket:message key="accessories">[accessories]</wicket:message>
+        </legend>
+        <wicket:container wicket:id="accessoriesView">
+            [accessories]
+        </wicket:container>
+    </fieldset>
+</wicket:fragment>
+
+
+</body>
+</html>

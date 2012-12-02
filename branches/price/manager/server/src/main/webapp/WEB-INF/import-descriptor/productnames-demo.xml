@@ -1,0 +1,192 @@
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<import-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/xstream/import-descriptor-1.0.0.xsd">
+
+    <!--
+        Demo fast insert import (no safe guard deletion for native inserts)
+    -->
+
+    <entity-type>org.yes.cart.domain.entity.Product</entity-type>
+
+    <import-directory></import-directory>
+
+    <import-file-descriptor>
+        <file-encoding>UTF-8</file-encoding>
+        <file-name-mask>productnames(.*).csv(.*)</file-name-mask>
+        <ignore-first-line>true</ignore-first-line>
+        <column-delimiter>;</column-delimiter>
+        <text-qualifier>&quot;</text-qualifier>
+    </import-file-descriptor>
+
+    <select-sql>select p from ProductEntity p where p.guid = {guid}</select-sql>
+
+    <import-columns>
+
+        <!-- Primary key -->
+        <column-descriptor>
+            <column-index>0</column-index>
+            <field-type>FIELD</field-type>
+            <name>guid</name>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <!-- SKU code -->
+        <column-descriptor>
+            <column-index>1</column-index>
+            <field-type>FIELD</field-type>
+            <name>code</name>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <!-- brand -->
+        <column-descriptor>
+            <column-index>3</column-index>
+            <field-type>FK_FIELD</field-type>
+            <entity-type>org.yes.cart.domain.entity.Brand</entity-type>
+            <name>brand</name>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>select b from BrandEntity b where b.name = {brand}</lookup-query>
+        </column-descriptor>
+
+        <!-- product type -->
+        <column-descriptor>
+            <column-index>4</column-index>
+            <field-type>FK_FIELD</field-type>
+            <entity-type>org.yes.cart.domain.entity.ProductType</entity-type>
+            <name>producttype</name>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>select pt from ProductTypeEntity pt where pt.name = {producttype}</lookup-query>
+        </column-descriptor>
+
+        <!--  Productname -->
+        <column-descriptor>
+            <column-index>6</column-index>
+            <field-type>FIELD</field-type>
+            <name>name</name>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>7</column-index>
+            <field-type>FIELD</field-type>
+            <name>displayName</name>
+            <language>en</language>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>8</column-index>
+            <field-type>FIELD</field-type>
+            <name>displayName</name>
+            <language>ru</language>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <!-- availability type -->
+        <column-descriptor>
+            <column-index>-1</column-index>
+            <field-type>FIELD</field-type>
+            <name>availability</name>
+            <value-constant>1</value-constant>
+        </column-descriptor>
+
+        <!-- Description -->
+        <column-descriptor>
+            <column-index>9</column-index>
+            <field-type>FIELD</field-type>
+            <name>description</name>
+            <value-regex>(.{0,4000})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>10</column-index>
+            <field-type>SLAVE_INLINE_FIELD</field-type>
+            <name/>
+            <import-descriptor>
+                <entity-type>org.yes.cart.domain.entity.AttrValueProduct</entity-type>
+                <import-directory/>
+                <import-file-descriptor>
+                    <file-encoding>UTF-8</file-encoding>
+                    <file-name-mask/>
+                    <ignore-first-line>false</ignore-first-line>
+                    <column-delimiter>,</column-delimiter>
+                    <text-qualifier>&quot;</text-qualifier>
+                </import-file-descriptor>
+                <select-sql/>
+                <insert-sql>
+                    INSERT INTO TPRODUCTATTRVALUE (PRODUCT_ID, GUID, CODE, VAL)
+                        VALUES ({masterObjectId}, '{masterObjectId}_PRODDESC_en', 'PRODUCT_DESCRITION_en','{val}')
+                </insert-sql>
+                <import-columns>
+                    <column-descriptor>
+                        <column-index>10</column-index>
+                        <field-type>FIELD</field-type>
+                        <name>val</name>
+                    </column-descriptor>
+                </import-columns>
+            </import-descriptor>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>11</column-index>
+            <field-type>SLAVE_INLINE_FIELD</field-type>
+            <name/>
+            <import-descriptor>
+                <entity-type>org.yes.cart.domain.entity.AttrValueProduct</entity-type>
+                <import-directory/>
+                <import-file-descriptor>
+                    <file-encoding>UTF-8</file-encoding>
+                    <file-name-mask/>
+                    <ignore-first-line>false</ignore-first-line>
+                    <column-delimiter>,</column-delimiter>
+                    <text-qualifier>&quot;</text-qualifier>
+                </import-file-descriptor>
+                <select-sql/>
+                <insert-sql>
+                    INSERT INTO TPRODUCTATTRVALUE (PRODUCT_ID, GUID, CODE, VAL)
+                        VALUES ({masterObjectId}, '{masterObjectId}_PRODDESC_ru', 'PRODUCT_DESCRITION_ru','{val}')
+                </insert-sql>
+                <import-columns>
+                    <column-descriptor>
+                        <column-index>11</column-index>
+                        <field-type>FIELD</field-type>
+                        <name>val</name>
+                    </column-descriptor>
+                </import-columns>
+            </import-descriptor>
+        </column-descriptor>
+
+        <!--featured-->
+        <column-descriptor>
+            <column-index>-1</column-index>
+            <field-type>FIELD</field-type>
+            <data-type>BOOLEAN</data-type>
+            <name>featured</name>
+            <value-constant>false</value-constant>
+        </column-descriptor>
+
+    </import-columns>
+</import-descriptor>
