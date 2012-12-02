@@ -1,1 +1,0 @@
-3rd party libraries inaccessible through maven central repository

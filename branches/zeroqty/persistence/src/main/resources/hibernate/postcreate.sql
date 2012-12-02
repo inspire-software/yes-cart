@@ -1,2 +1,0 @@
---TODO add index on TSEOIMAGE.IMAGE_NAME
---TODO add unique constraint on carrier sla name
