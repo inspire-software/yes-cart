@@ -51,22 +51,16 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
 
     private final SkuWarehouseService skuWarehouseService;
 
-
-    private final ProductIndexer productIndexer;
-
     /**
      * Construct transition.
      *
      * @param warehouseService    warehouse service
      * @param skuWarehouseService sku on warehouse service to change quantity
-     * @param productIndexer use to reindex allocated products, in case if qty is 0
      */
     public ProcessAllocationOrderEventHandlerImpl(final WarehouseService warehouseService,
-                                                  final SkuWarehouseService skuWarehouseService,
-                                                  final ProductIndexer productIndexer) {
+                                                  final SkuWarehouseService skuWarehouseService) {
         this.warehouseService = warehouseService;
         this.skuWarehouseService = skuWarehouseService;
-        this.productIndexer = productIndexer;
     }
 
     /**
@@ -78,7 +72,6 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
             return true;
         }
     }
-
 
 
     /**
@@ -99,14 +92,6 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
         return skuWarehouseService;
     }
 
-    /**
-     * Get product service.
-     *
-     * @return {@link ProductService}
-     */
-    protected ProductIndexer getProductIndexer() {
-        return productIndexer;
-    }
 
 
     /**
@@ -123,10 +108,6 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
         final List<Warehouse> warehouses = warehouseService.findByShopId(
                 orderDelivery.getCustomerOrder().getShop().getShopId());
 
-
-        final List<Long> productToReindex = new ArrayList<Long>();
-
-
         for (CustomerOrderDeliveryDet det : deliveryDetails) {
 
             ProductSku productSku = det.getSku();
@@ -141,14 +122,6 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
 
                 if (MoneyUtils.isFirstEqualToSecond(toAllocate, BigDecimal.ZERO, Constants.DEFAULT_SCALE)) {
 
-                    final BigDecimal qtyLeft = skuWarehouseService.getQuantity(warehouses, productSku).getFirst();
-
-                    if (MoneyUtils.isFirstEqualToSecond( BigDecimal.ZERO, qtyLeft) ) {
-
-                        productToReindex.add(productSku.getProduct().getProductId());  // product qty is 0 so need to reindex
-
-                    }
-
                     break; // quantity allocated
                 }
                 
@@ -161,11 +134,6 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
                                 + " for sku = " + productSku.getCode()
                                 + " in delivery " + orderDelivery.getDeliveryNum());
             }
-        }
-
-        // reindex product with 0 qty
-        for(Long pk : productToReindex) {
-            productIndexer.submitIndexTask(pk);
         }
 
         orderDelivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED);

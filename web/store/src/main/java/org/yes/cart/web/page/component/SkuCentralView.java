@@ -29,6 +29,7 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl;
+import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.component.price.PriceTierView;
@@ -186,6 +187,10 @@ public class SkuCentralView extends AbstractCentralView {
                 .set(AddSkuToCartEventCommandImpl.CMD_KEY, sku.getCode());
 
         final String selectedLocale = getLocale().getLanguage();
+
+
+
+
         final ObjectDecorator decorator = getDecorator();
 
         add(
@@ -204,6 +209,9 @@ public class SkuCentralView extends AbstractCentralView {
                 new Label(PRODUCT_DESCRIPTION_LABEL, decorator.getDescription(selectedLocale))
         ).add(
                 new BookmarkablePageLink<HomePage>(ADD_TO_CART_LINK, HomePage.class, addToCartParameters)
+                        .setVisible(
+                                MoneyUtils.isFirstBiggerThanSecond(sku.getQty(), BigDecimal.ZERO)
+                        )
         ).add(
                 new SkuAttributesView(SKU_ATTR_VIEW, sku, isProduct)
         ).add(
@@ -212,8 +220,8 @@ public class SkuCentralView extends AbstractCentralView {
 
 
         final List<ProductAssociation> associatedProducts = productAssociationService.getProductAssociations(
-                    isProduct ? product.getProductId() : sku.getProduct().getProductId(),
-                    Association.ACCESSORIES
+                isProduct ? product.getProductId() : sku.getProduct().getProductId(),
+                Association.ACCESSORIES
         );
 
 

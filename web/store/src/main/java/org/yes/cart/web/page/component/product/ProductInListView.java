@@ -32,6 +32,7 @@ import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl;
+import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.component.BaseComponent;
@@ -155,6 +156,9 @@ public class ProductInListView extends BaseComponent {
 
         add(
                 new BookmarkablePageLink<HomePage>(ADD_TO_CART_LINK, HomePage.class, addToCartParameters)
+                        .setVisible(
+                                MoneyUtils.isFirstBiggerThanSecond(product.getQtyOnWarehouse(), BigDecimal.ZERO )
+                        )
         );
 
         add(
