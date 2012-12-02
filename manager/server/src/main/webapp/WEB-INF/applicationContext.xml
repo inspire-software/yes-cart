@@ -140,8 +140,8 @@
         </property>
         <property name="hibernateProperties">
             <props>
-                <prop key="hibernate.search.default.indexBase">
-                    /development/projects/java/yc/persistence/luceneindex
+		<prop key="hibernate.search.default.indexBase">
+                    #{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'}
                 </prop>
                 <prop key="hibernate.search.default.exclusive_index_use">false</prop>
 
