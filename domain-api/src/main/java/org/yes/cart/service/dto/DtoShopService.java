@@ -39,9 +39,9 @@ public interface DtoShopService extends GenericDTOService<ShopDTO>, GenericAttrV
     String getSupportedCurrencies(long shopId);
 
     /**
-     * Get all suported currencies by all shops.
+     * Get all supported currencies by all shops.
      *
-     * @return all suported currencies.
+     * @return all supported currencies.
      */
     Collection<String> getAllSupportedCurrenciesByShops();
 

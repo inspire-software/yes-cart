@@ -14,49 +14,15 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.service.dto.support;
+package org.yes.cart.remote.service;
 
-import org.yes.cart.domain.dto.ShopDTO;
-
-import java.util.Date;
+import org.yes.cart.service.dto.DtoPriceListsService;
 
 /**
- * Price list filter DTO.
- *
  * User: denispavlov
- * Date: 12-11-29
- * Time: 6:53 PM
+ * Date: 12-12-03
+ * Time: 6:22 PM
  */
-public interface PriceListFilter {
-
-    /**
-     * @return shop filter.
-     */
-    ShopDTO getShop();
-
-    /**
-     * @return currency filter.
-     */
-    String getCurrencyCode();
-
-    /**
-     * @return product filter.
-     */
-    String getProductCode();
-
-    /**
-     * @return use exact match for product code.
-     */
-    Boolean getProductCodeExact();
-
-    /**
-     * @return from filter.
-     */
-    Date getFrom();
-
-    /**
-     * @return to filter.
-     */
-    Date getTo();
+public interface RemotePriceListService extends DtoPriceListsService {
 
 }

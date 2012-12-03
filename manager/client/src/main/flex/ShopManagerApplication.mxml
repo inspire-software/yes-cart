@@ -41,6 +41,7 @@
         import mx.utils.URLUtil;
 
         import org.yes.cart.filter.InventoryFilter;
+        import org.yes.cart.filter.PriceListFilter;
 
         import org.yes.cart.impl.AddressDTOImpl;
         import org.yes.cart.impl.AssociationDTOImpl;
@@ -59,6 +60,7 @@
         import org.yes.cart.impl.CustomerOrderDTOImpl;
         import org.yes.cart.impl.InventoryDTOImpl;
         import org.yes.cart.impl.JobStatusImpl;
+        import org.yes.cart.impl.PriceListDTOImpl;
         import org.yes.cart.impl.ProdTypeAttributeViewGroupDTOImpl;
         import org.yes.cart.impl.ProductAssociationDTOImpl;
         import org.yes.cart.impl.ProductCategoryDTOImpl;
@@ -90,6 +92,7 @@
         import org.yes.cart.ui.order.OrdersManagementPanel;
         import org.yes.cart.ui.payment.PaymentGateConfigManagementPanel;
         import org.yes.cart.ui.payment.PaymentManagementPanel;
+        import org.yes.cart.ui.price.PriceListManagementPanel;
         import org.yes.cart.ui.product.ProductManagementPanel;
         import org.yes.cart.ui.producttype.ProductTypeManagementPanel;
         import org.yes.cart.ui.reindex.ReindexPanel;
@@ -142,22 +145,24 @@
             registerClassAlias("org.yes.cart.domain.dto.impl.ShopUrlDTOImpl", ShopUrlDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.ShopExchangeRateDTOImpl", ShopExchangeRateDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.SkuPriceDTOImpl", SkuPriceDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.PriceListDTOImpl", PriceListDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.SkuWarehouseDTOImpl", SkuWarehouseDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.InventoryDTOImpl", InventoryDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.StateDTOImpl", StateDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.WarehouseDTOImpl", WarehouseDTOImpl);
 
             registerClassAlias("org.yes.cart.service.dto.support.impl.InventoryFilterImpl", InventoryFilter);
+            registerClassAlias("org.yes.cart.service.dto.support.impl.PriceListFilterImpl", PriceListFilter);
 
 
             channelSet.removeChannel(myamf);
             var url:String;
-            if ( this.url && (this.url.indexOf("file:/") != -1 )) { //local connection
+            if (this.url && (this.url.indexOf("file:/") != -1 )) { //local connection
                 // When running standalone (e.g. from IDEA) make sure transport-guarantee is NONE in web.xml
                 url = "http://localhost:8080/yes-manager/spring/amf";
                 myamf = new AMFChannel("myamf", url);
-            } else if ( this.url && (this.url.indexOf("http:/") != -1 )) {
-                url  = "http://{server.name}:{server.port}/yes-manager/spring/amf";
+            } else if (this.url && (this.url.indexOf("http:/") != -1 )) {
+                url = "http://{server.name}:{server.port}/yes-manager/spring/amf";
                 myamf = new AMFChannel("myamf", url);
             } else {
                 url = "https://{server.name}:{server.port}/yes-manager/spring/amf";
@@ -244,7 +249,7 @@
         }
 
         private function onHelpURLClick(event:MouseEvent):void {
-            navigateToURL(new URLRequest("http://www.inspire-software.com/confluence/display/YC"),"_help");
+            navigateToURL(new URLRequest("http://www.inspire-software.com/confluence/display/YC"), "_help");
         }
 
         private function onImportClick(event:MouseEvent):void {
@@ -351,6 +356,12 @@
             setFontWeight(productsBtn);
             mainPanel.removeAllChildren();
             mainPanel.addChild(new ProductManagementPanel());
+        }
+
+        private function onPriceManagementClick(event:MouseEvent):void {
+            setFontWeight(pricesBtn);
+            mainPanel.removeAllChildren();
+            mainPanel.addChild(new PriceListManagementPanel());
         }
 
         private function onCustomerManagementClick(event:MouseEvent):void {
@@ -585,38 +596,46 @@
                                     </mx:VBox>
                                 </mx:Canvas>
 
-                                <!--<mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='marketing')"
+                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='marketing')"
                                            width="100%" height="100%">
                                     <mx:VBox x="0" y="0" height="100%" width="100%">
                                         <mx:Spacer height="10"/>
-                                        <mx:LinkButton width="100%" enabled="false" id="catalogPromo"
-                                                       label="@Resource(bundle='ShopManagerApplication',key='catalogPromotion')"
-                                                       click="setFontWeight(catalogPromo); Alert.show('TODOV2')"
-                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='catalogPromotionyHint')"
+                                        <mx:LinkButton width="100%" id="pricesBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='productPrices')"
+                                                       click="onPriceManagementClick(event)"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='productPricesHint')"
                                                 />
-                                        <mx:LinkButton width="100%" enabled="false" id="cartPromo"
-                                                       label="@Resource(bundle='ShopManagerApplication',key='cartPromotion')"
-                                                       click="setFontWeight(cartPromo); Alert.show('TODO V2')"
-                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='cartPromotionHint')"
-                                                />
-                                        <mx:LinkButton width="100%" enabled="false" id="dynamicAdvBtn"
-                                                       label="@Resource(bundle='ShopManagerApplication',key='targetedAdvertizement')"
-                                                       click="setFontWeight(dynamicAdvBtn); Alert.show('TODO V2')"
-                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='targetedAdvertizementHint')"
-                                                />
-                                        <mx:LinkButton width="100%" enabled="false" id="dynamicMediaBtn"
-                                                       label="@Resource(bundle='ShopManagerApplication',key='advertisingMedia')"
-                                                       click="setFontWeight(dynamicMediaBtn); Alert.show('TODO V2')"
-                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='advertisingMediaHint')"
-                                                />
-                                        <mx:Spacer height="10"/>
-                                        <mx:LinkButton width="100%" enabled="false" id="couponsBtn"
-                                                       label="@Resource(bundle='ShopManagerApplication',key='coupons')"
-                                                       click="setFontWeight(couponsBtn); Alert.show('TODO V2')"
-                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='couponsHint')"
-                                                />
+
+                                        <!--
+                                          <mx:Spacer height="10"/>
+                                          <mx:LinkButton width="100%" enabled="false" id="catalogPromo"
+                                                          label="@Resource(bundle='ShopManagerApplication',key='catalogPromotion')"
+                                                          click="setFontWeight(catalogPromo); Alert.show('TODOV2')"
+                                                          toolTip="@Resource(bundle='ShopManagerApplication',key='catalogPromotionyHint')"
+                                                   />
+                                           <mx:LinkButton width="100%" enabled="false" id="cartPromo"
+                                                          label="@Resource(bundle='ShopManagerApplication',key='cartPromotion')"
+                                                          click="setFontWeight(cartPromo); Alert.show('TODO V2')"
+                                                          toolTip="@Resource(bundle='ShopManagerApplication',key='cartPromotionHint')"
+                                                   />
+                                           <mx:LinkButton width="100%" enabled="false" id="dynamicAdvBtn"
+                                                          label="@Resource(bundle='ShopManagerApplication',key='targetedAdvertizement')"
+                                                          click="setFontWeight(dynamicAdvBtn); Alert.show('TODO V2')"
+                                                          toolTip="@Resource(bundle='ShopManagerApplication',key='targetedAdvertizementHint')"
+                                                   />
+                                           <mx:LinkButton width="100%" enabled="false" id="dynamicMediaBtn"
+                                                          label="@Resource(bundle='ShopManagerApplication',key='advertisingMedia')"
+                                                          click="setFontWeight(dynamicMediaBtn); Alert.show('TODO V2')"
+                                                          toolTip="@Resource(bundle='ShopManagerApplication',key='advertisingMediaHint')"
+                                                   />
+                                           <mx:Spacer height="10"/>
+                                           <mx:LinkButton width="100%" enabled="false" id="couponsBtn"
+                                                          label="@Resource(bundle='ShopManagerApplication',key='coupons')"
+                                                          click="setFontWeight(couponsBtn); Alert.show('TODO V2')"
+                                                          toolTip="@Resource(bundle='ShopManagerApplication',key='couponsHint')"
+                                                   /> -->
                                     </mx:VBox>
-                                </mx:Canvas>-->
+                                </mx:Canvas>
 
 
                                 <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='inventoryManagement')"
