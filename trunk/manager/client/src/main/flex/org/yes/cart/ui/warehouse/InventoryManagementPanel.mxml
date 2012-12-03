@@ -1,4 +1,4 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   - Copyright 2009 Igor Azarnyi, Denys Pavlov
   -
@@ -15,13 +15,15 @@
   -    limitations under the License.
   -->
 
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" creationComplete="onPanelInit();">
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml"
+          title="@Resource(bundle='WarehouseManagementPanel',key='warehouses')"
+           width="100%"
+           height="100%"
+           creationComplete="onPanelInit();"
+           paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
 
     <mx:VBox width="100%" height="100%" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
         <mx:Form width="100%">
-            <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='product')">
-                <mx:Label id="productCodeName"/>
-            </mx:FormItem>
             <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='warehouse')">
                 <mx:HBox>
                     <mx:ComboBox id="warehouseComboBox"
@@ -30,6 +32,20 @@
                                  prompt="@Resource(bundle='ProductManagementPanel',key='selectWarehousePropmt')">
                     </mx:ComboBox>
                 </mx:HBox>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='product')">
+                <mx:HBox>
+                    <mx:TextInput id="productCode"
+                                  toolTip="@Resource(bundle='ShopManagerApplication',key='optionalInput')"
+                                  change="onProductCodeChange(event)"/>
+                    <mx:CheckBox id="productCodeExact"
+                                 change="onProductCodeExactChange(event)"/>
+                </mx:HBox>
+            </mx:FormItem>
+            <mx:FormItem>
+                <mx:Button id="search"
+                           label="@Resource(bundle='ShopManagerApplication',key='search')"
+                           click="onSearchButtonClick(event)"/>
             </mx:FormItem>
             <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='quantity')">
                 <mx:HBox>
@@ -59,7 +75,9 @@
         <mx:DataGrid
                 id="inventoryDataGrid"
                 width="100%" height="100%" editable="false"
-                itemClick="onSkuWarehouseQuantitySelected(event)">
+                itemClick="onSkuWarehouseQuantitySelected(event)"
+                doubleClickEnabled="true"
+                doubleClick="onEditQuantityClick(event)">
             <mx:columns>
                 <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagementPanel',key='id')"
                                    dataField="skuWarehouseId" editable="false"/>
@@ -88,45 +106,32 @@
 
     <mx:ArrayCollection id="allProductSkus"/>
 
-    <mx:RemoteObject showBusyCursor="true" id="remoteWarehouseService" destination="remoteWarehouseService"
+    <mx:RemoteObject showBusyCursor="true" id="remoteInventoryService" destination="remoteInventoryService"
                      result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
                      fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}">
 
-        <mx:method id="getAllWarehouses" name="getAll"
+        <mx:method id="getWarehouses" name="getWarehouses"
                    result="onGetAllWarehousesResult(event)"
                    fault="onRpcMethodFault(event)"/>
 
-        <mx:method id="findProductSkusOnWarehouse" name="findProductSkusOnWarehouse"
-                   result="onFindProductSkusOnWarehouseResult(event)"
+        <mx:method id="getInventoryList" name="getInventoryList"
+                   result="onGetInventoryListResult(event)"
                    fault="onRpcMethodFault(event)"/>
 
-        <mx:method id="createSkuOnWarehouse" name="createSkuOnWarehouse"
-                   result="onCreateSkuOnWarehouseResult(event)"
+        <mx:method id="createInventory" name="createInventory"
+                   result="onCreateInventoryResult(event)"
                    fault="onRpcMethodFault(event)"/>
 
-        <mx:method id="updateSkuOnWarehouse" name="updateSkuOnWarehouse"
-                   result="onUpdateSkuOnWarehouseResult(event)"
+        <mx:method id="updateInventory" name="updateInventory"
+                   result="onUpdateInventoryResult(event)"
                    fault="onRpcMethodFault(event)"/>
 
-        <mx:method id="removeSkuOnWarehouse" name="removeSkuOnWarehouse"
-                   result="onRemoveSkuOnWarehouseResult(event)"
-                   fault="onRpcMethodFault(event)"/>
-
-    </mx:RemoteObject>
-
-    <mx:RemoteObject showBusyCursor="true" id="remoteProductSkuService"
-                     destination="remoteProductSkuService"
-                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
-                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
-                     channelSet="{ShopManagerGlobal.instance.channelSet}">
-
-        <mx:method id="getAllProductSkus" name="getAllProductSkus"
-                   result="onGetAllProductSkusResult(event)"
+        <mx:method id="removeInventory" name="removeInventory"
+                   result="onRemoveInventoryResult(event)"
                    fault="onRpcMethodFault(event)"/>
 
     </mx:RemoteObject>
-
 
     <mx:Script><![CDATA[
         import com.hexagonstar.util.debug.Debug;
@@ -134,8 +139,10 @@
         import mx.core.FlexGlobals;
         import mx.rpc.events.FaultEvent;
 
-        import org.yes.cart.impl.ProductDTOImpl;
-        import org.yes.cart.impl.SkuWarehouseDTOImpl;
+        import org.yes.cart.filter.InventoryFilter;
+
+        import org.yes.cart.impl.InventoryDTOImpl;
+        import org.yes.cart.impl.WarehouseDTOImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
 
         import mx.controls.Alert;
@@ -144,33 +151,17 @@
         import mx.managers.PopUpManager;
         import mx.rpc.events.ResultEvent;
 
-        private var _productId:Number;
-
-        public function get productId():Number {
-            return _productId;
-        }
-
-        public function set product(value:ProductDTOImpl):void {
-            // TODO: need a global way of identifying concurrent modifications
-            // Mandatory reloading to force SKU and Inventory refreshes
-            //if (_productId == value.productId) {
-            //    return;
-            //}
-            _productId = value.productId;
-            productCodeName.text = value.name + ' (' + value.code + ')';
-            remoteProductSkuService.getAllProductSkus(productId);
-            refreshSkuWarehouseList();
-        }
+        private var _filter:InventoryFilter = new InventoryFilter();
 
         protected function onRpcMethodFault(event:FaultEvent):void {
             ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
         }
 
         private function onPanelInit():void {
-            // select all warehouses since we do not care for the shop assignment data
+            // select all warehouses since we do not care for shop assignment data
             // but when the product will be assigned to a shop then the inventory will be immediately
             // available
-            remoteWarehouseService.getAll();
+            remoteInventoryService.getWarehouses();
         }
 
         private function onSkuWarehouseQuantitySelected(event:ListEvent):void {
@@ -197,7 +188,7 @@
             if (event.detail == Alert.OK) {
 
                 if (allowDeleteInventory && inventoryDataGrid.selectedItem != null) {
-                    remoteWarehouseService.removeSkuOnWarehouse(inventoryDataGrid.selectedItem.skuWarehouseId);
+                    remoteInventoryService.removeInventory(inventoryDataGrid.selectedItem.skuWarehouseId);
                 }
             }
         }
@@ -207,9 +198,8 @@
         private function onEditQuantityClick(event:MouseEvent):void {
             if (allowEditInventory && inventoryDataGrid.selectedItem != null) {
                 createQuantityDialog = CreateQuantityDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CreateQuantityDialog, true));
-                createQuantityDialog.skuComboBox.dataProvider = allProductSkus;
                 createQuantityDialog.saveBtn.addEventListener(MouseEvent.CLICK, onUpdateSkuWarehouseSaveClick);
-                createQuantityDialog.skuQuantity = inventoryDataGrid.selectedItem as SkuWarehouseDTOImpl;
+                createQuantityDialog.skuQuantity = inventoryDataGrid.selectedItem as InventoryDTOImpl;
                 PopUpManager.centerPopUp(createQuantityDialog);
             }
         }
@@ -217,7 +207,6 @@
         private function onAddQuantityClick(event:MouseEvent):void {
             if (allowAddInventory && warehouseComboBox.selectedItem != null) {
                 createQuantityDialog = CreateQuantityDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CreateQuantityDialog, true));
-                createQuantityDialog.skuComboBox.dataProvider = allProductSkus;
                 createQuantityDialog.saveBtn.addEventListener(MouseEvent.CLICK, onCreateSkuWarehouseSaveClick);
                 createQuantityDialog.skuQuantityCreate();
                 PopUpManager.centerPopUp(createQuantityDialog);
@@ -228,11 +217,10 @@
 
             if (createQuantityDialog != null) {
                 if (allowAddInventory && warehouseComboBox.selectedItem != null) {
-                    var swh:SkuWarehouseDTOImpl = createQuantityDialog.skuQuantity;
-                    swh.warehouseId = warehouseComboBox.selectedItem.warehouseId;
+                    var swh:InventoryDTOImpl = createQuantityDialog.skuQuantity;
+                    swh.warehouseCode = warehouseComboBox.selectedItem.code;
                     Debug.trace("INFO swh to create is " + swh);
-
-                    remoteWarehouseService.createSkuOnWarehouse(swh);
+                    remoteInventoryService.createInventory(swh);
                 }
                 createQuantityDialog.saveBtn.removeEventListener(MouseEvent.CLICK, onCreateSkuWarehouseSaveClick);
                 PopUpManager.removePopUp(createQuantityDialog);
@@ -245,8 +233,8 @@
 
             if (createQuantityDialog != null) {
                 if (allowEditInventory) {
-                    var swh:SkuWarehouseDTOImpl = createQuantityDialog.skuQuantity;
-                    remoteWarehouseService.updateSkuOnWarehouse(swh);
+                    var swh:InventoryDTOImpl = createQuantityDialog.skuQuantity;
+                    remoteInventoryService.updateInventory(swh);
                     createQuantityDialog.saveBtn.removeEventListener(MouseEvent.CLICK, onUpdateSkuWarehouseSaveClick);
                     PopUpManager.removePopUp(createQuantityDialog);
                     createQuantityDialog = null;
@@ -259,13 +247,26 @@
          * Quantity label function.
          * @param item row
          * @param column column
-         * @return string representatin of qty
+         * @return string representation of qty
          */
         public function quantityLabelFunction(item:Object, column:DataGridColumn):String {
             return quantityFormatter.format(item.quantity);
         }
 
         private function onWarehouseSelectionChanged(event:Event):void {
+            _filter.warehouse = warehouseComboBox.selectedItem as WarehouseDTOImpl;
+            allowAddInventory = _filter.warehouse != null;
+        }
+
+        private function onProductCodeChange(event:Event):void {
+            _filter.productCode = productCode.text;
+        }
+
+        private function onProductCodeExactChange(event:Event):void {
+            _filter.productCodeExact = productCodeExact.selected;
+        }
+
+        private function onSearchButtonClick(event:Event):void {
             inventoryDataGrid.dataProvider = null;
             refreshSkuWarehouseList();
         }
@@ -273,39 +274,39 @@
         private function onGetAllWarehousesResult(event:ResultEvent):void {
             warehouseComboBox.dataProvider = event.result;
             inventoryDataGrid.dataProvider = null;
-            allowAddInventory = false;
+            allowAddInventory = true;
             // do not preselect unless specific warehouse is chosen
         }
 
-        private function onFindProductSkusOnWarehouseResult(event:ResultEvent):void {
+        private function onGetInventoryListResult(event:ResultEvent):void {
             inventoryDataGrid.dataProvider = event.result;
             allowEditInventory = false;
             allowDeleteInventory = false;
         }
 
-        private function onGetAllProductSkusResult(event:ResultEvent):void {
-            allProductSkus = event.result as ArrayCollection;
-        }
-
-        private function onCreateSkuOnWarehouseResult(event:ResultEvent):void {
-            refreshSkuWarehouseList();
-        }
-
         private function refreshSkuWarehouseList():void {
             if (warehouseComboBox.selectedItem != null) {
-                allowAddInventory = true;
-                remoteWarehouseService.findProductSkusOnWarehouse(productId, warehouseComboBox.selectedItem.warehouseId);
-            } else {
-                allowAddInventory = false;
+                remoteInventoryService.getInventoryList(_filter);
             }
         }
 
-        private function onUpdateSkuOnWarehouseResult(event:ResultEvent):void {
-            refreshSkuWarehouseList();
+        private function onRemoveInventoryResult(event:ResultEvent):void {
+            var index:int = inventoryDataGrid.selectedIndex;
+            if (index != -1) {
+                (inventoryDataGrid.dataProvider as ArrayCollection).removeItemAt(index);
+            }
         }
 
-        private function onRemoveSkuOnWarehouseResult(event:ResultEvent):void {
-            refreshSkuWarehouseList();
+        private function onCreateInventoryResult(event:ResultEvent):void {
+            (inventoryDataGrid.dataProvider as ArrayCollection).addItemAt(event.result, 0);
+        }
+
+        private function onUpdateInventoryResult(event:ResultEvent):void {
+            var index:int = inventoryDataGrid.selectedIndex;
+            if (index != -1) {
+                (inventoryDataGrid.dataProvider as ArrayCollection).setItemAt(event.result, index);
+            }
         }
         ]]></mx:Script>
-</mx:Canvas>
+
+</mx:Panel>

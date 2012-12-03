@@ -535,6 +535,19 @@
         </property>
     </bean>
 
+    <bean id="dtoInventoryService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoInventoryServiceImpl">
+                <constructor-arg index="0" ref="dtoWarehouseService"/>
+                <constructor-arg index="1" ref="skuWarehouseDao"/>
+                <constructor-arg index="2" ref="productSkuDao"/>
+                <constructor-arg index="3" ref="warehouseDao"/>
+                <constructor-arg index="4" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="5" ref="dtoAssemblerAdaptersRepository"/>
+            </bean>
+        </property>
+    </bean>
+
     <bean id="dtoProductTypeService" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.dto.impl.DtoProductTypeServiceImpl">
@@ -750,6 +763,7 @@
                 <entry key="org.yes.cart.domain.dto.ShopWarehouseDTO" value="org.yes.cart.domain.dto.impl.ShopWarehouseDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.ShopCategoryDTO" value="org.yes.cart.domain.dto.impl.ShopCategoryDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.SkuWarehouseDTO" value="org.yes.cart.domain.dto.impl.SkuWarehouseDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.InventoryDTO" value="org.yes.cart.domain.dto.impl.InventoryDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.SeoImageDTO" value="org.yes.cart.domain.dto.impl.SeoImageDTOImpl"/>
 
                 <entry key="org.yes.cart.domain.dto.AssociationDTO" value="org.yes.cart.domain.dto.impl.AssociationDTOImpl"/>

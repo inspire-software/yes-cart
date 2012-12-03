@@ -1219,6 +1219,8 @@
         foreign key (WAREHOUSE_ID) 
         references TWAREHOUSE (WAREHOUSE_ID);
 
+    alter table TSKUWAREHOUSE
+        add constraint U_SKUINVENTORY unique (WAREHOUSE_ID, SKU_ID);
 
     alter table TSYSTEMATTRVALUE 
         add index FK_SYS_ATTRIBUTE (CODE), 

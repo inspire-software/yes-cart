@@ -28,7 +28,7 @@ import org.yes.cart.domain.dto.AssociationDTO;
 @Dto
 public class AssociationDTOImpl implements AssociationDTO {
 
-    @DtoField(value = "associationId")
+    @DtoField(value = "associationId", readOnly = true)
     private long associationId;
 
     @DtoField(value = "code")

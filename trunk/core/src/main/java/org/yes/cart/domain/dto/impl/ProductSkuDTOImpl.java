@@ -45,7 +45,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     private static final long serialVersionUID = 20100602L;
 
 
-    @DtoField(value = "skuId")
+    @DtoField(value = "skuId", readOnly = true)
     private long skuId;
 
     @DtoField(value = "code")

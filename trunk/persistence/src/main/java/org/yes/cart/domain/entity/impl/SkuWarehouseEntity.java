@@ -29,7 +29,7 @@ import java.util.Date;
  * Time: 9:10 AM
  */
 @Entity
-@Table(name = "TSKUWAREHOUSE"
+@Table(name = "TSKUWAREHOUSE", uniqueConstraints = {@UniqueConstraint(columnNames = {"WAREHOUSE_ID","SKU_ID"})}
 )
 public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehouse, java.io.Serializable {
 

@@ -370,6 +370,18 @@
         </security:intercept-methods>
     </bean>
 
+    <bean id="remoteInventoryService" class="org.yes.cart.remote.service.impl.RemoteInventoryServiceImpl">
+        <constructor-arg index="0" ref="dtoInventoryService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="getWarehouses" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getInventoryList" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="createInventory" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="updateInventory" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="removeInventory" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+        </security:intercept-methods>
+    </bean>
+
     <bean id="remoteProductTypeService" class="org.yes.cart.remote.service.impl.RemoteProductTypeServiceImpl">
         <constructor-arg index="0" ref="dtoProductTypeService"/>
         <flex:remoting-destination/>

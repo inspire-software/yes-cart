@@ -30,7 +30,7 @@ public class SeoImageDTOImpl implements SeoImageDTO {
 
     private static final long serialVersionUID = 2010717L;
 
-    @DtoField(value = "seoImageId")
+    @DtoField(value = "seoImageId", readOnly = true)
     private long seoImageId;
 
     @DtoField(value = "imageName")

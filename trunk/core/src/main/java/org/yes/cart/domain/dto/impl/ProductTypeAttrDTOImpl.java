@@ -30,7 +30,7 @@ public class ProductTypeAttrDTOImpl implements ProductTypeAttrDTO {
 
     private static final long serialVersionUID = 2010717L;
 
-    @DtoField(value = "productTypeAttrId")
+    @DtoField(value = "productTypeAttrId", readOnly = true)
     private long productTypeAttrId;
 
 

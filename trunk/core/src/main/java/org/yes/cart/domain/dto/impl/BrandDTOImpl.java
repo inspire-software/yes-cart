@@ -37,7 +37,7 @@ public class BrandDTOImpl implements BrandDTO {
 
     private static final long serialVersionUID = 20100717L;
 
-    @DtoField(value = "brandId")
+    @DtoField(value = "brandId", readOnly = true)
     private long brandId;
 
     @DtoField(value = "name")

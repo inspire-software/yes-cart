@@ -36,7 +36,7 @@ public class CategoryDTOImpl implements CategoryDTO {
 
     private static final long serialVersionUID = 20100717L;
 
-    @DtoField(value = "categoryId")
+    @DtoField(value = "categoryId", readOnly = true)
     private long categoryId;
 
     @DtoField(value = "parentId")

@@ -40,6 +40,8 @@
         import mx.rpc.events.ResultEvent;
         import mx.utils.URLUtil;
 
+        import org.yes.cart.filter.InventoryFilter;
+
         import org.yes.cart.impl.AddressDTOImpl;
         import org.yes.cart.impl.AssociationDTOImpl;
         import org.yes.cart.impl.AttrValueBrandDTOImpl;
@@ -55,6 +57,7 @@
         import org.yes.cart.impl.CategoryDTOImpl;
         import org.yes.cart.impl.CustomerDTOImpl;
         import org.yes.cart.impl.CustomerOrderDTOImpl;
+        import org.yes.cart.impl.InventoryDTOImpl;
         import org.yes.cart.impl.JobStatusImpl;
         import org.yes.cart.impl.ProdTypeAttributeViewGroupDTOImpl;
         import org.yes.cart.impl.ProductAssociationDTOImpl;
@@ -95,6 +98,7 @@
         import org.yes.cart.ui.store.StoresManagementPanel;
         import org.yes.cart.ui.tools.QueryPanel;
         import org.yes.cart.ui.user.UserManagementPanel;
+        import org.yes.cart.ui.warehouse.InventoryManagementPanel;
         import org.yes.cart.ui.warehouse.WarehouseManagementPanel;
 
         private var shopManagerGlobal:ShopManagerGlobal;
@@ -139,13 +143,17 @@
             registerClassAlias("org.yes.cart.domain.dto.impl.ShopExchangeRateDTOImpl", ShopExchangeRateDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.SkuPriceDTOImpl", SkuPriceDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.SkuWarehouseDTOImpl", SkuWarehouseDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.InventoryDTOImpl", InventoryDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.StateDTOImpl", StateDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.WarehouseDTOImpl", WarehouseDTOImpl);
+
+            registerClassAlias("org.yes.cart.service.dto.support.impl.InventoryFilterImpl", InventoryFilter);
 
 
             channelSet.removeChannel(myamf);
             var url:String;
-            if ( this.url && (this.url.indexOf("file:/") != -1 )) { //local unsecure connection
+            if ( this.url && (this.url.indexOf("file:/") != -1 )) { //local connection
+                // When running standalone (e.g. from IDEA) make sure transport-guarantee is NONE in web.xml
                 url = "http://localhost:8080/yes-manager/spring/amf";
                 myamf = new AMFChannel("myamf", url);
             } else if ( this.url && (this.url.indexOf("http:/") != -1 )) {
@@ -390,9 +398,7 @@
         private function onInventoryManagementClick(event:MouseEvent):void {
             setFontWeight(inventoryBtn);
             mainPanel.removeAllChildren();
-            var label:Text = new Text();
-            label.text = "TODO: this is not yet implemented";
-            mainPanel.addChild(label);
+            mainPanel.addChild(new InventoryManagementPanel());
         }
 
         private function onPaymentsManagementClick(event:MouseEvent):void {
