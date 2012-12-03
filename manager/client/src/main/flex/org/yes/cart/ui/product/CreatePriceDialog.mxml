@@ -47,6 +47,12 @@
             <mx:TextInput id="salePriceTextInput" width="160"
                           enabled="{selectedSku != null}"/>
         </mx:FormItem>
+
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='minimalPrice')">
+            <mx:TextInput id="minimalPriceTextInput" width="160"
+                          enabled="{selectedSku != null}"/>
+        </mx:FormItem>
+
         <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='saleFrom')">
             <georg:DateTimeField id="saleFromDateField" width="160" enabled="{selectedSku != null}"/>
         </mx:FormItem>
@@ -54,19 +60,17 @@
             <georg:DateTimeField id="saleToDateField" width="160" enabled="{selectedSku != null}"/>
         </mx:FormItem>
 
-        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='minimalPrice')">
-            <mx:TextInput id="minimalPriceTextInput" width="160"
-                          enabled="{selectedSku != null}"/>
-        </mx:FormItem>
 
 
     </mx:Form>
+<!--
     <validation:NotInValidator
             id="quantityValidator"
             errorMessage="@Resource(bundle='ProductManagementPanel',key='quantityNotAllowed')"
             source="{quantityTextInput}"
             property="text"
             />
+-->
 
     <mx:NumberValidator id="quantityValidator2" source="{quantityTextInput}" property="text"
                         minValue="1" allowNegative="false" domain="int"/>
@@ -176,7 +180,7 @@
 
             validatorArr = new Array();
             validatorArr.push(listPriceValidator);
-            validatorArr.push(quantityValidator);
+            //validatorArr.push(quantityValidator);
             validatorArr.push(salePriceValidator);
             validatorArr.push(minimalPriceValidator);
 
@@ -194,7 +198,7 @@
                     validationArray.push(priceCandidate.quantity.toString());
                 }
             }
-            quantityValidator.inValues = validationArray;
+            //quantityValidator.inValues = validationArray;
 
         }
 

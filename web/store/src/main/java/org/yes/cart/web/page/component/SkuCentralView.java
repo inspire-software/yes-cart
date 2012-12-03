@@ -272,9 +272,9 @@ public class SkuCentralView extends AbstractCentralView {
      */
     private Collection<SkuPrice> getSkuPrices() {
         if (isProduct) {
-            return product.getDefaultSku().getSkuPrice();
+            return priceService.getSkuPricesFilteredByTimeFrame(product.getDefaultSku().getSkuPrice());
         }
-        return sku.getSkuPrice();
+        return priceService.getSkuPricesFilteredByTimeFrame(sku.getSkuPrice());
     }
 
 
