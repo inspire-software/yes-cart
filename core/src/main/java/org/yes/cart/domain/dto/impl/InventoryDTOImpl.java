@@ -18,6 +18,7 @@ package org.yes.cart.domain.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import org.yes.cart.domain.dto.InventoryDTO;
 import org.yes.cart.domain.dto.SkuWarehouseDTO;
 
 import java.math.BigDecimal;
@@ -28,32 +29,18 @@ import java.math.BigDecimal;
  * Time: 14:12:54
  */
 @Dto
-public class SkuWarehouseDTOImpl implements SkuWarehouseDTO {
+public class InventoryDTOImpl implements InventoryDTO {
 
-    private static final long serialVersionUID = 20100624L;
+    private static final long serialVersionUID = 20121130L;
 
     @DtoField(value = "skuWarehouseId", readOnly = true)
     private long skuWarehouseId;
-
-    @DtoField(
-            value = "sku",
-            converter = "skuId2Sku",
-            entityBeanKeys = "org.yes.cart.domain.entity.ProductSku"
-    )
-    private long productSkuId;
 
     @DtoField(value = "sku.code", readOnly = true)
     private String skuCode;
 
     @DtoField(value = "sku.name", readOnly = true)
     private String skuName;
-
-    @DtoField(
-            value = "warehouse",
-            converter = "warehouseId2Warehouse",
-            entityBeanKeys = "org.yes.cart.domain.entity.Warehouse"
-    )
-    private long warehouseId;
 
     @DtoField(value = "warehouse.code", readOnly = true)
     private String warehouseCode;
@@ -65,6 +52,11 @@ public class SkuWarehouseDTOImpl implements SkuWarehouseDTO {
     private BigDecimal quantity;
 
     /** {@inheritDoc} */
+    public long getId() {
+        return getSkuWarehouseId();
+    }
+
+    /** {@inheritDoc} */
     public long getSkuWarehouseId() {
         return skuWarehouseId;
     }
@@ -72,21 +64,6 @@ public class SkuWarehouseDTOImpl implements SkuWarehouseDTO {
     /** {@inheritDoc} */
     public void setSkuWarehouseId(final long skuWarehouseId) {
         this.skuWarehouseId = skuWarehouseId;
-    }
-
-    /** {@inheritDoc} */
-    public long getProductSkuId() {
-        return productSkuId;
-    }
-
-     /** {@inheritDoc}*/
-    public long getId() {
-        return productSkuId;
-    }
-
-    /** {@inheritDoc} */
-    public void setProductSkuId(final long productSkuId) {
-        this.productSkuId = productSkuId;
     }
 
     /** {@inheritDoc} */
@@ -107,16 +84,6 @@ public class SkuWarehouseDTOImpl implements SkuWarehouseDTO {
     /** {@inheritDoc} */
     public void setSkuName(final String skuName) {
         this.skuName = skuName;
-    }
-
-    /** {@inheritDoc} */
-    public long getWarehouseId() {
-        return warehouseId;
-    }
-
-    /** {@inheritDoc} */
-    public void setWarehouseId(final long warehouseId) {
-        this.warehouseId = warehouseId;
     }
 
     /** {@inheritDoc} */
@@ -153,10 +120,8 @@ public class SkuWarehouseDTOImpl implements SkuWarehouseDTO {
     public String toString() {
         return "SkuWarehouseDTOImpl{" +
                 "skuWarehouseId=" + skuWarehouseId +
-                ", productSkuId=" + productSkuId +
                 ", skuCode='" + skuCode + '\'' +
                 ", skuName='" + skuName + '\'' +
-                ", warehouseId=" + warehouseId +
                 ", warehouseCode='" + warehouseCode + '\'' +
                 ", warehouseName='" + warehouseName + '\'' +
                 ", quantity=" + quantity +

@@ -419,8 +419,8 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
     
     /**
      * Find entities by criteria.
-     * @param firstResult scroll to firts result.
-     * @param criterion given criterias
+     * @param firstResult scroll to first result.
+     * @param criterion given criteria
      * @return list of found entities.
      */
     @SuppressWarnings("unchecked")

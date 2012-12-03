@@ -30,7 +30,7 @@ public class EtypeDTOImpl implements EtypeDTO {
 
     private static final long serialVersionUID = 20100425L;
 
-    @DtoField(value = "etypeId")
+    @DtoField(value = "etypeId", readOnly = true)
     private long etypeId;
 
     @DtoField(value = "javatype")

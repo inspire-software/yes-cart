@@ -30,7 +30,7 @@ public class ProductAssociationDTOImpl implements ProductAssociationDTO {
 
     private static final long serialVersionUID = 2010717L;
 
-    @DtoField(value = "productassociationId")
+    @DtoField(value = "productassociationId", readOnly = true)
     private long productassociationId;
 
     @DtoField(value = "rank")

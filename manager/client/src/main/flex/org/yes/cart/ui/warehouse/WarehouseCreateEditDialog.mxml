@@ -104,6 +104,7 @@
                             trigger="{wName}" triggerEvent="focusOut"
                 />
 
+        <!-- TODO: forcing warehouses link with countries maybe going to be in V2
         <mx:NumberValidator id="stateComboBoxValidator"
                             source="{stateComboBox}" property="selectedIndex"
                             minValue="0"
@@ -117,6 +118,7 @@
                             required="true"
                             lowerThanMinError="@Resource(bundle='WarehouseManagementPanel',key='selectCountry')"
                 />
+         -->
     </mx:Array>
 
 

@@ -32,7 +32,7 @@ public class AttributeDTOImpl implements AttributeDTO {
 
     private static final long serialVersionUID = 20100717L;
 
-    @DtoField(value = "attributeId")
+    @DtoField(value = "attributeId", readOnly = true)
     private long attributeId;
     
 

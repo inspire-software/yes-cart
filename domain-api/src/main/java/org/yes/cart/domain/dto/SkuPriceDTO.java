@@ -33,7 +33,6 @@ public interface SkuPriceDTO extends Identifiable {
 
     /**
      * @return tier level for this quantity
-     * @depricated
      */
     BigDecimal getQuantityTier();
 

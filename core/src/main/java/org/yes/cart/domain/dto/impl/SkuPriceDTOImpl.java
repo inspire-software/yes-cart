@@ -35,7 +35,7 @@ public class SkuPriceDTOImpl implements SkuPriceDTO {
 
     private static final long serialVersionUID = 20100620L;
 
-    @DtoField(value = "skuPriceId")
+    @DtoField(value = "skuPriceId", readOnly = true)
     private long skuPriceId;
 
     @DtoField(value = "regularPrice")
