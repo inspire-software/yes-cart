@@ -28,42 +28,13 @@ import java.util.Date;
  * Date: Jan 22, 2011
  * Time: 11:11:44 PM
  */
-public interface SkuPriceDTO extends Identifiable {
+public interface PriceListDTO extends Identifiable {
 
 
     /**
      * @return tier level for this quantity
      */
     BigDecimal getQuantityTier();
-
-
-    /**
-     * Get the product sku id .
-     *
-     * @return product sku id
-     */
-    long getProductSkuId();
-
-    /**
-     * Set product sku.
-     *
-     * @param productSkuId product sku id .
-     */
-    void setProductSkuId(long productSkuId);
-
-    /**
-     * Get shop id.
-     *
-     * @return shop id
-     */
-    long getShopId();
-
-    /**
-     * Set shop id.
-     *
-     * @param shopId id
-     */
-    void setShopId(long shopId);
 
     /**
      * Get currency code.
@@ -196,15 +167,32 @@ public interface SkuPriceDTO extends Identifiable {
      *
      * @return sku code.
      */
-    String getCode();
+    String getSkuCode();
 
 
     /**
-     * Setsku code.
+     * Set sku code.
      *
      * @param code sku code.
      */
-    void setCode(String code);
+    void setSkuCode(String code);
+
+
+    /**
+     * Get shop code.
+     *
+     * @return shop code.
+     */
+    String getShopCode();
+
+
+    /**
+     * Set shop code.
+     *
+     * @param code shop code.
+     */
+    void setShopCode(String code);
+
 
 
 }

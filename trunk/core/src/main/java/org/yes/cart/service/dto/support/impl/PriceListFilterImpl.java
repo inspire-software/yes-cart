@@ -16,8 +16,6 @@
 
 package org.yes.cart.service.dto.support.impl;
 
-import org.yes.cart.domain.dto.CategoryDTO;
-import org.yes.cart.domain.dto.ProductDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.service.dto.support.PriceListFilter;
 
@@ -34,8 +32,8 @@ public class PriceListFilterImpl implements PriceListFilter {
 
     private ShopDTO shop;
     private String currencyCode;
-    private CategoryDTO category;
-    private ProductDTO product;
+    private String productCode;
+    private Boolean productCodeExact = Boolean.FALSE;
     private Date from;
     private Date to;
 
@@ -58,21 +56,21 @@ public class PriceListFilterImpl implements PriceListFilter {
     }
 
     /** {@inheritDoc} */
-    public CategoryDTO getCategory() {
-        return category;
+    public String getProductCode() {
+        return productCode;
     }
 
-    public void setCategory(final CategoryDTO category) {
-        this.category = category;
+    public void setProductCode(final String product) {
+        this.productCode = product;
     }
 
     /** {@inheritDoc} */
-    public ProductDTO getProduct() {
-        return product;
+    public Boolean getProductCodeExact() {
+        return productCodeExact;
     }
 
-    public void setProduct(final ProductDTO product) {
-        this.product = product;
+    public void setProductCodeExact(final Boolean productCodeExact) {
+        this.productCodeExact = productCodeExact != null && productCodeExact;
     }
 
     /** {@inheritDoc} */
@@ -99,8 +97,7 @@ public class PriceListFilterImpl implements PriceListFilter {
         return "PriceListFilterImpl{" +
                 "shop=" + shop +
                 ", currencyCode='" + currencyCode + '\'' +
-                ", category=" + category +
-                ", product=" + product +
+                ", productCode='" + productCode + '\'' +
                 ", from=" + from +
                 ", to=" + to +
                 '}';
