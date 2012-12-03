@@ -16,16 +16,16 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.constants.DaoServiceBeanKeys;
-import org.yes.cart.domain.entity.Category;
-import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.domain.entity.SkuPrice;
+import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.impl.ProductSkuEntity;
+import org.yes.cart.domain.entity.impl.SkuPriceEntity;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.service.domain.PriceService;
@@ -33,8 +33,9 @@ import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.util.MoneyUtils;
 
+import java.lang.System;
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -188,6 +189,160 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
         assertEquals( new BigDecimal("1200").intValue(), priceService1.niceBigDecimal(new BigDecimal("1234")).intValue());
         assertEquals( new BigDecimal("5700").intValue(), priceService1.niceBigDecimal(new BigDecimal("5678")).intValue());
 
+    }
+    
+    
+    @Test
+    public void testAddAllTimePrice() {
+        List<SkuPrice> skuPricesForOneSku = getSkuPrices("sku1");
+        skuPricesForOneSku.addAll(getSkuPrices("sku2"));
+        PriceServiceImpl priceServiceImpl = new PriceServiceImpl(null, null, null);
+        priceServiceImpl.reorderSkuPrices(skuPricesForOneSku);
+        List<SkuPrice> rez = new LinkedList<SkuPrice>();
+        assertTrue(priceServiceImpl.addAllTimePrice(rez, skuPricesForOneSku , System.currentTimeMillis()));
+        assertEquals(1, rez.size());
+        assertEquals(11, rez.get(0).getSkuPriceId());
+    }
+
+    @Test
+    public void testAddStartPrice() {
+        List<SkuPrice> skuPricesForOneSku = getSkuPrices("sku1");
+        PriceServiceImpl priceServiceImpl = new PriceServiceImpl(null, null, null);
+        priceServiceImpl.reorderSkuPrices(skuPricesForOneSku);
+        List<SkuPrice> rez = new LinkedList<SkuPrice>();
+        assertTrue(priceServiceImpl.addStartPrice(rez, skuPricesForOneSku, System.currentTimeMillis()));
+        assertEquals(1, rez.size());
+        assertEquals(8, rez.get(0).getSkuPriceId());
+    }
+
+    @Test
+    public void testAddEndPrice() {
+        List<SkuPrice> skuPricesForOneSku = getSkuPrices("sku1");
+        PriceServiceImpl priceServiceImpl = new PriceServiceImpl(null, null, null);
+        priceServiceImpl.reorderSkuPrices(skuPricesForOneSku);
+        List<SkuPrice> rez = new LinkedList<SkuPrice>();
+        assertTrue(priceServiceImpl.addEndPrice(rez, skuPricesForOneSku, System.currentTimeMillis()));
+        assertEquals(1, rez.size());
+        assertEquals(5, rez.get(0).getSkuPriceId());
+    }
+
+    @Test
+    public void testAllFramedPrice() {
+        List<SkuPrice> skuPricesForOneSku = getSkuPrices("sku1");
+        PriceServiceImpl priceServiceImpl = new PriceServiceImpl(null, null, null);
+        priceServiceImpl.reorderSkuPrices(skuPricesForOneSku);
+        List<SkuPrice> rez = new LinkedList<SkuPrice>();
+        assertTrue(priceServiceImpl.addFramedPrice(rez, skuPricesForOneSku, System.currentTimeMillis()));
+        assertEquals(1, rez.size());
+        assertEquals(1, rez.get(0).getSkuPriceId());
+    }
+
+    @Test
+    public void testGetSkuPricesFilteredByTimeFrame() {
+
+        List<SkuPrice> skuPricesForOneSku = getSkuPrices("sku1");
+
+        skuPricesForOneSku.addAll(getSkuPrices("sku2"));
+
+        PriceServiceImpl priceServiceImpl = new PriceServiceImpl(null, null, null);
+
+        List<SkuPrice> rez = priceServiceImpl.getSkuPricesFilteredByTimeFrame(skuPricesForOneSku);
+
+        assertEquals(2, rez.size());
+
+        assertEquals(1, rez.get(0).getSkuPriceId());
+        assertEquals(1, rez.get(1).getSkuPriceId());
+    }
+
+
+    private List<SkuPrice> getSkuPrices(final String skuCode) {
+
+
+        //this price will be overwrited by skuPrice1  because of order of adding -  skuPriceId
+        final SkuPrice skuPrice0 = new SkuPriceEntity();
+        skuPrice0.setSalefrom(new DateTime(1999,10,10,0,0,0,0).toDate());
+        skuPrice0.setSaleto(new DateTime(2025,10,10,0,0,0,0).toDate());
+        skuPrice0.setSkuPriceId(0);
+        final SkuPrice skuPrice1 = new SkuPriceEntity();
+        skuPrice1.setSalefrom(new DateTime(2000,10,10,0,0,0,0).toDate());
+        skuPrice1.setSaleto(new DateTime(2024,10,10,0,0,0,0).toDate());
+        skuPrice1.setSkuPriceId(1);
+        //start and end in past
+        final SkuPrice skuPrice2 = new SkuPriceEntity();
+        skuPrice2.setSalefrom(new DateTime(2000,10,10,0,0,0,0).toDate());
+        skuPrice2.setSaleto(new DateTime(2010,10,10,0,0,0,0).toDate());
+        skuPrice2.setSkuPriceId(2);
+        //start and end in future
+        final SkuPrice skuPrice3 = new SkuPriceEntity();
+        skuPrice3.setSalefrom(new DateTime(2020,10,10,0,0,0,0).toDate());
+        skuPrice3.setSaleto(new DateTime(2021,10,10,0,0,0,0).toDate());
+        skuPrice3.setSkuPriceId(3);
+
+
+        // price end in future but   skuPrice5 has higher priority 
+        final SkuPrice skuPrice4 = new SkuPriceEntity();
+        skuPrice4.setSaleto(new DateTime(2024,9,9,0,0,0,0).toDate());
+        skuPrice4.setSkuPriceId(4);
+        final SkuPrice skuPrice5 = new SkuPriceEntity();
+        skuPrice5.setSaleto(new DateTime(2040,9,9,0,0,0,0).toDate());
+        skuPrice5.setSkuPriceId(5);
+        // already end
+        final SkuPrice skuPrice6 = new SkuPriceEntity();
+        skuPrice6.setSaleto(new DateTime(1999,9,9,0,0,0,0).toDate());
+        skuPrice6.setSkuPriceId(6);
+
+
+        // this price starts in past, by 8 has more priority
+        final SkuPrice skuPrice7 = new SkuPriceEntity();
+        skuPrice7.setSalefrom(new DateTime(2001,10,10,0,0,0,0).toDate());
+        skuPrice7.setSkuPriceId(7);
+        final SkuPrice skuPrice8 = new SkuPriceEntity();
+        skuPrice8.setSalefrom(new DateTime(2000,10,10,0,0,0,0).toDate());
+        skuPrice8.setSkuPriceId(8);
+        //will start in the future
+        final SkuPrice skuPrice9 = new SkuPriceEntity();
+        skuPrice9.setSalefrom(new DateTime(2050,10,10,0,0,0,0).toDate());
+        skuPrice9.setSkuPriceId(9);
+
+
+
+        //never end price with low priority
+        final SkuPrice skuPrice10 = new SkuPriceEntity();
+        skuPrice10.setSkuPriceId(10);
+        //never end price with high priority
+        final SkuPrice skuPrice11 = new SkuPriceEntity();
+        skuPrice11.setSkuPriceId(11);
+
+
+
+
+
+
+        List<SkuPrice> rez =  new ArrayList<SkuPrice>() {{
+            add( skuPrice0 );
+            add( skuPrice1 );
+            add( skuPrice2 );
+            add( skuPrice3 );
+            add( skuPrice4 );
+            add( skuPrice5 );
+            add( skuPrice6 );
+            add( skuPrice7 );
+            add( skuPrice8 );
+            add( skuPrice9 );
+            add( skuPrice10 );
+            add( skuPrice11 );
+        }};
+
+        for (SkuPrice sp : rez) {
+            ProductSku ps = new ProductSkuEntity();
+            ps.setCode(skuCode);
+            sp.setSku(ps);
+        }
+        
+        Collections.shuffle(rez);
+
+        return rez;
+        
     }
 
 

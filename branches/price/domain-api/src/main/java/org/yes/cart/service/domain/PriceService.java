@@ -74,6 +74,19 @@ public interface PriceService extends GenericService<SkuPrice> {
 
 
     /**
+     * Atm we can have different price definitions (lowest in list with high priority):
+     * price without any time limitations;
+     * price, which starts in infinitive past and will be end at some date;
+     * price, which has the start date but no end date;
+     * price with start and end date.
+     *
+     * @param skuPrices all prices filtered by currency, and quantity for all skus
+     * @return the list of sku prices, which is filtered by time frame
+     */
+    List<SkuPrice> getSkuPricesFilteredByTimeFrame(Collection<SkuPrice> skuPrices);
+
+
+    /**
      * Get the sku prices filtered by shop.
      * Exchange rate will be used if shop has not prices
      * for gived curency.

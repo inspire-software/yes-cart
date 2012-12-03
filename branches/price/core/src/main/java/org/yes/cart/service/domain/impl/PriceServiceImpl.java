@@ -89,14 +89,14 @@ public class PriceServiceImpl
         BigDecimal minimalRegularPrice = null;
 
         List<SkuPrice> skuPrices = getSkuPrices(productSkus, shop, currencyCode);
+        skuPrices = getSkuPricesFilteredByTimeFrame(skuPrices);
+
         if (quantity != null) {
             skuPrices = getSkuPricesFilteredByQuantity(
                     skuPrices,
                     quantity);
         }
 
-        skuPrices = getSkuPricesFilteredByTimeFrame(
-                skuPrices);
 
         SkuPrice rez = null;
         for (SkuPrice skuPrice : skuPrices) {
@@ -123,12 +123,18 @@ public class PriceServiceImpl
             final String currencyCode,
             final BigDecimal quantity) {
 
-        final List<SkuPrice> skuPrices =
+
+        List<SkuPrice> skuPrices = getSkuPrices(productSkus, shop, currencyCode);
+        skuPrices = getSkuPricesFilteredByTimeFrame(skuPrices);
+
+        skuPrices =
                 getSkuPricesFilteredSkuCode(
-                        getSkuPricesFilteredByQuantity(
-                                getSkuPrices(productSkus, shop, currencyCode),
-                                quantity
-                        ),
+                        getSkuPricesFilteredByTimeFrame(
+                                getSkuPricesFilteredByQuantity(
+                                        skuPrices,
+                                        quantity
+                                ))
+                        ,
                         selectedSku
                 );
 
@@ -141,42 +147,154 @@ public class PriceServiceImpl
     }
 
 
-    List<SkuPrice> getSkuPricesFilteredByTimeFrame(final List<SkuPrice> skuPrices) {
+    /**
+     * Atm we can have different price definitions (lowest in list with high priority):
+     * price without any time limitations;
+     * price, which starts in infinitive past and will be end at some date;
+     * price, which has the start date but no end date;
+     * price with start and end date.
+     *
+     * @param skuPrices all prices filtered by currency, and quantity for all skus
+     * @return the list of sku prices, which is filtered by time frame
+     */
+    public List<SkuPrice> getSkuPricesFilteredByTimeFrame(final Collection<SkuPrice> skuPrices) {
 
         final List<SkuPrice> allPrices = new LinkedList<SkuPrice>();
 
         final MultiMap qtySkuPriceMap = new MultiValueMap();
 
         for (SkuPrice skuPrice : skuPrices) {
-            qtySkuPriceMap.put(skuPrice.getSku().getCode(), skuPrice);
+            qtySkuPriceMap.put(skuPrice.getSku().getCode() + ":" + skuPrice.getQuantity(), skuPrice);
         }
 
-        Iterator iter = qtySkuPriceMap.keySet().iterator();
 
-        while(iter.hasNext()) {
+        for (Object o : qtySkuPriceMap.keySet()) {
 
-            final String skuCode  = (String) iter.next();
+            final String key = (String) o;
 
-            final List<SkuPrice> skuPricesForOneSku = new ArrayList<SkuPrice>(  (Collection<SkuPrice>) qtySkuPriceMap.get(skuCode) );
+            final List<SkuPrice> skuPricesForOneSku = new ArrayList<SkuPrice>((Collection<SkuPrice>) qtySkuPriceMap.get(key));
 
-            Collections.sort(
-                    skuPricesForOneSku,
-                    new Comparator<SkuPrice>() {
+            reorderSkuPrices(skuPricesForOneSku);
 
-                        public int compare(final SkuPrice skuPrice1, final SkuPrice skuPrice2) {
-                            return 0;  //To change body of implemented methods use File | Settings | File Templates.
-                        }
+            long time = System.currentTimeMillis();   //TODOV2 time machine
 
-                    }
-            );
+            boolean found = false;
 
+            found = addFramedPrice(allPrices, skuPricesForOneSku, time);
 
-            allPrices.add(skuPricesForOneSku.get(0));
+            if (!found) {
+                found = addEndPrice(allPrices, skuPricesForOneSku, time);
+            }
+
+            if (!found) {
+                found = addStartPrice(allPrices, skuPricesForOneSku, time);
+            }
+
+            if (!found) {
+                addAllTimePrice(allPrices, skuPricesForOneSku, time);
+            }
 
 
         }
 
         return allPrices;
+    }
+
+    void reorderSkuPrices(List<SkuPrice> skuPricesForOneSku) {
+        Collections.sort(
+                skuPricesForOneSku,
+                new Comparator<SkuPrice>() {
+
+                    public int compare(final SkuPrice skuPrice1, final SkuPrice skuPrice2) {
+                        //the new price definition has high priority
+                        return skuPrice2.getSkuPriceId() < skuPrice1.getSkuPriceId() ? -1 : skuPrice2.getSkuPriceId() == skuPrice1.getSkuPriceId() ? 0 : 1;
+                    }
+                }
+        );
+    }
+
+    /**
+     * Try to add all time price (not start and no end)
+     * and add it into given result holder - <code>allPrices</code>
+     *
+     * @param allPrices          result holder for all skus.
+     * @param skuPricesForOneSku pricces for one sku
+     * @param time               current time
+     * @return true in case if result was added
+     */
+    boolean addAllTimePrice(List<SkuPrice> allPrices, List<SkuPrice> skuPricesForOneSku, long time) {
+        boolean found;
+        for (SkuPrice skuPrice : skuPricesForOneSku) {
+            if (skuPrice.getSalefrom() == null && skuPrice.getSaleto() == null) {
+                allPrices.add(skuPrice);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Try to find price has start date
+     * and add it into given result holder - <code>allPrices</code>
+     *
+     * @param allPrices          result holder for all skus.
+     * @param skuPricesForOneSku pricces for one sku
+     * @param time               current time
+     * @return true in case if result was added
+     */
+    boolean addStartPrice(List<SkuPrice> allPrices, List<SkuPrice> skuPricesForOneSku, long time) {
+        for (SkuPrice skuPrice : skuPricesForOneSku) {
+            if (skuPrice.getSalefrom() != null && skuPrice.getSaleto() == null) {
+                if (skuPrice.getSalefrom().getTime() < time) {
+                    allPrices.add(skuPrice);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * Try to find price started in infinitive past and has some end date,
+     * and add it into given result holder - <code>allPrices</code>
+     *
+     * @param allPrices          result holder for all skus.
+     * @param skuPricesForOneSku pricces for one sku
+     * @param time               current time
+     * @return true in case if result was added
+     */
+    boolean addEndPrice(List<SkuPrice> allPrices, List<SkuPrice> skuPricesForOneSku, long time) {
+        for (SkuPrice skuPrice : skuPricesForOneSku) {
+            if (skuPrice.getSalefrom() == null && skuPrice.getSaleto() != null) {
+                if (time < skuPrice.getSaleto().getTime()) {
+                    allPrices.add(skuPrice);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Try to find price with start and dates , which is mach search criteria
+     * and add it into given result holder - <code>allPrices</code>
+     *
+     * @param allPrices          result holder for all skus.
+     * @param skuPricesForOneSku pricces for one sku
+     * @param time               current time
+     * @return true in case if result was added
+     */
+    boolean addFramedPrice(List<SkuPrice> allPrices, List<SkuPrice> skuPricesForOneSku, long time) {
+        for (SkuPrice skuPrice : skuPricesForOneSku) {
+            if (skuPrice.getSalefrom() != null && skuPrice.getSaleto() != null) {
+                if (skuPrice.getSalefrom().getTime() < time && time < skuPrice.getSaleto().getTime()) {
+                    allPrices.add(skuPrice);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 
@@ -290,8 +408,6 @@ public class PriceServiceImpl
     }
 
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -363,10 +479,10 @@ public class PriceServiceImpl
 
     private List<PriceTierNode> getPriceTierNodes(final PriceTierTree priceTierTree, final String currency, final Shop shop) {
         List<PriceTierNode> priceTierNodes = priceTierTree.getPriceTierNodes(currency);
-        if (priceTierNodes == null ) {
+        if (priceTierNodes == null) {
             AttrValueShop attrValueShop = shop.getAttributeByCode("PRICE_NAVIGATION_STRATEGY");
 
-            if (attrValueShop != null && "DYNAMIC".equalsIgnoreCase( attrValueShop.getVal() )) {
+            if (attrValueShop != null && "DYNAMIC".equalsIgnoreCase(attrValueShop.getVal())) {
 
                 final String defaultCurrency = shop.getDefaultCurrency();
                 final List<PriceTierNode> defTiers = priceTierTree.getPriceTierNodes(defaultCurrency);
@@ -375,7 +491,7 @@ public class PriceServiceImpl
                         defTiers,
                         MoneyUtils.notNull(exchangeRate, BigDecimal.ONE));
                 priceTierTree.addPriceTierNode(currency, rez);
-                return  rez;
+                return rez;
             }
             return Collections.emptyList();
         }
@@ -385,8 +501,9 @@ public class PriceServiceImpl
 
     /**
      * Nice rounding for digits.
+     *
      * @param toNicefy digit to make it nice
-     * @return    nicefied digit
+     * @return nicefied digit
      */
     BigDecimal niceBigDecimal(final BigDecimal toNicefy) {
         Integer intValue = toNicefy.intValue();
@@ -411,7 +528,7 @@ public class PriceServiceImpl
     List<PriceTierNode> createPriceTierNodes(final List<PriceTierNode> priceTierNodes, final BigDecimal exchangeRate) {
 
         if (priceTierNodes != null) {
-            final  List<PriceTierNode> rez = new ArrayList<PriceTierNode>(priceTierNodes.size());
+            final List<PriceTierNode> rez = new ArrayList<PriceTierNode>(priceTierNodes.size());
             for (PriceTierNode priceTierNode : priceTierNodes) {
                 rez.add(new PriceTierNodeImpl(
                         niceBigDecimal(priceTierNode.getFrom().multiply(exchangeRate)),
@@ -438,7 +555,6 @@ public class PriceServiceImpl
         String sql;
 
 
-
         /**
          * Native sql is used, because i have got from hibernate
          * "number of select types did not match those for insert" this exeption is incorrect.
@@ -453,13 +569,14 @@ public class PriceServiceImpl
                 defaultCurrency);
 
 
-
         return skuPriceDao.executeNativeUpdate(sql);
     }
 
 
-    /** {@inheritDoc} */
-    public  void deleteDerivedPrices(final Shop shop, final String derivedCurrency) {
+    /**
+     * {@inheritDoc}
+     */
+    public void deleteDerivedPrices(final Shop shop, final String derivedCurrency) {
         final String shopId = String.valueOf(shop.getShopId());
         final String sql = MessageFormat.format("delete from tskuprice where shop_id = {0} and currency = ''{1}''",
                 shopId,
