@@ -214,6 +214,8 @@
                         </mx:Component>
                     </mx:itemRenderer>
                 </mx:DataGridColumn>
+                <mx:DataGridColumn width="80" headerText="@Resource(bundle='ShopManagerApplication',key='tag')"
+                                   dataField="tag" editable="false"/>
             </mx:columns>
         </mx:DataGrid>
     </mx:VBox>

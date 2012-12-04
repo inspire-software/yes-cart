@@ -34,6 +34,8 @@ public class PriceListFilterImpl implements PriceListFilter {
     private String currencyCode;
     private String productCode;
     private Boolean productCodeExact = Boolean.FALSE;
+    private String tag;
+    private Boolean tagExact = Boolean.FALSE;
     private Date from;
     private Date to;
 
@@ -92,12 +94,33 @@ public class PriceListFilterImpl implements PriceListFilter {
     }
 
     /** {@inheritDoc} */
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(final String tag) {
+        this.tag = tag;
+    }
+
+    /** {@inheritDoc} */
+    public Boolean getTagExact() {
+        return tagExact;
+    }
+
+    public void setTagExact(final Boolean tagExact) {
+        this.tagExact = tagExact != null && tagExact;
+    }
+
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         return "PriceListFilterImpl{" +
                 "shop=" + shop +
                 ", currencyCode='" + currencyCode + '\'' +
                 ", productCode='" + productCode + '\'' +
+                ", productCodeExact=" + productCodeExact +
+                ", tag='" + tag + '\'' +
+                ", tagExact=" + tagExact +
                 ", from=" + from +
                 ", to=" + to +
                 '}';

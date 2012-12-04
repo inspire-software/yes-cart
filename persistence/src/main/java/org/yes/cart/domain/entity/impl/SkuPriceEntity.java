@@ -48,6 +48,7 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
     private String createdBy;
     private String updatedBy;
     private String guid;
+    private String tag;
 
     public SkuPriceEntity() {
     }
@@ -215,6 +216,14 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
         this.guid = guid;
     }
 
+    @Column(name = "TAG", length = 45)
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(final String tag) {
+        this.tag = tag;
+    }
 
     // The following is extra code specified in the hbm.xml files
 

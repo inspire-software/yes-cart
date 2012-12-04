@@ -43,12 +43,14 @@ public class PriceListDTOImpl {
 
     public var shopCode:String;
 
+    public var tag:String;
+
     public function PriceListDTOImpl() {
     }
 
 
     public function toString():String {
-        return "SkuPriceDTOImpl{skuPriceId=" + String(skuPriceId) +
+        return "PriceListDtoImpl{skuPriceId=" + String(skuPriceId) +
                ",regularPrice=" + String(regularPrice) +
                ",minimalPrice=" + String(minimalPrice) +
                ",salePrice=" + String(salePrice) +
@@ -58,7 +60,8 @@ public class PriceListDTOImpl {
                ",shopId=" + shopCode +
                ",quantity=" + String(quantity) +
                ",currency=" + String(currency) +
-               ",skuName=" + String(skuName) + "}";
+               ",skuName=" + String(skuName) +
+               ",tag=" + String(tag) + "}";
     }
 }
 }

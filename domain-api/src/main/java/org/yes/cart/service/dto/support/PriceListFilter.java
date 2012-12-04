@@ -59,4 +59,14 @@ public interface PriceListFilter {
      */
     Date getTo();
 
+    /**
+     * @return price tag.
+     */
+    String getTag();
+
+    /**
+     * @return price tag exact match.
+     */
+    Boolean getTagExact();
+
 }

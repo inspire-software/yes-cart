@@ -24,11 +24,10 @@ import org.hibernate.FetchMode;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.sql.JoinType;
+import org.springframework.util.StringUtils;
 import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.InventoryDTO;
-import org.yes.cart.domain.dto.SkuWarehouseDTO;
 import org.yes.cart.domain.dto.WarehouseDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.entity.ProductSku;
@@ -89,7 +88,7 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
 
             final List<Criterion> criteria = new ArrayList<Criterion>();
             criteria.add(Restrictions.eq("warehouse.warehouseId", filter.getWarehouse().getId()));
-            if (filter.getProductCode() != null) {
+            if (StringUtils.hasLength(filter.getProductCode())) {
                 if (filter.getProductCodeExact()) {
                     criteria.add(
                             Restrictions.or(
