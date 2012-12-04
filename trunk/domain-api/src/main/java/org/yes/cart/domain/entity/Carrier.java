@@ -84,7 +84,7 @@ public interface Carrier extends Auditable {
 
 
     /**
-     * Is carrier perform world wide devilery.
+     * Can carrier perform world wide delivery.
      *
      * @return true if performs delivery.
      */
@@ -98,7 +98,7 @@ public interface Carrier extends Auditable {
     void setWorldwide(boolean worldwide);
 
     /**
-     * Is carrier perform country devilery.
+     * Can carrier perform country delivery.
      *
      * @return true if performs country delivery.
      */
@@ -112,7 +112,7 @@ public interface Carrier extends Auditable {
     void setCountry(boolean country);
 
     /**
-     * Is carrier perform state devilery.
+     * Can carrier perform state delivery.
      *
      * @return true if performs state delivery.
      */
@@ -127,7 +127,7 @@ public interface Carrier extends Auditable {
     void setState(boolean state);
 
     /**
-     * Is carrier perform local (city) devilery.
+     * Can carrier perform local (city) delivery.
      *
      * @return true if performs local (city)  delivery.
      */
