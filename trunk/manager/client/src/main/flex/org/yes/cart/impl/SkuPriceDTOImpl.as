@@ -44,6 +44,8 @@ public class SkuPriceDTOImpl {
     public var code:String;
 
     public var skuName:String;
+
+    public var tag:String;
     
     
     public function SkuPriceDTOImpl() {
@@ -62,7 +64,8 @@ public class SkuPriceDTOImpl {
                ",quantity=" + String(quantity) +
                ",currency=" + String(currency) +
                ",code=" + String(code) +
-               ",skuName=" + String(skuName) + "}";
+               ",skuName=" + String(skuName) +
+               ",tag=" + String(tag) + "}";
     }
 }
 }

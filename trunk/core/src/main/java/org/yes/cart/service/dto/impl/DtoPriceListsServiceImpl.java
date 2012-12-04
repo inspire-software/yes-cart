@@ -24,6 +24,7 @@ import org.hibernate.FetchMode;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.util.StringUtils;
 import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.PriceListDTO;
@@ -105,13 +106,13 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
 
         final List<PriceListDTO> priceList = new ArrayList<PriceListDTO>();
 
-        if (filter.getShop() != null && filter.getCurrencyCode() != null) {
+        if (filter.getShop() != null && StringUtils.hasLength(filter.getCurrencyCode())) {
             // only allow lists for shop+currency selection
 
             final List<Criterion> criteria = new ArrayList<Criterion>();
             criteria.add(Restrictions.eq("shop.shopId", filter.getShop().getId()));
             criteria.add(Restrictions.eq("currency", filter.getCurrencyCode()));
-            if (filter.getProductCode() != null) {
+            if (StringUtils.hasLength(filter.getProductCode())) {
                 if (filter.getProductCodeExact()) {
                     criteria.add(
                             Restrictions.or(
@@ -126,6 +127,13 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
                                     Restrictions.ilike("sku.code", filter.getProductCode(), MatchMode.ANYWHERE)
                             )
                     );
+                }
+            }
+            if (StringUtils.hasLength(filter.getTag())) {
+                if (filter.getTagExact()) {
+                    criteria.add(Restrictions.eq("tag", filter.getTag()));
+                } else {
+                    criteria.add(Restrictions.ilike("tag", filter.getTag(), MatchMode.ANYWHERE));
                 }
             }
             if (filter.getFrom() != null) {

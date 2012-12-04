@@ -736,6 +736,7 @@
         MINIMAL_PRICE decimal(19,2) comment 'Minimal price used in name-your-price pricing strategy. Must be less that regular',
         SALE_FROM datetime,
         SALE_TO datetime,
+        TAG varchar(45),
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),

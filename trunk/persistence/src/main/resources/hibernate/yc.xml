@@ -2529,6 +2529,7 @@ public void setRangeList(final RangeList rangeList) {
             </property>
             <property name="salefrom" column="SALE_FROM" type="timestamp" not-null="false"/>
             <property name="saleto" column="SALE_TO" type="timestamp" not-null="false"/>
+            <property name="tag" column="TAG" type="string" length="45" not-null="false"/>
 
 
 

@@ -770,6 +770,7 @@
         MINIMAL_PRICE numeric(19,2),
         SALE_FROM timestamp,
         SALE_TO timestamp,
+        TAG varchar(45),
         CREATED_TIMESTAMP timestamp,
         UPDATED_TIMESTAMP timestamp,
         CREATED_BY varchar(64),

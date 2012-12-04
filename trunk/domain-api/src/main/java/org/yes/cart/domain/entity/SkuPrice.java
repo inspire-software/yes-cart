@@ -178,4 +178,19 @@ public interface SkuPrice extends Auditable {
      */
     void setSkuPriceId(long skuPriceId);
 
+    /**
+     * Tag allows classification of price entries. E.g. It is hard to understand
+     * price with salefrom/to: 01/12/12 - 25/12/12, but it is easier if it has a tag
+     * Christmas sales 2012.
+     *
+     * @return tag or null.
+     */
+    String getTag();
+
+    /**
+     * Set tag value.
+     *
+     * @param tag price tag
+     */
+    void setTag(String tag);
 }

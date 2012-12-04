@@ -43,6 +43,15 @@
                                  change="onProductCodeExactChange(event)"/>
                 </mx:HBox>
             </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='ShopManagerApplication',key='tag')">
+                <mx:HBox>
+                    <mx:TextInput id="tagInput"
+                                  toolTip="@Resource(bundle='ShopManagerApplication',key='optionalInput')"
+                                  change="onTagChange(event)"/>
+                    <mx:CheckBox id="tagExact"
+                                 change="onTagExactChange(event)"/>
+                </mx:HBox>
+            </mx:FormItem>
             <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='salePrice')">
                 <mx:HBox>
                     <georg:DateTimeField id="saleFrom"
@@ -224,6 +233,8 @@
                         </mx:Component>
                     </mx:itemRenderer>
                 </mx:DataGridColumn>
+                <mx:DataGridColumn width="80" headerText="@Resource(bundle='ShopManagerApplication',key='tag')"
+                                   dataField="tag" editable="false"/>
             </mx:columns>
         </mx:DataGrid>
     </mx:VBox>
@@ -498,6 +509,14 @@
 
         private function onSaleToChange(event:CalendarLayoutChangeEvent):void {
             _filter.to = saleTo.selectedDate;
+        }
+
+        private function onTagChange(event:Event):void {
+            _filter.tag = tagInput.text;
+        }
+
+        private function onTagExactChange(event:Event):void {
+            _filter.tagExact = tagExact.selected;
         }
         ]]>
    </mx:Script>

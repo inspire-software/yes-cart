@@ -30,6 +30,8 @@ public class PriceListFilter {
     public var currencyCode:String;
     public var productCode:String;
     public var productCodeExact:Boolean;
+    public var tag:String;
+    public var tagExact:Boolean;
     public var from:Date;
     public var to:Date;
 

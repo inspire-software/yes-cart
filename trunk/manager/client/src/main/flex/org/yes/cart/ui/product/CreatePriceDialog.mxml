@@ -60,6 +60,9 @@
             <georg:DateTimeField id="saleToDateField" width="160" enabled="{selectedSku != null}"/>
         </mx:FormItem>
 
+        <mx:FormItem width="100%" label="@Resource(bundle='ShopManagerApplication',key='tag')">
+            <mx:TextInput id="tagInput" width="160"/>
+        </mx:FormItem>
 
 
     </mx:Form>
@@ -83,6 +86,9 @@
 
     <mx:NumberValidator id="minimalPriceValidator" source="{minimalPriceTextInput}" property="text"
                         allowNegative="false" decimalSeparator="." required="false"/>
+
+    <mx:StringValidator id="tagValidator" source="{tagInput}" property="text"
+                        required="false" maxLength="45"/>
 
     <mx:ControlBar horizontalAlign="right" width="100%">
         <mx:Button id="saveBtn"
@@ -156,6 +162,7 @@
 
         private function init():void {
 
+            BindingUtils.bindProperty(tagInput, "text", _skuPrice, "tag");
             BindingUtils.bindProperty(quantityTextInput, "text", _skuPrice, "quantity");
             BindingUtils.bindProperty(listPriceTextInput, "text", _skuPrice, "regularPrice");
             BindingUtils.bindProperty(salePriceTextInput, "text", _skuPrice, "salePrice");
@@ -163,6 +170,7 @@
             BindingUtils.bindProperty(saleToDateField, "selectedDate", _skuPrice, "saleto");
             BindingUtils.bindProperty(minimalPriceTextInput, "text", _skuPrice, "minimalPrice");
 
+            BindingUtils.bindProperty(_skuPrice, "tag", tagInput, "text");
             BindingUtils.bindProperty(_skuPrice, "quantity", quantityTextInput, "text");
             BindingUtils.bindProperty(_skuPrice, "regularPrice", listPriceTextInput, "text");
             BindingUtils.bindProperty(_skuPrice, "salePrice", salePriceTextInput, "text");
@@ -172,6 +180,7 @@
 
 
             ChangeWatcher.watch(skuComboBox, "selectedIndex", priceFormChanged);
+            ChangeWatcher.watch(tagInput, "text", priceFormChanged);
             ChangeWatcher.watch(quantityTextInput, "text", priceFormChanged);
             ChangeWatcher.watch(listPriceTextInput, "text", priceFormChanged);
             ChangeWatcher.watch(salePriceTextInput, "text", priceFormChanged);
@@ -183,6 +192,7 @@
             //validatorArr.push(quantityValidator);
             validatorArr.push(salePriceValidator);
             validatorArr.push(minimalPriceValidator);
+            validatorArr.push(tagValidator);
 
 
         }
