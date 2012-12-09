@@ -131,7 +131,8 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCappPaymentGatewayImp
             true, true, true, false,
             true, true, true, false,
             true, false,
-            null
+            null ,
+            false, true
     );
 
 

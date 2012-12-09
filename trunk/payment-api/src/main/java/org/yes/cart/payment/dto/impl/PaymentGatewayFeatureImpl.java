@@ -35,6 +35,8 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
     protected boolean externalFormProcessing;
     protected boolean onlineGateway;
     protected boolean requireDetails;
+    protected boolean supportCaptureMore;
+    protected boolean supportCaptureLess;
 
 
     protected boolean supportAuthorizePerShipment;
@@ -56,7 +58,7 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
      * @param externalFormProcessing
      * @param additionalFeatures
      * @param onlineGateway               is this online payment gateway
-     * @param requireDetails true in case if gateway require paymnet details for html form
+     * @param requireDetails true in case if gateway require payment details for html form
      */
     @SuppressWarnings("PMD.ExcessiveParameterList")
     public PaymentGatewayFeatureImpl(
@@ -70,7 +72,10 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
             final boolean externalFormProcessing,
             final boolean onlineGateway,
             final boolean requireDetails,
-            final String additionalFeatures) {
+            final String additionalFeatures,
+            final boolean supportCaptureMore,
+            final boolean supportCaptureLess
+    ) {
         this.supportAuthorize = supportAuthorize;
         this.supportAuthorizePerShipment = supportAuthorizePerShipment;
         this.supportCapture = supportCapture;
@@ -82,6 +87,8 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
         this.additionalFeatures = additionalFeatures;
         this.onlineGateway = onlineGateway;
         this.requireDetails = requireDetails;
+        this.supportCaptureMore = supportCaptureMore;
+        this.supportCaptureLess = supportCaptureLess;
     }
 
     /**
@@ -236,6 +243,34 @@ public class PaymentGatewayFeatureImpl implements PaymentGatewayFeature {
      */
     public void setRequireDetails(boolean requireDetails) {
         this.requireDetails = requireDetails;
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    public boolean isSupportCaptureMore() {
+        return supportCaptureMore;
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    public void setSupportCaptureMore(boolean supportCaptureMore) {
+        this.supportCaptureMore = supportCaptureMore;
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    public boolean isSupportCaptureLess() {
+        return supportCaptureLess;
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    public void setSupportCaptureLess(boolean supportCaptureLess) {
+        this.supportCaptureLess = supportCaptureLess;
     }
 
     /**

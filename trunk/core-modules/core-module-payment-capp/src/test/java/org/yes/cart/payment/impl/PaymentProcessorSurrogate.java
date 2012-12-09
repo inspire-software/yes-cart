@@ -250,6 +250,20 @@ public class PaymentProcessorSurrogate {
      * @return status of operation.
      */
     public String shipmentComplete(final CustomerOrder order, final String orderShipmentNumber) {
+        return shipmentComplete(order, orderShipmentNumber, null);
+    }
+
+    /**
+     * Particular shimment is complete. Funds can be captured.
+     * In case of multiple delivery and single payment, capture on last delivery.
+     *
+     * @param order               order
+     * @param orderShipmentNumber internal shipment number.
+     *                            Each order has at least one delivery.
+     * @param addToPayment        amount to add for each payment if it not null
+     * @return status of operation.
+     */
+    public String shipmentComplete(final CustomerOrder order, final String orderShipmentNumber, final BigDecimal addToPayment) {
 
         final boolean isMultiplePaymentsSupports = getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorizePerShipment();
         final List<CustomerOrderPayment> paymentsToCapture = customerOrderPaymentService.findBy(
@@ -281,13 +295,17 @@ public class PaymentProcessorSurrogate {
 
 
                 try {
+                    if (addToPayment != null) {
+                        payment.setPaymentAmount(payment.getPaymentAmount().add(addToPayment).setScale(2, BigDecimal.ROUND_HALF_UP));
+                    }
                     payment = getPaymentGateway().capture(payment); //pass "original" to perform fund capture.
                     paymentResult = payment.getPaymentProcessorResult();
                 } catch (Throwable th) {
                     paymentResult = Payment.PAYMENT_STATUS_FAILED;
                     payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
                     payment.setTransactionOperationResultMessage(th.getMessage());
-
+                    LOG.error("Cannot capture " + payment, th);
+                    th.printStackTrace();
                 } finally {
                     final CustomerOrderPayment authReversedOrderPayment = new CustomerOrderPaymentEntity();
                     //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);

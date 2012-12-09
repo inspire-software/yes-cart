@@ -36,7 +36,8 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
             false, false, false, true,
             false, false, false, true,
             true, false,
-            null
+            null,
+            false, false
     );
 
     // merchant id

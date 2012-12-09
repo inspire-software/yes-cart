@@ -9,6 +9,7 @@ import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 
+import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.UUID;
 
@@ -116,6 +117,47 @@ public class CyberSourcePaymentGatewayImplTest extends CappPaymentModuleDBTestCa
             //capture on second completed shipment
             assertEquals(Payment.PAYMENT_STATUS_OK,
                     paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum()));
+            assertEquals(2,
+                    customerOrderPaymentService.findBy(
+                            orderNum,
+                            null,
+                            Payment.PAYMENT_STATUS_OK,
+                            PaymentGateway.CAPTURE).size());
+        }
+    }
+
+    /**
+     * Test to check is pw allow capture less, than auth
+     */
+    @Test
+    public void testAuthPlusCaptureLess() {
+        if (isTestAllowed()) {
+            String orderNum = UUID.randomUUID().toString();
+            CustomerOrder customerOrder = createCustomerOrder(orderNum);
+            // The whole operation is completed successfully
+            assertEquals(Payment.PAYMENT_STATUS_OK,
+                    paymentProcessor.authorize(
+                            customerOrder,
+                            createCardParameters()));
+            assertEquals(2,
+                    customerOrderPaymentService.findBy(
+                            orderNum,
+                            null,
+                            Payment.PAYMENT_STATUS_OK,
+                            PaymentGateway.AUTH).size());
+            //capture on first completed shipment
+            Iterator<CustomerOrderDelivery> iter = customerOrder.getDelivery().iterator();
+            assertEquals(Payment.PAYMENT_STATUS_OK,
+                    paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum()));
+            assertEquals(1,
+                    customerOrderPaymentService.findBy(
+                            orderNum,
+                            null,
+                            Payment.PAYMENT_STATUS_OK,
+                            PaymentGateway.CAPTURE).size());
+            //capture on second completed shipment
+            assertEquals(Payment.PAYMENT_STATUS_OK,
+                    paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum(), new BigDecimal("-3.34")));
             assertEquals(2,
                     customerOrderPaymentService.findBy(
                             orderNum,

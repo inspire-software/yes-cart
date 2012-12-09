@@ -289,6 +289,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                     paymentResult = Payment.PAYMENT_STATUS_FAILED;
                     payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
                     payment.setTransactionOperationResultMessage(th.getMessage());
+                    LOG.error("Cannot capture " + payment, th);
 
                 } finally {
                     final CustomerOrderPayment authReversedOrderPayment = new CustomerOrderPaymentEntity();
