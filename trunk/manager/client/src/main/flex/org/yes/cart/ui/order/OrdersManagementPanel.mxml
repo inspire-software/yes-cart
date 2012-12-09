@@ -74,6 +74,17 @@
     </mx:RemoteObject>
 
 
+    <mx:RemoteObject showBusyCursor="true" id="remotePaymentModulesManagementService"
+                     destination="remotePaymentModulesManagementService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getPaymentGatewayFeature" name="getPaymentGatewayFeature"
+                   result="onGetPaymentGatewayFeature(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+
 
 
     <mx:ArrayCollection id="attrValues"/>
@@ -410,7 +421,9 @@
                            width="100%" height="100%"
                            toolTip="@Resource(bundle='CustomerOrderPanel',key='deliveryHint')">
                     <mx:DataGrid id="deliverySummaryDataGrid" width="100%" height="100%"
-                                 itemEditEnd="onRefNoValueEditEnd(event);">
+                                 itemEditEnd="onRefNoValueEditEnd(event);"
+
+                            >
                         <mx:columns>
                             <mx:DataGridColumn showDataTips="true" width="25"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='id')"
@@ -583,6 +596,30 @@
 
                                                     }
 
+
+
+                                                    public function getEditActionLabel(customerOrderDeliveryDTO:Object):String {
+
+                                                        return resourceManager.getString('CustomerOrderPanel','shipmnet.edit');
+
+                                                    }
+
+
+                                                    private function openEditDevliveryPopup():void {
+
+
+                                                    }
+
+                                                    /**
+                                                     * Edit delivery.
+                                                     * @param customerOrderDeliveryDTO
+                                                     */
+                                                    public function onEditDeliveryActionButtonClick(customerOrderDeliveryDTO:Object):void {
+
+                                                        Alert.show("Edit delivery" , "info");
+
+                                                    }
+
                                                     /**
                                                      * Set external reference number of delivery.
                                                      * @param customerOrderDeliveryDTO
@@ -619,6 +656,12 @@
                                                            label="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.setrefno')"
                                                            toolTip="@Resource(bundle='CustomerOrderPanel',key='shipmnet.print.setrefno.hint')"
                                                            click="callLater(onRefNumberActionButtonClick, new Array(data))"
+                                                        />
+                                                <mx:Button visible="false" includeInLayout="false"
+                                                           width="135" id="editDeliveryActionButton"
+                                                           label="{getEditActionLabel(data)}"
+                                                           toolTip="@Resource(bundle='CustomerOrderPanel',key='shipmnet.edit.hint')"
+                                                           click="callLater(onEditDeliveryActionButtonClick, new Array(data))"
                                                         />
 
                                             </mx:VBox>
@@ -791,6 +834,18 @@
             deliverySummaryDataGrid.dataProvider = event.result;
         }
 
+
+        /**
+         * Handle features of paymentgateway .
+         * @param event
+         */
+        private function onGetPaymentGatewayFeature(event:ResultEvent):void {
+
+            Alert.show( "" + event.result,"info");
+
+
+
+        }
 
         /**
          * Handle attributes of shopper.
