@@ -460,7 +460,7 @@
         }
 
         private function onMainAccordionChange(event:IndexChangedEvent):void {
-            const storeMenu:int = 5;
+            const storeMenu:int = 6;
             if (event.newIndex == storeMenu) {
                 remoteShopService.getAll(); // reload buttons
             }
