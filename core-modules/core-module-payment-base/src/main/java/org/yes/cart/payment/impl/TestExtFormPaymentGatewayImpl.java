@@ -40,7 +40,8 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl im
                 false, false, false, true,
                 false, false, false, true,
                 true,  false,
-                null
+                null,
+                false, false
         );
     }
 

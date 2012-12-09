@@ -31,7 +31,8 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
             false, false, false, true,
             false, false, false, true,
             true, false,
-            null
+            null ,
+            false, false
     );
 
 

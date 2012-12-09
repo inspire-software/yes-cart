@@ -60,7 +60,8 @@ public class PayflowPaymentGatewayImpl extends AbstractCappPaymentGatewayImpl im
             true, true, true, true,
             true, true, true, false,
             true, false,
-            null
+            null,
+            true, true
     );
 
     static {

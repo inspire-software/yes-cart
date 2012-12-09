@@ -95,7 +95,8 @@ public class TestPaymentGatewayImpl extends AbstractPaymentGatewayImpl implement
                     true, true, true, true,
                     true, true, true, false,
                     true, false,
-                    null
+                    null,
+                    true, true
             );
         }
 

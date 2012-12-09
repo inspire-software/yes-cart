@@ -37,7 +37,8 @@ public class PayPalNvpPaymentGatewayImpl extends AbstractPayPalPaymentGatewayImp
             true, true, true, false,
             true, true, true, false,
             true, false,
-            null
+            null,
+            false, true
     );
 
 

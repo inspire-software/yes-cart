@@ -158,12 +158,36 @@ public interface PaymentGatewayFeature extends Serializable {
      * Is deen to pass details in case of html for constrcution
      * @return   true in case if need provide detail info
      */
-    public boolean isRequireDetails();
+     boolean isRequireDetails();
 
     /**
      * Set require detail flag
      * @param requireDetails  flag to set.
      */
     void setRequireDetails(boolean requireDetails);
+
+    /**
+     *
+     * @return true in case if pgw support amount capture more that authorized before.
+     */
+    boolean isSupportCaptureMore() ;
+
+    /**
+     * Set caprure more flag.
+     * @param supportCaptureMore   flag
+     */
+    void setSupportCaptureMore(boolean supportCaptureMore);
+
+    /**
+     *
+     * @return true in case if pgw support amount capture less that authorized before.
+     */
+    boolean isSupportCaptureLess();
+
+    /**
+     * Set capture less flag.
+     * @param supportCaptureLess
+     */
+    void setSupportCaptureLess(boolean supportCaptureLess);
 
 }

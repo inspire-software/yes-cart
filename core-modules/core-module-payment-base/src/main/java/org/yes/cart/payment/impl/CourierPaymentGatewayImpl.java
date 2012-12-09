@@ -39,7 +39,8 @@ public class CourierPaymentGatewayImpl extends AbstractPaymentGatewayImpl implem
                     true, true, true, true,
                     true, true, true, false,
                     false, false,
-                    null
+                    null,
+                    true, true
             );
         }
 

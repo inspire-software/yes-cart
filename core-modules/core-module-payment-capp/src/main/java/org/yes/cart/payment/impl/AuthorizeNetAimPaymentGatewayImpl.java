@@ -26,7 +26,8 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
             true, true, true, true,
             true, true, true, false,
             true, false,
-            null
+            null,
+            false, true
     );
 
     /**
