@@ -17,6 +17,7 @@ package org.yes.cart.remote.service;
 
 import org.yes.cart.domain.dto.DtoPaymentGatewayInfo;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 
@@ -64,6 +65,14 @@ public interface RemotePaymentModulesManagementService {
      * @return PG parameters.
      */
     Collection<PaymentGatewayParameter> getPaymentGatewayParameters(String gatewayLabel, String lang);
+
+
+    /**
+     * Get payment gateway features.
+     * @param gatewayLabel payment gateway label.
+     * @return {@link PaymentGatewayFeature}  supported features of gateway.
+     */
+    PaymentGatewayFeature getPaymentGatewayFeature(String gatewayLabel);
 
 
     /**

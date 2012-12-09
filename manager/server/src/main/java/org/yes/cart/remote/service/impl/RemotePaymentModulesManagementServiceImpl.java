@@ -19,6 +19,7 @@ import org.yes.cart.domain.dto.DtoPaymentGatewayInfo;
 import org.yes.cart.domain.dto.impl.DtoPaymentGatewayInfoImpl;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.payment.PaymentGateway;
+import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
@@ -119,6 +120,18 @@ public class RemotePaymentModulesManagementServiceImpl implements RemotePaymentM
     /** {@inheritDoc}*/
     public Collection<PaymentGatewayParameter> getPaymentGatewayParameters(final String gatewayLabel, final String lang) {
         return paymentModulesManager.getPaymentGateway(gatewayLabel).getPaymentGatewayParameters();
+    }
+
+    final Map<String, PaymentGatewayFeature> paymentGatewayFeatureCache = new HashMap<String, PaymentGatewayFeature>();
+
+    /** {@inheritDoc}*/
+    public PaymentGatewayFeature getPaymentGatewayFeature(final String gatewayLabel) {
+        PaymentGatewayFeature rez = paymentGatewayFeatureCache.get(gatewayLabel);
+        if (rez == null) {
+            rez =  paymentModulesManager.getPaymentGateway(gatewayLabel).getPaymentGatewayFeatures();
+            paymentGatewayFeatureCache.put(gatewayLabel, rez) ;
+        }
+        return  rez;
     }
 
     /** {@inheritDoc}*/
