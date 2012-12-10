@@ -74,8 +74,12 @@ public class CustomerOrderDeliveryDTOImpl implements CustomerOrderDeliveryDTO {
     @DtoField(value = "customerOrder.shop.name", readOnly = true)
     private String shopName;
 
+    @DtoField(value = "customerOrder.pgLabel", readOnly = true)
+    private String pgLabel;
 
+    private boolean supportCaptureMore;
 
+    private boolean supportCaptureLess;
 
     @DtoField(value = "deliveryGroup", readOnly = true)
     private String deliveryGroup;
@@ -239,5 +243,35 @@ public class CustomerOrderDeliveryDTOImpl implements CustomerOrderDeliveryDTO {
     /** {@inheritDoc} */
     public long getId() {
         return customerOrderDeliveryId;
+    }
+
+    /** {@inheritDoc} */
+    public String getPgLabel() {
+        return pgLabel;
+    }
+
+    /** {@inheritDoc} */
+    public void setPgLabel(final String pgLabel) {
+        this.pgLabel = pgLabel;
+    }
+
+    /** {@inheritDoc} */
+    public boolean isSupportCaptureMore() {
+        return supportCaptureMore;
+    }
+
+    /** {@inheritDoc} */
+    public void setSupportCaptureMore(final boolean supportCaptureMore) {
+        this.supportCaptureMore = supportCaptureMore;
+    }
+
+    /** {@inheritDoc} */
+    public boolean isSupportCaptureLess() {
+        return supportCaptureLess;
+    }
+
+    /** {@inheritDoc} */
+    public void setSupportCaptureLess(final boolean supportCaptureLess) {
+        this.supportCaptureLess = supportCaptureLess;
     }
 }

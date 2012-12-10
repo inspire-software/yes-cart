@@ -225,5 +225,43 @@ public interface CustomerOrderDeliveryDTO   extends Identifiable {
     void setShopName(String shopName);
 
 
+    /**
+     * Get label of payment gateway.
+     * @return payment gateway.
+     */
+    String getPgLabel();
+
+    /**
+     * Set payment gateway.
+     * @param pgLabel  payment gateway.
+     */
+    void setPgLabel(String pgLabel);
+
+
+    /**
+     * Is pwg support capture more than authorised.
+     * @return true if support
+     */
+    boolean isSupportCaptureMore();
+
+    /**
+     * Set capture more flag.
+     * @param supportCaptureMore flag to set
+     */
+    void setSupportCaptureMore(boolean supportCaptureMore) ;
+
+    /**
+     * support capture less, than authorised.
+     * @return true if pgw supports.
+     */
+    boolean isSupportCaptureLess();
+
+    /**
+     * Set support capture less flag.
+     * @param supportCaptureLess capture less flag.
+     */
+    void setSupportCaptureLess( boolean supportCaptureLess)  ;
+
+
 
 }
