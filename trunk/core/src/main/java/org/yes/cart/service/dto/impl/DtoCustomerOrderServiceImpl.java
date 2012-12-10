@@ -37,6 +37,7 @@ import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
 import org.yes.cart.domain.misc.Result;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
+import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.dto.DtoCustomerOrderService;
@@ -64,6 +65,7 @@ public class DtoCustomerOrderServiceImpl
     protected final Assembler orderDeliveryAssembler;
     protected final OrderStateManager orderStateManager;
     protected final PaymentModulesManager paymentModulesManager;
+
 
     /**
      * Construct service.
@@ -317,6 +319,7 @@ public class DtoCustomerOrderServiceImpl
 
         if (CollectionUtils.isNotEmpty(orderList)) {
             final CustomerOrder customerOrder = orderList.get(0);
+            final PaymentGatewayFeature pgwFeatures = paymentModulesManager.getPaymentGateway(customerOrder.getPgLabel()).getPaymentGatewayFeatures();
             final List<CustomerOrderDeliveryDTO> rez = new ArrayList<CustomerOrderDeliveryDTO>(customerOrder.getDelivery().size());
 
             for (CustomerOrderDelivery delivery : customerOrder.getDelivery()) {
@@ -324,6 +327,8 @@ public class DtoCustomerOrderServiceImpl
                 if (StringUtils.isBlank(deliveryNum) || (StringUtils.isNotBlank(deliveryNum) && delivery.getDeliveryNum().equals(deliveryNum))) {
                     final CustomerOrderDeliveryDTO dto = dtoFactory.getByIface(CustomerOrderDeliveryDTO.class);
                     orderDeliveryAssembler.assembleDto(dto, delivery, getAdaptersRepository(), dtoFactory);
+                    dto.setSupportCaptureMore(pgwFeatures.isSupportCaptureMore());
+                    dto.setSupportCaptureLess(pgwFeatures.isSupportCaptureLess());
                     rez.add(dto);
                 }
 

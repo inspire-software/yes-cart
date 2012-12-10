@@ -600,6 +600,13 @@
 
                                                     public function getEditActionLabel(customerOrderDeliveryDTO:Object):String {
 
+                                                        editDeliveryActionButton.visible = editDeliveryActionButton.includeInLayout =
+                                                                        (!(customerOrderDeliveryDTO.deliveryStatus == "ds.shipment.inprogress"
+                                                                        || customerOrderDeliveryDTO.deliveryStatus == "ds.shipped"))
+                                                                        &&
+                                                                        (customerOrderDeliveryDTO.supportCaptureMore
+                                                                        || customerOrderDeliveryDTO.supportCaptureLess);
+
                                                         return resourceManager.getString('CustomerOrderPanel','shipmnet.edit');
 
                                                     }
