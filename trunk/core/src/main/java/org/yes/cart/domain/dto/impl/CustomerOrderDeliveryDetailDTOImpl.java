@@ -41,20 +41,19 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     @DtoField(value = "customerOrderDeliveryDetId", readOnly = true)
     private long customerOrderDeliveryDetId;
 
-    @DtoField(value = "sku.code", readOnly = true)
+    @DtoField(value = "sku.code")
     private String skuCode;
 
-    @DtoField(value = "sku.name", readOnly = true)
+    @DtoField(value = "sku.name")
     private String skuName;
 
 
-    @DtoField(value = "qty", readOnly = true)
+    @DtoField(value = "qty")
     private BigDecimal qty;
 
-    @DtoField(value = "price", readOnly = true)
+    @DtoField(value = "price")
     private BigDecimal invoicePrice;
 
-    //@DtoField(value = "price", readOnly = true)
     private BigDecimal listPrice;
 
     private BigDecimal lineTotal;
