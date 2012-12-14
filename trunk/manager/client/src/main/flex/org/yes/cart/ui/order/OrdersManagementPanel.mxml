@@ -612,19 +612,17 @@
                                                     }
 
 
-                                                    private function openEditDevliveryPopup():void {
-
-
-                                                    }
+                                                    private var editDeliveryDialog:EditOrderDeliveryDialog = null;
 
                                                     /**
                                                      * Edit delivery.
                                                      * @param customerOrderDeliveryDTO
                                                      */
                                                     public function onEditDeliveryActionButtonClick(customerOrderDeliveryDTO:Object):void {
-
-                                                        Alert.show("Edit delivery" , "info");
-
+                                                        editDeliveryDialog = new EditOrderDeliveryDialog();
+                                                        editDeliveryDialog.detail = customerOrderDeliveryDTO.detail;
+                                                        /*editDeliveryDialog.title = "Edit " + customerOrderDeliveryDTO.deliveryNum;*/
+                                                        PopUpManager.centerPopUp(editDeliveryDialog);
                                                     }
 
                                                     /**
@@ -1047,7 +1045,7 @@
 
 
         /**
-         * Get discount .
+         * Get line total .
          * @param item
          * @param column
          * @return
