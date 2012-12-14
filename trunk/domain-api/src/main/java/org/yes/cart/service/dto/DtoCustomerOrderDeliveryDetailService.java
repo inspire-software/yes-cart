@@ -21,6 +21,6 @@ import org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO;
 /**
  * Service to work with delivery details.
  */
-public interface DtoCustomerOrderDeliveryDetail extends GenericDTOService<CustomerOrderDeliveryDetailDTO> {
+public interface DtoCustomerOrderDeliveryDetailService extends GenericDTOService<CustomerOrderDeliveryDetailDTO> {
 
 }

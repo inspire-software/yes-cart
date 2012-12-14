@@ -348,6 +348,14 @@
         </property>
     </bean>
 
+    <bean id="customerOrderDeliveryDetService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.CustomerOrderDeliveryDetServiceImpl">
+                <constructor-arg index="0"  ref="customerOrderDeliveryDetDao"/>
+            </bean>
+        </property>
+    </bean>
+
     <bean id="customerService" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.CustomerServiceImpl">
@@ -672,6 +680,16 @@
         </property>
     </bean>
 
+    <bean id="dtoCustomerOrderDeliveryDetailService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoCustomerOrderDeliveryDetailServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="1" ref="customerOrderDeliveryDetService"/>
+                <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
+            </bean>
+        </property>
+    </bean>
+
 
     <bean id="dtoCustomerWishListService" parent="txProxyTemplate">
         <property name="target">
@@ -798,6 +816,7 @@
 
                 <entry key="org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO"  value="org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.CustomerOrderDeliveryDTO"        value="org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO"        value="org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl"/>
 
             </map>
         </constructor-arg>

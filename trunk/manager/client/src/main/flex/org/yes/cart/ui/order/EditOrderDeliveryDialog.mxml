@@ -21,13 +21,64 @@
                 creationComplete="init();"
         >
 
+    <mx:RemoteObject showBusyCursor="true" id="remoteCustomerOrderDeliveryDetailService"
+                     destination="remoteCustomerOrderDeliveryDetailService"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="create" name="create"
+                   result="onCreateDeliveryDetailResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="update" name="update"
+                   result="onUpdateDeliveryDetailResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="remove" name="remove"
+                   result="onRemoveDeliveryDetailResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+
+    </mx:RemoteObject>
+
     <mx:Script><![CDATA[
 
 
         import mx.managers.PopUpManager;
 
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
         public function init():void {
         }
+
+        /**
+         * Handle create new delivery detail.
+         * @param event event with result
+         */
+        private function onCreateDeliveryDetailResult(event:ResultEvent):void {
+
+        }
+
+
+        /**
+         * Handle update delivery detail record.
+         * @param event event with result
+         */
+        private function onUpdateDeliveryDetailResult(event:ResultEvent):void {
+
+        }
+
+
+        /**
+         * Handle create new delivery detail.
+         * @param event event with result
+         */
+        private function onRemoveDeliveryDetailResult(event:ResultEvent):void {
+
+        }
+
+
 
         ]]></mx:Script>
 </mx:TitleWindow>
