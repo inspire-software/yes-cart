@@ -490,6 +490,7 @@
                                                     import mx.events.DataGridEvent;
                                                     import mx.events.DataGridEventReason;
                                                     import mx.managers.PopUpManager;
+                                                    import mx.utils.ObjectUtil;
 
                                                     import org.yes.cart.impl.CustomerOrderDTOImpl;
 
@@ -619,10 +620,9 @@
                                                      * @param customerOrderDeliveryDTO
                                                      */
                                                     public function onEditDeliveryActionButtonClick(customerOrderDeliveryDTO:Object):void {
-                                                        editDeliveryDialog = new EditOrderDeliveryDialog();
-                                                        editDeliveryDialog.detail = customerOrderDeliveryDTO.detail;
-                                                        /*editDeliveryDialog.title = "Edit " + customerOrderDeliveryDTO.deliveryNum;*/
-                                                        PopUpManager.centerPopUp(editDeliveryDialog);
+                                                            editDeliveryDialog = EditOrderDeliveryDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), EditOrderDeliveryDialog, true));
+                                                            editDeliveryDialog.detail = customerOrderDeliveryDTO.detail;
+                                                            PopUpManager.centerPopUp(editDeliveryDialog);
                                                     }
 
                                                     /**

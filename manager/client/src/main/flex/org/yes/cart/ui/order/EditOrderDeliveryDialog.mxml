@@ -46,27 +46,44 @@
 
         <mx:ControlBar  width="100%">
 
+            <mx:Button height="100%"
+                       label="@Resource(bundle='CustomerOrderPanel',key='delivery.new.item')"
+                       toolTip="@Resource(bundle='CustomerOrderPanel',key='delivery.new.item.hint')"
+                       click="onAddNewItemClick(event)"/>
+
+            <mx:Button height="100%"  enabled="{deliveryDetailDataGrid.selectedItem != null}"
+                       label="@Resource(bundle='CustomerOrderPanel',key='delivery.delete.item')"
+                       toolTip="@Resource(bundle='CustomerOrderPanel',key='delivery.delete.item.hint')"
+                       click="onDeleteItemClick(event)"/>
+
+            <mx:Label id="currentAmount" />
+            <mx:Label id="allowedAmount" />
+
         </mx:ControlBar>
 
-        <mx:DataGrid id ="deliveryDetailDataGrid" x="0" y="0" width="100%" height="99%"  editable="true" dataProvider="{detail}">
+        <mx:DataGrid id ="deliveryDetailDataGrid" x="0" y="0" width="100%" height="99%"
+                     editable="true" dataProvider="{detail}"
+                     itemEditEnd="onDeliveryDetailItemEditEnd(event)"
+
+                >
             <mx:columns>
 
                 <mx:DataGridColumn showDataTips="true" width="50" editable="false"
                                    headerText="@Resource(bundle='CustomerOrderPanel',key='id')"
                                    dataField="customerOrderDeliveryDetId"/>
-                <mx:DataGridColumn showDataTips="true" width="50"
+                <mx:DataGridColumn showDataTips="true" editable="false"
                                    headerText="@Resource(bundle='CustomerOrderPanel',key='skuCode')"
                                    dataField="skuCode"/>
-                <mx:DataGridColumn showDataTips="true" width="50"  editable="false"
+                <mx:DataGridColumn showDataTips="true"   editable="false"
                                    headerText="@Resource(bundle='CustomerOrderPanel',key='skuName')"
                                    dataField="skuName"/>
-                <mx:DataGridColumn showDataTips="true" width="50"  editable="false"
+                <mx:DataGridColumn showDataTips="true"
                                    headerText="@Resource(bundle='CustomerOrderPanel',key='invoicePrice')"
                                    dataField="invoicePrice"/>
-                <mx:DataGridColumn showDataTips="true" width="50"  editable="false"
+                <mx:DataGridColumn showDataTips="true"
                                    headerText="@Resource(bundle='CustomerOrderPanel',key='qty')"
                                    dataField="qty"/>
-                <mx:DataGridColumn showDataTips="true" width="50"  editable="false"
+                <mx:DataGridColumn showDataTips="true"  editable="false"
                                    headerText="@Resource(bundle='CustomerOrderPanel',key='total')"
                                    labelFunction="lineTotalLabelFunction"/>
 
@@ -76,18 +93,24 @@
 
     </mx:VBox>
 
+    <mx:ArrayCollection id="detail"/>
+
 
     <mx:Script><![CDATA[
-
-
+        import mx.controls.TextInput;
+        import mx.core.FlexGlobals;
+        import mx.events.DataGridEvent;
+        import mx.events.DataGridEventReason;
         import mx.managers.PopUpManager;
 
         import org.yes.cart.shopmanager.ShopManagerGlobal;
         import mx.rpc.events.ResultEvent;
         import mx.rpc.events.FaultEvent;
 
-        [Bindable]
-        public var detail:Array;
+        import org.yes.cart.ui.product.ProductFinderDialog;
+
+
+        private var productFinderPopUp:ProductFinderDialog;
 
 
         public function init():void {
@@ -137,6 +160,62 @@
          */
         private function lineTotalLabelFunction(item:Object, column:DataGridColumn):String {
             return (item.qty * item.invoicePrice).toFixed(2);
+        }
+
+
+        /**
+         * Handle new item
+         * @param event
+         */
+        private function onAddNewItemClick(event:MouseEvent):void {
+
+            productFinderPopUp = ProductFinderDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), ProductFinderDialog, true));
+            productFinderPopUp.selectProductButton.addEventListener(MouseEvent.CLICK, onProductSelectedConfirm);
+            PopUpManager.centerPopUp(productFinderPopUp);
+
+        }
+
+
+
+        private function onProductSelectedConfirm(event:Event):void {
+            if (productFinderPopUp != null) {
+                var selected:Array = productFinderPopUp.productSelection;
+                if (selected != null && selected.length > 0) {
+                    //selectedProductDTOImpl = selected[0];
+                    //productLabel.text = selectedProductDTOImpl.name  + ' (' + selectedProductDTOImpl.code + ')';
+                    //productLabel.toolTip = selectedProductDTOImpl.description;
+                    productFinderPopUp.selectProductButton.removeEventListener(MouseEvent.CLICK, onProductSelectedConfirm);
+                    PopUpManager.removePopUp(productFinderPopUp);
+                    productFinderPopUp = null;
+                }
+            }
+        }
+
+
+        /**
+         * Handle new item
+         * @param event
+         */
+        private function onDeleteItemClick(event:MouseEvent):void {
+
+            detail.removeItemAt(deliveryDetailDataGrid.selectedIndex);
+
+        }
+
+        private function onDeliveryDetailItemEditEnd(event:DataGridEvent):void {
+            var myEditor:TextInput = TextInput(event.currentTarget.itemEditorInstance);
+            var newVal:String = myEditor.text;
+            var oldVal:String = event.currentTarget.editedItemRenderer.data[event.dataField];
+
+            if (event.reason == DataGridEventReason.CANCELLED ||
+                    event.reason == DataGridEventReason.OTHER) {
+                return;
+            }
+            if (oldVal == newVal){
+                event.preventDefault();
+            }else{
+                //TODO update item
+            }
         }
 
 
