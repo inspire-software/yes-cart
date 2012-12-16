@@ -89,10 +89,14 @@
 
         private function onGetAllBrandsResult(event:ResultEvent):void {
             brandComboBox.dataProvider = event.result;
+            brandComboBox.selectedItem = null;
+            brandComboBox.selectedIndex = -1;
         }
 
         private function onGetAllProductTypesResult(event:ResultEvent):void {
             typeComboBox.dataProvider = event.result;
+            typeComboBox.selectedItem = null;
+            typeComboBox.selectedIndex = -1;
         }
 
         private function onGetProductByCodeNameBrandTypeResult(event:ResultEvent):void {

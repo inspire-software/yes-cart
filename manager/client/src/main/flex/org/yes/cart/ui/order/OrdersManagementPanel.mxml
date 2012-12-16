@@ -622,6 +622,7 @@
                                                     public function onEditDeliveryActionButtonClick(customerOrderDeliveryDTO:Object):void {
                                                             editDeliveryDialog = EditOrderDeliveryDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), EditOrderDeliveryDialog, true));
                                                             editDeliveryDialog.detail = customerOrderDeliveryDTO.detail;
+                                                            editDeliveryDialog.customerOrderDeliveryDTO = customerOrderDeliveryDTO;
                                                             PopUpManager.centerPopUp(editDeliveryDialog);
                                                     }
 

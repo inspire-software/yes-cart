@@ -14,7 +14,7 @@
   -    limitations under the License.
   -->
 
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="780" height="500"
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="800" height="520"
                 title="@Resource(bundle='ProductManagementPanel',key='find')"
                 showCloseButton="true"
                 close="PopUpManager.removePopUp(this)"
@@ -44,46 +44,49 @@
 
     <mx:VBox width="100%" height="100%">
 
-        <mx:ControlBar  width="100%">
+        <mx:ControlBar width="100%">
 
             <mx:Button height="100%"
                        label="@Resource(bundle='CustomerOrderPanel',key='delivery.new.item')"
                        toolTip="@Resource(bundle='CustomerOrderPanel',key='delivery.new.item.hint')"
                        click="onAddNewItemClick(event)"/>
 
-            <mx:Button height="100%"  enabled="{deliveryDetailDataGrid.selectedItem != null}"
+            <mx:Button height="100%" enabled="{deliveryDetailDataGrid.selectedItem != null}"
+                       label="@Resource(bundle='CustomerOrderPanel',key='delivery.edit.item')"
+                       toolTip="@Resource(bundle='CustomerOrderPanel',key='delivery.edit.item.hint')"
+                       click="onAddNewItemClick(event)"/>
+
+            <mx:Button height="100%" enabled="{deliveryDetailDataGrid.selectedItem != null}"
                        label="@Resource(bundle='CustomerOrderPanel',key='delivery.delete.item')"
                        toolTip="@Resource(bundle='CustomerOrderPanel',key='delivery.delete.item.hint')"
                        click="onDeleteItemClick(event)"/>
 
-            <mx:Label id="currentAmount" />
-            <mx:Label id="allowedAmount" />
+            <mx:Label id="currentAmount"/>
+            <mx:Label id="allowedAmount"/>
 
         </mx:ControlBar>
 
-        <mx:DataGrid id ="deliveryDetailDataGrid" x="0" y="0" width="100%" height="99%"
+        <mx:DataGrid id="deliveryDetailDataGrid" x="0" y="0" width="100%" height="99%"
                      editable="true" dataProvider="{detail}"
                      itemEditEnd="onDeliveryDetailItemEditEnd(event)"
 
                 >
             <mx:columns>
 
-                <mx:DataGridColumn showDataTips="true" width="50" editable="false"
+                <mx:DataGridColumn width="50" editable="false"
                                    headerText="@Resource(bundle='CustomerOrderPanel',key='id')"
                                    dataField="customerOrderDeliveryDetId"/>
-                <mx:DataGridColumn showDataTips="true" editable="false"
+                <mx:DataGridColumn editable="false"
                                    headerText="@Resource(bundle='CustomerOrderPanel',key='skuCode')"
                                    dataField="skuCode"/>
-                <mx:DataGridColumn showDataTips="true"   editable="false"
+                <mx:DataGridColumn editable="false"
                                    headerText="@Resource(bundle='CustomerOrderPanel',key='skuName')"
                                    dataField="skuName"/>
-                <mx:DataGridColumn showDataTips="true"
-                                   headerText="@Resource(bundle='CustomerOrderPanel',key='invoicePrice')"
+                <mx:DataGridColumn headerText="@Resource(bundle='CustomerOrderPanel',key='invoicePrice')"
                                    dataField="invoicePrice"/>
-                <mx:DataGridColumn showDataTips="true"
-                                   headerText="@Resource(bundle='CustomerOrderPanel',key='qty')"
+                <mx:DataGridColumn headerText="@Resource(bundle='CustomerOrderPanel',key='qty')"
                                    dataField="qty"/>
-                <mx:DataGridColumn showDataTips="true"  editable="false"
+                <mx:DataGridColumn editable="false"
                                    headerText="@Resource(bundle='CustomerOrderPanel',key='total')"
                                    labelFunction="lineTotalLabelFunction"/>
 
@@ -103,7 +106,11 @@
         import mx.events.DataGridEventReason;
         import mx.managers.PopUpManager;
 
+        import org.yes.cart.impl.CustomerOrderDeliveryDetailDTOImpl;
+        import org.yes.cart.impl.ProductDTOImpl;
+
         import org.yes.cart.shopmanager.ShopManagerGlobal;
+
         import mx.rpc.events.ResultEvent;
         import mx.rpc.events.FaultEvent;
 
@@ -111,6 +118,9 @@
 
 
         private var productFinderPopUp:ProductFinderDialog;
+
+
+        public var customerOrderDeliveryDTO:Object;
 
 
         public function init():void {
@@ -176,7 +186,6 @@
         }
 
 
-
         private function onProductSelectedConfirm(event:Event):void {
             if (productFinderPopUp != null) {
                 var selected:Array = productFinderPopUp.productSelection;
@@ -184,6 +193,14 @@
                     //selectedProductDTOImpl = selected[0];
                     //productLabel.text = selectedProductDTOImpl.name  + ' (' + selectedProductDTOImpl.code + ')';
                     //productLabel.toolTip = selectedProductDTOImpl.description;
+
+                    var selectedProductDTOImpl:ProductDTOImpl = selected[0];
+                    var detLine:CustomerOrderDeliveryDetailDTOImpl = new CustomerOrderDeliveryDetailDTOImpl();
+                    detLine.skuCode = selectedProductDTOImpl.code;
+                    detLine.skuName = selectedProductDTOImpl.name;
+                    //detLine.deliveryNum = customerOrderDeliveryDTO
+                    detail.addItem(detLine); //todo  fill rest of fields and save
+
                     productFinderPopUp.selectProductButton.removeEventListener(MouseEvent.CLICK, onProductSelectedConfirm);
                     PopUpManager.removePopUp(productFinderPopUp);
                     productFinderPopUp = null;
@@ -198,6 +215,8 @@
          */
         private function onDeleteItemClick(event:MouseEvent):void {
 
+            remoteCustomerOrderDeliveryDetailService.remove(deliveryDetailDataGrid.selectedItem.customerOrderDeliveryDetId);
+
             detail.removeItemAt(deliveryDetailDataGrid.selectedIndex);
 
         }
@@ -211,15 +230,11 @@
                     event.reason == DataGridEventReason.OTHER) {
                 return;
             }
-            if (oldVal == newVal){
+            if (oldVal == newVal) {
                 event.preventDefault();
-            }else{
-                //TODO update item
+            } else {
+                remoteCustomerOrderDeliveryDetailService.update(deliveryDetailDataGrid.selectedItem);
             }
         }
-
-
-
-
         ]]></mx:Script>
 </mx:TitleWindow>
