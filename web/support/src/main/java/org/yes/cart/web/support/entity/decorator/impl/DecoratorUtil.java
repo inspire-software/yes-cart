@@ -27,8 +27,8 @@ import org.yes.cart.domain.entity.Seo;
 public class DecoratorUtil {
 
     /**
-     * Seo endcode id helper function, which retur seo uri if possible instead of id.
-     * @param idValueToEncode gicen id
+     * Seo encode id helper function, which returns seo uri if possible instead of id.
+     * @param idValueToEncode given id
      * @param seo given seo
      * @return seo uri
      */
