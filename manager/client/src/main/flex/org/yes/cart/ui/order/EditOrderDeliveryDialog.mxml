@@ -100,6 +100,7 @@
 
 
     <mx:Script><![CDATA[
+        import mx.controls.Alert;
         import mx.controls.TextInput;
         import mx.core.FlexGlobals;
         import mx.events.DataGridEvent;
@@ -233,7 +234,9 @@
             if (oldVal == newVal) {
                 event.preventDefault();
             } else {
-                remoteCustomerOrderDeliveryDetailService.update(deliveryDetailDataGrid.selectedItem);
+                var customerOrderDeliveryDetailDTOImpl:CustomerOrderDeliveryDetailDTOImpl = (DataGrid(event.target).dataProvider[event.rowIndex] as CustomerOrderDeliveryDetailDTOImpl);
+                event.currentTarget.editedItemRenderer.data[event.dataField] = newVal;
+                remoteCustomerOrderDeliveryDetailService.update(customerOrderDeliveryDetailDTOImpl);
             }
         }
         ]]></mx:Script>
