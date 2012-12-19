@@ -239,6 +239,7 @@ public class HomePage extends AbstractWebPage {
             if (rez == null) {
                 return super.getPageTitle();
             }
+            return rez;
         }
         return super.getPageTitle();
     }
@@ -255,6 +256,7 @@ public class HomePage extends AbstractWebPage {
             if (rez == null) {
                 return super.getDescription();
             }
+            return rez;
         }
         return super.getDescription();
     }
@@ -270,6 +272,7 @@ public class HomePage extends AbstractWebPage {
             if (rez == null) {
                 return super.getKeywords();
             }
+            return rez;
         }
         return super.getKeywords();
     }

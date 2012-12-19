@@ -16,7 +16,6 @@
 
 package org.yes.cart.web.page.component;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -25,6 +24,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.springframework.util.StringUtils;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.*;
@@ -228,9 +228,9 @@ public class SkuCentralView extends AbstractCentralView {
         if (associatedProducts.isEmpty()  /*|| false is accessory*/) {
 
             add(
-                    new Label(ACCESSORIES_HEAD_CONTAINER, StringUtils.EMPTY)
+                    new Label(ACCESSORIES_HEAD_CONTAINER, "")
             ).add(
-                    new Label(ACCESSORIES_BODY_CONTAINER, StringUtils.EMPTY)
+                    new Label(ACCESSORIES_BODY_CONTAINER, "")
             );
 
         } else {
@@ -307,7 +307,7 @@ public class SkuCentralView extends AbstractCentralView {
         final Seoable seoable = isProduct ? product : sku;
         if (seoable != null) {
             Seo seo = seoable.getSeo();
-            if (seo != null) {
+            if (seo != null && StringUtils.hasText(seo.getTitle())) {
                 return new Model<String>(seo.getTitle());
             }
         }
@@ -321,7 +321,7 @@ public class SkuCentralView extends AbstractCentralView {
         final Seoable seoable = isProduct ? product : sku;
         if (seoable != null) {
             Seo seo = seoable.getSeo();
-            if (seo != null) {
+            if (seo != null && StringUtils.hasText(seo.getMetadescription())) {
                 return new Model<String>(seo.getMetadescription());
             }
         }
@@ -336,7 +336,7 @@ public class SkuCentralView extends AbstractCentralView {
         final Seoable seoable = isProduct ? product : sku;
         if (seoable != null) {
             Seo seo = seoable.getSeo();
-            if (seo != null) {
+            if (seo != null && StringUtils.hasText(seo.getMetakeywords())) {
                 return new Model<String>(seo.getMetakeywords());
             }
         }

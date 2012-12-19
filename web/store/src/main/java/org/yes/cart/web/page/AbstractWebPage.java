@@ -111,6 +111,8 @@ public class AbstractWebPage extends WebPage {
 
     protected void onBeforeRender() {
 
+        super.onBeforeRender();
+        // need to call super first because components need to perform before render to initialise first
         addOrReplace(new Label(
                 PAGE_TITLE,
                 getPageTitle()));
@@ -127,8 +129,6 @@ public class AbstractWebPage extends WebPage {
         created.add( new AttributeAppender("content", getCreated(), " "));
         addOrReplace(created);*/ //TODOV2
 
-
-        super.onBeforeRender();
     }
 
     /**
@@ -193,6 +193,10 @@ public class AbstractWebPage extends WebPage {
      * @return page title
      */
     public IModel<String> getPageTitle() {
+        if (ApplicationDirector.getCurrentShop().getSeo() != null
+                && StringUtils.isNotBlank(ApplicationDirector.getCurrentShop().getSeo().getTitle())) {
+            return new Model<String>(ApplicationDirector.getCurrentShop().getSeo().getTitle());
+        }
         return new Model<String>(ApplicationDirector.getCurrentShop().getName());
     }
 
@@ -202,7 +206,8 @@ public class AbstractWebPage extends WebPage {
      * @return description
      */
     public IModel<String> getDescription() {
-        if (ApplicationDirector.getCurrentShop().getSeo() != null) {
+        if (ApplicationDirector.getCurrentShop().getSeo() != null
+                && StringUtils.isNotBlank(ApplicationDirector.getCurrentShop().getSeo().getMetadescription())) {
             return new Model<String>(ApplicationDirector.getCurrentShop().getSeo().getMetadescription());
         }
         return null;
@@ -213,7 +218,8 @@ public class AbstractWebPage extends WebPage {
      * @return keywords
      */
     public IModel<String> getKeywords() {
-        if (ApplicationDirector.getCurrentShop().getSeo() != null) {
+        if (ApplicationDirector.getCurrentShop().getSeo() != null
+                && StringUtils.isNotBlank(ApplicationDirector.getCurrentShop().getSeo().getMetakeywords())) {
             return new Model<String>(ApplicationDirector.getCurrentShop().getSeo().getMetakeywords());
         }
         return null;

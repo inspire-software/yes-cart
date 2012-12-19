@@ -20,6 +20,7 @@ import org.apache.lucene.search.BooleanQuery;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.springframework.util.StringUtils;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Seo;
@@ -99,7 +100,7 @@ public abstract class AbstractCentralView extends BaseComponent {
     public IModel<String> getPageTitle() {
         if (getCategory() != null) {
             Seo seo = getCategory().getSeo();
-            if (seo != null) {
+            if (seo != null && StringUtils.hasText(seo.getTitle())) {
                 return new Model<String>(seo.getTitle());
             }
         }
@@ -113,7 +114,7 @@ public abstract class AbstractCentralView extends BaseComponent {
     public IModel<String> getDescription() {
         if (getCategory() != null) {
             Seo seo = getCategory().getSeo();
-            if (seo != null) {
+            if (seo != null && StringUtils.hasText(seo.getMetadescription())) {
                 return new Model<String>(seo.getMetadescription());
             }
         }
@@ -128,7 +129,7 @@ public abstract class AbstractCentralView extends BaseComponent {
     public IModel<String> getKeywords() {
         if (getCategory() != null) {
             Seo seo = getCategory().getSeo();
-            if (seo != null) {
+            if (seo != null && StringUtils.hasText(seo.getMetakeywords())) {
                 return new Model<String>(seo.getMetakeywords());
             }
         }
