@@ -174,7 +174,14 @@ p {
 .filternav li a.active, .menu li a.active:hover{background:url('verMenuImages.png') 0px -40px no-repeat; color:rgb(0,0,0);}
 .filternav li a span { }
 
+.sku-tab {
+    margin-left: 5px;
+    width: 560px;
+}
 
+.attrstart {
+    margin-top: 50px;
+}
 
 .attrhead {
     width: 560px;
