@@ -46,6 +46,7 @@
 
         <mx:ControlBar width="100%">
 
+<!--        TODOV2
             <mx:Button height="100%"
                        label="@Resource(bundle='CustomerOrderPanel',key='delivery.new.item')"
                        toolTip="@Resource(bundle='CustomerOrderPanel',key='delivery.new.item.hint')"
@@ -55,6 +56,7 @@
                        label="@Resource(bundle='CustomerOrderPanel',key='delivery.edit.item')"
                        toolTip="@Resource(bundle='CustomerOrderPanel',key='delivery.edit.item.hint')"
                        click="onAddNewItemClick(event)"/>
+-->
 
             <mx:Button height="100%" enabled="{deliveryDetailDataGrid.selectedItem != null}"
                        label="@Resource(bundle='CustomerOrderPanel',key='delivery.delete.item')"
@@ -93,6 +95,7 @@
             </mx:columns>
 
         </mx:DataGrid>
+
 
     </mx:VBox>
 
@@ -199,6 +202,10 @@
                     var detLine:CustomerOrderDeliveryDetailDTOImpl = new CustomerOrderDeliveryDetailDTOImpl();
                     detLine.skuCode = selectedProductDTOImpl.code;
                     detLine.skuName = selectedProductDTOImpl.name;
+                    detLine.qty = 1;
+                    detLine.invoicePrice = 0;
+                    detLine.customerOrderDeliveryDetId = 0;
+
                     //detLine.deliveryNum = customerOrderDeliveryDTO
                     detail.addItem(detLine); //todo  fill rest of fields and save
 
@@ -222,7 +229,24 @@
 
         }
 
+
+        /**
+         * Amount of items in delivery.
+         * @param item delivery
+         * @param column column
+         * @return amount of items in delivery.
+         */
+        public function itemsCostInDeliveryLabelFunction():String {
+            var sum:Number = 0;
+            for (var i:int = 0; i < detail.length; i++) {
+                sum += Number((detail[i].qty * detail[i].invoicePrice).toFixed(2));
+            }
+            return sum.toFixed(2);
+        }
+
+
         private function onDeliveryDetailItemEditEnd(event:DataGridEvent):void {
+
             var myEditor:TextInput = TextInput(event.currentTarget.itemEditorInstance);
             var newVal:String = myEditor.text;
             var oldVal:String = event.currentTarget.editedItemRenderer.data[event.dataField];
@@ -234,7 +258,26 @@
             if (oldVal == newVal) {
                 event.preventDefault();
             } else {
+
                 var customerOrderDeliveryDetailDTOImpl:CustomerOrderDeliveryDetailDTOImpl = (DataGrid(event.target).dataProvider[event.rowIndex] as CustomerOrderDeliveryDetailDTOImpl);
+
+
+                if (isNaN( Number( newVal ) ) || Number( newVal ) < 0 ) {
+
+                    event.preventDefault();
+                    //event.currentTarget.editedItemRenderer.data[event.dataField] = oldVal;
+
+                    Alert.show(
+                            resourceManager.getString('Common', 'require.positive.number'),
+                            resourceManager.getString('Common', 'error')
+                    );
+
+                    //TextInput(DataGrid(event.target).itemEditorInstance).errorString=resourceManager.getString('Common', 'require.positive.number');
+
+                    return;
+                }
+
+
                 event.currentTarget.editedItemRenderer.data[event.dataField] = newVal;
                 remoteCustomerOrderDeliveryDetailService.update(customerOrderDeliveryDetailDTOImpl);
             }
