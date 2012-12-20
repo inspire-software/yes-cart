@@ -265,16 +265,16 @@
         </tr>
         <tr>
             <td>
-                <wicket:link>
-                    <a href="?thp=true&amp;step=ship"  class="button gray back">
-                        <span><wicket:message key="shipmentStep">[Shipping method]</wicket:message></span>
-                    </a>
-                </wicket:link>
+                <div class="g864 m5 menu"  style="border: solid 1px #d6d6d6;">
+                    <p>
+                        <span><wicket:message key="select.payment">[Payment details heading]</wicket:message></span>
+                    </p>
+                </div>
             </td>
         </tr>
         <tr>
             <td>
-                <form wicket:id="paymentOptionsForm">
+                <form wicket:id="paymentOptionsForm" class="payment-options-form">
                     <table align="center">
                         <tr>
                             <td colspan="5" align="left">
@@ -292,7 +292,7 @@
                     </table>
                 </form>
             </td>
-        </tr>		
+        </tr>
 
 
         <tr>
@@ -300,6 +300,18 @@
                 <div wicket:id="dynamicPaymentForm">[dynamic payment form]</div>
             </td>
         </tr>
+
+        <tr><td>&nbsp;</td></tr>
+        <tr>
+            <td>
+                <wicket:link>
+                    <a href="?thp=true&amp;step=ship"  class="button gray back">
+                        <span><wicket:message key="shipmentStep">[Shipping method]</wicket:message></span>
+                    </a>
+                </wicket:link>
+            </td>
+        </tr>
+        <tr><td>&nbsp;</td></tr>
 
     </table>
 </wicket:fragment>

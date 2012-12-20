@@ -839,3 +839,8 @@ ul { list-style-type: none;}
     filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f47a20', endColorstr='#faa51a');
 
 }
+
+.payment-options-form {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
