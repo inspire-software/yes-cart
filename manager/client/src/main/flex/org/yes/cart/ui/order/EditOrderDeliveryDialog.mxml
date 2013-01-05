@@ -46,17 +46,17 @@
 
         <mx:ControlBar width="100%">
 
-<!--        TODOV2
-            <mx:Button height="100%"
-                       label="@Resource(bundle='CustomerOrderPanel',key='delivery.new.item')"
-                       toolTip="@Resource(bundle='CustomerOrderPanel',key='delivery.new.item.hint')"
-                       click="onAddNewItemClick(event)"/>
+            <!--        TODOV2
+                        <mx:Button height="100%"
+                                   label="@Resource(bundle='CustomerOrderPanel',key='delivery.new.item')"
+                                   toolTip="@Resource(bundle='CustomerOrderPanel',key='delivery.new.item.hint')"
+                                   click="onAddNewItemClick(event)"/>
 
-            <mx:Button height="100%" enabled="{deliveryDetailDataGrid.selectedItem != null}"
-                       label="@Resource(bundle='CustomerOrderPanel',key='delivery.edit.item')"
-                       toolTip="@Resource(bundle='CustomerOrderPanel',key='delivery.edit.item.hint')"
-                       click="onAddNewItemClick(event)"/>
--->
+                        <mx:Button height="100%" enabled="{deliveryDetailDataGrid.selectedItem != null}"
+                                   label="@Resource(bundle='CustomerOrderPanel',key='delivery.edit.item')"
+                                   toolTip="@Resource(bundle='CustomerOrderPanel',key='delivery.edit.item.hint')"
+                                   click="onAddNewItemClick(event)"/>
+            -->
 
             <mx:Button height="100%" enabled="{deliveryDetailDataGrid.selectedItem != null}"
                        label="@Resource(bundle='CustomerOrderPanel',key='delivery.delete.item')"
@@ -103,12 +103,15 @@
 
 
     <mx:Script><![CDATA[
+        import mx.collections.ArrayCollection;
         import mx.controls.Alert;
         import mx.controls.TextInput;
         import mx.core.FlexGlobals;
+        import mx.events.CollectionEvent;
         import mx.events.DataGridEvent;
         import mx.events.DataGridEventReason;
         import mx.managers.PopUpManager;
+        import mx.utils.ObjectUtil;
 
         import org.yes.cart.impl.CustomerOrderDeliveryDetailDTOImpl;
         import org.yes.cart.impl.ProductDTOImpl;
@@ -125,6 +128,9 @@
 
 
         public var customerOrderDeliveryDTO:Object;
+        public var supportCaptureMore:Boolean;
+        public var supportCaptureLess:Boolean;
+        public var maxAmount:Number;
 
 
         public function init():void {
@@ -247,6 +253,8 @@
 
         private function onDeliveryDetailItemEditEnd(event:DataGridEvent):void {
 
+            var origDetail:ArrayCollection = ArrayCollection(mx.utils.ObjectUtil.copy(detail));
+
             var myEditor:TextInput = TextInput(event.currentTarget.itemEditorInstance);
             var newVal:String = myEditor.text;
             var oldVal:String = event.currentTarget.editedItemRenderer.data[event.dataField];
@@ -262,24 +270,47 @@
                 var customerOrderDeliveryDetailDTOImpl:CustomerOrderDeliveryDetailDTOImpl = (DataGrid(event.target).dataProvider[event.rowIndex] as CustomerOrderDeliveryDetailDTOImpl);
 
 
-                if (isNaN( Number( newVal ) ) || Number( newVal ) < 0 ) {
+                if (isNaN(Number(newVal)) || Number(newVal) < 0) {
 
                     event.preventDefault();
-                    //event.currentTarget.editedItemRenderer.data[event.dataField] = oldVal;
 
                     Alert.show(
                             resourceManager.getString('Common', 'require.positive.number'),
                             resourceManager.getString('Common', 'error')
                     );
 
-                    //TextInput(DataGrid(event.target).itemEditorInstance).errorString=resourceManager.getString('Common', 'require.positive.number');
-
                     return;
                 }
 
-
                 event.currentTarget.editedItemRenderer.data[event.dataField] = newVal;
-                remoteCustomerOrderDeliveryDetailService.update(customerOrderDeliveryDetailDTOImpl);
+                var newTotalAmount:Number = Number( itemsCostInDeliveryLabelFunction());
+
+
+                if (newTotalAmount > maxAmount && !supportCaptureMore) {
+                    event.currentTarget.editedItemRenderer.data[event.dataField] = oldVal;
+                    event.preventDefault();
+                    Alert.show(
+                            resourceManager.getString('CustomerOrderPanel', 'amount.must.be.less', [maxAmount, newTotalAmount]),
+                            resourceManager.getString('Common', 'error')
+                    );
+                    detail = origDetail;
+                    myEditor.text = oldVal;
+
+                } else if (newTotalAmount < maxAmount && !supportCaptureLess) {
+                    event.currentTarget.editedItemRenderer.data[event.dataField] = oldVal;
+                    event.preventDefault();
+                    Alert.show(
+                            resourceManager.getString('CustomerOrderPanel', 'amount.must.be.more', [maxAmount, newTotalAmount]),
+                            resourceManager.getString('Common', 'error')
+                    );
+                    detail = origDetail;
+                    myEditor.text = oldVal;
+
+                } else {
+                    remoteCustomerOrderDeliveryDetailService.update(customerOrderDeliveryDetailDTOImpl);
+                }
+
+
             }
         }
         ]]></mx:Script>
