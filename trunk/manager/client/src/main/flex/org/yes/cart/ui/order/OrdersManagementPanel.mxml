@@ -483,6 +483,7 @@
                                             <mx:VBox horizontalAlign="right">
                                                 <mx:Script>
                                                     <![CDATA[
+                                                    import mx.collections.ArrayCollection;
                                                     import mx.controls.Alert;
                                                     import mx.controls.DataGrid;
                                                     import mx.core.FlexGlobals;
@@ -620,10 +621,15 @@
                                                      * @param customerOrderDeliveryDTO
                                                      */
                                                     public function onEditDeliveryActionButtonClick(customerOrderDeliveryDTO:Object):void {
-                                                            editDeliveryDialog = EditOrderDeliveryDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), EditOrderDeliveryDialog, true));
-                                                            editDeliveryDialog.detail = customerOrderDeliveryDTO.detail;
-                                                            editDeliveryDialog.customerOrderDeliveryDTO = customerOrderDeliveryDTO;
-                                                            PopUpManager.centerPopUp(editDeliveryDialog);
+                                                        var maxAmount:Number = Number (outerDocument.itemsCostInDeliveryLabelFunction(customerOrderDeliveryDTO, null));
+                                                        editDeliveryDialog = EditOrderDeliveryDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), EditOrderDeliveryDialog, true));
+                                                        editDeliveryDialog.maxAmount = maxAmount; //todov2 maxamount must be taken from order delivery payments
+                                                        editDeliveryDialog.detail = ArrayCollection(mx.utils.ObjectUtil.copy(customerOrderDeliveryDTO.detail));
+
+                                                        editDeliveryDialog.customerOrderDeliveryDTO = customerOrderDeliveryDTO;
+                                                        editDeliveryDialog.supportCaptureMore = customerOrderDeliveryDTO.supportCaptureMore;
+                                                        editDeliveryDialog.supportCaptureLess = customerOrderDeliveryDTO.supportCaptureLess;
+                                                        PopUpManager.centerPopUp(editDeliveryDialog);
                                                     }
 
                                                     /**
