@@ -73,7 +73,8 @@ public class CartItemImpl implements CartItem {
      * @param quantity quantity of the above sku to be purchased
      */
     public void setQuantity(final BigDecimal quantity) {
-        this.quantity = new BigDecimal(MoneyUtils.notNull(quantity, DEFAULT_QUANTITY).intValue());
+        //this.quantity = new BigDecimal(MoneyUtils.notNull(quantity, DEFAULT_QUANTITY).intValue());
+        this.quantity = MoneyUtils.notNull(quantity, DEFAULT_QUANTITY);
         if (!MoneyUtils.isFirstBiggerThanOrEqualToSecond(this.quantity, BigDecimal.ONE)) {
             this.quantity = DEFAULT_QUANTITY;
         }
