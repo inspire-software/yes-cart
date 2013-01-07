@@ -186,8 +186,8 @@ public class PriceView extends BaseComponent {
                 pricePair.getFirst() != null
                 &&
                 !MoneyUtils.isFirstEqualToSecond(
-                        BigDecimal.ZERO,
-                        MoneyUtils.notNull(pricePair.getFirst()),
+                        BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP),
+                        MoneyUtils.notNull(pricePair.getFirst().setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP)),
                         2);
     }
 }
