@@ -130,7 +130,9 @@
     <bean id="attributeService" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.AttributeServiceImpl">
-                <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="attributeDao"/>
+                <constructor-arg index="0" ref="attributeDao"/>
+                <constructor-arg index="1" ref="attributeGroupService"/>
+                <constructor-arg index="2" value="true"/>
             </bean>
         </property>
     </bean>

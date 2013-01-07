@@ -24,7 +24,7 @@ package org.yes.cart.domain.entity;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface Attribute extends Auditable, Rankable, Codable {
+public interface Attribute extends Auditable, Rankable, Codable, Cloneable {
 
     /**
      * Get primary key.
@@ -239,6 +239,13 @@ public interface Attribute extends Auditable, Rankable, Codable {
      * @param choiceData comma separated coices.
      */
     void setChoiceData(String choiceData);
+
+
+    /**
+     * Create copy of current object;
+     * @return copy of current object.
+     */
+    Attribute copy() throws CloneNotSupportedException;
 
 
 }

@@ -23,6 +23,7 @@ import org.yes.cart.domain.entity.Etype;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -274,6 +275,64 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
     @Override
     public int hashCode() {
         return (int) (attributeId ^ (attributeId >>> 32));
+    }
+
+    public  org.yes.cart.domain.entity.Attribute copy() throws CloneNotSupportedException {
+        return this.clone();
+
+    }
+
+    protected AttributeEntity clone() throws CloneNotSupportedException {
+        return new AttributeEntity(
+                this.isMandatory(),
+                this.isAllowduplicate(),
+                this.isAllowfailover(),
+                this.getVal(),
+                this.getRegexp(),
+                this.getValidationFailedMessage(),
+                this.getRank(),
+                this.getChoiceData(),
+                this.getName(),
+                this.getDisplayName(),
+                this.getDescription(),
+                this.getEtype(),
+                this.getAttributeGroup(),
+                this.getCreatedTimestamp(),
+                this.getUpdatedTimestamp(),
+                this.getCreatedBy(),
+                this.getUpdatedBy(),
+                UUID.randomUUID().toString(),
+                this.getAttributeId(),
+                this.getCode()
+        );
+    }
+
+
+    public AttributeEntity(boolean mandatory, boolean allowduplicate, boolean allowfailover, String val,
+                           String regexp, String validationFailedMessage, int rank, String choiceData, String name,
+                           String displayName, String description, Etype etype, AttributeGroup attributeGroup,
+                           Date createdTimestamp, Date updatedTimestamp, String createdBy, String updatedBy,
+                           String guid, long attributeId, String code) {
+        this.mandatory = mandatory;
+        this.allowduplicate = allowduplicate;
+        this.allowfailover = allowfailover;
+        this.val = val;
+        this.regexp = regexp;
+        this.validationFailedMessage = validationFailedMessage;
+        this.rank = rank;
+        this.choiceData = choiceData;
+        this.name = name;
+        this.displayName = displayName;
+        this.description = description;
+        this.etype = etype;
+        this.attributeGroup = attributeGroup;
+        this.createdTimestamp = createdTimestamp;
+        this.updatedTimestamp = updatedTimestamp;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.guid = guid;
+        this.attributeId = attributeId;
+        this.code = code;
     }
 
 

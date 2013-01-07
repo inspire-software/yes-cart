@@ -57,7 +57,7 @@ public class CentralViewResolverImplTest {
                         return new ArrayList<Category>();
                     }
                 },
-                new AttributeServiceImpl(null) {
+                new AttributeServiceImpl(null, null, false) {
                     @Override
                     public List<String> getAllAttributeCodes() {
                         return new ArrayList<String>() {{

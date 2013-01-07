@@ -19,6 +19,7 @@ package org.yes.cart.service.dto.impl;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.AttributeDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
@@ -50,6 +51,27 @@ public class DtoAttributeServiceImplTezt extends BaseCoreDBTestCase {
         AttributeDTO dto = getDto();
         dto = dtoAttributeService.create(dto);
         assertTrue(dto.getAttributeId() > 0);
+        //shall be created product and sku attribute
+        assertTrue(        hasAttributeWithCode(
+                dtoAttributeService.findByAttributeGroupCode(AttributeGroupNames.SKU),
+                "SKUTESTCODE"
+        ));
+        assertTrue(        hasAttributeWithCode(
+                dtoAttributeService.findByAttributeGroupCode(AttributeGroupNames.PRODUCT),
+                "TESTCODE"
+        ));
+    }
+
+    private boolean hasAttributeWithCode(List<AttributeDTO> attributeDTOs, String code) {
+
+        for (AttributeDTO dto : attributeDTOs) {
+            if (dto.getCode().equals(code)) {
+                return true;
+            }
+
+        }
+        return false;
+
     }
 
     @Test
@@ -111,7 +133,7 @@ public class DtoAttributeServiceImplTezt extends BaseCoreDBTestCase {
         dto.setName("test attr");
         dto.setDescription("test attr description");
         dto.setEtypeId(1000L); //string
-        dto.setAttributegroupId(1006L); //customer
+        dto.setAttributegroupId(2003L); //customer
         dto.setAllowduplicate(true);
         dto.setAllowfailover(false);
         dto.setRegexp("[a-zA-Z]");

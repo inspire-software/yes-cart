@@ -17,9 +17,11 @@
 package org.yes.cart.service.domain.impl;
 
 import org.yes.cart.cache.Cacheable;
+import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
+import org.yes.cart.service.domain.AttributeGroupService;
 import org.yes.cart.service.domain.AttributeService;
 
 import java.util.HashMap;
@@ -34,16 +36,42 @@ import java.util.Map;
 public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> implements AttributeService {
 
 
-
     private final GenericDAO<Attribute, Long> attributeDao;
+    private final AttributeGroupService attributeGroupService;
+
+    private final boolean allowProductToSkuMirror;
 
     /**
      * Construct attribute service
-     * @param attributeDao dao to use.
+     *
+     * @param attributeDao            dao to use.
+     * @param allowProductToSkuMirror in case if ths flag is true all product attributes will be also created as sku attributes. CPOINT
+     * @param attributeGroupService   group service to use
      */
-    public AttributeServiceImpl(final GenericDAO<Attribute, Long> attributeDao) {
+    public AttributeServiceImpl(final GenericDAO<Attribute, Long> attributeDao,
+                                final AttributeGroupService attributeGroupService,
+                                final boolean allowProductToSkuMirror) {
         super(attributeDao);
         this.attributeDao = attributeDao;
+        this.allowProductToSkuMirror = allowProductToSkuMirror;
+        this.attributeGroupService = attributeGroupService;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Attribute create(final Attribute instance) {
+        if (instance.getAttributeGroup().getCode().equals(AttributeGroupNames.PRODUCT)) {
+            try {
+                final Attribute skuattr = instance.copy();
+                skuattr.setAttributeGroup(attributeGroupService.getAttributeGroupByCode(AttributeGroupNames.SKU));
+                skuattr.setCode("SKU" + instance.getCode());
+                super.create(skuattr);
+            } catch (CloneNotSupportedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return super.create(instance);
     }
 
     /**
