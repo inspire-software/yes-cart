@@ -29,6 +29,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.ProductSku;
@@ -153,8 +154,8 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
         );
 
 
-        final TextField<Integer> quantity = new TextField<Integer>(QUANTITY_TEXT,
-                new Model<Integer>(cartItem.getQty().intValue()));
+        final TextField<BigDecimal> quantity = new TextField<BigDecimal>(QUANTITY_TEXT,
+                new Model<BigDecimal>(cartItem.getQty()));
 
         cartItemListItem.add(
                 quantity
@@ -190,7 +191,7 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
      * @param qtyField       quantity input box
      * @return BookmarkablePageLink for remove one sku from cart command
      */
-    private Button createAddSeveralSkuButton(final String productSkuCode, final TextField<Integer> qtyField) {
+    private Button createAddSeveralSkuButton(final String productSkuCode, final TextField<BigDecimal> qtyField) {
         final Button adjustQuantityButton = new Button(QUANTITY_ADJUST_BUTTON) {
             @Override
             public void onSubmit() {
@@ -203,8 +204,8 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
                 }
 
 
-                if (NumberUtils.isDigits(qty) && NumberUtils.toInt(qty) >= 1) {
-                    qtyField.setConvertedInput(new Integer(qty));
+                if (NumberUtils.isNumber(qty) /*&& NumberUtils.toInt(qty) >= 1*/) {
+                    qtyField.setConvertedInput(new BigDecimal(qty).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
                     setResponsePage(
                             ShoppingCartPage.class,
                             new PageParameters()
@@ -214,7 +215,7 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
 
 
                 } else {
-                    qtyField.setConvertedInput(BigDecimal.ONE.intValue());
+                    qtyField.setConvertedInput(BigDecimal.ONE.setScale(Constants.DEFAULT_SCALE));
                     error(getLocalizer().getString("nonzerodigits", this, "Need positive integer value"));
                 }
             }
