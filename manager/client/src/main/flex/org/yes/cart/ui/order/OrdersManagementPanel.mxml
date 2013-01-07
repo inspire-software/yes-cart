@@ -334,39 +334,39 @@
                     <mx:VBox height="100%" width="100%">
                         <mx:DataGrid id="orderSummaryDataGrid" width="100%" height="100%">
                             <mx:columns>
-                                <mx:DataGridColumn showDataTips="true" width="25"
+                                <mx:DataGridColumn  width="25"
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='id')"
                                                    dataField="customerOrderDeliveryDetId"
                                         />
-                                <mx:DataGridColumn showDataTips="true"
+                                <mx:DataGridColumn
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='skuCode')"
                                                    dataField="skuCode"
                                         />
-                                <mx:DataGridColumn showDataTips="true"
+                                <mx:DataGridColumn
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='skuName')"
                                                    dataField="skuName"
                                         />
-                                <mx:DataGridColumn showDataTips="true"
+                                <mx:DataGridColumn
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='listPrice')"
                                                    dataField="listPrice"
                                         />
-                                <mx:DataGridColumn showDataTips="true"
+                                <mx:DataGridColumn
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='invoicePrice')"
                                                    dataField="invoicePrice"
                                         />
-                                <mx:DataGridColumn showDataTips="true"
+                                <mx:DataGridColumn
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='discount')"
                                                    labelFunction="discountLabelFunction"
                                         />
-                                <mx:DataGridColumn showDataTips="true"
+                                <mx:DataGridColumn
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='qty')"
                                                    dataField="qty"
                                         />
-                                <mx:DataGridColumn showDataTips="true"
+                                <mx:DataGridColumn
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='total')"
                                                    labelFunction="lineTotalLabelFunction"
                                         />
-                                <mx:DataGridColumn showDataTips="true"
+                                <mx:DataGridColumn
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='deliveryNum')"
                                                    dataField="deliveryNum"
                                         />

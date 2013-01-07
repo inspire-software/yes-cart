@@ -36,6 +36,7 @@ import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.service.payment.PaymentProcessorFactory;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.impl.*;
+import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -475,6 +476,53 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
         }
     }
 
+
+
+    /**
+     * Test to check non integer quantity.
+     *
+     * @throws Exception in case of errors
+     */
+    @Test
+    public void testShipmentComplete5() throws Exception {
+        Customer customer = createCustomer();
+        PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL);
+        ShoppingCart cart3 =getShoppingCart3(customer.getEmail());
+        CustomerOrder customerOrder = customerOrderService.createFromCart(cart3, false); //multiple delivery enabled
+        Iterator<CustomerOrderDelivery> iter = customerOrder.getDelivery().iterator();
+        CustomerOrderDelivery delivery0 = iter.next();
+        assertEquals(Payment.PAYMENT_STATUS_OK, paymentProcessor.authorize(customerOrder, createParametersMap()));
+        assertEquals(1, customerOrderPaymentService.findBy(
+                customerOrder.getOrdernum(), null, null, null).size());
+        assertEquals(1, customerOrderPaymentService.findBy(
+                customerOrder.getOrdernum(),
+                delivery0.getDeliveryNum(),
+                Payment.PAYMENT_STATUS_OK,
+                PaymentGateway.AUTH).size());
+        assertEquals(Payment.PAYMENT_STATUS_OK, paymentProcessor.shipmentComplete(customerOrder, delivery0.getDeliveryNum()));
+        assertEquals(1, customerOrderPaymentService.findBy(
+                customerOrder.getOrdernum(),
+                delivery0.getDeliveryNum(),
+                Payment.PAYMENT_STATUS_OK,
+                PaymentGateway.CAPTURE).size());
+        //total two records auth and capture
+        assertEquals(2, customerOrderPaymentService.findBy(
+                customerOrder.getOrdernum(),
+                delivery0.getDeliveryNum(),
+                Payment.PAYMENT_STATUS_OK,
+                null).size());
+
+        final Warehouse warehouse = warehouseService.getById(1);
+        final Pair<BigDecimal, BigDecimal> skuTest3 = skuWarehouseService.getQuantity(Collections.singletonList(warehouse) ,productSkuService.getProductSkuBySkuCode("CC_TEST3"));
+
+
+        assertTrue(MoneyUtils.isFirstBiggerThanSecond( skuTest3.getFirst().remainder(BigDecimal.ONE) , BigDecimal.ZERO));
+
+
+
+
+    }
+
     @Test
     public void testCancelOrder1() throws Exception {
         Customer customer = createCustomer();
@@ -647,6 +695,31 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
                 .execute(shoppingCart);
         return shoppingCart;
     }
+
+
+    /**
+     * Create simple cart to test non integer as quantity.
+     *
+     * @return cart
+     */
+    protected ShoppingCart getShoppingCart3(String customerEmail) {
+        ShoppingCart shoppingCart = getEmptyCart(customerEmail);
+//        new AddSkuToCartEventCommandImpl(ctx(), Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST1"))
+//                .execute(shoppingCart);
+        new AddSkuToCartEventCommandImpl(ctx(), Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST3"))
+                .execute(shoppingCart);
+
+        final Map<String, String> param = new HashMap<String, String>() {{
+            put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST3");
+            put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "2.50");
+        }};
+        new SetSkuQuantityToCartEventCommandImpl(ctx(), param)
+                .execute(shoppingCart);
+
+        return shoppingCart;
+    }
+
+
 
     /**
      * Bot sku with standard availability , but one of the has not qty on warehouse
