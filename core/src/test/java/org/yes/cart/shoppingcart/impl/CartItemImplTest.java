@@ -17,6 +17,7 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.junit.Test;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
@@ -47,6 +48,12 @@ public class CartItemImplTest {
     public void testSetQuantityIsNullSafe() {
         item.setQuantity(null);
         assertEquals("Must be valid quantity (default is one)", BigDecimal.ONE, item.getQty());
+    }
+
+    @Test
+    public void testSetQuantityFloatPoint() {
+        item.setQuantity(new BigDecimal("0.5"));
+        assertTrue("Must be equals to 0.5", MoneyUtils.isFirstEqualToSecond(new BigDecimal("0.5"), item.getQty(), Constants.DEFAULT_SCALE));
     }
 
     @Test

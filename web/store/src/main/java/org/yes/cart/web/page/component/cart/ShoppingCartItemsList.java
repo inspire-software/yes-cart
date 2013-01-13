@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page.component.cart;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
@@ -196,14 +197,19 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
             @Override
             public void onSubmit() {
                 String qty = qtyField.getInput();
-                String skuCode;
-                try {
+                if (StringUtils.isNotBlank(qty)) {
+                    qty = qty.replace(',', '.');
+                }
+                final String skuCode  = productSkuCode;
+                /*try {
                     skuCode = URLEncoder.encode(productSkuCode, "UTF-8");
                 } catch (UnsupportedEncodingException e) {
                     skuCode = productSkuCode;
-                }
+                }*/
 
 
+                //TODOv2 add flag for product is quantity with float point enabled for this product or not
+                //ATM this is CPOINT
                 if (NumberUtils.isNumber(qty) /*&& NumberUtils.toInt(qty) >= 1*/) {
                     qtyField.setConvertedInput(new BigDecimal(qty).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
                     setResponsePage(

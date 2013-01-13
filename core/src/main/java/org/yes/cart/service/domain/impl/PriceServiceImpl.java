@@ -394,6 +394,13 @@ public class PriceServiceImpl
                     break;
                 }
             }
+
+            if (result.isEmpty()
+                    && MoneyUtils.isFirstBiggerThanSecond(BigDecimal.ONE, quantity)
+                    &&  !MoneyUtils.isFirstEqualToSecond(BigDecimal.ZERO, quantity, Constants.DEFAULT_SCALE) ) {
+                // float point qty
+                return getSkuPricesFilteredByQuantity(prices, BigDecimal.ONE);
+            }
         }
         return result;
     }
