@@ -459,7 +459,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
         //TODO need calculate at shopping cart !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         BigDecimal rez = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
         for (PaymentLine paymentLine : payment.getOrderItems()) {
-            rez = rez.add(paymentLine.getQuantity().multiply(paymentLine.getUnitPrice()).setScale(Constants.DEFAULT_SCALE));
+            rez = rez.add(paymentLine.getQuantity().multiply(paymentLine.getUnitPrice()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
         }
         payment.setPaymentAmount(rez);
         payment.setOrderCurrency(order.getCurrency());
