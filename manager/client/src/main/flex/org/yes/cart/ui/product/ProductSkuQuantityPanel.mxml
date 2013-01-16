@@ -79,7 +79,8 @@
     <mx:NumberFormatter
             id="quantityFormatter"
             useThousandsSeparator="false"
-            precision="0"
+            precision="2"
+
             />
 
     <mx:Boolean id="allowAddInventory">false</mx:Boolean>
