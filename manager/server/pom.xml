@@ -59,12 +59,12 @@
             <artifactId>core</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-        <dependency>
+        <!-- dependency>
             <groupId>org.yes</groupId>
             <artifactId>yes-manager-client</artifactId>
             <version>${project.parent.version}</version>
             <type>swf</type>
-        </dependency>
+        </dependency -->
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>domain-api</artifactId>
