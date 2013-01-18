@@ -43,11 +43,13 @@
             <id>SpringFlex</id>
             <name>SpringFlex Source Repo</name>
             <url>https://src.springsource.org/svn/spring-flex/tags/spring-flex-1.5.0.RELEASE/local-repo/</url>
+            <snapshots><enabled>false</enabled></snapshots>
         </repository>
         <repository>
             <id>spring-maven-external</id>
             <name>Springframework Maven External Repository</name>
             <url>http://maven.springframework.org/external</url>
+            <snapshots><enabled>false</enabled></snapshots>
         </repository>
 
     </repositories>

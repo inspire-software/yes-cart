@@ -68,32 +68,39 @@
         <repository>
             <id>maven-central</id>
             <url>http://repo1.maven.org/maven2</url>
+            <snapshots><enabled>false</enabled></snapshots>
         </repository>
         <repository>
             <id>terracota</id>
             <url>http://www.terracotta.org/download/reflector/releases</url>
+            <snapshots><enabled>false</enabled></snapshots>
         </repository>
         <repository>
             <id>spring-release</id>
             <url>http://maven.springframework.org/release</url>
+            <snapshots><enabled>false</enabled></snapshots>
         </repository>
 
 
         <repository>
             <id>sonatype-public</id>
             <url>http://repository.sonatype.org/content/groups/public</url>
+            <snapshots><enabled>false</enabled></snapshots>
         </repository>
         <repository>
             <id>sonatype-flexgroup</id>
             <url>http://repository.sonatype.org/content/groups/flexgroup</url>
+            <snapshots><enabled>false</enabled></snapshots>
         </repository>
         <repository>
             <id>jboss-public</id>
             <url>https://repository.jboss.org/nexus/content/groups/public</url>
+            <snapshots><enabled>false</enabled></snapshots>
         </repository>
         <repository>
             <id>nexus.appliqa.com</id>
             <url>https://nexus.appliqa.com/nexus/content/repositories/public</url>
+            <snapshots><enabled>false</enabled></snapshots>
         </repository>
     </repositories>
     <pluginRepositories>
