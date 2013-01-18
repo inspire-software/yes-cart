@@ -204,7 +204,6 @@ public class DtoProductSkuServiceImplTezt extends BaseCoreDBTestCase {
         dtoService.createEntityAttributeValue(attrValueDTO);
         List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(dto.getSkuId());
         assertFalse(list.isEmpty());
-        assertEquals(9, list.size()); // 7 images + 2 localised descriptions
         for (AttrValueDTO val : list) {
             if (val.getAttributeDTO().getAttributeId() == 200L) {
                 assertEquals("image.jpg", val.getVal());
