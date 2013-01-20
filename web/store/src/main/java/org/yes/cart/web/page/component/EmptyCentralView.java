@@ -70,12 +70,17 @@ public class EmptyCentralView extends AbstractCentralView {
 
         configureContext();
 
-        String description = null;
         if (category != null) {
-            description = category.getDescription(getLocale().getLanguage());
+            String description  = category.getDescription(getLocale().getLanguage());
+            add(new Label(DESCRIPTION, description != null ? description : ""));
+        } else {
+            add(new Label(
+                    DESCRIPTION,
+                    getLocalizer().getString("description", this)
+            ).setEscapeModelStrings(false));
         }
 
-        add(new Label(DESCRIPTION, description != null ? description : ""));
+
 
         super.onBeforeRender();
 

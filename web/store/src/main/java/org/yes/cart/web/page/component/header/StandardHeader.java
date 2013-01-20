@@ -20,6 +20,7 @@ import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.Currency;
 import org.yes.cart.web.page.component.Language;
 import org.yes.cart.web.page.component.cart.SmallShoppingCartView;
+import org.yes.cart.web.page.component.customer.logout.LogoutPanel;
 import org.yes.cart.web.page.component.product.FeaturedProducts;
 import org.yes.cart.web.page.component.search.SearchView;
 
@@ -40,6 +41,7 @@ public class StandardHeader  extends BaseComponent {
         addOrReplace(new FeaturedProducts("featured"));
         addOrReplace(new Currency("currency"));
         addOrReplace(new Language("language"));
+        addOrReplace(new LogoutPanel("logout"));
         super.onBeforeRender();
     }
 
