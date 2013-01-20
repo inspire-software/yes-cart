@@ -21,11 +21,14 @@ import org.apache.lucene.search.BooleanQuery;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.utils.impl.ObjectUtil;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.*;
@@ -47,6 +50,7 @@ import org.yes.cart.web.support.util.HttpUtil;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.lang.reflect.Constructor;
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -58,6 +62,8 @@ import java.util.Map;
  * Time: 10:27 AM
  */
 public class HomePage extends AbstractWebPage {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
 
     final Map<String, String> mapParams;
@@ -217,10 +223,10 @@ public class HomePage extends AbstractWebPage {
                     BooleanQuery.class);
             return constructor.newInstance(id, categoryId, booleanQuery);
         } catch (Exception e) {
-            /*if (LOG.isErrorEnabled()) {
+            if (LOG.isErrorEnabled()) {
                 LOG.error(MessageFormat.format("Can not create instance of panel for label {0}", rendererLabel), e);
-            }*/
-            e.printStackTrace();
+            }
+            //e.printStackTrace();
             return new EmptyCentralView(id, categoryId, booleanQuery);
 
         }
