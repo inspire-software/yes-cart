@@ -1,4 +1,3 @@
-
     create table TADDRESS (
         ADDRESS_ID bigint not null auto_increment,
         CITY varchar(128) not null,
@@ -815,7 +814,10 @@
         GUID varchar(36) not null unique,
         primary key (WAREHOUSE_ID)
     ) ;
-
+	
+	create table HIBERNATE_UNIQUE_KEYS (
+         value integer 
+    );
 
     alter table TADDRESS 
         add index FKADDRCUSTOMER (CUSTOMER_ID), 
