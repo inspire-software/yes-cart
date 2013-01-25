@@ -30,9 +30,11 @@ import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.async.model.JobContext;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.async.model.impl.JobContextImpl;
+import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -45,15 +47,21 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
 
     private final RemoteBackdoorService remoteBackdoorService;
 
+    private final SystemService systemService;
+
     /**
      * Construct reindexer.
      *
      * @param executor task executor
      * @param remoteBackdoorService remote backdoor service.
+     * @param systemService system service
      */
-    public ReindexServiceImpl(final TaskExecutor executor, final RemoteBackdoorService remoteBackdoorService) {
+    public ReindexServiceImpl(final TaskExecutor executor,
+                              final RemoteBackdoorService remoteBackdoorService,
+                              final SystemService systemService) {
         super(executor);
         this.remoteBackdoorService = remoteBackdoorService;
+        this.systemService = systemService;
     }
 
     /** {@inheritDoc} */
@@ -113,7 +121,12 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
     }
 
     private JobContext createAsyncContext() {
-        final AsyncContext flex = new AsyncFlexContextImpl();
+
+        final Map<String, Object> param = new HashMap<String, Object>();
+        param.put(AsyncContext.WEB_SERVICE_URI, systemService.getBackdoorURI());
+
+        final AsyncContext flex = new AsyncFlexContextImpl(param);
+
         return new JobContextImpl(true, new JobStatusListenerImpl(10000, 300000), new HashMap<String, Object>() {{
             putAll(flex.getAttributes());
             put("security", SecurityContextHolder.getContext());

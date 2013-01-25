@@ -21,12 +21,16 @@ import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.remote.service.RemoteBackdoorService;
 import org.yes.cart.remote.service.RemoteImageService;
+import org.yes.cart.service.async.model.AsyncContext;
+import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.dto.DtoImageService;
 import org.yes.cart.service.dto.DtoShopService;
 import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -39,6 +43,7 @@ public class RemoteImageServiceImpl extends AbstractRemoteService<SeoImageDTO> i
     private final DtoImageService dtoImageService;
     private final DtoShopService dtoShopService;
     private final RemoteBackdoorService remoteBackdoorService;
+    private final SystemService systemService;
 
     /**
      * Construct dtoRemote service.
@@ -46,14 +51,17 @@ public class RemoteImageServiceImpl extends AbstractRemoteService<SeoImageDTO> i
      * @param dtoImageService       image service
      * @param dtoShopService        shop service to
      * @param remoteBackdoorService to get path to image vault
+     * @param systemService         system service
      */
     public RemoteImageServiceImpl(final DtoImageService dtoImageService,
                                   final DtoShopService dtoShopService,
-                                  final RemoteBackdoorService remoteBackdoorService) {
+                                  final RemoteBackdoorService remoteBackdoorService,
+                                  final SystemService systemService) {
         super(dtoImageService);
         this.dtoImageService = dtoImageService;
         this.dtoShopService = dtoShopService;
         this.remoteBackdoorService = remoteBackdoorService;
+        this.systemService = systemService;
     }
 
 
@@ -66,9 +74,14 @@ public class RemoteImageServiceImpl extends AbstractRemoteService<SeoImageDTO> i
             final byte[] imgBody,
             final String storagePrefix) throws IOException {
 
+        final Map<String, Object> param = new HashMap<String, Object>();
+        param.put(AsyncContext.WEB_SERVICE_URI, systemService.getBackdoorURI());
+
+        final AsyncContext flex = new AsyncFlexContextImpl(param);
+
         // TODO: this is quite strange that we have this method on dtoImageService but we do not use it since it puts
         // TODO: a blank string into path? maybe we need to revise all this??
-        final String realPath = remoteBackdoorService.getImageVaultPath(new AsyncFlexContextImpl()) + File.separator;
+        final String realPath = remoteBackdoorService.getImageVaultPath(flex) + File.separator;
         return addImageToRepository(fullFileName, code, imgBody, storagePrefix, realPath);
     }
 
@@ -92,9 +105,14 @@ public class RemoteImageServiceImpl extends AbstractRemoteService<SeoImageDTO> i
                                       final String code,
                                       final String storagePrefix) throws IOException {
 
+        final Map<String, Object> param = new HashMap<String, Object>();
+        param.put(AsyncContext.WEB_SERVICE_URI, systemService.getBackdoorURI());
+
+        final AsyncContext flex = new AsyncFlexContextImpl(param);
+
         // TODO: this is quite strange that we have this method on dtoImageService but we do not use it since it puts
         // TODO: a blank string into path? maybe we need to revise all this??
-        final String realPath = remoteBackdoorService.getImageVaultPath(new AsyncFlexContextImpl()) + File.separator;
+        final String realPath = remoteBackdoorService.getImageVaultPath(flex) + File.separator;
         return getImageAsByteArray(fileName, code, storagePrefix, realPath);
     }
 

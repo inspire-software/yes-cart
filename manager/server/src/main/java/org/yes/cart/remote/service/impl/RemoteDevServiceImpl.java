@@ -20,9 +20,12 @@ import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
 import org.yes.cart.remote.service.RemoteBackdoorService;
 import org.yes.cart.remote.service.RemoteDevService;
 import org.yes.cart.service.async.model.AsyncContext;
+import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -33,9 +36,13 @@ public class RemoteDevServiceImpl implements RemoteDevService {
 
     private final RemoteBackdoorService remoteBackdoorService;
 
+    private final SystemService systemService;
 
-    public RemoteDevServiceImpl(final RemoteBackdoorService remoteBackdoorService) {
+
+    public RemoteDevServiceImpl(final RemoteBackdoorService remoteBackdoorService,
+                                final SystemService systemService) {
         this.remoteBackdoorService = remoteBackdoorService;
+        this.systemService = systemService;
     }
 
     /** {@inheritDoc} */
@@ -64,7 +71,12 @@ public class RemoteDevServiceImpl implements RemoteDevService {
     }
 
     private AsyncContext createCtx() {
-        final AsyncContext flex = new AsyncFlexContextImpl();
+
+        final Map<String, Object> param = new HashMap<String, Object>();
+        param.put(AsyncContext.WEB_SERVICE_URI, systemService.getBackdoorURI());
+
+        final AsyncContext flex = new AsyncFlexContextImpl(param);
+
         return flex;
     }
 

@@ -17,6 +17,7 @@
 package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.yes.cart.cache.Cacheable;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValue;
@@ -37,8 +38,6 @@ import java.util.Map;
  */
 public class SystemServiceImpl implements SystemService {
 
-    private org.yes.cart.domain.entity.System system;
-
     private final GenericDAO<System, Long> systemDao;
 
     private final AttributeService attributeService;
@@ -58,6 +57,7 @@ public class SystemServiceImpl implements SystemService {
     /**
      * {@inheritDoc}
      */
+    @Cacheable(value = "systemServiceImplMethodCache")
     public String getAttributeValue(final String key) {
         return getAttirbuteValue(key, getSystem().getAttributes());
     }
@@ -65,6 +65,7 @@ public class SystemServiceImpl implements SystemService {
     /**
      * {@inheritDoc}
      */
+    @Cacheable(value = "systemServiceImplMethodCache")
     public Map<String, AttrValueSystem> getAttributeValues() {
         return getSystem().getAttributes();
     }
@@ -76,6 +77,7 @@ public class SystemServiceImpl implements SystemService {
 
         AttrValueSystem attrVal = getSystem().getAttributes().get(key);
 
+        final System system = getSystem();
         if (attrVal == null) {
             Attribute attr = attributeService.findByAttributeCode(key);
             if (attr != null) {
@@ -83,14 +85,13 @@ public class SystemServiceImpl implements SystemService {
                 attrVal = systemDao.getEntityFactory().getByIface(AttrValueSystem.class);
                 attrVal.setVal(value);
                 attrVal.setAttribute(attr);
-                attrVal.setSystem(this.system);
-                this.system.getAttributes().put(key, attrVal);
+                attrVal.setSystem(system);
+                system.getAttributes().put(key, attrVal);
             }
         } else {
             attrVal.setVal(value);
         }
-
-        systemDao.saveOrUpdate(getSystem());
+        systemDao.saveOrUpdate(system);
     }
 
     /**
@@ -107,6 +108,14 @@ public class SystemServiceImpl implements SystemService {
      */
     public String getDefaultShopURL() {
         return getAttirbuteValue(AttributeNamesKeys.System.SYSTEM_DEFAULT_SHOP,
+                getSystem().getAttributes());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getBackdoorURI() {
+        return getAttirbuteValue(AttributeNamesKeys.System.SYSTEM_BACKDOOR_URI,
                 getSystem().getAttributes());
     }
 
@@ -174,10 +183,7 @@ public class SystemServiceImpl implements SystemService {
 
 
     private System getSystem() {
-        if (system == null) {
-            system = systemDao.findAll().get(0);
-        }
-        return system;
+        return systemDao.findAll().get(0);
     }
 
 

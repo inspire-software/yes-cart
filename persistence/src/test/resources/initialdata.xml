@@ -48,7 +48,15 @@
 
     <TATTRIBUTE ATTRIBUTE_ID="1000" GUID="SYSTEM_DEFAULT_SHOP" CODE="SYSTEM_DEFAULT_SHOP" MANDATORY="1" VAL="http://localhost:8080/mobileshop"
                 NAME="System. Default shop"
-                DESCRIPTION="This value will be used for redirections when shop can not be resolved by http request"
+                DESCRIPTION="This value will be used for redirects when shop can not be resolved by http request"
+                ETYPE_ID="1002"
+                ATTRIBUTEGROUP_ID="1000"
+                ALLOWDUPLICATE="0"
+            />
+
+    <TATTRIBUTE ATTRIBUTE_ID="1055" GUID="SYSTEM_BACKDOOR_URI" CODE="SYSTEM_BACKDOOR_URI" MANDATORY="1" VAL="http://localhost:8080/yes-shop/services/backdoor"
+                NAME="System. Backdoor URI"
+                DESCRIPTION="This value will be used to locate backdoor web service"
                 ETYPE_ID="1002"
                 ATTRIBUTEGROUP_ID="1000"
                 ALLOWDUPLICATE="0"
@@ -174,6 +182,8 @@
     <TSYSTEM SYSTEM_ID="100" GUID="SYSTEM" CODE="SYSTEM" NAME="YesCart e-commerce system" DESCRIPTION="System table"/>
 
     <TSYSTEMATTRVALUE ATTRVALUE_ID="1000" GUID="1000_TSYSTEMATTRVALUE" CODE="SYSTEM_DEFAULT_SHOP" VAL="http://www.gadget.yescart.org:8080/yes-shop"
+                      SYSTEM_ID="100"/>
+    <TSYSTEMATTRVALUE ATTRVALUE_ID="1055" GUID="1055_TSYSTEMATTRVALUE" CODE="SYSTEM_BACKDOOR_URI" VAL="http://localhost:8080/yes-shop/services/backdoor"
                       SYSTEM_ID="100"/>
     <TSYSTEMATTRVALUE ATTRVALUE_ID="1004" GUID="1004_TSYSTEMATTRVALUE" CODE="SYSTEM_IMPORT_DESCRIPTORS" VAL="src/import/descriptors"
                       SYSTEM_ID="100"/>
