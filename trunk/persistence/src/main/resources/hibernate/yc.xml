@@ -597,7 +597,7 @@
             <property name="val" column="VAL" type="string" length="4000"/>
             <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
             <many-to-one name="attribute" class="org.yes.cart.domain.entity.Attribute" lazy="false"
-                         foreign-key="FK_SYS_ATTRIBUTE" property-ref="code" insert="false" update="false">
+                         foreign-key="FK_SYS_ATTRIBUTE" property-ref="code" insert="true" update="true">
                 <column name="CODE" not-null="true"/>
             </many-to-one>
             <many-to-one name="system" class="org.yes.cart.domain.entity.System"  not-null="true" column="SYSTEM_ID"/>

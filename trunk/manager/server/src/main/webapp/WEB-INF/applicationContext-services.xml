@@ -426,6 +426,7 @@
         <constructor-arg index="0" ref="dtoImageService"/>
         <constructor-arg index="1" ref="dtoShopService"/>
         <constructor-arg index="2" ref="remoteBackdoorService"/>
+        <constructor-arg index="3" ref="systemService"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
@@ -445,6 +446,7 @@
         <constructor-arg index="0" ref="dtoProductCategoryService"/>
         <constructor-arg index="1" ref="reindexService"/>
         <constructor-arg index="2" ref="remoteBackdoorService"/>
+        <constructor-arg index="3" ref="systemService"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
@@ -533,6 +535,7 @@
           class="org.yes.cart.remote.service.impl.ReindexServiceImpl">
         <constructor-arg index="0" ref="productIndexExecutor"/>
         <constructor-arg index="1" ref="remoteBackdoorService"/>
+        <constructor-arg index="2" ref="systemService"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="reindexAllProducts" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
@@ -543,6 +546,7 @@
     <bean id="remoteDevService"
           class="org.yes.cart.remote.service.impl.RemoteDevServiceImpl">
         <constructor-arg index="0" ref="remoteBackdoorService"/>
+        <constructor-arg index="1" ref="systemService"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="sqlQuery" access="ROLE_SMADMIN"/>
@@ -685,6 +689,7 @@
         <constructor-arg index="4" ref="productService"/>
         <constructor-arg index="5" ref="bulkImportExecutor"/>
         <constructor-arg index="6" ref="remoteBackdoorService"/>
+        <constructor-arg index="7" ref="systemService"/>
 
         <lookup-method name="getNewBulkImportService" bean="csvBulkImportService"/>
         <lookup-method name="getNewBulkImportImagesService" bean="bulkImportImageService"/>

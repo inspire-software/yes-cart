@@ -53,7 +53,9 @@ public class AsyncFlexContextImpl implements AsyncContext {
         //String password = (String) ((UsernamePasswordAuthenticationToken) FlexContext.getUserPrincipal()).getCredentials();
         this.attributes.put(CREDENTIALS, FlexContext.getFlexSession().getAttribute("pwd"));
 
-        this.attributes.put(WEB_SERVICE_URI, "http://localhost:8080/yes-shop/services/backdoor"); //TODO move to config v2 ?
+        if (attributes == null || !attributes.containsKey(WEB_SERVICE_URI) || attributes.get(WEB_SERVICE_URI) == null) {
+            this.attributes.put(WEB_SERVICE_URI, "http://localhost:8080/yes-shop/services/backdoor");
+        }
 
     }
 

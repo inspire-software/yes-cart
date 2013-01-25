@@ -922,6 +922,11 @@
         <property name="cacheName" value="org.yes.cart.service.domain.impl.AttributeServiceImpl.cache"/>
     </bean>
 
+    <bean id="systemServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="cacheName" value="org.yes.cart.service.domain.impl.SystemServiceImpl.cache"/>
+    </bean>
+
     <bean id="productServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
         <property name="cacheManager" ref="cacheManager"/>
         <property name="cacheName" value="org.yes.cart.service.domain.impl.ProductServiceImpl.cache"/>

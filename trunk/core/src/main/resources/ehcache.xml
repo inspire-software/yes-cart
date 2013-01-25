@@ -59,6 +59,12 @@
            eternal="false"
            timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
+    <cache name="org.yes.cart.service.domain.impl.SystemServiceImpl.cache"
+           maxElementsInMemory="100"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="600" timeToIdleSeconds="600"/>
+
     <cache name="org.yes.cart.service.domain.impl.ImageServiceImpl.cache"
            maxElementsInMemory="100"
            overflowToDisk="false"

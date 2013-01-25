@@ -54,7 +54,9 @@ import java.util.Date;
  */
 public class ShopResolverFilter extends AbstractFilter implements Filter, ApplicationContextAware, ServletContextAware {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
+    private static Logger getShopLogger() {
+        return LoggerFactory.getLogger(ShopCodeContext.getShopCode());
+    }
 
     private final SystemService systemService;
 
@@ -82,8 +84,10 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Applic
      */
     public ServletRequest doBefore(final ServletRequest servletRequest,
                                    final ServletResponse servletResponse) throws IOException, ServletException {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug(MessageFormat.format("Request id {0} start at {1}",
+
+        final Logger log = getShopLogger();
+        if (log.isDebugEnabled()) {
+            log.debug(MessageFormat.format("Request id {0} start at {1}",
                     servletRequest.toString(),
                     (new Date()).getTime()));
         }
@@ -94,8 +98,8 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Applic
 
         if (shop == null) {
             final String url = systemService.getDefaultShopURL();
-            if (LOG.isInfoEnabled()) {
-                LOG.info("Shop can not be resolved. Redirect to : " + url);
+            if (log.isInfoEnabled()) {
+                log.info("Shop can not be resolved. Redirect to : " + url);
             }
             ((HttpServletResponse) servletResponse).sendRedirect(url);
             return null;
@@ -137,7 +141,7 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Applic
 
 
     /**
-     * Create http serlet wrapper to handle multi store requests.
+     * Create http servlet wrapper to handle multi store requests.
      *
      * @param servletRequest current request
      * @param shop           resolved shop
@@ -149,15 +153,17 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Applic
         final String servletPath = httpServletRequest.getServletPath();
 
         if (StringUtils.isNotEmpty(servletPath)) {
+            final Logger log = getShopLogger();
             final String newServletPath = shop.getMarkupFolder() + servletPath;
             try {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("New servlet path is :" + newServletPath);
+
+                if (log.isDebugEnabled()) {
+                    log.debug("New servlet path is :" + newServletPath);
                 }
                 return new HttpServletRequestWrapper(httpServletRequest, newServletPath);
             } catch (/*MalformedURL*/Exception e) {
-                if (LOG.isErrorEnabled()) {
-                    LOG.error("Wrong URL for path : " + newServletPath, e);
+                if (log.isErrorEnabled()) {
+                    log.error("Wrong URL for path : " + newServletPath, e);
                 }
             }
         }
@@ -171,8 +177,9 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Applic
      */
     public void doAfter(final ServletRequest servletRequest,
                         final ServletResponse servletResponse) throws IOException, ServletException {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug(MessageFormat.format("Request id {0}   end at {1}",
+        final Logger log = getShopLogger();
+        if (log.isDebugEnabled()) {
+            log.debug(MessageFormat.format("Request id {0}   end at {1}",
                     servletRequest.toString(),
                     (new Date()).getTime()));
         }

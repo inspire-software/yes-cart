@@ -60,11 +60,18 @@ public interface SystemService {
     Map<String, AttrValueSystem> getAttributeValues();
 
     /**
-     * Need to know default shop URL, in case if shop can not be resolvel by domain name.
+     * Need to know default shop URL, in case if shop can not be resolved by domain name.
      *
      * @return URL of default shop
      */
     String getDefaultShopURL();
+
+    /**
+     * URI of Backdoor web service.
+     *
+     * @return Backdoor web service URI
+     */
+    String getBackdoorURI();
 
     /**
      * Get the mail templates directory.

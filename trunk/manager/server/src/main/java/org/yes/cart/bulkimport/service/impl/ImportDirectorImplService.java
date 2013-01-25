@@ -38,6 +38,7 @@ import org.yes.cart.service.async.model.JobContext;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.async.model.impl.JobContextImpl;
 import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.utils.impl.ZipUtils;
 import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
 
@@ -73,6 +74,8 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
 
     private final RemoteBackdoorService remoteBackdoorService;
 
+    private final SystemService systemService;
+
     /**
      * Construct the import director
      *
@@ -81,6 +84,9 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
      * @param pathToImportDescriptors path to use.
      * @param pathToImportFolder      path to use.
      * @param executor                async executor
+     * @param productService          product service
+     * @param remoteBackdoorService   backdoor service
+     * @param systemService           system service
      */
     public ImportDirectorImplService(
             final Map<String, List<String>> importDescriptors,
@@ -89,7 +95,8 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
             final String pathToImportFolder,
             final ProductService productService,
             final TaskExecutor executor,
-            final RemoteBackdoorService remoteBackdoorService) {
+            final RemoteBackdoorService remoteBackdoorService,
+            final SystemService systemService) {
         super(executor);
         this.pathToImportDescriptors = pathToImportDescriptors;
         this.pathToArchiveFolder = pathToArchiveFolder;
@@ -97,6 +104,7 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
         this.importDescriptors = importDescriptors;
         this.productService = productService;
         this.remoteBackdoorService = remoteBackdoorService;
+        this.systemService = systemService;
     }
 
 
@@ -124,7 +132,10 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
     /** {@inheritDoc} */
     public String doImport(final String descriptorGroup, final String fileName, final boolean async) {
 
-        final AsyncContext flex = new AsyncFlexContextImpl();
+        final Map<String, Object> param = new HashMap<String, Object>();
+        param.put(AsyncContext.WEB_SERVICE_URI, systemService.getBackdoorURI());
+
+        final AsyncContext flex = new AsyncFlexContextImpl(param);
 
         final String imgVault;
         try {

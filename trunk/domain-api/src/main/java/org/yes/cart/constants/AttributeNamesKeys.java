@@ -50,6 +50,10 @@ public interface AttributeNamesKeys {
          */
         String SYSTEM_DEFAULT_SHOP = "SYSTEM_DEFAULT_SHOP";
         /**
+         * Default shop to redirect.
+         */
+        String SYSTEM_BACKDOOR_URI = "SYSTEM_BACKDOOR_URI";
+        /**
          * Default (failover) directory for resources.
          */
         String SYSTEM_DEFAULT_FSPOINTER = "SYSTEM_DEFAULT_FSPOINTER";
