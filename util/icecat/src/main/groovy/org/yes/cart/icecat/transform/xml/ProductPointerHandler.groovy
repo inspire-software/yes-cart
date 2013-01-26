@@ -78,6 +78,7 @@ class ProductPointerHandler extends DefaultHandler {
                 }
                 productPointer.path.put(lang, attributes.getValue("path"));
                 productPointer.Product_ID = attributes.getValue("Product_ID");
+                productPointer.Product_ID_valid = validProductID(productPointer.Product_ID);
                 productPointer.Updated= attributes.getValue("Updated");
                 productPointer.Quality= attributes.getValue("Quality");
                 productPointer.Supplier_id= attributes.getValue("Supplier_id")
@@ -97,12 +98,16 @@ class ProductPointerHandler extends DefaultHandler {
         }
     }
 
+    String validProductID(String productId) {
+        return productId.replaceAll(":","-");
+    }
+
 
     void endElement(String ns, String localName, String qName) {
 
         if ("file" == qName && productPointer != null) {
 
-            println("Added product " + productPointer.Product_ID + " to category " + category.id);
+            println "Added product $productPointer.Product_ID ($productPointer.Product_ID_valid) to category $category.id" ;
             category.productPointer.add(productPointer);
             productMap.put(productPointer.Product_ID, productPointer);
             counter++;

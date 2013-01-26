@@ -45,7 +45,7 @@ class ProductsCsvAdapter {
 
         productMap.values().each {
             builder.append('"')
-            builder.append(it.Product_ID).append('";"')
+            builder.append(it.Product_ID_valid).append('";"')
             builder.append(Util.escapeCSV(it.Prod_ID)).append('";"') // SKU
             builder.append(Util.escapeCSV(it.Model_Name)).append('";"')
             builder.append(Util.escapeCSV(it.product.Supplier)).append('";"') // Brand

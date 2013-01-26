@@ -43,7 +43,7 @@ class ProductCategoryCsvAdapter {
             it.categories.values().each {
                 def cat = it;
                 builder.append('"')
-                builder.append(pp.Product_ID).append('";"')
+                builder.append(pp.Product_ID_valid).append('";"')
                 builder.append(Util.escapeCSV(pp.Model_Name)).append('";"')
                 builder.append(cat.id).append('";"')
                 builder.append(Util.escapeCSV(cat.getNameFor('def'))).append('"\n')

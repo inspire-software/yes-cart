@@ -31,6 +31,7 @@ class ProductPointer {
 
     Map<String, String> path = new HashMap<String, String>();
     String Product_ID;
+    String Product_ID_valid;
     String Updated;
     String Quality;
     String Supplier_id;
@@ -57,6 +58,7 @@ class ProductPointer {
         return "    ProductPointer{" +
                 "path='" + path + '\'' +
                 ", Product_ID='" + Product_ID + '\'' +
+                ", Product_ID_valid='" + Product_ID_valid + '\'' +
                 ", Updated='" + Updated + '\'' +
                 ", Quality='" + Quality + '\'' +
                 ", Supplier_id='" + Supplier_id + '\'' +

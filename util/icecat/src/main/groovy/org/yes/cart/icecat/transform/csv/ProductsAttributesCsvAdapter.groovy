@@ -49,7 +49,7 @@ class ProductsAttributesCsvAdapter {
             def pp = it;
             pp.product.productFeatures.values().each {
                 builder.append('"')
-                builder.append(pp.Product_ID).append('";"')
+                builder.append(pp.Product_ID_valid).append('";"')
                 builder.append(Util.escapeCSV(pp.Prod_ID)).append('";"') // SKU
                 builder.append(Util.escapeCSV(pp.Model_Name)).append('";"')
                 builder.append(it.feature.ID).append('";"') // code (same for product attr code)

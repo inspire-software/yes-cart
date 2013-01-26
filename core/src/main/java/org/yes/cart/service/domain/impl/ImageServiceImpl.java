@@ -196,9 +196,9 @@ public class ImageServiceImpl
 
 
     /**
-     * Create fodler(s) to store resized image.
+     * Create folder(s) to store scaled image.
      *
-     * @param fullPath full file name of resized image
+     * @param fullPath full file name of scaled image
      * @return true if folder created
      */
     private boolean createFolder(final String fullPath) {
