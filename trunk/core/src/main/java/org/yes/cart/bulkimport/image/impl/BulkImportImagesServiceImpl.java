@@ -168,7 +168,7 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
      * @param fileName    file name without the full path
      * @param code        product code
      * @param suffix      image suffix
-     * @return true if given image file attached as attribute to giveb product
+     * @return true if given image file attached as attribute to given product
      */
     boolean doImportProductImage(
             final JobStatusListener statusListener,

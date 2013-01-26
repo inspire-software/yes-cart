@@ -70,11 +70,11 @@ class ProductHandler extends DefaultHandler {
         if ("Product" == qName && product == null && !inProductRelated) {
 
             if (productPointer.product == null) {
-                println "Adding product instance to pp in $lang: $productPointer.Product_ID"
+                println "Adding product instance to pp in $lang: $productPointer.Product_ID ($productPointer.Product_ID_valid)"
                 product = new Product();
                 productPointer.product = product;
             } else {
-                println "Reusing product instance of pp for $lang: $productPointer.Product_ID"
+                println "Reusing product instance of pp for $lang: $productPointer.Product_ID ($productPointer.Product_ID_valid)"
                 product = productPointer.product;
             }
 
