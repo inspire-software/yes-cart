@@ -533,10 +533,10 @@
                                                label="@Resource(bundle='ShopManagerApplication',key='loginFormLogin')"
                                                enabled="{loginButtonEnabled}"
                                                click="login()"/>
-                                    <mx:Button id="cheatLoginButton"
+                                    <!--<mx:Button id="cheatLoginButton"
                                                label="Cheat"
                                                enabled="true"
-                                               click="cheatLogin()"/>
+                                               click="cheatLogin()"/>-->
                                 </mx:ControlBar>
                             </mx:Panel>
                         </mx:HBox>
