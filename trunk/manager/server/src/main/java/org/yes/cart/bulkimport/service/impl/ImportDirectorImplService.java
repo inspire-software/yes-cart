@@ -76,6 +76,8 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
 
     private final SystemService systemService;
 
+    private final ZipUtils zipUtils;
+
     /**
      * Construct the import director
      *
@@ -96,7 +98,8 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
             final ProductService productService,
             final TaskExecutor executor,
             final RemoteBackdoorService remoteBackdoorService,
-            final SystemService systemService) {
+            final SystemService systemService,
+            final ZipUtils zipUtils) {
         super(executor);
         this.pathToImportDescriptors = pathToImportDescriptors;
         this.pathToArchiveFolder = pathToArchiveFolder;
@@ -105,6 +108,8 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
         this.productService = productService;
         this.remoteBackdoorService = remoteBackdoorService;
         this.systemService = systemService;
+        this.zipUtils = zipUtils;
+
     }
 
 
@@ -176,7 +181,7 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
 
                     if (file.matches("(.*)\\.zip(.*)")) {
                         importedFiles.add(file);
-                        ZipUtils.unzipArchive(file, pathToImportFolder);
+                        zipUtils.unzipArchive(file, pathToImportFolder);
                         final JobContext zipJob = new JobContextDecoratorImpl(context, new HashMap<String, Object>() {{
                             put(JobContextKeys.IMPORT_FILE, null); // remove individual file name
                         }});
