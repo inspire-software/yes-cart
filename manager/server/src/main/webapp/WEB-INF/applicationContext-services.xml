@@ -690,6 +690,11 @@
         <constructor-arg index="5" ref="bulkImportExecutor"/>
         <constructor-arg index="6" ref="remoteBackdoorService"/>
         <constructor-arg index="7" ref="systemService"/>
+        <constructor-arg index="8">
+            <bean class="org.yes.cart.utils.impl.ZipUtils">
+                <constructor-arg index="0" value="Cp866"/>       <!--CPOINT-->
+            </bean>
+        </constructor-arg>
 
         <lookup-method name="getNewBulkImportService" bean="csvBulkImportService"/>
         <lookup-method name="getNewBulkImportImagesService" bean="bulkImportImageService"/>

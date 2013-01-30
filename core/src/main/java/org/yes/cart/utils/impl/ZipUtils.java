@@ -16,18 +16,34 @@
 
 package org.yes.cart.utils.impl;
 
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipFile;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 import java.util.Enumeration;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+
+
 
 /**
+ *
+ * Modified by I.Azarny to support different entry encoding via apache commons.
+ *
  * by Piotr Gabryanczyk on May 7, 2008
  * http://piotrga.wordpress.com/
  */
 public class ZipUtils {
+    
+    
+    private final String encoding;
+
+    /**
+     * Create Zip util.
+     * @param encoding  archive encoding
+     */
+    public ZipUtils(String encoding) {
+        this.encoding = encoding;
+    }
 
     /**
      * Unzip archive to given folder.
@@ -36,7 +52,7 @@ public class ZipUtils {
      * @param outputDir given folder
      * @throws IOException in case of error
      */
-    public static void unzipArchive(final String archive, final String outputDir) throws IOException {
+    public void unzipArchive(final String archive, final String outputDir) throws IOException {
         unzipArchive(
                 new File(archive),
                 new File(outputDir)
@@ -49,16 +65,16 @@ public class ZipUtils {
      * @throws IOException in case of error
      */
 
-    public static void unzipArchive(final File archive, final File outputDir) throws IOException {
-        ZipFile zipfile = new ZipFile(archive);
-        for (Enumeration e = zipfile.entries(); e.hasMoreElements(); ) {
-            ZipEntry entry = (ZipEntry) e.nextElement();
+    public void unzipArchive(final File archive, final File outputDir) throws IOException {
+        ZipFile zipfile = new ZipFile(archive, encoding);
+        for (Enumeration e = zipfile.getEntries(); e.hasMoreElements(); ) {
+            final ZipArchiveEntry entry = (ZipArchiveEntry) e.nextElement();
             unzipEntry(zipfile, entry, outputDir);
         }
         zipfile.close();
     }
 
-    private static void unzipEntry(final ZipFile zipfile, final ZipEntry entry, final File outputDir) throws IOException {
+    private void unzipEntry(final ZipFile zipfile, final ZipArchiveEntry entry, final File outputDir) throws IOException {
 
         if (entry.isDirectory()) {
             createDir(new File(outputDir, entry.getName()));
@@ -81,7 +97,7 @@ public class ZipUtils {
         }
     }
 
-    private static void createDir(final File dir) {
+    private void createDir(final File dir) {
         if (!dir.mkdirs()) throw new RuntimeException("Can not create dir " + dir);
     }
 
