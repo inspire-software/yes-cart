@@ -16,7 +16,6 @@
 
 package org.yes.cart.web.support.service.impl;
 
-import org.apache.commons.codec.net.URLCodec;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,10 +79,12 @@ public abstract class AbstractImageServiceImpl implements AttributableImageServi
      * @param attrName  attribute name
      * @return attribute value if found, otherwise noimage will be returned.
      */
-    public String getImageAttributeValue(final Attributable attributable, final String attrName) {
+    protected String getImageAttributeValue(final Attributable attributable,
+                                            final String attrName,
+                                            final String defaultValue) {
         final AttrValue attrValue = attributable.getAttributeByCode(attrName);
-        if (attrValue == null) {
-            return Constants.NO_IMAGE;
+        if (attrValue == null || StringUtils.isBlank(attrValue.getVal())) {
+            return defaultValue;
         }
         return attrValue.getVal();
 
@@ -95,9 +96,8 @@ public abstract class AbstractImageServiceImpl implements AttributableImageServi
                            final String width, final String height, final String attrName, String attrVal) {
 
         if (StringUtils.isBlank(attrVal)) {
-            attrVal =  getImageAttributeValue(attributable, attrName);
+            attrVal =  getImageAttributeValue(attributable, attrName, Constants.NO_IMAGE);
         }
-
 
         return getImageURI(attrVal, width, height, httpServletContextPath, attributable);
     }
