@@ -83,7 +83,7 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
                     SecurityContextHolder.setContext((SecurityContext) ctx.getAttribute("security"));
                     listener.notifyMessage("Indexing stared");
                     final int cnt = remoteBackdoorService.reindexAllProducts(ctx);
-                    // TODO: Need ping here too as if we get a lot of products we really only rely on the timeout
+                    // TODO: YC-148 Need ping here too as if we get a lot of products we really only rely on the timeout
                     //       In fact we have the WS timeout, Listener timeout - so this needs to be refactored
                     //       We need a common indexing interface where we can pass in listener (or can get
                     //       incremental update out of).
@@ -126,7 +126,7 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
         param.put(AsyncContext.WEB_SERVICE_URI, systemService.getBackdoorURI());
 
         final AsyncContext flex = new AsyncFlexContextImpl(param);
-
+        //TODO: YC-149 move timeouts to config
         return new JobContextImpl(true, new JobStatusListenerImpl(10000, 300000), new HashMap<String, Object>() {{
             putAll(flex.getAttributes());
             put("security", SecurityContextHolder.getContext());

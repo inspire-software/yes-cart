@@ -58,7 +58,7 @@ public class TestShopTopSellerServiceImpl extends BaseCoreDBTestCase {
         shopTopSellerDao = (GenericDAO<ShopTopSeller, Long>) ctx().getBean(DaoServiceBeanKeys.SHOP_TOP_SELLLER_DAO);
     }
 
-    // TODO fix to not depend on order of running
+    // TODO: YC-64 fix to not depend on order of running
     @Test
     public void testUpdateTopSellers() throws Exception {
         Map<Long, BigDecimal> expectation = new HashMap<Long, BigDecimal>() {{

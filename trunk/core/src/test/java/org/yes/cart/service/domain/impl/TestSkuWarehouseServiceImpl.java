@@ -40,7 +40,7 @@ import static org.junit.Assert.*;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-//TODO refactor to param test
+//TODO: YC-64 refactor to param test
 public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
 
     private WarehouseService warehouseService;
@@ -65,7 +65,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
         skuWarehouseService.delete(skuWarehouse);
     }
 
-    // TODO fix to not depend on order or running
+    // TODO: YC-64 fix to not depend on order or running
     @Test
     public void testGetQuantity() {
         SkuWarehouse skuWarehouse;

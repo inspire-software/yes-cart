@@ -152,7 +152,7 @@
         }
 
         public function set product(value:ProductDTOImpl):void {
-            // TODO: need a global way of identifying concurrent modifications
+            // TODO: YC-155 need a global way of identifying concurrent modifications
             // Mandatory reloading to force SKU and Inventory refreshes
             //if (_productId == value.productId) {
             //    return;

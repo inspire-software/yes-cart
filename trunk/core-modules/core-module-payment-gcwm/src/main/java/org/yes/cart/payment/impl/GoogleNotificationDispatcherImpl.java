@@ -112,7 +112,7 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
 
 
         getCustomerOrderService().update(customerOrder);
-        //todo perform auth transition
+        //TODO: YC-147 perform auth transition
 
     }
 

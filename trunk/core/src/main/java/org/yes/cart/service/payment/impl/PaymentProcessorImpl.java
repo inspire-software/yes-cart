@@ -405,7 +405,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
         final List<Payment> rez = new ArrayList<Payment>();
         if (forceSinglePayment || !getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorizePerShipment()) {
-            //TODO revome simgle payment per multiple delivery
+            //TODO: YC-145 remove single payment per multiple delivery
             Payment payment = (Payment) SerializationUtils.clone(templatePayment);
             for (CustomerOrderDelivery delivery : order.getDelivery()) {
                 fillPayment(order, delivery, payment, true);
@@ -455,8 +455,8 @@ public class PaymentProcessorImpl implements PaymentProcessor {
     private void fillPaymentAmount(final CustomerOrder order,
                                    final CustomerOrderDelivery delivery,
                                    final Payment payment) {
-        //TODOV2 more sofisticated, include discount and free shipping per one and multiple delivery
-        //TODO need calculate at shopping cart !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //TODO: YC-145 more sophisticated, include discount and free shipping per one and multiple delivery
+        //TODO: YC-145 need calculate at shopping cart !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         BigDecimal rez = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
         for (PaymentLine paymentLine : payment.getOrderItems()) {
             rez = rez.add(paymentLine.getQuantity().multiply(paymentLine.getUnitPrice()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));

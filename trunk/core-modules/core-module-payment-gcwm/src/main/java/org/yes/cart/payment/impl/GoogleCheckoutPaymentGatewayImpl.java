@@ -424,7 +424,7 @@ public class GoogleCheckoutPaymentGatewayImpl
      * {@inheritDoc}
      */
     public boolean isSuccess(Map<String, String> nvpCallResult) {
-        return true;  //todo
+        return true;  //TODO: YC-146
     }
 
 

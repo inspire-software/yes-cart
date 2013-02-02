@@ -124,7 +124,7 @@ public class PayPalExpressCheckoutFilter extends AbstractFilter implements Filte
                     + '|'   + nvpCallResult.get("L_SEVERITYCODE0") ;
 
 
-            //todo move order to failed state
+            // TODO: YC-156  move order to failed state
         }
 
         LOG.info("Pay pal filter user will be redirected to " + redirectUrl);

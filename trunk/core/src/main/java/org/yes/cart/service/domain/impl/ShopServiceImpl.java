@@ -125,7 +125,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
 
     /**
      * Set attribute value. New attribute value will be created, if attribute has not value for given shop.
-     * TODO make sence to move it into abstract generic
+     * TODO makes sense to move it into abstract generic
      * @param shopId shop id
      * @param attributeKey attribute key
      * @param attributeValue attribute value.

@@ -79,8 +79,8 @@ public class RemoteImageServiceImpl extends AbstractRemoteService<SeoImageDTO> i
 
         final AsyncContext flex = new AsyncFlexContextImpl(param);
 
-        // TODO: this is quite strange that we have this method on dtoImageService but we do not use it since it puts
-        // TODO: a blank string into path? maybe we need to revise all this??
+        // TODO: YC-150 this is quite strange that we have this method on dtoImageService but we do not use it since it puts
+        // TODO: YC-150 a blank string into path? maybe we need to revise all this??
         final String realPath = remoteBackdoorService.getImageVaultPath(flex) + File.separator;
         return addImageToRepository(fullFileName, code, imgBody, storagePrefix, realPath);
     }
@@ -110,8 +110,8 @@ public class RemoteImageServiceImpl extends AbstractRemoteService<SeoImageDTO> i
 
         final AsyncContext flex = new AsyncFlexContextImpl(param);
 
-        // TODO: this is quite strange that we have this method on dtoImageService but we do not use it since it puts
-        // TODO: a blank string into path? maybe we need to revise all this??
+        // TODO: YC-150 this is quite strange that we have this method on dtoImageService but we do not use it since it puts
+        // TODO: YC-150 a blank string into path? maybe we need to revise all this??
         final String realPath = remoteBackdoorService.getImageVaultPath(flex) + File.separator;
         return getImageAsByteArray(fileName, code, storagePrefix, realPath);
     }
