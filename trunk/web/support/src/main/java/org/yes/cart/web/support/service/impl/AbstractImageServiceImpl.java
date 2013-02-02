@@ -16,12 +16,18 @@
 
 package org.yes.cart.web.support.service.impl;
 
+import org.apache.commons.codec.net.URLCodec;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Attributable;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.AttributableImageService;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -29,6 +35,8 @@ import org.yes.cart.web.support.service.AttributableImageService;
  * Time: 6:44 PM
  */
 public abstract class AbstractImageServiceImpl implements AttributableImageService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractImageServiceImpl.class);
 
     /**
      * Get default image uri.
@@ -48,7 +56,12 @@ public abstract class AbstractImageServiceImpl implements AttributableImageServi
         final StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(servletContextPath);
         stringBuilder.append(getImageRepositoryUrlPattern(object));
-        stringBuilder.append(imageName);
+        try {
+            stringBuilder.append(URLEncoder.encode(imageName, "UTF-8"));
+        } catch (UnsupportedEncodingException uee) {
+            LOG.error(uee.getMessage(), uee);
+            stringBuilder.append(Constants.NO_IMAGE);
+        }
         stringBuilder.append('?');
         stringBuilder.append(WebParametersKeys.WIDTH);
         stringBuilder.append('=');
