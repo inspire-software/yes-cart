@@ -702,7 +702,7 @@
 
         <flex:remoting-destination/>
         <security:intercept-methods>
-            <!-- TODO: add security settings so that each descriptor group is driven by a certain role -->
+            <!-- TODO: YC-140 add security settings so that each descriptor group is driven by a certain role -->
             <security:protect method="doImport" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
             <security:protect method="getImportStatus" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
             <security:protect method="getImportGroups" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>

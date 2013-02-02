@@ -46,7 +46,7 @@ public class TestAttributeServiceImpl extends BaseCoreDBTestCase {
         attributeService = (AttributeService) ctx().getBean(ServiceSpringKeys.ATTRIBUTE_SERVICE);
     }
 
-    // TODO fix to not depend on order or running
+    // TODO: YC-64 fix to not depend on order or running
     @Test
     public void testFindByAttributeGroupCode() {
         List<Attribute> attrs = attributeService.findByAttributeGroupCode(AttributeGroupNames.CUSTOMER);

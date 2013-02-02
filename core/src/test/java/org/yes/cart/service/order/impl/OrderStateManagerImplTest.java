@@ -33,7 +33,7 @@ import static org.junit.Assert.assertTrue;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-// TODO simplify using JMock
+// TODO: YC-64 simplify using JMock
 public class OrderStateManagerImplTest {
 
     private Map<String, OrderEventHandler> handlersOk;

@@ -43,6 +43,6 @@ public class ExpireCartCommandImplTest {
         assertNull(shoppingCart.getCustomerEmail());
         assertNull(shoppingCart.getCustomerName());
         //assertEquals(ShoppingCart.SESSION_EXPIRED, shoppingCart.getLogonState());
-        //TODO remake test
+        //TODO: YC-151 remake test
     }
 }

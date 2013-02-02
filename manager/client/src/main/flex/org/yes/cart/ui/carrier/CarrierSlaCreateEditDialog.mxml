@@ -276,13 +276,13 @@
 
 
         /**
-         * Create dialog to edit distance - weight and distanse-volume matrix to price determination.
+         * Create dialog to edit distance - weight and distance-volume matrix to price determination.
          */
         private function editPriceMatrix(event:MouseEvent):void {
             Alert.show(
                     resourceManager.getString('CarrierManagementPanel', 'notImplemented'),
                     resourceManager.getString('ShopManagerApplication', 'warning')
-                    ); //TODO
+                    ); //TODO: YC-154 weight and distance-volume matrix to price determination
 
         }
 

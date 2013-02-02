@@ -52,7 +52,7 @@ public class TestCustomerServiceImpl extends BaseCoreDBTestCase {
         assertFalse(customer.getShops().isEmpty());
     }
 
-    // TODO fix to not depend on order of running
+    // TODO: YC-64 fix to not depend on order of running
     @Test
     public void testUpdate() {
         Customer customer = getCustomer(getTestName());
@@ -78,7 +78,7 @@ public class TestCustomerServiceImpl extends BaseCoreDBTestCase {
         assertNull(customer);
     }
 
-    //TODO refactor to param test
+    //TODO: YC-64 refactor to param test
     @Test
     public void testFindCustomer() {
         Customer customer = getCustomer(getTestName());

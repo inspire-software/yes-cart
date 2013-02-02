@@ -39,7 +39,7 @@ import static org.junit.Assert.*;
  * Date: 07-May-2011
  * Time: 16:13:01
  */
-// TODO refactor to param test
+// TODO: YC-143 refactor to param test
 public class ProductDAOTest extends AbstractTestDAO {
 
     private GenericDAO<Product, Long> productDao;

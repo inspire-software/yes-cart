@@ -34,7 +34,7 @@ public class LoginCommandImplTest {
     @Test
     public void testExecute() {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
-        //TODO rethink tis test
+        //TODO: YC-151 rethink this test
         //assertNull(shoppingCart.getAuthentication());
         assertEquals(ShoppingCart.NOT_LOGGED, shoppingCart.getLogonState());
         Map<String, String> params = new HashMap<String, String>();

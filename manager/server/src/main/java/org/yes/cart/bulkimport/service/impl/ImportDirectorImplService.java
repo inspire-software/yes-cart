@@ -150,6 +150,7 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
             throw new IllegalStateException("Unable to get image vault path");
         }
 
+        //TODO: YC-149 move timeouts to config
         /*
          * Max 10K char of report to UI since it will get huge and simply will crash the UI,
          * not to mention traffic cost.

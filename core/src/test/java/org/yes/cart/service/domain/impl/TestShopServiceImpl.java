@@ -49,7 +49,7 @@ public class TestShopServiceImpl extends BaseCoreDBTestCase {
         assertNotNull(shopService.getShopByCode("SHOIP3"));
     }
 
-    // TODO fix to not depend on order or running
+    // TODO: YC-64 fix to not depend on order or running
     @Test
     public void testGetAllCategoriesTestOnShopWithoutAssignedCategories() {
         Shop shop = shopService.getShopByDomainName("eddie.lives.somewhere.in.time");
@@ -77,7 +77,7 @@ public class TestShopServiceImpl extends BaseCoreDBTestCase {
     /**
      * Prove, that supported currency can be assigned via shop attributes.
      */
-    // TODO fix to not depend on order or running
+    // TODO: YC-64 fix to not depend on order or running
     @Test
     public void testAssignCurrency() {
         Shop shop = shopService.getShopByDomainName("long.live.robots");

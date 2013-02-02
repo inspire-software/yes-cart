@@ -107,7 +107,7 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
         return getBackdoorServiceClientFactory().getBackdoorService(
                 userName,
                 password,
-                uri, timeout);  //TODO move to config v2 ?
+                uri, timeout);  //TODO: YC-149 move timeouts to config
 
     }
 

@@ -38,7 +38,7 @@ public class BackdoorServiceClientFactoryTest {
                 "http://localhost:8080/yes-shop/services/backdoor", 10000L);
         assertNotNull(serv);
 
-        // TODO: why is this test written in such a way? are we expecting an exception? why just not test for that?
+        // TODO: YC-157 why is this test written in such a way? are we expecting an exception? why just not test for that?
         // javax.xml.ws.WebServiceException maybe?
         try {
             serv.reindexAllProducts();

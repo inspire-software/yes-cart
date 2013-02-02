@@ -136,7 +136,7 @@
         private function onSaveImageClick(evt:MouseEvent):void {
             if (imageBodyHasChanges) {
                 //Save image when it really changed.
-                var encoder:JPEGEncoder = new JPEGEncoder(); //TODO resolve the encoder by file extension
+                var encoder:JPEGEncoder = new JPEGEncoder(); //TODO: YC-152 resolve the encoder by file extension
                 var rawBytes:ByteArray = encoder.encode(bitmapData);
                 remoteImageService.addImageToRepository(value, code, rawBytes, resolveImageStorage(attributeGroup));
 

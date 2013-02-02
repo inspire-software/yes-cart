@@ -67,7 +67,7 @@
             this.title = windowTitle;
 
 
-            //TODO here add RE validator
+            //TODO: YC-153 here add RE validator
 
 
         }

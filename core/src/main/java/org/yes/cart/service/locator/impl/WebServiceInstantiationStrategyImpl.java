@@ -33,7 +33,7 @@ public class WebServiceInstantiationStrategyImpl implements InstantiationStrateg
 
     private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
-    private static final String NAMESPACE_URI = XMLConstants.NULL_NS_URI; // TODO is separate namespace need ?
+    private static final String NAMESPACE_URI = XMLConstants.NULL_NS_URI; // TODO is separate namespace needed ?
 
 /**
      * {@inheritDoc}

@@ -1,2 +1,2 @@
---TODO add index on TSEOIMAGE.IMAGE_NAME
---TODO add unique constraint on carrier sla name
+--TODO: YC-141 add index on TSEOIMAGE.IMAGE_NAME   (can't we just update the create tables?)
+--TODO: YC-141 add unique constraint on carrier sla name (can't we just update the create tables?)

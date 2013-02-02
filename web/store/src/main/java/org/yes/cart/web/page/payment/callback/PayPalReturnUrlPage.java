@@ -122,7 +122,7 @@ public class PayPalReturnUrlPage extends AbstractWebPage {
                 Collections.EMPTY_MAP,
                 "tmp")
                 .get(0);
-        //todo exception handling
+        // TODO: YC-156 exception handling
 
         try {
 
@@ -177,7 +177,7 @@ public class PayPalReturnUrlPage extends AbstractWebPage {
                                     ).execute(ApplicationDirector.getShoppingCart());
 
                                 } else {
-                                    //TODO lacks of information to show what the real problem
+                                    // TODO: YC-156 lacks of information to show what the real problem
                                     error(getLocalizer().getString("paymentFailed", this));
 
                                 }
