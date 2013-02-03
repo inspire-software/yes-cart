@@ -135,6 +135,8 @@ public class StorefrontApplication
 
         getComponentInstantiationListeners().add(getSpringComponentInjector());
 
+        getRequestCycleListeners().add(new StorefrontRequestCycleListener());
+
         mountPages();
 
         if ("true".equalsIgnoreCase(getInitParameter("secureMode"))) {
