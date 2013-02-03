@@ -27,6 +27,7 @@ import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.support.entity.decorator.impl.DecoratorUtil;
 import org.yes.cart.web.support.seo.BookmarkService;
+import org.yes.cart.web.support.seo.SeoEntryIdInvalidException;
 
 /**
  * User: denispavlov
@@ -85,11 +86,20 @@ public class BookmarkServiceImpl implements BookmarkService {
         String seoData = getStringFromValueWrapper(CATEGORY_ENCODE_CACHE.get(bookmark));
         if (seoData == null) {
             final Category category = categoryService.getById(NumberUtils.toLong(bookmark));
-            if (category != null) {
+            if (category == null) {
+
+                //given id value of category is fake
+                throw new SeoEntryIdInvalidException(
+                        "Category with id = [" + bookmark +"] does not exist. Direct input of category id ?"
+                );
+
+            }  else {
+
                 seoData = DecoratorUtil.encodeId(
                         bookmark,
                         category.getSeo()
                 );
+
             }
             if (seoData != null) {
                 CATEGORY_ENCODE_CACHE.put(new Element(bookmark, seoData));
