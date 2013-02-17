@@ -27,6 +27,7 @@ public interface Etype extends Auditable {
 
     // The OOTB business types
     String IMAGE_BUSINESS_TYPE = "Image";
+    String STRING_BUSINESS_TYPE = "String";
 
     /**
      * Get primary key.

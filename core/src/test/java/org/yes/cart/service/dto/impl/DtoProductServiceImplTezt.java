@@ -80,6 +80,21 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
         assertTrue(dto.getProductId() > 0);
     }
 
+
+    @Test
+    public void testCreateAndBindAttrVal() throws Exception {
+
+        ProductDTO dto = getDto("testCreateAndBindAttrVal");
+        dto = dtoService.create(dto);
+        assertTrue(dto.getProductId() > 0);
+
+        AttrValueDTO attrValueDTO = dtoService.createAndBindAttrVal(dto.getProductId(), "cpu", "z80");
+
+        assertNotNull(attrValueDTO);
+
+
+    }
+
     @Test
     public void testUpdate() throws Exception {
         ProductDTO dto = getDto();

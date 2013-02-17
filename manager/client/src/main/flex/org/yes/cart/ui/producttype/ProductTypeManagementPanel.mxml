@@ -735,7 +735,7 @@
 
                                 <mx:DataGridColumn headerText="@Resource(bundle='ProductTypeManagementPanel',key='name')"
                                                    dataField="name"/>
-                                <mx:DataGridColumn width="50"
+                                <mx:DataGridColumn width="100"
                                                    headerText="@Resource(bundle='ProductTypeManagementPanel',key='rank')"
                                                    dataField="rank"/>
 

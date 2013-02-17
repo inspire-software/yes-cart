@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  - Copyright 2009 Igor Azarnyi, Denys Pavlov
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+                title="@Resource(bundle='AttributeCreateEditDialog',key='editAttribute')"
+                showCloseButton="true"
+                close="PopUpManager.removePopUp(this)">
+
+
+    <mx:Form>
+
+        <mx:FormItem width="100%" label="@Resource(bundle='AttributeCreateEditDialog',key='name')">
+            <mx:TextInput width="160" id="attrName"/>
+        </mx:FormItem>
+
+        <mx:FormItem width="100%" label="@Resource(bundle='AttributeCreateEditDialog',key='code')">
+            <mx:TextInput width="160" id="attrVal"/>
+        </mx:FormItem>
+
+    </mx:Form>
+
+    <mx:ControlBar horizontalAlign="right" width="100%">
+        <mx:Button  id="saveBtn" label="@Resource(bundle='ShopManagerApplication',key='save')"/>
+        <mx:Button id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
+                   click="PopUpManager.removePopUp(this)"/>
+    </mx:ControlBar>
+
+    <mx:Script><![CDATA[
+        import mx.managers.PopUpManager;
+        ]]></mx:Script>
+
+</mx:TitleWindow>

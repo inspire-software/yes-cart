@@ -32,7 +32,7 @@ import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.DecoratorFacade;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
-import org.yes.cart.web.support.service.LanguageService;
+import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.web.support.util.cookie.ShoppingCartPersister;
 import org.yes.cart.web.util.WicketUtil;
 

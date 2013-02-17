@@ -450,9 +450,10 @@
                 <constructor-arg index="4" ref="dtoAttributeService"/>
                 <constructor-arg index="5" ref="attrValueEntityProductDao"/>
                 <constructor-arg index="6" ref="imageService"/>
-                <constructor-arg index="7" ref="productTypeAttrService"/>
+                <constructor-arg index="7" ref="dtoProductTypeAttrService"/>
                 <constructor-arg index="8" ref="dtoProductCategoryService"/>
                 <constructor-arg index="9" ref="dtoProductSkuService"/>
+                <constructor-arg index="10" ref="languageService"/>
             </bean>
         </property>
     </bean>
@@ -1180,6 +1181,17 @@
     </bean>
 
     <bean id="passwordHashHelper" class="org.yes.cart.service.domain.impl.MD5HashHelperImpl"/>
+
+    <!--TODOv2  must read languages from db-->
+    <bean id="languageService" class="org.yes.cart.service.misc.impl.LanguageServiceImpl">
+        <constructor-arg index="0">
+            <map>
+                <entry key="en" value="English"/>
+                <entry key="ru" value="&#x0420;&#x0443;&#x0441;&#x0441;&#x043a;&#x0438;&#x0439;"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
 
     <!-- ########################################## bulk import ########################## -->
 

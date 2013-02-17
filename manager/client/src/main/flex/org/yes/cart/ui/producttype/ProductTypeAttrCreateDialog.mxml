@@ -15,7 +15,7 @@
   -    limitations under the License.
   -->
 
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="400" height="320"
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="440" height="320"
                 title="@Resource(bundle='ProductTypeManagementPanel',key='productTypeAttr')"
                 showCloseButton="true"
                 close="PopUpManager.removePopUp(this)"

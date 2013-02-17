@@ -93,8 +93,8 @@
                                               productAvailability="{productAvailability}"
                                               creationComplete="initSummaryPanelListeners()"/>
                 </mx:Canvas>
-                <prod:ProductImageAttributesPanel id="imageTab"/>
-                <prod:ProductNonImageAttributesPanel id="attrTab"/>
+                <prod:ProductImageAttributesPanel id="imageTab" />
+                <prod:ProductNonImageAttributesPanel id="attrTab" canCreate="true"/>
                 <mx:Canvas id="skuTab" label="@Resource(bundle='ProductManagementPanel',key='skuTab')" width="100%"
                            height="100%"/>
                 <mx:Canvas label="@Resource(bundle='ProductManagementPanel',key='priceTab')" width="100%"
@@ -285,6 +285,13 @@
                 productCreateDialog.saveBtn.removeEventListener(MouseEvent.CLICK, onCreateNewProductSaveClick);
                 PopUpManager.removePopUp(productCreateDialog);
                 productCreateDialog = null;
+
+
+                codeTextInput.text = product.code; //following search operation will find only just created product
+                nameTextInput.text = "" ;
+                brandComboBox.selectedItem = null;
+                typeComboBox.selectedItem = null;
+
             }
         }
 

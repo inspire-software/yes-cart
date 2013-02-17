@@ -67,6 +67,16 @@ public interface GenericAttrValueService {
      */
     AttrValueDTO createEntityAttributeValue(AttrValueDTO attrValueDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
+    /**
+     * Create attribute, add to entity type, create entity attr value
+     * @param attrName  new attribute name
+     * @param attrValue   new attribute vale for given entity
+     * @param entityPk entity pk value
+     * @return created value
+     * @throws UnmappedInterfaceException
+     * @throws UnableToCreateInstanceException
+     */
+    AttrValueDTO createAndBindAttrVal(long entityPk, String attrName, String attrValue)  throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Delete attribute value by given pk value.
@@ -74,6 +84,8 @@ public interface GenericAttrValueService {
      * @param attributeValuePk given pk value.
      */
     void deleteAttributeValue(long attributeValuePk) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+
 
 
 }

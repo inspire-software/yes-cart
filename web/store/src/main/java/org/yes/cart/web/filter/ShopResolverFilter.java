@@ -31,7 +31,7 @@ import org.yes.cart.shoppingcart.impl.SetShopCartCommandImpl;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.request.HttpServletRequestWrapper;
-import org.yes.cart.web.support.service.LanguageService;
+import org.yes.cart.service.misc.LanguageService;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

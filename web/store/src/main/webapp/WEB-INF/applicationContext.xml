@@ -147,15 +147,6 @@
         <constructor-arg index="0" ref="cookieTuplizer"/>
     </bean>
 
-    <bean id="languageService" class="org.yes.cart.web.support.service.impl.LanguageServiceImpl">
-        <constructor-arg index="0">
-            <map>
-                <entry key="en" value="English"/>
-                <entry key="ru" value="&#x0420;&#x0443;&#x0441;&#x0441;&#x043a;&#x0438;&#x0439;"/>
-            </map>
-        </constructor-arg>
-    </bean>
-
     <bean id="centralViewResolver" class="org.yes.cart.web.support.service.impl.CentralViewResolverImpl">
         <constructor-arg index="0" ref="categoryService"/>
         <constructor-arg index="1" ref="attributeService"/>

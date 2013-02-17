@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.web.support.service;
+package org.yes.cart.service.misc;
 
 import java.util.List;
 import java.util.Map;
