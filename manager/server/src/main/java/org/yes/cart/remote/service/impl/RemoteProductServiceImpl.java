@@ -66,6 +66,13 @@ public class RemoteProductServiceImpl
     /**
      * {@inheritDoc}
      */
+    public AttrValueDTO createAndBindAttrVal(long entityPk, String attrName, String attrValue) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return ((DtoProductService) getGenericDTOService()).createAndBindAttrVal(entityPk, attrName, attrValue);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public List<ProductDTO> getProductByCategory(final long categoryId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return ((DtoProductService) getGenericDTOService()).getProductByCategory(categoryId);

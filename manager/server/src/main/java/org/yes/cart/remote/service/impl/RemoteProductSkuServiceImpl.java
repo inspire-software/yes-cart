@@ -205,4 +205,11 @@ public class RemoteProductSkuServiceImpl
         super.remove(id);
         reindexService.reindexProduct(getProductId(id));
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public AttrValueDTO createAndBindAttrVal(long entityPk, String attrName, String attrValue) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        throw new UnmappedInterfaceException("Not implemented");
+    }
 }

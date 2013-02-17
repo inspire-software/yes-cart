@@ -113,5 +113,12 @@ public class RemoteCategoryServiceImpl
         return ((DtoCategoryService) getGenericDTOService()).getByProductId(productId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public AttrValueDTO createAndBindAttrVal(long entityPk, String attrName, String attrValue) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        throw new UnmappedInterfaceException("Not implemented");
+    }
+
 
 }
