@@ -40,16 +40,11 @@ import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ProductTypeAttrService;
-import org.yes.cart.service.dto.DtoAttributeService;
-import org.yes.cart.service.dto.DtoProductCategoryService;
-import org.yes.cart.service.dto.DtoProductService;
-import org.yes.cart.service.dto.DtoProductSkuService;
+import org.yes.cart.service.dto.*;
+import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Default implementation of {@link DtoProductService}. Uses
@@ -77,11 +72,14 @@ public class DtoProductServiceImpl
     private final GenericDAO<AttrValueEntityProduct, Long> attrValueEntityProductDao;
 
     private final ProductTypeAttrService productTypeAttrService;
+    private final DtoProductTypeAttrService dtoProductTypeAttrService;
 
 
     private final Assembler productSkuDTOAssembler;
     private final Assembler attrValueAssembler;
     private final ImageService imageService;
+
+    private final LanguageService languageService;
 
 
     /**
@@ -100,10 +98,12 @@ public class DtoProductServiceImpl
             final DtoAttributeService dtoAttributeService,
             final GenericDAO<AttrValueEntityProduct, Long> attrValueEntityProductDao,
             final ImageService imageService,
-            final ProductTypeAttrService productTypeAttrService,
+            final DtoProductTypeAttrService dtoProductTypeAttrService,
             final DtoProductCategoryService dtoProductCategoryService,
-            final DtoProductSkuService dtoProductSkuService) {
+            final DtoProductSkuService dtoProductSkuService,
+            final LanguageService languageService) {
         super(dtoFactory, productService, adaptersRepository);
+
 
         this.dtoProductSkuService = dtoProductSkuService;
 
@@ -136,7 +136,11 @@ public class DtoProductServiceImpl
                 dtoFactory.getImplClass(ProductSkuDTO.class),
                 ProductSku.class);
 
-        this.productTypeAttrService = productTypeAttrService;
+        this.dtoProductTypeAttrService = dtoProductTypeAttrService;
+
+        this.productTypeAttrService = (ProductTypeAttrService) dtoProductTypeAttrService.getService();
+
+        this.languageService = languageService;
 
     }
 
@@ -396,6 +400,49 @@ public class DtoProductServiceImpl
         return attrValueDTO;
 
     }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public AttrValueDTO createAndBindAttrVal(final long entityPk, final String attrName, final String attrValue)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final Map<String, String> displayNames = new TreeMap<String, String>();
+        for (String lang : languageService.getSupportedLanguages()) {
+            displayNames.put(lang, attrName);
+        }
+
+
+        AttributeDTO attrDto = dtoFactory.getByIface(AttributeDTO.class);
+        attrDto.setName(attrName);
+        attrDto.setCode(attrName.replaceAll(" ", "-"));
+        attrDto.setDisplayNames(displayNames);
+        attrDto.setAllowfailover(true);
+        attrDto.setAttributegroupId(1003); //TODO fix me not constant but "PRODUCT" code
+        attrDto.setEtypeId(1000); //and me
+
+        attrDto = dtoAttributeService.create(attrDto);
+
+
+        ProductType productType = productService.getById(entityPk).getProducttype();
+        ProductTypeAttrDTO productTypeAttrDTO = dtoFactory.getByIface(ProductTypeAttrDTO.class);
+        productTypeAttrDTO.setAttributeDTO(attrDto);
+        productTypeAttrDTO.setProducttypeId(productType.getProducttypeId());
+        productTypeAttrDTO.setVisible(true);
+        productTypeAttrDTO.setNavigationType("S"); //TODOv2 "R" "S" Navigation type define as constant
+        productTypeAttrDTO = dtoProductTypeAttrService.create(productTypeAttrDTO);
+
+
+        AttrValueProductDTO attrValueDTO = getDtoFactory().getByIface(AttrValueProductDTO.class);
+        attrValueDTO.setAttributeDTO(attrDto);
+        attrValueDTO.setProductId(entityPk);
+
+        return createEntityAttributeValue(attrValueDTO);
+
+
+    }
+
 
     /**
      * {@inheritDoc}

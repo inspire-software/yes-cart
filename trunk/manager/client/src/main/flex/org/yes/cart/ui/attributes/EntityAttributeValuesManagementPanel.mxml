@@ -23,6 +23,7 @@
 
         import mx.controls.Alert;
         import mx.controls.TextInput;
+        import mx.controls.dataGridClasses.DataGridColumn;
         import mx.core.FlexGlobals;
         import mx.events.CloseEvent;
         import mx.events.DataGridEvent;
@@ -120,6 +121,32 @@
             return String(item.attrvalueId);
         }
 
+
+        private var newAttrValuePopUp:AttributeValueQuickCreateDialog;
+
+        /**
+         * Create new product attribute and his value for product.
+         * Attribute code will have name with space chaned to hyphen.
+         * Localized names for supported locales will be created as name.
+         * Product type must be specified.
+         * @param event
+         */
+        private function onCreateAttributeValueClick(event:MouseEvent):void {
+
+            newAttrValuePopUp =  AttributeValueQuickCreateDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), AttributeValueQuickCreateDialog, true));
+            newAttrValuePopUp.saveBtn.addEventListener(MouseEvent.CLICK, onQuickCreateAttrSaveClick);
+            PopUpManager.centerPopUp(newAttrValuePopUp);
+        }
+
+        private function onQuickCreateAttrSaveClick(event:Event):void {
+            if (newAttrValuePopUp != null) {
+                newAttrValuePopUp.saveBtn.removeEventListener(MouseEvent.CLICK, onQuickCreateAttrSaveClick);
+                PopUpManager.removePopUp(newAttrValuePopUp);
+                newAttrValuePopUp = null;
+            }
+        }
+
+
         private var newAttrPopUp:AttributeValueAddDialog;
 
         private function onAddAttributeValueClick(event:MouseEvent):void {
@@ -138,6 +165,17 @@
                 PopUpManager.removePopUp(newAttrPopUp);
                 newAttrPopUp = null;
             }
+        }
+
+
+        /**
+         * Hook for sub classes for the new attribute value functionality
+         *
+         * @param attrName new attribute name
+         * @param attrValue new attribute value
+         */
+        protected function onAttrValueAdded(attrName:String,  attrValue:String):void {
+            // must be overwritten in sub classes
         }
 
         /**
@@ -206,6 +244,7 @@
 
     <mx:Boolean id="canDelete">false</mx:Boolean>
     <mx:Boolean id="canAdd">false</mx:Boolean>
+    <mx:Boolean id="canCreate">false</mx:Boolean>
 
     <mx:VBox paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2" width="100%" height="100%">
 
@@ -222,6 +261,13 @@
                     enabled="{canDelete}"
                     click="onRemoveAttributeValueClick(event)"
                     />
+            <mx:Button id="createAttrValueBtn"
+                    label="@Resource(bundle='AttributesManagementPanel',key='createAttribute')"
+                    toolTip="@Resource(bundle='AttributesManagementPanel',key='createAttributeHint')"
+                    enabled="{canCreate}" visible="{canCreate}" includeInLayout="{canCreate}"
+                    click="onCreateAttributeValueClick(event)"
+                    />
+
         </mx:HBox>
         <mx:DataGrid id="valueDataGrid" width="100%" height="100%" editable="true"
                      dataProvider="{attrValues}"

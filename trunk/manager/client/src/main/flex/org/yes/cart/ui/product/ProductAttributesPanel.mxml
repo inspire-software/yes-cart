@@ -19,7 +19,9 @@
            xmlns:mx="http://www.adobe.com/2006/mxml"
            xmlns:attr="org.yes.cart.ui.attributes.*"
            width="100%"
-           height="100%">
+           height="100%"
+
+        >
 
     <mx:Script><![CDATA[
         import mx.collections.ArrayCollection;
@@ -52,6 +54,17 @@
             if (_product != null) {
                 remoteProductService.getEntityAttributes(_product.productId);
             }
+        }
+
+
+        /**
+         * New attribute value need to create
+         *
+         * @param attrName new attribute name
+         * @param attrValue new attribute value
+         */
+        override protected function onAttrValueAdded(attrName:String,  attrValue:String):void {
+            remoteProductService.createAndBindAttrVal(this._product.productId, attrName, attrValue);
         }
 
         override protected function onValueAdded(selectedAttributeDTO:AttributeDTOImpl):void {
@@ -137,6 +150,7 @@
         ]]></mx:Script>
 
 
+
     <mx:RemoteObject showBusyCursor="true" id="remoteProductService"
                      destination="remoteProductService"
                      channelSet="{ShopManagerGlobal.instance.channelSet}">
@@ -146,6 +160,10 @@
                    fault="onRpcMethodFault(event)"/>
 
         <mx:method id="createEntityAttributeValue" name="createEntityAttributeValue"
+                   result="onCreateEntityAttributeValueResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="createAndBindAttrVal" name="createAndBindAttrVal"
                    result="onCreateEntityAttributeValueResult(event)"
                    fault="onRpcMethodFault(event)"/>
 

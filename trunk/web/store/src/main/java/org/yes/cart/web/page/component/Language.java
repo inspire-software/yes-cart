@@ -29,7 +29,7 @@ import org.yes.cart.shoppingcart.impl.ChangeLocaleCartCommandImpl;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
-import org.yes.cart.web.support.service.LanguageService;
+import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.util.Collections;

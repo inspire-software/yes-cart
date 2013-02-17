@@ -296,4 +296,12 @@ public class DtoProductSkuServiceImpl
         }
         attrValueEntityProductSkuDao.delete(attrValue);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public AttrValueDTO createAndBindAttrVal(final long entityPk, final String attrName, final String attrValue)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        throw new UnmappedInterfaceException("Not implemented");
+    }
 }

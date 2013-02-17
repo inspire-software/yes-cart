@@ -14,9 +14,9 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.web.support.service.impl;
+package org.yes.cart.service.misc.impl;
 
-import org.yes.cart.web.support.service.LanguageService;
+import org.yes.cart.service.misc.LanguageService;
 
 import java.util.*;
 

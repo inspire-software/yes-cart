@@ -133,7 +133,7 @@ public class DtoAttributeServiceImplTezt extends BaseCoreDBTestCase {
         dto.setName("test attr");
         dto.setDescription("test attr description");
         dto.setEtypeId(1000L); //string
-        dto.setAttributegroupId(2003L); //customer
+        dto.setAttributegroupId(1003L); //customer
         dto.setAllowduplicate(true);
         dto.setAllowfailover(false);
         dto.setRegexp("[a-zA-Z]");

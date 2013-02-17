@@ -209,7 +209,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             boolean attrAllowFailover = rs.getBoolean("ALLOWFAILOVER");
             int attrRank = rs.getInt("RANK");
             rs.close();
-            assertEquals(2003L, attrGroupCodeFK);  // PRODUCT
+            assertEquals(1003L, attrGroupCodeFK);  // PRODUCT
             assertEquals(1000L, attrEtypeFK);      // String
             assertEquals("Keys", attrName);
             assertEquals("en#~#Keys#~#ru#~#Клавиши#~#", attrDName);
