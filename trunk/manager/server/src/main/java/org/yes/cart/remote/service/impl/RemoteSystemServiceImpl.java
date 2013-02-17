@@ -57,4 +57,11 @@ public class RemoteSystemServiceImpl implements RemoteSystemService {
         dtoSystemService.deleteAttributeValue(attributeValuePk);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public AttrValueDTO createAndBindAttrVal(long entityPk, String attrName, String attrValue) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        throw new UnmappedInterfaceException("Not implemented");
+    }
+
 }

@@ -104,6 +104,13 @@ public class RemoteShopServiceImpl
     /**
      * {@inheritDoc}
      */
+    public AttrValueDTO createAndBindAttrVal(long entityPk, String attrName, String attrValue) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        throw new UnmappedInterfaceException("Not implemented");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void deleteAttributeValue(final long attributeValuePk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         ((DtoShopService) getGenericDTOService()).deleteAttributeValue(attributeValuePk);
     }

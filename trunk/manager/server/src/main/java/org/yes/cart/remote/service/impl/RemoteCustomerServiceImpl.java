@@ -94,4 +94,11 @@ public class RemoteCustomerServiceImpl
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return dtoCustomerService.getEntityAttributes(entityPk);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public AttrValueDTO createAndBindAttrVal(long entityPk, String attrName, String attrValue) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        throw new UnmappedInterfaceException("Not implemented");
+    }
 }
