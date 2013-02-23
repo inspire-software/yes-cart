@@ -16,15 +16,16 @@
   -->
 
 <attr:EntityAttributeValuesManagementPanel
-           xmlns:mx="http://www.adobe.com/2006/mxml"
-           xmlns:attr="org.yes.cart.ui.attributes.*"
-           width="100%"
-           height="100%"
+        xmlns:mx="http://www.adobe.com/2006/mxml"
+        xmlns:attr="org.yes.cart.ui.attributes.*"
+        width="100%"
+        height="100%"
 
         >
 
     <mx:Script><![CDATA[
         import mx.collections.ArrayCollection;
+        import mx.controls.Alert;
         import mx.events.DataGridEvent;
         import mx.rpc.events.ResultEvent;
 
@@ -63,7 +64,7 @@
          * @param attrName new attribute name
          * @param attrValue new attribute value
          */
-        override protected function onAttrValueAdded(attrName:String,  attrValue:String):void {
+        override protected function onAttrValueAdded(attrName:String, attrValue:String):void {
             remoteProductService.createAndBindAttrVal(this._product.productId, attrName, attrValue);
         }
 
@@ -126,6 +127,12 @@
                 this.attrValues.addItemAt(prodAttr, index);
             } else {
                 this.attrValues.addItem(prodAttr);
+                var idx:int = this.attrValues.length - 1;
+                if (idx >= 0) {
+                    valueDataGrid.selectedIndex = idx;
+                    valueDataGrid.validateNow();
+                    valueDataGrid.scrollToIndex(idx);
+                }
             }
         }
 
@@ -148,7 +155,6 @@
             // ok deleted
         }
         ]]></mx:Script>
-
 
 
     <mx:RemoteObject showBusyCursor="true" id="remoteProductService"

@@ -437,6 +437,7 @@ public class DtoProductServiceImpl
         AttrValueProductDTO attrValueDTO = getDtoFactory().getByIface(AttrValueProductDTO.class);
         attrValueDTO.setAttributeDTO(attrDto);
         attrValueDTO.setProductId(entityPk);
+        attrValueDTO.setVal(attrValue);
 
         return createEntityAttributeValue(attrValueDTO);
 
