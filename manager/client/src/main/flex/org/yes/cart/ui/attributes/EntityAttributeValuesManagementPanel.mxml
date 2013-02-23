@@ -141,6 +141,7 @@
         private function onQuickCreateAttrSaveClick(event:Event):void {
             if (newAttrValuePopUp != null) {
                 newAttrValuePopUp.saveBtn.removeEventListener(MouseEvent.CLICK, onQuickCreateAttrSaveClick);
+                onAttrValueAdded(newAttrValuePopUp.attrName.text, newAttrValuePopUp.attrVal.text);
                 PopUpManager.removePopUp(newAttrValuePopUp);
                 newAttrValuePopUp = null;
             }
@@ -176,6 +177,7 @@
          */
         protected function onAttrValueAdded(attrName:String,  attrValue:String):void {
             // must be overwritten in sub classes
+
         }
 
         /**

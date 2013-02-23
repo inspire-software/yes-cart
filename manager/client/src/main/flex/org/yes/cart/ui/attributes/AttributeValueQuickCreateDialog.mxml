@@ -27,7 +27,7 @@
             <mx:TextInput width="160" id="attrName"/>
         </mx:FormItem>
 
-        <mx:FormItem width="100%" label="@Resource(bundle='AttributeCreateEditDialog',key='code')">
+        <mx:FormItem width="100%" label="@Resource(bundle='AttributeCreateEditDialog',key='value')">
             <mx:TextInput width="160" id="attrVal"/>
         </mx:FormItem>
 
