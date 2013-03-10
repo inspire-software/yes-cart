@@ -33,19 +33,17 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- *
  * Display featured product in particular category or entire shop.
- *
+ * <p/>
  * Igor Azarny iazarny@yahoo.com
  * Date: 18-Sep-2011
  * Time: 11:03:57
  */
-public class FeaturedProducts  extends AbstractProductList {
+public class FeaturedProducts extends AbstractProductList {
 
 
     @SpringBean(name = ServiceSpringKeys.SHOP_CATEGORY_SERVICE)
     private ShopCategoryService shopCategoryService;
-
 
 
     private List<Product> products = null;
@@ -59,7 +57,9 @@ public class FeaturedProducts  extends AbstractProductList {
         super(id, false);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Product> getProductListToShow() {
         if (products == null) {
@@ -68,11 +68,20 @@ public class FeaturedProducts  extends AbstractProductList {
             if (categoryId == 0) {
                 categories = adapt(ApplicationDirector.getCurrentShop().getShopCategory());
             } else {
-                categories = adapt(Collections.singletonList(
-                        shopCategoryService.findByShopCategory(
-                                ApplicationDirector.getCurrentShop(),
-                                categoryService.getById(categoryId))
-                ));
+
+                final ShopCategory shopCategory = shopCategoryService.findByShopCategory(
+                        ApplicationDirector.getCurrentShop(),
+                        categoryService.getById(categoryId));
+
+                if (shopCategory == null) {
+
+                    categories = Collections.EMPTY_LIST;
+
+                } else {
+
+                    categories = adapt(Collections.singletonList(shopCategory));
+
+                }
             }
             products = productService.getFeaturedProducts(
                     categories,
@@ -84,6 +93,7 @@ public class FeaturedProducts  extends AbstractProductList {
 
     /**
      * Transform list of categories to list of category ids
+     *
      * @param categories given category list
      * @return category IDs.
      */
@@ -106,7 +116,7 @@ public class FeaturedProducts  extends AbstractProductList {
      */
     public int getProductsLimit(final long categoryId) {
         final Category category = categoryService.getById(categoryId);
-        if(category != null) {
+        if (category != null) {
             AttrValue av = category.getAttributeByCode(AttributeNamesKeys.Category.CATEGORY_ITEMS_FEATURED);
             if (av != null) {
                 try {

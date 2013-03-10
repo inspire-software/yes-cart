@@ -98,8 +98,8 @@ public abstract class AbstractProductFilter extends BaseComponent {
         this.query = query;
         this.categoryId  = categoryId;
         if (categoryId > 0) {
-            categories = categoryService.transform(
-                    categoryService.getChildCategoriesRecursive(categoryId));
+            categories = new ArrayList<Long>(categoryService.transform(
+                    categoryService.getChildCategoriesRecursive(categoryId)));
         } else {
             categories = Arrays.asList(categoryId);
         }
