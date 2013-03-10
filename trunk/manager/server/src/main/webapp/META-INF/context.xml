@@ -30,6 +30,7 @@
               password="${db.config.yespay.password}"
               driverClassName="${db.config.yespay.driver}"
               url="${db.config.yespay.url}"
+              minEvictableIdleTimeMillis="864000000"
             />
 
 
@@ -46,6 +47,7 @@
               password="${db.config.yes.password}"
               driverClassName="${db.config.yes.driver}"
               url="${db.config.yes.url}"
+              minEvictableIdleTimeMillis="864000000"
             />
 
 
