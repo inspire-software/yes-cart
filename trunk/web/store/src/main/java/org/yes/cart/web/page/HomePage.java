@@ -51,10 +51,7 @@ import org.yes.cart.web.util.WicketUtil;
 
 import java.lang.reflect.Constructor;
 import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -117,7 +114,7 @@ public class HomePage extends AbstractWebPage {
                 shop.getShopId(),
                 shopCategories,
                 mapParams,
-                categoryService.transform(shopService.getShopCategories(shop))
+                new ArrayList<Long>( categoryService.transform(shopService.getShopCategories(shop)))
         );
 
         final BooleanQuery query = centralViewResolver.getBooleanQuery(
@@ -180,8 +177,8 @@ public class HomePage extends AbstractWebPage {
      */
     private List<Long> getCategories(final Long categoryId) {
         if (categoryId > 0) {
-            return categoryService.transform(
-                    categoryService.getChildCategoriesRecursive(categoryId));
+            return new ArrayList<Long>(categoryService.transform(
+                    categoryService.getChildCategoriesRecursive(categoryId)));
         } else {
             return Arrays.asList(0L);
         }
@@ -218,10 +215,22 @@ public class HomePage extends AbstractWebPage {
 
         Class<? extends AbstractCentralView> clz = rendererPanelMap.get(rendererLabel);
         try {
+            if (categoryId != 0) { //check is this category allowed to open in this shop
+
+                final Shop shop = ApplicationDirector.getCurrentShop();
+                if (!categoryService.transform(shopService.getShopCategories(shop)).contains(categoryId)) {
+                    if (LOG.isWarnEnabled()) {
+                        LOG.warn(MessageFormat.format("Can not access to category  {0} from shop {1}", categoryId, shop.getShopId()));
+                    }
+                    return new EmptyCentralView(id, categoryId, booleanQuery);
+                }
+            }
+
             Constructor<? extends AbstractCentralView> constructor = clz.getConstructor(String.class,
                     long.class,
                     BooleanQuery.class);
             return constructor.newInstance(id, categoryId, booleanQuery);
+
         } catch (Exception e) {
             if (LOG.isErrorEnabled()) {
                 LOG.error(MessageFormat.format("Can not create instance of panel for label {0}", rendererLabel), e);

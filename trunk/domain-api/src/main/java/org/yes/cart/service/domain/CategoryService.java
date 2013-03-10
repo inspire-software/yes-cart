@@ -129,7 +129,7 @@ public interface CategoryService extends GenericService<Category> {
      *
      * @return list of category IDs
      */
-    List<Long> transform(Collection<Category> categories);
+    Set<Long> transform(Collection<Category> categories);
 
 
     /**
