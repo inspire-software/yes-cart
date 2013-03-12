@@ -57,6 +57,26 @@ public interface DtoAttributeService extends GenericDTOService<AttributeDTO> {
     List<AttributeDTO> findAvailableAttributes(String attributeGroupCode, List<String> assignedAttributeCodes)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
+
+    /**
+     * Get the list of attributes, that belong to product type.
+     *
+     * @param productTypeId given product ype id
+     * @return list of attributes
+     */
+    List<AttributeDTO> findAvailableAttributesByProductTypeId(long productTypeId)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+    /**
+     * Get the list of image attributes , that belong to product type.
+     *
+     * @param attributeGroupCode     see AttributeGroup#code
+     * @return list of attributes
+     */
+    List<AttributeDTO> findAvailableImageAttributesByGroupCode(String attributeGroupCode)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+
     /**
      * Find all attribute DTOs in given group , that allow to have several attributes
      *

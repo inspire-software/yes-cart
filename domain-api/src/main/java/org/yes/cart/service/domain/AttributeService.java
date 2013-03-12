@@ -72,6 +72,23 @@ public interface AttributeService extends GenericService<Attribute> {
 
 
     /**
+     * Get the list of attributes, that belong to product type.
+     *
+     * @param productTypeId given product ype id
+     * @return list of attributes
+     */
+    List<Attribute> findAvailableAttributesByProductTypeId(long productTypeId);
+
+    /**
+     * Get the list of image attributes , that belong to product type.
+     *
+     * @param attributeGroupCode     see AttributeGroup#code
+     * @return list of attributes
+     */
+    List<Attribute> findAvailableImageAttributesByGroupCode(String attributeGroupCode);
+
+
+    /**
      * Find all attributes in given group , that allow to have several attributes
      *
      * @param attributeGroupCode group of attributes

@@ -19,6 +19,8 @@ package org.yes.cart.service.dto.impl;
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Predicate;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.*;
@@ -34,10 +36,7 @@ import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoProductSkuService;
 import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -245,19 +244,83 @@ public class DtoProductSkuServiceImpl
     public List<? extends AttrValueDTO> getEntityAttributes(final long entityPk)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final List<AttrValueProductSkuDTO> result = new ArrayList<AttrValueProductSkuDTO>();
-        result.addAll(getById(entityPk).getAttributes());
-        final List<AttributeDTO> availableAttributeDTOs = dtoAttributeService.findAvailableAttributes(
-                AttributeGroupNames.SKU,
-                getCodes(result));
-        for (AttributeDTO attributeDTO : availableAttributeDTOs) {
-            AttrValueProductSkuDTO attrValueDTO = getDtoFactory().getByIface(AttrValueProductSkuDTO.class);
-            attrValueDTO.setAttributeDTO(attributeDTO);
-            attrValueDTO.setSkuId(entityPk);
-            result.add(attrValueDTO);
+        final ProductSkuDTO sku = getById(entityPk);
+        final List<AttrValueProductSkuDTO> skuAttrs = new ArrayList<AttrValueProductSkuDTO>();
+        skuAttrs.addAll(sku.getAttributes());
+
+        final Product product = productService.getProductById(sku.getProductId());
+        final List<AttrValueProduct> productAttrs = new ArrayList<AttrValueProduct>();
+        productAttrs.addAll(product.getAttributes());
+
+        final List<AttributeDTO> ptList = dtoAttributeService.findAvailableAttributesByProductTypeId(
+                product.getProducttype().getProducttypeId()
+        );
+
+        final List<AttributeDTO> images = dtoAttributeService.findAvailableImageAttributesByGroupCode(
+                AttributeGroupNames.PRODUCT
+        );
+
+        ptList.addAll(images);
+
+
+        final List<AttrValueProductSkuDTO> full = new ArrayList<AttrValueProductSkuDTO>(ptList.size());
+        for (int i = 0; i < ptList.size(); i++) {
+            final AttributeDTO available = ptList.get(i);
+
+            final Iterator<AttrValueProductSkuDTO> valuesIt = skuAttrs.iterator();
+            boolean found = false;
+            while (valuesIt.hasNext()) {
+                final AttrValueProductSkuDTO value = valuesIt.next();
+                if (available.getCode().equals(value.getAttributeDTO().getCode())) {
+                    full.add(value);
+                    valuesIt.remove(); // remove from results
+                    found = true;
+                    break;
+                }
+            }
+
+            final Iterator<AttrValueProduct> productValuesIt = productAttrs.iterator();
+            while (productValuesIt.hasNext()) {
+                final AttrValueProduct value = productValuesIt.next();
+                if (available.getCode().equals(value.getAttribute().getCode())) {
+                    if (!found) {
+
+                        AttrValueProductSkuDTO attrValueDTO = getDtoFactory().getByIface(AttrValueProductSkuDTO.class);
+                        attrValueDTO.setAttributeDTO(available);
+                        attrValueDTO.setSkuId(entityPk);
+                        attrValueDTO.setVal(value.getVal());
+                        full.add(attrValueDTO);
+
+                        found = true;
+                    }
+                    productValuesIt.remove();
+                    break;
+                }
+            }
+
+            if (!found) {
+
+                AttrValueProductSkuDTO attrValueDTO = getDtoFactory().getByIface(AttrValueProductSkuDTO.class);
+                attrValueDTO.setAttributeDTO(available);
+                attrValueDTO.setSkuId(entityPk);
+                full.add(attrValueDTO);
+            }
+
         }
-        Collections.sort(result, new AttrValueDTOComparatorImpl());
-        return result;
+
+        full.addAll(skuAttrs); // add all the rest (probably not part of this product type)
+
+        CollectionUtils.filter(
+                full,
+                new Predicate() {
+                    public boolean evaluate(final Object object) {
+                        return ((AttrValueDTO) object).getAttributeDTO() != null;
+                    }
+                }
+        );
+
+        Collections.sort(skuAttrs, new AttrValueDTOComparatorImpl());
+        return full;
     }
 
     /**

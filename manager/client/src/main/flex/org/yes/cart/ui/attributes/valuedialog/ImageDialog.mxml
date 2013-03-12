@@ -178,7 +178,6 @@
                 return Constants.CATEGOTY_IMAGE_REPOSITORY_URL_PATTERN;
             } else if (AttributeGroupNames.BRAND == attrGroupName) {
                 return Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN;
-            } else if (AttributeGroupNames.SKU == attrGroupName) {
             } else if (AttributeGroupNames.PRODUCT == attrGroupName) {
             }
             return null;

@@ -60,6 +60,21 @@ public class RemoteAttributeServiceImpl
         return ((DtoAttributeService) getGenericDTOService()).findAvailableAttributes(attributeGroupCode, assignedAttributeCodes);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public List<AttributeDTO> findAvailableAttributesByProductTypeId(final long productTypeId)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return ((DtoAttributeService) getGenericDTOService()).findAvailableAttributesByProductTypeId(productTypeId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<AttributeDTO> findAvailableImageAttributesByGroupCode(final String attributeGroupCode)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return ((DtoAttributeService) getGenericDTOService()).findAvailableImageAttributesByGroupCode(attributeGroupCode);
+    }
 
     /**
      * {@inheritDoc}

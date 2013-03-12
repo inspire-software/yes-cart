@@ -51,11 +51,6 @@ public class DtoAttributeServiceImplTezt extends BaseCoreDBTestCase {
         AttributeDTO dto = getDto();
         dto = dtoAttributeService.create(dto);
         assertTrue(dto.getAttributeId() > 0);
-        //shall be created product and sku attribute
-        assertTrue(        hasAttributeWithCode(
-                dtoAttributeService.findByAttributeGroupCode(AttributeGroupNames.SKU),
-                "SKUTESTCODE"
-        ));
         assertTrue(        hasAttributeWithCode(
                 dtoAttributeService.findByAttributeGroupCode(AttributeGroupNames.PRODUCT),
                 "TESTCODE"

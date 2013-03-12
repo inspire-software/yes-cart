@@ -4640,6 +4640,24 @@ public void setRangeList(final RangeList rangeList) {
        ]]>
     </query>
 
+    <query name="PRODUCTS.ATTRIBUTE.BY.PROD.TYPE.ID">
+          <![CDATA[
+       select attr
+       from  ProductTypeAttrEntity pta  inner join pta.attribute attr
+            where pta.producttype.producttypeId = ?1
+            order by attr.code
+       ]]>
+    </query>
+
+    <query name="PRODUCTS.IMAGE.ATTRIBUTE.BY.GROUP.CODE">
+          <![CDATA[
+       select attr
+       from  AttributeEntity attr
+            where attr.attributeGroup.code = ?1 and attr.etype.businesstype = 'Image'
+            order by attr.code
+       ]]>
+    </query>
+
 
     <query name="PRODUCT.ATTR.VALUE">
         <![CDATA[

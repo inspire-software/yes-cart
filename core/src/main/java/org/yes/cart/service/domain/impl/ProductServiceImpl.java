@@ -306,7 +306,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                 if (groups == null) {
                     groups = new ArrayList<Pair<String, String>>();
                     map.put(attrCode, groups);
-                    map.put("SKU" + attrCode, groups); // map SKU version of attribute to the same list object
                 }
                 groups.add(new Pair<String, String>(
                         String.valueOf(group.getProdTypeAttributeViewGroupId()),

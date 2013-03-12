@@ -45,12 +45,12 @@ import java.util.List;
 public class ProductSkuDecoratorImpl extends ProductSkuEntity implements ProductSkuDecorator {
 
     private final static List<String> attrNames = new ArrayList<String>() {{
-        add(Constants.PRODUCT_SKU_IMAGE_ATTR_NAME_PREFIX + "0");
-        add(Constants.PRODUCT_SKU_IMAGE_ATTR_NAME_PREFIX + "1");
-        add(Constants.PRODUCT_SKU_IMAGE_ATTR_NAME_PREFIX + "2");
-        add(Constants.PRODUCT_SKU_IMAGE_ATTR_NAME_PREFIX + "3");
-        add(Constants.PRODUCT_SKU_IMAGE_ATTR_NAME_PREFIX + "4");
-        add(Constants.PRODUCT_SKU_IMAGE_ATTR_NAME_PREFIX + "5");
+        add(Constants.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "0");
+        add(Constants.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "1");
+        add(Constants.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "2");
+        add(Constants.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "3");
+        add(Constants.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "4");
+        add(Constants.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "5");
     }};
 
 
@@ -168,7 +168,7 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
      * {@inheritDoc}
      */
     public String getDefaultImageAttributeName() {
-        return Constants.PRODUCT_SKU_DEFAULT_IMAGE_ATTR_NAME;
+        return Constants.PRODUCT_DEFAULT_IMAGE_ATTR_NAME;
     }
 
 
@@ -207,7 +207,7 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
      * {@inheritDoc}
      */
     public String getDescription(final String locale) {
-        final String desc = getAttributeValue(AttributeNamesKeys.Product.SKUPRODUCT_DESCRIPTION_PREFIX + locale);
+        final String desc = getAttributeValue(AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX + locale);
         if (desc == null) {
             return getDescription();
         }

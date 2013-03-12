@@ -425,6 +425,9 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
                             defaultProductSku = productSku;
                         }
                     }
+                    if (defaultProductSku == null) { // if there is no matching one - then take the first one
+                        defaultProductSku = this.getSku().iterator().next();
+                    }
                 } else { //single sku
                     defaultProductSku = this.getSku().iterator().next();
                 }

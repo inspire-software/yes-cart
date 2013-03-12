@@ -48,7 +48,7 @@
             entityCode = value != null ? value.code : null;
 
             this.attrValues.removeAll();
-            onEntitySet(AttributeGroupNames.SKU);
+            onEntitySet(AttributeGroupNames.PRODUCT);
 
             if (_productSku != null) {
                 remoteProductSkuService.getEntityAttributes(_productSku.skuId);

@@ -238,7 +238,7 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
             LOG.warn(warn);
             return false;
         } else {
-            final String attributeCode = Constants.PRODUCT_SKU_IMAGE_ATTR_NAME_PREFIX + suffix;
+            final String attributeCode = Constants.PRODUCT_IMAGE_ATTR_NAME_PREFIX + suffix;
             final Attribute attribute = attributeService.findByAttributeCode(attributeCode);
             if (attribute == null) {
                 final String warn = MessageFormat.format("attribute with code {0} not found.", attributeCode);

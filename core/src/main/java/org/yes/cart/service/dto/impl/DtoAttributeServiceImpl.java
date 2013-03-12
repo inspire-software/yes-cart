@@ -111,6 +111,27 @@ public class DtoAttributeServiceImpl
     }
 
     /** {@inheritDoc}  */
+    public List<AttributeDTO> findAvailableAttributesByProductTypeId(
+            final long productTypeId)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final List<Attribute> attributes = ((AttributeService)service).findAvailableAttributesByProductTypeId(productTypeId);
+        final List<AttributeDTO> attributesDTO = new ArrayList<AttributeDTO>(attributes.size());
+        fillDTOs(attributes, attributesDTO);
+        return attributesDTO;
+    }
+
+    /** {@inheritDoc}  */
+    public List<AttributeDTO> findAvailableImageAttributesByGroupCode(
+            final String attributeGroupCode)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final List<Attribute> attributes = ((AttributeService)service).findAvailableImageAttributesByGroupCode(attributeGroupCode);
+        final List<AttributeDTO> attributesDTO = new ArrayList<AttributeDTO>(attributes.size());
+        fillDTOs(attributes, attributesDTO);
+        return attributesDTO;
+    }
+
+    /** {@inheritDoc}  */
     public List<AttributeDTO> findAttributesWithMultipleValues(
             final String attributeGroupCode) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<Attribute> attrs = ((AttributeService)service).findAttributesWithMultipleValues(attributeGroupCode);

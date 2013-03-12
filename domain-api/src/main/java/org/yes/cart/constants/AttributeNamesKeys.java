@@ -136,13 +136,6 @@ public interface AttributeNamesKeys {
          */
         String PRODUCT_DESCRIPTION_PREFIX = "PRODUCT_DESCRITION_";
 
-        /**
-         * Product SKU description attribute prefix. Requires current language to make
-         * full attribute name. E.g. SKUPRODUCT_DESCRITION_en.
-         */
-        String SKUPRODUCT_DESCRIPTION_PREFIX = "SKUPRODUCT_DESCRITION_";
-
-
     }
 
     interface Shop {
