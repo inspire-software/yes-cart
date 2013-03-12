@@ -176,14 +176,14 @@ public class DtoProductSkuServiceImplTezt extends BaseCoreDBTestCase {
         dto = dtoService.create(dto);
         assertTrue(dto.getSkuId() > 0);
         AttrValueProductSkuDTO attrValueDTO = dtoFactory.getByIface(AttrValueProductSkuDTO.class);
-        attrValueDTO.setAttributeDTO(dtoAttrService.getById(200L)); //SKUIMAGE0
+        attrValueDTO.setAttributeDTO(dtoAttrService.getById(100L)); //IMAGE0
         attrValueDTO.setSkuId(dto.getSkuId());
         attrValueDTO.setVal("image.jpg");
         dtoService.createEntityAttributeValue(attrValueDTO);
         dto = dtoService.getById(dto.getSkuId());
         assertFalse(dto.getAttributes().isEmpty());
         for (AttrValueDTO val : dto.getAttributes()) {
-            if (val.getAttributeDTO().getAttributeId() == 200L) {
+            if (val.getAttributeDTO().getAttributeId() == 100L) {
                 assertEquals("image.jpg", val.getVal());
                 return;
             }
@@ -198,14 +198,14 @@ public class DtoProductSkuServiceImplTezt extends BaseCoreDBTestCase {
         dto = dtoService.create(dto);
         assertTrue(dto.getSkuId() > 0);
         AttrValueProductSkuDTO attrValueDTO = dtoFactory.getByIface(AttrValueProductSkuDTO.class);
-        attrValueDTO.setAttributeDTO(dtoAttrService.getById(200L)); //SKUIMAGE0
+        attrValueDTO.setAttributeDTO(dtoAttrService.getById(100L)); //IMAGE0
         attrValueDTO.setSkuId(dto.getSkuId());
         attrValueDTO.setVal("image.jpg");
         dtoService.createEntityAttributeValue(attrValueDTO);
         List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(dto.getSkuId());
         assertFalse(list.isEmpty());
         for (AttrValueDTO val : list) {
-            if (val.getAttributeDTO().getAttributeId() == 200L) {
+            if (val.getAttributeDTO().getAttributeId() == 100L) {
                 assertEquals("image.jpg", val.getVal());
                 return;
             }
@@ -220,7 +220,7 @@ public class DtoProductSkuServiceImplTezt extends BaseCoreDBTestCase {
         dto = dtoService.create(dto);
         assertTrue(dto.getSkuId() > 0);
         AttrValueProductSkuDTO attrValueDTO = dtoFactory.getByIface(AttrValueProductSkuDTO.class);
-        attrValueDTO.setAttributeDTO(dtoAttrService.getById(200L)); //SKUIMAGE0
+        attrValueDTO.setAttributeDTO(dtoAttrService.getById(100L)); //IMAGE0
         attrValueDTO.setSkuId(dto.getSkuId());
         attrValueDTO.setVal("image.jpg");
         dtoService.createEntityAttributeValue(attrValueDTO);
@@ -228,7 +228,7 @@ public class DtoProductSkuServiceImplTezt extends BaseCoreDBTestCase {
         assertFalse(dto.getAttributes().isEmpty());
         AttrValueDTO image0 = null;
         for (AttrValueDTO val : dto.getAttributes()) {
-            if (val.getAttributeDTO().getAttributeId() == 200L) {
+            if (val.getAttributeDTO().getAttributeId() == 100L) {
                 assertEquals("image.jpg", val.getVal());
                 image0 = val;
             }
@@ -239,7 +239,7 @@ public class DtoProductSkuServiceImplTezt extends BaseCoreDBTestCase {
         dto = dtoService.getById(dto.getSkuId());
         assertFalse(dto.getAttributes().isEmpty());
         for (AttrValueDTO val : dto.getAttributes()) {
-            if (val.getAttributeDTO().getAttributeId() == 200L) {
+            if (val.getAttributeDTO().getAttributeId() == 100L) {
                 assertEquals("image2.jpeg", val.getVal());
                 return;
             }
@@ -254,7 +254,7 @@ public class DtoProductSkuServiceImplTezt extends BaseCoreDBTestCase {
         dto = dtoService.create(dto);
         assertTrue(dto.getSkuId() > 0);
         AttrValueProductSkuDTO attrValueDTO = dtoFactory.getByIface(AttrValueProductSkuDTO.class);
-        attrValueDTO.setAttributeDTO(dtoAttrService.getById(200L)); //SKUIMAGE0
+        attrValueDTO.setAttributeDTO(dtoAttrService.getById(100L)); //IMAGE0
         attrValueDTO.setSkuId(dto.getSkuId());
         attrValueDTO.setVal("image.jpg");
         dtoService.createEntityAttributeValue(attrValueDTO);
@@ -262,7 +262,7 @@ public class DtoProductSkuServiceImplTezt extends BaseCoreDBTestCase {
         assertFalse(dto.getAttributes().isEmpty());
         AttrValueDTO image0 = null;
         for (AttrValueDTO val : dto.getAttributes()) {
-            if (val.getAttributeDTO().getAttributeId() == 200L) {
+            if (val.getAttributeDTO().getAttributeId() == 100L) {
                 assertEquals("image.jpg", val.getVal());
                 image0 = val;
             }

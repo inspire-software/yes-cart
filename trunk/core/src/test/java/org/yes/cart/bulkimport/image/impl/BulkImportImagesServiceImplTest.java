@@ -156,9 +156,9 @@ public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
         assertNotNull(product);
         for (ProductSku productSku : product.getSku()) {
             if (productSku.getCode().equals("SOBOT-BEER")) {
-                assertNull(product.getAttributeByCode("SKUIMAGE0")); // at this point sku has not images
-                assertNull(product.getAttributeByCode("SKUIMAGE1")); // at this point sku has not images
-                assertNull(product.getAttributeByCode("SKUIMAGE2")); // at this point sku has not images
+                assertNull(productSku.getAttributeByCode("IMAGE0")); // at this point sku has no images
+                assertNull(productSku.getAttributeByCode("IMAGE1")); // at this point sku has no images
+                assertNull(productSku.getAttributeByCode("IMAGE2")); // at this point sku has no images
             }
         }
 
@@ -191,16 +191,15 @@ public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
         clearCache();
         product = productService.getProductById(10000L);
         assertNotNull(product);
-        assertNotNull(product);
         for (ProductSku productSku : product.getSku()) {
             if (productSku.getCode().equals("SOBOT-BEER")) {
-                assertNotNull(productSku.getAttributeByCode("SKUIMAGE0")); // at this point sku has not images
-                assertNotNull(productSku.getAttributeByCode("SKUIMAGE1")); // at this point sku has not images
-                assertNotNull(productSku.getAttributeByCode("SKUIMAGE2")); // at this point sku has not images
+                assertNotNull(productSku.getAttributeByCode("IMAGE0")); // at this point sku has images
+                assertNotNull(productSku.getAttributeByCode("IMAGE1")); // at this point sku has images
+                assertNotNull(productSku.getAttributeByCode("IMAGE2")); // at this point sku has images
 
-                assertEquals("im-image1-file_SOBOT-BEER_a.jpeg", productSku.getAttributeByCode("SKUIMAGE0").getVal());
-                assertEquals("im-image2-file_SOBOT-BEER_b.jpeg", productSku.getAttributeByCode("SKUIMAGE1").getVal());
-                assertEquals("im-image-file_SOBOT-BEER_c.jpeg", productSku.getAttributeByCode("SKUIMAGE2").getVal());
+                assertEquals("im-image1-file_SOBOT-BEER_a.jpeg", productSku.getAttributeByCode("IMAGE0").getVal());
+                assertEquals("im-image2-file_SOBOT-BEER_b.jpeg", productSku.getAttributeByCode("IMAGE1").getVal());
+                assertEquals("im-image-file_SOBOT-BEER_c.jpeg", productSku.getAttributeByCode("IMAGE2").getVal());
             }
         }
 
@@ -238,9 +237,9 @@ public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
 
         for (ProductSku productSku : product.getSku()) {
             if (productSku.getCode().equals("SOBOT-BEER")) {
-                assertNotNull(productSku.getAttributeByCode("SKUIMAGE2"));
+                assertNotNull(productSku.getAttributeByCode("IMAGE2"));
 
-                assertEquals("im-image-file_SOBOT-BEER_c.jpeg", productSku.getAttributeByCode("SKUIMAGE2").getVal());
+                assertEquals("im-image-file_SOBOT-BEER_c.jpeg", productSku.getAttributeByCode("IMAGE2").getVal());
             }
         }
 

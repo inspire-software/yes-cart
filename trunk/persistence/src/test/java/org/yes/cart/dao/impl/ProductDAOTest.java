@@ -480,7 +480,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 params);
         assertNotNull(brands);
         assertEquals(3, brands.size());
-        // test that list is alphabeticaly ordered
+        // test that list is alphabetically ordered
         assertEquals("LG", brands.get(0)[0]);
         assertEquals("Samsung", brands.get(1)[0]);
         assertEquals("Sony", brands.get(2)[0]);

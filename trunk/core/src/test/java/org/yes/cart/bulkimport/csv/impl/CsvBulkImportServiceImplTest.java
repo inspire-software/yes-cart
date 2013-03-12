@@ -164,7 +164,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.next();
             long cntAttrGroups = rs.getLong("cnt");
             rs.close();
-            assertEquals(10L, cntAttrGroups);  // 3 new ones +  7 OOTB
+            assertEquals(9L, cntAttrGroups);  // 3 new ones +  6 OOTB
 
             rs = getConnection().getConnection().createStatement().executeQuery ("select CODE, NAME, DESCRIPTION from TATTRIBUTEGROUP where GUID = '10000001'");
             rs.next();

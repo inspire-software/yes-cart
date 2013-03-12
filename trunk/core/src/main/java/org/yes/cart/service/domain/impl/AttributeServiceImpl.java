@@ -60,23 +60,6 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
-    public Attribute create(final Attribute instance) {
-        if (instance.getAttributeGroup().getCode().equals(AttributeGroupNames.PRODUCT)) {
-            try {
-                final Attribute skuattr = instance.copy();
-                skuattr.setAttributeGroup(attributeGroupService.getAttributeGroupByCode(AttributeGroupNames.SKU));
-                skuattr.setCode("SKU" + instance.getCode());
-                super.create(skuattr);
-            } catch (CloneNotSupportedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return super.create(instance);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public List<Attribute> findByAttributeGroupCode(final String attributeGroupCode) {
         return attributeDao.findByNamedQuery("ATTRIBUTES.BY.GROUPCODE", attributeGroupCode);
     }
@@ -117,6 +100,22 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
                     (List) assignedAttributeCodes,
                     attributeGroupCode);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "attributeServiceImplMethodCache")
+    public List<Attribute> findAvailableAttributesByProductTypeId(final long productTypeId) {
+        return getGenericDao().findByNamedQuery("PRODUCTS.ATTRIBUTE.BY.PROD.TYPE.ID", productTypeId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "attributeServiceImplMethodCache")
+    public List<Attribute> findAvailableImageAttributesByGroupCode(final String attributeGroupCode) {
+        return getGenericDao().findByNamedQuery("PRODUCTS.IMAGE.ATTRIBUTE.BY.GROUP.CODE", attributeGroupCode);
     }
 
     /**

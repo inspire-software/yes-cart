@@ -83,19 +83,6 @@ public interface Constants {
      */
     String PRODUCT_DEFAULT_IMAGE_ATTR_NAME = PRODUCT_IMAGE_ATTR_NAME_PREFIX + "0";
 
-    /**
-     * Default image attribute name.
-     */
-    String PRODUCT_SKU_IMAGE_ATTR_NAME_PREFIX = "SKUIMAGE";
-
-
-    /**
-     * Default image attribute name.
-     */
-    String PRODUCT_SKU_DEFAULT_IMAGE_ATTR_NAME = PRODUCT_SKU_IMAGE_ATTR_NAME_PREFIX  + "0";
-
-
-
 
     /**
      * Image height.

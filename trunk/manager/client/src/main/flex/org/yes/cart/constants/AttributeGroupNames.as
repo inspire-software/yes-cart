@@ -39,11 +39,6 @@ public class AttributeGroupNames {
     public static var PRODUCT:String = "PRODUCT";
 
     /**
-     * Product sku.
-     */
-    public static var SKU:String = "SKU";
-
-    /**
      * Brand.
      */
     public static var BRAND:String = "BRAND";

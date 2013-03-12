@@ -300,40 +300,50 @@ public class DtoProductServiceImpl
      * {@inheritDoc}
      */
     public List<? extends AttrValueDTO> getEntityAttributes(final long entityPk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<AttrValueProductDTO> result = new ArrayList<AttrValueProductDTO>();
+
         final ProductDTO productDTO = getById(entityPk);
-        result.addAll(productDTO.getAttributes());
+        final List<AttrValueProductDTO> productAttrs = new ArrayList<AttrValueProductDTO>();
+        productAttrs.addAll(productDTO.getAttributes());
 
 
-        final List<ProductTypeAttr> ptaList = productTypeAttrService.getByProductTypeId(
-                productDTO.getProductTypeDTO().getProducttypeId());
-
-        Collections.sort(
-                ptaList,
-                new Comparator<ProductTypeAttr>() {
-                    public int compare(ProductTypeAttr o1, ProductTypeAttr o2) {
-                        return o1.getAttribute().getCode().compareTo(o2.getAttribute().getCode());
-                    }
-                }
+        final List<AttributeDTO> ptList = dtoAttributeService.findAvailableAttributesByProductTypeId(
+                productDTO.getProductTypeDTO().getProducttypeId()
         );
 
-        final List<AttributeDTO> availableAttributeDTOs = dtoAttributeService.findAvailableAttributes(
-                AttributeGroupNames.PRODUCT,
-                getCodes(result));
+        final List<AttributeDTO> images = dtoAttributeService.findAvailableImageAttributesByGroupCode(
+                AttributeGroupNames.PRODUCT
+        );
 
+        ptList.addAll(images);
 
-        //Add which belong to product type only.
-        for (AttributeDTO attributeDTO : availableAttributeDTOs) {
-            if (isBelongToProductType(attributeDTO, ptaList) || Etype.IMAGE_BUSINESS_TYPE.equals(attributeDTO.getEtypeName())) {
+        final List<AttrValueProductDTO> full = new ArrayList<AttrValueProductDTO>(ptList.size());
+        for (int i = 0; i < ptList.size(); i++) {
+            final AttributeDTO available = ptList.get(i);
+
+            final Iterator<AttrValueProductDTO> valuesIt = productAttrs.iterator();
+            boolean found = false;
+            while (valuesIt.hasNext()) {
+                final AttrValueProductDTO value = valuesIt.next();
+                if (available.getCode().equals(value.getAttributeDTO().getCode())) {
+                    full.add(value);
+                    valuesIt.remove(); // remove from results
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
                 AttrValueProductDTO attrValueDTO = getDtoFactory().getByIface(AttrValueProductDTO.class);
-                attrValueDTO.setAttributeDTO(attributeDTO);
+                attrValueDTO.setAttributeDTO(available);
                 attrValueDTO.setProductId(entityPk);
-                result.add(attrValueDTO);
+                full.add(attrValueDTO);
             }
         }
 
+        full.addAll(productAttrs); // add all the rest (probably not part of this product type)
+
         CollectionUtils.filter(
-                result,
+                full,
                 new Predicate() {
                     public boolean evaluate(final Object object) {
                         return ((AttrValueDTO) object).getAttributeDTO() != null;
@@ -341,40 +351,9 @@ public class DtoProductServiceImpl
                 }
         );
 
-        Collections.sort(result, new AttrValueDTOComparatorImpl());
-        return result;
+        Collections.sort(productAttrs, new AttrValueDTOComparatorImpl());
+        return full;
     }
-
-    /**
-     * Check is given attribute belong to particular product type.
-     *
-     * @param attributeDTO {@link AttributeDTO}
-     * @param ptaList      list of attributes for particular product type
-     * @return true in case if given attrtibute belong to product type.
-     */
-    boolean isBelongToProductType(AttributeDTO attributeDTO, List<ProductTypeAttr> ptaList) {
-
-        final int idx = Collections.binarySearch(
-                ptaList,
-                attributeDTO.getCode(),
-                new Comparator<Object>() {
-                    public int compare(final Object o1, final Object o2) {
-                        if (o1 instanceof ProductTypeAttr && o2 instanceof String) {
-                            return ((ProductTypeAttr) o1).getAttribute().getCode().compareTo((String) o2);
-                        }
-                        if (o2 instanceof ProductTypeAttr && o1 instanceof String) {
-                            return ((ProductTypeAttr) o2).getAttribute().getCode().compareTo((String) o1);
-                        }
-
-
-                        return 0;
-                    }
-                }
-        );
-
-        return idx > 0;
-    }
-
 
     /**
      * {@inheritDoc}
@@ -430,7 +409,7 @@ public class DtoProductServiceImpl
         productTypeAttrDTO.setAttributeDTO(attrDto);
         productTypeAttrDTO.setProducttypeId(productType.getProducttypeId());
         productTypeAttrDTO.setVisible(true);
-        productTypeAttrDTO.setNavigationType("S"); //TODOv2 "R" "S" Navigation type define as constant
+        productTypeAttrDTO.setNavigationType("S"); // TODO v2 "R" "S" Navigation type define as constant
         productTypeAttrDTO = dtoProductTypeAttrService.create(productTypeAttrDTO);
 
 

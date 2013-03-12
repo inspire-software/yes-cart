@@ -47,11 +47,6 @@ public interface AttributeGroupNames {
     String PRODUCT = "PRODUCT";
 
     /**
-     * Product sku.
-     */
-    String SKU = "SKU";
-
-    /**
      * Brand.
      */
     String BRAND = "BRAND";
