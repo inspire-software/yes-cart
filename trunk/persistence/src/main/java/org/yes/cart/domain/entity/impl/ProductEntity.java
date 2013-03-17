@@ -439,7 +439,7 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     @Transient
     public Collection<AttrValueProduct> getAttributesByCode(final String attributeCode) {
         final Collection<AttrValueProduct> result = new ArrayList<AttrValueProduct>();
-        if (this.attributes != null) {
+        if (attributeCode != null && this.attributes != null) {
             for (AttrValueProduct attrValue : this.attributes) {
                 if (attrValue.getAttribute() != null && attrValue.getAttribute().getCode() != null && attrValue.getAttribute().getCode().equals(attributeCode)) {
                     result.add(attrValue);
@@ -464,6 +464,9 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
 
     @Transient
     public AttrValueProduct getAttributeByCode(final String attributeCode) {
+        if (attributeCode == null) {
+            return null;
+        }
         if (this.attributes != null) {
             for (AttrValueProduct attrValue : this.attributes) {
                 if (attrValue.getAttribute() != null && attrValue.getAttribute().getCode() != null && attrValue.getAttribute().getCode().equals(attributeCode)) {

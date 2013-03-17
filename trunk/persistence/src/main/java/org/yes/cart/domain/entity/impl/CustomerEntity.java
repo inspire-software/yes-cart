@@ -220,6 +220,9 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
 
     @Transient
     public Set<AttrValueCustomer> getAttributesByCode(final String attributeCode) {
+        if (attributeCode == null) {
+            return null;
+        }
         final Set<AttrValueCustomer> result = new HashSet<AttrValueCustomer>();
         if (this.attributes != null) {
             for (AttrValueCustomer attrValue : this.attributes) {
@@ -236,6 +239,9 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
 
     @Transient
     public AttrValueCustomer getAttributeByCode(String attributeCode) {
+        if (attributeCode == null) {
+            return null;
+        }
         if (this.attributes != null) {
             for (AttrValueCustomer attrValue : this.attributes) {
                 if (attrValue.getAttribute().getCode().equals(attributeCode)) {

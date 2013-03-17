@@ -328,6 +328,9 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
 
     @Transient
     public Set<AttrValueCategory> getAttributesByCode(final String attributeCode) {
+        if (attributeCode == null) {
+            return null;
+        }
         final Set<AttrValueCategory> result = new HashSet<AttrValueCategory>();
         if (this.attributes != null) {
             for (AttrValueCategory attrValue : this.attributes) {
@@ -344,6 +347,9 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
 
     @Transient
     public AttrValueCategory getAttributeByCode(String attributeCode) {
+        if (attributeCode == null) {
+            return null;
+        }
         if (this.attributes != null) {
             for (AttrValueCategory attrValue : this.attributes) {
                 if (attrValue.getAttribute() != null && attributeCode.equals(attrValue.getAttribute().getCode())) {

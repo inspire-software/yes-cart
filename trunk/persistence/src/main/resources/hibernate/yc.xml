@@ -1485,6 +1485,9 @@ public void setRangeList(final RangeList rangeList) {
 
     @Transient
     public ProductTypeAttr getAttributeByCode(final String attributeCode) {
+        if (attributeCode == null) {
+            return null;
+        }
         if (this.attributes != null) {
             for (ProductTypeAttr attr : this.attributes) {
                 if (attr.getAttribute() != null && attr.getAttribute().getCode() != null && attr.getAttribute().getCode().equals(attributeCode)) {
@@ -1782,6 +1785,9 @@ public void setRangeList(final RangeList rangeList) {
 
     @Transient
     public Set<AttrValueCategory> getAttributesByCode(final String attributeCode) {
+        if (attributeCode == null) {
+            return null;
+        }
         final Set<AttrValueCategory> result = new HashSet<AttrValueCategory>();
         if (this.attributes != null) {
             for (AttrValueCategory attrValue : this.attributes) {
@@ -1798,6 +1804,9 @@ public void setRangeList(final RangeList rangeList) {
 
     @Transient
     public AttrValueCategory getAttributeByCode(String attributeCode) {
+        if (attributeCode == null) {
+            return null;
+        }
         if (this.attributes != null) {
             for (AttrValueCategory attrValue : this.attributes) {
                 if (attrValue.getAttribute() != null && attributeCode.equals(attrValue.getAttribute().getCode())) {
@@ -2060,7 +2069,7 @@ public void setRangeList(final RangeList rangeList) {
    @Transient
     public Collection<AttrValueProduct> getAttributesByCode(final String attributeCode) {
         final Collection<AttrValueProduct> result = new ArrayList<AttrValueProduct>();
-        if (this.attributes != null) {
+        if (attributeCode != null && this.attributes != null) {
             for (AttrValueProduct attrValue : this.attributes) {
                 if (attrValue.getAttribute() != null && attrValue.getAttribute().getCode() != null && attrValue.getAttribute().getCode().equals(attributeCode)) {
                     result.add(attrValue);
@@ -2085,6 +2094,9 @@ public void setRangeList(final RangeList rangeList) {
 
     @Transient
     public AttrValueProduct getAttributeByCode(final String attributeCode) {
+        if (attributeCode == null) {
+            return null;
+        }
         if (this.attributes != null) {
             for (AttrValueProduct attrValue : this.attributes) {
                 if (attrValue.getAttribute() != null && attrValue.getAttribute().getCode() != null && attrValue.getAttribute().getCode().equals(attributeCode)) {
@@ -2335,7 +2347,7 @@ public void setRangeList(final RangeList rangeList) {
    @Transient
     public Collection<AttrValueProductSku> getAttributesByCode(final String attributeCode) {
         final Collection<AttrValueProductSku> result = new ArrayList<AttrValueProductSku>();
-        if (this.attributes != null) {
+        if (attributeCode != null && this.attributes != null) {
             for (AttrValueProductSku attrValue : this.attributes) {
                 if (attrValue.getAttribute().getCode().equals(attributeCode)) {
                     result.add(attrValue);
@@ -2347,6 +2359,9 @@ public void setRangeList(final RangeList rangeList) {
 
     @Transient
     public AttrValueProductSku getAttributeByCode(final String attributeCode) {
+        if (attributeCode == null) {
+            return null;
+        }
         if (this.attributes != null) {
             for (AttrValueProductSku attrValue : this.attributes) {
                 if (attrValue.getAttribute().getCode().equals(attributeCode)) {
@@ -2860,7 +2875,7 @@ public void setRangeList(final RangeList rangeList) {
    @Transient
     public Collection<AttrValueShop> getAttributesByCode(final String attributeCode) {
         final Collection<AttrValueShop> result = new ArrayList<AttrValueShop>();
-        if (this.attributes != null) {
+        if (attributeCode != null && this.attributes != null) {
             for (AttrValueShop attrValue : this.attributes) {
                 if (attrValue.getAttribute().getCode().equals(attributeCode)) {
                     result.add(attrValue);
@@ -2872,6 +2887,9 @@ public void setRangeList(final RangeList rangeList) {
 
     @Transient
     public AttrValueShop getAttributeByCode(final String attributeCode) {
+        if (attributeCode == null) {
+            return null;
+        }
         if (this.attributes != null) {
             for (AttrValueShop attrValue : this.attributes) {
                 if (attrValue.getAttribute().getCode().equals(attributeCode)) {
@@ -3669,6 +3687,9 @@ public void setRangeList(final RangeList rangeList) {
 
     @Transient
     public Set<AttrValueCustomer> getAttributesByCode(final String attributeCode) {
+        if (attributeCode == null) {
+            return null;
+        }
         final Set<AttrValueCustomer> result = new HashSet<AttrValueCustomer>();
         if (this.attributes != null) {
             for (AttrValueCustomer attrValue : this.attributes) {
@@ -3685,6 +3706,9 @@ public void setRangeList(final RangeList rangeList) {
 
     @Transient
     public AttrValueCustomer getAttributeByCode(String attributeCode) {
+        if (attributeCode == null) {
+            return null;
+        }
         if (this.attributes != null) {
             for (AttrValueCustomer attrValue : this.attributes) {
                 if (attrValue.getAttribute().getCode().equals(attributeCode)) {
