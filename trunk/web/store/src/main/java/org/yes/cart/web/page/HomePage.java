@@ -222,7 +222,7 @@ public class HomePage extends AbstractWebPage {
                     if (LOG.isWarnEnabled()) {
                         LOG.warn(MessageFormat.format("Can not access to category  {0} from shop {1}", categoryId, shop.getShopId()));
                     }
-                    return new EmptyCentralView(id, categoryId, booleanQuery);
+                    return new EmptyCentralView(id, booleanQuery);
                 }
             }
 
@@ -236,7 +236,7 @@ public class HomePage extends AbstractWebPage {
                 LOG.error(MessageFormat.format("Can not create instance of panel for label {0}", rendererLabel), e);
             }
             //e.printStackTrace();
-            return new EmptyCentralView(id, categoryId, booleanQuery);
+            return new EmptyCentralView(id, booleanQuery);
 
         }
 
