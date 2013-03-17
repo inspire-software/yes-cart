@@ -232,6 +232,9 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
 
     @Transient
     public ProductTypeAttr getAttributeByCode(final String attributeCode) {
+        if (attributeCode == null) {
+            return null;
+        }
         if (this.attributes != null) {
             for (ProductTypeAttr attr : this.attributes) {
                 if (attr.getAttribute() != null && attr.getAttribute().getCode() != null && attr.getAttribute().getCode().equals(attributeCode)) {

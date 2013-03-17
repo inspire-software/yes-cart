@@ -274,7 +274,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     @Transient
     public Collection<AttrValueShop> getAttributesByCode(final String attributeCode) {
         final Collection<AttrValueShop> result = new ArrayList<AttrValueShop>();
-        if (this.attributes != null) {
+        if (attributeCode != null && this.attributes != null) {
             for (AttrValueShop attrValue : this.attributes) {
                 if (attrValue.getAttribute().getCode().equals(attributeCode)) {
                     result.add(attrValue);
@@ -286,7 +286,9 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     @Transient
     public AttrValueShop getAttributeByCode(final String attributeCode) {
-        Assert.notNull(attributeCode, "attributeCode name must be not null");
+        if (attributeCode == null) {
+            return null;
+        }
         if (this.attributes != null) {
             for (AttrValueShop attrValue : this.attributes) {
                 if (attrValue.getAttribute() != null && attributeCode.equals(attrValue.getAttribute().getCode())) {

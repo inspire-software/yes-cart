@@ -249,7 +249,7 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
     @Transient
     public Collection<AttrValueProductSku> getAttributesByCode(final String attributeCode) {
         final Collection<AttrValueProductSku> result = new ArrayList<AttrValueProductSku>();
-        if (this.attributes != null) {
+        if (attributeCode != null && this.attributes != null) {
             for (AttrValueProductSku attrValue : this.attributes) {
                 if (attrValue.getAttribute().getCode().equals(attributeCode)) {
                     result.add(attrValue);
@@ -261,6 +261,9 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
 
     @Transient
     public AttrValueProductSku getAttributeByCode(final String attributeCode) {
+        if (attributeCode == null) {
+            return null;
+        }
         if (this.attributes != null) {
             for (AttrValueProductSku attrValue : this.attributes) {
                 if (attrValue.getAttribute().getCode().equals(attributeCode)) {
