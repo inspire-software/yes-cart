@@ -17,11 +17,6 @@
 package org.yes.cart.web.page.component;
 
 import org.apache.lucene.search.BooleanQuery;
-import org.apache.wicket.markup.html.basic.Label;
-import org.yes.cart.domain.entity.Category;
-import org.yes.cart.web.support.constants.WebParametersKeys;
-import org.yes.cart.web.support.entity.decorator.CategoryDecorator;
-import org.yes.cart.web.util.WicketUtil;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -30,62 +25,16 @@ import org.yes.cart.web.util.WicketUtil;
  */
 public class EmptyCentralView extends AbstractCentralView {
 
-    private static final String DESCRIPTION = "description";
-
-    private CategoryDecorator category;
-
     /**
-      * Construct panel.
+     * Construct panel.
      *
      * @param id panel id
-     * @param categoryId  current category id.
      * @param booleanQuery     boolean query.
      */
-    public EmptyCentralView(String id, long categoryId, BooleanQuery booleanQuery) {
-        super(id, categoryId, booleanQuery);
+    public EmptyCentralView(String id, BooleanQuery booleanQuery) {
+        super(id, 0l, booleanQuery);
 
 
     }
-
-    private void configureContext() {
-
-        String catId = getPage().getPageParameters().get(WebParametersKeys.CATEGORY_ID).toString();
-        if (catId != null) {
-            Category category = getCategory();
-            if (category != null) {
-                this.category = getDecoratorFacade().decorate(
-                        category,
-                        WicketUtil.getHttpServletRequest().getContextPath(),
-                        getI18NSupport());
-            }
-        }
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void onBeforeRender() {
-
-        configureContext();
-
-        if (category != null) {
-            String description  = category.getDescription(getLocale().getLanguage());
-            add(new Label(DESCRIPTION, description != null ? description : ""));
-        } else {
-            add(new Label(
-                    DESCRIPTION,
-                    getLocalizer().getString("description", this)
-            ).setEscapeModelStrings(false));
-        }
-
-
-
-        super.onBeforeRender();
-
-    }
-
-
 
 }
