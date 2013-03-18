@@ -17,8 +17,6 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.apache.commons.lang.math.NumberUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
@@ -34,8 +32,6 @@ import java.util.Map;
 public class SetCarrierSlaCartCommandImpl  extends AbstractCartCommandImpl implements ShoppingCartCommand {
 
     private static final long serialVersionUID = 20100313L;
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     public static final String CMD_KEY = "setCarrierSlaCmd";
 
@@ -62,9 +58,7 @@ public class SetCarrierSlaCartCommandImpl  extends AbstractCartCommandImpl imple
      * @param shoppingCart the shopping cart
      */
     public void execute(final ShoppingCart shoppingCart) {
-        if(LOG.isDebugEnabled()) {
-            LOG.debug("Set carrier sla to " + slaPkvalue);
-        }
+        ShopCodeContext.getLog().debug("Set carrier sla to {}", slaPkvalue);
         shoppingCart.getOrderInfo().setCarrierSlaId(slaPkvalue);
         setModifiedDate(shoppingCart);
     }

@@ -19,8 +19,6 @@ package org.yes.cart.web.aspect;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.yes.cart.domain.entity.RegisteredPerson;
@@ -48,8 +46,6 @@ import java.util.Set;
  */
 @Aspect
 public class RegistrationAspect extends BaseNotificationAspect {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final HashHelper hashHelper;
 
@@ -150,7 +146,7 @@ public class RegistrationAspect extends BaseNotificationAspect {
 
         sendNotification(registrationMessage);
 
-        LOG.info("Person message was send to queue " + registrationMessage.toString());
+        ShopCodeContext.getLog().info("Person message was send to queue {}", registrationMessage);
 
         return pjp.proceed();
     }

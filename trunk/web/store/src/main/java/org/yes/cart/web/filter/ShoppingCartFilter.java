@@ -17,8 +17,6 @@
 package org.yes.cart.web.filter;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.aop.target.CommonsPoolTargetSource;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.ShoppingCart;
@@ -44,8 +42,6 @@ import java.util.Date;
  * Time: 6:13:57 PM
  */
 public class ShoppingCartFilter extends AbstractFilter implements Filter {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     //private final CookieTuplizer tuplizer;
     private final CommonsPoolTargetSource tuplizerPool;
@@ -86,22 +82,20 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
                         httpRequest.getCookies(),
                         cart);
             } catch (UnableToObjectizeCookieException e) {
-                if (LOG.isWarnEnabled()) {
-                    LOG.warn("Cart not restored from cookies");
-                }
+                ShopCodeContext.getLog().warn("Cart not restored from cookies");
             }
             cart.setProcessingStartDate(new Date());
             cart.setCalculationStrategy(calculationStrategy);
             ApplicationDirector.setShoppingCart(cart);
 
         } catch (Exception e) {
-            LOG.error("Can process request", e);
+            ShopCodeContext.getLog().error("Can process request", e);
         } finally {
             if (tuplizer != null) {
                 try {
                     tuplizerPool.releaseTarget(tuplizer);
                 } catch (Exception e) {
-                    LOG.error("Can return object to pool ", e);
+                    ShopCodeContext.getLog().error("Can return object to pool ", e);
                 }
             }
         }

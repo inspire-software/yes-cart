@@ -25,7 +25,6 @@ import org.apache.ws.security.WSSecurityEngineResult;
 import org.apache.ws.security.WSUsernameTokenPrincipal;
 import org.apache.ws.security.handler.WSHandlerConstants;
 import org.apache.ws.security.handler.WSHandlerResult;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -99,7 +98,7 @@ public class BackdoorAuthenticationInInterceptor extends WSS4JInInterceptor impl
                             Authentication authentication = new UsernamePasswordAuthenticationToken(principal.getName(), principal.getPassword());
                             authentication = authenticationManager.authenticate(authentication);
                             if (!authentication.isAuthenticated()) {
-                                LoggerFactory.getLogger(ShopCodeContext.getShopCode()).warn("User " + principal.getName() + " is not authentic.");
+                                ShopCodeContext.getLog().warn("User {} is not authentic.", principal.getName());
                             }
                             SecurityContextHolder.getContext().setAuthentication(authentication);
                         }
@@ -107,8 +106,7 @@ public class BackdoorAuthenticationInInterceptor extends WSS4JInInterceptor impl
                 }
             }
         } catch (RuntimeException ex) {
-            LoggerFactory.getLogger(ShopCodeContext.getShopCode()).error(ex.getMessage(), ex);
-
+            ShopCodeContext.getLog().error(ex.getMessage(), ex);
             throw ex;
         }
     }

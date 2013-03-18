@@ -17,6 +17,12 @@
 package org.yes.cart.util;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  *
  * Hold current shop code context.
@@ -24,9 +30,9 @@ package org.yes.cart.util;
  */
 public class ShopCodeContext {
 
-
-
     private static ThreadLocal<String> shopCode = new ThreadLocal<String>();
+
+    private static final Map<String, Logger> LOGS = new ConcurrentHashMap<String, Logger>();
 
     /**
      * Get curent shop code.
@@ -45,6 +51,20 @@ public class ShopCodeContext {
      */
     public static void setShopCode(final String currentShopCode) {
         shopCode.set(currentShopCode);
+    }
+
+    /**
+     * @return get code specific logger to separate shop streams in
+     *         multistore environment
+     */
+    public static Logger getLog() {
+        final String code = getShopCode();
+        if (!LOGS.containsKey(code)) {
+            final Logger log = LoggerFactory.getLogger(code);
+            LOGS.put(code, log);
+            return log;
+        }
+        return LOGS.get(code);
     }
 
 }

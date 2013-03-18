@@ -29,9 +29,6 @@ import org.yes.cart.web.support.entity.decorator.ProductDecorator;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
 import org.yes.cart.web.support.service.AttributableImageService;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.*;
 

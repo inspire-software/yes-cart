@@ -16,8 +16,6 @@
 
 package org.yes.cart.web.support.util.cookie.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.util.cookie.CookieTuplizer;
@@ -35,8 +33,6 @@ import java.text.MessageFormat;
  * Time: 9:04 PM
  */
 public class ShoppingCartPersisterImpl implements ShoppingCartPersister {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final CookieTuplizer cookieTuplizer;
 
@@ -63,9 +59,7 @@ public class ShoppingCartPersisterImpl implements ShoppingCartPersister {
                 httpServletResponse.addCookie(cookie);
             }
         } catch (UnableToCookielizeObjectException e) {
-            if (LOG.isErrorEnabled()) {
-                LOG.error(MessageFormat.format("Unable to create cookies from {0} cart", shoppingCart), e);
-            }
+            ShopCodeContext.getLog().error(MessageFormat.format("Unable to create cookies from {0} cart", shoppingCart), e);
         }
 
     }

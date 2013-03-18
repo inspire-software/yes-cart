@@ -6,7 +6,6 @@ import com.cybersource.ws.client.FaultException;
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.payment.PaymentGatewayInternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentAddress;
@@ -34,8 +33,6 @@ import java.util.UUID;
  * Time: 14:12:54
  */
 public class CyberSourcePaymentGatewayImpl extends AbstractCappPaymentGatewayImpl implements PaymentGatewayInternalForm {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private static final String CS_MERCHANT_ID = "merchantID";
     private static final String CS_KEYS_DIRECTORY = "keysDirectory";
@@ -155,8 +152,9 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCappPaymentGatewayImp
      * {@inheritDoc}
      */
     public Payment authorize(final Payment payment) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Authorize " + payment);
+        final Logger log = ShopCodeContext.getLog();
+        if (log.isDebugEnabled()) {
+            log.debug("Authorize " + payment);
         }
 
         final HashMap<String, String> request = new HashMap<String, String>();
@@ -240,8 +238,9 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCappPaymentGatewayImp
      */
     public Payment reverseAuthorization(final Payment payment) {
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Reverse authorization " + payment);
+        final Logger log = ShopCodeContext.getLog();
+        if (log.isDebugEnabled()) {
+            log.debug("Reverse authorization " + payment);
         }
 
         final HashMap<String, String> request = new HashMap<String, String>();
@@ -265,8 +264,10 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCappPaymentGatewayImp
      * {@inheritDoc}
      */
     public Payment capture(final Payment payment) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Capture " + payment);
+
+        final Logger log = ShopCodeContext.getLog();
+        if (log.isDebugEnabled()) {
+            log.debug("Capture " + payment);
         }
 
         final HashMap<String, String> request = new HashMap<String, String>();
@@ -297,8 +298,9 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCappPaymentGatewayImp
      * {@inheritDoc}
      */
     public Payment voidCapture(final Payment payment) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Void capture " + payment);
+        final Logger log = ShopCodeContext.getLog();
+        if (log.isDebugEnabled()) {
+            log.debug("Void capture " + payment);
         }
 
         final HashMap<String, String> request = new HashMap<String, String>();
@@ -321,8 +323,9 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCappPaymentGatewayImp
      * {@inheritDoc}
      */
     public Payment refund(final Payment payment) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Credit on prev auth " + payment);
+        final Logger log = ShopCodeContext.getLog();
+        if (log.isDebugEnabled()) {
+            log.debug("Credit on prev auth " + payment);
         }
 
         final HashMap<String, String> request = new HashMap<String, String>();
@@ -374,10 +377,10 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCappPaymentGatewayImp
             payment.setTransactionOperationResultMessage(ERROR_CODE_DESC_MAP.get(reply.get("reasonCode")));
 
         } catch (ClientException e) {
-            LOG.error("Can not execute transaction. Client exception : " + payment, e);
+            ShopCodeContext.getLog().error("Can not execute transaction. Client exception : " + payment, e);
             throw new PaymentException("Can not execute transaction. Client exception : " + payment, e);
         } catch (FaultException e) {
-            LOG.error("Can not execute transaction. Fault exception : " + payment, e);
+            ShopCodeContext.getLog().error("Can not execute transaction. Fault exception : " + payment, e);
             throw new PaymentException("Can not execute transaction. Client exception : " + payment, e);
         }
         return payment;

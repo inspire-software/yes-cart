@@ -19,7 +19,6 @@ package org.yes.cart.web.page.component.breadcrumbs;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.util.ShopCodeContext;
@@ -41,8 +40,6 @@ import java.util.List;
  * Time: 9:50:51 AM
  */
 public class BreadCrumbsBuilder {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final CrumbNamePrefixProvider namePrefixProvider;
     private final List<Long> shopCategoryIds;
@@ -123,8 +120,9 @@ public class BreadCrumbsBuilder {
                    )
             );
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Adding breadcrumb for category: [" + categoryId + "] " + category.getName());
+            final Logger log = ShopCodeContext.getLog();
+            if (log.isDebugEnabled()) {
+                log.debug("Adding breadcrumb for category: [" + categoryId + "] " + category.getName());
             }
             fillCategories(categoriesCrumbs, category.getParentId());
         }

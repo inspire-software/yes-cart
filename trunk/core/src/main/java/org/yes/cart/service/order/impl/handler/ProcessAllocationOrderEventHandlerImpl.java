@@ -16,25 +16,19 @@
 
 package org.yes.cart.service.order.impl.handler;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Warehouse;
-import org.yes.cart.domain.entityindexer.ProductIndexer;
-import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.OrderItemAllocationException;
 import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -44,8 +38,6 @@ import java.util.List;
  * Time: 14:12:54
  */
 public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final WarehouseService warehouseService;
 

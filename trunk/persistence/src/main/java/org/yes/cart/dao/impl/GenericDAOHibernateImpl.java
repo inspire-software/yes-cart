@@ -29,7 +29,6 @@ import org.hibernate.search.indexes.interceptor.IndexingOverride;
 import org.hibernate.search.util.impl.ClassLoaderHelper;
 import org.hibernate.search.util.impl.HibernateHelper;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
@@ -49,8 +48,6 @@ import java.util.List;
  */
 public class GenericDAOHibernateImpl<T, PK extends Serializable>
         implements GenericDAO<T, PK> {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     final private Class<T> persistentClass;
     final private EntityFactory entityFactory;
@@ -222,7 +219,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                 return rez.get(0);
             }
             default: {
-                LOG.error("#findSingleByQuery has more than one result for " + hsqlQuery);
+                ShopCodeContext.getLog().error("#findSingleByQuery has more than one result for " + hsqlQuery);
                 return rez.get(0);
             }
         }
@@ -504,6 +501,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                     .setFetchSize(BATCH_SIZE)
                     .scroll(ScrollMode.FORWARD_ONLY);
 
+            final Logger log = ShopCodeContext.getLog();
             while (results.next()) {
                 index++;
                 T entity = (T) HibernateHelper.unproxy(results.get(0));
@@ -518,8 +516,8 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                 if (index % BATCH_SIZE == 0) {
                     fullTextSession.flushToIndexes(); //apply changes to indexes
                     fullTextSession.clear(); //clear since the queue is processed
-                    if (LOG.isInfoEnabled()) {
-                        LOG.info("Indexed " + index + " items of " + persistentClass + " class");
+                    if (log.isInfoEnabled()) {
+                        log.info("Indexed " + index + " items of " + persistentClass + " class");
                     }
                 }
             }

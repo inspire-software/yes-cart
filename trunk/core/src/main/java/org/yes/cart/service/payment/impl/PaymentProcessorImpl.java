@@ -17,8 +17,6 @@
 package org.yes.cart.service.payment.impl;
 
 import org.apache.commons.lang.SerializationUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.Assert;
 import org.yes.cart.constants.Constants;
@@ -49,8 +47,6 @@ import java.util.Map;
  * Time: 14:12:54
  */
 public class PaymentProcessorImpl implements PaymentProcessor {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private PaymentGateway paymentGateway;
     private final CustomerOrderPaymentService customerOrderPaymentService;
@@ -264,7 +260,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                 paymentsToCapture.size() > 1
                         ||
                         (paymentsToCapture.isEmpty() && !getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorize())) {
-            LOG.warn( //must be only one record
+            ShopCodeContext.getLog().warn( //must be only one record
                     MessageFormat.format(
                             "Payment gateway {0} with features {1}. Found {2} records to capture, but expected 1 only. Order num {3} Shipment num {4}",
                             getPaymentGateway().getLabel(), getPaymentGateway().getPaymentGatewayFeatures(), paymentsToCapture.size(), order.getOrdernum(), orderShipmentNumber
@@ -289,7 +285,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                     paymentResult = Payment.PAYMENT_STATUS_FAILED;
                     payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
                     payment.setTransactionOperationResultMessage(th.getMessage());
-                    LOG.error("Cannot capture " + payment, th);
+                    ShopCodeContext.getLog().error("Cannot capture " + payment, th);
 
                 } finally {
                     final CustomerOrderPayment authReversedOrderPayment = new CustomerOrderPaymentEntity();
@@ -344,7 +340,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                         paymentResult = payment.getPaymentProcessorResult();
                     }
                 } catch (Throwable th) {
-                    LOG.error(
+                    ShopCodeContext.getLog().error(
                             MessageFormat.format(
                                     "Can not perform roll back operation on payment record {0} payment {1}",
                                     customerOrderPayment.getCustomerOrderPaymentId(),
@@ -368,11 +364,8 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
             return wasError ? Payment.PAYMENT_STATUS_FAILED : Payment.PAYMENT_STATUS_OK;
         }
-        LOG.warn(
-                MessageFormat.format(
-                        "Can not payment cancelation on canceled order  {0}",
-                        order.getOrdernum()
-                )
+        ShopCodeContext.getLog().warn("Can not payment cancelation on canceled order  {}",
+                order.getOrdernum()
         );
         return Payment.PAYMENT_STATUS_FAILED;
     }

@@ -19,8 +19,6 @@ import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.handler.RedirectRequestHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.seo.SeoEntryIdInvalidException;
 
@@ -31,12 +29,10 @@ import org.yes.cart.web.support.seo.SeoEntryIdInvalidException;
  */
 public class StorefrontRequestCycleListener extends AbstractRequestCycleListener {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
-
     /** {@inheritDoc} */
     public IRequestHandler onException(final RequestCycle cycle, final Exception ex) {
         if (ex instanceof SeoEntryIdInvalidException)  {
-            LOG.error(ex.getMessage());
+            ShopCodeContext.getLog().error(ex.getMessage());
             return new RedirectRequestHandler("/"); //CPOINT add more sophisticated error handling if require
         }
         return super.onException(cycle, ex);

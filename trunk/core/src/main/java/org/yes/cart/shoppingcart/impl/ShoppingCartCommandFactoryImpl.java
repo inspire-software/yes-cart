@@ -16,8 +16,6 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -40,8 +38,6 @@ import java.util.Map;
 public class ShoppingCartCommandFactoryImpl implements ShoppingCartCommandFactory, ApplicationContextAware {
 
     private static final long serialVersionUID = 20100122L;
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private Map<String, Class<? extends ShoppingCartCommand>> commands;
 
@@ -95,13 +91,13 @@ public class ShoppingCartCommandFactoryImpl implements ShoppingCartCommandFactor
                                     Map.class);
                     return constructor.newInstance(applicationContext, pageParameters);
                 } catch (Exception e) {
-                    LOG.error(
+                    ShopCodeContext.getLog().error(
                             MessageFormat.format(
                                     "Can not create command instance for given key {0}. Is appropriate constuctor with ApplicationContext and Map parameters existis ?", cmdKey),
                             e);
                 }
             }
-            LOG.error(MessageFormat.format("Command instance not found for given key {0}", cmdKey));
+            ShopCodeContext.getLog().error("Command instance not found for given key {}", cmdKey);
         }
         return null;
     }

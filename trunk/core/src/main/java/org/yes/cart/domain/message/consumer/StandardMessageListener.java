@@ -16,8 +16,6 @@
 
 package org.yes.cart.domain.message.consumer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.yes.cart.constants.AttributeNamesKeys;
@@ -105,9 +103,6 @@ public class StandardMessageListener implements Runnable {
      */
     public static final String DELIVERY_EXTERNAL_NUM = "deliveryExtNum";
 
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
-
     private final JavaMailSender javaMailSender;
 
     private final MailComposer mailComposer;
@@ -181,7 +176,7 @@ public class StandardMessageListener implements Runnable {
                     try {
                         javaMailSender.send(mimeMessage);
                         send = true;
-                        LOG.info("Mail send to " + (String) map.get(CUSTOMER_EMAIL));
+                        ShopCodeContext.getLog().info("Mail send to {}", map.get(CUSTOMER_EMAIL));
                     } catch (MailSendException me) {
                         /**
                          * TODO
@@ -189,7 +184,7 @@ public class StandardMessageListener implements Runnable {
                          * store email and send it latter.
                          * Any persistem cache may be used for this purposes.
                          */
-                        LOG.error("Cant send email to " + (String) map.get(CUSTOMER_EMAIL) + " " + me.getMessage());
+                        ShopCodeContext.getLog().error("Cant send email to {} {}", map.get(CUSTOMER_EMAIL), me.getMessage());
                         Thread.sleep(60000);
 
                     }
@@ -197,7 +192,7 @@ public class StandardMessageListener implements Runnable {
 
 
             } catch (Exception e) {
-                LOG.error(
+                ShopCodeContext.getLog().error(
                         MessageFormat.format(
                                 "Cant compose or send email template {0} folder {1} to {2}",
                                 (String) map.get(TEMPLATE_NAME),
@@ -207,8 +202,8 @@ public class StandardMessageListener implements Runnable {
                         e);
             }
 
-        }   catch(ClassCastException cce) {
-            LOG.error("Class cast exception ", cce);
+        } catch(ClassCastException cce) {
+            ShopCodeContext.getLog().error("Class cast exception ", cce);
 
         }
 

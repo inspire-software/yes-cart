@@ -27,12 +27,10 @@ import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.domain.entity.Manager;
 import org.yes.cart.domain.message.RegistrationMessage;
 import org.yes.cart.domain.message.consumer.ManagerRegistrationMessageListener;
-import org.yes.cart.domain.message.consumer.StandardMessageListener;
 import org.yes.cart.domain.message.impl.RegistrationMessageImpl;
 import org.yes.cart.service.domain.HashHelper;
 import org.yes.cart.service.domain.PassPhrazeGenerator;
 import org.yes.cart.service.mail.MailComposer;
-import org.yes.cart.util.ShopCodeContext;
 
 import javax.servlet.ServletContext;
 import java.io.File;

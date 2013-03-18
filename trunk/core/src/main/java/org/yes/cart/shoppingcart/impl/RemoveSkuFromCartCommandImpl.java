@@ -16,14 +16,11 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
-import java.text.MessageFormat;
 import java.util.Map;
 
 /**
@@ -37,8 +34,6 @@ import java.util.Map;
 public class RemoveSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl{
 
     private static final long serialVersionUID = 20100313L;
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     public static final String CMD_KEY = "removeOneSkuCmd";
 
@@ -64,8 +59,8 @@ public class RemoveSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl{
         if (getProductSkuDTO() != null) {
             final String skuCode = getProductSkuDTO().getCode();
             if(!shoppingCart.removeCartItemQuantity(getProductSkuDTO(), BigDecimal.ONE)) {
-                LOG.warn(MessageFormat.format("Can not remove one sku with code {0} from cart",
-                        skuCode));
+                ShopCodeContext.getLog().warn("Can not remove one sku with code {} from cart",
+                        skuCode);
             }
 
             recalculatePrice(shoppingCart);

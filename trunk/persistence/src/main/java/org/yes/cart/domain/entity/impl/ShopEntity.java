@@ -16,7 +16,6 @@
 package org.yes.cart.domain.entity.impl;
 
 
-import org.springframework.util.Assert;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.*;
 

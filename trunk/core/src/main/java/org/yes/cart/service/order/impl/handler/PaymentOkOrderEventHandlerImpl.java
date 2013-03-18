@@ -16,8 +16,6 @@
 
 package org.yes.cart.service.order.impl.handler;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -43,8 +41,6 @@ import java.util.Map;
  * Time: 14:12:54
  */
 public class PaymentOkOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl implements OrderEventHandler, ApplicationContextAware {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private OrderStateManager orderStateManager = null;
     private ApplicationContext applicationContext;
@@ -83,8 +79,8 @@ public class PaymentOkOrderEventHandlerImpl extends AbstractOrderEventHandlerImp
             CustomerOrder order = orderEvent.getCustomerOrder();
             for (CustomerOrderDelivery delivery : order.getDelivery()) {
                 final String eventId = GROUP_TRIGGER_MAP.get(delivery.getDeliveryGroup());
-                LOG.info(MessageFormat.format("Delivery {0} for order {1} event {2}",
-                            delivery.getDeliveryNum(), order.getOrdernum(), eventId));
+                ShopCodeContext.getLog().info(MessageFormat.format("Delivery {0} for order {1} event {2}",
+                        delivery.getDeliveryNum(), order.getOrdernum(), eventId));
                 final OrderEvent deliveryEvent = new OrderEventImpl(eventId, order, delivery);
                 getOrderStateManager().fireTransition(deliveryEvent);
             }

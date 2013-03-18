@@ -16,8 +16,6 @@
 
 package org.yes.cart.service.payment.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderEvent;
@@ -38,8 +36,6 @@ import java.util.Map;
  * Time: 10:18
  */
 public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final CustomerOrderService customerOrderService;
     private final OrderStateManager orderStateManager;
@@ -73,11 +69,11 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         if (orderStateManager.fireTransition(orderEvent)
                 && !CustomerOrder.ORDER_STATUS_CANCELLED.equals(order.getOrderStatus())) {
 
-            LOG.info("PaymentProcessFacadeImpl#pay payment(s) for order " + orderNumber + " was successful");
+            ShopCodeContext.getLog().info("PaymentProcessFacadeImpl#pay payment(s) for order {} was successful", orderNumber);
             customerOrderService.update(order);
             return true;
         } else {
-            LOG.info("PaymentProcessFacadeImpl#pay payment(s) for order " + orderNumber + " was failed");
+            ShopCodeContext.getLog().info("PaymentProcessFacadeImpl#pay payment(s) for order {} has failed", orderNumber);
             customerOrderService.update(order);
             return false;
 

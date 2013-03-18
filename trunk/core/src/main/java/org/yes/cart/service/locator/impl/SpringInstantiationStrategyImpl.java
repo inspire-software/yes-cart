@@ -16,8 +16,6 @@
 
 package org.yes.cart.service.locator.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -34,8 +32,6 @@ import org.yes.cart.util.ShopCodeContext;
  */
 public class SpringInstantiationStrategyImpl implements InstantiationStrategy, ApplicationContextAware {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
-
     private ApplicationContext applicationContext;
 
     /**
@@ -45,9 +41,7 @@ public class SpringInstantiationStrategyImpl implements InstantiationStrategy, A
                              final Class<T> iface,
                              final String loginName, 
                              final String password) throws RuntimeException {
-        if(LOG.isDebugEnabled()) {
-            LOG.debug("Get " + serviceUrl + " as " + iface.getName());
-        }
+        ShopCodeContext.getLog().debug("Get {} as {}", serviceUrl, iface.getName());
         return applicationContext.getBean(serviceUrl, iface);
     }
 

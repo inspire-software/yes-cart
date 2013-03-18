@@ -17,7 +17,6 @@
 package org.yes.cart.shoppingcart.impl;
 
 
-import org.yes.cart.constants.Constants;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.util.MoneyUtils;
 

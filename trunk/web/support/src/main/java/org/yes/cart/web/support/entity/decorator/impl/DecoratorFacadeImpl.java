@@ -34,10 +34,6 @@ import org.yes.cart.web.support.i18n.I18NWebSupport;
 import org.yes.cart.web.support.seo.BookmarkService;
 import org.yes.cart.web.support.service.AttributableImageService;
 
-import java.io.Serializable;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.TimeUnit;
-
 /**
  * User: denispavlov
  * Date: 12-08-20

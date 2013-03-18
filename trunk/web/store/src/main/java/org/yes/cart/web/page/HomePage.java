@@ -22,26 +22,21 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.utils.impl.ObjectUtil;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.*;
 import org.yes.cart.web.page.component.breadcrumbs.BreadCrumbsView;
-import org.yes.cart.web.page.component.cart.SmallShoppingCartView;
 import org.yes.cart.web.page.component.filterednavigation.AttributeProductFilter;
 import org.yes.cart.web.page.component.filterednavigation.BrandProductFilter;
 import org.yes.cart.web.page.component.filterednavigation.PriceProductFilter;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.StandardHeader;
-import org.yes.cart.web.page.component.product.FeaturedProducts;
 import org.yes.cart.web.page.component.product.NewArrivalProducts;
-import org.yes.cart.web.page.component.search.SearchView;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
@@ -59,9 +54,6 @@ import java.util.*;
  * Time: 10:27 AM
  */
 public class HomePage extends AbstractWebPage {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
-
 
     final Map<String, String> mapParams;
 
@@ -219,8 +211,9 @@ public class HomePage extends AbstractWebPage {
 
                 final Shop shop = ApplicationDirector.getCurrentShop();
                 if (!categoryService.transform(shopService.getShopCategories(shop)).contains(categoryId)) {
-                    if (LOG.isWarnEnabled()) {
-                        LOG.warn(MessageFormat.format("Can not access to category  {0} from shop {1}", categoryId, shop.getShopId()));
+                    final Logger log = ShopCodeContext.getLog();
+                    if (log.isWarnEnabled()) {
+                        log.warn("Can not access to category  {} from shop {}", categoryId, shop.getShopId());
                     }
                     return new EmptyCentralView(id, booleanQuery);
                 }
@@ -232,9 +225,7 @@ public class HomePage extends AbstractWebPage {
             return constructor.newInstance(id, categoryId, booleanQuery);
 
         } catch (Exception e) {
-            if (LOG.isErrorEnabled()) {
-                LOG.error(MessageFormat.format("Can not create instance of panel for label {0}", rendererLabel), e);
-            }
+            ShopCodeContext.getLog().error(MessageFormat.format("Can not create instance of panel for label {0}", rendererLabel), e);
             //e.printStackTrace();
             return new EmptyCentralView(id, booleanQuery);
 

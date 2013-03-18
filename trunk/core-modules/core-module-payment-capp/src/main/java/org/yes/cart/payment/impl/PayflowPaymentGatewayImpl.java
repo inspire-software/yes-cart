@@ -1,8 +1,6 @@
 package org.yes.cart.payment.impl;
 
 import org.apache.commons.lang.SerializationUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.payment.PaymentGatewayInternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
@@ -26,8 +24,6 @@ import java.util.Map;
  * Time: 14:12:54
  */
 public class PayflowPaymentGatewayImpl extends AbstractCappPaymentGatewayImpl implements PaymentGatewayInternalForm {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private static final String PF_HOST = "HOST";
     private static final String PF_PORT = "PORT";
@@ -459,7 +455,7 @@ public class PayflowPaymentGatewayImpl extends AbstractCappPaymentGatewayImpl im
             }
         } catch (Throwable th) {
             th.printStackTrace();
-            LOG.error("Can not execute transaction. Client exception : " + payment, th);
+            ShopCodeContext.getLog().error("Can not execute transaction. Client exception : " + payment, th);
             throw new PaymentException("Can not execute transaction. Client exception : " + payment, th);
         }
     }

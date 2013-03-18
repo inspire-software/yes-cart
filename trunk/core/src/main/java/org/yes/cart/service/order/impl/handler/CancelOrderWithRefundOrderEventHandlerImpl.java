@@ -16,8 +16,6 @@
 
 package org.yes.cart.service.order.impl.handler;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.service.domain.SkuWarehouseService;
@@ -50,9 +48,6 @@ import org.yes.cart.util.ShopCodeContext;
  * Time: 14:12:54
  */
 public class CancelOrderWithRefundOrderEventHandlerImpl extends CancelOrderEventHandlerImpl implements OrderEventHandler {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
-
 
     private final PaymentProcessorFactory paymentProcessorFactory;
 
@@ -89,7 +84,7 @@ public class CancelOrderWithRefundOrderEventHandlerImpl extends CancelOrderEvent
             /**
              * Administrative notification will be send via email. See appropriate aspect
              */
-            LOG.error("Can not cancel order, because of error on payment gateway.");
+            ShopCodeContext.getLog().error("Can not cancel order, because of error on payment gateway.");
             return false;
         }
     }

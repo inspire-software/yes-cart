@@ -2,7 +2,6 @@ package org.yes.cart.payment.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
@@ -20,8 +19,6 @@ import java.util.*;
  
  */
 public abstract class AbstractCappPaymentGatewayImpl implements PaymentGateway {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private PaymentGatewayParameterService paymentGatewayParameterService;
 
@@ -103,7 +100,8 @@ public abstract class AbstractCappPaymentGatewayImpl implements PaymentGateway {
         payment.setCardCvv2Code(getSingleValue(parametersMap.get("ccSecCode")));
         payment.setCardType(getSingleValue(parametersMap.get("ccType")));
 
-        if (LOG.isDebugEnabled()) {
+        final Logger log = ShopCodeContext.getLog();
+        if (log.isDebugEnabled()) {
             displayMap("Payment prototype from map", parametersMap);
         }
 
@@ -156,8 +154,9 @@ public abstract class AbstractCappPaymentGatewayImpl implements PaymentGateway {
                 dest.append('\n');
             }
         }
-        if (LOG.isDebugEnabled()) {
-            LOG.debug(dest.toString());
+        final Logger log = ShopCodeContext.getLog();
+        if (log.isDebugEnabled()) {
+            log.debug(dest.toString());
         }
 
     }

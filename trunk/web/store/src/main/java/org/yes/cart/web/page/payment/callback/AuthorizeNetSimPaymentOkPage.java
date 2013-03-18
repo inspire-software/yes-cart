@@ -23,7 +23,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.ShopUrl;
@@ -55,8 +54,6 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
 
     private static final long serialVersionUID = 20110323L;
 
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
-
     private static final String ORDER_GUID = "orderGuid";     // correspond to  AuthorizeNetSimPaymentGatewayImpl
 
     @SpringBean(name = ServiceSpringKeys.CUSTOMER_ORDER_SERVICE)
@@ -84,13 +81,14 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
 
         final HttpServletRequest httpServletRequest = WicketUtil.getHttpServletRequest();
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug(HttpUtil.dumpRequest(httpServletRequest));
+        final Logger log = ShopCodeContext.getLog();
+        if (log.isDebugEnabled()) {
+            log.debug(HttpUtil.dumpRequest(httpServletRequest));
         }
 
         orderGuid = httpServletRequest.getParameter(ORDER_GUID);
 
-        LOG.info("#### orderGuid = " + orderGuid);
+        log.info("#### orderGuid = " + orderGuid);
 
         final CustomerOrder order = customerOrderService.findByGuid(orderGuid);
 
@@ -140,7 +138,7 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
     @Override
     protected void onBeforeRender() {
 
-        LOG.info("Redirect from authorize net page to " + redirectTo);
+        ShopCodeContext.getLog().info("Redirect from authorize net page to {}", redirectTo);
 
         add(
                 new Label("redirectJavaScript", "<!--\nlocation.replace(\"" + redirectTo + "\"); \n//-->").setEscapeModelStrings(false)

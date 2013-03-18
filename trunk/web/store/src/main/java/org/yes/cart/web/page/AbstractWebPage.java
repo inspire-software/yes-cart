@@ -25,6 +25,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
+import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.shoppingcart.impl.ChangeLocaleCartCommandImpl;
@@ -32,7 +33,6 @@ import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.DecoratorFacade;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
-import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.web.support.util.cookie.ShoppingCartPersister;
 import org.yes.cart.web.util.WicketUtil;
 

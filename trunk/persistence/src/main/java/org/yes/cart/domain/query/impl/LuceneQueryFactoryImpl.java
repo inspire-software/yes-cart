@@ -23,8 +23,6 @@ import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.util.Version;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.domain.query.PriceNavigation;
@@ -45,8 +43,6 @@ import java.util.Map;
  * Time: 11:12:54
  */
 public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     /**
      * Only this indexes allowed for attributive filtered navigaion.
@@ -102,7 +98,7 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
         try {
             return getMultiFieldQueryParser().parse(queryString);
         } catch (ParseException e) {
-            LOG.error(MessageFormat.format("Can not parse given query {0}", queryString), e);
+            ShopCodeContext.getLog().error(MessageFormat.format("Can not parse given query {0}", queryString), e);
         }
         return null;
     }

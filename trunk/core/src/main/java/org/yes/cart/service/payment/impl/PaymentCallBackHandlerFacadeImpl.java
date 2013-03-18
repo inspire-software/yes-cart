@@ -18,7 +18,6 @@ package org.yes.cart.service.payment.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.service.domain.CustomerOrderService;
@@ -38,8 +37,6 @@ import java.util.Map;
  * Time: 14:12:54
  */
 public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerFacade {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final PaymentModulesManager paymentModulesManager;
     private final CustomerOrderService customerOrderService;
@@ -67,7 +64,8 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
 
         final String orderGuid = getOrderGuid(parameters, paymentGatewayLabel);
 
-        LOG.info("Order guid to handle at call back handler is " + orderGuid);
+        final Logger log = ShopCodeContext.getLog();
+        log.info("Order guid to handle at call back handler is {}", orderGuid);
 
         if (StringUtils.isNotBlank(orderGuid)) {
 
@@ -75,8 +73,8 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
 
             if (order == null) {
 
-                if (LOG.isWarnEnabled()) {
-                    LOG.warn("Can not get order with guid " + orderGuid);
+                if (log.isWarnEnabled()) {
+                    log.warn("Can not get order with guid {}", orderGuid);
                 }
 
             } else {
@@ -94,13 +92,12 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
 
                     boolean rez = orderStateManager.fireTransition(orderEvent);
 
-                    LOG.info("Order state transition performed for " + orderGuid + " . Result is " + rez);
+                    log.info("Order state transition performed for {} . Result is {}", orderGuid, rez);
 
                     customerOrderService.update(order);
 
                 } else {
-                        LOG.warn("Order with guid " + orderGuid + " not in " + CustomerOrder.ORDER_STATUS_NONE
-                                + " state, but " + order.getOrderStatus());
+                    log.warn("Order with guid {} not in NONE state, but {}", orderGuid, order.getOrderStatus());
                 }
 
             }
@@ -111,9 +108,10 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
     private String getOrderGuid(final Map privateCallBackParameters, final String paymentGatewayLabel) {
         final PaymentGatewayExternalForm paymentGateway = getPaymentGateway(paymentGatewayLabel);
         final String orderGuid = paymentGateway.restoreOrderGuid(privateCallBackParameters);
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Get order guid " + orderGuid + "  from http request with "
-                    + paymentGatewayLabel + " payment gateway.");
+        final Logger log = ShopCodeContext.getLog();
+        if (log.isDebugEnabled()) {
+            log.debug("Get order guid {}  from http request with {} payment gateway.",
+                    orderGuid, paymentGatewayLabel);
         }
         return orderGuid;
     }

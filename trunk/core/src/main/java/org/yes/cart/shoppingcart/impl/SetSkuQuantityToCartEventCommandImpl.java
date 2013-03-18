@@ -16,14 +16,11 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
-import java.text.MessageFormat;
 import java.util.Map;
 
 /**
@@ -37,8 +34,6 @@ import java.util.Map;
 public class SetSkuQuantityToCartEventCommandImpl  extends AbstractSkuCartCommandImpl {
 
     private static final long serialVersionUID = 20110312L;
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     public static final String CMD_KEY = "setQuantityToCartCmd";
 
@@ -71,11 +66,9 @@ public class SetSkuQuantityToCartEventCommandImpl  extends AbstractSkuCartComman
         if (getProductSkuDTO() != null) {
             shoppingCart.setProductSkuToCart(getProductSkuDTO(), new BigDecimal(skuQty));
             recalculatePrice(shoppingCart);
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(MessageFormat.format("Add product sku with code {0} and qty {1} to cart",
-                        getProductSkuDTO().getCode(),
-                        skuQty));
-            }
+            ShopCodeContext.getLog().debug("Add product sku with code {} and qty {} to cart",
+                    getProductSkuDTO().getCode(),
+                    skuQty);
             setModifiedDate(shoppingCart);
         }
     }

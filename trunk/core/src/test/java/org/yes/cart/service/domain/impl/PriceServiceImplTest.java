@@ -35,7 +35,10 @@ import org.yes.cart.util.MoneyUtils;
 
 import java.lang.System;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 

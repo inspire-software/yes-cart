@@ -20,7 +20,6 @@ import org.yes.cart.domain.entity.SkuPrice;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
-import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;

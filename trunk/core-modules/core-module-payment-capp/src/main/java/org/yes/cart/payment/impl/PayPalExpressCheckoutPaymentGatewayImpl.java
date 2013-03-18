@@ -5,8 +5,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
@@ -33,8 +31,6 @@ import java.util.StringTokenizer;
  * Time: 2:33 PM
  */
 public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPaymentGatewayImpl implements PaymentGatewayExternalForm {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private static final String EQ = "=";
     private static final String AND = "&";
@@ -316,7 +312,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
 
     private String performPayPalApiCall(final String callParams) throws IOException {
 
-        LOG.info("PayPalExpressCheckoutPaymentGatewayImpl#performPayPalApiCall call parameters :" + callParams);
+        ShopCodeContext.getLog().info("PayPalExpressCheckoutPaymentGatewayImpl#performPayPalApiCall call parameters : {}", callParams);
 
         final StringBuilder respBuilder = new StringBuilder();
 
@@ -333,7 +329,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
         while (((_line = rd.readLine()) != null)) {
             respBuilder.append(_line);
         }
-        LOG.info("PayPalExpressCheckoutPaymentGatewayImpl#performPayPalApiCall responce :" + respBuilder.toString());
+        ShopCodeContext.getLog().info("PayPalExpressCheckoutPaymentGatewayImpl#performPayPalApiCall response : {}", respBuilder);
         return respBuilder.toString();
     }
 
