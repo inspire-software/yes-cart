@@ -36,7 +36,6 @@ import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.service.payment.PaymentProcessorFactory;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.impl.*;
-import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
 import java.util.*;

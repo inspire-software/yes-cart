@@ -2,14 +2,11 @@ package org.yes.cart.payment.impl;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.SerializationUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
-import org.yes.cart.util.ShopCodeContext;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,8 +23,6 @@ import java.util.Map;
  */
 public class RobokassaPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
         implements PaymentGatewayExternalForm {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     // robokassa bypath parameters, that will be restored at call back
     static final String SHP_ORDER_ID = "SHP_ORDER_ID";

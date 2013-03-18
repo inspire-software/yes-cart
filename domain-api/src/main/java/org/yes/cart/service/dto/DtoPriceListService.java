@@ -17,10 +17,8 @@
 package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.SkuPriceDTO;
-import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.service.dto.support.PriceListFilter;
 
-import java.util.Date;
 import java.util.List;
 
 /**

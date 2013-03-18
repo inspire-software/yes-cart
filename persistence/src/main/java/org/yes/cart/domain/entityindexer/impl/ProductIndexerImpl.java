@@ -17,7 +17,6 @@
 package org.yes.cart.domain.entityindexer.impl;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entityindexer.ProductIndexer;
@@ -33,8 +32,6 @@ import java.util.concurrent.Executors;
  * Time: 1:34 PM
  */
 public class ProductIndexerImpl implements ProductIndexer {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final ExecutorService threadPool;
 
@@ -66,6 +63,7 @@ public class ProductIndexerImpl implements ProductIndexer {
      */
     public void submitIndexTask(final Long productPkValue) {
 
+        final Logger log = ShopCodeContext.getLog();
         try {
             reindexQueue.put(productPkValue);
             threadPool.submit(
@@ -75,13 +73,13 @@ public class ProductIndexerImpl implements ProductIndexer {
                             try {
                                 productDao.fullTextSearchReindex(reindexQueue.take());
                             } catch (InterruptedException e) {
-                                LOG.error("Cant get product pk from queue to reindex", e);
+                                log.error("Cant get product pk from queue to reindex", e);
                             }
                         }
                     }
             );
         } catch (InterruptedException e) {
-            LOG.error("Cant put product pk from queue to reindex", e);
+            log.error("Cant put product pk from queue to reindex", e);
         }
 
     }

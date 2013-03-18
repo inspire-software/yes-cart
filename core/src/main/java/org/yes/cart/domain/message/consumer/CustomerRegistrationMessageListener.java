@@ -16,8 +16,6 @@
 
 package org.yes.cart.domain.message.consumer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.yes.cart.domain.message.RegistrationMessage;
@@ -41,8 +39,6 @@ import java.util.Map;
  * Time: 14:12:54
  */
 public class CustomerRegistrationMessageListener implements Runnable {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final JavaMailSender javaMailSender;
 
@@ -73,14 +69,14 @@ public class CustomerRegistrationMessageListener implements Runnable {
         try {
             final RegistrationMessage registrationMessage = (RegistrationMessage) objectMessage;
 
-            LOG.info("CustomerRegistrationMessageListener#onMessage responce :" + registrationMessage);
+            ShopCodeContext.getLog().info("CustomerRegistrationMessageListener#onMessage responce :" + registrationMessage);
 
             if (registrationMessage.getPathToTemplateFolder() != null) {
                 processMessage(registrationMessage);
             }
 
         } catch (Exception e) {
-            LOG.error("Cant process " + objectMessage, e);
+            ShopCodeContext.getLog().error("Cant process " + objectMessage, e);
             throw new RuntimeException(e); //rollback message
         }
     }
@@ -118,9 +114,9 @@ public class CustomerRegistrationMessageListener implements Runnable {
             try {
                 javaMailSender.send(mimeMessage);
                 send = true;
-                LOG.info("Customer registration mail send to " + registrationMessage.getEmail() );
+                ShopCodeContext.getLog().info("Customer registration mail send to {}", registrationMessage.getEmail() );
             } catch (MailSendException me) {
-                LOG.error("Cant send email to " + registrationMessage.getEmail() + " " + me.getMessage());
+                ShopCodeContext.getLog().error("Cant send email to {} {}", registrationMessage.getEmail(), me.getMessage());
                 Thread.sleep(60000);
                 
             }

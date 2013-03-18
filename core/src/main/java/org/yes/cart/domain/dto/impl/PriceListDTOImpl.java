@@ -19,7 +19,6 @@ package org.yes.cart.domain.dto.impl;
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.PriceListDTO;
-import org.yes.cart.domain.dto.SkuPriceDTO;
 
 import java.math.BigDecimal;
 import java.util.Date;

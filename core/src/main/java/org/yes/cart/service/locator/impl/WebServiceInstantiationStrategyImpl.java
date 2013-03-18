@@ -18,7 +18,6 @@ package org.yes.cart.service.locator.impl;
 
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.service.locator.InstantiationStrategy;
 import org.yes.cart.util.ShopCodeContext;
 
@@ -31,8 +30,6 @@ import javax.xml.XMLConstants;
  */
 public class WebServiceInstantiationStrategyImpl implements InstantiationStrategy {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
-
     private static final String NAMESPACE_URI = XMLConstants.NULL_NS_URI; // TODO is separate namespace needed ?
 
 /**
@@ -42,9 +39,10 @@ public class WebServiceInstantiationStrategyImpl implements InstantiationStrateg
                              final Class<T> iface,
                              final String loginName,
                              final String password)  {
-    //TODO use login & password 
-        if(LOG.isDebugEnabled()) {
-            LOG.debug("Get " + serviceUrl + " as " + iface.getName());
+    //TODO use login & password
+        final Logger log = ShopCodeContext.getLog();
+        if(log.isDebugEnabled()) {
+            log.debug("Get {} as {}", serviceUrl, iface.getName());
         }
 
         try {

@@ -5,8 +5,6 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.codec.Base64;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
@@ -59,8 +57,6 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
     static final String LP_PAYWAY_URL = "LP_PAYWAY_URL";
 
 
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
-
     /**
      * {@inheritDoc}
      */
@@ -97,7 +93,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
 
         final LiqPayResponce liqPayResponce = getLiqPayResponce(nvpCallResult);
 
-        LOG.info("LiqPayPaymentGatewayImpl#isSuccess " + liqPayResponce);
+        ShopCodeContext.getLog().info("LiqPayPaymentGatewayImpl#isSuccess {}", liqPayResponce);
 
         return liqPayResponce != null && "success".equalsIgnoreCase(liqPayResponce.getStatus());
 
@@ -131,7 +127,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
                 getParameterValue(LP_PAYWAY_URL)
         );
 
-        LOG.info(" Raw liqpay xml [" + operationXml + "]");
+        ShopCodeContext.getLog().info(" Raw liqpay xml [ {} ]", operationXml);
 
         final String merchantKey = getParameterValue(LP_MERCHANT_KEY);
         final String sign = createSignatire(merchantKey + operationXml + merchantKey);
@@ -278,7 +274,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
                 return (LiqPayResponce) getXStream().fromXML(operationXml);
 
             } else {
-                LOG.error(
+                ShopCodeContext.getLog().error(
                         MessageFormat.format(
                                 "Calculated signature {0} not correspond to provided  {1} for xml {2}. Req. params {3}",
                                 signToCheck,
@@ -290,7 +286,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
             }
 
         } else {
-            LOG.error("Cant get operation_xml. " + dump(nvpCallResult));
+            ShopCodeContext.getLog().error("Cant get operation_xml. " + dump(nvpCallResult));
         }
         return null;
 

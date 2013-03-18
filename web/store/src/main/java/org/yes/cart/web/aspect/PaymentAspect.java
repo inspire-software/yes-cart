@@ -19,8 +19,6 @@ package org.yes.cart.web.aspect;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.yes.cart.domain.entity.CustomerOrder;
@@ -45,8 +43,6 @@ import java.util.HashMap;
  */
 @Aspect
 public class PaymentAspect extends BaseNotificationAspect {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final ProductService productService;
 

@@ -19,9 +19,6 @@ package org.yes.cart.web.page.payment.callback;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.support.util.HttpUtil;
 import org.yes.cart.web.util.WicketUtil;
@@ -32,8 +29,6 @@ import org.yes.cart.web.util.WicketUtil;
  * Time: 5:17 PM
  */
 public class LiqPayReturnUrlPage  extends AbstractWebPage {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
 
     /**

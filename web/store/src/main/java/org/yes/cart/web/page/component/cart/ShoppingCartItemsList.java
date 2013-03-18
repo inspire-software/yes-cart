@@ -54,9 +54,7 @@ import org.yes.cart.web.support.entity.decorator.ProductSkuDecorator;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
 import org.yes.cart.web.util.WicketUtil;
 
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.net.URLEncoder;
 import java.util.List;
 
 /**

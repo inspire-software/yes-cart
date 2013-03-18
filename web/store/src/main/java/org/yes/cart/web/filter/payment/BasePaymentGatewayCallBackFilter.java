@@ -17,7 +17,6 @@
 package org.yes.cart.web.filter.payment;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.payment.PaymentCallBackHandlerFacade;
 import org.yes.cart.util.ShopCodeContext;
@@ -45,8 +44,6 @@ import java.util.Map;
  */
 public class BasePaymentGatewayCallBackFilter extends AbstractFilter implements Filter {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
-
     private final PaymentCallBackHandlerFacade paymentCallBackHandlerFacade;
 
 
@@ -71,8 +68,9 @@ public class BasePaymentGatewayCallBackFilter extends AbstractFilter implements 
 
         if (isCallerIpAllowed()) {
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(HttpUtil.dumpRequest((HttpServletRequest) servletRequest));
+            final Logger log = ShopCodeContext.getLog();
+            if (log.isDebugEnabled()) {
+                log.debug(HttpUtil.dumpRequest((HttpServletRequest) servletRequest));
             }
 
             final Map parameters = servletRequest.getParameterMap();
@@ -85,7 +83,7 @@ public class BasePaymentGatewayCallBackFilter extends AbstractFilter implements 
 
             } catch (OrderException e) {
 
-                LOG.error("Transition failed during payment call back for " + paymentGatewayLabel + " payment gateway" , e);
+                log.error("Transition failed during payment call back for " + paymentGatewayLabel + " payment gateway" , e);
 
             }
 

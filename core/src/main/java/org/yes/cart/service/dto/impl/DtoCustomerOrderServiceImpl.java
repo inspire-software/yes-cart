@@ -22,8 +22,6 @@ import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.Restrictions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.dto.CustomerOrderDTO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDTO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO;
@@ -59,8 +57,6 @@ import java.util.*;
 public class DtoCustomerOrderServiceImpl
         extends AbstractDtoServiceImpl<CustomerOrderDTO, CustomerOrderDTOImpl, CustomerOrder>
         implements DtoCustomerOrderService {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     protected final Assembler orderDeliveryDetailAssembler;
     protected final Assembler orderDeliveryAssembler;
@@ -134,7 +130,7 @@ public class DtoCustomerOrderServiceImpl
             }
 
         } catch (OrderException e) {
-            LOG.error(
+            ShopCodeContext.getLog().error(
                     MessageFormat.format(
                             "Cannot confirm payment for order with number [ {0} ] ",
                             orderNum
@@ -176,7 +172,7 @@ public class DtoCustomerOrderServiceImpl
             }
 
         } catch (OrderException e) {
-            LOG.error(
+            ShopCodeContext.getLog().error(
                     MessageFormat.format(
                             "Order with number [ {0} ] cannot be canceled ",
                             orderNum
@@ -278,7 +274,7 @@ public class DtoCustomerOrderServiceImpl
 
                     } catch (OrderException e) {
 
-                        LOG.error(
+                        ShopCodeContext.getLog().error(
                                 MessageFormat.format(
                                         "Order with number [ {0} ] delivery number [ {1} ] in [ {2} ] can not be transited to  [ {3} ] status ",
                                         orderNum, deliveryNum, delivery.getDeliveryStatus(), currentStatus
@@ -341,7 +337,7 @@ public class DtoCustomerOrderServiceImpl
             return rez;
 
         } else {
-            LOG.warn("Customer order not found. Order number is " + orderNum);
+            ShopCodeContext.getLog().warn("Customer order not found. Order number is " + orderNum);
         }
         return Collections.emptyList();
 
@@ -372,7 +368,7 @@ public class DtoCustomerOrderServiceImpl
 
             return rez;
         } else {
-            LOG.warn("Customer order not found. Order num is " + orderNum);
+            ShopCodeContext.getLog().warn("Customer order not found. Order num is " + orderNum);
         }
         return Collections.emptyList();
 

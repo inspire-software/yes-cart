@@ -33,7 +33,6 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.TypeDescriptor;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.AttrValue;
@@ -61,8 +60,6 @@ import java.util.Map;
  */
 public class DynaFormPanel extends BaseComponent {
 
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private final static String FORM = "form";
@@ -107,8 +104,9 @@ public class DynaFormPanel extends BaseComponent {
 
             @Override
             protected void onSubmit() {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug(
+                final Logger log = ShopCodeContext.getLog();
+                if (log.isDebugEnabled()) {
+                    log.debug(
                             MessageFormat.format(
                                     "Attributes will be updated for customer [{0}]",
                                     customer.getEmail()
@@ -116,7 +114,7 @@ public class DynaFormPanel extends BaseComponent {
                     );
 
                     for (AttrValue attrValue : attrValueCollection) {
-                        LOG.debug(
+                        log.debug(
                                 MessageFormat.format(
                                         "Attribute with code [{0}] has value [{1}]",
                                         attrValue.getAttribute().getCode(),

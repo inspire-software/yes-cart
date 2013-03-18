@@ -17,7 +17,6 @@
 package org.yes.cart.service.domain;
 
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.AttrValueSystem;
 
 import java.util.Map;

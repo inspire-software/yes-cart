@@ -16,8 +16,6 @@
 
 package org.yes.cart.service.order.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.service.order.*;
 import org.yes.cart.util.ShopCodeContext;
 
@@ -31,8 +29,6 @@ import java.util.Map;
  * Time: 14:12:54
  */
 public class OrderStateManagerImpl implements OrderStateManager {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final Map<String, OrderEventHandler> handlers;
 
@@ -65,7 +61,7 @@ public class OrderStateManagerImpl implements OrderStateManager {
         final OrderEventHandler handler = handlers.get(orderEvent.getEventId());
 
         if (handler == null) {
-            LOG.warn(MessageFormat.format(
+            ShopCodeContext.getLog().warn(MessageFormat.format(
                     "No handler registered for {0} event", orderEvent.getEventId()
             ));
         } else {
@@ -78,15 +74,13 @@ public class OrderStateManagerImpl implements OrderStateManager {
                 }
                 return result;
             } catch (OrderException e) {
-                if (LOG.isErrorEnabled()) {
-                    LOG.error(
-                            MessageFormat.format("Cant handle {0} event for {1} order because of {2}",
-                                    orderEvent.getEventId(),
-                                    orderEvent.getCustomerOrder().getOrdernum(),
-                                    e.getMessage()),
-                            e
-                    );
-                }
+                ShopCodeContext.getLog().error(
+                        MessageFormat.format("Cant handle {0} event for {1} order because of {2}",
+                                orderEvent.getEventId(),
+                                orderEvent.getCustomerOrder().getOrdernum(),
+                                e.getMessage()),
+                        e
+                );
                 throw e;
             }
 

@@ -33,7 +33,6 @@ import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.impl.OrderEventImpl;
-import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.service.payment.PaymentProcessorFactory;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl;
@@ -44,7 +43,6 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com

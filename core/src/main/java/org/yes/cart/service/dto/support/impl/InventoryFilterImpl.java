@@ -16,8 +16,6 @@
 
 package org.yes.cart.service.dto.support.impl;
 
-import org.yes.cart.domain.dto.CategoryDTO;
-import org.yes.cart.domain.dto.ProductDTO;
 import org.yes.cart.domain.dto.WarehouseDTO;
 import org.yes.cart.service.dto.support.InventoryFilter;
 

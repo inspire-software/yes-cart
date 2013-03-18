@@ -24,7 +24,6 @@ import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.UrlResourceStream;
 import org.apache.wicket.util.string.StringList;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.util.ShopCodeContext;
 
 import javax.servlet.ServletContext;
@@ -39,8 +38,6 @@ import java.util.List;
  * Time: 9:13 AM
  */
 public class MultiWebApplicationPath   implements IResourcePath {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     /** The list of urls in the path */
     private final List<String> webappPaths = new ArrayList<String>();
@@ -102,25 +99,27 @@ public class MultiWebApplicationPath   implements IResourcePath {
             }
         }
 
+        final Logger log = ShopCodeContext.getLog();
+
         Iterator<String> webappPathsIter = webappPaths.iterator();
         while (webappPathsIter.hasNext()) {
             String path = webappPathsIter.next();
             try {
                 final URL url = servletContext.getResource(path + pathname);
                 if (url != null) {
-                    //if (LOG.isDebugEnabled()) {
-                        LOG.debug("Retrieving resource: " + path + pathname);
-                    //}
+                    if (log.isDebugEnabled()) {
+                        log.debug("Retrieving resource: " + path + pathname);
+                    }
 
                     return new UrlResourceStream(url);
                 }
-                //if (LOG.isDebugEnabled()) {
-                    LOG.debug("Lookup resource: " + path + pathname);
-                //}
+                if (log.isDebugEnabled()) {
+                    log.debug("Lookup resource: " + path + pathname);
+                }
             }
             catch (Exception ex)  {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("File couldn't be found: " + path + pathname);
+                if (log.isDebugEnabled()) {
+                    log.debug("File couldn't be found: " + path + pathname);
                 }
             }
         }

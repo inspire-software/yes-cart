@@ -17,8 +17,6 @@
 package org.yes.cart.service.payment.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.PaymentModule;
@@ -42,8 +40,6 @@ import java.util.*;
  * Time: 14:12:54
  */
 public class PaymentModulesManagerImpl implements PaymentModulesManager {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final ServiceLocator serviceLocator;
 
@@ -91,14 +87,14 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
             paymentModulesMap = new HashMap<String, PaymentModule>();
             for (String url : getModulesUrl()) {
                 try {
-                    LOG.info(MessageFormat.format("Loading payment module from url {0}", url));
+                    ShopCodeContext.getLog().info("Loading payment module from url {}", url);
                     final PaymentModule paymentModule = serviceLocator.getServiceInstance(url, PaymentModule.class, null, null); //passwd & login not need set of payment gateways
                     paymentModulesMap.put(
                             paymentModule.getPaymentModuleDescriptor().getLabel(),
                             paymentModule
                     );
                 } catch (Throwable e) {
-                    LOG.error(
+                    ShopCodeContext.getLog().error(
                             MessageFormat.format(
                                     "Cannot load payment module with url {0} error message is {1}. See trace for more details",
                                     url,
@@ -243,7 +239,7 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
                 );
             }
         }
-        LOG.error(MessageFormat.format("Payment gateway {0} not found",  paymentGatewayLabel));
+        ShopCodeContext.getLog().error("Payment gateway {} not found", paymentGatewayLabel);
 
         return null;
     }

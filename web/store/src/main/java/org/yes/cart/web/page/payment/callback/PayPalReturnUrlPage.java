@@ -23,8 +23,6 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
@@ -67,8 +65,6 @@ import java.util.Map;
  * Time: 8:32 AM
  */
 public class PayPalReturnUrlPage extends AbstractWebPage {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private static final long serialVersionUID = 20111612L;
 
@@ -184,7 +180,7 @@ public class PayPalReturnUrlPage extends AbstractWebPage {
 
                             } catch (OrderException e) {
 
-                                LOG.error("Cant handle payment callback " , e);
+                                ShopCodeContext.getLog().error("Cant handle payment callback ", e);
 
                                 error(getLocalizer().getString("paymentFailed", this));
                             }
@@ -212,7 +208,7 @@ public class PayPalReturnUrlPage extends AbstractWebPage {
             }
 
         } catch (IOException e) {
-            LOG.error("Cant call paypal gateway ", e);
+            ShopCodeContext.getLog().error("Cant call paypal gateway ", e);
         }
     }
 

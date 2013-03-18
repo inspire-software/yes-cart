@@ -17,7 +17,6 @@
 package org.yes.cart.service.domain.impl;
 
 import org.yes.cart.cache.Cacheable;
-import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;

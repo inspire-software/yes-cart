@@ -19,7 +19,6 @@ package org.yes.cart.service.order.impl.handler;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
 import org.yes.cart.domain.entity.Warehouse;
-import org.yes.cart.domain.entityindexer.ProductIndexer;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;

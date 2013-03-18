@@ -18,13 +18,10 @@ package org.yes.cart.job;
 
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.yes.cart.bulkimport.service.ImportDirectorService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SystemService;
-import org.yes.cart.util.ShopCodeContext;
 
 /**
  * This stateful job perform import and products indexing, in case if import was fired.
@@ -36,8 +33,6 @@ import org.yes.cart.util.ShopCodeContext;
  */
 @Deprecated
 public class ImportJobBeanImpl extends QuartzJobBean {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private ImportDirectorService importDirector;
 

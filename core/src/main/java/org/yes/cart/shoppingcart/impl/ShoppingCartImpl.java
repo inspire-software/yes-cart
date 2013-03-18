@@ -17,8 +17,6 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.dto.ProductSkuDTO;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.shoppingcart.*;
@@ -39,8 +37,6 @@ import java.util.List;
 public class ShoppingCartImpl implements ShoppingCart {
 
     private static final long serialVersionUID =  20110509L;
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private List<CartItemImpl> items = new ArrayList<CartItemImpl>();
 
@@ -64,7 +60,7 @@ public class ShoppingCartImpl implements ShoppingCart {
     private AmountCalculationStrategy getCalculationStrategy() {
         if (calculationStrategy == null) {
             calculationStrategy = new DefaultAmountCalculationStrategy(BigDecimal.ZERO);
-            LOG.error("Default amount calculation strategy used with 0% tax. Please configure \"calculationStrategy\" and set it to cart");
+            ShopCodeContext.getLog().error("Default amount calculation strategy used with 0% tax. Please configure \"calculationStrategy\" and set it to cart");
         }
         return calculationStrategy;
     }

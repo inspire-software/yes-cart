@@ -18,12 +18,9 @@ package org.yes.cart.web.page.component.cart;
 
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
-
-import java.math.BigDecimal;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com

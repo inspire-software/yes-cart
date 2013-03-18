@@ -8,8 +8,6 @@ import com.google.checkout.sdk.notifications.Notification;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.Restrictions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.*;
@@ -33,8 +31,6 @@ import java.util.List;
  * Time: 5:13 PM
  */
 public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final ApplicationContext applicationContext;
 
@@ -76,9 +72,7 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
      */
     protected void onNewOrderNotification(final OrderSummary orderSummary,
                                           final NewOrderNotification notification) throws Exception {
-        if (LOG.isInfoEnabled()) {
-            LOG.info("BaseNotificationDispatcher#onNewOrderNotification  " + notification);
-        }
+        ShopCodeContext.getLog().info("BaseNotificationDispatcher#onNewOrderNotification {} ", notification);
 
         final String orderGuid = getOrderGuid(orderSummary);
         final CustomerOrder customerOrder = getCustomerOrderService().findByGuid(orderGuid);
@@ -130,17 +124,15 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
     @Override
     public void onAuthorizationAmountNotification(final OrderSummary orderSummary, final AuthorizationAmountNotification notification) {
 
-        if (LOG.isInfoEnabled()) {
-            LOG.info("BaseNotificationDispatcher#onAuthorizationAmountNotification  " + notification);
-        }
+        ShopCodeContext.getLog().info("BaseNotificationDispatcher#onAuthorizationAmountNotification {}", notification);
+
     }
 
     @Override
     protected void onOrderStateChangeNotification(
             final OrderSummary orderSummary,
             final OrderStateChangeNotification notification) throws Exception {
-        final String msg = "#onOrderStateChangeNotification order summary is : " + orderSummary.toString() + " notification is  " + notification;
-        LOG.info(msg);
+        ShopCodeContext.getLog().info("#onOrderStateChangeNotification order summary is : {} notification is {} ", orderSummary, notification);
 
     }
 
@@ -148,9 +140,7 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
     public boolean hasAlreadyHandled(final String serialNumber,
                                      final OrderSummary orderSummary,
                                      final Notification notification) {
-        if (LOG.isInfoEnabled()) {
-            LOG.info("BaseNotificationDispatcher#hasAlreadyHandled  " + serialNumber + " " + notification);
-        }
+        ShopCodeContext.getLog().info("BaseNotificationDispatcher#hasAlreadyHandled {} {} ", serialNumber, notification);
         return getPaymentModuleGenericDAO().findSingleByCriteria(Restrictions.eq("serialNumber", serialNumber)) != null;
     }
 
@@ -158,9 +148,7 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
     protected void rememberSerialNumber(final String serialNumber,
                                         final OrderSummary orderSummary, final Notification notification) {
 
-        if (LOG.isInfoEnabled()) {
-            LOG.info("BaseNotificationDispatcher#rememberSerialNumber  " + serialNumber + " " + notification);
-        }
+        ShopCodeContext.getLog().info("BaseNotificationDispatcher#rememberSerialNumber {} {} ", serialNumber, notification);
 
         final GoogleNotificationHistory entity = new GoogleNotificationHistoryEntity();
         entity.setSerialNumber(serialNumber);

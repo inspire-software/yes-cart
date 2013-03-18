@@ -16,8 +16,6 @@
 
 package org.yes.cart.web.filter.payment;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
@@ -52,8 +50,6 @@ import java.util.Map;
  * Time: 5:50 PM
  */
 public class PayPalExpressCheckoutFilter extends AbstractFilter implements Filter {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final PaymentModulesManager paymentModulesManager;
 
@@ -127,7 +123,7 @@ public class PayPalExpressCheckoutFilter extends AbstractFilter implements Filte
             // TODO: YC-156  move order to failed state
         }
 
-        LOG.info("Pay pal filter user will be redirected to " + redirectUrl);
+        ShopCodeContext.getLog().info("Pay pal filter user will be redirected to {}", redirectUrl);
 
         ((HttpServletResponse) servletResponse).sendRedirect(
                 ((HttpServletResponse) servletResponse).encodeRedirectURL(redirectUrl)

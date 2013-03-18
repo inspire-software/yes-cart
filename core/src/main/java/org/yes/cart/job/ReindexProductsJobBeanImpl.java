@@ -19,12 +19,10 @@ package org.yes.cart.job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.util.ShopCodeContext;
 
-import java.text.MessageFormat;
 import java.util.Date;
 
 /**
@@ -34,22 +32,21 @@ import java.util.Date;
  */
 public class ReindexProductsJobBeanImpl extends QuartzJobBean {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
-
     private ProductService productService;
 
     /**
      * {@inheritDoc }
      */
     protected void executeInternal(final JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        LOG.info(MessageFormat.format("ReindexProductsJobDetailImpl start at {0}", new Date()));
+        final Logger log = ShopCodeContext.getLog();
+        log.info("ReindexProductsJobDetailImpl start at {}", new Date());
 /*
         setProductService(
                 (ProductService)jobExecutionContext.getJobDetail().getJobDataMap().getByKey(ServiceSpringKeys.PRODUCT_SERVICE)
         );
 */
         productService.reindexProducts();
-        LOG.info(MessageFormat.format("ReindexProductsJobDetailImpl   end at {0}", new Date()));
+        log.info("ReindexProductsJobDetailImpl   end at {}", new Date());
     }
 
     /**

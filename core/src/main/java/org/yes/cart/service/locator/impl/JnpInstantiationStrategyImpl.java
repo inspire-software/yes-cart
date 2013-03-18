@@ -17,7 +17,6 @@
 package org.yes.cart.service.locator.impl;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.service.locator.InstantiationStrategy;
 import org.yes.cart.util.ShopCodeContext;
 
@@ -34,7 +33,6 @@ import java.util.Properties;
  */
 public class JnpInstantiationStrategyImpl implements InstantiationStrategy {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
     private static final String AT_DELIMITER = "@"; // delimiter between server and jndi name
 
     /**
@@ -46,8 +44,9 @@ public class JnpInstantiationStrategyImpl implements InstantiationStrategy {
                              final String loginName,
                              final String password) {
         //TODO pass login & pwd into context during lookup operation
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Get " + serviceUrl + " as " + iface.getName());
+        final Logger log = ShopCodeContext.getLog();
+        if (log.isDebugEnabled()) {
+            log.debug("Get " + serviceUrl + " as " + iface.getName());
         }
 
         try {

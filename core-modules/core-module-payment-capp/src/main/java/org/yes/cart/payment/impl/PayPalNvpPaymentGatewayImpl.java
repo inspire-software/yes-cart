@@ -9,7 +9,6 @@ import com.paypal.sdk.services.NVPCallerServices;
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.payment.PaymentGatewayInternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
@@ -27,9 +26,6 @@ import java.util.Properties;
  * Time: 14:12:54
  */
 public class PayPalNvpPaymentGatewayImpl extends AbstractPayPalPaymentGatewayImpl implements PaymentGatewayInternalForm {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
-
 
     private NVPCallerServices nvpCallerServices = null;
 
@@ -57,7 +53,7 @@ public class PayPalNvpPaymentGatewayImpl extends AbstractPayPalPaymentGatewayImp
                 nvpCallerServices = new NVPCallerServices();
                 nvpCallerServices.setAPIProfile(profile);
             } catch (PayPalException e) {
-                LOG.error("Cant create api profile", e);
+                ShopCodeContext.getLog().error("Cant create api profile", e);
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
 
@@ -202,20 +198,21 @@ public class PayPalNvpPaymentGatewayImpl extends AbstractPayPalPaymentGatewayImp
     }
 
     private Payment runTransaction(final NVPEncoder requestEncoder, final Payment payment, final String operation) {
+        final Logger log = ShopCodeContext.getLog();
         payment.setTransactionOperation(operation);
         String request = StringUtils.EMPTY;
         String responce = StringUtils.EMPTY;
         try {
             request = requestEncoder.encode();
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(MessageFormat.format("Request is {0}", request));
+            if (log.isDebugEnabled()) {
+                log.debug("Request is {}", request);
             }
 
             responce = getNvpCallerServices().call(request);
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(MessageFormat.format("Responce is {0}", responce));
+            if (log.isDebugEnabled()) {
+                log.debug("Response is {}", responce);
             }
 
             NVPDecoder nvpDecoder = new NVPDecoder();
@@ -230,8 +227,8 @@ public class PayPalNvpPaymentGatewayImpl extends AbstractPayPalPaymentGatewayImp
             } else {
                 final String transactionId = nvpDecoder.get("TRANSACTIONID");
 
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug(MessageFormat.format("Transaction Id is {0}", responce));
+                if (log.isDebugEnabled()) {
+                    log.debug("Transaction Id is {}", responce);
                 }
 
                 payment.setTransactionReferenceId(transactionId);
@@ -246,7 +243,7 @@ public class PayPalNvpPaymentGatewayImpl extends AbstractPayPalPaymentGatewayImp
                     payment,
                     e.getMessage()
             );
-            LOG.error(message, e);
+            log.error(message, e);
             throw new PaymentException(message, e);
         }
         return payment;

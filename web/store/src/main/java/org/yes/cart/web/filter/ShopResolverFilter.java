@@ -18,20 +18,19 @@ package org.yes.cart.web.filter;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.impl.ChangeCurrencyEventCommandImpl;
 import org.yes.cart.shoppingcart.impl.SetShopCartCommandImpl;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.request.HttpServletRequestWrapper;
-import org.yes.cart.service.misc.LanguageService;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -53,10 +52,6 @@ import java.util.Date;
  * filter redirect to default url.
  */
 public class ShopResolverFilter extends AbstractFilter implements Filter, ApplicationContextAware, ServletContextAware {
-
-    private static Logger getShopLogger() {
-        return LoggerFactory.getLogger(ShopCodeContext.getShopCode());
-    }
 
     private final SystemService systemService;
 
@@ -85,7 +80,7 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Applic
     public ServletRequest doBefore(final ServletRequest servletRequest,
                                    final ServletResponse servletResponse) throws IOException, ServletException {
 
-        final Logger log = getShopLogger();
+        final Logger log = ShopCodeContext.getLog();
         if (log.isDebugEnabled()) {
             log.debug(MessageFormat.format("Request id {0} start at {1}",
                     servletRequest.toString(),
@@ -153,7 +148,7 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Applic
         final String servletPath = httpServletRequest.getServletPath();
 
         if (StringUtils.isNotEmpty(servletPath)) {
-            final Logger log = getShopLogger();
+            final Logger log = ShopCodeContext.getLog();
             final String newServletPath = shop.getMarkupFolder() + servletPath;
             try {
 
@@ -177,7 +172,7 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Applic
      */
     public void doAfter(final ServletRequest servletRequest,
                         final ServletResponse servletResponse) throws IOException, ServletException {
-        final Logger log = getShopLogger();
+        final Logger log = ShopCodeContext.getLog();
         if (log.isDebugEnabled()) {
             log.debug(MessageFormat.format("Request id {0}   end at {1}",
                     servletRequest.toString(),

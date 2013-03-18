@@ -17,8 +17,6 @@
 package org.yes.cart.service.domain.impl;
 
 import org.hibernate.criterion.Restrictions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
@@ -40,8 +38,6 @@ import java.util.List;
  * Time: 14:12:54
  */
 public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrder> implements CustomerOrderService {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private final OrderAssembler orderAssembler;
 
@@ -155,7 +151,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
         if (customerOrderToDelete != null) {
             //CPOINT Two ways - delete or not delete existing order with not NONE status
             if (!CustomerOrder.ORDER_STATUS_NONE.equals(customerOrderToDelete.getOrderStatus())) {
-                LOG.error(
+                ShopCodeContext.getLog().error(
                         MessageFormat.format(
                                 "Order {0} with {1} cart guid has {2} order status instead of 1 - ORDER_STATUS_NONE",
                                 customerOrderToDelete.getCustomerorderId(),

@@ -1,8 +1,6 @@
 package org.yes.cart.payment.impl;
 
 import org.apache.commons.lang.SerializationUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.Address;
@@ -36,8 +34,6 @@ import java.util.Map;
  * Time: 14:12:54
  */
 public class PaymentProcessorSurrogate {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private PaymentGateway paymentGateway;
     private final CustomerOrderPaymentService customerOrderPaymentService;
@@ -276,7 +272,7 @@ public class PaymentProcessorSurrogate {
                 paymentsToCapture.size() > 1
                         ||
                         (paymentsToCapture.isEmpty() && !getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorize())) {
-            LOG.warn( //must be only one record
+            ShopCodeContext.getLog().warn( //must be only one record
                     MessageFormat.format(
                             "Payment gateway {0} with features {1}. Found {2} records to capture, but expected 1 only. Order num {3} Shipment num {4}",
                             getPaymentGateway().getLabel(), getPaymentGateway().getPaymentGatewayFeatures(), paymentsToCapture.size(), order.getOrdernum(), orderShipmentNumber
@@ -304,7 +300,7 @@ public class PaymentProcessorSurrogate {
                     paymentResult = Payment.PAYMENT_STATUS_FAILED;
                     payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
                     payment.setTransactionOperationResultMessage(th.getMessage());
-                    LOG.error("Cannot capture " + payment, th);
+                    ShopCodeContext.getLog().error("Cannot capture " + payment, th);
                     th.printStackTrace();
                 } finally {
                     final CustomerOrderPayment authReversedOrderPayment = new CustomerOrderPaymentEntity();
@@ -359,7 +355,7 @@ public class PaymentProcessorSurrogate {
                         paymentResult = payment.getPaymentProcessorResult();
                     }
                 } catch (Throwable th) {
-                    LOG.error(
+                    ShopCodeContext.getLog().error(
                             MessageFormat.format(
                                     "Can not perform roll back operation on payment record {0} payment {1}",
                                     customerOrderPayment.getCustomerOrderPaymentId(),
@@ -383,7 +379,7 @@ public class PaymentProcessorSurrogate {
 
             return wasError ? Payment.PAYMENT_STATUS_FAILED : Payment.PAYMENT_STATUS_OK;
         }
-        LOG.warn(
+        ShopCodeContext.getLog().warn(
                 MessageFormat.format(
                         "Can not payment cancelation on canceled order  {0}",
                         order.getOrdernum()

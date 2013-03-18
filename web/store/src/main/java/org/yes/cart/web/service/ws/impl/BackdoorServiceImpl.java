@@ -16,13 +16,12 @@
 
 package org.yes.cart.web.service.ws.impl;
 
+import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.util.Version;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -42,9 +41,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-
-import net.sf.ehcache.Cache;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -56,8 +52,6 @@ import net.sf.ehcache.Cache;
 public class BackdoorServiceImpl implements BackdoorService, ApplicationContextAware, ServletContextAware {
 
     private static final long serialVersionUID = 20120129L;
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCodeContext.getShopCode());
 
     private ProductService productService;
 
@@ -115,7 +109,7 @@ public class BackdoorServiceImpl implements BackdoorService, ApplicationContextA
 
         } catch (Exception e) {
             final String msg = "Cant parse query : " + query + " Error : " + e.getMessage();
-            LOG.warn(msg);
+            ShopCodeContext.getLog().warn(msg);
             return Collections.singletonList(new Object[]{msg});
         }
 
@@ -142,7 +136,7 @@ public class BackdoorServiceImpl implements BackdoorService, ApplicationContextA
             return Collections.EMPTY_LIST;
         } catch (Exception e) {
             final String msg = "Cant parse query : " + query + " Error : " + e.getMessage();
-            LOG.warn(msg);
+            ShopCodeContext.getLog().warn(msg);
             return Collections.singletonList(new Object[]{msg});
         }
 
@@ -166,7 +160,7 @@ public class BackdoorServiceImpl implements BackdoorService, ApplicationContextA
 
             final String msg = "Cant parse query : " + luceneQuery + " Error : " + e.getMessage();
 
-            LOG.warn(msg);
+            ShopCodeContext.getLog().warn(msg);
 
             return Collections.singletonList(new Object[]{msg});
 
