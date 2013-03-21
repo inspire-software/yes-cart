@@ -17,7 +17,7 @@
 package org.yes.cart.installer;
 
 import com.izforge.izpack.Pack;
-import com.izforge.izpack.event.SimpleInstallerListener;
+import com.izforge.izpack.api.event.AbstractInstallerListener;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 
@@ -27,7 +27,7 @@ import com.izforge.izpack.util.AbstractUIProgressHandler;
  *
  * @author <a href="mailto:stanley.shyiko@gmail.com">shyiko</a>
  */
-public abstract class PackPostInstaller extends SimpleInstallerListener {
+public abstract class PackPostInstaller extends AbstractInstallerListener {
 
   private String packName;
 
@@ -38,10 +38,9 @@ public abstract class PackPostInstaller extends SimpleInstallerListener {
     this.packName = packName;
   }
 
-  @Override
   public void afterPack(Pack pack, Integer puckNumber, AbstractUIProgressHandler handler) throws Exception {
     if (packName.equals(pack.name)) {
-      postInstall(getInstalldata());
+      postInstall(AutomatedInstallData.getInstance());
     }
   }
 

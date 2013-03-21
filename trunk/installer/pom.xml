@@ -34,8 +34,14 @@
         <junit.version>4.10</junit.version>
         <jmock.version>2.5.1</jmock.version>
         <project.build.izpack.directory>${project.build.directory}/izpack</project.build.izpack.directory>
+        <izpack.staging>${project.build.directory}/staging</izpack.staging>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>org.codehaus.izpack</groupId>
+            <artifactId>izpack-maven-plugin</artifactId>
+            <version>5.0.0-beta11</version>
+        </dependency>
         <dependency>
             <groupId>org.codehaus.izpack</groupId>
             <artifactId>izpack-standalone-compiler</artifactId>
@@ -157,9 +163,69 @@
                 </executions>
             </plugin>
             <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>create-staging-area</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <copy todir="${izpack.staging}">
+                                    <fileset dir="${basedir}/src/izpack"/>
+                                </copy>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <!-- copy *application* jars to izpack staging lib -->
+                        <id>copy-product-dependencies</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${izpack.staging}/lib</outputDirectory>
+                            <excludeTransitive>false</excludeTransitive>
+                            <stripVersion>true</stripVersion>
+                            <overWriteReleases>true</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                            <excludeScope>system</excludeScope> <!-- this excludes tools.jar, e.g. -->
+                            <excludeArtifactIds>mycustompanels</excludeArtifactIds> <!-- IMPORTANT: don't copy custom panels where our application jars live -->
+                            <excludeGroupIds>org.codehaus.izpack</excludeGroupIds> <!-- IMPORTANT: we don't want to copy the izpack dependency where our application jars live -->
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <!-- copy izpack custom (custom panels, etc.) jars to izpack staging custom -->
+                        <id>copy-izpack-dependencies</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${izpack.staging}/custom</outputDirectory>
+                            <excludeTransitive>false</excludeTransitive>
+                            <stripVersion>true</stripVersion>
+                            <overWriteReleases>true</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+
+<!--
                 <groupId>org.codehaus.izpack</groupId>
                 <artifactId>izpack-maven-plugin</artifactId>
-                <version>1.0-alpha-5</version>
+                <version>5.0.0-beta11</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -168,9 +234,12 @@
                         </goals>
                         <configuration>
                             <installerFile>${project.build.directory}/yes-cart-${project.build.finalName}.jar</installerFile>
+                            <comprLevel>9</comprLevel>
                         </configuration>
                     </execution>
                 </executions>
+-->
+<!--
                 <dependencies>
                     <dependency>
                         <groupId>org.codehaus.izpack</groupId>
@@ -178,6 +247,7 @@
                         <version>${izpack.version}</version>
                     </dependency>
                 </dependencies>
+-->
             </plugin>
         </plugins>
     </build>

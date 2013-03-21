@@ -16,7 +16,7 @@
 
 <!DOCTYPE installation PUBLIC "izpack-installation"
                               "http://svn.codehaus.org/izpack-svn/izpack-src/branches/4.3/src/dtd/installation.dtd">
-<installation version="1.0">
+<installation version="5.0">
     <info>
         <appname>yes-cart</appname>
         <appversion>${project.version}</appversion>
@@ -47,10 +47,10 @@
         <res id="CustomLangpack.xml_rus" src="i18n_rus.xml"/>
 
         <res id="ProcessPanel.Spec.xml" src="processPanelSpec.xml" />
-        <res id="ProcessPanel.Spec.xml_rus" src="processPanelSpec_rus.xml" />
+        <res id="ProcessPanel.Spec.xml_rus" src="../../src/main/izpack/processPanelSpec_rus.xml" />
 
-        <res id="shortcutSpec.xml" src="shortcutSpec.xml"/>
-        <res id="shortcutSpec.xml_rus" src="shortcutSpec_rus.xml"/>
+        <res id="shortcutSpec.xml" src="../../src/main/izpack/shortcutSpec.xml"/>
+        <res id="shortcutSpec.xml_rus" src="../../src/main/izpack/shortcutSpec_rus.xml"/>
 
 <!--
 
@@ -76,7 +76,7 @@
     </panels>
 
     <listeners>
-        <listener installer="org.yes.cart.installer.ApacheTomcat7PackPostInstaller"/>
+        <listener classname="org.yes.cart.installer.ApacheTomcat7PackPostInstaller" stage="install"/>
     </listeners>
 
     <packs>
@@ -132,6 +132,11 @@
             <fileset dir="../../src/main/resources/imagevault"
                      targetdir="$INSTALL_PATH/webapps/yes-shop/default/imagevault" override="update"/>
             <!-- lucene indexes -->
+<!--
+            <file src="../../src/main/resources/temp.zip"
+                     targetdir="$INSTALL_PATH/temp/yes-cart" override="update" />
+-->
+
             <fileset dir="../../src/main/resources/temp/yes-cart"
                      targetdir="$INSTALL_PATH/temp/yes-cart" override="update"/>
 
@@ -154,8 +159,8 @@
 
     </packs>
 
-    <jar src="installer-${project.version}.jar"/>
-    <jar src="guava-${guava.version}.jar"/>
+    <jar src="installer-1.0.0-SNAPSHOT.jar"/> <!-- installer-${project.version}.jar -->
+    <jar src="guava-r09.jar"/>
 
 
 
