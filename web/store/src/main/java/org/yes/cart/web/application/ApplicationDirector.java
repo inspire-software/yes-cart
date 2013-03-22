@@ -119,6 +119,17 @@ public class ApplicationDirector implements ApplicationContextAware {
     }
 
     /**
+     * @return current shop's theme
+     */
+    public static String getCurrentTheme() {
+        final Shop shop = shopThreadLocal.get();
+        if (shop == null) {
+            return "default";
+        }
+        return shop.getFspointer();
+    }
+
+    /**
      * Set {@link Shop} instance to current thread.
      *
      * @param currentShop current shop.

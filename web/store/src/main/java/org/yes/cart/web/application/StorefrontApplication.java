@@ -16,8 +16,6 @@
 
 package org.yes.cart.web.application;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.wicket.IRequestCycleProvider;
 import org.apache.wicket.Session;
@@ -30,23 +28,16 @@ import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.cycle.RequestCycleContext;
-import org.apache.wicket.request.mapper.MountedMapper;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
+import org.apache.wicket.util.ClassProvider;
 import org.apache.wicket.util.file.IResourceFinder;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
-import org.yes.cart.service.payment.PaymentModulesManager;
-import org.yes.cart.web.page.*;
-import org.yes.cart.web.page.component.customer.address.CreateEditAddressPage;
-import org.yes.cart.web.page.payment.callback.AuthorizeNetSimPaymentOkPage;
-import org.yes.cart.web.page.payment.callback.LiqPayReturnUrlPage;
-import org.yes.cart.web.page.payment.callback.PayPalReturnUrlPage;
-import org.yes.cart.web.page.payment.callback.ResultPage;
-import org.yes.cart.web.util.SeoBookmarkablePageParametersEncoder;
+import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.web.page.HomePage;
+import org.yes.cart.web.theme.WicketPagesMounter;
 
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -73,11 +64,6 @@ public class StorefrontApplication
         IResourceFinder,
         IRequestCycleProvider {
 
-    /**
-     * Home page mount path.
-     */
-    public static final String HOME_PAGE_MOUNT_PATH = "/shop";
-
     private static Map<String, MultiWebApplicationPath> resourceResolvers =
             new ConcurrentHashMap<String, MultiWebApplicationPath>();
 
@@ -85,13 +71,13 @@ public class StorefrontApplication
 
     private SpringComponentInjector springComponentInjector;
 
-
-
+    private ClassProvider loginPageProvider;
+    private ClassProvider homePageProvider;
 
     /**
      * Lazy getter of spring injector.
      *
-     * @return
+     * @return spring inject support
      */
     public SpringComponentInjector getSpringComponentInjector() {
         if (springComponentInjector == null) {
@@ -104,7 +90,7 @@ public class StorefrontApplication
      * @see org.apache.wicket.Application#getHomePage()
      */
     public Class<HomePage> getHomePage() {
-        return HomePage.class;
+        return homePageProvider.get();
     }
 
 
@@ -169,156 +155,30 @@ public class StorefrontApplication
      * {@inheritDoc}
      */
     protected Class<? extends WebPage> getSignInPageClass() {
-        return LoginPage.class;
+        return loginPageProvider.get();
     }
 
     /**
-     * Mount pages to particular pathes.
+     * Mount pages to particular paths.
      */
     private void mountPages() {
         final ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
-        final SeoBookmarkablePageParametersEncoder encoder = ctx.getBean(
-                "seoBookmarkablePageParametersEncoder",
-                SeoBookmarkablePageParametersEncoder.class);
-        final PaymentModulesManager paymentModulesManager = ctx.getBean(
-                "paymentModulesManager",
-                PaymentModulesManager.class);
-        mount(
-                new MountedMapper(
-                        "/",
-                        HomePage.class,
-                        encoder
-                )
-        );
+        final WicketPagesMounter mounter = ctx.getBean(
+                "wicketPagesMounter",
+                WicketPagesMounter.class);
 
-        mount(
-                new MountedMapper(
-                        "/cart",
-                        ShoppingCartPage.class,
-                        encoder
-                )
-        );
+        mounter.mountPages(this);
 
-        mount(
-                new MountedMapper(
-                        "/selfcare",
-                        CustomerSelfCarePage.class
-                )
-        );
+        loginPageProvider = mounter.getLoginPageProvider();
+        homePageProvider = mounter.getHomePageProvider();
 
-        mount(
-                new MountedMapper(
-                        "/faq",
-                        FaqPage.class
-                )
-        );
-
-        mount(
-                new MountedMapper(
-                        "/contact",
-                        ContactPage.class
-                )
-        );
-
-        mount(
-                new MountedMapper(
-                        "/login",
-                        LoginPage.class
-                )
-        );
-
-        mount(
-                new MountedMapper(
-                        "/registration",
-                        RegistrationPage.class
-                )
-        );
-
-        mount(
-                new MountedMapper(
-                        "/address",
-                        CreateEditAddressPage.class
-                )
-        );
-
-        mount(
-                new MountedMapper(
-                        "/checkout",
-                        CheckoutPage.class
-                )
-        );
-
-        mount(
-                new MountedMapper(
-                        "/payment",
-                        PaymentPage.class
-                )
-        );
-
-
-        mountPaymentGatewayCallBackPages(paymentModulesManager);
-
-    }
-
-
-    /**
-     * Mount pages for gateways, that works via redirect to
-     * gateway page and back.
-     * @param paymentModulesManager to determinate what module is active
-     */
-    private void mountPaymentGatewayCallBackPages(final PaymentModulesManager paymentModulesManager) {
-
-        mount(
-                new MountedMapper(
-                        "/paymentresult",
-                        ResultPage.class
-                )
-        );
-
-        final List<PaymentGatewayDescriptor> allowedPaymentGateways = paymentModulesManager.getPaymentGatewaysDescriptors(false);
-
-
-
-
-        if (isPaymentGatewayAllowed(allowedPaymentGateways, "authorizeNetSimPaymentGatewayLabel")) {
-            mount(
-                    new MountedMapper(
-                            "/anetsim",
-                            AuthorizeNetSimPaymentOkPage.class
-                    )
-            );
+        if (loginPageProvider == null) {
+            ShopCodeContext.getLog().error("No login page class was mounted");
+        }
+        if (homePageProvider == null) {
+            ShopCodeContext.getLog().error("No home page class was mounted");
         }
 
-
-        if (isPaymentGatewayAllowed(allowedPaymentGateways, "payPalExpressPaymentGatewayLabel")) {
-            mount(
-                    new MountedMapper(
-                            "/paypallreturn",
-                            PayPalReturnUrlPage.class
-                    )
-            );
-        }
-
-        if (isPaymentGatewayAllowed(allowedPaymentGateways, "liqPayPaymentGatewayLabel")) {
-            mount(
-                    new MountedMapper(
-                            "/liqpayreturn",
-                            LiqPayReturnUrlPage.class
-                    )
-            );
-
-        }
-
-
-
-    }
-
-    private boolean isPaymentGatewayAllowed(final List<PaymentGatewayDescriptor> allowedPaymentGateways, final String gatewayLabel) {
-        return CollectionUtils.exists(allowedPaymentGateways, new Predicate() {
-            public boolean evaluate(Object o) {
-                return ((PaymentGatewayDescriptor) o).getLabel().equals(gatewayLabel);
-            }
-        });
     }
 
     /**
@@ -343,16 +203,17 @@ public class StorefrontApplication
      * @return instance of {@link MultiWebApplicationPath}
      */
     private MultiWebApplicationPath getMultiWebApplicationPath() {
-        MultiWebApplicationPath MultiWebApplicationPath = resourceResolvers.get(ApplicationDirector.getCurrentShop().getCode());
-        if (MultiWebApplicationPath == null) { //first request to this shop, lets create a resolver
-            MultiWebApplicationPath = new MultiWebApplicationPath(getServletContext());
+        MultiWebApplicationPath multiWebApplicationPath = resourceResolvers.get(ApplicationDirector.getCurrentShop().getCode());
+        if (multiWebApplicationPath == null) { //first request to this shop, lets create a resolver
+            multiWebApplicationPath = new MultiWebApplicationPath(getServletContext());
 
-            MultiWebApplicationPath.add(ApplicationDirector.getCurrentShop().getFspointer() + "/markup");  // shop specific markup folder
-            MultiWebApplicationPath.add("default/markup"); // default place to search resource
+            multiWebApplicationPath.add(ApplicationDirector.getCurrentTheme() + "/markup");  // shop specific markup folder
+            multiWebApplicationPath.add("default/markup"); // default place to search resource
+            // TODO: v2 shop specific failover stacks with multiple themes?
 
-            resourceResolvers.put(ApplicationDirector.getCurrentShop().getCode(), MultiWebApplicationPath);
+            resourceResolvers.put(ApplicationDirector.getCurrentShop().getCode(), multiWebApplicationPath);
         }
-        return MultiWebApplicationPath;
+        return multiWebApplicationPath;
     }
 
 }
