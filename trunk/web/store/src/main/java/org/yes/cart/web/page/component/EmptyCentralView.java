@@ -33,8 +33,18 @@ public class EmptyCentralView extends AbstractCentralView {
      */
     public EmptyCentralView(String id, BooleanQuery booleanQuery) {
         super(id, 0l, booleanQuery);
+    }
 
-
+    /**
+     * This is an internal constructor used by HomePage class. It disregards the
+     * categoryId value.
+     *
+     * @param id panel id
+     * @param categoryId ignored
+     * @param booleanQuery     boolean query.
+     */
+    public EmptyCentralView(String id, long categoryId, BooleanQuery booleanQuery) {
+        super(id, 0l, booleanQuery);
     }
 
 }

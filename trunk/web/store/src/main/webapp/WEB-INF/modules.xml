@@ -33,5 +33,6 @@
     <import resource="classpath*:core-module-payment-capp.xml"/>
     <import resource="classpath*:core-module-payment-gswm.xml"/>
 
+    <import resource="wicket.xml"/>
 
 </beans>
