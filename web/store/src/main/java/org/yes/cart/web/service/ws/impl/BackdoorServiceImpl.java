@@ -109,7 +109,7 @@ public class BackdoorServiceImpl implements BackdoorService, ApplicationContextA
 
         } catch (Exception e) {
             final String msg = "Cant parse query : " + query + " Error : " + e.getMessage();
-            ShopCodeContext.getLog().warn(msg);
+            ShopCodeContext.getLog(this).warn(msg);
             return Collections.singletonList(new Object[]{msg});
         }
 
@@ -136,7 +136,7 @@ public class BackdoorServiceImpl implements BackdoorService, ApplicationContextA
             return Collections.EMPTY_LIST;
         } catch (Exception e) {
             final String msg = "Cant parse query : " + query + " Error : " + e.getMessage();
-            ShopCodeContext.getLog().warn(msg);
+            ShopCodeContext.getLog(this).warn(msg);
             return Collections.singletonList(new Object[]{msg});
         }
 
@@ -160,7 +160,7 @@ public class BackdoorServiceImpl implements BackdoorService, ApplicationContextA
 
             final String msg = "Cant parse query : " + luceneQuery + " Error : " + e.getMessage();
 
-            ShopCodeContext.getLog().warn(msg);
+            ShopCodeContext.getLog(this).warn(msg);
 
             return Collections.singletonList(new Object[]{msg});
 

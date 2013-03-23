@@ -5,6 +5,7 @@ import com.google.checkout.sdk.commands.CartPoster;
 import com.google.checkout.sdk.commands.Environment;
 import com.google.checkout.sdk.domain.*;
 import org.apache.commons.lang.SerializationUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -98,7 +99,7 @@ public class GoogleCheckoutPaymentGatewayImpl
      * Shipment not included. Will be added at capture operation.
      */
     public Payment authorize(final Payment paymentIn) {
-        ShopCodeContext.getLog().info("#authorize");
+        ShopCodeContext.getLog(this).info("#authorize");
 
         return (Payment) SerializationUtils.clone(paymentIn);
 
@@ -113,7 +114,7 @@ public class GoogleCheckoutPaymentGatewayImpl
      * {@inheritDoc}
      */
     public Payment reverseAuthorization(final Payment payment) {
-        ShopCodeContext.getLog().info("#reverseAuthorization");
+        ShopCodeContext.getLog(this).info("#reverseAuthorization");
 
         return payment;
     }
@@ -122,7 +123,7 @@ public class GoogleCheckoutPaymentGatewayImpl
      * {@inheritDoc}
      */
     public Payment capture(final Payment payment) {
-        ShopCodeContext.getLog().info("#capture");
+        ShopCodeContext.getLog(this).info("#capture");
 
         payment.setTransactionOperation(CAPTURE);
         return payment;
@@ -132,7 +133,7 @@ public class GoogleCheckoutPaymentGatewayImpl
      * {@inheritDoc}
      */
     public Payment voidCapture(final Payment payment) {
-        ShopCodeContext.getLog().info("#voidCapture");
+        ShopCodeContext.getLog(this).info("#voidCapture");
 
         return payment;
     }
@@ -141,7 +142,7 @@ public class GoogleCheckoutPaymentGatewayImpl
      * {@inheritDoc}
      */
     public Payment refund(final Payment payment) {
-        ShopCodeContext.getLog().info("#refund");
+        ShopCodeContext.getLog(this).info("#refund");
 
         return payment;
     }
@@ -386,9 +387,9 @@ public class GoogleCheckoutPaymentGatewayImpl
             final byte[] text = xmlToSign.getBytes();
             return new String(Base64.encode(mac.doFinal(text))).trim();
         } catch (NoSuchAlgorithmException e) {
-            ShopCodeContext.getLog().error("Cant create signature", e);
+            ShopCodeContext.getLog(this).error("Cant create signature", e);
         } catch (InvalidKeyException e) {
-            ShopCodeContext.getLog().error("Cant create signature", e);
+            ShopCodeContext.getLog(this).error("Cant create signature", e);
         }
         return null;
     }
@@ -423,11 +424,14 @@ public class GoogleCheckoutPaymentGatewayImpl
     }
 
 
-    public static void dumpRequest(final ServletRequest request) {
+    public void dumpRequest(final ServletRequest request) {
+
+        final Logger log = ShopCodeContext.getLog(this);
+
         Enumeration en = request.getParameterNames();
         while (en.hasMoreElements()) {
             final Object key = en.nextElement();
-            ShopCodeContext.getLog().info(MessageFormat.format("HttpUtil#dumpRequest local at gc param key = [{0}] value = [{1}]",
+            log.info(MessageFormat.format("HttpUtil#dumpRequest local at gc param key = [{0}] value = [{1}]",
                     key,
                     request.getParameter((String) key)));
         }
@@ -435,7 +439,7 @@ public class GoogleCheckoutPaymentGatewayImpl
         en = request.getAttributeNames();
         while (en.hasMoreElements()) {
             final Object key = en.nextElement();
-            ShopCodeContext.getLog().info(MessageFormat.format("HttpUtil#dumpRequest local at gc attr  key = [{0}] value = [{1}]",
+            log.info(MessageFormat.format("HttpUtil#dumpRequest local at gc attr  key = [{0}] value = [{1}]",
                     key,
                     request.getAttribute((String) key)));
         }

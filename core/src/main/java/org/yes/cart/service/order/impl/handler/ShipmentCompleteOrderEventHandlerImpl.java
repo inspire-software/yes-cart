@@ -50,7 +50,7 @@ public class ShipmentCompleteOrderEventHandlerImpl implements OrderEventHandler 
     public boolean handle(final OrderEvent orderEvent) {
         synchronized (OrderEventHandler.syncMonitor) {
 
-            final Logger log = ShopCodeContext.getLog();
+            final Logger log = ShopCodeContext.getLog(this);
             final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(orderEvent.getCustomerOrder().getPgLabel());
 
             final boolean fundCaptured = Payment.PAYMENT_STATUS_OK.equals(

@@ -123,7 +123,7 @@ public class PayPalExpressCheckoutFilter extends AbstractFilter implements Filte
             // TODO: YC-156  move order to failed state
         }
 
-        ShopCodeContext.getLog().info("Pay pal filter user will be redirected to {}", redirectUrl);
+        ShopCodeContext.getLog(this).info("Pay pal filter user will be redirected to {}", redirectUrl);
 
         ((HttpServletResponse) servletResponse).sendRedirect(
                 ((HttpServletResponse) servletResponse).encodeRedirectURL(redirectUrl)

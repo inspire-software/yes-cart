@@ -87,14 +87,14 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
             paymentModulesMap = new HashMap<String, PaymentModule>();
             for (String url : getModulesUrl()) {
                 try {
-                    ShopCodeContext.getLog().info("Loading payment module from url {}", url);
+                    ShopCodeContext.getLog(this).info("Loading payment module from url {}", url);
                     final PaymentModule paymentModule = serviceLocator.getServiceInstance(url, PaymentModule.class, null, null); //passwd & login not need set of payment gateways
                     paymentModulesMap.put(
                             paymentModule.getPaymentModuleDescriptor().getLabel(),
                             paymentModule
                     );
                 } catch (Throwable e) {
-                    ShopCodeContext.getLog().error(
+                    ShopCodeContext.getLog(this).error(
                             MessageFormat.format(
                                     "Cannot load payment module with url {0} error message is {1}. See trace for more details",
                                     url,
@@ -239,7 +239,7 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
                 );
             }
         }
-        ShopCodeContext.getLog().error("Payment gateway {} not found", paymentGatewayLabel);
+        ShopCodeContext.getLog(this).error("Payment gateway {} not found", paymentGatewayLabel);
 
         return null;
     }

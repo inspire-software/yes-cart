@@ -99,7 +99,7 @@ public class MultiWebApplicationPath   implements IResourcePath {
             }
         }
 
-        final Logger log = ShopCodeContext.getLog();
+        final Logger log = ShopCodeContext.getLog(this);
 
         Iterator<String> webappPathsIter = webappPaths.iterator();
         while (webappPathsIter.hasNext()) {

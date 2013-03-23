@@ -312,7 +312,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
 
     private String performPayPalApiCall(final String callParams) throws IOException {
 
-        ShopCodeContext.getLog().info("PayPalExpressCheckoutPaymentGatewayImpl#performPayPalApiCall call parameters : {}", callParams);
+        ShopCodeContext.getLog(this).info("PayPalExpressCheckoutPaymentGatewayImpl#performPayPalApiCall call parameters : {}", callParams);
 
         final StringBuilder respBuilder = new StringBuilder();
 
@@ -329,7 +329,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
         while (((_line = rd.readLine()) != null)) {
             respBuilder.append(_line);
         }
-        ShopCodeContext.getLog().info("PayPalExpressCheckoutPaymentGatewayImpl#performPayPalApiCall response : {}", respBuilder);
+        ShopCodeContext.getLog(this).info("PayPalExpressCheckoutPaymentGatewayImpl#performPayPalApiCall response : {}", respBuilder);
         return respBuilder.toString();
     }
 

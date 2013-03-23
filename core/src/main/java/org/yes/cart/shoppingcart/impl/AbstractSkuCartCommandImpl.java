@@ -73,7 +73,7 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
             dtoProductService = (DtoProductService) applicationContext.getBean(ServiceSpringKeys.DTO_PRODUCT_SERVICE);
             productSkuDTO = dtoProductService.getProductSkuByCode(skuCode);
         } catch (Exception e) {
-            final Logger log = ShopCodeContext.getLog();
+            final Logger log = ShopCodeContext.getLog(this);
             log.error("Can not retreive product sku dto with code {}", skuCode, e);
             log.error(e.getMessage(), e);
         }
@@ -90,7 +90,7 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
 
         if (shoppingCart.getShoppingContext().getShopId() == 0) {
 
-            ShopCodeContext.getLog().error("Can not recalculate price because the shop id is 0");
+            ShopCodeContext.getLog(this).error("Can not recalculate price because the shop id is 0");
 
         } else {
 
@@ -138,7 +138,7 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
         );
 
         if (!shoppingCart.setProductSkuPrice(skuCode, price)) {
-            ShopCodeContext.getLog().warn(MessageFormat.format("Can not set price to sku with code {0} ",
+            ShopCodeContext.getLog(this).warn(MessageFormat.format("Can not set price to sku with code {0} ",
                     skuCode));
 
         }

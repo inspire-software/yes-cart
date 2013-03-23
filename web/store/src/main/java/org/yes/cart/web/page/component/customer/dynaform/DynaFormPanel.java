@@ -104,7 +104,7 @@ public class DynaFormPanel extends BaseComponent {
 
             @Override
             protected void onSubmit() {
-                final Logger log = ShopCodeContext.getLog();
+                final Logger log = ShopCodeContext.getLog(this);
                 if (log.isDebugEnabled()) {
                     log.debug(
                             MessageFormat.format(

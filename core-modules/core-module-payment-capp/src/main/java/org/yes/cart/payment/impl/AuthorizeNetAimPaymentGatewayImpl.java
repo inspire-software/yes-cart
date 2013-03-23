@@ -208,7 +208,7 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
             payment.setTransactionReferenceId(transTez.getTarget().getTransactionId());
             payment.setTransactionAuthorizationCode(transTez.getTarget().getAuthorizationCode());
 
-            final Logger log = ShopCodeContext.getLog();
+            final Logger log = ShopCodeContext.getLog(this);
             if (log.isDebugEnabled()) {
                 log.debug(payment.getTransactionOperation() + " transaction response code was : "
                         + transTez.getReasonResponseCode().getResponseCode().getCode()
@@ -217,7 +217,7 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
                 );
             }
         } catch (Throwable th) {
-            ShopCodeContext.getLog().error("Can not execute transaction. Client exception : " + payment, th);
+            ShopCodeContext.getLog(this).error("Can not execute transaction. Client exception : " + payment, th);
             throw new PaymentException("Can not execute transaction. Client exception : " + payment, th);
 
         }

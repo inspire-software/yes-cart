@@ -120,7 +120,7 @@ public class BreadCrumbsBuilder {
                    )
             );
 
-            final Logger log = ShopCodeContext.getLog();
+            final Logger log = ShopCodeContext.getLog(this);
             if (log.isDebugEnabled()) {
                 log.debug("Adding breadcrumb for category: [" + categoryId + "] " + category.getName());
             }

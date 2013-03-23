@@ -56,7 +56,7 @@ public class WicketPagesMounterImpl implements WicketPagesMounter {
     /** {@inheritDoc} */
     public void mountPages(final WebApplication webApplication) {
 
-        final Logger log = ShopCodeContext.getLog();
+        final Logger log = ShopCodeContext.getLog(this);
 
         for (Map.Entry<String, Map<String, Class<IRequestablePage>>> pageMappingEntry : pageMapping.entrySet()) {
             final String url = pageMappingEntry.getKey();

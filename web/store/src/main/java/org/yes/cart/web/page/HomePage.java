@@ -211,7 +211,7 @@ public class HomePage extends AbstractWebPage {
 
                 final Shop shop = ApplicationDirector.getCurrentShop();
                 if (!categoryService.transform(shopService.getShopCategories(shop)).contains(categoryId)) {
-                    final Logger log = ShopCodeContext.getLog();
+                    final Logger log = ShopCodeContext.getLog(this);
                     if (log.isWarnEnabled()) {
                         log.warn("Can not access to category  {} from shop {}", categoryId, shop.getShopId());
                     }
@@ -225,7 +225,7 @@ public class HomePage extends AbstractWebPage {
             return constructor.newInstance(id, categoryId, booleanQuery);
 
         } catch (Exception e) {
-            ShopCodeContext.getLog().error(MessageFormat.format("Can not create instance of panel for label {0}", rendererLabel), e);
+            ShopCodeContext.getLog(this).error(MessageFormat.format("Can not create instance of panel for label {0}", rendererLabel), e);
             //e.printStackTrace();
             return new EmptyCentralView(id, booleanQuery);
 

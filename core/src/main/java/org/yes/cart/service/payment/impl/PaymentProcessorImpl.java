@@ -260,7 +260,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                 paymentsToCapture.size() > 1
                         ||
                         (paymentsToCapture.isEmpty() && !getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorize())) {
-            ShopCodeContext.getLog().warn( //must be only one record
+            ShopCodeContext.getLog(this).warn( //must be only one record
                     MessageFormat.format(
                             "Payment gateway {0} with features {1}. Found {2} records to capture, but expected 1 only. Order num {3} Shipment num {4}",
                             getPaymentGateway().getLabel(), getPaymentGateway().getPaymentGatewayFeatures(), paymentsToCapture.size(), order.getOrdernum(), orderShipmentNumber
@@ -285,7 +285,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                     paymentResult = Payment.PAYMENT_STATUS_FAILED;
                     payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
                     payment.setTransactionOperationResultMessage(th.getMessage());
-                    ShopCodeContext.getLog().error("Cannot capture " + payment, th);
+                    ShopCodeContext.getLog(this).error("Cannot capture " + payment, th);
 
                 } finally {
                     final CustomerOrderPayment authReversedOrderPayment = new CustomerOrderPaymentEntity();
@@ -340,7 +340,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                         paymentResult = payment.getPaymentProcessorResult();
                     }
                 } catch (Throwable th) {
-                    ShopCodeContext.getLog().error(
+                    ShopCodeContext.getLog(this).error(
                             MessageFormat.format(
                                     "Can not perform roll back operation on payment record {0} payment {1}",
                                     customerOrderPayment.getCustomerOrderPaymentId(),
@@ -364,7 +364,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
             return wasError ? Payment.PAYMENT_STATUS_FAILED : Payment.PAYMENT_STATUS_OK;
         }
-        ShopCodeContext.getLog().warn("Can not payment cancelation on canceled order  {}",
+        ShopCodeContext.getLog(this).warn("Can not payment cancelation on canceled order  {}",
                 order.getOrdernum()
         );
         return Payment.PAYMENT_STATUS_FAILED;

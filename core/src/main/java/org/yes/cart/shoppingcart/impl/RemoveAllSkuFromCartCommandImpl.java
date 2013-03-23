@@ -57,7 +57,7 @@ public class RemoveAllSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl 
     public void execute(final ShoppingCart shoppingCart) {
         if (getProductSkuDTO() != null) {
             if(!shoppingCart.removeCartItem(getProductSkuDTO())) {
-                ShopCodeContext.getLog().warn("Can not remove all skus with code {} from cart",
+                ShopCodeContext.getLog(this).warn("Can not remove all skus with code {} from cart",
                         getProductSkuDTO().getCode());
 
             } else  {

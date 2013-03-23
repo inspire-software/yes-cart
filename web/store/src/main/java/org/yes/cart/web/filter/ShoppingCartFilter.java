@@ -82,20 +82,20 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
                         httpRequest.getCookies(),
                         cart);
             } catch (UnableToObjectizeCookieException e) {
-                ShopCodeContext.getLog().warn("Cart not restored from cookies");
+                ShopCodeContext.getLog(this).warn("Cart not restored from cookies");
             }
             cart.setProcessingStartDate(new Date());
             cart.setCalculationStrategy(calculationStrategy);
             ApplicationDirector.setShoppingCart(cart);
 
         } catch (Exception e) {
-            ShopCodeContext.getLog().error("Can process request", e);
+            ShopCodeContext.getLog(this).error("Can process request", e);
         } finally {
             if (tuplizer != null) {
                 try {
                     tuplizerPool.releaseTarget(tuplizer);
                 } catch (Exception e) {
-                    ShopCodeContext.getLog().error("Can return object to pool ", e);
+                    ShopCodeContext.getLog(this).error("Can return object to pool ", e);
                 }
             }
         }

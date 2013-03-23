@@ -69,14 +69,14 @@ public class CustomerRegistrationMessageListener implements Runnable {
         try {
             final RegistrationMessage registrationMessage = (RegistrationMessage) objectMessage;
 
-            ShopCodeContext.getLog().info("CustomerRegistrationMessageListener#onMessage responce :" + registrationMessage);
+            ShopCodeContext.getLog(this).info("CustomerRegistrationMessageListener#onMessage responce :" + registrationMessage);
 
             if (registrationMessage.getPathToTemplateFolder() != null) {
                 processMessage(registrationMessage);
             }
 
         } catch (Exception e) {
-            ShopCodeContext.getLog().error("Cant process " + objectMessage, e);
+            ShopCodeContext.getLog(this).error("Cant process " + objectMessage, e);
             throw new RuntimeException(e); //rollback message
         }
     }
@@ -114,9 +114,9 @@ public class CustomerRegistrationMessageListener implements Runnable {
             try {
                 javaMailSender.send(mimeMessage);
                 send = true;
-                ShopCodeContext.getLog().info("Customer registration mail send to {}", registrationMessage.getEmail() );
+                ShopCodeContext.getLog(this).info("Customer registration mail send to {}", registrationMessage.getEmail() );
             } catch (MailSendException me) {
-                ShopCodeContext.getLog().error("Cant send email to {} {}", registrationMessage.getEmail(), me.getMessage());
+                ShopCodeContext.getLog(this).error("Cant send email to {} {}", registrationMessage.getEmail(), me.getMessage());
                 Thread.sleep(60000);
                 
             }

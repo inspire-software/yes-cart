@@ -173,10 +173,10 @@ public class StorefrontApplication
         homePageProvider = mounter.getHomePageProvider();
 
         if (loginPageProvider == null) {
-            ShopCodeContext.getLog().error("No login page class was mounted");
+            ShopCodeContext.getLog(this).error("No login page class was mounted");
         }
         if (homePageProvider == null) {
-            ShopCodeContext.getLog().error("No home page class was mounted");
+            ShopCodeContext.getLog(this).error("No home page class was mounted");
         }
 
     }

@@ -68,7 +68,7 @@ public class BasePaymentGatewayCallBackFilter extends AbstractFilter implements 
 
         if (isCallerIpAllowed()) {
 
-            final Logger log = ShopCodeContext.getLog();
+            final Logger log = ShopCodeContext.getLog(this);
             if (log.isDebugEnabled()) {
                 log.debug(HttpUtil.dumpRequest((HttpServletRequest) servletRequest));
             }

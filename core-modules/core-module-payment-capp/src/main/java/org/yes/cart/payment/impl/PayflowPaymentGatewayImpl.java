@@ -455,7 +455,7 @@ public class PayflowPaymentGatewayImpl extends AbstractCappPaymentGatewayImpl im
             }
         } catch (Throwable th) {
             th.printStackTrace();
-            ShopCodeContext.getLog().error("Can not execute transaction. Client exception : " + payment, th);
+            ShopCodeContext.getLog(this).error("Can not execute transaction. Client exception : " + payment, th);
             throw new PaymentException("Can not execute transaction. Client exception : " + payment, th);
         }
     }

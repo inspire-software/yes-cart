@@ -79,7 +79,7 @@ public class PaymentOkOrderEventHandlerImpl extends AbstractOrderEventHandlerImp
             CustomerOrder order = orderEvent.getCustomerOrder();
             for (CustomerOrderDelivery delivery : order.getDelivery()) {
                 final String eventId = GROUP_TRIGGER_MAP.get(delivery.getDeliveryGroup());
-                ShopCodeContext.getLog().info(MessageFormat.format("Delivery {0} for order {1} event {2}",
+                ShopCodeContext.getLog(this).info(MessageFormat.format("Delivery {0} for order {1} event {2}",
                         delivery.getDeliveryNum(), order.getOrdernum(), eventId));
                 final OrderEvent deliveryEvent = new OrderEventImpl(eventId, order, delivery);
                 getOrderStateManager().fireTransition(deliveryEvent);

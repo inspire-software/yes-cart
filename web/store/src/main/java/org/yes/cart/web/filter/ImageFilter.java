@@ -138,7 +138,7 @@ public class ImageFilter extends AbstractFilter implements Filter {
             httpServletResponse.sendError(HttpServletResponse.SC_NOT_MODIFIED);
             // use the same date we sent when we created the ETag the first time through
             httpServletResponse.setHeader(LAST_MODIFIED, httpServletRequest.getHeader(IF_MODIFIED_SINCE));
-            final Logger log = ShopCodeContext.getLog();
+            final Logger log = ShopCodeContext.getLog(this);
             if (log.isDebugEnabled()) {
                 log.debug("ETag the same, will return 304");
             }

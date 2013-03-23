@@ -91,13 +91,13 @@ public class ShoppingCartCommandFactoryImpl implements ShoppingCartCommandFactor
                                     Map.class);
                     return constructor.newInstance(applicationContext, pageParameters);
                 } catch (Exception e) {
-                    ShopCodeContext.getLog().error(
+                    ShopCodeContext.getLog(this).error(
                             MessageFormat.format(
                                     "Can not create command instance for given key {0}. Is appropriate constuctor with ApplicationContext and Map parameters existis ?", cmdKey),
                             e);
                 }
             }
-            ShopCodeContext.getLog().error("Command instance not found for given key {}", cmdKey);
+            ShopCodeContext.getLog(this).error("Command instance not found for given key {}", cmdKey);
         }
         return null;
     }

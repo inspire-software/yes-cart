@@ -53,7 +53,7 @@ public class PayPalNvpPaymentGatewayImpl extends AbstractPayPalPaymentGatewayImp
                 nvpCallerServices = new NVPCallerServices();
                 nvpCallerServices.setAPIProfile(profile);
             } catch (PayPalException e) {
-                ShopCodeContext.getLog().error("Cant create api profile", e);
+                ShopCodeContext.getLog(this).error("Cant create api profile", e);
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
 
@@ -198,7 +198,7 @@ public class PayPalNvpPaymentGatewayImpl extends AbstractPayPalPaymentGatewayImp
     }
 
     private Payment runTransaction(final NVPEncoder requestEncoder, final Payment payment, final String operation) {
-        final Logger log = ShopCodeContext.getLog();
+        final Logger log = ShopCodeContext.getLog(this);
         payment.setTransactionOperation(operation);
         String request = StringUtils.EMPTY;
         String responce = StringUtils.EMPTY;

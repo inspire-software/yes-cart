@@ -96,7 +96,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
     public BulkImportResult doImport(final JobContext context) {
 
 
-        final Logger log = ShopCodeContext.getLog();
+        final Logger log = ShopCodeContext.getLog(this);
         final JobStatusListener statusListener = context.getListener();
         final Set<String> importedFiles = context.getAttribute(JobContextKeys.IMPORT_FILE_SET);
         final String fileName = context.getAttribute(JobContextKeys.IMPORT_FILE);
@@ -182,7 +182,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
                   final String pathToImportDescriptor,
                   final CsvImportDescriptor csvImportDescriptor) {
 
-        final Logger log = ShopCodeContext.getLog();
+        final Logger log = ShopCodeContext.getLog(this);
         final String msgInfoImp = MessageFormat.format("import file : {0}", fileToImport.getAbsolutePath());
         statusListener.notifyMessage(msgInfoImp);
         log.info(msgInfoImp);
@@ -252,7 +252,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
                          final ImportDescriptor descriptor,
                          final Object masterObject) {
         Object object = null;
-        final Logger log = ShopCodeContext.getLog();
+        final Logger log = ShopCodeContext.getLog(this);
         final CsvImportDescriptor importDescriptor = (CsvImportDescriptor) descriptor;
         try {
 

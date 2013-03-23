@@ -80,11 +80,11 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Applic
     public ServletRequest doBefore(final ServletRequest servletRequest,
                                    final ServletResponse servletResponse) throws IOException, ServletException {
 
-        final Logger log = ShopCodeContext.getLog();
+        final Logger log = ShopCodeContext.getLog(this);
         if (log.isDebugEnabled()) {
-            log.debug(MessageFormat.format("Request id {0} start at {1}",
+            log.debug("Request id {} start at {}",
                     servletRequest.toString(),
-                    (new Date()).getTime()));
+                    (new Date()).getTime());
         }
 
         final String serverDomainName = servletRequest.getServerName().toLowerCase();
@@ -148,7 +148,7 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Applic
         final String servletPath = httpServletRequest.getServletPath();
 
         if (StringUtils.isNotEmpty(servletPath)) {
-            final Logger log = ShopCodeContext.getLog();
+            final Logger log = ShopCodeContext.getLog(this);
             final String newServletPath = shop.getMarkupFolder() + servletPath;
             try {
 
@@ -172,7 +172,7 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Applic
      */
     public void doAfter(final ServletRequest servletRequest,
                         final ServletResponse servletResponse) throws IOException, ServletException {
-        final Logger log = ShopCodeContext.getLog();
+        final Logger log = ShopCodeContext.getLog(this);
         if (log.isDebugEnabled()) {
             log.debug(MessageFormat.format("Request id {0}   end at {1}",
                     servletRequest.toString(),

@@ -63,7 +63,7 @@ public class ProductIndexerImpl implements ProductIndexer {
      */
     public void submitIndexTask(final Long productPkValue) {
 
-        final Logger log = ShopCodeContext.getLog();
+        final Logger log = ShopCodeContext.getLog(this);
         try {
             reindexQueue.put(productPkValue);
             threadPool.submit(

@@ -69,11 +69,11 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         if (orderStateManager.fireTransition(orderEvent)
                 && !CustomerOrder.ORDER_STATUS_CANCELLED.equals(order.getOrderStatus())) {
 
-            ShopCodeContext.getLog().info("PaymentProcessFacadeImpl#pay payment(s) for order {} was successful", orderNumber);
+            ShopCodeContext.getLog(this).info("PaymentProcessFacadeImpl#pay payment(s) for order {} was successful", orderNumber);
             customerOrderService.update(order);
             return true;
         } else {
-            ShopCodeContext.getLog().info("PaymentProcessFacadeImpl#pay payment(s) for order {} has failed", orderNumber);
+            ShopCodeContext.getLog(this).info("PaymentProcessFacadeImpl#pay payment(s) for order {} has failed", orderNumber);
             customerOrderService.update(order);
             return false;
 

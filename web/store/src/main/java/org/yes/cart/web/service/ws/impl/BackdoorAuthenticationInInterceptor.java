@@ -98,7 +98,7 @@ public class BackdoorAuthenticationInInterceptor extends WSS4JInInterceptor impl
                             Authentication authentication = new UsernamePasswordAuthenticationToken(principal.getName(), principal.getPassword());
                             authentication = authenticationManager.authenticate(authentication);
                             if (!authentication.isAuthenticated()) {
-                                ShopCodeContext.getLog().warn("User {} is not authentic.", principal.getName());
+                                ShopCodeContext.getLog(this).warn("User {} is not authentic.", principal.getName());
                             }
                             SecurityContextHolder.getContext().setAuthentication(authentication);
                         }
@@ -106,7 +106,7 @@ public class BackdoorAuthenticationInInterceptor extends WSS4JInInterceptor impl
                 }
             }
         } catch (RuntimeException ex) {
-            ShopCodeContext.getLog().error(ex.getMessage(), ex);
+            ShopCodeContext.getLog(this).error(ex.getMessage(), ex);
             throw ex;
         }
     }

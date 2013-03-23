@@ -40,7 +40,7 @@ public class TopSellerCounterJobBeanImpl extends QuartzJobBean {
      * {@inheritDoc}
      */
     protected void executeInternal(final JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        final Logger log = ShopCodeContext.getLog();
+        final Logger log = ShopCodeContext.getLog(this);
         log.info("TopSellerCounterJobBeanImpl start at {}", new Date());
         shopTopSellerService.updateTopSellers (calculationPeriodInDays);
         log.info("TopSellerCounterJobBeanImpl   end at {}", new Date());

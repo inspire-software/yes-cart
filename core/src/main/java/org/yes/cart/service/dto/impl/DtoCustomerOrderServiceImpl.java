@@ -130,7 +130,7 @@ public class DtoCustomerOrderServiceImpl
             }
 
         } catch (OrderException e) {
-            ShopCodeContext.getLog().error(
+            ShopCodeContext.getLog(this).error(
                     MessageFormat.format(
                             "Cannot confirm payment for order with number [ {0} ] ",
                             orderNum
@@ -172,7 +172,7 @@ public class DtoCustomerOrderServiceImpl
             }
 
         } catch (OrderException e) {
-            ShopCodeContext.getLog().error(
+            ShopCodeContext.getLog(this).error(
                     MessageFormat.format(
                             "Order with number [ {0} ] cannot be canceled ",
                             orderNum
@@ -274,7 +274,7 @@ public class DtoCustomerOrderServiceImpl
 
                     } catch (OrderException e) {
 
-                        ShopCodeContext.getLog().error(
+                        ShopCodeContext.getLog(this).error(
                                 MessageFormat.format(
                                         "Order with number [ {0} ] delivery number [ {1} ] in [ {2} ] can not be transited to  [ {3} ] status ",
                                         orderNum, deliveryNum, delivery.getDeliveryStatus(), currentStatus
@@ -337,7 +337,7 @@ public class DtoCustomerOrderServiceImpl
             return rez;
 
         } else {
-            ShopCodeContext.getLog().warn("Customer order not found. Order number is " + orderNum);
+            ShopCodeContext.getLog(this).warn("Customer order not found. Order number is " + orderNum);
         }
         return Collections.emptyList();
 
@@ -368,7 +368,7 @@ public class DtoCustomerOrderServiceImpl
 
             return rez;
         } else {
-            ShopCodeContext.getLog().warn("Customer order not found. Order num is " + orderNum);
+            ShopCodeContext.getLog(this).warn("Customer order not found. Order num is " + orderNum);
         }
         return Collections.emptyList();
 

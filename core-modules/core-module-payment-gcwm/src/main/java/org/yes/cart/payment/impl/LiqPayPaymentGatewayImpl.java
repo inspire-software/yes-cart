@@ -93,7 +93,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
 
         final LiqPayResponce liqPayResponce = getLiqPayResponce(nvpCallResult);
 
-        ShopCodeContext.getLog().info("LiqPayPaymentGatewayImpl#isSuccess {}", liqPayResponce);
+        ShopCodeContext.getLog(this).info("LiqPayPaymentGatewayImpl#isSuccess {}", liqPayResponce);
 
         return liqPayResponce != null && "success".equalsIgnoreCase(liqPayResponce.getStatus());
 
@@ -127,7 +127,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
                 getParameterValue(LP_PAYWAY_URL)
         );
 
-        ShopCodeContext.getLog().info(" Raw liqpay xml [ {} ]", operationXml);
+        ShopCodeContext.getLog(this).info(" Raw liqpay xml [ {} ]", operationXml);
 
         final String merchantKey = getParameterValue(LP_MERCHANT_KEY);
         final String sign = createSignatire(merchantKey + operationXml + merchantKey);
@@ -274,7 +274,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
                 return (LiqPayResponce) getXStream().fromXML(operationXml);
 
             } else {
-                ShopCodeContext.getLog().error(
+                ShopCodeContext.getLog(this).error(
                         MessageFormat.format(
                                 "Calculated signature {0} not correspond to provided  {1} for xml {2}. Req. params {3}",
                                 signToCheck,
@@ -286,7 +286,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
             }
 
         } else {
-            ShopCodeContext.getLog().error("Cant get operation_xml. " + dump(nvpCallResult));
+            ShopCodeContext.getLog(this).error("Cant get operation_xml. " + dump(nvpCallResult));
         }
         return null;
 

@@ -38,7 +38,7 @@ public class ReindexProductsJobBeanImpl extends QuartzJobBean {
      * {@inheritDoc }
      */
     protected void executeInternal(final JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        final Logger log = ShopCodeContext.getLog();
+        final Logger log = ShopCodeContext.getLog(this);
         log.info("ReindexProductsJobDetailImpl start at {}", new Date());
 /*
         setProductService(
