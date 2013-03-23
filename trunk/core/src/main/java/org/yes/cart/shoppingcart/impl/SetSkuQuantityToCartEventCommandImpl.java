@@ -66,7 +66,7 @@ public class SetSkuQuantityToCartEventCommandImpl  extends AbstractSkuCartComman
         if (getProductSkuDTO() != null) {
             shoppingCart.setProductSkuToCart(getProductSkuDTO(), new BigDecimal(skuQty));
             recalculatePrice(shoppingCart);
-            ShopCodeContext.getLog().debug("Add product sku with code {} and qty {} to cart",
+            ShopCodeContext.getLog(this).debug("Add product sku with code {} and qty {} to cart",
                     getProductSkuDTO().getCode(),
                     skuQty);
             setModifiedDate(shoppingCart);

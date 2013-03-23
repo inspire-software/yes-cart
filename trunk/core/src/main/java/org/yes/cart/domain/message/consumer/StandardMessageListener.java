@@ -176,7 +176,7 @@ public class StandardMessageListener implements Runnable {
                     try {
                         javaMailSender.send(mimeMessage);
                         send = true;
-                        ShopCodeContext.getLog().info("Mail send to {}", map.get(CUSTOMER_EMAIL));
+                        ShopCodeContext.getLog(this).info("Mail send to {}", map.get(CUSTOMER_EMAIL));
                     } catch (MailSendException me) {
                         /**
                          * TODO
@@ -184,7 +184,7 @@ public class StandardMessageListener implements Runnable {
                          * store email and send it latter.
                          * Any persistem cache may be used for this purposes.
                          */
-                        ShopCodeContext.getLog().error("Cant send email to {} {}", map.get(CUSTOMER_EMAIL), me.getMessage());
+                        ShopCodeContext.getLog(this).error("Cant send email to {} {}", map.get(CUSTOMER_EMAIL), me.getMessage());
                         Thread.sleep(60000);
 
                     }
@@ -192,7 +192,7 @@ public class StandardMessageListener implements Runnable {
 
 
             } catch (Exception e) {
-                ShopCodeContext.getLog().error(
+                ShopCodeContext.getLog(this).error(
                         MessageFormat.format(
                                 "Cant compose or send email template {0} folder {1} to {2}",
                                 (String) map.get(TEMPLATE_NAME),
@@ -203,7 +203,7 @@ public class StandardMessageListener implements Runnable {
             }
 
         } catch(ClassCastException cce) {
-            ShopCodeContext.getLog().error("Class cast exception ", cce);
+            ShopCodeContext.getLog(this).error("Class cast exception ", cce);
 
         }
 

@@ -93,7 +93,7 @@ public class CookieTuplizerImpl implements CookieTuplizer {
 
             desUnCipher.init(Cipher.DECRYPT_MODE, secretKey);
         } catch (Exception ike) {
-            ShopCodeContext.getLog().error(ike.getMessage(), ike);
+            ShopCodeContext.getLog(this).error(ike.getMessage(), ike);
             throw new RuntimeException("Unable to load Cipher for CookieTuplizer", ike);
         }
 
@@ -143,7 +143,7 @@ public class CookieTuplizerImpl implements CookieTuplizer {
         if (meta.key == null || meta.expiry == null) {
             final String errMsg = "object of type: " + meta.checkedClasses.toString()
                     + "must be annotated with PersistentCookie";
-            ShopCodeContext.getLog().error(errMsg);
+            ShopCodeContext.getLog(this).error(errMsg);
             throw new UnableToCookielizeObjectException(errMsg);
         }
 
@@ -225,7 +225,7 @@ public class CookieTuplizerImpl implements CookieTuplizer {
                 objectOutputStream.flush();
                 objectOutputStream.close();
             } catch (Throwable ioe) {
-                ShopCodeContext.getLog().error(
+                ShopCodeContext.getLog(this).error(
                         MessageFormat.format("Unable to serialize object {0}", serializable),
                         ioe
                 );
@@ -239,7 +239,7 @@ public class CookieTuplizerImpl implements CookieTuplizer {
                     base64EncoderStream.close();
                     byteArrayOutputStream.close();
                 } catch (IOException e) {
-                    ShopCodeContext.getLog().error("Can not close stream", e);
+                    ShopCodeContext.getLog(this).error("Can not close stream", e);
                 }
             }
         }
@@ -265,7 +265,7 @@ public class CookieTuplizerImpl implements CookieTuplizer {
         if (meta.key == null) {
             final String errMsg = "current object of types: " + meta.checkedClasses.toString()
                     + " must be annotated with PersistentCookie";
-            ShopCodeContext.getLog().error(errMsg);
+            ShopCodeContext.getLog(this).error(errMsg);
             throw new UnableToObjectizeCookieException(errMsg);
         }
 
@@ -328,10 +328,10 @@ public class CookieTuplizerImpl implements CookieTuplizer {
             try {
                 desUnCipher.init(Cipher.DECRYPT_MODE, secretKey); //reinit
             } catch (InvalidKeyException e) {
-                ShopCodeContext.getLog().error("Cant reinit desUnCipher", exception);
+                ShopCodeContext.getLog(this).error("Cant reinit desUnCipher", exception);
             }
             final String errMsg = "Unable to convert bytes assembled from cookies into object";
-            ShopCodeContext.getLog().error(errMsg, exception);
+            ShopCodeContext.getLog(this).error(errMsg, exception);
             throw new UnableToObjectizeCookieException(errMsg, exception);
         } finally {
             try {
@@ -342,7 +342,7 @@ public class CookieTuplizerImpl implements CookieTuplizer {
                 base64DecoderStream.close();
                 byteArrayInputStream.close();
             } catch (IOException ioe) { // leave this one silent as we have the object on hands.
-                ShopCodeContext.getLog().error("Unable to close object stream", ioe);
+                ShopCodeContext.getLog(this).error("Unable to close object stream", ioe);
             }
 
         }

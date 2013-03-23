@@ -59,7 +59,7 @@ public class ShoppingCartPersisterImpl implements ShoppingCartPersister {
                 httpServletResponse.addCookie(cookie);
             }
         } catch (UnableToCookielizeObjectException e) {
-            ShopCodeContext.getLog().error(MessageFormat.format("Unable to create cookies from {0} cart", shoppingCart), e);
+            ShopCodeContext.getLog(this).error(MessageFormat.format("Unable to create cookies from {0} cart", shoppingCart), e);
         }
 
     }

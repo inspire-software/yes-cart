@@ -64,7 +64,7 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
 
         final String orderGuid = getOrderGuid(parameters, paymentGatewayLabel);
 
-        final Logger log = ShopCodeContext.getLog();
+        final Logger log = ShopCodeContext.getLog(this);
         log.info("Order guid to handle at call back handler is {}", orderGuid);
 
         if (StringUtils.isNotBlank(orderGuid)) {
@@ -108,7 +108,7 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
     private String getOrderGuid(final Map privateCallBackParameters, final String paymentGatewayLabel) {
         final PaymentGatewayExternalForm paymentGateway = getPaymentGateway(paymentGatewayLabel);
         final String orderGuid = paymentGateway.restoreOrderGuid(privateCallBackParameters);
-        final Logger log = ShopCodeContext.getLog();
+        final Logger log = ShopCodeContext.getLog(this);
         if (log.isDebugEnabled()) {
             log.debug("Get order guid {}  from http request with {} payment gateway.",
                     orderGuid, paymentGatewayLabel);

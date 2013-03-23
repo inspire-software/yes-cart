@@ -58,7 +58,7 @@ public class SetCarrierSlaCartCommandImpl  extends AbstractCartCommandImpl imple
      * @param shoppingCart the shopping cart
      */
     public void execute(final ShoppingCart shoppingCart) {
-        ShopCodeContext.getLog().debug("Set carrier sla to {}", slaPkvalue);
+        ShopCodeContext.getLog(this).debug("Set carrier sla to {}", slaPkvalue);
         shoppingCart.getOrderInfo().setCarrierSlaId(slaPkvalue);
         setModifiedDate(shoppingCart);
     }

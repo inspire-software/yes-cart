@@ -90,7 +90,7 @@ public class ServiceLocatorImpl implements ServiceLocator {
                                     final String loginName,
                                     final String password) {
 
-        ShopCodeContext.getLog().debug("Get {} as {}", serviceUrl, iface.getName());
+        ShopCodeContext.getLog(this).debug("Get {} as {}", serviceUrl, iface.getName());
 
         try {
             return getInstantiationStrategy(serviceUrl).getInstance(serviceUrl, iface, loginName, password);

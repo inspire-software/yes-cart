@@ -219,7 +219,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                 return rez.get(0);
             }
             default: {
-                ShopCodeContext.getLog().error("#findSingleByQuery has more than one result for " + hsqlQuery);
+                ShopCodeContext.getLog(this).error("#findSingleByQuery has more than one result for " + hsqlQuery);
                 return rez.get(0);
             }
         }
@@ -501,7 +501,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                     .setFetchSize(BATCH_SIZE)
                     .scroll(ScrollMode.FORWARD_ONLY);
 
-            final Logger log = ShopCodeContext.getLog();
+            final Logger log = ShopCodeContext.getLog(this);
             while (results.next()) {
                 index++;
                 T entity = (T) HibernateHelper.unproxy(results.get(0));

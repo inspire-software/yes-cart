@@ -64,7 +64,7 @@ public class ManagerRegistrationMessageListener implements Runnable {
             final RegistrationMessage registrationMessage = (RegistrationMessage) objectMessage;
             processMessage(registrationMessage);
         } catch (Exception e) {
-            ShopCodeContext.getLog().error("Cant process " + objectMessage, e);
+            ShopCodeContext.getLog(this).error("Cant process " + objectMessage, e);
             throw new RuntimeException(e); //rollback message
         }
 
@@ -101,9 +101,9 @@ public class ManagerRegistrationMessageListener implements Runnable {
             try {
                 javaMailSender.send(mimeMessage);
                 send = true;
-                ShopCodeContext.getLog().info("Manager mail send to " + registrationMessage.getEmail() );
+                ShopCodeContext.getLog(this).info("Manager mail send to " + registrationMessage.getEmail() );
             } catch (MailSendException me) {
-                ShopCodeContext.getLog().error("Cant send email to " + registrationMessage.getEmail() + " " + me.getMessage());
+                ShopCodeContext.getLog(this).error("Cant send email to " + registrationMessage.getEmail() + " " + me.getMessage());
                 Thread.sleep(60000);
 
             }

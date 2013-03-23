@@ -59,7 +59,7 @@ public class RemoveSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl{
         if (getProductSkuDTO() != null) {
             final String skuCode = getProductSkuDTO().getCode();
             if(!shoppingCart.removeCartItemQuantity(getProductSkuDTO(), BigDecimal.ONE)) {
-                ShopCodeContext.getLog().warn("Can not remove one sku with code {} from cart",
+                ShopCodeContext.getLog(this).warn("Can not remove one sku with code {} from cart",
                         skuCode);
             }
 

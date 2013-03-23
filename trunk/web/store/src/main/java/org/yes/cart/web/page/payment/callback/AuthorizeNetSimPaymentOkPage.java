@@ -81,7 +81,7 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
 
         final HttpServletRequest httpServletRequest = WicketUtil.getHttpServletRequest();
 
-        final Logger log = ShopCodeContext.getLog();
+        final Logger log = ShopCodeContext.getLog(this);
         if (log.isDebugEnabled()) {
             log.debug(HttpUtil.dumpRequest(httpServletRequest));
         }
@@ -138,7 +138,7 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
     @Override
     protected void onBeforeRender() {
 
-        ShopCodeContext.getLog().info("Redirect from authorize net page to {}", redirectTo);
+        ShopCodeContext.getLog(this).info("Redirect from authorize net page to {}", redirectTo);
 
         add(
                 new Label("redirectJavaScript", "<!--\nlocation.replace(\"" + redirectTo + "\"); \n//-->").setEscapeModelStrings(false)

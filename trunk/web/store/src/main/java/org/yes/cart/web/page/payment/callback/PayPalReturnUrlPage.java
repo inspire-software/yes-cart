@@ -180,7 +180,7 @@ public class PayPalReturnUrlPage extends AbstractWebPage {
 
                             } catch (OrderException e) {
 
-                                ShopCodeContext.getLog().error("Cant handle payment callback ", e);
+                                ShopCodeContext.getLog(this).error("Cant handle payment callback ", e);
 
                                 error(getLocalizer().getString("paymentFailed", this));
                             }
@@ -208,7 +208,7 @@ public class PayPalReturnUrlPage extends AbstractWebPage {
             }
 
         } catch (IOException e) {
-            ShopCodeContext.getLog().error("Cant call paypal gateway ", e);
+            ShopCodeContext.getLog(this).error("Cant call paypal gateway ", e);
         }
     }
 

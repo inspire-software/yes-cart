@@ -36,7 +36,7 @@ public abstract class AbstractOrderEventHandlerImpl implements OrderEventHandler
     protected abstract String getTransitionTarget(final OrderEvent orderEvent);
 
     protected void handleInternal(final OrderEvent orderEvent) {
-        final Logger log = ShopCodeContext.getLog();
+        final Logger log = ShopCodeContext.getLog(this);
         if (log.isInfoEnabled()) {
             log.info("Order {} transition from {} to {} state",
                     new Object[]{

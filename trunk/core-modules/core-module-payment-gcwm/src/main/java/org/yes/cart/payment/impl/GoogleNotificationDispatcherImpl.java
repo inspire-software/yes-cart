@@ -72,7 +72,7 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
      */
     protected void onNewOrderNotification(final OrderSummary orderSummary,
                                           final NewOrderNotification notification) throws Exception {
-        ShopCodeContext.getLog().info("BaseNotificationDispatcher#onNewOrderNotification {} ", notification);
+        ShopCodeContext.getLog(this).info("BaseNotificationDispatcher#onNewOrderNotification {} ", notification);
 
         final String orderGuid = getOrderGuid(orderSummary);
         final CustomerOrder customerOrder = getCustomerOrderService().findByGuid(orderGuid);
@@ -124,7 +124,7 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
     @Override
     public void onAuthorizationAmountNotification(final OrderSummary orderSummary, final AuthorizationAmountNotification notification) {
 
-        ShopCodeContext.getLog().info("BaseNotificationDispatcher#onAuthorizationAmountNotification {}", notification);
+        ShopCodeContext.getLog(this).info("BaseNotificationDispatcher#onAuthorizationAmountNotification {}", notification);
 
     }
 
@@ -132,7 +132,7 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
     protected void onOrderStateChangeNotification(
             final OrderSummary orderSummary,
             final OrderStateChangeNotification notification) throws Exception {
-        ShopCodeContext.getLog().info("#onOrderStateChangeNotification order summary is : {} notification is {} ", orderSummary, notification);
+        ShopCodeContext.getLog(this).info("#onOrderStateChangeNotification order summary is : {} notification is {} ", orderSummary, notification);
 
     }
 
@@ -140,7 +140,7 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
     public boolean hasAlreadyHandled(final String serialNumber,
                                      final OrderSummary orderSummary,
                                      final Notification notification) {
-        ShopCodeContext.getLog().info("BaseNotificationDispatcher#hasAlreadyHandled {} {} ", serialNumber, notification);
+        ShopCodeContext.getLog(this).info("BaseNotificationDispatcher#hasAlreadyHandled {} {} ", serialNumber, notification);
         return getPaymentModuleGenericDAO().findSingleByCriteria(Restrictions.eq("serialNumber", serialNumber)) != null;
     }
 
@@ -148,7 +148,7 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
     protected void rememberSerialNumber(final String serialNumber,
                                         final OrderSummary orderSummary, final Notification notification) {
 
-        ShopCodeContext.getLog().info("BaseNotificationDispatcher#rememberSerialNumber {} {} ", serialNumber, notification);
+        ShopCodeContext.getLog(this).info("BaseNotificationDispatcher#rememberSerialNumber {} {} ", serialNumber, notification);
 
         final GoogleNotificationHistory entity = new GoogleNotificationHistoryEntity();
         entity.setSerialNumber(serialNumber);

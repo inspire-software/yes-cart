@@ -40,7 +40,7 @@ public class WebServiceInstantiationStrategyImpl implements InstantiationStrateg
                              final String loginName,
                              final String password)  {
     //TODO use login & password
-        final Logger log = ShopCodeContext.getLog();
+        final Logger log = ShopCodeContext.getLog(this);
         if(log.isDebugEnabled()) {
             log.debug("Get {} as {}", serviceUrl, iface.getName());
         }

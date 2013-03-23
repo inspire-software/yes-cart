@@ -152,7 +152,7 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCappPaymentGatewayImp
      * {@inheritDoc}
      */
     public Payment authorize(final Payment payment) {
-        final Logger log = ShopCodeContext.getLog();
+        final Logger log = ShopCodeContext.getLog(this);
         if (log.isDebugEnabled()) {
             log.debug("Authorize " + payment);
         }
@@ -238,7 +238,7 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCappPaymentGatewayImp
      */
     public Payment reverseAuthorization(final Payment payment) {
 
-        final Logger log = ShopCodeContext.getLog();
+        final Logger log = ShopCodeContext.getLog(this);
         if (log.isDebugEnabled()) {
             log.debug("Reverse authorization " + payment);
         }
@@ -265,7 +265,7 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCappPaymentGatewayImp
      */
     public Payment capture(final Payment payment) {
 
-        final Logger log = ShopCodeContext.getLog();
+        final Logger log = ShopCodeContext.getLog(this);
         if (log.isDebugEnabled()) {
             log.debug("Capture " + payment);
         }
@@ -298,7 +298,7 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCappPaymentGatewayImp
      * {@inheritDoc}
      */
     public Payment voidCapture(final Payment payment) {
-        final Logger log = ShopCodeContext.getLog();
+        final Logger log = ShopCodeContext.getLog(this);
         if (log.isDebugEnabled()) {
             log.debug("Void capture " + payment);
         }
@@ -323,7 +323,7 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCappPaymentGatewayImp
      * {@inheritDoc}
      */
     public Payment refund(final Payment payment) {
-        final Logger log = ShopCodeContext.getLog();
+        final Logger log = ShopCodeContext.getLog(this);
         if (log.isDebugEnabled()) {
             log.debug("Credit on prev auth " + payment);
         }
@@ -377,10 +377,10 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCappPaymentGatewayImp
             payment.setTransactionOperationResultMessage(ERROR_CODE_DESC_MAP.get(reply.get("reasonCode")));
 
         } catch (ClientException e) {
-            ShopCodeContext.getLog().error("Can not execute transaction. Client exception : " + payment, e);
+            ShopCodeContext.getLog(this).error("Can not execute transaction. Client exception : " + payment, e);
             throw new PaymentException("Can not execute transaction. Client exception : " + payment, e);
         } catch (FaultException e) {
-            ShopCodeContext.getLog().error("Can not execute transaction. Fault exception : " + payment, e);
+            ShopCodeContext.getLog(this).error("Can not execute transaction. Fault exception : " + payment, e);
             throw new PaymentException("Can not execute transaction. Client exception : " + payment, e);
         }
         return payment;

@@ -84,7 +84,7 @@ public class CancelOrderWithRefundOrderEventHandlerImpl extends CancelOrderEvent
             /**
              * Administrative notification will be send via email. See appropriate aspect
              */
-            ShopCodeContext.getLog().error("Can not cancel order, because of error on payment gateway.");
+            ShopCodeContext.getLog(this).error("Can not cancel order, because of error on payment gateway.");
             return false;
         }
     }

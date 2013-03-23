@@ -98,7 +98,7 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
         try {
             return getMultiFieldQueryParser().parse(queryString);
         } catch (ParseException e) {
-            ShopCodeContext.getLog().error(MessageFormat.format("Can not parse given query {0}", queryString), e);
+            ShopCodeContext.getLog(this).error(MessageFormat.format("Can not parse given query {0}", queryString), e);
         }
         return null;
     }

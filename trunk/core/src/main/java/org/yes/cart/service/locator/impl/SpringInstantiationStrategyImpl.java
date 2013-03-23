@@ -41,7 +41,7 @@ public class SpringInstantiationStrategyImpl implements InstantiationStrategy, A
                              final Class<T> iface,
                              final String loginName, 
                              final String password) throws RuntimeException {
-        ShopCodeContext.getLog().debug("Get {} as {}", serviceUrl, iface.getName());
+        ShopCodeContext.getLog(this).debug("Get {} as {}", serviceUrl, iface.getName());
         return applicationContext.getBean(serviceUrl, iface);
     }
 

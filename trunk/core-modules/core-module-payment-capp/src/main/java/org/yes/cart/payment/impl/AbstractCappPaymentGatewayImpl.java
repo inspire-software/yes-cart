@@ -100,7 +100,7 @@ public abstract class AbstractCappPaymentGatewayImpl implements PaymentGateway {
         payment.setCardCvv2Code(getSingleValue(parametersMap.get("ccSecCode")));
         payment.setCardType(getSingleValue(parametersMap.get("ccType")));
 
-        final Logger log = ShopCodeContext.getLog();
+        final Logger log = ShopCodeContext.getLog(this);
         if (log.isDebugEnabled()) {
             displayMap("Payment prototype from map", parametersMap);
         }
@@ -135,7 +135,7 @@ public abstract class AbstractCappPaymentGatewayImpl implements PaymentGateway {
      * @param header Header text.
      * @param map    Map object to display.
      */
-    protected static void displayMap(final String header, final Map<String, String> map) {
+    protected void displayMap(final String header, final Map<String, String> map) {
         StringBuilder dest = new StringBuilder();
         dest.append(header);
         if (map != null && !map.isEmpty()) {
@@ -154,7 +154,7 @@ public abstract class AbstractCappPaymentGatewayImpl implements PaymentGateway {
                 dest.append('\n');
             }
         }
-        final Logger log = ShopCodeContext.getLog();
+        final Logger log = ShopCodeContext.getLog(this);
         if (log.isDebugEnabled()) {
             log.debug(dest.toString());
         }

@@ -61,7 +61,7 @@ public class OrderStateManagerImpl implements OrderStateManager {
         final OrderEventHandler handler = handlers.get(orderEvent.getEventId());
 
         if (handler == null) {
-            ShopCodeContext.getLog().warn(MessageFormat.format(
+            ShopCodeContext.getLog(this).warn(MessageFormat.format(
                     "No handler registered for {0} event", orderEvent.getEventId()
             ));
         } else {
@@ -74,7 +74,7 @@ public class OrderStateManagerImpl implements OrderStateManager {
                 }
                 return result;
             } catch (OrderException e) {
-                ShopCodeContext.getLog().error(
+                ShopCodeContext.getLog(this).error(
                         MessageFormat.format("Cant handle {0} event for {1} order because of {2}",
                                 orderEvent.getEventId(),
                                 orderEvent.getCustomerOrder().getOrdernum(),

@@ -146,7 +146,7 @@ public class RegistrationAspect extends BaseNotificationAspect {
 
         sendNotification(registrationMessage);
 
-        ShopCodeContext.getLog().info("Person message was send to queue {}", registrationMessage);
+        ShopCodeContext.getLog(this).info("Person message was send to queue {}", registrationMessage);
 
         return pjp.proceed();
     }

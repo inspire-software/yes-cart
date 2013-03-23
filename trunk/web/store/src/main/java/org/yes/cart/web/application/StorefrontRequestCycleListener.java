@@ -32,7 +32,7 @@ public class StorefrontRequestCycleListener extends AbstractRequestCycleListener
     /** {@inheritDoc} */
     public IRequestHandler onException(final RequestCycle cycle, final Exception ex) {
         if (ex instanceof SeoEntryIdInvalidException)  {
-            ShopCodeContext.getLog().error(ex.getMessage());
+            ShopCodeContext.getLog(this).error(ex.getMessage());
             return new RedirectRequestHandler("/"); //CPOINT add more sophisticated error handling if require
         }
         return super.onException(cycle, ex);

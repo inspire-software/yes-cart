@@ -44,7 +44,7 @@ public class JnpInstantiationStrategyImpl implements InstantiationStrategy {
                              final String loginName,
                              final String password) {
         //TODO pass login & pwd into context during lookup operation
-        final Logger log = ShopCodeContext.getLog();
+        final Logger log = ShopCodeContext.getLog(this);
         if (log.isDebugEnabled()) {
             log.debug("Get " + serviceUrl + " as " + iface.getName());
         }

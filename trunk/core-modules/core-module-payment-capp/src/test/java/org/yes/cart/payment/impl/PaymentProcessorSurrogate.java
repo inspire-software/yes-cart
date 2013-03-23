@@ -272,7 +272,7 @@ public class PaymentProcessorSurrogate {
                 paymentsToCapture.size() > 1
                         ||
                         (paymentsToCapture.isEmpty() && !getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorize())) {
-            ShopCodeContext.getLog().warn( //must be only one record
+            ShopCodeContext.getLog(this).warn( //must be only one record
                     MessageFormat.format(
                             "Payment gateway {0} with features {1}. Found {2} records to capture, but expected 1 only. Order num {3} Shipment num {4}",
                             getPaymentGateway().getLabel(), getPaymentGateway().getPaymentGatewayFeatures(), paymentsToCapture.size(), order.getOrdernum(), orderShipmentNumber
@@ -300,7 +300,7 @@ public class PaymentProcessorSurrogate {
                     paymentResult = Payment.PAYMENT_STATUS_FAILED;
                     payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
                     payment.setTransactionOperationResultMessage(th.getMessage());
-                    ShopCodeContext.getLog().error("Cannot capture " + payment, th);
+                    ShopCodeContext.getLog(this).error("Cannot capture " + payment, th);
                     th.printStackTrace();
                 } finally {
                     final CustomerOrderPayment authReversedOrderPayment = new CustomerOrderPaymentEntity();
@@ -355,7 +355,7 @@ public class PaymentProcessorSurrogate {
                         paymentResult = payment.getPaymentProcessorResult();
                     }
                 } catch (Throwable th) {
-                    ShopCodeContext.getLog().error(
+                    ShopCodeContext.getLog(this).error(
                             MessageFormat.format(
                                     "Can not perform roll back operation on payment record {0} payment {1}",
                                     customerOrderPayment.getCustomerOrderPaymentId(),
@@ -379,7 +379,7 @@ public class PaymentProcessorSurrogate {
 
             return wasError ? Payment.PAYMENT_STATUS_FAILED : Payment.PAYMENT_STATUS_OK;
         }
-        ShopCodeContext.getLog().warn(
+        ShopCodeContext.getLog(this).warn(
                 MessageFormat.format(
                         "Can not payment cancelation on canceled order  {0}",
                         order.getOrdernum()

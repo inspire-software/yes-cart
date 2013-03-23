@@ -151,7 +151,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
         if (customerOrderToDelete != null) {
             //CPOINT Two ways - delete or not delete existing order with not NONE status
             if (!CustomerOrder.ORDER_STATUS_NONE.equals(customerOrderToDelete.getOrderStatus())) {
-                ShopCodeContext.getLog().error(
+                ShopCodeContext.getLog(this).error(
                         MessageFormat.format(
                                 "Order {0} with {1} cart guid has {2} order status instead of 1 - ORDER_STATUS_NONE",
                                 customerOrderToDelete.getCustomerorderId(),
