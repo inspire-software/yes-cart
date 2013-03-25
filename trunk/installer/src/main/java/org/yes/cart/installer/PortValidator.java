@@ -17,8 +17,8 @@
 package org.yes.cart.installer;
 
 import com.google.common.base.Strings;
-import com.izforge.izpack.panels.ProcessingClient;
-import com.izforge.izpack.panels.Validator;
+import com.izforge.izpack.panels.userinput.processorclient.ProcessingClient;
+import com.izforge.izpack.panels.userinput.validator.Validator;
 
 import java.util.Map;
 
@@ -54,4 +54,5 @@ public class PortValidator implements Validator {
     }
     return true;
   }
+
 }

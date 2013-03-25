@@ -17,7 +17,7 @@
 package org.yes.cart.installer;
 
 import com.google.common.collect.ImmutableMap;
-import com.izforge.izpack.panels.ProcessingClient;
+import com.izforge.izpack.panels.userinput.processorclient.ProcessingClient;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Test;

@@ -25,7 +25,7 @@
     </parent>
     <artifactId>yes-manager-client</artifactId>
     <name>YUM Yes cart update manager client</name>
-    <!--<packaging>swf</packaging>          -->
+    <!--packaging>swf</packaging-->
     <packaging>${packaging.type}</packaging>
     <dependencies>
 
