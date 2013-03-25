@@ -41,12 +41,12 @@
                 <pwd txt="" size="30" set=""/>
                 <pwd txt="Retype:" size="30" set=""/>
             </spec>
-            <validator class="com.izforge.izpack.util.PasswordEqualityValidator"
+            <validator class="com.izforge.izpack.panels.userinput.validator.PasswordEqualityValidator"
                        id="WebServerConfigurationPanel.ssl.keystore.password.validation.error"/>
-            <validator class="org.yes.cart.installer.KeystorePasswordValidator"
+            <!--<validator class="org.yes.cart.installer.KeystorePasswordValidator"
                        id="WebServerConfigurationPanel.ssl.keystore.file.password.validation.error">
                 <param name="keystoreFile" value="${ssl.keystore.file}"/>
-            </validator>
+            </validator>-->
         </field>
     </panel>
 </userInput>

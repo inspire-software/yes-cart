@@ -16,10 +16,10 @@
 
 package org.yes.cart.installer;
 
-import com.izforge.izpack.Pack;
+
+import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.event.AbstractInstallerListener;
-import com.izforge.izpack.installer.AutomatedInstallData;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 
 /**
  * Base class for &lt;pack ...&gt; - bound post installation tasks.
@@ -29,20 +29,21 @@ import com.izforge.izpack.util.AbstractUIProgressHandler;
  */
 public abstract class PackPostInstaller extends AbstractInstallerListener {
 
-  private String packName;
+    private String packName;
 
-  /**
-   * @param packName name of the pack for which post installer will be executed
-   */
-  protected PackPostInstaller(String packName) {
-    this.packName = packName;
-  }
-
-  public void afterPack(Pack pack, Integer puckNumber, AbstractUIProgressHandler handler) throws Exception {
-    if (packName.equals(pack.name)) {
-      postInstall(AutomatedInstallData.getInstance());
+    /**
+     * @param packName name of the pack for which post installer will be executed
+     */
+    protected PackPostInstaller(String packName) {
+        this.packName = packName;
     }
-  }
 
-  protected abstract void postInstall(AutomatedInstallData data) throws Exception;
+
+    @Override
+    public void afterPacks(AutomatedInstallData data, AbstractUIProgressHandler handler) throws Exception
+    {
+            postInstall(data);
+    }
+
+    protected abstract void postInstall(AutomatedInstallData data) throws Exception;
 }

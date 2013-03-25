@@ -17,9 +17,11 @@
 package org.yes.cart.installer;
 
 import com.google.common.base.Strings;
-import com.izforge.izpack.LocaleDatabase;
-import com.izforge.izpack.installer.AutomatedInstallData;
-import com.izforge.izpack.installer.DataValidator;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
+import com.izforge.izpack.api.data.LocaleDatabase;
+import com.izforge.izpack.api.installer.DataValidator;
+import com.izforge.izpack.api.resource.Messages;
 
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -42,7 +44,9 @@ public class WebServerConfigurationPanelValidator implements DataValidator {
 
   private String message;
 
-  public Status validateData(AutomatedInstallData data) {
+
+
+  public Status validateData(InstallData data) {
     int httpPort = Integer.parseInt(data.getVariable("http.port"));
     String httpsPort = data.getVariable("https.port");
     String sslKeyStoreFile = data.getVariable("ssl.keystore.file");
@@ -55,12 +59,12 @@ public class WebServerConfigurationPanelValidator implements DataValidator {
       failedValidations.add(HTTPS_PORT_UNAVAILABLE);
     }
     if (!failedValidations.isEmpty()) {
-      LocaleDatabase bundle = data.langpack;
-      StringBuilder sb = new StringBuilder(bundle.getString(VALIDATION_FAILED_TITLE));
+      Messages bundle = data.getMessages();
+      StringBuilder sb = new StringBuilder(bundle.getMessages().get(VALIDATION_FAILED_TITLE));
       for (String failedValidation : failedValidations) {
-        sb.append("\n").append(bundle.getString(failedValidation));
+        sb.append("\n").append(bundle.getMessages().get(failedValidation));
       }
-      sb.append("\n").append(bundle.getString(VALIDATION_FAILED_FOOTNOTE));
+      sb.append("\n").append(bundle.getMessages().get(VALIDATION_FAILED_FOOTNOTE));
       message = sb.toString();
       return Status.WARNING;
     }
@@ -81,7 +85,9 @@ public class WebServerConfigurationPanelValidator implements DataValidator {
     }
   }
 
-  public String getErrorMessageId() {
+
+
+    public String getErrorMessageId() {
     return message;
   }
 
