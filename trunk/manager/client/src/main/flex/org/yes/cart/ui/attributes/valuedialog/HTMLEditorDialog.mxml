@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  - Copyright 2009 Igor Azarnyi, Denys Pavlov
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+                showCloseButton="true"
+                close="PopUpManager.removePopUp(this)"
+                implements="org.yes.cart.ui.attributes.valuedialog.ValueDialog"
+                layout="vertical"
+                creationComplete="init();">
+
+    <mx:Label id="infoLabel"
+              visible="{this.infoLabel.text != null &amp;&amp; this.infoLabel.text.length >0}"
+              includeInLayout="{this.infoLabel.text != null &amp;&amp; this.infoLabel.text.length >0}"
+            />
+    <mx:Form width="100%">
+        <mx:FormItem label="@Resource(bundle='AttributesManagementPanel',key='value')">
+            <mx:RichTextEditor width="600" height="400" id="valueTextInput"/>
+        </mx:FormItem>
+    </mx:Form>
+    <mx:ControlBar width="100%" horizontalAlign="right">
+        <mx:Button id="btnSave"
+                   width="94"
+                   label="@Resource(bundle='AttributesManagementPanel',key='save')"/>
+        <mx:Button id="btnCancel"
+                   width="94"
+                   label="@Resource(bundle='AttributesManagementPanel',key='cancel')"
+                   click="PopUpManager.removePopUp(this)"
+                />
+    </mx:ControlBar>
+
+
+    <mx:Script><![CDATA[
+        import mx.binding.utils.BindingUtils;
+        import mx.managers.PopUpManager;
+
+        private var _value:String;
+        private var _oldValue:String;
+        private var _windowTitle:String;
+        private var _code:String;
+        private var _attributeGroup:String;
+
+
+        private function init():void {
+
+            BindingUtils.bindProperty(valueTextInput, "htmlText", this, "value");
+
+            BindingUtils.bindProperty(this, "value", valueTextInput, "htmlText");
+
+            this.title = windowTitle;
+
+
+            //TODO: YC-153 here add RE validator
+
+
+        }
+
+        public function getButtonSave():Button {
+            return this.btnSave;
+        }
+
+
+        public function get oldValue():String {
+            return _oldValue;
+        }
+
+        public function get windowTitle():String {
+            return _windowTitle;
+        }
+
+        public function set windowTitle(value:String):void {
+            _windowTitle = value;
+        }
+
+        public function get value():String {
+            return _value;
+        }
+
+        private function cleanFlex3Html(value:String):String {
+            return value.replace(/\<TEXTFORMAT([^>]*)>/gi,"").replace(/\<\/TEXTFORMAT>/gi,"");
+        }
+
+        public function set value(value:String):void {
+            _value = cleanFlex3Html(value);
+            _oldValue = new String(value);
+        }
+
+
+        public function get displayValues():Object {
+            return { };
+        }
+
+        public function set displayValues(value:Object):void {
+
+        }
+
+        public function get code():String {
+            return _code;
+        }
+
+        public function set code(value:String):void {
+            _code = value;
+        }
+
+        public function get attributeGroup():String {
+            return _attributeGroup;
+        }
+
+        public function set attributeGroup(value:String):void {
+            _attributeGroup = value;
+        }
+
+        public function setInformation(value:String):void {
+            infoLabel.text = value;
+        }
+        ]]>
+    </mx:Script>
+</mx:TitleWindow>

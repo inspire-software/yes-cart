@@ -307,6 +307,8 @@
                                     import mx.events.DataGridEventReason;
                                     import mx.managers.PopUpManager;
 
+                                    import org.yes.cart.ui.attributes.valuedialog.HTMLEditorDialog;
+
                                     import org.yes.cart.ui.attributes.valuedialog.ImageDialog;
                                     import org.yes.cart.ui.attributes.valuedialog.SimpleTextDialog;
                                     import org.yes.cart.ui.attributes.valuedialog.ValueDialog;
@@ -375,6 +377,8 @@
 
                                         if (data.attributeDTO.etypeName.indexOf("Image") > -1) {
                                             return ImageDialog;
+                                        } else if (data.attributeDTO.etypeName.indexOf("HTML") > -1) {
+                                            return HTMLEditorDialog;
                                         }
 
                                         return SimpleTextDialog;

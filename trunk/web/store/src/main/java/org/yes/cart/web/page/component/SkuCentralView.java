@@ -206,7 +206,7 @@ public class SkuCentralView extends AbstractCentralView {
         ).add(
                 new Label(PRODUCT_NAME_LABEL2, decorator.getName(selectedLocale))
         ).add(
-                new Label(PRODUCT_DESCRIPTION_LABEL, decorator.getDescription(selectedLocale))
+                new Label(PRODUCT_DESCRIPTION_LABEL, decorator.getDescription(selectedLocale)).setEscapeModelStrings(false)
         ).add(
                 new BookmarkablePageLink<HomePage>(ADD_TO_CART_LINK, HomePage.class, addToCartParameters)
                         .setVisible(

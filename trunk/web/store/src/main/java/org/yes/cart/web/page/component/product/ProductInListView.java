@@ -132,7 +132,7 @@ public class ProductInListView extends BaseComponent {
         );
         
         add (
-            new Label(DESCRIPTION_LABEL, product.getDescription(selectedLocale))
+            new Label(DESCRIPTION_LABEL, product.getDescription(selectedLocale)).setEscapeModelStrings(false)
         );
 
         add(
