@@ -17,7 +17,9 @@
 package org.yes.cart.web.support.service.impl;
 
 import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Attributable;
+import org.yes.cart.domain.entity.Category;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.web.support.service.AttributableImageService;
 import org.yes.cart.web.support.service.CategoryImageRetrieveStrategy;
@@ -56,10 +58,18 @@ public class CategoryImageServiceImpl extends AbstractImageServiceImpl implement
      */
     @Override
     public String getImageRepositoryUrlPattern(final Object strategyLabel) {
-        final String strategyKey;
-        if (strategies.containsKey(strategyLabel)) {
-            strategyKey = String.valueOf(strategyLabel);
-        } else {
+
+        String strategyKey = null;
+        if (strategyLabel instanceof String) {
+            strategyKey = (String) strategyLabel;
+        } else if (strategyLabel instanceof Category) {
+            final AttrValue imgStrategy = ((Category) strategyLabel).getAttributeByCode("CATEGORY_IMAGE_RETRIEVE_STRATEGY");
+            if (imgStrategy != null) {
+                strategyKey = imgStrategy.getVal();
+            }
+        }
+
+        if (!strategies.containsKey(strategyKey)) {
             strategyKey = defaultStrategy;
         }
         final CategoryImageRetrieveStrategy strategy = strategies.get(strategyKey);
