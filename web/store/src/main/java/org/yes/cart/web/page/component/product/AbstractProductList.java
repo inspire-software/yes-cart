@@ -155,7 +155,7 @@ public abstract class AbstractProductList extends BaseComponent {
                                         new ContextImage(PRODUCT_IMAGE, productDecorator.getDefaultImage(width, height))
                                                 .add(new AttributeModifier(HTML_WIDTH, width))
                                                 .add(new AttributeModifier(HTML_HEIGHT, height))
-                                                .add(new AttributeModifier(HTML_TITLE, productDecorator.getDescription(selectedLocale)))
+                                                .add(new AttributeModifier(HTML_TITLE, productDecorator.getName(selectedLocale)))
                                                 .add(new AttributeModifier(HTML_ALT, productDecorator.getName(selectedLocale)))
                                 )
                         );
