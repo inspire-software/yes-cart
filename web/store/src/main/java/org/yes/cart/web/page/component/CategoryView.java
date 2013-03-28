@@ -17,12 +17,12 @@
 package org.yes.cart.web.page.component;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.entity.decorator.CategoryDecorator;
 
@@ -65,19 +65,20 @@ public class CategoryView extends  BaseComponent {
         final String width = defSize[0];
         final String height = defSize[1];
 
+        final Class homePage = Application.get().getHomePage();
 
         add(
-            new BookmarkablePageLink<HomePage>(CATEGORY_IMAGE_LINK, HomePage.class, pageParameters).add(
+            new BookmarkablePageLink(CATEGORY_IMAGE_LINK, homePage, pageParameters).add(
                     new ContextImage(CATEGORY_IMAGE, category.getDefaultImage(width, height))
                             .add(new AttributeModifier(HTML_WIDTH, width))
                             .add(new AttributeModifier(HTML_HEIGHT, height))
             )
         ).add(
-            new BookmarkablePageLink<HomePage>(CATEGORY_NAME_LINK, HomePage.class, pageParameters).add(
+            new BookmarkablePageLink(CATEGORY_NAME_LINK, homePage, pageParameters).add(
                     new Label(CATEGORY_NAME, category.getName(selectedLocale)).setEscapeModelStrings(false)
             )
         ).add(
-                new BookmarkablePageLink<HomePage>(CATEGORY_DESCR_LINK, HomePage.class, pageParameters).add(
+                new BookmarkablePageLink(CATEGORY_DESCR_LINK, homePage, pageParameters).add(
                         new Label( CATEGORY_DESCR,  getDescription(category)  ).setEscapeModelStrings(false)
                 )
         );

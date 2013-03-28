@@ -18,6 +18,7 @@ package org.yes.cart.web.page.component.cart;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
+import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -43,7 +44,6 @@ import org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl;
 import org.yes.cart.shoppingcart.impl.RemoveAllSkuFromCartCommandImpl;
 import org.yes.cart.shoppingcart.impl.RemoveSkuFromCartCommandImpl;
 import org.yes.cart.shoppingcart.impl.SetSkuQuantityToCartEventCommandImpl;
-import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.ShoppingCartPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
@@ -235,8 +235,9 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
      * @return link to show product and selected SKU
      */
     private Link getProductLink(final ProductSkuDecorator productSku) {
-        final Link productLink = new BookmarkablePageLink<HomePage>(
-                PRODUCT_LINK, HomePage.class,
+        final Class homePage = Application.get().getHomePage();
+        final Link productLink = new BookmarkablePageLink(
+                PRODUCT_LINK, homePage,
                 new PageParameters().set(WebParametersKeys.SKU_ID, String.valueOf(productSku.getId()))
         );
         productLink.add(new Label(PRODUCT_NAME_LABEL, productSku.getName(getLocale().getLanguage())).setEscapeModelStrings(false));

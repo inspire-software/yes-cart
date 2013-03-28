@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page.component.navigation;
 
+import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -23,7 +24,6 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.util.WicketUtil;
 
@@ -45,6 +45,8 @@ public class ProductPerPageListView extends ListView<String> {
 
     private final PageParameters pageParameters;
 
+    private final Class homePage;
+
 
     /**
      * Constructor.
@@ -64,6 +66,8 @@ public class ProductPerPageListView extends ListView<String> {
                 WicketUtil.getSelectedItemsPerPage(pageParameters, items)
         );
 
+        homePage = Application.get().getHomePage();
+
     }
 
     /**
@@ -82,7 +86,7 @@ public class ProductPerPageListView extends ListView<String> {
         stringListItem.add(
                 new BookmarkablePageLink<Link>(
                         ITEMS_PER_PAGE,
-                        HomePage.class,
+                        homePage,
                         WicketUtil.getFilteredRequestParameters(pageParameters)
                                 .set(
                                         WebParametersKeys.QUANTITY,

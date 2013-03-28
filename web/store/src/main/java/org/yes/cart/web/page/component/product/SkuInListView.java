@@ -16,12 +16,12 @@
 
 package org.yes.cart.web.page.component.product;
 
+import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.i18n.I18NModel;
-import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.util.WicketUtil;
@@ -66,8 +66,10 @@ public class SkuInListView extends BaseComponent {
 
         final I18NModel nameModel = getI18NSupport().getFailoverModel(sku.getDisplayName(), sku.getName());
 
+        final Class homePage = Application.get().getHomePage();
+
         add(
-                new BookmarkablePageLink(SKU_LINK, HomePage.class, linkToSkuParameters)
+                new BookmarkablePageLink(SKU_LINK, homePage, linkToSkuParameters)
                         .add(new Label(SKU_CODE_LABEL, sku.getCode()))
                         .add(new Label(SKU_NAME_LABEL, nameModel.getValue(selectedLocale)))
         );

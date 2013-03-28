@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page.component.navigation;
 
+import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -25,7 +26,6 @@ import org.apache.wicket.markup.html.navigation.paging.IPagingLabelProvider;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigation;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.util.WicketUtil;
 
@@ -40,13 +40,15 @@ public class URLPagingNavigator   extends PagingNavigator {
     private final IPagingLabelProvider labelProvider;
     private PagingNavigation pagingNavigation;
     private final PageParameters pageParameters;
+    private final String activePageLinkHtmlClass;
+    private final Class homePage;
 
 
     /**
      * {@inheritDoc}
      */
-    public URLPagingNavigator(final String s, final IPageable iPageable, final PageParameters pageParameters) {
-        this(s, iPageable, null, pageParameters);
+    public URLPagingNavigator(final String s, final IPageable iPageable, final PageParameters pageParameters, final String activePageLinkHtmlClass) {
+        this(s, iPageable, null, pageParameters, activePageLinkHtmlClass);
     }
 
     /**
@@ -55,10 +57,13 @@ public class URLPagingNavigator   extends PagingNavigator {
     public URLPagingNavigator(final String s,
                               final IPageable iPageable,
                               final IPagingLabelProvider iPagingLabelProvider,
-                              final PageParameters pageParameters) {
+                              final PageParameters pageParameters,
+                              final String activePageLinkHtmlClass) {
         super(s, iPageable, iPagingLabelProvider);
         this.labelProvider = iPagingLabelProvider;
         this.pageParameters = pageParameters;
+        this.activePageLinkHtmlClass = activePageLinkHtmlClass;
+        homePage = Application.get().getHomePage();
     }
 
     /**
@@ -67,7 +72,7 @@ public class URLPagingNavigator   extends PagingNavigator {
     protected PagingNavigation newNavigation(final String id,
                                              final IPageable pageable,
                                              final IPagingLabelProvider labelProvider) {
-        return new URLPagingNavigation(id/*"navigation"*/, pageable, labelProvider);
+        return new URLPagingNavigation(id/*"navigation"*/, pageable, labelProvider, activePageLinkHtmlClass);
     }
 
     /**
@@ -79,7 +84,7 @@ public class URLPagingNavigator   extends PagingNavigator {
 
         map.set(WebParametersKeys.PAGE, pageable.getCurrentPage() + increment);
 
-        return new BookmarkablePageLink<Link>(id, HomePage.class, map);
+        return new BookmarkablePageLink<Link>(id, homePage, map);
 
 
         //return new PagingNavigationIncrementLink<Void>(id, pageable, increment);
@@ -102,7 +107,7 @@ public class URLPagingNavigator   extends PagingNavigator {
 
         params.set(WebParametersKeys.PAGE, pNum);
 
-        return new BookmarkablePageLink<Link>(id, HomePage.class, new PageParameters(params));
+        return new BookmarkablePageLink<Link>(id, homePage, new PageParameters(params));
 
     }
 

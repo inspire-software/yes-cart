@@ -16,12 +16,12 @@
 
 package org.yes.cart.web.page.component.navigation;
 
+import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
-import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.util.WicketUtil;
@@ -41,12 +41,16 @@ public class ProductSorter extends BaseComponent {
     private static final String PRODUCT_SORT_BY_PRICE_ASC = "orderByPriceA";
     private static final String PRODUCT_SORT_BY_PRICE_DESC = "orderByPriceD";
 
+    private final String sortOrderActiveClass;
+
     /**
      * Construct product sorter.
      * @param id component id.
+     * @param sortOrderActiveLinkHtmlClass html class for active links
      */
-    public ProductSorter(final String id) {
+    public ProductSorter(final String id, final String sortOrderActiveLinkHtmlClass) {
         super(id);
+        sortOrderActiveClass = sortOrderActiveLinkHtmlClass;
     }
 
     /**
@@ -80,10 +84,13 @@ public class ProductSorter extends BaseComponent {
         params.remove(WebParametersKeys.SORT_REVERSE);
         params.set(WebParametersKeys.PAGE, "0");
         params.add(sortOrder, sortField);
-        final Link rez = new BookmarkablePageLink<Link>(id, HomePage.class, params);
+
+        final Class homePage = Application.get().getHomePage();
+
+        final Link rez = new BookmarkablePageLink<Link>(id, homePage, params);
         if (WicketUtil.isSelectedProductSortOnPage(getPage().getPageParameters(), sortOrder, sortField)) {
 
-            rez.add(new AttributeModifier("class", "sort-order-active"));
+            rez.add(new AttributeModifier("class", sortOrderActiveClass));
 
         }
         return rez;

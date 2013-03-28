@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page.component.filterednavigation;
 
+import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
@@ -23,7 +24,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.component.BaseComponent;
 
 import java.util.Collections;
@@ -97,6 +97,9 @@ public class BaseFilterView extends BaseComponent {
      */
     protected void onBeforeRender() {
         if (isVisible()) {
+
+            final Class homePage = Application.get().getHomePage();
+
             add(
                     new Label(HEAD, head)
                             .setEscapeModelStrings(false)
@@ -105,7 +108,7 @@ public class BaseFilterView extends BaseComponent {
                     new ListView<Pair<Pair<String, Integer>, PageParameters>>(LINK_LIST, linkList) {
                         protected void populateItem(final ListItem<Pair<Pair<String, Integer>, PageParameters>> pairListItem) {
                             final Pair<Pair<String, Integer>, PageParameters> keyValue = pairListItem.getModelObject();
-                            final Link link = new BookmarkablePageLink<HomePage>(LINK, HomePage.class, keyValue.getSecond());
+                            final Link link = new BookmarkablePageLink(LINK, homePage, keyValue.getSecond());
                             final Label valueVabel = new Label(LINK_NAME, keyValue.getFirst().getFirst());
                             valueVabel.setEscapeModelStrings(false);
                             link.add(valueVabel);

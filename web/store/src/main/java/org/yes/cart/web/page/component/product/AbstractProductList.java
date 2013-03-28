@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page.component.product;
 
+import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
@@ -28,7 +29,6 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.service.domain.*;
-import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
@@ -149,9 +149,10 @@ public abstract class AbstractProductList extends BaseComponent {
 
                         final PageParameters pageParameters = getProductPageParameters(prod);
 
+                        final Class homePage = Application.get().getHomePage();
 
                         listItem.add(
-                                new BookmarkablePageLink<HomePage>(PRODUCT_LINK_IMAGE, HomePage.class, pageParameters).add(
+                                new BookmarkablePageLink(PRODUCT_LINK_IMAGE, homePage, pageParameters).add(
                                         new ContextImage(PRODUCT_IMAGE, productDecorator.getDefaultImage(width, height))
                                                 .add(new AttributeModifier(HTML_WIDTH, width))
                                                 .add(new AttributeModifier(HTML_HEIGHT, height))
@@ -160,7 +161,7 @@ public abstract class AbstractProductList extends BaseComponent {
                                 )
                         );
                         listItem.add(
-                                new BookmarkablePageLink<HomePage>(PRODUCT_NAME_LINK, HomePage.class, pageParameters)
+                                new BookmarkablePageLink(PRODUCT_NAME_LINK, homePage, pageParameters)
                                         .add(new Label(NAME, productDecorator.getName(selectedLocale)).setEscapeModelStrings(false))
                                         .setVisible(nameLinkVisible)
                         );

@@ -17,6 +17,7 @@
 package org.yes.cart.web.page.component;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -28,7 +29,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.shoppingcart.impl.ChangeLocaleCartCommandImpl;
 import org.yes.cart.web.application.ApplicationDirector;
-import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.util.WicketUtil;
 
@@ -88,6 +88,8 @@ public class Language extends BaseComponent {
 
             final PageParameters basePageParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters());
 
+            final Class homePage = Application.get().getHomePage();
+
             add(new ListView<String>(LANGUAGE_LIST, languageService.getSupportedLanguages()) {
 
                 @Override
@@ -101,9 +103,9 @@ public class Language extends BaseComponent {
 
                     itemPageParameters.add(ChangeLocaleCartCommandImpl.CMD_KEY, languageCode);
 
-                    final BookmarkablePageLink<HomePage> pageLink = new BookmarkablePageLink<HomePage>(
+                    final BookmarkablePageLink pageLink = new BookmarkablePageLink(
                             LANGUAGE_LINK,
-                            getPage().getClass(),
+                            homePage,
                             itemPageParameters);
 
                     final Label languageLabel = new Label(LANGUAGE_NAME, languageName);

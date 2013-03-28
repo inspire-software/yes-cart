@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page.component.product;
 
+import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
@@ -34,7 +35,6 @@ import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.web.application.ApplicationDirector;
-import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
@@ -125,8 +125,10 @@ public class ProductInListView extends BaseComponent {
         final String width = defImgSize[0];
         final String height = defImgSize[1];
 
+        final Class homePage = Application.get().getHomePage();
+
         add(
-                new BookmarkablePageLink<HomePage>(PRODUCT_LINK_SKU, HomePage.class, linkToProductParameters).add(
+                new BookmarkablePageLink(PRODUCT_LINK_SKU, homePage, linkToProductParameters).add(
                         new Label(SKU_CODE_LABEL, product.getCode())
                 )
         );
@@ -136,7 +138,7 @@ public class ProductInListView extends BaseComponent {
         );
 
         add(
-                new BookmarkablePageLink<HomePage>(PRODUCT_LINK_NAME, HomePage.class, linkToProductParameters).add(
+                new BookmarkablePageLink(PRODUCT_LINK_NAME, homePage, linkToProductParameters).add(
                         new Label(NAME_LABEL, product.getName(selectedLocale))
                 )
         );
@@ -144,7 +146,7 @@ public class ProductInListView extends BaseComponent {
 
 
         add(
-                new BookmarkablePageLink<HomePage>(PRODUCT_LINK_IMAGE, HomePage.class, linkToProductParameters).add(
+                new BookmarkablePageLink(PRODUCT_LINK_IMAGE, homePage, linkToProductParameters).add(
                         new ContextImage(PRODUCT_IMAGE, product.getDefaultImage(width, height))
                                 .add(new AttributeModifier(HTML_WIDTH, width))
                                 .add(new AttributeModifier(HTML_HEIGHT, height))
@@ -155,7 +157,7 @@ public class ProductInListView extends BaseComponent {
                 .set(AddSkuToCartEventCommandImpl.CMD_KEY, product.getDefaultSku().getCode());
 
         add(
-                new BookmarkablePageLink<HomePage>(ADD_TO_CART_LINK, HomePage.class, addToCartParameters)
+                new BookmarkablePageLink(ADD_TO_CART_LINK, homePage, addToCartParameters)
                         .setVisible(
                                 MoneyUtils.isFirstBiggerThanSecond(product.getQtyOnWarehouse(), BigDecimal.ZERO )
                         )
