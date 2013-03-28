@@ -17,6 +17,7 @@
 package org.yes.cart.web.page.component;
 
 import org.apache.commons.lang.math.NumberUtils;
+import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -29,7 +30,6 @@ import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.web.application.ApplicationDirector;
-import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 
 import java.util.List;
@@ -71,6 +71,8 @@ public class TopCategories extends BaseComponent {
 
         final long categoryId = NumberUtils.toLong(getPage().getPageParameters().get(WebParametersKeys.CATEGORY_ID).toString());
 
+        final Class homePage = Application.get().getHomePage();
+
         add(
                 new ListView<Category>(CATEGORY_LIST, categories) {
 
@@ -85,7 +87,7 @@ public class TopCategories extends BaseComponent {
 
                         categoryListItem.add(
 
-                                new BookmarkablePageLink<HomePage>(CATEGORY_NAME_LINK, HomePage.class, pageParameters).add(
+                                new BookmarkablePageLink(CATEGORY_NAME_LINK, homePage, pageParameters).add(
 
                                         new Label(CATEGORY_NAME, nameModel.getValue(selectedLocale)).setEscapeModelStrings(false)
 

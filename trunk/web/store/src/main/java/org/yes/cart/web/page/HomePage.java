@@ -100,13 +100,14 @@ public class HomePage extends AbstractWebPage {
 
         final Shop shop = ApplicationDirector.getCurrentShop();
 
-        final List<Long> shopCategories = getCategories(categoryId);
+        final List<Long> shopSubCategoriesIds = getCategories(categoryId);
+        final List<Long> shopAllCategoriesIds = new ArrayList<Long>(categoryService.transform(shopService.getShopCategories(shop)));
 
         final List<BooleanQuery> queriesChain = luceneQueryFactory.getFilteredNavigationQueryChain(
                 shop.getShopId(),
-                shopCategories,
+                shopSubCategoriesIds,
                 mapParams,
-                new ArrayList<Long>( categoryService.transform(shopService.getShopCategories(shop)))
+                shopAllCategoriesIds
         );
 
         final BooleanQuery query = centralViewResolver.getBooleanQuery(
@@ -122,7 +123,7 @@ public class HomePage extends AbstractWebPage {
         add(new BrandProductFilter("brandFilter", query, categoryId));
         add(new AttributeProductFilter("attributeFilter", query, categoryId));
         add(new PriceProductFilter("priceFilter", query, categoryId));
-        add(new BreadCrumbsView("breadCrumbs", categoryId, shopCategories));
+        add(new BreadCrumbsView("breadCrumbs", categoryId, shopAllCategoriesIds));
 
 
         add(new NewArrivalProducts("newArrival"));

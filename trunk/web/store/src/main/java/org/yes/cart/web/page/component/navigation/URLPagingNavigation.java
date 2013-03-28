@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page.component.navigation;
 
+import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -24,7 +25,6 @@ import org.apache.wicket.markup.html.navigation.paging.IPageable;
 import org.apache.wicket.markup.html.navigation.paging.IPagingLabelProvider;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.util.WicketUtil;
 
@@ -37,20 +37,17 @@ import java.util.Collections;
  */
 public class URLPagingNavigation extends PagingNavigation {
 
-    /**
-     * {@inheritDoc}
-     */
-    public URLPagingNavigation(final String s, final IPageable iPageable) {
-        super(s, iPageable);
-        setViewSize(5);
-    }
+    private final Class homePage;
+    private final String activePageLinkHtmlClass;
 
     /**
      * {@inheritDoc}
      */
-    public URLPagingNavigation(final String s, final IPageable iPageable, final IPagingLabelProvider iPagingLabelProvider) {
+    public URLPagingNavigation(final String s, final IPageable iPageable, final IPagingLabelProvider iPagingLabelProvider, final String activePageLinkHtmlClass) {
         super(s, iPageable, iPagingLabelProvider);
+        this.activePageLinkHtmlClass = activePageLinkHtmlClass;
         setViewSize(5);
+        homePage = Application.get().getHomePage();
     }
 
     /**
@@ -65,10 +62,10 @@ public class URLPagingNavigation extends PagingNavigation {
 
         pageParameters.set(WebParametersKeys.PAGE, pageIndex);
 
-        final AbstractLink rez =  new BookmarkablePageLink<Link>(id, HomePage.class, pageParameters);
+        final AbstractLink rez =  new BookmarkablePageLink<Link>(id, homePage, pageParameters);
 
         if (WicketUtil.isSelectedPageActive(getPage().getPageParameters(), WebParametersKeys.PAGE, pageIndex)) {
-            rez.add(new AttributeModifier("class", "page-active"));
+            rez.add(new AttributeModifier("class", activePageLinkHtmlClass));
         }
 
         return  rez;

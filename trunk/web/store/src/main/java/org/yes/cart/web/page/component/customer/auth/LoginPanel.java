@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page.component.customer.auth;
 
+import org.apache.wicket.Application;
 import org.apache.wicket.Page;
 import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.apache.wicket.markup.html.form.Button;
@@ -30,7 +31,6 @@ import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.CheckoutPage;
-import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.RegistrationPage;
 import org.yes.cart.web.page.component.BaseComponent;
 
@@ -78,7 +78,8 @@ public class LoginPanel extends BaseComponent {
                     CheckoutPage.STEP_ADDR
             );
         } else {
-            successfulPage = HomePage.class;
+            successfulPage = Application.get().getHomePage();
+
         }
 
         add(
@@ -136,7 +137,7 @@ public class LoginPanel extends BaseComponent {
                     if(isCheckout) {
                         info(getLocalizer().getString("emailSent", this));
                     } else {
-                        setResponsePage(HomePage.class);
+                        setResponsePage(Application.get().getHomePage());
                     }
 
                 }

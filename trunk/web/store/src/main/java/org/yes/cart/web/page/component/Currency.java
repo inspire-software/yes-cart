@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page.component;
 
+import org.apache.wicket.Application;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -26,7 +27,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.shoppingcart.impl.ChangeCurrencyEventCommandImpl;
 import org.yes.cart.web.application.ApplicationDirector;
-import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CurrencySymbolService;
 import org.yes.cart.web.util.WicketUtil;
@@ -82,6 +82,8 @@ public class Currency extends BaseComponent {
 
             final PageParameters basePageParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters());
 
+            final Class homePage = Application.get().getHomePage();
+
             add( new ListView<String>(CURRENCY_LIST, supportedCurrencies) {
 
                 protected void populateItem(ListItem<String> stringListItem) {
@@ -93,9 +95,9 @@ public class Currency extends BaseComponent {
 
                     itemPageParameters.add(ChangeCurrencyEventCommandImpl.CMD_KEY, currencyCode);
 
-                    final BookmarkablePageLink<HomePage> pageLink = new BookmarkablePageLink<HomePage>(
+                    final BookmarkablePageLink pageLink = new BookmarkablePageLink(
                             CURRENCY_LINK,
-                            getPage().getClass(),
+                            homePage,
                             itemPageParameters);
 
                     final Label currencyLabel = new Label(CURRENCY_NAME, currencySymbol);

@@ -17,6 +17,7 @@
 package org.yes.cart.web.page.component;
 
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -31,7 +32,6 @@ import org.yes.cart.service.domain.*;
 import org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.web.application.ApplicationDirector;
-import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.component.price.PriceTierView;
 import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.page.component.product.ImageView;
@@ -188,8 +188,7 @@ public class SkuCentralView extends AbstractCentralView {
 
         final String selectedLocale = getLocale().getLanguage();
 
-
-
+        final Class homePage = Application.get().getHomePage();
 
         final ObjectDecorator decorator = getDecorator();
 
@@ -208,7 +207,7 @@ public class SkuCentralView extends AbstractCentralView {
         ).add(
                 new Label(PRODUCT_DESCRIPTION_LABEL, decorator.getDescription(selectedLocale)).setEscapeModelStrings(false)
         ).add(
-                new BookmarkablePageLink<HomePage>(ADD_TO_CART_LINK, HomePage.class, addToCartParameters)
+                new BookmarkablePageLink(ADD_TO_CART_LINK, homePage, addToCartParameters)
                         .setVisible(
                                 MoneyUtils.isFirstBiggerThanSecond(sku.getQty(), BigDecimal.ZERO)
                         )
