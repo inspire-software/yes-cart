@@ -20,6 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.SkuPrice;
@@ -44,6 +45,7 @@ public class PriceView extends BaseComponent {
     private static final String WHOLE_LABEL = "whole";
     private static final String DOT_LABEL = "dot";
     private static final String DECIMAL_LABEL = "decimal";
+    private static final String SAVE_LABEL = "save";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
     
@@ -58,6 +60,7 @@ public class PriceView extends BaseComponent {
     private final Pair<BigDecimal, BigDecimal> pricePair;
     private final String currencySymbol;
     private final boolean showCurrencySymbol;
+    private final boolean showSavings;
     private static final String decimalSeparator; // to perform split operation
     private static final String[] emptyFormatedPrice;
 
@@ -82,8 +85,12 @@ public class PriceView extends BaseComponent {
      * @param id component id.
      * @param model model.
      * @param showCurrencySymbol currency symbol.
+     * @param showSavings show user friendly percentage savings
      */
-    public PriceView(final String id, final IModel<SkuPrice> model, final boolean showCurrencySymbol) {
+    public PriceView(final String id,
+                     final IModel<SkuPrice> model,
+                     final boolean showCurrencySymbol,
+                     final boolean showSavings) {
         super(id, model);
         final SkuPrice skuPrice = model.getObject();
         this.pricePair = new Pair<BigDecimal, BigDecimal>(
@@ -92,6 +99,7 @@ public class PriceView extends BaseComponent {
         );
         this.currencySymbol = skuPrice == null ? null : skuPrice.getCurrency();
         this.showCurrencySymbol = showCurrencySymbol;
+        this.showSavings = showSavings;
 
     }
 
@@ -101,15 +109,18 @@ public class PriceView extends BaseComponent {
      * @param pricePair regular / sale price pair.
      * @param showCurrencySymbol currency symbol.
      * @param currencySymbol currency symbol
+     * @param showSavings show user friendly percentage savings
      */
     public PriceView(final String id,
                      final Pair<BigDecimal, BigDecimal> pricePair,
                      final String currencySymbol,
-                     final boolean showCurrencySymbol) {
+                     final boolean showCurrencySymbol,
+                     final boolean showSavings) {
         super(id);
         this.pricePair = pricePair;
         this.showCurrencySymbol = showCurrencySymbol;
         this.currencySymbol = currencySymbol;
+        this.showSavings = showSavings;
     }
 
     /**
@@ -127,6 +138,7 @@ public class PriceView extends BaseComponent {
         this.pricePair = new Pair<BigDecimal, BigDecimal> (price, null);
         this.showCurrencySymbol = showCurrencySymbol;
         this.currencySymbol = currencySymbol;
+        this.showSavings = false;
     }
 
     /**
@@ -149,11 +161,20 @@ public class PriceView extends BaseComponent {
 
     @Override
     protected void onBeforeRender() {
+
+        boolean showSave = false;
+        String savePercent = "";
+
         BigDecimal priceToFormat = pricePair.getFirst();
         String cssModificator = "regular";
         if (pricePair.getSecond() != null) {
             priceToFormat = pricePair.getSecond();
             cssModificator = "sale";
+            showSave = this.showSavings;
+            if (showSave) {
+                final BigDecimal save = MoneyUtils.getDiscountDisplayValue(pricePair.getFirst(), pricePair.getSecond());
+                savePercent = save.toString();
+            }
         }
         final String[] formated = getFormatedPrice(priceToFormat);
 
@@ -173,6 +194,13 @@ public class PriceView extends BaseComponent {
                         .setVisible(showCurrencySymbol)
                         .setEscapeModelStrings(false)
                         .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_CURRENCY))
+        );
+
+
+        addOrReplace(
+                new Label(SAVE_LABEL, new StringResourceModel("save.percent", this, null, new Object[] { savePercent }))
+                        .setVisible(showSave)
+                        .add(new AttributeModifier(HTML_CLASS, "sale-price-save"))
         );
 
         super.onBeforeRender();

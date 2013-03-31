@@ -17,6 +17,7 @@
 package org.yes.cart.util;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * Utils class to simplify some work with BigDecimals.
@@ -26,6 +27,8 @@ import java.math.BigDecimal;
  * Time: 11:35:42 PM
  */
 public final class MoneyUtils {
+
+    public static final BigDecimal HUNDRED = new BigDecimal("100.00");
 
     private MoneyUtils() {
         // prevent instantiation
@@ -159,6 +162,25 @@ public final class MoneyUtils {
             return false;
         }
         return first.setScale(scale).compareTo(second.setScale(scale)) == 0;
+
+    }
+
+    /**
+     * Get discount as percentage. E.g. original 100.00, discounted 80.0 - the result will be 20 (%)
+     * This is not an exact discount calculation but rather one used for UI and hence it rounds to the
+     * nearest percent value. E.g. original 100.00, discounted 80.99 - the result will be 19 (%)
+     *
+     * @param original original price
+     * @param discounted discounted price
+     * @return discount in percent
+     */
+    public static BigDecimal getDiscountDisplayValue(final BigDecimal original, final BigDecimal discounted) {
+
+        if (original == null || discounted == null) {
+            return BigDecimal.ZERO;
+        }
+        return original.subtract(discounted).multiply(HUNDRED)
+                .divide(original, RoundingMode.FLOOR).setScale(0, RoundingMode.HALF_EVEN);
 
     }
 

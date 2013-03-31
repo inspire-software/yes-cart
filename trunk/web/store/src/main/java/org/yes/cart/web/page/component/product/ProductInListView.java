@@ -164,7 +164,7 @@ public class ProductInListView extends BaseComponent {
         );
 
         add(
-                new PriceView(PRICE_VIEW, new Model<SkuPrice>(getSkuPrice()), true)
+                new PriceView(PRICE_VIEW, new Model<SkuPrice>(getSkuPrice()), true, true)
         );
 
 

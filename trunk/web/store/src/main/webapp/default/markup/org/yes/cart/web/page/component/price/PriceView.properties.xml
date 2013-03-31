@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
   ~
@@ -14,10 +15,7 @@
   ~    limitations under the License.
   -->
 
-<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
-<body>
-<wicket:panel>
-    <span wicket:id="currency">[currency]</span> <span wicket:id="whole">[00]</span><span wicket:id="dot">[.]</span><span wicket:id="decimal">[00]</span> <span wicket:id="save">[Save 10%]</span>
-</wicket:panel>
-</body>
-</html>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <entry key="save.percent">Discount {0}%</entry>
+</properties>

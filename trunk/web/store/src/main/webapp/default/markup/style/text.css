@@ -380,10 +380,10 @@ p {
 
 
 .sale-price-whole        { color: #ff1111; font-weight: bold;  }
-.sale-price-dot          {  color: #ff1111;font-weight: bold; font-size: 0.8em; vertical-align: baseline; top: -0.7em; position: relative; display:none; visibility:hidden;}
-.sale-price-decimal      {color: #ff1111;  font-weight: bold; font-size: 0.8em; vertical-align: baseline; top: -0.7em; position: relative; text-decoration: underline;}
+.sale-price-dot          { color: #ff1111;font-weight: bold; font-size: 0.8em; vertical-align: baseline; top: -0.7em; position: relative; display:none; visibility:hidden;}
+.sale-price-decimal      { color: #ff1111;  font-weight: bold; font-size: 0.8em; vertical-align: baseline; top: -0.7em; position: relative; text-decoration: underline;}
 
-
+.sku .sale-price-save    { font-size: 12px; }
 
 
 /* ------------------------------------------------ tabs ------------------------------------------ */
