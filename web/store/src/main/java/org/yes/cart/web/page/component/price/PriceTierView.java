@@ -76,7 +76,7 @@ public class PriceTierView extends BaseComponent {
                             new Label(QUANTITY_LABEL, String.valueOf(listItem.getModelObject().getQuantity().intValue()))
                     );
                     listItem.add(
-                            new PriceView(PRICE_VIEW, listItem.getModel(), true)
+                            new PriceView(PRICE_VIEW, listItem.getModel(), true, false)
                     );
                 }
             }

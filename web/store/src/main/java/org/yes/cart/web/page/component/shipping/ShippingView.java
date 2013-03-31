@@ -217,7 +217,7 @@ public class ShippingView extends BaseComponent {
                             PRICE_VIEW,
                             new Pair<BigDecimal, BigDecimal>(carrierSla.getPrice(), null),
                             carrierSla.getCurrency(),
-                            true
+                            true, true
                     )
             );
 

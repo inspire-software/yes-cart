@@ -175,5 +175,26 @@ public class MoneyUtilsTest {
         assertTrue("ten is equal to ten", MoneyUtils.minPositive(null, BigDecimal.TEN ).equals(BigDecimal.TEN));
     }
 
+    @Test
+    public void testGetDiscountDisplayValueOnNullPrices() throws Exception {
 
+        assertSame(BigDecimal.ZERO, MoneyUtils.getDiscountDisplayValue(null, null));
+        assertSame(BigDecimal.ZERO, MoneyUtils.getDiscountDisplayValue(BigDecimal.TEN, null));
+        assertSame(BigDecimal.ZERO, MoneyUtils.getDiscountDisplayValue(null, BigDecimal.TEN));
+
+    }
+
+    @Test
+    public void testGetDiscountDisplayValue() throws Exception {
+
+        assertTrue(new BigDecimal("20")
+                .compareTo(MoneyUtils.getDiscountDisplayValue(new BigDecimal("100.00"), new BigDecimal("80.00"))) == 0);
+        assertTrue(new BigDecimal("0")
+                .compareTo(MoneyUtils.getDiscountDisplayValue(new BigDecimal("100.00"), new BigDecimal("100.00"))) == 0);
+        assertTrue(new BigDecimal("-20")
+                .compareTo(MoneyUtils.getDiscountDisplayValue(new BigDecimal("100.00"), new BigDecimal("120.00"))) == 0);
+        assertTrue(new BigDecimal("19")
+                .compareTo(MoneyUtils.getDiscountDisplayValue(new BigDecimal("100.00"), new BigDecimal("80.99"))) == 0);
+
+    }
 }

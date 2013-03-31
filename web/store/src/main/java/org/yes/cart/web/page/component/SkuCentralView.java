@@ -193,7 +193,7 @@ public class SkuCentralView extends AbstractCentralView {
         final ObjectDecorator decorator = getDecorator();
 
         add(
-                new PriceView(PRICE_VIEW, new Model<SkuPrice>(getSkuPrice()), true)
+                new PriceView(PRICE_VIEW, new Model<SkuPrice>(getSkuPrice()), true, true)
         ).add(
                 new PriceTierView(PRICE_TIERS_VIEW, getSkuPrices())
         ).add(

@@ -89,7 +89,7 @@ public class SmallShoppingCartView extends BaseComponent {
                 new PriceView(
                         SUB_TOTAL_VIEW,
                         new Model<SkuPrice>(skuPrice),
-                        true
+                        true, false
                 ).setVisible(!isCartEmpty())
         );
 
