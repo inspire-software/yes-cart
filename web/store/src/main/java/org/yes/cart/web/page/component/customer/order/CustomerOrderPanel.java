@@ -105,7 +105,7 @@ public class CustomerOrderPanel extends BaseComponent {
     @Override
     protected void onBeforeRender() {
         final Customer customer = (Customer) getDefaultModel().getObject();
-        final SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DEFAULT_DATE_FORMAT);
+        final SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DEFAULT_DATE_FORMAT, getLocale());
 
         final DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols(Locale.US);
         final DecimalFormat decimalFormat = new DecimalFormat(Constants.MONEY_FORMAT, formatSymbols);

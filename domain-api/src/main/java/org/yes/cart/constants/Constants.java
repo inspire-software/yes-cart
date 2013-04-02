@@ -31,7 +31,7 @@ public interface Constants {
 
     String DEFAULT_DATE_TIME_FORMAT = "yyyy-MMM-dd hh:mm:ss";
 
-    String DEFAULT_DATE_FORMAT = "yyyy-MMM-dd";
+    String DEFAULT_DATE_FORMAT = "dd MMMMM yyyy";
 
     /**
      * Accourding to HTTP/1.1 (RFC2068) spec date time must be in  RFC850 format.
