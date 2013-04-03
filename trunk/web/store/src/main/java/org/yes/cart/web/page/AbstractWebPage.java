@@ -17,6 +17,8 @@
 package org.yes.cart.web.page;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.authentication.IAuthenticationStrategy;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -27,8 +29,10 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.shoppingcart.impl.ChangeLocaleCartCommandImpl;
+import org.yes.cart.shoppingcart.impl.LogoutCommandImpl;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.DecoratorFacade;
@@ -138,9 +142,9 @@ public class AbstractWebPage extends WebPage {
 
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
 
-        if (cart.accept(
-                getShoppingCartCommandFactory().create(WicketUtil.pageParametesAsMap(getPageParameters()))
-        ) || needToPersists(cart)) {
+        final ShoppingCartCommand command = getShoppingCartCommandFactory().create(WicketUtil.pageParametesAsMap(getPageParameters()));
+
+        if (cart.accept(command) || needToPersists(cart)) {
             //Not sure what the best way to apply changed locale
             if (cart.getCurrentLocale() != null && !getSession().getLocale().getLanguage().equals(cart.getCurrentLocale())) {
                 getSession().setLocale(new Locale(cart.getCurrentLocale()));
@@ -150,7 +154,16 @@ public class AbstractWebPage extends WebPage {
                     (HttpServletResponse) getResponse().getContainerResponse(),
                     cart
             );
+
+            if (command != null && LogoutCommandImpl.CMD_KEY.equals(command.getCmdKey())) {
+                // Need to remove user from wicket auth
+                final IAuthenticationStrategy strategy = getApplication().getSecuritySettings()
+                        .getAuthenticationStrategy();
+                strategy.remove();
+                AuthenticatedWebSession.get().signOut();
+            }
         }
+
         //wft ??? super.onBeforeRender();
 
     }

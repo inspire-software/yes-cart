@@ -17,8 +17,8 @@
 package org.yes.cart.web.page.component.customer.dynaform;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
@@ -157,7 +157,7 @@ public class DynaFormPanel extends BaseComponent {
 
         if (StringUtils.isNotBlank(attrValue.getAttribute().getDescription())) {
 
-            rez.add(new SimpleAttributeModifier(HTML_TITLE, attrValue.getAttribute().getDescription()));
+            rez.add(new AttributeModifier(HTML_TITLE, attrValue.getAttribute().getDescription()));
 
         }
 

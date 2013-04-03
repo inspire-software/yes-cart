@@ -22,6 +22,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.https.RequireHttps;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.springframework.util.StringUtils;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
@@ -68,10 +69,24 @@ public class CustomerSelfCarePage extends AbstractWebPage {
     public CustomerSelfCarePage(final PageParameters params) {
         super(params);
 
-        final Customer customer = customerService.findCustomer(ApplicationDirector.getShoppingCart().getCustomerEmail());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void onBeforeRender() {
+        processCommands();
+
+        final String email = ApplicationDirector.getShoppingCart().getCustomerEmail();
+        final Customer customer;
+        if (StringUtils.hasLength(email)) {
+            customer = customerService.findCustomer(ApplicationDirector.getShoppingCart().getCustomerEmail());
+        } else {
+            customer = null;
+        }
 
         final Model<Customer> customerModel = new Model<Customer>(customer);
-
 
         add(
                 new FeedbackPanel(FEEDBACK)
@@ -93,14 +108,7 @@ public class CustomerSelfCarePage extends AbstractWebPage {
                 new StandardHeader(HEADER)
         );
 
-    }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void onBeforeRender() {
-        processCommands();
         super.onBeforeRender();
     }
 }
