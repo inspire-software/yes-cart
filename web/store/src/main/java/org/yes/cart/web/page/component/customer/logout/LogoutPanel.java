@@ -15,8 +15,9 @@
  */
 package org.yes.cart.web.page.component.customer.logout;
 
+import org.apache.wicket.Application;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
@@ -54,7 +55,7 @@ public class LogoutPanel  extends BaseComponent {
     }
 
     protected void onBeforeRender() {
-        final Class<? extends Page> page = getPage().getClass();
+        final Class<? extends Page> page = Application.get().getHomePage();
 
         final PageParameters primaryPageParameter = new PageParameters();
         primaryPageParameter.add(LogoutCommandImpl.CMD_KEY, LogoutCommandImpl.CMD_KEY);
@@ -63,7 +64,7 @@ public class LogoutPanel  extends BaseComponent {
                 page,
                 primaryPageParameter);
 
-        primaryActionLink.add(new SimpleAttributeModifier(
+        primaryActionLink.add(new AttributeModifier(
                 HTML_TITLE,
                 getSalutation(LOGOFF_TITLE, ApplicationDirector.getShoppingCart().getCustomerName())));
         primaryActionLink.add(new Label(

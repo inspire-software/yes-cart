@@ -17,7 +17,7 @@
 package org.yes.cart.web.page.component;
 
 import org.apache.wicket.Application;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -106,7 +106,7 @@ public class Currency extends BaseComponent {
 
                     if (currencyCode.equals(ApplicationDirector.getShoppingCart().getCurrencyCode())) {
 
-                        pageLink.add(new SimpleAttributeModifier(HTML_CLASS, "currency-active"));
+                        pageLink.add(new AttributeModifier(HTML_CLASS, "currency-active"));
                     }
 
                     pageLink.add(currencyLabel);
