@@ -73,7 +73,7 @@ public class AddressServiceImpl extends BaseGenericServiceImpl<Address> implemen
     private void setDefault(final Address instance) {
         getGenericDao().executeUpdate(
                 "ADDRESSES.RESET.DEFAULT",
-                instance.getCustomer().getCustomerId(), instance.getAddressType(), true
+                instance.getCustomer().getCustomerId(), instance.getAddressType(), false
         );
         instance.setDefaultAddress(true);
     }

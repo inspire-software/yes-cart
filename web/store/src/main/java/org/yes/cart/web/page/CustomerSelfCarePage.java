@@ -69,15 +69,6 @@ public class CustomerSelfCarePage extends AbstractWebPage {
     public CustomerSelfCarePage(final PageParameters params) {
         super(params);
 
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void onBeforeRender() {
-        processCommands();
-
         final String email = ApplicationDirector.getShoppingCart().getCustomerEmail();
         final Customer customer;
         if (StringUtils.hasLength(email)) {
@@ -108,7 +99,14 @@ public class CustomerSelfCarePage extends AbstractWebPage {
                 new StandardHeader(HEADER)
         );
 
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void onBeforeRender() {
+        processCommands();
         super.onBeforeRender();
     }
 }
