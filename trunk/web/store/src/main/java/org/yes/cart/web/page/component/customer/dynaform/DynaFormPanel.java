@@ -134,11 +134,13 @@ public class DynaFormPanel extends BaseComponent {
 
         form.add(fields);
 
+        final String lang = getLocale().getLanguage();
+
         for (AttrValue attrValue : attrValueCollection) {
 
             WebMarkupContainer row = new WebMarkupContainer(fields.newChildId());
 
-            row.add(getLabel(attrValue));
+            row.add(getLabel(attrValue, lang));
 
             row.add(getEditor(attrValue));
 
@@ -151,9 +153,12 @@ public class DynaFormPanel extends BaseComponent {
 
     }
 
-    private Label getLabel(final AttrValue attrValue) {
+    private Label getLabel(final AttrValue attrValue, final String lang) {
 
-        final Label rez = new Label(NAME, attrValue.getAttribute().getName());
+        final Label rez = new Label(NAME,
+                getI18NSupport().getFailoverModel(
+                        attrValue.getAttribute().getDisplayName(),
+                        attrValue.getAttribute().getName()).getValue(lang));
 
         if (StringUtils.isNotBlank(attrValue.getAttribute().getDescription())) {
 
