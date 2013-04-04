@@ -1,0 +1,3 @@
+name; description; price; currency; carrier; type
+"UPS 1 day";"1 day delivery";25.58;USD;UPS;F
+"NEW_V 1 day";"New Vasuki express 1 day delivery";5.58;UAH;NEWVASUKIEXPRESS;F

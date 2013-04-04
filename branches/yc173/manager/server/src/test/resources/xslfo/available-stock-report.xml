@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<yes-report>
+  <object-array>
+    <string>LG656ET#UUG</string>
+    <string>HP ProBook 6560b</string>
+    <string>0112312334</string>
+    <big-decimal>0.00</big-decimal>
+    <big-decimal>4.00</big-decimal>
+  </object-array>
+  <object-array>
+    <string>LH339EA#UUG</string>
+    <string>HP ProBook 4730d</string>
+    <string></string>
+    <big-decimal>0.00</big-decimal>
+    <big-decimal>5.00</big-decimal>
+  </object-array>
+  <object-array>
+    <string>LG656ET</string>
+    <string>HP ProBook 6560b</string>    
+    <string>0123456789012</string>
+    <big-decimal>5.00</big-decimal>
+    <big-decimal>100.00</big-decimal>
+  </object-array>
+</yes-report>

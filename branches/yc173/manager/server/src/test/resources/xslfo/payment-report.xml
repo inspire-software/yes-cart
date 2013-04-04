@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<yes-report>
+    <org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity>
+        <cardHolderName>John Smith</cardHolderName>
+        <customerOrderPaymentId>21</customerOrderPaymentId>
+        <cardExpireYear>2011</cardExpireYear>
+        <cardExpireMonth>12</cardExpireMonth>
+        <orderDate class="sql-timestamp">2012-07-31 21:32:30.911</orderDate>
+        <paymentAmount>1535.36</paymentAmount>
+        <orderCurrency>USD</orderCurrency>
+        <orderNumber>20120731-1</orderNumber>
+        <orderShipment>20120731-1-0</orderShipment>
+        <transactionReferenceId>29a47b4c-f6a3-4383-8e8e-0bc34fe2f490</transactionReferenceId>
+        <transactionAuthorizationCode>b402d278-3dfe-4950-9304-eef605955ca2</transactionAuthorizationCode>
+        <transactionGatewayLabel>testPaymentGateway</transactionGatewayLabel>
+        <transactionOperation>AUTH</transactionOperation>
+        <transactionOperationResultCode>EXTERNAL_OK</transactionOperationResultCode>
+        <paymentProcessorResult>Ok</paymentProcessorResult>
+        <paymentProcessorBatchSettlement>false</paymentProcessorBatchSettlement>
+        <createdTimestamp class="sql-timestamp">2012-07-31 21:33:03.616</createdTimestamp>
+        <updatedTimestamp class="sql-timestamp">2012-07-31 21:33:03.616</updatedTimestamp>
+        <createdBy>user unknown</createdBy>
+        <updatedBy>user unknown</updatedBy>
+        <guid>346b1fda-42bf-4adf-9549-8255309ac946</guid>
+        <cardNumber>1111</cardNumber>
+    </org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity>
+    <org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity>
+        <cardHolderName>Kaarel Noges</cardHolderName>
+        <customerOrderPaymentId>22</customerOrderPaymentId>
+        <cardExpireYear>2013</cardExpireYear>
+        <cardExpireMonth>12</cardExpireMonth>
+        <orderDate class="sql-timestamp">2012-08-01 22:03:46.79</orderDate>
+        <paymentAmount>1194.02</paymentAmount>
+        <orderCurrency>USD</orderCurrency>
+        <orderNumber>20120801-2</orderNumber>
+        <orderShipment>20120801-2-0</orderShipment>
+        <transactionReferenceId>49dbcb7b-d964-43f5-84d9-f317abf5a097</transactionReferenceId>
+        <transactionAuthorizationCode>eec36f9e-3ee0-4129-a2bc-307cd2ddef03</transactionAuthorizationCode>
+        <transactionGatewayLabel>testPaymentGateway</transactionGatewayLabel>
+        <transactionOperation>AUTH</transactionOperation>
+        <transactionOperationResultCode>EXTERNAL_OK</transactionOperationResultCode>
+        <paymentProcessorResult>Ok</paymentProcessorResult>
+        <paymentProcessorBatchSettlement>false</paymentProcessorBatchSettlement>
+        <createdTimestamp class="sql-timestamp">2012-08-01 22:04:06.596</createdTimestamp>
+        <updatedTimestamp class="sql-timestamp">2012-08-01 22:04:06.596</updatedTimestamp>
+        <createdBy>user unknown</createdBy>
+        <updatedBy>user unknown</updatedBy>
+        <guid>fbaadceb-2f4a-4ddc-a0e3-1cb33ba488db</guid>
+        <cardNumber>2222</cardNumber>
+    </org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity>
+    <org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity>
+        <cardHolderName>Ivan Pertoff</cardHolderName>
+        <customerOrderPaymentId>23</customerOrderPaymentId>
+        <cardExpireYear>2013</cardExpireYear>
+        <cardExpireMonth>12</cardExpireMonth>
+        <orderDate class="sql-timestamp">2012-08-01 22:03:46.79</orderDate>
+        <paymentAmount>4.02</paymentAmount>
+        <orderCurrency>USD</orderCurrency>
+        <orderNumber>20120801-2</orderNumber>
+        <orderShipment>20120801-2-0</orderShipment>
+        <transactionReferenceId>49dbcb7b-d964-43f5-84d9-f317abf5a097</transactionReferenceId>
+        <transactionAuthorizationCode>eec36f9e-3ee0-4129-a2bc-307cd2ddef03</transactionAuthorizationCode>
+        <transactionGatewayLabel>testPaymentGateway</transactionGatewayLabel>
+        <transactionOperation>REVERSE_AUTH</transactionOperation>
+        <transactionOperationResultCode>EXTERNAL_OK</transactionOperationResultCode>
+        <paymentProcessorResult>Ok</paymentProcessorResult>
+        <paymentProcessorBatchSettlement>false</paymentProcessorBatchSettlement>
+        <createdTimestamp class="sql-timestamp">2012-08-01 22:04:06.596</createdTimestamp>
+        <updatedTimestamp class="sql-timestamp">2012-08-01 22:04:06.596</updatedTimestamp>
+        <createdBy>user unknown</createdBy>
+        <updatedBy>user unknown</updatedBy>
+        <guid>fbaadceb-2f4a-4ddc-a0e3-1cb33ba488db</guid>
+        <cardNumber>3333</cardNumber>
+    </org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity>
+    <org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity>
+        <cardHolderName>Ivan Jensen</cardHolderName>
+        <customerOrderPaymentId>24</customerOrderPaymentId>
+        <cardExpireYear>2013</cardExpireYear>
+        <cardExpireMonth>12</cardExpireMonth>
+        <orderDate class="sql-timestamp">2012-08-01 22:03:46.79</orderDate>
+        <paymentAmount>423.02</paymentAmount>
+        <orderCurrency>USD</orderCurrency>
+        <orderNumber>20120801-2</orderNumber>
+        <orderShipment>20120801-2-0</orderShipment>
+        <transactionReferenceId>49dbcb7b-d964-43f5-84d9-f317abf5a097</transactionReferenceId>
+        <transactionAuthorizationCode>eec36f9e-3ee0-4129-a2bc-307cd2ddef03</transactionAuthorizationCode>
+        <transactionGatewayLabel>testPaymentGateway</transactionGatewayLabel>
+        <transactionOperation>CAPTURE</transactionOperation>
+        <transactionOperationResultCode>EXTERNAL_OK</transactionOperationResultCode>
+        <paymentProcessorResult>Ok</paymentProcessorResult>
+        <paymentProcessorBatchSettlement>false</paymentProcessorBatchSettlement>
+        <createdTimestamp class="sql-timestamp">2012-08-01 22:04:06.596</createdTimestamp>
+        <updatedTimestamp class="sql-timestamp">2012-08-01 22:04:06.596</updatedTimestamp>
+        <createdBy>user unknown</createdBy>
+        <updatedBy>user unknown</updatedBy>
+        <guid>fbaadceb-2f4a-4ddc-a0e3-1cb33ba488db</guid>
+        <cardNumber>0101</cardNumber>
+    </org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity>
+    <org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity>
+        <cardHolderName>Jenny Dou</cardHolderName>
+        <customerOrderPaymentId>25</customerOrderPaymentId>
+        <cardExpireYear>2013</cardExpireYear>
+        <cardExpireMonth>12</cardExpireMonth>
+        <orderDate class="sql-timestamp">2012-08-01 22:03:46.79</orderDate>
+        <paymentAmount>477.03</paymentAmount>
+        <orderCurrency>USD</orderCurrency>
+        <orderNumber>20120801-2</orderNumber>
+        <orderShipment>20120801-2-0</orderShipment>
+        <transactionReferenceId>49dbcb7b-d964-43f5-84d9-f317abf5a097</transactionReferenceId>
+        <transactionAuthorizationCode>eec36f9e-3ee0-4129-a2bc-307cd2ddef03</transactionAuthorizationCode>
+        <transactionGatewayLabel>testPaymentGateway</transactionGatewayLabel>
+        <transactionOperation>VOID_CAPTURE</transactionOperation>
+        <transactionOperationResultCode>EXTERNAL_OK</transactionOperationResultCode>
+        <paymentProcessorResult>Ok</paymentProcessorResult>
+        <paymentProcessorBatchSettlement>false</paymentProcessorBatchSettlement>
+        <createdTimestamp class="sql-timestamp">2012-08-01 22:04:06.596</createdTimestamp>
+        <updatedTimestamp class="sql-timestamp">2012-08-01 22:04:06.596</updatedTimestamp>
+        <createdBy>user unknown</createdBy>
+        <updatedBy>user unknown</updatedBy>
+        <guid>fbaadceb-2f4a-4ddc-a0e3-1cb33ba488db</guid>
+        <cardNumber>0202</cardNumber>
+    </org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity>
+    <org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity>
+        <cardHolderName>John Dou</cardHolderName>
+        <customerOrderPaymentId>26</customerOrderPaymentId>
+        <cardExpireYear>2013</cardExpireYear>
+        <cardExpireMonth>12</cardExpireMonth>
+        <orderDate class="sql-timestamp">2012-08-01 22:03:46.79</orderDate>
+        <paymentAmount>423.02</paymentAmount>
+        <orderCurrency>USD</orderCurrency>
+        <orderNumber>20120801-2</orderNumber>
+        <orderShipment>20120801-2-0</orderShipment>
+        <transactionReferenceId>49dbcb7b-d964-43f5-84d9-f317abf5a097</transactionReferenceId>
+        <transactionAuthorizationCode>eec36f9e-3ee0-4129-a2bc-307cd2ddef03</transactionAuthorizationCode>
+        <transactionGatewayLabel>cyberSourcePaymentGateway</transactionGatewayLabel>
+        <transactionOperation>CAPTURE</transactionOperation>
+        <transactionOperationResultCode>EXTERNAL_OK</transactionOperationResultCode>
+        <paymentProcessorResult>Ok</paymentProcessorResult>
+        <paymentProcessorBatchSettlement>false</paymentProcessorBatchSettlement>
+        <createdTimestamp class="sql-timestamp">2012-08-01 22:04:06.596</createdTimestamp>
+        <updatedTimestamp class="sql-timestamp">2012-08-01 22:04:06.596</updatedTimestamp>
+        <createdBy>user unknown</createdBy>
+        <updatedBy>user unknown</updatedBy>
+        <guid>fbaadceb-2f4a-4ddc-a0e3-1cb33ba488db</guid>
+        <cardNumber>0507</cardNumber>
+    </org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity>
+    <org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity>
+        <cardHolderName>John Dou</cardHolderName>
+        <customerOrderPaymentId>27</customerOrderPaymentId>
+        <cardExpireYear>2013</cardExpireYear>
+        <cardExpireMonth>12</cardExpireMonth>
+        <orderDate class="sql-timestamp">2012-08-01 22:03:46.79</orderDate>
+        <paymentAmount>345.02</paymentAmount>
+        <orderCurrency>EUR</orderCurrency>
+        <orderNumber>20120801-2</orderNumber>
+        <orderShipment>20120801-2-0</orderShipment>
+        <transactionReferenceId>49dbcb7b-d964-43f5-84d9-f317abf5a097</transactionReferenceId>
+        <transactionAuthorizationCode>eec36f9e-3ee0-4129-a2bc-307cd2ddef03</transactionAuthorizationCode>
+        <transactionGatewayLabel>cyberSourcePaymentGateway</transactionGatewayLabel>
+        <transactionOperation>CAPTURE</transactionOperation>
+        <transactionOperationResultCode>EXTERNAL_OK</transactionOperationResultCode>
+        <paymentProcessorResult>Ok</paymentProcessorResult>
+        <paymentProcessorBatchSettlement>false</paymentProcessorBatchSettlement>
+        <createdTimestamp class="sql-timestamp">2012-08-01 22:04:06.596</createdTimestamp>
+        <updatedTimestamp class="sql-timestamp">2012-08-01 22:04:06.596</updatedTimestamp>
+        <createdBy>user unknown</createdBy>
+        <updatedBy>user unknown</updatedBy>
+        <guid>fbaadceb-2f4a-4ddc-a0e3-1cb33ba488db</guid>
+        <cardNumber>0507</cardNumber>
+    </org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity>
+    <org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity>
+        <cardHolderName>Ling Hui</cardHolderName>
+        <customerOrderPaymentId>28</customerOrderPaymentId>
+        <cardExpireYear>2013</cardExpireYear>
+        <cardExpireMonth>12</cardExpireMonth>
+        <orderDate class="sql-timestamp">2012-08-01 22:03:46.79</orderDate>
+        <paymentAmount>3455.02</paymentAmount>
+        <orderCurrency>EUR</orderCurrency>
+        <orderNumber>20120801-2</orderNumber>
+        <orderShipment>20120801-2-0</orderShipment>
+        <transactionReferenceId>49dbcb7b-d964-43f5-84d9-f317abf5a097</transactionReferenceId>
+        <transactionAuthorizationCode>eec36f9e-3ee0-4129-a2bc-307cd2ddef03</transactionAuthorizationCode>
+        <transactionGatewayLabel>testPaymentGateway</transactionGatewayLabel>
+        <transactionOperation>AUTH</transactionOperation>
+        <transactionOperationResultCode>EXTERNAL_OK</transactionOperationResultCode>
+        <paymentProcessorResult>Ok</paymentProcessorResult>
+        <paymentProcessorBatchSettlement>false</paymentProcessorBatchSettlement>
+        <createdTimestamp class="sql-timestamp">2012-08-01 22:04:06.596</createdTimestamp>
+        <updatedTimestamp class="sql-timestamp">2012-08-01 22:04:06.596</updatedTimestamp>
+        <createdBy>user unknown</createdBy>
+        <updatedBy>user unknown</updatedBy>
+        <guid>fbaadceb-2f4a-4ddc-a0e3-1cb33ba488db</guid>
+        <cardNumber>0507</cardNumber>
+    </org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity>
+
+    <org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity>
+        <cardHolderName>Steve Muench</cardHolderName>
+        <customerOrderPaymentId>29</customerOrderPaymentId>
+        <cardExpireYear>2011</cardExpireYear>
+        <cardExpireMonth>12</cardExpireMonth>
+        <orderDate class="sql-timestamp">2012-07-31 21:32:30.911</orderDate>
+        <paymentAmount>777.77</paymentAmount>
+        <orderCurrency>USD</orderCurrency>
+        <orderNumber>20120731-1</orderNumber>
+        <orderShipment>20120731-1-0</orderShipment>
+        <transactionReferenceId>29a47b4c-f6a3-4383-8e8e-0bc34fe2f490</transactionReferenceId>
+        <transactionAuthorizationCode>b402d278-3dfe-4950-9304-eef605955ca2</transactionAuthorizationCode>
+        <transactionGatewayLabel>testPaymentGateway</transactionGatewayLabel>
+        <transactionOperation>AUTH</transactionOperation>
+        <transactionOperationResultCode>EXTERNAL_OK</transactionOperationResultCode>
+        <paymentProcessorResult>Ok</paymentProcessorResult>
+        <paymentProcessorBatchSettlement>false</paymentProcessorBatchSettlement>
+        <createdTimestamp class="sql-timestamp">2012-07-31 21:33:03.616</createdTimestamp>
+        <updatedTimestamp class="sql-timestamp">2012-07-31 21:33:03.616</updatedTimestamp>
+        <createdBy>user unknown</createdBy>
+        <updatedBy>user unknown</updatedBy>
+        <guid>346b1fda-42bf-4adf-9549-8255309ac946</guid>
+        <cardNumber>9999</cardNumber>
+    </org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity>
+
+    <org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity>
+        <cardHolderName>Steve Muench</cardHolderName>
+        <customerOrderPaymentId>30</customerOrderPaymentId>
+        <cardExpireYear>2011</cardExpireYear>
+        <cardExpireMonth>12</cardExpireMonth>
+        <orderDate class="sql-timestamp">2012-07-31 21:32:30.999</orderDate>
+        <paymentAmount>777.77</paymentAmount>
+        <orderCurrency>USD</orderCurrency>
+        <orderNumber>20120731-1</orderNumber>
+        <orderShipment>20120731-1-0</orderShipment>
+        <transactionReferenceId>29a47b4c-f6a3-4383-8e8e-0bc34fe2f490</transactionReferenceId>
+        <transactionAuthorizationCode>b402d278-3dfe-4950-9304-eef605955ca2</transactionAuthorizationCode>
+        <transactionGatewayLabel>testPaymentGateway</transactionGatewayLabel>
+        <transactionOperation>CAPTURE</transactionOperation>
+        <transactionOperationResultCode>EXTERNAL_OK</transactionOperationResultCode>
+        <paymentProcessorResult>Ok</paymentProcessorResult>
+        <paymentProcessorBatchSettlement>false</paymentProcessorBatchSettlement>
+        <createdTimestamp class="sql-timestamp">2012-07-31 21:33:03.616</createdTimestamp>
+        <updatedTimestamp class="sql-timestamp">2012-07-31 21:33:03.616</updatedTimestamp>
+        <createdBy>user unknown</createdBy>
+        <updatedBy>user unknown</updatedBy>
+        <guid>346b1fda-42bf-4adf-9549-8255309ac946</guid>
+        <cardNumber>9999</cardNumber>
+    </org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity>
+    <org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity>
+        <cardHolderName>Michael Torben</cardHolderName>
+        <customerOrderPaymentId>21</customerOrderPaymentId>
+        <cardExpireYear>2015</cardExpireYear>
+        <cardExpireMonth>04</cardExpireMonth>
+        <orderDate class="sql-timestamp">2012-07-31 21:32:30.911</orderDate>
+        <paymentAmount>24.15</paymentAmount>
+        <orderCurrency>USD</orderCurrency>
+        <orderNumber>20120731-1</orderNumber>
+        <orderShipment>20120731-1-0</orderShipment>
+        <transactionReferenceId>29a47b4c-f6a3-4383-8e8e-0bc34fe2f490</transactionReferenceId>
+        <transactionAuthorizationCode>b402d278-3dfe-4950-9304-eef605955ca2</transactionAuthorizationCode>
+        <transactionGatewayLabel>cyberSourcePaymentGateway</transactionGatewayLabel>
+        <transactionOperation>AUTH</transactionOperation>
+        <transactionOperationResultCode>EXTERNAL_OK</transactionOperationResultCode>
+        <paymentProcessorResult>Ok</paymentProcessorResult>
+        <paymentProcessorBatchSettlement>false</paymentProcessorBatchSettlement>
+        <createdTimestamp class="sql-timestamp">2012-07-31 21:33:03.616</createdTimestamp>
+        <updatedTimestamp class="sql-timestamp">2012-07-31 21:33:03.616</updatedTimestamp>
+        <createdBy>user unknown</createdBy>
+        <updatedBy>user unknown</updatedBy>
+        <guid>346b1fda-42bf-4adf-9549-8255309ac946</guid>
+        <cardNumber>1111</cardNumber>
+    </org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity>
+
+
+</yes-report>
