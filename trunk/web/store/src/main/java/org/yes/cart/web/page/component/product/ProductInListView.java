@@ -39,8 +39,10 @@ import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
+import org.yes.cart.web.support.entity.decorator.ProductAvailabilityModel;
 import org.yes.cart.web.support.entity.decorator.ProductDecorator;
 import org.yes.cart.web.support.service.AttributableImageService;
+import org.yes.cart.web.support.service.ProductAvailabilityStrategy;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.math.BigDecimal;
@@ -59,6 +61,7 @@ public class ProductInListView extends BaseComponent {
     private final static String NAME_LABEL = "name";
     private final static String DESCRIPTION_LABEL = "description";
     private final static String ADD_TO_CART_LINK = "addToCartLink";
+    private final static String ADD_TO_CART_LINK_LABEL = "addToCartLinkLabel";
     private final static String PRICE_VIEW = "priceView";
     private final static String PRODUCT_LINK_IMAGE = "productLinkImage";
     private final static String PRODUCT_IMAGE = "productDefaultImage";
@@ -83,6 +86,9 @@ public class ProductInListView extends BaseComponent {
 
     @SpringBean(name = ServiceSpringKeys.PRODUCT_SERVICE)
     protected ProductService productService;
+
+    @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_AVAILABILITY_STRATEGY)
+    private ProductAvailabilityStrategy productAvailabilityStrategy;
 
 
     private final String [] defImgSize;
@@ -156,11 +162,13 @@ public class ProductInListView extends BaseComponent {
         final PageParameters addToCartParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters())
                 .set(AddSkuToCartEventCommandImpl.CMD_KEY, product.getDefaultSku().getCode());
 
+        final ProductAvailabilityModel pam = productAvailabilityStrategy.getAvailabilityModel(product);
         add(
                 new BookmarkablePageLink(ADD_TO_CART_LINK, homePage, addToCartParameters)
-                        .setVisible(
-                                MoneyUtils.isFirstBiggerThanSecond(product.getQtyOnWarehouse(), BigDecimal.ZERO )
-                        )
+                        .add(new Label(ADD_TO_CART_LINK_LABEL, pam.isInStock() || pam.isPerpetual() ?
+                                getLocalizer().getString("add.to.cart", this) :
+                                getLocalizer().getString("preorder.cart", this)))
+                        .setVisible(pam.isAvailable())
         );
 
         add(

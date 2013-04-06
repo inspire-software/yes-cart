@@ -153,6 +153,8 @@
         <constructor-arg index="2" ref="luceneQueryFactory"/>
     </bean>
 
+    <bean id="productAvailabilityStrategy" class="org.yes.cart.web.support.service.impl.ProductAvailabilityStrategyImpl"/>
+
 
     <bean id="currencySymbolService" class="org.yes.cart.web.support.service.impl.CurrencySymbolServiceImpl">
         <constructor-arg index="0">
