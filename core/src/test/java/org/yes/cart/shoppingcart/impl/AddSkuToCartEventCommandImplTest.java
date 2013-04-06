@@ -49,12 +49,24 @@ public class AddSkuToCartEventCommandImplTest extends BaseCoreDBTestCase {
         AddSkuToCartEventCommandImpl command;
         command = new AddSkuToCartEventCommandImpl(ctx(), params);
         command.execute(shoppingCart);
-        assertTrue("Expected 19.99", (new BigDecimal("19.99")).equals(shoppingCart.getCartSubTotal()));
+        assertTrue("Expected 19.99", (new BigDecimal("19.99")).compareTo(shoppingCart.getCartSubTotal()) == 0);
         command = new AddSkuToCartEventCommandImpl(ctx(), params);
         command.execute(shoppingCart);
-        assertTrue("Expected 39.98", (new BigDecimal("39.98")).equals(shoppingCart.getCartSubTotal()));
+        assertTrue("Expected 39.98", (new BigDecimal("39.98")).compareTo(shoppingCart.getCartSubTotal()) == 0);
         command = new AddSkuToCartEventCommandImpl(ctx(), params);
         command.execute(shoppingCart);
-        assertTrue("Expected 57.00", (new BigDecimal("57.00")).equals(shoppingCart.getCartSubTotal()));
+        assertTrue("Expected 57.00", (new BigDecimal("57.00")).compareTo(shoppingCart.getCartSubTotal()) == 0);
+
+        params.put(AddSkuToCartEventCommandImpl.CMD_QTY_KEY, "7");
+        command = new AddSkuToCartEventCommandImpl(ctx(), params);
+        command.execute(shoppingCart);
+        assertTrue("Expected 180.00", (new BigDecimal("180.00")).compareTo(shoppingCart.getCartSubTotal()) == 0);
+
+        params.put(AddSkuToCartEventCommandImpl.CMD_QTY_KEY, "zzzz"); // if invalid use 1
+        command = new AddSkuToCartEventCommandImpl(ctx(), params);
+        command.execute(shoppingCart);
+        assertTrue("Expected 198.00", (new BigDecimal("198.00")).compareTo(shoppingCart.getCartSubTotal()) == 0);
+
+
     }
 }
