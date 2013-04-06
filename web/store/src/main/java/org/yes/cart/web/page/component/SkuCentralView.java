@@ -41,7 +41,9 @@ import org.yes.cart.web.page.component.product.SkuListView;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.entity.decorator.ObjectDecorator;
+import org.yes.cart.web.support.entity.decorator.ProductAvailabilityModel;
 import org.yes.cart.web.support.service.AttributableImageService;
+import org.yes.cart.web.support.service.ProductAvailabilityStrategy;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.math.BigDecimal;
@@ -72,6 +74,11 @@ public class SkuCentralView extends AbstractCentralView {
      * Add single item to cart
      */
     private final static String ADD_TO_CART_LINK = "addToCartLink";
+    /**
+     * Add single item to cart label
+     */
+    private final static String ADD_TO_CART_LINK_LABEL = "addToCartLinkLabel";
+
     /**
      * Product sku code
      */
@@ -141,6 +148,9 @@ public class SkuCentralView extends AbstractCentralView {
     @SpringBean(name = ServiceSpringKeys.PRODUCT_ASSOCIATIONS_SERVICE)
     protected ProductAssociationService productAssociationService;
 
+    @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_AVAILABILITY_STRATEGY)
+    private ProductAvailabilityStrategy productAvailabilityStrategy;
+
     private boolean isProduct;
     private Product product;
     private ProductSku sku;
@@ -206,11 +216,16 @@ public class SkuCentralView extends AbstractCentralView {
                 new Label(PRODUCT_NAME_LABEL2, decorator.getName(selectedLocale))
         ).add(
                 new Label(PRODUCT_DESCRIPTION_LABEL, decorator.getDescription(selectedLocale)).setEscapeModelStrings(false)
-        ).add(
+        );
+
+        final ProductAvailabilityModel pam = productAvailabilityStrategy.getAvailabilityModel(product);
+
+        add(
                 new BookmarkablePageLink(ADD_TO_CART_LINK, homePage, addToCartParameters)
-                        .setVisible(
-                                MoneyUtils.isFirstBiggerThanSecond(sku.getQty(), BigDecimal.ZERO)
-                        )
+                        .add(new Label(ADD_TO_CART_LINK_LABEL, pam.isInStock() || pam.isPerpetual() ?
+                                getLocalizer().getString("add.to.cart", this) :
+                                getLocalizer().getString("preorder.cart", this)))
+                        .setVisible(pam.isAvailable())
         ).add(
                 new SkuAttributesView(SKU_ATTR_VIEW, sku, isProduct)
         ).add(

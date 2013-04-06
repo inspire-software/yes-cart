@@ -18,5 +18,6 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 	<entry key="add.to.cart">Add to cart</entry>
+	<entry key="preorder.cart">Preorder</entry>
 	<entry key="sku.code">Code</entry>
 </properties>

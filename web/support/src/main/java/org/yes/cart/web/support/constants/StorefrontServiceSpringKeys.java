@@ -73,4 +73,9 @@ public interface StorefrontServiceSpringKeys {
       */
      public String DECORATOR_FACADE = "decoratorFacade";
 
+     /**
+      * Strategy for determining if product is purchasable
+      */
+     public String PRODUCT_AVAILABILITY_STRATEGY = "productAvailabilityStrategy";
+
 }
