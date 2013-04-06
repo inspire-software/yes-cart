@@ -19,6 +19,7 @@ package org.yes.cart.shoppingcart.impl;
 import org.slf4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
@@ -36,7 +37,9 @@ public class AddSkuToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
     private static final long serialVersionUID = 20100122L;
 
     public static final String CMD_KEY = "addToCartCmd";
+    public static final String CMD_QTY_KEY = "addToCartCmdQty";
 
+    private final BigDecimal quantity;
 
     /**
      * {@inheritDoc}
@@ -52,6 +55,17 @@ public class AddSkuToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
      */
     public AddSkuToCartEventCommandImpl(final ApplicationContext applicationContext, final Map parameters) {
         super(applicationContext, parameters);
+        final Object strQty = parameters.get(CMD_QTY_KEY);
+
+        BigDecimal qty = BigDecimal.ONE;
+        if (strQty instanceof String) {
+            try {
+                qty = new BigDecimal((String) strQty);
+            } catch (Exception exp) {
+                ShopCodeContext.getLog(this).error("Invalid quantity in add to cart command", exp);
+            }
+        }
+        quantity = MoneyUtils.isFirstBiggerThanSecond(qty, BigDecimal.ZERO) ? qty : BigDecimal.ONE;
     }
 
     /**
@@ -59,7 +73,7 @@ public class AddSkuToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
      */
     public void execute(final ShoppingCart shoppingCart) {
         if (getProductSkuDTO() != null) {
-            shoppingCart.addProductSkuToCart(getProductSkuDTO(), BigDecimal.ONE);
+            shoppingCart.addProductSkuToCart(getProductSkuDTO(), quantity);
             recalculatePrice(shoppingCart);
             setModifiedDate(shoppingCart);
             final Logger log = ShopCodeContext.getLog(this);
