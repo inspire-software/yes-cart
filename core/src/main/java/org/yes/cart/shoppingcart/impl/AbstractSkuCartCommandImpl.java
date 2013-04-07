@@ -22,6 +22,7 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.ProductSkuDTO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
@@ -29,6 +30,7 @@ import org.yes.cart.service.dto.DtoProductService;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
@@ -129,7 +131,8 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
 
         final Product product = getProductService().getProductBySkuCode(skuCode);
 
-        final BigDecimal price = getPriceService().getMinimalPrice(
+
+        final SkuPrice skuPrice = getPriceService().getMinimalRegularPrice(
                 product.getSku(),
                 skuCode,
                 shop,
@@ -137,7 +140,11 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
                 qty
         );
 
-        if (!shoppingCart.setProductSkuPrice(skuCode, price)) {
+        if (!shoppingCart.setProductSkuPrice(
+                skuCode,
+                MoneyUtils.minPositive(skuPrice.getSalePriceForCalculation(), skuPrice.getRegularPrice()),
+                skuPrice.getRegularPrice()
+        )) {
             ShopCodeContext.getLog(this).warn(MessageFormat.format("Can not set price to sku with code {0} ",
                     skuCode));
 

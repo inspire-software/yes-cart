@@ -189,6 +189,7 @@ public class ProductInListView extends BaseComponent {
     private SkuPrice getSkuPrice() {
         return priceService.getMinimalRegularPrice(
                 product.getSku(),
+                product.getDefaultSku().getCode(),
                 ApplicationDirector.getCurrentShop(),
                 ApplicationDirector.getShoppingCart().getCurrencyCode(),
                 BigDecimal.ONE

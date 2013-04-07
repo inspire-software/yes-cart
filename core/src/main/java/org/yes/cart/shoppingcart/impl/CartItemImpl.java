@@ -41,6 +41,8 @@ public class CartItemImpl implements CartItem {
 
     private BigDecimal price = BigDecimal.ZERO;
 
+    private BigDecimal listPrice = BigDecimal.ZERO;
+
     /**
      * {@inheritDoc}
      */
@@ -135,4 +137,16 @@ public class CartItemImpl implements CartItem {
     }
 
 
+    /** {@inheritDoc} */
+    public BigDecimal getListPrice() {
+        return listPrice;
+    }
+
+    /**
+     * Set list (regular/catalog) price.
+     * @param listPrice to set.
+     */
+    public void setListPrice(final BigDecimal listPrice) {
+        this.listPrice = listPrice;
+    }
 }
