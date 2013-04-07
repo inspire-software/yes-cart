@@ -201,10 +201,12 @@ public class ShoppingCartImpl implements ShoppingCart {
     /**
      * {@inheritDoc}
      */
-    public boolean setProductSkuPrice(final String skuCode, final BigDecimal price) {
+    public boolean setProductSkuPrice(final String skuCode, final BigDecimal price, final BigDecimal listPrice) {
         final int skuIndex = indexOf(skuCode);
         if (skuIndex != -1) {
-            getItems().get(skuIndex).setPrice(price);
+            final CartItemImpl cartItem = getItems().get(skuIndex);
+            cartItem.setPrice(price);
+            cartItem.setListPrice(listPrice);
             return true;
         }
         return false;

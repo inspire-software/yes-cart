@@ -42,35 +42,20 @@ public interface PriceService extends GenericService<SkuPrice> {
      * in price list for given currency.
      *
      * @param productSkus  product skus
-     * @param shop         shop
+     * @param shop         shop            sku will be c
+     * @param selectedSku  optional sku to filter the prices. if null all product skus will be  considered to determinate minimal price
      * @param currencyCode desirable currency
      * @param quantity     quantity
      * @return SkuPrice
      */
     SkuPrice getMinimalRegularPrice(
             final Collection<ProductSku> productSkus,
+            final String selectedSku,
             final Shop shop,
             final String currencyCode,
             final BigDecimal quantity);
 
-    /**
-     * Get minimal price for given product skus (will be filtered by selected sku), shop, currency and quantity.
-     * Exchange rate will be used for recalculate price if price does not present
-     * in price list for given currency.
-     *
-     * @param productSkus  product skus
-     * @param selectedSku  selected sku
-     * @param shop         shop
-     * @param currencyCode desirable currency
-     * @param quantity     quantity
-     * @return regular or sale price. for fiven parameters.
-     */
-    BigDecimal getMinimalPrice(
-            Collection<ProductSku> productSkus,
-            String selectedSku,
-            Shop shop,
-            String currencyCode,
-            BigDecimal quantity);
+
 
 
     /**
@@ -99,7 +84,6 @@ public interface PriceService extends GenericService<SkuPrice> {
     List<SkuPrice> getSkuPrices(Collection<ProductSku> productSkus, Shop shop, String currencyCode);
 
 
-
     /**
      * Get the sku prices filtered by quantity. Example:
      * ProductSKU1 has defined price ties 1 - 100 USD, 2 - 87 USD, 5 - 85 USD
@@ -114,8 +98,6 @@ public interface PriceService extends GenericService<SkuPrice> {
      * @return list of sku prices filtered by quantity
      */
     List<SkuPrice> getSkuPricesFilteredByQuantity(List<SkuPrice> prices, BigDecimal quantity);
-
-
 
 
     /**
@@ -163,7 +145,8 @@ public interface PriceService extends GenericService<SkuPrice> {
 
     /**
      * Delete derived prices in given shop.
-     * @param shop  given shop id
+     *
+     * @param shop            given shop id
      * @param derivedCurrency derived currency
      */
     void deleteDerivedPrices(Shop shop, String derivedCurrency);
