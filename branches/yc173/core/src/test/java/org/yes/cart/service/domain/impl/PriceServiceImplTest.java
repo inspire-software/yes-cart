@@ -100,11 +100,28 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
         Product product = productService.getProductById(10000L);
         assertNotNull(product);
         assertEquals(4, product.getSku().size());
+
         SkuPrice skuPrice = priceService.getMinimalRegularPrice(product.getSku(), product.getDefaultSku().getCode(), shop, "EUR", BigDecimal.ONE);
         assertNotNull(skuPrice);
         assertNull(skuPrice.getSalePriceForCalculation());
         assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
+
+        skuPrice = priceService.getMinimalRegularPrice(product.getSku(), null, shop, "EUR", BigDecimal.ONE);
+        assertNotNull(skuPrice);
+        assertNull(skuPrice.getSalePriceForCalculation());
+        assertTrue((new BigDecimal("150.00")).equals(skuPrice.getRegularPrice()));
+
+        skuPrice = priceService.getMinimalRegularPrice(product.getSku(), null, shop, "EUR", new BigDecimal("2"));
+        assertNotNull(skuPrice);
+        assertNull(skuPrice.getSalePriceForCalculation());
+        assertTrue((new BigDecimal("145.00")).equals(skuPrice.getRegularPrice()));
+
         skuPrice = priceService.getMinimalRegularPrice(product.getSku(), product.getDefaultSku().getCode(),shop, "EUR", new BigDecimal("2"));
+        assertNotNull(skuPrice);
+        assertNull(skuPrice.getSalePriceForCalculation());
+        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
+
+        skuPrice = priceService.getMinimalRegularPrice(product.getSku(), "SOBOT-LIGHT",shop, "EUR", new BigDecimal("2"));
         assertNotNull(skuPrice);
         assertNull(skuPrice.getSalePriceForCalculation());
         assertTrue((new BigDecimal("145.00")).equals(skuPrice.getRegularPrice()));
@@ -116,6 +133,10 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
         assertNull(skuPrice.getSalePriceForCalculation());
         //Test than we are can getByKey the minimal price through price tiers for multisku product.
         skuPrice = priceService.getMinimalRegularPrice(product.getSku(), product.getDefaultSku().getCode(), shop, "UAH", BigDecimal.ONE);
+        assertNotNull(skuPrice);
+        assertTrue(MoneyUtils.isFirstEqualToSecond(new BigDecimal("1716.67"), skuPrice.getRegularPrice()));
+
+        skuPrice = priceService.getMinimalRegularPrice(product.getSku(), null, shop, "UAH", BigDecimal.ONE);
         assertNotNull(skuPrice);
         assertTrue(MoneyUtils.isFirstEqualToSecond(new BigDecimal("1707.00"), skuPrice.getRegularPrice()));
     }

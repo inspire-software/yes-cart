@@ -101,8 +101,11 @@ public class PriceServiceImpl
 
         SkuPrice rez = null;
         for (SkuPrice skuPrice : skuPrices) {
-            if (skuPrice.getSku().getCode().equals(selectedSku) && ( minimalRegularPrice == null
-                    || MoneyUtils.isFirstBiggerThanOrEqualToSecond(minimalRegularPrice, skuPrice.getRegularPrice()))) {
+            if (   ( selectedSku == null || skuPrice.getSku().getCode().equals(selectedSku) )
+                    && ( minimalRegularPrice == null
+                        || MoneyUtils.isFirstBiggerThanOrEqualToSecond(minimalRegularPrice, skuPrice.getRegularPrice())
+            )
+                    ) {
                 minimalRegularPrice = skuPrice.getRegularPrice();
                 rez = skuPrice;
             }
@@ -114,37 +117,6 @@ public class PriceServiceImpl
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
-    public BigDecimal getMinimalPrice(
-            final Collection<ProductSku> productSkus,
-            final String selectedSku,
-            final Shop shop,
-            final String currencyCode,
-            final BigDecimal quantity) {
-
-        List<SkuPrice> skuPrices = getSkuPrices(productSkus, shop, currencyCode);
-        skuPrices = getSkuPricesFilteredByTimeFrame(skuPrices);
-
-        skuPrices =
-                getSkuPricesFilteredSkuCode(
-                        getSkuPricesFilteredByTimeFrame(
-                                getSkuPricesFilteredByQuantity(
-                                        skuPrices,
-                                        quantity
-                                ))
-                        ,
-                        selectedSku
-                );
-
-        if (skuPrices.isEmpty()) {
-            return BigDecimal.ZERO;
-        } else {
-            SkuPrice skuPrice = skuPrices.get(0);
-            return MoneyUtils.minPositive(skuPrice.getSalePriceForCalculation(), skuPrice.getRegularPrice());
-        }
-    }
 
 
     /**

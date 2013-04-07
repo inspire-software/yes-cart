@@ -41,6 +41,7 @@ public interface ShoppingCart extends Serializable {
 
     /**
      * Set amount calculation strategy.
+     *
      * @param calculationStrategy {@link AmountCalculationStrategy}
      */
     void setCalculationStrategy(AmountCalculationStrategy calculationStrategy);
@@ -111,9 +112,10 @@ public interface ShoppingCart extends Serializable {
      *
      * @param productSkuCode product sku
      * @param price          price to set
+     * @param listPrice      list price - without discounts, promos, etc.
      * @return true if price has been set
      */
-    boolean setProductSkuPrice(String productSkuCode, BigDecimal price);
+    boolean setProductSkuPrice(String productSkuCode, BigDecimal price, BigDecimal listPrice);
 
     /**
      * @return number of cart items currently in the shopping cart.
@@ -222,24 +224,25 @@ public interface ShoppingCart extends Serializable {
     /**
      * Get current shopping cart locale. Preferred to work with generic locale -
      * en instead of en_US, etc.
-     * @return   current locale
+     *
+     * @return current locale
      */
     String getCurrentLocale();
 
 
     /**
      * Get date when this cart was processed through cycle.
+     *
      * @return date.
      */
     Date getProcessingStartDate();
 
     /**
      * Set processing start date.
+     *
      * @param processingStartDate start date.
      */
     void setProcessingStartDate(Date processingStartDate);
-
-
 
 
     /**
@@ -251,12 +254,12 @@ public interface ShoppingCart extends Serializable {
 
     /**
      * Calculate taxes and amount withing current cart shopping context.
-     * @param items items to perform calculation on.
+     *
+     * @param items         items to perform calculation on.
      * @param orderDelivery optional delivery
      * @return {@link AmountCalculationResult} calculation result.
      */
     AmountCalculationResult getCartAmount(List<? extends CartItem> items, CustomerOrderDelivery orderDelivery);
-
 
 
 }

@@ -19,7 +19,7 @@
                 xmlns:georg="com.georg.*"
                 xmlns:validation="org.yes.cart.validation.*" layout="absolute"
                 width="300"
-                height="330"
+                height="340"
                 title="@Resource(bundle='ProductManagementPanel',key='createPriceTier')"
                 showCloseButton="true" close="PopUpManager.removePopUp(this)"
                 creationComplete="init();"
