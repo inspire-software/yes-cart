@@ -54,6 +54,7 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     @DtoField(value = "price")
     private BigDecimal invoicePrice;
 
+    @DtoField(value = "listPrice")
     private BigDecimal listPrice;
 
     private BigDecimal lineTotal;
@@ -139,7 +140,6 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     /** {@inheritDoc} */
     public void setInvoicePrice(final BigDecimal invoicePrice) {
         this.invoicePrice = invoicePrice;
-        setListPrice(invoicePrice); //todo add field and remove this
         calculateLineTotal();
     }
 

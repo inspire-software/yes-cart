@@ -261,6 +261,7 @@
         CUSTOMERORDERDELIVERYDET_ID bigint not null auto_increment,
         QTY decimal(19,2) not null comment 'Quantity of SKU in this praticular delivery',
         PRICE decimal(19,2) not null,
+        LIST_PRICE decimal(19,2) not null,
         SKU_ID bigint not null,
         CUSTOMERORDERDELIVERY_ID bigint not null,
         CREATED_TIMESTAMP datetime,
@@ -275,6 +276,8 @@
         CUSTOMERORDERDET_ID bigint not null auto_increment,
         QTY decimal(19,2),
         PRICE decimal(19,2) not null comment 'Price per one unit',
+        LIST_PRICE decimal(19,2) not null comment 'List
+         price per one unit',
         SKU_ID bigint not null,
         CUSTOMERORDER_ID bigint not null,
         CREATED_TIMESTAMP datetime,

@@ -102,4 +102,16 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
      */
     void setPrice(BigDecimal price);
 
+    /**
+     * Get list / catalog price.
+     * @return price
+     */
+    BigDecimal getListPrice();
+
+    /**
+     * Set list (regular/catalog) price.
+     * @param listPrice to set.
+     */
+    void setListPrice( BigDecimal listPrice);
+
 }

@@ -45,4 +45,10 @@ public interface CartItem extends Serializable {
      */
     BigDecimal getPrice();
 
+    /**
+     * Get list / catalog price.
+     * @return price
+     */
+    BigDecimal getListPrice();
+
 }

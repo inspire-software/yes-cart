@@ -75,6 +75,20 @@ public interface CustomerOrderDet extends Auditable, CartItem {
     void setPrice(BigDecimal price);
 
     /**
+     * Get list / catalog price.
+     * @return list price
+     */
+    BigDecimal getListPrice();
+
+
+    /**
+     * Set list price.
+     * @param listPrice   list price
+     */
+    void setListPrice(BigDecimal listPrice);
+
+
+    /**
      * Concrete product sku in cart.
      *
      * @return {@link ProductSku} product sku.

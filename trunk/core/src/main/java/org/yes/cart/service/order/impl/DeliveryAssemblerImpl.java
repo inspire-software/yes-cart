@@ -139,6 +139,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
         deliveryDet.setQty(orderDet.getQty());
         deliveryDet.setSku(orderDet.getSku());
         deliveryDet.setPrice(orderDet.getPrice());
+        deliveryDet.setListPrice(orderDet.getListPrice());
     }
 
     /**

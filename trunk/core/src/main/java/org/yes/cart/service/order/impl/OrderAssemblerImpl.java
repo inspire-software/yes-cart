@@ -153,6 +153,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
             customerOrder.getOrderDetail().add(customerOrderDet);
 
             customerOrderDet.setPrice(item.getPrice());
+            customerOrderDet.setListPrice(item.getListPrice());
             customerOrderDet.setQty(item.getQty());
 
             customerOrderDet.setSku(
