@@ -307,7 +307,7 @@ public class SkuCentralView extends AbstractCentralView {
         }
         return priceService.getMinimalRegularPrice(
                 productSkus,
-                product.getDefaultSku().getCode(),
+                isProduct ? product.getDefaultSku().getCode() : sku.getCode(),
                 ApplicationDirector.getCurrentShop(),
                 ApplicationDirector.getShoppingCart().getCurrencyCode(),
                 BigDecimal.ONE

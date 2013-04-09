@@ -30,6 +30,7 @@ public abstract class CappPaymentModuleDBTestCase extends BasePaymentModuleDBTes
         sku.setCode(skuCode);
         sku.setName(productSkuName);
         deliveryDet.setPrice(price);
+        deliveryDet.setListPrice(price);
         deliveryDet.setQty(qty);
         deliveryDet.setSku(sku);
         return deliveryDet;

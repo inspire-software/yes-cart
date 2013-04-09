@@ -37,6 +37,7 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
 
     private BigDecimal qty;
     private BigDecimal price;
+    private BigDecimal listPrice;
     private ProductSku sku;
     private CustomerOrder customerOrder;
     private Date createdTimestamp;
@@ -66,6 +67,19 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    /**
+     * Get list / catalog price.
+     * @return price
+     */
+    @Column(name = "LIST_PRICE", nullable = false)
+    public BigDecimal getListPrice() {
+        return listPrice;
+    }
+
+    public void setListPrice(BigDecimal listPrice) {
+        this.listPrice = listPrice;
     }
 
     @ManyToOne(fetch = FetchType.EAGER)

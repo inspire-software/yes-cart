@@ -63,4 +63,12 @@ public class ImmutableCartItemImpl implements CartItem {
     public BigDecimal getPrice() {
         return cartItem.getPrice();
     }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public BigDecimal getListPrice() {
+        return cartItem.getListPrice();
+    }
 }

@@ -36,6 +36,7 @@ public class CustomerOrderDeliveryDetEntity implements org.yes.cart.domain.entit
 
     private BigDecimal qty;
     private BigDecimal price;
+    private BigDecimal listPrice;
     private ProductSku sku;
     private CustomerOrderDelivery delivery;
     private Date createdTimestamp;
@@ -147,6 +148,23 @@ public class CustomerOrderDeliveryDetEntity implements org.yes.cart.domain.entit
     @Column(name = "CUSTOMERORDERDELIVERYDET_ID", nullable = false)
     public long getCustomerOrderDeliveryDetId() {
         return this.customerOrderDeliveryDetId;
+    }
+
+    /**
+     * Get list / catalog price.
+     * @return price
+     */
+    @Column(name = "LIST_PRICE", nullable = false)
+    public BigDecimal getListPrice() {
+        return listPrice;
+    }
+
+    /**
+     * Set list (regular/catalog) price.
+     * @param listPrice to set.
+     */
+    public void setListPrice(final BigDecimal listPrice) {
+        this.listPrice = listPrice;
     }
 
 

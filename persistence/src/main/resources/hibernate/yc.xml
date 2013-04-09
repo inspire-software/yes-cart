@@ -4208,6 +4208,7 @@ public void setRangeList(final RangeList rangeList) {
                 </column>
             </property>
             <property name="price" column="PRICE" type="java.math.BigDecimal" not-null="true"/>
+            <property name="listPrice" column="LIST_PRICE" type="java.math.BigDecimal" not-null="true"/>
             <property name="deliveryStatus" column="DELIVERYSTATUS" type="string" length="64" not-null="true"/>
             <bag name="detail" cascade="all" inverse="true" lazy="false">
                 <key column="CUSTOMERORDERDELIVERY_ID" not-null="true" foreign-key="FK_CODD_CDELIVERY"/>
@@ -4284,6 +4285,7 @@ public void setRangeList(final RangeList rangeList) {
                 </column>
             </property>
             <property name="price" column="PRICE" type="java.math.BigDecimal" not-null="true"/>
+            <property name="listPrice" column="LIST_PRICE" type="java.math.BigDecimal" not-null="true"/>
             <many-to-one name="sku" class="org.yes.cart.domain.entity.ProductSku" foreign-key="FK_CODD_SKU" lazy="false">
                 <column name="SKU_ID" not-null="true"/>
             </many-to-one>
