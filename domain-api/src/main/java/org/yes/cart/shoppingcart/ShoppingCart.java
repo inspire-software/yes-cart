@@ -253,6 +253,15 @@ public interface ShoppingCart extends Serializable {
     BigDecimal getCartSubTotal();
 
     /**
+     * Get cart sub total without any tax calculation.
+     *
+     * @param useListPrice if true then this calculation should be done using list price of items,
+     *                     otherwise sale price should be used.
+     * @return total amount for all items in the shopping cart.
+     */
+    BigDecimal getCartSubTotal(boolean useListPrice);
+
+    /**
      * Calculate taxes and amount withing current cart shopping context.
      *
      * @param items         items to perform calculation on.

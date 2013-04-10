@@ -18,9 +18,13 @@ package org.yes.cart.web.page.component.cart;
 
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
+
+import java.math.BigDecimal;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -57,6 +61,12 @@ public class ShoppingCartView extends BaseComponent {
     public ShoppingCartView(final String id) {
         super(id);
 
+
+        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        final BigDecimal totalSale = cart.getCartSubTotal();
+        final BigDecimal totalList = cart.getCartSubTotal(true);
+
+
         addOrReplace(
                 new Form(CART_FORM).addOrReplace(
                         new ShoppingCartItemsList(ITEMS_LIST, ApplicationDirector.getShoppingCart().getCartItemList())
@@ -65,9 +75,9 @@ public class ShoppingCartView extends BaseComponent {
                 ).addOrReplace(
                         new PriceView(
                                 SUB_TOTAL_VIEW,
-                                ApplicationDirector.getShoppingCart().getCartSubTotal(),
-                                ApplicationDirector.getShoppingCart().getCurrencyCode(),
-                                true)
+                                new Pair<BigDecimal, BigDecimal>(totalList, totalSale),
+                                cart.getCurrencyCode(),
+                                true, true)
                 )
         );
 
