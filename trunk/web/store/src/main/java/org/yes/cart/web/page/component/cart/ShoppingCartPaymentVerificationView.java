@@ -27,12 +27,14 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.shoppingcart.AmountCalculationResult;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
@@ -121,6 +123,7 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
         rootCategory = categoryService.getRootCategory();
 
         final AmountCalculationResult grandTotal = amountCalculationStrategy.calculate(shoppingContext, deliveries);
+        final AmountCalculationResult grandTotalList = amountCalculationStrategy.calculate(shoppingContext, deliveries, true);
 
         final String selectedLocale = getLocale().getLanguage();
 
@@ -226,9 +229,9 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                 .add(
                         new PriceView(
                                 DELIVERY_GRAND_AMOUNT,
-                                grandTotal.getTotalAmount(),
+                                new Pair<BigDecimal, BigDecimal>(grandTotalList.getTotalAmount(), grandTotal.getTotalAmount()),
                                 ApplicationDirector.getShoppingCart().getCurrencyCode(),
-                                true)
+                                true, true)
                 );
 
     }

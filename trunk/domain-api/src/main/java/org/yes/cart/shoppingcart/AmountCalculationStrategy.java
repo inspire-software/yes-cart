@@ -67,11 +67,35 @@ public interface AmountCalculationStrategy {
     /**
      * Calculate shopping cart amount.
      * @param shoppingContext  current {@link ShoppingContext}
+     * @param orderDelivery  {@link CustomerOrderDelivery}
+     * @param useListPrice if true then this calculation should be done using list price of items,
+     *                     otherwise sale price should be used.
+     * @return {@link AmountCalculationResult}
+     */
+    AmountCalculationResult calculate(ShoppingContext shoppingContext,
+                                      CustomerOrderDelivery orderDelivery,
+                                      boolean useListPrice);
+
+    /**
+     * Calculate shopping cart amount.
+     * @param shoppingContext  current {@link ShoppingContext}
      * @param orderDelivery list of {@link CustomerOrderDelivery}
      * @return {@link AmountCalculationResult}
      */
     AmountCalculationResult calculate(ShoppingContext shoppingContext,
                                       Collection<CustomerOrderDelivery> orderDelivery);
+
+    /**
+     * Calculate shopping cart amount.
+     * @param shoppingContext  current {@link ShoppingContext}
+     * @param orderDelivery list of {@link CustomerOrderDelivery}
+     * @param useListPrice if true then this calculation should be done using list price of items,
+     *                     otherwise sale price should be used.
+     * @return {@link AmountCalculationResult}
+     */
+    AmountCalculationResult calculate(ShoppingContext shoppingContext,
+                                      Collection<CustomerOrderDelivery> orderDelivery,
+                                      boolean useListPrice);
 
 
     /**
@@ -81,5 +105,15 @@ public interface AmountCalculationStrategy {
      * @return cart sub total.
      */
     BigDecimal calculateSubTotal(List<CartItem> items);
+
+    /**
+     * Calculate sub total of shopping cart by given list of {@link CartItem}.
+     *
+     * @param items given list of cart items.
+     * @param useListPrice if true then this calculation should be done using list price of items,
+     *                     otherwise sale price should be used.
+     * @return cart sub total.
+     */
+    BigDecimal calculateSubTotal(List<CartItem> items, boolean useListPrice);
 
 }

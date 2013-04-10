@@ -238,6 +238,15 @@ public class ShoppingCartImpl implements ShoppingCart {
     /**
      * {@inheritDoc}
      */
+    public BigDecimal getCartSubTotal(final boolean useListPrice) {
+
+        return getCalculationStrategy().calculateSubTotal(this.getCartItemList(), useListPrice);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public AmountCalculationResult getCartAmount(final List<? extends CartItem> items,
                                                  final CustomerOrderDelivery orderDelivery) {
         return getCalculationStrategy().calculate(

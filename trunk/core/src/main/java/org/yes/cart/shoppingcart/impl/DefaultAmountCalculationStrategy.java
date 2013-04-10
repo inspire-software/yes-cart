@@ -65,9 +65,18 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
      */
     public AmountCalculationResult calculate(final ShoppingContext shoppingContext,
                                              final Collection<CustomerOrderDelivery> orderDelivery) {
+        return calculate(shoppingContext, orderDelivery, false);
+    }
+
+        /**
+        * {@inheritDoc}
+        */
+    public AmountCalculationResult calculate(final ShoppingContext shoppingContext,
+                                             final Collection<CustomerOrderDelivery> orderDelivery,
+                                             final boolean useListPrice) {
         final AmountCalculationResult rez = new AmountCalculationResultImpl();
         for (CustomerOrderDelivery delivery : orderDelivery) {
-            final AmountCalculationResult singleDeviveryRez = calculate(shoppingContext, delivery);
+            final AmountCalculationResult singleDeviveryRez = calculate(shoppingContext, delivery, useListPrice);
 
             rez.setSubTotal(rez.getSubTotal().add(singleDeviveryRez.getSubTotal()));
             rez.setSubTotalTax(rez.getSubTotalTax().add(singleDeviveryRez.getSubTotalTax()));
@@ -85,18 +94,26 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
         return rez;
     }
 
-
     /**
      * {@inheritDoc}
      */
     public AmountCalculationResult calculate(final ShoppingContext shoppingContext,
                                              final CustomerOrderDelivery orderDelivery) {
+        return calculate(shoppingContext, orderDelivery, false);
+    }
+
+        /**
+        * {@inheritDoc}
+        */
+    public AmountCalculationResult calculate(final ShoppingContext shoppingContext,
+                                             final CustomerOrderDelivery orderDelivery,
+                                             final boolean useListPrice) {
 
         final AmountCalculationResult rez = new AmountCalculationResultImpl();
 
 
 
-        rez.setSubTotal(calculateSubTotal(orderDelivery.getDetail()));
+        rez.setSubTotal(calculateSubTotal(orderDelivery.getDetail(), useListPrice));
         rez.setSubTotalTax(calculateTax(rez.getSubTotal()));
         rez.setSubTotalAmount(calculateAmount(rez.getSubTotal(), rez.getSubTotalTax()));
 
@@ -117,11 +134,11 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
      * @param items given list of cart items.
      * @return cart sub total.
      */
-     BigDecimal calculateSubTotal(final Collection<CustomerOrderDeliveryDet> items) {
+     BigDecimal calculateSubTotal(final Collection<CustomerOrderDeliveryDet> items, final boolean useListPrice) {
         BigDecimal cartSubTotal = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
         if (items != null) {
             for (CustomerOrderDeliveryDet cartItem : items) {
-                final BigDecimal price = cartItem.getPrice();
+                final BigDecimal price = useListPrice ? cartItem.getListPrice() : cartItem.getPrice();
                 cartSubTotal = cartSubTotal.add(price.multiply(cartItem.getQty()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
             }
         }
@@ -135,10 +152,22 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
      * @return cart sub total.
      */
     public BigDecimal calculateSubTotal(final List<CartItem> items) {
+        return calculateSubTotal(items, false);
+    }
+
+    /**
+     * Calculate sub total of shopping cart by given list of {@link CartItem}.
+     *
+     * @param items given list of cart items.
+     * @param useListPrice if true then this calculation should be done using list price of items,
+     *                     otherwise sale price should be used.
+     * @return cart sub total.
+     */
+    public BigDecimal calculateSubTotal(final List<CartItem> items, final boolean useListPrice) {
         BigDecimal cartSubTotal = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
         if (items != null) {
             for (CartItem cartItem : items) {
-                final BigDecimal price = cartItem.getPrice();
+                final BigDecimal price = useListPrice ? cartItem.getListPrice() : cartItem.getPrice();
                 cartSubTotal = cartSubTotal.add(price.multiply(cartItem.getQty()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
             }
         }

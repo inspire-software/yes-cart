@@ -384,7 +384,10 @@ p {
 .sale-price-decimal      { color: #ff1111;  font-weight: bold; font-size: 0.8em; vertical-align: baseline; top: -0.7em; position: relative; text-decoration: underline;}
 
 .sku .sale-price-save    { font-size: 12px; }
-
+.menu .sale-price-save  { font-size: 50%; margin-left: 3px; position: absolute; }
+.cart-total { border-top: #999999 solid 1px; font-size:16px; margin-top: 5px; padding-top: 10px; }
+.cart-total .sale-price-save { font-size: 50%; display: block; }
+.cart-item-price  .sale-price-save { display: block; }
 
 /* ------------------------------------------------ tabs ------------------------------------------ */
 
