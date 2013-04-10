@@ -4124,7 +4124,9 @@ public void setRangeList(final RangeList rangeList) {
                 ]]>
             </meta>
             <property name="qty" column="QTY" type="java.math.BigDecimal" not-null="false"/>
+            <property name="listPrice" column="LIST_PRICE" type="java.math.BigDecimal" not-null="true"/>
             <property name="price" type="java.math.BigDecimal" not-null="false">
+
                 <column name="PRICE" not-null="true">
                     <comment>Price per one unit
                     </comment>
@@ -4208,7 +4210,6 @@ public void setRangeList(final RangeList rangeList) {
                 </column>
             </property>
             <property name="price" column="PRICE" type="java.math.BigDecimal" not-null="true"/>
-            <property name="listPrice" column="LIST_PRICE" type="java.math.BigDecimal" not-null="true"/>
             <property name="deliveryStatus" column="DELIVERYSTATUS" type="string" length="64" not-null="true"/>
             <bag name="detail" cascade="all" inverse="true" lazy="false">
                 <key column="CUSTOMERORDERDELIVERY_ID" not-null="true" foreign-key="FK_CODD_CDELIVERY"/>
