@@ -167,7 +167,7 @@ public class PriceView extends BaseComponent {
 
         BigDecimal priceToFormat = pricePair.getFirst();
         String cssModificator = "regular";
-        if (pricePair.getSecond() != null) {
+        if (pricePair.getSecond() != null && MoneyUtils.isFirstBiggerThanSecond(pricePair.getFirst(), pricePair.getSecond())) {
             priceToFormat = pricePair.getSecond();
             cssModificator = "sale";
             showSave = this.showSavings;
