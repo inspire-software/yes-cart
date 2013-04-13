@@ -138,7 +138,7 @@
                 <select-sql/>
                 <insert-sql>
                     INSERT INTO TPRODUCTATTRVALUE (PRODUCT_ID, GUID, CODE, VAL)
-                        VALUES ({masterObjectId}, '{masterObjectId}_PRODDESC_en', 'PRODUCT_DESCRITION_en','{val}')
+                        VALUES ({masterObjectId}, '{masterObjectId}_PRODDESC_en', 'PRODUCT_DESCRIPTION_en','{val}')
                 </insert-sql>
                 <import-columns>
                     <column-descriptor>
@@ -167,7 +167,7 @@
                 <select-sql/>
                 <insert-sql>
                     INSERT INTO TPRODUCTATTRVALUE (PRODUCT_ID, GUID, CODE, VAL)
-                        VALUES ({masterObjectId}, '{masterObjectId}_PRODDESC_ru', 'PRODUCT_DESCRITION_ru','{val}')
+                        VALUES ({masterObjectId}, '{masterObjectId}_PRODDESC_ru', 'PRODUCT_DESCRIPTION_ru','{val}')
                 </insert-sql>
                 <import-columns>
                     <column-descriptor>

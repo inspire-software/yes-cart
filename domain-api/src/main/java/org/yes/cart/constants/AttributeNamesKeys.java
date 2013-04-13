@@ -121,9 +121,9 @@ public interface AttributeNamesKeys {
 
         /**
          * Category description attribute prefix. Requires current language to make
-         * full attribute name. E.g. CATEGORY_DESCRITION_en.
+         * full attribute name. E.g. CATEGORY_DESCRIPTION_en.
          */
-        String CATEGORY_DESCRIPTION_PREFIX = "CATEGORY_DESCRITION_";
+        String CATEGORY_DESCRIPTION_PREFIX = "CATEGORY_DESCRIPTION_";
 
 
     }
@@ -132,9 +132,9 @@ public interface AttributeNamesKeys {
 
         /**
          * Product description attribute prefix. Requires current language to make
-         * full attribute name. E.g. PRODUCT_DESCRITION_en.
+         * full attribute name. E.g. PRODUCT_DESCRIPTION_en.
          */
-        String PRODUCT_DESCRIPTION_PREFIX = "PRODUCT_DESCRITION_";
+        String PRODUCT_DESCRIPTION_PREFIX = "PRODUCT_DESCRIPTION_";
 
     }
 

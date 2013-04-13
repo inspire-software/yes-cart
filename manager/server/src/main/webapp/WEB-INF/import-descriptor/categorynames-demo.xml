@@ -115,7 +115,7 @@
                 <select-sql/>
                 <insert-sql>
                     INSERT INTO TCATEGORYATTRVALUE (CATEGORY_ID, GUID, CODE, VAL)
-                        VALUES ({masterObjectId}, '{masterObjectId}_CATDESC_en', 'CATEGORY_DESCRITION_en','{val}')
+                        VALUES ({masterObjectId}, '{masterObjectId}_CATDESC_en', 'CATEGORY_DESCRIPTION_en','{val}')
                 </insert-sql>
                 <import-columns>
                     <column-descriptor>
@@ -144,7 +144,7 @@
                 <select-sql/>
                 <insert-sql>
                     INSERT INTO TCATEGORYATTRVALUE (CATEGORY_ID, GUID, CODE, VAL)
-                        VALUES ({masterObjectId}, '{masterObjectId}_CATDESC_ru', 'CATEGORY_DESCRITION_ru','{val}')
+                        VALUES ({masterObjectId}, '{masterObjectId}_CATDESC_ru', 'CATEGORY_DESCRIPTION_ru','{val}')
                 </insert-sql>
                 <import-columns>
                     <column-descriptor>
