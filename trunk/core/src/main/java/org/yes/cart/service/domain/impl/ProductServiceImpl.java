@@ -155,14 +155,18 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     @Cacheable(value = PROD_SERV_METHOD_CACHE)
     public Product getRandomProductByCategory(final Category category) {
         final int qty = getProductQty(category.getCategoryId());
-        final int idx = rand.nextInt(qty);
-        final ProductCategory productCategory = productCategoryDao.findUniqueByCriteria(
-                idx,
-                Restrictions.eq("category", category)
-        );
+        if (qty > 0) {
+            final int idx = rand.nextInt(qty);
+            final ProductCategory productCategory = productCategoryDao.findUniqueByCriteria(
+                    idx,
+                    Restrictions.eq("category.categoryId", category.getCategoryId())
+            );
 
-        if (productCategory != null) {
-            return getById(productCategory.getProduct().getProductId());
+            if (productCategory != null) {
+                final Product product = productDao.findById(productCategory.getProduct().getProductId());
+                product.getAttributes().size(); // initialise attributes
+                return product;
+            }
         }
         return null;
     }

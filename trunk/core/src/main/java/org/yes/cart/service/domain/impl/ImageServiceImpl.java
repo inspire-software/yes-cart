@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2009 Igor Azarnyi, Denys Pavlov
  *
@@ -93,6 +92,10 @@ public class ImageServiceImpl
                 RenderingHints.KEY_RENDERING,
                 RenderingHints.VALUE_RENDER_QUALITY
         );
+        // When scaling has rounding errors which leaves blank edges this setting will force JAI to
+        // copy adjacent pixels instead of zero fill (which is default that leaves a black border)
+        this.renderingHints.put(JAI.KEY_BORDER_EXTENDER, BorderExtender.createInstance(BorderExtender.BORDER_COPY));
+
         this.rectColor = new Color((int) colorR, (int) colorG, (int) colorB);
 
     }
@@ -123,17 +126,24 @@ public class ImageServiceImpl
         BigDecimal yScale = new BigDecimal((double) y).divide(new BigDecimal((double) originalY), 10, BigDecimal.ROUND_UP);
         BigDecimal scale = xScale.min(yScale);
         // getByKey pads from left and top
-        int xPad = (x - (new BigDecimal((double) originalX).multiply(scale)).intValue()) / 2;
-        int yPad = (y - (new BigDecimal((double) originalY).multiply(scale)).intValue()) / 2;
-
 
         createFolder(resized);
-        RenderedOp tmpImage = resizeImage(image, scale);
-        BufferedImage bufferedImage = drawBorder(tmpImage);
-        RenderedOp borderedImage = addPadding(bufferedImage, xPad, yPad);
-        JAI.create("filestore", borderedImage.getAsBufferedImage(), resized, getCodecFromFilename(original));
-        borderedImage.dispose();
-        tmpImage.dispose();
+        RenderedOp resizeOp = resizeImage(image, scale);
+
+        BufferedImage resizedBuff = resizeOp.getAsBufferedImage();
+        int xNew = resizedBuff.getWidth();
+        int yNew = resizedBuff.getHeight();
+
+        int lPad = (x - xNew) / 2;
+        int rPad = x - xNew - lPad;
+        int tPad = (y - yNew) / 2;
+        int bPad = y - yNew - tPad;
+
+        BufferedImage bufferedImage = drawBorder(resizedBuff);
+        RenderedOp paddedOp = addPadding(bufferedImage, tPad, rPad, bPad, lPad);
+        JAI.create("filestore", paddedOp.getAsBufferedImage(), resized, getCodecFromFilename(original));
+        paddedOp.dispose();
+        resizeOp.dispose();
 
     }
 
@@ -141,11 +151,10 @@ public class ImageServiceImpl
      * To prevent black border after resize, just draw a square with specified color.
      * see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6331420 for more details
      *
-     * @param tmpImage resized image
+     * @param bufferedImage resized image
      * @return buffered image with rectangle on border
      */
-    private BufferedImage drawBorder(final RenderedOp tmpImage) {
-        final BufferedImage bufferedImage = tmpImage.getAsBufferedImage();
+    private BufferedImage drawBorder(final BufferedImage bufferedImage) {
         final Graphics graphics = bufferedImage.getGraphics();
         graphics.setColor(rectColor);
         graphics.drawRect(0, 0, bufferedImage.getWidth() - 1, bufferedImage.getHeight() - 1);
@@ -172,13 +181,13 @@ public class ImageServiceImpl
     }
 
 
-    private RenderedOp addPadding(final BufferedImage bufferedImage, final int xPad, final int yPad) {
+    private RenderedOp addPadding(final BufferedImage bufferedImage, final int tPad, final int rPad, final int bPad, final int lPad) {
         ParameterBlock borderParams = new ParameterBlock();
         borderParams.addSource(bufferedImage);
-        borderParams.add(xPad); //left pad
-        borderParams.add(xPad); //right pad
-        borderParams.add(yPad); //top pad
-        borderParams.add(yPad); //bottom pad
+        borderParams.add(lPad); //left pad
+        borderParams.add(rPad); //right pad
+        borderParams.add(tPad); //top pad
+        borderParams.add(bPad); //bottom pad
         double fill[] = {colorR, colorG, colorB};
         borderParams.add(new BorderExtenderConstant(fill));//type
 
