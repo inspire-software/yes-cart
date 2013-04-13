@@ -127,7 +127,7 @@
                     DELETE FROM TPRODUCTSKUATTRVALUE
                         WHERE GUID = '{masterObjectId}_SKUDESC_en';
                     INSERT INTO TPRODUCTSKUATTRVALUE (SKU_ID, GUID, CODE, VAL)
-                        VALUES ({masterObjectId}, '{masterObjectId}_SKUDESC_en', 'SKUPRODUCT_DESCRITION_en','{val}')
+                        VALUES ({masterObjectId}, '{masterObjectId}_SKUDESC_en', 'SKUPRODUCT_DESCRIPTION_en','{val}')
                 </insert-sql>
                 <import-columns>
                     <column-descriptor>
@@ -158,7 +158,7 @@
                     DELETE FROM TPRODUCTSKUATTRVALUE
                         WHERE GUID = '{masterObjectId}_SKUDESC_ru';
                     INSERT INTO TPRODUCTSKUATTRVALUE (SKU_ID, GUID, CODE, VAL)
-                        VALUES ({masterObjectId}, '{masterObjectId}_SKUDESC_ru', 'SKUPRODUCT_DESCRITION_ru','{val}')
+                        VALUES ({masterObjectId}, '{masterObjectId}_SKUDESC_ru', 'SKUPRODUCT_DESCRIPTION_ru','{val}')
                 </insert-sql>
                 <import-columns>
                     <column-descriptor>
