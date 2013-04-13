@@ -275,7 +275,15 @@
             warehouseComboBox.dataProvider = event.result;
             inventoryDataGrid.dataProvider = null;
             allowAddInventory = false;
-            // do not preselect unless specific warehouse is chosen
+            // do preselect in case if only one wharehouse
+            if (warehouseComboBox.dataProvider.length == 1) {
+
+                warehouseComboBox.selectedIndex = 0;
+                warehouseComboBox.selectedItem = warehouseComboBox.dataProvider.getItemAt(0);
+                warehouseComboBox.dispatchEvent(new ListEvent(Event.CHANGE));
+
+
+            }
         }
 
         private function onFindProductSkusOnWarehouseResult(event:ResultEvent):void {

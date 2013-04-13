@@ -85,7 +85,7 @@
                                     // Define a property for returning the new value to the cell.
                                     [Bindable]
                                     public var returnListPrice:String;
-                                ]]>
+                                    ]]>
                                 </mx:Script>
                                 <mx:TextInput id="newListPrice" width="70" text="{data.regularPrice}"
                                               updateComplete="returnListPrice=newListPrice.text;"
@@ -119,7 +119,7 @@
                                     // Define a property for returning the new value to the cell.
                                     [Bindable]
                                     public var returnSalePrice:String;
-                                ]]>
+                                    ]]>
                                 </mx:Script>
                                 <mx:TextInput id="newSalePrice" width="70"
                                               text="{data.salePrice}"
@@ -154,7 +154,7 @@
                     <mx:itemRenderer>
                         <mx:Component>
                             <mx:VBox>
-                                <mx:DateFormatter id="formatDateTime" formatString="YYYY-MM-DD J:NN" ></mx:DateFormatter>
+                                <mx:DateFormatter id="formatDateTime" formatString="YYYY-MM-DD J:NN"></mx:DateFormatter>
                                 <mx:Label text="{formatDateTime.format(data.salefrom)}"/>
                             </mx:VBox>
                         </mx:Component>
@@ -168,7 +168,7 @@
                     <mx:itemRenderer>
                         <mx:Component>
                             <mx:VBox>
-                                <mx:DateFormatter id="formatDateTime" formatString="YYYY-MM-DD J:NN" ></mx:DateFormatter>
+                                <mx:DateFormatter id="formatDateTime" formatString="YYYY-MM-DD J:NN"></mx:DateFormatter>
                                 <mx:Label text="{formatDateTime.format(data.saleto)}"/>
                             </mx:VBox>
                         </mx:Component>
@@ -187,7 +187,7 @@
                                     // Define a property for returning the new value to the cell.
                                     [Bindable]
                                     public var returnMinimalPrice:String;
-                                ]]>
+                                    ]]>
                                 </mx:Script>
                                 <mx:TextInput id="newMinimalPrice" width="70"
                                               text="{data.minimalPrice}"
@@ -262,7 +262,6 @@
                    fault="onRpcMethodFault(event)"/>
 
     </mx:RemoteObject>
-
 
 
     <mx:Script>
@@ -399,7 +398,31 @@
             if (allowEditPrice && priceDataGrid.selectedItem != null && storesComboBox.selectedItem != null
                     && storeCurrencyComboBox.selectedItem != null) {
                 createPriceDialog = CreatePriceDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CreatePriceDialog, true));
-                createPriceDialog.skuComboBox.dataProvider = allProductSkus;
+
+                preselectSkuOnPriceDialog(false);
+                createPriceDialog.currency = storeCurrencyComboBox.selectedItem as String;
+                createPriceDialog.shopId = storesComboBox.selectedItem.shopId;
+                createPriceDialog.saveBtn.addEventListener(MouseEvent.CLICK, onUpdatePriceSaveClick);
+                createPriceDialog.skuPrice = priceDataGrid.selectedItem as SkuPriceDTOImpl;
+                PopUpManager.centerPopUp(createPriceDialog);
+            }
+        }
+
+        private function preselectSkuOnPriceDialog(forceFirst:Boolean):void {
+            createPriceDialog.skuComboBox.dataProvider = allProductSkus;
+
+            if (forceFirst) {
+
+                if (allProductSkus.length == 1) {
+                    createPriceDialog.skuComboBox.selectedIndex = 0;
+                    createPriceDialog.skuComboBox.selectedItem = createPriceDialog.selectedSku = createPriceDialog.skuComboBox.dataProvider.getItemAt(0);
+                    createPriceDialog.skuComboBox.dispatchEvent(new ListEvent(Event.CHANGE));
+
+                }
+
+
+            } else {
+
                 for (var i:int = 0, il:int = allProductSkus.length; i < il; i++) {
                     var skuCandidate:ProductSkuDTOImpl = allProductSkus.getItemAt(i) as ProductSkuDTOImpl;
                     if (skuCandidate.skuId == priceDataGrid.selectedItem.productSkuId) {
@@ -409,13 +432,8 @@
                         break;
                     }
                 }
-
-                createPriceDialog.currency = storeCurrencyComboBox.selectedItem as String;
-                createPriceDialog.shopId = storesComboBox.selectedItem.shopId;
-                createPriceDialog.saveBtn.addEventListener(MouseEvent.CLICK, onUpdatePriceSaveClick);
-                createPriceDialog.skuPrice = priceDataGrid.selectedItem as SkuPriceDTOImpl;
-                PopUpManager.centerPopUp(createPriceDialog);
             }
+
         }
 
         private function onUpdatePriceSaveClick(event:Event):void {
@@ -433,7 +451,7 @@
         private function onAddPriceClick(event:MouseEvent):void {
             if (allowAddPrice && storesComboBox.selectedItem != null && storeCurrencyComboBox.selectedItem != null) {
                 createPriceDialog = CreatePriceDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CreatePriceDialog, true));
-                createPriceDialog.skuComboBox.dataProvider = allProductSkus;
+                preselectSkuOnPriceDialog(true);
                 createPriceDialog.currency = storeCurrencyComboBox.selectedItem as String;
                 createPriceDialog.shopId = storesComboBox.selectedItem.shopId;
                 createPriceDialog.saveBtn.addEventListener(MouseEvent.CLICK, onAddPriceSaveClick);
