@@ -28,9 +28,7 @@ import org.yes.cart.web.support.entity.decorator.CategoryDecorator;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
 import org.yes.cart.web.support.service.AttributableImageService;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -56,7 +54,7 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
     private final AttributableImageService categoryImageService;
     private final CategoryService categoryService;
     private final String httpServletContextPath;
-    private String categoryImageUrl;
+    private Map<Integer, String> categoryImageUrl = new HashMap<Integer, String>();
     private final ImageService imageService;
     private final I18NWebSupport i18NWebSupport;
 
@@ -109,13 +107,19 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
      * {@inheritDoc}
      */
     public String getImage(final String width, final String height, final String imageAttributeName) {
-        return categoryImageService.getImage(
-                this,
-                httpServletContextPath,
-                width,
-                height,
-                imageAttributeName,
-                null);
+        final Integer hash = getImageWithSizeHash(imageAttributeName, width, height);
+        String img = categoryImageUrl.get(hash);
+        if (img == null) {
+            img = categoryImageService.getImage(
+                    this,
+                    httpServletContextPath,
+                    width,
+                    height,
+                    imageAttributeName,
+                    null);
+            categoryImageUrl.put(hash, img);
+        }
+        return img;
     }
 
 
@@ -123,10 +127,19 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
      * {@inheritDoc}
      */
     public String getDefaultImage(final String width, final String height) {
-        if (categoryImageUrl == null) {
-            categoryImageUrl = categoryImageService.getImage(this, httpServletContextPath, width, height, null, null);
+        return getImage(width, height, null);
+    }
+
+    private Integer getImageWithSizeHash(final String ... params) {
+        final int prime = 31;
+        int result = 1;
+        for( String param : params) {
+            if (param == null) {
+                continue;
+            }
+            result = result * prime + param.hashCode();
         }
-        return categoryImageUrl;
+        return result;
     }
 
 

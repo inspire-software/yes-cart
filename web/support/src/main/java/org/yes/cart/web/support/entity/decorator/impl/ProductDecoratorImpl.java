@@ -66,7 +66,7 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
     private transient ImageService imageService;
 
     private final String httpServletContextPath;
-    private final HashMap<String, String> productImageUrl;
+    private Map<Integer, String> productImageUrl = new HashMap<Integer, String>();
     private final Map<String, AttrValue> attrValueMap;
     private final String defaultImageAttributeValue;
     private final I18NWebSupport i18NWebSupport;
@@ -97,7 +97,6 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
         this.i18NWebSupport = i18NWebSupport;
         BeanUtils.copyProperties(productEntity, this);
         this.httpServletContextPath = httpServletContextPath;
-        this.productImageUrl = new HashMap<String, String>();
         this.defaultImageAttributeValue = defaultImageAttributeValue;
         if (withAttributes) {
             this.attrValueMap = getAllAttibutesAsMap();
@@ -151,7 +150,6 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
         this.i18NWebSupport = i18NWebSupport;
         BeanUtils.copyProperties(productEntity, this);
         this.httpServletContextPath = httpServletContextPath;
-        this.productImageUrl = new HashMap<String, String>();
         this.defaultImageAttributeValue = defaultImageAttributeValue;
         if (withAttributes) {
             this.attrValueMap = getAllAttibutesAsMap();
@@ -186,13 +184,19 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
      * {@inheritDoc}
      */
     public String getImage(final String width, final String height, final String imageAttributeName) {
-        return attributableImageService.getImage(
-                this,
-                httpServletContextPath,
-                width,
-                height,
-                imageAttributeName,
-                null);
+        final Integer hash = getImageWithSizeHash(imageAttributeName, width, height);
+        String img = productImageUrl.get(hash);
+        if (img == null) {
+            img = attributableImageService.getImage(
+                    this,
+                    httpServletContextPath,
+                    width,
+                    height,
+                    imageAttributeName,
+                    null);
+            productImageUrl.put(hash, img);
+        }
+        return img;
     }
 
 
@@ -201,22 +205,36 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
      * {@inheritDoc}
      */
     public String getDefaultImage(final String width, final String height) {
-        final String key = width + height;
-        String val = productImageUrl.get(key);
-        if (val == null) {
-            val = attributableImageService.getImage(
+        final String imageAttributeName = getDefaultImageAttributeName();
+        final Integer hash = getImageWithSizeHash(imageAttributeName, width, height);
+        String img = productImageUrl.get(hash);
+        if (img == null) {
+            img = attributableImageService.getImage(
                     this,
                     httpServletContextPath,
                     width,
                     height,
-                    getDefaultImageAttributeName() ,
+                    imageAttributeName,
                     defaultImageAttributeValue
             );
-            productImageUrl.put(key, val);
-            return val;
+            productImageUrl.put(hash, img);
         }
-        return val;
+        return img;
     }
+
+
+    private Integer getImageWithSizeHash(final String ... params) {
+        final int prime = 31;
+        int result = 1;
+        for( String param : params) {
+            if (param == null) {
+                continue;
+            }
+            result = result * prime + param.hashCode();
+        }
+        return result;
+    }
+
 
     /**
      * {@inheritDoc}
