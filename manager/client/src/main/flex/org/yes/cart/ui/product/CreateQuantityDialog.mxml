@@ -63,6 +63,7 @@
     <mx:Script>
             <![CDATA[
         import com.hexagonstar.util.debug.Debug;
+        import mx.controls.Alert;
 
         import org.yes.cart.impl.ProductSkuDTOImpl;
 
@@ -88,10 +89,10 @@
          */
         private function skuLabelFunction(value:Object):String {
             var code:String = value.code;
-            if (value.code != value.barCode) {
+            if (value.code != value.barCode && value.barCode != null) {
                 code += " / " + value.barCode;
             }
-            return value.name + " (" + code + " )";
+            return value.name + " ( " + code + " )";
         }
 
         private function onSkuSelected(event:Event):void {
@@ -115,6 +116,15 @@
             var skuQuantity:SkuWarehouseDTOImpl = new SkuWarehouseDTOImpl();
             skuQuantity.quantity = 0;
             this.skuQuantity = skuQuantity;
+
+
+            if (skuComboBox.dataProvider.length == 1) {//preselect for single sku product
+                skuComboBox.selectedIndex = 0;
+                skuComboBox.selectedItem = skuComboBox.dataProvider.getItemAt(0);
+                skuComboBox.dispatchEvent(new ListEvent(Event.CHANGE));
+            }
+
+
         }
 
 
