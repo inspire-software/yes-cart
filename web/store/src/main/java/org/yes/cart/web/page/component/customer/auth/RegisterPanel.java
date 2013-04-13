@@ -232,9 +232,13 @@ public class RegisterPanel extends BaseComponent {
 
                                 //and sent the new password to already existing user
 
-                                Customer customer = getCustomerService().findCustomer(getEmail());
 
-                                getCustomerService().resetPassword(customer, ApplicationDirector.getCurrentShop());
+
+                                //CPOINT
+                                //this commente out, becaue of yc-168
+                                //but it may be valid behavior for some clients.
+                                //Customer customer = getCustomerService().findCustomer(getEmail());
+                                //getCustomerService().resetPassword(customer, ApplicationDirector.getCurrentShop());
 
                             } else {
 
@@ -265,8 +269,6 @@ public class RegisterPanel extends BaseComponent {
                                     error(
                                             getLocalizer().getString("canNotRegister", this)
                                     );
-
-
 
                                 }
                             }

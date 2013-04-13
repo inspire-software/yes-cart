@@ -23,6 +23,6 @@
 	<entry key="lastname">Second name</entry>
 	<entry key="register">Register</entry>
     <entry key="phone">Phone</entry>
-    <entry key="customerExists">Customer already registered. The new password was sent.</entry>
-    <entry key="canNotRegister">Sorry. Some problem. Our administrator try to solve temporally problems.</entry>
+    <entry key="customerExists">Customer already registered.</entry>
+    <entry key="canNotRegister">Sorry. Some problem. Our administrators try to solve temporally problems.</entry>
 </properties>

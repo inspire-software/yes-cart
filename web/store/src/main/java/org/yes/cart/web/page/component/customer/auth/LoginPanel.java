@@ -24,6 +24,7 @@ import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
@@ -124,18 +125,44 @@ public class LoginPanel extends BaseComponent {
 
             setModel(new CompoundPropertyModel<LoginForm>(LoginForm.this));
 
+
+            add(
+                    new BookmarkablePageLink<RegistrationPage>(REGISTRATION_LINK, RegistrationPage.class)
+                        .setVisible(!isCheckout)
+            );
+
+            final TextField<String> emailInput = (TextField<String>) new TextField<String>(EMAIL_INPUT)
+                    .setRequired(true)
+                    .add(StringValidator.lengthBetween(MIN_LEN, MAX_LEN))
+                    .add(EmailAddressValidator.getInstance());
+
+            add(
+                    emailInput
+            );
+
+            final PasswordTextField passwordTextField = (PasswordTextField) new PasswordTextField(PASSWORD_INPUT)
+                    .setRequired(true);
+
+            add(
+                    passwordTextField
+            );
+
             final Button sendNewPasswordBtn = new Button(RESTORE_PASSWORD_BUTTON) {
 
                 @Override
                 public void onSubmit() {
-                    final Customer customer = getCustomerService().findCustomer(getEmail());
+                    final String email = getEmail();
+                    final Customer customer = getCustomerService().findCustomer(email);
                     if (customer != null) {
                         getCustomerService().resetPassword(customer, ApplicationDirector.getCurrentShop());
                     }
                     ((AbstractWebPage) getPage()).processCommands();
 
                     if(isCheckout) {
-                        info(getLocalizer().getString("emailSent", this));
+                        //final String errorMessage =  new StringResourceModel(ALLOCATION_DETAIL, this, null, new Object [] {sku.getName(), sku.getCode() } ).getString()  ;
+                        info(new StringResourceModel("emailSent", this, null, new Object[] {email}).getString());
+                        emailInput.getModel().setObject(email);
+
                     } else {
                         setResponsePage(Application.get().getHomePage());
                     }
@@ -152,21 +179,6 @@ public class LoginPanel extends BaseComponent {
                     sendNewPasswordBtn
             );
 
-            add(
-                    new BookmarkablePageLink<RegistrationPage>(REGISTRATION_LINK, RegistrationPage.class)
-                        .setVisible(!isCheckout)
-            );
-
-            add(
-                    new TextField<String>(EMAIL_INPUT)
-                            .setRequired(true)
-                            .add(StringValidator.lengthBetween(MIN_LEN, MAX_LEN))
-                            .add(EmailAddressValidator.getInstance())
-            );
-            add(
-                    new PasswordTextField(PASSWORD_INPUT)
-                            .setRequired(true)
-            );
 
             add(
                     new Button(LOGIN_BUTTON) {
@@ -183,12 +195,16 @@ public class LoginPanel extends BaseComponent {
                                     setResponsePage(successfulPage, parameters);
                                 }
                             } else {
-                                if (isCustomerExists(getEmail())) {
+                                final String email = getEmail();
+                                if (isCustomerExists(email)) {
                                     sendNewPasswordBtn.setVisible(true);
-                                    error(getLocalizer().getString("tryToRestore", this));
+                                    //emailInput.setEnabled(false);
+
+                                    error(new StringResourceModel("tryToRestore", this, null, new Object[] {email}).getString());
 
                                 } else {
                                     sendNewPasswordBtn.setVisible(false);
+                                    //emailInput.setEnabled(true);
                                     error(getLocalizer().getString("registration", this));
                                 }
                             }
