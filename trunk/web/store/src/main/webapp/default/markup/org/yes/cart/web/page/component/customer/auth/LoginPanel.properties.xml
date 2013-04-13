@@ -26,6 +26,6 @@
 	<entry key="login">Login</entry>
     <entry key="signIn">Sign In</entry>
     <entry key="registration">Registration</entry>
-    <entry key="tryToRestore">Try to restore password. It will be send to your email</entry>
-    <entry key="emailSent">New password was sent. Check email please.</entry>
+    <entry key="tryToRestore">Try to restore password. It will be send to your email {0}</entry>
+    <entry key="emailSent">New password was sent to {0}. Check email please.</entry>
 </properties>
