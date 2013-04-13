@@ -83,7 +83,8 @@ public class CategoryImageServiceImpl extends AbstractImageServiceImpl implement
                            final String httpServletContextPath,
                            final String width,
                            final String height,
-                           final String attrName) {
+                           final String attrName,
+                           final String attrVal) {
 
         //final String strategyLabel = getImageRetreiveStrategy(category);
         final String strategyLabel = getImageAttributeValue(category, AttributeNamesKeys.Category.CATEGORY_IMAGE_RETRIEVE_STRATEGY, defaultStrategy);
