@@ -1,0 +1,127 @@
+<?xml version="1.0" ?>
+<!--
+  - Copyright 2009 Igor Azarnyi, Denys Pavlov
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+                layout="absolute"
+                width="400"
+                height="200"
+                title="@Resource(bundle='ProductManagementPanel',key='adjustQuantity')"
+                showCloseButton="true" close="PopUpManager.removePopUp(this)">
+
+    <mx:Form>
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='sku')">
+            <mx:TextInput id="skuCodeInput" width="160"/>
+        </mx:FormItem>
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='quantity')">
+            <mx:TextInput id="quantityTextInput" width="160" change="onQuantityValueChanged(event);"/>
+        </mx:FormItem>
+    </mx:Form>
+
+    <mx:NumberValidator id="skuQuantityValidator"
+                        source="{quantityTextInput}"
+                        property="text"
+                        minValue="0" allowNegative="false" domain="int"/>
+
+    <mx:ControlBar horizontalAlign="right" width="100%">
+        <mx:Button id="saveBtn"
+                   label="@Resource(bundle='ProductManagementPanel',key='saveQuantity')"
+                   toolTip="@Resource(bundle='ProductManagementPanel',key='saveQuantityHint')"
+                   enabled="false"
+                />
+        <mx:Button id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
+                   click="PopUpManager.removePopUp(this)"/>
+    </mx:ControlBar>
+
+    <mx:Script>
+            <![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import mx.binding.utils.BindingUtils;
+        import mx.binding.utils.ChangeWatcher;
+        import mx.managers.PopUpManager;
+        import mx.validators.Validator;
+
+        import org.yes.cart.impl.InventoryDTOImpl;
+
+        import org.yes.cart.impl.ProductSkuDTOImpl;
+        import org.yes.cart.impl.SkuWarehouseDTOImpl;
+        import org.yes.cart.util.DomainUtils;
+
+        [Bindable]
+        private var validatorArr:Array;
+
+        [Bindable]
+        private var _skuQuantity:InventoryDTOImpl;
+
+        /**
+         * Create label for given product sku.
+         * @param value product sku dto
+         * @return label for given sku
+         */
+        private function skuLabelFunction(value:Object):String {
+            var code:String = value.code;
+            if (value.code != value.barCode) {
+                code += " / " + value.barCode;
+            }
+            return value.name + " (" + code + " )";
+        }
+
+        private function onQuantityValueChanged(event:*):void {
+            var validatorErrorArray:Array = Validator.validateAll(validatorArr);
+            Debug.trace("DEBUG qty validation array " + validatorErrorArray.length + " sku selected item " + skuCodeInput.text);
+            saveBtn.enabled = (validatorErrorArray.length == 0) && skuCodeInput.text != null;
+        }
+
+        public function skuQuantityCreate():void {
+            var skuQuantity:InventoryDTOImpl = new InventoryDTOImpl();
+            skuQuantity.quantity = 0;
+            this.skuQuantity = skuQuantity;
+        }
+
+
+        private function internalInit(skuWarehouse:InventoryDTOImpl):void {
+
+            BindingUtils.bindProperty(skuCodeInput, "text", skuWarehouse, "skuCode");
+            BindingUtils.bindProperty(skuWarehouse, "skuCode", skuCodeInput, "text");
+            BindingUtils.bindProperty(quantityTextInput, "text", skuWarehouse, "quantity");
+            BindingUtils.bindProperty(skuWarehouse, "quantity", quantityTextInput, "text");
+
+            ChangeWatcher.watch(quantityTextInput, "text", onQuantityValueChanged);
+
+
+            validatorArr = new Array();
+            validatorArr.push(skuQuantityValidator);
+
+        }
+
+        public function get skuQuantity():InventoryDTOImpl {
+            return _skuQuantity;
+        }
+
+        public function set skuQuantity(skuWarehouse:InventoryDTOImpl):void {
+
+            this._skuQuantity = skuWarehouse;
+
+            if (DomainUtils.isPersistentPK(skuWarehouse.skuWarehouseId)) {
+                skuCodeInput.text = skuWarehouse.skuCode;
+                skuCodeInput.enabled = false;
+            }
+            internalInit(skuWarehouse);
+        }
+        ]]>
+    </mx:Script>
+</mx:TitleWindow>
