@@ -1,2 +1,0 @@
-Need order confirmation for $customer.firstname $customer.lastname email is $customer.email
-Order number $root.ordernum at $shop.name
