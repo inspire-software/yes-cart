@@ -42,7 +42,8 @@ public interface CentralViewResolver {
      *
      * @param queriesChain  query chain obtained from url
      * @param currentQuery  current query
-     * @param categoryId    currenct category id
+     * @param categoryId    current category id
+     * @param categories    current category subcategories to include
      * @param viewLabel     resolved view label
      * @param itemId        sku or product id
      * @return <code>BooleanQuery</code> in case if renderer label has a registered query builder, otherwise null.
@@ -50,6 +51,7 @@ public interface CentralViewResolver {
     BooleanQuery getBooleanQuery(List<BooleanQuery> queriesChain,
                                  String currentQuery,
                                  long categoryId,
+                                 List<Long> categories,
                                  String viewLabel,
                                  String itemId);
 

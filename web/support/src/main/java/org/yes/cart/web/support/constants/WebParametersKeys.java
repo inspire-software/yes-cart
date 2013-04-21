@@ -71,6 +71,11 @@ public interface WebParametersKeys {
 
     String CATEGORY_ID = "category";
 
+    /**
+     * Central View resolver config to allow recursive product lookup instead of category view.
+     */
+    String CATEGORY_PRODUCTS_RECURSIVE = "categoryProductsRecursive";
+
     String PRODUCT_ID = "product";
 
     String SKU_ID = "sku";
