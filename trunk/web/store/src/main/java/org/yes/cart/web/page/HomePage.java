@@ -72,6 +72,11 @@ public class HomePage extends AbstractWebPage {
 
     private AbstractCentralView centralPanel;
 
+    /**
+     * to show all products in subcategories rather than category view
+     * change this to true.
+     */
+    private final boolean categoryProductsRecursive = false;
 
     /**
      * Construct home page.
@@ -83,6 +88,7 @@ public class HomePage extends AbstractWebPage {
         super(params);
 
         mapParams = WicketUtil.pageParametesAsMap(params);
+        mapParams.put(WebParametersKeys.CATEGORY_PRODUCTS_RECURSIVE, String.valueOf(categoryProductsRecursive));
 
     }
 
@@ -114,6 +120,7 @@ public class HomePage extends AbstractWebPage {
                 queriesChain,
                 null,
                 categoryId,
+                categoryProductsRecursive ? shopSubCategoriesIds : null,
                 centralViewLabel,
                 getItemId()
         );
