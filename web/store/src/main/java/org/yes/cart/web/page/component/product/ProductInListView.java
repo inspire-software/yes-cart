@@ -27,6 +27,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ImageService;
@@ -46,6 +47,7 @@ import org.yes.cart.web.support.service.ProductAvailabilityStrategy;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -159,24 +161,46 @@ public class ProductInListView extends BaseComponent {
                 )
         );
 
-        final PageParameters addToCartParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters())
-                .set(AddSkuToCartEventCommandImpl.CMD_KEY, product.getDefaultSku().getCode());
+        final ProductAvailabilityModel productPam = productAvailabilityStrategy.getAvailabilityModel(product);
+        final ProductSku defSku = getDefault(product, productPam);
 
-        final ProductAvailabilityModel pam = productAvailabilityStrategy.getAvailabilityModel(product);
+        final PageParameters addToCartParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters())
+                .set(AddSkuToCartEventCommandImpl.CMD_KEY, defSku.getCode());
+
+        final ProductAvailabilityModel skuPam = productAvailabilityStrategy.getAvailabilityModel(defSku);
+
         add(
                 new BookmarkablePageLink(ADD_TO_CART_LINK, homePage, addToCartParameters)
-                        .add(new Label(ADD_TO_CART_LINK_LABEL, pam.isInStock() || pam.isPerpetual() ?
+                        .add(new Label(ADD_TO_CART_LINK_LABEL, skuPam.isInStock() || skuPam.isPerpetual() ?
                                 getLocalizer().getString("add.to.cart", this) :
                                 getLocalizer().getString("preorder.cart", this)))
-                        .setVisible(pam.isAvailable())
+                        .setVisible(skuPam.isAvailable())
         );
 
         add(
-                new PriceView(PRICE_VIEW, new Model<SkuPrice>(getSkuPrice()), true, true)
+                new PriceView(PRICE_VIEW, new Model<SkuPrice>(getSkuPrice(defSku)), true, true)
         );
 
 
         super.onBeforeRender();
+    }
+
+    /*
+     * Return first available sku rather than default to improve customer experience.
+     */
+    private ProductSku getDefault(final Product product, final ProductAvailabilityModel productPam) {
+        if (productPam.isAvailable()) {
+            if (product.isMultiSkuProduct()) {
+                for (final ProductSku sku : product.getSku()) {
+                    final ProductAvailabilityModel skuPam = productAvailabilityStrategy.getAvailabilityModel(sku);
+                    if (skuPam.isAvailable()) {
+                        return sku;
+                    }
+                }
+            }
+        }
+        // single SKU and N/A product just use default
+        return product.getDefaultSku();
     }
 
 
@@ -184,12 +208,14 @@ public class ProductInListView extends BaseComponent {
      * Get product or his sku price.
      * In case of multisku product the minimal regular price from multiple sku was used for single item.
      *
+     * @param defaultSku default sku
+     *
      * @return {@link org.yes.cart.domain.entity.SkuPrice}
      */
-    private SkuPrice getSkuPrice() {
+    private SkuPrice getSkuPrice(final ProductSku defaultSku) {
         return priceService.getMinimalRegularPrice(
                 product.getSku(),
-                product.getDefaultSku().getCode(),
+                defaultSku.getCode(),
                 ApplicationDirector.getCurrentShop(),
                 ApplicationDirector.getShoppingCart().getCurrencyCode(),
                 BigDecimal.ONE
