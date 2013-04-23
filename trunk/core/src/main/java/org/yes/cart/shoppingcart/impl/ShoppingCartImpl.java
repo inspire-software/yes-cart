@@ -59,7 +59,7 @@ public class ShoppingCartImpl implements ShoppingCart {
 
     private AmountCalculationStrategy getCalculationStrategy() {
         if (calculationStrategy == null) {
-            calculationStrategy = new DefaultAmountCalculationStrategy(BigDecimal.ZERO);
+            calculationStrategy = new DefaultAmountCalculationStrategy(BigDecimal.ZERO, true);
             ShopCodeContext.getLog(this).error("Default amount calculation strategy used with 0% tax. Please configure \"calculationStrategy\" and set it to cart");
         }
         return calculationStrategy;

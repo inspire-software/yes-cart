@@ -18,7 +18,7 @@
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:datetime="com.georg.datetime.*"
                 xmlns:georg="com.georg.*"
                 xmlns:validation="org.yes.cart.validation.*" layout="absolute"
-                width="300"
+                width="500"
                 height="340"
                 title="@Resource(bundle='ProductManagementPanel',key='createPriceTier')"
                 showCloseButton="true" close="PopUpManager.removePopUp(this)"
@@ -27,31 +27,31 @@
 
     <mx:Form>
         <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='sku')">
-            <mx:TextInput id="skuInput" width="160" enabled="{!editing}"/>
+            <mx:TextInput id="skuInput" width="360" enabled="{!editing}"/>
         </mx:FormItem>
         <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='quantity')">
-            <mx:TextInput id="quantityTextInput" width="160"/>
+            <mx:TextInput id="quantityTextInput" width="360"/>
         </mx:FormItem>
         <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='listPrice')">
-            <mx:TextInput id="listPriceTextInput" width="160" />
+            <mx:TextInput id="listPriceTextInput" width="360" />
         </mx:FormItem>
 
         <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='salePrice')">
-            <mx:TextInput id="salePriceTextInput" width="160"/>
+            <mx:TextInput id="salePriceTextInput" width="360"/>
         </mx:FormItem>
         <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='saleFrom')">
-            <georg:DateTimeField id="saleFromDateField" width="160"/>
+            <georg:DateTimeField id="saleFromDateField" width="360"/>
         </mx:FormItem>
         <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='saleTo')">
-            <georg:DateTimeField id="saleToDateField" width="160"/>
+            <georg:DateTimeField id="saleToDateField" width="360"/>
         </mx:FormItem>
 
         <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='minimalPrice')">
-            <mx:TextInput id="minimalPriceTextInput" width="160"/>
+            <mx:TextInput id="minimalPriceTextInput" width="360"/>
         </mx:FormItem>
 
         <mx:FormItem width="100%" label="@Resource(bundle='ShopManagerApplication',key='tag')">
-            <mx:TextInput id="tagInput" width="160"/>
+            <mx:TextInput id="tagInput" width="360"/>
         </mx:FormItem>
 
     </mx:Form>

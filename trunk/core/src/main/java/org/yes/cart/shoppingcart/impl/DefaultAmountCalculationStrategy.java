@@ -25,6 +25,7 @@ import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingContext;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -35,15 +36,19 @@ import java.util.List;
  */
 public class DefaultAmountCalculationStrategy implements AmountCalculationStrategy {
 
+    private static final BigDecimal HUNDRED = new BigDecimal("100.00");
+
     private final BigDecimal tax;
+    private final boolean taxIncluded;
 
     /**
      * Construct default amount calculator with included tax.
      *
      * @param tax vat value in percents
      */
-    public DefaultAmountCalculationStrategy(final BigDecimal tax) {
+    public DefaultAmountCalculationStrategy(final BigDecimal tax, final boolean taxIncluded) {
         this.tax = tax.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+        this.taxIncluded = taxIncluded;
     }
 
     /**
@@ -57,7 +62,7 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
      * {@inheritDoc}
      */
     public boolean isTaxIncluded() {
-        return true;
+        return taxIncluded;
     }
 
     /**
@@ -76,19 +81,8 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
                                              final boolean useListPrice) {
         final AmountCalculationResult rez = new AmountCalculationResultImpl();
         for (CustomerOrderDelivery delivery : orderDelivery) {
-            final AmountCalculationResult singleDeviveryRez = calculate(shoppingContext, delivery, useListPrice);
 
-            rez.setSubTotal(rez.getSubTotal().add(singleDeviveryRez.getSubTotal()));
-            rez.setSubTotalTax(rez.getSubTotalTax().add(singleDeviveryRez.getSubTotalTax()));
-            rez.setSubTotalAmount(rez.getSubTotalAmount().add(singleDeviveryRez.getSubTotalAmount()));
-
-            rez.setDelivery(rez.getDelivery().add(singleDeviveryRez.getDelivery()));
-            rez.setDeliveryTax(rez.getDeliveryTax().add(singleDeviveryRez.getDeliveryTax()));
-            rez.setDeliveryAmount(rez.getDeliveryAmount().add(singleDeviveryRez.getDeliveryAmount()));
-
-            rez.setTotal(rez.getTotal().add(singleDeviveryRez.getTotal()));
-            rez.setTotalTax(rez.getTotalTax().add(singleDeviveryRez.getTotalTax()));
-            rez.setTotalAmount(rez.getTotalAmount().add(singleDeviveryRez.getTotalAmount()));
+            calculate(shoppingContext, delivery, useListPrice, rez);
 
         }
         return rez;
@@ -111,38 +105,30 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
 
         final AmountCalculationResult rez = new AmountCalculationResultImpl();
 
+        calculate(shoppingContext, orderDelivery, useListPrice, rez);
 
+        return rez;
+    }
 
-        rez.setSubTotal(calculateSubTotal(orderDelivery.getDetail(), useListPrice));
+    /*
+     * Calculate by adding current delivery amount to rez
+     */
+    void calculate(final ShoppingContext shoppingContext,
+                   final CustomerOrderDelivery orderDelivery,
+                   final boolean useListPrice,
+                   final AmountCalculationResult rez) {
+
+        rez.setSubTotal(rez.getSubTotal().add(calculateSubTotal(new ArrayList<CartItem>(orderDelivery.getDetail()), useListPrice)));
         rez.setSubTotalTax(calculateTax(rez.getSubTotal()));
         rez.setSubTotalAmount(calculateAmount(rez.getSubTotal(), rez.getSubTotalTax()));
 
-        rez.setDelivery(calculateDelievery(orderDelivery));
+        rez.setDelivery(rez.getDelivery().add(calculateDelivery(orderDelivery)));
         rez.setDeliveryTax(calculateTax(rez.getDelivery()));
         rez.setDeliveryAmount(calculateAmount(rez.getDelivery(), rez.getDeliveryTax()));
 
         rez.setTotal(rez.getSubTotal().add(rez.getDelivery()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
         rez.setTotalTax(calculateTax(rez.getTotal()));
         rez.setTotalAmount(calculateAmount(rez.getTotal(), rez.getTotalTax()));
-
-        return rez;
-    }
-
-    /**
-     * Calculate sub total of shopping cart by given list of {@link CartItem}.
-     *
-     * @param items given list of cart items.
-     * @return cart sub total.
-     */
-     BigDecimal calculateSubTotal(final Collection<CustomerOrderDeliveryDet> items, final boolean useListPrice) {
-        BigDecimal cartSubTotal = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-        if (items != null) {
-            for (CustomerOrderDeliveryDet cartItem : items) {
-                final BigDecimal price = useListPrice ? cartItem.getListPrice() : cartItem.getPrice();
-                cartSubTotal = cartSubTotal.add(price.multiply(cartItem.getQty()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
-            }
-        }
-        return cartSubTotal;
     }
 
     /**
@@ -168,7 +154,9 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
         if (items != null) {
             for (CartItem cartItem : items) {
                 final BigDecimal price = useListPrice ? cartItem.getListPrice() : cartItem.getPrice();
-                cartSubTotal = cartSubTotal.add(price.multiply(cartItem.getQty()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
+                if (price != null && cartItem.getQty() != null) {
+                    cartSubTotal = cartSubTotal.add(price.multiply(cartItem.getQty()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
+                }
             }
         }
         return cartSubTotal;
@@ -180,8 +168,8 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
      * @param orderDelivery optional order delivery
      * @return delivery price.
      */
-    BigDecimal calculateDelievery(final CustomerOrderDelivery orderDelivery) {
-        if (orderDelivery != null) {
+    BigDecimal calculateDelivery(final CustomerOrderDelivery orderDelivery) {
+        if (orderDelivery != null && orderDelivery.getPrice() != null) {
             return orderDelivery.getPrice().setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
         }
         return BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
@@ -195,21 +183,34 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
      * @return tax.
      */
     BigDecimal calculateTax(final BigDecimal money) {
-        return money.multiply(tax)
-                .divide(tax.add(new BigDecimal("100.00")), Constants.DEFAULT_SCALE)
+        if (money == null) {
+            return BigDecimal.ZERO;
+        }
+        if (taxIncluded) {
+            return money.multiply(tax)
+                    .divide(tax.add(HUNDRED), Constants.DEFAULT_SCALE)
+                    .setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+        }
+        return money.multiply(tax).divide(HUNDRED, Constants.DEFAULT_SCALE)
                 .setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
     }
 
 
     /**
-     * Calulate sub total amount.
+     * Calculate sub total amount.
      *
      * @param money given sub total.
      * @param tax   sub total tax.
      * @return cart sub total amount.
      */
     BigDecimal calculateAmount(final BigDecimal money, final BigDecimal tax) {
-        return money; // tax already included;
+        if (money == null) {
+            return BigDecimal.ZERO;
+        }
+        if (taxIncluded || tax == null) {
+            return money; // tax already included;
+        }
+        return money.add(tax);
     }
 
 
