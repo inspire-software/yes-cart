@@ -177,7 +177,8 @@ public class SkuCentralView extends AbstractCentralView {
         } else if (productId != null) {
             isProduct = true;
             product = productService.getProductById(Long.valueOf(productId), true);
-            sku = product.getDefaultSku();
+            final ProductAvailabilityModel pam = productAvailabilityStrategy.getAvailabilityModel(product);
+            sku = getDefault(product, pam);
         } else {
             throw new RuntimeException("Product or Sku id expected");
         }
@@ -218,7 +219,7 @@ public class SkuCentralView extends AbstractCentralView {
                 new Label(PRODUCT_DESCRIPTION_LABEL, decorator.getDescription(selectedLocale)).setEscapeModelStrings(false)
         );
 
-        final ProductAvailabilityModel pam = productAvailabilityStrategy.getAvailabilityModel(product);
+        final ProductAvailabilityModel pam = productAvailabilityStrategy.getAvailabilityModel(sku);
 
         add(
                 new BookmarkablePageLink(ADD_TO_CART_LINK, homePage, addToCartParameters)
@@ -291,6 +292,25 @@ public class SkuCentralView extends AbstractCentralView {
         return priceService.getSkuPricesFilteredByTimeFrame(sku.getSkuPrice());
     }
 
+    /*
+    * Return first available sku rather than default to improve customer experience.
+    */
+    private ProductSku getDefault(final Product product, final ProductAvailabilityModel productPam) {
+        if (productPam.isAvailable()) {
+            if (product.isMultiSkuProduct()) {
+                for (final ProductSku sku : product.getSku()) {
+                    final ProductAvailabilityModel skuPam = productAvailabilityStrategy.getAvailabilityModel(sku);
+                    if (skuPam.isAvailable()) {
+                        return sku;
+                    }
+                }
+            }
+        }
+        // single SKU and N/A product just use default
+        return product.getDefaultSku();
+    }
+
+
 
     /**
      * Get product or his sku price.
@@ -307,7 +327,7 @@ public class SkuCentralView extends AbstractCentralView {
         }
         return priceService.getMinimalRegularPrice(
                 productSkus,
-                isProduct ? product.getDefaultSku().getCode() : sku.getCode(),
+                sku.getCode(), /* We always preselect a SKU */
                 ApplicationDirector.getCurrentShop(),
                 ApplicationDirector.getShoppingCart().getCurrencyCode(),
                 BigDecimal.ONE
