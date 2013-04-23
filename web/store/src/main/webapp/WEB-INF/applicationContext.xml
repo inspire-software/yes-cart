@@ -140,6 +140,7 @@
     <bean id="amountCalculationStrategy"
           class="org.yes.cart.shoppingcart.impl.DefaultAmountCalculationStrategy">  <!-- CPOINT tax and amount calculation strategy -->
         <constructor-arg index="0" value="20.00"/>
+        <constructor-arg index="1" value="true"/>
     </bean>
 
 
