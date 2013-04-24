@@ -133,7 +133,7 @@ public class ImageServiceImpl
         RenderedOp cropOp = null;
         if (cropToFit) {
             // crop the original to best fit of target size
-            cropOp = cropImageFromTopLeft(imageRef, x, y, originalX, originalY);
+            cropOp = cropImageToCenter(imageRef, x, y, originalX, originalY);
             imageRef = cropOp.getAsBufferedImage();
         }
 
@@ -198,25 +198,29 @@ public class ImageServiceImpl
         return JAI.create("border", borderParams);
     }
 
-    private RenderedOp cropImageFromTopLeft(final RenderedImage image, final int targetX, final int targetY, final int originalX, final int originalY) {
+    private RenderedOp cropImageToCenter(final RenderedImage image, final int targetX, final int targetY, final int originalX, final int originalY) {
 
         // calculate crop so that we can scale to fit
         BigDecimal sourceRatio = new BigDecimal(originalX).divide(new BigDecimal(originalY), 10, BigDecimal.ROUND_UP);
         BigDecimal targetRatio = new BigDecimal(targetX).divide(new BigDecimal(targetY), 10, BigDecimal.ROUND_UP);
-        final int cropWidth, cropHeight;
+        final int cropWidth, cropHeight, cropX, cropY;
         if (sourceRatio.compareTo(targetRatio) < 0) { // need to crop by height
             cropWidth = originalX;
             cropHeight = new BigDecimal(originalY).divide((targetRatio.divide(sourceRatio, 10, BigDecimal.ROUND_UP)), 0, BigDecimal.ROUND_UP).intValue();
+            cropX = 0;
+            cropY = (originalY - cropHeight) / 2;
         } else { // need to crop by width
             cropHeight = originalY;
             cropWidth = new BigDecimal(originalX).divide((sourceRatio.divide(targetRatio, 10, BigDecimal.ROUND_UP)), 0, BigDecimal.ROUND_UP).intValue();
+            cropX = (originalX - cropWidth) / 2;
+            cropY = 0;
         }
 
 
         ParameterBlock cropParams = new ParameterBlock();
         cropParams.addSource(image);
-        cropParams.add(Float.valueOf(0f)); // X
-        cropParams.add(Float.valueOf(0f)); // Y
+        cropParams.add(Float.valueOf(cropX)); // X
+        cropParams.add(Float.valueOf(cropY)); // Y
         cropParams.add(Float.valueOf(cropWidth)); // width
         cropParams.add(Float.valueOf(cropHeight)); // height
 
