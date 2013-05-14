@@ -263,21 +263,21 @@ class CategoryWalker {
                 String path = it.path.get(lang);
                 String productFile = cacheFolderName + path.substring(1 + path.lastIndexOf("/"));
                 println("file: $productFile")
-                downloadSingleProduct(productFile, authString, it)
+                downloadSingleProduct(lang, productFile, authString, it)
             }
         }
     }
 
 
-    private downloadSingleProduct(String productFile, authString, productPointer) {
+    private downloadSingleProduct(String lang, String productFile, authString, productPointer) {
         if (!(new File(productFile).exists())) {
-
-            def conn = "$context.url$productPointer.path".toURL().openConnection();
+            def path = productPointer.path.get(lang);
+            def conn = "$context.url$path".toURL().openConnection();
             conn.setRequestProperty("Authorization", "Basic ${authString}")
             new File(productFile) << conn.getInputStream().text
             println "Downloaded $productPointer.Model_Name"
-        //} else {
-           // println "Skipped $it.Model_Name"
+
+
         }
     }
 

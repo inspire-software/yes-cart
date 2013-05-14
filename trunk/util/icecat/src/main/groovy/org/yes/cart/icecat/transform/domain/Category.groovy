@@ -31,6 +31,7 @@ import org.yes.cart.icecat.transform.Util
  */
 class Category {
 
+    String parentCategoryid;
     String id;
     String lowPic;
     String score;

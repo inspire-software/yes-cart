@@ -68,6 +68,10 @@ class CategoryHandler extends DefaultHandler {
                 category.visible = attributes.getValue("Visible");
             }
 
+        } else if ("ParentCategory" == qName) {
+
+            category.parentCategoryid = attributes.getValue("ID");
+
         } else if ("CategoriesList" == qName) {
 
             allowAddToCategoryList = true;
