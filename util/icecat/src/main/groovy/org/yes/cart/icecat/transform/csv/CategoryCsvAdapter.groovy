@@ -37,7 +37,8 @@ class CategoryCsvAdapter {
         StringBuilder builder = new StringBuilder();
         builder.append("parent category id;guid;category name;EN;RU;description;EN;RU;keywords;EN;RU\n");
         categoryMap.values().each {
-            builder.append('100;"')
+            //builder.append('100;"')
+            builder.append(it.parentCategoryid).append(';"')
             builder.append(it.id).append('";"')
             builder.append(Util.escapeCSV(it.getNameFor(null))).append('";"')
             builder.append(Util.escapeCSV(it.getNameFor('en'))).append('";"')
@@ -52,5 +53,63 @@ class CategoryCsvAdapter {
         new File(filename).write(builder.toString(), 'UTF-8');
 
     }
+
+    /**
+     *
+     * @param categoryId
+     * @param hierarhyRoot
+     * @return       true in case if category belong to given root
+     */
+    private boolean allowOutput(String categoryId, String hierarhyRoot) {
+
+        final Category cat = categoryMap.get(categoryId);
+        if (cat != null) {
+            if (cat.parentCategoryid == cat.id) { // root
+                return false;
+            }
+            if (cat.parentCategoryid == hierarhyRoot) {
+                return true;
+            }
+            return allowOutput(cat.parentCategoryid, hierarhyRoot);
+
+        }
+        return false;
+
+    }
+
+    /**
+     * Use to determinate list of category ids
+     * @param filename
+     * @param hierarhyRoot
+     */
+    public toCsvFile(String filename, String hierarhyRoot) {
+
+        StringBuilder builder = new StringBuilder();
+        builder.append("parent category id;guid;category name;EN;RU;description;EN;RU;keywords;EN;RU\n");
+        categoryMap.values().each {
+            //builder.append('100;"')
+
+           if (allowOutput(it.id, hierarhyRoot)) {
+               builder.append(it.parentCategoryid).append(';"')
+               builder.append(it.id).append('";"')
+               builder.append(Util.escapeCSV(it.getNameFor(null))).append('";"')
+               builder.append(Util.escapeCSV(it.getNameFor('en'))).append('";"')
+               builder.append(Util.escapeCSV(it.getNameFor('ru'))).append('";"')
+               builder.append(Util.escapeCSV(it.getDescriptionFor(null))).append('";"')
+               builder.append(Util.escapeCSV(it.getDescriptionFor('en'))).append('";"')
+               builder.append(Util.escapeCSV(it.getDescriptionFor('ru'))).append('";"')
+               builder.append(Util.escapeCSV(it.getKeywordsFor(null))).append('";"')
+               builder.append(Util.escapeCSV(it.getKeywordsFor('en'))).append('";"')
+               builder.append(Util.escapeCSV(it.getKeywordsFor('ru'))).append('"\n')
+
+           }
+
+
+        }
+        new File(filename).write(builder.toString(), 'UTF-8');
+
+    }
+
+
 
 }
