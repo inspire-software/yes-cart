@@ -4,8 +4,8 @@ rem
 rem YesCart. Start db and tomcat
 rem @author Igor Azarny (iazarny@yahoo.com)
 
-echo –°—Ç—Ä–∞—Ä—Ç—É–µ–º —Å–µ—Ä–≤–µ—Ä –±–∞–∑—ã –¥–∞–Ω–Ω—ã—Ö derby ...
-echo –ü–æ–∂–∞–ª—É–π—Å—Ç–∞, –Ω–µ –∑–∞–∫—Ä—ã–≤–∞–µ—Ç–µ –µ–≥–æ –æ–∫–Ω–æ
+echo ë‚‡†‡‚„•¨ ·•‡¢•‡ °†ßÎ §†≠≠ÎÂ derby ...
+echo èÆ¶†´„©·‚†, ≠• ß†™‡Î¢†•‚• •£Æ Æ™≠Æ
 ping 1.1.1.1 -n 1 -w 2000 > NUL
 set DERBY_HOME=%~dp0..
 cd %~dp0
@@ -14,11 +14,11 @@ set LOCALCLASSPATH=%DERBY_HOME%/lib/derby.jar;%DERBY_HOME%/lib/derbynet.jar;%DER
 start %~dp0\startNetworkServer.bat
 ping 1.1.1.1 -n 1 -w 5000 > NUL
 
-echo –°–µ—Ä–≤–µ—Ä –±–∞–∑—ã –¥–∞–Ω–Ω—ã—Ö –∑–∞–ø—É—â–µ–Ω
-echo –°–æ–∑–¥–∞–µ–º –ø—É—Å—Ç—É –±–∞–∑—É –¥–∞–Ω–Ω—ã—Ö...
+echo ë•‡¢•‡ °†ßÎ §†≠≠ÎÂ ß†Ø„È•≠
+echo ëÆß§†•¨ Ø„·‚„ °†ß„ §†≠≠ÎÂ...
 
 call java -classpath "%LOCALCLASSPATH%" -Dderby.system.home=%DERBY_HOME% -Dij.outfile=%DERBY_HOME%\derbyinit.log -Dderby.ui.codeset=UTF8 org.apache.derby.tools.ij dbinit_rus.sql
 
-echo –û–∫
+echo é™
 
 exit 0
