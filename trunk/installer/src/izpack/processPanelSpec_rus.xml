@@ -3,7 +3,7 @@
     <logfiledir>$INSTALL_PATH/logs/initdb.log</logfiledir>
     <job name="start db server">
         <os family="windows" />
-        <executefile name="$INSTALL_PATH/derbydb/bin/startderby_rus.bat" workingDir="$INSTALL_PATH/derbydb/bin"/>
+        <executefile name="$INSTALL_PATH/derbydb/bin/startderby.bat" workingDir="$INSTALL_PATH/derbydb/bin"/>
     </job>
     <job name="stop db server">
         <os family="windows" />

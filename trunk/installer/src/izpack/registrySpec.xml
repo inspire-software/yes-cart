@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+
+<registry>
+
+    <pack name="Apache Tomcat 7">
+
+        <value name="CATALINA_OPTS"   keypath="Environment"  root="HKCU"  string="-Dfile.encoding=UTF-8"                    override="false"/>
+        <value name="JAVA_OPTS"       keypath="Environment"  root="HKCU"  string="-Xms256m -Xmx1024m -XX:MaxPermSize=256m"  override="false"/>
+        <value name="YC_HOME"       keypath="Environment"  root="HKCU"  string="$INSTALL_PATH"                            override="false"/>
+        <!--
+          <value name="CATALINA_OPTS"   keypath="SYSTEM\CurrentControlSet\Control\Session Manager\Environment"  root="HKLM"  string="-Dfile.encoding=UTF-8"                   override="false"/>
+          <value name="JAVA_OPTS"       keypath="SYSTEM\CurrentControlSet\Control\Session Manager\Environment"  root="HKLM"  string="-Xms256m -Xmx1024m -XX:MaxPermSize=256m" override="false"/>
+        -->
+    </pack>
+
+</registry>
