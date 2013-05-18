@@ -1,3 +1,0 @@
-Dear $customer.firstname $customer.lastname !
-New order $root.ordernum at $shop.name was confirmed
-Please check detail on self care page at "<%out.print(shop.getDefaultShopUrl())%>" $shop.name
