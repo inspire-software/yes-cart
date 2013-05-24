@@ -233,7 +233,8 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         address.setPhoneList("555-55-52");
         addressService.create(address);
 //        customer = customerService.findCustomer("jd@domain.com");
-        customer = customerDao.findSingleByCriteria(Restrictions.eq("email", prefix + "jd@domain.com"));
+        //customer = customerDao.findSingleByCriteria(Restrictions.eq("email", prefix + "jd@domain.com"));
+        customer = customerService.findCustomer(prefix + "jd@domain.com");
         return customer;
     }
 }
