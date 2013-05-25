@@ -405,4 +405,7 @@ public interface GenericDAO<T, PK extends Serializable> {
     void flushClear();
 
 
+    void clear();
+
+
 }

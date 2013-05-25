@@ -693,5 +693,12 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
         sessionFactory.getCurrentSession().clear();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void clear() {
+        sessionFactory.getCurrentSession().clear();
+    }
+
 
 }

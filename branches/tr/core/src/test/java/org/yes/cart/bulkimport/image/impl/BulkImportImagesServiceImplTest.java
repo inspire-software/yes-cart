@@ -22,6 +22,7 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.bulkimport.service.BulkImportImagesService;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.async.JobStatusListener;
@@ -95,8 +96,8 @@ public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testgetImageAttributeSuffixName() {
-        BulkImportImagesServiceImpl service = (BulkImportImagesServiceImpl)
-                createContext().getBean("bulkImportImageService");
+        BulkImportImagesService service =
+                createContext().getBean("bulkImportImageService", BulkImportImagesService.class);
         int idx = 0;
         for (String fileName : fileNames) {
             Integer attrIdx = Integer.valueOf(service.getImageAttributeSuffixName(fileName));
@@ -106,9 +107,9 @@ public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
     }
 
 
-    private BulkImportImagesServiceImpl getBulkImportService() {
-        BulkImportImagesServiceImpl service = (BulkImportImagesServiceImpl)
-                createContext().getBean("bulkImportImageService");
+    private BulkImportImagesService getBulkImportService() {
+        BulkImportImagesService service =
+                createContext().getBean("bulkImportImageService", BulkImportImagesService.class);
         return service;
 
     }
@@ -129,7 +130,7 @@ public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
         }});
 
 
-        BulkImportImagesServiceImpl service = getBulkImportService();
+        BulkImportImagesService service = getBulkImportService();
         boolean rez = service.doImportProductImage(
                 listener,
                 "im-image-file_BENDER-ua_a.jpeg",
@@ -170,7 +171,7 @@ public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
         }});
 
 
-        BulkImportImagesServiceImpl service = getBulkImportService();
+        BulkImportImagesService service = getBulkImportService();
         boolean rez = service.doImportProductSkuImage(
                 listener,
                 "im-image1-file_SOBOT-BEER_a.jpeg",
@@ -223,7 +224,7 @@ public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
         }});
 
 
-        BulkImportImagesServiceImpl service = getBulkImportService();
+        BulkImportImagesService service = getBulkImportService();
         service.doImport(
                 new File("src/test/resources/import/im-image-file_SOBOT-BEER_c.jpeg"),
                 listener,

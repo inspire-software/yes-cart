@@ -300,6 +300,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
             );
             log.error(message, e);
             statusListener.notifyError(message);
+            genericDAO.clear();
         }
     }
 

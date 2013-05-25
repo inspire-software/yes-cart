@@ -141,9 +141,14 @@
     <!--     #############################   Image section begin   #############################    -->
     <bean id="categoryImageNameStrategy" class="org.yes.cart.service.image.impl.CategoryImageNameStrategyImpl"/>
 
-    <bean id="productImageNameStrategy" class="org.yes.cart.service.image.impl.ProductImageNameStrategyImpl">
-        <constructor-arg index="0" ref="attrValueEntityProductSkuDao"/>
-        <constructor-arg index="1" ref="attrValueEntityProductDao"/>
+
+    <bean id="productImageNameStrategy" parent="txProxyTemplate">
+        <property name="target">
+            <bean  class="org.yes.cart.service.image.impl.ProductImageNameStrategyImpl">
+                <constructor-arg index="0" ref="attrValueEntityProductSkuDao"/>
+                <constructor-arg index="1" ref="attrValueEntityProductDao"/>
+            </bean>
+        </property>
     </bean>
 
     <bean id="brandImageNameStrategy" class="org.yes.cart.service.image.impl.BrandImageNameStrategyImpl"/>
@@ -1212,20 +1217,27 @@
 
     <bean id="importDescriptorXStreamProvider" class="org.yes.cart.bulkimport.stream.xml.CsvImportDescriptorXStreamProvider"/>
 
-    <bean id="csvBulkImportService" class="org.yes.cart.bulkimport.csv.impl.CsvBulkImportServiceImpl" scope="prototype">
-        <property name="genericDAO" ref="genericDao"/>
-        <property name="extendedConversionService" ref="extendedConversionService"/>
-        <property name="importDescriptorXStreamProvider" ref="importDescriptorXStreamProvider"/>
+    <bean id="csvBulkImportService" parent="txProxyTemplate">
+        <property name="target">
+            <bean  class="org.yes.cart.bulkimport.csv.impl.CsvBulkImportServiceImpl" scope="prototype">
+                <property name="genericDAO" ref="genericDao"/>
+                <property name="extendedConversionService" ref="extendedConversionService"/>
+                <property name="importDescriptorXStreamProvider" ref="importDescriptorXStreamProvider"/>
+            </bean>
+        </property>
     </bean>
 
-    <bean id="bulkImportImageService" class="org.yes.cart.bulkimport.image.impl.BulkImportImagesServiceImpl" scope="prototype">
-        <constructor-arg index="0" ref="genericDao"/>
-        <constructor-arg index="1" ref="attributeService"/>
-        <constructor-arg index="2" ref="imageService"/>
-        <constructor-arg index="3" value="_([.[^_]]*)_[a-z]\.jpe?g$"/>
-        <constructor-arg index="4" value="(.*)\.jpe?g"/>
+    <bean id="bulkImportImageService" parent="txProxyTemplate">
+        <property name="target">
+            <bean  class="org.yes.cart.bulkimport.image.impl.BulkImportImagesServiceImpl" scope="prototype">
+                <constructor-arg index="0" ref="genericDao"/>
+                <constructor-arg index="1" ref="attributeService"/>
+                <constructor-arg index="2" ref="imageService"/>
+                <constructor-arg index="3" value="_([.[^_]]*)_[a-z]\.jpe?g$"/>
+                <constructor-arg index="4" value="(.*)\.jpe?g"/>
+            </bean>
+        </property>
     </bean>
-
 
 
 
