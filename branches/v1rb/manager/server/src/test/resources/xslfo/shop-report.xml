@@ -1,0 +1,886 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+<yes-report>
+    <shop>
+        <code>SHOIP1</code>
+        <name>Gadget universe кирилица</name>
+        <description>Gadget universe shop</description>
+        <fspointer>gadget</fspointer>
+        <imageVaultFolder>gadget/imagevault</imageVaultFolder>
+        <shopUrl class="org.hibernate.collection.internal.PersistentSet">
+            <set>
+                <shopurl>
+                    <url>gadget.yescart.org</url>
+                    <shop class="shop" reference="../../../.."/>
+                    <storeUrlId>10</storeUrlId>
+                </shopurl>
+                <shopurl>
+                    <url>www.gadget.yescart.org</url>
+                    <shop class="shop" reference="../../../.."/>
+                    <storeUrlId>11</storeUrlId>
+                </shopurl>
+            </set>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.shopUrl</role>
+            <key class="long">10</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="map">
+                <entry>
+                    <shopurl reference="../../../set/shopurl"/>
+                    <shopurl reference="../../../set/shopurl"/>
+                </entry>
+                <entry>
+                    <shopurl reference="../../../set/shopurl[2]"/>
+                    <shopurl reference="../../../set/shopurl[2]"/>
+                </entry>
+            </storedSnapshot>
+        </shopUrl>
+        <exchangerates class="org.hibernate.collection.internal.PersistentBag">
+            <bag>
+                <exchangerates>
+                    <fromCurrency>EUR</fromCurrency>
+                    <toCurrency>UAH</toCurrency>
+                    <shop class="shop" reference="../../../.."/>
+                    <rate>11.38</rate>
+                    <shopexchangerateId>1</shopexchangerateId>
+                </exchangerates>
+                <exchangerates>
+                    <fromCurrency>EUR</fromCurrency>
+                    <toCurrency>RUB</toCurrency>
+                    <shop class="shop" reference="../../../.."/>
+                    <rate>42.56</rate>
+                    <shopexchangerateId>2</shopexchangerateId>
+                </exchangerates>
+            </bag>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.exchangerates</role>
+            <key class="long">10</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="list">
+                <exchangerates reference="../../bag/exchangerates"/>
+                <exchangerates reference="../../bag/exchangerates[2]"/>
+            </storedSnapshot>
+        </exchangerates>
+        <advertisingPlaces class="org.hibernate.collection.internal.PersistentBag">
+            <bag/>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.advertisingPlaces</role>
+            <key class="long">10</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="list"/>
+        </advertisingPlaces>
+        <shopDiscountRules class="org.hibernate.collection.internal.PersistentBag">
+            <bag/>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.shopDiscountRules</role>
+            <key class="long">10</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="list"/>
+        </shopDiscountRules>
+        <attribute class="org.hibernate.collection.internal.PersistentBag">
+            <bag>
+                <org.yes.cart.domain.entity.impl.AttrValueEntityShop>
+                    <val>EUR,UAH,RUB</val>
+                    <shop class="shop" reference="../../../.."/>
+                    <attribute class="org.yes.cart.domain.entity.impl.AttributeEntity">
+                        <mandatory>false</mandatory>
+                        <allowduplicate>false</allowduplicate>
+                        <allowfailover>false</allowfailover>
+                        <rank>500</rank>
+                        <name>Currency</name>
+                        <etype class="org.hibernate.proxy.HibernateProxy_$$_javassist_67"
+                               resolves-to="org.hibernate.proxy.pojo.javassist.SerializableProxy">
+                            <persistentClass>org.yes.cart.domain.entity.Etype</persistentClass>
+                            <interfaces>
+                                <java-class>org.hibernate.proxy.HibernateProxy</java-class>
+                                <java-class>org.yes.cart.domain.entity.Etype</java-class>
+                            </interfaces>
+                            <getIdentifierMethodClass>org.yes.cart.domain.entity.Etype</getIdentifierMethodClass>
+                            <setIdentifierMethodClass>org.yes.cart.domain.entity.Etype</setIdentifierMethodClass>
+                            <getIdentifierMethodName>getEtypeId</getIdentifierMethodName>
+                            <setIdentifierMethodName>setEtypeId</setIdentifierMethodName>
+                            <setIdentifierMethodParams>
+                                <java-class>long</java-class>
+                            </setIdentifierMethodParams>
+                            <entityName>org.yes.cart.domain.entity.Etype</entityName>
+                            <id class="long">1004</id>
+                        </etype>
+                        <attributeGroup class="org.yes.cart.domain.entity.AttributeGroup_$$_javassist_22"
+                                        resolves-to="org.hibernate.proxy.pojo.javassist.SerializableProxy">
+                            <persistentClass>org.yes.cart.domain.entity.AttributeGroup</persistentClass>
+                            <interfaces>
+                                <java-class>org.yes.cart.domain.entity.AttributeGroup</java-class>
+                                <java-class>org.hibernate.proxy.HibernateProxy</java-class>
+                            </interfaces>
+                            <getIdentifierMethodClass>org.yes.cart.domain.entity.AttributeGroup
+                            </getIdentifierMethodClass>
+                            <setIdentifierMethodClass>org.yes.cart.domain.entity.AttributeGroup
+                            </setIdentifierMethodClass>
+                            <getIdentifierMethodName>getAttributegroupId</getIdentifierMethodName>
+                            <setIdentifierMethodName>setAttributegroupId</setIdentifierMethodName>
+                            <setIdentifierMethodParams>
+                                <java-class>long</java-class>
+                            </setIdentifierMethodParams>
+                            <entityName>org.yes.cart.domain.entity.AttributeGroup</entityName>
+                            <id class="long">1001</id>
+                        </attributeGroup>
+                        <attributeId>1006</attributeId>
+                        <code>CURRENCY</code>
+                    </attribute>
+                    <attrvalueId>10</attrvalueId>
+                </org.yes.cart.domain.entity.impl.AttrValueEntityShop>
+                <org.yes.cart.domain.entity.impl.AttrValueEntityShop>
+                    <val>noreply@gadget.com</val>
+                    <shop class="shop" reference="../../../.."/>
+                    <attribute class="org.yes.cart.domain.entity.impl.AttributeEntity">
+                        <mandatory>true</mandatory>
+                        <allowduplicate>false</allowduplicate>
+                        <allowfailover>false</allowfailover>
+                        <rank>500</rank>
+                        <name>Shop mail from</name>
+                        <etype class="org.hibernate.proxy.HibernateProxy_$$_javassist_67"
+                               resolves-to="org.hibernate.proxy.pojo.javassist.SerializableProxy">
+                            <persistentClass>org.yes.cart.domain.entity.Etype</persistentClass>
+                            <interfaces
+                                    reference="../../../../org.yes.cart.domain.entity.impl.AttrValueEntityShop/attribute/etype/interfaces"/>
+                            <getIdentifierMethodClass>org.yes.cart.domain.entity.Etype</getIdentifierMethodClass>
+                            <setIdentifierMethodClass>org.yes.cart.domain.entity.Etype</setIdentifierMethodClass>
+                            <getIdentifierMethodName>getEtypeId</getIdentifierMethodName>
+                            <setIdentifierMethodName>setEtypeId</setIdentifierMethodName>
+                            <setIdentifierMethodParams>
+                                <java-class>long</java-class>
+                            </setIdentifierMethodParams>
+                            <entityName>org.yes.cart.domain.entity.Etype</entityName>
+                            <id class="long">1000</id>
+                        </etype>
+                        <attributeGroup class="org.yes.cart.domain.entity.AttributeGroup_$$_javassist_22"
+                                        reference="../../../org.yes.cart.domain.entity.impl.AttrValueEntityShop/attribute/attributeGroup"/>
+                        <attributeId>1027</attributeId>
+                        <code>SHOP_MAIL_FROM</code>
+                    </attribute>
+                    <attrvalueId>11</attrvalueId>
+                </org.yes.cart.domain.entity.impl.AttrValueEntityShop>
+            </bag>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.attribute</role>
+            <key class="long">10</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="list">
+                <org.yes.cart.domain.entity.impl.AttrValueEntityShop
+                        reference="../../bag/org.yes.cart.domain.entity.impl.AttrValueEntityShop"/>
+                <org.yes.cart.domain.entity.impl.AttrValueEntityShop
+                        reference="../../bag/org.yes.cart.domain.entity.impl.AttrValueEntityShop[2]"/>
+            </storedSnapshot>
+        </attribute>
+        <shopCategory class="org.hibernate.collection.internal.PersistentBag">
+            <bag>
+                <org.yes.cart.domain.entity.impl.ShopCategoryEntity>
+                    <rank>5</rank>
+                    <shop class="shop" reference="../../../.."/>
+                    <category class="org.yes.cart.domain.entity.Category_$$_javassist_46"
+                              resolves-to="org.hibernate.proxy.pojo.javassist.SerializableProxy">
+                        <persistentClass>org.yes.cart.domain.entity.Category</persistentClass>
+                        <interfaces>
+                            <java-class>org.yes.cart.domain.entity.Category</java-class>
+                            <java-class>org.hibernate.proxy.HibernateProxy</java-class>
+                        </interfaces>
+                        <getIdentifierMethodClass>org.yes.cart.domain.entity.Category</getIdentifierMethodClass>
+                        <setIdentifierMethodClass>org.yes.cart.domain.entity.Category</setIdentifierMethodClass>
+                        <getIdentifierMethodName>getCategoryId</getIdentifierMethodName>
+                        <setIdentifierMethodName>setCategoryId</setIdentifierMethodName>
+                        <setIdentifierMethodParams>
+                            <java-class>long</java-class>
+                        </setIdentifierMethodParams>
+                        <entityName>org.yes.cart.domain.entity.Category</entityName>
+                        <id class="long">140</id>
+                    </category>
+                    <shopCategoryId>107</shopCategoryId>
+                </org.yes.cart.domain.entity.impl.ShopCategoryEntity>
+                <org.yes.cart.domain.entity.impl.ShopCategoryEntity>
+                    <rank>5</rank>
+                    <shop class="shop" reference="../../../.."/>
+                    <category class="org.yes.cart.domain.entity.Category_$$_javassist_46"
+                              resolves-to="org.hibernate.proxy.pojo.javassist.SerializableProxy">
+                        <persistentClass>org.yes.cart.domain.entity.Category</persistentClass>
+                        <interfaces
+                                reference="../../../org.yes.cart.domain.entity.impl.ShopCategoryEntity/category/interfaces"/>
+                        <getIdentifierMethodClass>org.yes.cart.domain.entity.Category</getIdentifierMethodClass>
+                        <setIdentifierMethodClass>org.yes.cart.domain.entity.Category</setIdentifierMethodClass>
+                        <getIdentifierMethodName>getCategoryId</getIdentifierMethodName>
+                        <setIdentifierMethodName>setCategoryId</setIdentifierMethodName>
+                        <setIdentifierMethodParams>
+                            <java-class>long</java-class>
+                        </setIdentifierMethodParams>
+                        <entityName>org.yes.cart.domain.entity.Category</entityName>
+                        <id class="long">141</id>
+                    </category>
+                    <shopCategoryId>108</shopCategoryId>
+                </org.yes.cart.domain.entity.impl.ShopCategoryEntity>
+                <org.yes.cart.domain.entity.impl.ShopCategoryEntity>
+                    <rank>5</rank>
+                    <shop class="shop" reference="../../../.."/>
+                    <category class="org.yes.cart.domain.entity.Category_$$_javassist_46"
+                              resolves-to="org.hibernate.proxy.pojo.javassist.SerializableProxy">
+                        <persistentClass>org.yes.cart.domain.entity.Category</persistentClass>
+                        <interfaces
+                                reference="../../../org.yes.cart.domain.entity.impl.ShopCategoryEntity/category/interfaces"/>
+                        <getIdentifierMethodClass>org.yes.cart.domain.entity.Category</getIdentifierMethodClass>
+                        <setIdentifierMethodClass>org.yes.cart.domain.entity.Category</setIdentifierMethodClass>
+                        <getIdentifierMethodName>getCategoryId</getIdentifierMethodName>
+                        <setIdentifierMethodName>setCategoryId</setIdentifierMethodName>
+                        <setIdentifierMethodParams>
+                            <java-class>long</java-class>
+                        </setIdentifierMethodParams>
+                        <entityName>org.yes.cart.domain.entity.Category</entityName>
+                        <id class="long">142</id>
+                    </category>
+                    <shopCategoryId>109</shopCategoryId>
+                </org.yes.cart.domain.entity.impl.ShopCategoryEntity>
+                <org.yes.cart.domain.entity.impl.ShopCategoryEntity>
+                    <rank>5</rank>
+                    <shop class="shop" reference="../../../.."/>
+                    <category class="org.yes.cart.domain.entity.Category_$$_javassist_46"
+                              resolves-to="org.hibernate.proxy.pojo.javassist.SerializableProxy">
+                        <persistentClass>org.yes.cart.domain.entity.Category</persistentClass>
+                        <interfaces
+                                reference="../../../org.yes.cart.domain.entity.impl.ShopCategoryEntity/category/interfaces"/>
+                        <getIdentifierMethodClass>org.yes.cart.domain.entity.Category</getIdentifierMethodClass>
+                        <setIdentifierMethodClass>org.yes.cart.domain.entity.Category</setIdentifierMethodClass>
+                        <getIdentifierMethodName>getCategoryId</getIdentifierMethodName>
+                        <setIdentifierMethodName>setCategoryId</setIdentifierMethodName>
+                        <setIdentifierMethodParams>
+                            <java-class>long</java-class>
+                        </setIdentifierMethodParams>
+                        <entityName>org.yes.cart.domain.entity.Category</entityName>
+                        <id class="long">211</id>
+                    </category>
+                    <shopCategoryId>211</shopCategoryId>
+                </org.yes.cart.domain.entity.impl.ShopCategoryEntity>
+                <org.yes.cart.domain.entity.impl.ShopCategoryEntity>
+                    <rank>10</rank>
+                    <shop class="shop" reference="../../../.."/>
+                    <category class="org.yes.cart.domain.entity.Category_$$_javassist_46"
+                              resolves-to="org.hibernate.proxy.pojo.javassist.SerializableProxy">
+                        <persistentClass>org.yes.cart.domain.entity.Category</persistentClass>
+                        <interfaces
+                                reference="../../../org.yes.cart.domain.entity.impl.ShopCategoryEntity/category/interfaces"/>
+                        <getIdentifierMethodClass>org.yes.cart.domain.entity.Category</getIdentifierMethodClass>
+                        <setIdentifierMethodClass>org.yes.cart.domain.entity.Category</setIdentifierMethodClass>
+                        <getIdentifierMethodName>getCategoryId</getIdentifierMethodName>
+                        <setIdentifierMethodName>setCategoryId</setIdentifierMethodName>
+                        <setIdentifierMethodParams>
+                            <java-class>long</java-class>
+                        </setIdentifierMethodParams>
+                        <entityName>org.yes.cart.domain.entity.Category</entityName>
+                        <id class="long">101</id>
+                    </category>
+                    <shopCategoryId>100</shopCategoryId>
+                </org.yes.cart.domain.entity.impl.ShopCategoryEntity>
+                <org.yes.cart.domain.entity.impl.ShopCategoryEntity>
+                    <rank>20</rank>
+                    <shop class="shop" reference="../../../.."/>
+                    <category class="org.yes.cart.domain.entity.Category_$$_javassist_46"
+                              resolves-to="org.hibernate.proxy.pojo.javassist.SerializableProxy">
+                        <persistentClass>org.yes.cart.domain.entity.Category</persistentClass>
+                        <interfaces
+                                reference="../../../org.yes.cart.domain.entity.impl.ShopCategoryEntity/category/interfaces"/>
+                        <getIdentifierMethodClass>org.yes.cart.domain.entity.Category</getIdentifierMethodClass>
+                        <setIdentifierMethodClass>org.yes.cart.domain.entity.Category</setIdentifierMethodClass>
+                        <getIdentifierMethodName>getCategoryId</getIdentifierMethodName>
+                        <setIdentifierMethodName>setCategoryId</setIdentifierMethodName>
+                        <setIdentifierMethodParams>
+                            <java-class>long</java-class>
+                        </setIdentifierMethodParams>
+                        <entityName>org.yes.cart.domain.entity.Category</entityName>
+                        <id class="long">106</id>
+                    </category>
+                    <shopCategoryId>101</shopCategoryId>
+                </org.yes.cart.domain.entity.impl.ShopCategoryEntity>
+                <org.yes.cart.domain.entity.impl.ShopCategoryEntity>
+                    <rank>30</rank>
+                    <shop class="shop" reference="../../../.."/>
+                    <category class="org.yes.cart.domain.entity.Category_$$_javassist_46"
+                              resolves-to="org.hibernate.proxy.pojo.javassist.SerializableProxy">
+                        <persistentClass>org.yes.cart.domain.entity.Category</persistentClass>
+                        <interfaces
+                                reference="../../../org.yes.cart.domain.entity.impl.ShopCategoryEntity/category/interfaces"/>
+                        <getIdentifierMethodClass>org.yes.cart.domain.entity.Category</getIdentifierMethodClass>
+                        <setIdentifierMethodClass>org.yes.cart.domain.entity.Category</setIdentifierMethodClass>
+                        <getIdentifierMethodName>getCategoryId</getIdentifierMethodName>
+                        <setIdentifierMethodName>setCategoryId</setIdentifierMethodName>
+                        <setIdentifierMethodParams>
+                            <java-class>long</java-class>
+                        </setIdentifierMethodParams>
+                        <entityName>org.yes.cart.domain.entity.Category</entityName>
+                        <id class="long">113</id>
+                    </category>
+                    <shopCategoryId>102</shopCategoryId>
+                </org.yes.cart.domain.entity.impl.ShopCategoryEntity>
+                <org.yes.cart.domain.entity.impl.ShopCategoryEntity>
+                    <rank>40</rank>
+                    <shop class="shop" reference="../../../.."/>
+                    <category class="org.yes.cart.domain.entity.Category_$$_javassist_46"
+                              resolves-to="org.hibernate.proxy.pojo.javassist.SerializableProxy">
+                        <persistentClass>org.yes.cart.domain.entity.Category</persistentClass>
+                        <interfaces
+                                reference="../../../org.yes.cart.domain.entity.impl.ShopCategoryEntity/category/interfaces"/>
+                        <getIdentifierMethodClass>org.yes.cart.domain.entity.Category</getIdentifierMethodClass>
+                        <setIdentifierMethodClass>org.yes.cart.domain.entity.Category</setIdentifierMethodClass>
+                        <getIdentifierMethodName>getCategoryId</getIdentifierMethodName>
+                        <setIdentifierMethodName>setCategoryId</setIdentifierMethodName>
+                        <setIdentifierMethodParams>
+                            <java-class>long</java-class>
+                        </setIdentifierMethodParams>
+                        <entityName>org.yes.cart.domain.entity.Category</entityName>
+                        <id class="long">120</id>
+                    </category>
+                    <shopCategoryId>103</shopCategoryId>
+                </org.yes.cart.domain.entity.impl.ShopCategoryEntity>
+                <org.yes.cart.domain.entity.impl.ShopCategoryEntity>
+                    <rank>50</rank>
+                    <shop class="shop" reference="../../../.."/>
+                    <category class="org.yes.cart.domain.entity.Category_$$_javassist_46"
+                              resolves-to="org.hibernate.proxy.pojo.javassist.SerializableProxy">
+                        <persistentClass>org.yes.cart.domain.entity.Category</persistentClass>
+                        <interfaces
+                                reference="../../../org.yes.cart.domain.entity.impl.ShopCategoryEntity/category/interfaces"/>
+                        <getIdentifierMethodClass>org.yes.cart.domain.entity.Category</getIdentifierMethodClass>
+                        <setIdentifierMethodClass>org.yes.cart.domain.entity.Category</setIdentifierMethodClass>
+                        <getIdentifierMethodName>getCategoryId</getIdentifierMethodName>
+                        <setIdentifierMethodName>setCategoryId</setIdentifierMethodName>
+                        <setIdentifierMethodParams>
+                            <java-class>long</java-class>
+                        </setIdentifierMethodParams>
+                        <entityName>org.yes.cart.domain.entity.Category</entityName>
+                        <id class="long">129</id>
+                    </category>
+                    <shopCategoryId>104</shopCategoryId>
+                </org.yes.cart.domain.entity.impl.ShopCategoryEntity>
+                <org.yes.cart.domain.entity.impl.ShopCategoryEntity>
+                    <rank>60</rank>
+                    <shop class="shop" reference="../../../.."/>
+                    <category class="org.yes.cart.domain.entity.Category_$$_javassist_46"
+                              resolves-to="org.hibernate.proxy.pojo.javassist.SerializableProxy">
+                        <persistentClass>org.yes.cart.domain.entity.Category</persistentClass>
+                        <interfaces
+                                reference="../../../org.yes.cart.domain.entity.impl.ShopCategoryEntity/category/interfaces"/>
+                        <getIdentifierMethodClass>org.yes.cart.domain.entity.Category</getIdentifierMethodClass>
+                        <setIdentifierMethodClass>org.yes.cart.domain.entity.Category</setIdentifierMethodClass>
+                        <getIdentifierMethodName>getCategoryId</getIdentifierMethodName>
+                        <setIdentifierMethodName>setCategoryId</setIdentifierMethodName>
+                        <setIdentifierMethodParams>
+                            <java-class>long</java-class>
+                        </setIdentifierMethodParams>
+                        <entityName>org.yes.cart.domain.entity.Category</entityName>
+                        <id class="long">133</id>
+                    </category>
+                    <shopCategoryId>105</shopCategoryId>
+                </org.yes.cart.domain.entity.impl.ShopCategoryEntity>
+                <org.yes.cart.domain.entity.impl.ShopCategoryEntity>
+                    <rank>70</rank>
+                    <shop class="shop" reference="../../../.."/>
+                    <category class="org.yes.cart.domain.entity.Category_$$_javassist_46"
+                              resolves-to="org.hibernate.proxy.pojo.javassist.SerializableProxy">
+                        <persistentClass>org.yes.cart.domain.entity.Category</persistentClass>
+                        <interfaces
+                                reference="../../../org.yes.cart.domain.entity.impl.ShopCategoryEntity/category/interfaces"/>
+                        <getIdentifierMethodClass>org.yes.cart.domain.entity.Category</getIdentifierMethodClass>
+                        <setIdentifierMethodClass>org.yes.cart.domain.entity.Category</setIdentifierMethodClass>
+                        <getIdentifierMethodName>getCategoryId</getIdentifierMethodName>
+                        <setIdentifierMethodName>setCategoryId</setIdentifierMethodName>
+                        <setIdentifierMethodParams>
+                            <java-class>long</java-class>
+                        </setIdentifierMethodParams>
+                        <entityName>org.yes.cart.domain.entity.Category</entityName>
+                        <id class="long">134</id>
+                    </category>
+                    <shopCategoryId>106</shopCategoryId>
+                </org.yes.cart.domain.entity.impl.ShopCategoryEntity>
+            </bag>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.shopCategory</role>
+            <key class="long">10</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="list">
+                <org.yes.cart.domain.entity.impl.ShopCategoryEntity
+                        reference="../../bag/org.yes.cart.domain.entity.impl.ShopCategoryEntity"/>
+                <org.yes.cart.domain.entity.impl.ShopCategoryEntity
+                        reference="../../bag/org.yes.cart.domain.entity.impl.ShopCategoryEntity[2]"/>
+                <org.yes.cart.domain.entity.impl.ShopCategoryEntity
+                        reference="../../bag/org.yes.cart.domain.entity.impl.ShopCategoryEntity[3]"/>
+                <org.yes.cart.domain.entity.impl.ShopCategoryEntity
+                        reference="../../bag/org.yes.cart.domain.entity.impl.ShopCategoryEntity[4]"/>
+                <org.yes.cart.domain.entity.impl.ShopCategoryEntity
+                        reference="../../bag/org.yes.cart.domain.entity.impl.ShopCategoryEntity[5]"/>
+                <org.yes.cart.domain.entity.impl.ShopCategoryEntity
+                        reference="../../bag/org.yes.cart.domain.entity.impl.ShopCategoryEntity[6]"/>
+                <org.yes.cart.domain.entity.impl.ShopCategoryEntity
+                        reference="../../bag/org.yes.cart.domain.entity.impl.ShopCategoryEntity[7]"/>
+                <org.yes.cart.domain.entity.impl.ShopCategoryEntity
+                        reference="../../bag/org.yes.cart.domain.entity.impl.ShopCategoryEntity[8]"/>
+                <org.yes.cart.domain.entity.impl.ShopCategoryEntity
+                        reference="../../bag/org.yes.cart.domain.entity.impl.ShopCategoryEntity[9]"/>
+                <org.yes.cart.domain.entity.impl.ShopCategoryEntity
+                        reference="../../bag/org.yes.cart.domain.entity.impl.ShopCategoryEntity[10]"/>
+                <org.yes.cart.domain.entity.impl.ShopCategoryEntity
+                        reference="../../bag/org.yes.cart.domain.entity.impl.ShopCategoryEntity[11]"/>
+            </storedSnapshot>
+        </shopCategory>
+        <shopId>10</shopId>
+    </shop>
+    <shop>
+        <code>SHOIP2</code>
+        <name>Mobile universe</name>
+        <description>Mobile universe shop</description>
+        <fspointer>mobile</fspointer>
+        <imageVaultFolder>mobile/imagevault</imageVaultFolder>
+        <shopUrl class="org.hibernate.collection.internal.PersistentSet">
+            <set>
+                <shopurl>
+                    <url>www.mobile.yescart.org</url>
+                    <shop class="shop" reference="../../../.."/>
+                    <storeUrlId>21</storeUrlId>
+                </shopurl>
+                <shopurl>
+                    <url>mobile.yescart.org</url>
+                    <shop class="shop" reference="../../../.."/>
+                    <storeUrlId>20</storeUrlId>
+                </shopurl>
+            </set>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.shopUrl</role>
+            <key class="long">20</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="map">
+                <entry>
+                    <shopurl reference="../../../set/shopurl"/>
+                    <shopurl reference="../../../set/shopurl"/>
+                </entry>
+                <entry>
+                    <shopurl reference="../../../set/shopurl[2]"/>
+                    <shopurl reference="../../../set/shopurl[2]"/>
+                </entry>
+            </storedSnapshot>
+        </shopUrl>
+        <exchangerates class="org.hibernate.collection.internal.PersistentBag">
+            <bag/>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.exchangerates</role>
+            <key class="long">20</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="list"/>
+        </exchangerates>
+        <advertisingPlaces class="org.hibernate.collection.internal.PersistentBag">
+            <bag/>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.advertisingPlaces</role>
+            <key class="long">20</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="list"/>
+        </advertisingPlaces>
+        <shopDiscountRules class="org.hibernate.collection.internal.PersistentBag">
+            <bag/>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.shopDiscountRules</role>
+            <key class="long">20</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="list"/>
+        </shopDiscountRules>
+        <attribute class="org.hibernate.collection.internal.PersistentBag">
+            <bag/>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.attribute</role>
+            <key class="long">20</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="list"/>
+        </attribute>
+        <shopCategory class="org.hibernate.collection.internal.PersistentBag">
+            <bag/>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.shopCategory</role>
+            <key class="long">20</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="list"/>
+        </shopCategory>
+        <shopId>20</shopId>
+    </shop>
+    <shop>
+        <code>SHOIP3</code>
+        <name>Game universe</name>
+        <description>Game universe shop</description>
+        <fspointer>game</fspointer>
+        <imageVaultFolder>game/imagevault</imageVaultFolder>
+        <shopUrl class="org.hibernate.collection.internal.PersistentSet">
+            <set>
+                <shopurl>
+                    <url>www.game.yescart.org</url>
+                    <shop class="shop" reference="../../../.."/>
+                    <storeUrlId>31</storeUrlId>
+                </shopurl>
+                <shopurl>
+                    <url>game.yescart.org</url>
+                    <shop class="shop" reference="../../../.."/>
+                    <storeUrlId>30</storeUrlId>
+                </shopurl>
+            </set>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.shopUrl</role>
+            <key class="long">30</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="map">
+                <entry>
+                    <shopurl reference="../../../set/shopurl"/>
+                    <shopurl reference="../../../set/shopurl"/>
+                </entry>
+                <entry>
+                    <shopurl reference="../../../set/shopurl[2]"/>
+                    <shopurl reference="../../../set/shopurl[2]"/>
+                </entry>
+            </storedSnapshot>
+        </shopUrl>
+        <exchangerates class="org.hibernate.collection.internal.PersistentBag">
+            <bag/>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.exchangerates</role>
+            <key class="long">30</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="list"/>
+        </exchangerates>
+        <advertisingPlaces class="org.hibernate.collection.internal.PersistentBag">
+            <bag/>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.advertisingPlaces</role>
+            <key class="long">30</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="list"/>
+        </advertisingPlaces>
+        <shopDiscountRules class="org.hibernate.collection.internal.PersistentBag">
+            <bag/>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.shopDiscountRules</role>
+            <key class="long">30</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="list"/>
+        </shopDiscountRules>
+        <attribute class="org.hibernate.collection.internal.PersistentBag">
+            <bag/>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.attribute</role>
+            <key class="long">30</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="list"/>
+        </attribute>
+        <shopCategory class="org.hibernate.collection.internal.PersistentBag">
+            <bag/>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.shopCategory</role>
+            <key class="long">30</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="list"/>
+        </shopCategory>
+        <shopId>30</shopId>
+    </shop>
+    <shop>
+        <code>SHOIP4</code>
+        <name>Shop without assigned categories</name>
+        <description>Shop without assigned categories used in test</description>
+        <fspointer>/dev/none</fspointer>
+        <imageVaultFolder>none/imagevault</imageVaultFolder>
+        <shopUrl class="org.hibernate.collection.internal.PersistentSet">
+            <set>
+                <shopurl>
+                    <url>eddie.lives.somewhere.in.time</url>
+                    <shop class="shop" reference="../../../.."/>
+                    <storeUrlId>32</storeUrlId>
+                </shopurl>
+            </set>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.shopUrl</role>
+            <key class="long">40</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="map">
+                <entry>
+                    <shopurl reference="../../../set/shopurl"/>
+                    <shopurl reference="../../../set/shopurl"/>
+                </entry>
+            </storedSnapshot>
+        </shopUrl>
+        <exchangerates class="org.hibernate.collection.internal.PersistentBag">
+            <bag/>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.exchangerates</role>
+            <key class="long">40</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="list"/>
+        </exchangerates>
+        <advertisingPlaces class="org.hibernate.collection.internal.PersistentBag">
+            <bag/>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.advertisingPlaces</role>
+            <key class="long">40</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="list"/>
+        </advertisingPlaces>
+        <shopDiscountRules class="org.hibernate.collection.internal.PersistentBag">
+            <bag/>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.shopDiscountRules</role>
+            <key class="long">40</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="list"/>
+        </shopDiscountRules>
+        <attribute class="org.hibernate.collection.internal.PersistentBag">
+            <bag/>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.attribute</role>
+            <key class="long">40</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="list"/>
+        </attribute>
+        <shopCategory class="org.hibernate.collection.internal.PersistentBag">
+            <bag/>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.shopCategory</role>
+            <key class="long">40</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="list"/>
+        </shopCategory>
+        <shopId>40</shopId>
+    </shop>
+    <shop>
+        <code>SHOIP5</code>
+        <name>Shop with limited assigned categories</name>
+        <description>Shop with limited assigned categories used in test</description>
+        <fspointer>/dev/none</fspointer>
+        <imageVaultFolder>none/imagevault</imageVaultFolder>
+        <shopUrl class="org.hibernate.collection.internal.PersistentSet">
+            <set>
+                <shopurl>
+                    <url>long.live.robots</url>
+                    <shop class="shop" reference="../../../.."/>
+                    <storeUrlId>33</storeUrlId>
+                </shopurl>
+            </set>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.shopUrl</role>
+            <key class="long">50</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="map">
+                <entry>
+                    <shopurl reference="../../../set/shopurl"/>
+                    <shopurl reference="../../../set/shopurl"/>
+                </entry>
+            </storedSnapshot>
+        </shopUrl>
+        <exchangerates class="org.hibernate.collection.internal.PersistentBag">
+            <bag/>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.exchangerates</role>
+            <key class="long">50</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="list"/>
+        </exchangerates>
+        <advertisingPlaces class="org.hibernate.collection.internal.PersistentBag">
+            <bag/>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.advertisingPlaces</role>
+            <key class="long">50</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="list"/>
+        </advertisingPlaces>
+        <shopDiscountRules class="org.hibernate.collection.internal.PersistentBag">
+            <bag/>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.shopDiscountRules</role>
+            <key class="long">50</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="list"/>
+        </shopDiscountRules>
+        <attribute class="org.hibernate.collection.internal.PersistentBag">
+            <bag/>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.attribute</role>
+            <key class="long">50</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="list"/>
+        </attribute>
+        <shopCategory class="org.hibernate.collection.internal.PersistentBag">
+            <bag>
+                <org.yes.cart.domain.entity.impl.ShopCategoryEntity>
+                    <rank>5</rank>
+                    <shop class="shop" reference="../../../.."/>
+                    <category class="org.yes.cart.domain.entity.Category_$$_javassist_46"
+                              resolves-to="org.hibernate.proxy.pojo.javassist.SerializableProxy">
+                        <persistentClass>org.yes.cart.domain.entity.Category</persistentClass>
+                        <interfaces>
+                            <java-class>org.yes.cart.domain.entity.Category</java-class>
+                            <java-class>org.hibernate.proxy.HibernateProxy</java-class>
+                        </interfaces>
+                        <getIdentifierMethodClass>org.yes.cart.domain.entity.Category</getIdentifierMethodClass>
+                        <setIdentifierMethodClass>org.yes.cart.domain.entity.Category</setIdentifierMethodClass>
+                        <getIdentifierMethodName>getCategoryId</getIdentifierMethodName>
+                        <setIdentifierMethodName>setCategoryId</setIdentifierMethodName>
+                        <setIdentifierMethodParams>
+                            <java-class>long</java-class>
+                        </setIdentifierMethodParams>
+                        <entityName>org.yes.cart.domain.entity.Category</entityName>
+                        <id class="long">200</id>
+                    </category>
+                    <shopCategoryId>150</shopCategoryId>
+                </org.yes.cart.domain.entity.impl.ShopCategoryEntity>
+            </bag>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.shopCategory</role>
+            <key class="long">50</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="list">
+                <org.yes.cart.domain.entity.impl.ShopCategoryEntity
+                        reference="../../bag/org.yes.cart.domain.entity.impl.ShopCategoryEntity"/>
+            </storedSnapshot>
+        </shopCategory>
+        <shopId>50</shopId>
+    </shop>
+    <shop>
+        <code>JEWEL_SHOP</code>
+        <name>To pass bulk import test</name>
+        <description>Shop with limited assigned categories used in test</description>
+        <fspointer>/dev/none</fspointer>
+        <imageVaultFolder>none/imagevault</imageVaultFolder>
+        <shopUrl class="org.hibernate.collection.internal.PersistentSet">
+            <set/>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.shopUrl</role>
+            <key class="long">60</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="map"/>
+        </shopUrl>
+        <exchangerates class="org.hibernate.collection.internal.PersistentBag">
+            <bag/>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.exchangerates</role>
+            <key class="long">60</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="list"/>
+        </exchangerates>
+        <advertisingPlaces class="org.hibernate.collection.internal.PersistentBag">
+            <bag/>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.advertisingPlaces</role>
+            <key class="long">60</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="list"/>
+        </advertisingPlaces>
+        <shopDiscountRules class="org.hibernate.collection.internal.PersistentBag">
+            <bag/>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.shopDiscountRules</role>
+            <key class="long">60</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="list"/>
+        </shopDiscountRules>
+        <attribute class="org.hibernate.collection.internal.PersistentBag">
+            <bag/>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.attribute</role>
+            <key class="long">60</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="list"/>
+        </attribute>
+        <shopCategory class="org.hibernate.collection.internal.PersistentBag">
+            <bag/>
+            <initialized>true</initialized>
+            <owner class="shop" reference="../.."/>
+            <cachedSize>-1</cachedSize>
+            <role>org.yes.cart.domain.entity.impl.ShopEntity.shopCategory</role>
+            <key class="long">60</key>
+            <dirty>false</dirty>
+            <storedSnapshot class="list"/>
+        </shopCategory>
+        <shopId>60</shopId>
+    </shop>
+</yes-report>
