@@ -39,9 +39,10 @@ public class DtoAssociationServiceImplTezt extends BaseCoreDBTestCase {
     private DtoFactory dtoFactory;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         dtoAssociationService = (DtoAssociationService) ctx().getBean(ServiceSpringKeys.DTO_ASSOCIATION_SERVICE);
         dtoFactory = (DtoFactory) ctx().getBean(ServiceSpringKeys.DTO_FACTORY);
+        super.setUp();
     }
 
     @Test

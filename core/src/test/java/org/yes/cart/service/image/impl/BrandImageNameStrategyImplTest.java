@@ -34,8 +34,9 @@ public class BrandImageNameStrategyImplTest extends BaseCoreDBTestCase {
     private ImageNameStrategy imageNameStrategy;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         imageNameStrategy = (ImageNameStrategy) ctx().getBean(ServiceSpringKeys.BRAND_IMAGE_NAME_STRATEGY);
+        super.setUp();
     }
 
     @Test

@@ -45,12 +45,13 @@ public class ProcessAllocationOrderEventHandlerImplTest extends AbstractEventHan
     private SkuWarehouseService skuWarehouseService;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp()  {
         handler = (ProcessAllocationOrderEventHandlerImpl) ctx().getBean("processAllocationOrderEventHandler");
         orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
         productSkuService = (ProductSkuService) ctx().getBean("productSkuService");
         skuWarehouseService = (SkuWarehouseService) ctx().getBean("skuWarehouseService");
         warehouseService = (WarehouseService) ctx().getBean("warehouseService");
+        super.setUp();
     }
 
     @Test

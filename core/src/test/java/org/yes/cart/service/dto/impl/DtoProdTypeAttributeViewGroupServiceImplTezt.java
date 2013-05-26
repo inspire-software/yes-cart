@@ -43,11 +43,12 @@ public class DtoProdTypeAttributeViewGroupServiceImplTezt  extends BaseCoreDBTes
 
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
 
         dtoProductTypeService = (DtoProductTypeService) ctx().getBean(ServiceSpringKeys.DTO_PRODUCT_TYPE_SERVICE);
         dtoProdTypeAttributeViewGroupService = (DtoProdTypeAttributeViewGroupService) ctx().getBean(ServiceSpringKeys.DTO_PRODUCT_TYPE_AV_SERVICE);
 
+        super.setUp();
 
     }
 

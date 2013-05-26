@@ -16,6 +16,7 @@
 package org.yes.cart.domain.entity.impl;
 
 
+import org.hibernate.annotations.Cascade;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Warehouse;
 
@@ -61,6 +62,11 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SKU_ID", nullable = false)
+    @Cascade({
+            org.hibernate.annotations.CascadeType.PERSIST,
+            org.hibernate.annotations.CascadeType.MERGE,
+            org.hibernate.annotations.CascadeType.REFRESH
+    })
     public ProductSku getSku() {
         return this.sku;
     }

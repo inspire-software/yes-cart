@@ -64,7 +64,7 @@ public class ShipmentCompleteOrderEventHandlerImplTest extends AbstractEventHand
     private ProductSkuService productSkuService;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp()  {
         paymentProcessorFactory = (PaymentProcessorFactory) ctx().getBean(ServiceSpringKeys.PAYMENT_PROCESSOR_FACTORY);
         handler = (ShipmentCompleteOrderEventHandlerImpl) ctx().getBean("shipmentCompleteOrderEventHandler");
         orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
@@ -73,6 +73,7 @@ public class ShipmentCompleteOrderEventHandlerImplTest extends AbstractEventHand
         pendingHandler = (PendingOrderEventHandlerImpl) ctx().getBean("pendingOrderEventHandler");
         warehouseService = (WarehouseService) ctx().getBean("warehouseService");
         productSkuService = (ProductSkuService) ctx().getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE);
+        super.setUp();
     }
 
     @Test

@@ -279,6 +279,15 @@ public interface GenericDAO<T, PK extends Serializable> {
      */
     int fullTextSearchReindex(PK primaryKey);
 
+    /**
+     * Force reindex given entity.
+     *
+     * @param primaryKey to reindex.
+     * @param purgeOnly true in case if need purge without reindexing from search index
+     * @return document quantity in index
+     */
+    int fullTextSearchReindex(PK primaryKey, boolean purgeOnly);
+
 
     /**
      * Get the full text search result.
@@ -394,6 +403,9 @@ public interface GenericDAO<T, PK extends Serializable> {
      * Flush clear.
      */
     void flushClear();
+
+
+    void clear();
 
 
 }

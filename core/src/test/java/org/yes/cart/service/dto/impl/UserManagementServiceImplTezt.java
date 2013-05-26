@@ -40,9 +40,10 @@ public class UserManagementServiceImplTezt extends BaseCoreDBTestCase {
     private ManagerService managerService;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         managementService = (ManagementService) ctx().getBean(ServiceSpringKeys.USER_MANAGMENT_SERVICE);
         managerService = (ManagerService) ctx().getBean(ServiceSpringKeys.MANAGER_SERVICE);
+        super.setUp();
     }
 
     @Test

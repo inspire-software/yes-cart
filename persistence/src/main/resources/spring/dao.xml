@@ -46,7 +46,9 @@
                 <prop key="executeNative*">PROPAGATION_REQUIRED</prop>
                 <prop key="doImport*">PROPAGATION_REQUIRED</prop>
                 <prop key="getEntityFactory">PROPAGATION_SUPPORTS,readOnly</prop>
+                <prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
                 <prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+
             </props>
         </property>
     </bean>
@@ -128,489 +130,276 @@
     </bean>
 
 
-    <bean id="genericDao"  parent="txProxyTemplate">
-        <property name="target">
-                         
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>java.lang.Object</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="genericDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>java.lang.Object</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
 
-    <bean id="etypeDao"  parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.EtypeEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>                
-            </bean>
-        </property>
+    <bean  id="etypeDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.EtypeEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="attributeGroupDao"  parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.AttributeGroupEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="attributeGroupDao"  class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.AttributeGroupEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="attributeDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.AttributeEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="attributeDao"  class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.AttributeEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="attrValueEntityCategoryDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.AttrValueEntityCategory</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="attrValueEntityCategoryDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.AttrValueEntityCategory</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="attrValueEntityProductDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.AttrValueEntityProduct</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="attrValueEntityProductDao"  class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.AttrValueEntityProduct</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="addressDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.AddressEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="addressDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.AddressEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-
-
-    <bean id="customerWishListDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.CustomerWishListEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="customerWishListDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.CustomerWishListEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="attrValueEntityProductSkuDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.AttrValueEntityProductSku</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="attrValueEntityProductSkuDao"  class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.AttrValueEntityProductSku</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="attrValueEntityBrandDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.AttrValueEntityBrand</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="attrValueEntityBrandDao"  class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.AttrValueEntityBrand</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="attrValueEntityShopDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.AttrValueEntityShop</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="attrValueEntityShopDao"  class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.AttrValueEntityShop</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="attrValueEntitySystemDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.AttrValueEntitySystem</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="attrValueEntitySystemDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.AttrValueEntitySystem</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="attrValueEntityCustomerDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.AttrValueEntityCustomer</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="attrValueEntityCustomerDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.AttrValueEntityCustomer</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="brandDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.BrandEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="brandDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.BrandEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-
-
-    <bean id="carrierDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.CarrierEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="carrierDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.CarrierEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="carrierSlaDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.CarrierSlaEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="carrierSlaDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.CarrierSlaEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-
-    <bean id="countryDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.CountryEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="countryDao"  class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.CountryEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="stateDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.StateEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="stateDao"  class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.StateEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <!--bean id="settingsDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.SettingsEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
-    </bean-->
-
-    <!--bean id="shopSettingsDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.ShopSettingsEntity</value></constructor-arg>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
-    </bean--> 
-
-    <bean id="systemDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.SystemEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="systemDao"  class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.SystemEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="shopDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.ShopEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="shopDao"  class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.ShopEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="categoryDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.CategoryEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean  id="categoryDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.CategoryEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="productDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.ProductEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="productDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.ProductEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="prodTypeAttributeViewGroupDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.ProdTypeAttributeViewGroupEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="prodTypeAttributeViewGroupDao"  class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.ProdTypeAttributeViewGroupEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="productSkuDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.ProductSkuEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="productSkuDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.ProductSkuEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-
-
-
-    <bean id="productTypeDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.ProductTypeEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean  id="productTypeDao"  class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.ProductTypeEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="productTypeAttrDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.ProductTypeAttrEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="productTypeAttrDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.ProductTypeAttrEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="productCategoryDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.ProductCategoryEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="productCategoryDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.ProductCategoryEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="seoImageDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.SeoImageEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="seoImageDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.SeoImageEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="associationDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.AssociationEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="associationDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.AssociationEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="productAssociationDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.ProductAssociationEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="productAssociationDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.ProductAssociationEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-
-
-    <bean id="warehouseDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.WarehouseEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="warehouseDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.WarehouseEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="shopWarehouseDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.ShopWarehouseEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="shopWarehouseDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.ShopWarehouseEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="skuWarehouseDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.SkuWarehouseEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="skuWarehouseDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.SkuWarehouseEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="shopTopSellerDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.ShopTopSellerEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="shopTopSellerDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.ShopTopSellerEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="skuPriceDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.SkuPriceEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="skuPriceDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.SkuPriceEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="managerDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.ManagerEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="managerDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.ManagerEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="managerRoleDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.ManagerRoleEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="managerRoleDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.ManagerRoleEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="roleDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.RoleEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="roleDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.RoleEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-
-    <bean id="shopUrlDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.ShopUrlEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="shopUrlDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.ShopUrlEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="shopExchangeRateDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.ShopExchangeRateEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="shopExchangeRateDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.ShopExchangeRateEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="seoDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.SeoEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="seoDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.SeoEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="shopCategoryDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.ShopCategoryEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="shopCategoryDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.ShopCategoryEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="customerOrderDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.CustomerOrderEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="customerOrderDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.CustomerOrderEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="customerOrderDeliveryDetDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.CustomerOrderDeliveryDetEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="customerOrderDeliveryDetDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.CustomerOrderDeliveryDetEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-
-    <bean id="customerDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.CustomerEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="customerDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.CustomerEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
-
 
 
 </beans>

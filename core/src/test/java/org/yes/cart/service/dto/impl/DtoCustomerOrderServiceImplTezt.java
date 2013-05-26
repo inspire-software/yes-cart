@@ -46,9 +46,10 @@ public class DtoCustomerOrderServiceImplTezt extends BaseCoreDBTestCase {
     private CustomerOrderService customerOrderService;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         dtoService = (DtoCustomerOrderService) ctx().getBean(ServiceSpringKeys.DTO_CUSTOMER_ORDER_SERVICE);
         customerOrderService = (CustomerOrderService) ctx().getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
+        super.setUp();
     }
 
     @Test(expected = UnableToCreateInstanceException.class)

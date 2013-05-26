@@ -24,6 +24,7 @@ import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderAssembler;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.impl.*;
@@ -46,16 +47,17 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
 
     private OrderAssembler orderAssembler;
     private DeliveryAssemblerImpl deliveryAssembler;
-    private GenericDAO<CustomerOrder, Long> customerOrderDao;
+    //private GenericDAO<CustomerOrder, Long> customerOrderDao;
+    private CustomerOrderService customerOrderService;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         orderAssembler = (OrderAssembler) ctx().getBean(ServiceSpringKeys.ORDER_ASSEMBLER);
-        customerOrderDao = (GenericDAO<CustomerOrder, Long>) ctx().getBean("customerOrderDao");
+        customerOrderService =  ctx().getBean("customerOrderService", CustomerOrderService.class);
         deliveryAssembler = (DeliveryAssemblerImpl) ctx().getBean(ServiceSpringKeys.DELIVERY_ASSEMBLER);
+        super.setUp();
     }
 
-    @Ignore("expected:<2> but was:<1>")
     @Test
     public void testGetDeliveryGroups() {
         Customer customer = createCustomer();
@@ -141,7 +143,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         assertNotNull("Customer can not be null", shoppingCart.getCustomerEmail());
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, false);
-        customerOrder = customerOrderDao.create(customerOrder);
+        customerOrder = customerOrderService.create(customerOrder);
         assertTrue(customerOrder.getCustomerorderId() > 0);
         for (CustomerOrderDelivery cod : customerOrder.getDelivery()) {
             assertTrue(cod.getCustomerOrderDeliveryId() > 0);

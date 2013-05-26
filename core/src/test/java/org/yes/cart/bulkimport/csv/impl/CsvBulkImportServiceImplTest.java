@@ -55,11 +55,12 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
     private final Mockery mockery = new JUnit4Mockery();
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp()  {
 
         if (bulkImportService == null) {
             bulkImportService = (BulkImportService) createContext().getBean("csvBulkImportService");
         }
+        super.setUp();
 
 
     }

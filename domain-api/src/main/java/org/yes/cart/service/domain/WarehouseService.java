@@ -53,6 +53,14 @@ public interface WarehouseService extends GenericService<Warehouse> {
      */
     ShopWarehouse assignWarehouse(long warehouseId, long shopId);
 
+
+    /**
+     * Get shop warehouse by his id.
+     * @param shopWarehouseId  given id
+     * @return   entity
+     */
+    ShopWarehouse findShopWarehouseById(long shopWarehouseId);
+
     /**
      * Unassign given warehouse from shop
      *

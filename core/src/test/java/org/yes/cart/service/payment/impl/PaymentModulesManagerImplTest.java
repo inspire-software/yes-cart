@@ -54,12 +54,12 @@ public class PaymentModulesManagerImplTest extends BaseCoreDBTestCase {
 
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         
         
         paymentModulesManager = (PaymentModulesManager) ctx().getBean(ServiceSpringKeys.PAYMENT_MODULES_MANAGER);
 
-
+        super.setUp();
 
 
     }

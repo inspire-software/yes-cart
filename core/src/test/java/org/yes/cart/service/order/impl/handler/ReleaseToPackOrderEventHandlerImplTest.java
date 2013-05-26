@@ -38,9 +38,10 @@ public class ReleaseToPackOrderEventHandlerImplTest extends AbstractEventHandler
     private ReleaseToPackOrderEventHandlerImpl handler;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp()  {
         handler = (ReleaseToPackOrderEventHandlerImpl) ctx().getBean("releaseToPackOrderEventHandler");
         orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
+        super.setUp();
     }
 
     @Test

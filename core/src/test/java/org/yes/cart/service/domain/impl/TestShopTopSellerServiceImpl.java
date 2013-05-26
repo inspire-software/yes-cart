@@ -25,6 +25,7 @@ import org.yes.cart.dao.constants.DaoServiceBeanKeys;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.ShopTopSeller;
+import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.ShopTopSellerService;
 import org.yes.cart.service.order.OrderAssembler;
 import org.yes.cart.shoppingcart.ShoppingCart;
@@ -47,15 +48,14 @@ public class TestShopTopSellerServiceImpl extends BaseCoreDBTestCase {
 
     private ShopTopSellerService shopTopSellerService;
     private OrderAssembler orderAssembler;
-    private GenericDAO<CustomerOrder, Long> customerOrderDao;
-    private GenericDAO<ShopTopSeller, Long> shopTopSellerDao;
+    private CustomerOrderService customerOrderService;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         shopTopSellerService = (ShopTopSellerService) ctx().getBean(ServiceSpringKeys.SHOP_TOP_SELLER_SERVICE);
         orderAssembler = (OrderAssembler) ctx().getBean(ServiceSpringKeys.ORDER_ASSEMBLER);
-        customerOrderDao = (GenericDAO<CustomerOrder, Long>) ctx().getBean(DaoServiceBeanKeys.CUSTOMER_ORDER_DAO);
-        shopTopSellerDao = (GenericDAO<ShopTopSeller, Long>) ctx().getBean(DaoServiceBeanKeys.SHOP_TOP_SELLLER_DAO);
+        customerOrderService = ctx().getBean("customerOrderService", CustomerOrderService.class);
+        super.setUp();
     }
 
     // TODO: YC-64 fix to not depend on order of running
@@ -74,13 +74,13 @@ public class TestShopTopSellerServiceImpl extends BaseCoreDBTestCase {
         Customer customer = createCustomer();
         ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail());
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
-        customerOrderDao.create(customerOrder);
+        customerOrderService.create(customerOrder);
         Customer customer2 = createCustomer2();
         ShoppingCart shoppingCart2 = getShoppingCart2(customer2.getEmail());
         CustomerOrder customerOrder2 = orderAssembler.assembleCustomerOrder(shoppingCart2);
-        customerOrderDao.create(customerOrder2);
+        customerOrderService.create(customerOrder2);
         shopTopSellerService.updateTopSellers(10);
-        List<ShopTopSeller> allTopSellers = shopTopSellerDao.findAll();
+        List<ShopTopSeller> allTopSellers = shopTopSellerService.findAll();
         for (ShopTopSeller ts : allTopSellers) {
             Long key = ts.getProduct().getId();
             BigDecimal expectedCounter = expectation.remove(key);

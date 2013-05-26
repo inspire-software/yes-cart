@@ -43,7 +43,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
 
     private final HashHelper hashHelper;
 
-    private final GenericDAO<Shop, Long> shopDao;
+    private final GenericDAO<Object, Long> customerShopDao;
 
     private final AttributeService attributeService;
 
@@ -53,15 +53,15 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      *
      * @param genericDao customer dao to use.
      * @param hashHelper to generate password hash
-     * @param shopDao    to assing o shop
+     * @param customerShopDao    to delete
      */
     public CustomerServiceImpl(final GenericDAO<Customer, Long> genericDao,
                                final HashHelper hashHelper,
-                               final GenericDAO<Shop, Long> shopDao,
+                               final GenericDAO<Object, Long> customerShopDao,
                                final AttributeService attributeService) {
         super(genericDao);
         this.hashHelper = hashHelper;
-        this.shopDao = shopDao;
+        this.customerShopDao = customerShopDao;
         this.attributeService = attributeService;
     }
 
@@ -233,4 +233,13 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
         getGenericDao().update(customer);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void delete(final Customer instance) {
+        for(CustomerShop cshop : instance.getShops()) {
+            customerShopDao.delete(cshop);
+        }
+        super.delete(instance);
+    }
 }

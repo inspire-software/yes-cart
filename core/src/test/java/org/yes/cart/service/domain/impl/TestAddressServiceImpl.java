@@ -41,10 +41,11 @@ public class TestAddressServiceImpl extends BaseCoreDBTestCase {
     private ShopService shopService;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         addressService = (AddressService) ctx().getBean(ServiceSpringKeys.ADDRESS_SERVICE);
         customerService = (CustomerService) ctx().getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
         shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
+        super.setUp();
     }
 
     @Test

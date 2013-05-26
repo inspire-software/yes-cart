@@ -146,7 +146,7 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
         this.orderDetail = orderDetail;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "customerOrder")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "customerOrder", orphanRemoval = true)
     public Collection<CustomerOrderDelivery> getDelivery() {
         return this.delivery;
     }

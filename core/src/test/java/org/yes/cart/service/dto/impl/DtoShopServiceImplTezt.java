@@ -35,8 +35,9 @@ public class DtoShopServiceImplTezt extends BaseCoreDBTestCase {
     private DtoShopService dtoShopService ;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         dtoShopService = (DtoShopService) ctx().getBean(ServiceSpringKeys.DTO_SHOP_SERVICE);
+        super.setUp();
     }
 
     @Test

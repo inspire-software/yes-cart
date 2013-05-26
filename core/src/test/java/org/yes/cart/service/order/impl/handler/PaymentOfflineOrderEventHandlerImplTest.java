@@ -37,9 +37,10 @@ public class PaymentOfflineOrderEventHandlerImplTest extends AbstractEventHandle
     private PaymentOfflineOrderEventHandlerImpl handler;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         handler = (PaymentOfflineOrderEventHandlerImpl) ctx().getBean("paymentOfflineOrderEventHandler");
         orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
+        super.setUp();
     }
 
     @Test

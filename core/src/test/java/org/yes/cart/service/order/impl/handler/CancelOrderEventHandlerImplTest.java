@@ -37,9 +37,10 @@ public class CancelOrderEventHandlerImplTest extends AbstractEventHandlerImplTes
     private CancelOrderEventHandlerImpl handler;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         handler = (CancelOrderEventHandlerImpl) ctx().getBean("cancelOrderEventHandler");
         orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
+        super.setUp();
     }
 
     // FIX to allow running from IDE

@@ -38,9 +38,10 @@ public class ProcessTimeWaitOrderEventHandlerImplTest extends AbstractEventHandl
     private ProcessTimeWaitOrderEventHandlerImpl handler;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         handler = (ProcessTimeWaitOrderEventHandlerImpl) ctx().getBean("processTimeWaitOrderEventHandler");
         orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
+        super.setUp();
     }
 
     @Test

@@ -42,8 +42,9 @@ public class TestAttributeServiceImpl extends BaseCoreDBTestCase {
     private AttributeService attributeService;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         attributeService = (AttributeService) ctx().getBean(ServiceSpringKeys.ATTRIBUTE_SERVICE);
+        super.setUp();
     }
 
     // TODO: YC-64 fix to not depend on order or running

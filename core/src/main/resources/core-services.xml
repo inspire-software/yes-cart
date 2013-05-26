@@ -141,9 +141,14 @@
     <!--     #############################   Image section begin   #############################    -->
     <bean id="categoryImageNameStrategy" class="org.yes.cart.service.image.impl.CategoryImageNameStrategyImpl"/>
 
-    <bean id="productImageNameStrategy" class="org.yes.cart.service.image.impl.ProductImageNameStrategyImpl">
-        <constructor-arg index="0" ref="attrValueEntityProductSkuDao"/>
-        <constructor-arg index="1" ref="attrValueEntityProductDao"/>
+
+    <bean id="productImageNameStrategy" parent="txProxyTemplate">
+        <property name="target">
+            <bean  class="org.yes.cart.service.image.impl.ProductImageNameStrategyImpl">
+                <constructor-arg index="0" ref="attrValueEntityProductSkuDao"/>
+                <constructor-arg index="1" ref="attrValueEntityProductDao"/>
+            </bean>
+        </property>
     </bean>
 
     <bean id="brandImageNameStrategy" class="org.yes.cart.service.image.impl.BrandImageNameStrategyImpl"/>
@@ -352,9 +357,10 @@
             <bean class="org.yes.cart.service.domain.impl.CustomerOrderServiceImpl">
                 <constructor-arg index="0"  ref="customerOrderDao"/>
                 <constructor-arg index="1"  ref="customerDao"/>
-                <constructor-arg index="2"  ref="orderAssembler"/>
-                <constructor-arg index="3"  ref="deliveryAssembler"/>
-                <constructor-arg index="4"  ref="customerOrderPaymentService"/>
+                <constructor-arg index="2"  ref="genericDao"/>
+                <constructor-arg index="3"  ref="orderAssembler"/>
+                <constructor-arg index="4"  ref="deliveryAssembler"/>
+                <constructor-arg index="5"  ref="customerOrderPaymentService"/>
             </bean>
         </property>
     </bean>
@@ -372,7 +378,7 @@
             <bean class="org.yes.cart.service.domain.impl.CustomerServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="customerDao"/>
                 <constructor-arg index="1" type="org.yes.cart.service.domain.HashHelper" ref="hashHelper"/>
-                <constructor-arg index="2" type="org.yes.cart.dao.GenericDAO" ref="shopDao"/>
+                <constructor-arg index="2" type="org.yes.cart.dao.GenericDAO" ref="genericDao"/>
                 <constructor-arg index="3" type="org.yes.cart.service.domain.AttributeService" ref="attributeService"/>
             </bean>
         </property>
@@ -995,24 +1001,30 @@
         <constructor-arg index="0" ref="customerOrderDao"/>
     </bean>
 
-    <bean id="orderAssembler" class="org.yes.cart.service.order.impl.OrderAssemblerImpl">
-        <constructor-arg index="0" ref="orderNumberGenerator"/>
-        <constructor-arg index="1" ref="customerDao"/>
-        <constructor-arg index="2" ref="shopDao"/>
-        <constructor-arg index="3" ref="productSkuDao"/>
-        <constructor-arg index="4" value="{0} {1} {2} {3} {4} {5} {6} {7} {8}"/>
-        <!-- Address format
-        0 - address line 1
-        1 - address line 2
-        2 - post(zip) code
-        3 - city
-        4 - country code
-        5 - county/state/provicne/area code
-        6 - first name
-        7 - last name
-        8 - contact phone(s) as string 
-        -->
+    <bean id="orderAssembler" parent="txProxyTemplate">
+        <property name="target">
+            <bean  class="org.yes.cart.service.order.impl.OrderAssemblerImpl">
+                <constructor-arg index="0" ref="orderNumberGenerator"/>
+                <constructor-arg index="1" ref="customerDao"/>
+                <constructor-arg index="2" ref="shopDao"/>
+                <constructor-arg index="3" ref="productSkuDao"/>
+                <constructor-arg index="4" value="{0} {1} {2} {3} {4} {5} {6} {7} {8}"/>
+                <!-- Address format
+                0 - address line 1
+                1 - address line 2
+                2 - post(zip) code
+                3 - city
+                4 - country code
+                5 - county/state/provicne/area code
+                6 - first name
+                7 - last name
+                8 - contact phone(s) as string
+                -->
+            </bean>
+        </property>
     </bean>
+
+
 
     <bean id="deliveryAssembler" class="org.yes.cart.service.order.impl.DeliveryAssemblerImpl">
         <constructor-arg index="0" ref="warehouseService"/>
@@ -1206,20 +1218,27 @@
 
     <bean id="importDescriptorXStreamProvider" class="org.yes.cart.bulkimport.stream.xml.CsvImportDescriptorXStreamProvider"/>
 
-    <bean id="csvBulkImportService" class="org.yes.cart.bulkimport.csv.impl.CsvBulkImportServiceImpl" scope="prototype">
-        <property name="genericDAO" ref="genericDao"/>
-        <property name="extendedConversionService" ref="extendedConversionService"/>
-        <property name="importDescriptorXStreamProvider" ref="importDescriptorXStreamProvider"/>
+    <bean id="csvBulkImportService" parent="txProxyTemplate">
+        <property name="target">
+            <bean  class="org.yes.cart.bulkimport.csv.impl.CsvBulkImportServiceImpl" scope="prototype">
+                <property name="genericDAO" ref="genericDao"/>
+                <property name="extendedConversionService" ref="extendedConversionService"/>
+                <property name="importDescriptorXStreamProvider" ref="importDescriptorXStreamProvider"/>
+            </bean>
+        </property>
     </bean>
 
-    <bean id="bulkImportImageService" class="org.yes.cart.bulkimport.image.impl.BulkImportImagesServiceImpl" scope="prototype">
-        <constructor-arg index="0" ref="genericDao"/>
-        <constructor-arg index="1" ref="attributeService"/>
-        <constructor-arg index="2" ref="imageService"/>
-        <constructor-arg index="3" value="_([.[^_]]*)_[a-z]\.jpe?g$"/>
-        <constructor-arg index="4" value="(.*)\.jpe?g"/>
+    <bean id="bulkImportImageService" parent="txProxyTemplate">
+        <property name="target">
+            <bean  class="org.yes.cart.bulkimport.image.impl.BulkImportImagesServiceImpl" scope="prototype">
+                <constructor-arg index="0" ref="genericDao"/>
+                <constructor-arg index="1" ref="attributeService"/>
+                <constructor-arg index="2" ref="imageService"/>
+                <constructor-arg index="3" value="_([.[^_]]*)_[a-z]\.jpe?g$"/>
+                <constructor-arg index="4" value="(.*)\.jpe?g"/>
+            </bean>
+        </property>
     </bean>
-
 
 
 

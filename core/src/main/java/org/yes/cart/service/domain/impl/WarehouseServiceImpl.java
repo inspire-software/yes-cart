@@ -65,6 +65,13 @@ public class WarehouseServiceImpl extends BaseGenericServiceImpl<Warehouse> impl
     }
 
     /** {@inheritDoc} */
+    public ShopWarehouse findShopWarehouseById(long shopWarehouseId) {
+
+        return shopWarehouseDao.findById(shopWarehouseId);
+
+    }
+
+    /** {@inheritDoc} */
     public ShopWarehouse assignWarehouse(final long warehouseId, final long shopId) {
         final ShopWarehouse shopWarehouse = shopWarehouseDao.getEntityFactory().getByIface(ShopWarehouse.class);
         shopWarehouse.setWarehouse(getById(warehouseId));

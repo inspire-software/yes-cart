@@ -38,8 +38,9 @@ public class CarrierSlaServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         carrierService = (CarrierService) ctx().getBean(ServiceSpringKeys.CARRIER_SERVICE);
+        super.setUp();
     }
 
     @Test

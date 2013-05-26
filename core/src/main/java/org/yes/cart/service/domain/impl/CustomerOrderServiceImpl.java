@@ -20,6 +20,7 @@ import org.hibernate.criterion.Restrictions;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.DeliveryAssembler;
@@ -45,6 +46,8 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
 
     private final GenericDAO<Customer, Long> customerDao;
 
+    private final GenericDAO<Object, Long> genericDao;
+
     private final CustomerOrderPaymentService customerOrderPaymentService;
 
     /**
@@ -59,6 +62,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     public CustomerOrderServiceImpl(
             final GenericDAO<CustomerOrder, Long> customerOrderDao,
             final GenericDAO<Customer, Long> customerDao,
+            final GenericDAO<Object, Long> genericDao,
             final OrderAssembler orderAssembler,
             final DeliveryAssembler deliveryAssembler,
             final CustomerOrderPaymentService customerOrderPaymentService) {
@@ -67,6 +71,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
         this.deliveryAssembler = deliveryAssembler;
         this.customerDao = customerDao;
         this.customerOrderPaymentService = customerOrderPaymentService;
+        this.genericDao = genericDao;
     }
 
     /**
@@ -183,5 +188,13 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
         );
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
+    public void delete(final CustomerOrder instance) {
+        for (CustomerOrderDelivery delivery : instance.getDelivery()) {
+            this.genericDao.delete(delivery);
+        }
+        super.delete(instance);
+    }
 }

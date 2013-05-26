@@ -46,8 +46,9 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
     private CategoryService categoryService;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         categoryService = (CategoryService) ctx().getBean(ServiceSpringKeys.CATEGORY_SERVICE);
+        super.setUp();
     }
 
     @Test
@@ -122,12 +123,11 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
      */
     @Test
     public void testGetCategoryAttributeRecursive() {
-        GenericDAO<Category, Long> categoryDAO = (GenericDAO<Category, Long>) ctx().getBean(DaoServiceBeanKeys.CATEGORY_DAO);
-        String val = categoryService.getCategoryAttributeRecursive(null, categoryDAO.findById(105L), "SOME_NOT_EXISTING_ATTR", null);
+        String val = categoryService.getCategoryAttributeRecursive(null, categoryService.getById(105L), "SOME_NOT_EXISTING_ATTR", null);
         assertNull(val);
-        val = categoryService.getCategoryAttributeRecursive(null, categoryDAO.findById(105L), AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
+        val = categoryService.getCategoryAttributeRecursive(null, categoryService.getById(105L), AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
         assertEquals("10,20,50", val);
-        val = categoryService.getCategoryAttributeRecursive(null, categoryDAO.findById(139L), AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
+        val = categoryService.getCategoryAttributeRecursive(null, categoryService.getById(139L), AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
         assertEquals("6,12,24", val);
     }
 
@@ -136,9 +136,8 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
      */
     @Test
     public void testGetItemsPerPageTest() {
-        GenericDAO<Category, Long> categoryDAO = (GenericDAO<Category, Long>) ctx().getBean(DaoServiceBeanKeys.CATEGORY_DAO);
         // Category with seted CATEGORY_ITEMS_PER_PAGE
-        Category category = categoryDAO.findById(105L);
+        Category category = categoryService.getById(105L);
         assertNotNull(category);
         assertNotNull(category.getAttributeByCode(AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE));
         List<String> itemsPerPage = categoryService.getItemsPerPage(category);
@@ -148,7 +147,7 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
         assertEquals("20", itemsPerPage.get(1));
         assertEquals("50", itemsPerPage.get(2));
         // Failover part
-        category = categoryDAO.findById(139L);
+        category = categoryService.getById(139L);
         assertNotNull(category);
         assertNull(category.getAttributesByCode(AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE));
         itemsPerPage = categoryService.getItemsPerPage(category);
@@ -165,8 +164,7 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
      */
     @Test
     public void testGetUIVariationTest() {
-        GenericDAO<Category, Long> categoryDAO = (GenericDAO<Category, Long>) ctx().getBean(DaoServiceBeanKeys.CATEGORY_DAO);
-        Category category = categoryDAO.findById(139L);
+        Category category = categoryService.getById(139L);
         assertNotNull(category);
         assertNull(category.getUitemplate());
         String uiVariation = categoryService.getCategoryTemplateVariation(category);

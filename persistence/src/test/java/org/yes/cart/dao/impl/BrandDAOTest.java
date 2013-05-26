@@ -21,6 +21,10 @@ import org.hibernate.FetchMode;
 import org.hibernate.criterion.Restrictions;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.constants.DaoServiceBeanKeys;
@@ -45,46 +49,82 @@ public class BrandDAOTest extends AbstractTestDAO {
     private GenericDAO<Attribute, Long> attributeDAO;
     private GenericDAO<Brand, Long> brandDAO;
 
+
     @Before
     public void setUp() {
         attributeDAO = (GenericDAO<Attribute, Long>) ctx().getBean(DaoServiceBeanKeys.ATTRIBUTE_DAO);
         brandDAO = (GenericDAO<Brand, Long>) ctx().getBean(DaoServiceBeanKeys.BRAND_DAO);
+        super.setUp();
+
     }
 
     @Test
     public void testAddEmptyBrand() {
-        // create simple brand without attributes
-        Brand entity = new BrandEntity();
-        entity.setName("brandName without attributes");
-        long pk = brandDAO.create(entity).getBrandId();
-        assertTrue(entity.getBrandId() != 0);
-        assertTrue(entity.getAttributes().isEmpty());
-        List<Brand> brands = brandDAO.findByCriteria(Restrictions.eq("brandId", pk));
-        assertEquals(1, brands.size());
+        getTx().execute(new TransactionCallbackWithoutResult() {
+            public void doInTransactionWithoutResult(TransactionStatus status) {
+
+
+                // create simple brand without attributes
+                Brand entity = new BrandEntity();
+                entity.setName("brandName without attributes");
+                long pk = brandDAO.create(entity).getBrandId();
+                assertTrue(entity.getBrandId() != 0);
+                assertTrue(entity.getAttributes().isEmpty());
+                List<Brand> brands = brandDAO.findByCriteria(Restrictions.eq("brandId", pk));
+                assertEquals(1, brands.size());
+
+                status.setRollbackOnly();
+
+            }
+        });
+
     }
+
+    /*
+    getTx().execute(new TransactionCallbackWithoutResult() {
+        public void doInTransactionWithoutResult(TransactionStatus status) {
+
+
+
+            status.setRollbackOnly();
+
+        }
+    });
+    */
 
     @Test
     public void testAddBrandWithAttributeValues() {
-        Brand entityWithAttributes = new BrandEntity();
-        entityWithAttributes.setName("brandName with attributes");
-        Attribute attributeEntity = attributeDAO.findByCriteria(Restrictions.eq("code", "BRAND_IMAGE")).get(0);
-        AttrValueBrand attrValueBrandEntity = new AttrValueEntityBrand();
-        attrValueBrandEntity.setBrand(entityWithAttributes);
-        attrValueBrandEntity.setAttribute(attributeEntity);
-        attrValueBrandEntity.setVal("brand.jpg");
-        //BRAND_IMAGE
-        entityWithAttributes.getAttributes().add(attrValueBrandEntity);
-        long pk = brandDAO.create(entityWithAttributes).getBrandId();
-        List<Brand> brands = brandDAO.findByCriteria(
-                new CriteriaTuner() {
-                    public void tune(final Criteria crit) {
-                        crit.setFetchMode("attributes", FetchMode.JOIN);
-                    }
-                },
-                Restrictions.eq("brandId", pk)
-        );
-        assertEquals(1, brands.size());
-        entityWithAttributes = brands.get(0);
-        assertEquals(1, entityWithAttributes.getAttributes().size());
+
+        getTx().execute(new TransactionCallbackWithoutResult() {
+            public void doInTransactionWithoutResult(TransactionStatus status) {
+
+                Brand entityWithAttributes = new BrandEntity();
+                entityWithAttributes.setName("brandName with attributes");
+                Attribute attributeEntity = attributeDAO.findByCriteria(Restrictions.eq("code", "BRAND_IMAGE")).get(0);
+                AttrValueBrand attrValueBrandEntity = new AttrValueEntityBrand();
+                attrValueBrandEntity.setBrand(entityWithAttributes);
+                attrValueBrandEntity.setAttribute(attributeEntity);
+                attrValueBrandEntity.setVal("brand.jpg");
+                //BRAND_IMAGE
+                entityWithAttributes.getAttributes().add(attrValueBrandEntity);
+                long pk = brandDAO.create(entityWithAttributes).getBrandId();
+                List<Brand> brands = brandDAO.findByCriteria(
+                        new CriteriaTuner() {
+                            public void tune(final Criteria crit) {
+                                crit.setFetchMode("attributes", FetchMode.JOIN);
+                            }
+                        },
+                        Restrictions.eq("brandId", pk)
+                );
+                assertEquals(1, brands.size());
+                entityWithAttributes = brands.get(0);
+                assertEquals(1, entityWithAttributes.getAttributes().size());
+
+                status.setRollbackOnly();
+
+            }
+        });
+
+
     }
 }

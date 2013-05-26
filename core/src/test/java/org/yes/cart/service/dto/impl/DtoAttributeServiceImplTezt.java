@@ -41,9 +41,10 @@ public class DtoAttributeServiceImplTezt extends BaseCoreDBTestCase {
     private DtoFactory dtoFactory;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         dtoAttributeService = (DtoAttributeService) ctx().getBean(ServiceSpringKeys.DTO_ATTRIBUTE_SERVICE);
         dtoFactory = (DtoFactory) ctx().getBean(ServiceSpringKeys.DTO_FACTORY);
+        super.setUp();
     }
 
     @Test

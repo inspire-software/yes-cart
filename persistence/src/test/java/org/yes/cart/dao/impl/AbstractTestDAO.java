@@ -25,10 +25,13 @@ import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.operation.DatabaseOperation;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.ExternalResource;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -38,15 +41,28 @@ import java.io.FileOutputStream;
  * Date: 07-May-2011
  * Time: 16:13:01
  */
-public abstract class AbstractTestDAO {
+public abstract class AbstractTestDAO  {
 
     // Do not enable dump unless this is necessary as it is very slow.
-    private static final boolean ENABLED_DUMPS = false;
+    private static final boolean ENABLED_DUMPS = true;
 
     private ApplicationContext ctx;
     private SessionFactory sessionFactory;
     private Session session;
     private AbstractDatabaseTester dbTester;
+
+    private PlatformTransactionManager transactionManager;
+    private TransactionTemplate tx;
+
+    @Before
+    public void setUp()   {
+        transactionManager =   ctx().getBean("transactionManager", PlatformTransactionManager.class);
+        tx = new TransactionTemplate(transactionManager);
+    }
+
+    public TransactionTemplate getTx() {
+        return tx;
+    }
 
     @Rule
     public ExternalResource dbResource = new ExternalResource() {
@@ -95,7 +111,7 @@ public abstract class AbstractTestDAO {
         return new FlatXmlDataSet(getClass().getClassLoader().getResourceAsStream("initialdata.xml"), false);
     }
 
-    protected void dumpDataBase(final String prefix, final String[] tables) throws Exception {
+    protected void dumpDataBase(final String prefix, final String ... tables) throws Exception {
 
         if (!ENABLED_DUMPS) {
             System.out.println("DUMP: [DISABLED] - change parameter in AbstractTestDAO.ENABLED_DUMPS");

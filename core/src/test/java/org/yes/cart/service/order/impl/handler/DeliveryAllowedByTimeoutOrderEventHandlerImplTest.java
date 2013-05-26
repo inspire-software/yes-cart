@@ -40,9 +40,10 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImplTest extends AbstractE
     private DeliveryAllowedByTimeoutOrderEventHandlerImpl handler;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp()  {
         handler = (DeliveryAllowedByTimeoutOrderEventHandlerImpl) ctx().getBean("deliveryAllowedByTimeoutOrderEventHandler");
         orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
+        super.setUp();
     }
 
     @Test

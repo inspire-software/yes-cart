@@ -65,7 +65,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
     private ProductSkuService productSkuService;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         paymentProcessorFactory = (PaymentProcessorFactory) ctx().getBean(ServiceSpringKeys.PAYMENT_PROCESSOR_FACTORY);
         customerOrderService = (CustomerOrderService) ctx().getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
         customerOrderPaymentService = (CustomerOrderPaymentService) ctx().getBean(ServiceSpringKeys.ORDER_PAYMENT_SERICE);
@@ -77,6 +77,8 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
         warehouseService = (WarehouseService) ctx().getBean(ServiceSpringKeys.WAREHOUSE_SERVICE);
         skuWarehouseService = (SkuWarehouseService) ctx().getBean(ServiceSpringKeys.SKU_WAREHOUSE_SERVICE);
         productSkuService = (ProductSkuService) ctx().getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE);
+
+        super.setUp();
     }
 
     /**
