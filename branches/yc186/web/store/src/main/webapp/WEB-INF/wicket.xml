@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+
+    <bean id="wicketPagesMounter" class="org.yes.cart.web.theme.impl.WicketPagesMounterImpl">
+        <constructor-arg index="0" ref="seoBookmarkablePageParametersEncoder"/>
+        <constructor-arg index="1">
+            <map>
+                <entry key="/">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.HomePage"/>
+                    </map>
+                </entry>
+                <entry key="/login">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.LoginPage"/>
+                    </map>
+                </entry>
+                <entry key="/cart">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.ShoppingCartPage"/>
+                    </map>
+                </entry>
+                <entry key="/selfcare">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.CustomerSelfCarePage"/>
+                    </map>
+                </entry>
+                <entry key="/faq">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.FaqPage"/>
+                    </map>
+                </entry>
+                <entry key="/contact">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.ContactPage"/>
+                    </map>
+                </entry>
+                <entry key="/registration">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.RegistrationPage"/>
+                    </map>
+                </entry>
+                <entry key="/address">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.component.customer.address.CreateEditAddressPage"/>
+                    </map>
+                </entry>
+                <entry key="/checkout">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.CheckoutPage"/>
+                    </map>
+                </entry>
+                <entry key="/payment">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.PaymentPage"/>
+                    </map>
+                </entry>
+                <entry key="/paymentresult">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.payment.callback.ResultPage"/>
+                    </map>
+                </entry>
+                <entry key="/anetsim">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.payment.callback.AuthorizeNetSimPaymentOkPage"/>
+                    </map>
+                </entry>
+                <entry key="/paypallreturn">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.payment.callback.PayPalReturnUrlPage"/>
+                    </map>
+                </entry>
+                <entry key="/liqpayreturn">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.payment.callback.LiqPayReturnUrlPage"/>
+                    </map>
+                </entry>
+            </map>
+        </constructor-arg>
+        <constructor-arg index="2">
+            <value>/login</value>
+        </constructor-arg>
+        <constructor-arg index="3">
+            <list>
+                <value>/</value>
+                <value>/cart</value>
+            </list>
+        </constructor-arg>
+    </bean>
+
+</beans>
