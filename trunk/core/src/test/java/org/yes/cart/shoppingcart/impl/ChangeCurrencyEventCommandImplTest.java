@@ -46,7 +46,8 @@ public class ChangeCurrencyEventCommandImplTest extends BaseCoreDBTestCase {
             new AddSkuToCartEventCommandImpl(ctx(), singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST1"))
                     .execute(shoppingCart);
         }
-        assertTrue("Expected 57.00", (new BigDecimal("57.00")).equals(shoppingCart.getCartSubTotal()));
+
+        assertTrue("Expected 57.00 Actual " + shoppingCart.getCartSubTotal(), (new BigDecimal("57.00")).equals(shoppingCart.getCartSubTotal()));
         new ChangeCurrencyEventCommandImpl(ctx(), singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "USD"))
                 .execute(shoppingCart);
         assertEquals("USD", shoppingCart.getCurrencyCode());

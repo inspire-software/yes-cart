@@ -49,7 +49,7 @@ public class AddSkuToCartEventCommandImplTest extends BaseCoreDBTestCase {
         AddSkuToCartEventCommandImpl command;
         command = new AddSkuToCartEventCommandImpl(ctx(), params);
         command.execute(shoppingCart);
-        assertTrue("Expected 19.99", (new BigDecimal("19.99")).compareTo(shoppingCart.getCartSubTotal()) == 0);
+        assertTrue("Expected 19.99 actual value " + shoppingCart.getCartSubTotal(), (new BigDecimal("19.99")).compareTo(shoppingCart.getCartSubTotal()) == 0);
         command = new AddSkuToCartEventCommandImpl(ctx(), params);
         command.execute(shoppingCart);
         assertTrue("Expected 39.98", (new BigDecimal("39.98")).compareTo(shoppingCart.getCartSubTotal()) == 0);

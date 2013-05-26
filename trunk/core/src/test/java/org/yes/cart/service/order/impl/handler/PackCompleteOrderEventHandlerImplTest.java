@@ -38,9 +38,10 @@ public class PackCompleteOrderEventHandlerImplTest extends AbstractEventHandlerI
     private PackCompleteOrderEventHandlerImpl handler;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         handler = (PackCompleteOrderEventHandlerImpl) ctx().getBean("packCompleteOrderEventHandler");
         orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
+        super.setUp();
     }
 
     @Test

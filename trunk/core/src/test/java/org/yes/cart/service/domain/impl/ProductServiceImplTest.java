@@ -43,8 +43,9 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
     private ProductService productService;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         productService = (ProductService) ctx().getBean(ServiceSpringKeys.PRODUCT_SERVICE);
+        super.setUp();
     }
 
     @Test

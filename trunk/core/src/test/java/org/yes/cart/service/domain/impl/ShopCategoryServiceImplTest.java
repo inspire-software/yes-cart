@@ -39,10 +39,11 @@ public class ShopCategoryServiceImplTest extends BaseCoreDBTestCase {
     private CategoryService categoryService;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         shopCategoryService = (ShopCategoryService) ctx().getBean(ServiceSpringKeys.SHOP_CATEGORY_SERVICE);
         shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
         categoryService = (CategoryService) ctx().getBean(ServiceSpringKeys.CATEGORY_SERVICE);
+        super.setUp();
     }
 
     @Test

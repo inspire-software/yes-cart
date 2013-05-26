@@ -43,10 +43,11 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImplTest extends Abstrac
     private SkuWarehouseService skuWarehouseService;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp()  {
         handler = (DeliveryAllowedByInventoryOrderEventHandlerImpl) ctx().getBean("deliveryAllowedByInventoryOrderEventHandler");
         orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
         skuWarehouseService = (SkuWarehouseService) ctx().getBean("skuWarehouseService");
+        super.setUp();
     }
 
     @Test

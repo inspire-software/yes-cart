@@ -43,16 +43,15 @@ public class TestWarehouseServiceImpl extends BaseCoreDBTestCase {
     private WarehouseService warehouseService;
     private ShopService shopService;
     private EntityFactory entityFactory;
-    private GenericDAO<ShopWarehouse, Long> shopWarehouseDao;
     private Shop shop;
     private Warehouse warehouse;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
         warehouseService = (WarehouseService) ctx().getBean(ServiceSpringKeys.WAREHOUSE_SERVICE);
         entityFactory = warehouseService.getGenericDao().getEntityFactory();
-        shopWarehouseDao = (GenericDAO) ctx().getBean(DaoServiceBeanKeys.SHOP_WAREHOUSE_DAO);
+        super.setUp();
     }
 
     /**
@@ -92,7 +91,7 @@ public class TestWarehouseServiceImpl extends BaseCoreDBTestCase {
         assertEquals("Test default rank", 100, shopWarehouse.getRank());
 
         warehouseService.updateShopWarehouseRank(shopWarehouse.getShopWarehouseId(), 200);
-        shopWarehouse = shopWarehouseDao.findById(shopWarehouse.getShopWarehouseId());
+        shopWarehouse = warehouseService.findShopWarehouseById(shopWarehouse.getShopWarehouseId());
         assertEquals("Test default rank", 200, shopWarehouse.getRank());
     }
 

@@ -23,6 +23,7 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderAssembler;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
@@ -36,12 +37,13 @@ import static org.junit.Assert.*;
 public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
 
     private OrderAssembler orderAssembler;
-    private GenericDAO<CustomerOrder, Long> customerOrderDao;
+    private CustomerOrderService customerOrderService;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp()  {
         orderAssembler = (OrderAssembler) ctx().getBean(ServiceSpringKeys.ORDER_ASSEMBLER);
-        customerOrderDao = (GenericDAO<CustomerOrder, Long>) ctx().getBean("customerOrderDao");
+        customerOrderService =  ctx().getBean("customerOrderService", CustomerOrderService.class);
+        super.setUp();
     }
 
     @Test
@@ -50,7 +52,7 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
         ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail());
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         assertNotNull(customerOrder);
-        customerOrder = customerOrderDao.create(customerOrder);
+        customerOrder =  customerOrderService.create(customerOrder);
         assertNotNull(customerOrder);
         assertNotNull(customerOrder.getBillingAddress());
         assertEquals("By default billing and shipping addresses the same",

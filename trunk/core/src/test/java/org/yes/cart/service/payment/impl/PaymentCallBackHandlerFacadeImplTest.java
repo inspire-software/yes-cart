@@ -47,11 +47,13 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
     private DeliveryAssemblerImpl deliveryAssembler;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         paymentCallBackHandlerFacade = (PaymentCallBackHandlerFacade) ctx().getBean(ServiceSpringKeys.PAYMENT_CALLBACK_HANDLER);
         orderAssembler = (OrderAssembler) ctx().getBean(ServiceSpringKeys.ORDER_ASSEMBLER);
         customerOrderService = (CustomerOrderService) ctx().getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
         deliveryAssembler = (DeliveryAssemblerImpl) ctx().getBean(ServiceSpringKeys.DELIVERY_ASSEMBLER);
+
+        super.setUp();
     }
 
     @Test

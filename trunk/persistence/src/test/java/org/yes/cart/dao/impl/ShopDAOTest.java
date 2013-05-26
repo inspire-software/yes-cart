@@ -19,6 +19,8 @@ package org.yes.cart.dao.impl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.constants.DaoServiceBeanKeys;
 import org.yes.cart.domain.entity.Shop;
@@ -45,41 +47,59 @@ public class ShopDAOTest extends AbstractTestDAO {
     private static final String URL2 = "shop1.yescart.org";
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp()  {
         shopDao = (GenericDAO<Shop, Long>) ctx().getBean(DaoServiceBeanKeys.SHOP_DAO);
+        super.setUp();
     }
 
     @After
     public void cleanUp() {
-        for (Long pk : cleanupPks) {
-            shopDao.delete(shopDao.findById(pk));
-            assertNull(shopDao.findById(pk));
-        }
+        getTx().execute(new TransactionCallbackWithoutResult() {
+            public void doInTransactionWithoutResult(TransactionStatus status) {
+                for (Long pk : cleanupPks) {
+                    Shop shop = shopDao.findById(pk);
+                    shopDao.delete(shop);
+                    assertNull(shopDao.findById(pk));
+                }
+            }
+        });
+
     }
 
     @Test
     public void testShopDao() {
-        Shop shop = new ShopEntity();
-        shop.setCode("TESTSHOP");
-        shop.setName("test shop");
-        shop.setDescription("test shop description");
-        shop.setFspointer("/yescart/data");
-        shop.setImageVaultFolder("/yescart/data/imgvault");
-        ShopUrl url;
-        url = new ShopUrlEntity();
-        url.setUrl(URL1);
-        url.setShop(shop);
-        shop.getShopUrl().add(url);
-        url = new ShopUrlEntity();
-        url.setUrl(URL2);
-        url.setShop(shop);
-        shop.getShopUrl().add(url);
-        shop = shopDao.create(shop);
-        assertNotNull(shop);
-        assertEquals(2, shop.getShopUrl().size());
-        cleanupPks.add(shop.getShopId());
-        updateShop();
-        resolveShopByURL();
+
+        getTx().execute(new TransactionCallbackWithoutResult() {
+            public void doInTransactionWithoutResult(TransactionStatus status) {
+
+                Shop shop = new ShopEntity();
+                shop.setCode("TESTSHOP");
+                shop.setName("test shop");
+                shop.setDescription("test shop description");
+                shop.setFspointer("/yescart/data");
+                shop.setImageVaultFolder("/yescart/data/imgvault");
+                ShopUrl url;
+                url = new ShopUrlEntity();
+                url.setUrl(URL1);
+                url.setShop(shop);
+                shop.getShopUrl().add(url);
+                url = new ShopUrlEntity();
+                url.setUrl(URL2);
+                url.setShop(shop);
+                shop.getShopUrl().add(url);
+                shop = shopDao.create(shop);
+                assertNotNull(shop);
+                assertEquals(2, shop.getShopUrl().size());
+                cleanupPks.add(shop.getShopId());
+                updateShop();
+                resolveShopByURL();
+
+                status.setRollbackOnly();
+
+            }
+        });
+
+
     }
 
     public void updateShop() {

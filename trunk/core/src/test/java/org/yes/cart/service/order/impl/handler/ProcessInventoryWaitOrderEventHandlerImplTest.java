@@ -38,9 +38,10 @@ public class ProcessInventoryWaitOrderEventHandlerImplTest extends AbstractEvent
     private ProcessInventoryWaitOrderEventHandlerImpl handler;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         handler = (ProcessInventoryWaitOrderEventHandlerImpl) ctx().getBean("processInventoryWaitOrderEventHandler");
         orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
+        super.setUp();
     }
 
     @Test

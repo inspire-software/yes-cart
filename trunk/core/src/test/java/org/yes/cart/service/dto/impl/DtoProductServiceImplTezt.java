@@ -53,7 +53,7 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
     //private DtoCategoryService dtoCategoryService;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         dtoService = (DtoProductService) ctx().getBean(ServiceSpringKeys.DTO_PRODUCT_SERVICE);
         dtoBrandService = (DtoBrandService) ctx().getBean(ServiceSpringKeys.DTO_BRAND_SERVICE);
         dtoProductTypeService = (DtoProductTypeService) ctx().getBean(ServiceSpringKeys.DTO_PRODUCT_TYPE_SERVICE);
@@ -61,7 +61,7 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
         dtoFactory = (DtoFactory) ctx().getBean(ServiceSpringKeys.DTO_FACTORY);
         dtoProductTypeAttrService = (DtoProductTypeAttrService) ctx().getBean(ServiceSpringKeys.DTO_PRODUCT_TYPE_ATTR_SERVICE);
         dtoProductCategoryService = (DtoProductCategoryService) ctx().getBean(/*ServiceSpringKeys.DTO_PRODUCT_CATEGORY_SERVICE*/ "dtoProductCategoryService");
-        //dtoCategoryService = (DtoCategoryService) ctx().getBean(ServiceSpringKeys.DTO_CATEGORY_SERVICE);
+        super.setUp();
 
     }
 

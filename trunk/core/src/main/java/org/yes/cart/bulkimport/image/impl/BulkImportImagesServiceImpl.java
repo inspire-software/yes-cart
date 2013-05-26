@@ -126,7 +126,7 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
      * @param importedFiles add file to this set if imported it successfuly imported.
      * @param pathToRepository path to image vault
      */
-    void doImport(final File file, final JobStatusListener statusListener, final Set<String> importedFiles, final String pathToRepository) {
+    public void doImport(final File file, final JobStatusListener statusListener, final Set<String> importedFiles, final String pathToRepository) {
         final String fileName = file.getName();
         Matcher matcher = pattern.matcher(fileName);
         if (matcher.find()) {
@@ -170,7 +170,7 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
      * @param suffix      image suffix
      * @return true if given image file attached as attribute to given product
      */
-    boolean doImportProductImage(
+    public boolean doImportProductImage(
             final JobStatusListener statusListener,
             final String fileName,
             final String code,
@@ -226,7 +226,7 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
      * @param suffix      image suffix
      * @return true if given image file attached as attribute to giveb product
      */
-    boolean doImportProductSkuImage(
+    public boolean doImportProductSkuImage(
             final JobStatusListener statusListener,
             final String fileName,
             final String code,
@@ -281,7 +281,7 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
      * @param fileName file name.
      * @return image attribute suffix name
      */
-    String getImageAttributeSuffixName(final String fileName) {
+    public String getImageAttributeSuffixName(final String fileName) {
         int startIndex = fileName.lastIndexOf('_') + 1;
         int endIndex = fileName.lastIndexOf('.');
         String suffixChar = fileName.substring(startIndex, endIndex);

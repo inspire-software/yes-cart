@@ -35,12 +35,13 @@
         <module>installer</module>
     </modules>
     <properties>
-        <hibernate.core.version>4.1.4.Final</hibernate.core.version>
-        <hibernate.search.version>4.1.1.Final</hibernate.search.version>
+        <hibernate.core.version>4.2.0.Final</hibernate.core.version>
+        <hibernate.search.version>4.2.0.Final</hibernate.search.version>
         <lucene.version>3.5.0</lucene.version>
+        <!--<lucene.version>4.3.0</lucene.version>-->
         <cxf.version>2.5.2</cxf.version>
-        <spring-security.version>3.1.0.RELEASE</spring-security.version>
-        <spring.version>3.1.1.RELEASE</spring.version>
+        <spring-security.version>3.1.4.RELEASE</spring-security.version>
+        <spring.version>3.1.4.RELEASE</spring.version>
         <lucene.config.index.dir>/yes-cart/lucene-index</lucene.config.index.dir>
         <ehcache.version>2.6.0</ehcache.version>
         <!--<ehcache.version>1.6.2</ehcache.version>-->

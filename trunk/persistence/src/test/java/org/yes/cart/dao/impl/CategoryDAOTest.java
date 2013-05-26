@@ -18,6 +18,8 @@ package org.yes.cart.dao.impl;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.constants.DaoServiceBeanKeys;
 import org.yes.cart.domain.entity.Category;
@@ -42,61 +44,81 @@ public class CategoryDAOTest extends AbstractTestDAO {
     private GenericDAO<Shop, Long> shopDao;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp()  {
         shopDao = (GenericDAO<Shop, Long>) ctx().getBean(DaoServiceBeanKeys.SHOP_DAO);
         categoryDao = (GenericDAO<Category, Long>) ctx().getBean(DaoServiceBeanKeys.CATEGORY_DAO);
+        super.setUp();
     }
 
-    @Test
-    public void testCategoryDAO() {
-        resovleCategoriesbyShop();
-        availableCriteriaTest();
-    }
 
     /**
      * Test, that we can resolve categories by shop
      * and thea are ranked.
      */
+    @Test
     public void resovleCategoriesbyShop() {
-        Shop shop = shopDao.findSingleByNamedQuery("SHOP.BY.URL", "gadget.yescart.org");
-        assertNotNull("Shop must be resolved by URL", shop);
-        List<Category> assignedCategories =
-                categoryDao.findByNamedQuery("TOPCATEGORIES.BY.SHOPID", shop.getShopId(), new Date());
-        assertNotNull("Test shop must have assigned categories", assignedCategories);
-        assertFalse("Assigned categories not empty", assignedCategories.isEmpty());
-        int currentRank = Integer.MIN_VALUE;
-        Iterator<ShopCategory> shopCategoryIterator = shop.getShopCategory().iterator();
-        Iterator<Category> categoryIterator = assignedCategories.iterator();
-        // because categories can be out of available scope
-        // assertTrue(assignedCategories.size() == shop.getShopCategory().size());
-        List<Long> allAssignedCategories = new ArrayList<Long>();
-        for (ShopCategory allShopCat : shop.getShopCategory()) {
-            allAssignedCategories.add(allShopCat.getCategory().getCategoryId());
-        }
-        List<Long> allAssignedAvailableCategories = new ArrayList<Long>();
-        for (Category allShopCat : assignedCategories) {
-            allAssignedAvailableCategories.add(allShopCat.getCategoryId());
-        }
-        assertTrue(allAssignedCategories.containsAll(allAssignedAvailableCategories));
-        while (shopCategoryIterator.hasNext()) {
-            ShopCategory sc = shopCategoryIterator.next();
-            assertTrue("Assigned category is ranked ", currentRank <= sc.getRank());
-            currentRank = sc.getRank();
-        }
+
+        getTx().execute(new TransactionCallbackWithoutResult() {
+            public void doInTransactionWithoutResult(TransactionStatus status) {
+
+                Shop shop = shopDao.findSingleByNamedQuery("SHOP.BY.URL", "gadget.yescart.org");
+                assertNotNull("Shop must be resolved by URL", shop);
+                List<Category> assignedCategories =
+                        categoryDao.findByNamedQuery("TOPCATEGORIES.BY.SHOPID", shop.getShopId(), new Date());
+                assertNotNull("Test shop must have assigned categories", assignedCategories);
+                assertFalse("Assigned categories not empty", assignedCategories.isEmpty());
+                int currentRank = Integer.MIN_VALUE;
+                Iterator<ShopCategory> shopCategoryIterator = shop.getShopCategory().iterator();
+                Iterator<Category> categoryIterator = assignedCategories.iterator();
+                // because categories can be out of available scope
+                // assertTrue(assignedCategories.size() == shop.getShopCategory().size());
+                List<Long> allAssignedCategories = new ArrayList<Long>();
+                for (ShopCategory allShopCat : shop.getShopCategory()) {
+                    allAssignedCategories.add(allShopCat.getCategory().getCategoryId());
+                }
+                List<Long> allAssignedAvailableCategories = new ArrayList<Long>();
+                for (Category allShopCat : assignedCategories) {
+                    allAssignedAvailableCategories.add(allShopCat.getCategoryId());
+                }
+                assertTrue(allAssignedCategories.containsAll(allAssignedAvailableCategories));
+                while (shopCategoryIterator.hasNext()) {
+                    ShopCategory sc = shopCategoryIterator.next();
+                    assertTrue("Assigned category is ranked ", currentRank <= sc.getRank());
+                    currentRank = sc.getRank();
+                }
+
+                status.setRollbackOnly();
+
+            }
+        });
+
+
     }
 
     /**
      * Test, that available from and available to work correctly
      */
+    @Test
     public void availableCriteriaTest() {
-        Shop shop = shopDao.findSingleByNamedQuery("SHOP.BY.URL", "gadget.yescart.org");
-        assertNotNull("Shop must be resolved by URL", shop);
-        List<Category> assignedCategories =
-                categoryDao.findByNamedQuery("TOPCATEGORIES.BY.SHOPID", shop.getShopId(), new Date());
-        Date date = new Date();
-        for (Category category : assignedCategories) {
-            assertTrue((category.getAvailablefrom() == null) || (category.getAvailablefrom().getTime() > date.getTime()));
-            assertTrue((category.getAvailableto() == null) || (category.getAvailableto().getTime() < date.getTime()));
-        }
+
+        getTx().execute(new TransactionCallbackWithoutResult() {
+            public void doInTransactionWithoutResult(TransactionStatus status) {
+
+                Shop shop = shopDao.findSingleByNamedQuery("SHOP.BY.URL", "gadget.yescart.org");
+                assertNotNull("Shop must be resolved by URL", shop);
+                List<Category> assignedCategories =
+                        categoryDao.findByNamedQuery("TOPCATEGORIES.BY.SHOPID", shop.getShopId(), new Date());
+                Date date = new Date();
+                for (Category category : assignedCategories) {
+                    assertTrue((category.getAvailablefrom() == null) || (category.getAvailablefrom().getTime() > date.getTime()));
+                    assertTrue((category.getAvailableto() == null) || (category.getAvailableto().getTime() < date.getTime()));
+                }
+
+                status.setRollbackOnly();
+
+            }
+        });
+
+
     }
 }

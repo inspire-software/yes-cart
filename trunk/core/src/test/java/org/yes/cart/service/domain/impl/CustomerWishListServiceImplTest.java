@@ -46,11 +46,12 @@ public class CustomerWishListServiceImplTest extends BaseCoreDBTestCase {
     private ShopService shopService;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         service = (CustomerWishListService) ctx().getBean(ServiceSpringKeys.CUSTOMER_WISH_LIST_SERVICE);
         customerService = (CustomerService) ctx().getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
         productSkuService = (ProductSkuService) ctx().getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE);
         shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
+        super.setUp();
     }
 
     @Test

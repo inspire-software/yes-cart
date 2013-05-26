@@ -4218,7 +4218,7 @@ public void setRangeList(final RangeList rangeList) {
             <many-to-one name="carrierSla" class="org.yes.cart.domain.entity.CarrierSla" foreign-key="FK_OD_CSLA" lazy="false">
                 <column name="CARRIERSLA_ID" not-null="false"/>
             </many-to-one>
-            <many-to-one name="customerOrder" class="org.yes.cart.domain.entity.CustomerOrder" foreign-key="FK_OD_ORD">
+            <many-to-one name="customerOrder" class="org.yes.cart.domain.entity.CustomerOrder" foreign-key="FK_OD_ORD" >
                 <column name="CUSTOMERORDER_ID" not-null="true"/>
             </many-to-one>
             <property name="deliveryGroup" type="string" not-null="true">
@@ -4725,7 +4725,7 @@ public void setRangeList(final RangeList rangeList) {
         <![CDATA[
        select distinct b.name, b.name, b.name, 0
        from ProductCategoryEntity pc, ProductEntity p inner join p.brand b
-       where p.productId = pc.product.productId 
+       where p.productId = pc.product.productId
         and pc.category.categoryId in (:list)
         order by b.name
        ]]>

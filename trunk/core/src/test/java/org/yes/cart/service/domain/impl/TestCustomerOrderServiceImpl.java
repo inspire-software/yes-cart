@@ -53,9 +53,10 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
 
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         customerOrderService = (CustomerOrderService) ctx().getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
         handler = (PendingOrderEventHandlerImpl) ctx().getBean("pendingOrderEventHandler");
+        super.setUp();
     }
 
     @Test

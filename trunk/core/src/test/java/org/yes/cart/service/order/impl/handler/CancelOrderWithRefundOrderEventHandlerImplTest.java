@@ -44,11 +44,12 @@ public class CancelOrderWithRefundOrderEventHandlerImplTest extends AbstractEven
     private CancelOrderWithRefundOrderEventHandlerImpl handler;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp()  {
         orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
         skuWarehouseService = (SkuWarehouseService) ctx().getBean("skuWarehouseService");
         pendingHandler = (PendingOrderEventHandlerImpl) ctx().getBean("pendingOrderEventHandler");
         handler = (CancelOrderWithRefundOrderEventHandlerImpl) ctx().getBean("cancelOrderWithRefundOrderEventHandler");
+        super.setUp();
     }
 
     /**

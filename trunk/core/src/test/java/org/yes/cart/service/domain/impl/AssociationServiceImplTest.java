@@ -41,8 +41,9 @@ public class AssociationServiceImplTest extends BaseCoreDBTestCase {
     private Set<Long> cleanupPks = new HashSet<Long>();
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         associationService = (AssociationService) ctx().getBean(ServiceSpringKeys.ASSOCIATION_SERVICE);
+        super.setUp();
     }
 
     @After

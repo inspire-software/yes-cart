@@ -54,13 +54,14 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
     private SkuWarehouseService skuWarehouseService;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp()  {
         handler = (PendingOrderEventHandlerImpl) ctx().getBean("pendingOrderEventHandler");
         orderService = (CustomerOrderService) ctx().getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
         customerOrderPaymentService = (CustomerOrderPaymentService) ctx().getBean(ServiceSpringKeys.ORDER_PAYMENT_SERICE);
         productSkuService = (ProductSkuService) ctx().getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE);
         skuWarehouseService = (SkuWarehouseService) ctx().getBean(ServiceSpringKeys.SKU_WAREHOUSE_SERVICE);
         warehouseService = (WarehouseService) ctx().getBean(ServiceSpringKeys.WAREHOUSE_SERVICE);
+        super.setUp();
     }
 
     /**

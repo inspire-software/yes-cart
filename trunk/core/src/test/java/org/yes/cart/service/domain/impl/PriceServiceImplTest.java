@@ -28,6 +28,7 @@ import org.yes.cart.domain.entity.impl.ProductSkuEntity;
 import org.yes.cart.domain.entity.impl.SkuPriceEntity;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
+import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
@@ -54,7 +55,7 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
     private ProductService productService;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         productService = (ProductService) ctx().getBean(ServiceSpringKeys.PRODUCT_SERVICE);
         priceService = (PriceService) ctx().getBean(ServiceSpringKeys.PRICE_SERVICE);
         shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
@@ -63,13 +64,14 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
         } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
+        super.setUp();
     }
 
     @Test
     public void testGetPriceNavigationRecords() {
         Shop shop = shopService.getShopByDomainName("www.gadget.yescart.org");
-        GenericDAO<Category, Long> categoryDAO = (GenericDAO<Category, Long>) ctx().getBean(DaoServiceBeanKeys.CATEGORY_DAO);
-        Category cat = categoryDAO.findById(129L); // this category hold navigation by price tiers
+        CategoryService categoryService = ctx().getBean("categoryService", CategoryService.class);
+        Category cat = categoryService.getById(129L); // this category hold navigation by price tiers
         assertNotNull(cat);
         PriceTierTree priceTierTree = cat.getNavigationByPriceTree();
         try {

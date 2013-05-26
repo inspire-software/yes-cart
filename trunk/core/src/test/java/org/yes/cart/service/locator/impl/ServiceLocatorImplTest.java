@@ -36,8 +36,9 @@ public class ServiceLocatorImplTest extends BaseCoreDBTestCase {
     private ServiceLocator serviceLocator;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp()  {
         serviceLocator = (ServiceLocator) ctx().getBean(ServiceSpringKeys.SERVICE_LOCATOR);
+        super.setUp();
     }
 
     @Test

@@ -42,6 +42,8 @@ public interface DaoServiceBeanKeys {
 
     final static String PRODUCT_DAO = "productDao";
 
+    final static String PRODUCT_SKU_DAO = "productDao";
+
     final static String PRODUCT_TYPE_DAO = "productTypeDao";
 
     final static String AVAILABILITY_DAO = "availabilityDao";
