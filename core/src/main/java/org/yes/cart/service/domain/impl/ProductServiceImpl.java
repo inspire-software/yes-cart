@@ -560,11 +560,22 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * @return list of {@link org.yes.cart.domain.queryobject.FilteredNavigationRecord}
      */
     public List<FilteredNavigationRecord> getSingleValueNavigationRecords(final String locale, final long productTypeId) {
-        List<Object[]> list = productDao.findQueryObjectsByNamedQuery(
+        List<Object[]> list;
+        List<FilteredNavigationRecord> records = new ArrayList<FilteredNavigationRecord>();
+
+        list = productDao.findQueryObjectsByNamedQuery(
                 "PRODUCTS.ATTR.CODE.VALUES.BY.PRODUCTTYPEID",
                 productTypeId,
                 true);
-        return constructFilteredNavigationRecords(locale, list);
+        records.addAll(constructFilteredNavigationRecords(locale, list));
+
+        list = productDao.findQueryObjectsByNamedQuery(
+                "PRODUCTSKUS.ATTR.CODE.VALUES.BY.PRODUCTTYPEID",
+                productTypeId,
+                true);
+        records.addAll(constructFilteredNavigationRecords(locale, list));
+
+        return records;
     }
 
 
