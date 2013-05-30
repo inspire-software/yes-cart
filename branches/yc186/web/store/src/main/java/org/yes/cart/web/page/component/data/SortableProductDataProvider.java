@@ -19,7 +19,7 @@ package org.yes.cart.web.page.component.data;
 import org.apache.lucene.search.Query;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.model.IModel;
-import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.support.entity.decorator.DecoratorFacade;
@@ -84,9 +84,9 @@ public class SortableProductDataProvider extends SortableDataProvider<ProductDec
     }
 
 
-    private List<ProductDecorator> decorate(final List<Product> productsToDecorate) {
+    private List<ProductDecorator> decorate(final List<ProductSearchResultDTO> productsToDecorate) {
         final List<ProductDecorator> rez = new ArrayList<ProductDecorator>(productsToDecorate.size());
-        for (Product product : productsToDecorate) {
+        for (ProductSearchResultDTO product : productsToDecorate) {
             rez.add(
                     decoratorFacade.decorate(
                             product,

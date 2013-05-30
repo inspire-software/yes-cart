@@ -18,6 +18,7 @@ package org.yes.cart.service.domain;
 
 import org.apache.lucene.search.Query;
 import org.yes.cart.dao.CriteriaTuner;
+import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
@@ -239,7 +240,7 @@ public interface ProductService extends GenericService<Product> {
      * @param reverse       reverce the search result if true
      * @return list of products
      */
-    List<Product> getProductByQuery(
+    List<ProductSearchResultDTO> getProductByQuery(
             Query query,
             int firtsResult,
             int maxResults,

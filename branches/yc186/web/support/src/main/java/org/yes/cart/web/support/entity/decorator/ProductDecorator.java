@@ -16,23 +16,18 @@
 
 package org.yes.cart.web.support.entity.decorator;
 
-import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.ProductSku;
-import org.yes.cart.domain.entity.Seo;
+import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.support.service.AttributableImageService;
-
-import java.math.BigDecimal;
-import java.util.Collection;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 7/13/11
  * Time: 9:39 PM
  */
-public interface ProductDecorator extends  Product, ObjectDecorator {
+public interface ProductDecorator extends ProductSearchResultDTO , /* Product,*/ ObjectDecorator {
 
     /**
      * Attache to context after deserialization in case of cache overflow.
@@ -47,32 +42,6 @@ public interface ProductDecorator extends  Product, ObjectDecorator {
              AttributableImageService attributableImageService,
              CategoryService categoryService,
              ProductService productService);
-    /*
-    //product.getId()
-    long getId();
 
-    long getProductId();
-
-    //product.getSeo()
-    Seo getSeo();
-
-    //product.getCode()
-
-    String getCode();
-
-    //product.getAvailability(),
-    int getAvailability();
-
-    //product.getQtyOnWarehouse()
-    BigDecimal getQtyOnWarehouse();
-
-    Collection<ProductSkuDecorator> getSku();
-
-    //product.isMultiSkuProduct()
-    boolean  isMultiSkuProduct();
-
-    //ProductSku getDefaultSku();
-    ProductSkuDecorator getDefaultSku();
-    */
 
 }

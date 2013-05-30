@@ -25,16 +25,15 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
+import org.yes.cart.domain.dto.ProductSearchResultDTO;
+import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.entity.Category;
-import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl;
-import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
@@ -47,7 +46,6 @@ import org.yes.cart.web.support.service.ProductAvailabilityStrategy;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -104,17 +102,18 @@ public class ProductInListView extends BaseComponent {
      * @param category product in category, optional parameter
      * @param defImgSize image size in given category
      */
-    public ProductInListView(final String id, final Product product, final Category category, final String [] defImgSize) {
+    public ProductInListView(final String id, final ProductDecorator product, final Category category, final String [] defImgSize) {
         super(id);
         if (category == null) {
             this.category = categoryService.getRootCategory();
         } else {
             this.category = category;
         }
-        this.product = getDecoratorFacade().decorate(
-                product,
-                WicketUtil.getHttpServletRequest().getContextPath(),
-                getI18NSupport(), false);
+        this.product = product;
+                /*this.product = getDecoratorFacade().decorate(
+              product,
+              WicketUtil.getHttpServletRequest().getContextPath(),
+              getI18NSupport(), false); */
         this.defImgSize = defImgSize;
 
     }
@@ -162,7 +161,7 @@ public class ProductInListView extends BaseComponent {
         );
 
         final ProductAvailabilityModel productPam = productAvailabilityStrategy.getAvailabilityModel(product);
-        final ProductSku defSku = getDefault(product, productPam);
+        final ProductSkuSearchResultDTO defSku = getDefault(product, productPam);
 
         final PageParameters addToCartParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters())
                 .set(AddSkuToCartEventCommandImpl.CMD_KEY, defSku.getCode());
@@ -188,10 +187,10 @@ public class ProductInListView extends BaseComponent {
     /*
      * Return first available sku rather than default to improve customer experience.
      */
-    private ProductSku getDefault(final Product product, final ProductAvailabilityModel productPam) {
+    private ProductSkuSearchResultDTO getDefault(final ProductDecorator product, final ProductAvailabilityModel productPam) {
         if (productPam.isAvailable()) {
             if (product.isMultiSkuProduct()) {
-                for (final ProductSku sku : product.getSku()) {
+                for (final ProductSkuSearchResultDTO sku : product.getSku()) {
                     final ProductAvailabilityModel skuPam = productAvailabilityStrategy.getAvailabilityModel(sku);
                     if (skuPam.isAvailable()) {
                         return sku;
@@ -212,7 +211,7 @@ public class ProductInListView extends BaseComponent {
      *
      * @return {@link org.yes.cart.domain.entity.SkuPrice}
      */
-    private SkuPrice getSkuPrice(final ProductSku defaultSku) {
+    private SkuPrice getSkuPrice(final ProductSkuSearchResultDTO defaultSku) {
         return priceService.getMinimalRegularPrice(
                 product.getSku(),
                 defaultSku.getCode(),
