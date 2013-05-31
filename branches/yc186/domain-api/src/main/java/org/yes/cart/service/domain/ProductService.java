@@ -240,7 +240,24 @@ public interface ProductService extends GenericService<Product> {
      * @param reverse       reverce the search result if true
      * @return list of products
      */
-    List<ProductSearchResultDTO> getProductByQuery(
+    List<ProductSearchResultDTO> getProductSearchResultDTOByQuery(
+            Query query,
+            int firtsResult,
+            int maxResults,
+            String sortFieldName,
+            boolean reverse);
+
+    /**
+     * Get the all products , that match the given query
+     *
+     * @param query         lucene query
+     * @param firtsResult   index of first result
+     * @param maxResults    quantity results to return
+     * @param sortFieldName sort field name
+     * @param reverse       reverce the search result if true
+     * @return list of products
+     */
+    List<Product> getProductByQuery(
             Query query,
             int firtsResult,
             int maxResults,

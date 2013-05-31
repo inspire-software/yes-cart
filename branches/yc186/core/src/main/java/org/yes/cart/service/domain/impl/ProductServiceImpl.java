@@ -27,6 +27,7 @@ import org.yes.cart.cache.Cacheable;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.misc.Pair;
@@ -460,6 +461,30 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             final boolean reverse) {
 
         return productDao.fullTextSearch(query, firtsResult, maxResults, sortFieldName, reverse);
+
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = PROD_SERV_METHOD_CACHE)
+    public List<ProductSearchResultDTO> getProductSearchResultDTOByQuery(
+            final Query query,
+            final int firtsResult,
+            final int maxResults,
+            final String sortFieldName,
+            final boolean reverse) {
+
+        final List<Object[]> searchRez = productDao.fullTextSearch(
+                query,
+                firtsResult,
+                maxResults,
+                sortFieldName,
+                reverse,
+                "");
+
+        return null;
 
     }
 
