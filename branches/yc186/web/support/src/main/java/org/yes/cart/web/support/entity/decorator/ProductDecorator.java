@@ -16,7 +16,7 @@
 
 package org.yes.cart.web.support.entity.decorator;
 
-import org.yes.cart.domain.dto.ProductSearchResultDTO;
+import org.yes.cart.domain.entity.Product;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.ProductService;
@@ -27,7 +27,7 @@ import org.yes.cart.web.support.service.AttributableImageService;
  * Date: 7/13/11
  * Time: 9:39 PM
  */
-public interface ProductDecorator extends ProductSearchResultDTO , /* Product,*/ ObjectDecorator {
+public interface ProductDecorator extends Product, ObjectDecorator {
 
     /**
      * Attache to context after deserialization in case of cache overflow.

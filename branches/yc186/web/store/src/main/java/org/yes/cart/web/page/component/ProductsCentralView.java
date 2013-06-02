@@ -25,6 +25,7 @@ import org.apache.wicket.markup.repeater.data.GridView;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
+import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ProductService;
@@ -124,15 +125,15 @@ public class ProductsCentralView extends AbstractCentralView {
 
         applySortFieldAndOrder(dataProvider);
 
-        final GridView<ProductDecorator> productDataView = new GridView<ProductDecorator>(PRODUCT_LIST, dataProvider) {
+        final GridView<ProductSearchResultDTO> productDataView = new GridView<ProductSearchResultDTO>(PRODUCT_LIST, dataProvider) {
 
-            protected void populateItem(Item<ProductDecorator> productItem) {
+            protected void populateItem(Item<ProductSearchResultDTO> productItem) {
                 productItem.add(
                         new ProductInListView(PRODUCT, productItem.getModelObject(), getCategory(), widthHeight)
                 );
             }
 
-            protected void populateEmptyItem(Item<ProductDecorator> productItem) {
+            protected void populateEmptyItem(Item<ProductSearchResultDTO> productItem) {
                 productItem.add(
                         new Label(PRODUCT, StringUtils.EMPTY).setVisible(false)
                 );

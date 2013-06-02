@@ -41,6 +41,26 @@ public interface PriceService extends GenericService<SkuPrice> {
      * Exchange rate will be used for recalculate price if price does not present
      * in price list for given currency.
      *
+     * @param productId  product id
+     * @param shop         shop            sku will be c
+     * @param selectedSku  optional sku to filter the prices. if null all product skus will be  considered to determinate minimal price
+     * @param currencyCode desirable currency
+     * @param quantity     quantity
+     * @return SkuPrice
+     */
+    SkuPrice getMinimalRegularPrice(
+            final long productId,
+            final String selectedSku,
+            final Shop shop,
+            final String currencyCode,
+            final BigDecimal quantity);
+
+
+    /**
+     * Get minimal price for given product skus (all), shop, currency and quantity.
+     * Exchange rate will be used for recalculate price if price does not present
+     * in price list for given currency.
+     *
      * @param productSkus  product skus
      * @param shop         shop            sku will be c
      * @param selectedSku  optional sku to filter the prices. if null all product skus will be  considered to determinate minimal price

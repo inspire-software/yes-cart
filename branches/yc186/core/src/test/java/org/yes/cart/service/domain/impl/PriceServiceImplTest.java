@@ -200,7 +200,7 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testCreatePriceTierNodes() {
 
-        PriceServiceImpl priceService1 = new PriceServiceImpl(null,null,null);
+        PriceServiceImpl priceService1 = new PriceServiceImpl(null,null,null,null);
 
         assertEquals( new BigDecimal("3000").intValue(), priceService1.niceBigDecimal(new BigDecimal("3000")).intValue());
         assertEquals( new BigDecimal("30").intValue(), priceService1.niceBigDecimal(new BigDecimal("30")).intValue());
@@ -222,7 +222,7 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
     public void testAddAllTimePrice() {
         List<SkuPrice> skuPricesForOneSku = getSkuPrices("sku1");
         skuPricesForOneSku.addAll(getSkuPrices("sku2"));
-        PriceServiceImpl priceServiceImpl = new PriceServiceImpl(null, null, null);
+        PriceServiceImpl priceServiceImpl = new PriceServiceImpl(null, null, null, null);
         priceServiceImpl.reorderSkuPrices(skuPricesForOneSku);
         List<SkuPrice> rez = new LinkedList<SkuPrice>();
         assertTrue(priceServiceImpl.addAllTimePrice(rez, skuPricesForOneSku , System.currentTimeMillis()));
@@ -233,7 +233,7 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testAddStartPrice() {
         List<SkuPrice> skuPricesForOneSku = getSkuPrices("sku1");
-        PriceServiceImpl priceServiceImpl = new PriceServiceImpl(null, null, null);
+        PriceServiceImpl priceServiceImpl = new PriceServiceImpl(null, null, null, null);
         priceServiceImpl.reorderSkuPrices(skuPricesForOneSku);
         List<SkuPrice> rez = new LinkedList<SkuPrice>();
         assertTrue(priceServiceImpl.addStartPrice(rez, skuPricesForOneSku, System.currentTimeMillis()));
@@ -244,7 +244,7 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testAddEndPrice() {
         List<SkuPrice> skuPricesForOneSku = getSkuPrices("sku1");
-        PriceServiceImpl priceServiceImpl = new PriceServiceImpl(null, null, null);
+        PriceServiceImpl priceServiceImpl = new PriceServiceImpl(null, null, null, null);
         priceServiceImpl.reorderSkuPrices(skuPricesForOneSku);
         List<SkuPrice> rez = new LinkedList<SkuPrice>();
         assertTrue(priceServiceImpl.addEndPrice(rez, skuPricesForOneSku, System.currentTimeMillis()));
@@ -255,7 +255,7 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testAllFramedPrice() {
         List<SkuPrice> skuPricesForOneSku = getSkuPrices("sku1");
-        PriceServiceImpl priceServiceImpl = new PriceServiceImpl(null, null, null);
+        PriceServiceImpl priceServiceImpl = new PriceServiceImpl(null, null, null, null);
         priceServiceImpl.reorderSkuPrices(skuPricesForOneSku);
         List<SkuPrice> rez = new LinkedList<SkuPrice>();
         assertTrue(priceServiceImpl.addFramedPrice(rez, skuPricesForOneSku, System.currentTimeMillis()));
@@ -270,7 +270,7 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
 
         skuPricesForOneSku.addAll(getSkuPrices("sku2"));
 
-        PriceServiceImpl priceServiceImpl = new PriceServiceImpl(null, null, null);
+        PriceServiceImpl priceServiceImpl = new PriceServiceImpl(null, null, null, null);
 
         List<SkuPrice> rez = priceServiceImpl.getSkuPricesFilteredByTimeFrame(skuPricesForOneSku);
 

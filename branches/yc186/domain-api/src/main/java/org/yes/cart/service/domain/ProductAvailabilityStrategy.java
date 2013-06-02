@@ -14,14 +14,13 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.web.support.service;
+package org.yes.cart.service.domain;
 
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
-import org.yes.cart.web.support.entity.decorator.ProductAvailabilityModel;
-import org.yes.cart.web.support.entity.decorator.ProductDecorator;
+import org.yes.cart.domain.entity.ProductAvailabilityModel;
 
 /**
  * Availability strategy allows to determine if this product is eligible for
@@ -46,8 +45,6 @@ public interface ProductAvailabilityStrategy {
      * @return availability of this product
      */
     ProductAvailabilityModel getAvailabilityModel(final ProductSearchResultDTO product);
-
-    ProductAvailabilityModel getAvailabilityModel(final ProductSkuSearchResultDTO skuSearchResultDto);
 
     /**
      * @param sku product sku

@@ -28,6 +28,8 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
+import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
+import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.misc.Pair;
@@ -57,12 +59,13 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     private final GenericDAO<ProductCategory, Long> productCategoryDao;
     private final GenericDAO<ProductTypeAttr, Long> productTypeAttrDao;
     private final Random rand;
+    private final DtoFactory dtoFactory;
 
     /**
      * Construct product service.
      *
      * @param productDao         product dao
-     * @param productSkuService      product service
+     * @param productSkuService  product service
      * @param productTypeDao     product type dao to deal with type information
      * @param productCategoryDao category dao to work with category nformation
      * @param productTypeAttrDao product type attributes need to work with range navigation
@@ -71,7 +74,8 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                               final ProductSkuService productSkuService,
                               final GenericDAO<ProductType, Long> productTypeDao,
                               final GenericDAO<ProductCategory, Long> productCategoryDao,
-                              final GenericDAO<ProductTypeAttr, Long> productTypeAttrDao) {
+                              final GenericDAO<ProductTypeAttr, Long> productTypeAttrDao,
+                              final DtoFactory dtoFactory) {
         super(productDao);
         this.productDao = productDao;
         this.productSkuService = productSkuService;
@@ -80,6 +84,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         this.productTypeAttrDao = productTypeAttrDao;
         rand = new Random();
         rand.setSeed((new Date().getTime()));
+        this.dtoFactory = dtoFactory;
     }
 
     /**
@@ -192,7 +197,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
 
         final ProductSku sku = skuId != 0L ? getSkuById(skuId, true) : null;
         final Product product = productId != 0 ? getProductById(productId, true) :
-                                (sku != null ? getProductById(sku.getProduct().getId(), true) : null);
+                (sku != null ? getProductById(sku.getProduct().getId(), true) : null);
 
         Collection<AttrValue> productAttrValues;
         Collection<AttrValue> skuAttrValues;
@@ -227,7 +232,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         return attributesToShow;
     }
 
-    private static final List<Pair<String, String>> NO_GROUP = Arrays.asList(new Pair<String, String>("",""));
+    private static final List<Pair<String, String>> NO_GROUP = Arrays.asList(new Pair<String, String>("", ""));
 
     private void loadAttributeValueToAttributesToShowMap(
             final String locale, final Map<String, List<Pair<String, String>>> attributeViewGroupMap,
@@ -332,8 +337,8 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             if (skuAvs != null && skuAvs.size() > 0) {
                 final Object[] av = (Object[]) skuAvs.get(0);
                 return new Pair<String, String>(
-                    (String) av[0],
-                    new FailoverStringI18NModel((String) av[1], (String) av[0]).getValue(locale)
+                        (String) av[0],
+                        new FailoverStringI18NModel((String) av[1], (String) av[0]).getValue(locale)
                 );
             }
         }
@@ -396,18 +401,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         return prod;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Cacheable(value = PROD_SERV_METHOD_CACHE)
-    public List<Product> getProductByQuery(
-            final Query query,
-            final int firtsResult,
-            final int maxResults) {
 
-        return productDao.fullTextSearch(query, firtsResult, maxResults);
-
-    }
 
     /**
      * {@inheritDoc}
@@ -482,9 +476,24 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                 maxResults,
                 sortFieldName,
                 reverse,
-                "");
+                "productId", "code", "name", "description", "availability", "qtyOnWarehouse",
+                "firstAvailableSkuCode", "firstAvailableSkuQuantity");
 
-        return null;
+        final List<ProductSearchResultDTO> rez = new ArrayList<ProductSearchResultDTO>(searchRez.size());
+        for (Object[] obj : searchRez) {
+            final ProductSearchResultDTO dto = dtoFactory.getByIface(ProductSearchResultDTO.class);
+            dto.setId((Long) obj[0]);
+            dto.setCode((String) obj[1]);
+            dto.setName((String) obj[2]);
+            dto.setDescription((String) obj[3]);
+            dto.setAvailability((Integer) obj[4]);
+            dto.setQtyOnWarehouse((BigDecimal) obj[5]);
+            dto.setFirstAvailableSkuCode((String) obj[6]);
+            dto.setFirstAvailableSkuQuantity((BigDecimal) obj[7]);
+            rez.add(dto);
+        }
+
+        return rez;
 
     }
 
@@ -551,7 +560,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * Get the ranked by ProductTypeAttr.rank list of unique product attribute values by given product type
      * and attribute code.
      *
-     * @param locale locale
+     * @param locale        locale
      * @param productTypeId product type id
      * @return list of distinct attib values
      */
@@ -580,7 +589,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * Collect the single attribute value navigation see ProductTypeAttr#navigationType
      *
-     * @param locale locale
+     * @param locale        locale
      * @param productTypeId product type id
      * @return list of {@link org.yes.cart.domain.queryobject.FilteredNavigationRecord}
      */
@@ -596,7 +605,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * Get the navigation records for range values.
      *
-     * @param locale locale
+     * @param locale        locale
      * @param productTypeId product type id
      * @return list of {@link org.yes.cart.domain.queryobject.FilteredNavigationRecord}
      */

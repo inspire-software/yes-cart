@@ -22,7 +22,7 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
-import org.yes.cart.web.support.entity.decorator.ProductAvailabilityModel;
+import org.yes.cart.domain.entity.ProductAvailabilityModel;
 
 import java.math.BigDecimal;
 

@@ -20,10 +20,9 @@ import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
-import org.yes.cart.web.support.entity.decorator.ProductAvailabilityModel;
-import org.yes.cart.web.support.entity.decorator.ProductDecorator;
-import org.yes.cart.web.support.entity.decorator.impl.ProductAvailabilityModelImpl;
-import org.yes.cart.web.support.service.ProductAvailabilityStrategy;
+import org.yes.cart.domain.entity.ProductAvailabilityModel;
+import org.yes.cart.domain.entity.impl.ProductAvailabilityModelImpl;
+import org.yes.cart.service.domain.ProductAvailabilityStrategy;
 
 /**
  * User: denispavlov
@@ -37,11 +36,6 @@ public class ProductAvailabilityStrategyImpl implements ProductAvailabilityStrat
         return new ProductAvailabilityModelImpl(product.getAvailability(), product.getQtyOnWarehouse());
     }
 
-    /** {@inheritDoc} */
-    public ProductAvailabilityModel getAvailabilityModel(final ProductSkuSearchResultDTO skuSearchResultDto) {
-        final ProductSearchResultDTO productSearchResultDTO = skuSearchResultDto.getProduct();
-        return new ProductAvailabilityModelImpl(productSearchResultDTO.getAvailability(), skuSearchResultDto.getQty());
-    }
 
     /** {@inheritDoc} */
     public ProductAvailabilityModel getAvailabilityModel(final ProductSearchResultDTO product) {

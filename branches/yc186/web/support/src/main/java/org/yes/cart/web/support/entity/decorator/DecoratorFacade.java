@@ -46,17 +46,7 @@ public interface DecoratorFacade {
      * @param withAttributes true if decorator should load product attributes
      * @return decorated product
      */
-    //ProductDecorator decorate(Product product, String servletContextPath, I18NWebSupport i18NWebSupport, final boolean withAttributes);
-
-    /**
-     *
-     * @param product product search result dto item to decorate
-     * @param servletContextPath path
-     * @param i18NWebSupport i18n support
-     * @param withAttributes true if decorator should load product attributes
-     * @return decorated product
-     */
-    ProductDecorator decorate(ProductSearchResultDTO product, String servletContextPath, I18NWebSupport i18NWebSupport, final boolean withAttributes);
+    ProductDecorator decorate(Product product, String servletContextPath, I18NWebSupport i18NWebSupport, final boolean withAttributes);
 
     /**
      * @param sku sku

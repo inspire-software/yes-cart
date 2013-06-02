@@ -264,18 +264,7 @@ public interface ProductService extends GenericService<Product> {
             String sortFieldName,
             boolean reverse);
 
-    /**
-     * Get the all products , that match the given query
-     *
-     * @param query       lucene query
-     * @param firtsResult index of first result
-     * @param maxResults  quantity results to return
-     * @return list of products
-     */
-    List<Product> getProductByQuery(
-            Query query,
-            int firtsResult,
-            int maxResults);
+
 
     /**
      * Get all available products, that marked as featured . Need to be carefull to mark product as featured and keep
