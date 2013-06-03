@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page.component.product;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
@@ -25,6 +26,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.Category;
@@ -204,13 +206,17 @@ public class ProductInListView extends BaseComponent {
      * {@inheritDoc}
      */
     public String getDefaultImage(final String width, final String height) {
+        String defImg = productService.getDefaultImage(product.getId());
+        if (StringUtils.isBlank(defImg)) {
+            defImg = Constants.NO_IMAGE;
+        }
         return attributableImageService.getImage(
                 null,
                 WicketUtil.getHttpServletRequest().getContextPath(),
                 width,
                 height,
                 null,
-                productService.getDefaultImage(product.getId()));
+                defImg);
     }
 
 
