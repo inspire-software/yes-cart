@@ -452,9 +452,15 @@
         <property name="proxyInterface" value="javax.sql.DataSource"/>
     </bean>
 
-    <bean id="backDoorBean" class="org.yes.cart.web.service.ws.impl.BackdoorServiceImpl">
-        <property name="productService" ref="productService"/>
+    <bean id="backDoorBean" parent="txProxyTemplate">
+        <property name="target">
+            <bean  class="org.yes.cart.web.service.ws.impl.BackdoorServiceImpl">
+                <property name="productService" ref="productService"/>
+            </bean>
+        </property>
     </bean>
+
+
 
 
     <jaxws:endpoint id="backDoor" implementor="#backDoorBean" address="/backdoor">
