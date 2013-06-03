@@ -265,11 +265,6 @@ public interface ServiceSpringKeys {
     String DTO_CATEGORY_SERVICE = "dtoCategoryService";
 
     /**
-     * {@link org.yes.cart.service.dto.DtoSeoService}
-     */
-    String DTO_SEO_SERVICE = "dtoSeoService";
-
-    /**
      * {@link org.yes.cart.service.dto.DtoProductService}
      */
     String DTO_PRODUCT_SERVICE = "dtoProductService";
@@ -288,11 +283,6 @@ public interface ServiceSpringKeys {
      * {@link org.yes.cart.service.dto.DtoProductTypeAttrService}
      */
     String DTO_PRODUCT_TYPE_ATTR_SERVICE = "dtoProductTypeAttrService";
-
-    /**
-     * {@link org.yes.cart.service.dto.DtoProductCategoryService}
-     * /
-    String DTO_PRODUCT_CATEGORY_SERVICE = "dtoProductCategoryService";
 
     /**
      * {@link org.yes.cart.service.dto.DtoImageService}
