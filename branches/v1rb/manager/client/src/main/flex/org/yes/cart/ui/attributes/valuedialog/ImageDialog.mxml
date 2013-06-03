@@ -148,6 +148,11 @@
 
 
         private function updateImageSeoData():void {
+
+            if (seoImage == null) {
+                seoImage = new SeoImageDTOImpl();
+            }
+
             seoImage.imageName = value;
             seoImage.alt = altTextInput.text;
             seoImage.title = titleTextInput.text;
