@@ -165,29 +165,35 @@
         storing images into repository during bulk import;
         work with brand, product, sku and category images.
     -->
-    <bean id="imageService" class="org.yes.cart.service.domain.impl.ImageServiceImpl">
-        <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="seoImageDao"/>
-        <constructor-arg type="org.yes.cart.service.image.ImageNameStrategyResolver" ref="imageNameStrategyResolver"/>
-        <!--
-            Allowed pictures sizes to resize. Original image will be returned if requested size not allowed.
-        -->
-        <constructor-arg type="java.lang.String" value="40x40,50x50,60x60,80x80,200x200,160x160,360x360,120x120,280x280,240x240"/>
-        <!--
-            Background RGB color for re-sized picture. When picture is scaled this is the border
-            color around the picture where it does not fill all the space
-        -->
-        <constructor-arg type="double" value="255"/>
-        <constructor-arg type="double" value="255"/>
-        <constructor-arg type="double" value="255"/>
-        <!--
-            cropToFit setting this to true will crop the image to proper ratio prior to scaling
-            so that scaled image fills all the space. This is useful for those who wish to have
-            images that fill all space dedicated for image without having border around the image.
-            For those who wish images of products in the middle e.g. as it is in YC demo better
-            to set this to false.
-        -->
-        <constructor-arg type="boolean" value="false"/>
+
+    <bean id="imageService" parent="txProxyTemplate">
+        <property name="target">
+            <bean  class="org.yes.cart.service.domain.impl.ImageServiceImpl">
+                <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="seoImageDao"/>
+                <constructor-arg type="org.yes.cart.service.image.ImageNameStrategyResolver" ref="imageNameStrategyResolver"/>
+                <!--
+                    Allowed pictures sizes to resize. Original image will be returned if requested size not allowed.
+                -->
+                <constructor-arg type="java.lang.String" value="40x40,50x50,60x60,80x80,200x200,160x160,360x360,120x120,280x280,240x240"/>
+                <!--
+                    Background RGB color for re-sized picture. When picture is scaled this is the border
+                    color around the picture where it does not fill all the space
+                -->
+                <constructor-arg type="double" value="255"/>
+                <constructor-arg type="double" value="255"/>
+                <constructor-arg type="double" value="255"/>
+                <!--
+                    cropToFit setting this to true will crop the image to proper ratio prior to scaling
+                    so that scaled image fills all the space. This is useful for those who wish to have
+                    images that fill all space dedicated for image without having border around the image.
+                    For those who wish images of products in the middle e.g. as it is in YC demo better
+                    to set this to false.
+                -->
+                <constructor-arg type="boolean" value="false"/>
+            </bean>
+        </property>
     </bean>
+
     <!--     #############################   Image section end   #############################    -->
 
     <bean id="productAssociationService" parent="txProxyTemplate">
