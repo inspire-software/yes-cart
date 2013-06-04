@@ -206,17 +206,14 @@ public class ProductInListView extends BaseComponent {
      * {@inheritDoc}
      */
     public String getDefaultImage(final String width, final String height) {
-        String defImg = productService.getDefaultImage(product.getId());
-        if (StringUtils.isBlank(defImg)) {
-            defImg = Constants.NO_IMAGE;
-        }
-        return attributableImageService.getImage(
-                null,
-                WicketUtil.getHttpServletRequest().getContextPath(),
+
+        return attributableImageService.getImageURI(
+                product.getDefaultImage(),
                 width,
                 height,
-                null,
-                defImg);
+                WicketUtil.getHttpServletRequest().getContextPath(),
+                product
+        );
     }
 
 

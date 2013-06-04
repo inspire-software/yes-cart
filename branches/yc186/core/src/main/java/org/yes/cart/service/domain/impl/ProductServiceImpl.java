@@ -490,7 +490,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             dto.setQtyOnWarehouse((BigDecimal) obj[5]);
             dto.setFirstAvailableSkuCode((String) obj[6]);
             dto.setFirstAvailableSkuQuantity((BigDecimal) obj[7]);
-            dto.setDefaultImage((String) obj[8]); 
+            dto.setDefaultImage((String) obj[8]);
             rez.add(dto);
         }
 
