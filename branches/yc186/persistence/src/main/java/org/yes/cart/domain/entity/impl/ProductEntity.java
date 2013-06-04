@@ -16,8 +16,10 @@
 package org.yes.cart.domain.entity.impl;
 
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.search.annotations.*;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 
@@ -389,6 +391,22 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         return firstAvailableSkuCodeQuantity.getFirst();
     }
 
+    /**
+     * Get default image, which is stored into lucene index, to reduce db hit.
+     * @return default product image if found, otherwise no image constant.
+     */
+    @Transient
+    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
+    public String getDefaultImage() {
+        final AttrValue attr = getAttributeByCode(Constants.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "0");
+        if (attr == null || StringUtils.isBlank(attr.getVal())) {
+
+            return Constants.NO_IMAGE;
+
+        }
+        return attr.getVal();
+    }
+
 
     @Transient
     @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
@@ -475,13 +493,12 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
 
     @Transient
     public AttrValueProduct getAttributeByCode(final String attributeCode) {
-        if (attributeCode == null) {
-            return null;
-        }
-        if (this.attributes != null) {
-            for (AttrValueProduct attrValue : this.attributes) {
-                if (attrValue.getAttribute() != null && attrValue.getAttribute().getCode() != null && attrValue.getAttribute().getCode().equals(attributeCode)) {
-                    return attrValue;
+        if (attributeCode != null) {
+            if (this.attributes != null) {
+                for (AttrValueProduct attrValue : this.attributes) {
+                    if (attrValue.getAttribute() != null && attrValue.getAttribute().getCode() != null && attrValue.getAttribute().getCode().equals(attributeCode)) {
+                        return attrValue;
+                    }
                 }
             }
         }

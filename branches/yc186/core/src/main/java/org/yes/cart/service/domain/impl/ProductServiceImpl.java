@@ -477,7 +477,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                 sortFieldName,
                 reverse,
                 "productId", "code", "name", "description", "availability", "qtyOnWarehouse",
-                "firstAvailableSkuCode", "firstAvailableSkuQuantity");
+                "firstAvailableSkuCode", "firstAvailableSkuQuantity", "defaultImage");
 
         final List<ProductSearchResultDTO> rez = new ArrayList<ProductSearchResultDTO>(searchRez.size());
         for (Object[] obj : searchRez) {
@@ -490,6 +490,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             dto.setQtyOnWarehouse((BigDecimal) obj[5]);
             dto.setFirstAvailableSkuCode((String) obj[6]);
             dto.setFirstAvailableSkuQuantity((BigDecimal) obj[7]);
+            dto.setDefaultImage((String) obj[8]); 
             rez.add(dto);
         }
 
