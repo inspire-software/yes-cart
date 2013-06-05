@@ -17,10 +17,9 @@
 package org.yes.cart.service.domain;
 
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
-import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.ProductAvailabilityModel;
+import org.yes.cart.domain.entity.ProductSku;
 
 /**
  * Availability strategy allows to determine if this product is eligible for

@@ -18,13 +18,10 @@ package org.yes.cart.domain.dto.impl;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
-import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
-import javax.persistence.Transient;
 import java.math.BigDecimal;
-import java.util.Collection;
 
 /**
  * Implement search result dto item.
@@ -38,90 +35,109 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     private String code;
     private String name;
     private String description;
-
     private int availability;
-
     private BigDecimal qtyOnWarehouse;
-
     private String firstAvailableSkuCode;
     private BigDecimal firstAvailableSkuQuantity;
-
-    private I18NModel i18NModel;
     private String defaultImage;
 
+    private I18NModel i18NModel;
+
+    /** {@inheritDoc} */
     public String getDefaultImage() {
         return defaultImage;
     }
 
-    public void setDefaultImage(String defaultImage) {
+    /** {@inheritDoc} */
+    public void setDefaultImage(final String defaultImage) {
         this.defaultImage = defaultImage;
     }
 
+    /** {@inheritDoc} */
     public String getFirstAvailableSkuCode() {
         return firstAvailableSkuCode;
     }
 
-    public void setFirstAvailableSkuCode(String firstAvailableSkuCode) {
+    /** {@inheritDoc} */
+    public void setFirstAvailableSkuCode(final String firstAvailableSkuCode) {
         this.firstAvailableSkuCode = firstAvailableSkuCode;
     }
 
+    /** {@inheritDoc} */
     public BigDecimal getFirstAvailableSkuQuantity() {
         return firstAvailableSkuQuantity;
     }
 
-    public void setFirstAvailableSkuQuantity(BigDecimal firstAvailableSkuQuantity) {
+    /** {@inheritDoc} */
+    public void setFirstAvailableSkuQuantity(final BigDecimal firstAvailableSkuQuantity) {
         this.firstAvailableSkuQuantity = firstAvailableSkuQuantity;
     }
 
+    /** {@inheritDoc} */
     public BigDecimal getQtyOnWarehouse() {
         return qtyOnWarehouse;
     }
 
-    public void setQtyOnWarehouse(BigDecimal qtyOnWarehouse) {
+    /** {@inheritDoc} */
+    public void setQtyOnWarehouse(final BigDecimal qtyOnWarehouse) {
         this.qtyOnWarehouse = qtyOnWarehouse;
     }
 
+    /** {@inheritDoc} */
     public int getAvailability() {
         return availability;
     }
 
+    /** {@inheritDoc} */
     public void setAvailability(final int availability) {
         this.availability = availability;
     }
 
+    /** {@inheritDoc} */
     public long getId() {
         return id;
     }
 
+    /** {@inheritDoc} */
     public void setId(final long id) {
         this.id = id;
     }
 
+    /** {@inheritDoc} */
     public String getCode() {
         return code;
     }
 
+    /** {@inheritDoc} */
     public void setCode(final String code) {
         this.code = code;
     }
 
+    /** {@inheritDoc} */
     public String getName(final String locale) {
-        return (String) ObjectUtils.defaultIfNull(this.i18NModel.getValue(locale), name);
+        return (String) ObjectUtils.defaultIfNull(
+                this.i18NModel.getValue(locale),
+                name
+        );
     }
 
+    /** {@inheritDoc} */
     public String getName() {
         return name;
     }
 
+    /** {@inheritDoc} */
     public void setName(final String name) {
         this.name = name;
         this.i18NModel = new StringI18NModel(name);
     }
 
+    /** {@inheritDoc} */
     public String getDescription() {
         return description;
     }
 
+    /** {@inheritDoc} */
     public void setDescription(final String description) {
         this.description = description;
     }
