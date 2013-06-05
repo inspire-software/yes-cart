@@ -47,7 +47,7 @@ public abstract class AbstractImageServiceImpl implements AttributableImageServi
      * @param object             product/sku/category
      * @return image uri.
      */
-    protected String getImageURI(final String imageName,
+    public String getImageURI(final String imageName,
                               final String width,
                               final String height,
                               final String servletContextPath,

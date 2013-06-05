@@ -46,4 +46,20 @@ public interface AttributableImageService {
                     String attrName,
                     String attrVal);
 
+    /**
+     * Get default image uri.
+     *
+     * @param imageName          name of image
+     * @param width              image width
+     * @param height             image height
+     * @param servletContextPath http servlet request
+     * @param object             product/sku/category
+     * @return image uri.
+     */
+    String getImageURI(final String imageName,
+                              final String width,
+                              final String height,
+                              final String servletContextPath,
+                              final Object object);
+
 }

@@ -14,11 +14,11 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.web.support.entity.decorator.impl;
+package org.yes.cart.domain.entity.impl;
 
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.web.support.entity.decorator.ProductAvailabilityModel;
+import org.yes.cart.domain.entity.ProductAvailabilityModel;
 
 import java.math.BigDecimal;
 

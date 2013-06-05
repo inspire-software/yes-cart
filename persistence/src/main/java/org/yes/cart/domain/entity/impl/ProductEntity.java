@@ -16,9 +16,12 @@
 package org.yes.cart.domain.entity.impl;
 
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.search.annotations.*;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.misc.Pair;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -35,53 +38,22 @@ import java.util.*;
 @Table(name = "TPRODUCT")
 public class ProductEntity implements org.yes.cart.domain.entity.Product, java.io.Serializable {
 
+    private static Pair<String, BigDecimal> NOT_AVAILABLE_CODE_QTY = new Pair<String, BigDecimal>("N/A", BigDecimal.ZERO);
 
-    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
+
     private String code;
-
-    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     private Date availablefrom;
-
-    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     private Date availableto;
-
-    @Fields({@Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES), @Field(name = "name_sort", index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)})
     private String name;
-
-    @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES)
-    @FieldBridge(impl = org.yes.cart.domain.entity.bridge.DisplayNameBridge.class)
     private String displayName;
-
-    @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES)
     private String description;
-
-    @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES)
     private String tag;
-
-    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
-    @FieldBridge(impl = org.yes.cart.domain.entity.bridge.BrandBridge.class)
     private Brand brand;
-
-    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
-    @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductTypeValueBridge.class)
-
     private ProductType producttype;
     private int availability;
-
-    @Field
-    @ContainedIn
-    @IndexedEmbedded(targetElement = AttrValueEntityProduct.class)
-    @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeValueBridge.class)
     private Set<AttrValueProduct> attributes = new HashSet<AttrValueProduct>(0);
-
-    @Field
-    @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductCategoryBridge.class)
     private Set<ProductCategory> productCategory = new HashSet<ProductCategory>(0);
-
-    @Field
-    @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductSkuBridge.class)
     private Collection<ProductSku> sku = new ArrayList<ProductSku>(0);
-
     private Set<ProductEnsebleOption> ensebleOption = new HashSet<ProductEnsebleOption>(0);
     private Set<ProductAssociation> productAssociations = new HashSet<ProductAssociation>(0);
     private Boolean featured;
@@ -98,7 +70,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
 
 
     @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
-
     @Column(name = "CODE", nullable = false)
     public String getCode() {
         return this.code;
@@ -199,8 +170,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
      *      */
     @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     @FieldBridge(impl = org.yes.cart.domain.entity.bridge.BrandBridge.class)
-    /*
-    */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BRAND_ID", nullable = false)
     public Brand getBrand() {
@@ -227,6 +196,7 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.producttype = producttype;
     }
 
+    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     @Column(name = "AVAILABILITY", nullable = false)
     public int getAvailability() {
         return this.availability;
@@ -242,8 +212,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     @ContainedIn
     @IndexedEmbedded(targetElement = AttrValueEntityProduct.class)
     @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeValueBridge.class)
-    /*
-    */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "product")
     public Set<AttrValueProduct> getAttributes() {
         return this.attributes;
@@ -376,17 +344,13 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     }
 
 
-    // The following is extra code specified in the hbm.xml files
-
 
     private ProductSku defaultProductSku = null;
     private long productId;
 
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
     @DocumentId
     @Id
     @GeneratedValue
-    /*(generator="generator")*/
     @Column(name = "PRODUCT_ID", nullable = false)
     public long getProductId() {
         return this.productId;
@@ -402,7 +366,7 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.productId = productId;
     }
 
-
+    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     @Transient
     public BigDecimal getQtyOnWarehouse() {
         BigDecimal rez = BigDecimal.ZERO.setScale(2);
@@ -412,6 +376,71 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
             }
         }
         return rez;
+    }
+
+    private Pair<String, BigDecimal> firstAvailableSkuCodeQuantity = null;
+
+
+
+    @Transient
+    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
+    public String getFirstAvailableSkuCode() {
+        if (firstAvailableSkuCodeQuantity == null) {
+            firstAvailableSkuCodeQuantity = createFirstAvailableCodeQuantityPair();
+        }
+        return firstAvailableSkuCodeQuantity.getFirst();
+    }
+
+    /**
+     * Get default image, which is stored into lucene index, to reduce db hit.
+     * @return default product image if found, otherwise no image constant.
+     */
+    @Transient
+    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
+    public String getDefaultImage() {
+        final AttrValue attr = getAttributeByCode(Constants.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "0");
+        if (attr == null || StringUtils.isBlank(attr.getVal())) {
+
+            return Constants.NO_IMAGE;
+
+        }
+        return attr.getVal();
+    }
+
+
+    @Transient
+    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
+    public BigDecimal getFirstAvailableSkuQuantity() {
+        if (firstAvailableSkuCodeQuantity == null) {
+            firstAvailableSkuCodeQuantity = createFirstAvailableCodeQuantityPair();
+        }
+        return firstAvailableSkuCodeQuantity.getSecond();
+    }
+
+
+    /*
+    * Return first available sku rather than default to improve customer experience.
+    */
+    private Pair<String, BigDecimal>  createFirstAvailableCodeQuantityPair() {
+        final ProductAvailabilityModel productPam = new ProductAvailabilityModelImpl(getAvailability(), getQtyOnWarehouse());
+        if (productPam.isAvailable()) {
+            if (isMultiSkuProduct()) {
+                for (final ProductSku sku : getSku()) {
+                    final ProductAvailabilityModel skuPam = new ProductAvailabilityModelImpl(getAvailability(), sku.getQty());
+                    if (skuPam.isAvailable()) {
+                        return  new Pair<String, BigDecimal>(sku.getCode(), sku.getQty());
+                    }
+                }
+            }
+        }
+
+        ProductSku productSku  = getDefaultSku();
+        if(productSku != null) {
+            // single SKU and N/A product just use default
+            return  new Pair<String, BigDecimal>(productSku.getCode(), productSku.getQty());
+
+        }
+        return NOT_AVAILABLE_CODE_QTY;
     }
 
 
@@ -464,13 +493,12 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
 
     @Transient
     public AttrValueProduct getAttributeByCode(final String attributeCode) {
-        if (attributeCode == null) {
-            return null;
-        }
-        if (this.attributes != null) {
-            for (AttrValueProduct attrValue : this.attributes) {
-                if (attrValue.getAttribute() != null && attrValue.getAttribute().getCode() != null && attrValue.getAttribute().getCode().equals(attributeCode)) {
-                    return attrValue;
+        if (attributeCode != null) {
+            if (this.attributes != null) {
+                for (AttrValueProduct attrValue : this.attributes) {
+                    if (attrValue.getAttribute() != null && attrValue.getAttribute().getCode() != null && attrValue.getAttribute().getCode().equals(attributeCode)) {
+                        return attrValue;
+                    }
                 }
             }
         }

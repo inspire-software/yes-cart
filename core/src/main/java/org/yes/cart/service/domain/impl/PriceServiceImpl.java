@@ -21,10 +21,7 @@ import org.apache.commons.collections.map.MultiValueMap;
 import org.yes.cart.cache.Cacheable;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.entity.AttrValueShop;
-import org.yes.cart.domain.entity.ProductSku;
-import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.domain.entity.SkuPrice;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.navigation.price.PriceTierNode;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
 import org.yes.cart.domain.misc.navigation.price.impl.PriceTierNodeImpl;
@@ -55,6 +52,7 @@ public class PriceServiceImpl
     private final ExchangeRateService exchangeRateService;
     private final PriceNavigation priceNavigation;
     private final GenericDAO<SkuPrice, Long> skuPriceDao;
+    private final GenericDAO<Product, Long> productDao;
 
 
     /**
@@ -66,15 +64,37 @@ public class PriceServiceImpl
      */
     public PriceServiceImpl(final ExchangeRateService exchangeRateService,
                             final PriceNavigation priceNavigation,
-                            final GenericDAO<SkuPrice, Long> skuPriceDao
+                            final GenericDAO<SkuPrice, Long> skuPriceDao,
+                            final GenericDAO<Product, Long> productDao
     ) {
         super(skuPriceDao);
         this.exchangeRateService = exchangeRateService;
         this.priceNavigation = priceNavigation;
         this.skuPriceDao = skuPriceDao;
+        this.productDao = productDao;
 
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "priceServiceImplMethodCache")
+    public SkuPrice getMinimalRegularPrice(
+            final long productId,
+            final String selectedSku,
+            final Shop shop,
+            final String currencyCode,
+            final BigDecimal quantity) {
+
+        return getMinimalRegularPrice(
+                productDao.findById(productId).getSku(),
+                selectedSku,
+                shop,
+                currencyCode,
+                quantity
+                );
+    }
 
     /**
      * {@inheritDoc}
@@ -101,9 +121,9 @@ public class PriceServiceImpl
 
         SkuPrice rez = null;
         for (SkuPrice skuPrice : skuPrices) {
-            if (   ( selectedSku == null || skuPrice.getSku().getCode().equals(selectedSku) )
-                    && ( minimalRegularPrice == null
-                        || MoneyUtils.isFirstBiggerThanOrEqualToSecond(minimalRegularPrice, skuPrice.getRegularPrice())
+            if ((selectedSku == null || skuPrice.getSku().getCode().equals(selectedSku))
+                    && (minimalRegularPrice == null
+                    || MoneyUtils.isFirstBiggerThanOrEqualToSecond(minimalRegularPrice, skuPrice.getRegularPrice())
             )
                     ) {
                 minimalRegularPrice = skuPrice.getRegularPrice();
@@ -115,8 +135,6 @@ public class PriceServiceImpl
         }
         return rez;
     }
-
-
 
 
     /**
@@ -148,7 +166,7 @@ public class PriceServiceImpl
 
             reorderSkuPrices(skuPricesForOneSku);
 
-            long time = System.currentTimeMillis();   //TODOV2 time machine
+            long time = java.lang.System.currentTimeMillis();   //TODOV2 time machine
 
             boolean found = false;
 
@@ -369,7 +387,7 @@ public class PriceServiceImpl
 
             if (result.isEmpty()
                     && MoneyUtils.isFirstBiggerThanSecond(BigDecimal.ONE, quantity)
-                    &&  !MoneyUtils.isFirstEqualToSecond(BigDecimal.ZERO, quantity, Constants.DEFAULT_SCALE) ) {
+                    && !MoneyUtils.isFirstEqualToSecond(BigDecimal.ZERO, quantity, Constants.DEFAULT_SCALE)) {
                 // float point qty
                 return getSkuPricesFilteredByQuantity(prices, BigDecimal.ONE);
             }

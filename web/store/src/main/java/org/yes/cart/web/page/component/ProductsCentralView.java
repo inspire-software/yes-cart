@@ -25,19 +25,17 @@ import org.apache.wicket.markup.repeater.data.GridView;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
+import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.page.component.data.SortableProductDataProvider;
 import org.yes.cart.web.page.component.navigation.ProductPerPageListView;
 import org.yes.cart.web.page.component.navigation.ProductSorter;
 import org.yes.cart.web.page.component.navigation.URLPagingNavigator;
 import org.yes.cart.web.page.component.product.ProductInListView;
-import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.entity.decorator.ProductDecorator;
-import org.yes.cart.web.support.service.AttributableImageService;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.util.List;
@@ -83,16 +81,8 @@ public class ProductsCentralView extends AbstractCentralView {
     @SpringBean(name = ServiceSpringKeys.PRODUCT_SERVICE)
     protected ProductService productService;
 
-    @SpringBean(name = StorefrontServiceSpringKeys.ATTRIBUTABLE_IMAGE_SERVICE)
-    protected AttributableImageService attributableImageService;
-
     @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
     protected CategoryService categoryService;
-
-    @SpringBean(name = ServiceSpringKeys.IMAGE_SERVICE)
-    protected ImageService imageService;
-
-
 
     /**
      * Construct panel.
@@ -126,24 +116,24 @@ public class ProductsCentralView extends AbstractCentralView {
         final int selectedItemPerPage = WicketUtil.getSelectedItemsPerPage(
                 getPage().getPageParameters(), itemsPerPageValues);
 
-        final SortableProductDataProvider dataProvider = new
-                SortableProductDataProvider(
+        final SortableProductDataProvider dataProvider = new  SortableProductDataProvider(
                 productService,
                 getBooleanQuery(),
                 getI18NSupport(),
-                getDecoratorFacade());
+                getDecoratorFacade()
+        );
 
         applySortFieldAndOrder(dataProvider);
 
-        final GridView<ProductDecorator> productDataView = new GridView<ProductDecorator>(PRODUCT_LIST, dataProvider) {
+        final GridView<ProductSearchResultDTO> productDataView = new GridView<ProductSearchResultDTO>(PRODUCT_LIST, dataProvider) {
 
-            protected void populateItem(Item<ProductDecorator> productItem) {
+            protected void populateItem(Item<ProductSearchResultDTO> productItem) {
                 productItem.add(
                         new ProductInListView(PRODUCT, productItem.getModelObject(), getCategory(), widthHeight)
                 );
             }
 
-            protected void populateEmptyItem(Item<ProductDecorator> productItem) {
+            protected void populateEmptyItem(Item<ProductSearchResultDTO> productItem) {
                 productItem.add(
                         new Label(PRODUCT, StringUtils.EMPTY).setVisible(false)
                 );

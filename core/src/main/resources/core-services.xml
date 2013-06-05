@@ -92,6 +92,7 @@
                 <constructor-arg index="2" type="org.yes.cart.dao.GenericDAO" ref="productTypeDao"/>
                 <constructor-arg index="3" type="org.yes.cart.dao.GenericDAO" ref="productCategoryDao"/>
                 <constructor-arg index="4" type="org.yes.cart.dao.GenericDAO" ref="productTypeAttrDao"/>
+                <constructor-arg index="5" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
             </bean>
         </property>
     </bean>
@@ -218,6 +219,7 @@
                 <constructor-arg index="0" type="org.yes.cart.service.domain.ExchangeRateService" ref="exchangeRateService"/>
                 <constructor-arg index="1" type="org.yes.cart.domain.query.PriceNavigation" ref="priceNavigation"/>
                 <constructor-arg index="2" type="org.yes.cart.dao.GenericDAO" ref="skuPriceDao"/>
+                <constructor-arg index="3" type="org.yes.cart.dao.GenericDAO" ref="productDao"/>
             </bean>
         </property>
     </bean>
@@ -804,6 +806,7 @@
                 <entry key="org.yes.cart.domain.dto.ProductTypeAttrDTO" value="org.yes.cart.domain.dto.impl.ProductTypeAttrDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.ProductCategoryDTO" value="org.yes.cart.domain.dto.impl.ProductCategoryDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.ProductDTO" value="org.yes.cart.domain.dto.impl.ProductDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ProductSearchResultDTO" value="org.yes.cart.domain.dto.impl.ProductSearchResultDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.ProductSkuDTO" value="org.yes.cart.domain.dto.impl.ProductSkuDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.AttrValueCategoryDTO" value="org.yes.cart.domain.dto.impl.AttrValueCategoryDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.AttrValueCustomerDTO" value="org.yes.cart.domain.dto.impl.AttrValueCustomerDTOImpl"/>

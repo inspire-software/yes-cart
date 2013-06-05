@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.web.support.entity.decorator;
+package org.yes.cart.domain.entity;
 
 import java.math.BigDecimal;
 

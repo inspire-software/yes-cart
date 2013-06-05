@@ -18,6 +18,7 @@ package org.yes.cart.service.domain;
 
 import org.apache.lucene.search.Query;
 import org.yes.cart.dao.CriteriaTuner;
+import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
@@ -239,7 +240,7 @@ public interface ProductService extends GenericService<Product> {
      * @param reverse       reverce the search result if true
      * @return list of products
      */
-    List<Product> getProductByQuery(
+    List<ProductSearchResultDTO> getProductSearchResultDTOByQuery(
             Query query,
             int firtsResult,
             int maxResults,
@@ -249,15 +250,21 @@ public interface ProductService extends GenericService<Product> {
     /**
      * Get the all products , that match the given query
      *
-     * @param query       lucene query
-     * @param firtsResult index of first result
-     * @param maxResults  quantity results to return
+     * @param query         lucene query
+     * @param firtsResult   index of first result
+     * @param maxResults    quantity results to return
+     * @param sortFieldName sort field name
+     * @param reverse       reverce the search result if true
      * @return list of products
      */
     List<Product> getProductByQuery(
             Query query,
             int firtsResult,
-            int maxResults);
+            int maxResults,
+            String sortFieldName,
+            boolean reverse);
+
+
 
     /**
      * Get all available products, that marked as featured . Need to be carefull to mark product as featured and keep
