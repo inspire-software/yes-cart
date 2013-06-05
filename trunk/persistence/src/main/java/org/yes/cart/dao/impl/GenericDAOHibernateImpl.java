@@ -16,8 +16,9 @@
 
 package org.yes.cart.dao.impl;
 
-import org.apache.lucene.search.SortField;
+import org.apache.lucene.search.*;
 import org.hibernate.*;
+import org.hibernate.Query;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Example;
 import org.hibernate.search.FullTextQuery;
@@ -583,27 +584,59 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
+    public List<Object[]> fullTextSearch(final org.apache.lucene.search.Query query,
+                                         final int firtsResult,
+                                         final int maxResults,
+                                         final String sortFieldName,
+                                         final boolean reverse,
+                                         final String ... fields) {
+        if (null != getPersistentClass().getAnnotation(org.hibernate.search.annotations.Indexed.class)) {
+            final FullTextQuery fullTextQuery = createFullTextQuery(query, firtsResult, maxResults, sortFieldName, reverse);
+            fullTextQuery.setProjection(fields);
+            final List<Object[]> list = fullTextQuery.list();
+            if (list != null) {
+                return list;
+            }
+
+        }
+        return Collections.EMPTY_LIST;
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
     public List<T> fullTextSearch(final org.apache.lucene.search.Query query,
                                   final int firtsResult,
                                   final int maxResults,
                                   final String sortFieldName,
                                   final boolean reverse) {
         if (null != getPersistentClass().getAnnotation(org.hibernate.search.annotations.Indexed.class)) {
-            FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
-            FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(query, getPersistentClass());
-            if (sortFieldName != null) {
-                org.apache.lucene.search.Sort sort = new org.apache.lucene.search.Sort(
-                        new org.apache.lucene.search.SortField(sortFieldName, SortField.STRING, reverse));
-                fullTextQuery.setSort(sort);
-            }
-            fullTextQuery.setFirstResult(firtsResult);
-            fullTextQuery.setMaxResults(maxResults);
-            List<T> list = fullTextQuery.list();
+            final FullTextQuery fullTextQuery = createFullTextQuery(query, firtsResult, maxResults, sortFieldName, reverse);
+            final List<T> list = fullTextQuery.list();
             if (list != null) {
                 return list;
             }
         }
         return Collections.EMPTY_LIST;
+    }
+
+    private FullTextQuery createFullTextQuery(final org.apache.lucene.search.Query query,
+                                              final int firtsResult,
+                                              final int maxResults,
+                                              final String sortFieldName,
+                                              final boolean reverse) {
+        FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
+        FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(query, getPersistentClass());
+        if (sortFieldName != null) {
+            Sort sort = new Sort(
+                    new SortField(sortFieldName, SortField.STRING, reverse));
+            fullTextQuery.setSort(sort);
+        }
+        fullTextQuery.setFirstResult(firtsResult);
+        fullTextQuery.setMaxResults(maxResults);
+        return fullTextQuery;
     }
 
 

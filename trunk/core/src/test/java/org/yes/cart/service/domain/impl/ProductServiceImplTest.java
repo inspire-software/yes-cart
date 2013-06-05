@@ -16,15 +16,21 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.apache.lucene.search.Query;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.EntityFactory;
+import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.query.impl.GlobalSearchQueryBuilderImpl;
+import org.yes.cart.domain.query.impl.ProductsInCategoryQueryBuilderImpl;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.service.domain.*;
 
@@ -32,6 +38,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -291,13 +298,13 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetDefaultImage() {
-       assertEquals("sobot-picture.jpeg", productService.getDefaultImage(10000L));
-       assertNull("sobot-picture.jpeg", productService.getDefaultImage(9999L));
+        assertEquals("sobot-picture.jpeg", productService.getDefaultImage(10000L));
+        assertNull("sobot-picture.jpeg", productService.getDefaultImage(9999L));
 
     }
 
     @Test
-    public  void testNoneAttributesView() {
+    public void testNoneAttributesView() {
 
         final Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> attrs =
                 productService.getProductAttributes("en", 0L, 0L, 1L);
@@ -308,7 +315,7 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public  void testProductAttributesView() {
+    public void testProductAttributesView() {
 
         // bender product
         final Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> attrs =
@@ -327,7 +334,7 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public  void testProductSkuAttributesView() {
+    public void testProductSkuAttributesView() {
 
         // bender sku
         final Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> attrs =
@@ -342,6 +349,30 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
         final List<Pair<String, String>> values = attrs.get(dvdKey).get(weightKey);
         assertEquals(1, values.size());
         assertEquals("1.16", values.get(0).getSecond());
+
+    }
+
+    @Test
+    public void testGetProductSearchResultDTOByQuery() {
+        getTx().execute(new TransactionCallbackWithoutResult() {
+            public void doInTransactionWithoutResult(TransactionStatus status) {
+
+                productService.getGenericDao().fullTextSearchReindex();
+
+                final ProductsInCategoryQueryBuilderImpl queryBuilder = new ProductsInCategoryQueryBuilderImpl();
+                Query query = queryBuilder.createQuery(Arrays.asList(101L));
+                final List<ProductSearchResultDTO> searchRes = productService.getProductSearchResultDTOByQuery(
+                        query,
+                        0,
+                        100,
+                        null,
+                        false
+                );
+                assertEquals("Failed [" + query.toString() + "]", 2, searchRes.size());
+
+            }
+        });
+
 
     }
 

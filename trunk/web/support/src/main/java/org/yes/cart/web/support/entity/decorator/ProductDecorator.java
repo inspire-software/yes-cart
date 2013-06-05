@@ -43,4 +43,5 @@ public interface ProductDecorator extends Product, ObjectDecorator {
              CategoryService categoryService,
              ProductService productService);
 
+
 }

@@ -134,7 +134,7 @@ public class ProductDAOTest extends AbstractTestDAO {
 
                 productDao.fullTextSearchReindex();
 
-                GlobalSearchQueryBuilderImpl queryBuilder = new GlobalSearchQueryBuilderImpl();
+                final GlobalSearchQueryBuilderImpl queryBuilder = new GlobalSearchQueryBuilderImpl();
                 Query query = queryBuilder.createQuery("bender", Arrays.asList(101L, 104L));
                 List<Product> products = productDao.fullTextSearch(query);
                 assertTrue("Failed [" + query.toString() +"]", !products.isEmpty());
