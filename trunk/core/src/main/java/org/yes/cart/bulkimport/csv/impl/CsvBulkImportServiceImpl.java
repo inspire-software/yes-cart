@@ -63,8 +63,6 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
 
     private GenericConversionService extendedConversionService;
 
-    private PropertyDescriptor propertyDescriptor;
-
     private XStreamProvider<CsvImportDescriptor> importDescriptorXStreamProvider;
 
     private ValueAdapter valueDataAdapter;
@@ -279,15 +277,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
             statusListener.notifyPing("Importing tuple: " + tuple.getSourceId()); // make sure we do not time out
 
         } catch (Exception e) {
-            String additionalInfo = null;
-            if (propertyDescriptor != null) {
-                additionalInfo = MessageFormat.format(
-                        "Property name {0} type {1} object is {2}",
-                        propertyDescriptor.getName(),
-                        propertyDescriptor.getPropertyType().getName(),
-                        object
-                );
-            }
+            String additionalInfo = e.getMessage();
             String message = MessageFormat.format(
                     "during import row : {0} \ndescriptor {1} \nerror {2}\n{3} \nadditional info {4} \nobject is {5} \nmaster object is {6}",
                     tuple,
@@ -352,27 +342,57 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
 
         final Class clz = object.getClass();
 
+        PropertyDescriptor propertyDescriptor = null;
+
         for (ImportColumn importColumn : importColumns) {
-            if (StringUtils.isNotBlank(importColumn.getName())) { //can be just lookup query
-                propertyDescriptor = new PropertyDescriptor(importColumn.getName(), clz);
+            try {
+                if (StringUtils.isNotBlank(importColumn.getName())) { //can be just lookup query
 
-                Object singleObjectValue = tuple.getColumnValue(importColumn, valueDataAdapter);
-                if (importColumn.getLanguage() != null) {
-                    final I18NModel model = new StringI18NModel((String) propertyDescriptor.getReadMethod().invoke(object));
-                    model.putValue(importColumn.getLanguage(), String.valueOf(singleObjectValue));
-                    singleObjectValue = model.toString();
-                }
-                if (singleObjectValue != null && !singleObjectValue.getClass().equals(propertyDescriptor.getPropertyType())) {
-                    // if we have mismatch try on the fly conversion
-                    singleObjectValue =
-                            extendedConversionService.convert(
-                                    singleObjectValue,
-                                    TypeDescriptor.valueOf(singleObjectValue.getClass()),
-                                    TypeDescriptor.valueOf((propertyDescriptor.getPropertyType())
-                                ));
-                }
+                    Object writeObject = object;
 
-                propertyDescriptor.getWriteMethod().invoke(object, singleObjectValue);
+                    if (importColumn.getName().indexOf('.') == -1) {
+                        // direct property
+                        propertyDescriptor = new PropertyDescriptor(importColumn.getName(), clz);
+                    } else {
+                        // object path
+                        final String[] chain = importColumn.getName().split("\\.");
+                        for (int i = 0; i < chain.length - 1; i++) {
+                            propertyDescriptor = new PropertyDescriptor(chain[i], writeObject.getClass());
+                            writeObject = propertyDescriptor.getReadMethod().invoke(writeObject);
+                        }
+                        propertyDescriptor = new PropertyDescriptor(chain[chain.length - 1], writeObject.getClass());
+                    }
+
+
+                    Object singleObjectValue = tuple.getColumnValue(importColumn, valueDataAdapter);
+                    if (importColumn.getLanguage() != null) {
+                        final I18NModel model = new StringI18NModel((String) propertyDescriptor.getReadMethod().invoke(object));
+                        model.putValue(importColumn.getLanguage(), String.valueOf(singleObjectValue));
+                        singleObjectValue = model.toString();
+                    }
+                    if (singleObjectValue != null && !singleObjectValue.getClass().equals(propertyDescriptor.getPropertyType())) {
+                        // if we have mismatch try on the fly conversion
+                        singleObjectValue =
+                                extendedConversionService.convert(
+                                        singleObjectValue,
+                                        TypeDescriptor.valueOf(singleObjectValue.getClass()),
+                                        TypeDescriptor.valueOf((propertyDescriptor.getPropertyType())
+                                    ));
+                    }
+
+                    propertyDescriptor.getWriteMethod().invoke(writeObject, singleObjectValue);
+                }
+            } catch (Exception exp) {
+
+                final String propName = propertyDescriptor != null ? propertyDescriptor.getName() : null;
+                final String propType = propertyDescriptor != null ? propertyDescriptor.getPropertyType().getName() : null;
+
+                throw new Exception(MessageFormat.format(
+                        "Failed to process property name {0} type {1} object is {2}",
+                        propName,
+                        propType,
+                        object
+                ), exp);
             }
         }
 
@@ -399,6 +419,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
         ImportColumn currentColumn = null;
         final Class clz = object.getClass();
         Object singleObjectValue = null;
+        PropertyDescriptor propertyDescriptor = null;
 
         try {
             for (ImportColumn importColumn : importColumns) {
@@ -412,14 +433,19 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
                 propertyDescriptor = new PropertyDescriptor(importColumn.getName(), clz);
                 propertyDescriptor.getWriteMethod().invoke(object, singleObjectValue);
             }
-        } catch (Exception e) {
-            throw new Exception(
-                    MessageFormat.format(
-                            " \nroot cause: {0} \nvalue {1} \nstack trace is {2}",
-                            currentColumn,
-                            singleObjectValue,
-                            ExceptionUtil.stackTraceToString(e)),
-                    e);
+        } catch (Exception exp) {
+
+            final String propName = propertyDescriptor != null ? propertyDescriptor.getName() : null;
+            final String propType = propertyDescriptor != null ? propertyDescriptor.getPropertyType().getName() : null;
+
+            throw new Exception(MessageFormat.format(
+                    "Failed to process property name {0} type {1} object is {2} caused by column {0} with value {1}",
+                    propName,
+                    propType,
+                    object,
+                    currentColumn,
+                    singleObjectValue
+            ), exp);
         }
 
     }
@@ -442,7 +468,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
                              final ImportDescriptor importDescriptor) throws ClassNotFoundException {
 
         if (column == null) {
-            // no cacheing for prime select
+            // no caching for prime select
             final Object prime = getExistingEntity(importDescriptor, importDescriptor.getSelectSql(), masterObject, tuple);
             if (prime == null) {
                 return genericDAO.getEntityFactory().getByIface(Class.forName(importDescriptor.getEntityType()));

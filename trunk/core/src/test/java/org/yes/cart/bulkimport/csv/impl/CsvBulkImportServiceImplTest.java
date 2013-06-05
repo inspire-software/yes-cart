@@ -257,11 +257,12 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             assertEquals(12L, cntCats);  // 12 categories
 
             rs = getConnection().getConnection().createStatement().executeQuery (
-                    "select PARENT_ID, PRODUCTTYPE_ID, DESCRIPTION, GUID from TCATEGORY where NAME = 'mice'");
+                    "select PARENT_ID, PRODUCTTYPE_ID, DESCRIPTION, GUID, URI from TCATEGORY where NAME = 'mice'");
             rs.next();
             assertFalse(rs.isAfterLast());
             String catDesc = rs.getString("DESCRIPTION");
             String catGuid = rs.getString("GUID");
+            String catSeoUri = rs.getString("URI");
             long catParentId = rs.getLong("PARENT_ID");
             long catPtypeId = rs.getLong("PRODUCTTYPE_ID");
             rs.close();
@@ -273,6 +274,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             assertEquals(100L, catParentId);
             assertEquals(ptypeId, catPtypeId);
             assertEquals("195", catGuid);
+            assertEquals("mice", catSeoUri);
 
 
 
