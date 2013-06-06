@@ -132,7 +132,8 @@ public class ProductInListView extends BaseComponent {
         );
 
         add(
-                new Label(DESCRIPTION_LABEL, getDescription(selectedLocale)).setEscapeModelStrings(false)
+                new Label(DESCRIPTION_LABEL, product.getDescription(selectedLocale)).setEscapeModelStrings(false)
+               // new Label(DESCRIPTION_LABEL, getDescription(selectedLocale)).setEscapeModelStrings(false)
         );
 
         add(
@@ -193,14 +194,14 @@ public class ProductInListView extends BaseComponent {
     /**
      * {@inheritDoc}
      */
-    public String getDescription(final String locale) {
+    /*public String getDescription(final String locale) {
         final Pair<String, String> desc = productService.getProductAttribute(
                 locale, product.getId(), 0L, AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX + locale);
         if (desc == null) {
             return product.getDescription();
         }
         return desc.getSecond();
-    }
+    }  */
 
     /**
      * {@inheritDoc}

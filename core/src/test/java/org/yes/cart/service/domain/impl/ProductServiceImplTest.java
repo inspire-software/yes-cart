@@ -369,6 +369,9 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
                         false
                 );
                 assertEquals("Failed [" + query.toString() + "]", 2, searchRes.size());
+                ProductSearchResultDTO bernder = searchRes.get(0);
+                assertEquals("Бендер Згибатель Родригес", bernder.getName("ru"));
+                assertEquals("Бендер Згинач Родріґес", bernder.getName("ua"));
 
             }
         });

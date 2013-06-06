@@ -19,8 +19,11 @@ package org.yes.cart.domain.entity.impl;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.search.annotations.*;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.System;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 
 import javax.persistence.*;
@@ -105,12 +108,10 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.availableto = availableto;
     }
 
-    /**
-     *      */
-    @Fields({@Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES), @Field(name = "name_sort", index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)})
-    /*
-    */
-
+    /** {@inheritDoc} */
+    @Fields({
+            @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES),
+            @Field(name = "name_sort", index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)})
     @Column(name = "NAME", nullable = false)
     public String getName() {
         return this.name;
@@ -120,28 +121,56 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.name = name;
     }
 
-    /**
-     *      */
-    @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES)
+    /** {@inheritDoc} */
+    @Fields
+            (
+                {
+                        @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES),
+                        @Field(name = "displayNameAsIs", index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
+                }
+            )
     @FieldBridge(impl = org.yes.cart.domain.entity.bridge.DisplayNameBridge.class)
-    /*
-    */
-
     @Column(name = "DISPLAYNAME", length = 4000)
     public String getDisplayName() {
         return this.displayName;
     }
 
-    public void setDisplayName(String displayName) {
+    /** {@inheritDoc} */
+    public void setDisplayName(final String displayName) {
         this.displayName = displayName;
     }
 
-    /**
-     *      */
-    @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES)
-    /*
-    */
+    /** {@inheritDoc} */
+    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
+    @Transient
+    public String getDescriptionAsIs() {
+        final StringBuilder builder = new StringBuilder();
+        for (AttrValue attr : attributes) {
 
+            java.lang.System.out.println(attr.getAttribute().getCode());
+
+            if (attr.getAttribute().getCode().startsWith(AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX)) {
+
+
+
+                builder.append(getLocale(attr.getAttribute().getCode()));
+                builder.append(StringI18NModel.SEPARATOR);
+                builder.append(attr.getAttribute().getVal());
+                builder.append(StringI18NModel.SEPARATOR);
+            }
+            
+        }
+        return this.description;
+    }
+
+    @Transient
+    String getLocale(final String attrCode) {
+        return attrCode.substring(AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX.length() - 1);
+    }
+
+
+    /** {@inheritDoc} */
+    @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES)
     @Column(name = "DESCRIPTION", length = 4000)
     public String getDescription() {
         return this.description;
@@ -151,12 +180,7 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.description = description;
     }
 
-    /**
-     *      */
     @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES)
-    /*
-    */
-
     @Column(name = "TAG")
     public String getTag() {
         return this.tag;
@@ -166,8 +190,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.tag = tag;
     }
 
-    /**
-     *      */
     @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     @FieldBridge(impl = org.yes.cart.domain.entity.bridge.BrandBridge.class)
     @ManyToOne(fetch = FetchType.LAZY)
@@ -184,8 +206,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
      *      */
     @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductTypeValueBridge.class)
-    /*
-    */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "PRODUCTTYPE_ID", nullable = false)
     public ProductType getProducttype() {
