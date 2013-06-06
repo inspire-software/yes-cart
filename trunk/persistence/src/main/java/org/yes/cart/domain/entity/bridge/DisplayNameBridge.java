@@ -19,26 +19,41 @@ package org.yes.cart.domain.entity.bridge;
 import org.apache.lucene.document.Document;
 import org.hibernate.search.bridge.FieldBridge;
 import org.hibernate.search.bridge.LuceneOptions;
+import org.hibernate.search.bridge.TwoWayFieldBridge;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
+import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 
 /**
  * User: denispavlov
  * Date: 12-08-15
  * Time: 2:05 PM
  */
-public class DisplayNameBridge implements FieldBridge {
+public class DisplayNameBridge implements TwoWayFieldBridge/*FieldBridge*/ {
 
     /** {@inheritDoc} */
     public void set(final String name, final Object value, final Document document, final LuceneOptions luceneOptions) {
 
         if (value instanceof String) {
-            final I18NModel model = new StringI18NModel((String) value);
-            for (String displayName : model.getAllValues().values()) {
-                // add all names to index
-                luceneOptions.addFieldToDocument(name, displayName, document);
+            if (ProductSearchQueryBuilder.PRODUCT_DISPLAYNAME_FIELD.equals(name)) {
+                final I18NModel model = new StringI18NModel((String) value);
+                for (String displayName : model.getAllValues().values()) {
+                    // add all names to index
+                    luceneOptions.addFieldToDocument(name, displayName, document);
+                }
+            } else if (ProductSearchQueryBuilder.PRODUCT_DISPLAYNAME_ASIS_FIELD.equals(name)) {
+                luceneOptions.addFieldToDocument(name, (String) value, document);
             }
         }
+    }
 
+    /** {@inheritDoc} */
+    public Object get(final String name, final Document document) {
+        return document.get(name);
+    }
+
+    /** {@inheritDoc} */
+    public String objectToString(final Object object) {
+        return (String) object;
     }
 }

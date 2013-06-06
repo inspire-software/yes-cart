@@ -34,14 +34,18 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     private long id;
     private String code;
     private String name;
+    private String displayName;
     private String description;
+    private String displayDescription;
     private int availability;
     private BigDecimal qtyOnWarehouse;
     private String firstAvailableSkuCode;
     private BigDecimal firstAvailableSkuQuantity;
     private String defaultImage;
 
-    private I18NModel i18NModel;
+    private I18NModel i18NModelName;
+    private I18NModel i18NModelDescription;
+
 
     /** {@inheritDoc} */
     public String getDefaultImage() {
@@ -114,9 +118,21 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     }
 
     /** {@inheritDoc} */
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    /** {@inheritDoc} */
+    public void setDisplayName(final String displayName) {
+        this.displayName = displayName;
+        this.i18NModelName = new StringI18NModel(this.displayName);
+    }
+
+
+    /** {@inheritDoc} */
     public String getName(final String locale) {
         return (String) ObjectUtils.defaultIfNull(
-                this.i18NModel.getValue(locale),
+                this.i18NModelName.getValue(locale),
                 name
         );
     }
@@ -129,8 +145,9 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     /** {@inheritDoc} */
     public void setName(final String name) {
         this.name = name;
-        this.i18NModel = new StringI18NModel(name);
     }
+    
+    
 
     /** {@inheritDoc} */
     public String getDescription() {
@@ -141,4 +158,28 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     public void setDescription(final String description) {
         this.description = description;
     }
+
+    /** {@inheritDoc} */
+    public String getDescription(final String locale) {
+        return (String) ObjectUtils.defaultIfNull(
+                this.i18NModelDescription.getValue(locale),
+                description
+        );
+    }
+
+
+    /** {@inheritDoc} */
+    public String getDisplayDescription() {
+        return displayDescription;
+    }
+
+    /** {@inheritDoc} */
+    public void setDisplayDescription(final String displayDescription) {
+        
+        this.displayDescription = displayDescription;
+
+        i18NModelDescription = new StringI18NModel(this.displayDescription);
+    }
+
+    
 }

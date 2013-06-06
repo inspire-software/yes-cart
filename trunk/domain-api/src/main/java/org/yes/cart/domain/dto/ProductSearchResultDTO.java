@@ -16,6 +16,8 @@
 
 package org.yes.cart.domain.dto;
 
+import org.apache.commons.lang.ObjectUtils;
+
 import java.math.BigDecimal;
 
 /**
@@ -68,7 +70,7 @@ public interface ProductSearchResultDTO {
 
     /**
      * Get product description.
-     * @return
+     * @return product description.
      */
     String getDescription();
 
@@ -137,6 +139,41 @@ public interface ProductSearchResultDTO {
      * @param defaultImage default image.
      */
     void setDefaultImage(String defaultImage);
+
+
+    /**
+     * Get display name, which is hold localization failover.
+     * @return display name.
+     */
+    String getDisplayName();
+
+    /**
+     * Set display name.
+     * @param displayName display name.
+     */
+    void setDisplayName(String displayName);
+
+
+    /**
+     * Get localized description.
+     * @param locale locale.
+     * @return localized description
+     */
+    String getDescription(String locale);
+
+
+    /**
+     * GEt localized raw value
+     * @return localized raw value
+     */
+    String getDisplayDescription();
+
+    /**
+     * Set raw localized value for description.
+     * @param displayDescription
+     */
+    void setDisplayDescription(String displayDescription);
+
 
 
 }

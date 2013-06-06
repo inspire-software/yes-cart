@@ -34,6 +34,7 @@ import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.misc.navigation.range.RangeList;
 import org.yes.cart.domain.misc.navigation.range.RangeNode;
+import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.domain.queryobject.impl.FilteredNavigationRecordImpl;
 import org.yes.cart.service.domain.ProductService;
@@ -475,8 +476,17 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                 maxResults,
                 sortFieldName,
                 reverse,
-                "productId", "code", "name", "description", "availability", "qtyOnWarehouse",
-                "firstAvailableSkuCode", "firstAvailableSkuQuantity", "defaultImage");
+                ProductSearchQueryBuilder.PRODUCT_ID_FIELD,
+                ProductSearchQueryBuilder.PRODUCT_CODE_FIELD,
+                ProductSearchQueryBuilder.PRODUCT_NAME_FIELD,
+                ProductSearchQueryBuilder.PRODUCT_DESCIPTION_FIELD,
+                ProductSearchQueryBuilder.PRODUCT_AVAILABILITY_FIELD,
+                ProductSearchQueryBuilder.PRODUCT_QTY_FIELD,
+                ProductSearchQueryBuilder.PRODUCT_AVAILABESKUCODE_FIELD,
+                ProductSearchQueryBuilder.PRODUCT_AVAILABESKUCODEQTY_FIELD,
+                ProductSearchQueryBuilder.PRODUCT_DEFAULTIMAGE_FIELD,
+                ProductSearchQueryBuilder.PRODUCT_DISPLAYNAME_ASIS_FIELD,
+                ProductSearchQueryBuilder.PRODUCT_DESCRIPTION_ASIS_FIELD);
 
         final List<ProductSearchResultDTO> rez = new ArrayList<ProductSearchResultDTO>(searchRez.size());
         for (Object[] obj : searchRez) {
@@ -490,6 +500,8 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             dto.setFirstAvailableSkuCode((String) obj[6]);
             dto.setFirstAvailableSkuQuantity((BigDecimal) obj[7]);
             dto.setDefaultImage((String) obj[8]);
+            dto.setDisplayName((String) obj[9]);
+            dto.setDisplayDescription((String) obj[10]);
             rez.add(dto);
         }
 

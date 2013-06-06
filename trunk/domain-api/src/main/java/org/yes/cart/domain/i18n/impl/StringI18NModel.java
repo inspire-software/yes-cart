@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
  */
 public class StringI18NModel implements I18NModel {
 
-    private static final String SEPARATOR = "#~#";
+    public static final String SEPARATOR = "#~#";
     private static final Pattern PATTERN = Pattern.compile(SEPARATOR);
 
     private final Map<String, String> values = new HashMap<String, String>();

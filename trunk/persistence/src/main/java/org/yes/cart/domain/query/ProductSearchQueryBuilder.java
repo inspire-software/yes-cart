@@ -26,7 +26,16 @@ public interface ProductSearchQueryBuilder {
     //can be used in sort order
     public final static String PRODUCT_NAME_FIELD = "name";
     public final static String PRODUCT_DISPLAYNAME_FIELD = "displayName";
+    public final static String PRODUCT_DISPLAYNAME_ASIS_FIELD = "displayNameAsIs"; //for projections only
     public final static String PRODUCT_CODE_FIELD = "code";
+
+    public final static String PRODUCT_AVAILABILITY_FIELD = "availability"; //for projections only
+    public final static String PRODUCT_QTY_FIELD = "qtyOnWarehouse"; //for projections only
+    public final static String PRODUCT_AVAILABESKUCODE_FIELD = "firstAvailableSkuCode"; //for projections only
+    public final static String PRODUCT_AVAILABESKUCODEQTY_FIELD = "firstAvailableSkuQuantity"; //for projections only
+    public final static String PRODUCT_DEFAULTIMAGE_FIELD = "defaultImage"; //for projections only
+    public final static String PRODUCT_DESCRIPTION_ASIS_FIELD = "descriptionAsIs"; //for projections only
+
     public final static String PRODUCT_TAG_FIELD = "tag";
     public final static String SKU_PRODUCT_CODE_FIELD = "sku.code";
     public final static String PRODUCT_NAME_SORT_FIELD = "name_sort";

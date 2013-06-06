@@ -286,6 +286,12 @@ public interface Product extends Auditable, Attributable, Seoable, Codable {
     void setDescription(String description);
 
     /**
+     * Get description for
+     * @return
+     */
+    String getDescriptionAsIs();
+
+    /**
      * Get the default sku. For single sku product it will be only one sku.
      * In case of multi sku product default sku has the same sku code as product, otherwise
      * the first will be returned.,
