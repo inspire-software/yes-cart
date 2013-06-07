@@ -4710,7 +4710,24 @@ public void setRangeList(final RangeList rangeList) {
        ]]>
     </query>
 
-      <query name="PRODUCTS.RANGE.ATTR.CODE.VALUES.BY.PRODUCTTYPEID">
+    <query name="PRODUCTSKUS.ATTR.CODE.VALUES.BY.PRODUCTTYPEID">
+        <![CDATA[
+       select a.attribute.name, a.attribute.displayName, a.attribute.code, a.val, a.displayVal, 0, pta.rank
+       from  ProductTypeEntity pt, ProductTypeAttrEntity pta, ProductEntity p, ProductSkuEntity s inner join s.attributes a
+            where s.product.productId = p.productId
+            and p.producttype.producttypeId = pt.producttypeId
+            and pt.producttypeId = pta.producttype.producttypeId
+            and pta.producttype.producttypeId = ?1
+            and pta.attribute.code = a.attribute.code
+            and pta.navigationType = 'S'
+            and pta.navigation = ?2
+            group by a.attribute.name, a.attribute.displayName, a.attribute.code, a.val, a.displayVal, pta.rank
+            order by pta.rank, a.attribute.name, a.val
+       ]]>
+    </query>
+
+
+    <query name="PRODUCTS.RANGE.ATTR.CODE.VALUES.BY.PRODUCTTYPEID">
         <![CDATA[
        select pta
        from  ProductTypeAttrEntity pta
