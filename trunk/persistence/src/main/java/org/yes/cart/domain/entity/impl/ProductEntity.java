@@ -146,26 +146,19 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     public String getDescriptionAsIs() {
         final StringBuilder builder = new StringBuilder();
         for (AttrValue attr : attributes) {
-
-            java.lang.System.out.println(attr.getAttribute().getCode());
-
             if (attr.getAttribute().getCode().startsWith(AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX)) {
-
-
-
                 builder.append(getLocale(attr.getAttribute().getCode()));
                 builder.append(StringI18NModel.SEPARATOR);
-                builder.append(attr.getAttribute().getVal());
+                builder.append(attr.getVal());
                 builder.append(StringI18NModel.SEPARATOR);
             }
-            
         }
-        return this.description;
+        return builder.toString();
     }
 
     @Transient
     String getLocale(final String attrCode) {
-        return attrCode.substring(AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX.length() - 1);
+        return attrCode.substring(AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX.length() );
     }
 
 
