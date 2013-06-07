@@ -28,10 +28,7 @@ import org.yes.cart.service.mail.MailComposer;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
+import java.io.*;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -178,9 +175,11 @@ public class MailComposerImpl implements MailComposer {
         final String propString = getTemplate(fullPath, templateName + ".properties");
         final Properties prop = new Properties();
         if (propString != null) {
-            prop.load(new ByteArrayInputStream(propString.getBytes()));
+
+            prop.load(new StringReader(propString));
+
         }
-        helper.setSubject(prop.getProperty("subject"));
+        helper.setSubject(prop.getProperty("subject") );
 
         if (from == null) {
             helper.setFrom(prop.getProperty("from"));
