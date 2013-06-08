@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+
+
+
+    <security:http entry-point-ref="entryPoint">
+        <security:anonymous enabled="false"/>
+    </security:http>
+
+    <bean id="entryPoint"
+          class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint"/>
+
+    <security:authentication-manager>
+        <security:authentication-provider>
+            <security:password-encoder hash="md5"/>
+            <security:jdbc-user-service
+                    data-source-ref="dataSourceSec"
+                    group-authorities-by-username-query=""
+                    users-by-username-query="SELECT m.email as username, m.password, 1 as enabled FROM TMANAGER m where m.email = ?"
+                    authorities-by-username-query="SELECT mr.email as username, mr.code as authority FROM TMANAGERROLE mr  WHERE mr.email = ?"/>
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+
+    <bean id="dataSourceSec" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="java:comp/env/jdbc/yesjndi"/>
+        <property name="lookupOnStartup" value="true"/>
+        <property name="cache" value="true"/>
+        <property name="proxyInterface" value="javax.sql.DataSource"/>
+    </bean>
+
+
+
+    <!-- #################################  aspects configurations begin ######################################-->
+
+    <bean id="aspectExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"/>
+
+
+    <bean id="managerRegistrationAspect" class="org.yes.cart.service.domain.aspect.impl.ManagerRegistrationAspect">
+        <constructor-arg ref="aspectExecutor"/>
+        <constructor-arg index="1">
+            <bean class="org.yes.cart.service.domain.impl.PassPhraseGeneratorImpl">
+                <constructor-arg index="0" value="8"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="2">
+            <bean class="org.yes.cart.service.domain.impl.MD5HashHelperImpl"/>
+        </constructor-arg>
+        <constructor-arg index="3" ref="mailSender"/>
+        <constructor-arg index="4" ref="mailComposer"/>
+    </bean>
+
+    <bean id="orderStateChangeAspect" class="org.yes.cart.service.domain.aspect.impl.OrderStateChangeListenerAspect">
+        <constructor-arg ref="aspectExecutor"/>
+        <constructor-arg index="1" type="org.springframework.mail.javamail.JavaMailSender" ref="mailSender"/>
+        <constructor-arg index="2" type="org.yes.cart.service.mail.MailComposer" ref="mailComposer"/>
+        <constructor-arg index="3" type="org.yes.cart.service.domain.CustomerService" ref="customerService"/>
+        <constructor-arg index="4" type="org.yes.cart.service.domain.CustomerOrderService" ref="customerOrderService"/>
+        <constructor-arg index="5" type="org.yes.cart.service.domain.ShopService" ref="shopService"/>
+        <constructor-arg index="6">
+            <map>
+                <entry key="evt.order.cancel-os.cancelled" value="order-canceled"/> <!-- done -->
+                <entry key="evt.packing.complete-os.in.progress-ds.shipment.ready" value="order-delivery-readytoshipping"/>  <!-- done -->
+                <entry key="evt.payment.confirmed-os.in.progress" value="order-confirmed"/>  <!-- done -->
+                <entry key="evt.pending-os.in.progress" value="order-new"/>   <!-- done in shop -->
+                <entry key="evt.release.to.shipment-os.in.progress-ds.shipment.inprogress" value="order-delivery-shipped"/>   <!-- done -->
+                <entry key="evt.shipment.complete-os.completed-ds.shipped" value="order-shipping-completed"/>  <!-- done -->
+
+            </map>
+        </constructor-arg>
+        <constructor-arg index="7">
+            <map>
+                <entry key="evt.order.cancel-os.cancelled" value="adm-order-canceled"/>  <!-- done -->
+                <entry key="evt.payment.confirmed-os.in.progress" value="adm-order-confirmed"/>  <!-- done -->
+                <entry key="evt.pending-os.in.progress" value="adm-order-new"/>  <!-- done in shop -->
+                <entry key="evt.pending-os.waiting" value="adm-order-wait-confirmation"/> <!-- done -->
+                <entry key="evt.shipment.complete-os.completed-ds.shipped" value="adm-order-shipping-completed"/> <!-- done -->
+            </map>
+        </constructor-arg>
+    </bean>
+
+
+
+    <!-- #################################  aspects configurations end ######################################-->
+
+
+    <!-- #################################  message consumers begin ######################################-->
+
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="${yum.mail.host}"/>
+        <property name="port" value="${yum.mail.port}"/>
+        <property name="username" value="${yum.mail.username}"/>
+        <property name="password" value="${yum.mail.password}"/>
+        <property name="javaMailProperties">
+            <props>
+                <!-- Use SMTP-AUTH to authenticate to SMTP server -->
+                <!--<prop key="mail.smtp.auth">true</prop>-->
+                <!-- Use TLS to encrypt communication with SMTP server -->
+                <prop key="mail.smtp.starttls.enable">${yum.mail.smtp.starttls.enable}</prop>
+            </props>
+        </property>
+    </bean>
+
+
+
+    <!-- #################################  message consumers end ######################################-->
+
+
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
+          autowire="byName">
+        <property name="configLocation" value="classpath:hibernate-nc.cfg.xml"/>
+        <property name="mappingResources">
+            <list>
+                <value>hibernate/yc.xml</value>
+            </list>
+        </property>
+        <property name="entityInterceptor">
+            <bean class="org.yes.cart.domain.interceptor.AuditInterceptor"/>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+		<prop key="hibernate.search.default.indexBase">
+                    #{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'}
+                </prop>
+                <prop key="hibernate.search.default.exclusive_index_use">false</prop>
+
+            </props>
+        </property>
+    </bean>
+
+    <bean id="productReindexer" class="org.yes.cart.domain.entityindexer.impl.EmptyProductIndexerImpl"/>
+
+
+
+    <import resource="classpath*:core-config.xml"/>
+
+    <import resource="classpath*:payment-api.xml"/>
+    <import resource="classpath*:core-module-payment-base.xml"/>
+    <import resource="classpath*:core-module-payment-capp.xml"/>
+    <import resource="classpath*:core-module-payment-gswm.xml"/>
+
+
+    <bean id="methodCacheAdvice" class="org.yes.cart.cache.MethodCacheAdvice">
+        <property name="cacheEnabled" value="false"/>
+    </bean>
+
+
+
+</beans>

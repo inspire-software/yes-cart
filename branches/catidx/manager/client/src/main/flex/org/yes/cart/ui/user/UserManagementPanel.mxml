@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  - Copyright 2009 Igor Azarnyi, Denys Pavlov
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml"
+          title="@Resource(bundle='UserManagementPanel',key='users')"
+          width="100%"
+          height="100%"
+          creationComplete="init();"
+          paddingLeft="2" paddingRight="2" paddingBottom="5">
+    <mx:Script>
+		<![CDATA[
+        import mx.controls.Alert;
+        import mx.core.FlexGlobals;
+        import mx.events.CloseEvent;
+        import mx.events.ListEvent;
+        import mx.managers.PopUpManager;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        private var newPopUp:UserCreateEditDialog;
+
+        public function init():void {
+
+        }
+
+        private function onApplyFilterClick(event:MouseEvent):void {
+
+            userSelected = false;
+            revokeOneEnabled = false;
+            grantOneEnabled = false;
+
+            remoteUserManagementService.getManagers(
+                    emailFilterValue.text,
+                    firstNameFilterValue.text,
+                    lastNameFilterValue.text);
+        }
+
+        private function onSelectUserClick(event:ListEvent):void {
+
+            userSelected = this.usersDataGrid.selectedItem != null;
+            if (userSelected) {
+                readRoles(this.usersDataGrid.selectedItem.email);
+            }
+        }
+
+        private function readRoles(email:String):void {
+            revokeOneEnabled = false;
+            grantOneEnabled = false;
+            remoteUserManagementService.getAssignedManagerRoles(email);
+            remoteUserManagementService.getAvailableManagerRoles(email);
+        }
+
+        private function onAvailableRolesItemClick(event:ListEvent):void {
+            grantOneEnabled = this.availableRolesList.selectedItem != null;
+        }
+
+        private function onAssigedRolesItemClick(event:ListEvent):void {
+            revokeOneEnabled = this.assignedRolesList.selectedItem != null;
+        }
+
+
+        private function onGrantOneRoleClick(event:Event):void {
+            if (this.usersDataGrid.selectedItem != null && this.availableRolesList.selectedItem != null) {
+                var email:String = this.usersDataGrid.selectedItem.email;
+                var roleToGrant:Object = this.availableRolesList.selectedItem.code;
+                remoteUserManagementService.grantRole(email, roleToGrant);
+            }
+        }
+
+        private function onRevokeOneRoleClick(event:Event):void {
+            if (this.usersDataGrid.selectedItem != null && this.assignedRolesList.selectedItem != null) {
+                var email:String = this.usersDataGrid.selectedItem.email;
+                var roleToRevoke:Object = this.assignedRolesList.selectedItem.code;
+                remoteUserManagementService.revokeRole(email, roleToRevoke);
+            }
+        }
+
+
+        private function onNewUserClick(event:MouseEvent):void {
+            newPopUp = UserCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), UserCreateEditDialog, true));
+            newPopUp.saveBtn.addEventListener(MouseEvent.CLICK, onCreateUserClick);
+            newPopUp.createNewUser();
+            PopUpManager.centerPopUp(newPopUp);
+        }
+
+        private function onEditUserClick(event:Event):void {
+            var selectedUser:Object = this.usersDataGrid.selectedItem;
+            if (this.userSelected && selectedUser != null) {
+                newPopUp = UserCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), UserCreateEditDialog, true));
+                newPopUp.saveBtn.addEventListener(MouseEvent.CLICK, onUpdateUserClick);
+                newPopUp.editUser(selectedUser.email, selectedUser.firstName, selectedUser.lastName);
+                PopUpManager.centerPopUp(newPopUp);
+            } else {
+                this.userSelected = false;
+            }
+
+        }
+
+        private function onCreateUserClick(event:Event):void {
+            remoteUserManagementService.addUser(
+                    newPopUp.email.text,
+                    newPopUp.firstName.text,
+                    newPopUp.lastName.text
+            );
+        }
+
+        private function onUpdateUserClick(event:Event):void {
+            remoteUserManagementService.updateUser(
+                    newPopUp.email.text,
+                    newPopUp.firstName.text,
+                    newPopUp.lastName.text
+            );
+        }
+
+        private function loadUsers(result:Object, obj:Object = null):void {
+            onApplyFilterClick(null);
+            PopUpManager.removePopUp(newPopUp);
+        }
+
+        private function onResetPasswordClick(event:MouseEvent):void {
+            var selectedUser:Object = this.usersDataGrid.selectedItem;
+            if (this.userSelected && selectedUser != null) {
+                Alert.show(
+                        resourceManager.getString('UserManagementPanel', 'resetPasswordConfirm', [ selectedUser.email ]),
+                        resourceManager.getString('ShopManagerApplication', 'warning'),
+                        Alert.OK | Alert.CANCEL, this, onResetPasswordConfirm, null, Alert.OK);
+            }
+        }
+
+        private function onResetPasswordConfirm(event:CloseEvent):void {
+            if (event.detail == Alert.OK) {
+
+                var selectedUser:Object = this.usersDataGrid.selectedItem;
+                if (this.userSelected && selectedUser != null) {
+
+                    remoteUserManagementService.resetPassword(selectedUser.email);
+
+                }
+            }
+        }
+
+        private function onDeleteUserClick(event:MouseEvent):void {
+            var selectedUser:Object = this.usersDataGrid.selectedItem;
+            if (this.userSelected && selectedUser != null) {
+
+                Alert.show(
+                        resourceManager.getString('UserManagementPanel', 'deleteUserConfirm', [ selectedUser.email ]),
+                        resourceManager.getString('ShopManagerApplication', 'warning'),
+                        Alert.OK | Alert.CANCEL, this, onDeleteUserConfirm, null, Alert.OK);
+            }
+        }
+
+        private function onDeleteUserConfirm(event:CloseEvent):void {
+            if (event.detail == Alert.OK) {
+
+
+                var selectedUser:Object = this.usersDataGrid.selectedItem;
+                if (this.userSelected && selectedUser != null) {
+
+                    remoteUserManagementService.deleteUser(selectedUser.email);
+
+                }
+            }
+        }
+
+        private function onGetManagersResult(event:ResultEvent):void {
+            userSelected = false;
+            this.usersDataGrid.dataProvider = event.result;
+        }
+
+        private function onDeleteUserResult(event:ResultEvent):void {
+            Alert.show(
+                    resourceManager.getString('UserManagementPanel', 'userDeletedConfirm'),
+                    resourceManager.getString('ShopManagerApplication', 'info'));
+
+            onApplyFilterClick(null);
+        }
+
+        private function onResetPasswordResult(event:ResultEvent):void {
+
+            Alert.show(
+                    resourceManager.getString('UserManagementPanel', 'passwordResetedConfirm'),
+                    resourceManager.getString('ShopManagerApplication', 'info'));
+
+        }
+
+        private function onUpdateUserResult(event:ResultEvent):void {
+            onApplyFilterClick(null);
+            if (newPopUp != null) {
+                newPopUp.saveBtn.removeEventListener(MouseEvent.CLICK, onUpdateUserClick);
+                PopUpManager.removePopUp(newPopUp);
+                newPopUp = null;
+            }
+        }
+
+        private function onAddUserResult(event:ResultEvent):void {
+            onApplyFilterClick(null);
+            if (newPopUp != null) {
+                newPopUp.saveBtn.removeEventListener(MouseEvent.CLICK, onCreateUserClick);
+                PopUpManager.removePopUp(newPopUp);
+                newPopUp = null;
+            }
+        }
+
+        private function onGetAssignedManagerRolesResult(event:ResultEvent):void {
+
+            this.assignedRolesList.dataProvider = event.result;
+            revokeOneEnabled = this.assignedRolesList.dataProvider.length > 0;
+
+        }
+
+        private function onGetAvailableManagerRolesResult(event:ResultEvent):void {
+
+            this.availableRolesList.dataProvider = event.result;
+            grantOneEnabled = this.availableRolesList.dataProvider.length > 0;
+
+        }
+
+        private function onGrantRoleResult(event:ResultEvent):void {
+
+            if (userSelected && this.usersDataGrid.selectedItem != null) {
+                var email:String = this.usersDataGrid.selectedItem.email;
+                readRoles(email);
+            }
+
+        }
+
+        private function onRevokeRoleResult(event:ResultEvent):void {
+
+            if (userSelected && this.usersDataGrid.selectedItem != null) {
+                var email:String = this.usersDataGrid.selectedItem.email;
+                readRoles(email);
+            }
+
+        }
+
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        private function onApplyFilterShowClick(event:MouseEvent):void {
+            filterPanel.visible = !filterPanel.visible;
+            filterPanel.includeInLayout = filterPanel.visible;
+            if (filterPanel.visible) {
+                (event.target as Button).label = resourceManager.getString('Common', 'findBtnToggleOff');
+            } else {
+                (event.target as Button).label = resourceManager.getString('Common', 'findBtnToggleOn');
+            }
+        }
+        ]]>
+    </mx:Script>
+
+    <mx:RemoteObject showBusyCursor="true"  id="remoteUserManagementService"
+                     destination="remoteUserManagementService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getManagers" name="getManagers"
+                   result="onGetManagersResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+        <mx:method id="getAssignedManagerRoles" name="getAssignedManagerRoles"
+                   result="onGetAssignedManagerRolesResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+        <mx:method id="getAvailableManagerRoles" name="getAvailableManagerRoles"
+                   result="onGetAvailableManagerRolesResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+        <mx:method id="grantRole" name="grantRole"
+                   result="onGrantRoleResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+        <mx:method id="revokeRole" name="revokeRole"
+                   result="onRevokeRoleResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+        <mx:method id="addUser" name="addUser"
+                   result="onAddUserResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+        <mx:method id="updateUser" name="updateUser"
+                   result="onUpdateUserResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+        <mx:method id="resetPassword" name="resetPassword"
+                   result="onResetPasswordResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+        <mx:method id="deleteUser" name="deleteUser"
+                   result="onDeleteUserResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+
+
+    <mx:Boolean id="userSelected">false</mx:Boolean>
+    <mx:Boolean id="revokeOneEnabled">false</mx:Boolean>
+    <mx:Boolean id="grantOneEnabled">false</mx:Boolean>
+
+
+    <mx:VDividedBox id="userManagementPanel" height="100%" width="100%">
+        <mx:VBox height="50%" width="100%">
+
+            <mx:HBox paddingTop="5" width="100%">
+                <mx:Button label="@Resource(bundle='UserManagementPanel',key='newUser')"
+                           toolTip="@Resource(bundle='UserManagementPanel',key='newUserToolTip')"
+                           click="onNewUserClick(event)"/>
+
+                <mx:Button label="@Resource(bundle='UserManagementPanel',key='resetPassword')"
+                           toolTip="@Resource(bundle='UserManagementPanel',key='resetPasswordToolTip')"
+                           enabled="{userSelected}"
+                           click='onResetPasswordClick(event)'
+                        />
+                <mx:Button label="@Resource(bundle='UserManagementPanel',key='editUser')"
+                           toolTip="@Resource(bundle='UserManagementPanel',key='editUserToolTip')"
+                           enabled="{userSelected}"
+                           click="onEditUserClick(event)"
+                        />
+                <mx:Button label="@Resource(bundle='UserManagementPanel',key='deleteUser')"
+                           toolTip="@Resource(bundle='UserManagementPanel',key='deleteUserToolTip')"
+                           enabled="{userSelected}"
+                           click="onDeleteUserClick(event)"
+                        />
+                <mx:Button label="@Resource(bundle='Common',key='findBtnToggleOn')"
+                           click="onApplyFilterShowClick(event)"
+                        />
+                <mx:Button label="@Resource(bundle='UserManagementPanel',key='findBtn')"
+                           toolTip="@Resource(bundle='UserManagementPanel',key='applyFilterToolTip')"
+                           click="onApplyFilterClick(event)"
+                        />
+
+            </mx:HBox>
+            <mx:HBox paddingTop="5" width="100%" id="filterPanel" visible="false" includeInLayout="false">
+                <mx:Label text="@Resource(bundle='UserManagementPanel',key='emailFilter')"/>
+                <mx:TextInput id="emailFilterValue" width="50"/>
+                <mx:Label text="@Resource(bundle='UserManagementPanel',key='firstNameFilter')"/>
+                <mx:TextInput id="firstNameFilterValue"  width="50"/>
+                <mx:Label text="@Resource(bundle='UserManagementPanel',key='lastNameFilter')"/>
+                <mx:TextInput id="lastNameFilterValue"  width="50"/>
+
+            </mx:HBox>
+
+            <mx:DataGrid id="usersDataGrid"
+                         width="100%" height="90%"
+                         doubleClickEnabled="true"
+                         itemDoubleClick="onEditUserClick(event)"
+                         itemClick="onSelectUserClick(event)">
+				<mx:columns>
+					<mx:DataGridColumn headerText="@Resource(bundle='UserManagementPanel',key='email')" dataField="email"/>
+					<mx:DataGridColumn headerText="@Resource(bundle='UserManagementPanel',key='firstName')" dataField="firstName"/>
+					<mx:DataGridColumn headerText="@Resource(bundle='UserManagementPanel',key='lastName')" dataField="lastName"/>
+				</mx:columns>
+			</mx:DataGrid>
+
+		</mx:VBox>
+
+        <mx:Grid width="100%" height="50%" id="rolesDetailPanel"  visible="{userSelected}" >
+            <mx:GridRow width="100%" height="5%">
+                <mx:GridItem width="45%" height="100%">
+                    <mx:Label text="@Resource(bundle='UserManagementPanel',key='availableRoles')"/>
+                </mx:GridItem>
+                <mx:GridItem width="10%" height="100%">
+                </mx:GridItem>
+                <mx:GridItem width="45%" height="100%">
+                    <mx:Label text="@Resource(bundle='UserManagementPanel',key='appliedRoles')"/>
+                </mx:GridItem>
+            </mx:GridRow>
+
+            <mx:GridRow width="100%" height="95%">
+                <mx:GridItem  width="44%" height="100%">
+                    <mx:List itemClick="onAvailableRolesItemClick(event)"
+                             doubleClickEnabled="true"
+                             itemDoubleClick="onGrantOneRoleClick(event)"
+                             id="availableRolesList" width="100%" height="100%"  labelField="code">
+
+                    </mx:List>
+                </mx:GridItem>
+                <mx:GridItem width="12%" height="100%">
+                    <mx:VBox height="100%" width="100%" horizontalAlign="center" verticalAlign="middle">
+
+                        <mx:Button width="60" enabled="{grantOneEnabled}" click="onGrantOneRoleClick(event)" label="@Resource(bundle='UserManagementPanel',key='grantOneRole')"/>
+                        <mx:Button width="60" enabled="{revokeOneEnabled}" click="onRevokeOneRoleClick(event)" label="@Resource(bundle='UserManagementPanel',key='revokeOneRole')"/>
+
+                    </mx:VBox>
+                </mx:GridItem>
+                <mx:GridItem width="44%" height="100%">
+                    <mx:List itemClick="onAssigedRolesItemClick(event)"
+                             doubleClickEnabled="true"
+                             itemDoubleClick="onRevokeOneRoleClick(event)"
+                             id="assignedRolesList" width="100%" height="100%" labelField="code">
+
+                    </mx:List>
+                </mx:GridItem>
+            </mx:GridRow>
+        </mx:Grid>
+    </mx:VDividedBox>
+
+</mx:Panel>
