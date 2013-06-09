@@ -21,8 +21,6 @@ import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.EntityFactory;
-import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.dao.constants.DaoServiceBeanKeys;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShopWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
@@ -88,11 +86,11 @@ public class TestWarehouseServiceImpl extends BaseCoreDBTestCase {
         assertTrue(shopWarehouses.isEmpty());
 
         ShopWarehouse shopWarehouse = warehouseService.assignWarehouse(warehouse.getWarehouseId(), shop.getShopId());
-        assertEquals("Test default rank", 100, shopWarehouse.getRank());
+        assertEquals("Test default rank", new Integer(100), shopWarehouse.getRank());
 
         warehouseService.updateShopWarehouseRank(shopWarehouse.getShopWarehouseId(), 200);
         shopWarehouse = warehouseService.findShopWarehouseById(shopWarehouse.getShopWarehouseId());
-        assertEquals("Test default rank", 200, shopWarehouse.getRank());
+        assertEquals("Test default rank", new Integer(200), shopWarehouse.getRank());
     }
 
     private void createShopAndWareHouse(final String shopCode, final String warehouseCode) {

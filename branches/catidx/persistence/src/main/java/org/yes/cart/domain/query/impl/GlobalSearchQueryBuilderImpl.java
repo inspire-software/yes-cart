@@ -26,14 +26,31 @@ import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import java.util.List;
 
 /**
-* User: Igor Azarny iazarny@yahoo.com
+ * User: Igor Azarny iazarny@yahoo.com
  * Date: 08-May-2011
  * Time: 11:12:54
  * This query builder used for perform search on the whole shop.
  */
 public class GlobalSearchQueryBuilderImpl implements ProductSearchQueryBuilder {
 
-    public BooleanQuery createQuery(
+    public BooleanQuery createQuerySearchInShop(
+            final String searchPhraze,
+            final Long shopId) throws IllegalArgumentException {
+
+        final BooleanQuery currentQuery = new BooleanQuery();
+
+        currentQuery.add(new TermQuery(new Term(PRODUCT_SHOP_FIELD, shopId.toString())),
+                BooleanClause.Occur.MUST);
+
+        final List<String> words = SearchPhrazeUtil.splitForSearch(searchPhraze);
+
+        enrichQueryWithSearchWords(words, currentQuery);
+
+        return currentQuery;
+
+    }
+
+    public BooleanQuery createQuerySearchInCategories(
             final String searchPhraze,
             final List<Long> categories) throws IllegalArgumentException {
 
@@ -41,7 +58,7 @@ public class GlobalSearchQueryBuilderImpl implements ProductSearchQueryBuilder {
 
         if (searchPhraze != null) {
 
-            List<String> words = SearchPhrazeUtil.splitForSearch(searchPhraze);
+            final List<String> words = SearchPhrazeUtil.splitForSearch(searchPhraze);
 
             if (categories != null) {
 
@@ -60,7 +77,7 @@ public class GlobalSearchQueryBuilderImpl implements ProductSearchQueryBuilder {
         return query;
     }
 
-    public BooleanQuery createQuery(final String searchPhraze, final Long category) {
+    public BooleanQuery createQuerySearchInCategory(final String searchPhraze, final Long category) {
         return createQuery(SearchPhrazeUtil.splitForSearch(searchPhraze), category);
     }
 
@@ -68,23 +85,28 @@ public class GlobalSearchQueryBuilderImpl implements ProductSearchQueryBuilder {
         BooleanQuery currentQuery = new BooleanQuery();
 
         if (category != null) {
-            currentQuery.add(new TermQuery( new Term(PRODUCT_CATEGORY_FIELD, category.toString())),
-                            BooleanClause.Occur.MUST);            
+            currentQuery.add(new TermQuery(new Term(PRODUCT_CATEGORY_FIELD, category.toString())),
+                    BooleanClause.Occur.MUST);
         }
 
+        enrichQueryWithSearchWords(words, currentQuery);
+
+        return currentQuery;
+    }
+
+    private void enrichQueryWithSearchWords(final List<String> words, final BooleanQuery currentQuery) {
         for (String word : words) {
             BooleanQuery termQuery = new BooleanQuery();
-            termQuery.add( new FuzzyQuery( new Term(PRODUCT_NAME_FIELD, word)),  BooleanClause.Occur.SHOULD);
-            termQuery.add( new FuzzyQuery( new Term(PRODUCT_DISPLAYNAME_FIELD, word)),  BooleanClause.Occur.SHOULD);
-            termQuery.add( new FuzzyQuery( new Term(PRODUCT_DESCIPTION_FIELD, word)),  BooleanClause.Occur.SHOULD);
-            termQuery.add( new FuzzyQuery( new Term(BRAND_FIELD, word)),  BooleanClause.Occur.SHOULD);
-            termQuery.add( new FuzzyQuery( new Term(ATTRIBUTE_VALUE_SEARCH_FIELD, word)),  BooleanClause.Occur.SHOULD);
-            termQuery.add( new FuzzyQuery( new Term(SKU_ATTRIBUTE_VALUE_SEARCH_FIELD, word)),  BooleanClause.Occur.SHOULD);
-            termQuery.add( new FuzzyQuery( new Term(PRODUCT_CODE_FIELD, word), 0.9f),  BooleanClause.Occur.SHOULD);
-            termQuery.add( new FuzzyQuery( new Term(SKU_PRODUCT_CODE_FIELD, word), 0.9f),  BooleanClause.Occur.SHOULD);
+            termQuery.add(new FuzzyQuery(new Term(PRODUCT_NAME_FIELD, word)), BooleanClause.Occur.SHOULD);
+            termQuery.add(new FuzzyQuery(new Term(PRODUCT_DISPLAYNAME_FIELD, word)), BooleanClause.Occur.SHOULD);
+            termQuery.add(new FuzzyQuery(new Term(PRODUCT_DESCIPTION_FIELD, word)), BooleanClause.Occur.SHOULD);
+            termQuery.add(new FuzzyQuery(new Term(BRAND_FIELD, word)), BooleanClause.Occur.SHOULD);
+            termQuery.add(new FuzzyQuery(new Term(ATTRIBUTE_VALUE_SEARCH_FIELD, word)), BooleanClause.Occur.SHOULD);
+            termQuery.add(new FuzzyQuery(new Term(SKU_ATTRIBUTE_VALUE_SEARCH_FIELD, word)), BooleanClause.Occur.SHOULD);
+            termQuery.add(new FuzzyQuery(new Term(PRODUCT_CODE_FIELD, word), 0.9f), BooleanClause.Occur.SHOULD);
+            termQuery.add(new FuzzyQuery(new Term(SKU_PRODUCT_CODE_FIELD, word), 0.9f), BooleanClause.Occur.SHOULD);
             currentQuery.add(termQuery, BooleanClause.Occur.MUST);
         }
-        return currentQuery;
     }
 
 }

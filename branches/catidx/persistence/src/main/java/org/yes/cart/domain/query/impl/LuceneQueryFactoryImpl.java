@@ -223,9 +223,9 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
         BooleanQuery query;
         final GlobalSearchQueryBuilderImpl globalSearchQueryBuilder = new GlobalSearchQueryBuilderImpl();
         if (categories.size() == 1 && categories.get(0) == 0) {
-            query = globalSearchQueryBuilder.createQuery(String.valueOf(val), allShopcategories);
+            query = globalSearchQueryBuilder.createQuerySearchInCategories(String.valueOf(val), allShopcategories);
         } else {
-            query = globalSearchQueryBuilder.createQuery(String.valueOf(val), categories);
+            query = globalSearchQueryBuilder.createQuerySearchInCategories(String.valueOf(val), categories);
         }
         return query;
     }

@@ -35,7 +35,7 @@ public class ShopWarehouseEntity implements org.yes.cart.domain.entity.ShopWareh
 
     private Shop shop;
     private Warehouse warehouse;
-    private int rank;
+    private Integer rank;
     private Date createdTimestamp;
     private Date updatedTimestamp;
     private String createdBy;
@@ -68,11 +68,14 @@ public class ShopWarehouseEntity implements org.yes.cart.domain.entity.ShopWareh
     }
 
     @Column(name = "RANK")
-    public int getRank() {
+    public Integer getRank() {
+        if (this.rank == null) {
+            this.rank = 0;
+        }
         return this.rank;
     }
 
-    public void setRank(int rank) {
+    public void setRank(Integer rank) {
         this.rank = rank;
     }
 

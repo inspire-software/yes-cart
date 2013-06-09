@@ -64,14 +64,14 @@ public interface ShopWarehouse extends Auditable {
      * Get the rank of warehouse usage in shop.
      * @return    rank of warehouse usage
      */
-    int getRank();
+    Integer getRank();
 
 
     /**
      * Set the rank of warehouse usage.
      * @param rank of warehouse usage.
      */
-    void setRank(int rank);
+    void setRank(Integer rank);
 
 
 }
