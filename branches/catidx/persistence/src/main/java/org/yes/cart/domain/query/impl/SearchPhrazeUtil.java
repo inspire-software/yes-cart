@@ -44,7 +44,7 @@ public class SearchPhrazeUtil {
             List<String> words = new ArrayList<String>(token.length);
             for (int i = 0; i < token.length ; i++) {
                 if (StringUtils.isNotBlank(token[i])) {
-                    words.add(token[i].trim());
+                    words.add(token[i].trim().toLowerCase());
                 }
             }
             return words;
