@@ -968,6 +968,7 @@
     </bean>
 
 
+
     <!-- ########################################### ExtendedConversionService ################################# -->
     <bean id="extendedConversionService" class="org.yes.cart.utils.impl.ExtendedConversionService"/>
 

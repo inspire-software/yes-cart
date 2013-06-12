@@ -19,6 +19,7 @@ package org.yes.cart.web.support.service.impl;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.lucene.search.BooleanQuery;
 import org.springframework.util.CollectionUtils;
+import org.yes.cart.cache.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.query.LuceneQueryFactory;
@@ -27,6 +28,7 @@ import org.yes.cart.domain.query.impl.ProductsInCategoryQueryBuilderImpl;
 import org.yes.cart.domain.query.impl.SkuQueryBuilderImpl;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.CentralViewResolver;
@@ -48,7 +50,7 @@ public class CentralViewResolverImpl implements CentralViewResolver {
     private final CategoryService categoryService;
     private final AttributeService attributeService;
     private final LuceneQueryFactory luceneQueryFactory;
-    private final GenericDAO<Product, Long> productDao;
+    private final ProductService productService;
 
     /**
      * Construct central view resolver.
@@ -56,15 +58,16 @@ public class CentralViewResolverImpl implements CentralViewResolver {
      * @param categoryService    to product and sub categories quantity determination.
      * @param attributeService   to allowed attributes name determination
      * @param luceneQueryFactory luceneQueryFactory
+     * @param productService product service
      */
     public CentralViewResolverImpl(final CategoryService categoryService,
                                    final AttributeService attributeService,
                                    final LuceneQueryFactory luceneQueryFactory,
-                                   final GenericDAO<Product, Long> productDao ) {
+                                   final ProductService productService ) {
         this.categoryService = categoryService;
         this.attributeService = attributeService;
         this.luceneQueryFactory = luceneQueryFactory;
-        this.productDao = productDao;
+        this.productService = productService;
     }
 
     /**
@@ -105,7 +108,7 @@ public class CentralViewResolverImpl implements CentralViewResolver {
     /**
      * {@inheritDoc}
      */
-    //TODO cache query
+    @Cacheable(value = "centralViewResolverImplMethodCache")
     public BooleanQuery getBooleanQuery(
             final List<BooleanQuery> queriesChain,
             final String currentQuery,
@@ -145,7 +148,7 @@ public class CentralViewResolverImpl implements CentralViewResolver {
 
             rez = luceneQueryFactory.getSnowBallQuery(queriesChain, currentQuery, false);
 
-            if (this.productDao.fullTextSearch(rez,0,1).isEmpty()) {
+            if (productService.getProductByQuery(rez,0,1, null, false).isEmpty()) {
                 //create q with lowercase
                 rez = luceneQueryFactory.getSnowBallQuery(queriesChain, currentQuery, true);
 

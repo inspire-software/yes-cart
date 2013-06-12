@@ -119,7 +119,11 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
     public BooleanQuery getSnowBallQuery(final List<BooleanQuery> allQueries, final String currentQuery, boolean abatement) {
         BooleanQuery booleanQuery = new BooleanQuery();
         for (BooleanQuery cookie : allQueries) {
-            booleanQuery.add(cookie, BooleanClause.Occur.MUST);
+            //booleanQuery.add(cookie, BooleanClause.Occur.MUST);
+            booleanQuery.add(
+                    parseQuery(cookie.toString(), abatement),
+                    BooleanClause.Occur.MUST
+            );
         }
         if (currentQuery != null) {
             // add current query

@@ -71,6 +71,12 @@
            eternal="false"
            timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
+    <cache name="org.yes.cart.web.support.service.impl.CentralViewResolverImpl.cache"
+           maxElementsInMemory="1000"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
     <!-- ############################################# hibernate enitity cache #######################################-->
 
     <cache name="org.yes.cart.domain.entity.Category" maxElementsInMemory="500" overflowToDisk="false" eternal="false"
