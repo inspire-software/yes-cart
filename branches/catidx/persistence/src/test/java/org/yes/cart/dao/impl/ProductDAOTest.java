@@ -235,6 +235,44 @@ public class ProductDAOTest extends AbstractTestDAO {
         });
     }
 
+
+    /**
+     * Test to prove, that some abatement during search is working, in case if strongly limitation query not return any results.
+     * @throws InterruptedException
+     */
+    @Test
+    public void testSimpleSearchTest3() throws InterruptedException {
+
+        getTx().execute(new TransactionCallbackWithoutResult() {
+            public void doInTransactionWithoutResult(TransactionStatus status) {
+
+                productDao.fullTextSearchReindex();
+
+                final GlobalSearchQueryBuilderImpl queryBuilder = new GlobalSearchQueryBuilderImpl();
+                Query query = queryBuilder.createQuerySearchInCategories("bender", Arrays.asList(101L, 104L));
+                List<Product> products = productDao.fullTextSearch(query);
+                assertTrue("Failed [" + query.toString() +"]", !products.isEmpty());
+                // search by Sku code
+                query = queryBuilder.createQuerySearchInCategory("CC_TEST99", (Long) null);
+                products = productDao.fullTextSearch(query);
+                assertEquals(0, products.size());
+                
+                
+                LuceneQueryFactoryImpl luceneQueryFactory = new LuceneQueryFactoryImpl(null,null);
+                BooleanQuery booleanQuery =  luceneQueryFactory.getSnowBallQuery(
+                        Collections.EMPTY_LIST,
+                        query.toString(),
+                        true
+                );
+
+                products = productDao.fullTextSearch(booleanQuery);
+                assertFalse(products.isEmpty());
+
+                status.setRollbackOnly();
+            }
+        });
+    }
+
     @Test
     public void testSearchByCategoryTest() throws InterruptedException {
 
@@ -368,7 +406,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 assertEquals("Failed [" + query + "]", 1, products.size());
 
 
-                QueryParser qp = new QueryParser(Version.LUCENE_31, "", new AsIsAnalyzer());
+                QueryParser qp = new QueryParser(Version.LUCENE_31, "", new AsIsAnalyzer(false));
                 Query parsed = null;
                 try {
                     parsed = qp.parse("productCategory.category:101 productCategory.category:200 "

@@ -61,19 +61,16 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
             ProductSearchQueryBuilder.PRODUCT_ID_FIELD
     };
 
-    private MultiFieldQueryParser queryParser;
 
     private final PriceNavigation priceNavigation;
     private final AttributeService attributeService;
 
-    protected MultiFieldQueryParser getQueryParser() {
-        return queryParser;
-    }
 
     /**
      * Construct query builder factory.
-     * @param priceNavigation   price navigation service
-     * @param attributeService  attribute service to filter not allowed page parameters during filtered navigation
+     *
+     * @param priceNavigation  price navigation service
+     * @param attributeService attribute service to filter not allowed page parameters during filtered navigation
      */
     public LuceneQueryFactoryImpl(final PriceNavigation priceNavigation, final AttributeService attributeService) {
         this.priceNavigation = priceNavigation;
@@ -81,11 +78,16 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
     }
 
 
-    private MultiFieldQueryParser getMultiFieldQueryParser() {
-        if (queryParser == null) {
-            queryParser = new MultiFieldQueryParser(Version.LUCENE_31, fields, new AsIsAnalyzer());
-        }
-        return queryParser;
+    private MultiFieldQueryParser getMultiFieldQueryParser(final boolean abatement) {
+
+        final MultiFieldQueryParser multiFieldQueryParser = new MultiFieldQueryParser(
+                Version.LUCENE_31,
+                fields,
+                new AsIsAnalyzer(abatement));
+
+        multiFieldQueryParser.setLowercaseExpandedTerms(abatement);
+
+        return multiFieldQueryParser;
     }
 
     /**
@@ -94,9 +96,9 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
      * @param queryString string representation of lucene query
      * @return query if string was succsesfuly parsed.
      */
-    private Query parseQuery(final String queryString) {
+    private Query parseQuery(final String queryString, final boolean abatement) {
         try {
-            return getMultiFieldQueryParser().parse(queryString);
+            return getMultiFieldQueryParser(abatement).parse(queryString);
         } catch (ParseException e) {
             ShopCodeContext.getLog(this).error(MessageFormat.format("Can not parse given query {0}", queryString), e);
         }
@@ -114,14 +116,14 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
      * @param currentQuery optional current query
      * @return combined from chain query
      */
-    public BooleanQuery getSnowBallQuery(final List<BooleanQuery> allQueries, final String currentQuery) {
+    public BooleanQuery getSnowBallQuery(final List<BooleanQuery> allQueries, final String currentQuery, boolean abatement) {
         BooleanQuery booleanQuery = new BooleanQuery();
         for (BooleanQuery cookie : allQueries) {
             booleanQuery.add(cookie, BooleanClause.Occur.MUST);
         }
         if (currentQuery != null) {
-            // add current querry
-            Query query = parseQuery(currentQuery);
+            // add current query
+            Query query = parseQuery(currentQuery, abatement);
             if (query != null) {
                 booleanQuery.add(query, BooleanClause.Occur.MUST);
             }
@@ -160,11 +162,11 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
      * Entire search if size of categories is one and first category is 0
      * otherwise need to use all sub categories, that belong to given category list.
      *
-     * @param shopId                the current shop id
-     * @param requestParameters     web request parameters
-     * @param categories            given category ids
-     * @param allShopcategories     optional parameter all shop caterories with child as list used in case if
-     *                              user perform serach on entire shop
+     * @param shopId            the current shop id
+     * @param requestParameters web request parameters
+     * @param categories        given category ids
+     * @param allShopcategories optional parameter all shop caterories with child as list used in case if
+     *                          user perform serach on entire shop
      * @return ordered by cookie name list of cookies
      */
     public List<BooleanQuery> getFilteredNavigationQueryChain(
@@ -245,8 +247,9 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
 
     /**
      * Create query to search by brand name in given categories.
-     * @param categories    given categories
-     * @param val brand name
+     *
+     * @param categories given categories
+     * @param val        brand name
      * @return {@link BooleanQuery}
      */
     private BooleanQuery createBrandChain(final List<Long> categories, final Object val) {
@@ -257,8 +260,9 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
 
     /**
      * Create query to search by product tag in given categories.
-     * @param categories    given categories
-     * @param val given product tag
+     *
+     * @param categories given categories
+     * @param val        given product tag
      * @return {@link BooleanQuery}
      */
     private BooleanQuery createTagChain(final List<Long> categories, final Object val) {
