@@ -118,13 +118,40 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
      */
     public BooleanQuery getSnowBallQuery(final List<BooleanQuery> allQueries, final String currentQuery, boolean abatement) {
         BooleanQuery booleanQuery = new BooleanQuery();
-        for (BooleanQuery cookie : allQueries) {
-            //booleanQuery.add(cookie, BooleanClause.Occur.MUST);
-            booleanQuery.add(
-                    parseQuery(cookie.toString(), abatement),
-                    BooleanClause.Occur.MUST
-            );
+        
+        for (int i = 0 ; i < allQueries.size(); i++) {
+
+            //sry, looks like sux :(
+            //means - will replace last query in case if abatement is set and
+            //no give query to test -  currentQuery
+            if (abatement && currentQuery == null && (i + 1 == allQueries.size()) ) {
+
+                final Query newVersion = parseQuery(
+                        allQueries.get(i).toString(),
+                        abatement);
+
+                booleanQuery.add (
+                        newVersion,
+                        BooleanClause.Occur.MUST
+                );
+
+
+                final BooleanQuery softReplacement = new BooleanQuery();
+                softReplacement.add(newVersion, BooleanClause.Occur.MUST);
+                allQueries.set(i, softReplacement);
+
+
+            } else {
+
+                booleanQuery.add(
+                        allQueries.get(i),
+                        BooleanClause.Occur.MUST
+                );
+
+            }
+            
         }
+
         if (currentQuery != null) {
             // add current query
             Query query = parseQuery(currentQuery, abatement);
