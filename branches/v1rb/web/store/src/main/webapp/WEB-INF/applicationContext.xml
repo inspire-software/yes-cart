@@ -148,6 +148,12 @@
         <constructor-arg index="0" ref="cookieTuplizer"/>
     </bean>
 
+    <bean id="centralViewResolverImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="cacheName" value="org.yes.cart.web.support.service.impl.CentralViewResolverImpl.cache"/>
+    </bean>
+
+
     <bean id="centralViewResolver" class="org.yes.cart.web.support.service.impl.CentralViewResolverImpl">
         <constructor-arg index="0" ref="categoryService"/>
         <constructor-arg index="1" ref="attributeService"/>

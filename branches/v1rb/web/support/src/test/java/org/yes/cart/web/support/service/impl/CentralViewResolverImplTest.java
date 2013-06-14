@@ -67,6 +67,7 @@ public class CentralViewResolverImplTest {
                     }
                 },
                 null
+
         );
         assertEquals(CentralViewLabel.SKU,
                 resolver.resolveMainPanelRendererLabel(getRequestParams(WebParametersKeys.SKU_ID, null)));

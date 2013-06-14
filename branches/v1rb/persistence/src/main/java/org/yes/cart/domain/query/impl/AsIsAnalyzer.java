@@ -16,7 +16,11 @@
 
 package org.yes.cart.domain.query.impl;
 
+import org.apache.lucene.analysis.LowerCaseFilter;
 import org.apache.lucene.analysis.ReusableAnalyzerBase;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.Tokenizer;
+import org.apache.lucene.analysis.standard.StandardFilter;
 import org.apache.lucene.util.Version;
 
 import java.io.Reader;
@@ -28,11 +32,25 @@ import java.io.Reader;
  */
 public class AsIsAnalyzer extends ReusableAnalyzerBase {
 
+    private final boolean toLowerCase;
+
+    /**
+     * COnstruct analyser.
+     * @param toLowerCase
+     */
+    public AsIsAnalyzer(boolean toLowerCase) {
+        this.toLowerCase = toLowerCase;
+    }
+
     /** {@inheritDoc} */
     @Override
     protected TokenStreamComponents createComponents(final String fieldName, final Reader aReader) {
-        return new TokenStreamComponents(new AsIsTokenizer(Version.LUCENE_31, aReader));
+        if (toLowerCase) {
+            final Tokenizer asIsTokenizer = new AsIsTokenizer(Version.LUCENE_31, aReader);
+            return new TokenStreamComponents(asIsTokenizer, new LowerCaseFilter(Version.LUCENE_31, asIsTokenizer));
+        } else {
+            return new TokenStreamComponents(new AsIsTokenizer(Version.LUCENE_31, aReader));
+        }
     }
-
 
 }
