@@ -66,7 +66,6 @@ public class CentralViewResolverImplTest {
                         }};
                     }
                 },
-                null,
                 null
 
         );

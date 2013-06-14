@@ -158,7 +158,6 @@
         <constructor-arg index="0" ref="categoryService"/>
         <constructor-arg index="1" ref="attributeService"/>
         <constructor-arg index="2" ref="luceneQueryFactory"/>
-        <constructor-arg index="3" ref="productService"/>
     </bean>
 
     <bean id="productAvailabilityStrategy" class="org.yes.cart.web.support.service.impl.ProductAvailabilityStrategyImpl"/>

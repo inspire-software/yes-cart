@@ -50,7 +50,6 @@ public class CentralViewResolverImpl implements CentralViewResolver {
     private final CategoryService categoryService;
     private final AttributeService attributeService;
     private final LuceneQueryFactory luceneQueryFactory;
-    private final ProductService productService;
 
     /**
      * Construct central view resolver.
@@ -58,16 +57,13 @@ public class CentralViewResolverImpl implements CentralViewResolver {
      * @param categoryService    to product and sub categories quantity determination.
      * @param attributeService   to allowed attributes name determination
      * @param luceneQueryFactory luceneQueryFactory
-     * @param productService product service
      */
     public CentralViewResolverImpl(final CategoryService categoryService,
                                    final AttributeService attributeService,
-                                   final LuceneQueryFactory luceneQueryFactory,
-                                   final ProductService productService ) {
+                                   final LuceneQueryFactory luceneQueryFactory ) {
         this.categoryService = categoryService;
         this.attributeService = attributeService;
         this.luceneQueryFactory = luceneQueryFactory;
-        this.productService = productService;
     }
 
     /**
@@ -143,16 +139,8 @@ public class CentralViewResolverImpl implements CentralViewResolver {
             final ProductQueryBuilderImpl queryBuilder = new ProductQueryBuilderImpl();
             rez = queryBuilder.createQuery(itemId);
         } else if (CentralViewLabel.SEARCH_LIST.equals(viewLabel)) {
-
             //Product in list via filtered navigation
-
-            rez = luceneQueryFactory.getSnowBallQuery(queriesChain, currentQuery, false);
-
-            if (productService.getProductByQuery(rez,0,1, null, false).isEmpty()) {
-                //create q with lowercase
-                rez = luceneQueryFactory.getSnowBallQuery(queriesChain, currentQuery, true);
-
-            }
+            rez = luceneQueryFactory.getSnowBallQuery(queriesChain, currentQuery);
 
         }
 

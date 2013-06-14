@@ -36,10 +36,9 @@ public interface LuceneQueryFactory {
      *
      * @param allQueries   query chain
      * @param currentQuery optional current query
-     * @param abatement true in case if need some abatement for query, i.e. use case insensitive search
      * @return combined from chain query
      */
-    BooleanQuery getSnowBallQuery(List<BooleanQuery> allQueries, String currentQuery, boolean abatement);
+    BooleanQuery getSnowBallQuery(List<BooleanQuery> allQueries, String currentQuery);
 
     /**
      * Get the combined from query chain query.

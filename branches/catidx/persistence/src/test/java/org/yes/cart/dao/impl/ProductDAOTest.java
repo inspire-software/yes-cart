@@ -21,8 +21,14 @@ import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.util.Version;
+import org.hamcrest.Description;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.api.Invocation;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.yes.cart.dao.GenericDAO;
@@ -30,7 +36,10 @@ import org.yes.cart.dao.constants.DaoServiceBeanKeys;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.*;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.query.impl.*;
+import org.yes.cart.service.domain.AttributeService;
+import org.yes.cart.service.domain.ProductService;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -43,6 +52,7 @@ import static org.junit.Assert.*;
  * Time: 16:13:01
  */
 // TODO: YC-143 refactor to param test
+
 public class ProductDAOTest extends AbstractTestDAO {
 
     private GenericDAO<Product, Long> productDao;
@@ -55,6 +65,10 @@ public class ProductDAOTest extends AbstractTestDAO {
     private GenericDAO<SkuWarehouse, Long> skuWareHouseDao;
     private GenericDAO<Warehouse, Long> warehouseDao;
 
+    private AttributeService attributeService;
+
+    private Mockery mockery = new JUnit4Mockery();
+
     @Before
     public void setUp()  {
         productDao = (GenericDAO<Product, Long>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_DAO);
@@ -66,6 +80,10 @@ public class ProductDAOTest extends AbstractTestDAO {
         attributeDao = (GenericDAO<Attribute, Long>) ctx().getBean(DaoServiceBeanKeys.ATTRIBUTE_DAO);
         skuWareHouseDao = (GenericDAO<SkuWarehouse, Long>) ctx().getBean(DaoServiceBeanKeys.SKU_WAREHOUSE_DAO);
         warehouseDao = (GenericDAO<Warehouse, Long>) ctx().getBean(DaoServiceBeanKeys.WAREHOUSE_DAO);
+
+
+        attributeService = mockery.mock(AttributeService.class);
+
         super.setUp();
     }
 
@@ -245,6 +263,9 @@ public class ProductDAOTest extends AbstractTestDAO {
 
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
+                
+                String okToFind;
+                String failToFind;
 
                 productDao.fullTextSearchReindex();
 
@@ -256,14 +277,37 @@ public class ProductDAOTest extends AbstractTestDAO {
                 query = queryBuilder.createQuerySearchInCategory("CC_TEST99", (Long) null);
                 products = productDao.fullTextSearch(query);
                 assertEquals(0, products.size());
-                
-                
-                LuceneQueryFactoryImpl luceneQueryFactory = new LuceneQueryFactoryImpl(null,null);
-                BooleanQuery booleanQuery =  luceneQueryFactory.getSnowBallQuery(
-                        Collections.EMPTY_LIST,
-                        query.toString(),
-                        true
+                // search by Sku code
+                query = queryBuilder.createQuerySearchInCategory("cc_test99", (Long) null);
+                okToFind = query.toString();
+                products = productDao.fullTextSearch(query);
+                assertFalse(products.isEmpty());
+
+                mockery.checking(
+                        new Expectations() {{
+                            allowing(attributeService).getAllAttributeCodes();
+                            will(returnValue(Collections.singletonList(ProductSearchQueryBuilder.QUERY)));
+                        } }
                 );
+                
+                
+                LuceneQueryFactoryImpl luceneQueryFactory = new LuceneQueryFactoryImpl(
+                        null,
+                        attributeService,
+                        productDao);
+
+                List<BooleanQuery> chain = luceneQueryFactory.getFilteredNavigationQueryChain(
+                        10L,
+                        Arrays.asList(101L, 104L),
+                        Collections.singletonMap(ProductSearchQueryBuilder.QUERY, "CC_TEST99"),
+                        Arrays.asList(101L, 104L)
+                        
+                );
+                
+                BooleanQuery booleanQuery =  luceneQueryFactory.getSnowBallQuery(chain, null);
+                failToFind = booleanQuery.toString();
+
+
 
                 products = productDao.fullTextSearch(booleanQuery);
                 assertFalse(products.isEmpty());
@@ -291,7 +335,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 assertEquals(query.toString(), 2, products.size());
                 query = queryBuilder.createQuery(Arrays.asList(101L, 104L));
                 products = productDao.fullTextSearch(query);
-                assertEquals(3, products.size());
+                assertEquals(4, products.size());
 
                 status.setRollbackOnly();
 
