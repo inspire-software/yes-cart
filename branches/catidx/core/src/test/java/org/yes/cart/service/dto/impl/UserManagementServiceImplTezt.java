@@ -18,6 +18,8 @@ package org.yes.cart.service.dto.impl;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.ManagerDTO;
@@ -111,41 +113,100 @@ public class UserManagementServiceImplTezt extends BaseCoreDBTestCase {
 
     @Test
     public void testUpdateRole() throws Exception {
-        managementService.addRole("ROLE_XXX", null);
-        assertEquals(1, managementService.getRolesList().size());
-        managementService.updateRole("ROLE_XXX", "xxx");
-        assertEquals("xxx", managementService.getRolesList().get(0).getDescription());
+
+        getTx().execute(new TransactionCallbackWithoutResult() {
+            public void doInTransactionWithoutResult(TransactionStatus status) {
+                try {
+                    managementService.addRole("ROLE_XXX", null);
+                    assertEquals(1, managementService.getRolesList().size());
+                    managementService.updateRole("ROLE_XXX", "xxx");
+                    assertEquals("xxx", managementService.getRolesList().get(0).getDescription());
+                }   catch (Exception e) {
+                    assertTrue(e.getMessage(), false);
+
+                }
+
+                status.setRollbackOnly();
+
+            }
+        });
+
+
     }
 
     @Test
     public void testGrantRole() throws Exception {
-        managementService.addUser("bende11r@futurama.com", "Bender", "Rodríguez");
-        managementService.addRole("ROLE_CCC", null);
-        managementService.grantRole("bende11r@futurama.com", "ROLE_CCC");
-        assertEquals("ROLE_CCC", managementService.getAssignedManagerRoles("bende11r@futurama.com").get(0).getCode());
+
+        getTx().execute(new TransactionCallbackWithoutResult() {
+            public void doInTransactionWithoutResult(TransactionStatus status) {
+                try {
+                    managementService.addUser("bende11r@futurama.com", "Bender", "Rodríguez");
+                    managementService.addRole("ROLE_CCC", null);
+                    managementService.grantRole("bende11r@futurama.com", "ROLE_CCC");
+                    assertEquals("ROLE_CCC", managementService.getAssignedManagerRoles("bende11r@futurama.com").get(0).getCode());
+                }   catch (Exception e) {
+                    assertTrue(e.getMessage(), false);
+
+                }
+
+                status.setRollbackOnly();
+
+            }
+        });
+
     }
 
     @Test
     public void testRevokeRole() throws Exception {
-        managementService.addUser("bender12@futurama.com", "Bender", "Rodríguez");
-        managementService.addRole("ROLE_VVV", null);
-        managementService.grantRole("bender12@futurama.com", "ROLE_VVV");
-        assertEquals("ROLE_VVV", managementService.getAssignedManagerRoles("bender12@futurama.com").get(0).getCode());
-        managementService.revokeRole("bender12@futurama.com", "ROLE_VVV");
-        assertEquals(0, managementService.getAssignedManagerRoles("bender@futurama.com").size());
+
+        getTx().execute(new TransactionCallbackWithoutResult() {
+            public void doInTransactionWithoutResult(TransactionStatus status) {
+                try {
+                    managementService.addUser("bender12@futurama.com", "Bender", "Rodríguez");
+                    managementService.addRole("ROLE_VVV", null);
+                    managementService.grantRole("bender12@futurama.com", "ROLE_VVV");
+                    assertEquals("ROLE_VVV", managementService.getAssignedManagerRoles("bender12@futurama.com").get(0).getCode());
+                    managementService.revokeRole("bender12@futurama.com", "ROLE_VVV");
+                    assertEquals(0, managementService.getAssignedManagerRoles("bender@futurama.com").size());
+                }   catch (Exception e) {
+                    assertTrue(e.getMessage(), false);
+
+                }
+
+                status.setRollbackOnly();
+
+            }
+        });
+
+
     }
 
     @Test
     public void testDeleteRole() throws Exception {
-        managementService.addUser("bender13@futurama.com", "Bender", "Rodríguez");
-        managementService.addRole("ROLE_AAA", null);
-        managementService.grantRole("bender13@futurama.com", "ROLE_AAA");
-        assertEquals("ROLE_AAA", managementService.getAssignedManagerRoles("bender13@futurama.com").get(0).getCode());
-        managementService.deleteRole("ROLE_AAA");
-        for (RoleDTO role : managementService.getRolesList()) {
-            assertFalse("ROLE_AAA".equals(role.getCode()));
-        }
-        assertEquals(0, managementService.getAssignedManagerRoles("bender13@futurama.com").size());
+
+        getTx().execute(new TransactionCallbackWithoutResult() {
+            public void doInTransactionWithoutResult(TransactionStatus status) {
+                try {
+                    managementService.addUser("bender13@futurama.com", "Bender", "Rodríguez");
+                    managementService.addRole("ROLE_AAA", null);
+                    managementService.grantRole("bender13@futurama.com", "ROLE_AAA");
+                    assertEquals("ROLE_AAA", managementService.getAssignedManagerRoles("bender13@futurama.com").get(0).getCode());
+                    managementService.deleteRole("ROLE_AAA");
+                    for (RoleDTO role : managementService.getRolesList()) {
+                        assertFalse("ROLE_AAA".equals(role.getCode()));
+                    }
+                    assertEquals(0, managementService.getAssignedManagerRoles("bender13@futurama.com").size());
+                }   catch (Exception e) {
+                    assertTrue(e.getMessage(), false);
+
+                }
+
+                status.setRollbackOnly();
+
+            }
+        });
+
+
     }
 }
 

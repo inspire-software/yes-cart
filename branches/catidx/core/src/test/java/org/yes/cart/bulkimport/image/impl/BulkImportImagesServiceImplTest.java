@@ -21,8 +21,11 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.bulkimport.service.BulkImportImagesService;
+import org.yes.cart.domain.entity.AttrValueProductSku;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.async.JobStatusListener;
@@ -156,6 +159,14 @@ public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
         Product product = productService.getProductById(10000L, true); //SOBOT
         assertNotNull(product);
         for (ProductSku productSku : product.getSku()) {
+
+            for (AttrValueProductSku avps : productSku.getAttributes()) {
+                System.out.println(">>>>>>>>> " + avps.getAttribute().getCode()
+                        + " " + avps.getAttribute().getName()
+                        + " " + avps.getVal());
+            }
+
+
             if (productSku.getCode().equals("SOBOT-BEER")) {
                 assertNull(productSku.getAttributeByCode("IMAGE0")); // at this point sku has no images
                 assertNull(productSku.getAttributeByCode("IMAGE1")); // at this point sku has no images
@@ -211,40 +222,49 @@ public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testDoImport() {
 
-        ProductService productService = (ProductService) createContext().getBean("productService");
-        Product product = productService.getProductById(10000L, true);
-        assertNotNull(product);
-        assertNull(product.getAttributeByCode("IMAGE2")); // product has not IMAGE2 attribute
+        getTx().execute(new TransactionCallbackWithoutResult() {
+            public void doInTransactionWithoutResult(TransactionStatus status) {
 
-        final JobStatusListener listener = mockery.mock(JobStatusListener.class, "listener");
+                ProductService productService = (ProductService) createContext().getBean("productService");
+                Product product = productService.getProductById(10000L, true);
+                assertNotNull(product);
+                assertNull(product.getAttributeByCode("IMAGE2")); // product has not IMAGE2 attribute
 
-        mockery.checking(new Expectations() {{
-            allowing(listener).notifyWarning(with(any(String.class)));
-            allowing(listener).notifyMessage(with(any(String.class)));
-        }});
+                final JobStatusListener listener = mockery.mock(JobStatusListener.class, "listener");
 
-
-        BulkImportImagesService service = getBulkImportService();
-        service.doImport(
-                new File("src/test/resources/import/im-image-file_SOBOT-BEER_c.jpeg"),
-                listener,
-                new HashSet<String>(),
-                "");
-
-        clearCache();
-        product = productService.getProductById(10000L, true);
-        assertNotNull(product);
+                mockery.checking(new Expectations() {{
+                    allowing(listener).notifyWarning(with(any(String.class)));
+                    allowing(listener).notifyMessage(with(any(String.class)));
+                }});
 
 
-        for (ProductSku productSku : product.getSku()) {
-            if (productSku.getCode().equals("SOBOT-BEER")) {
-                assertNotNull(productSku.getAttributeByCode("IMAGE2"));
+                BulkImportImagesService service = getBulkImportService();
+                service.doImport(
+                        new File("src/test/resources/import/im-image-file_SOBOT-BEER_c.jpeg"),
+                        listener,
+                        new HashSet<String>(),
+                        "");
 
-                assertEquals("im-image-file_SOBOT-BEER_c.jpeg", productSku.getAttributeByCode("IMAGE2").getVal());
+                clearCache();
+                product = productService.getProductById(10000L, true);
+                assertNotNull(product);
+
+
+                for (ProductSku productSku : product.getSku()) {
+                    if (productSku.getCode().equals("SOBOT-BEER")) {
+                        assertNotNull(productSku.getAttributeByCode("IMAGE2"));
+
+                        assertEquals("im-image-file_SOBOT-BEER_c.jpeg", productSku.getAttributeByCode("IMAGE2").getVal());
+                    }
+                }
+
+                status.setRollbackOnly();
+
+                mockery.assertIsSatisfied();
+
             }
-        }
+        });
 
-        mockery.assertIsSatisfied();
 
     }
 

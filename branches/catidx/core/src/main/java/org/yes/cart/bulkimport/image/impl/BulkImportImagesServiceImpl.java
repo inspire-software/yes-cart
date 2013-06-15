@@ -175,7 +175,7 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
             final String fileName,
             final String code,
             final String suffix) {
-        Product product = (Product) genericDAO.getScalarResultByNamedQuery("PRODUCT.BY.CODE", true, code);
+        Product product = (Product) genericDAO.getScalarResultByNamedQueryWithInit("PRODUCT.BY.CODE", code);
 
         if (product == null) {
             final String warn = MessageFormat.format("product with code {0} not found.", code);
