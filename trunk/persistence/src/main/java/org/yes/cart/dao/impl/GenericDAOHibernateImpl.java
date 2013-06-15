@@ -167,7 +167,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
-    public Object getScalarResultByNamedQuery(final String namedQueryName, final boolean forceCollectionInit, final Object... parameters) {
+    public Object getScalarResultByNamedQueryWithInit(final String namedQueryName,  final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
         int idx = 1;
         for (Object param : parameters) {
@@ -175,11 +175,9 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
             idx++;
         }
         final Object obj = query.uniqueResult();
-        if (forceCollectionInit) {
-            if (obj instanceof Product) {
-                Hibernate.initialize(((Product) obj).getAttributes());
+        if (obj instanceof Product) {
+            Hibernate.initialize(((Product) obj).getAttributes());
 
-            }
         }
         return obj;
     }
