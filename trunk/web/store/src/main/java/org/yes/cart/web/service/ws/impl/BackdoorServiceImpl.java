@@ -148,7 +148,7 @@ public class BackdoorServiceImpl implements BackdoorService, ApplicationContextA
      */
     public List<Object[]> luceneQuery(final String luceneQuery) {
 
-        final QueryParser queryParser = new QueryParser(Version.LUCENE_31, "", new AsIsAnalyzer());
+        final QueryParser queryParser = new QueryParser(Version.LUCENE_31, "", new AsIsAnalyzer(false));
 
         try {
 

@@ -23,11 +23,14 @@ import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.util.Version;
+import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.domain.query.PriceNavigation;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.AttributeService;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
@@ -61,31 +64,38 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
             ProductSearchQueryBuilder.PRODUCT_ID_FIELD
     };
 
-    private MultiFieldQueryParser queryParser;
 
     private final PriceNavigation priceNavigation;
     private final AttributeService attributeService;
+    private final GenericDAO<Product, Long> productDao;
 
-    protected MultiFieldQueryParser getQueryParser() {
-        return queryParser;
-    }
 
     /**
      * Construct query builder factory.
-     * @param priceNavigation   price navigation service
-     * @param attributeService  attribute service to filter not allowed page parameters during filtered navigation
+     *
+     * @param priceNavigation  price navigation service
+     * @param attributeService attribute service to filter not allowed page parameters during filtered navigation
+     * @param productDao product dao service
      */
-    public LuceneQueryFactoryImpl(final PriceNavigation priceNavigation, final AttributeService attributeService) {
+    public LuceneQueryFactoryImpl(final PriceNavigation priceNavigation,
+                                  final AttributeService attributeService,
+                                  final GenericDAO<Product, Long> productDao) {
         this.priceNavigation = priceNavigation;
         this.attributeService = attributeService;
+        this.productDao = productDao;
     }
 
 
-    private MultiFieldQueryParser getMultiFieldQueryParser() {
-        if (queryParser == null) {
-            queryParser = new MultiFieldQueryParser(Version.LUCENE_31, fields, new AsIsAnalyzer());
-        }
-        return queryParser;
+    private MultiFieldQueryParser getMultiFieldQueryParser(final boolean abatement) {
+
+        final MultiFieldQueryParser multiFieldQueryParser = new MultiFieldQueryParser(
+                Version.LUCENE_31,
+                fields,
+                new AsIsAnalyzer(abatement));
+
+        multiFieldQueryParser.setLowercaseExpandedTerms(abatement);
+
+        return multiFieldQueryParser;
     }
 
     /**
@@ -94,9 +104,9 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
      * @param queryString string representation of lucene query
      * @return query if string was succsesfuly parsed.
      */
-    private Query parseQuery(final String queryString) {
+    private Query parseQuery(final String queryString, final boolean abatement) {
         try {
-            return getMultiFieldQueryParser().parse(queryString);
+            return getMultiFieldQueryParser(abatement).parse(queryString);
         } catch (ParseException e) {
             ShopCodeContext.getLog(this).error(MessageFormat.format("Can not parse given query {0}", queryString), e);
         }
@@ -116,12 +126,17 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
      */
     public BooleanQuery getSnowBallQuery(final List<BooleanQuery> allQueries, final String currentQuery) {
         BooleanQuery booleanQuery = new BooleanQuery();
-        for (BooleanQuery cookie : allQueries) {
-            booleanQuery.add(cookie, BooleanClause.Occur.MUST);
+        
+        for (int i = 0 ; i < allQueries.size(); i++) {
+            booleanQuery.add(
+                    allQueries.get(i),
+                    BooleanClause.Occur.MUST
+            );
         }
+
         if (currentQuery != null) {
-            // add current querry
-            Query query = parseQuery(currentQuery);
+            // add current query
+            Query query = parseQuery(currentQuery, false);
             if (query != null) {
                 booleanQuery.add(query, BooleanClause.Occur.MUST);
             }
@@ -160,18 +175,16 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
      * Entire search if size of categories is one and first category is 0
      * otherwise need to use all sub categories, that belong to given category list.
      *
-     * @param shopId                the current shop id
-     * @param requestParameters     web request parameters
-     * @param categories            given category ids
-     * @param allShopcategories     optional parameter all shop caterories with child as list used in case if
-     *                              user perform serach on entire shop
+     * @param shopId            the current shop id
+     * @param requestParameters web request parameters
+     * @param categories        given category ids
      * @return ordered by cookie name list of cookies
      */
+    //@Cacheable(value = "centralViewResolverImplMethodCache")
     public List<BooleanQuery> getFilteredNavigationQueryChain(
             final Long shopId,
             final List<Long> categories,
-            final Map<String, ?> requestParameters,
-            final List<Long> allShopcategories) {
+            final Map<String, ?> requestParameters) {
 
         final List<String> allowedAttributeCodes = attributeService.getAllAttributeCodes();
 
@@ -191,11 +204,17 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
                         } else if (ProductSearchQueryBuilder.PRODUCT_PRICE.equals(decodedKeyName)) {
                             query = createPriceChain(shopId, categories, val);
                         } else if (ProductSearchQueryBuilder.QUERY.equals(decodedKeyName)) {
-                            query = createSearchChain(categories, allShopcategories, val);
+                            query = createSearchChain(categories, shopId, val, false);
+                            final BooleanQuery booleanQueryToTest = getSnowBallQuery(queryChain, query.toString());
+                            if (productDao.fullTextSearch(booleanQueryToTest,0,1, null, false).isEmpty()) {
+                                //create not very strict query with lowercase
+                                query = createSearchChain(categories, shopId, val, true);
+                            }
                         } else {
                             query = createAttributeChain(categories, decodedKeyName, val);
                         }
                         queryChain.add(query);
+
                     }
                 }
             }
@@ -219,13 +238,24 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
         return query;
     }
 
-    private BooleanQuery createSearchChain(final List<Long> categories, final List<Long> allShopcategories, final Object val) {
+    private BooleanQuery createSearchChain(final List<Long> categories, final Long shopId, final Object val, final boolean abatement) {
         BooleanQuery query;
         final GlobalSearchQueryBuilderImpl globalSearchQueryBuilder = new GlobalSearchQueryBuilderImpl();
         if (categories.size() == 1 && categories.get(0) == 0) {
-            query = globalSearchQueryBuilder.createQuery(String.valueOf(val), allShopcategories);
+            query = globalSearchQueryBuilder.createQuerySearchInShop(String.valueOf(val), shopId);
         } else {
-            query = globalSearchQueryBuilder.createQuery(String.valueOf(val), categories);
+            query = globalSearchQueryBuilder.createQuerySearchInCategories(String.valueOf(val), categories);
+        }
+
+        if (abatement) {
+            final String queryToAbatement = query.toString();
+            Query queryCandidate = parseQuery(queryToAbatement, abatement);
+            if (queryCandidate instanceof BooleanQuery) {
+                query = (BooleanQuery) queryCandidate;
+            } else {
+                query = new BooleanQuery();
+                query.add(queryCandidate,BooleanClause.Occur.MUST);
+            }
         }
         return query;
     }
@@ -245,8 +275,9 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
 
     /**
      * Create query to search by brand name in given categories.
-     * @param categories    given categories
-     * @param val brand name
+     *
+     * @param categories given categories
+     * @param val        brand name
      * @return {@link BooleanQuery}
      */
     private BooleanQuery createBrandChain(final List<Long> categories, final Object val) {
@@ -257,8 +288,9 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
 
     /**
      * Create query to search by product tag in given categories.
-     * @param categories    given categories
-     * @param val given product tag
+     *
+     * @param categories given categories
+     * @param val        given product tag
      * @return {@link BooleanQuery}
      */
     private BooleanQuery createTagChain(final List<Long> categories, final Object val) {

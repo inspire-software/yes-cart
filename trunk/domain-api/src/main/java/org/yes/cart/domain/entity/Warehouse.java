@@ -16,6 +16,8 @@
 
 package org.yes.cart.domain.entity;
 
+import java.util.Collection;
+
 /**
  * Warehouse entity. Each shop can have several warehouses.
  * Address part of warehouse used to:
@@ -141,6 +143,19 @@ public interface Warehouse extends Auditable, Codable {
     void setPostcode(String postcode);
 
     // address part of warehouse end
+
+
+    /**
+     * Get shop warehouse relation.
+     * @return  shop warehouse relation.
+     */
+    Collection<ShopWarehouse> getWarehouseShop();
+
+    /**
+     * Set shop warehouse relation.
+     * @param warehouseShop  shop warehouse relation.
+     */
+    void setWarehouseShop(Collection<ShopWarehouse> warehouseShop);
 
 
 }

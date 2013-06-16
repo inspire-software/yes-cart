@@ -19,12 +19,16 @@ package org.yes.cart.web.support.service.impl;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.lucene.search.BooleanQuery;
 import org.springframework.util.CollectionUtils;
+import org.yes.cart.cache.Cacheable;
+import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.domain.query.impl.ProductQueryBuilderImpl;
 import org.yes.cart.domain.query.impl.ProductsInCategoryQueryBuilderImpl;
 import org.yes.cart.domain.query.impl.SkuQueryBuilderImpl;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.CentralViewResolver;
@@ -56,7 +60,7 @@ public class CentralViewResolverImpl implements CentralViewResolver {
      */
     public CentralViewResolverImpl(final CategoryService categoryService,
                                    final AttributeService attributeService,
-                                   final LuceneQueryFactory luceneQueryFactory) {
+                                   final LuceneQueryFactory luceneQueryFactory ) {
         this.categoryService = categoryService;
         this.attributeService = attributeService;
         this.luceneQueryFactory = luceneQueryFactory;
@@ -100,6 +104,7 @@ public class CentralViewResolverImpl implements CentralViewResolver {
     /**
      * {@inheritDoc}
      */
+    @Cacheable(value = "centralViewResolverImplMethodCache")
     public BooleanQuery getBooleanQuery(
             final List<BooleanQuery> queriesChain,
             final String currentQuery,
@@ -108,34 +113,39 @@ public class CentralViewResolverImpl implements CentralViewResolver {
             final String viewLabel,
             final String itemId) {
 
+        BooleanQuery rez = null;
 
         if (CentralViewLabel.PRODUCTS_LIST.equals(viewLabel)) {
             //Products in list
             final ProductsInCategoryQueryBuilderImpl queryBuilder = new ProductsInCategoryQueryBuilderImpl();
             if (CollectionUtils.isEmpty(categories)) {
-                return queryBuilder.createQuery(categoryId);
-            }
-            final List<Long> allCategories = new ArrayList<Long>();
-            for (final Long category : categories) {
-                if (category != null && category > 0l) {
-                    allCategories.add(category);
+                rez = queryBuilder.createQuery(categoryId);
+            } else {
+                final List<Long> allCategories = new ArrayList<Long>();
+                for (final Long category : categories) {
+                    if (category != null && category > 0l) {
+                        allCategories.add(category);
+                    }
                 }
+                allCategories.add(categoryId);
+                rez = queryBuilder.createQuery(allCategories);
             }
-            allCategories.add(categoryId);
-            return queryBuilder.createQuery(allCategories);
         } else if (CentralViewLabel.SKU.equals(viewLabel)) {
             //single sku
             final SkuQueryBuilderImpl queryBuilder = new SkuQueryBuilderImpl();
-            return queryBuilder.createQuery(itemId);
+            rez = queryBuilder.createQuery(itemId);
         } else if (CentralViewLabel.PRODUCT.equals(viewLabel)) {
             //Single product
             final ProductQueryBuilderImpl queryBuilder = new ProductQueryBuilderImpl();
-            return queryBuilder.createQuery(itemId);
+            rez = queryBuilder.createQuery(itemId);
         } else if (CentralViewLabel.SEARCH_LIST.equals(viewLabel)) {
             //Product in list via filtered navigation
-            return luceneQueryFactory.getSnowBallQuery(queriesChain, currentQuery);
+            rez = luceneQueryFactory.getSnowBallQuery(queriesChain, currentQuery);
+
         }
-        return null;
+
+
+        return rez;
 
     }
 

@@ -159,14 +159,6 @@ public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
         Product product = productService.getProductById(10000L, true); //SOBOT
         assertNotNull(product);
         for (ProductSku productSku : product.getSku()) {
-
-            for (AttrValueProductSku avps : productSku.getAttributes()) {
-                System.out.println(">>>>>>>>> " + avps.getAttribute().getCode()
-                        + " " + avps.getAttribute().getName()
-                        + " " + avps.getVal());
-            }
-
-
             if (productSku.getCode().equals("SOBOT-BEER")) {
                 assertNull(productSku.getAttributeByCode("IMAGE0")); // at this point sku has no images
                 assertNull(productSku.getAttributeByCode("IMAGE1")); // at this point sku has no images

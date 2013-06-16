@@ -144,7 +144,7 @@
 
     </packs>
 
-    <jar src="target/izpack/installer-1.0.0-SNAPSHOT.jar"/>
+    <jar src="target/izpack/installer-2.0.0-SNAPSHOT.jar"/>
     <jar src="target/izpack/guava-r09.jar"/>
 
 

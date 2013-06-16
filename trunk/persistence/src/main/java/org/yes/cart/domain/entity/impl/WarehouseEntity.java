@@ -16,7 +16,11 @@
 package org.yes.cart.domain.entity.impl;
 
 
+import org.yes.cart.domain.entity.ShopWarehouse;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -37,6 +41,9 @@ public class WarehouseEntity implements org.yes.cart.domain.entity.Warehouse, ja
     private String stateCode;
     private String city;
     private String postcode;
+
+    private Collection<ShopWarehouse> warehouseShop = new ArrayList<ShopWarehouse>(5);
+
     private Date createdTimestamp;
     private Date updatedTimestamp;
     private String createdBy;
@@ -46,8 +53,17 @@ public class WarehouseEntity implements org.yes.cart.domain.entity.Warehouse, ja
     public WarehouseEntity() {
     }
 
+    /** {@inheritDoc} */
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "WAREHOUSE_ID", updatable = false)
+    public Collection<ShopWarehouse> getWarehouseShop() {
+        return warehouseShop;
+    }
 
-
+    /** {@inheritDoc} */
+    public void setWarehouseShop(final Collection<ShopWarehouse> warehouseShop) {
+        this.warehouseShop = warehouseShop;
+    }
 
     @Column(name = "CODE", nullable = false)
     public String getCode() {

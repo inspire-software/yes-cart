@@ -73,7 +73,7 @@ public class DtoWarehouseServiceImplTezt extends BaseCoreDBTestCase {
         assertNotNull(dtos);
         assertEquals(2, dtos.size());
         //shop has not assigned warehouses
-        dtos = dtoService.findByShopId(20L);
+        dtos = dtoService.findByShopId(30L);
         assertNotNull(dtos);
         assertTrue(dtos.isEmpty());
         //not existing shop
@@ -87,10 +87,10 @@ public class DtoWarehouseServiceImplTezt extends BaseCoreDBTestCase {
         WarehouseDTO dto = getDto(2);
         dto = dtoService.create(dto);
         assertTrue(dto.getWarehouseId() > 0);
-        dtoService.assignWarehouse(dto.getWarehouseId(), 20L);
-        List<WarehouseDTO> dtos = dtoService.findByShopId(20L);
+        dtoService.assignWarehouse(dto.getWarehouseId(), 30L);
+        List<WarehouseDTO> dtos = dtoService.findByShopId(30L);
         assertEquals(1, dtos.size());
-        dtoService.unassignWarehouse(dto.getWarehouseId(), 20L);
+        dtoService.unassignWarehouse(dto.getWarehouseId(), 30L);
     }
 
     @Test

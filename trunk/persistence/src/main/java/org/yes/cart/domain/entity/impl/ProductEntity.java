@@ -22,9 +22,9 @@ import org.hibernate.search.annotations.*;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
-import org.yes.cart.domain.entity.System;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.util.MoneyUtils;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -93,17 +93,15 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.availablefrom = availablefrom;
     }
 
-    /**
-     *      */
+    /** {@inheritDoc} */
     @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
-    /*
-    */
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "AVAILABLETO")
     public Date getAvailableto() {
         return this.availableto;
     }
 
+    /** {@inheritDoc} */
     public void setAvailableto(Date availableto) {
         this.availableto = availableto;
     }
@@ -117,7 +115,8 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         return this.name;
     }
 
-    public void setName(String name) {
+    /** {@inheritDoc} */
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -154,6 +153,28 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
             }
         }
         return builder.toString();
+    }
+
+    /** {@inheritDoc} */
+    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
+    @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductShopBridge.class)
+    @Transient
+    public List<Long> getShopId() {
+        //this.getSku().iterator().next().getQuantityOnWarehouse().iterator().next().getWarehouse().getWarehouseShop()
+        final List<Long> rez =  new ArrayList<Long>(5);
+
+        for (ProductSku productSku : getSku()) {
+            for (SkuWarehouse skuWarehouse : productSku.getQuantityOnWarehouse()) {
+                if (MoneyUtils.isFirstBiggerThanSecond(skuWarehouse.getQuantity(), BigDecimal.ZERO) ) {
+                    for(ShopWarehouse shopWarehouse : skuWarehouse.getWarehouse().getWarehouseShop()) {
+                        rez.add(shopWarehouse.getShop().getShopId());
+                    }
+                }
+            }
+        }
+
+        return rez;
+
     }
 
     @Transient
@@ -234,12 +255,8 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.attributes = attributes;
     }
 
-    /**
-     *      */
     @Field
     @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductCategoryBridge.class)
-    /*
-    */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "PRODUCT_ID", updatable = false)
     public Set<ProductCategory> getProductCategory() {
@@ -250,12 +267,8 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.productCategory = productCategory;
     }
 
-    /**
-     *      */
     @Field
     @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductSkuBridge.class)
-    /*
-    */
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "PRODUCT_ID", updatable = false)
     @Cascade({org.hibernate.annotations.CascadeType.ALL, org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
