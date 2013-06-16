@@ -41,6 +41,19 @@ public class SearchPhrazeUtilTest {
         assertEquals("test", rez.get(5));
         assertEquals("hehe", rez.get(6));
         assertEquals("wow", rez.get(7));
+
+
+        /*rez = SearchPhrazeUtil.splitForSearch(" | Just, phraZe--to splIt;for.Test,,Hehe++wow");
+        assertEquals(8, rez.size());
+        assertEquals("just", rez.get(0));
+        assertEquals("phraze", rez.get(1));
+        assertEquals("to", rez.get(2));
+        assertEquals("split", rez.get(3));
+        assertEquals("for", rez.get(4));
+        assertEquals("test", rez.get(5));
+        assertEquals("hehe", rez.get(6));
+        assertEquals("wow", rez.get(7));*/
+
     }
 
     @Test

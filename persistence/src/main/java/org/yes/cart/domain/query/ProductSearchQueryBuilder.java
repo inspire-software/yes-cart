@@ -51,6 +51,7 @@ public interface ProductSearchQueryBuilder {
 
 
     public final static String PRODUCT_CATEGORY_FIELD = "productCategory.category";
+    public final static String PRODUCT_SHOP_FIELD = "productShopId";
     public final static String PRODUCT_ID_FIELD = "productId";
     public final static String SKU_ID_FIELD = "sku.skuId"; //////////////////////////////////////////////
 
@@ -72,5 +73,15 @@ public interface ProductSearchQueryBuilder {
 
     // not really a field, but used for global search
     public final static String QUERY = "query";
+
+    //--------------------------------------- categories -----------------------------------
+
+    public final static String CATEGORY_NAME_FIELD = "name";
+    public final static String CATEGORY_DISPLAYNAME_FIELD = "displayName";
+    public final static String CATEGORY_DESCRIPTION_FIELD = "description";
+    public final static String CATEGORY_SEO_URI_FIELD = "seo.uri";
+    public final static String CATEGORY_SEO_TITLE_FIELD = "seo.title";
+    public final static String CATEGORY_SEO_METAKEYWORDS_FIELD = "seo.metakeywords";
+    public final static String CATEGORY_SEO_METADESCRIPTION_FIELD = "seo.metadescription";
 
 }

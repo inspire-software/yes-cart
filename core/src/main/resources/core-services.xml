@@ -23,9 +23,15 @@
 
     <bean id="hashHelper" class="org.yes.cart.service.domain.impl.MD5HashHelperImpl" scope="prototype"/>
 
-    <bean id="luceneQueryFactory" class="org.yes.cart.domain.query.impl.LuceneQueryFactoryImpl">
-        <constructor-arg index="0" type="org.yes.cart.domain.query.PriceNavigation" ref="priceNavigation"/>
-        <constructor-arg index="1" type="org.yes.cart.service.domain.AttributeService" ref="attributeService"/>
+
+    <bean id="luceneQueryFactory" parent="txProxyTemplate">
+        <property name="target">
+            <bean  class="org.yes.cart.domain.query.impl.LuceneQueryFactoryImpl">
+                <constructor-arg index="0" type="org.yes.cart.domain.query.PriceNavigation" ref="priceNavigation"/>
+                <constructor-arg index="1" type="org.yes.cart.service.domain.AttributeService" ref="attributeService"/>
+                <constructor-arg index="2" type="org.yes.cart.dao.GenericDAO" ref="productDao"/>
+            </bean>
+        </property>
     </bean>
 
     <bean id="systemService" parent="txProxyTemplate">
@@ -966,6 +972,7 @@
         <property name="cacheManager" ref="cacheManager"/>
         <property name="cacheName" value="org.yes.cart.service.domain.impl.ImageServiceImpl.cache"/>
     </bean>
+
 
 
     <!-- ########################################### ExtendedConversionService ################################# -->

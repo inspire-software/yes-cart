@@ -2802,6 +2802,13 @@ public void setRangeList(final RangeList rangeList) {
             <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
 			<property name="guid" column="GUID" type="string" length="36" unique="true" index="WAREHOUSE_GUID" not-null="true"/>
 
+            <bag name="warehouseShop" inverse="false" lazy="true" cascade="all">
+                <key>
+                    <column name="WAREHOUSE_ID" not-null="false"/>
+                </key>
+                <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.ShopWarehouse"/>
+            </bag>
+
         </subclass>
 
     </class>

@@ -19,6 +19,7 @@ package org.yes.cart.domain.entity.impl;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.search.annotations.*;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.xml.CategoryPriceNavigationXStreamProvider;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
@@ -32,9 +33,9 @@ import java.util.*;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
+@Indexed(index = "luceneindex/category")
 @Entity
-@Table(name = "TCATEGORY"
-)
+@Table(name = "TCATEGORY")
 public class CategoryEntity implements org.yes.cart.domain.entity.Category, java.io.Serializable {
 
 
@@ -66,6 +67,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
 
 
     @Column(name = "PARENT_ID")
+    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public long getParentId() {
         return this.parentId;
     }
@@ -75,6 +77,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     }
 
     @Column(name = "RANK")
+    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public int getRank() {
         return this.rank;
     }
@@ -95,6 +98,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     }
 
     @Column(name = "NAME", nullable = false)
+    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public String getName() {
         return this.name;
     }
@@ -104,6 +108,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     }
 
     @Column(name = "DISPLAYNAME", length = 4000)
+    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public String getDisplayName() {
         return this.displayName;
     }
@@ -113,6 +118,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     }
 
     @Column(name = "DESCRIPTION", length = 4000)
+    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public String getDescription() {
         return this.description;
     }
@@ -164,6 +170,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
             @AttributeOverride(name = "title", column = @Column(name = "TITLE")),
             @AttributeOverride(name = "metakeywords", column = @Column(name = "METAKEYWORDS")),
             @AttributeOverride(name = "metadescription", column = @Column(name = "METADESCRIPTION"))})
+    @FieldBridge(impl = org.yes.cart.domain.entity.bridge.SeoBridge.class)
     public SeoEntity getSeo() {
         return this.seo;
     }
@@ -274,8 +281,8 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
     @Id
     @GeneratedValue
-    /*(generator="generator")*/
     @Column(name = "CATEGORY_ID", nullable = false)
+    @DocumentId
     public long getCategoryId() {
         return this.categoryId;
     }

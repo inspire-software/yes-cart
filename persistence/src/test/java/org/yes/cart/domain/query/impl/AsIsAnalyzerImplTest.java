@@ -32,12 +32,18 @@ import static org.junit.Assert.assertEquals;
 public class AsIsAnalyzerImplTest {
 
     private static final String LUCENE_QUERY = "+productCategory.category:104 +attribute.attribute:BATTERY_TYPE +attribute.val:Litium";
+    private static final String LUCENE_QUERY_LOWERCASE = "+productCategory.category:104 +attribute.attribute:battery_type +attribute.val:litium";
     private static final String[] FIELDS = {"productCategory.category", "attribute.attribute", "attribute.val"};
 
     @Test
     public void testThatQueryIsNotTransformaedByAnalyzerWithMultipleFiledsQueryParser() throws ParseException {
-        MultiFieldQueryParser queryParser = new MultiFieldQueryParser(Version.LUCENE_31, FIELDS, new AsIsAnalyzer());
+        MultiFieldQueryParser queryParser = new MultiFieldQueryParser(Version.LUCENE_31, FIELDS, new AsIsAnalyzer(false));
         Query query = queryParser.parse(LUCENE_QUERY);
         assertEquals(LUCENE_QUERY, query.toString());
+
+        queryParser = new MultiFieldQueryParser(Version.LUCENE_31, FIELDS, new AsIsAnalyzer(true));
+        query = queryParser.parse(LUCENE_QUERY);
+        assertEquals(LUCENE_QUERY_LOWERCASE, query.toString());
+
     }
 }
