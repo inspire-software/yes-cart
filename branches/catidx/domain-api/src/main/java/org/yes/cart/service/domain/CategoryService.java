@@ -69,25 +69,19 @@ public interface CategoryService extends GenericService<Category> {
     /**
      * Get the root category.
      *
-     * @return root cateory.
+     * @return root category.
      */
     Category getRootCategory();
 
     /**
-     * Get the "template variation" for given category with failover to parent category.
+     * Get the "template variation" for given category with fail over to parent category.
      *
      * @param category given category
      * @return Template variation
      */
     String getCategoryTemplateVariation(Category category);
 
-    /**
-     * Get the "template variation" for given category with failover to parent category.
-     *
-     * @param categoryId given categoryId
-     * @return Template variation
-     */
-    String getCategoryTemplateVariation(long categoryId);
+
 
     /**
      * Count products in given category.

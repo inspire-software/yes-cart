@@ -258,15 +258,6 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         return getCategoryAttributeRecursive(locale, parentCategory, attributeName);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Cacheable(value = CACHE_NAME)
-    public String getCategoryTemplateVariation(final long categoryId) {
-        return getCategoryTemplateVariation(
-                categoryDao.findById(categoryId)
-        );
-    }
 
     /**
      * {@inheritDoc}

@@ -178,16 +178,13 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
      * @param shopId            the current shop id
      * @param requestParameters web request parameters
      * @param categories        given category ids
-     * @param allShopcategories optional parameter all shop caterories with child as list used in case if
-     *                          user perform serach on entire shop
      * @return ordered by cookie name list of cookies
      */
     //@Cacheable(value = "centralViewResolverImplMethodCache")
     public List<BooleanQuery> getFilteredNavigationQueryChain(
             final Long shopId,
             final List<Long> categories,
-            final Map<String, ?> requestParameters,
-            final List<Long> allShopcategories) {
+            final Map<String, ?> requestParameters) {
 
         final List<String> allowedAttributeCodes = attributeService.getAllAttributeCodes();
 
@@ -207,11 +204,11 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
                         } else if (ProductSearchQueryBuilder.PRODUCT_PRICE.equals(decodedKeyName)) {
                             query = createPriceChain(shopId, categories, val);
                         } else if (ProductSearchQueryBuilder.QUERY.equals(decodedKeyName)) {
-                            query = createSearchChain(categories, allShopcategories, val, false);
+                            query = createSearchChain(categories, shopId, val, false);
                             final BooleanQuery booleanQueryToTest = getSnowBallQuery(queryChain, query.toString());
                             if (productDao.fullTextSearch(booleanQueryToTest,0,1, null, false).isEmpty()) {
                                 //create not very strict query with lowercase
-                                query = createSearchChain(categories, allShopcategories, val, true);
+                                query = createSearchChain(categories, shopId, val, true);
                             }
                         } else {
                             query = createAttributeChain(categories, decodedKeyName, val);
@@ -241,11 +238,11 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
         return query;
     }
 
-    private BooleanQuery createSearchChain(final List<Long> categories, final List<Long> allShopcategories, final Object val, final boolean abatement) {
+    private BooleanQuery createSearchChain(final List<Long> categories, final Long shopId, final Object val, final boolean abatement) {
         BooleanQuery query;
         final GlobalSearchQueryBuilderImpl globalSearchQueryBuilder = new GlobalSearchQueryBuilderImpl();
         if (categories.size() == 1 && categories.get(0) == 0) {
-            query = globalSearchQueryBuilder.createQuerySearchInCategories(String.valueOf(val), allShopcategories);
+            query = globalSearchQueryBuilder.createQuerySearchInShop(String.valueOf(val), shopId);
         } else {
             query = globalSearchQueryBuilder.createQuerySearchInCategories(String.valueOf(val), categories);
         }

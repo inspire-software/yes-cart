@@ -299,9 +299,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 List<BooleanQuery> chain = luceneQueryFactory.getFilteredNavigationQueryChain(
                         10L,
                         Arrays.asList(101L, 104L),
-                        Collections.singletonMap(ProductSearchQueryBuilder.QUERY, "CC_TEST99"),
-                        Arrays.asList(101L, 104L)
-                        
+                        Collections.singletonMap(ProductSearchQueryBuilder.QUERY, "CC_TEST99")
                 );
                 
                 BooleanQuery booleanQuery =  luceneQueryFactory.getSnowBallQuery(chain, null);

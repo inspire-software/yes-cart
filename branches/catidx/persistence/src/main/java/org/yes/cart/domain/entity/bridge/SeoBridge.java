@@ -27,28 +27,28 @@ public class SeoBridge implements FieldBridge {
 
 
             document.add(new Field(
-                    "seo.uri", //ProductSearchQueryBuilder.
+                    ProductSearchQueryBuilder.CATEGORY_SEO_URI_FIELD,
                     seo.getUri(),
                     luceneOptions.getStore(),
                     Field.Index.NOT_ANALYZED,
                     luceneOptions.getTermVector()
             ));
             document.add(new Field(
-                    "seo.title", //ProductSearchQueryBuilder.
+                    ProductSearchQueryBuilder.CATEGORY_SEO_TITLE_FIELD,
                     seo.getTitle(),
                     luceneOptions.getStore(),
                     Field.Index.NOT_ANALYZED,
                     luceneOptions.getTermVector()
             ));
             document.add(new Field(
-                    "seo.metakeywords", //ProductSearchQueryBuilder.
+                    ProductSearchQueryBuilder.CATEGORY_SEO_METAKEYWORDS_FIELD,
                     seo.getMetakeywords(),
                     luceneOptions.getStore(),
                     Field.Index.NOT_ANALYZED,
                     luceneOptions.getTermVector()
             ));
             document.add(new Field(
-                    "seo.metadescription", //ProductSearchQueryBuilder.
+                    ProductSearchQueryBuilder.CATEGORY_SEO_METADESCRIPTION_FIELD,
                     seo.getMetadescription(),
                     luceneOptions.getStore(),
                     Field.Index.NOT_ANALYZED,

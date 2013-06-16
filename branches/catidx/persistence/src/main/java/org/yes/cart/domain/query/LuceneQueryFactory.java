@@ -62,14 +62,11 @@ public interface LuceneQueryFactory {
      * @param shopId                the current shop id
      * @param requestParameters     web request parameters
      * @param categories            given category ids
-     * @param allShopcategories     optional parameter all shop caterories with child as list used in case if
-     *                              user perform serach on entire shop
      * @return ordered by cookie name list of cookies
      */
     List<BooleanQuery> getFilteredNavigationQueryChain(
             Long shopId,
             List<Long> categories,
-            Map<String, ?> requestParameters,
-            List<Long> allShopcategories
+            Map<String, ?> requestParameters
     );
 }
