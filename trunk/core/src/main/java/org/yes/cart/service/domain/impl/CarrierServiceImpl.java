@@ -52,11 +52,12 @@ public class CarrierServiceImpl extends BaseGenericServiceImpl<Carrier> implemen
         final List<Carrier> rez  = new ArrayList<Carrier>();
         rez.addAll(getGenericDao().findAll());
         filterByCurrency(rez, currency);
-        return rez;  //TODOV2 implement more sofisticacted search
+        return rez;  //TODO: V2 implement more sophisticated search
     }
 
     /**
-     * Filter list of curreiers and his SLA by currency.
+     * Filter list of carriers and their SLA by currency.
+     *
      * @param currency currency to filter
      * @param carriers to filter
      */

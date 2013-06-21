@@ -35,7 +35,7 @@ public class CarrierSlaRenderer extends ChoiceRenderer<CarrierSla> {
         stringBuilder.append('(');
         stringBuilder.append(carrierSla.getMaxDays());
         stringBuilder.append(") ");
-        stringBuilder.append(carrierSla.getPrice()); //TODOV2 calculate shipping price
+        stringBuilder.append(carrierSla.getPrice()); //TODO: V2 calculate shipping price
         stringBuilder.append(' ');
         stringBuilder.append(carrierSla.getCurrency());        
         return stringBuilder.toString();

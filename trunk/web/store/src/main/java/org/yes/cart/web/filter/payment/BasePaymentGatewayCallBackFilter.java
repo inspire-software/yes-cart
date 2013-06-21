@@ -107,7 +107,7 @@ public class BasePaymentGatewayCallBackFilter extends AbstractFilter implements 
     }
 
     protected boolean isCallerIpAllowed() {
-        return true; //TODOV2
+        return true; //TODO: V2
     }
 
     /**

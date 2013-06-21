@@ -155,7 +155,7 @@ public class ImageView extends BaseComponent {
             component.add(
                     new AttributeModifier(HTML_ALT, seoImage.getAlt()),
                     new AttributeModifier(HTML_TITLE, seoImage.getTitle())
-            ); //TODOV2 need to add image long description <img longdesc="URL">
+            ); //TODO: V2 need to add image long description <img longdesc="URL">
 
         }
         return component;

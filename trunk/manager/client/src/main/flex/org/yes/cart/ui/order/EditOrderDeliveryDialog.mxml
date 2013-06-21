@@ -46,7 +46,7 @@
 
         <mx:ControlBar width="100%">
 
-            <!--        TODOV2
+            <!--        TODO: V2
                         <mx:Button height="100%"
                                    label="@Resource(bundle='CustomerOrderPanel',key='delivery.new.item')"
                                    toolTip="@Resource(bundle='CustomerOrderPanel',key='delivery.new.item.hint')"
