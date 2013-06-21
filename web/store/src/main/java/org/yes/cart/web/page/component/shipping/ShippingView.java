@@ -108,7 +108,7 @@ public class ShippingView extends BaseComponent {
         super(id);
 
         final List<Carrier> carriers = carrierService.findCarriers(
-                null, //TODOV2 get from default shipping addr . probably not to limit , but put it first
+                null, //TODO: V2 get from default shipping addr . probably not to limit , but put it first
                 null,
                 null,
                 ApplicationDirector.getShoppingCart().getCurrencyCode());

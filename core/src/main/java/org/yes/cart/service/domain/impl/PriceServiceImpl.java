@@ -166,7 +166,7 @@ public class PriceServiceImpl
 
             reorderSkuPrices(skuPricesForOneSku);
 
-            long time = java.lang.System.currentTimeMillis();   //TODOV2 time machine
+            long time = java.lang.System.currentTimeMillis();   //TODO: V2 time machine
 
             boolean found = false;
 

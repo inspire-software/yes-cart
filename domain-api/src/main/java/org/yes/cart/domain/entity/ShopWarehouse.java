@@ -18,7 +18,7 @@ package org.yes.cart.domain.entity;
 
 /**
  * Relation between shop and warehouse.
- * TODOV2 add usage priority in next releases  , whic warehouse should be used first.
+ * TODO: V2 add usage priority in next releases  , whic warehouse should be used first.
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
