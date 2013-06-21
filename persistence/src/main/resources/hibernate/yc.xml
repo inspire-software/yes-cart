@@ -4419,8 +4419,8 @@ public void setRangeList(final RangeList rangeList) {
             <property name="maxDays" column="MAX_DAYS" type="java.lang.Integer"/>
 
             <property name="slaType"  column="SLA_TYPE" type="string" length="1" not-null="true"/>
-            <property name="price"    column="PRICE"    type="java.math.BigDecimal"/>
-            <property name="percent"  column="PER_CENT" type="java.math.BigDecimal"/>
+            <property name="price"    column="PRICE"    type="java.math.BigDecimal" not-null="true"/>
+            <property name="percent"  column="PER_CENT" type="java.math.BigDecimal" not-null="true"/>
             <property name="script"   column="SCRIPT"   type="string" length="4000"/>
 
 

@@ -20,6 +20,7 @@ import org.yes.cart.util.ShopCodeContext;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -99,7 +100,11 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
         if (carrierSla != null) {
 
             customerOrderDelivery.setCarrierSla(carrierSla); // only one delivery, so just set sla
-            customerOrderDelivery.setPrice(carrierSla.getPrice());
+            if (carrierSla.getPrice() != null) {
+                customerOrderDelivery.setPrice(carrierSla.getPrice());
+            } else {
+                customerOrderDelivery.setPrice(BigDecimal.ZERO);
+            }
         }
 
         customerOrder.setOrdernum(orderSummary.getGoogleOrderNumber()); //switch to google order number instead of internal
