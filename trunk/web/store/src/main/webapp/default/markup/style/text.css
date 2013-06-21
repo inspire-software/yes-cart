@@ -96,7 +96,11 @@ p {
 }
 
 .searchInput {
-    width: 724px;
+    width: 324px;
+}
+
+.social {
+    padding-top: 10px;
 }
 
 
