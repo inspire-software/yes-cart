@@ -1,3 +1,4 @@
+chcp 1251
 @echo off
 
 @REM Licensed to the Apache Software Foundation (ASF) under one
