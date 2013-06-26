@@ -4866,15 +4866,52 @@ public void setRangeList(final RangeList rangeList) {
        ]]>
     </query>
 
+    <query name="CATEGORY.ID.BY.SEO.URI">
+        <![CDATA[
+                  select c.categoryId from CategoryEntity c  where c.seo.uri = ?1
+       ]]>
+    </query>
+
+    <query name="SEO.URI.BY.CATEGORY.ID">
+        <![CDATA[
+                  select c.seo.uri from CategoryEntity c  where c.categoryId = ?1
+       ]]>
+    </query>
+
     <query name="PRODUCT.BY.SEO.URI">
         <![CDATA[
                  select p from ProductEntity p   where p.seo.uri = ?1
         ]]>
     </query>
 
+    <query name="PRODUCT.ID.BY.SEO.URI">
+        <![CDATA[
+                 select p.productId from ProductEntity p   where p.seo.uri = ?1
+        ]]>
+    </query>
+
+    <query name="SEO.URI.BY.PRODUCT.ID">
+        <![CDATA[
+                 select p.seo.uri from ProductEntity p   where p.productId = ?1
+        ]]>
+    </query>
+
+
     <query name="SKU.BY.SEO.URI">
         <![CDATA[
                  select ps from ProductSkuEntity ps   where ps.seo.uri = ?1
+        ]]>
+    </query>
+
+    <query name="SKU.ID.BY.SEO.URI">
+        <![CDATA[
+                 select ps.skuId from ProductSkuEntity ps   where ps.seo.uri = ?1
+        ]]>
+    </query>
+
+    <query name="SEO.URI.BY.SKU.ID">
+        <![CDATA[
+                 select ps.seo.uri from ProductSkuEntity ps   where ps.skuId = ?1
         ]]>
     </query>
 

@@ -51,6 +51,7 @@ import java.util.*;
 public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implements ProductService {
 
     private final static String PROD_SERV_METHOD_CACHE = "productServiceImplMethodCache";
+    private final static String PROD_SERV_SEO_CACHE = "productServiceImplSeoCache";
 
     private final GenericDAO<Product, Long> productDao;
     //private final GenericDAO<ProductSku, Long> productSkuDao;
@@ -495,7 +496,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             dto.setCode((String) obj[1]);
             dto.setName((String) obj[2]);
             dto.setDescription((String) obj[3]);
-            dto.setAvailability((Integer) obj[4]);
+            dto.setAvailability(obj[4] == null ? Product.AVAILABILITY_STANDARD : (Integer) obj[4]);
             dto.setQtyOnWarehouse((BigDecimal) obj[5]);
             dto.setFirstAvailableSkuCode((String) obj[6]);
             dto.setFirstAvailableSkuQuantity((BigDecimal) obj[7]);
@@ -717,11 +718,14 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = PROD_SERV_METHOD_CACHE)
+    @Cacheable(value = PROD_SERV_SEO_CACHE)
     public Long getProductIdBySeoUri(final String seoUri) {
-        List<Product> list = productDao.findByNamedQuery("PRODUCT.BY.SEO.URI", seoUri);
+        List<Object> list = productDao.findQueryObjectByNamedQuery("PRODUCT.ID.BY.SEO.URI", seoUri);
         if (list != null && !list.isEmpty()) {
-            return list.get(0).getProductId();
+            final Object id = list.get(0);
+            if (id instanceof Long) {
+                return (Long) id;
+            }
         }
         return null;
     }
@@ -729,15 +733,47 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = PROD_SERV_METHOD_CACHE)
-    public Long getProductSkuIdBySeoUri(final String seoUri) {
-        List<ProductSku> list = productSkuService.getGenericDao().findByNamedQuery("SKU.BY.SEO.URI", seoUri);
+    @Cacheable(value = PROD_SERV_SEO_CACHE)
+    public String getSeoUriByProductId(final Long productId) {
+        List<Object> list = productDao.findQueryObjectByNamedQuery("SEO.URI.BY.PRODUCT.ID", productId);
         if (list != null && !list.isEmpty()) {
-            return list.get(0).getSkuId();
+            final Object uri = list.get(0);
+            if (uri instanceof String) {
+                return (String) uri;
+            }
         }
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = PROD_SERV_SEO_CACHE)
+    public Long getProductSkuIdBySeoUri(final String seoUri) {
+        List<Object> list = productSkuService.getGenericDao().findQueryObjectByNamedQuery("SKU.ID.BY.SEO.URI", seoUri);
+        if (list != null && !list.isEmpty()) {
+            final Object id = list.get(0);
+            if (id instanceof Long) {
+                return (Long) id;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = PROD_SERV_SEO_CACHE)
+    public String getSeoUriByProductSkuId(final Long skuId) {
+        List<Object> list = productSkuService.getGenericDao().findQueryObjectByNamedQuery("SEO.URI.BY.SKU.ID", skuId);
+        if (list != null && !list.isEmpty()) {
+            final Object uri = list.get(0);
+            if (uri instanceof String) {
+                return (String) uri;
+            }
+        }
+        return null;
+    }
 
     /**
      * {@inheritDoc}

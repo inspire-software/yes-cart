@@ -38,6 +38,7 @@ import java.util.*;
 public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implements CategoryService {
 
     private static final String CACHE_NAME = "categoryServiceImplMethodCache";
+    private static final String SEO_CACHE_NAME = "categoryServiceImplSeoCache";
 
     private final GenericDAO<Category, Long> categoryDao;
 
@@ -378,11 +379,29 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = CACHE_NAME)
+    @Cacheable(value = SEO_CACHE_NAME)
     public Long getCategoryIdBySeoUri(final String seoUri) {
-        List<Category> list = categoryDao.findByNamedQuery("CATEGORY.BY.SEO.URI", seoUri);
+        List<Object> list = categoryDao.findQueryObjectByNamedQuery("CATEGORY.ID.BY.SEO.URI", seoUri);
         if (list != null && !list.isEmpty()) {
-            return list.get(0).getCategoryId();
+            final Object id = list.get(0);
+            if (id instanceof Long) {
+                return (Long) id;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = SEO_CACHE_NAME)
+    public String getSeoUriByCategoryId(final Long categoryId) {
+        List<Object> list = categoryDao.findQueryObjectByNamedQuery("SEO.URI.BY.CATEGORY.ID", categoryId);
+        if (list != null && !list.isEmpty()) {
+            final Object uri = list.get(0);
+            if (uri instanceof String) {
+                return (String) uri;
+            }
         }
         return null;
     }

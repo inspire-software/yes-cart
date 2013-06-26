@@ -326,12 +326,28 @@ public interface ProductService extends GenericService<Product> {
     Long getProductIdBySeoUri(String seoUri);
 
     /**
+     * Get product SEO uri id by given id
+     *
+     * @param productId given product id
+     * @return product seo uri if found otherwise null
+     */
+    String getSeoUriByProductId(Long productId);
+
+    /**
      * Get product sku id id by given seo uri
      *
      * @param seoUri given seo uri
      * @return product sku id if found otherwise null
      */
     Long getProductSkuIdBySeoUri(String seoUri);
+
+    /**
+     * Get product sku SEO uri by given id
+     *
+     * @param skuId given sku id
+     * @return product sku uri if found otherwise null
+     */
+    String getSeoUriByProductSkuId(Long skuId);
 
 
     /**
