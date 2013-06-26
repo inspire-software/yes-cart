@@ -40,4 +40,18 @@ public class DecoratorUtil {
         }
     }
 
+    /**
+     * Seo encode id helper function, which returns seo uri if possible instead of id.
+     * @param idValueToEncode given id
+     * @param seoUri given seo uri
+     * @return seo uri
+     */
+    public static String encodeId(final String idValueToEncode, final String seoUri) {
+        if (StringUtils.isNotBlank(seoUri)) {
+            return seoUri;
+        } else {
+            return idValueToEncode;
+        }
+    }
+
 }

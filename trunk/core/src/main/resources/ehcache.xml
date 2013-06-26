@@ -24,10 +24,16 @@
             />
 
     <cache name="org.yes.cart.service.domain.impl.CategoryServiceImpl.cache"
-           maxElementsInMemory="100"
+           maxElementsInMemory="500"
            overflowToDisk="false"
            eternal="false"
            timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+    <cache name="org.yes.cart.service.domain.impl.CategorySeo.cache"
+           maxElementsInMemory="1000"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="3600" timeToIdleSeconds="600"/>
 
     <cache name="org.yes.cart.service.domain.impl.ShopServiceImpl.cache"
            maxElementsInMemory="100"
@@ -46,6 +52,12 @@
            overflowToDisk="false"
            eternal="false"
            timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+    <cache name="org.yes.cart.service.domain.impl.ProductSeo.cache"
+           maxElementsInMemory="10000"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="3600" timeToIdleSeconds="600"/>
 
     <cache name="org.yes.cart.service.domain.impl.ProductTypeAttrServiceImpl.cache"
            maxElementsInMemory="50"

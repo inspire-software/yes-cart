@@ -938,6 +938,11 @@
         <property name="cacheName" value="org.yes.cart.service.domain.impl.CategoryServiceImpl.cache"/>
     </bean>
 
+    <bean id="categoryServiceImplSeoCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="cacheName" value="org.yes.cart.service.domain.impl.CategorySeo.cache"/>
+    </bean>
+
     <bean id="shopServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
         <property name="cacheManager" ref="cacheManager"/>
         <property name="cacheName" value="org.yes.cart.service.domain.impl.ShopServiceImpl.cache"/>
@@ -961,6 +966,11 @@
     <bean id="productServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
         <property name="cacheManager" ref="cacheManager"/>
         <property name="cacheName" value="org.yes.cart.service.domain.impl.ProductServiceImpl.cache"/>
+    </bean>
+
+    <bean id="productServiceImplSeoCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="cacheName" value="org.yes.cart.service.domain.impl.ProductSeo.cache"/>
     </bean>
 
     <bean id="productTypeAttrServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">

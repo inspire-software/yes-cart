@@ -20,14 +20,11 @@ import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 import org.apache.commons.lang.math.NumberUtils;
-import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.support.entity.decorator.impl.DecoratorUtil;
 import org.yes.cart.web.support.seo.BookmarkService;
-import org.yes.cart.web.support.seo.SeoEntryIdInvalidException;
 
 /**
  * User: denispavlov
@@ -85,19 +82,13 @@ public class BookmarkServiceImpl implements BookmarkService {
 
         String seoData = getStringFromValueWrapper(CATEGORY_ENCODE_CACHE.get(bookmark));
         if (seoData == null) {
-            final Category category = categoryService.getById(NumberUtils.toLong(bookmark));
-            if (category == null) {
+            final long categoryId = NumberUtils.toLong(bookmark, 0L);
+            if (categoryId > 0L) {
 
-                //given id value of category is fake
-                throw new SeoEntryIdInvalidException(
-                        "Category with id = [" + bookmark +"] does not exist. Direct input of category id ?"
-                );
-
-            }  else {
-
+                final String categorySeoUri = categoryService.getSeoUriByCategoryId(categoryId);
                 seoData = DecoratorUtil.encodeId(
                         bookmark,
-                        category.getSeo()
+                        categorySeoUri
                 );
 
             }
@@ -133,11 +124,12 @@ public class BookmarkServiceImpl implements BookmarkService {
 
         String seoData = getStringFromValueWrapper(PRODUCT_ENCODE_CACHE.get(bookmark));
         if (seoData == null) {
-            final Product product = productService.getProductById(NumberUtils.toLong(bookmark));
-            if (product != null) {
+            final long productId = NumberUtils.toLong(bookmark, 0L);
+            if (productId > 0L) {
+                final String productSeoUri = productService.getSeoUriByProductId(productId);
                 seoData = DecoratorUtil.encodeId(
                         bookmark,
-                        product.getSeo()
+                        productSeoUri
                 );
             }
             if (seoData != null) {
@@ -197,11 +189,12 @@ public class BookmarkServiceImpl implements BookmarkService {
 
         String seoData = getStringFromValueWrapper(SKU_ENCODE_CACHE.get(bookmark));
         if (seoData == null) {
-            final ProductSku productSku = productService.getSkuById(NumberUtils.toLong(bookmark));
-            if (productSku != null) {
+            final long skuId = NumberUtils.toLong(bookmark, 0L);
+            if (skuId > 0L) {
+                final String productSkuUri = productService.getSeoUriByProductSkuId(skuId);
                 seoData = DecoratorUtil.encodeId(
                         bookmark,
-                        productSku.getSeo()
+                        productSkuUri
                 );
             }
             if (seoData != null) {
