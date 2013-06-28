@@ -55,7 +55,15 @@
             <data-type>DECIMAL</data-type>
             <name>price</name>
         </column-descriptor>
-        
+
+        <column-descriptor>
+            <column-index>-1</column-index>
+            <field-type>FIELD</field-type>
+            <data-type>DECIMAL</data-type>
+            <name>percent</name>
+            <value-constant>0.00</value-constant>
+        </column-descriptor>
+
         <column-descriptor>
             <column-index>3</column-index>
             <field-type>FIELD</field-type>
