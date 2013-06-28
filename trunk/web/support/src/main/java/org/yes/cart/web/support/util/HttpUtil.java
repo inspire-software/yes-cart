@@ -66,7 +66,7 @@ public class HttpUtil {
 
     /**
      * Dump http request.
-     * @param request thhp request to dump.
+     * @param request http request to dump.
      * @return String with dump.
      */
     public static String dumpRequest(final HttpServletRequest request) {

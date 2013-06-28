@@ -39,6 +39,7 @@ import org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
+import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.AttributableImageService;
@@ -115,8 +116,10 @@ public class ProductInListView extends BaseComponent {
     @Override
     protected void onBeforeRender() {
 
+        final LinksSupport links = getWicketSupportFacade().links();
+
         final String selectedLocale = getLocale().getLanguage();
-        final PageParameters linkToProductParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters());
+        final PageParameters linkToProductParameters = links.getFilteredCurrentParameters(getPage().getPageParameters());
         linkToProductParameters.set(WebParametersKeys.PRODUCT_ID, product.getId());
 
 
@@ -125,26 +128,21 @@ public class ProductInListView extends BaseComponent {
 
         final Class homePage = Application.get().getHomePage();
 
-        add(
-                new BookmarkablePageLink(PRODUCT_LINK_SKU, homePage, linkToProductParameters).add(
-                        new Label(SKU_CODE_LABEL, product.getCode())
-                )
+        add(links.newProductLink(PRODUCT_LINK_SKU, product.getId(), getPage().getPageParameters())
+                .add(new Label(SKU_CODE_LABEL, product.getCode()))
         );
 
         add(
                 new Label(DESCRIPTION_LABEL, product.getDescription(selectedLocale)).setEscapeModelStrings(false)
-               // new Label(DESCRIPTION_LABEL, getDescription(selectedLocale)).setEscapeModelStrings(false)
         );
 
-        add(
-                new BookmarkablePageLink(PRODUCT_LINK_NAME, homePage, linkToProductParameters).add(
-                        new Label(NAME_LABEL, product.getName(selectedLocale))
-                )
+        add(links.newProductLink(PRODUCT_LINK_NAME, product.getId(), getPage().getPageParameters())
+                .add(new Label(NAME_LABEL, product.getName(selectedLocale)))
         );
 
 
-        add(
-                new BookmarkablePageLink(PRODUCT_LINK_IMAGE, homePage, linkToProductParameters).add(
+        add(links.newProductLink(PRODUCT_LINK_IMAGE, product.getId(), getPage().getPageParameters())
+                .add(
                         new ContextImage(PRODUCT_IMAGE, getDefaultImage(width, height))
                                 .add(new AttributeModifier(HTML_WIDTH, width))
                                 .add(new AttributeModifier(HTML_HEIGHT, height))
@@ -152,13 +150,9 @@ public class ProductInListView extends BaseComponent {
         );
 
 
-        final PageParameters addToCartParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters())
-                .set(AddSkuToCartEventCommandImpl.CMD_KEY, product.getFirstAvailableSkuCode());
-
         final ProductAvailabilityModel skuPam = new ProductAvailabilityModelImpl(product.getAvailability(), product.getFirstAvailableSkuQuantity());
 
-        add(
-                new BookmarkablePageLink(ADD_TO_CART_LINK, homePage, addToCartParameters)
+        add(links.newAddToCartLink(ADD_TO_CART_LINK, product.getFirstAvailableSkuCode(), null, getPage().getPageParameters())
                         .add(new Label(ADD_TO_CART_LINK_LABEL, skuPam.isInStock() || skuPam.isPerpetual() ?
                                 getLocalizer().getString("add.to.cart", this) :
                                 getLocalizer().getString("preorder.cart", this)))

@@ -45,6 +45,7 @@
                 <prop key="fullTextSearchPurge">PROPAGATION_REQUIRED</prop>
                 <prop key="executeNative*">PROPAGATION_REQUIRED</prop>
                 <prop key="doImport*">PROPAGATION_REQUIRED</prop>
+                <prop key="getRootContent">PROPAGATION_REQUIRED</prop>
                 <prop key="getEntityFactory">PROPAGATION_SUPPORTS,readOnly</prop>
                 <prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
                 <prop key="*">PROPAGATION_REQUIRED,readOnly</prop>

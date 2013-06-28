@@ -1,0 +1,59 @@
+/*
+ * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package org.yes.cart.service.dto;
+
+import org.yes.cart.domain.dto.CategoryDTO;
+import org.yes.cart.exception.UnableToCreateInstanceException;
+import org.yes.cart.exception.UnmappedInterfaceException;
+
+import java.util.List;
+
+/**
+ * User: Denis Pavlov
+ * Date: 27-June-2013
+ */
+public interface DtoContentService extends GenericDTOService<CategoryDTO>, GenericAttrValueService {
+
+    /**
+     * Get all assigned to shop content.
+     *
+     * @param shopId shop id
+     * @return list of assigned content
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case of reflection problem
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration problem
+     */
+    List<CategoryDTO> getAllByShopId(final long shopId)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+    /**
+     * Get all content with or without availability date range filtering.
+     *
+     * @param shopId shop id
+     * @param withAvailabilityFiltering true if need to filter
+     * @return list of categories
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case of reflection problem
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration problem
+     */
+    List<CategoryDTO> getAllWithAvailabilityFilter(final long shopId, boolean withAvailabilityFiltering)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+
+}

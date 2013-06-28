@@ -25,6 +25,9 @@ import org.apache.wicket.markup.html.navigation.paging.IPageable;
 import org.apache.wicket.markup.html.navigation.paging.IPagingLabelProvider;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.yes.cart.web.page.AbstractWebPage;
+import org.yes.cart.web.service.wicketsupport.LinksSupport;
+import org.yes.cart.web.service.wicketsupport.PaginationSupport;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.util.WicketUtil;
 
@@ -37,7 +40,6 @@ import java.util.Collections;
  */
 public class URLPagingNavigation extends PagingNavigation {
 
-    private final Class homePage;
     private final String activePageLinkHtmlClass;
 
     /**
@@ -47,7 +49,6 @@ public class URLPagingNavigation extends PagingNavigation {
         super(s, iPageable, iPagingLabelProvider);
         this.activePageLinkHtmlClass = activePageLinkHtmlClass;
         setViewSize(5);
-        homePage = Application.get().getHomePage();
     }
 
     /**
@@ -55,18 +56,14 @@ public class URLPagingNavigation extends PagingNavigation {
      */
     protected AbstractLink newPagingNavigationLink(final String id, final IPageable pageable, final int pageIndex) {
 
-        final PageParameters pageParameters =
-                WicketUtil.getFilteredRequestParameters(
-                        getPage().getPageParameters(),
-                        Collections.EMPTY_LIST);
+        final LinksSupport links = ((AbstractWebPage) getPage()).getWicketSupportFacade().links();
+        final PaginationSupport pagination = ((AbstractWebPage) getPage()).getWicketSupportFacade().pagination();
 
+        final PageParameters pageParameters = links.getFilteredCurrentParameters(getPage().getPageParameters());
         pageParameters.set(WebParametersKeys.PAGE, pageIndex);
 
-        final AbstractLink rez =  new BookmarkablePageLink<Link>(id, homePage, pageParameters);
-
-        if (WicketUtil.isSelectedPageActive(getPage().getPageParameters(), WebParametersKeys.PAGE, pageIndex)) {
-            rez.add(new AttributeModifier("class", activePageLinkHtmlClass));
-        }
+        final Link rez = links.newLink(id, pageParameters);
+        pagination.markSelectedPageLink(rez, activePageLinkHtmlClass, getPage().getPageParameters(), pageIndex);
 
         return  rez;
     }

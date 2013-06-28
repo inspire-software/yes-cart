@@ -81,16 +81,43 @@ public interface CategoryService extends GenericService<Category> {
      */
     String getCategoryTemplateVariation(Category category);
 
+    /**
+     * Get the "template variation" template (No fail over).
+     *
+     * @param categoryId given category PK
+     * @return Template variation
+     */
+    String getCategoryTemplate(long categoryId);
+
 
 
     /**
      * Count products in given category.
      *
      * @param categoryId   given categoryId
-     * @param includeChild true if need include child categories
+     * @param includeChildren true if need include child categories
      * @return quantity of products
      */
-    int getProductQuantity(long categoryId, boolean includeChild);
+    int getProductQuantity(long categoryId, boolean includeChildren);
+
+    /**
+     * Does given this category have at least one product assigned to it.
+     *
+     * @param categoryId   given categoryId
+     * @param includeChildren true if need include child categories
+     * @return true if at least one product is reachable
+     */
+    boolean isCategoryHasProducts(long categoryId, boolean includeChildren);
+
+    /**
+     * Does given this category have at least one sub category.
+     *
+     * @param categoryId   given categoryId
+     * @param includeChildren true if need include child categories
+     * @return true if at least one sub category exists
+     */
+    boolean isCategoryHasChildren(long categoryId, boolean includeChildren);
+
 
     /**
      * Get the child categories without recursion, only one level down.
@@ -119,8 +146,9 @@ public interface CategoryService extends GenericService<Category> {
     Set<Category> getChildCategoriesRecursive(long categoryId);
 
     /**
-     * Transform collection of categories into collection of his IDs.
+     * Transform collection of categories into collection of IDs.
      *
+     * @param categories list of category objects
      * @return list of category IDs
      */
     Set<Long> transform(Collection<Category> categories);
@@ -145,7 +173,7 @@ public interface CategoryService extends GenericService<Category> {
      * @param locale        locale for localised value (or null for raw value)
      * @param category      given category
      * @param attributeName attribute name
-     * @param defaultValue  default value will be returned if value not found in hierarcht
+     * @param defaultValue  default value will be returned if value not found in hierarchy
      * @return value of given attribute name or defaultValue if value not found in category hierarchy
      */
     String getCategoryAttributeRecursive(String locale, Category category, String attributeName, String defaultValue);
@@ -193,16 +221,19 @@ public interface CategoryService extends GenericService<Category> {
      * Get all categories, that contains product with given id.
      *
      * @param productId given product id.
+     *
      * @return list of categories, that contains product.
      */
     List<Category> getByProductId(long productId);
 
 
     /**
-     * Is given sub category belong to tree, that start from <code>topCategory</code>.
+     * Does given sub category belong to tree with given parent <code>topCategory</code>.
+     *
      * @param topCategoryId given root for category tree.
      * @param subCategoryId candidate to check.
-     * @return true in case if category belong to tree, that start from <code>topCategory</code>
+     *
+     * @return true in case if category belongs to tree that starts from <code>topCategory</code>
      */
     boolean isCategoryHasSubcategory(long topCategoryId, long subCategoryId);
 

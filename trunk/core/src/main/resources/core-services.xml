@@ -49,6 +49,7 @@
             <bean class="org.yes.cart.service.domain.impl.ShopServiceImpl">
                 <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="shopDao"/>
                 <constructor-arg type="org.yes.cart.service.domain.CategoryService" ref="categoryService"/>
+                <constructor-arg type="org.yes.cart.service.domain.ContentService" ref="contentService"/>
                 <constructor-arg type="org.yes.cart.service.domain.AttributeService" ref="attributeService"/>
             </bean>
         </property>
@@ -75,6 +76,16 @@
     <bean id="categoryService" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.CategoryServiceImpl">
+                <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="categoryDao"/>
+                <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="shopCategoryDao"/>
+                <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="shopDao"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="contentService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.ContentServiceImpl">
                 <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="categoryDao"/>
                 <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="shopCategoryDao"/>
                 <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="shopDao"/>
@@ -453,6 +464,20 @@
                 <constructor-arg index="5" ref="attrValueEntityCategoryDao"/>
                 <constructor-arg index="6" ref="imageService"/>
                 <constructor-arg index="7" ref="dtoAssemblerAdaptersRepository"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="dtoContentService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoContentServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="1" ref="contentService"/>
+                <constructor-arg index="2" ref="productTypeService"/>
+                <constructor-arg index="3" ref="dtoAttributeService"/>
+                <constructor-arg index="4" ref="attrValueEntityCategoryDao"/>
+                <constructor-arg index="5" ref="imageService"/>
+                <constructor-arg index="6" ref="dtoAssemblerAdaptersRepository"/>
             </bean>
         </property>
     </bean>
@@ -938,9 +963,9 @@
         <property name="cacheName" value="org.yes.cart.service.domain.impl.CategoryServiceImpl.cache"/>
     </bean>
 
-    <bean id="categoryServiceImplSeoCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+    <bean id="contentServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
         <property name="cacheManager" ref="cacheManager"/>
-        <property name="cacheName" value="org.yes.cart.service.domain.impl.CategorySeo.cache"/>
+        <property name="cacheName" value="org.yes.cart.service.domain.impl.ContentServiceImpl.cache"/>
     </bean>
 
     <bean id="shopServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
@@ -966,11 +991,6 @@
     <bean id="productServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
         <property name="cacheManager" ref="cacheManager"/>
         <property name="cacheName" value="org.yes.cart.service.domain.impl.ProductServiceImpl.cache"/>
-    </bean>
-
-    <bean id="productServiceImplSeoCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
-        <property name="cacheManager" ref="cacheManager"/>
-        <property name="cacheName" value="org.yes.cart.service.domain.impl.ProductSeo.cache"/>
     </bean>
 
     <bean id="productTypeAttrServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">

@@ -26,6 +26,10 @@ package org.yes.cart.web.support.constants;
  */
 public interface CentralViewLabel {
 
+    public static final String CONTENT = "content";
+
+    public static final String CATEGORY = "category";
+
     public static final String SUBCATEGORIES_LIST = "subcats";
 
     public static final String PRODUCTS_LIST = "products";

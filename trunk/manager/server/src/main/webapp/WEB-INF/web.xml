@@ -58,7 +58,7 @@
     </filter-mapping>
 
     <servlet>
-        <servlet-name>Spring MVC desipatcher</servlet-name>
+        <servlet-name>Spring MVC despatcher</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <init-param>
             <param-name>contextConfigLocation</param-name>
@@ -68,7 +68,7 @@
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>Spring MVC desipatcher</servlet-name>
+        <servlet-name>Spring MVC despatcher</servlet-name>
         <url-pattern>/spring/*</url-pattern>
     </servlet-mapping>
 

@@ -41,6 +41,21 @@ public interface BookmarkService {
     String getCategoryForURI(String uri);
 
     /**
+     * Save (or return cached) bookmark for given content context.
+     *
+     * @param bookmark bookmark parameter
+     * @return SEO data
+     */
+    String saveBookmarkForContent(String bookmark);
+
+    /**
+     * Get content bookmark id by URI
+     * @param uri SEO URI
+     * @return category id
+     */
+    String getContentForURI(String uri);
+
+    /**
      * Save (or return cached) bookmark for given product context.
      *
      * @param bookmark bookmark parameter

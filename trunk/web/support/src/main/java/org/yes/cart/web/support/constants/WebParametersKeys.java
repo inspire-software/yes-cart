@@ -69,6 +69,14 @@ public interface WebParametersKeys {
      */
     String REQUEST_SHOPPING_CART = "shoppingCart";
 
+    /**
+     * Key for content rendering
+     */
+    String CONTENT_ID = "content";
+
+    /**
+     * Key for category rendering
+     */
     String CATEGORY_ID = "category";
 
     /**
@@ -76,8 +84,14 @@ public interface WebParametersKeys {
      */
     String CATEGORY_PRODUCTS_RECURSIVE = "categoryProductsRecursive";
 
+    /**
+     * Key for product rendering
+     */
     String PRODUCT_ID = "product";
 
+    /**
+     * Key for specific SKU rendering
+     */
     String SKU_ID = "sku";
 
     String CATEGORY_NAME = "categoryName";
@@ -96,7 +110,9 @@ public interface WebParametersKeys {
 
     String ADDRESS_TYPE = "addrType";
 
-    /** Label, that shows return address after address editing */
+    /**
+     * Label, that shows return address after address editing
+     */
     String ADDRESS_FORM_RETURN_LABEL= "returnTo";
 
     /**

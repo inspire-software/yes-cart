@@ -30,11 +30,18 @@ import java.util.Map;
 public interface AttributeService extends GenericService<Attribute> {
 
     /**
-     * Get all attrubute codes.
+     * Get all attribute codes.
      *
      * @return set of attribute codes.
      */
     List<String> getAllAttributeCodes();
+
+    /**
+     * Get all attribute codes.
+     *
+     * @return set of attribute codes.
+     */
+    List<String> getAllNavigatableAttributeCodes();
 
     /**
      * Get attrubute names.

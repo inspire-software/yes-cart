@@ -112,7 +112,7 @@ public class BreadCrumbsBuilder {
      */
     private void fillCategories(final List<Crumb> categoriesCrumbs, final long categoryId) {
         final Category category = categoryService.getById(categoryId);
-        if (categoryId != category.getParentId()) {
+        if (categoryId != category.getParentId() && category.getParentId() > 0l) {
             categoriesCrumbs.add(
                    new Crumb("category", category.getName(),
                            category.getDisplayName(), getCategoryLinkParameters(categoryId),

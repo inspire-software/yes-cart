@@ -130,6 +130,19 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
         return allowedAttributeNames;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "attributeServiceImplMethodCache")
+    public List<String> getAllNavigatableAttributeCodes() {
+        List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.NAVIGATION.UNIQUE", Boolean.TRUE);
+        allowedAttributeNames.add(ProductSearchQueryBuilder.BRAND_FIELD);
+        allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_PRICE);
+        allowedAttributeNames.add(ProductSearchQueryBuilder.QUERY);
+        allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD);
+        return allowedAttributeNames;
+    }
+
     @Cacheable(value = "attributeServiceImplMethodCache")
     public Map<String, String> getAttributeNamesByCodes(final List<String> codes) {
         Map<String, String> result = new HashMap<String, String>();

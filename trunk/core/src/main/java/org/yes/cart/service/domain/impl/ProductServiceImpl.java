@@ -51,7 +51,6 @@ import java.util.*;
 public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implements ProductService {
 
     private final static String PROD_SERV_METHOD_CACHE = "productServiceImplMethodCache";
-    private final static String PROD_SERV_SEO_CACHE = "productServiceImplSeoCache";
 
     private final GenericDAO<Product, Long> productDao;
     //private final GenericDAO<ProductSku, Long> productSkuDao;
@@ -718,7 +717,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = PROD_SERV_SEO_CACHE)
     public Long getProductIdBySeoUri(final String seoUri) {
         List<Object> list = productDao.findQueryObjectByNamedQuery("PRODUCT.ID.BY.SEO.URI", seoUri);
         if (list != null && !list.isEmpty()) {
@@ -733,7 +731,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = PROD_SERV_SEO_CACHE)
     public String getSeoUriByProductId(final Long productId) {
         List<Object> list = productDao.findQueryObjectByNamedQuery("SEO.URI.BY.PRODUCT.ID", productId);
         if (list != null && !list.isEmpty()) {
@@ -748,7 +745,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = PROD_SERV_SEO_CACHE)
     public Long getProductSkuIdBySeoUri(final String seoUri) {
         List<Object> list = productSkuService.getGenericDao().findQueryObjectByNamedQuery("SKU.ID.BY.SEO.URI", seoUri);
         if (list != null && !list.isEmpty()) {
@@ -763,7 +759,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = PROD_SERV_SEO_CACHE)
     public String getSeoUriByProductSkuId(final Long skuId) {
         List<Object> list = productSkuService.getGenericDao().findQueryObjectByNamedQuery("SEO.URI.BY.SKU.ID", skuId);
         if (list != null && !list.isEmpty()) {

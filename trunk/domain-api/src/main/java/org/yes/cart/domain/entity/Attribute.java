@@ -234,9 +234,9 @@ public interface Attribute extends Auditable, Rankable, Codable, Cloneable {
     String getChoiceData();
 
     /**
-     * Set comma separated coices.
+     * Set comma separated choices.
      *
-     * @param choiceData comma separated coices.
+     * @param choiceData comma separated choices.
      */
     void setChoiceData(String choiceData);
 

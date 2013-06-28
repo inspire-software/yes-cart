@@ -23,6 +23,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.yes.cart.web.page.AbstractWebPage;
+import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.entity.decorator.CategoryDecorator;
 
@@ -58,29 +60,27 @@ public class CategoryView extends  BaseComponent {
 
         final CategoryDecorator category = (CategoryDecorator) this.getParent().getDefaultModel().getObject();
 
-        final PageParameters pageParameters = new PageParameters().add(WebParametersKeys.CATEGORY_ID, category.getCategoryId());
-
         final String [] defSize = category.getDefaultImageSize(category);
 
         final String width = defSize[0];
         final String height = defSize[1];
 
-        final Class homePage = Application.get().getHomePage();
+        final LinksSupport links = getWicketSupportFacade().links();
 
         add(
-            new BookmarkablePageLink(CATEGORY_IMAGE_LINK, homePage, pageParameters).add(
+            links.newCategoryLink(CATEGORY_IMAGE_LINK, category.getCategoryId()).add(
                     new ContextImage(CATEGORY_IMAGE, category.getDefaultImage(width, height))
                             .add(new AttributeModifier(HTML_WIDTH, width))
                             .add(new AttributeModifier(HTML_HEIGHT, height))
             )
         ).add(
-            new BookmarkablePageLink(CATEGORY_NAME_LINK, homePage, pageParameters).add(
+            links.newCategoryLink(CATEGORY_NAME_LINK, category.getCategoryId()).add(
                     new Label(CATEGORY_NAME, category.getName(selectedLocale)).setEscapeModelStrings(false)
             )
         ).add(
-                new BookmarkablePageLink(CATEGORY_DESCR_LINK, homePage, pageParameters).add(
-                        new Label( CATEGORY_DESCR,  getDescription(category)  ).setEscapeModelStrings(false)
-                )
+            links.newCategoryLink(CATEGORY_DESCR_LINK, category.getCategoryId()).add(
+                    new Label( CATEGORY_DESCR,  getDescription(category)  ).setEscapeModelStrings(false)
+            )
         );
 
 

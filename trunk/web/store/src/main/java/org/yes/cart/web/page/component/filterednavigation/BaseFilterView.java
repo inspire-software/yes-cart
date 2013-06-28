@@ -25,6 +25,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.web.page.component.BaseComponent;
+import org.yes.cart.web.service.wicketsupport.LinksSupport;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -98,7 +99,7 @@ public class BaseFilterView extends BaseComponent {
     protected void onBeforeRender() {
         if (isVisible()) {
 
-            final Class homePage = Application.get().getHomePage();
+            final LinksSupport links = getWicketSupportFacade().links();
 
             add(
                     new Label(HEAD, head)
@@ -108,7 +109,7 @@ public class BaseFilterView extends BaseComponent {
                     new ListView<Pair<Pair<String, Integer>, PageParameters>>(LINK_LIST, linkList) {
                         protected void populateItem(final ListItem<Pair<Pair<String, Integer>, PageParameters>> pairListItem) {
                             final Pair<Pair<String, Integer>, PageParameters> keyValue = pairListItem.getModelObject();
-                            final Link link = new BookmarkablePageLink(LINK, homePage, keyValue.getSecond());
+                            final Link link = links.newLink(LINK, keyValue.getSecond());
                             final Label valueVabel = new Label(LINK_NAME, keyValue.getFirst().getFirst());
                             valueVabel.setEscapeModelStrings(false);
                             link.add(valueVabel);

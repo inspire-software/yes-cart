@@ -173,6 +173,6 @@ public class ApplicationDirector implements ApplicationContextAware {
         this.shopService = applicationContext.getBean("shopService", ShopService.class);
         this.systemService = applicationContext.getBean("systemService", SystemService.class);
         final CacheManager cacheManager = applicationContext.getBean("cacheManager", CacheManager.class);
-        this.urlShopCache = cacheManager.getCache("urlShopCache");
+        this.urlShopCache = cacheManager.getCache("org.yes.cart.web.urlShopCache");
     }
 }

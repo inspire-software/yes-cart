@@ -30,6 +30,7 @@ import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.web.page.component.BaseComponent;
+import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.entity.decorator.ProductDecorator;
@@ -130,6 +131,8 @@ public abstract class AbstractProductList extends BaseComponent {
             category = categoryService.getRootCategory();
         }
 
+        final LinksSupport links = getWicketSupportFacade().links();
+
 
         add(
                 new ListView<Product>(PRODUCT_LIST, getProductListToShow()) {
@@ -147,12 +150,9 @@ public abstract class AbstractProductList extends BaseComponent {
                         final String height = size[1];
 
 
-                        final PageParameters pageParameters = getProductPageParameters(prod);
-
-                        final Class homePage = Application.get().getHomePage();
-
                         listItem.add(
-                                new BookmarkablePageLink(PRODUCT_LINK_IMAGE, homePage, pageParameters).add(
+                                links.newProductLink(PRODUCT_LINK_IMAGE, prod.getProductId(), getPage().getPageParameters())
+                                .add(
                                         new ContextImage(PRODUCT_IMAGE, productDecorator.getDefaultImage(width, height))
                                                 .add(new AttributeModifier(HTML_WIDTH, width))
                                                 .add(new AttributeModifier(HTML_HEIGHT, height))
@@ -161,7 +161,7 @@ public abstract class AbstractProductList extends BaseComponent {
                                 )
                         );
                         listItem.add(
-                                new BookmarkablePageLink(PRODUCT_NAME_LINK, homePage, pageParameters)
+                                links.newProductLink(PRODUCT_NAME_LINK, prod.getProductId(), getPage().getPageParameters())
                                         .add(new Label(NAME, productDecorator.getName(selectedLocale)).setEscapeModelStrings(false))
                                         .setVisible(nameLinkVisible)
                         );

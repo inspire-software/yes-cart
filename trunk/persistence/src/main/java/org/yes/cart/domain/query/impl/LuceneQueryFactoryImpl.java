@@ -186,7 +186,7 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
             final List<Long> categories,
             final Map<String, ?> requestParameters) {
 
-        final List<String> allowedAttributeCodes = attributeService.getAllAttributeCodes();
+        final List<String> allowedAttributeCodes = attributeService.getAllNavigatableAttributeCodes();
 
         final List<BooleanQuery> queryChain = new ArrayList<BooleanQuery>();
         for (Map.Entry<String, ?> entry : requestParameters.entrySet()) {

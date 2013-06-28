@@ -160,15 +160,33 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
 
     /**
      * UI template variation test. Prove that we are able to
-     * getByKey ui tepmlate from parent category on any level.
+     * getByKey ui template from parent category on any level.
      */
     @Test
-    public void testGetUIVariationTest() {
+    public void testGetUIVariationTestWithFailover() {
         Category category = categoryService.getById(139L);
         assertNotNull(category);
         assertNull(category.getUitemplate());
         String uiVariation = categoryService.getCategoryTemplateVariation(category);
         assertEquals("default", uiVariation);
+    }
+
+    @Test
+    public void testGetUIVariationTestNoFailover() {
+        Category category = categoryService.getById(139L);
+        assertNotNull(category);
+        assertNull(category.getUitemplate());
+        String uiVariation = categoryService.getCategoryTemplate(139L);
+        assertNull(uiVariation);
+    }
+
+    @Test
+    public void testGetUIVariationTestExists() {
+        Category category = categoryService.getById(100L);
+        assertNotNull(category);
+        assertEquals("default", category.getUitemplate());
+        String uiVariation = categoryService.getCategoryTemplate(100L);
+        assertEquals(category.getUitemplate(), uiVariation);
     }
 
     @Test
@@ -179,6 +197,42 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
         for (Category category : categories) {
             assertTrue(categoryIds.contains(category.getCategoryId()));
         }
+    }
+
+    @Test
+    public void testIsCategoryHasChildrenTrue() throws Exception {
+        assertTrue(categoryService.isCategoryHasChildren(101L, false));
+    }
+
+    @Test
+    public void testIsCategoryHasChildrenFalse() throws Exception {
+
+        final Category newCategory = categoryService.getGenericDao().getEntityFactory().getByIface(Category.class);
+        newCategory.setGuid("TEST-CHILDREN");
+        newCategory.setName("TEST-CHILDREN");
+
+        final Category saved = categoryService.create(newCategory);
+        assertFalse(categoryService.isCategoryHasChildren(saved.getCategoryId(), false));
+
+        categoryService.delete(saved);
+
+    }
+
+    @Test
+    public void testIsCategoryHasProductsTrue() throws Exception {
+        assertTrue(categoryService.isCategoryHasProducts(101L, false));
+    }
+
+    @Test
+    public void testIsCategoryHasProductsFalse() throws Exception {
+        final Category newCategory = categoryService.getGenericDao().getEntityFactory().getByIface(Category.class);
+        newCategory.setGuid("TEST-PRODUCTS");
+        newCategory.setName("TEST-PRODUCTS");
+
+        final Category saved = categoryService.create(newCategory);
+        assertFalse(categoryService.isCategoryHasProducts(saved.getCategoryId(), false));
+
+        categoryService.delete(saved);
     }
 
     @Test

@@ -24,6 +24,8 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.yes.cart.web.page.AbstractWebPage;
+import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.util.WicketUtil;
 
@@ -83,17 +85,11 @@ public class ProductPerPageListView extends ListView<String> {
             label.add(new AttributeModifier("class", "items-per-page-active"));
         }
 
-        stringListItem.add(
-                new BookmarkablePageLink<Link>(
-                        ITEMS_PER_PAGE,
-                        homePage,
-                        WicketUtil.getFilteredRequestParameters(pageParameters)
-                                .set(
-                                        WebParametersKeys.QUANTITY,
-                                        quantity))
-                        .add(
-                                label)
-        );
+        final LinksSupport links = ((AbstractWebPage) getPage()).getWicketSupportFacade().links();
+        final PageParameters params = links.getFilteredCurrentParameters(pageParameters);
+        params.set(WebParametersKeys.QUANTITY, quantity);
+
+        stringListItem.add(links.newLink(ITEMS_PER_PAGE, params).add(label));
 
     }
 

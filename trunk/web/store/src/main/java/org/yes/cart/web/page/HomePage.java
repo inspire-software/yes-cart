@@ -102,7 +102,14 @@ public class HomePage extends AbstractWebPage {
 
         final String centralViewLabel = centralViewResolver.resolveMainPanelRendererLabel(mapParams);
 
-        final long categoryId = NumberUtils.toLong(HttpUtil.getSingleValue(mapParams.get(WebParametersKeys.CATEGORY_ID)));
+        final long categoryId;
+        if (mapParams.containsKey(WebParametersKeys.CATEGORY_ID)) {
+            categoryId = NumberUtils.toLong(HttpUtil.getSingleValue(mapParams.get(WebParametersKeys.CATEGORY_ID)));
+        } else if (mapParams.containsKey(WebParametersKeys.CONTENT_ID)) {
+            categoryId = NumberUtils.toLong(HttpUtil.getSingleValue(mapParams.get(WebParametersKeys.CONTENT_ID)));
+        } else {
+            categoryId = 0l;
+        }
 
         final Shop shop = ApplicationDirector.getCurrentShop();
 
@@ -195,6 +202,8 @@ public class HomePage extends AbstractWebPage {
                 put(CentralViewLabel.PRODUCT, SkuCentralView.class);
                 put(CentralViewLabel.SKU, SkuCentralView.class);
                 put(CentralViewLabel.SEARCH_LIST, ProductsCentralView.class);
+                put(CentralViewLabel.CONTENT, ContentCentralView.class);
+                put(CentralViewLabel.CATEGORY, EmptyCentralView.class);
                 put(CentralViewLabel.DEFAULT, EmptyCentralView.class);
             }};
 
@@ -216,7 +225,7 @@ public class HomePage extends AbstractWebPage {
 
         Class<? extends AbstractCentralView> clz = rendererPanelMap.get(rendererLabel);
         try {
-            if (categoryId != 0) { //check is this category allowed to open in this shop
+            if (categoryId != 0 && clz != ContentCentralView.class) { //check is this category allowed to open in this shop
 
                 final Shop shop = ApplicationDirector.getCurrentShop();
                 if (!categoryService.transform(shopService.getShopCategories(shop)).contains(categoryId)) {

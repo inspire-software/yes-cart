@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.service.domain.impl.AttributeServiceImpl;
 import org.yes.cart.service.domain.impl.CategoryServiceImpl;
+import org.yes.cart.service.domain.impl.ContentServiceImpl;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 
@@ -41,25 +42,40 @@ public class CentralViewResolverImplTest {
     public void testResolveMainPanelRendererLabel() throws Exception {
         CentralViewResolverImpl resolver = new CentralViewResolverImpl(
                 new CategoryServiceImpl(null, null, null) {
-                    public int getProductQuantity(long categoryId, boolean includeChild) {
-                        if (categoryId == 10) {
-                            return 0;
+                    @Override
+                    public boolean isCategoryHasProducts(final long categoryId, final boolean includeChildren) {
+                        if (categoryId == 10 || categoryId == 999) {
+                            return false;
                         }
-                        return 13;
+                        return true;
                     }
-
-                    public List<Category> getChildCategories(long categoryId) {
+                    @Override
+                    public boolean isCategoryHasChildren(final long categoryId, final boolean includeChildren) {
                         if (categoryId == 10) {
-                            return new ArrayList<Category>() {{
-                                add(null);
-                            }};
+                            return true;
                         }
-                        return new ArrayList<Category>();
+                        return false;
+                    }
+                    @Override
+                    public String getCategoryTemplate(final long categoryId) {
+                        if (categoryId == 999L) {
+                            return "template";
+                        }
+                        return null;
+                    }
+                },
+                new ContentServiceImpl(null, null, null) {
+                    @Override
+                    public String getContentTemplate(final long categoryId) {
+                        if (categoryId == 888L) {
+                            return "template";
+                        }
+                        return null;
                     }
                 },
                 new AttributeServiceImpl(null, null, false) {
                     @Override
-                    public List<String> getAllAttributeCodes() {
+                    public List<String> getAllNavigatableAttributeCodes() {
                         return new ArrayList<String>() {{
                             add("attrWeight");
                             add("attrSize");
@@ -81,6 +97,12 @@ public class CentralViewResolverImplTest {
                 resolver.resolveMainPanelRendererLabel(getRequestParams2(WebParametersKeys.CATEGORY_ID, "10")));
         assertEquals(CentralViewLabel.PRODUCTS_LIST,
                 resolver.resolveMainPanelRendererLabel(getRequestParams2(WebParametersKeys.CATEGORY_ID, "11")));
+        assertEquals("template",
+                resolver.resolveMainPanelRendererLabel(getRequestParams2(WebParametersKeys.CATEGORY_ID, "999")));
+        assertEquals(CentralViewLabel.CONTENT,
+                resolver.resolveMainPanelRendererLabel(getRequestParams2(WebParametersKeys.CONTENT_ID, "889")));
+        assertEquals("template",
+                resolver.resolveMainPanelRendererLabel(getRequestParams2(WebParametersKeys.CONTENT_ID, "888")));
     }
 
     private Map<String, String> getRequestParams(final String param, final String val) {

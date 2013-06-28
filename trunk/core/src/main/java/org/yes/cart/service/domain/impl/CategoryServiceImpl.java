@@ -38,7 +38,6 @@ import java.util.*;
 public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implements CategoryService {
 
     private static final String CACHE_NAME = "categoryServiceImplMethodCache";
-    private static final String SEO_CACHE_NAME = "categoryServiceImplSeoCache";
 
     private final GenericDAO<Category, Long> categoryDao;
 
@@ -131,6 +130,20 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         return variation;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = CACHE_NAME)
+    public String getCategoryTemplate(final long categoryId) {
+        List<Object> count = categoryDao.findQueryObjectByNamedQuery("TEMPLATE.BY.CATEGORY.ID", categoryId);
+        if (count != null && count.size() == 1) {
+            final String template = (String) count.get(0);
+            if (!StringUtils.isBlank(template)) {
+                return template;
+            }
+        }
+        return null;
+    }
 
     /**
      * {@inheritDoc}
@@ -264,20 +277,70 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      * {@inheritDoc}
      */
     @Cacheable(value = CACHE_NAME)
-    public int getProductQuantity(final long categoryId, final boolean includeChild) {
+    public int getProductQuantity(final long categoryId, final boolean includeChildren) {
         int qty = 0;
-        Category category = categoryDao.findById(categoryId);
-        if (category != null) {
-            qty = category.getProductCategory().size();
-            if (includeChild) {
+        List<Object> count = categoryDao.findQueryObjectByNamedQuery("CATEGORY.PRODUCT.COUNT", categoryId);
+        if (count != null && count.size() == 1) {
+            qty = ((Number) count.get(0)).intValue();
+            if (includeChildren) {
                 List<Category> childs = getChildCategories(categoryId);
                 for (Category childCategory : childs) {
-                    qty += getProductQuantity(childCategory.getCategoryId(), includeChild);
+                    qty += getProductQuantity(childCategory.getCategoryId(), includeChildren);
                 }
 
             }
         }
         return qty;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = CACHE_NAME)
+    public boolean isCategoryHasProducts(final long categoryId, final boolean includeChildren) {
+        List<Object> count = categoryDao.findQueryObjectByNamedQuery("CATEGORY.PRODUCT.COUNT", categoryId);
+        if (count != null && count.size() == 1) {
+            int qty = ((Number) count.get(0)).intValue();
+            if (qty > 0) {
+                return true;
+            }
+            if (includeChildren) {
+                List<Category> childs = getChildCategories(categoryId);
+                for (Category childCategory : childs) {
+                    final boolean childHasProducts = isCategoryHasProducts(childCategory.getCategoryId(), includeChildren);
+                    if (childHasProducts) {
+                        return true;
+                    }
+                }
+
+            }
+        }
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = CACHE_NAME)
+    public boolean isCategoryHasChildren(final long categoryId, final boolean includeChildren) {
+        List<Object> count = categoryDao.findQueryObjectByNamedQuery("CATEGORY.SUBCATEGORY.COUNT", categoryId);
+        if (count != null && count.size() == 1) {
+            int qty = ((Number) count.get(0)).intValue();
+            if (qty > 0) {
+                return true;
+            }
+            if (includeChildren) {
+                List<Category> childs = getChildCategories(categoryId);
+                for (Category childCategory : childs) {
+                    final boolean childHasProducts = isCategoryHasChildren(childCategory.getCategoryId(), includeChildren);
+                    if (childHasProducts) {
+                        return true;
+                    }
+                }
+
+            }
+        }
+        return false;
     }
 
     /**
@@ -367,7 +430,6 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = CACHE_NAME)
     public Set<Long> transform(final Collection<Category> categories) {
         final Set<Long> result = new LinkedHashSet<Long>(categories.size());
         for (Category category : categories) {
@@ -379,7 +441,6 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = SEO_CACHE_NAME)
     public Long getCategoryIdBySeoUri(final String seoUri) {
         List<Object> list = categoryDao.findQueryObjectByNamedQuery("CATEGORY.ID.BY.SEO.URI", seoUri);
         if (list != null && !list.isEmpty()) {
@@ -394,7 +455,6 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = SEO_CACHE_NAME)
     public String getSeoUriByCategoryId(final Long categoryId) {
         List<Object> list = categoryDao.findQueryObjectByNamedQuery("SEO.URI.BY.CATEGORY.ID", categoryId);
         if (list != null && !list.isEmpty()) {

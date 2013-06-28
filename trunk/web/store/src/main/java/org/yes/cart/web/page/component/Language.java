@@ -21,6 +21,7 @@ import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
@@ -77,8 +78,6 @@ public class Language extends BaseComponent {
 
         if (isVisible()) {
 
-            final String selectedLocale = getLocale().getLanguage();
-
             if (StringUtils.isBlank(ApplicationDirector.getShoppingCart().getCurrentLocale())) {
                 new ChangeLocaleCartCommandImpl(
                         null,
@@ -87,8 +86,6 @@ public class Language extends BaseComponent {
             }
 
             final PageParameters basePageParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters());
-
-            final Class homePage = Application.get().getHomePage();
 
             add(new ListView<String>(LANGUAGE_LIST, languageService.getSupportedLanguages()) {
 
@@ -99,14 +96,10 @@ public class Language extends BaseComponent {
 
                     final String languageName = languageService.resolveLanguageName(languageCode);
 
-                    final PageParameters itemPageParameters =  new PageParameters(basePageParameters);
-
-                    itemPageParameters.add(ChangeLocaleCartCommandImpl.CMD_KEY, languageCode);
-
-                    final BookmarkablePageLink pageLink = new BookmarkablePageLink(
+                    final Link pageLink = getWicketSupportFacade().links().newChangeLocaleLink(
                             LANGUAGE_LINK,
-                            homePage,
-                            itemPageParameters);
+                            languageCode,
+                            basePageParameters);
 
                     final Label languageLabel = new Label(LANGUAGE_NAME, languageName);
 
