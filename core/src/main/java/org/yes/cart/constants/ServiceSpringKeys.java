@@ -31,6 +31,10 @@ public interface ServiceSpringKeys {
      */
     String CATEGORY_SERVICE = "categoryService";
     /**
+     * {@link org.yes.cart.service.domain.ContentService} bean key.
+     */
+    String CONTENT_SERVICE = "contentService";
+    /**
      * {@link org.yes.cart.service.domain.ShopService} bean key.
      */
     String SHOP_SERVICE = "shopService";
@@ -263,6 +267,10 @@ public interface ServiceSpringKeys {
      * {@link org.yes.cart.service.dto.DtoCategoryService}
      */
     String DTO_CATEGORY_SERVICE = "dtoCategoryService";
+    /**
+     * {@link org.yes.cart.service.dto.DtoContentService}
+     */
+    String DTO_CONTENT_SERVICE = "dtoContentService";
 
     /**
      * {@link org.yes.cart.service.dto.DtoProductService}

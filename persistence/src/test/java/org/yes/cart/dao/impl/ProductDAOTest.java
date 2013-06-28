@@ -285,7 +285,7 @@ public class ProductDAOTest extends AbstractTestDAO {
 
                 mockery.checking(
                         new Expectations() {{
-                            allowing(attributeService).getAllAttributeCodes();
+                            allowing(attributeService).getAllNavigatableAttributeCodes();
                             will(returnValue(Collections.singletonList(ProductSearchQueryBuilder.QUERY)));
                         } }
                 );

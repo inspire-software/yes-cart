@@ -20,7 +20,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * USed in multistore support.
+ * Used in multistore support.
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 2011-May-17

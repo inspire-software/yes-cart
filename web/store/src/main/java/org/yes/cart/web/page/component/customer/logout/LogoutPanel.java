@@ -55,25 +55,18 @@ public class LogoutPanel  extends BaseComponent {
     }
 
     protected void onBeforeRender() {
-        final Class<? extends Page> page = Application.get().getHomePage();
 
-        final PageParameters primaryPageParameter = new PageParameters();
-        primaryPageParameter.add(LogoutCommandImpl.CMD_KEY, LogoutCommandImpl.CMD_KEY);
-        final Link primaryActionLink = new BookmarkablePageLink<AbstractWebPage>(
-                LOGOFF_LINK,
-                page,
-                primaryPageParameter);
+        final Link logOff = getWicketSupportFacade().links().newLogOffLink(LOGOFF_LINK,
+                getPage().getPageParameters());
 
-        primaryActionLink.add(new AttributeModifier(
+        logOff.add(new AttributeModifier(
                 HTML_TITLE,
                 getSalutation(LOGOFF_TITLE, ApplicationDirector.getShoppingCart().getCustomerName())));
-        primaryActionLink.add(new Label(
+        logOff.add(new Label(
                 LOGOFF_LABEL,
                 getLocalizer().getString(LOGOFF_LABEL, this)));
 
-        addOrReplace(primaryActionLink);
-
-
+        addOrReplace(logOff);
 
         super.onBeforeRender();
     }

@@ -112,12 +112,12 @@ public class DtoCategoryServiceImpl
     /**
      * {@inheritDoc}
      */
-    public List<CategoryDTO> getAllWithAvailabilityFilter(final boolean withAvailalilityFiltering)
+    public List<CategoryDTO> getAllWithAvailabilityFilter(final boolean withAvailabilityFiltering)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         CategoryService categoryService = (CategoryService) service;
         Category root = categoryService.getRootCategory();
         CategoryDTO rootDTO = getById(root.getCategoryId());
-        getAllFromRoot(rootDTO, withAvailalilityFiltering);
+        getAllFromRoot(rootDTO, withAvailabilityFiltering);
         return Collections.singletonList(rootDTO);
     }
 
@@ -164,15 +164,10 @@ public class DtoCategoryServiceImpl
     /**
      * Bind data from dictionaries to category.
      *
-     * @param instance category dto to collec data from
+     * @param instance category dto to collect data from
      * @param category category to set dictionary data to.
      */
     private void bindDictionaryData(final CategoryDTO instance, final Category category) {
-        /*if (instance.getSeoId() != null && instance.getSeoId() > 0) {
-            category.setSeo(seoGenericService.getById(instance.getSeoId()));
-        } else {
-            category.setSeo(null);
-        }      */
         if (instance.getProductTypeId() != null && instance.getProductTypeId() > 0) {
             category.setProductType(productTypeService.getById(instance.getProductTypeId()));
         } else {

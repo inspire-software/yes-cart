@@ -45,8 +45,6 @@ public class WicketUtil {
 
     private static final PageParametersEncoder pageParametersEncoder = new PageParametersEncoder();
 
-    private static final PageParameters emptyPageParameters = new PageParameters();
-
     public void setCmdKeys(final List<String> cmdKeys) {
         WicketUtil.cmdKeys.addAll(cmdKeys);
     }
@@ -60,11 +58,13 @@ public class WicketUtil {
         return (HttpServletRequest) ((WebRequest) RequestCycle.get().getRequest()).getContainerRequest();
     }
 
-
+    /**
+     * @return decoded page parameters (null safe)
+     */
     public static PageParameters getPageParameters() {
         final PageParameters pageParameters = pageParametersEncoder.decodePageParameters(RequestCycle.get().getRequest());
         if (pageParameters == null) {
-            return emptyPageParameters;
+            return new PageParameters();
         }
         return pageParameters;
     }

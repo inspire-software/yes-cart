@@ -20,10 +20,8 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Category;
@@ -71,8 +69,6 @@ public class TopCategories extends BaseComponent {
 
         final long categoryId = NumberUtils.toLong(getPage().getPageParameters().get(WebParametersKeys.CATEGORY_ID).toString());
 
-        final Class homePage = Application.get().getHomePage();
-
         add(
                 new ListView<Category>(CATEGORY_LIST, categories) {
 
@@ -82,12 +78,10 @@ public class TopCategories extends BaseComponent {
                         final Category category = categoryListItem.getModelObject();
                         final I18NModel nameModel = getI18NSupport().getFailoverModel(category.getDisplayName(), category.getName());
 
-                        final PageParameters pageParameters = new PageParameters().add(WebParametersKeys.CATEGORY_ID, category.getCategoryId());
-
-
                         categoryListItem.add(
 
-                                new BookmarkablePageLink(CATEGORY_NAME_LINK, homePage, pageParameters).add(
+                                getWicketSupportFacade().links().newCategoryLink(CATEGORY_NAME_LINK, category.getCategoryId())
+                                .add(
 
                                         new Label(CATEGORY_NAME, nameModel.getValue(selectedLocale)).setEscapeModelStrings(false)
 
@@ -96,7 +90,7 @@ public class TopCategories extends BaseComponent {
                                         new AttributeModifier(
                                                 "class",
                                                 /*categoryService.isCategoryHasSubcategory(category.getCategoryId(), categoryId)*/ category.getCategoryId() == categoryId ?
-                                                        "active-category":""
+                                                "active-category" : ""
                                         )
 
                                 )

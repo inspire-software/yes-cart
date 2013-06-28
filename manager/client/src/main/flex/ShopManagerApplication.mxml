@@ -32,6 +32,7 @@
 
         import mx.controls.Alert;
         import mx.controls.Text;
+        import mx.core.Container;
         import mx.events.IndexChangedEvent;
         import mx.messaging.channels.SecureAMFChannel;
         import mx.rpc.AsyncResponder;
@@ -86,6 +87,7 @@
         import org.yes.cart.ui.bulkimport.BulkImportPanel;
         import org.yes.cart.ui.carrier.CarrierManagementPanel;
         import org.yes.cart.ui.category.CategoryManagementPanel;
+        import org.yes.cart.ui.content.ContentManagementPanel;
         import org.yes.cart.ui.customer.CustomerManagementPanel;
         import org.yes.cart.ui.location.LocationManagementPanel;
         import org.yes.cart.ui.monitoring.MonitoringPanel;
@@ -106,6 +108,10 @@
 
         private var shopManagerGlobal:ShopManagerGlobal;
 
+        const contentMenu:int = 2;
+        const storeMenu:int = 7;
+
+        private var currentIndex:Number;
         private var shops:Object;
 
         public function init():void {
@@ -298,6 +304,15 @@
             mainPanel.addChild(panel);
         }
 
+        private function onContentManagementClick(event:MouseEvent):void {
+            setFontWeight(event.target as LinkButton);
+            mainPanel.removeAllChildren();
+            var panel:ContentManagementPanel = new ContentManagementPanel();
+            var shop:ShopDTOImpl = this.shops[(event.target as LinkButton).id];
+            panel.shopDTOImpl = shop;
+            mainPanel.addChild(panel);
+        }
+
         private function onNewStoreClick(event:MouseEvent):void {
             setFontWeight(event.target as LinkButton);
             mainPanel.removeAllChildren();
@@ -429,20 +444,24 @@
                 this.shops['shop_' + shop.shopId] = shop;
             }
 
-            this.onInitStoresButtons();
+            if (this.currentIndex == storeMenu) {
+                this.onInitStoresButtons(storesButtons, 'storesBtn', onStoreManagementClick);
+            } else if (this.currentIndex == contentMenu) {
+                this.onInitStoresButtons(contentButtons, '-', onContentManagementClick);
+            }
 
         }
 
-        private function onInitStoresButtons():void {
-            var tempArray:ArrayCollection = new ArrayCollection(storesButtons.getChildren());
+        private function onInitStoresButtons(buttonBox:Container, createButtonId:String, clickFunction:Function):void {
+            var tempArray:ArrayCollection = new ArrayCollection(buttonBox.getChildren());
             for each (var oldShopButton:Object in tempArray) {
                 if (oldShopButton is LinkButton) {
                     var oldButton:LinkButton = oldShopButton as LinkButton;
-                    if (oldButton.id == 'storesBtn') {
+                    if (oldButton.id == createButtonId) {
                         continue; // do not remove the create button
                     }
-                    oldButton.removeEventListener(MouseEvent.CLICK, onStoreManagementClick);
-                    storesButtons.removeChild(oldButton);
+                    oldButton.removeEventListener(MouseEvent.CLICK, clickFunction);
+                    buttonBox.removeChild(oldButton);
                 }
             }
 
@@ -452,16 +471,16 @@
                 var shopButton:LinkButton = new LinkButton();
                 shopButton.label = shop.name + ' (' + shop.code + ')';
                 shopButton.id = shopId;
-                shopButton.addEventListener(MouseEvent.CLICK, onStoreManagementClick);
+                shopButton.addEventListener(MouseEvent.CLICK, clickFunction);
                 shopButton.percentWidth = 100;
-                storesButtons.addChildAt(shopButton, storeButtonIndex++);
+                buttonBox.addChildAt(shopButton, storeButtonIndex++);
             }
 
         }
 
         private function onMainAccordionChange(event:IndexChangedEvent):void {
-            const storeMenu:int = 6;
-            if (event.newIndex == storeMenu) {
+            this.currentIndex = event.newIndex;
+            if (event.newIndex == storeMenu || event.newIndex == contentMenu) {
                 remoteShopService.getAll(); // reload buttons
             }
         }
@@ -596,6 +615,14 @@
                                     </mx:VBox>
                                 </mx:Canvas>
 
+                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='content')" width="100%"
+                                           height="100%">
+                                    <mx:VBox x="0" y="0" height="100%" width="100%" id="contentButtons">
+                                        <mx:Spacer height="10"/>
+
+                                    </mx:VBox>
+                                </mx:Canvas>
+
                                 <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='marketing')"
                                            width="100%" height="100%">
                                     <mx:VBox x="0" y="0" height="100%" width="100%">
@@ -610,7 +637,7 @@
                                           <mx:Spacer height="10"/>
                                           <mx:LinkButton width="100%" enabled="false" id="catalogPromo"
                                                           label="@Resource(bundle='ShopManagerApplication',key='catalogPromotion')"
-                                                          click="setFontWeight(catalogPromo); Alert.show('TODOV2')"
+                                                          click="setFontWeight(catalogPromo); Alert.show('TODO: V2')"
                                                           toolTip="@Resource(bundle='ShopManagerApplication',key='catalogPromotionyHint')"
                                                    />
                                            <mx:LinkButton width="100%" enabled="false" id="cartPromo"

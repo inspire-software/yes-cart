@@ -32,4 +32,11 @@ public class StandardFooter extends BaseComponent {
     public StandardFooter(final String id) {
         super(id);
     }
+
+    @Override
+    protected void onBeforeRender() {
+
+        addOrReplace(getWicketSupportFacade().links().newContentLink("licenseLink", "license"));
+        super.onBeforeRender();
+    }
 }

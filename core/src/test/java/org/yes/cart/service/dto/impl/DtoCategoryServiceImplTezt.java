@@ -43,7 +43,7 @@ public class DtoCategoryServiceImplTezt extends BaseCoreDBTestCase {
     private DtoFactory dtoFactory;
     private DtoCategoryService dtoService;
     private DtoAttributeService dtoAttrService;
-    public static final int QTY = 3;
+    public static final int QTY = 5;
 
     @Before
     public void setUp() {
@@ -286,7 +286,7 @@ public class DtoCategoryServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testzCreateEntityAttributeValue() throws Exception {
         List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(100L);
-        assertEquals(3, list.size());
+        assertEquals(5, list.size());
         for (int i = 0; i < QTY; i++) {
             AttrValueDTO dto = list.get(i);
             if (dto.getVal() != null) {

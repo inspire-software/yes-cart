@@ -154,7 +154,7 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
                 new BookmarkablePageLink<ResultPage>(
                         "redirectLink",
                         ResultPage.class,
-                        new PageParameters("orderNum=" + orderGuid))
+                        new PageParameters().add("orderNum", orderGuid))
         );
 
         super.onBeforeRender();

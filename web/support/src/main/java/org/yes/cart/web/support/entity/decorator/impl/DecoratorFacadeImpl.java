@@ -69,7 +69,7 @@ public class DecoratorFacadeImpl implements DecoratorFacade {
         this.categoryService = categoryService;
         this.productService = productService;
         this.bookmarkService = bookmarkService;
-        this.PRODUCT_CACHE = cacheManager.getCache("decoratedProductCache");
+        this.PRODUCT_CACHE = cacheManager.getCache("org.yes.cart.web.decoratedProductCache");
     }
 
     /**

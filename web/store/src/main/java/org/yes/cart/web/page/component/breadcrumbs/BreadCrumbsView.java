@@ -20,6 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -32,6 +33,7 @@ import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.web.page.component.BaseComponent;
+import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.CurrencySymbolService;
@@ -122,7 +124,7 @@ public class BreadCrumbsView extends BaseComponent implements CrumbNamePrefixPro
 
         final String selectedLocale = getLocale().getLanguage();
 
-        final Class homePage = Application.get().getHomePage();
+        final LinksSupport links = getWicketSupportFacade().links();
 
         add(
                 new ListView<Crumb>(
@@ -143,10 +145,10 @@ public class BreadCrumbsView extends BaseComponent implements CrumbNamePrefixPro
                                 );
                     }
 
-                    private BookmarkablePageLink getPageLink(final String linkKey, final String linkName,
-                                                             final PageParameters parameters, final boolean addLabel) {
+                    private Link getPageLink(final String linkKey, final String linkName,
+                                             final PageParameters parameters, final boolean addLabel) {
 
-                        final BookmarkablePageLink pageLink = new BookmarkablePageLink(linkKey, homePage, parameters);
+                        final Link pageLink = links.newLink(linkKey, parameters);
                         if (addLabel) {
                             final Label label = new Label(BREADCRUMBS_LINK_NAME, linkName);
                             label.setEscapeModelStrings(false);

@@ -26,6 +26,8 @@ import org.apache.wicket.markup.html.navigation.paging.IPagingLabelProvider;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigation;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.yes.cart.web.page.AbstractWebPage;
+import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.util.WicketUtil;
 
@@ -80,12 +82,11 @@ public class URLPagingNavigator   extends PagingNavigator {
      */
     protected AbstractLink newPagingNavigationIncrementLink(final String id, final IPageable pageable, final int increment) {
 
-        final PageParameters map = WicketUtil.getFilteredRequestParameters(pageParameters);
-
+        final LinksSupport links = ((AbstractWebPage) getPage()).getWicketSupportFacade().links();
+        final PageParameters map = links.getFilteredCurrentParameters(pageParameters);
         map.set(WebParametersKeys.PAGE, pageable.getCurrentPage() + increment);
 
-        return new BookmarkablePageLink<Link>(id, homePage, map);
-
+        return links.newLink(id, map);
 
         //return new PagingNavigationIncrementLink<Void>(id, pageable, increment);
     }
@@ -95,7 +96,8 @@ public class URLPagingNavigator   extends PagingNavigator {
      */
     protected AbstractLink newPagingNavigationLink(final String id, final IPageable pageable, int pageNumber) {
 
-        final PageParameters params = WicketUtil.getFilteredRequestParameters(pageParameters);
+        final LinksSupport links = ((AbstractWebPage) getPage()).getWicketSupportFacade().links();
+        final PageParameters params = links.getFilteredCurrentParameters(pageParameters);
 
         final int pNum;
 
@@ -107,7 +109,7 @@ public class URLPagingNavigator   extends PagingNavigator {
 
         params.set(WebParametersKeys.PAGE, pNum);
 
-        return new BookmarkablePageLink<Link>(id, homePage, new PageParameters(params));
+        return links.newLink(id, params);
 
     }
 

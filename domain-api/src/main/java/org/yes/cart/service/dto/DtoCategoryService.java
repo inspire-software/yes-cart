@@ -44,16 +44,16 @@ public interface DtoCategoryService extends GenericDTOService<CategoryDTO>, Gene
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
-     * Get all categories with or withaout availability date range filtering.
+     * Get all categories with or without availability date range filtering.
      *
-     * @param withAvailalilityFiltering true if need to filter
+     * @param withAvailabilityFiltering true if need to filter
      * @return list of categories
      * @throws org.yes.cart.exception.UnableToCreateInstanceException
      *          in case of reflection problem
      * @throws org.yes.cart.exception.UnmappedInterfaceException
      *          in case of configuration problem
      */
-    List<CategoryDTO> getAllWithAvailabilityFilter(boolean withAvailalilityFiltering)
+    List<CategoryDTO> getAllWithAvailabilityFilter(boolean withAvailabilityFiltering)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**

@@ -34,6 +34,7 @@ import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.shoppingcart.impl.ChangeLocaleCartCommandImpl;
 import org.yes.cart.shoppingcart.impl.LogoutCommandImpl;
 import org.yes.cart.web.application.ApplicationDirector;
+import org.yes.cart.web.service.wicketsupport.WicketSupportFacade;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.DecoratorFacade;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
@@ -70,6 +71,9 @@ public class AbstractWebPage extends WebPage {
 
     @SpringBean(name = StorefrontServiceSpringKeys.DECORATOR_FACADE)
     private DecoratorFacade decoratorFacade;
+
+    @SpringBean(name = StorefrontServiceSpringKeys.WICKET_SUPPORT_FACADE)
+    private WicketSupportFacade wicketSupportFacade;
 
 
     /** Page title. */
@@ -200,6 +204,12 @@ public class AbstractWebPage extends WebPage {
         return decoratorFacade;
     }
 
+    /**
+     * @return wicket support facade
+     */
+    public WicketSupportFacade getWicketSupportFacade() {
+        return wicketSupportFacade;
+    }
 
     /**
      * Get page title.

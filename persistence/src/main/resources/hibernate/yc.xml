@@ -4579,6 +4579,27 @@ public void setRangeList(final RangeList rangeList) {
        ]]>
     </query>
 
+    <query name="ROOTCONTENT.BY.SHOP.ID">
+        <![CDATA[
+       select c from CategoryEntity c, ShopEntity s WHERE c.guid = s.code AND c.parentId = 0 AND s.shopId = ?1
+       ]]>
+    </query>
+
+    <query name="SHOPCODE.BY.SHOP.ID">
+        <![CDATA[
+       select s.code from ShopEntity s WHERE s.shopId = ?1
+       ]]>
+    </query>
+
+    <query name="CONTENTBODY.BY.CONTENTID">
+        <![CDATA[
+       select av.val from CategoryEntity c, AttrValueEntityCategory av
+       where c.categoryId = av.category.categoryId and c.categoryId = ?1 and av.attribute.code = ?2
+       and (c.availablefrom < ?3 OR c.availablefrom IS NULL)
+       and (c.availableto > ?3 OR c.availableto IS NULL)
+       ]]>
+    </query>
+
     <query name="PRODUCTS.BY.CATEGORYID">
         <![CDATA[
        select p from ProductEntity p, ProductCategoryEntity pc
@@ -4769,6 +4790,12 @@ public void setRangeList(final RangeList rangeList) {
        ]]>
     </query>
 
+    <query name="ATTRIBUTE.CODES.NAVIGATION.UNIQUE">
+        <![CDATA[
+       select distinct a.code from ProductTypeAttrEntity pt inner join pt.attribute a where pt.navigation = ?1
+       ]]>
+    </query>
+
 
 
     <query name="ATTRIBUTE.BY.CODE">
@@ -4872,11 +4899,30 @@ public void setRangeList(final RangeList rangeList) {
        ]]>
     </query>
 
+    <query name="TEMPLATE.BY.CATEGORY.ID">
+        <![CDATA[
+                  select c.uitemplate from CategoryEntity c  where c.categoryId = ?1
+       ]]>
+    </query>
+
     <query name="SEO.URI.BY.CATEGORY.ID">
         <![CDATA[
                   select c.seo.uri from CategoryEntity c  where c.categoryId = ?1
        ]]>
     </query>
+
+    <query name="CATEGORY.PRODUCT.COUNT">
+        <![CDATA[
+                  select count(pc.productCategoryId) from ProductCategoryEntity pc  where pc.category.categoryId = ?1
+       ]]>
+    </query>
+
+    <query name="CATEGORY.SUBCATEGORY.COUNT">
+        <![CDATA[
+                  select count(c.categoryId) from CategoryEntity c  where c.parentId = ?1
+       ]]>
+    </query>
+
 
     <query name="PRODUCT.BY.SEO.URI">
         <![CDATA[

@@ -22,6 +22,7 @@ import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ShopService;
 
 import java.util.*;
@@ -38,21 +39,25 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     private final AttributeService attributeService;
 
     private final CategoryService categoryService;
+    private final ContentService contentService;
 
 
     /**
      * Construct shop service.
      * @param shopDao shop doa.
-     * @param categoryService {@link CategoryService}
+     * @param categoryService {@link org.yes.cart.service.domain.CategoryService}
      * @param attributeService attribute service
+     * @param contentService {@link org.yes.cart.service.domain.ContentService}
      */
     public ShopServiceImpl(final GenericDAO<Shop, Long> shopDao,
                            final CategoryService categoryService,
+                           final ContentService contentService,
                            final AttributeService attributeService) {
         super(shopDao);
         this.shopDao = shopDao;
         this.categoryService = categoryService;
         this.attributeService = attributeService;
+        this.contentService = contentService;
     }
 
     /**
@@ -122,6 +127,13 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
         return currencies;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public Shop create(final Shop instance) {
+        final Shop shop = super.create(instance);
+        contentService.getRootContent(shop.getShopId());
+        return shop;
+    }
 
     /**
      * Set attribute value. New attribute value will be created, if attribute has not value for given shop.

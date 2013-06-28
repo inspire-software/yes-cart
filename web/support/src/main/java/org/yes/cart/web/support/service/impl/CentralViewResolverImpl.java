@@ -20,22 +20,20 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.apache.lucene.search.BooleanQuery;
 import org.springframework.util.CollectionUtils;
 import org.yes.cart.cache.Cacheable;
-import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.domain.query.impl.ProductQueryBuilderImpl;
 import org.yes.cart.domain.query.impl.ProductsInCategoryQueryBuilderImpl;
 import org.yes.cart.domain.query.impl.SkuQueryBuilderImpl;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.CentralViewResolver;
 import org.yes.cart.web.support.util.HttpUtil;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +45,7 @@ import java.util.Map;
  */
 public class CentralViewResolverImpl implements CentralViewResolver {
 
+    private final ContentService contentService;
     private final CategoryService categoryService;
     private final AttributeService attributeService;
     private final LuceneQueryFactory luceneQueryFactory;
@@ -54,14 +53,17 @@ public class CentralViewResolverImpl implements CentralViewResolver {
     /**
      * Construct central view resolver.
      *
-     * @param categoryService    to product and sub categories quantity determination.
-     * @param attributeService   to allowed attributes name determination
+     * @param categoryService    for product, sub categories, quantity and ui template lookup.
+     * @param contentService     for content templates lookup
+     * @param attributeService   for allowed attributes name lookup
      * @param luceneQueryFactory luceneQueryFactory
      */
     public CentralViewResolverImpl(final CategoryService categoryService,
+                                   final ContentService contentService,
                                    final AttributeService attributeService,
-                                   final LuceneQueryFactory luceneQueryFactory ) {
+                                   final LuceneQueryFactory luceneQueryFactory) {
         this.categoryService = categoryService;
+        this.contentService = contentService;
         this.attributeService = attributeService;
         this.luceneQueryFactory = luceneQueryFactory;
     }
@@ -74,7 +76,7 @@ public class CentralViewResolverImpl implements CentralViewResolver {
      */
     public String resolveMainPanelRendererLabel(final Map parameters) {
 
-        final List allowedAttributeNames = attributeService.getAllAttributeCodes(); //list of product attributes plus brand and price
+        final List allowedAttributeNames = attributeService.getAllNavigatableAttributeCodes(); //list of product attributes plus brand and price
 
         if (parameters.containsKey(WebParametersKeys.SKU_ID)) {
             return CentralViewLabel.SKU;
@@ -91,11 +93,28 @@ public class CentralViewResolverImpl implements CentralViewResolver {
                 final boolean lookInSubCats = parameters.containsKey(WebParametersKeys.CATEGORY_PRODUCTS_RECURSIVE)
                         && Boolean.valueOf(String.valueOf(parameters.get(WebParametersKeys.CATEGORY_PRODUCTS_RECURSIVE)));
 
-                if (categoryService.getProductQuantity(categoryId, lookInSubCats) > 0) {
+                if (categoryService.isCategoryHasProducts(categoryId, lookInSubCats)) {
                     return CentralViewLabel.PRODUCTS_LIST;
-                } else if (categoryService.getChildCategories(categoryId).size() > 0) {
-                    return CentralViewLabel.SUBCATEGORIES_LIST;
+                } else {
+
+                    final String template = categoryService.getCategoryTemplate(categoryId);
+                    if (template != null) {
+                        return template;
+                    } else if (categoryService.isCategoryHasChildren(categoryId, false)) {
+                        return CentralViewLabel.SUBCATEGORIES_LIST;
+                    } else {
+                        return CentralViewLabel.CATEGORY;
+                    }
                 }
+            }
+        } else if (parameters.containsKey(WebParametersKeys.CONTENT_ID)) {
+            final long contentId = NumberUtils.toLong(HttpUtil.getSingleValue(parameters.get(WebParametersKeys.CONTENT_ID)));
+            if (contentId > 0) {
+                final String template = contentService.getContentTemplate(contentId);
+                if (template != null) {
+                    return template;
+                }
+                return CentralViewLabel.CONTENT;
             }
         }
         return CentralViewLabel.DEFAULT;

@@ -68,22 +68,33 @@ public class SeoBookmarkablePageParametersEncoder implements IPageParametersEnco
             final String rez;
             if (WebParametersKeys.CATEGORY_ID.equals(idName)) {
 
-                return bookmarkService.saveBookmarkForCategory(idValueToEncode);
+                rez = bookmarkService.saveBookmarkForCategory(idValueToEncode);
 
             } else if (WebParametersKeys.PRODUCT_ID.equals(idName)) {
 
-                return bookmarkService.saveBookmarkForProduct(idValueToEncode);
+                rez = bookmarkService.saveBookmarkForProduct(idValueToEncode);
 
             } else if (WebParametersKeys.SKU_ID.equals(idName)) {
 
-                return bookmarkService.saveBookmarkForSku(idValueToEncode);
+                rez = bookmarkService.saveBookmarkForSku(idValueToEncode);
+
+            } else if (WebParametersKeys.CONTENT_ID.equals(idName)) {
+
+                rez = bookmarkService.saveBookmarkForContent(idValueToEncode);
 
             } else {
+
                 rez = idValueToEncode;
 
             }
 
-            return rez;
+            /*
+             * Encoder must not return null as is results in NPE in wicket urlFor().
+             * If we get situations like this then probably we either:
+             * 1. Used seo uri instead of object ID in PageParameters of BookmarkableLink - which is fine
+             * 2. BookmarkService was unable to look up object by ID - which will be deals with upon rendering the page
+             */
+            return rez != null ? rez : idValueToEncode;
         }
 
         return idValueToEncode;
@@ -122,6 +133,11 @@ public class SeoBookmarkablePageParametersEncoder implements IPageParametersEnco
                 }
             } else if (WebParametersKeys.SKU_ID.equals(idName)) {
                 final String id = bookmarkService.getSkuForURI(idValueToDecode);
+                if (id != null) {
+                    return id;
+                }
+            } else if (WebParametersKeys.CONTENT_ID.equals(idName)) {
+                final String id = bookmarkService.getContentForURI(idValueToDecode);
                 if (id != null) {
                     return id;
                 }

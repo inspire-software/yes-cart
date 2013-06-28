@@ -99,7 +99,7 @@ public class TestAttributeServiceImpl extends BaseCoreDBTestCase {
      */
     @Test
     public void testFindAvailableAttributes2() {
-        List<String> allCodes = Arrays.asList("URI", "CATEGORY_ITEMS_PER_PAGE", "CATEGORY_IMAGE_RETRIEVE_STRATEGY");
+        List<String> allCodes = Arrays.asList("URI", "CATEGORY_ITEMS_PER_PAGE", "CATEGORY_IMAGE_RETRIEVE_STRATEGY", "CONTENT_BODY_ru", "CONTENT_BODY_en");
         // getByKey all attributes available for category
         List<Attribute> attributes = attributeService.findAvailableAttributes(AttributeGroupNames.CATEGORY, null);
         assertNotNull(attributes);
@@ -119,8 +119,17 @@ public class TestAttributeServiceImpl extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testAttributeService() {
+    public void testAllAttributeCodes() {
         List<String> codes = attributeService.getAllAttributeCodes();
+        assertNotNull(codes);
+        assertFalse(codes.isEmpty());
+        Map<String, String> map = attributeService.getAttributeNamesByCodes(codes);
+        assertNotNull(map);
+    }
+
+    @Test
+    public void testAllNavigatableAttributeCodes() {
+        List<String> codes = attributeService.getAllNavigatableAttributeCodes();
         assertNotNull(codes);
         assertFalse(codes.isEmpty());
         Map<String, String> map = attributeService.getAttributeNamesByCodes(codes);

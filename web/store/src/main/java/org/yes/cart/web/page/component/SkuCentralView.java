@@ -193,12 +193,7 @@ public class SkuCentralView extends AbstractCentralView {
 
         configureContext();
 
-        final PageParameters addToCartParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters())
-                .set(AddSkuToCartEventCommandImpl.CMD_KEY, sku.getCode());
-
         final String selectedLocale = getLocale().getLanguage();
-
-        final Class homePage = Application.get().getHomePage();
 
         final ObjectDecorator decorator = getDecorator();
 
@@ -221,7 +216,7 @@ public class SkuCentralView extends AbstractCentralView {
         final ProductAvailabilityModel pam = productAvailabilityStrategy.getAvailabilityModel(sku);
 
         add(
-                new BookmarkablePageLink(ADD_TO_CART_LINK, homePage, addToCartParameters)
+                getWicketSupportFacade().links().newAddToCartLink(ADD_TO_CART_LINK, sku.getCode(), null, getPage().getPageParameters())
                         .add(new Label(ADD_TO_CART_LINK_LABEL, pam.isInStock() || pam.isPerpetual() ?
                                 getLocalizer().getString("add.to.cart", this) :
                                 getLocalizer().getString("preorder.cart", this)))

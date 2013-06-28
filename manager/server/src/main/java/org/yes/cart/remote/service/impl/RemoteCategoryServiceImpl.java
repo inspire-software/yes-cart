@@ -57,9 +57,9 @@ public class RemoteCategoryServiceImpl
     /**
      * {@inheritDoc}
      */
-    public List<CategoryDTO> getAllWithAvailabilityFilter(final boolean withAvailalilityFiltering)
+    public List<CategoryDTO> getAllWithAvailabilityFilter(final boolean withAvailabilityFiltering)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return ((DtoCategoryService) getGenericDTOService()).getAllWithAvailabilityFilter(withAvailalilityFiltering);
+        return ((DtoCategoryService) getGenericDTOService()).getAllWithAvailabilityFilter(withAvailabilityFiltering);
     }
 
     /**

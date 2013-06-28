@@ -44,6 +44,7 @@ import org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl;
 import org.yes.cart.shoppingcart.impl.RemoveAllSkuFromCartCommandImpl;
 import org.yes.cart.shoppingcart.impl.RemoveSkuFromCartCommandImpl;
 import org.yes.cart.shoppingcart.impl.SetSkuQuantityToCartEventCommandImpl;
+import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.ShoppingCartPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
@@ -235,11 +236,8 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
      * @return link to show product and selected SKU
      */
     private Link getProductLink(final ProductSkuDecorator productSku) {
-        final Class homePage = Application.get().getHomePage();
-        final Link productLink = new BookmarkablePageLink(
-                PRODUCT_LINK, homePage,
-                new PageParameters().set(WebParametersKeys.SKU_ID, String.valueOf(productSku.getId()))
-        );
+        final Link productLink = ((AbstractWebPage) getPage()).getWicketSupportFacade().links()
+                .newProductSkuLink(PRODUCT_LINK, productSku.getId());
         productLink.add(new Label(PRODUCT_NAME_LABEL, productSku.getName(getLocale().getLanguage())).setEscapeModelStrings(false));
         return productLink;
     }

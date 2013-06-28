@@ -23,6 +23,8 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.web.page.component.BaseComponent;
+import org.yes.cart.web.service.wicketsupport.LinksSupport;
+import org.yes.cart.web.service.wicketsupport.PaginationSupport;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.util.WicketUtil;
 
@@ -79,20 +81,18 @@ public class ProductSorter extends BaseComponent {
      * @return product sort link
      */
     private Link getSortLink(final String id, final String sortOrder, final String sortField) {
-        final PageParameters params = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters());
+
+        final LinksSupport links = getWicketSupportFacade().links();
+        final PaginationSupport pagination = getWicketSupportFacade().pagination();
+
+        final PageParameters params = links.getFilteredCurrentParameters(getPage().getPageParameters());
         params.remove(WebParametersKeys.SORT);
         params.remove(WebParametersKeys.SORT_REVERSE);
         params.set(WebParametersKeys.PAGE, "0");
         params.add(sortOrder, sortField);
 
-        final Class homePage = Application.get().getHomePage();
-
-        final Link rez = new BookmarkablePageLink<Link>(id, homePage, params);
-        if (WicketUtil.isSelectedProductSortOnPage(getPage().getPageParameters(), sortOrder, sortField)) {
-
-            rez.add(new AttributeModifier("class", sortOrderActiveClass));
-
-        }
+        final Link rez = links.newLink(id, params);
+        pagination.markSelectedSortLink(rez, sortOrderActiveClass, getPage().getPageParameters(), sortOrder, sortField);
         return rez;
     }
 }

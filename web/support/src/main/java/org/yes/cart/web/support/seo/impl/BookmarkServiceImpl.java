@@ -22,7 +22,9 @@ import net.sf.ehcache.Element;
 import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.entity.decorator.impl.DecoratorUtil;
 import org.yes.cart.web.support.seo.BookmarkService;
 
@@ -35,35 +37,43 @@ public class BookmarkServiceImpl implements BookmarkService {
 
     private final Cache CATEGORY_DECODE_CACHE;
     private final Cache CATEGORY_ENCODE_CACHE;
+    private final Cache CONTENT_DECODE_CACHE;
+    private final Cache CONTENT_ENCODE_CACHE;
     private final Cache SKU_DECODE_CACHE;
     private final Cache SKU_ENCODE_CACHE;
     private final Cache PRODUCT_DECODE_CACHE;
     private final Cache PRODUCT_ENCODE_CACHE;
 
     private final CategoryService categoryService;
+    private final ContentService contentService;
     private final ProductService productService;
 
     /**
      * Constrcut bookmark service.
      *
      * @param categoryService category service
+     * @param contentService  content service
      * @param productService  product service
      * @param cacheManager    cache manager to use
      */
     public BookmarkServiceImpl(
             final CategoryService categoryService,
+            final ContentService contentService,
             final ProductService productService,
-            final CacheManager cacheManager
-    ) {
+            final CacheManager cacheManager) {
+
         this.categoryService = categoryService;
         this.productService = productService;
+        this.contentService = contentService;
 
-        CATEGORY_DECODE_CACHE = cacheManager.getCache("categoryDecodeCache");
-        CATEGORY_ENCODE_CACHE = cacheManager.getCache("categoryEncodeCache");
-        SKU_DECODE_CACHE = cacheManager.getCache("skuDecodeCache");
-        SKU_ENCODE_CACHE = cacheManager.getCache("skuEncodeCache");
-        PRODUCT_DECODE_CACHE = cacheManager.getCache("productDecodeCache");
-        PRODUCT_ENCODE_CACHE = cacheManager.getCache("productEncodeCache");
+        CATEGORY_DECODE_CACHE = cacheManager.getCache("org.yes.cart.web.seoCategoryDecodeCache");
+        CATEGORY_ENCODE_CACHE = cacheManager.getCache("org.yes.cart.web.seoCategoryEncodeCache");
+        CONTENT_DECODE_CACHE = cacheManager.getCache("org.yes.cart.web.seoContentDecodeCache");
+        CONTENT_ENCODE_CACHE = cacheManager.getCache("org.yes.cart.web.seoContentEncodeCache");
+        SKU_DECODE_CACHE = cacheManager.getCache("org.yes.cart.web.seoSkuDecodeCache");
+        SKU_ENCODE_CACHE = cacheManager.getCache("org.yes.cart.web.seoSkuEncodeCache");
+        PRODUCT_DECODE_CACHE = cacheManager.getCache("org.yes.cart.web.seoProductDecodeCache");
+        PRODUCT_ENCODE_CACHE = cacheManager.getCache("org.yes.cart.web.seoProductEncodeCache");
 
 
     }
@@ -97,6 +107,9 @@ public class BookmarkServiceImpl implements BookmarkService {
                 CATEGORY_DECODE_CACHE.put(new Element(seoData, bookmark));
             }
         }
+
+        ShopCodeContext.getLog(this).debug("Bookmark for category ID {} resolved to uri {}", bookmark, seoData);
+
         return seoData;
     }
 
@@ -110,10 +123,59 @@ public class BookmarkServiceImpl implements BookmarkService {
             final Long catId = categoryService.getCategoryIdBySeoUri(uri);
             if (catId != null) {
                 saveBookmarkForCategory(catId.toString());
-                return catId.toString();
+                id = catId.toString();
             }
-            return null;
         }
+
+        ShopCodeContext.getLog(this).debug("Bookmark category for uri {} resolved to ID {}", uri, id);
+
+        return id;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String saveBookmarkForContent(final String bookmark) {
+
+        String seoData = getStringFromValueWrapper(CONTENT_ENCODE_CACHE.get(bookmark));
+        if (seoData == null) {
+            final long contentId = NumberUtils.toLong(bookmark, 0L);
+            if (contentId > 0L) {
+
+                final String contentSeoUri = contentService.getSeoUriByContentId(contentId);
+                seoData = DecoratorUtil.encodeId(
+                        bookmark,
+                        contentSeoUri
+                );
+
+            }
+            if (seoData != null) {
+                CONTENT_ENCODE_CACHE.put(new Element(bookmark, seoData));
+                CONTENT_DECODE_CACHE.put(new Element(seoData, bookmark));
+            }
+        }
+
+        ShopCodeContext.getLog(this).debug("Bookmark for content ID {} resolved to uri {}", bookmark, seoData);
+
+        return seoData;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getContentForURI(final String uri) {
+
+        String id = getStringFromValueWrapper(CONTENT_DECODE_CACHE.get(uri));
+        if (id == null) {
+            final Long conId = contentService.getContentIdBySeoUri(uri);
+            if (conId != null) {
+                saveBookmarkForContent(conId.toString());
+                id = conId.toString();
+            }
+        }
+
+        ShopCodeContext.getLog(this).debug("Bookmark content for uri {} resolved to ID {}", uri, id);
+
         return id;
     }
 
@@ -137,6 +199,9 @@ public class BookmarkServiceImpl implements BookmarkService {
                 PRODUCT_DECODE_CACHE.put(new Element(seoData, bookmark));
             }
         }
+
+        ShopCodeContext.getLog(this).debug("Bookmark for product ID {} resolved to uri {}", bookmark, seoData);
+
         return seoData;
 
     }
@@ -160,6 +225,9 @@ public class BookmarkServiceImpl implements BookmarkService {
                 PRODUCT_DECODE_CACHE.put(new Element(seoData, bookmark));
             }
         }
+
+        ShopCodeContext.getLog(this).debug("Bookmark for product ID {} resolved to uri {}", bookmark, seoData);
+
         return seoData;
 
     }
@@ -174,10 +242,12 @@ public class BookmarkServiceImpl implements BookmarkService {
             final Long prodId = productService.getProductIdBySeoUri(uri);
             if (prodId != null) {
                 saveBookmarkForProduct(prodId.toString());
-                return prodId.toString();
+                id = prodId.toString();
             }
-            return null;
         }
+
+        ShopCodeContext.getLog(this).debug("Bookmark product for uri {} resolved to ID {}", uri, id);
+
         return id;
 
     }
@@ -202,6 +272,9 @@ public class BookmarkServiceImpl implements BookmarkService {
                 SKU_DECODE_CACHE.put(new Element(seoData, bookmark));
             }
         }
+
+        ShopCodeContext.getLog(this).debug("Bookmark for SKU ID {} resolved to uri {}", bookmark, seoData);
+
         return seoData;
 
     }
@@ -216,10 +289,12 @@ public class BookmarkServiceImpl implements BookmarkService {
             final Long skuId = productService.getProductSkuIdBySeoUri(uri);
             if (skuId != null) {
                 saveBookmarkForSku(skuId.toString());
-                return skuId.toString();
+                id = skuId.toString();
             }
-            return null;
         }
+
+        ShopCodeContext.getLog(this).debug("Bookmark SKU for uri {} resolved to ID {}", uri, id);
+
         return id;
 
     }
