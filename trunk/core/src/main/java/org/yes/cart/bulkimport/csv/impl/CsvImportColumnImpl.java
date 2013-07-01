@@ -92,7 +92,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
 
     private Pattern getPattern() {
         if (pattern == null && StringUtils.isNotBlank(valueRegEx)) {
-            pattern = Pattern.compile(valueRegEx, Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE);
+            pattern = Pattern.compile(valueRegEx, Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
         }
         return pattern;
     }

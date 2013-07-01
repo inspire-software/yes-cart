@@ -60,7 +60,7 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     private Set<ProductEnsebleOption> ensebleOption = new HashSet<ProductEnsebleOption>(0);
     private Set<ProductAssociation> productAssociations = new HashSet<ProductAssociation>(0);
     private Boolean featured;
-    private SeoEntity seo;
+    private SeoEntity seoInternal;
     private Date createdTimestamp;
     private Date updatedTimestamp;
     private String createdBy;
@@ -314,12 +314,12 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
             @AttributeOverride(name = "title", column = @Column(name = "TITLE")),
             @AttributeOverride(name = "metakeywords", column = @Column(name = "METAKEYWORDS")),
             @AttributeOverride(name = "metadescription", column = @Column(name = "METADESCRIPTION"))})
-    public SeoEntity getSeo() {
-        return this.seo;
+    public SeoEntity getSeoInternal() {
+        return this.seoInternal;
     }
 
-    public void setSeo(SeoEntity seo) {
-        this.seo = seo;
+    public void setSeoInternal(SeoEntity seo) {
+        this.seoInternal = seo;
     }
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -551,11 +551,20 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         return this.getClass().getName() + this.getProductId();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
+    /** {@inheritDoc} */
+    public Seo getSeo() {
+        SeoEntity seo = getSeoInternal();
+        if (seo == null) {
+            seo = new SeoEntity();
+            this.setSeoInternal(seo);
+        }
+        return seo;
+    }
+
+    /** {@inheritDoc} */
     public void setSeo(final Seo seo) {
-        this.seo = (SeoEntity) seo;
+        this.setSeoInternal((SeoEntity) seo);
     }
 
 

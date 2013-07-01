@@ -49,7 +49,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     private Date availablefrom;
     private Date availableto;
     private Collection<AttrValueCategory> attributes = new ArrayList<AttrValueCategory>(0);
-    private SeoEntity seo;
+    private SeoEntity seoInternal;
     private Set<ProductCategory> productCategory = new HashSet<ProductCategory>(0);
     private Boolean navigationByAttributes;
     private Boolean navigationByBrand;
@@ -171,12 +171,12 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
             @AttributeOverride(name = "metakeywords", column = @Column(name = "METAKEYWORDS")),
             @AttributeOverride(name = "metadescription", column = @Column(name = "METADESCRIPTION"))})
     @FieldBridge(impl = org.yes.cart.domain.entity.bridge.SeoBridge.class)
-    public SeoEntity getSeo() {
-        return this.seo;
+    public SeoEntity getSeoInternal() {
+        return this.seoInternal;
     }
 
-    public void setSeo(SeoEntity seo) {
-        this.seo = seo;
+    public void setSeoInternal(SeoEntity seo) {
+        this.seoInternal = seo;
     }
 
     @OneToMany(cascade = javax.persistence.CascadeType.ALL, fetch = FetchType.LAZY)
@@ -383,11 +383,20 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         return new ArrayList<AttrValue>(attributes);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
+    /** {@inheritDoc} */
+    public Seo getSeo() {
+        SeoEntity seo = getSeoInternal();
+        if (seo == null) {
+            seo = new SeoEntity();
+            this.setSeoInternal(seo);
+        }
+        return seo;
+    }
+
+    /** {@inheritDoc} */
     public void setSeo(final Seo seo) {
-        this.seo = (SeoEntity) seo;
+        this.setSeoInternal((SeoEntity) seo);
     }
 
 

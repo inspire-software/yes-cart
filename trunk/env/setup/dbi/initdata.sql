@@ -102,12 +102,20 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
    'Quantity of featured items to show on category page',  1006, 1002);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
-  VALUES (  11060,  'CONTENT_BODY_en', 'CONTENT_BODY_en',  0,  NULL,  'Content body (en)',
-  'Content body in English (en)',  1011, 1002);
+  VALUES (  11060,  'CONTENT_BODY_en_1', 'CONTENT_BODY_en_1',  0,  NULL,  'Content body (en)',
+  'Content body in English (en). 1st 4000 characters',  1011, 1002);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
-  VALUES (  11061,  'CONTENT_BODY_ru', 'CONTENT_BODY_ru',  0,  NULL,  'Текст контента (ru)',
-  'Текст контента на Русском (ru)',  1011, 1002);
+  VALUES (  11061,  'CONTENT_BODY_en_2', 'CONTENT_BODY_en_2',  0,  NULL,  'Content body (en)',
+  'Content body in English (en). 2nd 4000 characters',  1011, 1002);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11070,  'CONTENT_BODY_ru_1', 'CONTENT_BODY_ru_1',  0,  NULL,  'Текст контента (ru)',
+  'Текст контента на Русском (ru). 1-е 4000 символов.',  1011, 1002);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11071,  'CONTENT_BODY_ru_2', 'CONTENT_BODY_ru_2',  0,  NULL,  'Текст контента (ru)',
+  'Текст контента на Русском (ru). 2-е 4000 символов.',  1011, 1002);
 
 
 
@@ -192,7 +200,7 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
 
 INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID) VALUES (10000, 0, 0, 'SHOP10 Content', 'SHOP10 Content','content', 'SHOP10');
 INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10001, 10000, 0, 'License', 'License Page','content', 'License','license');
-INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12010,'CONTENT_BODY_en','<pre>Copyright 2009 Igor Azarnyi, Denys Pavlov
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12010,'CONTENT_BODY_en_1','<pre>Copyright 2009 Igor Azarnyi, Denys Pavlov
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -206,7 +214,7 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
     See the License for the specific language governing permissions and
     limitations under the License.
 </pre>',10001,'12010_CAV');
-INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12011,'CONTENT_BODY_ru','<pre>Copyright 2009 Igor Azarnyi, Denys Pavlov
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12011,'CONTENT_BODY_ru_1','<pre>Copyright 2009 Igor Azarnyi, Denys Pavlov
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

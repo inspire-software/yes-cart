@@ -31,10 +31,13 @@
             <mx:RichTextEditor width="600" height="400" id="valueTextInput" visible="{!showRaw}" includeInLayout="{!showRaw}"/>
             <mx:TextArea width="600" height="400" id="valueTextInputRaw" visible="{showRaw}" includeInLayout="{showRaw}"/>
         </mx:FormItem>
+        <mx:FormItem label="">
+            <mx:Text text="@Resource(bundle='AttributesManagementPanel',key='value.html.caution')"/>
+        </mx:FormItem>
     </mx:Form>
     <mx:ControlBar width="100%" horizontalAlign="right">
-        <mx:RadioButton groupName="mode" value="raw" label="@Resource(bundle='AttributesManagementPanel',key='rawHtmlEdit')"/>
-        <mx:RadioButton groupName="mode" value="rich" label="@Resource(bundle='AttributesManagementPanel',key='richHtmlEdit')" selected="true"/>
+        <mx:RadioButton groupName="mode" value="raw" label="@Resource(bundle='AttributesManagementPanel',key='rawHtmlEdit')" selected="true"/>
+        <mx:RadioButton groupName="mode" value="rich" label="@Resource(bundle='AttributesManagementPanel',key='richHtmlEdit')"/>
         <mx:Button id="btnSave"
                    width="94"
                    label="@Resource(bundle='AttributesManagementPanel',key='save')"/>
@@ -46,11 +49,11 @@
     </mx:ControlBar>
 
     <mx:RadioButtonGroup id="mode" itemClick="onModeSelectClick(event);"/>
-    <mx:Boolean id="showRaw">false</mx:Boolean>
-
+    <mx:Boolean id="showRaw">true</mx:Boolean>
 
     <mx:Script><![CDATA[
         import mx.binding.utils.BindingUtils;
+        import mx.binding.utils.ChangeWatcher;
         import mx.events.ItemClickEvent;
         import mx.managers.PopUpManager;
 
@@ -60,18 +63,17 @@
         private var _code:String;
         private var _attributeGroup:String;
 
+        private var _cw1:ChangeWatcher;
+        private var _cw2:ChangeWatcher;
+
 
         private function init():void {
 
-            BindingUtils.bindProperty(valueTextInput, "htmlText", this, "value");
-
-            BindingUtils.bindProperty(this, "value", valueTextInput, "htmlText");
-
-
-            BindingUtils.bindProperty(valueTextInputRaw, "text", this, "value");
-
-            BindingUtils.bindProperty(this, "value", valueTextInputRaw, "text");
-
+            if (showRaw) {
+                bindInput(valueTextInputRaw, "text");
+            } else {
+                bindInput(valueTextInput, "htmlText");
+            }
 
             this.title = windowTitle;
 
@@ -80,6 +82,18 @@
 
 
         }
+
+        private function bindInput(control:Object, prop:String):void {
+            if (_cw1 != null) {
+                _cw1.unwatch();
+            }
+            if (_cw2 != null) {
+                _cw2.unwatch();
+            }
+            _cw1 = BindingUtils.bindProperty(control, prop, this, "value");
+            _cw2 = BindingUtils.bindProperty(this, "value", control, prop);
+        }
+
 
         public function getButtonSave():Button {
             return this.btnSave;
@@ -146,9 +160,9 @@
         private function onModeSelectClick(event:ItemClickEvent):void {
             this.showRaw = event.currentTarget.selectedValue == "raw";
             if (this.showRaw) {
-                valueTextInputRaw.text = this.value;
+                bindInput(valueTextInputRaw, "text");
             } else {
-                valueTextInput.htmlText = this.value;
+                bindInput(valueTextInput, "htmlText");
             }
         }
         ]]>

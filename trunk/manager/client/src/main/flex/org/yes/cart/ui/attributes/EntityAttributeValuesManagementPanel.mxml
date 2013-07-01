@@ -114,7 +114,11 @@
         /**
          * Label function for id column
          */
-        private function idLabelFunction(item:Object, column:DataGridColumn):String {
+        private function idLabelFunctionInternal(item:Object, column:DataGridColumn):String {
+            return idLabelFunction(item, column);
+        }
+
+        protected function idLabelFunction(item:Object, column:DataGridColumn):String {
             if (DomainUtils.isNew(item, 'attrvalueId')) {
                 return "*";
             }
@@ -281,7 +285,7 @@
                 <mx:DataGridColumn id="attrvalueIdColumn"
                                    headerText="@Resource(bundle='AttributesManagementPanel',key='attribute_id')"
                                    dataField="attrvalueId" width="40" editable="false"
-                                   labelFunction="idLabelFunction"
+                                   labelFunction="idLabelFunctionInternal"
                         />
                 <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='code')"
                                    dataField="attributeDTO.code" width="180" editable="false"

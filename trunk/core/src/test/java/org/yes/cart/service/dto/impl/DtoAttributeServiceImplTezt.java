@@ -88,7 +88,7 @@ public class DtoAttributeServiceImplTezt extends BaseCoreDBTestCase {
     public void testFindByAttributeGroupCode() throws Exception {
         List<AttributeDTO> dtos = dtoAttributeService.findByAttributeGroupCode("CATEGORY");
         assertNotNull(dtos);
-        assertEquals(5, dtos.size());
+        assertEquals(7, dtos.size());
         dtos = dtoAttributeService.findByAttributeGroupCode("NONEXISTINGGROUP");
         assertNotNull(dtos);
         assertTrue(dtos.isEmpty());
@@ -101,7 +101,7 @@ public class DtoAttributeServiceImplTezt extends BaseCoreDBTestCase {
                 Collections.singletonList("CATEGORY_ITEMS_PER_PAGE")
         );
         assertNotNull(dtos);
-        assertEquals(4, dtos.size());
+        assertEquals(6, dtos.size());
         for (AttributeDTO dto : dtos) {
             assertFalse("CATEGORY_ITEMS_PER_PAGE".equals(dto.getCode()));
         }

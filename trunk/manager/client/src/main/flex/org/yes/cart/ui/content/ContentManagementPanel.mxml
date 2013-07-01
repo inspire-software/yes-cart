@@ -16,7 +16,7 @@
   -->
 
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
-           xmlns:cat="org.yes.cart.ui.category.*"
+           xmlns:con="org.yes.cart.ui.content.*"
            xmlns:seo="org.yes.cart.ui.seo.*" xmlns:yci18n="org.yes.cart.ui.i18n.*"
            width="100%" height="100%"
            creationComplete="init();">
@@ -56,8 +56,9 @@
         import org.yes.cart.util.DomainUtils;
 
         private var TAB_SUMMARY_IDX:int = 0;
-        private var TAB_IMAGE_IDX:int = 1;
-        private var TAB_ATTRIB_IDX:int = 2;
+        private var TAB_CONTENT_IDX:int = 1;
+        private var TAB_IMAGE_IDX:int = 2;
+        private var TAB_ATTRIB_IDX:int = 3;
 
 
         [Bindable]
@@ -118,6 +119,12 @@
                 case TAB_SUMMARY_IDX:
                 {
                     summaryTabSelected();
+                    break;
+                }
+
+                case TAB_CONTENT_IDX:
+                {
+                    contentTabSelected();
                     break;
                 }
 
@@ -301,9 +308,18 @@
         private function imagesTabSelected():void {
             Debug.trace("INFO Category Images tab selected for category id" + selectedCategoryDTOImpl.categoryId);
             if (categorySelected && this.selectedCategoryDTOImpl != null) {
-                catImagesPanel.category = this.selectedCategoryDTOImpl;
+                conImagesPanel.category = this.selectedCategoryDTOImpl;
             } else {
-                catImagesPanel.category = null;
+                conImagesPanel.category = null;
+            }
+        }
+
+        private function contentTabSelected():void {
+            Debug.trace("INFO Category Content tab selected for category id" + selectedCategoryDTOImpl.categoryId);
+            if (categorySelected && this.selectedCategoryDTOImpl != null) {
+                contBodyPanel.category = this.selectedCategoryDTOImpl;
+            } else {
+                contBodyPanel.category = null;
             }
         }
 
@@ -511,8 +527,9 @@
                             </mx:VBox>
                         </mx:Canvas>
 
-                        <cat:CategoryImageAttributesPanel id="catImagesPanel" enabled="{selectedCategoryDTOImpl != null &amp;&amp; selectedCategoryDTOImpl.categoryId > 0}"/>
-                        <cat:CategoryNonImageAttributesPanel id="attrValuesTabPanel" enabled="{selectedCategoryDTOImpl != null &amp;&amp; selectedCategoryDTOImpl.categoryId > 0}"/>
+                        <con:ContentBodyAttributesPanel id="contBodyPanel" enabled="{selectedCategoryDTOImpl != null &amp;&amp; selectedCategoryDTOImpl.categoryId > 0}"/>
+                        <con:ContentImageAttributesPanel id="conImagesPanel" enabled="{selectedCategoryDTOImpl != null &amp;&amp; selectedCategoryDTOImpl.categoryId > 0}"/>
+                        <con:ContentNonImageAttributesPanel id="attrValuesTabPanel" enabled="{selectedCategoryDTOImpl != null &amp;&amp; selectedCategoryDTOImpl.categoryId > 0}"/>
                     </mx:TabNavigator>
 
                 </mx:HDividedBox>

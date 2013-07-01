@@ -534,29 +534,6 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
     }
 
     /**
-     * Get the look up query parameters, if  useMasterObject set to true  masterObject will be added
-     * to the end of rowParameters array
-     *
-     * @param useMasterObject use master object flag
-     * @param masterObject    master object
-     * @param rowParameters   original parameters for lookup query.
-     * @return parameters for look up query
-     */
-    private Object[] getQueryParameters(boolean useMasterObject, Object masterObject, Object... rowParameters) {
-        if (rowParameters != null && rowParameters.length == 1 && rowParameters[0] == null) {
-            rowParameters = new Object[0];
-        }
-        if (useMasterObject) {
-            Object[] params = new Object[rowParameters.length + 1];
-            System.arraycopy(rowParameters, 0, params, 0, rowParameters.length);
-            params[params.length - 1] = masterObject;
-            return params;
-        }
-        return rowParameters;
-
-    }
-
-    /**
      * IoC. Set the {@link org.yes.cart.dao.GenericDAO} instance.
      *
      * @param genericDAO {@link GenericDAO} to use.

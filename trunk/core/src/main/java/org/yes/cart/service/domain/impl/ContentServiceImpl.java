@@ -154,10 +154,16 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
      */
     @Cacheable(value = CACHE_NAME)
     public String getContentBody(final long contentId, final String locale) {
-        final String attributeKey = "CONTENT_BODY_" + locale;
+        final String attributeKey = "CONTENT_BODY_" + locale + "_%";
         final List<Object> bodyList = categoryDao.findQueryObjectByNamedQuery("CONTENTBODY.BY.CONTENTID", contentId, attributeKey, new Date());
-        if (bodyList != null && bodyList.size() == 1) {
-            return (String) bodyList.get(0);
+        if (bodyList != null && bodyList.size() > 0) {
+            final StringBuilder content = new StringBuilder();
+            for (final Object bodyPart : bodyList) {
+                if (StringUtils.isNotBlank((String) bodyPart)) {
+                    content.append(bodyPart);
+                }
+            }
+            return content.toString();
         }
         return null;
     }
