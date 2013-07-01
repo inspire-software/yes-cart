@@ -1834,10 +1834,19 @@ public void setRangeList(final RangeList rangeList) {
     }
 
     /** {@inheritDoc} */
-    public void setSeo(final Seo seo) {
-        this.seo = (SeoEntity) seo;
+    public Seo getSeo() {
+        SeoEntity seo = getSeoInternal();
+        if (seo == null) {
+            seo = new SeoEntity();
+            this.setSeoInternal(seo);
+        }
+        return seo;
     }
 
+    /** {@inheritDoc} */
+    public void setSeo(final Seo seo) {
+        this.setSeoInternal((SeoEntity) seo);
+    }
 
                 ]]>
             </meta>
@@ -1875,7 +1884,7 @@ public void setRangeList(final RangeList rangeList) {
                 <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.AttrValueCategory" />
             </bag>
 
-            <component name="seo" class="org.yes.cart.domain.entity.impl.SeoEntity">
+            <component name="seoInternal" class="org.yes.cart.domain.entity.impl.SeoEntity">
                 <meta attribute="implements">org.yes.cart.domain.entity.Seo</meta>
                 <meta attribute="class-code">
                 <![CDATA[
@@ -2127,9 +2136,20 @@ public void setRangeList(final RangeList rangeList) {
         return this.getClass().getName() + this.getProductId();
     }
 
+
+    /** {@inheritDoc} */
+    public Seo getSeo() {
+        SeoEntity seo = getSeoInternal();
+        if (seo == null) {
+            seo = new SeoEntity();
+            this.setSeoInternal(seo);
+        }
+        return seo;
+    }
+
     /** {@inheritDoc} */
     public void setSeo(final Seo seo) {
-        this.seo = (SeoEntity) seo;
+        this.setSeoInternal((SeoEntity) seo);
     }
 
                 ]]>
@@ -2233,7 +2253,7 @@ public void setRangeList(final RangeList rangeList) {
 
 
 
-            <component name="seo" class="org.yes.cart.domain.entity.impl.SeoEntity">
+            <component name="seoInternal" class="org.yes.cart.domain.entity.impl.SeoEntity">
                 <meta attribute="implements">org.yes.cart.domain.entity.Seo</meta>
                 <property name="uri" type="string" column="URI" length="255" not-null="false"/>
                 <property name="title" type="string" column="TITLE" length="255" not-null="false"/>
@@ -2392,8 +2412,18 @@ public void setRangeList(final RangeList rangeList) {
     }
 
     /** {@inheritDoc} */
+    public Seo getSeo() {
+        SeoEntity seo = getSeoInternal();
+        if (seo == null) {
+            seo = new SeoEntity();
+            this.setSeoInternal(seo);
+        }
+        return seo;
+    }
+
+    /** {@inheritDoc} */
     public void setSeo(final Seo seo) {
-        this.seo = (SeoEntity) seo;
+        this.setSeoInternal((SeoEntity) seo);
     }
 
     ]]>
@@ -2452,7 +2482,7 @@ public void setRangeList(final RangeList rangeList) {
                 <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.SkuWarehouse" />
             </bag>
 
-            <component name="seo" class="org.yes.cart.domain.entity.impl.SeoEntity">
+            <component name="seoInternal" class="org.yes.cart.domain.entity.impl.SeoEntity">
                 <meta attribute="implements">org.yes.cart.domain.entity.Seo</meta>
                 <property name="uri" type="string" column="URI" length="255" not-null="false"/>
                 <property name="title" type="string" column="TITLE" length="255" not-null="false"/>
@@ -2958,8 +2988,18 @@ public void setRangeList(final RangeList rangeList) {
     }
 
     /** {@inheritDoc} */
+    public Seo getSeo() {
+        SeoEntity seo = getSeoInternal();
+        if (seo == null) {
+            seo = new SeoEntity();
+            this.setSeoInternal(seo);
+        }
+        return seo;
+    }
+
+    /** {@inheritDoc} */
     public void setSeo(final Seo seo) {
-        this.seo = (SeoEntity) seo;
+        this.setSeoInternal((SeoEntity) seo);
     }
 
 
@@ -3016,7 +3056,7 @@ public void setRangeList(final RangeList rangeList) {
                 <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.AttrValueShop"/>
             </bag>
 
-            <component name="seo" class="org.yes.cart.domain.entity.impl.SeoEntity">
+            <component name="seoInternal" class="org.yes.cart.domain.entity.impl.SeoEntity">
                 <meta attribute="implements">org.yes.cart.domain.entity.Seo</meta>
                 <property name="uri" type="string" column="URI" length="255" not-null="false"/>
                 <property name="title" type="string" column="TITLE" length="255" not-null="false"/>
@@ -4594,9 +4634,16 @@ public void setRangeList(final RangeList rangeList) {
     <query name="CONTENTBODY.BY.CONTENTID">
         <![CDATA[
        select av.val from CategoryEntity c, AttrValueEntityCategory av
-       where c.categoryId = av.category.categoryId and c.categoryId = ?1 and av.attribute.code = ?2
+       where c.categoryId = av.category.categoryId and c.categoryId = ?1 and av.attribute.code like ?2
        and (c.availablefrom < ?3 OR c.availablefrom IS NULL)
        and (c.availableto > ?3 OR c.availableto IS NULL)
+       order by av.attribute.code
+       ]]>
+    </query>
+
+    <query name="CONTENTBODY.ATTRIBUTES">
+        <![CDATA[
+       select a from AttributeEntity a where a.code like ?1 order by a.code asc
        ]]>
     </query>
 
@@ -4889,13 +4936,13 @@ public void setRangeList(final RangeList rangeList) {
 
     <query name="CATEGORY.BY.SEO.URI">
         <![CDATA[
-                  select c from CategoryEntity c  where c.seo.uri = ?1
+                  select c from CategoryEntity c  where c.seoInternal.uri = ?1
        ]]>
     </query>
 
     <query name="CATEGORY.ID.BY.SEO.URI">
         <![CDATA[
-                  select c.categoryId from CategoryEntity c  where c.seo.uri = ?1
+                  select c.categoryId from CategoryEntity c  where c.seoInternal.uri = ?1
        ]]>
     </query>
 
@@ -4907,7 +4954,7 @@ public void setRangeList(final RangeList rangeList) {
 
     <query name="SEO.URI.BY.CATEGORY.ID">
         <![CDATA[
-                  select c.seo.uri from CategoryEntity c  where c.categoryId = ?1
+                  select c.seoInternal.uri from CategoryEntity c  where c.categoryId = ?1
        ]]>
     </query>
 
@@ -4926,38 +4973,38 @@ public void setRangeList(final RangeList rangeList) {
 
     <query name="PRODUCT.BY.SEO.URI">
         <![CDATA[
-                 select p from ProductEntity p   where p.seo.uri = ?1
+                 select p from ProductEntity p   where p.seoInternal.uri = ?1
         ]]>
     </query>
 
     <query name="PRODUCT.ID.BY.SEO.URI">
         <![CDATA[
-                 select p.productId from ProductEntity p   where p.seo.uri = ?1
+                 select p.productId from ProductEntity p   where p.seoInternal.uri = ?1
         ]]>
     </query>
 
     <query name="SEO.URI.BY.PRODUCT.ID">
         <![CDATA[
-                 select p.seo.uri from ProductEntity p   where p.productId = ?1
+                 select p.seoInternal.uri from ProductEntity p   where p.productId = ?1
         ]]>
     </query>
 
 
     <query name="SKU.BY.SEO.URI">
         <![CDATA[
-                 select ps from ProductSkuEntity ps   where ps.seo.uri = ?1
+                 select ps from ProductSkuEntity ps   where ps.seoInternal.uri = ?1
         ]]>
     </query>
 
     <query name="SKU.ID.BY.SEO.URI">
         <![CDATA[
-                 select ps.skuId from ProductSkuEntity ps   where ps.seo.uri = ?1
+                 select ps.skuId from ProductSkuEntity ps   where ps.seoInternal.uri = ?1
         ]]>
     </query>
 
     <query name="SEO.URI.BY.SKU.ID">
         <![CDATA[
-                 select ps.seo.uri from ProductSkuEntity ps   where ps.skuId = ?1
+                 select ps.seoInternal.uri from ProductSkuEntity ps   where ps.skuId = ?1
         ]]>
     </query>
 

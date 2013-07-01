@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.dto;
 
+import org.yes.cart.domain.dto.AttrValueDTO;
 import org.yes.cart.domain.dto.CategoryDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
@@ -53,6 +54,28 @@ public interface DtoContentService extends GenericDTOService<CategoryDTO>, Gener
      *          in case of configuration problem
      */
     List<CategoryDTO> getAllWithAvailabilityFilter(final long shopId, boolean withAvailabilityFiltering)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+
+    /**
+     * Get the business entity attributes values, that contains two set of attribute values: with values
+     * and with empty values for available attributes. Example:
+     * category type has attr1, attr2 and attr3, particular category
+     * has attr1 and attr3 with values, so service return 3 records:
+     * attr1 - value
+     * attr2 - empty value
+     * attr3 value.
+     * <p/>
+     * This service mostly for UI.
+     *
+     * @param entityPk entity pk value
+     * @return list of attribute values
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case of configuration errors
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration errors
+     */
+    List<? extends AttrValueDTO> getEntityContentAttributes(long entityPk)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 

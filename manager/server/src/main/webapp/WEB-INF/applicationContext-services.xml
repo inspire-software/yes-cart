@@ -695,6 +695,14 @@
                       -->
                     <list/>
                 </entry>
+                <entry key="Content">
+                    <!--
+                        Content import to upload static content for shops.
+                    -->
+                    <list>
+                        <value>contentnames.xml</value>
+                    </list>
+                </entry>
                 <entry key="Shops and Warehouses">
                     <!-- This is just example for completeness -->
                     <list>

@@ -32,7 +32,7 @@ public interface GenericAttrValueService {
     /**
      * Get the business entity attributes values, that contains two set of attribute values: with values
      * and with empty values for available attributes. Example:
-     * category type has attr1, attr2 and attr3, partucular category
+     * category type has attr1, attr2 and attr3, particular category
      * has attr1 and attr3 with values, so service return 3 records:
      * attr1 - value
      * attr2 - empty value
@@ -43,9 +43,9 @@ public interface GenericAttrValueService {
      * @param entityPk entity pk value
      * @return list of attribute values
      * @throws org.yes.cart.exception.UnableToCreateInstanceException
-     *          in case of configuration erros
+     *          in case of configuration errors
      * @throws org.yes.cart.exception.UnmappedInterfaceException
-     *          in case of configuration erros
+     *          in case of configuration errors
      */
     List<? extends AttrValueDTO> getEntityAttributes(long entityPk)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;

@@ -71,6 +71,13 @@ public class RemoteContentServiceImpl
     /**
      * {@inheritDoc}
      */
+    public List<? extends AttrValueDTO> getEntityContentAttributes(final long entityPk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return ((DtoContentService) getGenericDTOService()).getEntityContentAttributes(entityPk);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public AttrValueDTO updateEntityAttributeValue(final AttrValueDTO attrValueDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return ((DtoContentService) getGenericDTOService()).updateEntityAttributeValue(attrValueDTO);
     }

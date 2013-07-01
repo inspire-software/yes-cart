@@ -43,7 +43,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private Collection<ShopAdvPlace> advertisingPlaces = new ArrayList<ShopAdvPlace>(0);
     private Collection<ShopDiscount> shopDiscountRules = new ArrayList<ShopDiscount>(0);
     private Collection<AttrValueShop> attributes = new ArrayList<AttrValueShop>(0);
-    private SeoEntity seo;
+    private SeoEntity seoInternal;
     private Collection<ShopCategory> shopCategory = new ArrayList<ShopCategory>(0);
     private Date createdTimestamp;
     private Date updatedTimestamp;
@@ -153,12 +153,12 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
             @AttributeOverride(name = "title", column = @Column(name = "TITLE")),
             @AttributeOverride(name = "metakeywords", column = @Column(name = "METAKEYWORDS")),
             @AttributeOverride(name = "metadescription", column = @Column(name = "METADESCRIPTION"))})
-    public SeoEntity getSeo() {
-        return this.seo;
+    public SeoEntity getSeoInternal() {
+        return this.seoInternal;
     }
 
-    public void setSeo(SeoEntity seo) {
-        this.seo = seo;
+    public void setSeoInternal(SeoEntity seo) {
+        this.seoInternal = seo;
     }
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -348,11 +348,20 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return "";
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
+    /** {@inheritDoc} */
+    public Seo getSeo() {
+        SeoEntity seo = getSeoInternal();
+        if (seo == null) {
+            seo = new SeoEntity();
+            this.setSeoInternal(seo);
+        }
+        return seo;
+    }
+
+    /** {@inheritDoc} */
     public void setSeo(final Seo seo) {
-        this.seo = (SeoEntity) seo;
+        this.setSeoInternal((SeoEntity) seo);
     }
 
 

@@ -52,7 +52,7 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
     private Collection<SkuPrice> skuPrice = new ArrayList<SkuPrice>(0);
     private Collection<AttrValueProductSku> attributes = new ArrayList<AttrValueProductSku>(0);
     private Collection<SkuWarehouse> quantityOnWarehouse = new ArrayList<SkuWarehouse>(0);
-    private SeoEntity seo;
+    private SeoEntity seoInternal;
     private Date createdTimestamp;
     private Date updatedTimestamp;
     private String createdBy;
@@ -167,12 +167,12 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
             @AttributeOverride(name = "title", column = @Column(name = "TITLE")),
             @AttributeOverride(name = "metakeywords", column = @Column(name = "METAKEYWORDS")),
             @AttributeOverride(name = "metadescription", column = @Column(name = "METADESCRIPTION"))})
-    public SeoEntity getSeo() {
-        return this.seo;
+    public SeoEntity getSeoInternal() {
+        return this.seoInternal;
     }
 
-    public void setSeo(SeoEntity seo) {
-        this.seo = seo;
+    public void setSeoInternal(SeoEntity seo) {
+        this.seoInternal = seo;
     }
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -293,11 +293,20 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         return new ArrayList<AttrValue>(attributes);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
+    /** {@inheritDoc} */
+    public Seo getSeo() {
+        SeoEntity seo = getSeoInternal();
+        if (seo == null) {
+            seo = new SeoEntity();
+            this.setSeoInternal(seo);
+        }
+        return seo;
+    }
+
+    /** {@inheritDoc} */
     public void setSeo(final Seo seo) {
-        this.seo = (SeoEntity) seo;
+        this.setSeoInternal((SeoEntity) seo);
     }
 
     @Transient
