@@ -108,8 +108,8 @@
 
         private var shopManagerGlobal:ShopManagerGlobal;
 
-        const contentMenu:int = 2;
-        const storeMenu:int = 7;
+        private const contentMenu:int = 2;
+        private const storeMenu:int = 7;
 
         private var currentIndex:Number;
         private var shops:Object;
