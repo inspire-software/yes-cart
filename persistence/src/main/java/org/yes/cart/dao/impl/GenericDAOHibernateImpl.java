@@ -30,6 +30,8 @@ import org.hibernate.search.indexes.interceptor.IndexingOverride;
 import org.hibernate.search.util.impl.ClassLoaderHelper;
 import org.hibernate.search.util.impl.HibernateHelper;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
@@ -40,6 +42,9 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
@@ -50,10 +55,14 @@ import java.util.List;
 public class GenericDAOHibernateImpl<T, PK extends Serializable>
         implements GenericDAO<T, PK> {
 
-    final private Class<T> persistentClass;
-    final private EntityFactory entityFactory;
-    final private EntityIndexingInterceptor entityIndexingInterceptor;
+    private static final Logger LOG = LoggerFactory.getLogger(GenericDAOHibernateImpl.class);
+
+    private final Class<T> persistentClass;
+    private final EntityFactory entityFactory;
+    private final EntityIndexingInterceptor entityIndexingInterceptor;
     protected SessionFactory sessionFactory;
+
+    private TaskExecutor indexExecutor;
 
 
     /**
@@ -65,6 +74,14 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
 
     }
 
+    /**
+     * Executir that will perform indexing jobs asynchronously.
+     *
+     * @param indexExecutor index executor
+     */
+    public void setIndexExecutor(final TaskExecutor indexExecutor) {
+        this.indexExecutor = indexExecutor;
+    }
 
     /**
      * Default constructor.
@@ -498,47 +515,111 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
        return  fullTextSearchReindex(primaryKey, false);
     }
 
+    private final int IDLE = -3;
+    private final int COMPLETED = -1;
+    private final int LASTUPDATE = -2;
+    private final int RUNNING = 0;
+
+    private final AtomicInteger asyncRunningState = new AtomicInteger(IDLE);
+    private final AtomicInteger currentIndexingCount = new AtomicInteger(0);
+
     /**
      * {@inheritDoc}
      */
-    public int fullTextSearchReindex() {
+    public int fullTextSearchReindex(final boolean async) {
+
+        final int[] count = new int[] { 0 };
+        final boolean runAsync = async && this.indexExecutor != null;
+        if (!runAsync) {
+            createIndexingRunnable(false, count).run(); // sync
+            return count[0];
+        }
+
+        if (asyncRunningState.get() == RUNNING) {
+            // indexing already in progress
+            return currentIndexingCount.get();
+        }
+
+        if (asyncRunningState.compareAndSet(COMPLETED, LASTUPDATE)) {
+            // last update of the count from the indexing with final count
+            return currentIndexingCount.get();
+        }
+
+        if (asyncRunningState.compareAndSet(LASTUPDATE, IDLE)) {
+            // thread had finished, so need to set this to idle
+            // if this is not set then this may turn into endless recursion
+            // from pinging YUM
+            currentIndexingCount.set(0);
+            return -1; // must be negative as the signal to job to stop
+        }
+
+        if (!asyncRunningState.compareAndSet(IDLE, RUNNING)) {
+            // indexing started just now on another thread
+            return currentIndexingCount.get();
+        }
+
+        this.indexExecutor.execute(createIndexingRunnable(true, new int[1])); // async
+
+        return currentIndexingCount.get();
+    }
+
+    private Runnable createIndexingRunnable(final boolean async, final int[] count) {
         final int BATCH_SIZE = 20;
-        int index = 0;
+        return new Runnable() {
+            @Override
+            public void run() {
+                int index = 0;
+                try {
 
-        if (null != getPersistentClass().getAnnotation(org.hibernate.search.annotations.Indexed.class)) {
-            FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
-            fullTextSession.setFlushMode(FlushMode.MANUAL);
-            fullTextSession.setCacheMode(CacheMode.IGNORE);
-            fullTextSession.purgeAll(getPersistentClass());
-            fullTextSession.getSearchFactory().optimize(getPersistentClass());
-            ScrollableResults results = fullTextSession.createCriteria(persistentClass)
-                    .setFetchSize(BATCH_SIZE)
-                    .scroll(ScrollMode.FORWARD_ONLY);
+                    if (null != getPersistentClass().getAnnotation(org.hibernate.search.annotations.Indexed.class)) {
+                        FullTextSession fullTextSession = Search.getFullTextSession(async ? sessionFactory.openSession() : sessionFactory.getCurrentSession());
+                        fullTextSession.setFlushMode(FlushMode.MANUAL);
+                        fullTextSession.setCacheMode(CacheMode.IGNORE);
+                        fullTextSession.purgeAll(getPersistentClass());
+                        fullTextSession.getSearchFactory().optimize(getPersistentClass());
+                        ScrollableResults results = fullTextSession.createCriteria(persistentClass)
+                                .setFetchSize(BATCH_SIZE)
+                                .scroll(ScrollMode.FORWARD_ONLY);
 
-            final Logger log = ShopCodeContext.getLog(this);
-            while (results.next()) {
-                index++;
-                T entity = (T) HibernateHelper.unproxy(results.get(0));
+                        final Logger log = ShopCodeContext.getLog(this);
+                        while (results.next()) {
+                            index++;
+                            T entity = (T) HibernateHelper.unproxy(results.get(0));
 
-                if (entityIndexingInterceptor != null) {
-                    if (IndexingOverride.APPLY_DEFAULT == entityIndexingInterceptor.onAdd(entity)) {
-                        fullTextSession.index(entity);
+                            if (entityIndexingInterceptor != null) {
+                                if (IndexingOverride.APPLY_DEFAULT == entityIndexingInterceptor.onAdd(entity)) {
+                                    fullTextSession.index(entity);
+                                }
+                            } else {
+                                fullTextSession.index(entity);
+                            }
+                            if (index % BATCH_SIZE == 0) {
+                                fullTextSession.flushToIndexes(); //apply changes to indexes
+                                fullTextSession.clear(); //clear since the queue is processed
+                                if (log.isInfoEnabled()) {
+                                    log.info("Indexed " + index + " items of " + persistentClass + " class");
+                                }
+                            }
+                            if (async) {
+                                currentIndexingCount.compareAndSet(index - 1, index);
+                            }
+                        }
+                        fullTextSession.flushToIndexes(); //apply changes to indexes
+                        fullTextSession.clear(); //clear since the queue is processed
                     }
-                } else {
-                    fullTextSession.index(entity);
-                }
-                if (index % BATCH_SIZE == 0) {
-                    fullTextSession.flushToIndexes(); //apply changes to indexes
-                    fullTextSession.clear(); //clear since the queue is processed
-                    if (log.isInfoEnabled()) {
-                        log.info("Indexed " + index + " items of " + persistentClass + " class");
+                } catch (Exception exp) {
+                    LOG.error("Error during indexing", exp);
+                } finally {
+                    count[0] = index;
+                    if (async) {
+                        asyncRunningState.set(COMPLETED);
+                        try {
+                            sessionFactory.getCurrentSession().close();
+                        } catch (Exception exp) { }
                     }
                 }
             }
-            fullTextSession.flushToIndexes(); //apply changes to indexes
-            fullTextSession.clear(); //clear since the queue is processed
-        }
-        return index;
+        };
     }
 
     /**

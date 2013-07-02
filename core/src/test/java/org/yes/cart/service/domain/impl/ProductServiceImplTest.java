@@ -357,7 +357,7 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                productService.getGenericDao().fullTextSearchReindex();
+                productService.getGenericDao().fullTextSearchReindex(false);
 
                 final ProductsInCategoryQueryBuilderImpl queryBuilder = new ProductsInCategoryQueryBuilderImpl();
                 Query query = queryBuilder.createQuery(Arrays.asList(101L));

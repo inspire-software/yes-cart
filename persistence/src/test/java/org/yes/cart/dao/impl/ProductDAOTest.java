@@ -132,7 +132,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 product.getAttributes().add(attrValueProduct);
                 pk = productDao.create(product).getProductId();
                 assertTrue(pk > 0L);
-                productDao.fullTextSearchReindex();
+                productDao.fullTextSearchReindex(false);
 
                 status.setRollbackOnly();
 
@@ -149,7 +149,7 @@ public class ProductDAOTest extends AbstractTestDAO {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                productDao.fullTextSearchReindex();
+                productDao.fullTextSearchReindex(false);
 
                 final GlobalSearchQueryBuilderImpl queryBuilder = new GlobalSearchQueryBuilderImpl();
                 Query query = queryBuilder.createQuerySearchInCategories("bender", Arrays.asList(101L, 104L));
@@ -202,7 +202,7 @@ public class ProductDAOTest extends AbstractTestDAO {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                productDao.fullTextSearchReindex();
+                productDao.fullTextSearchReindex(false);
 
                 final GlobalSearchQueryBuilderImpl queryBuilder = new GlobalSearchQueryBuilderImpl();
 
@@ -267,7 +267,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 String okToFind;
                 String failToFind;
 
-                productDao.fullTextSearchReindex();
+                productDao.fullTextSearchReindex(false);
 
                 final GlobalSearchQueryBuilderImpl queryBuilder = new GlobalSearchQueryBuilderImpl();
                 Query query = queryBuilder.createQuerySearchInCategories("bender", Arrays.asList(101L, 104L));
@@ -322,7 +322,7 @@ public class ProductDAOTest extends AbstractTestDAO {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
 
-                productDao.fullTextSearchReindex();
+                productDao.fullTextSearchReindex(false);
 
                 ProductsInCategoryQueryBuilderImpl queryBuilder = new ProductsInCategoryQueryBuilderImpl();
                 Query query = queryBuilder.createQuery(Arrays.asList(101L));
@@ -349,7 +349,7 @@ public class ProductDAOTest extends AbstractTestDAO {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
 
-                productDao.fullTextSearchReindex();
+                productDao.fullTextSearchReindex(false);
 
                 TagSearchQueryBuilder queryBuilder = new TagSearchQueryBuilder();
                 Query query = queryBuilder.createQuery(null, "newarrival");
@@ -387,7 +387,7 @@ public class ProductDAOTest extends AbstractTestDAO {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
 
-                productDao.fullTextSearchReindex();
+                productDao.fullTextSearchReindex(false);
 
                 AttributiveSearchQueryBuilderImpl queryBuilder = new AttributiveSearchQueryBuilderImpl();
 
@@ -480,7 +480,7 @@ public class ProductDAOTest extends AbstractTestDAO {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
 
-                productDao.fullTextSearchReindex();
+                productDao.fullTextSearchReindex(false);
 
                 AttributiveSearchQueryBuilderImpl queryBuilder = new AttributiveSearchQueryBuilderImpl();
                 Query query = queryBuilder.createQuery(
@@ -549,7 +549,7 @@ public class ProductDAOTest extends AbstractTestDAO {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                productDao.fullTextSearchReindex();
+                productDao.fullTextSearchReindex(false);
 
                 Product product = new ProductEntity();
                 product.setAvailability(Product.AVAILABILITY_STANDARD);
@@ -629,7 +629,7 @@ public class ProductDAOTest extends AbstractTestDAO {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                productDao.fullTextSearchReindex();
+                productDao.fullTextSearchReindex(false);
 
                 Product product = new ProductEntity();
                 product.setAvailability(Product.AVAILABILITY_STANDARD);
@@ -668,7 +668,7 @@ public class ProductDAOTest extends AbstractTestDAO {
 
                 List<Product> products = null;
 
-                //productDao.fullTextSearchReindex();
+                //productDao.fullTextSearchReindex(false);
                 GlobalSearchQueryBuilderImpl queryBuilder = new GlobalSearchQueryBuilderImpl();
                 Query query = queryBuilder.createQuerySearchInCategories("sony", Arrays.asList(128L));
                 products = productDao.fullTextSearch(query);
@@ -724,7 +724,7 @@ public class ProductDAOTest extends AbstractTestDAO {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                //productDao.fullTextSearchReindex();
+                //productDao.fullTextSearchReindex(false);
 
                 ArrayList<Long> createdProducts = new ArrayList<Long>();
                 createdProducts.add(createProduct(102L, "LG_DVD_PLAYER", "product lg dvd player", 3L, 134L));
@@ -776,7 +776,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 createdProducts.add(createProduct(102L, "LG_MP3_PLAYER", "product lg mp3 player", 2L, 135L));
                 createdProducts.add(createProduct(103L, "SONY_MP3_PLAYER", "product sony mp3 player", 2L, 135L));
                 createdProducts.add(createProduct(104L, "SAM_MP3_PLAYER", "product sam mp3 player", 2L, 136L));
-                // productDao.fullTextSearchReindex();
+                // productDao.fullTextSearchReindex(false);
                 List<Product> foundedProducts;
                 BooleanQuery query;
                 List<Long> categories = new ArrayList<Long>();
@@ -925,7 +925,7 @@ public class ProductDAOTest extends AbstractTestDAO {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
 
-                productDao.fullTextSearchReindex();
+                productDao.fullTextSearchReindex(false);
 
                 ProductsInCategoryQueryBuilderImpl productSearchQueryBuilder = new ProductsInCategoryQueryBuilderImpl();
                 List<Product> products = productDao.fullTextSearch(productSearchQueryBuilder.createQuery(212L));

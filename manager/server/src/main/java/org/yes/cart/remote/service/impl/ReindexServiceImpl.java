@@ -82,12 +82,22 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
                 try {
                     SecurityContextHolder.setContext((SecurityContext) ctx.getAttribute("security"));
                     listener.notifyMessage("Indexing stared");
-                    final int cnt = remoteBackdoorService.reindexAllProducts(ctx);
-                    // TODO: YC-148 Need ping here too as if we get a lot of products we really only rely on the timeout
-                    //       In fact we have the WS timeout, Listener timeout - so this needs to be refactored
-                    //       We need a common indexing interface where we can pass in listener (or can get
-                    //       incremental update out of).
-                    listener.notifyMessage("Indexing completed. Indexed products count: " + cnt);
+
+                    int lastPositive = 0;
+                    int cnt = 0;
+                    while (cnt >= 0) {
+
+                        // This should call
+                        cnt = remoteBackdoorService.reindexAllProducts(ctx);
+                        if (cnt >= 0) {
+                            lastPositive = cnt;
+                            listener.notifyPing("Indexed " + cnt + " products so far... ");
+                            Thread.sleep(5000l);
+                        }
+
+                    }
+                    listener.notifyMessage("Indexing completed. Last traceable product count is: " + lastPositive
+                            + ". CAUTION this may not be the full count of products that was indexed.");
                     listener.notifyCompleted(JobStatus.Completion.OK);
                 } catch (Throwable trw) {
                     LOG.error(trw.getMessage(), trw);
