@@ -111,7 +111,7 @@ public interface GenericDAO<T, PK extends Serializable> {
     Object getScalarResultByNamedQuery(String namedQueryName, Object... parameters);
 
     /**
-     * Executes agregate named query, that return single scalar value. And force load collections .
+     * Executes aggregate named query, that return single scalar value. And force load collections .
      *
      * @param namedQueryName      name of query
      * @param parameters          optional parameters for named query
@@ -266,9 +266,10 @@ public interface GenericDAO<T, PK extends Serializable> {
     /**
      * Force reindex the all entities.
      *
+     * @param async true if async required
      * @return document quantity in index
      */
-    int fullTextSearchReindex();
+    int fullTextSearchReindex(boolean async);
 
     /**
      * Force reindex given entity.

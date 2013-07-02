@@ -55,7 +55,7 @@ public class PriceSearchQueryBuilderImplTest extends AbstractTestDAO {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                productDao.fullTextSearchReindex();
+                productDao.fullTextSearchReindex(false);
 
                 PriceSearchQueryBuilderImpl queryBuilder = new PriceSearchQueryBuilderImpl();
                 // test that price border is inclusive in search
