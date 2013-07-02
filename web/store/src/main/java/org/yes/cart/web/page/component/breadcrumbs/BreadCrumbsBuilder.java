@@ -44,6 +44,7 @@ public class BreadCrumbsBuilder {
     private final CrumbNamePrefixProvider namePrefixProvider;
     private final List<Long> shopCategoryIds;
     private final long categoryId;
+    private final boolean isContentPage;
     private final PageParameters pageParameters;
     private final List<String> allowedAttributeNames;
     private final CategoryService categoryService;
@@ -69,6 +70,7 @@ public class BreadCrumbsBuilder {
         this.namePrefixProvider = namePrefixProvider;
         this.shopCategoryIds = shopCategoryIds;
         this.categoryId = categoryId;
+        this.isContentPage = WebParametersKeys.CONTENT_ID.equals(pageParameters.get(WebParametersKeys.PAGE_TYPE).toString());
         this.pageParameters = pageParameters;
         this.allowedAttributeNames = allowedAttributeNames;
         this.categoryService = categoryService;
@@ -83,7 +85,7 @@ public class BreadCrumbsBuilder {
      */
     public List<Crumb> getBreadCrumbs() {
         final List<Crumb> crumbs = new ArrayList<Crumb>();
-        crumbs.addAll(getCategoriesCrumbs(categoryId));
+        crumbs.addAll(getCategoriesCrumbs(categoryId, isContentPage));
         crumbs.addAll(getFilteredNavigationCrumbs(allowedAttributeNames));
         return crumbs;
     }
@@ -94,10 +96,10 @@ public class BreadCrumbsBuilder {
         return navigationCrumbs;
     }
 
-    private List<Crumb> getCategoriesCrumbs(final long categoryId) {
+    private List<Crumb> getCategoriesCrumbs(final long categoryId, final boolean contentPage) {
         final List<Crumb> categoriesCrumbs = new ArrayList<Crumb>();
         if (categoryId > 0) {
-            fillCategories(categoriesCrumbs, categoryId);
+            fillCategories(categoriesCrumbs, categoryId, contentPage);
             Collections.reverse(categoriesCrumbs);
         }
         return categoriesCrumbs;
@@ -109,14 +111,16 @@ public class BreadCrumbsBuilder {
      *
      * @param categoriesCrumbs the crumbs list
      * @param categoryId       the current category id
+     * @param contentPage
      */
-    private void fillCategories(final List<Crumb> categoriesCrumbs, final long categoryId) {
+    private void fillCategories(final List<Crumb> categoriesCrumbs, final long categoryId, final boolean contentPage) {
         final Category category = categoryService.getById(categoryId);
         if (categoryId != category.getParentId() && category.getParentId() > 0l) {
             categoriesCrumbs.add(
                    new Crumb("category", category.getName(),
-                           category.getDisplayName(), getCategoryLinkParameters(categoryId),
-                   getRemoveCategoryLinkParameters(category)
+                           category.getDisplayName(),
+                           getCategoryLinkParameters(categoryId, contentPage),
+                           getRemoveCategoryLinkParameters(category, contentPage)
                    )
             );
 
@@ -124,27 +128,33 @@ public class BreadCrumbsBuilder {
             if (log.isDebugEnabled()) {
                 log.debug("Adding breadcrumb for category: [" + categoryId + "] " + category.getName());
             }
-            fillCategories(categoriesCrumbs, category.getParentId());
+            fillCategories(categoriesCrumbs, category.getParentId(), contentPage);
         }
     }
 
     /**
      * Get {@link PageParameters}, that point to given category.
+     *
      * @param categoryId given category id
+     * @param contentPage true if this is a content category
      * @return  page parameters for link
      */
-    public PageParameters getCategoryLinkParameters(final long categoryId) {
-        return new PageParameters().add(WebParametersKeys.CATEGORY_ID, categoryId);
+    private PageParameters getCategoryLinkParameters(final long categoryId, final boolean contentPage) {
+        return new PageParameters().add(
+                contentPage ? WebParametersKeys.CONTENT_ID : WebParametersKeys.CATEGORY_ID,
+                categoryId);
     }
 
     /**
      * Get {@link PageParameters}, that point to parent, if any, of given category.
+     *
      * @param category given category
+     * @param contentPage true if this is a content category
      * @return page parameter for point to parent.
      */
-    private PageParameters getRemoveCategoryLinkParameters(final Category category) {
+    private PageParameters getRemoveCategoryLinkParameters(final Category category, final boolean contentPage) {
         if (shopCategoryIds.contains(category.getParentId())) {
-            return getCategoryLinkParameters(category.getParentId());
+            return getCategoryLinkParameters(category.getParentId(), contentPage);
         }
         return new PageParameters();
     }
@@ -158,7 +168,7 @@ public class BreadCrumbsBuilder {
                 pageParameters,
                 allowedAttributeNames);
 
-        //Base hold category path from begining and accumulate all attributive navigation
+        //Base hold category path from beginning and accumulate all attributive navigation
         final PageParameters base = WicketUtil.getFilteredRequestParameters(
                 pageParameters,
                 allowedAttributeNames);

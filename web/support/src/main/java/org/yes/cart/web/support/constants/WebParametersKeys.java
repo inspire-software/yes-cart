@@ -70,6 +70,12 @@ public interface WebParametersKeys {
     String REQUEST_SHOPPING_CART = "shoppingCart";
 
     /**
+     * Parameter set by the encoder to denote which page we are on.
+     * I.e. "content", "category", "product" or "sku".
+     */
+    String PAGE_TYPE = "pagetype";
+
+    /**
      * Key for content rendering
      */
     String CONTENT_ID = "content";
