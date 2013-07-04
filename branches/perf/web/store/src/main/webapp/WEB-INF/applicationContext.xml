@@ -167,6 +167,9 @@
 
     <bean id="productAvailabilityStrategy" class="org.yes.cart.web.support.service.impl.ProductAvailabilityStrategyImpl"/>
 
+    <bean id="breadCrumbsBuilder" class="org.yes.cart.web.page.component.breadcrumbs.impl.BreadCrumbsBuilderImpl">
+        <constructor-arg index="0" ref="categoryService"/>
+    </bean>
 
     <bean id="currencySymbolService" class="org.yes.cart.web.support.service.impl.CurrencySymbolServiceImpl">
         <constructor-arg index="0">

@@ -256,7 +256,7 @@
           <stringProp name="TestPlan.comments">			</stringProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
+        <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="false">
           <stringProp name="ConstantTimer.delay">5000</stringProp>
         </ConstantTimer>
         <hashTree/>
