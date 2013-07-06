@@ -81,11 +81,6 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Applic
                                    final ServletResponse servletResponse) throws IOException, ServletException {
 
         final Logger log = ShopCodeContext.getLog(this);
-        if (log.isDebugEnabled()) {
-            log.debug("Request id {} start at {}",
-                    servletRequest.toString(),
-                    (new Date()).getTime());
-        }
 
         final String serverDomainName = servletRequest.getServerName().toLowerCase();
 

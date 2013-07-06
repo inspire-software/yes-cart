@@ -148,6 +148,12 @@
         <constructor-arg index="0" ref="cookieTuplizer"/>
     </bean>
 
+    <bean id="breadCrumbBuilderImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="cacheName" value="org.yes.cart.service.domain.impl.BreadCrumbBuilderImpl.cache"/>
+    </bean>
+
+
     <bean id="centralViewResolverImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
         <property name="cacheManager" ref="cacheManager"/>
         <property name="cacheName" value="org.yes.cart.web.support.service.impl.CentralViewResolverImpl.cache"/>

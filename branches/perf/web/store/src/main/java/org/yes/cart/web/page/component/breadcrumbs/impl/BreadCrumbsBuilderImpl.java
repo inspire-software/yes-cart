@@ -19,6 +19,7 @@ package org.yes.cart.web.page.component.breadcrumbs.impl;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
+import org.yes.cart.cache.Cacheable;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.util.ShopCodeContext;
@@ -72,6 +73,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
 
      * @return list of crumbs
      */
+    @Cacheable(value = "breadCrumbBuilderImplMethodCache")
     public List<Crumb> getBreadCrumbs(
             final long categoryId,
             final PageParameters pageParameters,
