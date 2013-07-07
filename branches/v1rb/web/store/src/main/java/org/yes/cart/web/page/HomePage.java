@@ -18,6 +18,7 @@ package org.yes.cart.web.page;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -54,6 +55,8 @@ import java.util.*;
  * Time: 10:27 AM
  */
 public class HomePage extends AbstractWebPage {
+
+
 
     final Map<String, String> mapParams;
 
@@ -127,9 +130,17 @@ public class HomePage extends AbstractWebPage {
 
 
         add(new TopCategories("topCategories"));
-        add(new BrandProductFilter("brandFilter", query, categoryId));
-        add(new AttributeProductFilter("attributeFilter", query, categoryId));
-        add(new PriceProductFilter("priceFilter", query, categoryId));
+
+        if (CentralViewLabel.PRODUCT.equals(centralViewLabel) || CentralViewLabel.SKU.equals(centralViewLabel)) {
+            add(new Label("brandFilter"));
+            add(new Label("attributeFilter"));
+            add(new Label("priceFilter"));
+        } else {
+            add(new BrandProductFilter("brandFilter", query, categoryId));
+            add(new AttributeProductFilter("attributeFilter", query, categoryId));
+            add(new PriceProductFilter("priceFilter", query, categoryId));
+        }
+
         add(new BreadCrumbsView("breadCrumbs", categoryId, shopAllCategoriesIds));
 
 

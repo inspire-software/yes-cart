@@ -20,22 +20,18 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.apache.lucene.search.BooleanQuery;
 import org.springframework.util.CollectionUtils;
 import org.yes.cart.cache.Cacheable;
-import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.domain.query.impl.ProductQueryBuilderImpl;
 import org.yes.cart.domain.query.impl.ProductsInCategoryQueryBuilderImpl;
 import org.yes.cart.domain.query.impl.SkuQueryBuilderImpl;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.CentralViewResolver;
 import org.yes.cart.web.support.util.HttpUtil;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 

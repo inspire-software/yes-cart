@@ -151,10 +151,6 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Applic
             final Logger log = ShopCodeContext.getLog(this);
             final String newServletPath = shop.getMarkupFolder() + servletPath;
             try {
-
-                if (log.isDebugEnabled()) {
-                    log.debug("New servlet path is :" + newServletPath);
-                }
                 return new HttpServletRequestWrapper(httpServletRequest, newServletPath);
             } catch (/*MalformedURL*/Exception e) {
                 if (log.isErrorEnabled()) {

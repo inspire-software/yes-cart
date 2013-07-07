@@ -153,6 +153,11 @@
         <property name="cacheName" value="org.yes.cart.web.support.service.impl.CentralViewResolverImpl.cache"/>
     </bean>
 
+    <bean id="luceneQueryFactoryImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="cacheName" value="org.yes.cart.web.support.service.impl.LuceneQueryFactoryImpl.cache"/>
+    </bean>
+
 
     <bean id="centralViewResolver" class="org.yes.cart.web.support.service.impl.CentralViewResolverImpl">
         <constructor-arg index="0" ref="categoryService"/>
@@ -162,6 +167,9 @@
 
     <bean id="productAvailabilityStrategy" class="org.yes.cart.web.support.service.impl.ProductAvailabilityStrategyImpl"/>
 
+    <bean id="breadCrumbsBuilder" class="org.yes.cart.web.page.component.breadcrumbs.impl.BreadCrumbsBuilderImpl">
+        <constructor-arg index="0" ref="categoryService"/>
+    </bean>
 
     <bean id="currencySymbolService" class="org.yes.cart.web.support.service.impl.CurrencySymbolServiceImpl">
         <constructor-arg index="0">

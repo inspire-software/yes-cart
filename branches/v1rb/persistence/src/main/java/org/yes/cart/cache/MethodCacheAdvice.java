@@ -68,7 +68,7 @@ public class MethodCacheAdvice implements ApplicationContextAware {
      * @return method execution result
      * @throws Throwable in case of error
      */
-    @Around("@annotation(Cacheable)")
+    @Around("@annotation(org.yes.cart.cache.Cacheable)")
     public Object doCache(final ProceedingJoinPoint pjp) throws Throwable {
 
         if (cacheEnabled) {
@@ -101,7 +101,7 @@ public class MethodCacheAdvice implements ApplicationContextAware {
      * @param joinPoint JoinPoint
      * @throws Throwable in case of error
      */
-    @After("@annotation(CacheFlush)")
+    @After("@annotation(org.yes.cart.cache.CacheFlush)")
     public void doCacheFlush(final JoinPoint joinPoint) throws Throwable {
         if (cacheEnabled) {
             final Cache cache = getCache(getAnnotation(joinPoint, CacheFlush.class).value());

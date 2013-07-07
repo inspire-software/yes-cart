@@ -23,6 +23,7 @@ import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.util.Version;
+import org.yes.cart.cache.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.misc.Pair;
@@ -182,7 +183,7 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
      *                          user perform serach on entire shop
      * @return ordered by cookie name list of cookies
      */
-    //@Cacheable(value = "centralViewResolverImplMethodCache")
+    @Cacheable(value = "luceneQueryFactoryImplMethodCache")
     public List<BooleanQuery> getFilteredNavigationQueryChain(
             final Long shopId,
             final List<Long> categories,
