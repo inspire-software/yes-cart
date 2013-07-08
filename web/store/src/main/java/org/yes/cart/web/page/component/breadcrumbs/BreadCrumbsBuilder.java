@@ -16,17 +16,8 @@
 
 package org.yes.cart.web.page.component.breadcrumbs;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.slf4j.Logger;
-import org.yes.cart.domain.entity.Category;
-import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.support.constants.WebParametersKeys;
-import org.yes.cart.web.util.WicketUtil;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -39,186 +30,31 @@ import java.util.List;
  * Date: 2011-May-17
  * Time: 9:50:51 AM
  */
-public class BreadCrumbsBuilder {
+public interface BreadCrumbsBuilder {
 
-    private final CrumbNamePrefixProvider namePrefixProvider;
-    private final List<Long> shopCategoryIds;
-    private final long categoryId;
-    private final boolean isContentPage;
-    private final PageParameters pageParameters;
-    private final List<String> allowedAttributeNames;
-    private final CategoryService categoryService;
-
-    /**
-     * Bread crumbs builder constructor.
-     *
-     * @param categoryId            current category id
-     * @param pageParameters        current query string
-     * @param allowedAttributeNames allowed attribute names for filtering including price, brand, search...
-     * @param shopCategoryIds       all categoryIds, that belong to shop
-     * @param namePrefixProvider    name prifix provider for price, brand, search..
-     * @param categoryService       category service
-     */
-    public BreadCrumbsBuilder(
-            final long categoryId,
-            final PageParameters pageParameters,
-            final List<String> allowedAttributeNames,
-            final List<Long> shopCategoryIds,
-            final CrumbNamePrefixProvider namePrefixProvider,
-            final CategoryService categoryService) {
-
-        this.namePrefixProvider = namePrefixProvider;
-        this.shopCategoryIds = shopCategoryIds;
-        this.categoryId = categoryId;
-        this.isContentPage = WebParametersKeys.CONTENT_ID.equals(pageParameters.get(WebParametersKeys.PAGE_TYPE).toString());
-        this.pageParameters = pageParameters;
-        this.allowedAttributeNames = allowedAttributeNames;
-        this.categoryService = categoryService;
-    }
 
 
     /**
      * We have 2 kinds of breadcrumbs:
      * 1. category path, for example electronics -> phones -> ip phones
      * 2. attributive filters, for example ip phones [price range, brands, weight, ect]
+     *
+     * @param categoryId            current category id
+     * @param pageParameters        current query string
+     * @param allowedAttributeNames allowed attribute names for filtering including price, brand, search...
+     * @param shopCategoryIds       all categoryIds, that belong to shop
+     * @param namePrefixProvider    name prifix provider for price, brand, search..
+
      * @return list of crumbs
      */
-    public List<Crumb> getBreadCrumbs() {
-        final List<Crumb> crumbs = new ArrayList<Crumb>();
-        crumbs.addAll(getCategoriesCrumbs(categoryId, isContentPage));
-        crumbs.addAll(getFilteredNavigationCrumbs(allowedAttributeNames));
-        return crumbs;
-    }
-
-    private List<Crumb> getFilteredNavigationCrumbs(final List<String> allowedAttributeNames) {
-        final List<Crumb> navigationCrumbs = new ArrayList<Crumb>();
-        fillAttributes(navigationCrumbs, allowedAttributeNames);
-        return navigationCrumbs;
-    }
-
-    private List<Crumb> getCategoriesCrumbs(final long categoryId, final boolean contentPage) {
-        final List<Crumb> categoriesCrumbs = new ArrayList<Crumb>();
-        if (categoryId > 0) {
-            fillCategories(categoriesCrumbs, categoryId, contentPage);
-            Collections.reverse(categoriesCrumbs);
-        }
-        return categoriesCrumbs;
-    }
+    List<Crumb> getBreadCrumbs(
+            long categoryId,
+            PageParameters pageParameters,
+            List<String> allowedAttributeNames,
+            List<Long> shopCategoryIds,
+            CrumbNamePrefixProvider namePrefixProvider);
 
 
-    /**
-     * Recursive function to reverse build the breadcrumbs by categories, starting from currently selected one.
-     *
-     * @param categoriesCrumbs the crumbs list
-     * @param categoryId       the current category id
-     * @param contentPage
-     */
-    private void fillCategories(final List<Crumb> categoriesCrumbs, final long categoryId, final boolean contentPage) {
-        final Category category = categoryService.getById(categoryId);
-        if (categoryId != category.getParentId() && category.getParentId() > 0l) {
-            categoriesCrumbs.add(
-                   new Crumb("category", category.getName(),
-                           category.getDisplayName(),
-                           getCategoryLinkParameters(categoryId, contentPage),
-                           getRemoveCategoryLinkParameters(category, contentPage)
-                   )
-            );
 
-            final Logger log = ShopCodeContext.getLog(this);
-            if (log.isDebugEnabled()) {
-                log.debug("Adding breadcrumb for category: [" + categoryId + "] " + category.getName());
-            }
-            fillCategories(categoriesCrumbs, category.getParentId(), contentPage);
-        }
-    }
-
-    /**
-     * Get {@link PageParameters}, that point to given category.
-     *
-     * @param categoryId given category id
-     * @param contentPage true if this is a content category
-     * @return  page parameters for link
-     */
-    private PageParameters getCategoryLinkParameters(final long categoryId, final boolean contentPage) {
-        return new PageParameters().add(
-                contentPage ? WebParametersKeys.CONTENT_ID : WebParametersKeys.CATEGORY_ID,
-                categoryId);
-    }
-
-    /**
-     * Get {@link PageParameters}, that point to parent, if any, of given category.
-     *
-     * @param category given category
-     * @param contentPage true if this is a content category
-     * @return page parameter for point to parent.
-     */
-    private PageParameters getRemoveCategoryLinkParameters(final Category category, final boolean contentPage) {
-        if (shopCategoryIds.contains(category.getParentId())) {
-            return getCategoryLinkParameters(category.getParentId(), contentPage);
-        }
-        return new PageParameters();
-    }
-
-    private void fillAttributes(
-            final List<Crumb> navigationCrumbs,
-            final List<String> allowedAttributeNames) {
-
-        //This is attributive only filtered navigation from request
-        final PageParameters attributesOnly = WicketUtil.getRetainedRequestParameters(
-                pageParameters,
-                allowedAttributeNames);
-
-        //Base hold category path from beginning and accumulate all attributive navigation
-        final PageParameters base = WicketUtil.getFilteredRequestParameters(
-                pageParameters,
-                allowedAttributeNames);
-
-        //If we are on display product page, we have to remove for filtering  as well as sku
-        base.remove(WebParametersKeys.PRODUCT_ID);
-        base.remove(WebParametersKeys.SKU_ID);
-
-        for (PageParameters.NamedPair namedPair : attributesOnly.getAllNamed()) {
-            navigationCrumbs.add(createFilteredNavigationCrumb(base, namedPair.getKey(), namedPair.getValue()));
-        }
-    }
-
-    /**
-     * Create filtered navigation crubm with two links:
-     * <p/>
-     * First - current position, that include the whole path before current.
-     * example category/17/subcategory/156/price/100-200/currentkey/currentvalue
-     * <p/>
-     * Second - the whole current path without current
-     * example category/17/subcategory/156/price/100-200/currentkey/currentvalue/nextkey/nextvalue
-     * ^^^^^^^^^^^^^^^^^^^^^^^ this will be removed,
-     * so uri will be
-     * example category/17/subcategory/156/price/100-200/nextkey/nextvalue
-     *
-     * @param base  initial parameter map, usually category and sub category navigation
-     * @param key   current key
-     * @param value current value
-     * @return {@link Crumb}
-     */
-    private Crumb createFilteredNavigationCrumb(
-            final PageParameters base,
-            final String key,
-            final String value) {
-
-        final PageParameters withoutCurrent = WicketUtil.getFilteredRequestParameters(
-                pageParameters,
-                key,
-                value
-        );
-
-        String linkName = namePrefixProvider.getLinkNamePrefix(key);
-        if (StringUtils.isNotBlank(linkName)) {
-            linkName += "::"  + namePrefixProvider.getLinkName(key, value);
-        } else {
-            linkName =  namePrefixProvider.getLinkName(key, value);
-        }
-
-        base.add(key, value);
-        return new Crumb(key, linkName, null, new PageParameters(base), withoutCurrent);
-    }
 
 }

@@ -63,6 +63,9 @@ public class BreadCrumbsView extends BaseComponent implements CrumbNamePrefixPro
     @SpringBean(name = StorefrontServiceSpringKeys.CURRENCY_SYMBOL_SERVICE)
     private CurrencySymbolService currencySymbolService;
 
+    @SpringBean(name = StorefrontServiceSpringKeys.BREAD_CRUMBS_BUILDER)
+    private BreadCrumbsBuilder breadCrumbsBuilder;
+
     @SpringBean(name = ServiceSpringKeys.PRICE_NAVIGATION)
     private PriceNavigation priceNavigation;
 
@@ -106,14 +109,12 @@ public class BreadCrumbsView extends BaseComponent implements CrumbNamePrefixPro
      */
     public List<Crumb> getCrumbs() {
         if (crumbs == null) {
-            BreadCrumbsBuilder breadCrumbsBuilder = new BreadCrumbsBuilder(
-                    categoryId,
+
+            crumbs = breadCrumbsBuilder.getBreadCrumbs(categoryId,
                     getPage().getPageParameters(),
                     allowedAttributeNames,
                     shopCategoryIds,
-                    this,
-                    categoryService);
-            crumbs = breadCrumbsBuilder.getBreadCrumbs();
+                    this);
 
         }
         return crumbs;
