@@ -37,9 +37,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.Collections;
-import java.util.Date;
 
 
 /**
@@ -81,11 +79,6 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Applic
                                    final ServletResponse servletResponse) throws IOException, ServletException {
 
         final Logger log = ShopCodeContext.getLog(this);
-        if (log.isDebugEnabled()) {
-            log.debug("Request id {} start at {}",
-                    servletRequest.toString(),
-                    (new Date()).getTime());
-        }
 
         final String serverDomainName = servletRequest.getServerName().toLowerCase();
 
@@ -151,10 +144,6 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Applic
             final Logger log = ShopCodeContext.getLog(this);
             final String newServletPath = shop.getMarkupFolder() + servletPath;
             try {
-
-                if (log.isDebugEnabled()) {
-                    log.debug("New servlet path is :" + newServletPath);
-                }
                 return new HttpServletRequestWrapper(httpServletRequest, newServletPath);
             } catch (/*MalformedURL*/Exception e) {
                 if (log.isErrorEnabled()) {
@@ -172,12 +161,7 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Applic
      */
     public void doAfter(final ServletRequest servletRequest,
                         final ServletResponse servletResponse) throws IOException, ServletException {
-        final Logger log = ShopCodeContext.getLog(this);
-        if (log.isDebugEnabled()) {
-            log.debug(MessageFormat.format("Request id {0}   end at {1}",
-                    servletRequest.toString(),
-                    (new Date()).getTime()));
-        }
+
 
     }
 

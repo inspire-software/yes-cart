@@ -62,7 +62,19 @@
            timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
     <cache name="org.yes.cart.service.domain.impl.AttributeServiceImpl.cache"
-           maxElementsInMemory="100"
+           maxElementsInMemory="1000"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+    <cache name="org.yes.cart.service.domain.impl.BreadCrumbBuilderImpl.cache"
+           maxElementsInMemory="1000"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+    <cache name="org.yes.cart.service.domain.impl.AttributeProductFilter.cache"
+           maxElementsInMemory="1000"
            overflowToDisk="false"
            eternal="false"
            timeToLiveSeconds="600" timeToIdleSeconds="120"/>
@@ -86,6 +98,12 @@
            timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
     <!-- ############################################# hibernate entity cache #######################################-->
+    <cache name="org.yes.cart.web.support.service.impl.LuceneQueryFactoryImpl.cache"
+           maxElementsInMemory="1000"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
 
     <cache name="org.yes.cart.domain.entity.Category" maxElementsInMemory="500" overflowToDisk="false" eternal="false"
            timeToLiveSeconds="600"/>

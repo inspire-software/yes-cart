@@ -17,6 +17,7 @@
 package org.yes.cart.web.page.component.filterednavigation;
 
 import org.apache.lucene.search.BooleanQuery;
+import org.yes.cart.cache.Cacheable;
 import org.yes.cart.domain.entity.ProductType;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
@@ -80,6 +81,7 @@ public class AttributeProductFilter extends AbstractProductFilter {
     /**
      * {@inheritDoc}
      */
+    @Cacheable(value = "attributeProductFlterImplMethodCache")
     List<FilteredNavigationRecord> getFilteredNavigationRecords(List<FilteredNavigationRecord> allNavigationRecords) {
 
         final AttributiveSearchQueryBuilderImpl queryBuilder = new AttributiveSearchQueryBuilderImpl();

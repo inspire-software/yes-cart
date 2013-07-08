@@ -20,7 +20,6 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.apache.lucene.search.BooleanQuery;
 import org.springframework.util.CollectionUtils;
 import org.yes.cart.cache.Cacheable;
-import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.domain.query.impl.ProductQueryBuilderImpl;
 import org.yes.cart.domain.query.impl.ProductsInCategoryQueryBuilderImpl;

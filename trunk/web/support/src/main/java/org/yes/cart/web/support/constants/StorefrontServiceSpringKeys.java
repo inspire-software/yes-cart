@@ -28,6 +28,8 @@ public interface StorefrontServiceSpringKeys {
      */
     public String CURRENCY_SYMBOL_SERVICE = "currencySymbolService";
 
+    public String BREAD_CRUMBS_BUILDER = "breadCrumbsBuilder";
+
     /**
      * Language service.
      */

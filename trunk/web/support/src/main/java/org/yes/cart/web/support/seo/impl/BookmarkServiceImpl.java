@@ -108,8 +108,6 @@ public class BookmarkServiceImpl implements BookmarkService {
             }
         }
 
-        ShopCodeContext.getLog(this).debug("Bookmark for category ID {} resolved to uri {}", bookmark, seoData);
-
         return seoData;
     }
 
@@ -126,8 +124,6 @@ public class BookmarkServiceImpl implements BookmarkService {
                 id = catId.toString();
             }
         }
-
-        ShopCodeContext.getLog(this).debug("Bookmark category for uri {} resolved to ID {}", uri, id);
 
         return id;
     }
@@ -155,8 +151,6 @@ public class BookmarkServiceImpl implements BookmarkService {
             }
         }
 
-        ShopCodeContext.getLog(this).debug("Bookmark for content ID {} resolved to uri {}", bookmark, seoData);
-
         return seoData;
     }
 
@@ -173,8 +167,6 @@ public class BookmarkServiceImpl implements BookmarkService {
                 id = conId.toString();
             }
         }
-
-        ShopCodeContext.getLog(this).debug("Bookmark content for uri {} resolved to ID {}", uri, id);
 
         return id;
     }
@@ -200,8 +192,6 @@ public class BookmarkServiceImpl implements BookmarkService {
             }
         }
 
-        ShopCodeContext.getLog(this).debug("Bookmark for product ID {} resolved to uri {}", bookmark, seoData);
-
         return seoData;
 
     }
@@ -226,8 +216,6 @@ public class BookmarkServiceImpl implements BookmarkService {
             }
         }
 
-        ShopCodeContext.getLog(this).debug("Bookmark for product ID {} resolved to uri {}", bookmark, seoData);
-
         return seoData;
 
     }
@@ -245,8 +233,6 @@ public class BookmarkServiceImpl implements BookmarkService {
                 id = prodId.toString();
             }
         }
-
-        ShopCodeContext.getLog(this).debug("Bookmark product for uri {} resolved to ID {}", uri, id);
 
         return id;
 
@@ -273,8 +259,6 @@ public class BookmarkServiceImpl implements BookmarkService {
             }
         }
 
-        ShopCodeContext.getLog(this).debug("Bookmark for SKU ID {} resolved to uri {}", bookmark, seoData);
-
         return seoData;
 
     }
@@ -293,7 +277,6 @@ public class BookmarkServiceImpl implements BookmarkService {
             }
         }
 
-        ShopCodeContext.getLog(this).debug("Bookmark SKU for uri {} resolved to ID {}", uri, id);
 
         return id;
 
