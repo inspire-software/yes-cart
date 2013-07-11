@@ -158,6 +158,11 @@
         <property name="cacheName" value="org.yes.cart.service.domain.impl.AttributeProductFilter.cache"/>
     </bean>
 
+    <bean id="priceProductFilterImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="cacheName" value="org.yes.cart.service.domain.impl.PriceProductFilter.cache"/>
+    </bean>
+
 
     <bean id="centralViewResolverImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
         <property name="cacheManager" ref="cacheManager"/>

@@ -18,6 +18,7 @@ package org.yes.cart.web.page.component.filterednavigation;
 
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.yes.cart.cache.Cacheable;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
@@ -98,6 +99,7 @@ public class PriceProductFilter extends AbstractProductFilter {
     /**
      * {@inheritDoc}
      */
+    @Cacheable(value = "priceProductFilterImplMethodCache")
     List<FilteredNavigationRecord> getFilteredNavigationRecords(
             final List<FilteredNavigationRecord> allNavigationRecords) {
         final List<FilteredNavigationRecord> navigationList = new ArrayList<FilteredNavigationRecord>();
