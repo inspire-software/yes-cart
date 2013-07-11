@@ -36,7 +36,7 @@
                   auth="Container"
                   scope="Shareable"
                   type="javax.sql.DataSource"
-                  maxActive="100"
+                  maxActive="1000"
                   maxIdle="30"
                   maxWait="10000"
                   removeAbandoned="true"
