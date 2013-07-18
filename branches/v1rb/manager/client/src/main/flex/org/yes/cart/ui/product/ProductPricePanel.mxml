@@ -451,11 +451,11 @@
         private function onAddPriceClick(event:MouseEvent):void {
             if (allowAddPrice && storesComboBox.selectedItem != null && storeCurrencyComboBox.selectedItem != null) {
                 createPriceDialog = CreatePriceDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CreatePriceDialog, true));
-                preselectSkuOnPriceDialog(true);
                 createPriceDialog.currency = storeCurrencyComboBox.selectedItem as String;
                 createPriceDialog.shopId = storesComboBox.selectedItem.shopId;
                 createPriceDialog.saveBtn.addEventListener(MouseEvent.CLICK, onAddPriceSaveClick);
                 createPriceDialog.skuPriceCreate();
+                preselectSkuOnPriceDialog(true);
                 PopUpManager.centerPopUp(createPriceDialog);
             }
         }
