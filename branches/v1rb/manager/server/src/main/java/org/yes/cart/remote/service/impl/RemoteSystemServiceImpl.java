@@ -53,8 +53,8 @@ public class RemoteSystemServiceImpl implements RemoteSystemService {
     }
 
     /** {@inheritDoc} */
-    public void deleteAttributeValue(final long attributeValuePk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        dtoSystemService.deleteAttributeValue(attributeValuePk);
+    public long deleteAttributeValue(final long attributeValuePk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return dtoSystemService.deleteAttributeValue(attributeValuePk);
     }
 
     /**

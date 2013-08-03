@@ -69,7 +69,13 @@ public interface DtoInventoryService {
      *
      * @param skuWarehouseId given pk value.
      */
-    void removeInventory(long skuWarehouseId) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    InventoryDTO getInventory(long skuWarehouseId) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
+    /**
+     * Remove sku warehouse object by given pk value
+     *
+     * @param skuWarehouseId given pk value.
+     */
+    void removeInventory(long skuWarehouseId) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 }

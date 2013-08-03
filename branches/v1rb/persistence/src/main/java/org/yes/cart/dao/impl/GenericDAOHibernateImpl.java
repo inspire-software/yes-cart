@@ -469,7 +469,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
     public int fullTextSearchReindex(final PK primaryKey) {
         int result = 0;
         if (null != getPersistentClass().getAnnotation(org.hibernate.search.annotations.Indexed.class)) {
-            sessionFactory.evict(getPersistentClass(), primaryKey);
+            sessionFactory.getCache().evictEntity(getPersistentClass(), primaryKey);
             T entity = findById(primaryKey);
             FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
             fullTextSession.setFlushMode(FlushMode.MANUAL);

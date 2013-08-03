@@ -440,11 +440,12 @@ public class DtoProductServiceImpl
     /**
      * {@inheritDoc}
      */
-    public void deleteAttributeValue(final long attributeValuePk) {
+    public long deleteAttributeValue(final long attributeValuePk) {
         final AttrValueEntityProduct attrValue = attrValueEntityProductDao.findById(attributeValuePk);
         if (Etype.IMAGE_BUSINESS_TYPE.equals(attrValue.getAttribute().getEtype().getBusinesstype())) {
             imageService.deleteImage(attrValue.getVal());
         }
         attrValueEntityProductDao.delete(attrValue);
+        return attrValue.getProduct().getProductId();
     }
 }

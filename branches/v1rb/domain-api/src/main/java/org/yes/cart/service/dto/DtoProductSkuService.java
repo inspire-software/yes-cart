@@ -57,7 +57,14 @@ public interface DtoProductSkuService extends GenericDTOService<ProductSkuDTO>, 
 
 
     /**
-     * Delete sku prioce by given pk
+     * Delete sku price by given pk
+     *
+     * @param skuPriceId pk value.
+     */
+    SkuPriceDTO getSkuPrice(long skuPriceId);
+
+    /**
+     * Delete sku price by given pk
      *
      * @param skuPriceId pk value.
      */

@@ -22,15 +22,8 @@ import org.yes.cart.domain.dto.ProductCategoryDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.remote.service.ReindexService;
-import org.yes.cart.remote.service.RemoteBackdoorService;
 import org.yes.cart.remote.service.RemoteProductCategoryService;
-import org.yes.cart.service.async.model.AsyncContext;
-import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.dto.DtoProductCategoryService;
-import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -46,28 +39,18 @@ public class RemoteProductCategoryServiceImpl
 
     private final ReindexService reindexService;
 
-    private final RemoteBackdoorService remoteBackdoorService;
-
-    private final SystemService systemService;
-
 
 
     /**
      * Construct remote service.
      *
      * @param dtoProductCategoryService dto service to use.
-     * @param reindexService            product reindex service
-     * @param systemService             system service
      */
     public RemoteProductCategoryServiceImpl(
             final DtoProductCategoryService dtoProductCategoryService,
-            final ReindexService reindexService,
-            final RemoteBackdoorService remoteBackdoorService,
-            final SystemService systemService) {
+            final ReindexService reindexService) {
         super(dtoProductCategoryService);
         this.reindexService = reindexService;
-        this.remoteBackdoorService = remoteBackdoorService;
-        this.systemService = systemService;
     }
 
 
@@ -130,17 +113,10 @@ public class RemoteProductCategoryServiceImpl
      * {@inheritDoc}
      */
     public void remove(long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        try {
 
-            final Map<String, Object> param = new HashMap<String, Object>();
-            param.put(AsyncContext.WEB_SERVICE_URI, systemService.getBackdoorURI());
-
-            final AsyncContext flex = new AsyncFlexContextImpl(param);
-
-            remoteBackdoorService.reindexProduct(flex, this.getById(id).getProductId());
-        } catch (Exception e) {
-            LOG.error("Cant reindex product which was referenced by product category record with id  " + id, e);
-        }
+        final long productId = this.getById(id).getProductId();
         super.remove(id);
+        reindexService.reindexProduct(productId);
+
     }
 }

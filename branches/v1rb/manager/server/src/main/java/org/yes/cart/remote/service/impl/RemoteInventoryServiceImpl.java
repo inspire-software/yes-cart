@@ -20,6 +20,7 @@ import org.yes.cart.domain.dto.InventoryDTO;
 import org.yes.cart.domain.dto.WarehouseDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
+import org.yes.cart.remote.service.ReindexService;
 import org.yes.cart.remote.service.RemoteInventoryService;
 import org.yes.cart.service.dto.DtoInventoryService;
 import org.yes.cart.service.dto.support.InventoryFilter;
@@ -34,33 +35,57 @@ import java.util.List;
 public class RemoteInventoryServiceImpl implements RemoteInventoryService {
 
     private final DtoInventoryService dtoInventoryService;
+    private final ReindexService reindexService;
 
-    public RemoteInventoryServiceImpl(final DtoInventoryService dtoInventoryService) {
+    public RemoteInventoryServiceImpl(final DtoInventoryService dtoInventoryService,
+                                      final ReindexService reindexService) {
         this.dtoInventoryService = dtoInventoryService;
+        this.reindexService = reindexService;
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<InventoryDTO> getInventoryList(final InventoryFilter filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return dtoInventoryService.getInventoryList(filter);
     }
 
     /** {@inheritDoc} */
+    @Override
     public InventoryDTO createInventory(final InventoryDTO inventory) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return dtoInventoryService.createInventory(inventory);
+        final InventoryDTO rez = dtoInventoryService.createInventory(inventory);
+        reindexService.reindexProductSkuCode(inventory.getSkuCode());
+        return rez;
     }
 
     /** {@inheritDoc} */
+    @Override
     public InventoryDTO updateInventory(final InventoryDTO inventory) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return dtoInventoryService.updateInventory(inventory);
+        final InventoryDTO rez = dtoInventoryService.updateInventory(inventory);
+        reindexService.reindexProductSkuCode(inventory.getSkuCode());
+        return rez;
+
     }
 
     /** {@inheritDoc} */
+    @Override
     public List<WarehouseDTO> getWarehouses() throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return dtoInventoryService.getWarehouses();
     }
 
     /** {@inheritDoc} */
-    public void removeInventory(final long skuWarehouseId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        dtoInventoryService.removeInventory(skuWarehouseId);
+    @Override
+    public InventoryDTO getInventory(final long skuWarehouseId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return dtoInventoryService.getInventory(skuWarehouseId);
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public void removeInventory(final long skuWarehouseId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final InventoryDTO skuWarehouse = dtoInventoryService.getInventory(skuWarehouseId);
+        dtoInventoryService.removeInventory(skuWarehouseId);
+        if (skuWarehouse != null) {
+            reindexService.reindexProductSkuCode(skuWarehouse.getSkuCode());
+        }
+    }
+
 }

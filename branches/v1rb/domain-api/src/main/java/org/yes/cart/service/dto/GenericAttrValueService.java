@@ -82,8 +82,10 @@ public interface GenericAttrValueService {
      * Delete attribute value by given pk value.
      *
      * @param attributeValuePk given pk value.
+     *
+     * @return attribute value owner object id
      */
-    void deleteAttributeValue(long attributeValuePk) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    long deleteAttributeValue(long attributeValuePk) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
 

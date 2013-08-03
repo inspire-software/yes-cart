@@ -69,8 +69,8 @@ public class RemoteCustomerServiceImpl
     /**
      * {@inheritDoc}
      */
-    public void deleteAttributeValue(final long attributeValuePk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        dtoCustomerService.deleteAttributeValue(attributeValuePk);
+    public long deleteAttributeValue(final long attributeValuePk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return dtoCustomerService.deleteAttributeValue(attributeValuePk);
     }
 
     /**

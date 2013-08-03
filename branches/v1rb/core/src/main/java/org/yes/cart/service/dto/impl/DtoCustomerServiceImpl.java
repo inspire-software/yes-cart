@@ -188,9 +188,10 @@ public class DtoCustomerServiceImpl
     /**
      * {@inheritDoc}
      */
-    public void deleteAttributeValue(final long attributeValuePk) {
-        final AttrValueEntityCustomer valueEntityCategory = attrValueEntityCustomerDao.findById(attributeValuePk);
-        attrValueEntityCustomerDao.delete(valueEntityCategory);
+    public long deleteAttributeValue(final long attributeValuePk) {
+        final AttrValueEntityCustomer valueEntityCustomer = attrValueEntityCustomerDao.findById(attributeValuePk);
+        attrValueEntityCustomerDao.delete(valueEntityCustomer);
+        return valueEntityCustomer.getCustomer().getCustomerId();
     }
 
 
