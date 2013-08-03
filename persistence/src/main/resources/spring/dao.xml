@@ -23,32 +23,32 @@
         <property name="transactionManager" ref="transactionManager"/>
         <property name="transactionAttributes">
             <props>
-                <prop key="add*">PROPAGATION_REQUIRED</prop>
-                <prop key="grant*">PROPAGATION_REQUIRED</prop>
-                <prop key="revoke*">PROPAGATION_REQUIRED</prop>
-                <prop key="create*">PROPAGATION_REQUIRED</prop>
-                <prop key="update*">PROPAGATION_REQUIRED</prop>
-                <prop key="delete*">PROPAGATION_REQUIRED</prop>
-                <prop key="remove*">PROPAGATION_REQUIRED</prop>
-                <prop key="save*">PROPAGATION_REQUIRED</prop>
-                <prop key="assign*">PROPAGATION_REQUIRED</prop>
-                <prop key="unassign*">PROPAGATION_REQUIRED</prop>
-                <prop key="reset*">PROPAGATION_REQUIRED</prop>
-                <prop key="reserve*">PROPAGATION_REQUIRED</prop>
-                <prop key="debit*">PROPAGATION_REQUIRED</prop>
-                <prop key="credit*">PROPAGATION_REQUIRED</prop>
-                <prop key="voidReservation">PROPAGATION_REQUIRED</prop>
-                <prop key="fireTransition">PROPAGATION_REQUIRED</prop>
-                <prop key="handle">PROPAGATION_REQUIRED</prop>
-                <prop key="reservation*">PROPAGATION_REQUIRED</prop>
-                <prop key="fullTextSearchReindex">PROPAGATION_REQUIRED</prop>
-                <prop key="fullTextSearchPurge">PROPAGATION_REQUIRED</prop>
-                <prop key="executeNative*">PROPAGATION_REQUIRED</prop>
-                <prop key="doImport*">PROPAGATION_REQUIRED</prop>
-                <prop key="getRootContent">PROPAGATION_REQUIRED</prop>
-                <prop key="getEntityFactory">PROPAGATION_SUPPORTS,readOnly</prop>
-                <prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
-                <prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="add*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="grant*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="revoke*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="create*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="update*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="delete*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="remove*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="save*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="assign*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="unassign*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="reset*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="reserve*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="debit*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="credit*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="voidReservation">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="fireTransition">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="handle">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="reservation*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="fullTextSearchReindex">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="fullTextSearchPurge">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="executeNative*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="doImport*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="getRootContent">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="getEntityFactory">PROPAGATION_SUPPORTS,readOnly,-Throwable</prop>
+                <prop key="find*">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
+                <prop key="*">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
 
             </props>
         </property>

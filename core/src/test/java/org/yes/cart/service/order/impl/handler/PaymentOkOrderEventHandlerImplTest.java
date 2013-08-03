@@ -22,6 +22,7 @@ import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.service.domain.CustomerOrderService;
+import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 
@@ -37,11 +38,11 @@ import static org.junit.Assert.*;
 public class PaymentOkOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
     private CustomerOrderService orderService;
-    private PaymentOkOrderEventHandlerImpl handler;
+    private OrderEventHandler handler;
 
     @Before
     public void setUp() {
-        handler = (PaymentOkOrderEventHandlerImpl) ctx().getBean("paymentOkOrderEventHandler");
+        handler = (OrderEventHandler) ctx().getBean("paymentOkOrderEventHandler");
         orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
         super.setUp();
     }

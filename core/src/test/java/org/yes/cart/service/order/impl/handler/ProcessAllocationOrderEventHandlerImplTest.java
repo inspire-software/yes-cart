@@ -24,6 +24,7 @@ import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
+import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 
 import java.math.BigDecimal;
@@ -39,14 +40,14 @@ import static org.junit.Assert.*;
 public class ProcessAllocationOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
     private CustomerOrderService orderService;
-    private ProcessAllocationOrderEventHandlerImpl handler;
+    private OrderEventHandler handler;
     private WarehouseService warehouseService;
     private ProductSkuService productSkuService;
     private SkuWarehouseService skuWarehouseService;
 
     @Before
     public void setUp()  {
-        handler = (ProcessAllocationOrderEventHandlerImpl) ctx().getBean("processAllocationOrderEventHandler");
+        handler = (OrderEventHandler) ctx().getBean("processAllocationOrderEventHandler");
         orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
         productSkuService = (ProductSkuService) ctx().getBean("productSkuService");
         skuWarehouseService = (SkuWarehouseService) ctx().getBean("skuWarehouseService");

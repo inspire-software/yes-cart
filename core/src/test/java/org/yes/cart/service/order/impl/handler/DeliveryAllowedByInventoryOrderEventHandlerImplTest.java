@@ -25,6 +25,7 @@ import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.SkuWarehouseService;
+import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 
 import java.math.BigDecimal;
@@ -39,12 +40,12 @@ import static org.junit.Assert.*;
 public class DeliveryAllowedByInventoryOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
     private CustomerOrderService orderService;
-    private DeliveryAllowedByInventoryOrderEventHandlerImpl handler;
+    private OrderEventHandler handler;
     private SkuWarehouseService skuWarehouseService;
 
     @Before
     public void setUp()  {
-        handler = (DeliveryAllowedByInventoryOrderEventHandlerImpl) ctx().getBean("deliveryAllowedByInventoryOrderEventHandler");
+        handler = (OrderEventHandler) ctx().getBean("deliveryAllowedByInventoryOrderEventHandler");
         orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
         skuWarehouseService = (SkuWarehouseService) ctx().getBean("skuWarehouseService");
         super.setUp();

@@ -385,7 +385,7 @@ public class CheckoutPage extends AbstractWebPage {
                                                 );
                                                 final BigDecimal grandTotal = amountCalculationResult.getTotalAmount();
 
-                                                //pay pall express checkout gateway support
+                                                //pay pal express checkout gateway support
                                                 order.setPgLabel(descriptor.getLabel());
                                                 customerOrderService.update(order);
 

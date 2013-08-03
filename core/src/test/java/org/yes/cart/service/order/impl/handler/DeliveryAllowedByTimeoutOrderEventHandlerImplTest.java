@@ -23,6 +23,7 @@ import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
 import org.yes.cart.service.domain.CustomerOrderService;
+import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 
 import java.util.Calendar;
@@ -37,17 +38,17 @@ import static org.junit.Assert.*;
 public class DeliveryAllowedByTimeoutOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
     private CustomerOrderService orderService;
-    private DeliveryAllowedByTimeoutOrderEventHandlerImpl handler;
+    private OrderEventHandler handler;
 
     @Before
     public void setUp()  {
-        handler = (DeliveryAllowedByTimeoutOrderEventHandlerImpl) ctx().getBean("deliveryAllowedByTimeoutOrderEventHandler");
+        handler = (OrderEventHandler) ctx().getBean("deliveryAllowedByTimeoutOrderEventHandler");
         orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
         super.setUp();
     }
 
     @Test
-    public void testHandle() {
+    public void testHandle() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
         CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx(), customer.getEmail()), false);

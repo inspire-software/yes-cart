@@ -25,6 +25,7 @@ import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.SkuWarehouseService;
+import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 
 import java.math.BigDecimal;
@@ -39,16 +40,16 @@ import static org.junit.Assert.*;
 public class CancelOrderWithRefundOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
     private CustomerOrderService orderService;
-    private PendingOrderEventHandlerImpl pendingHandler;
+    private OrderEventHandler pendingHandler;
     private SkuWarehouseService skuWarehouseService;
-    private CancelOrderWithRefundOrderEventHandlerImpl handler;
+    private OrderEventHandler handler;
 
     @Before
     public void setUp()  {
         orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
         skuWarehouseService = (SkuWarehouseService) ctx().getBean("skuWarehouseService");
-        pendingHandler = (PendingOrderEventHandlerImpl) ctx().getBean("pendingOrderEventHandler");
-        handler = (CancelOrderWithRefundOrderEventHandlerImpl) ctx().getBean("cancelOrderWithRefundOrderEventHandler");
+        pendingHandler = (OrderEventHandler) ctx().getBean("pendingOrderEventHandler");
+        handler = (OrderEventHandler) ctx().getBean("cancelOrderWithRefundOrderEventHandler");
         super.setUp();
     }
 

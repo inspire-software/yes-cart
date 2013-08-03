@@ -30,6 +30,7 @@ import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
+import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 
 import java.math.BigDecimal;
@@ -47,7 +48,7 @@ import static org.junit.Assert.*;
 public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
     private CustomerOrderService orderService;
-    private PendingOrderEventHandlerImpl handler;
+    private OrderEventHandler handler;
     private CustomerOrderPaymentService customerOrderPaymentService;
     private WarehouseService warehouseService;
     private ProductSkuService productSkuService;
@@ -55,7 +56,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
 
     @Before
     public void setUp()  {
-        handler = (PendingOrderEventHandlerImpl) ctx().getBean("pendingOrderEventHandler");
+        handler = (OrderEventHandler) ctx().getBean("pendingOrderEventHandler");
         orderService = (CustomerOrderService) ctx().getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
         customerOrderPaymentService = (CustomerOrderPaymentService) ctx().getBean(ServiceSpringKeys.ORDER_PAYMENT_SERICE);
         productSkuService = (ProductSkuService) ctx().getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE);

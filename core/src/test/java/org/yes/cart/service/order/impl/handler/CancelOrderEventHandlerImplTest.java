@@ -21,6 +21,7 @@ import org.junit.Test;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.service.domain.CustomerOrderService;
+import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 
 import static org.junit.Assert.assertEquals;
@@ -34,18 +35,18 @@ import static org.junit.Assert.assertFalse;
 public class CancelOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
     private CustomerOrderService orderService;
-    private CancelOrderEventHandlerImpl handler;
+    private OrderEventHandler handler;
 
     @Before
     public void setUp() {
-        handler = (CancelOrderEventHandlerImpl) ctx().getBean("cancelOrderEventHandler");
+        handler = (OrderEventHandler) ctx().getBean("cancelOrderEventHandler");
         orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
         super.setUp();
     }
 
     // FIX to allow running from IDE
     @Test
-    public void testHandle() {
+    public void testHandle() throws Exception{
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
         CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx(), customer.getEmail()), false);
