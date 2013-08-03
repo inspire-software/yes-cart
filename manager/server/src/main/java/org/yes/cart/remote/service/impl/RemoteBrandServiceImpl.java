@@ -72,8 +72,8 @@ public class RemoteBrandServiceImpl
     /**
      * {@inheritDoc}
      */
-    public void deleteAttributeValue(final long attributeValuePk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        dtoBrandService.deleteAttributeValue(attributeValuePk);
+    public long deleteAttributeValue(final long attributeValuePk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return dtoBrandService.deleteAttributeValue(attributeValuePk);
     }
 
     /**

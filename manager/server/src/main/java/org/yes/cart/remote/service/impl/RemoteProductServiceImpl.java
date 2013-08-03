@@ -127,8 +127,10 @@ public class RemoteProductServiceImpl
     /**
      * {@inheritDoc}
      */
-    public void deleteAttributeValue(final long attributeValuePk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        ((DtoProductService) getGenericDTOService()).deleteAttributeValue(attributeValuePk);
+    public long deleteAttributeValue(final long attributeValuePk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final long productId = ((DtoProductService) getGenericDTOService()).deleteAttributeValue(attributeValuePk);
+        reindexService.reindexProduct(productId);
+        return productId;
     }
 
     /**
@@ -149,5 +151,11 @@ public class RemoteProductServiceImpl
         return rez;
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
+    public void remove(final long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        super.remove(id);
+        reindexService.reindexProduct(id);
+    }
 }

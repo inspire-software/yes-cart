@@ -300,13 +300,14 @@ public class DtoCategoryServiceImpl
      *
      * @param attributeValuePk given pk value.
      */
-    public void deleteAttributeValue(final long attributeValuePk) {
+    public long deleteAttributeValue(final long attributeValuePk) {
         final AttrValueEntityCategory valueEntityCategory = attrValueEntityCategoryDao.findById(attributeValuePk);
         if (Etype.IMAGE_BUSINESS_TYPE.equals(valueEntityCategory.getAttribute().getEtype().getBusinesstype())) {
             imageService.deleteImage(valueEntityCategory.getVal());
         }
 
         attrValueEntityCategoryDao.delete(valueEntityCategory);
+        return valueEntityCategory.getCategory().getCategoryId();
     }
 
     /**

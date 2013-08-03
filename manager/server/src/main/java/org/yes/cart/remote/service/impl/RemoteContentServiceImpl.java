@@ -92,8 +92,8 @@ public class RemoteContentServiceImpl
     /**
      * {@inheritDoc}
      */
-    public void deleteAttributeValue(final long attributeValuePk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        ((DtoContentService) getGenericDTOService()).deleteAttributeValue(attributeValuePk);
+    public long deleteAttributeValue(final long attributeValuePk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return ((DtoContentService) getGenericDTOService()).deleteAttributeValue(attributeValuePk);
     }
 
     /**

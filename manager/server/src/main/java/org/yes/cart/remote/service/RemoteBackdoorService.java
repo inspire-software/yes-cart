@@ -38,13 +38,31 @@ public interface RemoteBackdoorService {
     int reindexAllProducts(AsyncContext context);
 
     /**
-     * Reindex single products.
+     * Reindex single product.
      *
      * @param context web service context
      * @param productPk product pk.
      * @return quantity of objects in index
      */
     int reindexProduct(AsyncContext context, long productPk);
+
+    /**
+     * Reindex single product by sku.
+     *
+     * @param context web service context
+     * @param productSkuPk product SKU pk.
+     * @return quantity of objects in index
+     */
+    int reindexProductSku(AsyncContext context, long productSkuPk);
+
+    /**
+     * Reindex single product by sku.
+     *
+     * @param context web service context
+     * @param productSkuCode product SKU code.
+     * @return quantity of objects in index
+     */
+    int reindexProductSkuCode(AsyncContext context, String productSkuCode);
 
 
     /**

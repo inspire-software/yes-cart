@@ -111,7 +111,7 @@ public class RemoteShopServiceImpl
     /**
      * {@inheritDoc}
      */
-    public void deleteAttributeValue(final long attributeValuePk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        ((DtoShopService) getGenericDTOService()).deleteAttributeValue(attributeValuePk);
+    public long deleteAttributeValue(final long attributeValuePk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return ((DtoShopService) getGenericDTOService()).deleteAttributeValue(attributeValuePk);
     }
 }

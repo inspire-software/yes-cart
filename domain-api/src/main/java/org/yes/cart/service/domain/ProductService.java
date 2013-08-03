@@ -267,7 +267,7 @@ public interface ProductService extends GenericService<Product> {
 
 
     /**
-     * Get all available products, that marked as featured . Need to be carefull to mark product as featured and keep
+     * Get all available products, that marked as featured . Need to be careful to mark product as featured and keep
      * quantity of featured products limited.
      *
      * @param categories current shop categories
@@ -298,6 +298,22 @@ public interface ProductService extends GenericService<Product> {
      * @return document quantity in index
      */
     int reindexProduct(Long pk);
+
+    /**
+     * Reindex the products.
+     *
+     * @param pk the product primary key
+     * @return document quantity in index
+     */
+    int reindexProductSku(Long pk);
+
+    /**
+     * Reindex the products.
+     *
+     * @param code the product SKU code
+     * @return document quantity in index
+     */
+    int reindexProductSku(String code);
 
 
     /**

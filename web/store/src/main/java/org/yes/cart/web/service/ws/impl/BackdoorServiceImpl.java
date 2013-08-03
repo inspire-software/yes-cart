@@ -59,29 +59,67 @@ public class BackdoorServiceImpl implements BackdoorService, ApplicationContextA
 
     private ServletContext servletContext;
 
+    private CacheManager cacheManager;
+
+    /*
+     * Once a product is reindexed we need to flush all cached information
+     * to enforce changes to take immediate effect on the storefront.
+     */
+    private void flushCache() {
+        cacheManager.getCache("org.yes.cart.service.domain.impl.PriceServiceImpl.cache").removeAll();
+        cacheManager.getCache("org.yes.cart.service.domain.impl.ProductServiceImpl.cache").removeAll();
+        cacheManager.getCache("org.yes.cart.web.decoratedProductCache").removeAll();
+        cacheManager.getCache("org.yes.cart.web.seoProductDecodeCache").removeAll();
+        cacheManager.getCache("org.yes.cart.web.seoProductEncodeCache").removeAll();
+        cacheManager.getCache("org.yes.cart.web.seoSkuDecodeCache").removeAll();
+        cacheManager.getCache("org.yes.cart.web.seoSkuEncodeCache").removeAll();
+    }
 
     /**
      * {@inheritDoc}
      */
     public int reindexAllProducts() {
-        return productService.reindexProducts();
+        final int count = productService.reindexProducts();
+        flushCache();
+        return count;
     }
 
     /**
      * {@inheritDoc}
      */
-    public int reindexProduct(long productPk) {
-        return productService.reindexProduct(productPk);
+    public int reindexProduct(final long productPk) {
+        final int count = productService.reindexProduct(productPk);
+        flushCache();
+        return count;
     }
 
     /**
      * {@inheritDoc}
      */
-    public int reindexProducts(long[] productPks) {
+    public int reindexProductSku(final long productPk) {
+        final int count = productService.reindexProductSku(productPk);
+        flushCache();
+        return count;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int reindexProductSkuCode(final String productCode) {
+        final int count = productService.reindexProductSku(productCode);
+        flushCache();
+        return count;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int reindexProducts(final long[] productPks) {
         int rez = 0;
         for (long pk : productPks) {
             rez += productService.reindexProduct(pk);
         }
+        flushCache();
         return rez;
     }
 
@@ -188,6 +226,15 @@ public class BackdoorServiceImpl implements BackdoorService, ApplicationContextA
      */
     public void setProductService(final ProductService productService) {
         this.productService = productService;
+    }
+
+    /**
+     * IoC. Set cache manager service.
+     *
+     * @param cacheManager cache manager
+     */
+    public void setCacheManager(final CacheManager cacheManager) {
+        this.cacheManager = cacheManager;
     }
 
     @SuppressWarnings("unchecked")

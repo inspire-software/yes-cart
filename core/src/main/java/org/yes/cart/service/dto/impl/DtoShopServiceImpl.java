@@ -182,12 +182,13 @@ public class DtoShopServiceImpl
     }
 
     /** {@inheritDoc}*/
-    public void deleteAttributeValue(final long attributeValuePk) {
+    public long deleteAttributeValue(final long attributeValuePk) {
         final AttrValueEntityShop valueEntityShop = attrValueEntityShopDao.findById(attributeValuePk);
         if (Etype.IMAGE_BUSINESS_TYPE.equals(valueEntityShop.getAttribute().getEtype().getBusinesstype())) {
             imageService.deleteImage(valueEntityShop.getVal());
         }
         attrValueEntityShopDao.delete(valueEntityShop);
+        return valueEntityShop.getShop().getShopId();
     }
 
     /**

@@ -26,23 +26,42 @@ import org.yes.cart.service.async.model.JobStatus;
 public interface ReindexService {
 
     /**
+     * Get index job status by token.
+     *
      * @param token job token
-     * @return staus of indexing
+     * @return status of indexing
      */
     JobStatus getIndexAllStatus(final String token);
 
     /**
-     * Reindex all products
+     * Reindex all products.
+     *
      * @return quantity product in created index.
      */
     String reindexAllProducts();
 
     /**
-     * Reindex product by given sku code.
+     * Reindex product by given primary key.
      *
      * @param pk product primary key
-     * @return quantity product in created index.
+     * @return quantity of products in created index.
      */
     int reindexProduct(long pk);
+
+    /**
+     * Reindex product by given sku primary key.
+     *
+     * @param pk sku primary key
+     * @return quantity of products in created index.
+     */
+    int reindexProductSku(long pk);
+
+    /**
+     * Reindex product by given sku primary key.
+     *
+     * @param code sku code
+     * @return quantity of products in created index.
+     */
+    int reindexProductSkuCode(String code);
 
 }

@@ -118,7 +118,7 @@ public class DtoSystemServiceImpl implements DtoSystemService {
     }
 
     /** {@inheritDoc}*/
-    public void deleteAttributeValue(final long attributeValuePk) {
+    public long deleteAttributeValue(final long attributeValuePk) {
         throw new UnsupportedOperationException("System attributes cannot be deleted"); // at least for now
     }
 
