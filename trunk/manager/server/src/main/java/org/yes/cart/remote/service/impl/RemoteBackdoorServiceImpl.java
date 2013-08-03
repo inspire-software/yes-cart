@@ -44,6 +44,16 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
     }
 
     /** {@inheritDoc} */
+    public int reindexProductSku(final AsyncContext context, final long productPk) {
+        return getBackdoorService(context, 60000).reindexProductSku(productPk);
+    }
+
+    /** {@inheritDoc} */
+    public int reindexProductSkuCode(final AsyncContext context, final String productSkuCode) {
+        return getBackdoorService(context, 60000).reindexProductSkuCode(productSkuCode);
+    }
+
+    /** {@inheritDoc} */
     public int reindexProducts(final AsyncContext context, final long[] productPks) {
         return getBackdoorService(context, 60000).reindexProducts(productPks);
     }

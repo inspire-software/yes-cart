@@ -155,6 +155,17 @@ public class DtoProductSkuServiceImpl
         getService().getGenericDao().delete(sku);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public SkuPriceDTO getSkuPrice(final long skuPriceId) {
+        SkuPrice skuPrice = priceService.getById(skuPriceId);
+        SkuPriceDTO skuPriceDTO = getDtoFactory().getByIface(SkuPriceDTO.class);
+        skuPriceAssembler.assembleEntity(skuPriceDTO, skuPrice,
+                getAdaptersRepository(),
+                new EntityFactoryToBeanFactoryAdaptor(service.getGenericDao().getEntityFactory()));
+        return skuPriceDTO;
+    }
 
     /**
      * {@inheritDoc}
@@ -352,12 +363,13 @@ public class DtoProductSkuServiceImpl
     /**
      * {@inheritDoc}
      */
-    public void deleteAttributeValue(final long attributeValuePk) {
+    public long deleteAttributeValue(final long attributeValuePk) {
         final AttrValueEntityProductSku attrValue = attrValueEntityProductSkuDao.findById(attributeValuePk);
         if (Etype.IMAGE_BUSINESS_TYPE.equals(attrValue.getAttribute().getEtype().getBusinesstype())) {
             imageService.deleteImage(attrValue.getVal());
         }
         attrValueEntityProductSkuDao.delete(attrValue);
+        return attrValue.getProductSku().getSkuId();
     }
 
     /**

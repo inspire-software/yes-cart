@@ -19,7 +19,6 @@ package org.yes.cart.remote.service.impl;
 import org.yes.cart.domain.dto.ShopWarehouseDTO;
 import org.yes.cart.domain.dto.SkuWarehouseDTO;
 import org.yes.cart.domain.dto.WarehouseDTO;
-import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
@@ -96,32 +95,18 @@ public class RemoteWarehouseServiceImpl
      */
     public void removeSkuOnWarehouse(final long skuWarehouseId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final SkuWarehouse skuWarehouse = getSkuWarehouseService().getById(skuWarehouseId);
-        if (skuWarehouse != null) {
-            reindexService.reindexProduct(getProductId(skuWarehouse.getSku().getSkuId()));
-        }
         dtoWarehouseService.removeSkuOnWarehouse(skuWarehouseId);
-    }
-
-    /**
-     * Get product id by sku id.
-     * @param skuId   product sku
-     * @return product pk value
-     */
-    private long getProductId(final long skuId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        ProductSku sku = productSkuService.getById(skuId);
-        if (sku != null) {
-            return sku.getProduct().getProductId();
+        if (skuWarehouse != null) {
+            reindexService.reindexProductSku(skuWarehouse.getSku().getSkuId());
         }
-        return 0;
     }
-
 
     /**
      * {@inheritDoc
      */
     public SkuWarehouseDTO createSkuOnWarehouse(final SkuWarehouseDTO skuWarehouseDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         SkuWarehouseDTO rez = dtoWarehouseService.createSkuOnWarehouse(skuWarehouseDTO);
-        reindexService.reindexProduct(getProductId(rez.getProductSkuId()));
+        reindexService.reindexProductSku(rez.getProductSkuId());
         return rez;
     }
 
@@ -130,7 +115,7 @@ public class RemoteWarehouseServiceImpl
      */
     public SkuWarehouseDTO updateSkuOnWarehouse(final SkuWarehouseDTO skuWarehouseDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         SkuWarehouseDTO rez = dtoWarehouseService.updateSkuOnWarehouse(skuWarehouseDTO);
-        reindexService.reindexProduct(getProductId(rez.getProductSkuId()));
+        reindexService.reindexProductSku(rez.getProductSkuId());
         return rez;
     }
 
@@ -143,7 +128,7 @@ public class RemoteWarehouseServiceImpl
 
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public SkuWarehouseService getSkuWarehouseService() {
         return dtoWarehouseService.getSkuWarehouseService();

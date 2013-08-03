@@ -65,6 +65,7 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
     }
 
     /** {@inheritDoc} */
+    @Override
     public JobStatus getIndexAllStatus(final String token) {
         return getStatus(token);
     }
@@ -111,23 +112,28 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
         };
     }
 
-    /**
-     * Reindex all products
-     *
-     * @return quantity product in created index.
-     */
+    /** {@inheritDoc} */
+    @Override
     public String reindexAllProducts() {
         return doJob(createAsyncContext());
     }
 
-    /**
-     * Reindex product by given sku code.
-     *
-     * @param pk          product primary key
-     * @return quantity product in created index.
-     */
+    /** {@inheritDoc} */
+    @Override
     public int reindexProduct(long pk) {
         return remoteBackdoorService.reindexProduct(createAsyncContext(), pk);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int reindexProductSku(long pk) {
+        return remoteBackdoorService.reindexProductSku(createAsyncContext(), pk);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int reindexProductSkuCode(String code) {
+        return remoteBackdoorService.reindexProductSkuCode(createAsyncContext(), code);
     }
 
     private JobContext createAsyncContext() {

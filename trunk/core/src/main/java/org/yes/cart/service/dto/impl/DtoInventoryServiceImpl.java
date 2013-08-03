@@ -35,6 +35,7 @@ import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
+import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.dto.DtoInventoryService;
 import org.yes.cart.service.dto.DtoWarehouseService;
 import org.yes.cart.service.dto.support.InventoryFilter;
@@ -140,6 +141,17 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
     }
 
     /** {@inheritDoc} */
+    public InventoryDTO getInventory(final long skuWarehouseId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final InventoryDTO dto = dtoFactory.getByIface(InventoryDTO.class);
+        final Map<String, Object> adapters = adaptersRepository.getAll();
+        final SkuWarehouse entity = skuWarehouseDAO.findById(skuWarehouseId);
+        skuWarehouseAsm.assembleDto(dto, entity, adapters, dtoFactory);
+
+        return dto;
+    }
+
+    /** {@inheritDoc} */
     public InventoryDTO createInventory(final InventoryDTO inventory) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return saveInventory(inventory);
     }
@@ -203,4 +215,5 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
 
         return inventory;
     }
+
 }

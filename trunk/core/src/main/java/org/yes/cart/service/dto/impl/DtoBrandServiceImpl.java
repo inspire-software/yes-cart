@@ -154,12 +154,13 @@ public class DtoBrandServiceImpl
     }
 
     /** {@inheritDoc}*/
-    public void deleteAttributeValue(final long attributeValuePk) {
+    public long deleteAttributeValue(final long attributeValuePk) {
         final AttrValueEntityBrand valueEntityBrand = attrValueEntityBrandDao.findById(attributeValuePk);
         if (Etype.IMAGE_BUSINESS_TYPE.equals(valueEntityBrand.getAttribute().getEtype().getBusinesstype())) {
             imageService.deleteImage(valueEntityBrand.getVal());
         }
         attrValueEntityBrandDao.delete(valueEntityBrand);
+        return valueEntityBrand.getBrand().getBrandId();
     }
 
     /**

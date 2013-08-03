@@ -795,6 +795,28 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public int reindexProductSku(final Long pk) {
+        final ProductSku productSku = productSkuService.getById(pk);
+        if (productSku != null) {
+            return productDao.fullTextSearchReindex(productSku.getProduct().getProductId());
+        }
+        return 0;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int reindexProductSku(final String code) {
+        final ProductSku productSku = productSkuService.getProductSkuBySkuCode(code);
+        if (productSku != null) {
+            return productDao.fullTextSearchReindex(productSku.getProduct().getProductId());
+        }
+        return 0;
+    }
+
+    /**
      * Get the total quantity of product skus on all warehouses.
      *
      * @param product product
