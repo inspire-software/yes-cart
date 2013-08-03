@@ -24,8 +24,8 @@ import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.service.domain.CustomerOrderService;
+import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.impl.OrderEventImpl;
-import org.yes.cart.service.order.impl.handler.PendingOrderEventHandlerImpl;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl;
 import org.yes.cart.shoppingcart.impl.SetCarrierSlaCartCommandImpl;
@@ -49,13 +49,13 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
 
     private CustomerOrderService customerOrderService;
 
-    private PendingOrderEventHandlerImpl handler;
+    private OrderEventHandler handler;
 
 
     @Before
     public void setUp() {
         customerOrderService = (CustomerOrderService) ctx().getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
-        handler = (PendingOrderEventHandlerImpl) ctx().getBean("pendingOrderEventHandler");
+        handler = (OrderEventHandler) ctx().getBean("pendingOrderEventHandler");
         super.setUp();
     }
 

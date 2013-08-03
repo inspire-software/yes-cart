@@ -139,8 +139,8 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
                     (Product.AVAILABILITY_STANDARD == productSku.getProduct().getAvailability())) {
 
                 /**
-                 * Availability.AVAILABILITY_BACKORDER -  can get from somewere
-                 * Availability.AVAILABILITY_PREORDER - can order from manafacturer
+                 * Availability.AVAILABILITY_BACKORDER -  can get more stock
+                 * Availability.AVAILABILITY_PREORDER - can pre-order from manufacturer
                  * Availability.AVAILABILITY_ALWAYS - always
                  */
                 throw new OrderItemAllocationException(

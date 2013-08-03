@@ -32,6 +32,7 @@ import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
+import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.service.payment.PaymentProcessorFactory;
 import org.yes.cart.shoppingcart.ShoppingCart;
@@ -56,8 +57,8 @@ public class ShipmentCompleteOrderEventHandlerImplTest extends AbstractEventHand
     private PaymentProcessorFactory paymentProcessorFactory;
 
     private CustomerOrderService orderService;
-    private ShipmentCompleteOrderEventHandlerImpl handler;
-    private PendingOrderEventHandlerImpl pendingHandler;
+    private OrderEventHandler handler;
+    private OrderEventHandler pendingHandler;
     private SkuWarehouseService skuWarehouseService;
     private CustomerOrderPaymentService customerOrderPaymentService;
     private WarehouseService warehouseService;
@@ -66,11 +67,11 @@ public class ShipmentCompleteOrderEventHandlerImplTest extends AbstractEventHand
     @Before
     public void setUp()  {
         paymentProcessorFactory = (PaymentProcessorFactory) ctx().getBean(ServiceSpringKeys.PAYMENT_PROCESSOR_FACTORY);
-        handler = (ShipmentCompleteOrderEventHandlerImpl) ctx().getBean("shipmentCompleteOrderEventHandler");
+        handler = (OrderEventHandler) ctx().getBean("shipmentCompleteOrderEventHandler");
         orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
         skuWarehouseService = (SkuWarehouseService) ctx().getBean("skuWarehouseService");
         customerOrderPaymentService = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
-        pendingHandler = (PendingOrderEventHandlerImpl) ctx().getBean("pendingOrderEventHandler");
+        pendingHandler = (OrderEventHandler) ctx().getBean("pendingOrderEventHandler");
         warehouseService = (WarehouseService) ctx().getBean("warehouseService");
         productSkuService = (ProductSkuService) ctx().getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE);
         super.setUp();

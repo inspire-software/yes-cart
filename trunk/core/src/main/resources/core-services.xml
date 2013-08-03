@@ -1137,76 +1137,114 @@
 
 <!-- ################################# order flow state manager  ########################################## -->
 
-<!--
-    Transition from none state to pending. Pending state is temporal and not persisted. Possible transition cancel or payment ok.
-    Perform online payment authorization
--->
-    <bean id="pendingOrderEventHandler" class="org.yes.cart.service.order.impl.handler.PendingOrderEventHandlerImpl">
-        <constructor-arg index="0" ref="paymentProcessorFactory"/>
-        <constructor-arg index="1" ref="warehouseService"/>
-        <constructor-arg index="2" ref="skuWarehouseService"/>
+    <bean id="txProxyOrderEventHandlerTemplate" abstract="true"
+          class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager" ref="transactionManager"/>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="handle">PROPAGATION_REQUIRED,-Throwable</prop>
+            </props>
+        </property>
+    </bean>
 
+    <!--
+        Transition from none state to pending. Pending state is temporal and not persisted. Possible transition cancel or payment ok.
+        Perform online payment authorization
+    -->
+    <bean id="pendingOrderEventHandler"  parent="txProxyOrderEventHandlerTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.handler.PendingOrderEventHandlerImpl">
+                <constructor-arg index="0" ref="paymentProcessorFactory"/>
+                <constructor-arg index="1" ref="warehouseService"/>
+                <constructor-arg index="2" ref="skuWarehouseService"/>
+            </bean>
+        </property>
     </bean>
 
     <!--Wait for order confirmation in case of courier payment gateway or fund capture in case of offline bank payment gateway-->
-    <bean id="paymentOfflineOrderEventHandler" class="org.yes.cart.service.order.impl.handler.PaymentOfflineOrderEventHandlerImpl"/>
+    <bean id="paymentOfflineOrderEventHandler"
+          class="org.yes.cart.service.order.impl.handler.PaymentOfflineOrderEventHandlerImpl"/>
 
 
     <!--Pefrom separate processing of order deliveries-->
-    <bean id="paymentOkOrderEventHandler" class="org.yes.cart.service.order.impl.handler.PaymentOkOrderEventHandlerImpl"/>
+    <bean id="paymentOkOrderEventHandler"
+          class="org.yes.cart.service.order.impl.handler.PaymentOkOrderEventHandlerImpl"/>
 
 
     <!-- Process quantity allocation on warehouses -->
-    <bean id="processAllocationOrderEventHandler"
-          class="org.yes.cart.service.order.impl.handler.ProcessAllocationOrderEventHandlerImpl">
-        <constructor-arg index="0" ref="warehouseService"/>
-        <constructor-arg index="1" ref="skuWarehouseService"/>
+    <bean id="processAllocationOrderEventHandler"  parent="txProxyOrderEventHandlerTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.handler.ProcessAllocationOrderEventHandlerImpl">
+                <constructor-arg index="0" ref="warehouseService"/>
+                <constructor-arg index="1" ref="skuWarehouseService"/>
+            </bean>
+        </property>
     </bean>
 
     <!--Order , that wait confirmation approved-->
-    <bean id="paymentConfirmedOrderEventHandler"  class="org.yes.cart.service.order.impl.handler.PaymentConfirmedOrderEventHandlerImpl" />
+    <bean id="paymentConfirmedOrderEventHandler"
+          class="org.yes.cart.service.order.impl.handler.PaymentConfirmedOrderEventHandlerImpl" />
 
     <!--Cancel order-->
-    <bean id="cancelOrderEventHandler"  class="org.yes.cart.service.order.impl.handler.CancelOrderEventHandlerImpl">
-        <constructor-arg index="0" ref="warehouseService"/>
-        <constructor-arg index="1" ref="skuWarehouseService"/>
+    <bean id="cancelOrderEventHandler"  parent="txProxyOrderEventHandlerTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.handler.CancelOrderEventHandlerImpl">
+                <constructor-arg index="0" ref="warehouseService"/>
+                <constructor-arg index="1" ref="skuWarehouseService"/>
+            </bean>
+        </property>
     </bean>
 
     <!-- Simple transition to time wait state, because of mixed delivery of pre order -->
-    <bean id="processTimeWaitOrderEventHandler"  class="org.yes.cart.service.order.impl.handler.ProcessTimeWaitOrderEventHandlerImpl"/>
+    <bean id="processTimeWaitOrderEventHandler"
+          class="org.yes.cart.service.order.impl.handler.ProcessTimeWaitOrderEventHandlerImpl"/>
 
     <!-- Simple transition to inventory wait state, because of back order -->
-    <bean id="processInventoryWaitOrderEventHandler"  class="org.yes.cart.service.order.impl.handler.ProcessInventoryWaitOrderEventHandlerImpl"/>
+    <bean id="processInventoryWaitOrderEventHandler"
+          class="org.yes.cart.service.order.impl.handler.ProcessInventoryWaitOrderEventHandlerImpl"/>
 
     <!-- Transition from time wait to inventory wait state -->
-    <bean id="deliveryAllowedByTimeoutOrderEventHandler"  class="org.yes.cart.service.order.impl.handler.DeliveryAllowedByTimeoutOrderEventHandlerImpl"/>
+    <bean id="deliveryAllowedByTimeoutOrderEventHandler"
+          class="org.yes.cart.service.order.impl.handler.DeliveryAllowedByTimeoutOrderEventHandlerImpl"/>
 
     <!-- Transition from inventory wait state to inventory allocation -->
-    <bean id="deliveryAllowedByInventoryOrderEventHandler"  class="org.yes.cart.service.order.impl.handler.DeliveryAllowedByInventoryOrderEventHandlerImpl">
-        <constructor-arg index="0" ref="warehouseService"/>
-        <constructor-arg index="1" ref="skuWarehouseService"/>
+    <bean id="deliveryAllowedByInventoryOrderEventHandler"  parent="txProxyOrderEventHandlerTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.handler.DeliveryAllowedByInventoryOrderEventHandlerImpl">
+                <constructor-arg index="0" ref="warehouseService"/>
+                <constructor-arg index="1" ref="skuWarehouseService"/>
+            </bean>
+        </property>
     </bean>
 
 
-    <!-- Simple transition delivery released to paicking -->
-    <bean id="releaseToPackOrderEventHandler"  class="org.yes.cart.service.order.impl.handler.ReleaseToPackOrderEventHandlerImpl"/>
+    <!-- Simple transition delivery released to packing -->
+    <bean id="releaseToPackOrderEventHandler"
+          class="org.yes.cart.service.order.impl.handler.ReleaseToPackOrderEventHandlerImpl"/>
 
-    <!-- Pack completed . Wait for shipment-->
-    <bean id="packCompleteOrderEventHandler"  class="org.yes.cart.service.order.impl.handler.PackCompleteOrderEventHandlerImpl"/>
+    <!-- Pack completed . Wait for shipment -->
+    <bean id="packCompleteOrderEventHandler"
+          class="org.yes.cart.service.order.impl.handler.PackCompleteOrderEventHandlerImpl"/>
 
     <!-- Shipment in progress -->
-    <bean id="releaseToShipmentOrderEventHandler"  class="org.yes.cart.service.order.impl.handler.ReleaseToShipmentOrderEventHandlerImpl"/>
+    <bean id="releaseToShipmentOrderEventHandler"
+          class="org.yes.cart.service.order.impl.handler.ReleaseToShipmentOrderEventHandlerImpl"/>
 
     <!-- Shipment completed -->
-    <bean id="shipmentCompleteOrderEventHandler"  class="org.yes.cart.service.order.impl.handler.ShipmentCompleteOrderEventHandlerImpl">
+    <bean id="shipmentCompleteOrderEventHandler"
+          class="org.yes.cart.service.order.impl.handler.ShipmentCompleteOrderEventHandlerImpl">
         <constructor-arg index="0" ref="paymentProcessorFactory"/>
     </bean>
 
     <!-- Cancel with refund -->
-    <bean id="cancelOrderWithRefundOrderEventHandler"  class="org.yes.cart.service.order.impl.handler.CancelOrderWithRefundOrderEventHandlerImpl">
-        <constructor-arg index="0" ref="paymentProcessorFactory"/>
-        <constructor-arg index="1" ref="warehouseService"/>
-        <constructor-arg index="2" ref="skuWarehouseService"/>
+    <bean id="cancelOrderWithRefundOrderEventHandler"  parent="txProxyOrderEventHandlerTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.handler.CancelOrderWithRefundOrderEventHandlerImpl">
+                <constructor-arg index="0" ref="paymentProcessorFactory"/>
+                <constructor-arg index="1" ref="warehouseService"/>
+                <constructor-arg index="2" ref="skuWarehouseService"/>
+            </bean>
+        </property>
     </bean>
 
 
