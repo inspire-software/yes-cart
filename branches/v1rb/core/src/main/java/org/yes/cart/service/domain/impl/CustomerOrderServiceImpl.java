@@ -20,6 +20,7 @@ import org.hibernate.criterion.Restrictions;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.DeliveryAssembler;
@@ -45,6 +46,8 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
 
     private final GenericDAO<Customer, Long> customerDao;
 
+    private final GenericDAO<CustomerOrderDelivery, Long> customerOrderDeliveryDao;
+
     private final CustomerOrderPaymentService customerOrderPaymentService;
 
     /**
@@ -55,10 +58,12 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
      * @param deliveryAssembler delivery assembler
      * @param customerDao customer dao to use
      * @param customerOrderPaymentService to calculate order amount payments.
+     * @param customerOrderDeliveryDao to get deliveries, awiting for inventory
      */
     public CustomerOrderServiceImpl(
             final GenericDAO<CustomerOrder, Long> customerOrderDao,
             final GenericDAO<Customer, Long> customerDao,
+            final GenericDAO<CustomerOrderDelivery, Long> customerOrderDeliveryDao,
             final OrderAssembler orderAssembler,
             final DeliveryAssembler deliveryAssembler,
             final CustomerOrderPaymentService customerOrderPaymentService) {
@@ -67,6 +72,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
         this.deliveryAssembler = deliveryAssembler;
         this.customerDao = customerDao;
         this.customerOrderPaymentService = customerOrderPaymentService;
+        this.customerOrderDeliveryDao = customerOrderDeliveryDao;
     }
 
     /**
@@ -77,6 +83,19 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
      */
     public BigDecimal getOrderAmount(final String orderNumber) {
         return customerOrderPaymentService.getOrderAmount(orderNumber);
+    }
+
+    /**
+     * Find orders, which are waiting for inventory to be completed.
+     * @param skuId  what sku is required.
+     * @return awaiting orders
+     */
+    public List<CustomerOrderDelivery> findDeliveriesAwaitingForInventory(final long skuId) {
+        return customerOrderDeliveryDao.findByNamedQuery("DELIVERIES.WAITING.FOR.INVENTORY",
+                CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                CustomerOrder.ORDER_STATUS_IN_PROGRESS,
+                skuId);
+
     }
 
 

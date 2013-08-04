@@ -17,14 +17,21 @@
 package org.yes.cart.service.domain.impl;
 
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.entity.ProductSku;
-import org.yes.cart.domain.entity.SkuWarehouse;
-import org.yes.cart.domain.entity.Warehouse;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.service.domain.CustomerOrderService;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SkuWarehouseService;
+import org.yes.cart.service.order.OrderException;
+import org.yes.cart.service.order.OrderStateManager;
+import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -35,15 +42,25 @@ import java.util.List;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse> implements SkuWarehouseService {
+public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse> implements SkuWarehouseService, ApplicationContextAware {
+
+    private  ProductService productService;
+
+    private ApplicationContext applicationContext   ;
+
+    private  OrderStateManager orderStateManager;
+
+    private  CustomerOrderService customerOrderService;
 
 
     /**
      * Construct sku warehouse service.
      *
-     * @param genericDao     dao to use.
+     * @param genericDao dao to use.
      */
-    public SkuWarehouseServiceImpl(final GenericDAO<SkuWarehouse, Long> genericDao) {
+    public SkuWarehouseServiceImpl(
+            final GenericDAO<SkuWarehouse, Long> genericDao
+    ) {
         super(genericDao);
     }
 
@@ -173,10 +190,24 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
             skuWarehouse.setQuantity(skuWarehouse.getQuantity().add(addQty));
             update(skuWarehouse);
         }
+        updateOrdersAwaitingForInventory(productSku.getSkuId());
         return BigDecimal.ZERO;
 
     }
 
+    /** {@inheritDoc}*/
+    public SkuWarehouse create(SkuWarehouse instance) {
+        final SkuWarehouse rez = super.create(instance);
+
+        return rez;
+    }
+
+    /** {@inheritDoc}*/
+    public SkuWarehouse update(SkuWarehouse instance) {
+        final SkuWarehouse rez = super.update(instance);
+
+        return rez;
+    }
 
     /**
      * Debit (decrease) quantity of given sku on particular warehouse.
@@ -222,4 +253,78 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     }
 
 
+    /**
+     * Push orders , that are awaiting for inventory
+     *
+     * @param productSkuId
+     */
+    public void updateOrdersAwaitingForInventory(final long productSkuId) {
+        /**
+         * WARNING . Potential issue  delivery may be not allowed by time. Need to solve it
+         */
+        if (isSkuAvilabilityPreorder(productSkuId)) {
+
+            List<CustomerOrderDelivery> waitForInventory = getCustomerOrderService().findDeliveriesAwaitingForInventory(productSkuId);
+
+            for (CustomerOrderDelivery delivery : waitForInventory) {
+
+                try {
+                    boolean rez = getOrderStateManager().fireTransition(
+                            new OrderEventImpl(OrderStateManager.EVT_DELIVERY_ALLOWED_QUANTITY, delivery.getCustomerOrder(), delivery));
+                    if (rez) {
+                        customerOrderService.update(delivery.getCustomerOrder());
+                        ShopCodeContext.getLog(this).info("Push delivery " + delivery.getDeliveryNum() + " back to life cycle , because of sku quantity is changed. Product sku id =" + productSkuId);
+
+                    } else {
+                        ShopCodeContext.getLog(this).info("Cannot push delivery "
+                                + delivery.getDeliveryNum() + " back to life cycle , because of sku quantity is changed. Product sku id ="
+                                + productSkuId
+                                + " Stop pushing");
+                        break;
+                    }
+                } catch (OrderException e) {
+                    ShopCodeContext.getLog(this).error("Cannot push orders, which are awaiting for inventory", e);
+                }
+
+            }
+
+        }
+
+    }
+
+
+    /**
+     * Check is sku has preorder availablilty.
+     *
+     * @param productSkuId sku warehouse entity
+     * @return true, if sku has preorder availability.
+     */
+    public boolean isSkuAvilabilityPreorder(final long productSkuId) {
+        ProductSku sku = productService.getSkuById(productSkuId);
+        return Product.AVAILABILITY_PREORDER == sku.getProduct().getAvailability();
+    }
+
+    /** IoC.*/
+    public void setProductService(ProductService productService) {
+        this.productService = productService;
+    }
+
+    private OrderStateManager getOrderStateManager() {
+        if (orderStateManager == null) {
+            orderStateManager = applicationContext.getBean("orderStateManager", OrderStateManager.class);
+        }
+        return orderStateManager;
+    }
+
+    private CustomerOrderService getCustomerOrderService() {
+        if (customerOrderService == null) {
+            customerOrderService =  applicationContext.getBean("customerOrderService", CustomerOrderService.class);
+        }
+        return customerOrderService;
+    }
+
+
+    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
 }
