@@ -66,13 +66,21 @@ public class BackdoorServiceImpl implements BackdoorService, ApplicationContextA
      * to enforce changes to take immediate effect on the storefront.
      */
     private void flushCache() {
-        cacheManager.getCache("org.yes.cart.service.domain.impl.PriceServiceImpl.cache").removeAll();
-        cacheManager.getCache("org.yes.cart.service.domain.impl.ProductServiceImpl.cache").removeAll();
-        cacheManager.getCache("org.yes.cart.web.decoratedProductCache").removeAll();
-        cacheManager.getCache("org.yes.cart.web.seoProductDecodeCache").removeAll();
-        cacheManager.getCache("org.yes.cart.web.seoProductEncodeCache").removeAll();
-        cacheManager.getCache("org.yes.cart.web.seoSkuDecodeCache").removeAll();
-        cacheManager.getCache("org.yes.cart.web.seoSkuEncodeCache").removeAll();
+        safeFlushCache(cacheManager.getCache("org.yes.cart.service.domain.impl.PriceServiceImpl.cache"));
+        safeFlushCache(cacheManager.getCache("org.yes.cart.service.domain.impl.ProductServiceImpl.cache"));
+        safeFlushCache(cacheManager.getCache("org.yes.cart.web.decoratedProductCache"));
+        safeFlushCache(cacheManager.getCache("org.yes.cart.web.seoProductDecodeCache"));
+        safeFlushCache(cacheManager.getCache("org.yes.cart.web.seoProductEncodeCache"));
+        safeFlushCache(cacheManager.getCache("org.yes.cart.web.seoSkuDecodeCache"));
+        safeFlushCache(cacheManager.getCache("org.yes.cart.web.seoSkuEncodeCache"));
+    }
+
+    private void safeFlushCache(final Cache cache) {
+
+        if(cache != null) {
+            cache.removeAll();
+        }
+
     }
 
     /**

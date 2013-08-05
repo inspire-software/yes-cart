@@ -46,7 +46,7 @@ import java.util.List;
  * Time: 14:12:54
  */
 public class DtoWarehouseServiceImpl
-    extends AbstractDtoServiceImpl<WarehouseDTO, WarehouseDTOImpl, Warehouse>
+        extends AbstractDtoServiceImpl<WarehouseDTO, WarehouseDTOImpl, Warehouse>
         implements DtoWarehouseService {
 
     private final SkuWarehouseService skuWarehouseService;
@@ -55,13 +55,15 @@ public class DtoWarehouseServiceImpl
 
     private final Assembler shopWarehouseAssembler;
 
+
+
     /**
      * Construct dto service.
      *
-     * @param dtoFactory    {@link org.yes.cart.domain.dto.factory.DtoFactory}
-     * @param warehouseGenericService       {@link org.yes.cart.service.domain.GenericService}
-     * @param adaptersRepository     value converter
-     * @param skuWarehouseService service to manage sku qty on warehouses
+     * @param dtoFactory              {@link org.yes.cart.domain.dto.factory.DtoFactory}
+     * @param warehouseGenericService {@link org.yes.cart.service.domain.GenericService}
+     * @param adaptersRepository      value converter
+     * @param skuWarehouseService     service to manage sku qty on warehouses
      */
     public DtoWarehouseServiceImpl(final GenericService<Warehouse> warehouseGenericService,
                                    final DtoFactory dtoFactory,
@@ -77,54 +79,69 @@ public class DtoWarehouseServiceImpl
                 ShopWarehouseDTOImpl.class, ShopWarehouse.class);
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public Class<WarehouseDTO> getDtoIFace() {
         return WarehouseDTO.class;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public Class<WarehouseDTOImpl> getDtoImpl() {
         return WarehouseDTOImpl.class;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public Class<Warehouse> getEntityIFace() {
         return Warehouse.class;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public List<WarehouseDTO> findByShopId(final long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        List<Warehouse> warehouses = ((WarehouseService)service).findByShopId(shopId);
+        List<Warehouse> warehouses = ((WarehouseService) service).findByShopId(shopId);
         List<WarehouseDTO> dtos = new ArrayList<WarehouseDTO>();
         fillDTOs(warehouses, dtos);
         return dtos;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public void setShopWarehouseRank(final long shopWarehouseId, final int newRank) {
-       ((WarehouseService)service).updateShopWarehouseRank(shopWarehouseId, newRank);
+        ((WarehouseService) service).updateShopWarehouseRank(shopWarehouseId, newRank);
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public ShopWarehouseDTO assignWarehouse(
             final long warehouseId,
             final long shopId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        ShopWarehouse shopWarehouse = ((WarehouseService)service).assignWarehouse(warehouseId, shopId);
+        ShopWarehouse shopWarehouse = ((WarehouseService) service).assignWarehouse(warehouseId, shopId);
         ShopWarehouseDTO dto = dtoFactory.getByIface(ShopWarehouseDTO.class);
         shopWarehouseAssembler.assembleDto(dto, shopWarehouse, getAdaptersRepository(), dtoFactory);
         return dto;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public void unassignWarehouse(final long warehouseId, final long shopId) {
-        ((WarehouseService)service).unassignWarehouse(warehouseId, shopId);
+        ((WarehouseService) service).unassignWarehouse(warehouseId, shopId);
     }
 
 
     /**
      * Dind product skus quantity objects on given warehouse.
-     * @param productId given product id
+     *
+     * @param productId   given product id
      * @param warehouseId given warehouse id.
      * @return list of founded {@link SkuWarehouseDTO}
      */
@@ -139,6 +156,7 @@ public class DtoWarehouseServiceImpl
 
     /**
      * Create given {@link SkuWarehouseDTO}
+     *
      * @param skuWarehouseDTO given {@link SkuWarehouseDTO}
      * @return created SkuWarehouseDTO.
      */
@@ -150,11 +168,13 @@ public class DtoWarehouseServiceImpl
                 getAdaptersRepository(),
                 new EntityFactoryToBeanFactoryAdaptor(service.getGenericDao().getEntityFactory()));
         skuWarehouse = skuWarehouseService.create(skuWarehouse);
+        skuWarehouseService.updateOrdersAwaitingForInventory(skuWarehouse.getSku().getSkuId());
         return assembleSkuWarehouseDTO(skuWarehouse);
     }
 
     /**
      * Update given {@link SkuWarehouseDTO}
+     *
      * @param skuWarehouseDTO given {@link SkuWarehouseDTO}
      * @return updated SkuWarehouseDTO.
      */
@@ -166,6 +186,7 @@ public class DtoWarehouseServiceImpl
                 getAdaptersRepository(),
                 new EntityFactoryToBeanFactoryAdaptor(service.getGenericDao().getEntityFactory()));
         skuWarehouse = skuWarehouseService.update(skuWarehouse);
+        skuWarehouseService.updateOrdersAwaitingForInventory(skuWarehouse.getSku().getSkuId());
         return assembleSkuWarehouseDTO(skuWarehouse);
 
     }
@@ -182,6 +203,7 @@ public class DtoWarehouseServiceImpl
 
     /**
      * Remove sku warehouse object by given pk value
+     *
      * @param skuWarehouseId given pk value.
      */
     public void removeSkuOnWarehouse(final long skuWarehouseId) {
@@ -193,6 +215,7 @@ public class DtoWarehouseServiceImpl
 
     /**
      * Get the {@link SkuWarehouseService}. Test usage only.
+     *
      * @return {@link org.yes.cart.service.domain.SkuWarehouseService}
      */
     public SkuWarehouseService getSkuWarehouseService() {

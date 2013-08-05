@@ -18,6 +18,7 @@ package org.yes.cart.service.domain;
 
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.math.BigDecimal;
@@ -81,6 +82,13 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
             Date toDate,
             String orderNum
     );
+
+    /**
+     * Find orders, which are waiting for inventory to be completed.
+     * @param skuId  what sku is required.
+     * @return awaiting orders
+     */
+    List<CustomerOrderDelivery> findDeliveriesAwaitingForInventory(long skuId);
 
 
     /**
