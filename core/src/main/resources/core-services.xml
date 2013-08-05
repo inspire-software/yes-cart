@@ -383,9 +383,10 @@
                 <constructor-arg index="0"  ref="customerOrderDao"/>
                 <constructor-arg index="1"  ref="customerDao"/>
                 <constructor-arg index="2"  ref="genericDao"/>
-                <constructor-arg index="3"  ref="orderAssembler"/>
-                <constructor-arg index="4"  ref="deliveryAssembler"/>
-                <constructor-arg index="5"  ref="customerOrderPaymentService"/>
+                <constructor-arg index="3"  ref="customerOrderDeliveryDao"/>
+                <constructor-arg index="4"  ref="orderAssembler"/>
+                <constructor-arg index="5"  ref="deliveryAssembler"/>
+                <constructor-arg index="6"  ref="customerOrderPaymentService"/>
             </bean>
         </property>
     </bean>
@@ -421,6 +422,7 @@
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.SkuWarehouseServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="skuWarehouseDao"/>
+                <property name="productService" ref="productService"/>
             </bean>
         </property>
     </bean>

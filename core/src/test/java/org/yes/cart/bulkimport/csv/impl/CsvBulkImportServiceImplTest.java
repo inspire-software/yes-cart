@@ -147,7 +147,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.next();
             long cntBrands = rs.getLong("cnt");
             rs.close();
-            assertEquals(17L, cntBrands);  // 12 new + 6 Initial Data (but Samsung is duplicate)
+            assertEquals(18L, cntBrands);  // 12 new + 7 Initial Data (but Samsung is duplicate)
 
             rs = getConnection().getConnection().createStatement().executeQuery ("select DESCRIPTION from TBRAND where NAME = 'Ergotron'");
             rs.next();
@@ -232,7 +232,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.next();
             long cntProductType = rs.getLong("cnt");
             rs.close();
-            assertEquals(16L, cntProductType);  // 12 same as categories + 4 from initialdata.xml
+            assertEquals(17L, cntProductType);  // 12 same as categories + 5 from initialdata.xml
 
             rs = getConnection().getConnection().createStatement().executeQuery (
                     "select PRODUCTTYPE_ID, DESCRIPTION from TPRODUCTTYPE where NAME = 'mice'");

@@ -4708,6 +4708,17 @@ public void setRangeList(final RangeList rangeList) {
        ]]>
     </query>
 
+
+    <query name="DELIVERIES.WAITING.FOR.INVENTORY">
+        <![CDATA[
+       select d from CustomerOrderDeliveryEntity d inner join d.detail dd
+       where  d.deliveryStatus = ?1
+       and d.customerOrder.orderStatus = ?2
+       and dd.sku.skuId = ?3
+
+       ]]>
+    </query>
+
     <query name="PRODUCT.ATTRIBUTE.VALUES.BY.CODE">
         <![CDATA[
        select a.val, a.displayVal

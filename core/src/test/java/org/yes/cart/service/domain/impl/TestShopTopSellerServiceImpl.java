@@ -84,9 +84,11 @@ public class TestShopTopSellerServiceImpl extends BaseCoreDBTestCase {
         for (ShopTopSeller ts : allTopSellers) {
             Long key = ts.getProduct().getId();
             BigDecimal expectedCounter = expectation.remove(key);
-            // counter can be increased by other tests
-            assertThat("Unexpected counter for product with id = " + key,
-                    ts.getCounter(), greaterThanOrEqualTo(expectedCounter));
+            if (expectedCounter != null) {
+                // counter can be increased by other tests
+                assertThat("Unexpected counter for product with id = " + key,
+                        ts.getCounter(), greaterThanOrEqualTo(expectedCounter));
+            }
         }
         assertThat(expectation.keySet(), hasSize(0));
     }

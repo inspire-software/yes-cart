@@ -20,9 +20,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
+import org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.impl.OrderEventImpl;
@@ -32,13 +34,11 @@ import org.yes.cart.shoppingcart.impl.SetCarrierSlaCartCommandImpl;
 import org.yes.cart.shoppingcart.impl.SetSkuQuantityToCartEventCommandImpl;
 
 import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static java.util.Collections.singletonMap;
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -194,4 +194,43 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
                 .execute(shoppingCart);
         return shoppingCart;
     }
+
+
+
+
+
+    @Test
+    public void testFindDeliveryAwaitingForInventory()      throws Exception {
+        final Customer customer = createCustomer();
+        final ShoppingCart shoppingCart = getShoppingCartWithPreorderItems("pre", false);
+
+        CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
+        assertEquals(CustomerOrder.ORDER_STATUS_NONE, order.getOrderStatus());
+        order.setPgLabel("testPaymentGatewayLabel");
+        customerOrderService.update(order);
+
+        assertTrue(handler.handle(
+                new OrderEventImpl("", //evt.pending
+                        order,
+                        null,
+                        Collections.EMPTY_MAP)));
+        customerOrderService.update(order);
+        order = customerOrderService.findByGuid(shoppingCart.getGuid());
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
+        for (CustomerOrderDelivery delivery : order.getDelivery()) {
+            assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT, delivery.getDeliveryStatus());
+        }
+
+        List<CustomerOrderDelivery> rez = customerOrderService.findDeliveriesAwaitingForInventory(15330);
+        assertEquals("Expect one order with preorder sku id = 15330" , 1, rez.size());
+
+        rez = customerOrderService.findDeliveriesAwaitingForInventory(15340);
+        assertEquals("Expect one order with preorder sku id = 15340" ,1, rez.size());
+
+        rez = customerOrderService.findDeliveriesAwaitingForInventory(15129);
+        assertEquals("Not expected orders waiting for inventory sku id = 15129" ,0, rez.size());
+
+
+    }
+
 }

@@ -93,6 +93,25 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
     }
 
     /**
+     * @return cart with one digital available product.
+     */
+    protected ShoppingCart getShoppingCartWithPreorderItems(final String prefix, final boolean firstSet) {
+        ShoppingCart shoppingCart = getEmptyCart(prefix);
+        // this digital product available
+        Map<String, String> param = new HashMap<String, String>();
+        param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, firstSet ? "PREORDER-BACK-TO-FLOW0" : "PREORDER-BACK-TO-FLOW2");
+        param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
+        new SetSkuQuantityToCartEventCommandImpl(ctx(), param)
+                .execute(shoppingCart);
+        param = new HashMap<String, String>();
+        param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, firstSet ? "PREORDER-BACK-TO-FLOW1" : "PREORDER-BACK-TO-FLOW3");
+        param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "2.00");
+        new SetSkuQuantityToCartEventCommandImpl(ctx(), param)
+                .execute(shoppingCart);
+        return shoppingCart;
+    }
+
+    /**
      * Get product with standard availability, back order and pre order availability both have inventory.
      * Ordered qty more than qty on warehouses, so one "wait inventory " delivery will be planned.
      *
