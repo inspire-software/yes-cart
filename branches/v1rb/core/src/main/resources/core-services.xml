@@ -581,7 +581,7 @@
         <property name="target">
             <bean class="org.yes.cart.service.dto.impl.DtoInventoryServiceImpl">
                 <constructor-arg index="0" ref="dtoWarehouseService"/>
-                <constructor-arg index="1" ref="skuWarehouseDao"/>
+                <constructor-arg index="1" ref="skuWarehouseService"/>
                 <constructor-arg index="2" ref="productSkuDao"/>
                 <constructor-arg index="3" ref="warehouseDao"/>
                 <constructor-arg index="4" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>

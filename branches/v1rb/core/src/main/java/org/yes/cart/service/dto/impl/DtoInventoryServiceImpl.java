@@ -53,7 +53,8 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
 
     private final DtoWarehouseService dtoWarehouseService;
 
-    private final GenericDAO<SkuWarehouse, Long> skuWarehouseDAO;
+    //private final GenericDAO<SkuWarehouse, Long> skuWarehouseDAO;
+    private final SkuWarehouseService skuWarehouseService;
     private final GenericDAO<ProductSku, Long> productSkuDAO;
     private final GenericDAO<Warehouse, Long> warehouseDAO;
     private final DtoFactory dtoFactory;
@@ -62,21 +63,23 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
     private final Assembler skuWarehouseAsm;
 
     public DtoInventoryServiceImpl(final DtoWarehouseService dtoWarehouseService,
-                                   final GenericDAO<SkuWarehouse, Long> skuWarehouseDAO,
+                                   final SkuWarehouseService skuWarehouseService,
                                    final GenericDAO<ProductSku, Long> productSkuDAO,
                                    final GenericDAO<Warehouse, Long> warehouseDAO,
                                    final DtoFactory dtoFactory,
                                    final AdaptersRepository adaptersRepository) {
         this.dtoWarehouseService = dtoWarehouseService;
-        this.skuWarehouseDAO = skuWarehouseDAO;
+        this.skuWarehouseService = skuWarehouseService;
         this.productSkuDAO = productSkuDAO;
         this.warehouseDAO = warehouseDAO;
         this.dtoFactory = dtoFactory;
         this.adaptersRepository = adaptersRepository;
 
+
+
         this.skuWarehouseAsm = DTOAssembler.newAssembler(
                 this.dtoFactory.getImplClass(InventoryDTO.class),
-                this.skuWarehouseDAO.getEntityFactory().getImplClass(SkuWarehouse.class));
+                this.skuWarehouseService.getGenericDao().getEntityFactory().getImplClass(SkuWarehouse.class));
     }
 
     /** {@inheritDoc} */
@@ -107,7 +110,7 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
                 }
             }
 
-            final List<SkuWarehouse> entities = skuWarehouseDAO.findByCriteria(new CriteriaTuner() {
+            final List<SkuWarehouse> entities = skuWarehouseService.getGenericDao().findByCriteria(new CriteriaTuner() {
                 public void tune(final Criteria crit) {
                     crit.createAlias("sku", "sku");
                     crit.createAlias("warehouse", "warehouse");
@@ -145,7 +148,7 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
 
         final InventoryDTO dto = dtoFactory.getByIface(InventoryDTO.class);
         final Map<String, Object> adapters = adaptersRepository.getAll();
-        final SkuWarehouse entity = skuWarehouseDAO.findById(skuWarehouseId);
+        final SkuWarehouse entity = (SkuWarehouse) skuWarehouseService.getGenericDao().findById(skuWarehouseId);
         skuWarehouseAsm.assembleDto(dto, entity, adapters, dtoFactory);
 
         return dto;
@@ -166,7 +169,7 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
         SkuWarehouse entity = null;
         if (inventory.getSkuWarehouseId() > 0) {
             // check by id
-            entity = skuWarehouseDAO.findById(inventory.getSkuWarehouseId());
+            entity = (SkuWarehouse) skuWarehouseService.getGenericDao().findById(inventory.getSkuWarehouseId());
         }
         if (entity == null) {
             // check by unique combination
@@ -174,7 +177,7 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
             criteria.add(Restrictions.eq("warehouse.code", inventory.getWarehouseCode()));
             criteria.add(Restrictions.eq("sku.code", inventory.getSkuCode()));
 
-            final List<SkuWarehouse> candidates = skuWarehouseDAO.findByCriteria(new CriteriaTuner() {
+            final List<SkuWarehouse> candidates = skuWarehouseService.getGenericDao().findByCriteria(new CriteriaTuner() {
                 public void tune(final Criteria crit) {
                     crit.createAlias("sku", "sku");
                     crit.createAlias("warehouse", "warehouse");
@@ -200,7 +203,7 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
                 throw new UnableToCreateInstanceException("Invalid warehouse: " + inventory.getWarehouseCode(), null);
             }
 
-            entity = skuWarehouseDAO.getEntityFactory().getByIface(SkuWarehouse.class);
+            entity = skuWarehouseService.getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);
             entity.setSku(skus.get(0));
             entity.setWarehouse(warehouses.get(0));
         }
@@ -209,7 +212,9 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
 
         skuWarehouseAsm.assembleEntity(inventory, entity, adapters, dtoFactory);
 
-        skuWarehouseDAO.saveOrUpdate(entity);
+        skuWarehouseService.getGenericDao().saveOrUpdate(entity);
+
+        skuWarehouseService.updateOrdersAwaitingForInventory(entity.getSku().getSkuId());
 
         skuWarehouseAsm.assembleDto(inventory, entity, adapters, dtoFactory);
 
