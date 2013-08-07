@@ -220,13 +220,16 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
             assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT, delivery.getDeliveryStatus());
         }
 
-        List<CustomerOrderDelivery> rez = customerOrderService.findDeliveriesAwaitingForInventory(15330);
+        List<CustomerOrderDelivery> rez = customerOrderService.findDeliveriesAwaitingForInventory(15330,CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                CustomerOrder.ORDER_STATUS_IN_PROGRESS);
         assertEquals("Expect one order with preorder sku id = 15330" , 1, rez.size());
 
-        rez = customerOrderService.findDeliveriesAwaitingForInventory(15340);
+        rez = customerOrderService.findDeliveriesAwaitingForInventory(15340,CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                CustomerOrder.ORDER_STATUS_IN_PROGRESS);
         assertEquals("Expect one order with preorder sku id = 15340" ,1, rez.size());
 
-        rez = customerOrderService.findDeliveriesAwaitingForInventory(15129);
+        rez = customerOrderService.findDeliveriesAwaitingForInventory(15129,CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                CustomerOrder.ORDER_STATUS_IN_PROGRESS);
         assertEquals("Not expected orders waiting for inventory sku id = 15129" ,0, rez.size());
 
 
