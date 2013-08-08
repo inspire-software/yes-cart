@@ -66,7 +66,7 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
     private transient ImageService imageService;
 
     private final String httpServletContextPath;
-    private Map<Integer, String> productImageUrl = new HashMap<Integer, String>();
+    private final Map<Integer, String> productImageUrl = new HashMap<Integer, String>();
     private final Map<String, AttrValue> attrValueMap;
     private final String defaultImageAttributeValue;
     private final I18NWebSupport i18NWebSupport;
