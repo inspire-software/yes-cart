@@ -88,7 +88,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
-    public List<CustomerOrderDelivery> findDeliveriesAwaitingForInventory(final long skuId, final String deliveryStatus, final String orderStatus) {
+    public List<CustomerOrderDelivery> findAwaitingDeliveries(final Long skuId, final String deliveryStatus, final String orderStatus) {
 /*        return customerOrderDeliveryDao.findByNamedQuery("DELIVERIES.WAITING.FOR.INVENTORY",
                 CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
                 CustomerOrder.ORDER_STATUS_IN_PROGRESS,

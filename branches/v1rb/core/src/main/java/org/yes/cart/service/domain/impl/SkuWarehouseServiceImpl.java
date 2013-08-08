@@ -264,7 +264,7 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
          */
         if (isSkuAvilabilityPreorder(productSkuId)) {
 
-            List<CustomerOrderDelivery> waitForInventory = getCustomerOrderService().findDeliveriesAwaitingForInventory(productSkuId, CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+            List<CustomerOrderDelivery> waitForInventory = getCustomerOrderService().findAwaitingDeliveries(productSkuId, CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
                     CustomerOrder.ORDER_STATUS_IN_PROGRESS);
 
             for (CustomerOrderDelivery delivery : waitForInventory) {

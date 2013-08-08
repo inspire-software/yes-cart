@@ -86,12 +86,12 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
     /**
      * Find orders, which are waiting for inventory to be completed.
      *
-     * @param skuId          what sku is required.
+     * @param skuId          what sku is required. optional
      * @param deliveryStatus status of delivery
      * @param orderStatus    order status
      * @return awaiting orders
      */
-    List<CustomerOrderDelivery> findDeliveriesAwaitingForInventory(long skuId, String deliveryStatus, String orderStatus);
+    List<CustomerOrderDelivery> findAwaitingDeliveries(Long skuId, String deliveryStatus, String orderStatus);
 
 
     /**

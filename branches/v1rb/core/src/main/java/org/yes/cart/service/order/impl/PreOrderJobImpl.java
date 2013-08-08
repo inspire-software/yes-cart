@@ -17,16 +17,63 @@ package org.yes.cart.service.order.impl;
 
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.quartz.StatefulJob;
+import org.slf4j.Logger;
 import org.springframework.scheduling.quartz.QuartzJobBean;
+import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.service.domain.CustomerOrderService;
+import org.yes.cart.service.order.OrderException;
+import org.yes.cart.service.order.OrderStateManager;
+import org.yes.cart.util.ShopCodeContext;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * Simple quartz job, which will try to get orders, which are awaiting for beginning of the sales.
  */
-public class PreOrderJobImpl extends QuartzJobBean {
+public class PreOrderJobImpl extends QuartzJobBean implements StatefulJob {
+
+    final Logger log = ShopCodeContext.getLog(this);
+
+
+    private CustomerOrderService customerOrderService;
+    private OrderStateManager orderStateManager;
 
 
     protected void executeInternal(final JobExecutionContext context) throws JobExecutionException {
-        System.out.println("Lets check orders");
+
+        customerOrderService = (CustomerOrderService) context.get("customerOrderService");
+        orderStateManager = (OrderStateManager) context.get("orderStateManager");
+
+        log.info("Check for awaiting orders");
+
+        processAwaitingOrders(
+                CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT,
+                OrderStateManager.EVT_DELIVERY_ALLOWED_TIMEOUT);
+
+        processAwaitingOrders(
+                CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                OrderStateManager.EVT_DELIVERY_ALLOWED_QUANTITY);
+
+
+    }
+
+    private void processAwaitingOrders(final String status, final String event) {
+
+        List<CustomerOrderDelivery> waitForDate = customerOrderService.findAwaitingDeliveries(null, status, CustomerOrder.ORDER_STATUS_IN_PROGRESS);
+
+        for (CustomerOrderDelivery delivery : waitForDate) {
+            try {
+                orderStateManager.fireTransition(
+                        new OrderEventImpl(event, delivery.getCustomerOrder(), delivery)
+                );
+            } catch (OrderException e) {
+                log.error("Cannot process delivery " + delivery.getDeliveryNum());
+            }
+
+        }
     }
 
 }
