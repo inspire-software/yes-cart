@@ -37,43 +37,69 @@ public class PreOrderJobImpl extends QuartzJobBean implements StatefulJob {
 
     final Logger log = ShopCodeContext.getLog(this);
 
-
-    private CustomerOrderService customerOrderService;
-    private OrderStateManager orderStateManager;
-
-
     protected void executeInternal(final JobExecutionContext context) throws JobExecutionException {
 
-        customerOrderService = (CustomerOrderService) context.get("customerOrderService");
-        orderStateManager = (OrderStateManager) context.get("orderStateManager");
+        CustomerOrderService customerOrderService = (CustomerOrderService) context.get("customerOrderService");
+        OrderStateManager orderStateManager = (OrderStateManager) context.get("orderStateManager");
 
         log.info("Check for awaiting orders");
 
         processAwaitingOrders(
                 CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT,
-                OrderStateManager.EVT_DELIVERY_ALLOWED_TIMEOUT);
+                OrderStateManager.EVT_DELIVERY_ALLOWED_TIMEOUT,
+                customerOrderService,
+                orderStateManager);
 
         processAwaitingOrders(
                 CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
-                OrderStateManager.EVT_DELIVERY_ALLOWED_QUANTITY);
+                OrderStateManager.EVT_DELIVERY_ALLOWED_QUANTITY,
+                customerOrderService,
+                orderStateManager);
 
 
     }
 
-    private void processAwaitingOrders(final String status, final String event) {
+    /**
+     * Get deliveries for given order and delivery state and try to push into porcessing.
+     *
+     * @param status               status of delivery
+     * @param event                what event to fore
+     * @param customerOrderService customer order service
+     * @param orderStateManager    order state manager
+     * @return quantity of processed deliveries
+     */
+    int processAwaitingOrders(final String status,
+                              final String event,
+                              final CustomerOrderService customerOrderService,
+                              final OrderStateManager orderStateManager) {
 
-        List<CustomerOrderDelivery> waitForDate = customerOrderService.findAwaitingDeliveries(null, status, CustomerOrder.ORDER_STATUS_IN_PROGRESS);
+        int cnt = 0;
+
+        final List<CustomerOrderDelivery> waitForDate = customerOrderService.findAwaitingDeliveries(
+                null,
+                status,
+                CustomerOrder.ORDER_STATUS_IN_PROGRESS);
+
 
         for (CustomerOrderDelivery delivery : waitForDate) {
             try {
-                orderStateManager.fireTransition(
+                if (orderStateManager.fireTransition(
                         new OrderEventImpl(event, delivery.getCustomerOrder(), delivery)
-                );
+                )) {
+
+                    customerOrderService.update(delivery.getCustomerOrder());
+                    cnt++;
+
+                }
+
+
             } catch (OrderException e) {
                 log.error("Cannot process delivery " + delivery.getDeliveryNum());
             }
 
         }
+
+        return cnt;
     }
 
 }
