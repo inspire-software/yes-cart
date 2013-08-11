@@ -305,6 +305,12 @@
             }
         }
 
+        private function onCreateContentRootConfirmClick(event:CloseEvent):void {
+            if (event.detail == Alert.OK) {
+                remoteContentService.createContentRoot(_shopDTOImpl.shopId);
+            }
+        }
+
         private function imagesTabSelected():void {
             Debug.trace("INFO Category Images tab selected for category id" + selectedCategoryDTOImpl.categoryId);
             if (categorySelected && this.selectedCategoryDTOImpl != null) {
@@ -342,13 +348,24 @@
             ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
         }
 
+        private function onCreateCategoriesRootResult(event:ResultEvent):void {
+            init(); // reinitialise the panel
+        }
+
         private function onGetAllCategoriesResult(event:ResultEvent):void {
-            categoryTree.dataProvider = event.result;
-            categoryTree.dataDescriptor = new CategoryTreeDescriptor(null);
-            if (categoryTree.dataProvider.length > 0) {
-                categoryTree.openItems = [ categoryTree.dataProvider.getItemAt(0) ];
-                categoryTree.expandItem(categoryTree.dataProvider.getItemAt(0), true);
-                categoryTree.validateNow();
+            if (event.result == null || event.result.length == 0) {
+                Alert.show(
+                        resourceManager.getString('CategoryManagementPanel', 'createContentRootConfirm', [ _shopDTOImpl.code ]),
+                        resourceManager.getString('ShopManagerApplication', 'warning'),
+                        Alert.OK | Alert.CANCEL, this, onCreateContentRootConfirmClick, null, Alert.OK);
+            } else {
+                categoryTree.dataProvider = event.result;
+                categoryTree.dataDescriptor = new CategoryTreeDescriptor(null);
+                if (categoryTree.dataProvider.length > 0) {
+                    categoryTree.openItems = [ categoryTree.dataProvider.getItemAt(0) ];
+                    categoryTree.expandItem(categoryTree.dataProvider.getItemAt(0), true);
+                    categoryTree.validateNow();
+                }
             }
         }
 
@@ -395,6 +412,10 @@
 
         <mx:method id="getAllCategories" name="getAllByShopId"
                    result="onGetAllCategoriesResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="createContentRoot" name="createContentRoot"
+                   result="onCreateCategoriesRootResult(event)"
                    fault="onRpcMethodFault(event)"/>
 
         <mx:method id="createCategories" name="create"

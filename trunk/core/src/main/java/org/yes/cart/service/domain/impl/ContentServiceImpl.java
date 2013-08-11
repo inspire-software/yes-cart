@@ -65,12 +65,12 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
      * {@inheritDoc}
      */
     @Cacheable(value = CACHE_NAME)
-    public Category getRootContent(final long shopId) {
+    public Category getRootContent(final long shopId, final boolean createIfMissing) {
         if (shopId <= 0) {
             throw new IllegalArgumentException("Shop must not be null or transient");
         }
         final Category shopContentRoot = categoryDao.findSingleByNamedQuery("ROOTCONTENT.BY.SHOP.ID", shopId);
-        if (shopContentRoot == null) {
+        if (shopContentRoot == null && createIfMissing) {
             final List<Object> shops = categoryDao.findQueryObjectByNamedQuery("SHOPCODE.BY.SHOP.ID", shopId);
             if (shops != null && shops.size() == 1) {
                 return createContentRootForShop((String) shops.get(0));

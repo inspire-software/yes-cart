@@ -131,7 +131,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     @Override
     public Shop create(final Shop instance) {
         final Shop shop = super.create(instance);
-        contentService.getRootContent(shop.getShopId());
+        contentService.getRootContent(shop.getShopId(), true);
         return shop;
     }
 

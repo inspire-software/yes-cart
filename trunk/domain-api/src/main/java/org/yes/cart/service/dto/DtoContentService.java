@@ -30,6 +30,13 @@ import java.util.List;
 public interface DtoContentService extends GenericDTOService<CategoryDTO>, GenericAttrValueService {
 
     /**
+     * Create root content for given shop if none exists.
+     *
+     * @param shopId shop id
+     */
+    void createContentRoot(final long shopId);
+
+    /**
      * Get all assigned to shop content.
      *
      * @param shopId shop id
