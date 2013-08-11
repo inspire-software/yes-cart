@@ -4634,7 +4634,7 @@ public void setRangeList(final RangeList rangeList) {
     </query>
 
 
-    <query name="DELIVERIES.WAITING.FOR.INVENTORY">
+    <query  name="DELIVERIES.WAITING.FOR.INVENTORY">
         <![CDATA[
        select d from CustomerOrderDeliveryEntity d inner join d.detail dd
        where  d.deliveryStatus = ?1

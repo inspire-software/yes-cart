@@ -39,7 +39,7 @@ public class PreOrderJobImpl extends QuartzJobBean implements StatefulJob {
 
     protected void executeInternal(final JobExecutionContext context) throws JobExecutionException {
 
-        CustomerOrderService customerOrderService = (CustomerOrderService) context.get("customerOrderService");
+        CustomerOrderService customerOrderService = (CustomerOrderService) context.getMergedJobDataMap().get("customerOrderService");
         OrderStateManager orderStateManager = (OrderStateManager) context.get("orderStateManager");
 
         log.info("Check for awaiting orders");

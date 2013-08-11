@@ -200,7 +200,7 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testFindDeliveryAwaitingForInventory()      throws Exception {
         final Customer customer = createCustomer();
-        final ShoppingCart shoppingCart = getShoppingCartWithPreorderItems("pre", false);
+        final ShoppingCart shoppingCart = getShoppingCartWithPreorderItems("pre", 1);
 
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, order.getOrderStatus());
