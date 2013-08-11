@@ -1,0 +1,241 @@
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<ehcache updateCheck="false">
+
+    <defaultCache
+            maxElementsInMemory="10000"
+            overflowToDisk="false"
+            eternal="false"
+            timeToIdleSeconds="120" timeToLiveSeconds="600"
+            />
+
+    <!-- ############################################# service cache #######################################-->
+
+    <cache name="org.yes.cart.service.domain.impl.CategoryServiceImpl.cache"
+           maxElementsInMemory="500"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+    <cache name="org.yes.cart.service.domain.impl.ContentServiceImpl.cache"
+           maxElementsInMemory="500"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="3600" timeToIdleSeconds="600"/>
+
+    <cache name="org.yes.cart.service.domain.impl.ShopServiceImpl.cache"
+           maxElementsInMemory="100"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+    <cache name="org.yes.cart.service.domain.impl.PriceServiceImpl.cache"
+           maxElementsInMemory="1000"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+    <cache name="org.yes.cart.service.domain.impl.ProductServiceImpl.cache"
+           maxElementsInMemory="5000"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+    <cache name="org.yes.cart.service.domain.impl.ProductTypeAttrServiceImpl.cache"
+           maxElementsInMemory="50"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+    <cache name="org.yes.cart.service.domain.impl.AttributeServiceImpl.cache"
+           maxElementsInMemory="1000"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+    <cache name="org.yes.cart.service.domain.impl.BreadCrumbBuilderImpl.cache"
+           maxElementsInMemory="1000"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+    <cache name="org.yes.cart.service.domain.impl.AttributeProductFilter.cache"
+           maxElementsInMemory="1000"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+    <cache name="org.yes.cart.service.domain.impl.PriceProductFilter.cache"
+           maxElementsInMemory="1000"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+    <cache name="org.yes.cart.service.domain.impl.SystemServiceImpl.cache"
+           maxElementsInMemory="100"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="600" timeToIdleSeconds="600"/>
+
+    <cache name="org.yes.cart.service.domain.impl.ImageServiceImpl.cache"
+           maxElementsInMemory="100"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+    <cache name="org.yes.cart.web.support.service.impl.CentralViewResolverImpl.cache"
+           maxElementsInMemory="1000"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+    <!-- ############################################# hibernate entity cache #######################################-->
+    <cache name="org.yes.cart.web.support.service.impl.LuceneQueryFactoryImpl.cache"
+           maxElementsInMemory="1000"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+
+    <cache name="org.yes.cart.domain.entity.Category" maxElementsInMemory="500" overflowToDisk="false" eternal="false"
+           timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.CategoryEntity.attribute" maxElementsInMemory="5000" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.CategoryEntity.productCategory" maxElementsInMemory="10000"
+           overflowToDisk="false" eternal="false" timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.ProductCategory" maxElementsInMemory="1000" overflowToDisk="false" eternal="false"
+           timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.AttributeGroup" maxElementsInMemory="1000" overflowToDisk="false" eternal="false"
+           timeToLiveSeconds="600"/>
+
+
+    <cache name="org.yes.cart.domain.entity.Product" maxElementsInMemory="1000" overflowToDisk="false" eternal="false"
+           timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.ProductEntity.sku" maxElementsInMemory="1000" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.ProductEntity.productAssociations" maxElementsInMemory="1000"
+           overflowToDisk="false" eternal="false" timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.ProductEntity.ensebleOption" maxElementsInMemory="1000" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.ProductEntity.attribute" maxElementsInMemory="1000" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.Etype" maxElementsInMemory="100" overflowToDisk="false" eternal="false"
+           timeToLiveSeconds="600"/>
+
+<!--
+    <cache name="org.yes.cart.domain.entity.impl.EtypeEntity.attributes" maxElementsInMemory="1000" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="600"/>
+-->
+
+    <cache name="org.yes.cart.domain.entity.Attribute" maxElementsInMemory="5000" overflowToDisk="false" eternal="false"
+           timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.ProductType" maxElementsInMemory="100" overflowToDisk="false" eternal="false"
+           timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.ProductTypeEntity.attributeViewGroup" maxElementsInMemory="100"
+           overflowToDisk="false" eternal="false" timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.ProductTypeEntity.attribute" maxElementsInMemory="1000"
+           overflowToDisk="false" eternal="false" timeToLiveSeconds="600"/>
+
+
+
+    <cache name="org.hibernate.cache.StandardQueryCache"
+           maxElementsInMemory="1000" eternal="false" timeToLiveSeconds="600"
+           overflowToDisk="false" />
+
+
+    <!-- ############################################# seo cache #######################################-->
+
+    <cache name="org.yes.cart.web.seoCategoryDecodeCache"
+           maxElementsInMemory="1000"
+           overflowToDisk="true"
+           eternal="false"
+           timeToLiveSeconds="3600"
+           timeToIdleSeconds="600"/>
+    <cache name="org.yes.cart.web.seoCategoryEncodeCache"
+           maxElementsInMemory="1000"
+           overflowToDisk="true"
+           eternal="false"
+           timeToLiveSeconds="3600"
+           timeToIdleSeconds="600"/>
+
+    <cache name="org.yes.cart.web.seoContentDecodeCache"
+           maxElementsInMemory="1000"
+           overflowToDisk="true"
+           eternal="false"
+           timeToLiveSeconds="3600"
+           timeToIdleSeconds="600"/>
+    <cache name="org.yes.cart.web.seoContentEncodeCache"
+           maxElementsInMemory="1000"
+           overflowToDisk="true"
+           eternal="false"
+           timeToLiveSeconds="3600"
+           timeToIdleSeconds="600"/>
+
+    <cache name="org.yes.cart.web.seoSkuDecodeCache"
+           maxElementsInMemory="5000"
+           overflowToDisk="true"
+           eternal="false"
+           timeToLiveSeconds="180"
+           timeToIdleSeconds="60"/>
+    <cache name="org.yes.cart.web.seoSkuEncodeCache"
+           maxElementsInMemory="5000"
+           overflowToDisk="true"
+           eternal="false"
+           timeToLiveSeconds="3600"
+           timeToIdleSeconds="600"/>
+
+    <cache name="org.yes.cart.web.seoProductDecodeCache"
+           maxElementsInMemory="5000"
+           overflowToDisk="true"
+           eternal="false"
+           timeToLiveSeconds="3600"
+           timeToIdleSeconds="600"/>
+    <cache name="org.yes.cart.web.seoProductEncodeCache"
+           maxElementsInMemory="5000"
+           overflowToDisk="true"
+           eternal="false"
+           timeToLiveSeconds="3600"
+           timeToIdleSeconds="600"/>
+
+    <cache name="org.yes.cart.web.decoratedProductCache"
+           maxElementsInMemory="3000"
+           overflowToDisk="true"
+           eternal="false"
+           timeToLiveSeconds="180"
+           timeToIdleSeconds="60"/>
+
+    <cache name="org.yes.cart.web.urlShopCache"
+           maxElementsInMemory="100"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="180"
+           timeToIdleSeconds="60"/>
+
+
+</ehcache>

@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.0.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+           http://www.springframework.org/schema/security
+           http://www.springframework.org/schema/security/spring-security-3.1.xsd
+           http://cxf.apache.org/jaxws
+           http://cxf.apache.org/schemas/jaxws.xsd">
+
+
+    <context:component-scan base-package="org.yes.cart"/>
+
+    <aop:aspectj-autoproxy/>
+
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
+          autowire="byName">
+        <property name="mappingResources">
+            <list>
+                <value>hibernate/yc.xml</value>
+            </list>
+        </property>
+        <property name="entityInterceptor">
+            <bean class="org.yes.cart.domain.interceptor.AuditInterceptor"/>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+		<prop key="hibernate.search.default.indexBase">
+                    #{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'}
+                </prop>
+                <prop key="hibernate.search.worker.execution">async</prop>
+                <prop key="hibernate.search.worker.thread_pool.size">2</prop>
+                <prop key="hibernate.search.default.exclusive_index_use">false</prop>
+
+            </props>
+        </property>
+    </bean>
+
+    <bean id="productReindexer" class="org.yes.cart.domain.entityindexer.impl.ProductIndexerImpl">
+        <constructor-arg index="0" ref="productDao"/>
+        <constructor-arg index="1" value="128"/>
+        <constructor-arg index="2" value="4"/>
+    </bean>
+
+
+    <import resource="classpath*:core-config.xml"/>
+
+    <import resource="modules.xml"/>
+
+
+    <bean id="applicationDirector" class="org.yes.cart.web.application.ApplicationDirector"/>
+
+    <!-- ################################### filter delegates begin ################################### -->
+    <bean id="shopResolverFilter" class="org.yes.cart.web.filter.ShopResolverFilter">
+        <constructor-arg index="0" ref="applicationDirector"/>
+        <constructor-arg index="1" ref="systemService"/>
+        <constructor-arg index="2" ref="languageService"/>
+    </bean>
+
+    <bean id="imageFilter" class="org.yes.cart.web.filter.ImageFilter">
+        <constructor-arg index="0" ref="applicationDirector"/>
+        <constructor-arg index="1" ref="imageService"/>
+        <constructor-arg index="2" ref="systemService"/>
+    </bean>
+
+    <bean id="shoppingCartFilter" class="org.yes.cart.web.filter.ShoppingCartFilter">
+        <constructor-arg index="0" ref="applicationDirector"/>
+        <constructor-arg index="1" ref="cookieTuplizerPool"/>
+        <constructor-arg index="2" ref="amountCalculationStrategy"/>
+    </bean>
+
+    <!--CPOINT do you need paypal express checkout ?-->
+    <bean id="payPalExpressCheckoutFilter" class="org.yes.cart.web.filter.payment.PayPalExpressCheckoutFilter">
+        <constructor-arg index="0" ref="applicationDirector"/>
+        <constructor-arg index="1" ref="paymentModulesManager"/>
+        <constructor-arg index="2" ref="paymentProcessor"/>
+        <constructor-arg index="3" ref="customerOrderService"/>
+    </bean>
+
+    <!--CPOINT do you need google checkout ?-->
+    <bean id="googleCheckoutCallBackFilter" class="org.yes.cart.web.filter.payment.GoogleCheckoutCallBackFilter">
+        <constructor-arg index="0" ref="applicationDirector"/>
+        <constructor-arg index="1" ref="paymentCallBackHandlerFacade"/>
+        <constructor-arg index="2" ref="paymentModulesManager"/>
+    </bean>
+
+    <!-- CPOINT is authorize net need for you ? -->
+    <bean id="anetPaymentCallBackFilter" class="org.yes.cart.web.filter.payment.BasePaymentGatewayCallBackFilter">
+        <constructor-arg index="0" ref="applicationDirector"/>
+        <constructor-arg index="1" ref="paymentCallBackHandlerFacade"/>
+    </bean>
+
+    <!-- CPOINT is liq pay need for you ? -->
+    <bean id="liqPayCallBackFilter" class="org.yes.cart.web.filter.payment.BasePaymentGatewayCallBackFilter">
+        <constructor-arg index="0" ref="applicationDirector"/>
+        <constructor-arg index="1" ref="paymentCallBackHandlerFacade"/>
+    </bean>
+
+    <!-- ################################### filter delegates end ################################### -->
+
+    <bean id="cookieTuplizer" class="org.yes.cart.web.support.util.cookie.impl.CookieTuplizerImpl"
+          scope="prototype">
+        <constructor-arg index="0" value="CHANGE_PASSWORD_ON_PRODUCTION"/>
+        <constructor-arg index="1" value="2048"/>
+        <constructor-arg index="2" value="DES"/>
+        <constructor-arg index="3" value="DES/ECB/PKCS5Padding"/>
+    </bean>
+
+    <bean id="cookieTuplizerPool" class="org.springframework.aop.target.CommonsPoolTargetSource">
+        <property name="targetBeanName" value="cookieTuplizer"/>
+        <property name="maxSize" value="10"/>
+        <property name="maxIdle" value="10" />
+        <property name="minIdle" value="5" />
+    </bean>
+
+    <bean id="amountCalculationStrategy"
+          class="org.yes.cart.shoppingcart.impl.DefaultAmountCalculationStrategy">  <!-- CPOINT tax and amount calculation strategy -->
+        <constructor-arg index="0" value="20.00"/>
+        <constructor-arg index="1" value="true"/>
+    </bean>
+
+
+    <bean id="shoppingCartPersister" class="org.yes.cart.web.support.util.cookie.impl.ShoppingCartPersisterImpl">
+        <constructor-arg index="0" ref="cookieTuplizer"/>
+    </bean>
+
+    <bean id="breadCrumbBuilderImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="cacheName" value="org.yes.cart.service.domain.impl.BreadCrumbBuilderImpl.cache"/>
+    </bean>
+
+    <bean id="attributeProductFlterImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="cacheName" value="org.yes.cart.service.domain.impl.AttributeProductFilter.cache"/>
+    </bean>
+
+    <bean id="priceProductFilterImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="cacheName" value="org.yes.cart.service.domain.impl.PriceProductFilter.cache"/>
+    </bean>
+
+
+    <bean id="centralViewResolverImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="cacheName" value="org.yes.cart.web.support.service.impl.CentralViewResolverImpl.cache"/>
+    </bean>
+
+    <bean id="luceneQueryFactoryImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="cacheName" value="org.yes.cart.web.support.service.impl.LuceneQueryFactoryImpl.cache"/>
+    </bean>
+
+
+    <bean id="centralViewResolver" class="org.yes.cart.web.support.service.impl.CentralViewResolverImpl">
+        <constructor-arg index="0" ref="categoryService"/>
+        <constructor-arg index="1" ref="contentService"/>
+        <constructor-arg index="2" ref="attributeService"/>
+        <constructor-arg index="3" ref="luceneQueryFactory"/>
+    </bean>
+
+    <bean id="productAvailabilityStrategy" class="org.yes.cart.web.support.service.impl.ProductAvailabilityStrategyImpl"/>
+
+    <bean id="breadCrumbsBuilder" class="org.yes.cart.web.page.component.breadcrumbs.impl.BreadCrumbsBuilderImpl">
+        <constructor-arg index="0" ref="categoryService"/>
+    </bean>
+
+    <bean id="currencySymbolService" class="org.yes.cart.web.support.service.impl.CurrencySymbolServiceImpl">
+        <constructor-arg index="0">
+            <map>
+                <entry key="ALL" value="&#x4c;&#x65;&#x6b;"/>
+                <entry key="AFN" value="&#x60b;"/>
+                <entry key="ANG" value="&#x192;"/>
+                <entry key="ARS" value="&#x24;"/>
+                <entry key="AUD" value="&#x24;"/>
+                <entry key="AWG" value="&#x192;"/>
+                <entry key="AZN" value="&#x43c;&#x430;&#x43d;"/>
+                <entry key="BAM" value="&#x4b;&#x4d;"/>
+                <entry key="BBD" value="&#x24;"/>
+                <entry key="BGN" value="&#x43b;&#x432;"/>
+                <entry key="BND" value="&#x24;"/>
+                <entry key="BOB" value="&#x24;&#x62;"/>
+                <entry key="BRL" value="&#x52;&#x24;"/>
+                <entry key="BSD" value="&#x24;"/>
+                <entry key="BWP" value="&#x50;"/>
+                <entry key="BYR" value="&#x70;&#x2e;"/>
+                <entry key="BZD" value="&#x42;&#x5a;&#x24;"/>
+                <entry key="CAD" value="&#x24;"/>
+                <entry key="CHF" value="&#x43;&#x48;&#x46;"/>
+                <entry key="CLP" value="&#x24;"/>
+                <entry key="CNY" value="&#xa5;"/>
+                <entry key="COP" value="&#x24;"/>
+                <entry key="CRC" value="&#x20a1;"/>
+                <entry key="CUP" value="&#x20b1;"/>
+                <entry key="CZK" value="&#x4b;&#x10d;"/>
+                <entry key="DKK" value="&#x6b;&#x72;"/>
+                <entry key="DOP" value="&#x52;&#x44;&#x24;"/>
+                <entry key="EEK" value="&#x6b;&#x72;"/>
+                <entry key="EGP" value="&#xa3;"/>
+                <entry key="EUR" value="&#x20ac;"/>
+                <entry key="FJD" value="&#x24;"/>
+                <entry key="FKP" value="&#xa3;"/>
+                <entry key="GBP" value="&#xa3;"/>
+                <entry key="GGP" value="&#xa3;"/>
+                <entry key="GHC" value="&#xa2;"/>
+                <entry key="GIP" value="&#xa3;"/>
+                <entry key="GTQ" value="&#x51;"/>
+                <entry key="GYD" value="&#x24;"/>
+                <entry key="HKD" value="&#x24;"/>
+                <entry key="HNL" value="&#x4c;"/>
+                <entry key="HRK" value="&#x6b;&#x6e;"/>
+                <entry key="HUF" value="&#x46;&#x74;"/>
+                <entry key="IDR" value="&#x52;&#x70;"/>
+                <entry key="ILS" value="&#x20aa;"/>
+                <entry key="IMP" value="&#xa3;"/>
+                <entry key="INR" value="&#x20a8;"/>
+                <entry key="IRR" value="&#xfdfc;"/>
+                <entry key="ISK" value="&#x6b;&#x72;"/>
+                <entry key="JEP" value="&#xa3;"/>
+                <entry key="JMD" value="&#x4a;&#x24;"/>
+                <entry key="JPY" value="&#xa5;"/>
+                <entry key="KGS" value="&#x43b;&#x432;"/>
+                <entry key="KHR" value="&#x17db;"/>
+                <entry key="KPW" value="&#x20a9;"/>
+                <entry key="KRW" value="&#x20a9;"/>
+                <entry key="KYD" value="&#x24;"/>
+                <entry key="KZT" value="&#x43b;&#x432;"/>
+                <entry key="LAK" value="&#x20ad;"/>
+                <entry key="LBP" value="&#xa3;"/>
+                <entry key="LKR" value="&#x20a8;"/>
+                <entry key="LRD" value="&#x24;"/>
+                <entry key="LTL" value="&#x4c;&#x74;"/>
+                <entry key="LVL" value="&#x4c;&#x73;"/>
+                <entry key="MKD" value="&#x434;&#x435;&#x43d;"/>
+                <entry key="MNT" value="&#x20ae;"/>
+                <entry key="MUR" value="&#x20a8;"/>
+                <entry key="MXN" value="&#x24;"/>
+                <entry key="MYR" value="&#x52;&#x4d;"/>
+                <entry key="MZN" value="&#x4d;&#x54;"/>
+                <entry key="NAD" value="&#x24;"/>
+                <entry key="NGN" value="&#x20a6;"/>
+                <entry key="NIO" value="&#x43;&#x24;"/>
+                <entry key="NOK" value="&#x6b;&#x72;"/>
+                <entry key="NPR" value="&#x20a8;"/>
+                <entry key="NZD" value="&#x24;"/>
+                <entry key="OMR" value="&#xfdfc;"/>
+                <entry key="PAB" value="&#x42;&#x2f;&#x2e;"/>
+                <entry key="PEN" value="&#x53;&#x2f;&#x2e;"/>
+                <entry key="PHP" value="&#x50;&#x68;&#x70;"/>
+                <entry key="PKR" value="&#x20a8;"/>
+                <entry key="PLN" value="&#x7a;&#x142;"/>
+                <entry key="PYG" value="&#x47;&#x73;"/>
+                <entry key="QAR" value="&#xfdfc;"/>
+                <entry key="RON" value="&#x6c;&#x65;&#x69;"/>
+                <entry key="RSD" value="&#x414;&#x438;&#x43d;&#x2e;"/>
+                <entry key="RUB" value="&#x440;&#x443;&#x431;"/>
+                <entry key="SAR" value="&#xfdfc;"/>
+                <entry key="SBD" value="&#x24;"/>
+                <entry key="SCR" value="&#x20a8;"/>
+                <entry key="SEK" value="&#x6b;&#x72;"/>
+                <entry key="SGD" value="&#x24;"/>
+                <entry key="SHP" value="&#xa3;"/>
+                <entry key="SOS" value="&#x53;"/>
+                <entry key="SRD" value="&#x24;"/>
+                <entry key="SVC" value="&#x24;"/>
+                <entry key="SYP" value="&#xa3;"/>
+                <entry key="THB" value="&#xe3f;"/>
+                <entry key="TRL" value="&#x20a4;"/>
+                <entry key="TRY" value="&#x54;&#x4c;"/>
+                <entry key="TTD" value="&#x54;&#x54;&#x24;"/>
+                <entry key="TVD" value="&#x24;"/>
+                <entry key="TWD" value="&#x4e;&#x54;&#x24;"/>
+                <entry key="UAH" value="&#1075;&#1088;&#1085;."/><!-- not all browser support &#x20b4; -->
+                <entry key="USD" value="&#x24;"/>
+                <entry key="UYU" value="&#x24;&#x55;"/>
+                <entry key="UZS" value="&#x43b;&#x432;"/>
+                <entry key="VEF" value="&#x42;&#x73;"/>
+                <entry key="VND" value="&#x20ab;"/>
+                <entry key="XCD" value="&#x24;"/>
+                <entry key="YER" value="&#xfdfc;"/>
+                <entry key="ZAR" value="&#x52;"/>
+                <entry key="ZWD" value="&#x5a;&#x24;"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <!-- ################################## Category , Product and Sku image services begin ######################## -->
+    <bean id="categoryImageAttributeStrategy"
+          class="org.yes.cart.web.support.service.impl.CategoryImageRetrieveStrategyAttributeImpl">
+        <constructor-arg index="0" value="CATEGORY_IMAGE"/>
+    </bean>
+
+    <bean id="categoryImageRandomProduct"
+          class="org.yes.cart.web.support.service.impl.CategoryImageRetrieveStrategyRandomProductImpl">
+        <constructor-arg index="0" ref="productService"/>
+        <constructor-arg index="1" value="IMAGE0"/>
+    </bean>
+
+    <bean id="categoryImageService" class="org.yes.cart.web.support.service.impl.CategoryImageServiceImpl">
+        <constructor-arg index="0">
+            <map>
+                <entry key="ATTRIBUTE" value-ref="categoryImageAttributeStrategy"/>
+                <entry key="RANDOM_PRODUCT" value-ref="categoryImageRandomProduct"/>
+            </map>
+        </constructor-arg>
+        <constructor-arg index="1" ref="categoryService"/>
+        <constructor-arg index="2" value="RANDOM_PRODUCT"/>
+        <!-- one of the allowed stategy label -->
+    </bean>
+
+    <bean id="attributableImageService" class="org.yes.cart.web.support.service.impl.AttributableImageServiceImpl"/>
+
+
+    <bean id="bookmarkService" class="org.yes.cart.web.support.seo.impl.BookmarkServiceImpl">
+        <constructor-arg index="0" ref="categoryService"/>
+        <constructor-arg index="1" ref="contentService"/>
+        <constructor-arg index="2" ref="productService"/>
+        <constructor-arg index="3" ref="cacheManager"/>
+    </bean>
+
+    <bean id="i18nSupport" class="org.yes.cart.web.support.i18n.impl.I18NWebSupportImpl"/>
+
+    <bean id="decoratorFacade" class="org.yes.cart.web.support.entity.decorator.impl.DecoratorFacadeImpl">
+        <constructor-arg index="0" ref="imageService"/>
+        <constructor-arg index="1" ref="categoryImageService"/>
+        <constructor-arg index="2" ref="attributableImageService"/>
+        <constructor-arg index="3" ref="attributableImageService"/>
+        <constructor-arg index="4" ref="categoryService"/>
+        <constructor-arg index="5" ref="productService"/>
+        <constructor-arg index="6" ref="bookmarkService"/>
+        <constructor-arg index="7" ref="cacheManager"/>
+    </bean>
+
+    <bean id="wicketSupportFacade" class="org.yes.cart.web.service.wicketsupport.impl.WicketSupportFacadeImpl">
+        <constructor-arg index="0">
+            <bean class="org.yes.cart.web.service.wicketsupport.impl.LinksSupportImpl"/>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <bean class="org.yes.cart.web.service.wicketsupport.impl.PaginationSupportImpl"/>
+        </constructor-arg>
+    </bean>
+
+
+    <!-- ############################ Category , Product and Sku image services end ############################### -->
+
+    <bean id="wicketUtil" class="org.yes.cart.web.util.WicketUtil">
+        <property name="cmdKeys">
+            <list>
+                <value>addToCartCmd</value>
+                <value>changeCurrencyCmd</value>
+                <value>changeLocaleCmd</value>
+                <value>cleanCartCmd</value>
+                <value>expireCartCmd</value>
+                <value>loginCmd</value>
+                <value>logoutCmd</value>
+                <value>removeAllSkuCmd</value>
+                <value>removeOneSkuCmd</value>
+                <value>setBillingAddressSeparateCmd</value>
+                <value>setCarrierSlaCmd</value>
+                <value>setMultipleDeliveryCmd</value>
+                <value>setShopIdCmd</value>
+                <value>setQuantityToCartCmd</value>
+                <value>sku</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="seoBookmarkablePageParametersEncoder" class="org.yes.cart.web.util.SeoBookmarkablePageParametersEncoder">
+        <constructor-arg index="0" ref="bookmarkService"/>
+        <constructor-arg index="1" value="true"/>
+        <!-- is seo url rewriting enabled -->
+    </bean>
+
+
+
+
+
+    <!-- #################################  aspects configurations begin ######################################-->
+
+    <bean id="aspectExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"/>
+
+    <bean id="customerRegistrationAspect" class="org.yes.cart.web.aspect.RegistrationAspect">
+        <constructor-arg index="0" ref="aspectExecutor"/>
+        <constructor-arg index="1" ref="passPhraseGenerator"/>
+        <constructor-arg index="2" ref="passwordHashHelper"/>
+        <constructor-arg index="3" ref="mailSender"/>
+        <constructor-arg index="4" ref="mailComposer"/>
+
+    </bean>
+
+    <bean id="paymentNotificationAspect" class="org.yes.cart.web.aspect.PaymentAspect">
+        <constructor-arg index="0" ref="aspectExecutor"/>
+        <constructor-arg index="1" ref="productService"/>
+
+        <constructor-arg index="2" type="org.springframework.mail.javamail.JavaMailSender" ref="mailSender"/>
+        <constructor-arg index="3" type="org.yes.cart.service.mail.MailComposer" ref="mailComposer"/>
+        <constructor-arg index="4" type="org.yes.cart.service.domain.CustomerService" ref="customerService"/>
+        <constructor-arg index="5" type="org.yes.cart.service.domain.ShopService" ref="shopService"/>
+    </bean>
+
+    <bean id="orderStateChangeAspect" class="org.yes.cart.service.domain.aspect.impl.OrderStateChangeListenerAspect">
+        <constructor-arg index="0" ref="aspectExecutor"/>
+        <constructor-arg index="1" type="org.springframework.mail.javamail.JavaMailSender" ref="mailSender"/>
+        <constructor-arg index="2" type="org.yes.cart.service.mail.MailComposer" ref="mailComposer"/>
+        <constructor-arg index="3" type="org.yes.cart.service.domain.CustomerService" ref="customerService"/>
+        <constructor-arg index="4" type="org.yes.cart.service.domain.CustomerOrderService" ref="customerOrderService"/>
+        <constructor-arg index="5" type="org.yes.cart.service.domain.ShopService" ref="shopService"/>
+        <constructor-arg index="6">
+                <map>
+                    <entry key="evt.order.cancel-os.cancelled" value="order-canceled"/>
+                    <entry key="evt.packing.complete-os.in.progress-ds.shipment.ready" value="order-delivery-readytoshipping"/>
+                    <entry key="evt.payment.confirmed-os.in.progress" value="order-confirmed"/>
+                    <entry key="evt.pending-os.in.progress" value="order-new"/>
+                    <entry key="evt.release.to.shipment-os.in.progress-ds.shipment.inprogress" value="order-delivery-shipped"/>
+                    <entry key="evt.shipment.complete-os.completed-ds.shipped" value="order-shipping-completed"/>
+
+                </map>
+        </constructor-arg>
+        <constructor-arg index="7">
+                <map>
+                    <entry key="evt.order.cancel-os.cancelled" value="adm-order-canceled"/>
+                    <entry key="evt.payment.confirmed-os.in.progress" value="adm-order-confirmed"/>
+                    <entry key="evt.pending-os.in.progress" value="adm-order-new"/>
+                    <entry key="evt.pending-os.waiting" value="adm-order-wait-confirmation"/>
+                    <entry key="evt.shipment.complete-os.completed-ds.shipped" value="adm-order-shipping-completed"/>
+                </map>
+        </constructor-arg>
+    </bean>
+
+
+
+    <!-- #################################  aspects configurations end ######################################-->
+
+
+
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="${ycs.mail.host}"/>
+        <property name="port" value="${ycs.mail.port}"/>
+        <property name="username" value="${ycs.mail.username}"/>
+        <property name="password" value="${ycs.mail.password}"/>
+        <property name="javaMailProperties">
+            <props>
+                <!-- Use SMTP-AUTH to authenticate to SMTP server -->
+                <!--<prop key="mail.smtp.auth">true</prop>-->
+                <!-- Use TLS to encrypt communication with SMTP server -->
+                <prop key="mail.smtp.starttls.enable">${ycs.mail.smtp.starttls.enable}</prop>
+            </props>
+        </property>
+    </bean>
+
+
+    <!-- #################################  message consumers end ######################################-->
+
+    <security:authentication-manager alias="authenticationManager">
+        <security:authentication-provider>
+            <security:password-encoder hash="md5"/>
+            <security:jdbc-user-service
+                    data-source-ref="dataSourceSec"
+                    group-authorities-by-username-query=""
+                    users-by-username-query="SELECT m.email as username, m.password, 1 as enabled FROM TMANAGER m where m.email = ?"
+                    authorities-by-username-query="SELECT mr.email as username, mr.code as authority FROM TMANAGERROLE mr  WHERE mr.email = ?"/>
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+
+    <bean id="dataSourceSec" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="java:comp/env/jdbc/yesjndi"/>
+        <property name="lookupOnStartup" value="true"/>
+        <property name="cache" value="true"/>
+        <property name="proxyInterface" value="javax.sql.DataSource"/>
+    </bean>
+
+    <bean id="backDoorBean" parent="txProxyTemplate">
+        <property name="target">
+            <bean  class="org.yes.cart.web.service.ws.impl.BackdoorServiceImpl">
+                <property name="productService" ref="productService"/>
+                <property name="cacheManager" ref="cacheManager"/>
+            </bean>
+        </property>
+    </bean>
+
+
+
+
+    <jaxws:endpoint id="backDoor" implementor="#backDoorBean" address="/backdoor">
+        <jaxws:properties>
+            <entry key="ws-security.validate.token">
+                <value>false</value>
+            </entry>
+        </jaxws:properties>
+        <jaxws:inInterceptors>
+            <ref bean="wsAuthenticationInterceptor"/>
+        </jaxws:inInterceptors>
+    </jaxws:endpoint>
+
+    <bean id="wsAuthenticationInterceptor" class="org.yes.cart.web.service.ws.impl.BackdoorAuthenticationInInterceptor">
+        <constructor-arg>
+            <map>
+                <entry key="action" value="UsernameToken"/>
+                <entry key="passwordType" value="PasswordText"/>
+<!--                <entry key="passwordCallbackClass" value="org.yes.cart.web.service.ws.impl.BackdoorCallback"/>-->
+            </map>
+        </constructor-arg>
+        <property name="authenticationManager" ref="authenticationManager"/>
+    </bean>
+
+
+    <bean id="methodCacheAdvice" class="org.yes.cart.cache.MethodCacheAdvice"/>
+
+    <!-- ################################ JMX support  begin ###################################### -->
+
+    <bean id="mbeanServer" class="org.springframework.jmx.support.MBeanServerFactoryBean">
+        <property name="locateExistingServerIfPossible" value="true"/>
+        <property name="defaultDomain" value="YesShop"/>
+    </bean>
+
+    <bean class="org.springframework.jmx.export.MBeanExporter" lazy-init="false">
+        <property name="server" ref="mbeanServer"/>
+        <property name="registrationBehaviorName" value="REGISTRATION_REPLACE_EXISTING"/>
+        <property name="beans">
+            <map>
+                <entry key="bean:name=YesShop-ImageFilter" value-ref="imageFilter"/>
+                <entry key="bean:name=YesShop-ShopResolverFilter" value-ref="shopResolverFilter"/>
+                <entry key="bean:name=YesShop-ProductReindexer" value-ref="productReindexer"/>
+                <entry key="bean:name=YesShop-ShoppingCartFilter" value-ref="shoppingCartFilter"/>
+
+                <entry key="bean:name=YesShop-ImageService" value-ref="imageService"/>
+            </map>
+        </property>
+    </bean>
+
+    <!-- ################################ JMX support  end ###################################### -->
+
+</beans>
