@@ -803,6 +803,34 @@
     <!-- ################################ JMX support  end ###################################### -->
 
 
+    <!-- ################################ preorder support   ###################################### -->
+
+    <bean name="preorderJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+        <property name="jobClass" value="org.yes.cart.service.order.impl.PreOrderJobImpl" />
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="customerOrderService" value-ref="customerOrderService" />
+                <entry key="orderStateManager" value-ref="orderStateManager" />
+            </map>
+        </property>
+    </bean>
+
+    <bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="preorderJob" />
+        <!-- each 5 minute 05,10,15,20, etc -->
+        <property name="cronExpression" value="0 0/5 * * * ?" />
+    </bean>
+
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="cronTrigger" />
+            </list>
+        </property>
+    </bean>
+
+
+
 
 
 </beans>

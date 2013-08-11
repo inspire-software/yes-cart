@@ -79,7 +79,7 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImplTest extends AbstractE
                         delivery
                 )
         ));
-        assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+        assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED/*DELIVERY_STATUS_INVENTORY_WAIT*/,  //it push next transition automatically - allocate quantity
                 delivery.getDeliveryStatus());
     }
 }

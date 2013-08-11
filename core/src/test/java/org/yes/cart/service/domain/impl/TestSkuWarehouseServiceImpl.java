@@ -292,7 +292,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
 
         Customer cust = createCustomer("preorder-tester");
 
-        ShoppingCart shoppingCart = getShoppingCartWithPreorderItems("pre-test2", true);
+        ShoppingCart shoppingCart = getShoppingCartWithPreorderItems("pre-test2", 0);
 
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, order.getOrderStatus());

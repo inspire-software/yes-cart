@@ -4709,12 +4709,12 @@ public void setRangeList(final RangeList rangeList) {
     </query>
 
 
-    <query name="DELIVERIES.WAITING.FOR.INVENTORY">
+    <query  name="DELIVERIES.WAITING.FOR.INVENTORY">
         <![CDATA[
        select d from CustomerOrderDeliveryEntity d inner join d.detail dd
        where  d.deliveryStatus = ?1
        and d.customerOrder.orderStatus = ?2
-       and dd.sku.skuId = ?3
+       and (dd.sku.skuId = ?3 or ?3 is null)
 
        ]]>
     </query>

@@ -68,7 +68,7 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImpl
                     if (MoneyUtils.isFirstBiggerThanSecond(
                             qtyPair.getSecond().add(det.getQty()),
                             qtyPair.getFirst())) {
-                        return false; //reserved plus to reserve biger, than on warehouses
+                        return false; //reserved plus to reserve bigger, than on warehouses
                     }
                 }
             }

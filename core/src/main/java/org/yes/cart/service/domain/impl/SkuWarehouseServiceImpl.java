@@ -264,13 +264,14 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
          */
         if (isSkuAvilabilityPreorder(productSkuId)) {
 
-            List<CustomerOrderDelivery> waitForInventory = getCustomerOrderService().findDeliveriesAwaitingForInventory(productSkuId);
+            List<CustomerOrderDelivery> waitForInventory = getCustomerOrderService().findAwaitingDeliveries(productSkuId, CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                    CustomerOrder.ORDER_STATUS_IN_PROGRESS);
 
             for (CustomerOrderDelivery delivery : waitForInventory) {
 
                 try {
                     boolean rez = getOrderStateManager().fireTransition(
-                            new OrderEventImpl(OrderStateManager.EVT_DELIVERY_ALLOWED_QUANTITY, delivery.getCustomerOrder(), delivery));
+                            new OrderEventImpl(OrderStateManager.EVT_DELIVERY_ALLOWED_TIMEOUT, delivery.getCustomerOrder(), delivery));
                     if (rez) {
                         customerOrderService.update(delivery.getCustomerOrder());
                         ShopCodeContext.getLog(this).info("Push delivery " + delivery.getDeliveryNum() + " back to life cycle , because of sku quantity is changed. Product sku id =" + productSkuId);

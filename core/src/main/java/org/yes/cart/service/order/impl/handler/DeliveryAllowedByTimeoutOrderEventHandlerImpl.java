@@ -16,11 +16,17 @@
 
 package org.yes.cart.service.order.impl.handler;
 
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
+import org.yes.cart.service.order.OrderException;
+import org.yes.cart.service.order.OrderStateManager;
+import org.yes.cart.service.order.impl.OrderEventImpl;
 
 import java.util.Collection;
 import java.util.Date;
@@ -32,12 +38,15 @@ import java.util.Date;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class DeliveryAllowedByTimeoutOrderEventHandlerImpl implements OrderEventHandler {
+public class DeliveryAllowedByTimeoutOrderEventHandlerImpl implements OrderEventHandler, ApplicationContextAware {
+
+    private OrderStateManager orderStateManager = null;
+    private ApplicationContext applicationContext;
 
     /**
      * {@inheritDoc}
      */
-    public boolean handle(final OrderEvent orderEvent) {
+    public boolean handle(final OrderEvent orderEvent)  throws OrderException {
         synchronized (OrderEventHandler.syncMonitor) {
             final Date now = getCurrentDate();
 
@@ -52,13 +61,28 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImpl implements OrderEvent
             }
 
             orderEvent.getCustomerOrderDelivery().setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT);
+            getOrderStateManager().fireTransition(new OrderEventImpl(OrderStateManager.EVT_DELIVERY_ALLOWED_QUANTITY, orderEvent.getCustomerOrder(), orderEvent.getCustomerOrderDelivery()));
 
             return true;
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
+
     private Date getCurrentDate() {
         return new Date(); //TODO: V2 time machine
+    }
+
+    private synchronized OrderStateManager getOrderStateManager() {
+        if (orderStateManager == null) {
+            orderStateManager = (OrderStateManager) applicationContext.getBean("orderStateManager");
+        }
+        return orderStateManager;
     }
 
 
