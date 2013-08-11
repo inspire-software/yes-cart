@@ -101,13 +101,23 @@ public class DtoContentServiceImpl
     /**
      * {@inheritDoc}
      */
+    public void createContentRoot(final long shopId) {
+        ((ContentService) service).getRootContent(shopId, true);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public List<CategoryDTO> getAllWithAvailabilityFilter(final long shopId, final boolean withAvailabilityFiltering)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         ContentService categoryService = (ContentService) service;
-        Category root = categoryService.getRootContent(shopId);
-        CategoryDTO rootDTO = getById(root.getCategoryId());
-        getAllFromRoot(rootDTO, withAvailabilityFiltering);
-        return Collections.singletonList(rootDTO);
+        Category root = categoryService.getRootContent(shopId, false);
+        if (root != null) {
+            CategoryDTO rootDTO = getById(root.getCategoryId());
+            getAllFromRoot(rootDTO, withAvailabilityFiltering);
+            return Collections.singletonList(rootDTO);
+        }
+        return null;
     }
 
 

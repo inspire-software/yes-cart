@@ -33,7 +33,7 @@ public interface ContentService extends GenericService<Category> {
      *
      * @return root content.
      */
-    Category getRootContent(long shopId);
+    Category getRootContent(long shopId, final boolean createIfMissing);
 
     /**
      * Get the "template variation" for given content with fail over to parent.

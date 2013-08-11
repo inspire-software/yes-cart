@@ -111,17 +111,19 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
      * @param categoryId       the current category id
      */
     private void fillCategories(final List<Crumb> categoriesCrumbs, final long categoryId, final List<Long> shopCategoryIds) {
-        final Category category = categoryService.getById(categoryId);
-        if (categoryId != category.getParentId()) {
-            categoriesCrumbs.add(
-                    new Crumb("category", category.getName(),
-                            category.getDisplayName(), getCategoryLinkParameters(categoryId),
-                            getRemoveCategoryLinkParameters(category, shopCategoryIds)
-                    )
-            );
+        if (categoryId > 0l) {
+            final Category category = categoryService.getById(categoryId);
+            if (categoryId != category.getParentId() && category.getParentId() > 0l) {
+                categoriesCrumbs.add(
+                        new Crumb("category", category.getName(),
+                                category.getDisplayName(), getCategoryLinkParameters(categoryId),
+                                getRemoveCategoryLinkParameters(category, shopCategoryIds)
+                        )
+                );
 
 
-            fillCategories(categoriesCrumbs, category.getParentId(), shopCategoryIds);
+                fillCategories(categoriesCrumbs, category.getParentId(), shopCategoryIds);
+            }
         }
     }
 

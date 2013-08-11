@@ -21,7 +21,6 @@ import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.*;
 
@@ -50,14 +49,14 @@ public class ContentServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetRootContent() {
-        Category rootContent = contentService.getRootContent(20L); //SHOIP2
+        Category rootContent = contentService.getRootContent(20L, false); //SHOIP2
         assertNotNull(rootContent);
         assertEquals(rootContent.getGuid(), "SHOIP2");
     }
 
     @Test
     public void testGetRootContentCreate() {
-        Category rootContent = contentService.getRootContent(10L); //SHOIP1
+        Category rootContent = contentService.getRootContent(10L, true); //SHOIP1
         assertNotNull(rootContent);
         assertEquals(rootContent.getGuid(), "SHOIP1");
     }

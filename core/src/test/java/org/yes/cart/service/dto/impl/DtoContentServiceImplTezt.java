@@ -169,7 +169,7 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
                     dto = dtoService.getById(id);
                     assertNull(dto);
                 } catch (Exception e) {
-                    assertTrue(e.getMessage(), false);
+                    fail(e.getMessage());
 
                 }
 
@@ -181,16 +181,38 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testGetAllByShopId() throws Exception {
+    public void testGetAllByShopIdNoContent() throws Exception {
 
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
                 try {
                     List<CategoryDTO> list = dtoService.getAllByShopId(50L);
+                    assertNull(list); // No Content Root
+                } catch (Exception e) {
+                    fail(e.getMessage());
+
+                }
+
+                status.setRollbackOnly();
+            }
+        });
+
+
+    }
+
+    @Test
+    public void testGetAllByShopIdWithCreate() throws Exception {
+
+        getTx().execute(new TransactionCallbackWithoutResult() {
+            public void doInTransactionWithoutResult(TransactionStatus status) {
+                try {
+                    dtoService.createContentRoot(50L);
+                    List<CategoryDTO> list = dtoService.getAllByShopId(50L);
+                    assertNotNull(list);
                     assertFalse(list.isEmpty());
                     assertEquals(1, list.size());
                 } catch (Exception e) {
-                    assertTrue(e.getMessage(), false);
+                    fail(e.getMessage());
 
                 }
 
@@ -241,7 +263,7 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    assertTrue(e.getMessage(), false);
+                    fail(e.getMessage());
 
                 }
 

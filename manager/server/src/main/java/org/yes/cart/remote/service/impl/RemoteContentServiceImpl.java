@@ -47,6 +47,13 @@ public class RemoteContentServiceImpl
     /**
      * {@inheritDoc}
      */
+    public void createContentRoot(final long shopId) {
+        ((DtoContentService) getGenericDTOService()).createContentRoot(shopId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public List<CategoryDTO> getAllByShopId(final long shopId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return ((DtoContentService) getGenericDTOService()).getAllByShopId(shopId);
