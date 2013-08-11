@@ -20,8 +20,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.util.Assert;
-import org.yes.cart.cache.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.SeoImage;
 import org.yes.cart.service.domain.ImageService;
@@ -385,7 +386,7 @@ public class ImageServiceImpl
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "imageServiceImplMethodCache")
+    @Cacheable(value = "imageService-seoImage")
     public SeoImage getSeoImage(final String imageName) {
         java.util.List<SeoImage> seoImages = seoImageDao.findByCriteria(Restrictions.eq("imageName", imageName));
         if (seoImages == null || seoImages.isEmpty()) {
@@ -394,4 +395,23 @@ public class ImageServiceImpl
         return seoImages.get(0);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @CacheEvict(value = {
+            "imageService-seoImage"
+    }, allEntries = true)
+    public SeoImage update(SeoImage instance) {
+        return super.update(instance);    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @CacheEvict(value = {
+            "imageService-seoImage"
+    }, allEntries = true)
+    public void delete(SeoImage instance) {
+        super.delete(instance);    //To change body of overridden methods use File | Settings | File Templates.
+    }
 }

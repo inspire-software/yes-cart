@@ -23,7 +23,6 @@ import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.util.Version;
-import org.yes.cart.cache.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.misc.Pair;
@@ -31,7 +30,6 @@ import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.domain.query.PriceNavigation;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.AttributeService;
-import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;

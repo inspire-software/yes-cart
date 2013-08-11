@@ -16,7 +16,8 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.yes.cart.cache.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
@@ -104,7 +105,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "attributeServiceImplMethodCache")
+    @Cacheable(value = "attributeService-availableAttributesByProductTypeId")
     public List<Attribute> findAvailableAttributesByProductTypeId(final long productTypeId) {
         return getGenericDao().findByNamedQuery("PRODUCTS.ATTRIBUTE.BY.PROD.TYPE.ID", productTypeId);
     }
@@ -112,7 +113,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "attributeServiceImplMethodCache")
+    @Cacheable(value = "attributeService-availableImageAttributesByGroupCode")
     public List<Attribute> findAvailableImageAttributesByGroupCode(final String attributeGroupCode) {
         return getGenericDao().findByNamedQuery("PRODUCTS.IMAGE.ATTRIBUTE.BY.GROUP.CODE", attributeGroupCode);
     }
@@ -120,9 +121,9 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "attributeServiceImplMethodCache")
+    @Cacheable(value = "attributeService-allAttributeCodes")
     public List<String> getAllAttributeCodes() {
-        List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.UNIQUE");
+        final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.UNIQUE");
         allowedAttributeNames.add(ProductSearchQueryBuilder.BRAND_FIELD);
         allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_PRICE);
         allowedAttributeNames.add(ProductSearchQueryBuilder.QUERY);
@@ -133,9 +134,9 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "attributeServiceImplMethodCache")
+    @Cacheable(value = "attributeService-allNavigatableAttributeCodes")
     public List<String> getAllNavigatableAttributeCodes() {
-        List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.NAVIGATION.UNIQUE", Boolean.TRUE);
+        final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.NAVIGATION.UNIQUE", Boolean.TRUE);
         allowedAttributeNames.add(ProductSearchQueryBuilder.BRAND_FIELD);
         allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_PRICE);
         allowedAttributeNames.add(ProductSearchQueryBuilder.QUERY);
@@ -143,7 +144,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
         return allowedAttributeNames;
     }
 
-    @Cacheable(value = "attributeServiceImplMethodCache")
+    @Cacheable(value = "attributeService-attributeNamesByCodes")
     public Map<String, String> getAttributeNamesByCodes(final List<String> codes) {
         Map<String, String> result = new HashMap<String, String>();
         List<Object[]> codeNameList = attributeDao.findQueryObjectsByNamedQueryWithList(
@@ -160,4 +161,36 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
         return result;
     }
 
+    /** {@inheritDoc} */
+    @CacheEvict(value = {"attributeService-availableAttributesByProductTypeId",
+            "attributeService-availableImageAttributesByGroupCode",
+            "attributeService-allAttributeCodes",
+            "attributeService-allNavigatableAttributeCodes",
+            "attributeService-attributeNamesByCodes"},
+             allEntries = true)
+    public Attribute create(Attribute instance) {
+        return super.create(instance);    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    /** {@inheritDoc} */
+    @CacheEvict(value = {"attributeService-availableAttributesByProductTypeId",
+            "attributeService-availableImageAttributesByGroupCode",
+            "attributeService-allAttributeCodes",
+            "attributeService-allNavigatableAttributeCodes",
+            "attributeService-attributeNamesByCodes"},
+            allEntries = true)
+    public Attribute update(Attribute instance) {
+        return super.update(instance);    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    /** {@inheritDoc} */
+    @CacheEvict(value = {"attributeService-availableAttributesByProductTypeId",
+            "attributeService-availableImageAttributesByGroupCode",
+            "attributeService-allAttributeCodes",
+            "attributeService-allNavigatableAttributeCodes",
+            "attributeService-attributeNamesByCodes"},
+            allEntries = true)
+    public void delete(Attribute instance) {
+        super.delete(instance);    //To change body of overridden methods use File | Settings | File Templates.
+    }
 }

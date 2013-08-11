@@ -87,7 +87,7 @@ public interface GenericService<T> {
      *
      * @return generic dao
      */
-    GenericDAO getGenericDao();
+    GenericDAO<T, Long> getGenericDao();
 
 
 }

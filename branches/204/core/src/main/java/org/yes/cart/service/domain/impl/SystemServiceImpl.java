@@ -17,7 +17,8 @@
 package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.yes.cart.cache.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValue;
@@ -57,7 +58,7 @@ public class SystemServiceImpl implements SystemService {
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "systemServiceImplMethodCache")
+    @Cacheable(value = "systemService-AttributeValue")
     public String getAttributeValue(final String key) {
         return getAttirbuteValue(key, getSystem().getAttributes());
     }
@@ -65,7 +66,7 @@ public class SystemServiceImpl implements SystemService {
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "systemServiceImplMethodCache")
+    @Cacheable(value =  "systemService-AttributeValues")
     public Map<String, AttrValueSystem> getAttributeValues() {
         return getSystem().getAttributes();
     }
@@ -73,6 +74,10 @@ public class SystemServiceImpl implements SystemService {
     /**
      * {@inheritDoc}
      */
+    @CacheEvict(value ={
+            "systemService-AttributeValue",
+            "systemService-AttributeValues"
+    }, allEntries = true)
     public void updateAttributeValue(final String key, final String value) {
 
         AttrValueSystem attrVal = getSystem().getAttributes().get(key);
@@ -222,4 +227,6 @@ public class SystemServiceImpl implements SystemService {
     public GenericDAO getGenericDao() {
         return systemDao;
     }
+
+
 }
