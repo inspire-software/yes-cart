@@ -110,12 +110,12 @@ public interface SkuWarehouseService extends GenericService<SkuWarehouse> {
     SkuWarehouse findByWarehouseSku(Warehouse warehouse, ProductSku productSku);
 
     /**
-     * Check is sku has preorder availablilty.
+     * Check if sku has pre-order availability.
      *
      * @param productSkuId sku warehouse entity
-     * @return true, if sku has preorder availability.
+     * @return true, if sku has pre-order availability.
      */
-    boolean isSkuAvilabilityPreorder(long productSkuId);
+    boolean isSkuAvailabilityPreorder(long productSkuId);
 
     /**
      * Push orders , that are awaiting for inventory
