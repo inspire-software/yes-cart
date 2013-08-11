@@ -95,16 +95,23 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
     /**
      * @return cart with one digital available product.
      */
-    protected ShoppingCart getShoppingCartWithPreorderItems(final String prefix, final boolean firstSet) {
+    protected ShoppingCart getShoppingCartWithPreorderItems(final String prefix, final int skuCodeSetIdx) {
+        final String [][] skuCodeSet = new String [][] {
+                {"PREORDER-BACK-TO-FLOW0", "PREORDER-BACK-TO-FLOW1"},
+                {"PREORDER-BACK-TO-FLOW2", "PREORDER-BACK-TO-FLOW3"},
+                {"PREORDER-BACK-TO-FLOW4", "PREORDER-BACK-TO-FLOW5"},
+        };
+        final String firstCode = skuCodeSet[skuCodeSetIdx][0];
+        final String secondCode = skuCodeSet[skuCodeSetIdx][1];
         ShoppingCart shoppingCart = getEmptyCart(prefix);
         // this digital product available
         Map<String, String> param = new HashMap<String, String>();
-        param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, firstSet ? "PREORDER-BACK-TO-FLOW0" : "PREORDER-BACK-TO-FLOW2");
+        param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, firstCode/*firstSet ? "PREORDER-BACK-TO-FLOW0" : "PREORDER-BACK-TO-FLOW2"*/);
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
         new SetSkuQuantityToCartEventCommandImpl(ctx(), param)
                 .execute(shoppingCart);
         param = new HashMap<String, String>();
-        param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, firstSet ? "PREORDER-BACK-TO-FLOW1" : "PREORDER-BACK-TO-FLOW3");
+        param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, secondCode /*firstSet ? "PREORDER-BACK-TO-FLOW1" : "PREORDER-BACK-TO-FLOW3"*/);
         param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "2.00");
         new SetSkuQuantityToCartEventCommandImpl(ctx(), param)
                 .execute(shoppingCart);

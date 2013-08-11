@@ -18,6 +18,7 @@ package org.yes.cart.service.order.impl;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.service.order.*;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ import static org.junit.Assert.assertTrue;
  * Time: 14:12:54
  */
 // TODO: YC-64 simplify using JMock
-public class OrderStateManagerImplTest {
+public class OrderStateManagerImplTest extends BaseCoreDBTestCase {
 
     private Map<String, OrderEventHandler> handlersOk;
     private Map<String, OrderEventHandler> handlersFailed;
@@ -46,7 +47,7 @@ public class OrderStateManagerImplTest {
     private boolean beforeTransitionDynamicListenerWasFired;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp()  {
         handlersOk = new HashMap<String, OrderEventHandler>() {{
             put("payment.ok", new OrderEventHandler() {
                 public boolean handle(OrderEvent orderEvent) {
@@ -83,6 +84,8 @@ public class OrderStateManagerImplTest {
         beforeListenersMapOk = new HashMap<String, List<? extends OrderStateTransitionListener>>() {{
             put("payment.ok", orderStateBeforeTransitionListeners);
         }};
+
+        super.setUp();
     }
 
     /**
