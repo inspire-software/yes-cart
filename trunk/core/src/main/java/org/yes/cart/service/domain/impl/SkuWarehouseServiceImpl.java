@@ -262,7 +262,7 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
         /**
          * WARNING . Potential issue  delivery may be not allowed by time. Need to solve it
          */
-        if (isSkuAvilabilityPreorder(productSkuId)) {
+        if (isSkuAvailabilityPreorder(productSkuId)) {
 
             List<CustomerOrderDelivery> waitForInventory = getCustomerOrderService().findAwaitingDeliveries(productSkuId, CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
                     CustomerOrder.ORDER_STATUS_IN_PROGRESS);
@@ -294,13 +294,8 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     }
 
 
-    /**
-     * Check is sku has preorder availablilty.
-     *
-     * @param productSkuId sku warehouse entity
-     * @return true, if sku has preorder availability.
-     */
-    public boolean isSkuAvilabilityPreorder(final long productSkuId) {
+    /** {@inheritDoc} */
+    public boolean isSkuAvailabilityPreorder(final long productSkuId) {
         ProductSku sku = productService.getSkuById(productSkuId);
         return Product.AVAILABILITY_PREORDER == sku.getProduct().getAvailability();
     }
