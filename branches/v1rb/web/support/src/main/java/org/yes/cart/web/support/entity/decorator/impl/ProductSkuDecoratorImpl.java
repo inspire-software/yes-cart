@@ -33,7 +33,9 @@ import org.yes.cart.web.support.i18n.I18NWebSupport;
 import org.yes.cart.web.support.service.AttributableImageService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Product sku decorator.
@@ -59,7 +61,7 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
     private final AttributableImageService attributableImageService;
     private final CategoryService categoryService;
     private final String httpServletContextPath;
-    private String productImageUrl;
+    private final Map<Integer, String> productImageUrl = new HashMap<Integer, String>();
     private final ImageService imageService;
     private final I18NWebSupport i18NWebSupport;
 
@@ -88,7 +90,6 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
         this.httpServletContextPath = httpServletContextPath;
         this.attributableImageService = attributableImageService;
         this.categoryService = categoryService;
-        this.productImageUrl = null;
         this.imageService = imageService;
     }
 
@@ -113,18 +114,35 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
         return rez;
     }
 
+    private Integer getImageWithSizeHash(final String ... params) {
+        final int prime = 31;
+        int result = 1;
+        for( String param : params) {
+            if (param == null) {
+                continue;
+            }
+            result = result * prime + param.hashCode();
+        }
+        return result;
+    }
 
     /**
      * {@inheritDoc}
      */
     public String getImage(final String width, final String height, final String imageAttributeName) {
-        return attributableImageService.getImage(
-                this,
-                httpServletContextPath,
-                width,
-                height,
-                imageAttributeName,
-                null);
+        final Integer hash = getImageWithSizeHash(imageAttributeName, width, height);
+        String img = productImageUrl.get(hash);
+        if (img == null) {
+            img = attributableImageService.getImage(
+                    this,
+                    httpServletContextPath,
+                    width,
+                    height,
+                    imageAttributeName,
+                    null);
+            productImageUrl.put(hash, img);
+        }
+        return img;
     }
 
 
@@ -132,15 +150,20 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
      * {@inheritDoc}
      */
     public String getDefaultImage(final String width, final String height) {
-        if (productImageUrl == null) {
-            productImageUrl = attributableImageService.getImage(
+        final String imageAttributeName = getDefaultImageAttributeName();
+        final Integer hash = getImageWithSizeHash(imageAttributeName, width, height);
+        String img = productImageUrl.get(hash);
+        if (img == null) {
+            img = attributableImageService.getImage(
                     this,
                     httpServletContextPath,
                     width,
-                    height, getDefaultImageAttributeName(),
+                    height,
+                    imageAttributeName,
                     null);
+            productImageUrl.put(hash, img);
         }
-        return productImageUrl;
+        return img;
     }
 
 
