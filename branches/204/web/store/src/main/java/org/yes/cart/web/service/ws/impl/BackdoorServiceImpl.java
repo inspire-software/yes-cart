@@ -28,6 +28,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
+import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.query.impl.AsIsAnalyzer;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.util.ShopCodeContext;
@@ -246,7 +247,7 @@ public class BackdoorServiceImpl implements BackdoorService, ApplicationContextA
     }
 
     @SuppressWarnings("unchecked")
-    private GenericDAO<Object, Long> getGenericDao() {
+    private GenericDAO<Product, Long> getGenericDao() {
         return productService.getGenericDao();
     }
 

@@ -24,9 +24,7 @@ import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.AttributeGroupService;
 import org.yes.cart.service.domain.AttributeService;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -122,30 +120,30 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
      * {@inheritDoc}
      */
     @Cacheable(value = "attributeService-allAttributeCodes")
-    public List<String> getAllAttributeCodes() {
+    public Set<String> getAllAttributeCodes() {
         final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.UNIQUE");
         allowedAttributeNames.add(ProductSearchQueryBuilder.BRAND_FIELD);
         allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_PRICE);
         allowedAttributeNames.add(ProductSearchQueryBuilder.QUERY);
         allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD);
-        return allowedAttributeNames;
+        return new HashSet<String>(allowedAttributeNames);
     }
 
     /**
      * {@inheritDoc}
      */
     @Cacheable(value = "attributeService-allNavigatableAttributeCodes")
-    public List<String> getAllNavigatableAttributeCodes() {
+    public Set<String> getAllNavigatableAttributeCodes() {
         final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.NAVIGATION.UNIQUE", Boolean.TRUE);
         allowedAttributeNames.add(ProductSearchQueryBuilder.BRAND_FIELD);
         allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_PRICE);
         allowedAttributeNames.add(ProductSearchQueryBuilder.QUERY);
         allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD);
-        return allowedAttributeNames;
+        return new HashSet<String>(allowedAttributeNames);
     }
 
     @Cacheable(value = "attributeService-attributeNamesByCodes")
-    public Map<String, String> getAttributeNamesByCodes(final List<String> codes) {
+    public Map<String, String> getAttributeNamesByCodes(final Set<String> codes) {
         Map<String, String> result = new HashMap<String, String>();
         List<Object[]> codeNameList = attributeDao.findQueryObjectsByNamedQueryWithList(
                 "ATTRIBUTE.CODE.NAMES",

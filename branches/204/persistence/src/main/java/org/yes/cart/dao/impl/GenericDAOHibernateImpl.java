@@ -294,7 +294,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
-    public List<Object[]> findQueryObjectsByNamedQueryWithList(final String namedQueryName, final List parameter) {
+    public List<Object[]> findQueryObjectsByNamedQueryWithList(final String namedQueryName, final Collection parameter) {
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
         query.setParameterList("list", parameter);
         return query.list();

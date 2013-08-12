@@ -24,10 +24,7 @@ import org.yes.cart.service.domain.impl.ContentServiceImpl;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -75,8 +72,8 @@ public class CentralViewResolverImplTest {
                 },
                 new AttributeServiceImpl(null, null, false) {
                     @Override
-                    public List<String> getAllNavigatableAttributeCodes() {
-                        return new ArrayList<String>() {{
+                    public Set<String> getAllNavigatableAttributeCodes() {
+                        return new HashSet<String>() {{
                             add("attrWeight");
                             add("attrSize");
                         }};

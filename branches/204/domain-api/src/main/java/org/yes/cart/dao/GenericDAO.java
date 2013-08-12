@@ -154,7 +154,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      * @param parameter      list parameter for named query
      * @return list of found objects
      */
-    List<Object[]> findQueryObjectsByNamedQueryWithList(String namedQueryName, List parameter);
+    List<Object[]> findQueryObjectsByNamedQueryWithList(String namedQueryName, Collection parameter);
 
     /**
      * Find "query objects" within named query that use IN clause.

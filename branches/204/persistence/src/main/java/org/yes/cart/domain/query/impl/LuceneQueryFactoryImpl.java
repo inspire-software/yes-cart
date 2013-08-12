@@ -34,10 +34,7 @@ import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -179,13 +176,13 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
      * @param categories        given category ids
      * @return ordered by cookie name list of cookies
      */
-    @Cacheable(value = "luceneQueryFactoryImplMethodCache")
+    //@Cacheable(value = "luceneQueryFactoryImplMethodCache")
     public List<BooleanQuery> getFilteredNavigationQueryChain(
             final Long shopId,
             final List<Long> categories,
             final Map<String, ?> requestParameters) {
 
-        final List<String> allowedAttributeCodes = attributeService.getAllNavigatableAttributeCodes();
+        final Set<String> allowedAttributeCodes = attributeService.getAllNavigatableAttributeCodes();
 
         final List<BooleanQuery> queryChain = new ArrayList<BooleanQuery>();
         for (Map.Entry<String, ?> entry : requestParameters.entrySet()) {

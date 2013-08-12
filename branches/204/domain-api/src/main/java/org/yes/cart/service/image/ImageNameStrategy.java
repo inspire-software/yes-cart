@@ -76,7 +76,7 @@ public interface ImageNameStrategy {
     String getFullFileNamePath(String fileName, String code, String width, String height);
 
     /**
-     * Get the code for given url.
+     * Get the code (sku or product) for given url.
      *
      * @param url filename
      * @return code for given image name or null if particular strategy not support code.
