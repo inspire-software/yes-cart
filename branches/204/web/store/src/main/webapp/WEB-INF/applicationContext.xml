@@ -20,6 +20,7 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:security="http://www.springframework.org/schema/security"
        xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:cache="http://www.springframework.org/schema/cache"
        xmlns:jaxws="http://cxf.apache.org/jaxws"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
@@ -30,10 +31,14 @@
            http://www.springframework.org/schema/security
            http://www.springframework.org/schema/security/spring-security-3.1.xsd
            http://cxf.apache.org/jaxws
-           http://cxf.apache.org/schemas/jaxws.xsd">
+           http://cxf.apache.org/schemas/jaxws.xsd
+           http://www.springframework.org/schema/cache
+           http://www.springframework.org/schema/cache/spring-cache.xsd">
 
 
     <context:component-scan base-package="org.yes.cart"/>
+
+    <cache:annotation-driven />
 
     <aop:aspectj-autoproxy/>
 

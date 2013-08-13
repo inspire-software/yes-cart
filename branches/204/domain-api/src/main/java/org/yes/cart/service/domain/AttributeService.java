@@ -45,7 +45,7 @@ public interface AttributeService extends GenericService<Attribute> {
     Set<String> getAllNavigatableAttributeCodes();
 
     /**
-     * Get attrubute names.
+     * Get attribute names.
      *
      * @param codes attribute codes
      * @return map of attribute code - name.
