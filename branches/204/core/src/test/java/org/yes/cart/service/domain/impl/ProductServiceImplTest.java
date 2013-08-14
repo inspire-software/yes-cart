@@ -19,6 +19,8 @@ package org.yes.cart.service.domain.impl;
 import org.apache.lucene.search.Query;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.yes.cart.BaseCoreDBTestCase;
@@ -52,6 +54,7 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
     @Before
     public void setUp() {
         productService = (ProductService) ctx().getBean(ServiceSpringKeys.PRODUCT_SERVICE);
+
         super.setUp();
     }
 
@@ -244,10 +247,19 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetRandomProductByCategory() {
+
         CategoryService categoryService = (CategoryService) ctx().getBean(ServiceSpringKeys.CATEGORY_SERVICE);
         Category category = categoryService.getById(211L);
         Set<Long> list = new HashSet<Long>();
+
+        final CacheManager cm = ctx().getBean("cacheManager", CacheManager.class);
+        final Cache cache = cm.getCache("productService-randomProductByCategory");
+
         for (int i = 0; i < 10; i++) {
+            /**
+             * The value is cached, hence before get new value need to evict related cache "productService-randomProductByCategory"
+             */
+            cache.clear();
             list.add(productService.getRandomProductByCategory(category).getProductId());
         }
         //assume, that we select at least two different products in ten times

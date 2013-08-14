@@ -102,7 +102,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "shopService-shopCategories", key ="shop.getShopId()")
+    @Cacheable(value = "shopService-shopCategories"/*, key ="shop.getShopId()"*/)
     public Set<Category> getShopCategories(final Shop shop) {
         Set<Category> result = new HashSet<Category>();
         for (ShopCategory category : shop.getShopCategory()) {

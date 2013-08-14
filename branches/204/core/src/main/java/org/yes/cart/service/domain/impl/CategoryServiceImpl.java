@@ -67,7 +67,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      * @param shop given shop
      * @return ordered by rank list of assigned top level categories
      */
-    @Cacheable(value = "categoryService-topLevelCategories", key="shop.getShopId()")
+    @Cacheable(value = "categoryService-topLevelCategories", key="shop.shopId")
     public List<Category> getTopLevelCategories(final Shop shop) {
         return categoryDao.findByNamedQuery("TOPCATEGORIES.BY.SHOPID", shop.getShopId(), new Date());
     }
@@ -114,7 +114,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "categoryService-categoryTemplateVariation", key="category.getCategoryId()")
+    @Cacheable(value = "categoryService-categoryTemplateVariation"/*, key="category.getCategoryId()"*/)
     public String getCategoryTemplateVariation(final Category category) {
         String variation = null;
         if (StringUtils.isBlank(category.getUitemplate())) {
@@ -147,7 +147,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "categoryService-itemsPerPage", key="category.getCategoryId()")
+    @Cacheable(value = "categoryService-itemsPerPage"/*, key="category.getCategoryId()"*/)
     public List<String> getItemsPerPage(final Category category) {
         final List<String> rez;
         if (category == null) {

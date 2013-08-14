@@ -98,7 +98,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "contentService-contentTemplateVariation" , key = "content.getCategoryId()")
+    @Cacheable(value = "contentService-contentTemplateVariation" /*, key = "content.getCategoryId()"*/)
     public String getContentTemplateVariation(final Category content) {
         String variation = null;
         if (StringUtils.isBlank(content.getUitemplate())) {
@@ -132,7 +132,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "contentService-itemsPerPage" , key = "content.getCategoryId()")
+    @Cacheable(value = "contentService-itemsPerPage" /*, key = "content.getCategoryId()"*/)
     public List<String> getItemsPerPage(final Category content) {
         final List<String> rez;
         if (content == null) {
@@ -151,7 +151,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "contentService-contentBody" , key = "content.getCategoryId()")
+    @Cacheable(value = "contentService-contentBody"/* , key = "content.getCategoryId()"*/)
     public String getContentBody(final long contentId, final String locale) {
         final String attributeKey = "CONTENT_BODY_" + locale + "_%";
         final List<Object> bodyList = categoryDao.findQueryObjectByNamedQuery("CONTENTBODY.BY.CONTENTID", contentId, attributeKey, new Date());
@@ -170,7 +170,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "contentService-contentAttributeRecursive" , key = "content.getCategoryId()")
+    @Cacheable(value = "contentService-contentAttributeRecursive"/* , key = "content.getCategoryId()"*/)
     public String getContentAttributeRecursive(final String locale, final Category content, final String attributeName, final String defaultValue) {
         final String value = getContentAttributeRecursive(locale, content, attributeName);
         if (value == null) {

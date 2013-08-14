@@ -59,9 +59,6 @@
     <cache name="categoryService-itemsPerPage"      maxElementsInMemory="200" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
-    <cache name="categoryService-itemsPerPage"      maxElementsInMemory="200" overflowToDisk="false"
-           eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
-
     <cache name="categoryService-categoryAttributeRecursive"      maxElementsInMemory="200" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
@@ -105,9 +102,6 @@
            eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
     <cache name="contentService-itemsPerPage"      maxElementsInMemory="200" overflowToDisk="false"
-           eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
-
-    <cache name="contentService-contentBody"      maxElementsInMemory="200" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
     <cache name="contentService-contentBody"      maxElementsInMemory="200" overflowToDisk="false"
@@ -197,9 +191,6 @@
     <cache name="productService-productQty"      maxElementsInMemory="2000" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
-    <cache name="productService-distinctAttributeValues"      maxElementsInMemory="2000" overflowToDisk="false"
-           eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
-
     <cache name="productService-productByIdList"      maxElementsInMemory="2000" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
@@ -226,12 +217,38 @@
            eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
 
+
     <cache name="systemService-AttributeValue"      maxElementsInMemory="200" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
     <cache name="systemService-AttributeValues"      maxElementsInMemory="200" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
+
+
+
+    <cache name="productService-productCode"      maxElementsInMemory="2000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+
+
+    <cache name="centralViewResolver-booleanQuery"      maxElementsInMemory="2000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+
+
+    <cache name="breadCrumbBuilder-breadCrumbs"      maxElementsInMemory="1000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+
+
+    <cache name="attributeProductFlter-filteredNavigationRecords"      maxElementsInMemory="100" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+
+
+    <cache name="priceProduct-filteredNavigationRecords"      maxElementsInMemory="100" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
 
     <!-- ############################################# hibernate entity cache #######################################-->

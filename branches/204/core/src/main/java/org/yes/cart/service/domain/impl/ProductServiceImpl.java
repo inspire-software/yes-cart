@@ -143,7 +143,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = {"productService-randomProductByCategory"}, key = "category.getCategoryId()")
+    @Cacheable(value = {"productService-randomProductByCategory"}/*, key = "category.getCategoryId()"*/)
     public Product getRandomProductByCategory(final Category category) {
         final int qty = getProductQty(category.getCategoryId());
         if (qty > 0) {

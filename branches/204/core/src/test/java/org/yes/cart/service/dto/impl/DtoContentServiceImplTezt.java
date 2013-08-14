@@ -270,6 +270,7 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
                 //status.setRollbackOnly();
             }
         });
+        clearCache();
 
         final List<? extends AttrValueDTO> list2 = dtoService.getEntityAttributes(10105L);
         //assertEquals(totalSize, list2.size());
@@ -360,6 +361,7 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
         contentLarge.setVal(LARGE_CONTENT);
 
         dtoService.updateEntityAttributeValue(contentLarge);
+        clearCache();
 
         final String bodyLarge = service.getContentBody(10106L, "en");
         assertEquals(bodyLarge, LARGE_CONTENT);
