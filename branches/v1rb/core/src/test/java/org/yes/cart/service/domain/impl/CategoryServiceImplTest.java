@@ -184,6 +184,12 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
+    public void testGetChildCategoriesRecursiveNullTest() {
+        Set<Category> categories = categoryService.getChildCategoriesRecursive(0l);
+        assertTrue(categories.isEmpty());
+    }
+
+    @Test
     public void testIsCategoryHasSubcategory() {
         CategoryService categoryService = (CategoryService) ctx().getBean(ServiceSpringKeys.CATEGORY_SERVICE);
         assertTrue(categoryService.isCategoryHasSubcategory(300, 304));
