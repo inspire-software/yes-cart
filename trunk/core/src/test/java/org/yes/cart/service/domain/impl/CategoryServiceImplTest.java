@@ -200,6 +200,12 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
+    public void testGetChildCategoriesRecursiveNullTest() {
+        Set<Category> categories = categoryService.getChildCategoriesRecursive(0l);
+        assertTrue(categories.isEmpty());
+    }
+
+    @Test
     public void testIsCategoryHasChildrenTrue() throws Exception {
         assertTrue(categoryService.isCategoryHasChildren(101L, false));
     }

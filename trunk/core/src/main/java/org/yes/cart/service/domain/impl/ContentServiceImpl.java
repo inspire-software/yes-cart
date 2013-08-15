@@ -292,17 +292,25 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
      */
     @Cacheable(value = CACHE_NAME)
     public Set<Category> getChildContentRecursive(final long contentId) {
-        Set<Category> result = new HashSet<Category>();
-        List<Category> categories = getChildContent(contentId);
-        result.addAll(categories);
-        for (Category category : categories) {
-            if (category.getCategoryId() != category.getParentId()) {
-                result.addAll(getChildContentRecursive(category.getCategoryId()));
-            }
+        final Category thisCon = getById(contentId);
+        if (thisCon != null) {
+            final Set<Category> all = new HashSet<Category>();
+            all.add(thisCon);
+            loadChildContentRecursiveInternal(all, thisCon);
+            return all;
         }
-        result.add(getById(contentId));
-        return result;
+        return Collections.emptySet();
     }
+
+
+    private void loadChildContentRecursiveInternal(final Set<Category> result, final Category category) {
+        List<Category> categories = getChildContent(category.getCategoryId());
+        result.addAll(categories);
+        for (Category subCategory : categories) {
+            loadChildContentRecursiveInternal(result, subCategory);
+        }
+    }
+
 
     /**
      * {@inheritDoc} Just to cache
