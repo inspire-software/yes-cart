@@ -144,6 +144,12 @@ public class ContentServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
+    public void testGetChildCategoriesRecursiveNullTest() {
+        Set<Category> contents = contentService.getChildContentRecursive(0l);
+        assertTrue(contents.isEmpty());
+    }
+
+    @Test
     public void testIsContentHasSubcontentTrue() throws Exception {
         assertTrue(contentService.isContentHasSubcontent(10105L, 10109L));
     }

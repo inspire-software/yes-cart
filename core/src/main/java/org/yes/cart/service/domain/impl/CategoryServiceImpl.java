@@ -375,16 +375,22 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      */
     @Cacheable(value = CACHE_NAME)
     public Set<Category> getChildCategoriesRecursive(final long categoryId) {
-        Set<Category> result = new HashSet<Category>();
-        List<Category> categories = getChildCategories(categoryId);
-        result.addAll(categories);
-        for (Category category : categories) {
-            if (category.getCategoryId() != category.getParentId()) {
-                result.addAll(getChildCategoriesRecursive(category.getCategoryId()));
-            }
+        final Category thisCat = getById(categoryId);
+        if (thisCat != null) {
+            final Set<Category> all = new HashSet<Category>();
+            all.add(thisCat);
+            loadChildCategoriesRecursiveInternal(all, thisCat);
+            return all;
         }
-        result.add(getById(categoryId));
-        return result;
+        return Collections.emptySet();
+    }
+
+    private void loadChildCategoriesRecursiveInternal(final Set<Category> result, final Category category) {
+        List<Category> categories = getChildCategories(category.getCategoryId());
+        result.addAll(categories);
+        for (Category subCategory : categories) {
+            loadChildCategoriesRecursiveInternal(result, subCategory);
+        }
     }
 
     /**
