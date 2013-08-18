@@ -138,6 +138,11 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
      * @param attributeKey attribute key
      * @param attributeValue attribute value.
      */
+    @CacheEvict(value ={
+            "shopService-shopBuCode",
+            "shopService-shopByDomainName",
+            "shopService-shopCategories"
+    }, allEntries = true)
     public void updateAttributeValue(final long shopId, final String attributeKey, final String attributeValue) {
         final Shop shop = shopDao.findById(shopId);
         if (shop != null) {

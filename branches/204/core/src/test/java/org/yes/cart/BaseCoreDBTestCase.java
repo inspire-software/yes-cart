@@ -274,7 +274,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         }
     }
 
-    private Map<String, Cache> getCacheMap() {
+    protected Map<String, Cache> getCacheMap() {
         final CacheManager cm = ctx().getBean("cacheManager", CacheManager.class);
         final Collection<String> cacheNames = cm.getCacheNames();
         final Map<String, Cache> cacheMap = new HashMap<String, Cache> (cacheNames.size());
