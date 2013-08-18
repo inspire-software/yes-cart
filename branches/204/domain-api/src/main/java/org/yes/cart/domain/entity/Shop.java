@@ -118,6 +118,18 @@ public interface Shop extends Auditable, Seoable, Codable {
     void setShopUrl(Set<ShopUrl> shopUrl);
 
     /**
+     * Get back door urls.
+     * @return  back door urls.
+     */
+    Set<ShopBackdoorUrl> getShopBackdoorUrl();
+
+    /**
+     * Set  back door url.
+     * @param shopUrl  back door url.
+     */
+    void setShopBackdoorUrl(Set<ShopBackdoorUrl> shopUrl);
+
+    /**
      * Get the currency exchange rates. All exchange rates from default to target currency.
      *
      * @return list of exchange rates.

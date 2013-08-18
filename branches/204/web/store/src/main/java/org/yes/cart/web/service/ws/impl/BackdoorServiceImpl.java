@@ -16,13 +16,13 @@
 
 package org.yes.cart.web.service.ws.impl;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.util.Version;
 import org.springframework.beans.BeansException;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.web.context.ServletContextAware;
@@ -40,6 +40,7 @@ import javax.servlet.ServletContext;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -79,7 +80,7 @@ public class BackdoorServiceImpl implements BackdoorService, ApplicationContextA
     private void safeFlushCache(final Cache cache) {
 
         if(cache != null) {
-            cache.removeAll();
+            cache.clear();
         }
 
     }
@@ -256,18 +257,19 @@ public class BackdoorServiceImpl implements BackdoorService, ApplicationContextA
      */
     public List<CacheInfoDTOImpl> getCacheInfo() {
         final CacheManager cm = applicationContext.getBean("cacheManager", CacheManager.class);
-        final String[] cacheNames = cm.getCacheNames();
-        final List<CacheInfoDTOImpl> rez = new ArrayList<CacheInfoDTOImpl>(cacheNames.length);
+        final Collection<String> cacheNames = cm.getCacheNames();
+        final List<CacheInfoDTOImpl> rez = new ArrayList<CacheInfoDTOImpl>(cacheNames.size());
         for (String cacheName : cacheNames) {
             final Cache cache = cm.getCache(cacheName);
+            final net.sf.ehcache.Cache nativeCache = (net.sf.ehcache.Cache) cache.getNativeCache();
             rez.add(
                     new CacheInfoDTOImpl(
-                            cache.getName(),
-                            cache.getSize(),
-                            cache.getMemoryStoreSize(),
-                            cache.getDiskStoreSize(),
-                            0,0/*cache.calculateInMemorySize(),
-                            cache.calculateOnDiskSize()*/   /*heavy operation*/
+                            nativeCache.getName(),
+                            nativeCache.getSize(),
+                            nativeCache.getMemoryStoreSize(),
+                            nativeCache.getDiskStoreSize(),
+                            0,0/*nativeCache.calculateInMemorySize(),
+                            nativeCache.calculateOnDiskSize()*/   /*heavy operation*/
                     )
             );
 
@@ -280,10 +282,9 @@ public class BackdoorServiceImpl implements BackdoorService, ApplicationContextA
      */
     public void evictCache() {
         final CacheManager cm = applicationContext.getBean("cacheManager", CacheManager.class);
-        final String[] cacheNames = cm.getCacheNames();
-        for (String cacheName : cacheNames) {
+        for (String cacheName : cm.getCacheNames()) {
             final Cache cache = cm.getCache(cacheName);
-            cache.removeAll();
+            cache.clear();
         }
     }
 
