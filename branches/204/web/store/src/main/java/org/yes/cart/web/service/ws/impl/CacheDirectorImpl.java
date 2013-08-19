@@ -15,6 +15,7 @@
  */
 package org.yes.cart.web.service.ws.impl;
 
+import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
@@ -24,6 +25,7 @@ import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.service.ws.CacheDirector;
 
 import javax.jws.WebService;
@@ -40,6 +42,8 @@ import java.util.*;
 @WebService(endpointInterface = "org.yes.cart.web.service.ws.CacheDirector",
         serviceName = "CacheDirector")
 public class CacheDirectorImpl implements CacheDirector, ApplicationContextAware, ServletContextAware {
+
+    final Logger log = ShopCodeContext.getLog(this);
 
     private Map<String, Map<String, Set<Pair<String, String>>>> entityOperationCache;
 
@@ -118,9 +122,11 @@ public class CacheDirectorImpl implements CacheDirector, ApplicationContextAware
 
                         cache.evict(pkValue);
 
+                        cnt ++;
+
                     } else {
 
-                        //treat strategy as SPeL expression over object to get key from entity
+                        log.warn("The [" + cacheStrategy.getSecond() + "] cache eviction strategy not supported");
 
                     }
 

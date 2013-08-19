@@ -41,7 +41,7 @@
 
     <!-- ###################### Attributes  ################################################ -->
 
-    <util:set id="AttributeCreate">
+    <util:set id="AttributeAll">
         <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="attributeService-availableAttributesByProductTypeId"/>
             <constructor-arg index="1" value="all"/>
@@ -64,57 +64,78 @@
         </bean>
     </util:set>
 
-    <util:set id="AttributeUpdate">
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="attributeService-availableAttributesByProductTypeId"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="attributeService-availableImageAttributesByGroupCode"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="attributeService-allAttributeCodes"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="attributeService-allNavigatableAttributeCodes"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="attributeService-attributeNamesByCodes"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-    </util:set>
 
-    <util:set id="AttributeDelete">
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="attributeService-availableAttributesByProductTypeId"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="attributeService-availableImageAttributesByGroupCode"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="attributeService-allAttributeCodes"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="attributeService-allNavigatableAttributeCodes"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="attributeService-attributeNamesByCodes"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-    </util:set>
 
     <util:map id="AttributeCUD">
-        <entry key="Create" value-ref="AttributeCreate"/>
-        <entry key="Update" value-ref="AttributeUpdate"/>
-        <entry key="Delete" value-ref="AttributeDelete"/>
+        <entry key="Create" value-ref="AttributeAll"/>
+        <entry key="Update" value-ref="AttributeAll"/>
+        <entry key="Delete" value-ref="AttributeAll"/>
     </util:map>
+
+    <!-- ###################### Category  ################################################ -->
+
+    <util:set id="CategoryDelete">
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-topLevelCategories"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-rootCategory"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-categoryTemplateVariation"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-categoryTemplate"/>
+            <constructor-arg index="1" value="key"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-itemsPerPage"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-categoryAttributeRecursive"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-categoryAttributeRecursive2"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-productQuantity"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-categoryHasProducts"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-categoryHasChildren"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-childCategories"/>
+            <constructor-arg index="1" value="key"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-childCategoriesRecursive"/>
+            <constructor-arg index="1" value="key"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-categoryHasSubcategory"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-byId"/>
+            <constructor-arg index="1" value="key"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-transform"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+    </util:set>
 
 
 
